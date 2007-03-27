@@ -20,11 +20,11 @@
 /* Prototypes */
 EXPORT gboolean select_datalog_for_import(GtkWidget *, gpointer );
 void load_logviewer_file(GIOChannel * );
-void read_log_header(GIOChannel *, struct Log_Info * );
-void read_log_data(GIOChannel *, struct Log_Info * );
-struct Log_Info * initialize_log_info(void);
-void allocate_buffers(struct Log_Info *);
-void populate_limits(struct Log_Info *);
+void read_log_header(GIOChannel *, Log_Info * );
+void read_log_data(GIOChannel *, Log_Info * );
+Log_Info * initialize_log_info(void);
+void allocate_buffers(Log_Info *);
+void populate_limits(Log_Info *);
 void free_log_info(void);
 
 /* Prototypes */

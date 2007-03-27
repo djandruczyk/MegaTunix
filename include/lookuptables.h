@@ -21,7 +21,7 @@
 #include <enums.h>
 #include <structures.h>
 
-void load_lookuptables(struct Canidate *);
+void load_lookuptables(Canidate *);
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
 gint reverse_lookup(GObject *, gint );

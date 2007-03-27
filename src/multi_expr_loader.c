@@ -49,7 +49,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	gint num_keys = 0;
 	gint i = 0;
 	GHashTable *hash = NULL;
-	struct MultiExpr *multi = NULL;
+	MultiExpr *multi = NULL;
 
 	if (!cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
 	{
@@ -124,7 +124,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_expr);
 	for (i=0;i<num_keys;i++)
 	{
-		multi = g_new0(struct MultiExpr, 1);
+		multi = g_new0(MultiExpr, 1);
 		multi->lower_limit = (gint)strtol(l_limits[i],NULL,10);
 		multi->upper_limit = (gint)strtol(u_limits[i],NULL,10);
 		multi->lookuptable = g_strdup(lookuptables[i]);
@@ -145,7 +145,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 
 void free_multi_expr(gpointer data)
 {
-	struct MultiExpr *multi = (struct MultiExpr *)data;
+	MultiExpr *multi = (MultiExpr *)data;
 	if (multi->dl_conv_expr)
 		g_free(multi->dl_conv_expr);	
 	if (multi->ul_conv_expr)
@@ -161,7 +161,7 @@ void free_multi_expr(gpointer data)
 
 void free_multi_source(gpointer data)
 {
-	struct MultiSource *multi = (struct MultiSource *)data;
+	MultiSource *multi = (MultiSource *)data;
 	if (multi->source)
 		g_free(multi->source);	
 	if (multi->conv_expr)

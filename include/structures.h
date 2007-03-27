@@ -25,12 +25,43 @@
 #include <termios.h>
 #include <unistd.h>
 
+/* Type definitions */
+typedef struct _Serial_Params Serial_Params;
+typedef struct _Firmware_Details Firmware_Details;
+typedef struct _Reqd_Fuel Reqd_Fuel;
+typedef struct _Io_File Io_File;
+typedef struct _Viewable_Value Viewable_Value;
+typedef struct _Dash_Gauge Dash_Gauge;
+typedef struct _Rt_Slider Rt_Slider;
+typedef struct _Rt_Text Rt_Text;
+typedef struct _Log_Info Log_Info;
+typedef struct _Page_Params Page_Params;
+typedef struct _Table_Params Table_Params;
+typedef struct _Canidate Canidate;
+typedef struct _Req_Fuel_Params Req_Fuel_Params;
+typedef struct _Command Command;
+typedef struct _Io_Message Io_Message;
+typedef struct _Text_Message Text_Message;
+typedef struct _QFunction QFunction;
+typedef struct _Widget_Update Widget_Update;
+typedef struct _Io_Cmds Io_Cmds;
+typedef struct _Output_Data Output_Data;
+typedef struct _Rtv_Map Rtv_Map;
+typedef struct _DebugLevel DebugLevel;
+typedef struct _Group Group;
+typedef struct _BindGroup BindGroup;
+typedef struct _Ve_View_3D Ve_View_3D;
+typedef struct _Vex_Import Vex_Import;
+typedef struct _Logview_Data Logview_Data;
+typedef struct _TTMon_Data TTMon_Data;
+typedef struct _MultiExpr MultiExpr;
+typedef struct _MultiSource MultiSource;
 
 /*! 
- \brief Serial_Params holds all variables related to the state of the serial
+ \brief _Serial_Params holds all variables related to the state of the serial
  port being used by MegaTunix
  */
-struct Serial_Params
+struct _Serial_Params
 {
         gint fd;		/*! File descriptor */
         gchar *port_name;	/*! textual name of comm port */
@@ -43,13 +74,13 @@ struct Serial_Params
 
 
 /*! 
- \brief Firmware_Details stores all attributes about the firmware being used
+ \brief _Firmware_Details stores all attributes about the firmware being used
  after detection (\see interrogate_ecu ) including lists of tabs to be loaded
  by the glade loader (\see load_gui_tabs ), the configuration for the realtime
  variables map (\see rtv_map_loader) and the sliderss_map_file (\see 
  load_runtime_sliders )
  */
-struct Firmware_Details
+struct _Firmware_Details
 {
 	gchar *name;		/*! textual name */
 	gchar **tab_list;	/*! vector string of tabs to load */
@@ -73,19 +104,19 @@ struct Firmware_Details
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages ... */
-	struct Page_Params **page_params;/*! special vars per page */
-	struct Table_Params **table_params;/*! details each table */
-	struct Req_Fuel_Params **rf_params;/*! req_fuel params */
+	Page_Params **page_params;/*! special vars per page */
+	Table_Params **table_params;/*! details each table */
+	Req_Fuel_Params **rf_params;/*! req_fuel params */
 };
 
 
 /*! 
  Controls for the Required Fuel Calculator... 
- \brief The Req_Fuel struct contains jsut about all widgets for the rewuired
+ \brief The _Req_Fuel struct contains jsut about all widgets for the rewuired
  fuel popup.  most of the values are loaded/saved from the main config file
  when used.
  */
-struct Reqd_Fuel
+struct _Reqd_Fuel
 {
 	GtkWidget *popup;		/*! the popup window */
 	GtkWidget *calcd_val_spin;	/*! Preliminary value */
@@ -105,12 +136,12 @@ struct Reqd_Fuel
 
 
 /*!
- \brief Io_File is the datastructure used for file I/O in the inport/export
+ \brief _Io_File is the datastructure used for file I/O in the inport/export
  routines.
  \see vetable_import
  \see vetable_export
  */
-struct Io_File
+struct _Io_File
 {
 	GIOChannel *iochannel;
 	gchar *filename;
@@ -119,10 +150,10 @@ struct Io_File
 
 
 /*!
- \brief Viewable_Value is the datastructure bound 
+ \brief _Viewable_Value is the datastructure bound 
  to every trace viewed in the logviewer. 
  */
-struct Viewable_Value
+struct _Viewable_Value
 {
 	GdkGC *font_gc;			/*! GC used for the fonts */
 	GdkGC *trace_gc;		/*! GC used for the trace */
@@ -143,11 +174,11 @@ struct Viewable_Value
 	gfloat cur_low;			/*! User limits to use for scaling */
 	gfloat cur_high;		/*! User limits to use for scaling */
 	GArray *data_array;		/*! History of all values recorded */
-	struct Log_Info *log_info;	/*! important */
+	Log_Info *log_info;	/*! important */
 };
 	
 
-struct Dash_Gauge
+struct _Dash_Gauge
 {
 	GObject *object;		/* Data stroage object for RT vars */
 	gchar * source;			/* Source name (unused) */
@@ -157,11 +188,11 @@ struct Dash_Gauge
 
 
 /*! 
- \brief The Rt_Slider struct contains info on the runtime display tab sliders
+ \brief The _Rt_Slider struct contains info on the runtime display tab sliders
  as they are now stored in the config file and adjustable in position
  and placement and such..
  */
-struct Rt_Slider
+struct _Rt_Slider
 {
 	gchar *ctrl_name;	/*! Ctrl name in config file (key in hash) */
 	GtkWidget *parent;	/*! Parent of the table below  */
@@ -186,10 +217,10 @@ struct Rt_Slider
 
 
 /*! 
- \brief The Rt_Text struct contains info on the floating runtime var text 
+ \brief The _Rt_Text struct contains info on the floating runtime var text 
  display
  */
-struct Rt_Text
+struct _Rt_Text
 {
 	gchar *ctrl_name;	/*! Ctrl name in config file (key in hash) */
 	GtkWidget *parent;	/*! Parent of the table below  */
@@ -205,10 +236,10 @@ struct Rt_Text
 
 
 /*! 
- \brief The Log_Info datastructure is populated when a datalog file is opened
+ \brief The _Log_Info datastructure is populated when a datalog file is opened
  for viewing in the Datalog viewer.
  */
-struct Log_Info
+struct _Log_Info
 {
 	gint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
@@ -217,11 +248,11 @@ struct Log_Info
 
 
 /*! 
- \brief The Page_Params structure contains fields defining the size of the 
+ \brief The _Page_Params structure contains fields defining the size of the 
  page returned from the ECU, the VEtable, RPm and Load table base offsets and
  sizes, along with a flag signifying if it's a spark table
  */
-struct Page_Params
+struct _Page_Params
 {
 	gint length;		/*! How big this page is... */
 	gint truepgnum;		/*! True pagenumber to send */
@@ -231,10 +262,10 @@ struct Page_Params
 
 
 /*! 
- \brief The Table_Params structure contains fields defining table parameters
+ \brief The _Table_Params structure contains fields defining table parameters
  One struct is allocated per table, and multiple tables per page are allowed
  */
-struct Table_Params
+struct _Table_Params
 {
 	gboolean is_fuel;	/*! If true next 7 params must exist */
 	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
@@ -306,13 +337,13 @@ struct Table_Params
 
 
 /*! 
- \brief The Canidate structure is used for interrogation, each potential
+ \brief The _Canidate structure is used for interrogation, each potential
  firmware is interrogated and as it is the data is fed into this structure
  for comparison against know values (interrogation profiles), upon a match
  the needed data is copied into a Firmware_Details structure
  \see Firmware_Details
  */
-struct Canidate
+struct _Canidate
 {
 	gchar *name;		/*! Name of this firmware */
 	gchar *filename;	/*! absolute path to this canidate profile */
@@ -343,18 +374,18 @@ struct Canidate
 	gint total_pages;	/*! how many pages do we handle? */
 	gint total_tables;	/*! how many tables do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */
-	struct Page_Params **page_params;/*! special vars per page */
-	struct Table_Params **table_params;/*! details on ve/rpm/load tables*/
+	Page_Params **page_params;/*! special vars per page */
+	Table_Params **table_params;/*! details on ve/rpm/load tables*/
 };
 
 
 /*!
- \brief The Req_Fuel_Params structure is used to store the current and last
+ \brief The _Req_Fuel_Params structure is used to store the current and last
  values of the interdependant required fuel parameters for the function
  that verifies req_fuel status and downloads it.  There is one structure
  allocated PER Table (even if the table's aren't fuel..)
  */
-struct Req_Fuel_Params
+struct _Req_Fuel_Params
 {
 	gint num_squirts;
 	gint num_cyls;
@@ -372,13 +403,13 @@ struct Req_Fuel_Params
 
 
 /*!
- \brief the Command struct is used to store details on the commands that
+ \brief the _Command struct is used to store details on the commands that
  are valid for the ECU, they are loaded from a config file "tests" normally
  installed in /usr/local/share/MegaTunix/Interrogator/tests. There will be
  one Command struct created per command, and they are used to interrogate the
  target ECU.
  */
-struct Command
+struct _Command
 {
 	gchar *string;		/*! command to get the data */
 	gchar *desc;		/*! command description */
@@ -392,13 +423,13 @@ struct Command
 
 
 /*!
- \brief Io_Message structure is used for passing data around in threads.c for
+ \brief _Io_Message structure is used for passing data around in threads.c for
  kicking off commands to send data to/from the ECU or run specified handlers.
  messages and postfunctiosn can be bound into this strucutre to do some complex
  things with a simple subcommand.
- \see Io_Cmds
+ \see _Io_Cmds
  */
-struct Io_Message
+struct _Io_Message
 {
 	Io_Command cmd;		/*! Source command (initiator)*/
 	CmdType command;	/*! Command type */
@@ -415,12 +446,12 @@ struct Io_Message
 
 
 /*
- \brief Text_Message strcture is used for a thread to pass messages up
+ \brief _Text_Message strcture is used for a thread to pass messages up
  a GAsyncQueue to the main gui thread for updating a textview in a thread
  safe manner. A dispatch queue runs 5 times per second checking for messages
  to dispatch...
  */
-struct Text_Message
+struct _Text_Message
 {
 	gchar *view_name;	/*! Textview name */
 	gchar *tagname;		/*! Texttag to use */
@@ -431,11 +462,11 @@ struct Text_Message
 
 
 /*
- \brief QFunction strcture is used for a thread to pass messages up
+ \brief _QFunction strcture is used for a thread to pass messages up
  a GAsyncQueue to the main gui thread for running any arbritrary function
  by name.
  */
-struct QFunction
+struct _QFunction
 {
 	gchar *func_name;	/*! Function Name */
 	gint  dummy;		/*! filler for more shit later.. */
@@ -443,12 +474,12 @@ struct QFunction
 
 
 /*
- \brief Widget_Update strcture is used for a thread to pass a widget update
+ \brief _Widget_Update strcture is used for a thread to pass a widget update
  call up a GAsyncQueue to the main gui thread for updating a widget in 
  a thread safe manner. A dispatch queue runs 5 times per second checking 
  for messages to dispatch...
  */
-struct Widget_Update
+struct _Widget_Update
 {
 	gchar *widget_name;	/*! Widget name */
 	WidgetType type;	/*! what type of widget are we updating */
@@ -457,12 +488,12 @@ struct Widget_Update
 
 
 /*!
- \brief Io_Cmds stores the basic data for the critical megasquirt command
+ \brief _Io_Cmds stores the basic data for the critical megasquirt command
  codes. (realtime, VE, ign and spark) including the length of each of those
  commands.  
  \warning This really should be done a better way...
  */
-struct Io_Cmds
+struct _Io_Cmds
 {
 	gchar *realtime_cmd;	/*! Command sent to get RT vars.... */
 	gint rt_cmd_len;	/*! length in bytes of rt_cmd_len */
@@ -476,10 +507,10 @@ struct Io_Cmds
 
 
 /*! 
- \brief Output_Data A simple wrapper struct to pass data to the output 
+ \brief _Output_Data A simple wrapper struct to pass data to the output 
  function which makes the function a lot simpler.
  */
-struct Output_Data
+struct _Output_Data
 {
 	gint canID;		/*! CAN Module ID (MS-II ONLY) */
 	gint page;		/*! Page in ECU */
@@ -494,11 +525,11 @@ struct Output_Data
 
 
 /*! 
- \brief RtvMap is the RealTime Variables Map structure, containing fields to
+ \brief _RtvMap is the RealTime Variables Map structure, containing fields to
  access the realtime derived data via a hashtable, and via raw index. Stores
  timestamps of each incoming data byte for advanced future use.
  */
-struct Rtv_Map
+struct _Rtv_Map
 {
 	gint raw_total;		/*! Number of raw variables */
 	gint derived_total;	/*! Number of derived variables */
@@ -512,11 +543,11 @@ struct Rtv_Map
 
 
 /*! 
- \brief DebugLevel stores the debugging name, handler, class (bitmask) and 
+ \brief _DebugLevel stores the debugging name, handler, class (bitmask) and 
  shift (forgot why this is here) and a enable/disable flag. Used to make the
  debugging core a little more configurable
  */
-struct DebugLevel
+struct _DebugLevel
 {
 	gchar * name;		/*! Debugging name */
 	gint	handler;	/*! Signal handler name */
@@ -527,11 +558,11 @@ struct DebugLevel
 
 
 /*!
- \brief Group holds common settings from groups of control as defined in a 
+ \brief _Group holds common settings from groups of control as defined in a 
  datamap file.  This should reduce redundancy and significantly shrink the 
  datamap files.
  */
-struct Group
+struct _Group
 {
 	gchar **keys;		/*! String array for key names */
 	gint *keytypes;		/*! Int array of key types... */
@@ -543,10 +574,10 @@ struct Group
 
 
 /*!
- \brief BindGroup is a small container used to pass multiple params into
+ \brief _BindGroup is a small container used to pass multiple params into
  a function that is limited to a certain number of arguments...
  */
-struct BindGroup
+struct _BindGroup
 {
 	ConfigFile *cfgfile;	/*! where the configfile ptr goes... */
 	GHashTable *groups;	/*! where the groups table goes */
@@ -554,11 +585,11 @@ struct BindGroup
 
 
 /*!
- \brief the Ve_View_3D structure contains all the field to create and 
+ \brief the _Ve_View_3D structure contains all the field to create and 
  manipulate a 3D view of a MegaSquirt VE/Spark table, and should work in
  theory for any sized table
  */
-struct Ve_View_3D
+struct _Ve_View_3D
 {
 	gint beginX;
 	gint beginY;
@@ -633,7 +664,7 @@ struct Ve_View_3D
  \see vetable_import
  \see vetable_export
  */
-struct Vex_Import
+struct _Vex_Import
 {	
 	gchar *version;		/* String */
 	gchar *revision;	/* String */
@@ -657,12 +688,12 @@ struct Vex_Import
 
 
 /*!
- \brief The Logview_Data struct is a ontainer used within the logviewer_gui.c
+ \brief The _Logview_Data struct is a ontainer used within the logviewer_gui.c
  file used to store settigns specific to the logviewer including th pointer to
  the drawing area, and a hashtable and list of pointers to the trace 
  datastructures.
  */
-struct Logview_Data
+struct _Logview_Data
 {
 	GdkGC *highlight_gc;	/*! GC used for the highlight */
 	GtkWidget *darea;	/*! Trace drawing area... */
@@ -678,10 +709,10 @@ struct Logview_Data
 };
 
 /*!
- * \brief TrigToothMon_Data struct is a container used to hold private data
+ * \brief _TTMon_Data struct is a container used to hold private data
  * for the Trigger and Tooth Loggers (MSnS-E only)
  */
-struct TTMon_Data
+struct _TTMon_Data
 {
 	gint page;		/*! page used to discern them apart */
 	GdkPixmap *pixmap;	/*! Pixmap */
@@ -709,10 +740,10 @@ struct TTMon_Data
 
 
 /*!
- * \brief MultiExpr is a container struct used for Realtime var processing
+ * \brief _MultiExpr is a container struct used for Realtime var processing
  * for vars that depend on ECU state (MAP, need to know current sensor)
  */
-struct MultiExpr
+struct _MultiExpr
 {
 	gint lower_limit;	/* Lower limit */	
 	gint upper_limit;	/* Upper limit */
@@ -725,12 +756,12 @@ struct MultiExpr
 
 
 /*!
- * \brief MultiSource is a container struct used for Table data handling 
+ * \brief _MultiSource is a container struct used for Table data handling 
  * for the x/y/z axis's for properly scaling and displaying things on the
  * 3D displays as well as the 2D table scaling.  This allows things to be
  * significantly more adaptable 
  */
-struct MultiSource
+struct _MultiSource
 {
 	gchar *source;		/* name of rtvars datasource */
 	gchar *conv_expr;	/* conversion expression ms units to real */

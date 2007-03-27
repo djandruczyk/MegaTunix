@@ -21,7 +21,7 @@
 #include <structures.h>
 
 
-extern struct Logview_Data *lv_data;
+extern Logview_Data *lv_data;
 
 
 /*! 
@@ -42,7 +42,7 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 	/* Get pointer to backing pixmap ... */
 	if (!lv_data)
 	{
-		lv_data = g_new0(struct Logview_Data,1);
+		lv_data = g_new0(Logview_Data,1);
 		lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 	}
 	pixmap = lv_data->pixmap;
@@ -128,9 +128,9 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	gint y = 0;
 	gint tnum = 0;
 	GdkModifierType state;
-	extern struct Logview_Data *lv_data;
+	extern Logview_Data *lv_data;
 	extern gint info_width;
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 
 	x = event->x;
 	y = event->y;
@@ -178,7 +178,7 @@ void highlight_tinfo(gint tnum, gboolean state)
 	rect.width =  info_width-1;
 	rect.height = lv_data->spread;
 
-	extern struct Logview_Data *lv_data;
+	extern Logview_Data *lv_data;
 	if (state)
 		gdk_draw_rectangle(lv_data->pixmap,
 				lv_data->highlight_gc,
@@ -209,9 +209,9 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	gint h = 0;
 	gint tnum = 0;
 	GdkModifierType state;
-	extern struct Logview_Data *lv_data;
+	extern Logview_Data *lv_data;
 	extern gint info_width;
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 
 	x = event->x;
 	y = event->y;

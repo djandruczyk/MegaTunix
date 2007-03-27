@@ -73,9 +73,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
 	gchar * tmpbuf = NULL;
-	struct Ve_View_3D *ve_view;
+	Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
 	gint table_num =  -1;
 	extern gboolean forced_update;
@@ -406,11 +406,11 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
  */
 gint free_ve3d_view(GtkWidget *widget)
 {
-	struct Ve_View_3D *ve_view;
+	Ve_View_3D *ve_view;
 	extern GHashTable *dynamic_widgets;
 	gchar * tmpbuf = NULL;
 
-	ve_view = (struct Ve_View_3D 
+	ve_view = (Ve_View_3D 
 			*)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
@@ -455,8 +455,8 @@ gint free_ve3d_view(GtkWidget *widget)
  */
 void reset_3d_view(GtkWidget * widget)
 {
-	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
+	Ve_View_3D *ve_view;
+	ve_view = (Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
 	ve_view->dt = 0.008;
@@ -511,8 +511,8 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D 
+	Ve_View_3D *ve_view;
+	ve_view = (Ve_View_3D 
 			*)g_object_get_data(G_OBJECT(widget),"ve_view");
 
 	GLfloat w = widget->allocation.width;
@@ -525,7 +525,8 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
-	ve_view->aspect = (gfloat)w/(gfloat)h;
+//	ve_view->aspect = (gfloat)w/(gfloat)h;
+	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 
 	gdk_gl_drawable_gl_end (gldrawable);
@@ -546,9 +547,10 @@ we don't
 gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	//extern gboolean forced_update;
-	struct Ve_View_3D *ve_view = NULL;
+	Ve_View_3D *ve_view = NULL;
+	Cur_Vals *cur_vals = NULL;
 
-	ve_view = (struct Ve_View_3D 
+	ve_view = (Ve_View_3D 
 			*)g_object_get_data(G_OBJECT(widget),"ve_view");
 
 	if (dbg_lvl & OPENGL)
@@ -583,19 +585,18 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	//	printf ("sphi is %f\tsthetea is %f\n", ve_view->sphi, ve_view->stheta);
 	glTranslatef (-0.5, -0.5, -0.5);
 
-	ve3d_calculate_scaling(ve_view);
-	ve3d_draw_ve_grid(ve_view);
-	ve3d_draw_runtime_indicator(ve_view);
-	ve3d_draw_edit_indicator(ve_view);
-	ve3d_draw_active_vertexes_marker(ve_view);
-	ve3d_draw_axis(ve_view);
+	cur_vals = get_current_values(ve_view);
+	ve3d_calculate_scaling(ve_view,cur_vals);
+	ve3d_draw_runtime_indicator(ve_view,cur_vals);
+	ve3d_draw_edit_indicator(ve_view,cur_vals);
+	ve3d_draw_ve_grid(ve_view,cur_vals);
+	ve3d_draw_active_vertexes_marker(ve_view,cur_vals);
+	ve3d_draw_axis(ve_view,cur_vals);
+	free_current_values(cur_vals);
 
 	glTranslatef (0.0, 0.0, -1.0);
 
-	/* Swap buffers */
-	//      if (gdk_gl_drawable_is_double_buffered (gldrawable))
 	gdk_gl_drawable_swap_buffers (gldrawable);
-	//      else
 	glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -617,8 +618,8 @@ rotated/scaled/strafed
  */
 gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
+	Ve_View_3D *ve_view;
+	ve_view = (Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
@@ -660,8 +661,8 @@ order to
  */
 gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
+	Ve_View_3D *ve_view;
+	ve_view = (Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"));
 
@@ -730,7 +731,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 the
  dimensions for the scales to make thing look pretty
  */
-void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
+void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint i=0;
 	extern gint **ms_data;
@@ -743,13 +744,6 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gfloat min = 0.0;
 	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
-	void *eval;
-	extern GHashTable *sources_hash;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
-	extern gint *algorithm;
 
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
@@ -764,39 +758,10 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 
 	min = 65535;
 	max = 0;
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		eval = multi->evaluator;
-	}
-	else
-		eval = ve_view->x_eval;
 
 	for (i=0;i<ve_view->x_bincount;i++) 
 	{
-		tmpf = evaluator_evaluate_x(eval,ms_data[x_page][x_base+i]);
+		tmpf = evaluator_evaluate_x(cur_val->x_eval,ms_data[x_page][x_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -806,38 +771,9 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	ve_view->x_scale = 1.0/(max-min);
 	min = 65535;
 	max = 0;
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		eval = multi->evaluator;
-	}
-	else
-		eval = ve_view->y_eval;
 	for (i=0;i<ve_view->y_bincount;i++) 
 	{
-		tmpf = evaluator_evaluate_x(eval,ms_data[y_page][y_base+i]);
+		tmpf = evaluator_evaluate_x(cur_val->y_eval,ms_data[y_page][y_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -847,39 +783,10 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	ve_view->y_scale = 1.0/(max-min);
 	min = 65535;
 	max = 0;
-	if (ve_view->z_multi_source)
-	{
-		hash = ve_view->z_multi_hash;
-		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		eval = multi->evaluator;
-	}
-	else
-		eval = ve_view->z_eval;
 	
 	for (i=0;i<(ve_view->x_bincount*ve_view->y_bincount);i++) 
 	{
-		tmpf = evaluator_evaluate_x(eval,ms_data[z_page][z_base+i]);
+		tmpf = evaluator_evaluate_x(cur_val->z_eval,ms_data[z_page][z_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -898,43 +805,21 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 VEtable grid 
  in 3D space
  */
-void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
+void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern gint **ms_data;
 	//GdkColor color;
 	gint x = 0;
 	gint y = 0;
-	gint x_page = 0;
-	gint y_page = 0;
-	gint z_page = 0;
-	gint x_base = 0;
-	gint y_base = 0;
-	gint z_base = 0;
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
-	void *x_eval = NULL;
-	void *y_eval = NULL;
-	void *z_eval = NULL;
-	extern GHashTable *sources_hash;
-	extern gint *algorithm;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
-	x_base = ve_view->x_base;
-	y_base = ve_view->y_base;
-	z_base = ve_view->z_base;
-
-	x_page = ve_view->x_page;
-	y_page = ve_view->y_page;
-	z_page = ve_view->z_page;
 
 	glColor3f(1.0, 1.0, 1.0);
 	tmpf1 = (MIN(w,h)/360.0 < 1.2) ? 1.2:MIN(w,h)/360.0;
@@ -942,115 +827,18 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	//glLineWidth(tmpf1);
 	glLineWidth(1.25);
 
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		x_eval = multi->evaluator;
-	}
-	else
-		x_eval = ve_view->x_eval;
-
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		y_eval = multi->evaluator;
-	}
-	else
-		y_eval = ve_view->y_eval;
-
-	if (ve_view->z_multi_source)
-	{
-		hash = ve_view->z_multi_hash;
-		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		z_eval = multi->evaluator;
-	}
-	else
-		z_eval = ve_view->z_eval;
-
 	/* Draw lines on RPM axis */
 	for(x=0;x<ve_view->x_bincount;x++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(y=0;y<ve_view->y_bincount;y++) 
 		{
-			tmpf1 = ((evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+			tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
 				
-			tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+			tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 				
-			tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
 
-			////this crazy tranformation is required  because of the weird trasnformation you have
-			////up above.  the VE table is colored based on scale out of 0 - 255, as opposed
-			////to the weird scaling up above.  so you can either undo it here like i did, or
-			////change the transformation up above, or perhaps both
-			//color = ((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]) / 255.0) * 360);
-			////unsigned short(2-byte) glcolor call, values range from 0 to 65535
-			//glColor3us (color.red, color.green, color.blue);
 			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 
@@ -1064,14 +852,12 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 		glBegin(GL_LINE_STRIP);
 		for(x=0;x<ve_view->x_bincount;x++)
 		{
-			tmpf1 = ((evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+			tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
 				
-			tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+			tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 				
-			tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
 				
-			//color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0) * 360.0, 0.33, 1.0);
-			//glColor3us (color.red, color.green, color.blue);
 			glColor3f(1.0,1.0,tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 		}
@@ -1086,174 +872,29 @@ the
 user.  
  The user moves this with the arrow keys..
  */
-void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
+void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern gint **ms_data;
-	gint x_page = 0;
-	gint y_page = 0;
-	gint z_page = 0;
-	gint x_base = 0;
-	gint y_base = 0;
-	gint z_base = 0;
-	gfloat tmp = 0.0;
-	gfloat tmpf1 = 0.0;
-	gfloat tmpf2 = 0.0;
-	gfloat tmpf3 = 0.0;
 	gfloat bottom = 0.0;
 	gchar * tmpbuf = NULL;
-	gchar * value = NULL;
-	gchar * key = NULL;
-	gchar * hash_key = NULL;
-	void *x_eval = NULL;
-	void *y_eval = NULL;
-	void *z_eval = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern gint * algorithm;
-	extern GHashTable *sources_hash;
-	GHashTable *hash = NULL;
-	struct MultiSource *multi = NULL;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 
-	x_base = ve_view->x_base;
-	y_base = ve_view->y_base;
-	z_base = ve_view->z_base;
-
-	x_page = ve_view->x_page;
-	y_page = ve_view->y_page;
-	z_page = ve_view->z_page;
-
-	/* X */
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		x_eval = multi->evaluator;
-		tmpf1 = (evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
-		tmp = (tmpf1/ve_view->x_scale)+ve_view->x_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
-	}
-	else
-	{
-		x_eval = ve_view->x_eval;
-		tmpf1 = (evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
-		tmp = (tmpf1/ve_view->x_scale)+ve_view->x_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
-	}
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->x_edit_text);
 	g_free(tmpbuf);
-	g_free(value);
 
-	/* Y */
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		y_eval = multi->evaluator;
-		tmpf2 = (evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
-		tmp = (tmpf2/ve_view->y_scale)+ve_view->y_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
-	}
-	else
-	{
-		y_eval = ve_view->y_eval;
-		tmpf2 = (evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
-		tmp = (tmpf2/ve_view->y_scale)+ve_view->y_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
-	}
 	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->y_edit_text);
 	g_free(tmpbuf);
-	g_free(value);
 
-
-	if (ve_view->z_multi_source)
-	{
-		hash = ve_view->z_multi_hash;
-		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		z_eval = multi->evaluator;
-		tmpf3 = (evaluator_evaluate_x(z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale;
-		tmp = (tmpf3/ve_view->z_scale)+ve_view->z_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
-	}
-	else
-	{
-		z_eval = ve_view->z_eval;
-		tmpf3 = (evaluator_evaluate_x(z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale;
-		tmp = (tmpf3/ve_view->z_scale)+ve_view->z_trans;
-		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
-	}
 	tmpbuf = g_strdup_printf("z_active_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->z_edit_text);
 	g_free(tmpbuf);
-	g_free(value);
 
 	/* Render a red dot at the active VE map position */
 //	glPointSize(8.0);
@@ -1261,52 +902,60 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
-	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(
+			cur_val->x_edit_value,
+			cur_val->y_edit_value,
+			cur_val->z_edit_value);
 		
 	glEnd();        
 
 	glBegin(GL_LINE_STRIP);
 	glColor3f(1.0,0.0,0.0);
 
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-	glVertex3f(tmpf1,tmpf2,bottom);
+	glVertex3f(
+			cur_val->x_edit_value,
+			cur_val->y_edit_value,
+			cur_val->z_edit_value);
+	glVertex3f(
+			cur_val->x_edit_value,
+			cur_val->y_edit_value,
+			bottom);
+	glVertex3f(
+			0.0,
+			cur_val->y_edit_value,
+			bottom);
 
-	glVertex3f(0.0,tmpf2,bottom);
 	glEnd();
 
 	glBegin(GL_LINES);
-	glVertex3f(tmpf1,tmpf2,bottom - ve_view->z_offset);
+	glVertex3f(
+			cur_val->x_edit_value,
+			cur_val->y_edit_value,
+			bottom - ve_view->z_offset);
 
-	glVertex3f(tmpf1,0.0,bottom);
+	glVertex3f(
+			cur_val->x_edit_value,
+			0.0,
+			bottom);
 	glEnd();
 }
 
 /*!
- \brief ve3d_draw_runtiem_indicator is called during rerender and draws 
+ \brief ve3d_draw_runtim_indicator is called during rerender and draws 
 the
  green dot which tells where the engien is running at this instant.
  */
-void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
+void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	gfloat x_val = 0.0;
-	gfloat y_val = 0.0;
-	gfloat z_val = 0.0;
 	gchar * tmpbuf = NULL;
-	gchar * value = NULL;
 	gchar * label = NULL;
-	gfloat bottom = 0.0;
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
+	gfloat bottom = 0.0;
 	gboolean out_of_bounds = FALSE;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
-	extern gint *algorithm;
-	extern GHashTable *sources_hash;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
@@ -1320,131 +969,18 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 		return;
 	}
 
-	/* X */
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
 
-		if (!multi)
-			printf("multi is null!!\n");
-
-		lookup_current_value(multi->source,&x_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",x_val,multi->precision,multi->suffix);
-
-	}
-	else
-	{
-		lookup_current_value(ve_view->x_source,&x_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
-	}
 	tmpbuf = g_strdup_printf("x_runtime_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->x_runtime_text);
 	g_free(tmpbuf);
-	g_free(value);
 
-
-	/* Y */
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-
-		lookup_current_value(multi->source,&y_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",y_val,multi->precision,multi->suffix);
-
-	}
-	else
-	{
-		lookup_current_value(ve_view->y_source,&y_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
-	}
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->y_runtime_text);
 	g_free(tmpbuf);
-	g_free(value);
 
-
-
-	/* Z */
-	if (ve_view->z_multi_source)
-	{
-		hash = ve_view->z_multi_hash;
-		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-
-		lookup_current_value(multi->source,&z_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",z_val,multi->precision,multi->suffix);
-	}
-	else
-	{
-		lookup_current_value(ve_view->z_source,&z_val);
-		value = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
-	}
 	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),cur_val->z_runtime_text);
 	g_free(tmpbuf);
-	g_free(value);
-
 
 	bottom = 0.0;
 	/* Render a green dot at the active VE map position */
@@ -1452,9 +988,9 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	glLineWidth(MIN(w,h)/300.0);
 
 	glColor3f(0.0,1.0,0.0);
-	tmpf1 = (x_val-ve_view->x_trans)*ve_view->x_scale;
-	tmpf2 = (y_val-ve_view->y_trans)*ve_view->y_scale;
-	tmpf3 = (z_val-ve_view->z_trans)*ve_view->z_scale;
+	tmpf1 = (cur_val->x_val-ve_view->x_trans)*ve_view->x_scale;
+	tmpf2 = (cur_val->y_val-ve_view->y_trans)*ve_view->y_scale;
+	tmpf3 = (cur_val->z_val-ve_view->z_trans)*ve_view->z_scale;
 	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
 		out_of_bounds = TRUE;
 	else
@@ -1491,27 +1027,24 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	glEnd();
 
 	/* Live X axis marker */
-	label = g_strdup_printf("%i",(gint)x_val);
+	label = g_strdup_printf("%i",(gint)cur_val->x_val);
 
 	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
 	g_free(label);
 
 
 	/* Live Y axis marker */
-	label = g_strdup_printf("%i",(gint)y_val);
+	label = g_strdup_printf("%i",(gint)cur_val->y_val);
 
 	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
 	g_free(label);
-
-
-
 }
 
 /*!
  \brief ve3d_draw_axis is called during rerender and draws the
  border axis scales around the VEgrid.
  */
-void ve3d_draw_axis(struct Ve_View_3D *ve_view)
+void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
@@ -1520,104 +1053,19 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	gfloat tmpf2 = 0.0;
 	gchar *label;
 	extern gint **ms_data;
-	gint x_page = 0;
-	gint y_page = 0;
-	gint z_page = 0;
-	gint x_base = 0;
-	gint y_base = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
-	gint z_base = 0;
-	void *x_eval = NULL;
-	void *y_eval = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern gint *algorithm;
-	extern GHashTable *sources_hash;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
 
 	if (dbg_lvl & OPENGL)
 		dbg_func(g_strdup(__FILE__": ve3d_draw_axis()\n"));
 
-	x_base = ve_view->x_base;
-	y_base = ve_view->y_base;
-	z_base = ve_view->z_base;
-
-	x_page = ve_view->x_page;
-	y_page = ve_view->y_page;
-	z_page = ve_view->z_page;
-
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
 
-	/* X */
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		x_eval = multi->evaluator;
-	}
-	else
-		x_eval = ve_view->x_eval;
-
-	/* Y */
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[ve_view->table_num] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[ve_view->table_num] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-		y_eval = multi->evaluator;
-	}
-	else
-		y_eval = ve_view->y_eval;
-
-
 	/* Set line thickness and color */
 	glLineWidth(1.0);
-	glColor3f(0.7,0.7,0.7);
+	glColor3f(0.5,0.5,0.5);
 
 	/* Draw horizontal background grid lines  
 	   starting at 0 VE and working up to VE+10% */
@@ -1635,7 +1083,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<y_bincount;i++)
 	{
 		glBegin(GL_LINES);
-		tmpf2 = (evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale;
+		tmpf2 = (evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+i])-ve_view->y_trans)*ve_view->y_scale;
 
 		glVertex3f(1,tmpf2,0);
 		glVertex3f(1,tmpf2,1);
@@ -1647,7 +1095,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	{
 		glBegin(GL_LINES);
 
-		tmpf1 = (evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale;
+		tmpf1 = (evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+i])-ve_view->x_trans)*ve_view->x_scale;
 		glVertex3f(tmpf1,1,0);
 
 		glVertex3f(tmpf1,1,1);
@@ -1675,17 +1123,17 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<y_bincount;i++)
 	{
 		tmpf = 
-			evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+i]);
+			evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+i]);
 		label = g_strdup_printf("%i",(gint)tmpf);
 		tmpf2 = 
-			((evaluator_evaluate_x(y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale);
+			((evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+i])-ve_view->y_trans)*ve_view->y_scale);
 		ve3d_draw_text(label,-0.1,tmpf2,-0.05);
 		g_free(label);
 	}
 
 	for (i=0;i<x_bincount;i++)
 	{
-		tmpf = 	evaluator_evaluate_x(x_eval,ms_data[x_page][x_base+i]);
+		tmpf = 	evaluator_evaluate_x(x_eval,ms_data[ve_view->x_page][ve_view->x_base+i]);
 		label = g_strdup_printf("%i",(gint)tmpf);
 		tmpf1 = (tmpf-ve_view->x_trans)*ve_view->x_scale);
 		ve3d_draw_text(label,tmpf1,-0.1,-0.05);
@@ -1781,11 +1229,11 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gint z_base = 0;
 	gint dload_val = 0;
 	gboolean update_widgets = FALSE;
-	struct Ve_View_3D *ve_view = NULL;
+	Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern gboolean forced_update;
-	ve_view = (struct Ve_View_3D *)g_object_get_data(
+	ve_view = (Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
 	if (dbg_lvl & OPENGL)
@@ -1924,10 +1372,10 @@ intialize it's
  datastructure for use.  
  \see Ve_View
  */
-struct Ve_View_3D * initialize_ve3d_view()
+Ve_View_3D * initialize_ve3d_view()
 {
-	struct Ve_View_3D *ve_view = NULL; 
-	ve_view= g_new0(struct Ve_View_3D,1);
+	Ve_View_3D *ve_view = NULL; 
+	ve_view= g_new0(Ve_View_3D,1);
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -1986,14 +1434,14 @@ forces
  */
 void update_ve3d_if_necessary(int page, int offset)
 {
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GHashTable *dynamic_widgets;
 	gint total_tables = firmware->total_tables;
 	gboolean need_update = FALSE;
 	gint i = 0;
 	gchar * string = NULL;
 	GtkWidget * tmpwidget = NULL;
-	struct Ve_View_3D *ve_view = NULL;
+	Ve_View_3D *ve_view = NULL;
 
 	for (i=0;i<total_tables;i++)
 	{
@@ -2023,7 +1471,7 @@ update_now:
 	g_free(string);
 	if (GTK_IS_WIDGET(tmpwidget))
 	{
-		ve_view = (struct Ve_View_3D 
+		ve_view = (Ve_View_3D 
 				*)g_object_get_data(G_OBJECT(tmpwidget),"ve_view");
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 		{
@@ -2034,10 +1482,8 @@ update_now:
 }
 
 
-void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
+void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 {
-	gfloat x_source = 0.0;
-	gfloat y_source = 0.0;
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
@@ -2055,131 +1501,18 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 	gfloat right = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
-	void *x_eval = NULL;
-	void *y_eval = NULL;
-	void *z_eval = NULL;
-	extern GHashTable *sources_hash;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern gint ** ms_data;
-	extern gint *algorithm;
 	extern gint active_table;
 
 	table = active_table;
-	/* X */
-	if (ve_view->x_multi_source)
-	{
-		hash = ve_view->x_multi_hash;
-		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[table] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[table] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[table] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-
-		x_eval = multi->evaluator;
-		lookup_current_value(multi->source,&x_source);
-
-	}
-	else
-	{
-		x_eval = ve_view->x_eval;
-		lookup_current_value(ve_view->x_source,&x_source);
-	}
-
-	/* Y */
-	if (ve_view->y_multi_source)
-	{
-		hash = ve_view->y_multi_hash;
-		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[table] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[table] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[table] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-
-		y_eval = multi->evaluator;
-		lookup_current_value(multi->source,&y_source);
-	}
-	else
-	{
-		y_eval = ve_view->y_eval;
-		lookup_current_value(ve_view->y_source,&x_source);
-	}
-	/* Z */
-	if (ve_view->z_multi_source)
-	{
-		hash = ve_view->z_multi_hash;
-		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
-		if (algorithm[table] == SPEED_DENSITY)
-		{
-			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
-			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else if (algorithm[table] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-		else if (algorithm[table] == MAF)
-		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
-		}
-		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
-
-		if (!multi)
-			printf("multi is null!!\n");
-
-		z_eval = multi->evaluator;
-	}
-	else
-		z_eval = ve_view->z_eval;
-
 
 	/* Find bin corresponding to current rpm  */
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
 		page = firmware->table_params[table]->x_page;
 		base = firmware->table_params[table]->x_base;
-		if (evaluator_evaluate_x(x_eval,ms_data[page][base]) >= x_source)
+		if (evaluator_evaluate_x(cur_val->x_eval,ms_data[page][base]) >= cur_val->x_val)
 		{
 			bin[0] = -1;
 			bin[1] = 0;
@@ -2187,20 +1520,20 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 			right_w = 1;
 			break;
 		}
-		left = evaluator_evaluate_x(x_eval,ms_data[page][base+i]);
-		right = evaluator_evaluate_x(x_eval,ms_data[page][base+i+1]);
+		left = evaluator_evaluate_x(cur_val->x_eval,ms_data[page][base+i]);
+		right = evaluator_evaluate_x(cur_val->x_eval,ms_data[page][base+i+1]);
 
-		if ((x_source > left) && (x_source <= right))
+		if ((cur_val->x_val > left) && (cur_val->x_val <= right))
 		{
 			bin[0] = i;
 			bin[1] = i+1;
 
-			right_w = (float)(x_source-left)/(float)(right-left);
+			right_w = (float)(cur_val->x_val-left)/(float)(right-left);
 			left_w = 1.0-right_w;
 			break;
 
 		}
-		if (x_source > right)
+		if (cur_val->x_val > right)
 		{
 			bin[0] = i+1;
 			bin[1] = -1;
@@ -2214,7 +1547,7 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 	{
 		page = firmware->table_params[table]->y_page;
 		base = firmware->table_params[table]->y_base;
-		if (evaluator_evaluate_x(y_eval,ms_data[page][base]) >= y_source)
+		if (evaluator_evaluate_x(cur_val->y_eval,ms_data[page][base]) >= cur_val->y_val)
 		{
 			bin[2] = -1;
 			bin[3] = 0;
@@ -2222,20 +1555,20 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 			bottom_w = 1;
 			break;
 		}
-		bottom = evaluator_evaluate_x(y_eval,ms_data[page][base+i]);
-		top = evaluator_evaluate_x(y_eval,ms_data[page][base+i+1]);
+		bottom = evaluator_evaluate_x(cur_val->y_eval,ms_data[page][base+i]);
+		top = evaluator_evaluate_x(cur_val->y_eval,ms_data[page][base+i+1]);
 
-		if ((y_source > bottom) && (y_source <= top))
+		if ((cur_val->y_val > bottom) && (cur_val->y_val <= top))
 		{
 			bin[2] = i;
 			bin[3] = i+1;
 
-			top_w = (float)(y_source-bottom)/(float)(top-bottom);
+			top_w = (float)(cur_val->y_val-bottom)/(float)(top-bottom);
 			bottom_w = 1.0-top_w;
 			break;
 
 		}
-		if (y_source > top)
+		if (cur_val->y_val > top)
 		{
 			bin[2] = i+1;
 			bin[3] = -1;
@@ -2253,33 +1586,228 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 	tmpf3 = z_weight[0]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf1 = ((evaluator_evaluate_x(x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
-	tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
-	tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
+	tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
+	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
 	tmpf3 = z_weight[1]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
-	tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
+	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
 	tmpf3 = z_weight[2]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf1 = ((evaluator_evaluate_x(x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
-	tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
-	tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
+	tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
+	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
 	tmpf3 = z_weight[3]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf2 = ((evaluator_evaluate_x(y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
-	tmpf3 = (((evaluator_evaluate_x(z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
+	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
 	glEnd();
 
+}
+
+
+/*!
+ \brief get_current_values isa helper function that populates a structure
+ of data comon to all the redraw subhandlers to avoid duplication of
+ effort
+ /param ve_view, base structure
+ /returns a Cur_Vals structure populted with appropriate fields soem of which
+ MUST be freed when done.
+ */
+Cur_Vals * get_current_values(Ve_View_3D *ve_view)
+{
+	gfloat x_val = 0.0;
+	gfloat y_val = 0.0;
+	gfloat z_val = 0.0;
+	gfloat tmp = 0.0;
+	extern gint *algorithm;
+	extern GHashTable *sources_hash;
+	extern gint **ms_data;
+	GHashTable *hash = NULL;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
+	MultiSource *multi = NULL;
+	Cur_Vals *cur_val = NULL;
+	cur_val = g_new0(Cur_Vals, 1);
+
+	/* X */
+	if (ve_view->x_multi_source)
+	{
+		hash = ve_view->x_multi_hash;
+		key = ve_view->x_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf("multi is null!!\n");
+		cur_val->x_eval = multi->evaluator;
+
+		/* Edit value */
+		cur_val->x_edit_value = (evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
+		tmp = (cur_val->x_edit_value/ve_view->x_scale)+ve_view->x_trans;
+		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
+
+		/* Runtime value */
+		lookup_current_value(multi->source,&x_val);
+		cur_val->x_val = x_val;
+		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,multi->precision,multi->suffix);
+	}
+	else
+	{
+		cur_val->x_eval = ve_view->x_eval;
+		/* Edit value */
+		cur_val->x_edit_value = (evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
+		tmp = (cur_val->x_edit_value/ve_view->x_scale)+ve_view->x_trans;
+		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
+		/* Runtime value */
+		lookup_current_value(ve_view->x_source,&x_val);
+		cur_val->x_val = x_val;
+		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
+	}
+
+	/* Y */
+	if (ve_view->y_multi_source)
+	{
+		hash = ve_view->y_multi_hash;
+		key = ve_view->y_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf("multi is null!!\n");
+		cur_val->y_eval = multi->evaluator;
+		/* Edit value */
+		cur_val->y_edit_value = (evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
+		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
+		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
+		/* runtime value */
+		lookup_current_value(multi->source,&y_val);
+		cur_val->y_val = y_val;
+		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,multi->precision,multi->suffix);
+	}
+	else
+	{
+		cur_val->y_eval = ve_view->y_eval;
+		/* Edit value */
+		cur_val->y_edit_value = (evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
+		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
+		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
+		/* runtime value */
+		lookup_current_value(ve_view->y_source,&y_val);
+		cur_val->y_val = y_val;
+		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
+	}
+
+	/* Z */
+	if (ve_view->z_multi_source)
+	{
+		hash = ve_view->z_multi_hash;
+		key = ve_view->z_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf("multi is null!!\n");
+		cur_val->z_eval = multi->evaluator;
+		/* Edit value */
+		cur_val->z_edit_value = (evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale;
+		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
+		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
+		/* runtime value */
+		lookup_current_value(multi->source,&z_val);
+		cur_val->z_val = z_val;
+		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,multi->precision,multi->suffix);
+	}
+	else
+	{
+		cur_val->z_eval = ve_view->z_eval;
+		/* Edit value */
+		cur_val->z_edit_value = (evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale;
+		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
+		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
+		/* runtime value */
+		lookup_current_value(ve_view->z_source,&z_val);
+		cur_val->z_val = z_val;
+		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
+	}
+
+	return cur_val;
+}
+
+
+void free_current_values(Cur_Vals *cur_val)
+{
+	if (cur_val->x_edit_text)
+		g_free(cur_val->x_edit_text);
+	if (cur_val->y_edit_text)
+		g_free(cur_val->y_edit_text);
+	if (cur_val->z_edit_text)
+		g_free(cur_val->z_edit_text);
+	if (cur_val->x_runtime_text)
+		g_free(cur_val->x_runtime_text);
+	if (cur_val->y_runtime_text)
+		g_free(cur_val->y_runtime_text);
+	if (cur_val->z_runtime_text)
+		g_free(cur_val->z_runtime_text);
+	g_free(cur_val);
 }

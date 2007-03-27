@@ -29,7 +29,7 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
-extern struct Serial_Params *serial_params;
+extern Serial_Params *serial_params;
 gint interval_min;
 gint interval_step;
 gint interval_max;

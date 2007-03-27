@@ -41,10 +41,10 @@ extern GStaticMutex serio_mutex;
  \brief handle_ecu_data() reads in the data from the ECU, checks to make sure
  enough arrived, copies it to thedestination buffer and returns;
  \param handler (InputHandler enumeration) determines a courseof action
- \param message (struct Io_Message *) extra data for some handlers...
+ \param message (Io_Message *) extra data for some handlers...
  \returns TRUE on success, FALSE on failure 
  */
-gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
+gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 {
 	gint res = 0;
 	gint i = 0;
@@ -56,11 +56,10 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	guchar buf[2048];
 	guchar *ptr = buf;
 	gchar *err_text = NULL;
-	struct Raw_Runtime_Std *raw_runtime = NULL;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
-	extern struct Serial_Params *serial_params;
-	extern struct Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
+	extern Firmware_Details *firmware;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -272,19 +271,19 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				goto jumpout;
 			}
 
-			raw_runtime = (struct Raw_Runtime_Std *)buf;
+			ptr = buf;
 			/* Test for MS reset */
 			if (just_starting)
 			{
-				lastcount = raw_runtime->secl;
+				lastcount = ptr[0];
 				just_starting = FALSE;
 			}
 			/* Check for clock jump from the MS, a 
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - raw_runtime->secl > 1) && \
-					(lastcount - raw_runtime->secl != 255))
+			if ((lastcount - ptr[0] > 1) && \
+					(lastcount - ptr[0] != 255))
 			{
 				ms_reset_count++;
 				gdk_beep();
@@ -292,7 +291,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			else
 				ms_goodread_count++;
 
-			lastcount = raw_runtime->secl;
+			lastcount = ptr[0];
 
 			/* Feed raw buffer over to post_process()
 			 * as a void * and pass it a pointer to the new

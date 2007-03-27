@@ -36,7 +36,7 @@
 #endif
 
 
-struct Serial_Params *serial_params;
+Serial_Params *serial_params;
 gboolean connected = FALSE;
 gboolean link_up = FALSE;
 GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;

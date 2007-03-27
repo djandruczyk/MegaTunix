@@ -29,7 +29,7 @@
 #include <stringmatch.h>
 #include <structures.h>
 
-struct Rtv_Map *rtv_map = NULL;
+Rtv_Map *rtv_map = NULL;
 gboolean rtvars_loaded = FALSE;
 extern gint dbg_lvl;
 
@@ -42,7 +42,7 @@ extern gint dbg_lvl;
 gboolean load_realtime_map(void )
 {
 	ConfigFile *cfgfile;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	gchar * filename = NULL;
 	gchar *tmpbuf = NULL;
 	gint raw_total = 0;
@@ -89,7 +89,7 @@ gboolean load_realtime_map(void )
 	g_free(filename);
 
 	/* If file found we continue... */
-	rtv_map = g_new0(struct Rtv_Map, 1);
+	rtv_map = g_new0(Rtv_Map, 1);
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))

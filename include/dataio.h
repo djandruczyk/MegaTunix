@@ -19,7 +19,7 @@
 #include <structures.h>
 
 /* Prototypes */
-gboolean handle_ecu_data(InputHandler, struct Io_Message * );
+gboolean handle_ecu_data(InputHandler, Io_Message * );
 void dump_output(gint, guchar *);
 /* Prototypes */
 

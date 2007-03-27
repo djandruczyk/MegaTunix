@@ -51,14 +51,14 @@ GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
 gboolean update_runtime_vars()
 {
 	gint i = 0;
-	struct Ve_View_3D * ve_view = NULL;
+	Ve_View_3D * ve_view = NULL;
 	extern GHashTable *rtt_hash;
 	extern GHashTable *rt_sliders;
 	extern GHashTable *enr_sliders;
 	extern GHashTable *ww_sliders;
 	extern GHashTable **ve3d_sliders;
 	GtkWidget * tmpwidget=NULL;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GHashTable * dynamic_widgets;
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
@@ -69,7 +69,7 @@ gboolean update_runtime_vars()
 	extern GHashTable *sources_hash;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
-	struct MultiSource *multi = NULL;
+	MultiSource *multi = NULL;
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
 	extern gint * algorithm;
@@ -97,7 +97,7 @@ gboolean update_runtime_vars()
 		g_free(string);
 		if (GTK_IS_WIDGET(tmpwidget))
 		{
-			ve_view = (struct Ve_View_3D *)g_object_get_data(
+			ve_view = (Ve_View_3D *)g_object_get_data(
 					G_OBJECT(tmpwidget),"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
@@ -299,7 +299,7 @@ void rt_update_status(gpointer key, gpointer data)
 	static GArray * history = NULL;
 	static gchar * source = NULL;
 	static gchar * last_source = "";
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 
@@ -361,7 +361,7 @@ void rt_update_status(gpointer key, gpointer data)
  */
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
-	struct Rt_Slider *slider = (struct Rt_Slider *)value;
+	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
 	gint rate = slider->rate;
 	gint last_upd = slider->last_upd;
@@ -463,7 +463,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
  */
 void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
-	struct Rt_Text *rtt = (struct Rt_Text *)value;
+	Rt_Text *rtt = (Rt_Text *)value;
 	gint count = rtt->count;
 	gint rate = rtt->rate;
 	gint last_upd = rtt->last_upd;

@@ -41,8 +41,8 @@ extern gboolean connected;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern gint dbg_lvl;
-extern struct Serial_Params *serial_params;
-struct Firmware_Details *firmware = NULL;
+extern Serial_Params *serial_params;
+Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 
 
@@ -54,8 +54,8 @@ gboolean interrogated = FALSE;
  */
 void interrogate_ecu()
 {
-	struct Command *cmd = NULL;
-	struct Canidate *canidate = NULL;
+	Command *cmd = NULL;
+	Canidate *canidate = NULL;
 	extern GHashTable *dynamic_widgets;
 	gint size = 4096;
 	gint res = 0;
@@ -90,7 +90,7 @@ void interrogate_ecu()
 
 
 	/* Allocate memory to store interrogation results */
-	canidate = g_malloc0(sizeof(struct Canidate));
+	canidate = g_malloc0(sizeof(Canidate));
 	canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
 	cmd_details = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -119,7 +119,7 @@ void interrogate_ecu()
 	{
 		flush_serial(serial_params->fd,TCIOFLUSH);
 		count = 0;
-		cmd = g_array_index(cmd_array,struct Command *, i);
+		cmd = g_array_index(cmd_array,Command *, i);
 
 		/* flush buffer to known state.. */
 		memset (buf,0,size);
@@ -263,21 +263,21 @@ void interrogate_ecu()
  \brief determine_ecu() trys to match determine the target firmware by 
  loading the interrogation profiles in turn and comparing the data from our
  test ECU adn a profile until a match is found, 
- \param canidate (struct Canidate *) pointer to the Canidate structure
+ \param canidate (Canidate *) pointer to the Canidate structure
  \param cmd_array (GArray *) pointer to the array of commands sent
  \param cmd_details (GHashTable) details on the interrogation process with
  the target ECU
  \returns TRUE on successfull interrogation, FALSE on no match
  */
-gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable *cmd_details)
+gboolean determine_ecu(Canidate *canidate, GArray *cmd_array, GHashTable *cmd_details)
 {
-	struct Canidate *potential = NULL;
-	struct Command *cmd = NULL;
+	Canidate *potential = NULL;
+	Command *cmd = NULL;
 	gint i = 0;
 	gint num_tests = cmd_array->len;
 	gboolean match = FALSE;
 	gchar ** filenames = NULL;
-	struct MultiSource *multi = NULL;
+	MultiSource *multi = NULL;
 	gchar **sources = NULL;
 	gchar **suffixes = NULL;
 	gchar **conv_exprs = NULL;
@@ -289,7 +289,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	gint len4 = 0;
 	gint len5 = 0;
 	gint j = 0;
-	extern struct Io_Cmds *cmds;
+	extern Io_Cmds *cmds;
 
 	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"));	
 	if (!filenames)
@@ -313,7 +313,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
 	{
-		cmd = g_array_index(cmd_array,struct Command *,i);
+		cmd = g_array_index(cmd_array,Command *,i);
 		if (dbg_lvl & INTERROGATOR)
 			dbg_func(g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
 						cmd->string,
@@ -361,7 +361,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 
 	/* Set expected sizes for commands */
 	if (!firmware)
-		firmware = g_new0(struct Firmware_Details,1);
+		firmware = g_new0(Firmware_Details,1);
 
 	firmware->name = g_strdup(potential->name);
 	if (canidate->sig_str)
@@ -389,15 +389,15 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 		firmware->chunk_write_cmd = g_strdup(potential->chunk_write_cmd);
 
 	/* Allocate RAM for the Req_Fuel_Params structures. */
-	firmware->rf_params = g_new0(struct Req_Fuel_Params *,firmware->total_tables);
+	firmware->rf_params = g_new0(Req_Fuel_Params *,firmware->total_tables);
 
 	/* Allocate RAM for the Table_Params structures and copy data in.. */
-	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
+	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		firmware->rf_params[i] = g_new0(struct Req_Fuel_Params ,1);
+		firmware->rf_params[i] = g_new0(Req_Fuel_Params ,1);
 		firmware->table_params[i] = initialize_table_params();
-		memcpy(firmware->table_params[i],potential->table_params[i],sizeof(struct Table_Params));
+		memcpy(firmware->table_params[i],potential->table_params[i],sizeof(Table_Params));
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->x_multi_source)
 		{
@@ -416,7 +416,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -450,7 +450,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -485,7 +485,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -506,11 +506,11 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 
 
 	/* Allocate RAM for the Page_Params structures and copy data in.. */
-	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
+	firmware->page_params = g_new0(Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		firmware->page_params[i] = initialize_page_params();
-		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
+		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(Page_Params));
 	}
 
 	mem_alloc();
@@ -522,7 +522,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 
 	if (potential->rt_cmd_key != NULL)
 	{
-		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
+		cmd = (Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
 		cmds->realtime_cmd = g_strdup(cmd->string);
 		cmds->rt_cmd_len = cmd->len;
 		firmware->rtvars_size = (gint)g_hash_table_lookup(
@@ -536,7 +536,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	/* VE/Constants */
 	if (potential->ve_cmd_key != NULL)
 	{
-		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
+		cmd = (Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
 		cmds->veconst_cmd = g_strdup(cmd->string);
 		cmds->ve_cmd_len = cmd->len;
 	}
@@ -548,7 +548,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	/* Ignition vars */
 	if (potential->ign_cmd_key != NULL)
 	{
-		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
+		cmd = (Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
 		cmds->ignition_cmd = g_strdup(cmd->string);
 		cmds->ign_cmd_len = cmd->len;
 	}
@@ -556,7 +556,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	/* Raw memory */
 	if (potential->raw_mem_cmd_key != NULL)
 	{
-		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
+		cmd = (Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
 		cmds->raw_mem_cmd = g_strdup(cmd->string);
 		cmds->raw_mem_cmd_len = cmd->len;
 		firmware->memblock_size = (gint)g_hash_table_lookup(
@@ -605,7 +605,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	gint total_tests = 0;
 	gint i = 0;
 	gboolean tmpi = FALSE;
-	struct Command *cmd = NULL;
+	Command *cmd = NULL;
 
 	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"tests",NULL),NULL);
 	if (!filename)
@@ -616,11 +616,11 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	{	
 		if (dbg_lvl & INTERROGATOR)
 			dbg_func(g_strdup_printf(__FILE__": validate_and_load_tests()\n\tfile %s, opened successfully\n",filename));
-		cmd_array = g_array_new(FALSE,FALSE,sizeof(struct Command *));
+		cmd_array = g_array_new(FALSE,FALSE,sizeof(Command *));
 		cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 		for (i=0;i<total_tests;i++)
 		{
-			cmd = g_new0(struct Command, 1);
+			cmd = g_new0(Command, 1);
 			cmd->multipart=FALSE;
 			section = g_strdup_printf("test_%.2i",i);
 			if (!cfg_read_string(cfgfile,section,"raw_cmd",&cmd->string))
@@ -676,11 +676,11 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
  */
 void free_test_commands(GArray * cmd_array)
 {
-	struct Command *cmd = NULL;
+	Command *cmd = NULL;
 	gint i = 0;
 	for (i=0;i<cmd_array->len;i++)
 	{
-		cmd = g_array_index(cmd_array,struct Command *,i);
+		cmd = g_array_index(cmd_array,Command *,i);
 		if (cmd->string)
 			g_free(cmd->string);
 		if (cmd->desc)
@@ -695,9 +695,9 @@ void free_test_commands(GArray * cmd_array)
 /*!
  \brief close_profile() closes the interrogation profile and deallocates and
  memory associated with it..
- \param canidate (struct Canidate *) pointer to the canidate structure
+ \param canidate (Canidate *) pointer to the canidate structure
  */
-void close_profile(struct Canidate *canidate)
+void close_profile(Canidate *canidate)
 {
 	gint i = 0;
 
@@ -766,10 +766,10 @@ void close_profile(struct Canidate *canidate)
  \param filename (gchr *) the name of the interrogation profile filename
  \returns a pointer to a Canidate structure
  */
-struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
+Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
 {
 	ConfigFile *cfgfile;
-	struct Canidate *canidate = NULL;
+	Canidate *canidate = NULL;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -815,10 +815,10 @@ struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
  \brief load_profile_details() loads the profile details for the interrogation
  profile.  This is only done on a match for final prep of megatunix data-
  structures for use.
- \param canidate (struct Canidate *) pointer to the canidate to store 
+ \param canidate (Canidate *) pointer to the canidate to store 
  the rest of the data into
  */
-void load_profile_details(struct Canidate *canidate)
+void load_profile_details(Canidate *canidate)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;
@@ -983,7 +983,7 @@ void load_profile_details(struct Canidate *canidate)
 		}
 
 		/* Allocate space for Table Offsets structures.... */
-		canidate->table_params = g_new0(struct Table_Params *,canidate->total_tables);
+		canidate->table_params = g_new0(Table_Params *,canidate->total_tables);
 		for (i=0;i<canidate->total_tables;i++)
 		{
 			canidate->table_params[i] = initialize_table_params();
@@ -1283,7 +1283,7 @@ void load_profile_details(struct Canidate *canidate)
 			g_free(section);
 		}
 
-		canidate->page_params = g_new0(struct Page_Params *,canidate->total_pages);
+		canidate->page_params = g_new0(Page_Params *,canidate->total_pages);
 		for (i=0;i<canidate->total_pages;i++)
 		{
 			canidate->page_params[i] = initialize_page_params();
@@ -1327,14 +1327,14 @@ void load_profile_details(struct Canidate *canidate)
  */
 void load_bytecounts(GArray *cmd_array, GHashTable *hash, ConfigFile *cfgfile)
 {
-	struct Command *cmd = NULL;
+	Command *cmd = NULL;
 	gint i = 0;
 	gint bytecount = -2;
 
 	for (i=0;i<cmd_array->len;i++)
 	{
 		bytecount = -1;
-		cmd = g_array_index(cmd_array,struct Command *, i);
+		cmd = g_array_index(cmd_array,Command *, i);
 
 		if(!cfg_read_int(cfgfile,"bytecounts",cmd->key,&bytecount))
 			bytecount = -1;
@@ -1390,22 +1390,22 @@ gint translate_capabilities(gchar *string)
  ECU to the canidates in turn.  when a match occurs TRUE is returns
  otherwise it returns FALSE
  \param cmd_array (GArray *) array of commands
- \param potential (struct Canidate *) potential 
- \param canidate (struct Canidate *) Canidate
+ \param potential (Canidate *) potential 
+ \param canidate (Canidate *) Canidate
  \returns TRUE on match, FALSE on failure
  */
-gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct Canidate *canidate)
+gboolean check_for_match(GArray *cmd_array, Canidate *potential, Canidate *canidate)
 {
 	gint num_tests = cmd_array->len;
 	gint cbytes = 0;
 	gint pbytes = 0;
-	struct Command *cmd = NULL;
+	Command *cmd = NULL;
 
 	gint j = 0;
 
 	for (j=0;j<num_tests;j++)
 	{
-		cmd = g_array_index(cmd_array,struct Command *, j);
+		cmd = g_array_index(cmd_array,Command *, j);
 		cbytes = (gint)g_hash_table_lookup(
 				canidate->bytecounts,
 				cmd->key);

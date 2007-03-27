@@ -104,7 +104,7 @@ void select_table_for_export(gint table_num)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern gboolean interrogated;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	if (!interrogated)
 		return;
@@ -191,7 +191,7 @@ void select_table_for_import(gint table_num)
 	GIOChannel *iochannel = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	if (!interrogated)
 		return;
@@ -259,7 +259,7 @@ gboolean all_table_export(GIOChannel *iochannel)
 	gint x_bincount = 0;
 	gint y_bincount = 0;
 	extern gint ** ms_data;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	GIOStatus status;
 	GString *output = NULL;
 
@@ -370,7 +370,7 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 	gint x_bincount = 0;
 	gint y_bincount = 0;
 	extern gint ** ms_data;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	GIOStatus status;
 	GString *output = NULL;
 
@@ -465,7 +465,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
-	struct Vex_Import *vex = NULL;
+	Vex_Import *vex = NULL;
 	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
@@ -474,7 +474,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 			dbg_func(g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return FALSE;
 	}
-	vex = g_new0(struct Vex_Import, 1);
+	vex = g_new0(Vex_Import, 1);
 	vex->table = -1;
 
 	//reset_import_flags();
@@ -504,7 +504,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 		{
 			feed_import_data_to_ecu(vex);
 			dealloc_vex_struct(vex);
-			vex = g_new0(struct Vex_Import, 1);
+			vex = g_new0(Vex_Import, 1);
 			vex->table = -1;
 		}
 	}
@@ -536,7 +536,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
-	struct Vex_Import *vex = NULL;
+	Vex_Import *vex = NULL;
 	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
@@ -545,7 +545,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 			dbg_func(g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return;
 	}
-	vex = g_new0(struct Vex_Import, 1);
+	vex = g_new0(Vex_Import, 1);
 	vex->table = table_num;
 
 	//reset_import_flags();
@@ -595,12 +595,12 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 /*!
  \brief process_vex_line() is called for to read the VEX file and
  dispatch handlers to process sections of the file.
- \param vex (struct Vex_Import *) pointer to Vex_Import structure.
+ \param vex (Vex_Import *) pointer to Vex_Import structure.
  \param iochannel (GIOChannel *) the bytestream represented by the VEXfile
  \returns The status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL
  usually
  */
-GIOStatus process_vex_line(struct Vex_Import * vex, GIOChannel *iochannel)
+GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochannel)
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
@@ -635,7 +635,7 @@ breakout:
  It passes off the pointer to the Vex_Import struct, the function arg, 
  the string read, and the pointer to the IOchannel representing the 
  input bytestream.
- \param vex (struct Vex_Import *) The pointer to the Vex_Import datastructure.
+ \param vex (Vex_Import *) The pointer to the Vex_Import datastructure.
  \param function (ImportParserFunc) an enumeration used to determine 
  which handler to call.
  \param arg (ImportParserArg) another enumeration passed to the functiosn 
@@ -649,7 +649,7 @@ breakout:
  \returns a GIOStatus of the dispatched function (usually G_IO_STATUS_NORMAL
  or G_IO_STATUS_ERROR)
  */
-GIOStatus handler_dispatch(struct Vex_Import *vex, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
@@ -673,12 +673,12 @@ GIOStatus handler_dispatch(struct Vex_Import *vex, ImportParserFunc function, Im
 /*!
  \brief process_header() processes portions of the header of the VEX file 
  and populates the Vex_Import datastructure for this Table
- \param vex (struct Vex_Import *) pointer to the Vex_Import structure
+ \param vex (Vex_Import *) pointer to the Vex_Import structure
  \param arg (ImportPArserArg) enumeration of header portion to process
  \param string (gchar *) text of the header line to process
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_header(struct Vex_Import *vex, ImportParserArg arg, gchar * string)
+GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
 {
 	gchar ** str_array = NULL;
 	gchar *result = NULL;
@@ -726,16 +726,16 @@ GIOStatus process_header(struct Vex_Import *vex, ImportParserArg arg, gchar * st
 /*!
  \brief process_page() extracts the page variable from the VEX file and 
  stores it in the Vex_Import Structure for this table.
- \param vex (struct Vex_Import *) Pointer to the Vex_Import structure
+ \param vex (Vex_Import *) Pointer to the Vex_Import structure
  \param string (gchar *) line of VEX file in which to extract the page out of
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_page(struct Vex_Import *vex, gchar *string)
+GIOStatus process_page(Vex_Import *vex, gchar *string)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gchar ** str_array = NULL;
 	gint page = -1;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	if (!string)
 	{
@@ -769,13 +769,13 @@ GIOStatus process_page(struct Vex_Import *vex, gchar *string)
 /*!
  \brief process_table() extracts the table_number out of the comment field
  stores it in the Vex_Import Structure for this table.
- \param vex (struct Vex_Import *) Pointer to the Vex_Import structure
+ \param vex (Vex_Import *) Pointer to the Vex_Import structure
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_table(struct Vex_Import *vex)
+GIOStatus process_table(Vex_Import *vex)
 {
 	gchar **string = NULL;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	/* Search for out magic semicolon, if missing AND multi-table/page
 	 * firmware, ABORT */
@@ -848,7 +848,7 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
  allocate the memory for storing the data and call the needed functions to
  read the values into the arrays.
  \see read_number_from_line
- \param vex (struct Vex_Import *) pointer to the Vex_Import structure
+ \param vex (Vex_Import *) pointer to the Vex_Import structure
  \param arg (ImportParserArg) enumeration to decide which range we are going to
  read
  \param string (gchar *) Line of text passed to parse.
@@ -856,7 +856,7 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
  retrieving additional data.
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gint i = 0;
@@ -942,7 +942,7 @@ GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar *
  VEX file for reading more data
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *iochannel)
+GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochannel)
 {
 	gint i = 0, j = 0;
 	GString *a_line;
@@ -1052,10 +1052,10 @@ EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 /*!
  \brief dealloc_vex_struct() deallocates the memory used by the Vex_Import
  datastructure
- \param vex (struct Vex_Import *) Pointer to the Vex_Import structure 
+ \param vex (Vex_Import *) Pointer to the Vex_Import structure 
  to deallocate.
  */
-void dealloc_vex_struct(struct Vex_Import *vex)
+void dealloc_vex_struct(Vex_Import *vex)
 {
 	if (vex->version)
 		g_free(vex->version);
@@ -1082,9 +1082,9 @@ void dealloc_vex_struct(struct Vex_Import *vex)
  \brief feed_import_data_to_ecu() Forwards the data in the VEX file to the
  ECU.  NOTE this may have problems with firmware using multiple tables in
  a page, as the VEX format 1.0 does NOT handle that condition.
- \param vex (struct Vex_Import *) pointer to the Vex_Impot datastructure.
+ \param vex (Vex_Import *) pointer to the Vex_Impot datastructure.
  */
-void feed_import_data_to_ecu(struct Vex_Import *vex)
+void feed_import_data_to_ecu(Vex_Import *vex)
 {
 	gint i = 0;
 	extern gint ** ms_data;
@@ -1096,7 +1096,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	gint base = 0;
 	gboolean is_spark = 0;
 	gint table = -1;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	/* Since we assume the page is where the table is this can cause
 	 * major problems with some firmwares that use two tables inside
@@ -1208,7 +1208,7 @@ void revert_to_previous_data()
 	/* Called to back out a load of a VEtable from VEX import */
 	extern gint ** ms_data;
 	extern gint ** ms_data_backup;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GHashTable *dynamic_widgets;
 
 	for (i=0;i<firmware->total_pages;i++)

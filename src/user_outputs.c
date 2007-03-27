@@ -108,7 +108,7 @@ GtkTreeModel * create_model(void)
 	gint upper = 0;
 	gchar * range = NULL;
 	GObject * object = NULL;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 
 	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
 
@@ -279,7 +279,7 @@ void cell_edited(GtkCellRendererText *cell,
 	gchar *hash_key = NULL;
 	gboolean ign_parm = FALSE;
 	gboolean is_float = FALSE;
-	struct MultiExpr *multi = NULL;
+	MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
 	extern GHashTable *sources_hash;
 
@@ -304,13 +304,13 @@ void cell_edited(GtkCellRendererText *cell,
 		{
 			hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 			if (hash_key)
-				multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
+				multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
 			else
-				multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 
 		}
 		else
-			multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+			multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 		if (!multi)
 			return;
 		if (new < multi->lower_limit)
@@ -439,7 +439,7 @@ void update_model_from_view(GtkWidget * widget)
 	gchar * key = NULL;
 	gchar * hash_key = NULL;
 	GHashTable *hash = NULL;
-	struct MultiExpr * multi = NULL;
+	MultiExpr * multi = NULL;
 	extern GHashTable *sources_hash;
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
@@ -471,12 +471,12 @@ void update_model_from_view(GtkWidget * widget)
 				{
 					hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 					if (hash_key)
-						multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
+						multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
 					else
-						multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+						multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 				}
 				else
-					multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 				if (!multi)
 					continue;
 

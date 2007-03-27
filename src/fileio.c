@@ -107,7 +107,7 @@ EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
  */
 void backup_all_ecu_settings(gchar *filename)
 {
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	gchar * section = NULL;
 	gint i = 0;
@@ -153,7 +153,7 @@ void backup_all_ecu_settings(gchar *filename)
  */
 void restore_all_ecu_settings(gchar *filename)
 {
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	gchar * section = NULL;
 	gint page = 0;

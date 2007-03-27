@@ -52,8 +52,8 @@ void set_offline_mode(void)
 	gchar * filename = NULL;
 	GArray *cmd_array = NULL;
 	GHashTable *cmd_details = NULL;
-	struct Canidate *canidate = NULL;
-	extern struct Firmware_Details *firmware;
+	Canidate *canidate = NULL;
+	extern Firmware_Details *firmware;
 	extern gint ecu_caps;
 	extern gboolean interrogated;
 	gchar **sources = NULL;
@@ -66,7 +66,7 @@ void set_offline_mode(void)
 	gint len3 = 0;
 	gint len4 = 0;
 	gint len5 = 0;
-	struct MultiSource *multi = NULL;
+	MultiSource *multi = NULL;
 	gint j = 0;
 
 	gint i = 0;
@@ -107,7 +107,7 @@ void set_offline_mode(void)
 
 	/* Set expected sizes for commands */
 	if (!firmware)
-		firmware = g_new0(struct Firmware_Details,1);
+		firmware = g_new0(Firmware_Details,1);
 
 	firmware->name = g_strdup(canidate->name);
 	firmware->tab_list = g_strsplit(canidate->load_tabs,",",0);
@@ -123,15 +123,15 @@ void set_offline_mode(void)
 	firmware->page_cmd = g_strdup(canidate->page_cmd);
 
 	/* Allocate RAM for the Req_Fuel_Params structures. */
-	firmware->rf_params = g_new0(struct Req_Fuel_Params *,firmware->total_tables);
+	firmware->rf_params = g_new0(Req_Fuel_Params *,firmware->total_tables);
 
 	/* Allocate ram for the necessary structures... */
-	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
+	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		firmware->rf_params[i] = g_new0(struct Req_Fuel_Params, 1);
+		firmware->rf_params[i] = g_new0(Req_Fuel_Params, 1);
 		firmware->table_params[i] = initialize_table_params();
-		memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(struct Table_Params));
+		memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(Table_Params));
 		firmware->rf_params[i]->num_cyls=1;
 		firmware->rf_params[i]->num_squirts=1;
 		firmware->rf_params[i]->num_inj=1;
@@ -153,7 +153,7 @@ void set_offline_mode(void)
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -187,7 +187,7 @@ void set_offline_mode(void)
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -222,7 +222,7 @@ void set_offline_mode(void)
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
-				multi = g_new0(struct MultiSource,1);
+				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
@@ -242,11 +242,11 @@ void set_offline_mode(void)
 
 	}
 
-	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
+	firmware->page_params = g_new0(Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		firmware->page_params[i] = initialize_page_params();
-		memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(struct Page_Params));
+		memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(Page_Params));
 	}
 
 	mem_alloc();
@@ -284,7 +284,7 @@ void set_offline_mode(void)
 gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 {
 	gchar ** filenames = NULL;
-	struct Canidate *potential = NULL;
+	Canidate *potential = NULL;
 	GtkWidget *dialog_window = NULL;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;

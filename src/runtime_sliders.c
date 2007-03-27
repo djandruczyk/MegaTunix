@@ -40,8 +40,8 @@ extern gint dbg_lvl;
 void load_sliders()
 {
 	ConfigFile *cfgfile = NULL;
-	struct Rt_Slider *slider = NULL;
-	extern struct Firmware_Details *firmware;
+	Rt_Slider *slider = NULL;
+	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
 	gchar *filename = NULL;
 	gint count = 0;
@@ -187,8 +187,8 @@ finish_off:
 void load_ve3d_sliders(gint table_num)
 {
 	ConfigFile *cfgfile = NULL;
-	struct Rt_Slider *slider = NULL;
-	extern struct Firmware_Details *firmware;
+	Rt_Slider *slider = NULL;
+	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -287,19 +287,19 @@ finish_off:
  \param ident (TabIdent) enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
  */
-struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
+Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
-	struct Rt_Slider *slider = NULL;
+	Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *pbar = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
-	slider = g_malloc0(sizeof(struct Rt_Slider));
+	slider = g_malloc0(sizeof(Rt_Slider));
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
@@ -350,14 +350,11 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
-	//label = gtk_label_new(NULL);
-	//set_fixed_size(label,6);
-	//gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
-	
 	label = gtk_entry_new();
 	gtk_entry_set_has_frame(GTK_ENTRY(label),FALSE);
-	gtk_entry_set_width_chars(GTK_ENTRY(label),6);
+	gtk_entry_set_width_chars(GTK_ENTRY(label),5);
 	gtk_entry_set_alignment(GTK_ENTRY(label),1);
+	gtk_entry_set_editable(GTK_ENTRY(label),FALSE);
 	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&table->style->bg[GTK_STATE_NORMAL]);
 
 	slider->textval = label;
@@ -373,8 +370,8 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 
 	gtk_table_attach (GTK_TABLE (table),hbox,
 			0,2,slider->row,(slider->row)+1,
-			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
-			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -403,8 +400,8 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;
-	extern struct Rtv_Map *rtv_map;
-	struct Rt_Slider *slider = g_malloc0(sizeof(struct Rt_Slider));
+	extern Rtv_Map *rtv_map;
+	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
 	gchar * source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
 	TabIdent ident = (TabIdent)g_object_get_data(G_OBJECT(widget),"tab_ident");
 		

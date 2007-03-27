@@ -24,7 +24,7 @@
 #include <structures.h>
 
 
-struct TTMon_Data *ttm_data;
+TTMon_Data *ttm_data;
 
 #define CTR 187
 #define UNITS 188
@@ -60,7 +60,7 @@ EXPORT void reset_ttm_buttons()
 EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
 
-	ttm_data = g_new0(struct TTMon_Data,1);
+	ttm_data = g_new0(TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->pixmap = NULL;
 	ttm_data->darea = src_widget;

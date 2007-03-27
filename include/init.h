@@ -24,16 +24,16 @@ void save_config(void);
 void make_megasquirt_dirs(void);
 void mem_alloc(void);
 void mem_dealloc(void);
-void dealloc_textmessage(struct Text_Message * );
-void dealloc_message(struct Io_Message * );
-void dealloc_w_update(struct Widget_Update * );
-void dealloc_table_params(struct Table_Params * );
-void dealloc_qfunction(struct QFunction * );
-struct Io_Message * initialize_io_message(void);
-struct Text_Message * initialize_text_message(void);
-struct Canidate * initialize_canidate(void);
-struct Page_Params * initialize_page_params(void);
-struct Table_Params * initialize_table_params(void);
+void dealloc_textmessage(Text_Message * );
+void dealloc_message(Io_Message * );
+void dealloc_w_update(Widget_Update * );
+void dealloc_table_params(Table_Params * );
+void dealloc_qfunction(QFunction * );
+Io_Message * initialize_io_message(void);
+Text_Message * initialize_text_message(void);
+Canidate * initialize_canidate(void);
+Page_Params * initialize_page_params(void);
+Table_Params * initialize_table_params(void);
 /* Prototypes */
 
 #endif

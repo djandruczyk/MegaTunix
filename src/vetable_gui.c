@@ -39,15 +39,10 @@
  needed data to properly do the rescaling.
  */
 static gboolean color_changed = FALSE;
-enum
-{
-	_X_=0,
-	_Y_
-};
 
 void rescale_table(GtkWidget *widget)
 {
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
@@ -166,7 +161,7 @@ void rescale_table(GtkWidget *widget)
  */
 void reqfuel_rescale_table(GtkWidget *widget)
 {
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
@@ -350,7 +345,7 @@ void draw_ve_marker()
 	gint heaviest = -1;
 	GList *list = NULL;
 	static void ***eval;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern gint ** ms_data;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
@@ -361,7 +356,12 @@ void draw_ve_marker()
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
-	struct MultiSource *multi = NULL;
+	MultiSource *multi = NULL;
+	enum
+	{
+		_X_=0,
+		_Y_
+	};
 
 	if ((active_table < 0 )||(active_table > (firmware->total_tables-1)))
 		return;

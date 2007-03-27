@@ -66,7 +66,7 @@ void comms_test()
 {
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
-	extern struct Serial_Params *serial_params;
+	extern Serial_Params *serial_params;
 	extern gboolean connected;
 	extern gboolean offline;
 	extern gint failurecount;
@@ -194,15 +194,15 @@ void comms_test()
  \brief update_write_status() checks the differences between the current ECU
  data snapshot and the last one, if there are any differences (things need to
  be burnt) then it turns all the widgets in the "burners" group to RED
- \param data (struct Output_Data *) pointer to data sent to ECU used to
+ \param data (Output_Data *) pointer to data sent to ECU used to
  update other widgets that refer to that Page/Offset
  */
-void update_write_status(struct Output_Data *data)
+void update_write_status(Output_Data *data)
 {
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	gint i = 0;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
@@ -253,12 +253,12 @@ void update_write_status(struct Output_Data *data)
 
 /*!
  \brief writeto_ecu() physiclaly sends the data to the ECU.
- \param message (struct Io_Message *) a pointer to a struct Io_Message
+ \param message (Io_Message *) a pointer to a Io_Message
  */
-void writeto_ecu(struct Io_Message *message)
+void writeto_ecu(Io_Message *message)
 {
 	extern gboolean connected;
-	struct Output_Data *output = message->payload;
+	Output_Data *output = message->payload;
 
 	gint page = output->page;
 	gint truepgnum = message->truepgnum;
@@ -274,8 +274,8 @@ void writeto_ecu(struct Io_Message *message)
 	gint i = 0;
 	char *lbuff = NULL;
 	gchar * write_cmd = NULL;
-	extern struct Firmware_Details *firmware;
-	extern struct Serial_Params *serial_params;
+	extern Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
 	extern gint **ms_data;
 	extern gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -487,8 +487,8 @@ void burn_ecu_flash()
 	gint res = 0;
 	gint i = 0;
 	gchar * err_text = NULL;
-	extern struct Firmware_Details * firmware;
-	extern struct Serial_Params *serial_params;
+	extern Firmware_Details * firmware;
+	extern Serial_Params *serial_params;
 	extern gboolean offline;
 	extern gboolean connected;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -542,13 +542,13 @@ copyover:
  written in this function to trigger the ECU to send back a block of data, 
  and then a handler is kicked off to handle the incoming data
  \see handle_ecu_data
- \param message (struct Io_Message *) pointer to a struct Io_Message
+ \param message (Io_Message *) pointer to a Io_Message
  */
-void readfrom_ecu(struct Io_Message *message)
+void readfrom_ecu(Io_Message *message)
 {
 	gint result = 0;
-	extern struct Serial_Params *serial_params;
-	extern struct Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
+	extern Firmware_Details *firmware;
 	extern gboolean connected;
 	extern gchar *handler_types[];
 	gchar *err_text = NULL;
@@ -646,8 +646,8 @@ void readfrom_ecu(struct Io_Message *message)
  */
 void set_ms_page(guint8 ms_page)
 {
-	extern struct Firmware_Details *firmware;
-	extern struct Serial_Params *serial_params;
+	extern Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	extern gboolean force_page_change;

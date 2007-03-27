@@ -40,7 +40,7 @@ extern gint dbg_lvl;
  */
 void start_tickler(TicklerType type)
 {
-	extern struct Serial_Params *serial_params;
+	extern Serial_Params *serial_params;
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -93,7 +93,7 @@ void start_tickler(TicklerType type)
  */
 void stop_tickler(TicklerType type)
 {
-	extern struct Serial_Params *serial_params;
+	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
 	switch (type)
 	{

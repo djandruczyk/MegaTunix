@@ -24,7 +24,7 @@ void reset_logviewer_state(void);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean set_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
-struct Viewable_Value * build_v_value(GObject * );
+Viewable_Value * build_v_value(GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
 void draw_infotext();

@@ -20,7 +20,7 @@
 
 /* Prototypes */
 void load_rt_text(void );
-struct Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *);
+Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *);
 /* Prototypes */
 
 #endif

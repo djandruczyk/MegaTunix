@@ -38,8 +38,6 @@ static gint def_width=620;
 static gint def_height=525;
 gint width = 0;
 gint height = 0;
-gint main_x_origin = 0;
-gint main_y_origin = 0;
 extern gboolean tips_in_use;
 GtkWidget *main_window = NULL;
 GtkTooltips *tip = NULL;
@@ -52,7 +50,14 @@ GtkTooltips *tip = NULL;
 int setup_gui()
 {
 	gchar *filename = NULL;
+	GtkWidget *window = NULL;
+	GtkWidget *top_vbox = NULL;
 	GladeXML *xml = NULL;
+	gint x = 0;
+	gint y = 0;
+	gint w = 0;
+	gint h = 0;
+	extern GObject *global_data;
 
 	filename = get_file(g_build_filename(GUI_DATA_DIR,"main.glade",NULL),NULL);
 	if (!filename)
@@ -61,20 +66,29 @@ int setup_gui()
 		exit(-1);
 	}
 	else
-		xml = glade_xml_new(filename, "mtx_main_window",NULL);
+		xml = glade_xml_new(filename, "mtx_top_vbox",NULL);
 	g_free(filename);
 
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	g_signal_connect(G_OBJECT(window),"delete_event",
+			G_CALLBACK(leave),NULL);
+	main_window = window;
+	top_vbox = glade_xml_get_widget(xml,"mtx_top_vbox");
+	gtk_container_add(GTK_CONTAINER(window),top_vbox);
 
 	glade_xml_signal_autoconnect(xml);
+	g_object_set_data(global_data,"main_xml",xml);
 
 	tip = gtk_tooltips_new();
-	main_window = glade_xml_get_widget(xml,"mtx_main_window");
-	finalize_core_gui(xml);
-	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
+	x = (gint)g_object_get_data(global_data,"main_x_origin");
+	y = (gint)g_object_get_data(global_data,"main_y_origin");
+	w = (gint)g_object_get_data(global_data,"width");
+	h = (gint)g_object_get_data(global_data,"height");
+	gtk_window_move((GtkWindow *)main_window, x, y);
 	gtk_widget_set_size_request(main_window,def_width,def_height);
-	gtk_window_resize(GTK_WINDOW(main_window),width,height);
+	gtk_window_resize(GTK_WINDOW(main_window),w,h);
 	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
-
+	finalize_core_gui(xml);
 
 	if(tips_in_use)
 		gtk_tooltips_enable(tip);
@@ -104,11 +118,10 @@ void finalize_core_gui(GladeXML * xml)
 	gchar * tmpbuf = NULL;
 	extern gint temp_units;
 	extern gboolean tips_in_use;
-	extern gchar * cluster_1_name;
-	extern gchar * cluster_2_name;
 	extern gchar * serial_port_name;
 	extern gint baudrate;
-	extern struct Serial_Params *serial_params;
+	extern GObject *global_data;
+	extern Serial_Params *serial_params;
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
@@ -151,8 +164,9 @@ void finalize_core_gui(GladeXML * xml)
 	button = glade_xml_get_widget(xml,"dash1_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
 	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
-	if ((cluster_1_name) && (g_ascii_strcasecmp(cluster_1_name,"") !=0))
-		gtk_button_set_label(GTK_BUTTON(button),cluster_1_name);
+	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_1_name");
+	if ((tmpbuf) && (g_ascii_strcasecmp(tmpbuf,"") !=0))
+		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
 	else
 		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
 
@@ -163,7 +177,7 @@ void finalize_core_gui(GladeXML * xml)
 	if (gtk_minor_version >= 6)
 		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
 #endif
-	register_widget("dash_cluster_1_label",label);
+	register_widget("dash_1_label",label);
 	/* Bind signal to the button to choose a new dash */
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),
@@ -173,8 +187,9 @@ void finalize_core_gui(GladeXML * xml)
 	button = glade_xml_get_widget(xml,"dash2_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
 	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
-	if ((cluster_2_name) && (g_ascii_strcasecmp(cluster_2_name,"") !=0))
-		gtk_button_set_label(GTK_BUTTON(button),cluster_2_name);
+	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
+	if ((tmpbuf) && (g_ascii_strcasecmp(tmpbuf,"") !=0))
+		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
 	else
 		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",gtk_bin_get_child(GTK_BIN(button)));
@@ -184,7 +199,7 @@ void finalize_core_gui(GladeXML * xml)
 	if (gtk_minor_version >= 6)
 		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
 #endif
-	register_widget("dash_cluster_2_label",label);
+	register_widget("dash_2_label",label);
 	/* Bind signal to the button to choose a new dash */
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),

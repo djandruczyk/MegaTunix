@@ -27,7 +27,7 @@ gint dbg_lvl = 0;
 
 static FILE * dbgfile = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
-static struct DebugLevel dbglevels[] = 
+static DebugLevel dbglevels[] = 
 {
 	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT, FALSE},
 	{ "OpenGL", DEBUG_LEVEL, OPENGL, OPENGL_SHIFT, FALSE},

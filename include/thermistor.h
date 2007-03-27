@@ -31,7 +31,7 @@ class thermistor {
     thermistor(char scale, samples &input, int bias, int type, char *cmnt);	// Parameterized constructor
     thermistor(thermistor &);									// Copy constructor
     int write_inc_file();
-    int modify_s19_file(char filename[]);
+    void modify_s19_file(char filename[]);
     ~thermistor(void);
     
   protected:

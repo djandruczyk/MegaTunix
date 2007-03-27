@@ -49,12 +49,12 @@ void setup_menu_handlers()
 	GtkWidget *item = NULL;
 	gint i = 0;
 	GladeXML *xml = NULL;
-	extern GtkWidget *main_window;
+	extern GObject *global_data;
 	extern volatile gboolean leaving;
 
-	if ((!main_window) || (leaving))
+	xml = (GladeXML *)g_object_get_data(global_data,"main_xml");
+	if ((!xml) || (leaving))
 		return;
-	xml = glade_get_widget_tree(main_window);
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)
 	{

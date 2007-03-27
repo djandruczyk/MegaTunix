@@ -49,7 +49,7 @@ EXPORT void finish_raweditor(void)
 	gint cols = 8;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GHashTable *dynamic_widgets;
 	extern GList *** ve_widgets;
 	extern volatile gboolean leaving;

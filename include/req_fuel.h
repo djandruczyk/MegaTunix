@@ -23,7 +23,7 @@ gboolean save_reqd_fuel(GtkWidget *, gpointer);
 gboolean close_popup(GtkWidget *);
 void req_fuel_change(GtkWidget *);
 void check_req_fuel_limits(gint);
-struct Reqd_Fuel * initialize_reqd_fuel(gint );
+Reqd_Fuel * initialize_reqd_fuel(gint );
 /* Prototypes */
 
 #endif

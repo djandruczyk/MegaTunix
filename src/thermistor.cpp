@@ -126,7 +126,7 @@ int thermistor::write_inc_file() {
 * IAT thermistor, it should modify the 256 entries starting at F500, if it is
 * a CLT thermistor, it should modify those starting at F600.
 ****************************************************************************/
-int thermistor::modify_s19_file(char filename[]) {
+void thermistor::modify_s19_file(char filename[]) {
 	char *mangled_name;
 	char replace_locate[9];
 	int start_addr;

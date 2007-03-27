@@ -31,13 +31,12 @@
 
 /* global vars (owned here...) */
 gchar *delimiter;
-gfloat cumu = 0.0;
 gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
 extern gint dbg_lvl;
-extern struct Rtv_Map *rtv_map;
+extern Rtv_Map *rtv_map;
 
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
@@ -239,7 +238,7 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
 
 /*!
  \brief write_log_header() writes the top line of the datalog with field names
- \param iofile (struct Io_File *) pointer to the datalog output file 
+ \param iofile (Io_File *) pointer to the datalog output file 
  \param override (gboolean),  if true ALL variabels are logged, if FALSE
  only selected variabels are logged
  */
@@ -253,7 +252,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	GObject * object = NULL;
 	gchar * string = NULL;
 	extern gint preferred_delimiter;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	if (!iochannel)
 	{
 		if (dbg_lvl & CRITICAL)

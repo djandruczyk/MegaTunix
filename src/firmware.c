@@ -20,7 +20,7 @@
 /*!
  \brief load_firmware_file loads the .s19 file into memory
  */
-void load_firmware_file(struct Io_File *iofile)
+void load_firmware_file(Io_File *iofile)
 {
 	g_printf("load_firmware_file() not implemented yet\n");
 }

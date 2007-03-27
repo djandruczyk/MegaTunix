@@ -36,19 +36,20 @@ void load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
-	//	GtkWidget *ebox = NULL;
+	gchar *key = NULL;
+	gchar *prefix = NULL;
+	gint x = 0;
+	gint y = 0;
+	extern GObject * global_data;
+	extern GHashTable *dynamic_widgets;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern gchar * cluster_1_name;
-	extern gchar * cluster_2_name;
 	extern gboolean interrogated;
 
 	if (!interrogated)
 		return;
 	if (filename == NULL)
-	{
 		return;
-	}
 
 	LIBXML_TEST_VERSION
 
@@ -71,18 +72,10 @@ void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dummy), NULL);
 	//	ebox = gtk_event_box_new();
 	//	gtk_container_add(GTK_CONTAINER(window),ebox);
-	if ((gint)data == 1)
-	{
-		if (cluster_1_name)
-			g_free(cluster_1_name);
-		cluster_1_name = g_strdup(filename);
-	}
-	if ((gint)data == 2)
-	{
-		if (cluster_2_name)
-			g_free(cluster_2_name);
-		cluster_2_name = g_strdup(filename);
-	}
+	prefix = g_strdup_printf("dash_%i",(gint)data);
+	key = g_strdup_printf("%s_name",prefix);
+	g_object_set_data(global_data,key, g_strdup(filename));
+	g_free(key);
 
 	dash = gtk_fixed_new();
 	gtk_widget_add_events(GTK_WIDGET(dash),GDK_POINTER_MOTION_MASK|
@@ -105,8 +98,14 @@ void load_dashboard(gchar *filename, gpointer data)
 
 	dash_shape_combine(dash);
 
-
-//	gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,filename), cluster_1_x_origin, cluster_1_y_origin);
+	key = g_strdup_printf("%s_x_origin",prefix);
+	x = (gint)g_object_get_data(global_data,key);
+	g_free(key);
+	key = g_strdup_printf("%s_y_origin",prefix);
+	y = (gint)g_object_get_data(global_data,key);
+	g_free(key);
+	gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,filename), x,y);
+	g_free(prefix);
 	gtk_widget_show_all(window);
 	g_free(filename);
 }
@@ -246,7 +245,7 @@ void load_string_from_xml(xmlNode *node, gchar **dest)
 
 void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
-	struct Dash_Gauge *d_gauge = NULL;
+	Dash_Gauge *d_gauge = NULL;
 	GtkFixedChild *child;
 	GList *children = NULL;
 	gint len = 0;
@@ -254,7 +253,7 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	GObject * rtv_obj = NULL;
 	gchar * source = NULL;
 	extern GHashTable *dash_gauges;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
@@ -283,19 +282,19 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 				dbg_func(g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source));
 			continue ;
 		}
-		d_gauge = g_new0(struct Dash_Gauge, 1);
+		d_gauge = g_new0(Dash_Gauge, 1);
 		d_gauge->object = rtv_obj;
 		d_gauge->source = source;
 		d_gauge->gauge = child->widget;
 		d_gauge->dash = dash;
-		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_cluster_%i_gauge_%i",(gint)data,i),(gpointer)d_gauge);
+		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_%i_gauge_%i",(gint)data,i),(gpointer)d_gauge);
 
 	}
 }
 
 void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
-	struct Dash_Gauge *d_gauge = (struct Dash_Gauge *)value;
+	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
 	extern GStaticMutex rtv_mutex;
 	GArray *history;
 	gint current_index = 0;
@@ -432,26 +431,24 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 void initialize_dashboards()
 {
 	GtkWidget * label = NULL;
-	extern gchar * cluster_1_name;
-	extern gchar * cluster_2_name;
-	extern gint cluster_1_x_origin;
-	extern gint cluster_1_y_origin;
-	extern gint cluster_2_x_origin;
-	extern gint cluster_2_y_origin;
+	gchar * tmpbuf = NULL;
+	extern GObject *global_data;
 	extern GHashTable *dynamic_widgets;
 
-	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_1_label");
-	if ((GTK_IS_LABEL(label)) && (cluster_1_name != NULL) && (g_ascii_strcasecmp(cluster_1_name,"") != 0))
+	label = g_hash_table_lookup(dynamic_widgets,"dash_1_label");
+	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_1_name");
+	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (g_ascii_strcasecmp(tmpbuf,"") != 0))
 	{
-		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_1_name,-1,NULL,NULL,NULL));
-		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
+		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL));
+		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
 	}
 
-	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
-	if ((GTK_IS_LABEL(label)) && (cluster_2_name != NULL) && (g_ascii_strcasecmp(cluster_2_name,"") != 0))
+	label = g_hash_table_lookup(dynamic_widgets,"dash_2_label");
+	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
+	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (g_ascii_strcasecmp(tmpbuf,"") != 0))
 	{
-		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_2_name,-1,NULL,NULL,NULL));
-		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
+		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL));
+		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
 	}
 }
 
@@ -497,8 +494,8 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dash_gauges;
 	GtkWidget *label = NULL;
-	extern gchar * cluster_1_name;
-	extern gchar * cluster_2_name;
+	gchar *tmpbuf = NULL;
+	extern GObject *global_data;
 
 	if(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		return FALSE;
@@ -509,18 +506,20 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 		gtk_label_set_text(GTK_LABEL(label),"Choose a Dashboard File");
 		if ((gint)data == 1)
 		{
-			if (cluster_1_name)
+			tmpbuf = (gchar *)g_object_get_data(global_data,"dash_1_name");
+			if (tmpbuf)
 			{
-				g_free(cluster_1_name);
-				cluster_1_name = NULL;
+				g_free(tmpbuf);
+				g_object_set_data(global_data,"dash_1_name",NULL);
 			}
 		}
 		if ((gint)data == 2)
 		{
-			if (cluster_2_name)
+			tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
+			if (tmpbuf)
 			{
-				g_free(cluster_2_name);
-				cluster_2_name = NULL;
+				g_free(tmpbuf);
+				g_object_set_data(global_data,"dash_2_name",NULL);
 			}
 		}
 	}
@@ -532,14 +531,14 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 {
 	gchar *tmpbuf = NULL;
-	struct Dash_Gauge *d_gauge = NULL;
+	Dash_Gauge *d_gauge = NULL;
 
-	tmpbuf = g_strdup_printf("dash_cluster_%i",(gint)user_data);
+	tmpbuf = g_strdup_printf("dash_%i",(gint)user_data);
 	if (g_strrstr((gchar *)key,tmpbuf) != NULL)
 	{
 		g_free(tmpbuf);
 		/* Foudn gauge in soon to be destroyed dash */
-		d_gauge = (struct Dash_Gauge *)value;
+		d_gauge = (Dash_Gauge *)value;
 		g_free(d_gauge->source);
 		if (GTK_IS_WIDGET(d_gauge->dash))
 			gtk_widget_destroy(gtk_widget_get_toplevel(d_gauge->dash));

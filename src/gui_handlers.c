@@ -60,7 +60,7 @@ extern gchar *delimiter;
 extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
-extern struct Serial_Params *serial_params;
+extern Serial_Params *serial_params;
 extern gchar * serial_port_name;
 extern gint dbg_lvl;
 
@@ -410,7 +410,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern GHashTable *sources_hash;
 	extern gint baudrate;
 
@@ -1030,9 +1030,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	extern gint realtime_id;
 	extern gint **ms_data;
 	extern gint lv_zoom;
-	struct Reqd_Fuel *reqd_fuel = NULL;
+	Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
 
@@ -1049,7 +1049,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 
-	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
+	reqd_fuel = (Reqd_Fuel *)g_object_get_data(
 			G_OBJECT(widget),"reqd_fuel");
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
@@ -1339,7 +1339,7 @@ void update_ve_const()
 	extern gint **ms_data;
 	extern gint ecu_caps;
 	extern volatile gboolean leaving;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	if (leaving)
 		return;
@@ -1469,6 +1469,10 @@ void update_ve_const()
  */
 gboolean trigger_group_update(gpointer data)
 {
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
+
 	g_list_foreach(get_list((gchar *)data),update_widget,NULL);
 	return FALSE;/* Make it cancel and not run again till called */
 }
@@ -1487,7 +1491,7 @@ gboolean force_update_table(gpointer data)
 	extern volatile gboolean leaving;
 	extern gboolean forced_update;
 	extern GList ***ve_widgets;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	gint base = 0;
 	gint length = 0;
 

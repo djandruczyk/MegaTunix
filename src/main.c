@@ -34,13 +34,12 @@
 
 
 extern gint temp_units;
-extern struct Serial_Params *serial_params;
 GThread * thread_dispatcher_id = NULL;
 gboolean ready = FALSE;
 gint dispatcher_id = -1;
 gboolean gl_ability = FALSE;
-struct Serial_Params *serial_params;
-struct Io_Cmds *cmds;
+Serial_Params *serial_params;
+Io_Cmds *cmds;
 GAsyncQueue *io_queue;
 GAsyncQueue *dispatch_queue;
 
@@ -70,8 +69,8 @@ gint main(gint argc, gchar ** argv)
 	gtk_set_locale();
 
 	/* Allocate memory  */
-	serial_params = g_malloc0(sizeof(struct Serial_Params));
-	cmds = g_malloc0(sizeof(struct Io_Cmds));
+	serial_params = g_malloc0(sizeof(Serial_Params));
+	cmds = g_malloc0(sizeof(Io_Cmds));
 
 	init();			/* Initialize global vars */
 	open_debugfile();	/* Open debug log */

@@ -22,7 +22,7 @@
  #include <windows.h>
 #endif
 
-extern struct Serial_Params *serial_params;
+extern Serial_Params *serial_params;
 extern gint dbg_lvl;
 /*
 void win32_open_comm_port()

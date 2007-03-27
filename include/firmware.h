@@ -18,7 +18,7 @@
 #include <structures.h>
 
 /* Prototypes */
-void load_firmware_file(struct Io_File *);
+void load_firmware_file(Io_File *);
 
 /* Prototypes */
 

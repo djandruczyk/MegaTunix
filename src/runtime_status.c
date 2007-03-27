@@ -30,19 +30,18 @@
  settings from the StatusMapFile.
  */
 
-gint status_x_origin = 100;
-gint status_y_origin = 100;
-gint status_width = 50;
-gint status_height = 100;
 extern gint dbg_lvl;
 
 void load_status(void)
 {
 	ConfigFile *cfgfile = NULL;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
 	gchar *section = NULL;
 	gint x = 0;
+	gint y = 0;
+	gint w = 0;
+	gint h = 0;
 	gint i = 0;
 	gint tmpi = 0;
 	gint count = 0;
@@ -58,6 +57,7 @@ void load_status(void)
 	GtkWidget * label;
 	GtkWidget * frame;
 	GtkWidget * table;
+	extern GObject *global_data;
 	GdkColor color;
 
 	if (!firmware->status_map_file)
@@ -79,14 +79,17 @@ void load_status(void)
 		}
 
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		gtk_window_move(GTK_WINDOW(window),status_x_origin,status_y_origin);
-		gtk_window_set_default_size(GTK_WINDOW(window),status_width,status_height);
-		gtk_window_resize(GTK_WINDOW(window),status_width,status_height);
+		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
+		x = (gint)g_object_get_data(global_data,"status_x_origin");
+		y = (gint)g_object_get_data(global_data,"status_y_origin");
+		gtk_window_move(GTK_WINDOW(window),x,y);
+		w = (gint)g_object_get_data(global_data,"status_width");
+		h = (gint)g_object_get_data(global_data,"status_height");
+		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
+		gtk_window_resize(GTK_WINDOW(window),w,h);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
 		register_widget("status_window",window);
-		gtk_window_move((GtkWindow *)window, status_x_origin, status_y_origin);
-		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
 		gtk_widget_realize(window);
 
 		frame = gtk_frame_new("ECU Status");

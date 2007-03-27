@@ -20,14 +20,14 @@
 
 /* Prototypes */
 void interrogate_ecu(void);
-gboolean determine_ecu(struct Canidate *, GArray *,GHashTable *);
+gboolean determine_ecu(Canidate *, GArray *,GHashTable *);
 GArray * validate_and_load_tests(GHashTable *);
 void free_test_commands(GArray *);
 void load_bytecounts(GArray *, GHashTable *, ConfigFile *);
-void close_profile(struct Canidate * );
-struct Canidate * load_potential_match(GArray * , gchar * );
-gboolean check_for_match(GArray *, struct Canidate *, struct Canidate *);
-void load_profile_details(struct Canidate * );
+void close_profile(Canidate * );
+Canidate * load_potential_match(GArray * , gchar * );
+gboolean check_for_match(GArray *, Canidate *, Canidate *);
+void load_profile_details(Canidate * );
 gint translate_capabilities(gchar *);
 /* Prototypes */
 

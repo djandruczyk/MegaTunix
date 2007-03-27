@@ -19,7 +19,7 @@
 #include <structures.h>
 
 /* Prototypes */
-EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
+EXPORT gboolean select_vex_for_import(GtkWidget *, gpointer );
 EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
 gboolean all_table_export(GIOChannel *);
 gboolean all_table_import(GIOChannel *);
@@ -28,15 +28,15 @@ void single_table_import(GIOChannel *, gint );
 void select_table_for_export(gint);
 void select_table_for_import(gint);
 GIOStatus process_vex_line();
-GIOStatus process_vex_range(struct Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
-GIOStatus process_vex_table(struct Vex_Import *, gchar *, GIOChannel * );
+GIOStatus process_vex_range(Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
+GIOStatus process_vex_table(Vex_Import *, gchar *, GIOChannel * );
 GIOStatus read_number_from_line(gint *, GIOChannel *);
-GIOStatus process_header(struct Vex_Import *, ImportParserArg , gchar *);
-GIOStatus process_page(struct Vex_Import *, gchar * );
-GIOStatus process_table(struct Vex_Import *);
-GIOStatus handler_dispatch(struct Vex_Import *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
-void dealloc_vex_struct(struct Vex_Import *);
-void feed_import_data_to_ecu(struct Vex_Import *);
+GIOStatus process_header(Vex_Import *, ImportParserArg , gchar *);
+GIOStatus process_page(Vex_Import *, gchar * );
+GIOStatus process_table(Vex_Import *);
+GIOStatus handler_dispatch(Vex_Import *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
+void dealloc_vex_struct(Vex_Import *);
+void feed_import_data_to_ecu(Vex_Import *);
 void revert_to_previous_data();
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */

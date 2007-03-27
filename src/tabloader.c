@@ -44,7 +44,7 @@ extern gint dbg_lvl;
  */
 gboolean load_gui_tabs(void)
 {
-	extern struct Firmware_Details * firmware;
+	extern Firmware_Details * firmware;
 	gint i = 0;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
@@ -55,7 +55,7 @@ gboolean load_gui_tabs(void)
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
 	GHashTable *groups = NULL;
-	struct BindGroup *bindgroup = NULL;
+	BindGroup *bindgroup = NULL;
 	GtkWidget * notebook;
 	extern volatile gboolean leaving;
 	extern GHashTable *dynamic_widgets;
@@ -67,7 +67,7 @@ gboolean load_gui_tabs(void)
 	if (!firmware->tab_confs)
 		return FALSE;
 
-	bindgroup = g_new0(struct BindGroup,1);
+	bindgroup = g_new0(BindGroup,1);
 	notebook = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
 
 	while (firmware->tab_list[i])
@@ -185,7 +185,7 @@ gboolean load_gui_tabs(void)
  */
 void group_free(gpointer value)
 {
-	struct Group *group = value;
+	Group *group = value;
 	gint i = 0;
 
 	for (i=0;i<group->num_keys;i++)
@@ -215,7 +215,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	gchar **groupnames = NULL;
 	gchar *section = NULL;
 	gint num_groups = 0;
-	struct Group *group = NULL;
+	Group *group = NULL;
 	GHashTable *groups = NULL;
 
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
@@ -233,7 +233,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	for (x=0;x<num_groups;x++)
 	{
 		/* Create structure and allocate ram for it */
-		group = g_new0(struct Group, 1);
+		group = g_new0(Group, 1);
 		section = g_strdup(groupnames[x]);
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
@@ -315,7 +315,7 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
-	struct Group *group = NULL;
+	Group *group = NULL;
 	extern GtkTooltips *tip;
 
 	group = g_hash_table_lookup(groups,groupname);
@@ -401,7 +401,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
  */
 void bind_data(GtkWidget *widget, gpointer user_data)
 {
-	struct BindGroup *bindgroup = user_data;
+	BindGroup *bindgroup = user_data;
 	ConfigFile *cfgfile = bindgroup->cfgfile;
 	GHashTable *groups = bindgroup->groups;
 	gchar * tmpbuf = NULL;
@@ -415,7 +415,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	GdkColor color;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 
 	if (GTK_IS_CONTAINER(widget))

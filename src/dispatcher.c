@@ -66,17 +66,17 @@ gboolean force_page_change = FALSE;
  */
 gboolean dispatcher(gpointer data)
 {
-	extern struct Firmware_Details * firmware;
+	extern Firmware_Details * firmware;
 	gint len=0;
 	gint i=0;
 	gint j=0;
 	gint val=-1;
 	gint count = 0;
 	GtkWidget *widget = NULL;
-	struct Io_Message *message = NULL;
-	struct Text_Message *t_message = NULL;
-	struct Widget_Update *w_update = NULL;
-	struct QFunction *qfunc = NULL;
+	Io_Message *message = NULL;
+	Text_Message *t_message = NULL;
+	Widget_Update *w_update = NULL;
+	QFunction *qfunc = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gboolean forced_update;
@@ -89,6 +89,8 @@ gboolean dispatcher(gpointer data)
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
 	//printf("dispatch queue length is %i\n",g_async_queue_length(dispatch_queue));
+	if (leaving)
+		return TRUE;
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
 	{
@@ -109,13 +111,13 @@ trypop:
 			switch ((UpdateFunction)val)
 			{
 				case UPD_LOGBAR:
-					t_message = (struct Text_Message *)message->payload;
+					t_message = (Text_Message *)message->payload;
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
-					qfunc = (struct QFunction *)message->payload;
+					qfunc = (QFunction *)message->payload;
 					run_post_function(qfunc->func_name);
 					dealloc_qfunction(qfunc);
 					message->payload = NULL;
@@ -123,7 +125,7 @@ trypop:
 
 				case UPD_WIDGET:
 					widget = NULL;
-					w_update = (struct Widget_Update *)message->payload;
+					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:

@@ -40,8 +40,8 @@ extern gint dbg_lvl;
  */
 void process_rt_vars(void *incoming)
 {
-	extern struct Rtv_Map *rtv_map;
-	extern struct Firmware_Details *firmware;
+	extern Rtv_Map *rtv_map;
+	extern Firmware_Details *firmware;
 	extern gint temp_units;
 	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
@@ -343,7 +343,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
  */
 gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *hash)
 {
-	struct MultiExpr *multi = NULL;
+	MultiExpr *multi = NULL;
 	gint offset = 0;
 	gfloat result = 0.0;
 	gfloat x = 0.0;
@@ -353,7 +353,7 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 
 	key = (gchar *)g_object_get_data(object,"source_key");
 	hash_key  = (gchar *)g_hash_table_lookup(sources_hash,key);
-	multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
+	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
 	if (!multi)
 	{
 		if (dbg_lvl & COMPLEX_EXPR)
@@ -428,7 +428,7 @@ gfloat handle_special(GObject *object,gchar *handler_name)
  */
 gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 {
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
@@ -459,7 +459,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
  */
 gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 {
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
@@ -489,8 +489,8 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
  */
 void flush_rt_arrays()
 {
-	extern struct Firmware_Details *firmware;
-	extern struct Rtv_Map *rtv_map;
+	extern Firmware_Details *firmware;
+	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;
 	gint i = 0;
 	gint j = 0;

@@ -42,9 +42,9 @@ extern gint dbg_lvl;
 void req_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
-	struct Reqd_Fuel *reqd_fuel = NULL;
+	Reqd_Fuel *reqd_fuel = NULL;
 	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
-		reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+		reqd_fuel = (Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
 		if (dbg_lvl & (REQ_FUEL|CRITICAL))
@@ -106,12 +106,12 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	GtkAdjustment *adj;
 	gchar * tmpbuf = NULL;
 	gint page = -1;
-	struct Reqd_Fuel *reqd_fuel = NULL;
+	Reqd_Fuel *reqd_fuel = NULL;
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 
 	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
-		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+		reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
 		reqd_fuel = initialize_reqd_fuel(page);
@@ -355,13 +355,13 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
  */
 gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
-	struct Reqd_Fuel * reqd_fuel = NULL;
+	Reqd_Fuel * reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 
-	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 
 	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",reqd_fuel->table_num);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
@@ -414,9 +414,9 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
  */
 gboolean close_popup(GtkWidget * widget)
 {
-	struct Reqd_Fuel *reqd_fuel = NULL;
+	Reqd_Fuel *reqd_fuel = NULL;
 
-	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	gtk_widget_destroy(reqd_fuel->popup);
 	reqd_fuel->visible = FALSE;
 	return TRUE;
@@ -459,7 +459,7 @@ void check_req_fuel_limits(gint table_num)
 	extern GHashTable ** interdep_vars;
 	extern GHashTable *dynamic_widgets;
 	extern gint **ms_data;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	/* F&H Dualtable required Fuel calc
 	 *
@@ -601,18 +601,18 @@ void check_req_fuel_limits(gint table_num)
  \brief initialize_reqd_fuel() initializes the reqd_fuel datastructure for 
  use This will load any previously saved defaults from the global config file.
  \param page (gint) page to create this structure for.
- \returns a pointer to a struct Reqd_Fuel
+ \returns a pointer to a Reqd_Fuel
  */
-struct Reqd_Fuel * initialize_reqd_fuel(gint page)
+Reqd_Fuel * initialize_reqd_fuel(gint page)
 {
-	struct Reqd_Fuel *reqd_fuel = NULL;
+	Reqd_Fuel *reqd_fuel = NULL;
 	ConfigFile * cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 
-	reqd_fuel = g_new0(struct Reqd_Fuel, 1);
+	reqd_fuel = g_new0(Reqd_Fuel, 1);
 	reqd_fuel->page = page;
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",page);
 	cfgfile = cfg_open_file(filename);

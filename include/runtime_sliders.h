@@ -22,7 +22,7 @@
 void load_sliders(void );
 void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
-struct Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
+Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
 gboolean free_ve3d_sliders(gint);
 /* Prototypes */
 

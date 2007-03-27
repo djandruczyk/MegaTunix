@@ -36,7 +36,7 @@ extern gint dbg_lvl;
 void load_rt_text()
 {
 	ConfigFile *cfgfile = NULL;
-	struct Rt_Text *rt_text = NULL;
+	Rt_Text *rt_text = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *vbox = NULL;
 	gint count = 0;
@@ -45,10 +45,15 @@ void load_rt_text()
 	gchar *source = NULL;
 	gchar *section = NULL;
 	gint i = 0;
+	gint x = 0;
+	gint y = 0;
+	gint w = 0;
+	gint h = 0;
+	extern GObject *global_data;
 	extern volatile gboolean leaving;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern struct Firmware_Details *firmware;
+	extern Firmware_Details *firmware;
 
 	if ((!tabs_loaded) || (!firmware) || (leaving))
 		return;
@@ -74,7 +79,16 @@ void load_rt_text()
 			return;
 		}
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title(GTK_WINDOW(window),"RT Text");
+		gtk_window_set_title(GTK_WINDOW(window),"Runtime Vars");
+		x = (gint)g_object_get_data(global_data,"rtt_x_origin");
+		y = (gint)g_object_get_data(global_data,"rtt_y_origin");
+		gtk_window_move(GTK_WINDOW(window),x,y);
+		w = (gint)g_object_get_data(global_data,"rtt_width");
+		h = (gint)g_object_get_data(global_data,"rtt_height");
+		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
+		gtk_window_resize(GTK_WINDOW(window),w,h);
+
+		register_widget("rtt_window",window);
 		g_signal_connect(G_OBJECT(window),"destroy_event",
 				G_CALLBACK(prevent_close),NULL);
 		g_signal_connect(G_OBJECT(window),"delete_event",
@@ -101,8 +115,10 @@ void load_rt_text()
 			rt_text = add_rtt(vbox,ctrl_name,source);
 			if (rt_text)
 			{
-				if (g_hash_table_lookup(rtt_hash,ctrl_name)==NULL)
-					g_hash_table_insert(rtt_hash,g_strdup(ctrl_name),(gpointer)rt_text);
+				if (!g_hash_table_lookup(rtt_hash,ctrl_name))
+					g_hash_table_insert(rtt_hash,
+							g_strdup(ctrl_name),
+							(gpointer)rt_text);
 			}
 			g_free(section);
 			g_free(ctrl_name);
@@ -129,15 +145,15 @@ void load_rt_text()
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-struct Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
+Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 {
-	struct Rt_Text *rtt = NULL;
+	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
-	rtt = g_malloc0(sizeof(struct Rt_Text));
+	rtt = g_malloc0(sizeof(Rt_Text));
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))

@@ -48,7 +48,7 @@ gint failurecount = 0;
 /*!
  \brief io_cmd() is called from all over the gui to kick off a threaded I/O
  command.  A command enumeration and an option block of data is passed and
- this function allocates a struct Io_Message and shoves it down an GAsyncQueue
+ this function allocates a Io_Message and shoves it down an GAsyncQueue
  to the main thread dispatcher which runs things and then passes any 
  needed information back to the gui via another GAsyncQueue which takes care
  of any post thread GUI updates. (which can NOT be done in a thread context
@@ -59,10 +59,10 @@ gint failurecount = 0;
  */
 void io_cmd(Io_Command cmd, gpointer data)
 {
-	struct Io_Message *message = NULL;
-	extern struct Io_Cmds *cmds;
+	Io_Message *message = NULL;
+	extern Io_Cmds *cmds;
 	extern gboolean tabs_loaded;
-	extern struct Firmware_Details * firmware;
+	extern Firmware_Details * firmware;
 	extern GHashTable *dynamic_widgets;
 	extern GAsyncQueue *io_queue;
 	static gboolean just_starting = TRUE;
@@ -353,12 +353,12 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = WRITE_CMD;
-			message->page=((struct Output_Data *)data)->page;
-			message->truepgnum=firmware->page_params[((struct Output_Data *)data)->page]->truepgnum;
+			message->page=((Output_Data *)data)->page;
+			message->truepgnum=firmware->page_params[((Output_Data *)data)->page]->truepgnum;
 			message->payload = data;
 			message->need_page_change = TRUE;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-			if (((struct Output_Data *)data)->queue_update)
+			if (((Output_Data *)data)->queue_update)
 			{
 				tmp = UPD_WRITE_STATUS;
 				g_array_append_val(message->funcs,tmp);
@@ -383,7 +383,7 @@ void *thread_dispatcher(gpointer data)
 	extern gboolean link_up;
 	extern gchar * serial_port_name;
 	extern volatile gboolean leaving;
-	struct Io_Message *message = NULL;	
+	Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
@@ -580,11 +580,11 @@ void *thread_dispatcher(gpointer data)
  */
 void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm, gboolean queue_update)
 {
-	struct Output_Data *output = NULL;
+	Output_Data *output = NULL;
 
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm));
-	output = g_new0(struct Output_Data, 1);
+	output = g_new0(Output_Data, 1);
 	output->page = page;
 	output->offset = offset;
 	output->value = value;
@@ -607,11 +607,11 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
  */
 void chunk_write(gint page, gint offset, gint len, guchar * data)
 {
-	struct Output_Data *output = NULL;
+	Output_Data *output = NULL;
 
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, len %i, data %p\n",page,offset,len,data));
-	output = g_new0(struct Output_Data, 1);
+	output = g_new0(Output_Data, 1);
 	output->page = page;
 	output->offset = offset;
 	output->len = len;
@@ -644,14 +644,14 @@ void  thread_update_logbar(
 		gboolean count,
 		gboolean clear)
 {
-	struct Io_Message *message = NULL;
-	struct Text_Message *t_message = NULL;
+	Io_Message *message = NULL;
+	Text_Message *t_message = NULL;
 	extern GAsyncQueue *dispatch_queue;
 	gint tmp = 0;
 
 	message = initialize_io_message();
 
-	t_message = g_new0(struct Text_Message, 1);
+	t_message = g_new0(Text_Message, 1);
 	t_message->view_name = view_name;
 	t_message->tagname = tagname;
 	t_message->msg = msg;
@@ -680,14 +680,14 @@ void  thread_update_logbar(
  */
 void queue_function(gchar * name)
 {
-	struct Io_Message *message = NULL;
-	struct QFunction *qfunc = NULL;
+	Io_Message *message = NULL;
+	QFunction *qfunc = NULL;
 	extern GAsyncQueue *dispatch_queue;
 	gint tmp = 0;
 
 	message = initialize_io_message();
 
-	qfunc = g_new0(struct QFunction, 1);
+	qfunc = g_new0(QFunction, 1);
 	qfunc->func_name = name;
 
 	message->payload = qfunc;
@@ -717,14 +717,14 @@ void  thread_update_widget(
 		WidgetType type,
 		gchar * msg)
 {
-	struct Io_Message *message = NULL;
-	struct Widget_Update *w_update = NULL;
+	Io_Message *message = NULL;
+	Widget_Update *w_update = NULL;
 	extern GAsyncQueue *dispatch_queue;
 	gint tmp = 0;
 
 	message = initialize_io_message();
 
-	w_update = g_new0(struct Widget_Update, 1);
+	w_update = g_new0(Widget_Update, 1);
 	w_update->widget_name = widget_name;
 	w_update->type = type;
 	w_update->msg = msg;

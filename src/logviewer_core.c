@@ -27,7 +27,7 @@
 #include <structures.h>
 #include <tabloader.h>
 
-struct Log_Info *log_info = NULL;
+Log_Info *log_info = NULL;
 extern gint dbg_lvl;
 
 
@@ -102,10 +102,10 @@ void load_logviewer_file(GIOChannel *iochannel)
  of the log_info struture
  \returns a pointer to an allocated Log_Info structure
  */
-struct Log_Info * initialize_log_info(void)
+Log_Info * initialize_log_info(void)
 {
-	struct Log_Info *log_info = NULL;
-	log_info = g_malloc0(sizeof(struct Log_Info));
+	Log_Info *log_info = NULL;
+	log_info = g_malloc0(sizeof(Log_Info));
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GObject *));
@@ -116,9 +116,9 @@ struct Log_Info * initialize_log_info(void)
  \brief read_log_header() First we read the first line,  try to determine 
  if the delimiter is a COMMA, or a TAB. 
  \param iochannel (GIOChannel *) iochannel that represents the input file
- \param log_info (struct Log_Info *)the Log_Info structure
+ \param log_info (Log_Info *)the Log_Info structure
  */
-void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
+void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
@@ -183,9 +183,9 @@ read_again:
 /*!
  \brief populate_limits() scans the datalog data and sets the minimum and 
  maximum values based on the span of the data in the file
- \param log_info (struct Log_Info *) pointer to log info structure
+ \param log_info (Log_Info *) pointer to log info structure
  */
-void populate_limits(struct Log_Info *log_info)
+void populate_limits(Log_Info *log_info)
 {
 	gint i = 0;
 	gint j = 0;
@@ -230,9 +230,9 @@ void populate_limits(struct Log_Info *log_info)
  \brief read_log_data() reads the log data and sticks it into the arrays in
  the log_info structure
  \param iochannel (GIOChannel *) data source 
- \param log_info (struct Log_Info *) pointer to log information struct
+ \param log_info (Log_Info *) pointer to log information struct
  */
-void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
+void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
@@ -274,7 +274,7 @@ void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
  */
 void free_log_info()
 {
-	extern struct Log_Info *log_info;
+	extern Log_Info *log_info;
 	gint i = 0;
 	GObject *object = NULL;
 	GArray *array = NULL;

@@ -35,11 +35,11 @@ static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
 extern gint dbg_lvl;
 
-struct Logview_Data *lv_data = NULL;
+Logview_Data *lv_data = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
 gboolean playback_mode = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
-extern struct Log_Info *log_info;
+extern Log_Info *log_info;
 
 
 /*!
@@ -68,7 +68,7 @@ void present_viewer_choices(void)
 	gchar * tooltip = NULL;
 	GtkWidget *darea = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 
 	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 	lv_data->darea = darea;
@@ -263,10 +263,10 @@ void populate_viewer()
 {
 	gint i = 0;
 	gint total = 0;
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
-	extern struct Rtv_Map *rtv_map;
+	extern Rtv_Map *rtv_map;
 	extern GHashTable *dynamic_widgets;
 	GObject *object = NULL;
 
@@ -279,7 +279,7 @@ void populate_viewer()
 	 */
 	if (lv_data == NULL)
 	{
-		lv_data = g_new0(struct Logview_Data,1);
+		lv_data = g_new0(Logview_Data,1);
 		lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 	}
 
@@ -336,7 +336,7 @@ void populate_viewer()
 		{	/* If in table but now de-selected, remove it */
 			if (!being_viewed)
 			{
-				v_value = (struct Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
+				v_value = (Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
 				lv_data->tlist = g_list_remove(lv_data->tlist,(gpointer)v_value);
 				if ((hue > 0) && ((gint)hue%1110 == 0))
 				{
@@ -398,8 +398,8 @@ void populate_viewer()
  */
 void reset_logviewer_state()
 {
-	extern struct Rtv_Map *rtv_map;
-	extern struct Log_Info *log_info;
+	extern Rtv_Map *rtv_map;
+	extern Log_Info *log_info;
 	gint i = 0 ;
 	GObject * object = NULL;
 
@@ -438,14 +438,14 @@ void reset_logviewer_state()
  \param object (GObject *) objet to get soem of the data from
  \returns a newly allocated and populated Viewable_Value structure
  */
-struct Viewable_Value * build_v_value(GObject *object)
+Viewable_Value * build_v_value(GObject *object)
 {
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
 
 	pixmap = lv_data->pixmap;
 
-	v_value = g_malloc(sizeof(struct Viewable_Value));		
+	v_value = g_malloc(sizeof(Viewable_Value));		
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
 
@@ -692,7 +692,7 @@ void draw_infotext()
 	gint width = 0;
 	gint height = 0;
 	gint max = 0;
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
 
@@ -716,7 +716,7 @@ void draw_infotext()
 	name_x = text_border;
 	for (i=0;i<lv_data->active_traces;i++)
 	{
-		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 		info_ctr = (lv_data->spread * (i+1))- (lv_data->spread/2);
 
 		layout = gtk_widget_create_pango_layout(lv_data->darea,NULL);
@@ -762,7 +762,7 @@ void draw_valtext(gboolean force_draw)
 	gint h = 0;
 	gint i = 0;
 	GArray *array = NULL;
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
 
@@ -777,7 +777,7 @@ void draw_valtext(gboolean force_draw)
 	val_x = 15;
 	for (i=0;i<lv_data->active_traces;i++)
 	{
-		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 		info_ctr = (lv_data->spread * (i+1))- (lv_data->spread/2);
 		val_y = info_ctr + 1;
 
@@ -889,7 +889,7 @@ void trace_update(gboolean redraw_all)
 	gfloat newpos = 0.0;
 	GArray *array = NULL;
 	GdkPoint pts[2048]; // Bad idea as static...
-	struct Viewable_Value *v_value = NULL;
+	Viewable_Value *v_value = NULL;
 	static gulong sig_id = 0;
 	static GtkWidget *scale = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -912,7 +912,7 @@ void trace_update(gboolean redraw_all)
 		lo_width = lv_data->darea->allocation.width-info_width;
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
-			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 			array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
 			len = array->len;
 			if (len == 0)	/* If empty */
@@ -972,7 +972,7 @@ void trace_update(gboolean redraw_all)
 	{
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
-			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 			array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
 			last_index = v_value->last_index;
 			if(last_index >= array->len)
@@ -1026,7 +1026,7 @@ void trace_update(gboolean redraw_all)
 	/* REALTIME mode... all traces updated at once.. */
 	for (i=0;i<g_list_length(lv_data->tlist);i++)
 	{
-		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 		array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
 		current_index = (gint)g_object_get_data(v_value->object,"current_index");
 		val = g_array_index(array,gfloat, current_index);
@@ -1271,7 +1271,7 @@ EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	lv_data = g_new0(struct Logview_Data,1);
+	lv_data = g_new0(Logview_Data,1);
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 
 	if (playback_mode)
