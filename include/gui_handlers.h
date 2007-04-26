@@ -39,6 +39,7 @@ gboolean trigger_group_update(gpointer );
 void update_widget(gpointer, gpointer );
 void switch_labels(gpointer , gpointer );
 void swap_labels(gchar *, gboolean );
+void prompt_to_save(void);
 /* Prototypes */
 
 #endif

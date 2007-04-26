@@ -316,6 +316,7 @@ typedef enum
 	MTX_INT = 0x190,
 	MTX_ENUM,
 	MTX_BOOL,
+	MTX_FLOAT,
 	MTX_STRING,
 }DataType;
 
@@ -371,13 +372,11 @@ typedef enum
 	MTX_ENTRY=0x1e0,
 	MTX_TITLE,
 	MTX_LABEL,
-}WidgetType;
-
-typedef enum
-{
-	MTX_PROGRESS=0x200,
 	MTX_RANGE,
-}SliderType;
+	MTX_SPINBUTTON,
+	MTX_PROGRESS,
+	MTX_SCALE,
+}WidgetType;
 
 
 typedef enum

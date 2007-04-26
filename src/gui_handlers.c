@@ -100,6 +100,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint count = 0;
 
+	prompt_to_save();
+
 	if (leaving)
 		return;
 	leaving = TRUE;
@@ -829,6 +831,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gint tmpi = 0;
 	gchar * tmpbuf = NULL;
 	gboolean restart = FALSE;
+	GtkWidget *twidget = NULL;
 	extern gint realtime_id;
 	extern gboolean no_update;
 	extern gboolean offline;
@@ -926,7 +929,19 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case CHECK_ECU_COMMS:
 			if (offline)
 				break;
-			io_cmd(IO_COMMS_TEST,NULL);
+			twidget = g_hash_table_lookup(dynamic_widgets, "comms_serial_port_entry");
+			/* If not sent flag is defined, we need to trigger the
+			 * comm port change FIRST
+			 */
+			if (g_object_get_data(G_OBJECT(twidget),"not_sent"))
+			{
+				comm_port_change(GTK_EDITABLE(twidget));
+				/* No need to call comms test as that is part 
+				 * of a comm port change..
+				 */
+			}
+			else
+				io_cmd(IO_COMMS_TEST,NULL);
 			break;
 		case BURN_MS_FLASH:
 			io_cmd(IO_BURN_MS_FLASH,NULL);
@@ -2349,7 +2364,45 @@ EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 
 
 
+/*!
+ * \brief dummy handler to prevent window closing
+ */
 EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 {
 	return TRUE;
 }
+
+
+/*!
+ * \brief prompts user to save internal datalog and ecu backup
+ */
+void prompt_to_save(void)
+{
+	gint result = 0;
+	extern gboolean offline;
+	GtkWidget *dialog = NULL;
+
+	if (!offline)
+	{
+		dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_QUESTION,
+				GTK_BUTTONS_YES_NO,
+				"Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
+
+		result = gtk_dialog_run(GTK_DIALOG(dialog));
+		if (result == GTK_RESPONSE_YES)
+			internal_datalog_dump(NULL,NULL);
+		gtk_widget_destroy (dialog);
+	}
+
+	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_YES_NO,
+			"Save ECU Settings to file?");
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (result == GTK_RESPONSE_YES)
+		select_file_for_ecu_backup(NULL,NULL);
+	gtk_widget_destroy (dialog);
+
+}
+

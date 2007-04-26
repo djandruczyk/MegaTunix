@@ -71,7 +71,7 @@ Ve_View_3D * initialize_ve3d_view();
 void update_ve3d_if_necessary(int , int );
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
-
+gboolean set_tracking_focus(GtkWidget *, gpointer );
 
 /* Prototypes */
 

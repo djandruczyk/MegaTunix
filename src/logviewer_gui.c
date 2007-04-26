@@ -26,7 +26,6 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 
-gint info_width = 120;
 static gint max_viewables = 0;
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
@@ -281,6 +280,7 @@ void populate_viewer()
 	{
 		lv_data = g_new0(Logview_Data,1);
 		lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
+		lv_data->info_width = 120;
 	}
 
 	/* check to see if it's already in the table, if so ignore, if not
@@ -701,7 +701,7 @@ void draw_infotext()
 	gdk_draw_rectangle(pixmap,
 			lv_data->darea->style->black_gc,
 			TRUE, 0,0,
-			info_width,h);
+			lv_data->info_width,h);
 
 
 	if (!lv_data->font_desc)
@@ -730,14 +730,14 @@ void draw_infotext()
 		
 		gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
 	}
-	info_width = max + (text_border * 2);
+	lv_data->info_width = max + (text_border * 2.5);
 
 	for (i=0;i<lv_data->active_traces;i++)
 	{
 		gdk_draw_rectangle(pixmap,
 				lv_data->darea->style->white_gc,
 				FALSE, 0,i*lv_data->spread,
-				info_width-1,lv_data->spread);
+				lv_data->info_width-1,lv_data->spread);
 	}
 
 }
@@ -774,7 +774,7 @@ void draw_valtext(gboolean force_draw)
 		pango_font_description_set_size(lv_data->font_desc,(10)*PANGO_SCALE);
 	}
 	
-	val_x = 15;
+	val_x = 7;
 	for (i=0;i<lv_data->active_traces;i++)
 	{
 		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
@@ -797,7 +797,7 @@ void draw_valtext(gboolean force_draw)
 				TRUE,
 				v_value->ink_rect->x+val_x,
 				v_value->ink_rect->y+val_y,
-				info_width-1-v_value->ink_rect->x-val_x,
+				lv_data->info_width-1-v_value->ink_rect->x-val_x,
 				v_value->ink_rect->height);
 
 		if (v_value->is_float)
@@ -909,7 +909,7 @@ void trace_update(gboolean redraw_all)
 	/* Full screen redraw, only with configure events (usually) */
 	if ((gboolean)redraw_all)
 	{
-		lo_width = lv_data->darea->allocation.width-info_width;
+		lo_width = lv_data->darea->allocation.width-lv_data->info_width;
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
@@ -1097,8 +1097,8 @@ void trace_update(gboolean redraw_all)
  */
 void scroll_logviewer_traces()
 {
-	gint start = info_width;
-	gint end = info_width;
+	gint start = lv_data->info_width;
+	gint end = lv_data->info_width;
 	gint w = 0;
 	gint h = 0;
 	GdkPixmap *pixmap = NULL;
@@ -1130,25 +1130,25 @@ void scroll_logviewer_traces()
 	gdk_draw_drawable(pmap,
 			widget->style->black_gc,
 			pixmap,
-			info_width+lv_zoom,0,
-			info_width,0,
-			w-info_width-lv_zoom,h);
+			lv_data->info_width+lv_zoom,0,
+			lv_data->info_width,0,
+			w-lv_data->info_width-lv_zoom,h);
 
 	gdk_draw_drawable(pixmap,
 			widget->style->black_gc,
 			pmap,
-			info_width,0,
-			info_width,0,
-			w-info_width,h);
+			lv_data->info_width,0,
+			lv_data->info_width,0,
+			w-lv_data->info_width,h);
 #else
 
 	// Scroll the screen to the left... 
 	gdk_draw_drawable(pixmap,
 			widget->style->black_gc,
 			pixmap,
-			info_width+lv_zoom,0,
-			info_width,0,
-			w-info_width-lv_zoom,h);
+			lv_data->info_width+lv_zoom,0,
+			lv_data->info_width,0,
+			w-lv_data->info_width-lv_zoom,h);
 #endif
 
 	// Init new "blank space" as black 
@@ -1228,6 +1228,7 @@ void set_playback_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"scroll_speed_vbox"));
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
 	if (GTK_IS_RANGE(widget))
 		gtk_range_set_value(GTK_RANGE(widget),0.0);
@@ -1253,6 +1254,7 @@ void set_realtime_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"scroll_speed_vbox"));
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
 	if (GTK_IS_RANGE(widget))
 		gtk_range_set_value(GTK_RANGE(widget),100.0);
@@ -1273,6 +1275,7 @@ EXPORT void finish_logviewer(void)
 
 	lv_data = g_new0(Logview_Data,1);
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
+	lv_data->info_width = 120;
 
 	if (playback_mode)
 		set_playback_mode();

@@ -129,7 +129,6 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	gint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
-	extern gint info_width;
 	Viewable_Value *v_value = NULL;
 
 	x = event->x;
@@ -138,7 +137,7 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 
 	if (lv_data->active_traces == 0)
 		return FALSE;
-	if (x > info_width) /* If out of bounds just return... */
+	if (x > lv_data->info_width) /* If out of bounds just return... */
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
 		lv_data->tselect = -1;
@@ -170,12 +169,11 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
  */
 void highlight_tinfo(gint tnum, gboolean state)
 {
-	extern gint info_width;
 	GdkRectangle rect;
 
 	rect.x = 0;
 	rect.y = lv_data->spread*tnum;
-	rect.width =  info_width-1;
+	rect.width =  lv_data->info_width-1;
 	rect.height = lv_data->spread;
 
 	extern Logview_Data *lv_data;
@@ -210,7 +208,6 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	gint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
-	extern gint info_width;
 	Viewable_Value *v_value = NULL;
 
 	x = event->x;
@@ -223,7 +220,7 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 
 	//printf("button with event is %i\n",event->button);
 	//printf("state of event is %i\n",state);
-	if (x > info_width) /* If out of bounds just return... */
+	if (x > lv_data->info_width) /* If out of bounds just return... */
 		return TRUE;
 
 	if (lv_data->active_traces == 0)
@@ -238,8 +235,8 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 		v_value->highlight = FALSE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,
-				TRUE, info_width,0,
-				w-info_width,h);
+				TRUE, lv_data->info_width,0,
+				w-lv_data->info_width,h);
 		trace_update(TRUE);
 		highlight_tinfo(tnum,TRUE);
 		return TRUE;
@@ -251,8 +248,8 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 		v_value->highlight = TRUE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,
-				TRUE, info_width,0,
-				w-info_width,h);
+				TRUE, lv_data->info_width,0,
+				w-lv_data->info_width,h);
 		trace_update(TRUE);
 		highlight_tinfo(tnum,TRUE);
 		return TRUE;

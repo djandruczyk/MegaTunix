@@ -51,8 +51,8 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Save your ECU Settings to file");
-	fileio->default_filename= g_strdup("ECU_Backup.ecu");
-	fileio->default_extension= g_strdup("ecu");
+	fileio->default_filename = g_strdup("ECU_Backup.ecu");
+	fileio->default_extension = g_strdup("ecu");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
 

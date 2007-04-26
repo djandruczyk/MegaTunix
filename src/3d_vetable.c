@@ -311,46 +311,52 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
 
-	label = gtk_label_new("Edit\nPosition");
+	label = gtk_label_new("Edit");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("x_active_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("y_active_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("z_active_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Runtime\nPosition");
+	label = gtk_label_new("Runtime");
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("x_runtime_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("y_runtime_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
+	set_fixed_size(label,12);
 
 	register_widget(g_strdup_printf("z_runtime_label_%i",table_num),label);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
@@ -370,6 +376,13 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer) window);
 
+	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
+	ve_view->tracking_button = button;
+	g_object_set_data(G_OBJECT(button),"ve_view",ve_view);
+	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(set_tracking_focus),
+			NULL);
 
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
@@ -528,6 +541,10 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 //	ve_view->aspect = (gfloat)w/(gfloat)h;
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
+//	  glMatrixMode(GL_PROJECTION);
+//	     glLoadIdentity();
+//	        gluPerspective(60.0, 1, 0.1, 40.0);
+//	  glMatrixMode(GL_MODELVIEW);
 
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/                                                                                                                  
@@ -716,9 +733,9 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	glShadeModel(GL_FLAT);
 	glEnable (GL_LINE_SMOOTH);
 	glEnable (GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_DEPTH_TEST);
 
 	ve3d_load_font_metrics();
 
@@ -1228,6 +1245,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gint x_base = 0;
 	gint z_base = 0;
 	gint dload_val = 0;
+	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
@@ -1347,6 +1365,17 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				update_widgets = TRUE;
 			}
 			break;                                                  
+
+		case GDK_t:
+		case GDK_T:
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"t/T\"\n"));
+			cur_state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ve_view->tracking_button));
+			if (cur_state)
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ve_view->tracking_button),FALSE);
+			else
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ve_view->tracking_button),TRUE);
+			break;
 
 		default:
 			if (dbg_lvl & OPENGL)
@@ -1792,6 +1821,20 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	}
 
 	return cur_val;
+}
+
+
+gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
+{
+	extern gboolean forced_update;
+	Ve_View_3D *ve_view = NULL;
+
+	ve_view = g_object_get_data(G_OBJECT(widget),"ve_view");
+	if (!ve_view)
+		return FALSE;
+	ve_view->tracking_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	forced_update = TRUE;
+	return TRUE;
 }
 
 

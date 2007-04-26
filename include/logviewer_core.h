@@ -19,6 +19,7 @@
 
 /* Prototypes */
 EXPORT gboolean select_datalog_for_import(GtkWidget *, gpointer );
+EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *, gpointer );
 void load_logviewer_file(GIOChannel * );
 void read_log_header(GIOChannel *, Log_Info * );
 void read_log_data(GIOChannel *, Log_Info * );

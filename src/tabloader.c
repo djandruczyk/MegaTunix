@@ -138,6 +138,7 @@ gboolean load_gui_tabs(void)
 			}
 			cfg_free(cfgfile);
 			g_free(cfgfile);
+			g_object_unref(xml);
 			update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 		}
 		else
@@ -348,6 +349,8 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 				if (g_object_get_data(G_OBJECT(group->object), "bind_to_list"))
 					bind_to_lists(widget,(gchar *)g_object_get_data(G_OBJECT(group->object), "bind_to_list"));
 				break;
+			default:
+				break;
 		}
 	}
 	return group->page;
@@ -412,7 +415,10 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint num_keytypes = 0;
 	gint offset = 0;
 	gint page = 0;
+	gint widget_type = 0;
+	gchar * initializer = NULL;
 	GdkColor color;
+	extern GObject *global_data;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
@@ -533,6 +539,37 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
+	/* If this widget has "initializer" there's a global variable 
+	 * with it's name on it 
+	 */
+	if (cfg_read_string(cfgfile,section,"initializer",&initializer))
+	{
+		if (!cfg_read_string(cfgfile,section,"widget_type",&tmpbuf))
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s has initializer, but no widget_type!!!!\n",section));	
+		}
+		else
+			widget_type = translate_string(tmpbuf);
+		g_free(tmpbuf);
+		switch (widget_type)
+		{
+			case MTX_RANGE:
+				gtk_range_set_value(GTK_RANGE(widget),(gint)g_object_get_data(global_data,initializer));
+				break;
+
+			case MTX_SPINBUTTON:
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)g_object_get_data(global_data,initializer));
+				break;
+			case MTX_ENTRY:
+				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)g_object_get_data(global_data,initializer));
+
+			default:
+				break;
+
+		}
+		g_free(initializer);
+	}
 	offset = -1;
 	cfg_read_int(cfgfile,section,"offset",&offset);
 	if (offset >= 0)

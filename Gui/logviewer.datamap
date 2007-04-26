@@ -65,3 +65,9 @@ keys=page,handler
 key_types=_INT_,_ENUM_
 page=0
 handler=_LOGVIEW_ZOOM_
+
+[logviewer_scroll_hscale]
+keys=page,initializer,widget_type
+key_types=_INT_,_STRING_,_ENUM_
+initializer=lv_scroll_delay
+widget_type=_MTX_RANGE_

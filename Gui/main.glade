@@ -1469,7 +1469,6 @@
 					  <property name="width_chars">10</property>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Tue, 27 Feb 2007 23:34:14 GMT"/>
 					  <signal name="activate" handler="comm_port_change" last_modification_time="Tue, 27 Feb 2007 23:34:24 GMT"/>
-					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">1</property>

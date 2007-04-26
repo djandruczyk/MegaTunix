@@ -55,6 +55,18 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"_BOOL_",
 			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"_FLOAT_",
+			GINT_TO_POINTER(MTX_FLOAT));
+
+	/* Widget Types */
+	g_hash_table_insert(str_2_enum,"_MTX_ENTRY_",
+			GINT_TO_POINTER(MTX_ENTRY));
+	g_hash_table_insert(str_2_enum,"_MTX_LABEL_",
+			GINT_TO_POINTER(MTX_LABEL));
+	g_hash_table_insert(str_2_enum,"_MTX_RANGE_",
+			GINT_TO_POINTER(MTX_RANGE));
+	g_hash_table_insert(str_2_enum,"_MTX_SPINBUTTON_",
+			GINT_TO_POINTER(MTX_SPINBUTTON));
 
 	/* Variable handling */
 	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",

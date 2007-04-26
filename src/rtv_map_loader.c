@@ -284,6 +284,8 @@ gboolean load_realtime_map(void )
 							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					}
 					break;
+				default:
+					break;
 
 			}
 		}

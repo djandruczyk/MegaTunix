@@ -40,6 +40,7 @@ extern gint dbg_lvl;
  */
 void start_tickler(TicklerType type)
 {
+	extern GObject *global_data;
 	extern Serial_Params *serial_params;
 	switch (type)
 	{
@@ -55,7 +56,7 @@ void start_tickler(TicklerType type)
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
-				playback_id = g_timeout_add(24,(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				playback_id = g_timeout_add((gint)g_object_get_data(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
 			{
 				if (dbg_lvl & CRITICAL)
@@ -64,7 +65,7 @@ void start_tickler(TicklerType type)
 			break;
 		case TOOTHMON_TICKLER:
 			if (toothmon_id == 0)
-				toothmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				toothmon_id = g_timeout_add(400,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			else
 			{
 				if (dbg_lvl & CRITICAL)

@@ -179,6 +179,8 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Serial", "baudrate", 
 				&baudrate);
 		cfg_read_int(cfgfile, "Logviewer", "zoom", &lv_zoom);
+		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
+			g_object_set_data(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
@@ -308,6 +310,8 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Serial", "baudrate", baudrate);
 			
 	cfg_write_int(cfgfile, "Logviewer", "zoom", lv_zoom);
+	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(gint) g_object_get_data(global_data,"lv_scroll_delay"));
+
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
 	cfg_write_int(cfgfile, "MemViewer", "page2_style", mem_view_style[2]);

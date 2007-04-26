@@ -141,6 +141,8 @@ trypop:
 						case MTX_TITLE:
 							set_title(g_strdup(w_update->msg));
 							break;
+						default:
+							break;
 					}
 					dealloc_w_update(w_update);
 					message->payload = NULL;

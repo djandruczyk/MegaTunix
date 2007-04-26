@@ -405,20 +405,21 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			case MTX_RANGE:
 				gtk_range_set_value(GTK_RANGE(slider->pbar),current);
 				break;
+			default:
+				break;
 		}
 
 
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
 		 * */
-		if ((slider->textval) && ((abs(count-last_upd) > 3) || (forced_update)))
+		if ((slider->textval) && ((abs(count-last_upd) > 2) || (forced_update)))
 		{
 			if (is_float)
 				tmpbuf = g_strdup_printf("%.2f",current);
 			else
 				tmpbuf = g_strdup_printf("%i",(gint)current);
 
-			//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 			gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
@@ -432,7 +433,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		else
 			tmpbuf = g_strdup_printf("%i",(gint)current);
 
-		//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 		gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;

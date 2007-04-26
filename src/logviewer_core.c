@@ -26,6 +26,7 @@
 #include <string.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <timeout_handlers.h>
 
 Log_Info *log_info = NULL;
 extern gint dbg_lvl;
@@ -298,4 +299,25 @@ void free_log_info()
 	log_info = NULL;
 
 	return;
+}
+
+
+/*!
+ *\brief changes scroll speed for logviewer playback
+ */
+EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
+{
+	gfloat tmpf = 0.0;
+	extern GObject *global_data;
+	extern gint playback_id;
+
+	tmpf = gtk_range_get_value(GTK_RANGE(widget));
+	g_object_set_data(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
+	if (playback_id > 0)
+	{
+		stop_tickler(LV_PLAYBACK_TICKLER);
+		start_tickler(LV_PLAYBACK_TICKLER);
+	}
+
+	return TRUE;
 }

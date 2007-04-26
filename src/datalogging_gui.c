@@ -349,7 +349,8 @@ void run_datalog(void)
 		value = g_array_index(history, gfloat, current_index);
 		if ((gboolean)g_object_get_data(object,"is_float"))
 		{
-			tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3g",value);
+			printf("value %.3f\n",value);
+			tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3f",value);
 			g_string_append(output,tmpbuf);
 		}
 		else
@@ -523,8 +524,14 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	gchar *tmpbuf = NULL;
 	gboolean *is_floats;
 	gfloat value = 0.0;
+	extern gint realtime_id;
+	gboolean restart_tickler = FALSE;
 
-	stop_tickler(RTV_TICKLER);
+	if (realtime_id)
+	{
+		restart_tickler = TRUE;
+		stop_tickler(RTV_TICKLER);
+	}
 
 	output = g_string_sized_new(1024); 
 
@@ -548,7 +555,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 			value = g_array_index(histories[i], gfloat, x);
 			if (is_floats[i])
 			{
-				tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3g",value);
+				tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3f",value);
 				g_string_append(output,tmpbuf);
 			}
 			else
@@ -567,6 +574,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	g_free(is_floats);
 	g_free(histories);
 	g_string_free(output,TRUE);
-	start_tickler(RTV_TICKLER);
+	if (restart_tickler)
+		start_tickler(RTV_TICKLER);
 
 }

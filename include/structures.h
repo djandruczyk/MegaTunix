@@ -212,7 +212,7 @@ struct _Rt_Slider
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */
 	gint last_upd;		/*! used to making sure things update */
-	SliderType class;	/*! Slider type... */
+	WidgetType class;	/*! Slider type... */
 };
 
 
@@ -655,6 +655,8 @@ struct _Ve_View_3D
 	gint z_page;
 	gchar *table_name;
 	gint table_num;
+	gboolean tracking_focus;
+	GtkWidget *tracking_button;
 };
 
 
@@ -706,6 +708,7 @@ struct _Logview_Data
 	gint spread;		/*! Pixel spread between trace info blocks */
 	gint tselect;		/*! Trace that is currently selected */
 	PangoFontDescription *font_desc; /*! Font used for text... */
+	gint info_width;	/*! Width of left info area */
 };
 
 /*!

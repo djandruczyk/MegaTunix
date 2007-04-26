@@ -84,6 +84,7 @@ void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (dash), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
+	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
 
 
 	gtk_container_add(GTK_CONTAINER(window),dash);
