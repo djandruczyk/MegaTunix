@@ -1,9 +1,14 @@
-GaugeEngine: XML based file format storing a description (theme) to build
-the gauges.  The GaugeEngine is intended to give photo-realisitic gauges
-comparable to what you could buy off the shelf..  Will be based on the 
-gnome canvas...
 
-support for MS-II (difficult, requires parser to be designed and written to
-handle it's I/O stream (different size variabels not layed out on clean
-boundaries, makes it a bitch to deal with..)
+Interrogator simplification and redesign to support MS-II
+
+Gauges "always on top" choice to be user selectable,  contect menu for the 
+dash should be added (should be easy)
+
+Add full offline playback mode selectable at any time. to allow playback of 
+logs wiht visual feeedback in 2d/3d views, and dashes.  Requires designing 
+parser/mapper to link datamap fields to  internal datasource names.
+
+
+Add full MS-II support including CAN submodules (requires internal core 
+modifications to handle the arrays for CAN controls.
 
