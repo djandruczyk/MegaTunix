@@ -38,6 +38,9 @@ typedef struct _Log_Info Log_Info;
 typedef struct _Page_Params Page_Params;
 typedef struct _Table_Params Table_Params;
 typedef struct _Canidate Canidate;
+typedef struct _Potential Potential;
+typedef struct _Test Test;
+typedef struct _Test_Result Test_Result;
 typedef struct _Req_Fuel_Params Req_Fuel_Params;
 typedef struct _Command Command;
 typedef struct _Io_Message Io_Message;
@@ -333,6 +336,49 @@ struct _Table_Params
 	void *z_eval;		/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
+};
+
+
+/*!
+ \brief the _Potential structure holds only the bare minimum of an 
+ interrogation profile used to match against the tests for ECU deterination
+ once a match is made the filename param is used to do a full profile load.
+ */
+struct _Potential
+{
+	gchar *filename;
+	GHashTable *things_to_match;
+};
+
+
+/*!
+ \brief The _Test_Result structure holds info about each test performed
+ during interogation, including a friendly test name (human readable), the 
+ actual test encoded string (machine parsable), the resulting string from the
+ ecu (for string matching as needed), and the number of bytes returned in this
+ test.
+ */
+struct _Test_Result
+{
+	gchar *test_name;	/* Friendly name, like MS-I_RTvars */
+	gchar *actual_test;	/* Machine parsable test name like a,0x00,0x00*/
+	gchar *result_str;	/* Result of test stored for matching */
+	gchar *num_bytes;	/* Number of bytes returned for this test */
+};
+
+
+/*!
+ \brief The _Test struct holds the basics for each ECU test performed, incl.
+ a friendly human readable test name (this matches up eith test names in the 
+ actual profile), the actual_test string (a machine parsable form), and a 
+ test_vector,  which is the result of splitting up the actual_test string into
+ it's component parts. 
+ */
+struct _Test
+{
+	gchar *test_name;	/* Friendly test name, like "MS-I_RTvars" */
+	gchar *actual_test;	/* machine parsable test string */
+	gchar **test_vector;	/* Vector split of test (csv split) */
 };
 
 
