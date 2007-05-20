@@ -17,7 +17,8 @@ gauges_files = 	\
 		AM_SportComp_TPSpercent_Gauge.xml \
 		AM_SportComp_CLT_degC_Gauge.xml \
 		AM_SportComp_MAT_degC_Gauge.xml \
-		AM_SportComp_VE_Gauge.xml
+		AM_SportComp_VE_Gauge.xml \
+		AM_SportComp_Volts.xml
 
 gauges_DATA = $(gauges_files)
 
