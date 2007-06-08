@@ -315,6 +315,7 @@ gboolean determine_ecu(GArray *tests)
 		load_firmware_details(firmware,filename);
 		if (firmware->rt_cmd_key)
 		{
+			printf("firmware->rt_cmd_key is %s\n",firmware->rt_cmd_key);
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->rt_cmd_key);
 			cmds->realtime_cmd = g_strdup(test->test_vector[0]);
 			cmds->rt_cmd_len = g_strv_length(test->test_vector);
@@ -325,9 +326,10 @@ gboolean determine_ecu(GArray *tests)
 		}	
 		if (firmware->ve_cmd_key)
 		{
+			printf("firmware->ve_cmd_key is %s\n",firmware->ve_cmd_key);
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ve_cmd_key);
 			cmds->veconst_cmd = g_strdup(test->test_vector[0]);
-			cmds->ve_cmd_len = test->num_bytes;
+			cmds->ve_cmd_len = g_strv_length(test->test_vector);
 			printf("VE cmd is \"%s\"\n",cmds->veconst_cmd);
 			printf("VE cmd len \"%i\"\n",cmds->ve_cmd_len);
 		}	
@@ -1257,7 +1259,6 @@ gboolean check_for_match(GArray *tests, gchar *filename)
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	MatchClass class = 0;
-	guchar *ptr = NULL;
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)

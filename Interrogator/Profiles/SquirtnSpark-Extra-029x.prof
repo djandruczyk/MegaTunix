@@ -397,7 +397,6 @@ CMD_UPPER_S=32
 MS_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,39
-MS-VerNum=_COUNT_,1
 MS-I_VEconst=_COUNT_,189
 MS_Signature=_SUBMATCH_,extra format 029q
 
