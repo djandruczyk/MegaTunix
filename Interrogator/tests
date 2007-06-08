@@ -30,7 +30,7 @@
 #	
 
 [interrogation_tests]
-total_tests=9
+total_tests=11
 
 [test_00]
 test_name=MS_Clock
@@ -87,6 +87,12 @@ test_arg_types=_CHAR_
 test_desc=MSnS-3.x Ignition Page
 
 [test_09]
+test_name=MS-DT_Raw_Mem
+actual_test=F,0
+test_arg_types=_CHAR_,_UINT8_
+test_desc=MS-I DT Raw Mem
+
+[test_10]
 test_name=MS-II_RTVars
 actual_test=a,0,6
 test_arg_types=_CHAR_,_UINT8_,_UINT8_

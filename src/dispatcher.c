@@ -220,7 +220,7 @@ trypop:
 						 statuscounts_id = gtk_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 					break;
 				case UPD_START_REALTIME:
-						//start_tickler(RTV_TICKLER);
+						start_tickler(RTV_TICKLER);
 					break;
 				case UPD_REALTIME:
 					if (interrogated)

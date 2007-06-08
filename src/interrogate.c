@@ -164,7 +164,7 @@ void interrogate_ecu()
 			if (res <= 0)
 				zerocount++;
 
-			if (zerocount >= 2)
+			if (zerocount > 1)
 				break;
 		}
 
@@ -315,23 +315,16 @@ gboolean determine_ecu(GArray *tests)
 		load_firmware_details(firmware,filename);
 		if (firmware->rt_cmd_key)
 		{
-			printf("firmware->rt_cmd_key is %s\n",firmware->rt_cmd_key);
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->rt_cmd_key);
 			cmds->realtime_cmd = g_strdup(test->test_vector[0]);
 			cmds->rt_cmd_len = g_strv_length(test->test_vector);
 			firmware->rtvars_size = test->num_bytes;
-			printf("RT cmd is \"%s\"\n",cmds->realtime_cmd);
-			printf("RT cmd len \"%i\"\n",cmds->rt_cmd_len);
-			printf("RTvars size \"%i\"\n",firmware->rtvars_size);
 		}	
 		if (firmware->ve_cmd_key)
 		{
-			printf("firmware->ve_cmd_key is %s\n",firmware->ve_cmd_key);
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ve_cmd_key);
 			cmds->veconst_cmd = g_strdup(test->test_vector[0]);
 			cmds->ve_cmd_len = g_strv_length(test->test_vector);
-			printf("VE cmd is \"%s\"\n",cmds->veconst_cmd);
-			printf("VE cmd len \"%i\"\n",cmds->ve_cmd_len);
 		}	
 		return TRUE;
 	
