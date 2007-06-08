@@ -2,12 +2,12 @@
 name=MegaSquirtnSpark-Extra 029x
 
 [parameters]
-SignatureQueryString=extra format 029q
-ExtVerQueryString=
-VerNumber=
-Capabilities=_MSNS_E_
+SignatureVia=MS_Signature
+TextVerVia=MS_Textrev
+NumVerVia=MS-VerNum
 Rt_Cmd_Key=MSnS-E_RTVars
 VE_Cmd_Key=MS-I_VEconst
+Capabilities=_MSNS_E_
 Write_Cmd=W
 Burn_Cmd=B
 Chunk_Write_Cmd=X
@@ -386,14 +386,8 @@ length=256
 truepgnum=243
 length=256
 
-[bytecounts]
-CMD_UPPER_A=22
-CMD_UPPER_R=39
-CMD_UPPER_Q=1
-CMD_UPPER_V=189
-CMD_UPPER_S=32
-
 [interrogation]
+match_on=MS_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
 MS_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,39

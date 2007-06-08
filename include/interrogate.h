@@ -22,13 +22,13 @@
 void interrogate_ecu(void);
 gboolean determine_ecu(GArray *);
 GArray * validate_and_load_tests(void );
-void close_profile(Canidate * );
 gboolean check_for_match(GArray *,gchar *);
 void free_results_array(GArray *);
 void free_tests_array(GArray *);
 void interrogate_error(gchar *, gint);
 gint translate_capabilities(gchar *);
 void load_firmware_details(Firmware_Details *, gchar * );
+void update_interrogation_gui(Firmware_Details *);
 /* Prototypes */
 
 #endif

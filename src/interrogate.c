@@ -199,7 +199,10 @@ void interrogate_ecu()
 
 		/* copy data from tmp buffer to struct pointer */
 		test->num_bytes = total_read;
-		test->result_str = g_memdup(ptr, total_read);
+		if (total_read == 0)
+			test->result_str = g_strdup("");
+		else
+			test->result_str = g_memdup(ptr, total_read);
 	}
 
 	interrogated = determine_ecu(tests);	
@@ -270,33 +273,6 @@ gboolean determine_ecu(GArray *tests)
 						test->actual_test,
 						test->test_desc,
 						test->num_bytes));
-		/*
-		   if (cmd->store_type == VNUM)
-		   {
-		   if (canidate->ver_num == 0)
-		   thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup(""));
-		   else
-		   thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",(float)canidate->ver_num/10.0));
-
-		   }
-		   if (cmd->store_type == SIG)
-		   {
-		   if (canidate->sig_str == NULL)
-		   thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strdup(""));
-		   else
-		   thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(canidate->sig_str,(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key)));
-
-		   }
-		   if (cmd->store_type == TEXTVER)
-		   {
-		   if (canidate->text_version_str == NULL)
-		   thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
-		   else
-		   thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(canidate->text_version_str,(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key)));
-
-
-		   }
-		   */
 
 	}
 	if (match == FALSE) // (we DID NOT find one)
@@ -313,18 +289,37 @@ gboolean determine_ecu(GArray *tests)
 			firmware = g_new0(Firmware_Details,1);
 
 		load_firmware_details(firmware,filename);
+		update_interrogation_gui(firmware);
+
 		if (firmware->rt_cmd_key)
 		{
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->rt_cmd_key);
-			cmds->realtime_cmd = g_strdup(test->test_vector[0]);
-			cmds->rt_cmd_len = g_strv_length(test->test_vector);
-			firmware->rtvars_size = test->num_bytes;
+			if (test)
+			{
+				cmds->realtime_cmd = g_strdup(test->test_vector[0]);
+				cmds->rt_cmd_len = g_strv_length(test->test_vector);
+				firmware->rtvars_size = test->num_bytes;
+			}
 		}	
+		test = NULL;
 		if (firmware->ve_cmd_key)
 		{
 			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ve_cmd_key);
-			cmds->veconst_cmd = g_strdup(test->test_vector[0]);
-			cmds->ve_cmd_len = g_strv_length(test->test_vector);
+			if (test)
+			{
+				cmds->veconst_cmd = g_strdup(test->test_vector[0]);
+				cmds->ve_cmd_len = g_strv_length(test->test_vector);
+			}
+		}	
+		test = NULL;
+		if (firmware->ign_cmd_key)
+		{
+			test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ign_cmd_key);
+			if (test)
+			{
+				cmds->ignition_cmd = g_strdup(test->test_vector[0]);
+				cmds->ign_cmd_len = g_strv_length(test->test_vector);
+			}
 		}	
 		return TRUE;
 	
@@ -361,6 +356,9 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			dbg_func(g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
 
 	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
+	cfg_read_string(cfgfile,"parameters","TextVerVia",&firmware->TextVerVia);
+	cfg_read_string(cfgfile,"parameters","NumVerVia",&firmware->NumVerVia);
+	cfg_read_string(cfgfile,"parameters","SignatureVia",&firmware->SignatureVia);
 
 	if (dbg_lvl & INTERROGATOR)
 		dbg_func(g_strdup_printf(__FILE__": load_profile_details()\n\tfile:%s opened successfully\n",filename));
@@ -960,50 +958,7 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	}
 
 	mem_alloc();
-	/*
-	   if (potential->rt_cmd_key != NULL)
-	   {
-	   cmd = (Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
-	   firmware->rtvars_size = (gint)g_hash_table_lookup(
-	   potential->bytecounts,cmd->key);
-	   }
-	   else
-	   {
-	   if (dbg_lvl & (INTERROGATOR|CRITICAL))
-	   dbg_func(g_strdup(__FILE__": determine_ecu()\n\tRead cmd is NOT defined in interrogation profile,\n\tCRITICAL ERROR, expect imminent crash\n\n"));
-	   }
-	// VE/Constants 
-	if (potential->ve_cmd_key != NULL)
-	{
-	cmd = (Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
-	cmds->veconst_cmd = g_strdup(cmd->string);
-	cmds->ve_cmd_len = cmd->len;
-	}
-	else
-	{
-	if (dbg_lvl & (INTERROGATOR|CRITICAL))
-	dbg_func(g_strdup(__FILE__": determine_ecu()\n\tVE/Constants cmd is NOT defined in interrogation profile,\n\tCRITICAL ERROR, expect imminent crash\n\n"));
-	}
-	// Ignition vars 
-	if (potential->ign_cmd_key != NULL)
-	{
-	cmd = (Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
-	cmds->ignition_cmd = g_strdup(cmd->string);
-	cmds->ign_cmd_len = cmd->len;
-	}
 
-	// Raw memory 
-	if (potential->raw_mem_cmd_key != NULL)
-	{
-	cmd = (Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
-	cmds->raw_mem_cmd = g_strdup(cmd->string);
-	cmds->raw_mem_cmd_len = cmd->len;
-	firmware->memblock_size = (gint)g_hash_table_lookup(
-	potential->bytecounts,cmd->key);
-	}
-
-
-*/
 	// Display firmware version in the window... 
 
 	if (dbg_lvl & INTERROGATOR)
@@ -1117,84 +1072,6 @@ void free_test_commands(GArray * cmd_array)
 	g_array_free(cmd_array,TRUE);
 }
 
-/*!
- \brief close_profile() closes the interrogation profile and deallocates and
- memory associated with it..
- \param canidate (Canidate *) pointer to the canidate structure
- */
-void close_profile(Canidate *canidate)
-{
-	gint i = 0;
-
-	if (dbg_lvl & INTERROGATOR)
-		dbg_func(g_strdup(__FILE__": close_profile(),\n\tDeallocating memory for potential canidate match\n"));
-	if (canidate->name)
-		g_free(canidate->name);
-	if (canidate->filename)
-		g_free(canidate->filename);
-	if (canidate->bytecounts)
-		g_hash_table_destroy(canidate->bytecounts);
-	if (canidate->sig_str)
-		g_free(canidate->sig_str);
-	if (canidate->text_version_str)
-		g_free(canidate->text_version_str);
-	if (canidate->load_tabs)
-		g_free(canidate->load_tabs);
-	if (canidate->tab_confs)
-		g_free(canidate->tab_confs);
-	if (canidate->rtv_map_file)
-		g_free(canidate->rtv_map_file);
-	if (canidate->sliders_map_file)
-		g_free(canidate->sliders_map_file);
-	if (canidate->rtt_map_file)
-		g_free(canidate->rtt_map_file);
-	if (canidate->status_map_file)
-		g_free(canidate->status_map_file);
-	if (canidate->rt_cmd_key)
-		g_free(canidate->rt_cmd_key);
-	if (canidate->ve_cmd_key)
-		g_free(canidate->ve_cmd_key);
-	if (canidate->ign_cmd_key)
-		g_free(canidate->ign_cmd_key);
-	if (canidate->raw_mem_cmd_key)
-		g_free(canidate->raw_mem_cmd_key);
-	if (canidate->write_cmd)
-		g_free(canidate->write_cmd);
-	if (canidate->chunk_write_cmd)
-		g_free(canidate->chunk_write_cmd);
-	if (canidate->burn_cmd)
-		g_free(canidate->burn_cmd);
-	if (canidate->page_cmd)
-		g_free(canidate->page_cmd);
-	if (canidate->lookuptables)
-		g_hash_table_destroy(canidate->lookuptables);
-	for (i=0;i<(canidate->total_pages);i++)
-		if (canidate->page_params[i])
-			g_free(canidate->page_params[i]);
-	g_free(canidate->page_params);
-	for (i=0;i<(canidate->total_tables);i++)
-		if (canidate->table_params[i])
-			dealloc_table_params(canidate->table_params[i]);
-	g_free(canidate->table_params);
-	g_free(canidate);
-	if (dbg_lvl & INTERROGATOR)
-		dbg_func(g_strdup(__FILE__": close_profile(),\n\tDeallocation of memory for potential canidate complete\n"));
-
-}
-
-
-/*!
- \brief load_profile_details() loads the profile details for the interrogation
- profile.  This is only done on a match for final prep of megatunix data-
- structures for use.
- \param canidate (Canidate *) pointer to the canidate to store 
- the rest of the data into
- */
-void load_profile_details(Canidate *canidate)
-{
-}
-
-
 
 /*!
  \brief translate_capabilities() converts a stringlist into a mask of 
@@ -1249,23 +1126,39 @@ gboolean check_for_match(GArray *tests, gchar *filename)
 	ConfigFile *cfgfile = NULL;
 	Detection_Test *test = NULL;
 	gint i = 0;
+	gint ok = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
+	gchar ** match_on = NULL;
 	MatchClass class = 0;
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		return FALSE;
 
-	for (i=0;i<tests->len;i++)
-	{
-		test = g_array_index(tests,Detection_Test *,i);
 
-		/* IF the test_name is NOT IN the interrogation profile,  we 
-		 * assume that test is a MATCH (i.e. we don't care)
+	if (cfg_read_string(cfgfile,"interrogation","match_on",&tmpbuf) == FALSE)
+		printf("ERROR:!! match_on key missing from interrogation profile\n");
+	match_on = g_strsplit(tmpbuf,",",-1);
+
+	for (i=0;i<g_strv_length(match_on);i++)
+	{
+		ok = -1;
+//		printf("checking for match on %s\n",match_on[i]);
+		test = g_hash_table_lookup(tests_hash,match_on[i]);
+		if (!test)
+			printf("ERROR test data not found for test %s\n",match_on[i]);
+
+		/* If the test_name is NOT IN the interrogation profile,  we 
+		 * abort as it's NOT match
 		 */
 		if (cfg_read_string(cfgfile,"interrogation",test->test_name,&tmpbuf) == FALSE)
-			continue;  //loop around
+		{
+			if (dbg_lvl & INTERROGATOR)
+				dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			cfg_free(cfgfile);
+			return FALSE;
+		}
 		vector = g_strsplit(tmpbuf,",",-1);
 		/* Possible choices are "Count", "submatch" and "fullmatch", so
 		 * stringparse to get them into a consistent form
@@ -1273,29 +1166,38 @@ gboolean check_for_match(GArray *tests, gchar *filename)
 		if (g_strv_length(vector) != 2)
 			printf("ERROR interrogation check_for match vector does NOT have two args it has %i\n",g_strv_length(vector));
 		class = translate_string(vector[0]);
+//		printf("potential data is %s\n",vector[1]);
 		switch (class)
 		{
 			case COUNT:
 				if (test->num_bytes == atoi(vector[1]))
-					continue;
+					ok=0;
 				break;
 			case NUMMATCH:
 				if ((gint)(test->result_str[0]) == atoi(vector[1]))
-					continue;
+					ok=0;
 				break;
 			case SUBMATCH:
 				if (strstr(test->result_str,vector[1]) != NULL)
-					continue;
+					ok=0;
 				break;
 			case FULLMATCH:
 				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
-					continue;
+					ok=0;
 				break;
+			default:
+				ok=-1;
 		}
-		if (dbg_lvl & INTERROGATOR)
-			dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
-		cfg_free(cfgfile);
-		return FALSE;
+		g_strfreev(vector);
+		if (ok == 0)
+			continue;
+		else
+		{
+			if (dbg_lvl & INTERROGATOR)
+				dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			cfg_free(cfgfile);
+			return FALSE;
+		}
 
 	}
 	if (dbg_lvl & INTERROGATOR)
@@ -1340,4 +1242,54 @@ void interrogate_error(gchar *text, gint num)
 	extern gint dbg_lvl;
 	if (dbg_lvl & (CRITICAL|INTERROGATOR))
 		dbg_func(g_strdup_printf("\tInterrogation error: \"%s\" data: \"%i\"n",text,num));
+}
+
+
+/* !brief updates the interrogation gui with the text revision, signature
+ * and ecu numerical revision
+ */
+void update_interrogation_gui(Firmware_Details *firmware)
+{
+	Detection_Test *test = NULL;
+	if (firmware->TextVerVia == NULL)
+		thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
+	else
+	{
+		test = g_hash_table_lookup(tests_hash,firmware->TextVerVia);
+		if (test)
+		{
+			if (test->num_bytes > 0)
+				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(test->result_str,test->num_bytes));
+		}
+		else
+			printf("couldn't find test results for the %s test\n",firmware->TextVerVia);
+	}
+	test = NULL;
+	if (firmware->NumVerVia == NULL)
+		thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup(""));
+	else
+	{
+		test = g_hash_table_lookup(tests_hash,firmware->NumVerVia);
+		if (test)
+		{
+			if (test->num_bytes > 0)
+				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)(test->result_str[0]))/10.0));
+		}
+		else
+			printf("couldn't find test results for the %s test\n",firmware->NumVerVia);
+	}
+	if (firmware->SignatureVia == NULL)
+		thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strdup(""));
+	else
+	{
+		test = g_hash_table_lookup(tests_hash,firmware->SignatureVia);
+		if (test)
+		{
+			if (test->num_bytes > 0)
+				thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(test->result_str,test->num_bytes));
+		}
+		else
+			printf("couldn't find test results for the %s test\n",firmware->SignatureVia);
+	}
+
 }

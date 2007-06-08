@@ -37,8 +37,6 @@ typedef struct _Rt_Text Rt_Text;
 typedef struct _Log_Info Log_Info;
 typedef struct _Page_Params Page_Params;
 typedef struct _Table_Params Table_Params;
-typedef struct _Canidate Canidate;
-typedef struct _Potential Potential;
 typedef struct _Detection_Test Detection_Test;
 typedef struct _Detection_Test_Result Detection_Test_Result;
 typedef struct _Req_Fuel_Params Req_Fuel_Params;
@@ -97,6 +95,9 @@ struct _Firmware_Details
 	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */
 	gchar *ign_cmd_key;	/*! string key to hashtable for Ign command */
 	gchar *raw_mem_cmd_key;	/*! string key to hashtable for RAW command */
+	gchar *SignatureVia;	/*! Key to retrieve signature string */
+	gchar *TextVerVia;	/*! Key to retrieve text version string */
+	gchar *NumVerVia;	/*! Key to retrieve numerical version string */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
@@ -364,48 +365,6 @@ struct _Detection_Test
 
 };
 
-
-/*! 
- \brief The _Canidate structure is used for interrogation, each potential
- firmware is interrogated and as it is the data is fed into this structure
- for comparison against know values (interrogation profiles), upon a match
- the needed data is copied into a Firmware_Details structure
- \see Firmware_Details
- */
-struct _Canidate
-{
-	gchar *name;		/*! Name of this firmware */
-	gchar *filename;	/*! absolute path to this canidate profile */
-	GHashTable *bytecounts;	/*! byte count for each of the 10 test cmds */
-	gchar *sig_str;		/*! Signature string to search for */
-	gchar *text_version_str;/*! Ext Version string to search for */
-	gint ver_num;		/*! Version number to search for */
-	gchar *load_tabs;	/*! list of tabs to load into the gui */
-	gchar *tab_confs;	/*! Tab configuration files */
-	gchar *rtv_map_file;	/*! name of realtime vars map file */
-	gchar *sliders_map_file;/*! runtime sliders map filename */
-	gchar *rtt_map_file;	/*! runtime text map filename */
-	gchar *status_map_file;	/*! runtime status map filename */
-	Capability capabilities;/*! Bitmask of capabilities.... */
-	gchar *rt_cmd_key;	/*! string key to hashtable for RT command */
-	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */
-	gchar *ign_cmd_key;	/*! string key to hashtable for Ign command */
-	gchar *raw_mem_cmd_key;	/*! string key to hashtable for RAW command */
-	gchar *chunk_write_cmd;	/*! Command to send to write data... */
-	gchar *write_cmd;	/*! Command to send to write data... */
-	gchar *burn_cmd;	/*! Command to send to burn data... */
-	gchar *page_cmd;	/*! Command to send to change pages... */
-	gboolean multi_page;	/*! Multi-page firmware */
-	gboolean chunk_support;	/*! Chunk Write supported firmware */
-	gint ro_above;		/*! Debug pages above this one */
-	gint trigmon_page;	/*! Trigger Monitor RO Page */
-	gint toothmon_page;	/*! Tooth Monitor RO Page */
-	gint total_pages;	/*! how many pages do we handle? */
-	gint total_tables;	/*! how many tables do we handle? */
-	GHashTable *lookuptables;/*! Lookuptables hashtable... */
-	Page_Params **page_params;/*! special vars per page */
-	Table_Params **table_params;/*! details on ve/rpm/load tables*/
-};
 
 
 /*!

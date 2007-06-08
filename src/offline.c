@@ -52,7 +52,6 @@ void set_offline_mode(void)
 	gchar * filename = NULL;
 	GArray *cmd_array = NULL;
 	GHashTable *cmd_details = NULL;
-	Canidate *canidate = NULL;
 	extern Firmware_Details *firmware;
 	extern gint ecu_caps;
 	extern gboolean interrogated;
@@ -109,6 +108,7 @@ void set_offline_mode(void)
 	if (!firmware)
 		firmware = g_new0(Firmware_Details,1);
 
+	/*
 	firmware->name = g_strdup(canidate->name);
 	firmware->tab_list = g_strsplit(canidate->load_tabs,",",0);
 	firmware->tab_confs = g_strsplit(canidate->tab_confs,",",0);
@@ -121,6 +121,7 @@ void set_offline_mode(void)
 	firmware->write_cmd = g_strdup(canidate->write_cmd);
 	firmware->burn_cmd = g_strdup(canidate->burn_cmd);
 	firmware->page_cmd = g_strdup(canidate->page_cmd);
+	*/
 
 	/* Allocate RAM for the Req_Fuel_Params structures. */
 	firmware->rf_params = g_new0(Req_Fuel_Params *,firmware->total_tables);
@@ -131,7 +132,7 @@ void set_offline_mode(void)
 	{
 		firmware->rf_params[i] = g_new0(Req_Fuel_Params, 1);
 		firmware->table_params[i] = initialize_table_params();
-		memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(Table_Params));
+	//	memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(Table_Params));
 		firmware->rf_params[i]->num_cyls=1;
 		firmware->rf_params[i]->num_squirts=1;
 		firmware->rf_params[i]->num_inj=1;
@@ -246,7 +247,8 @@ void set_offline_mode(void)
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		firmware->page_params[i] = initialize_page_params();
-		memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(Page_Params));
+///
+//memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(Page_Params));
 	}
 
 	mem_alloc();
@@ -284,7 +286,6 @@ void set_offline_mode(void)
 gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 {
 	gchar ** filenames = NULL;
-	Canidate *potential = NULL;
 	GtkWidget *dialog_window = NULL;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -325,7 +326,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	while (filenames[i]) 
 	{
 		//potential = load_potential_match(filenames[i]);
-		if (!potential)
+//		if (!potential)
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
@@ -334,7 +335,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		}
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
-		label = gtk_label_new(g_strdup(potential->name));
+//		label = gtk_label_new(g_strdup(potential->name));
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
 		g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
@@ -346,7 +347,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 				NULL);
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
-		close_profile(potential);
+//		close_profile(potential);
 		i++;
 	}
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);

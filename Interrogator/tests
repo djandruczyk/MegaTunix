@@ -60,7 +60,7 @@ test_desc=MSnS-Extra Runtime Vars
 test_name=MS-VerNum
 actual_test=Q
 test_arg_types=_CHAR_
-test_desc=ECU Text Revision
+test_desc=ECU Numeric Revision
 
 [test_05]
 test_name=MS-I_VEconst
@@ -78,7 +78,7 @@ test_desc=ECU Signature
 test_name=MS_Textrev
 actual_test=T
 test_arg_types=_CHAR_
-test_desc=Text Version
+test_desc=ECU Text Version
 
 [test_08]
 test_name=MSnS-Ignition

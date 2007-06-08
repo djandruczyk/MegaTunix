@@ -593,40 +593,6 @@ Table_Params * initialize_table_params(void)
 }
 
 
-/*!
- *  \brief initialize_canidate() creates and initializes the Candidate
- *   datastructure to sane defaults and returns it
- *    */
-Canidate * initialize_canidate(void)
-{
-	Canidate *canidate = NULL;
-	canidate = g_malloc0(sizeof(Canidate));
-	canidate->name = NULL;
-	canidate->filename = NULL;
-	canidate->bytecounts = NULL;
-	canidate->sig_str = NULL;
-	canidate->text_version_str = NULL;
-	canidate->ver_num = -1;
-	canidate->load_tabs = NULL;
-	canidate->tab_confs = NULL;
-	canidate->rtv_map_file = NULL;
-	canidate->sliders_map_file = NULL;
-	canidate->rt_cmd_key = NULL;
-	canidate->ve_cmd_key = NULL;
-	canidate->ign_cmd_key = NULL;
-	canidate->raw_mem_cmd_key = NULL;
-	canidate->write_cmd = NULL;
-	canidate->burn_cmd = NULL;
-	canidate->page_cmd = NULL;
-	canidate->lookuptables = NULL;
-	canidate->total_pages = -1;
-	canidate->total_tables = -1;
-	canidate->capabilities = 0;
-	canidate->page_params = NULL;
-	canidate->table_params = NULL;
-	return canidate;
-}
-
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O
