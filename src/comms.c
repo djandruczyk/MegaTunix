@@ -421,6 +421,7 @@ void writeto_ecu(Io_Message *message)
 		ms_data[page][offset] = value;
 
 		g_free(write_cmd);
+		g_usleep(5000);
 
 	}
 	else if (output->mode == MTX_CHUNK_WRITE)
@@ -468,7 +469,6 @@ void writeto_ecu(Io_Message *message)
 	}
 
 	/*is this really needed??? */
-//	g_usleep(5000);
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);

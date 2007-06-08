@@ -6,8 +6,8 @@ SignatureQueryString=extra format hr
 ExtVerQueryString=
 VerNumber=
 Capabilities=_MSNS_E_
-Rt_Cmd_Key=CMD_UPPER_R
-VE_Cmd_Key=CMD_UPPER_V
+Rt_Cmd_Key=MSnS-E_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Write_Cmd=W
 Burn_Cmd=B
 Chunk_Write_Cmd=X
@@ -385,6 +385,14 @@ CMD_UPPER_R=41
 CMD_UPPER_Q=1
 CMD_UPPER_V=189
 CMD_UPPER_S=32
+
+[interrogation]
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MSnS-E_RTVars=_COUNT_,41
+MS-VerNum=_COUNT_,1
+MS-I_VEconst=_COUNT_,189
+MS_Signature=_SUBMATCH_,extra format hr
 
 [gui]
 RealtimeMapFile=MSnS-Extra-HR-029x

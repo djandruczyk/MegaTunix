@@ -20,15 +20,15 @@
 
 /* Prototypes */
 void interrogate_ecu(void);
-gboolean determine_ecu(Canidate *, GArray *,GHashTable *);
-GArray * validate_and_load_tests(GHashTable *);
-void free_test_commands(GArray *);
-void load_bytecounts(GArray *, GHashTable *, ConfigFile *);
+gboolean determine_ecu(GArray *);
+GArray * validate_and_load_tests(void );
 void close_profile(Canidate * );
-Canidate * load_potential_match(GArray * , gchar * );
-gboolean check_for_match(GArray *, Canidate *, Canidate *);
-void load_profile_details(Canidate * );
+gboolean check_for_match(GArray *,gchar *);
+void free_results_array(GArray *);
+void free_tests_array(GArray *);
+void interrogate_error(gchar *, gint);
 gint translate_capabilities(gchar *);
+void load_firmware_details(Firmware_Details *, gchar * );
 /* Prototypes */
 
 #endif

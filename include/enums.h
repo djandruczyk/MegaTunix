@@ -411,4 +411,21 @@ typedef enum
 	MTX_CHUNK_WRITE,
 }WriteMode;
 
+typedef enum
+{
+	MTX_CHAR=0x250,
+	MTX_UINT8,
+	MTX_SINT8,
+	MTX_UINT16,
+	MTX_SINT16
+}TestArgType;
+
+typedef enum
+{
+	COUNT=0x260,
+	NUMMATCH,
+	SUBMATCH,
+	FULLMATCH,
+}MatchClass;
+
 #endif

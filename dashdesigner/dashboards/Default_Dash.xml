@@ -8,8 +8,8 @@
   <gauge>
     <width>156</width>
     <height>156</height>
-    <x_offset>316</x_offset>
-    <y_offset>296</y_offset>
+    <x_offset>306</x_offset>
+    <y_offset>327</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_AFR_Gauge.xml</gauge_xml_name>
     <datasource>afr</datasource>
   </gauge>
@@ -24,24 +24,24 @@
   <gauge>
     <width>138</width>
     <height>158</height>
-    <x_offset>286</x_offset>
-    <y_offset>-3</y_offset>
+    <x_offset>325</x_offset>
+    <y_offset>-13</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_Advance_Gauge.xml</gauge_xml_name>
     <datasource>sparkangle</datasource>
   </gauge>
   <gauge>
     <width>132</width>
     <height>136</height>
-    <x_offset>301</x_offset>
-    <y_offset>150</y_offset>
+    <x_offset>328</x_offset>
+    <y_offset>189</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_CLT_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
     <width>127</width>
     <height>141</height>
-    <x_offset>156</x_offset>
-    <y_offset>33</y_offset>
+    <x_offset>142</x_offset>
+    <y_offset>5</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
@@ -52,5 +52,13 @@
     <y_offset>44</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_MAP_Gauge.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
+  </gauge>
+  <gauge>
+    <width>120</width>
+    <height>133</height>
+    <x_offset>241</x_offset>
+    <y_offset>98</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_Volts.xml</gauge_xml_name>
+    <datasource>battvolt</datasource>
   </gauge>
 </dashboard>

@@ -79,8 +79,8 @@ void set_offline_mode(void)
 
 	queue_function(g_strdup("kill_conn_warning"));
 
-	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
-	cmd_array = validate_and_load_tests(cmd_details);
+	//cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
+	//cmd_array = validate_and_load_tests(cmd_details);
 
 	filename = present_firmware_choices(cmd_array,cmd_details);
 	if (!filename)
@@ -98,12 +98,12 @@ void set_offline_mode(void)
 		return;
 
 	}
-	canidate = load_potential_match(cmd_array,filename);
+	//canidate = load_potential_match(filename);
 
-	load_profile_details(canidate);
-	load_lookuptables(canidate);
+	//load_profile_details(canidate);
+	//load_lookuptables(canidate);
 	/* Set flags */
-	ecu_caps = canidate->capabilities;
+	//ecu_caps = canidate->capabilities;
 
 	/* Set expected sizes for commands */
 	if (!firmware)
@@ -324,7 +324,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	i = 0;
 	while (filenames[i]) 
 	{
-		potential = load_potential_match(cmd_array,filenames[i]);
+		//potential = load_potential_match(filenames[i]);
 		if (!potential)
 		{
 			if (dbg_lvl & CRITICAL)

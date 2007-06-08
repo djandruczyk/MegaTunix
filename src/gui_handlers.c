@@ -409,7 +409,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gchar * group_2_update = NULL;
 	gchar * tmpbuf = NULL;
 	extern gint dbg_lvl;
-	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
@@ -477,7 +476,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
-			if (ecu_caps & MSNS_E)
+			if (firmware->capabilities & MSNS_E)
 			{
 				tmpbuf = (gchar *)g_object_get_data(
 						G_OBJECT(widget),"table_num");
@@ -1352,7 +1351,6 @@ void update_ve_const()
 	union config11 cfg11;
 	union config12 cfg12;
 	extern gint **ms_data;
-	extern gint ecu_caps;
 	extern volatile gboolean leaving;
 	extern Firmware_Details *firmware;
 
@@ -1422,12 +1420,12 @@ void update_ve_const()
 		 * MSnS-E use the SAME in DT mode only
 		 * MSnS-E uses B&G form in single table mode
 		 */
-		if (ecu_caps & DUALTABLE)
+		if (firmware->capabilities & DUALTABLE)
 		{
 		//	printf("DT\n");
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
-		else if ((ecu_caps & MSNS_E) && (((ms_data[firmware->table_params[i]->dtmode_page][firmware->table_params[i]->dtmode_offset] & 0x10) >> 4) == 1))
+		else if ((firmware->capabilities & MSNS_E) && (((ms_data[firmware->table_params[i]->dtmode_page][firmware->table_params[i]->dtmode_offset] & 0x10) >> 4) == 1))
 		{
 		//	printf("MSnS-E DT\n");
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
@@ -1956,8 +1954,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-//	printf("key event\n");
-//	printf("widget name %s\n",glade_get_widget_name(widget));
+	printf("key event\n");
+	printf("widget name %s\n",glade_get_widget_name(widget));
 	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
 		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
 	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
@@ -1968,6 +1966,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	reverse_keys = (gboolean) g_object_get_data(G_OBJECT(widget),"reverse_keys");
 
 	value = ms_data[page][offset];
+	if (event->keyval == GDK_KP_Space)
+	{
+		printf("spacebar!\n");
+	}
 	if (event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
@@ -2405,4 +2407,5 @@ void prompt_to_save(void)
 	gtk_widget_destroy (dialog);
 
 }
+
 

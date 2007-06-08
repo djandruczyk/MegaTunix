@@ -369,7 +369,7 @@ source_key=map_sensor
 source_value=MPX4250
 
 [300kpa_rbutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,source_key,group_2_update
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,source_key,source_value,group_2_update
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=1
 offset=182

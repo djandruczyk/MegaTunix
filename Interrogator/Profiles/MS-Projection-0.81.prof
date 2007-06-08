@@ -6,8 +6,8 @@ SignatureQueryString=
 ExtVerQueryString=
 VerNumber=81
 Capabilities=
-Rt_Cmd_Key=CMD_UPPER_A
-VE_Cmd_Key=CMD_UPPER_V
+Rt_Cmd_Key=MS-I_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
@@ -57,6 +57,12 @@ length=128
 CMD_UPPER_A=22
 CMD_UPPER_Q=1
 CMD_UPPER_V=128
+
+[interrogation]
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MS-VerNum=_NUMMATCH_,81
+MS-I_VEconst=_COUNT_,128
 
 [gui]
 RealtimeMapFile=BnG-std

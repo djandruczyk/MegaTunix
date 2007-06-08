@@ -34,7 +34,6 @@ gint preferred_delimiter;
 gint baudrate;
 gchar * serial_port_name = NULL;
 extern gint dbg_lvl;
-gint ecu_caps = 0;	/* Assume stock B&G code */
 extern GStaticMutex comms_mutex;
 extern gint mem_view_style[];
 extern gint ms_reset_count;

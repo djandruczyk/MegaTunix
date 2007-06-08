@@ -6,9 +6,8 @@ SignatureQueryString=v.1.02
 ExtVerQueryString=
 VerNumber=1
 Capabilities=_DUALTABLE_
-Rt_Cmd_Key=CMD_UPPER_A
-VE_Cmd_Key=CMD_UPPER_V
-Raw_Mem_Cmd_Key=CMD_UPPER_F0
+Rt_Cmd_Key=MS-I_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
@@ -98,6 +97,14 @@ CMD_UPPER_Q=1
 CMD_UPPER_V=128
 CMD_UPPER_S=19
 CMD_UPPER_F0=255
+
+[interrogation]
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MS-VerNum=_NUMMATCH_,1
+MS-I_VEconst=_COUNT_,128
+MS-Signature=_SUBMATCH_,v.1.02
+
 
 [gui]
 RealtimeMapFile=DT-std

@@ -6,8 +6,8 @@ SignatureQueryString=extra format 029q
 ExtVerQueryString=
 VerNumber=
 Capabilities=_MSNS_E_
-Rt_Cmd_Key=CMD_UPPER_R
-VE_Cmd_Key=CMD_UPPER_V
+Rt_Cmd_Key=MSnS-E_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Write_Cmd=W
 Burn_Cmd=B
 Chunk_Write_Cmd=X
@@ -22,6 +22,14 @@ ToothmonPage=9
 TrigmonPage=10
 # Fuel1, Fuel2, Fuel3, Spark1, Spark2, AFR1, AFR2, Boost1, Boost2, Boost3
 TotalPages=11
+
+[iocommands]
+Realtime_Cmd=R,39
+VE_Cmd=V,189
+Write_Cmd=W,0
+Burn_Cmd=B,0
+Chunk_Write_Cmd=X,0
+Page_Cmd=P,0
 
 [table_0]
 table_name=Fuel VE-Table 1, MSnSpark-Extra
@@ -384,6 +392,15 @@ CMD_UPPER_R=39
 CMD_UPPER_Q=1
 CMD_UPPER_V=189
 CMD_UPPER_S=32
+
+[interrogation]
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MSnS-E_RTVars=_COUNT_,39
+MS-VerNum=_COUNT_,1
+MS-I_VEconst=_COUNT_,189
+MS_Signature=_SUBMATCH_,extra format 029q
+
 
 [gui]
 RealtimeMapFile=MSnS-Extra-029x

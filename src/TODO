@@ -1,4 +1,61 @@
 
-GaugeEngine.  Gauges using libgnomecanvas and XML or other based config files
-defining gauge look/feel (photorealistic and scalable if possible)
+
+Interrogation redesign:
+
+tests are more descriptive to handle CAN tests:
+
+structure:
+
+[test_xx]
+test_name=MS-II_RTvars    <---Arbritrary text,  no spaces
+actual_test=a,0,6	<-- comma sep values, 
+test_arg_types=_CHAR_,_UINT8_._UINT8_	<- arg sizes for casting before send
+test_desc=Text desc of test <-- textual desc, spaces allowed for display in 
+				interrogator window
+
+
+Interrogation profile will replace the "bytecounts" section with:
+
+[interrogation]
+MS-II_RTvars=Count,112    <--- Type of match(count) followed by number of bytes
+MS-II_Signature=Submatch,MS-II 2.6878   <- substring match, string to search for
+MS-II_TextVersion=FullMatch,String to match exactly,  <-- exact match
+
+The values on the LEFT side of the equals sign are the test_names from the 
+Detection Test structures,  
+
+
+psuedocode for interrogation procedure:
+Verify connectivity exists (make sure connected==TRUE)
+open tests file,  get total number of tests
+iterate (loop) thru each section, alocating a Detection_Test struct for
+each test, and populating it wiht hte test name, the actual test string
+and break down the string into it's parts (test_vector), and parse the 
+test_arg_types string into an array defining the types of each part.
+
+Allocate an Array for Detection test results, and run the tests in turn
+recording the results into that struct (num bytes and resulting string)
+
+Get list of potential interrogation profiles and open in sequence and do 
+the following:
+if test_result count is ZERO (0), we first check the potential to see if it
+HASA this test defined, if it does we continue matching on it's criteria, if
+NOT we skip to the next test.
+if tet result is NOT zero, we MUST haev a match in the potential, otherwise
+the potential is discarded and hte next is processed.
+
+Matching modes:
+the matching tests look like:
+
+[interrogation]
+MS-II_RTvars=Count,112
+MS-II_Signature=Submatch,MS-II 2.6878
+MS-II_TextVersion=FullMatch,String to match exactly
+
+There are three match modes: 
+Count,  which matches only a count in bytes matches exactly
+Submatch, which takes the following string and searches for it in the 
+result_str of the Detection_Test_Result, if found, this satisfies the match
+Fullmatch, takes the following string and does a full match to the result_str
+if they differ in any way the match returns FALSE.
 

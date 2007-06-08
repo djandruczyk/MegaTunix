@@ -253,7 +253,7 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 
 				if (dbg_lvl & (IO_PROCESS))
 					dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read));
-				if (zerocount > 1)  // 2 bad reads, abort
+				if (zerocount > 3)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
@@ -331,7 +331,7 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 
 				if (dbg_lvl & IO_PROCESS)
 					dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read));
-				if (zerocount > 1)  // 2 bad reads, abort
+				if (zerocount > 3)  // 4 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
