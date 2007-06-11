@@ -50,27 +50,13 @@ void set_offline_mode(void)
 	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
-	GArray *cmd_array = NULL;
-	GHashTable *cmd_details = NULL;
+	Detection_Test *test = NULL;
+	GArray *tests = NULL;
+	GHashTable *tests_hash = NULL;
 	extern Firmware_Details *firmware;
-	extern gint ecu_caps;
 	extern gboolean interrogated;
-	gchar **sources = NULL;
-	gchar **suffixes = NULL;
-	gchar **conv_exprs = NULL;
-	gchar **precisions = NULL;
-	gchar **expr_keys = NULL;
-	gint len1 = 0;
-	gint len2 = 0;
-	gint len3 = 0;
-	gint len4 = 0;
-	gint len5 = 0;
-	MultiSource *multi = NULL;
-	gint j = 0;
+	extern Io_Cmds *cmds;
 
-	gint i = 0;
-
-	offline = TRUE;
 	/* Disable interrogation button */
 	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -78,16 +64,11 @@ void set_offline_mode(void)
 
 	queue_function(g_strdup("kill_conn_warning"));
 
-	//cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
-	//cmd_array = validate_and_load_tests(cmd_details);
-
-	filename = present_firmware_choices(cmd_array,cmd_details);
+	filename = present_firmware_choices();
 	if (!filename)
 	{
 		offline = FALSE;
 		interrogated = FALSE;
-		g_hash_table_destroy(cmd_details);
-		g_array_free(cmd_array,TRUE);
 		widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
@@ -97,164 +78,43 @@ void set_offline_mode(void)
 		return;
 
 	}
-	//canidate = load_potential_match(filename);
-
-	//load_profile_details(canidate);
-	//load_lookuptables(canidate);
-	/* Set flags */
-	//ecu_caps = canidate->capabilities;
-
-	/* Set expected sizes for commands */
+	offline = TRUE;
+	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)
 		firmware = g_new0(Firmware_Details,1);
+	load_firmware_details(firmware,filename);
+	update_interrogation_gui(firmware,tests_hash);
 
-	/*
-	firmware->name = g_strdup(canidate->name);
-	firmware->tab_list = g_strsplit(canidate->load_tabs,",",0);
-	firmware->tab_confs = g_strsplit(canidate->tab_confs,",",0);
-	firmware->rtv_map_file = g_strdup(canidate->rtv_map_file);
-	firmware->sliders_map_file = g_strdup(canidate->sliders_map_file);
-	firmware->status_map_file = g_strdup(canidate->status_map_file);
-	firmware->multi_page = canidate->multi_page;
-	firmware->total_tables = canidate->total_tables;
-	firmware->total_pages = canidate->total_pages;
-	firmware->write_cmd = g_strdup(canidate->write_cmd);
-	firmware->burn_cmd = g_strdup(canidate->burn_cmd);
-	firmware->page_cmd = g_strdup(canidate->page_cmd);
-	*/
-
-	/* Allocate RAM for the Req_Fuel_Params structures. */
-	firmware->rf_params = g_new0(Req_Fuel_Params *,firmware->total_tables);
-
-	/* Allocate ram for the necessary structures... */
-	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
-	for (i=0;i<firmware->total_tables;i++)
+	if (firmware->rt_cmd_key)
 	{
-		firmware->rf_params[i] = g_new0(Req_Fuel_Params, 1);
-		firmware->table_params[i] = initialize_table_params();
-	//	memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(Table_Params));
-		firmware->rf_params[i]->num_cyls=1;
-		firmware->rf_params[i]->num_squirts=1;
-		firmware->rf_params[i]->num_inj=1;
-		/* Check for multi source table handling */
-		if (firmware->table_params[i]->x_multi_source)
+		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->rt_cmd_key);
+		if (test)
 		{
-			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
-			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
-			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
-			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->x_conv_exprs,",",-1);
-			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
-			len1 = g_strv_length(expr_keys);
-			len2 = g_strv_length(sources);
-			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
-			for (j=0;j<len1;j++)
-			{
-				multi = g_new0(MultiSource,1);
-				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
-				multi->suffix = g_strdup(suffixes[j]);
-				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
-			}
-			g_strfreev(expr_keys);
-			g_strfreev(sources);
-			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
-			g_strfreev(precisions);
+			cmds->realtime_cmd = g_strdup(test->test_vector[0]);
+			cmds->rt_cmd_len = g_strv_length(test->test_vector);
+			firmware->rtvars_size = test->num_bytes;
 		}
-		else
-			firmware->table_params[i]->x_eval = evaluator_create(firmware->table_params[i]->x_conv_expr);
-		/* Check for multi source table handling */
-		if (firmware->table_params[i]->y_multi_source)
-		{
-			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
-			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
-			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
-			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->y_conv_exprs,",",-1);
-			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
-			len1 = g_strv_length(expr_keys);
-			len2 = g_strv_length(sources);
-			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
-			for (j=0;j<len1;j++)
-			{
-				multi = g_new0(MultiSource,1);
-				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
-				multi->suffix = g_strdup(suffixes[j]);
-				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
-			}
-			g_strfreev(expr_keys);
-			g_strfreev(sources);
-			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
-			g_strfreev(precisions);
-		}
-		else
-			firmware->table_params[i]->y_eval = evaluator_create(firmware->table_params[i]->y_conv_expr);
-
-		/* Check for multi source table handling */
-		if (firmware->table_params[i]->z_multi_source)
-		{
-			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
-			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
-			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
-			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->z_conv_exprs,",",-1);
-			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
-			len1 = g_strv_length(expr_keys);
-			len2 = g_strv_length(sources);
-			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
-			for (j=0;j<len1;j++)
-			{
-				multi = g_new0(MultiSource,1);
-				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
-				multi->suffix = g_strdup(suffixes[j]);
-				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
-			}
-			g_strfreev(expr_keys);
-			g_strfreev(sources);
-			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
-			g_strfreev(precisions);
-		}
-		else
-			firmware->table_params[i]->z_eval = evaluator_create(firmware->table_params[i]->z_conv_expr);
-
-
 	}
-
-	firmware->page_params = g_new0(Page_Params *,firmware->total_pages);
-	for (i=0;i<firmware->total_pages;i++)
+	test = NULL;
+	if (firmware->ve_cmd_key)
 	{
-		firmware->page_params[i] = initialize_page_params();
-///
-//memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(Page_Params));
+		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ve_cmd_key);
+		if (test)
+		{
+			cmds->veconst_cmd = g_strdup(test->test_vector[0]);
+			cmds->ve_cmd_len = g_strv_length(test->test_vector);
+		}
 	}
-
-	mem_alloc();
-
-	g_hash_table_destroy(cmd_details);
-	g_array_free(cmd_array,TRUE);
+	test = NULL;
+	if (firmware->ign_cmd_key)
+	{
+		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ign_cmd_key);
+		if (test)
+		{
+			cmds->ignition_cmd = g_strdup(test->test_vector[0]);
+			cmds->ign_cmd_len = g_strv_length(test->test_vector);
+		}
+	}
 
 	interrogated = TRUE;
 
@@ -271,6 +131,7 @@ void set_offline_mode(void)
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
 	offline_ecu_restore(NULL,NULL);
+	free_tests_array(tests);
 
 }
 
@@ -278,12 +139,9 @@ void set_offline_mode(void)
 /*!
  \brief present_firmware_choices() presents a dialog box with the firmware
  choices.
- \param cmd_array (GArray) array of commands to be passed to subfunctions
- \param cmd_details (GHashTable) hashtable of details re the commands in the
- cmd_array array.
  \returns the name of the chosen firmware
  */
-gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
+gchar * present_firmware_choices()
 {
 	gchar ** filenames = NULL;
 	GtkWidget *dialog_window = NULL;
@@ -292,7 +150,9 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	GtkWidget *hbox = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
+	gchar *tmpbuf = NULL;
 	GSList *group = NULL;
+	ConfigFile *cfgfile = NULL;
 	gint i = 0;
 	gint result = 0;
 	extern gchar * offline_firmware_choice;
@@ -325,17 +185,22 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	i = 0;
 	while (filenames[i]) 
 	{
-		//potential = load_potential_match(filenames[i]);
-//		if (!potential)
+		cfgfile = cfg_open_file(filenames[i]);
+		if (!cfgfile)
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
 			i++;
 			continue;
 		}
+		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
+		cfg_free(cfgfile);
+		g_free(cfgfile);
+
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
-//		label = gtk_label_new(g_strdup(potential->name));
+		label = gtk_label_new(g_strdup(tmpbuf));
+		g_free(tmpbuf);
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
 		g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
@@ -347,7 +212,6 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 				NULL);
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
-//		close_profile(potential);
 		i++;
 	}
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);

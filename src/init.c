@@ -459,10 +459,13 @@ void mem_dealloc()
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			g_free(ms_data[i]);
-			g_free(ms_data_last[i]);
-			g_free(ms_data_backup[i]);
-			if (interdep_vars[i] != NULL)
+			if (ms_data[i])
+				g_free(ms_data[i]);
+			if (ms_data_last[i])
+				g_free(ms_data_last[i]);
+			if (ms_data_backup[i])
+				g_free(ms_data_backup[i]);
+			if (interdep_vars[i])
 			{
 				g_hash_table_destroy(interdep_vars[i]);
 				interdep_vars[i] = NULL;

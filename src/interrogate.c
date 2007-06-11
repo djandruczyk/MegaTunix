@@ -44,7 +44,6 @@ extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
-static GHashTable *tests_hash = NULL;
 
 
 /*!
@@ -57,6 +56,7 @@ void interrogate_ecu()
 {
 	GArray *tests = NULL;
 	extern GHashTable *dynamic_widgets;
+	GHashTable *tests_hash = NULL;
 	Detection_Test *test = NULL;
 	guchar uint8 = 0;
 	gchar sint8 = 0;
@@ -89,7 +89,7 @@ void interrogate_ecu()
 	}
 
 	/* Load tests from config files */
-	tests = validate_and_load_tests();
+	tests = validate_and_load_tests(&tests_hash);
 	if (tests->len < 1)
 	{
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
@@ -205,7 +205,7 @@ void interrogate_ecu()
 			test->result_str = g_memdup(ptr, total_read);
 	}
 
-	interrogated = determine_ecu(tests);	
+	interrogated = determine_ecu(tests,tests_hash);	
 	if (interrogated)
 	{
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),FALSE);
@@ -213,6 +213,7 @@ void interrogate_ecu()
 	}
 
 	free_tests_array(tests);
+	g_hash_table_destroy(tests_hash);
 
 	g_static_mutex_unlock(&mutex);
 	if (dbg_lvl & INTERROGATOR)
@@ -233,7 +234,7 @@ void interrogate_ecu()
  \returns TRUE on successfull interrogation, FALSE on no match
  */
 
-gboolean determine_ecu(GArray *tests)
+gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 {
 
 	gint i = 0;
@@ -255,7 +256,7 @@ gboolean determine_ecu(GArray *tests)
 	i = 0;
 	while (filenames[i])
 	{
-		if (check_for_match(tests,filenames[i]))
+		if (check_for_match(tests_hash,filenames[i]))
 		{
 			match = TRUE;
 			filename = g_strdup(filenames[i]);
@@ -289,7 +290,7 @@ gboolean determine_ecu(GArray *tests)
 			firmware = g_new0(Firmware_Details,1);
 
 		load_firmware_details(firmware,filename);
-		update_interrogation_gui(firmware);
+		update_interrogation_gui(firmware,tests_hash);
 
 		if (firmware->rt_cmd_key)
 		{
@@ -975,7 +976,7 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
  command tested against the ECU arestored
  \returns a dynamic GArray for commands
  */
-GArray * validate_and_load_tests(void)
+GArray * validate_and_load_tests(GHashTable **tests_hash)
 {
 	ConfigFile *cfgfile;
 	GArray * tests = NULL;
@@ -997,7 +998,7 @@ GArray * validate_and_load_tests(void)
 	if (!cfgfile)
 		return NULL;
 
-	tests_hash = g_hash_table_new(g_str_hash,g_str_equal);
+	*tests_hash = g_hash_table_new(g_str_hash,g_str_equal);
 
 		if (dbg_lvl & INTERROGATOR)
 			dbg_func(g_strdup_printf(__FILE__": validate_and_load_tests()\n\tfile %s, opened successfully\n",filename));
@@ -1041,7 +1042,7 @@ GArray * validate_and_load_tests(void)
 
 			g_free(section);
 			g_array_append_val(tests,test);
-			g_hash_table_insert(tests_hash,test->test_name,test);
+			g_hash_table_insert(*tests_hash,test->test_name,test);
 		}
 		cfg_free(cfgfile);
 		g_free(cfgfile);
@@ -1120,7 +1121,7 @@ gint translate_capabilities(gchar *string)
  \param canidate (Canidate *) Canidate
  \returns TRUE on match, FALSE on failure
  */
-gboolean check_for_match(GArray *tests, gchar *filename)
+gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 {
 
 	ConfigFile *cfgfile = NULL;
@@ -1248,7 +1249,7 @@ void interrogate_error(gchar *text, gint num)
 /* !brief updates the interrogation gui with the text revision, signature
  * and ecu numerical revision
  */
-void update_interrogation_gui(Firmware_Details *firmware)
+void update_interrogation_gui(Firmware_Details *firmware,GHashTable *tests_hash)
 {
 	Detection_Test *test = NULL;
 	if (firmware->TextVerVia == NULL)
