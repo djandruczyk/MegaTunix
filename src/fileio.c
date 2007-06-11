@@ -206,7 +206,7 @@ void restore_all_ecu_settings(gchar *filename)
 				}
 				if (firmware->chunk_support)
 				{
-					data = g_new(guchar, firmware->page_params[page]->length);
+					data = g_new0(guchar, firmware->page_params[page]->length);
 					for (offset=0;offset<num_keys;offset++)
 						data[offset]=(guchar)atoi(keys[offset]);
 					chunk_write(page,0,num_keys,data);

@@ -58,11 +58,6 @@ void set_offline_mode(void)
 	extern Io_Cmds *cmds;
 
 	/* Disable interrogation button */
-	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
-	if (GTK_IS_WIDGET(widget))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-
-	queue_function(g_strdup("kill_conn_warning"));
 
 	filename = present_firmware_choices();
 	if (!filename)
@@ -79,6 +74,12 @@ void set_offline_mode(void)
 
 	}
 	offline = TRUE;
+
+	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+	queue_function(g_strdup("kill_conn_warning"));
+
 	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)
 		firmware = g_new0(Firmware_Details,1);

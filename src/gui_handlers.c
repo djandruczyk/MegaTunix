@@ -188,11 +188,14 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 		count++;
 	}
 
-	/* Free all buffers */
+
+	/* Grab and release all mutexes to get them to relinquish
+	 */
 	g_static_mutex_lock(&comms_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
+	/* Free all buffers */
 	mem_dealloc();
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

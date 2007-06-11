@@ -292,7 +292,7 @@ void writeto_ecu(Io_Message *message)
 				ms_data[page][offset] = value;
 				break;
 			case MTX_CHUNK_WRITE:
-				for (i=0;i<=output->len;i++)
+				for (i=0;i<output->len;i++)
 					ms_data[page][offset+i] = output->data[i];
 				break;
 		}

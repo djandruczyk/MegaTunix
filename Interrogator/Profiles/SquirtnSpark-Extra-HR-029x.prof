@@ -93,7 +93,7 @@ z_base_offset=0
 z_source=vecurr2
 z_suffix=VE %
 z_conv_expr=x*1
-x_precision=0
+z_precision=0
 
 [table_2]
 table_name=Fuel VE-Table 3, MSnSpark-Extra
