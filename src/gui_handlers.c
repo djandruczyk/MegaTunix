@@ -1957,8 +1957,6 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-	printf("key event\n");
-	printf("widget name %s\n",glade_get_widget_name(widget));
 	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
 		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
 	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)

@@ -36,6 +36,7 @@ void load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
+	GtkWidget *ebox = NULL;
 	gchar *key = NULL;
 	gchar *prefix = NULL;
 	gint x = 0;
@@ -70,24 +71,25 @@ void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dummy), NULL);
 	g_signal_connect (G_OBJECT (window), "destroy_event",
 			G_CALLBACK (dummy), NULL);
-	//	ebox = gtk_event_box_new();
-	//	gtk_container_add(GTK_CONTAINER(window),ebox);
+	ebox = gtk_event_box_new();
+	gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
+	gtk_container_add(GTK_CONTAINER(window),ebox);
 	prefix = g_strdup_printf("dash_%i",(gint)data);
 	key = g_strdup_printf("%s_name",prefix);
 	g_object_set_data(global_data,key, g_strdup(filename));
 	g_free(key);
 
 	dash = gtk_fixed_new();
-	gtk_widget_add_events(GTK_WIDGET(dash),GDK_POINTER_MOTION_MASK|
+	gtk_widget_add_events(GTK_WIDGET(ebox),GDK_POINTER_MOTION_MASK|
 			GDK_BUTTON_PRESS_MASK |GDK_BUTTON_RELEASE_MASK);
-	g_signal_connect (G_OBJECT (dash), "motion_notify_event",
+	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
 			G_CALLBACK (dash_motion_event), NULL);
-	g_signal_connect (G_OBJECT (dash), "button_press_event",
+	g_signal_connect (G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
-	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
+//	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
 
 
-	gtk_container_add(GTK_CONTAINER(window),dash);
+	gtk_container_add(GTK_CONTAINER(ebox),dash);
 
 
 	gtk_widget_show_all(window);
@@ -355,10 +357,15 @@ void dash_shape_combine(GtkWidget *dash)
 	gdk_gc_set_foreground (gc, &black);
 
 	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,req.width,req.height);
+
+	gdk_gc_set_foreground (gc, &white);
+	gdk_draw_rectangle(bitmap,gc,TRUE,req.width-8,0,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,0,req.height-8,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,req.width-8,req.height-8,8,8);
 			
 
 	children = GTK_FIXED(dash)->children;
-	gdk_gc_set_foreground (gc, &white);
 
 	for (i=0;i<g_list_length(children);i++)
 	{
@@ -416,6 +423,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 {
 	 if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
 	 {
+		 printf("dash button event\n");
 		 if (GTK_IS_WINDOW(widget->parent))
 		 {
 			 gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),

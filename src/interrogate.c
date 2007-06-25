@@ -279,8 +279,8 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	if (match == FALSE) // (we DID NOT find one)
 	{
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
-			dbg_func(g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, send contents of the interrogation window\n\tand the firmware details to the MegaTunix author\n"));
-		thread_update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n"),FALSE,FALSE);
+			dbg_func(g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
+			thread_update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE);
 		return FALSE;
 	}
 	else

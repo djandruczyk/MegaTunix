@@ -1,4 +1,34 @@
 
+Interrogation testing all REDONE AND WORKING 6/11/07
+
+
+Infini-cmd:
+Need a way to define commands in an extensible format that does NOT
+require future changes to sourcecode in order to accomodate NEW commands.
+
+[commands]
+cmd_list=rtv,burn,read,write,table,tblcheck
+rtv_cmd=a,0,6
+burn_cmd=b,%c,%t
+read_cmd=r,%c,%t,%2o,%2c
+write_cmd=w,%c,%t,%2o,%2c,%v
+table_cmd=t,%t,%v
+tblcheck=y,%t
+
+
+ALIASES:
+Aliases are defined by a "%" following by an (OPTIONAL) integer where this 
+integer is a number designating the number of bytes that this command uses.
+%c  CAN ID 
+%t  TABLE ID
+%o  OFFSET (8 bit)
+%c  COUNT (8 bit)
+%2o  OFFSET (16 bit)
+%2c  COUNT (16 bit)
+%v  VARIABLE LENGTH BLOCK
+
+
+
 
 Interrogation redesign:
 
@@ -58,4 +88,8 @@ Submatch, which takes the following string and searches for it in the
 result_str of the Detection_Test_Result, if found, this satisfies the match
 Fullmatch, takes the following string and does a full match to the result_str
 if they differ in any way the match returns FALSE.
+
+
+
+
 
