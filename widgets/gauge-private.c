@@ -1445,26 +1445,26 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 	GdkWindowEdge edge = -1;
 //	printf("gauge button event\n");
 	/* Right side of window */
-	if (event->x > (0.55*gauge->w))
+	if (event->x > (gauge->w-10))
 	{
 		/* Upper portion */
-		if (event->y < (0.45*gauge->h))
+		if (event->y < 10)
 			edge = GDK_WINDOW_EDGE_NORTH_EAST;
 		/* Lower portion */
-		else if (event->y > (0.55*gauge->h))
+		else if (event->y > (gauge->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_EAST;
 		else 
 			edge = -1;
 	}
 	/* Left Side of window */
-	else if (event->x < (0.45*gauge->w))
+	else if (event->x < 10)
 	{
 		/* If it's in the middle portion */
 		/* Upper portion */
-		if (event->y < (0.45*gauge->h))
+		if (event->y < 10) 
 			edge = GDK_WINDOW_EDGE_NORTH_WEST;
 		/* Lower portion */
-		else if (event->y > (0.55*gauge->h))
+		else if (event->y > (gauge->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_WEST;
 		else 
 			edge = -1;
@@ -1478,7 +1478,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		switch (event->button)
 		{
 			case 1: /* left button */
-				if (GTK_IS_WINDOW(widget->parent))
+				if ((edge == -1) && (GTK_IS_WINDOW(widget->parent)))
 				{
 					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							event->button,
@@ -1486,20 +1486,15 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 							event->y_root,
 							event->time);
 				}
-				break;
-			case 2: /* Middle button,  RESIZE */
-				if (edge != -1)
+				else if (GTK_IS_WINDOW(widget->parent))
 				{
-					if (GTK_IS_WINDOW(widget->parent))
-					{
 
-					gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-							edge,
-							event->button,
-							event->x_root,
-							event->y_root,
-							event->time);
-					}
+						gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+								edge,
+								event->button,
+								event->x_root,
+								event->y_root,
+								event->time);
 				}
 				break;
 			case 3: /* right button */
@@ -1523,10 +1518,6 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 					       
 {
-	/*
-	MtxGaugeFacePrivate *priv;
-	priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
-	*/
 //	printf("button release\n");
 	return FALSE;
 }

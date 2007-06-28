@@ -2,10 +2,12 @@
 MegaTunix designed and written by David J. Andruczyk
 
 	Inspiration for this code came from Bruce Bowling and Al Grippo, 
-designers of the MegaSquirt DIY Fuel Injection ECU.  This code is 
+designers of the MegaSquirt DIY Fuel Injection ECU.  This code was initially 
 modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
 for Windows.  Inspiration also came from Eric Fahlgrens and Guy Hill's
-MegaTune, also for Windows.
+MegaTune, also for Windows.  Since that time it has turning into it's own
+original application with many benefits and differences from MegaTune and
+other tuning softwares.
 
 NOTE about fonts:
 	Some people have complained that MegaTunix comes up with abnormally
@@ -21,4 +23,26 @@ so your ideal font size may vary.
 Suggestions are welcomed for improving the functionality of MegaTunix...
 Send suggestions, bug reports and general feedback to (SPAM not welcome) 
 djandruczyk <at> yahoo <dot> com
+
+System requirements:
+	MegaTunix is developed on both Gentoo and Ubuntu Linux  distros, 
+the package names will vary if you don't use Gentoo.  Most RPM and Debian 
+based distros split packages into a runtime and devel package.  Runtime 
+ones are needed to run the program, and devel packages are needed for 
+programs like megatunix to compile against.
+
+MegaTunix requires the following libraries (and their dependancies);
+* minimum GTK-2.6  (2.10 or newer recommended) and the dev package
+  - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
+* Gtkglext-1.x (and the dev package)
+  - gtkglext depends on gtk+ and glib
+* Xorg or XFree86 development libraries (xorg-devel or XF86-devel)
+  - libglade-2.0 (and dev package)
+  - libglade depends on libxml-2.x and gtk+
+
+Optional:
+  The Glade GUI designer can be installed to modify and add new gui tabs to
+megatunix for your own custom firmware needs.  This is ONLY needed if you want
+to modify megatunix or design custom tabs for your firmware.  
+I recommend glade-2.4.x
 

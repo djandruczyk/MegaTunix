@@ -16,6 +16,8 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="main_vbox">
@@ -26,6 +28,8 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem1">
@@ -241,8 +245,10 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="delete_event" handler="gtk_widget_hide" last_modification_time="Sat, 09 Dec 2006 20:54:23 GMT"/>
-  <signal name="destroy_event" handler="gtk_widget_hide" last_modification_time="Sat, 09 Dec 2006 20:54:37 GMT"/>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="dummy" last_modification_time="Thu, 28 Jun 2007 15:10:13 GMT"/>
+  <signal name="destroy_event" handler="dummy" last_modification_time="Thu, 28 Jun 2007 15:10:18 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="preview_vbox">
@@ -297,6 +303,10 @@
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
 		</widget>
 		<packing>
 		  <property name="type">tab</property>
@@ -318,6 +328,10 @@
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="type">label_item</property>
@@ -349,8 +363,10 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="delete_event" handler="gtk_widget_hide" last_modification_time="Thu, 28 Dec 2006 02:19:59 GMT"/>
-  <signal name="destroy_event" handler="gtk_widget_hide" last_modification_time="Thu, 28 Dec 2006 02:20:06 GMT"/>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="dummy" last_modification_time="Thu, 28 Jun 2007 15:10:27 GMT"/>
+  <signal name="destroy_event" handler="dummy" last_modification_time="Thu, 28 Jun 2007 15:10:33 GMT"/>
 
   <child>
     <widget class="GtkScrolledWindow" id="prop_swin">

@@ -6,6 +6,9 @@ Infini-cmd:
 Need a way to define commands in an extensible format that does NOT
 require future changes to sourcecode in order to accomodate NEW commands.
 
+NOTE: in MS-II %t (tableID) seems to be analagous to a page number in 
+MS-I codes.
+
 [commands]
 cmd_list=rtv,burn,read,write,table,tblcheck
 rtv_cmd=a,0,6
@@ -59,7 +62,7 @@ psuedocode for interrogation procedure:
 Verify connectivity exists (make sure connected==TRUE)
 open tests file,  get total number of tests
 iterate (loop) thru each section, alocating a Detection_Test struct for
-each test, and populating it wiht hte test name, the actual test string
+each test, and populating it wiht the test name, the actual test string
 and break down the string into it's parts (test_vector), and parse the 
 test_arg_types string into an array defining the types of each part.
 
@@ -69,10 +72,10 @@ recording the results into that struct (num bytes and resulting string)
 Get list of potential interrogation profiles and open in sequence and do 
 the following:
 if test_result count is ZERO (0), we first check the potential to see if it
-HASA this test defined, if it does we continue matching on it's criteria, if
+HAS this test defined, if it does we continue matching on it's criteria, if
 NOT we skip to the next test.
-if tet result is NOT zero, we MUST haev a match in the potential, otherwise
-the potential is discarded and hte next is processed.
+if test result is NOT zero, we MUST have a match in the potential, otherwise
+the potential is discarded and the next is processed.
 
 Matching modes:
 the matching tests look like:

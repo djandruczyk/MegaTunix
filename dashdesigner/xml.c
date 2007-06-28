@@ -114,7 +114,9 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 		cur_node = cur_node->next;
 
 	}
-	gtk_window_resize(GTK_WINDOW(gtk_widget_get_toplevel(dash)),width,height);
+//	gtk_window_resize(GTK_WINDOW(gtk_widget_get_toplevel(dash)),width,height);
+//	gtk_widget_set_size_request(dash,width,height);
+	gtk_widget_set_size_request(dash,-1,-1);
 
 }
 
@@ -255,10 +257,12 @@ void export_dash_xml(gchar * filename)
 	dash = glade_xml_get_widget(main_xml,"dashboard");
 
 	node = xmlNewChild(root_node,NULL,BAD_CAST "dash_geometry", NULL);
-	tmpbuf = g_strdup_printf("%i",gtk_widget_get_toplevel(dash)->allocation.width);
+	//tmpbuf = g_strdup_printf("%i",gtk_widget_get_toplevel(dash)->allocation.width);
+	tmpbuf = g_strdup_printf("%i",dash->allocation.width);
 	xmlNewChild(node, NULL, BAD_CAST "width", BAD_CAST tmpbuf);
 	g_free(tmpbuf);
-	tmpbuf = g_strdup_printf("%i",gtk_widget_get_toplevel(dash)->allocation.height);
+	//tmpbuf = g_strdup_printf("%i",gtk_widget_get_toplevel(dash)->allocation.height);
+	tmpbuf = g_strdup_printf("%i",dash->allocation.height);
 	xmlNewChild(node, NULL, BAD_CAST "height", BAD_CAST tmpbuf);
 	g_free(tmpbuf);
 
