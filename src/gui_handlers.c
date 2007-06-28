@@ -2402,6 +2402,7 @@ void prompt_to_save(void)
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
 			"Save ECU Settings to file?");
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Question....");
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
 		select_file_for_ecu_backup(NULL,NULL);
