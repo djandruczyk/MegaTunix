@@ -113,11 +113,10 @@ void load_dashboard(gchar *filename, gpointer data)
 	g_free(prefix);
 	g_free(filename);
 
-	width = (gint)g_object_get_data(G_OBJECT(dash),"orig_xml_width");
-	height = (gint)g_object_get_data(G_OBJECT(dash),"orig_xml_height");
-	printf("move/resize to %i,%i, %ix%i\n",x,y,width,height);
+	width = (gint)g_object_get_data(G_OBJECT(dash),"orig_width");
+	height = (gint)g_object_get_data(G_OBJECT(dash),"orig_height");
+//	printf("move/resize to %i,%i, %ix%i\n",x,y,width,height);
 	gtk_window_move(GTK_WINDOW(window), x,y);
-	//gtk_window_resize(GTK_WINDOW(window), width,height);
 	gtk_window_set_default_size(GTK_WINDOW(window), width,height);
 	gtk_widget_show_all(window);
 	dash_shape_combine(dash);
@@ -129,20 +128,48 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	gint orig_height = 0;
 	gint cur_width = 0;
 	gint cur_height = 0;
+	GtkFixedChild *child = NULL;
+	GtkWidget *gauge = NULL;
+	GList *children = NULL;
+	gint i = 0;
+	gint child_w = 0;
+	gint child_h = 0;
+	gint child_x = 0;
+	gint child_y = 0;
+	gfloat ratio = 0.0;
 	GtkWidget * dash  = NULL;
 	dash = g_object_get_data(G_OBJECT(widget),"dash");
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
 
-	orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_xml_width");
-	orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_xml_height");
-	printf("alloc w %i, h %i\n",widget->allocation.width,widget->allocation.height);
-	printf("req w %i, h %i\n",widget->requisition.width,widget->requisition.height);
+	orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
+	orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
 	cur_width =  event->width;
 	cur_height =  event->height;
-	printf("Current dash dimensions are: %i,%i\n",cur_width,cur_height);
-	printf ("Orig XML dimesions are: %i,%i\n",orig_width, orig_height);
-	printf("dash configure event\n");
+	
+	ratio = (((gfloat)cur_height/(gfloat)orig_height)+((gfloat)cur_width/(gfloat)orig_width))/2.0;
+
+	if (((ratio - (gint)ratio)*100) < 1)
+		return FALSE;
+
+	children = GTK_FIXED(dash)->children;
+	for (i=0;i<g_list_length(children);i++)
+        {
+                child = g_list_nth_data(children,i);
+		gauge = child->widget;
+		child_x = (gint)g_object_get_data(G_OBJECT(gauge),"orig_x_offset");
+		child_y = (gint)g_object_get_data(G_OBJECT(gauge),"orig_y_offset");
+		child_w = (gint)g_object_get_data(G_OBJECT(gauge),"orig_width");
+		child_h = (gint)g_object_get_data(G_OBJECT(gauge),"orig_height");
+		gtk_fixed_move(GTK_FIXED(dash),gauge,ratio*child_x,ratio*child_y);
+		gtk_widget_set_size_request(gauge,child_w*ratio,child_h*ratio);
+	}
+
+//	printf ("ration of current to orig is %f\n",ratio);
+//	printf("Current dash dimensions are: %i,%i\n",cur_width,cur_height);
+//	printf ("Orig XML dimesions are: %i,%i\n",orig_width, orig_height);
+//	printf("dash configure event\n");
+	dash_shape_combine(dash);
 	return FALSE;
 }
 
@@ -190,17 +217,15 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 		cur_node = cur_node->next;
 
 	}
-	g_object_set_data(G_OBJECT(dash),"orig_xml_width", GINT_TO_POINTER(width));
-	g_object_set_data(G_OBJECT(dash),"orig_xml_height", GINT_TO_POINTER(height));
+	g_object_set_data(G_OBJECT(dash),"orig_width", GINT_TO_POINTER(width));
+	g_object_set_data(G_OBJECT(dash),"orig_height", GINT_TO_POINTER(height));
 	
 	hints.min_width = 100;
 	hints.min_height = 100;
-	hints.max_width = 900;
-	hints.max_height = 800;
 	hints.min_aspect = (gfloat)width/(gfloat)height;
 	hints.max_aspect = hints.min_aspect;
 
-	gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_ASPECT|GDK_HINT_MIN_SIZE|GDK_HINT_MAX_SIZE);
+	gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_ASPECT|GDK_HINT_MIN_SIZE);
 
 }
 
@@ -248,10 +273,10 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
 		g_object_set_data(G_OBJECT(gauge),"datasource",g_strdup(datasource));
-		g_object_set_data(G_OBJECT(gauge),"orig_xml_width",GINT_TO_POINTER(width));
-		g_object_set_data(G_OBJECT(gauge),"orig_xml_height",GINT_TO_POINTER(height));
+		g_object_set_data(G_OBJECT(gauge),"orig_width",GINT_TO_POINTER(width));
+		g_object_set_data(G_OBJECT(gauge),"orig_height",GINT_TO_POINTER(height));
 		g_object_set_data(G_OBJECT(gauge),"orig_x_offset",GINT_TO_POINTER(x_offset));
-		g_object_set_data(G_OBJECT(gauge),"orig_x_offset",GINT_TO_POINTER(y_offset));
+		g_object_set_data(G_OBJECT(gauge),"orig_y_offset",GINT_TO_POINTER(y_offset));
 		g_free(xml_name);
 		g_free(datasource);
 	}
@@ -398,7 +423,6 @@ void dash_shape_combine(GtkWidget *dash)
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 
 	bitmap = gdk_pixmap_new(NULL,width,height,1);
-	printf("size of dash %i,%i\n",width,height);
 
 	colormap = gdk_colormap_get_system ();
 	gdk_color_parse ("black", & black);
@@ -466,13 +490,13 @@ void dash_shape_combine(GtkWidget *dash)
 #endif
 		gdk_window_shape_combine_mask(dash->window,bitmap,0,0);
 	}
-
+	g_object_unref(bitmap);
 	return;
 }
 
 gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	printf("motion detected\n");
+//	printf("motion detected\n");
 	return FALSE;
 }
 
