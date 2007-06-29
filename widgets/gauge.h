@@ -378,6 +378,7 @@ struct _MtxGaugeFace
 #ifdef HAVE_CAIRO
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
+	cairo_font_options_t * font_options;
 #endif
 	PangoLayout *layout;	/*! Pango TextLayout object */
 	PangoFontDescription *font_desc;/*! Pango Font description */

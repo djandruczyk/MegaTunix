@@ -278,7 +278,12 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 
 	cr = gdk_cairo_create (gauge->pixmap);
+	cairo_set_font_options(cr,gauge->font_options);
 
+	if (gauge->antialias)
+		cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
+	else
+		cairo_set_antialias(cr,CAIRO_ANTIALIAS_NONE);
 	/* Update the VALUE text */
 	if (gauge->show_value)
 	{
@@ -530,6 +535,13 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		gauge->yc = gauge->h / 2;
 		gauge->radius = MIN (gauge->w/2, gauge->h/2); // - 5;
 
+#ifdef HAVE_CAIRO
+		if (gauge->font_options)
+			cairo_font_options_destroy(gauge->font_options);
+		gauge->font_options = cairo_font_options_create();
+		cairo_font_options_set_antialias(gauge->font_options,
+				CAIRO_ANTIALIAS_GRAY);
+#endif
 
 		/* Shape combine mask bitmap */
 		colormap = gdk_colormap_get_system ();
@@ -692,6 +704,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		return;
 	/* get a cairo_t */
 	cr = gdk_cairo_create (gauge->bg_pixmap);
+	cairo_set_font_options(cr,gauge->font_options);
 	/* Background set to black */
 	if (gauge->show_drag_border)
 	{
