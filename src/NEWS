@@ -5,4 +5,11 @@ Interrogator has been rewritten and all interrogation profiles updated to use th
 Now can interrogation MS-II.
 
 
+6/28/2007
+
+Gauge dashboards are now 100% scalable within megatunix.  Slightly choppy
+due to excessive configure_events, (not sure how to fix that) and a little
+clunky as i need to get the rescale corner buttons to appear/disappear on 
+demand.,  but it works 
+
 
