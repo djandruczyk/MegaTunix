@@ -2,8 +2,8 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>653</width>
-    <height>850</height>
+    <width>641</width>
+    <height>821</height>
   </dash_geometry>
   <gauge>
     <width>385</width>
@@ -22,18 +22,18 @@
     <datasource>matdeg</datasource>
   </gauge>
   <gauge>
-    <width>355</width>
-    <height>218</height>
-    <x_offset>360</x_offset>
-    <y_offset>362</y_offset>
+    <width>215</width>
+    <height>216</height>
+    <x_offset>426</x_offset>
+    <y_offset>360</y_offset>
     <gauge_xml_name>Impact/Impact_CLT_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
-    <width>370</width>
+    <width>262</width>
     <height>243</height>
-    <x_offset>53</x_offset>
-    <y_offset>3</y_offset>
+    <x_offset>114</x_offset>
+    <y_offset>4</y_offset>
     <gauge_xml_name>Impact/Impact_AFR_Gauge.xml</gauge_xml_name>
     <datasource>afr</datasource>
   </gauge>

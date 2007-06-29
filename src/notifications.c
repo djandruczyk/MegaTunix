@@ -18,6 +18,7 @@
 #include <gtk/gtk.h>
 #include <listmgmt.h>
 #include <notifications.h>
+#include <offline.h>
 #include <structures.h>
 #include <tabloader.h>
 
@@ -245,18 +246,13 @@ EXPORT void kill_conn_warning()
 void warn_user(gchar *message)
 {
 	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
-			GTK_BUTTONS_CLOSE,message);
-	g_signal_connect (G_OBJECT(warning_dialog),
-			"delete_event",
-			G_CALLBACK (close_dialog),
-			warning_dialog);
-	g_signal_connect (G_OBJECT(warning_dialog),
-			"destroy_event",
-			G_CALLBACK (close_dialog),
-			warning_dialog);
+			GTK_BUTTONS_NONE,message);
+	gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);
+			
+
 	g_signal_connect (G_OBJECT(warning_dialog),
 			"response",
-			G_CALLBACK (close_dialog),
+			G_CALLBACK (get_response),
 			warning_dialog);
 
 	warning_present = TRUE;
@@ -264,14 +260,29 @@ void warn_user(gchar *message)
 }
 
 
+gboolean get_response(GtkWidget *widget, gpointer data)
+{
+	gint response = (gint)data;
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		close_dialog(widget,NULL);
+		set_title(g_strdup("Offline Mode..."));
+		set_offline_mode();
+	}
+	if (response == GTK_RESPONSE_CLOSE)
+	close_dialog(widget,NULL);
+	return TRUE;
+}
+
+
 /*!
- \brief close_dialog() is a handler to closeth edialog and reset the flag
+ \brief close_dialog() is a handler to close the dialog and reset the flag
  showing if it was up or not so it prevents displaying the error multiple
  times
  \param widget (GtkWidget *) widget to destroy
  \param data (gpointer) unused
  */
-gint close_dialog(GtkWidget *widget, gpointer data)
+gboolean close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
 	warning_present = FALSE;
