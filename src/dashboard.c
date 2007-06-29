@@ -507,7 +507,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
 	{
-		printf("dash button event\n");
+//		printf("dash button event\n");
 		if (event->x > (widget->allocation.width-8))
 		{
 			/* Upper portion */
@@ -538,7 +538,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 	
 		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
 		{
-			printf("MOVE drag\n");
+//			printf("MOVE drag\n");
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
 					event->x_root,
@@ -548,7 +548,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 		}
 		else if (GTK_IS_WINDOW(widget->parent))
 		{
-			printf("RESIZE drag\n");
+//			printf("RESIZE drag\n");
 			gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					edge,
 					event->button,
