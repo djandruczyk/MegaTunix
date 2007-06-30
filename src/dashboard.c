@@ -68,7 +68,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-	//gtk_window_set_resizable(GTK_WINDOW(window),TRUE);
+	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
 
 	g_signal_connect (G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
@@ -86,7 +86,6 @@ void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
-//	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
 
 
 	dash = gtk_fixed_new();
@@ -140,10 +139,12 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	gint child_y = 0;
 	gfloat ratio = 0.0;
 	GtkWidget * dash  = NULL;
+	/*
 	GdkGC *gc = NULL;
 	GdkColormap *colormap = NULL;
 	GdkColor black;
 	GdkColor white;
+	*/
 
 	dash = g_object_get_data(G_OBJECT(widget),"dash");
 	if (!GTK_IS_WIDGET(dash))

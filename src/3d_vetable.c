@@ -1516,6 +1516,8 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
+	gfloat max = 0.0;
+	gint heaviest = -1;
 	gint i = 0;
 	gint table = 0;
 	gint page = 0;
@@ -1610,6 +1612,15 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	z_weight[2] = right_w*bottom_w;
 	z_weight[3] = right_w*top_w;
 
+	max=0;
+	for (i=0;i<4;i++)
+	{
+		if (z_weight[i] > max)
+		{
+			max = z_weight[i];
+			heaviest = i;
+		}
+	}
 	glBegin(GL_POINTS);
 
 	tmpf3 = z_weight[0]*1.35;
@@ -1619,6 +1630,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	if ((ve_view->tracking_focus) && (heaviest == 0))
+	{
+		ve_view->active_x = bin[0];
+		ve_view->active_y = bin[2];
+	}
 
 	tmpf3 = z_weight[1]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
@@ -1626,6 +1642,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	if ((ve_view->tracking_focus) && (heaviest == 1))
+	{
+		ve_view->active_x = bin[0];
+		ve_view->active_y = bin[3];
+	}
 
 	tmpf3 = z_weight[2]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
@@ -1634,6 +1655,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	if ((ve_view->tracking_focus) && (heaviest == 2))
+	{
+		ve_view->active_x = bin[1];
+		ve_view->active_y = bin[2];
+	}
 
 	tmpf3 = z_weight[3]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
@@ -1641,6 +1667,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	if ((ve_view->tracking_focus) && (heaviest == 3))
+	{
+		ve_view->active_x = bin[1];
+		ve_view->active_y = bin[3];
+	}
 
 	glEnd();
 
@@ -1833,6 +1864,11 @@ gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 	if (!ve_view)
 		return FALSE;
 	ve_view->tracking_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	if (!ve_view->tracking_focus)
+	{
+		ve_view->active_x = 0;
+		ve_view->active_y = 0;
+	}
 	forced_update = TRUE;
 	return TRUE;
 }
