@@ -80,6 +80,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	gchar *d_name = NULL;
 	gint t_num = -1;
 	extern GladeXML *main_xml;
+	GHashTable *list = NULL;
 	GdkColor white = { 0, 65535, 65535, 65535};
 	GdkColor home_color = {0, 62000, 59000, 65535};
 	gint i = 0;
@@ -155,6 +156,10 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
+			if (g_strrstr(files[i],".MegaTunix"))
+				gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+			else
+				gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
 			gtk_widget_show(gauge);
 			i++;
 		}
@@ -163,10 +168,12 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	dir = g_dir_open(path,0,NULL);
 	if (dir)
 	{
+		list = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		d_name = (gchar *)g_dir_read_name(dir);
 		while (d_name != NULL)
 		{
-			/* check for files */
+			g_hash_table_insert(list,g_strdup(d_name),GINT_TO_POINTER(1)); /* Store this dirname for next run thru */
+			/* check for files in */
 			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"));
 			if (files)
 			{
@@ -227,6 +234,79 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		g_dir_close(dir);
 	}
 	g_free(path);
+	/* NOW for user private dirs,  check to make sure we didn't already get overrides and
+	 * create sections for entirely user private ones.
+	 * */
+        path = g_build_path(PSEP,HOME(),".MegaTunix",GAUGES_DATA_DIR,NULL);
+	dir = g_dir_open(path,0,NULL);
+        if (dir)
+	{
+		d_name = (gchar *)g_dir_read_name(dir);
+		while ((d_name != NULL))
+		{
+			if (g_hash_table_lookup(list,d_name) != NULL)	/* we already got this dir*/
+			{
+				d_name = (gchar *)g_dir_read_name(dir);
+				continue;
+			}
+			/* check for files in */
+			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"));
+			if (files)
+			{
+				ebox = gtk_event_box_new();
+				g_signal_connect(G_OBJECT(ebox),
+						"button_press_event",
+						G_CALLBACK(gauge_choice_button_event),
+						NULL);
+				swin = gtk_scrolled_window_new(NULL,NULL);
+				gtk_scrolled_window_set_policy(
+						GTK_SCROLLED_WINDOW(swin),
+						GTK_POLICY_AUTOMATIC,
+						GTK_POLICY_AUTOMATIC);
+				gtk_scrolled_window_add_with_viewport(
+						GTK_SCROLLED_WINDOW(swin),
+						ebox);
+				vbox = gtk_vbox_new(FALSE,0);
+				gtk_container_add(GTK_CONTAINER(ebox),vbox);
+				table = gtk_table_new(1,1,FALSE);
+				gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
+				g_object_set_data(G_OBJECT(ebox),"table",table);
+				label = gtk_label_new(d_name);
+				t_num = gtk_notebook_append_page(
+						GTK_NOTEBOOK(notebook),
+						swin,label);
+				i = 0;
+				gtk_widget_show_all(ebox);
+				while (files[i])
+				{
+					ebox = gtk_event_box_new();
+					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+					gauge = mtx_gauge_face_new();
+					gtk_container_add(GTK_CONTAINER(ebox),gauge);
+					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
+					if (g_strrstr(files[i],".MegaTunix"))
+						gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+					else
+						gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
+					gtk_widget_show(gauge);
+					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
+					i++;
+					if (gtk_events_pending())
+						gtk_main_iteration();
+				}
+				g_strfreev(files);
+			}
+			gtk_widget_show_all(table);
+			/* Get next dir... */
+			d_name = (gchar *)g_dir_read_name(dir);
+		}
+		gtk_widget_show_all(notebook);
+		g_dir_close(dir);
+	}
+	g_free(path);
+
+	g_hash_table_destroy(list);
+
 	created = TRUE;
 	prop_created = TRUE;
 	return TRUE;
