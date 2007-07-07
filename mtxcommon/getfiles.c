@@ -219,7 +219,11 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
-		if (data->default_path)
+		if ((data->absolute_path) && (!data->default_path))
+		{
+			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
+		}
+		else if (data->default_path)
 		{
 #ifdef __WIN32__	/* Disallows modifying distributed files */
 			path = g_build_path(PSEP,HOME(),"dist",data->default_path,NULL);
@@ -410,6 +414,8 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->filename);
 	if (data->external_path)
 		g_free(data->external_path);
+	if (data->absolute_path)
+		g_free(data->absolute_path);
 	if (data->default_path)
 		g_free(data->default_path);
 	if (data->filter)

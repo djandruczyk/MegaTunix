@@ -21,12 +21,16 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
+	extern gchar *cwd;
 
 	if (hold_handlers)
 		return TRUE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->default_path = g_strdup("Gauges");
+	if (cwd)
+		fileio->absolute_path = g_strdup(cwd);
+	else
+		fileio->default_path = g_strdup("Gauges");
 	fileio->title = g_strdup("Select Gauge to Open");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");

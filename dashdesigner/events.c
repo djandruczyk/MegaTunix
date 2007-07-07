@@ -653,6 +653,9 @@ void update_properties(GtkWidget * widget, Choice choice)
 		gtk_container_set_border_width(GTK_CONTAINER(table),5);
 		entry = gtk_entry_new();
 		tmpbuf = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(widget));
+		if (!tmpbuf)
+			printf("ERROR, gauge has no associated filename!!\n");
+		g_assert(tmpbuf);
 		vector = g_strsplit(tmpbuf,PSEP,-1);
 		len = g_strv_length(vector);
 		g_free(tmpbuf);

@@ -22,6 +22,7 @@ struct _MtxFileIO
 {
 	GtkFileChooserAction action;	/* Action, save,open, etc.. */
 	gchar *filter;			/* CSV pairs of File filter string */
+	gchar *absolute_path;		/* absolute path to set filesel to */
 	gchar *default_path;		/* default path to set filesel to */
 	gchar *external_path;		/* external path rel to homedir */
 	gchar *shortcut_folders;	/* CSV list of ADDITIONAL shortcut 
