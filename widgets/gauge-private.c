@@ -115,6 +115,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->show_value = TRUE;
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->gc = NULL;
+	gauge->a_ranges = g_array_new(FALSE,TRUE,sizeof(MtxAlertRange *));
 	gauge->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	gauge->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	gauge->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
@@ -263,18 +264,68 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	gfloat tail_width = 0.0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
+	gfloat lwidth = 0.0;
+	gboolean alert = FALSE;
+	MtxAlertRange *range = NULL;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
+	/* Check if in alert bounds and alert as necessary */
+	alert = FALSE;
+	for (i=0;i<gauge->a_ranges->len;i++)
+	{
+		range = g_array_index(gauge->a_ranges,MtxAlertRange *, i);
+		if ((gauge->value >= range->lowpoint)  &&
+				(gauge->value <= range->highpoint))
+		{
+			alert = TRUE;
+			if (gauge->last_alert_index == i)
+				goto cairo_jump_out_of_alerts;
+
+			/* If we alert, in order to save CPU, we copy the 
+			 * background pixmap to a temp pixmap and render on 
+			 * that and STORE the index of this alert.  Next time
+			 * acount we'll detect we ALREADY drew the alert and 
+			 * just copy hte pixmap (saving all the render time)
+			 * as pixmap copies are fast.
+			 */
+			gauge->last_alert_index = i;
+			gdk_draw_drawable(gauge->tmp_pixmap,
+					widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+					gauge->bg_pixmap,
+					0,0,
+					0,0,
+					widget->allocation.width,widget->allocation.height);
+			cr = gdk_cairo_create (gauge->tmp_pixmap);
+			cairo_set_source_rgb(cr,range->color.red/65535.0,
+					range->color.green/65535.0,
+					range->color.blue/65535.0);
+			lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
+			cairo_set_line_width (cr, lwidth);
+			cairo_arc(cr, gauge->xc, gauge->yc, (range->inset * gauge->radius),0, 2*M_PI);
+			cairo_stroke(cr);
+			cairo_destroy(cr);
+			break;
+		}
+	}
+cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
-	gdk_draw_drawable(gauge->pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			gauge->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
+	if (!alert)
+		gdk_draw_drawable(gauge->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				gauge->bg_pixmap,
+				0,0,
+				0,0,
+				widget->allocation.width,widget->allocation.height);
+	else
+		gdk_draw_drawable(gauge->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				gauge->tmp_pixmap,
+				0,0,
+				0,0,
+				widget->allocation.width,widget->allocation.height);
 
 
 	cr = gdk_cairo_create (gauge->pixmap);
@@ -348,26 +399,30 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	gauge->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
 	gauge->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
 	gauge->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
-	
-	 gauge->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
-	 gauge->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
 
-	 gauge->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
-	 gauge->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
-	 gauge->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
-	 gauge->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
-	 gauge->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
-	 gauge->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
-	 gauge->needle_polygon_points = 6;
+	gauge->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
+	gauge->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
 
-	 cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
-	 cairo_line_to (cr, gauge->needle_coords[1].x,gauge->needle_coords[1].y);
-	 cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
-	 cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
-	 cairo_line_to (cr, gauge->needle_coords[4].x,gauge->needle_coords[4].y);
-	 cairo_line_to (cr, gauge->needle_coords[5].x,gauge->needle_coords[5].y);
-	 cairo_fill_preserve (cr);
-	 cairo_destroy(cr);
+	gauge->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
+	gauge->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
+	gauge->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
+	gauge->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
+	gauge->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
+	gauge->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+	gauge->needle_polygon_points = 6;
+
+	cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
+	cairo_line_to (cr, gauge->needle_coords[1].x,gauge->needle_coords[1].y);
+	cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
+	cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
+	cairo_line_to (cr, gauge->needle_coords[4].x,gauge->needle_coords[4].y);
+	cairo_line_to (cr, gauge->needle_coords[5].x,gauge->needle_coords[5].y);
+	cairo_fill_preserve (cr);
+	cairo_stroke(cr);
+
+
+
+	cairo_destroy(cr);
 #endif
 }
 
@@ -390,20 +445,73 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gint n_tip = 0;
 	gint tip_width = 0;
 	gint tail_width = 0;
+	gboolean alert = FALSE;
 	gchar * message = NULL;
 	gchar * tmpbuf = NULL;
+	gint lwidth = 0;
+	MtxAlertRange* range = NULL;
 	PangoRectangle logical_rect;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
-	/* Copy bacground pixmap to intermediaary for final rendering */
-	gdk_draw_drawable(gauge->pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			gauge->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
+	/* Check if in alert bounds and alert as necessary */
+	alert = FALSE;
+	for (i=0;i<gauge->a_ranges->len;i++)
+	{
+		range = g_array_index(gauge->a_ranges,MtxAlertRange *, i);
+		if ((gauge->value >= range->lowpoint)  &&
+				(gauge->value <= range->highpoint))
+		{
+			alert = TRUE;
+			if (gauge->last_alert_index == i)
+				goto gdk_jump_out_of_alerts;
 
+			/* If we alert, in order to save CPU, we copy the 
+			 * background pixmap to a temp pixmap and render on 
+			 * that and STORE the index of this alert.  Next time
+			 * acount we'll detect we ALREADY drew the alert and 
+			 * just copy hte pixmap (saving all the render time)
+			 * as pixmap copies are fast.
+			 */
+			gauge->last_alert_index = i;
+			gdk_draw_drawable(gauge->tmp_pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				gauge->bg_pixmap,
+				0,0,
+				0,0,
+				widget->allocation.width,widget->allocation.height);
+			gdk_gc_set_rgb_fg_color(gauge->gc,&range->color);
+			lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
+			gdk_gc_set_line_attributes(gauge->gc,lwidth,
+					GDK_LINE_SOLID,
+					GDK_CAP_BUTT,
+					GDK_JOIN_BEVEL);
+			gdk_draw_arc(gauge->tmp_pixmap,gauge->gc,FALSE,
+					gauge->xc-gauge->radius*range->inset,
+					gauge->yc-gauge->radius*range->inset,
+					2*(gauge->radius*range->inset),
+					2*(gauge->radius*range->inset),
+					0,
+					360*64);
+			break;
+		}
+	}
+gdk_jump_out_of_alerts:
+	/* Copy background pixmap to intermediary for final rendering */
+	if (!alert)
+		gdk_draw_drawable(gauge->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				gauge->bg_pixmap,
+				0,0,
+				0,0,
+				widget->allocation.width,widget->allocation.height);
+	else
+		gdk_draw_drawable(gauge->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				gauge->tmp_pixmap,
+				0,0,
+				0,0,
+				widget->allocation.width,widget->allocation.height);
 
 	/* the text */
 	if (gauge->show_value)
@@ -468,6 +576,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 			gauge->gc,
 			TRUE,gauge->needle_coords,
 			gauge->needle_polygon_points);
+	
 #endif
 }
 
@@ -525,6 +634,17 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				widget->style->black_gc,
 				TRUE, 0,0,
 				gauge->w,gauge->h);
+		/* Tmp Background pixmap */
+		if (gauge->tmp_pixmap)
+			g_object_unref(gauge->tmp_pixmap);
+		gauge->tmp_pixmap=gdk_pixmap_new(widget->window,
+				gauge->w,gauge->h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_rectangle(gauge->tmp_pixmap,
+				widget->style->black_gc,
+				TRUE, 0,0,
+				gauge->w,gauge->h);
+		gauge->last_alert_index = -1;
 
 		gdk_window_set_back_pixmap(widget->window,gauge->pixmap,0);
 		gauge->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
@@ -604,8 +724,11 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				360*64);  // angle 2: full circle
 
 	}
-	generate_gauge_background(widget);
-	update_gauge_position(widget);
+	if (gauge->radius > 0)
+	{
+		generate_gauge_background(widget);
+		update_gauge_position(widget);
+	}
 
 	return TRUE;
 }

@@ -126,6 +126,17 @@ typedef enum
 	CR_NUM_FIELDS,
 }CrField;
 
+/* Alert Range enumeration for the individual fields */
+typedef enum
+{
+	ALRT_LOWPOINT = 0,
+	ALRT_HIGHPOINT,
+	ALRT_COLOR,
+	ALRT_LWIDTH,
+	ALRT_INSET,
+	ALRT_NUM_FIELDS,
+}AlrtField;
+
 /* General Attributes enumeration */
 typedef enum
 {
@@ -152,6 +163,7 @@ typedef enum
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
+typedef struct _MtxAlertRange		MtxAlertRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
 typedef struct _MtxXMLFuncs		MtxXMLFuncs;
@@ -182,6 +194,23 @@ struct _MtxDispatchHelper
  * gauge background generation
  */
 struct _MtxColorRange
+{
+	gfloat lowpoint;	///< where the range starts from
+	gfloat highpoint; 	///< where the range ends at
+	GdkColor color;		///< The color to use
+	gfloat lwidth;		///< % of radius to determine the line width
+	gfloat inset;		///< % of radius to inset the line
+};
+
+
+/*! \struct _MtxAlertRange
+ * \brief
+ * _MtxAlertRange is a container struct that holds all the information needed
+ * for an alert range span on a gauge. Any gauge can have an arbritrary number
+ * of these structs as they are stored in a dynamic array and redraw on
+ * gauge update if the gauge value is within the limits of the alert. 
+ */
+struct _MtxAlertRange
 {
 	gfloat lowpoint;	///< where the range starts from
 	gfloat highpoint; 	///< where the range ends at
@@ -361,15 +390,18 @@ struct _MtxGaugeFace
 	GdkBitmap *bitmap;	/*! for shape_combine stuff */
 	GdkPixmap *pixmap;	/*! Update/backing pixmap */
 	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
+	GdkPixmap *tmp_pixmap;	/*! Tmp pixmap for alerts for speed boost */
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GArray *t_blocks;	/* Array of MtxTextBlock structs */
 	GArray *c_ranges;	/* Array of MtxColorRange structs */
+	GArray *a_ranges;	/* Array of MtxAlertRange structs */
 	GArray *tick_groups;	/*! Array to contain the tick groups */
 	GArray *polygons;	/*! Array to contain polygon defs */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
 	gchar * xml_filename;	/*! Filename of XML for this gauge  */
 	gboolean show_drag_border;	/*! Show drag border flag */
+	gint last_alert_index;	/*! index of last active alert struct */
 	gint w;			/*! width */
 	gint h;			/*! height */
 	gdouble xc;		/*! X Center */
@@ -387,7 +419,6 @@ struct _MtxGaugeFace
 	GdkColormap *colormap;	/*! Colormap for GC's */
 	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
 					     parts of a gauge object */
-	gchar *txt_str;		/* Array of Text strings */
 	gchar *value_font;	/* Array of Font name strings */
 	gfloat value_font_scale;/* Array of font scales */
 	gfloat value_xpos;	/* Array of X offsets for strings */
@@ -441,6 +472,14 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField f
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
+
+/* Alert Ranges */
+GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index, AlrtField field, void * value);
+gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *);
+void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge);
+
 /* Text Blocks */
 GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
