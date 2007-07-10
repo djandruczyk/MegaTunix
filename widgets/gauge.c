@@ -297,7 +297,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 
 
 /*!
- \brief returns the array of ranges to the requestor
+ \brief returns the array of color ranges to the requestor
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
@@ -305,6 +305,18 @@ GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
 	return gauge->c_ranges;
+}
+
+
+/*!
+ \brief returns the array of alert ranges to the requestor
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \returns GArray * of the ranges,  DO NOT FREE THIS.
+ */
+GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
+	return gauge->a_ranges;
 }
 
 

@@ -11,7 +11,8 @@ static GladeXML *gen_xml;
 GladeXML *text_xml;
 GladeXML *tick_groups_xml;
 GladeXML *polygons_xml;
-GladeXML *ranges_xml;
+GladeXML *c_ranges_xml;
+GladeXML *a_ranges_xml;
 extern GdkColor black;
 extern GdkColor white;
 extern GtkWidget *gauge;
@@ -87,6 +88,7 @@ EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 		if (GTK_IS_WIDGET(window))
 		{
 			gtk_widget_show_all(window);
+			update_onscreen_tgroups();
 			return TRUE;
 		}
 
@@ -128,6 +130,7 @@ EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
 		if (GTK_IS_WIDGET(window))
 		{
 			gtk_widget_show_all(window);
+			update_onscreen_polygons();
 			return TRUE;
 		}
 
@@ -257,6 +260,7 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 		{
 			gtk_widget_show_all(window);
 			update_text_controls();
+			update_general_controls();
 			return TRUE;
 		}
 
@@ -429,11 +433,12 @@ EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 
 	if (created)
 	{
-		window = glade_xml_get_widget(ranges_xml,"warning_ranges_window");
+		window = glade_xml_get_widget(c_ranges_xml,"warning_ranges_window");
 		if (GTK_IS_WIDGET(window))
 		{
 			gtk_widget_show_all(window);
 			update_text_controls();
+			update_onscreen_c_ranges();
 			return TRUE;
 		}
 
@@ -452,9 +457,52 @@ EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 
-	ranges_xml = xml;
+	c_ranges_xml = xml;
 	created = TRUE;
-	update_onscreen_ranges();
+	update_onscreen_c_ranges();
+	return TRUE;
+}
+
+
+EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
+{
+	static gboolean created = FALSE;
+	gchar * filename = NULL;
+	GtkWidget *window = NULL;
+	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	if (created)
+	{
+		window = glade_xml_get_widget(a_ranges_xml,"alert_ranges_window");
+		if (GTK_IS_WIDGET(window))
+		{
+			gtk_widget_show_all(window);
+			update_text_controls();
+			update_onscreen_a_ranges();
+			return TRUE;
+		}
+
+	}
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "alert_ranges_window", NULL);
+		g_free(filename);
+	}
+	else
+	{
+		printf("can't load XML, ERROR!\n");
+		exit(-2);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+
+	a_ranges_xml = xml;
+	created = TRUE;
+	update_onscreen_a_ranges();
 	return TRUE;
 }
 

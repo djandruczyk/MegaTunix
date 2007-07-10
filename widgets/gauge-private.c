@@ -1125,6 +1125,14 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	cairo_stroke(cr);
 
 	cairo_destroy (cr);
+	/* SAVE copy of this on tmp pixmap */
+	gdk_draw_drawable(gauge->tmp_pixmap,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			gauge->bg_pixmap,
+			0,0,
+			0,0,
+			widget->allocation.width,widget->allocation.height);
+	gauge->last_alert_index = -1;
 #endif
 }
 
@@ -1562,6 +1570,14 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->xc-(logical_rect.width/2)+(tblock->x_pos*gauge->radius),
 				gauge->yc-(logical_rect.height/2)+(tblock->y_pos*gauge->radius),gauge->layout);
 	}
+	/* SAVE copy of this on tmp pixmap */
+	gdk_draw_drawable(gauge->tmp_pixmap,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			gauge->bg_pixmap,
+			0,0,
+			0,0,
+			widget->allocation.width,widget->allocation.height);
+	gauge->last_alert_index = -1;
 
 #endif
 }

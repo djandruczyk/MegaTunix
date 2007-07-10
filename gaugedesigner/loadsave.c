@@ -44,8 +44,6 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		//printf("loading gauge file %s\n",filename);
 		update_attributes();
-		update_onscreen_ranges();
-		update_onscreen_tblocks();
 		g_free (filename);
 	}
 	free_mtxfileio(fileio);
