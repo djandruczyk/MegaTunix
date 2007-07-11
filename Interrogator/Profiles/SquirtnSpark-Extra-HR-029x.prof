@@ -385,7 +385,7 @@ MS_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,41
 MS-I_VEconst=_COUNT_,189
-MS_Signature=_SUBMATCH_,format hr
+MS_Signature=_SUBMATCH_,format hr_0
 
 [gui]
 RealtimeMapFile=MSnS-Extra-HR-029x

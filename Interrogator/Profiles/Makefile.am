@@ -9,6 +9,7 @@ profiles = README \
 	SquirtnEDIS-3.008.prof \
 	SquirtnSpark-3.0.prof \
 	SquirtnSpark-Extra-HR-029x.prof \
+	SquirtnSpark-Extra-HR-010a.prof \
 	SquirtnSpark-Extra-029x.prof \
 	SquirtnSpark-Extra-029yx.prof 
 

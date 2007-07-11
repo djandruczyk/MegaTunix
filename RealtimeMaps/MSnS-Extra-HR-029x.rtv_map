@@ -1,5 +1,5 @@
 [realtime_map]
-applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x
+applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010a
 raw_total=41
 derived_total=56
 raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw1,pw2,tpsaccel,barocorr,gammae,vecurr,sparkangle
