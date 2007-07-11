@@ -44,7 +44,9 @@ void load_dashboard(gchar *filename, gpointer data)
 	gint height = 0;
 	gint x = 0;
 	gint y = 0;
+	gfloat * ratio = NULL;
 	extern GObject * global_data;
+	extern GtkWidget * main_window;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	extern gboolean interrogated;
@@ -68,7 +70,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-	gtk_window_set_keep_above(GTK_WINDOW(window),TRUE);
+	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
 
 	g_signal_connect (G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
@@ -111,6 +113,9 @@ void load_dashboard(gchar *filename, gpointer data)
 	key = g_strdup_printf("%s_y_origin",prefix);
 	y = (gint)g_object_get_data(global_data,key);
 	g_free(key);
+	key = g_strdup_printf("%s_size_ratio",prefix);
+	ratio = (gfloat *)g_object_get_data(global_data,key);
+	g_free(key);
 	g_free(prefix);
 	g_free(filename);
 
@@ -118,7 +123,10 @@ void load_dashboard(gchar *filename, gpointer data)
 	height = (gint)g_object_get_data(G_OBJECT(dash),"orig_height");
 //	printf("move/resize to %i,%i, %ix%i\n",x,y,width,height);
 	gtk_window_move(GTK_WINDOW(window), x,y);
-	gtk_window_set_default_size(GTK_WINDOW(window), width,height);
+	if (ratio)
+		gtk_window_set_default_size(GTK_WINDOW(window), width**ratio,height**ratio);
+	else
+		gtk_window_set_default_size(GTK_WINDOW(window), width,height);
 	gtk_widget_show_all(window);
 	dash_shape_combine(dash);
 }
@@ -139,12 +147,8 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	gint child_y = 0;
 	gfloat ratio = 0.0;
 	GtkWidget * dash  = NULL;
-	/*
-	GdkGC *gc = NULL;
-	GdkColormap *colormap = NULL;
-	GdkColor black;
-	GdkColor white;
-	*/
+
+
 
 	dash = g_object_get_data(G_OBJECT(widget),"dash");
 	if (!GTK_IS_WIDGET(dash))
@@ -157,29 +161,10 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	
 	ratio = (((gfloat)cur_height/(gfloat)orig_height)+((gfloat)cur_width/(gfloat)orig_width))/2.0;
 
-/*
-	colormap = gdk_colormap_get_system ();
-	gdk_color_parse ("black", & black);
-	gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
-	gdk_color_parse ("white", & white);
-	gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
-	gc = gdk_gc_new (dash->window);
-	gdk_gc_set_foreground (gc, &white);
-
-	gdk_draw_rectangle(dash->window,gc,TRUE,cur_width-10,0,10,10);
-	gdk_draw_rectangle(dash->window,gc,TRUE,0,0,10,10);
-	gdk_draw_rectangle(dash->window,gc,TRUE,0,cur_height-10,10,10);
-	gdk_draw_rectangle(dash->window,gc,TRUE,cur_width-10,cur_height-10,10,10);
-	gdk_gc_set_foreground (gc, &black);
-	gdk_draw_rectangle(dash->window,gc,FALSE,cur_width-10,0,10,10);
-	gdk_draw_rectangle(dash->window,gc,FALSE,0,0,10,10);
-	gdk_draw_rectangle(dash->window,gc,FALSE,0,cur_height-10,10,10);
-	gdk_draw_rectangle(dash->window,gc,FALSE,cur_width-10,cur_height-10,10,10);
-	*/
-
 	if (((ratio - (gint)ratio)*100) < 1)
 		return FALSE;
 
+	g_signal_handlers_block_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
         {
@@ -193,11 +178,8 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 		gtk_widget_set_size_request(gauge,child_w*ratio,child_h*ratio);
 	}
 
-//	printf ("ration of current to orig is %f\n",ratio);
-//	printf("Current dash dimensions are: %i,%i\n",cur_width,cur_height);
-//	printf ("Orig XML dimesions are: %i,%i\n",orig_width, orig_height);
-//	printf("dash configure event\n");
 	dash_shape_combine(dash);
+	g_signal_handlers_unblock_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
 	return FALSE;
 }
 
@@ -445,7 +427,9 @@ void dash_shape_combine(GtkWidget *dash)
 	GtkRequisition req;
 	gint width = 0;
 	gint height = 0;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	g_static_mutex_lock(&mutex);
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 
 	bitmap = gdk_pixmap_new(NULL,width,height,1);
@@ -461,10 +445,10 @@ void dash_shape_combine(GtkWidget *dash)
 	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,width,height);
 
 	gdk_gc_set_foreground (gc, &white);
-	gdk_draw_rectangle(bitmap,gc,TRUE,width-10,0,10,10);
-	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,10,10);
-	gdk_draw_rectangle(bitmap,gc,TRUE,0,height-10,10,10);
-	gdk_draw_rectangle(bitmap,gc,TRUE,width-10,height-10,10,10);
+	gdk_draw_rectangle(bitmap,gc,TRUE,width-8,0,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,0,height-8,8,8);
+	gdk_draw_rectangle(bitmap,gc,TRUE,width-8,height-8,8,8);
 
 
 	children = GTK_FIXED(dash)->children;
@@ -515,7 +499,10 @@ void dash_shape_combine(GtkWidget *dash)
 #endif
 		gdk_window_shape_combine_mask(dash->window,bitmap,0,0);
 	}
+	g_object_unref(colormap);
+	g_object_unref(gc);
 	g_object_unref(bitmap);
+	g_static_mutex_unlock(&mutex);
 	return;
 }
 

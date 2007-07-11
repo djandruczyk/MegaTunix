@@ -12,8 +12,8 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>529</width>
-  <height>399</height>
+  <width>178</width>
+  <height>162</height>
   <main_start_angle>135.000000</main_start_angle>
   <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>0.000000</lbound>
@@ -42,7 +42,7 @@
   </text_block>
   <tick_group>
     <font>Sans</font>
-    <font_scale>0.135000</font_scale>
+    <font_scale>0.125000</font_scale>
     <text>0,20,40,60,80,100,110,130,150,170,190,210,230,250</text>
     <text_inset>0.255000</text_inset>
     <text_color>65535 65535 65535</text_color>

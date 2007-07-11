@@ -175,7 +175,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	{
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
-		gtk_main_iteration();
+		while (gtk_events_pending())
+			gtk_main_iteration();
 		count++;
 	}
 	count = 0;
@@ -184,7 +185,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)));
 		g_async_queue_try_pop(dispatch_queue);
-		gtk_main_iteration();
+		while (gtk_events_pending())
+			gtk_main_iteration();
 		count++;
 	}
 
@@ -2384,6 +2386,7 @@ void prompt_to_save(void)
 	gint result = 0;
 	extern gboolean offline;
 	GtkWidget *dialog = NULL;
+	extern GtkWidget *main_window;
 
 	if (!offline)
 	{
@@ -2392,6 +2395,8 @@ void prompt_to_save(void)
 				GTK_BUTTONS_YES_NO,
 				"Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
 
+		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
+		gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save internal log, yes/no ?");
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
 		if (result == GTK_RESPONSE_YES)
 			internal_datalog_dump(NULL,NULL);
@@ -2402,7 +2407,8 @@ void prompt_to_save(void)
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
 			"Save ECU Settings to file?");
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Question....");
+	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
+	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save ECU Settings yes/no ?");
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
 		select_file_for_ecu_backup(NULL,NULL);

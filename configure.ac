@@ -89,15 +89,33 @@ PKG_CHECK_MODULES(LIBXML2,libxml-2.0 )
 AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 
+
+dnl ===============
+dnl Debugging stuff
+dnl ===============
+
+dnl General Debugging code
+AC_ARG_ENABLE(debug,
+[  --enable-debug         enable debugging [default=no]],, enable_debug=no)
+
+if test "$enable_debug" = yes ; then
+DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
+fi
+AC_SUBST(DEBUG_FLAGS)
+
 dnl optimizations
 CFLAGS="-O2"
 AC_SUBST(CFLAGS)
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
-if test $cross_compiling = yes; then
+if test "$cross_compiling" = yes ; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	WIN32_RESOURCES="resources.o "
-	EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
+	if test "$enable_debug" = yes ; then
+		EXTRA_LIBS=" -lgw32c -luuid -lole32"
+	else
+		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
+	fi
 else
 	EXTRA_LIBS=""
 fi
@@ -110,20 +128,6 @@ dnl =================
 dnl big/little endian
 dnl =================
 AC_C_BIGENDIAN(,,)
-
-
-dnl ===============
-dnl Debugging stuff
-dnl ===============
-
-dnl General Debugging code
-AC_ARG_ENABLE(debug,
-[  --enable-debug         enable debugging [default=no]],, enable_debug=no)
-
-if test "$enable_debug" = yes; then
-DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
-fi
-AC_SUBST(DEBUG_FLAGS)
 
 dnl ==============
 dnl profiling
