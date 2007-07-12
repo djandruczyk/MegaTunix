@@ -442,10 +442,13 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern GtkWidget *main_window;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for datalog export");
+	fileio->parent = main_window;
+	fileio->on_top =TRUE;
 	fileio->default_filename= g_strdup("Untitled.log");
 	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -481,10 +484,13 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
+	extern GtkWidget *main_window;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
+	fileio->parent = main_window;
+	fileio->on_top =TRUE;
 	fileio->default_filename= g_strdup("Untitled.log");
 	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;

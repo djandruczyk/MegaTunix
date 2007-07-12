@@ -246,12 +246,15 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
+	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Offline mode REQUIRES you to load ECU Settings from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->shortcut_folders = g_strdup("ecu_snapshots,MTX_ecu_snapshots");

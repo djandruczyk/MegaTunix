@@ -304,8 +304,10 @@ void save_config(void)
 		cfg_write_int(cfgfile, "Window", "width", tmp_width);
 		cfg_write_int(cfgfile, "Window", "height", tmp_height);
 		gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
-		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
-		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+		if (x > 0)
+			cfg_write_int(cfgfile, "Window", "main_x_origin", x);
+		if (y > 0)
+			cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
 		{
 			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
@@ -313,8 +315,10 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"status_window")),&x,&y);
-			cfg_write_int(cfgfile, "Window", "status_x_origin", x);
-			cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+			if (x > 0)
+				cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+			if (y > 0)
+				cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 		}
 		if (g_hash_table_lookup(dynamic_widgets,"rtt_window"))
 		{
@@ -323,8 +327,10 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"rtt_window")),&x,&y);
-			cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
-			cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
+			if (x > 0)
+				cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
+			if (y > 0)
+				cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 		}
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);

@@ -509,7 +509,7 @@ void dash_shape_combine(GtkWidget *dash)
 gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 //	printf("motion detected\n");
-	return FALSE;
+	return TRUE;
 }
 
 
@@ -602,7 +602,9 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GtkWidget *label = NULL;
+	extern GtkWidget *main_window;
 	extern gboolean interrogated;
+
 
 	if (!interrogated)
 		return FALSE;
@@ -610,6 +612,8 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select Dashboard to Open");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");

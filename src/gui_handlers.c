@@ -2387,28 +2387,55 @@ void prompt_to_save(void)
 	extern gboolean offline;
 	GtkWidget *dialog = NULL;
 	extern GtkWidget *main_window;
+	GtkWidget *label = NULL;
+	GtkWidget *hbox = NULL;
+	GdkPixbuf *pixbuf = NULL;
+	GtkWidget *image = NULL;
 
 	if (!offline)
 	{
-		dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_YES_NO,
-				"Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
+		dialog = gtk_dialog_new_with_buttons("Save internal log, yes/no ?",
+				GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_YES,GTK_RESPONSE_YES,
+				GTK_STOCK_NO,GTK_RESPONSE_NO,
+				NULL);
+		hbox = gtk_hbox_new(FALSE,0);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+		pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
+		image = gtk_image_new_from_pixbuf(pixbuf);
+		gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
+		label = gtk_label_new("Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
+		gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
+		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
+		gtk_widget_show_all(hbox);
 
+		//		gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save internal log, yes/no ?");
 		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
-		gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save internal log, yes/no ?");
+
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
+		g_object_unref(pixbuf);
 		if (result == GTK_RESPONSE_YES)
 			internal_datalog_dump(NULL,NULL);
 		gtk_widget_destroy (dialog);
+
 	}
 
-	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_MESSAGE_QUESTION,
-			GTK_BUTTONS_YES_NO,
-			"Save ECU Settings to file?");
+	dialog = gtk_dialog_new_with_buttons("Save ECU settings to file?",
+			GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_YES,GTK_RESPONSE_YES,
+			GTK_STOCK_NO,GTK_RESPONSE_NO,
+			NULL);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
+	label = gtk_label_new("Would you like to save the ECU settings to a file so that they can be restored at a future time?");
+	gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
+	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
+	gtk_widget_show_all(hbox);
+
 	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
-	gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save ECU Settings yes/no ?");
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
 		select_file_for_ecu_backup(NULL,NULL);

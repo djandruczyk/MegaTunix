@@ -219,6 +219,11 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
+		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+
+
+
 		if ((data->absolute_path) && (!data->default_path))
 		{
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
@@ -243,6 +248,10 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				NULL);	
+
+		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+
 		defdir = g_build_path(PSEP,HOME(), ".MegaTunix",data->default_path, NULL);
 		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
 			g_mkdir(defdir,0755);
