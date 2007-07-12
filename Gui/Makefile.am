@@ -56,7 +56,10 @@ gui_files = 	README \
 		msns-e-water-nos-launch.glade \
 		msns-e-water-nos-launch-029x.datamap \
 		msns-e-wheeldecode.glade \
+		msns-e-wheeldecode-029yx.glade \
 		msns-e-wheeldecode-029x.datamap \
+		msns-e-wheeldecode-hr_10x.glade \
+		msns-e-wheeldecode-hr_10x.datamap \
 		projection.glade \
 		projection.datamap \
 		raweditor.glade \

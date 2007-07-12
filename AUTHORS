@@ -1,4 +1,4 @@
-Lead developer:
+Lead developer/App creator, owner:
 	David J. Andruczyk <djandruczyk at yahoo dot com>
 
 
@@ -8,13 +8,17 @@ Bruce Bowling <bbowling at earthlink dot net>
 	WWW-> http://bgsoflex.com/megasquirt.html
 	Provided PCC sourcecode
 
+Al Grippo <????&????.???>
+	WWW-> http://megasquirt.info
+	Provided MS-II API communiation docs and more.
+
 Perry Harrington < pedward at apsoft dot com> 
 	WWW-> http://www.dainst.com
 	Provided headers for manipulating bitfields and various tips/
 	suggestions to make my life much easier.
 
 Dale Anderson <dale_anderson at yahoo dot com
-	Logo Designer, (damn cool logo too..)  Gui suggestions
+	Logo Designer, (damn cool logo too..)  Gui suggestions/testing
 
 Joe Mitchel <comicfu at yahoo dot com>
 	Provided SourceForge Developer level access to the "MegaSquirt"
@@ -32,17 +36,25 @@ silverchris < unknown, via msefi.com >
 	Created the Gentoo ebuild for version 0.7.9, which was submitted to 
 	the gentoo bugzilla on 8/13/2005.
 
+Baldur Gisalson <baldur @ ???? )
+        Tested Megatunix on FreeBSD and assisted with debugging
+
+Keith ?????  (sly4vems, AIM)
+        Helped with Win32 port and debugging/testing
+
 Albert Fletcher < unknown >
 	Most generously donated a Apple G4 Mac Mini to be used for 
-	megatunix on PPC testing and improvement.
+	megatunix on PPC testing and improvement, which is used to test 
+	all OS-X builds.
 	
 Christopher Mire <cnm3332 at louisiana dot edu> 
-	Wrote the first gauge widget for megatnuix of which I built upon
+	Wrote the first gauge widget for megatunix of which I built upon
         and wrote GDK routines for low end boxes, and then added more on 
-	with an additional contribution from  Ari, below.
+	with an additional contribution from Ari, below.
 
 Ari Karhu <ari at ultimatevw dot com>
-	Provided a gauge widget that I used a large amount of code from
+	Provided a gauge widget that I used a large amount of code from and
+	extended to use an XML storage backend
 
 TurboCamaro <msefi.com forum>
 	Created a whole set of AutoMeter SportComp gauges for the new gauge/

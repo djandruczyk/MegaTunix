@@ -16,88 +16,84 @@
 # between zero and testcount-1 inclusive.
 # Fields allowed inside [test_XX} blocks:
 #
-#	raw_cmd		<-- (String) This is the ascii value sent to the ECU
-#	cmd_desc	<-- (String) This is displayed in the interrogator 
+#	test_name	<-- (String) Internal ASCII name (key) assigned to this
+#			test. If a firmware uses this key, the interrogation
+#			profile will HAVE this key present in the 
+#			[interrogation] section
+#	test_desc	<-- (String) This is displayed in the interrogator 
 #			window and is a brief description of the command sent.
-#	cmd_length	<-- (Int) Length of command sent to the ECU in bytes
-#	multipart	<-- (bool) This means that the write to the ECU has 
-#			two components, a command and an arg. (see cmd_int_arg)
-#	cmd_int_arg	<-- (int) the argument sent AFTER the command, used 
-#			only seldomly for things like RAW mem read.
-#	store_data	<-- (bool), true to save return vals or false to ignore
-#	store_type	<-- (String) Only _SIG_ , _VNUM_ , or _TEXTVER_ are
-#			allowed here... 
+#	actual_test	<-- (string, CSV) This is a comma separated list of 
+#			values sent to the ECU. This requires the corresponding
+#			field "test_arg_types"
+#	test_arg_types	<-- (Enum CSV list), comma separated list of enum
+#			strings. (i.e. _CHAR_, _UINT8_, _SINT8, etc )
 #	
 
 [interrogation_tests]
 total_tests=11
 
 [test_00]
-raw_cmd=C
-cmd_length=1
-cmd_desc=MS Clock
-store_data=FALSE
+test_name=MS_Clock
+actual_test=C
+test_arg_types=_CHAR_
+test_desc=MS Clock
 
 [test_01]
-raw_cmd=c
-cmd_length=1
-cmd_desc=MS-II Clock
-store_data=FALSE
+test_name=MS-II_Clock
+actual_test=c
+test_arg_types=_CHAR_
+test_desc=MS-II Clock
 
 [test_02]
-raw_cmd=A
-cmd_length=1
-cmd_desc=Runtime Vars
-store_data=FALSE
+test_name=MS-I_RTVars
+actual_test=A
+test_arg_types=_CHAR_
+test_desc=MS-I Runtime Vars
 
 [test_03]
-raw_cmd=R
-cmd_length=1
-cmd_desc=Runtime Vars (MSnS-Extra) 
-store_data=FALSE
+test_name=MSnS-E_RTVars
+actual_test=R
+test_arg_types=_CHAR_
+test_desc=MSnS-Extra Runtime Vars 
 
 [test_04]
-raw_cmd=Q
-cmd_length=1
-cmd_desc=MS Revision
-store_type=_VNUM_
-store_data=TRUE
+test_name=MS-VerNum
+actual_test=Q
+test_arg_types=_CHAR_
+test_desc=ECU Numeric Revision
 
 [test_05]
-raw_cmd=V
-cmd_length=1
-cmd_desc=VE/Constants 
-store_data=FALSE
+test_name=MS-I_VEconst
+actual_test=V
+test_arg_types=_CHAR_
+test_desc=MS-I VE/Constants 
 
 [test_06]
-raw_cmd=S
-cmd_length=1
-cmd_desc=ECU Signature
-store_type=_SIG_
-store_data=TRUE
+test_name=MS_Signature
+actual_test=S
+test_arg_types=_CHAR_
+test_desc=ECU Signature
 
 [test_07]
-raw_cmd=T
-cmd_length=1
-cmd_desc=Text Version
-store_type=_TEXTVER_
-store_data=TRUE
+test_name=MS_Textrev
+actual_test=T
+test_arg_types=_CHAR_
+test_desc=ECU Text Version
 
 [test_08]
-raw_cmd=I
-cmd_length=1
-cmd_desc=Ignition Variables
-store_data=FALSE
+test_name=MSnS-Ignition
+actual_test=I
+test_arg_types=_CHAR_
+test_desc=MSnS-3.x Ignition Page
 
 [test_09]
-raw_cmd=F0
-cmd_length=2
-cmd_desc=Raw Memory Readback
-store_data=FALSE
+test_name=MS-DT_Raw_Mem
+actual_test=F,0
+test_arg_types=_CHAR_,_UINT8_
+test_desc=MS-I DT Raw Mem
 
 [test_10]
-raw_cmd=a06
-cmd_length=3
-cmd_desc=MS-II RT Vars
-store_data=FALSE
-
+test_name=MS-II_RTVars
+actual_test=a,0,6
+test_arg_types=_CHAR_,_UINT8_,_UINT8_
+test_desc=MS-II RTVars

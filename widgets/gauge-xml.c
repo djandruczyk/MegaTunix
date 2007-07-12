@@ -99,6 +99,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 
 		g_object_freeze_notify(G_OBJECT(gauge));
 		mtx_gauge_face_remove_all_text_blocks(gauge);
+		mtx_gauge_face_remove_all_alert_ranges(gauge);
 		mtx_gauge_face_remove_all_color_ranges(gauge);
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
@@ -303,6 +304,39 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		cur_node = cur_node->next;
 	}
 	g_array_append_val(gauge->c_ranges,range);
+}
+
+
+void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_alert_range_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxAlertRange *range = NULL;
+
+	range = g_new0(MtxAlertRange, 1);
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"lowpoint") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->lowpoint);
+			if (g_strcasecmp((gchar *)cur_node->name,"highpoint") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->highpoint);
+			if (g_strcasecmp((gchar *)cur_node->name,"lwidth") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->lwidth);
+			if (g_strcasecmp((gchar *)cur_node->name,"inset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&range->color);
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->a_ranges,range);
 }
 
 
@@ -612,6 +646,46 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 	{
 		range = g_array_index(helper->gauge->c_ranges,MtxColorRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
+
+		tmpbuf = g_strdup_printf("%f",range->lowpoint);
+		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->highpoint);
+		xmlNewChild(node, NULL, BAD_CAST "highpoint",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->lwidth);
+		xmlNewChild(node, NULL, BAD_CAST "lwidth",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->inset);
+		xmlNewChild(node, NULL, BAD_CAST "inset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i %i %i", 
+				range->color.red, 
+				range->color.green, 
+				range->color.blue); 
+		xmlNewChild(node, NULL, BAD_CAST "color",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+
+	}
+}
+
+
+void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
+{
+	gint i = 0;
+	gchar * tmpbuf = NULL;
+	MtxAlertRange *range = NULL;
+	xmlNodePtr node = NULL;
+
+	for (i=0;i<helper->gauge->a_ranges->len;i++)
+	{
+		range = g_array_index(helper->gauge->a_ranges,MtxAlertRange *, i);
+		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "alert_range",NULL );
 
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",

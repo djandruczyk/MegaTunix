@@ -64,6 +64,7 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern gboolean interrogated;
+	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
@@ -71,6 +72,8 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.vex");
 	fileio->default_extension= g_strdup("vex");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -103,8 +106,10 @@ void select_table_for_export(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
+	extern GtkWidget *main_window;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
+	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return;
@@ -117,6 +122,8 @@ void select_table_for_export(gint table_num)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup_printf("%s.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ",'_'));
 	fileio->default_extension= g_strdup("vex");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -150,6 +157,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
+	extern GtkWidget *main_window;
 	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 
@@ -159,6 +167,8 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
 	filename = choose_file(fileio);
@@ -189,6 +199,7 @@ void select_table_for_import(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
+	extern GtkWidget *main_window;
 	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
@@ -203,6 +214,8 @@ void select_table_for_import(gint table_num)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->parent = main_window;
+	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 

@@ -115,6 +115,8 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
 				}
 				break;
+			default:
+				break;
 
 		}
 	}

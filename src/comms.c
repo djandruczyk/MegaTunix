@@ -292,7 +292,7 @@ void writeto_ecu(Io_Message *message)
 				ms_data[page][offset] = value;
 				break;
 			case MTX_CHUNK_WRITE:
-				for (i=0;i<=output->len;i++)
+				for (i=0;i<output->len;i++)
 					ms_data[page][offset+i] = output->data[i];
 				break;
 		}
@@ -421,6 +421,7 @@ void writeto_ecu(Io_Message *message)
 		ms_data[page][offset] = value;
 
 		g_free(write_cmd);
+		g_usleep(5000);
 
 	}
 	else if (output->mode == MTX_CHUNK_WRITE)
@@ -468,7 +469,6 @@ void writeto_ecu(Io_Message *message)
 	}
 
 	/*is this really needed??? */
-//	g_usleep(5000);
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
@@ -651,7 +651,7 @@ void set_ms_page(guint8 ms_page)
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	extern gboolean force_page_change;
-	static gint last_page = 0;
+	static gint last_page = -1;
 	gint res = 0;
 	gchar * err_text = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -659,6 +659,12 @@ void set_ms_page(guint8 ms_page)
 	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&mutex);
+
+	/* put int to make sure page is SET on FIRST RUN after interrogation.
+	 * Found that wihtout it was getting a corrupted first page
+	 */
+	if (last_page == -1)
+		goto forceburn;
 
 	if ((ms_page > firmware->ro_above) || (last_page > firmware->ro_above))
 		goto skipburn;
@@ -679,6 +685,7 @@ skipburn:
 		return;
 	}
 
+forceburn:
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd));
 

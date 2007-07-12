@@ -159,6 +159,27 @@ gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *r
 
 
 /*!
+ \brief adds a new alert range between the limits specified in the struct passed
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param range (MtxAlertRange*) pointer to alert range struct to copy
+ \returns index of where this range is stored...
+ */
+gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *range)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
+
+	g_object_freeze_notify (G_OBJECT (gauge));
+	MtxAlertRange * newrange = g_new0(MtxAlertRange, 1);
+	newrange = g_memdup(range,sizeof(MtxAlertRange)); 
+	g_array_append_val(gauge->a_ranges,newrange);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return gauge->a_ranges->len-1;
+}
+
+
+/*!
  \brief adds a new text block  from the struct passed
  \param gauge, MtxGaugeFace * pointer to gauge
  \param tblock, MtxTextBlock * pointer to text block struct to copy
@@ -276,7 +297,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 
 
 /*!
- \brief returns the array of ranges to the requestor
+ \brief returns the array of color ranges to the requestor
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
@@ -284,6 +305,18 @@ GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
 	return gauge->c_ranges;
+}
+
+
+/*!
+ \brief returns the array of alert ranges to the requestor
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \returns GArray * of the ranges,  DO NOT FREE THIS.
+ */
+GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
+	return gauge->a_ranges;
 }
 
 
@@ -708,9 +741,9 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 
 /*!
  \brief changes a color range field by passing in an index 
- to the test block and the field name to change
+ to the color range array and the field name to change
  \param gauge  pointer to gauge object
- \param index, index of the textblock
+ \param index, index of the ColorRange
  \param field,  enumeration of the field to change
  \param value, new value
  */
@@ -752,6 +785,51 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField fi
 
 
 /*!
+ \brief changes a alert range field by passing in an index 
+ to the alert range array and the field name to change
+ \param gauge  pointer to gauge object
+ \param index, index of the AlertRange
+ \param field,  enumeration of the field to change
+ \param value, new value
+ */
+void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlrtField field, void * value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (field < ALRT_NUM_FIELDS);
+	g_return_if_fail (field >= 0);
+	g_object_freeze_notify (G_OBJECT (gauge));
+
+	MtxAlertRange *a_range = NULL;
+	a_range = g_array_index(gauge->a_ranges,MtxAlertRange *,index);
+	g_return_if_fail (a_range != NULL);
+	switch (field)
+	{
+		case ALRT_LOWPOINT:
+			a_range->lowpoint = *(gfloat *)value;
+			break;
+		case ALRT_HIGHPOINT:
+			a_range->highpoint = *(gfloat *)value;
+			break;
+		case ALRT_INSET:
+			a_range->inset = *(gfloat *)value;
+			break;
+		case ALRT_LWIDTH:
+			a_range->lwidth = *(gfloat *)value;
+			break;
+		case ALRT_COLOR:
+			a_range->color = *(GdkColor *)value;
+			break;
+		default:
+			break;
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+/*!
  \brief clears all color ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
@@ -766,6 +844,29 @@ void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
 		c_range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
 		gauge->c_ranges = g_array_remove_index(gauge->c_ranges,i);
 		g_free(c_range);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+/*!
+ \brief clears all alert ranges from the gauge
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ */
+void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge)
+{
+	gint i = 0;
+	MtxAlertRange *a_range = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	for (i=gauge->a_ranges->len-1;i>=0;i--)
+	{
+		a_range = g_array_index(gauge->a_ranges,MtxAlertRange *, i);
+		gauge->a_ranges = g_array_remove_index(gauge->a_ranges,i);
+		g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -869,6 +970,31 @@ void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
 		g_array_remove_index(gauge->c_ranges,index);
 		if (c_range)
 			g_free(c_range);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+
+}
+
+
+/*!
+ \brief clears a specific alert range based on index passed
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \param index gint index of the one we want to remove.
+ */
+void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index)
+{
+	MtxAlertRange *a_range = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if ((index <= gauge->a_ranges->len) && (index >= 0 ))
+	{
+		a_range = g_array_index(gauge->a_ranges,MtxAlertRange *, index);
+		g_array_remove_index(gauge->a_ranges,index);
+		if (a_range)
+			g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));

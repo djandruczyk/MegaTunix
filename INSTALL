@@ -6,7 +6,7 @@ untar it (you've obviously already did this if you're reading this file...)
 
 ./configure
 make
-make install (as root) <-- required for MegaTunix to work
+make install (as root or via sudo) <-- required for MegaTunix to work
 
 For those that used CVS
 first update your tree:

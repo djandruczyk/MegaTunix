@@ -251,7 +251,7 @@ bitshift=1
 bitmask=2
 
 [status_18]
-create_label=ECU ERROR!!!
+create_label=CONFIG ERROR!!!
 active_fg=red
 inactive_fg=dim grey
 col=0

@@ -1,4 +1,15 @@
-5/25/2002 
-	Writing vars to the MS works now in realtime.  Still need to select
-the Flash Burn so vars are retained for next power up...
+6/20/2007
+
+Interrogator has been rewritten and all interrogation profiles updated to use the new structure
+
+Now can interrogation MS-II.
+
+
+6/28/2007
+
+Gauge dashboards are now 100% scalable within megatunix.  Slightly choppy
+due to excessive configure_events, (not sure how to fix that) and a little
+clunky as i need to get the rescale corner buttons to appear/disappear on 
+demand.,  but it works 
+
 

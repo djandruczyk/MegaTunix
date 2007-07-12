@@ -219,7 +219,16 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
-		if (data->default_path)
+		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+
+
+
+		if ((data->absolute_path) && (!data->default_path))
+		{
+			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
+		}
+		else if (data->default_path)
 		{
 #ifdef __WIN32__	/* Disallows modifying distributed files */
 			path = g_build_path(PSEP,HOME(),"dist",data->default_path,NULL);
@@ -239,6 +248,10 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				NULL);	
+
+		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+
 		defdir = g_build_path(PSEP,HOME(), ".MegaTunix",data->default_path, NULL);
 		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
 			g_mkdir(defdir,0755);
@@ -410,6 +423,8 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->filename);
 	if (data->external_path)
 		g_free(data->external_path);
+	if (data->absolute_path)
+		g_free(data->absolute_path);
 	if (data->default_path)
 		g_free(data->default_path);
 	if (data->filter)

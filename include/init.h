@@ -31,7 +31,6 @@ void dealloc_table_params(Table_Params * );
 void dealloc_qfunction(QFunction * );
 Io_Message * initialize_io_message(void);
 Text_Message * initialize_text_message(void);
-Canidate * initialize_canidate(void);
 Page_Params * initialize_page_params(void);
 Table_Params * initialize_table_params(void);
 /* Prototypes */

@@ -41,10 +41,10 @@ row=0
 source=o2volt
 
 [rt_slider_6]
-slider_name=tps_percent
+slider_name=tps_adc
 table=1
 row=1
-source=tpspercent
+source=tpsadc
 
 [rt_slider_7]
 slider_name=map

@@ -2,12 +2,12 @@
 name=MegaSquirtnSpark-Extra Highres 029x
 
 [parameters]
-SignatureQueryString=extra format hr
-ExtVerQueryString=
-VerNumber=
+SignatureVia=MS_Signature
+TextVerVia=MS_Textrev
+NumVerVia=MS-VerNum
+Rt_Cmd_Key=MSnS-E_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Capabilities=_MSNS_E_
-Rt_Cmd_Key=CMD_UPPER_R
-VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
 Chunk_Write_Cmd=X
@@ -93,7 +93,7 @@ z_base_offset=0
 z_source=vecurr2
 z_suffix=VE %
 z_conv_expr=x*1
-x_precision=0
+z_precision=0
 
 [table_2]
 table_name=Fuel VE-Table 3, MSnSpark-Extra
@@ -379,12 +379,13 @@ length=256
 truepgnum=243
 length=256
 
-[bytecounts]
-CMD_UPPER_A=22
-CMD_UPPER_R=41
-CMD_UPPER_Q=1
-CMD_UPPER_V=189
-CMD_UPPER_S=32
+[interrogation]
+match_on=MS_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MSnS-E_RTVars=_COUNT_,41
+MS-I_VEconst=_COUNT_,189
+MS_Signature=_SUBMATCH_,format hr_0
 
 [gui]
 RealtimeMapFile=MSnS-Extra-HR-029x

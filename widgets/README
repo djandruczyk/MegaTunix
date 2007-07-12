@@ -4,8 +4,12 @@ Design was enhanced by David Andruczyk and then incorporated code from Ari
 Currently has a rich api and attribute set allowing some very attractive 
 gauges to be created.
 
+Companion tools gaugedesigner and dashdesigner built by DJA to allow graphical 
+designing of custom gauges which are stored in XML, as well as dash clusters 
+which are also stored in XML.
+
 credits:
-Chrisopher Mire
+Christopher Mire (czb83)
 David Andruczyk < djandruczyk at yahoo dot com>
 Ari Karhu <ari at ultimatevw dot com>
 

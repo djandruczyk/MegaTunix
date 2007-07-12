@@ -13,6 +13,7 @@ gauges_files = 	\
 		Impact_VE_Gauge.xml \
 		Impact_CLT_degC_Gauge.xml \
 		Impact_MAT_degC_Gauge.xml \
+		Impact_Volts_Gauge.xml \
 		Impact_rpm_Gauge.xml
 
 

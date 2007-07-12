@@ -106,7 +106,7 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
-		xml = glade_xml_new(filename, "range_dialog", NULL);
+		xml = glade_xml_new(filename, "c_range_dialog", NULL);
 		g_free(filename);
 	}
 	else
@@ -116,7 +116,7 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 	}
 
 	glade_xml_signal_autoconnect(xml);
-	dialog = glade_xml_get_widget(xml,"range_dialog");
+	dialog = glade_xml_get_widget(xml,"c_range_dialog");
 	cbutton = glade_xml_get_widget(xml,"range_colorbutton");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
 	if (!GTK_IS_WIDGET(dialog))
@@ -144,7 +144,75 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_colorbutton")),&range->color);
 			mtx_gauge_face_set_color_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
-			update_onscreen_ranges();
+			update_onscreen_c_ranges();
+
+			break;
+		default:
+			break;
+	}
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy(dialog);
+
+	return (FALSE);
+}
+
+
+EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
+{
+	GtkWidget *dialog = NULL;
+	GtkWidget *spinner = NULL;
+	GtkWidget *cbutton = NULL;
+	MtxAlertRange *range = NULL;
+	gfloat lbound = 0.0;
+	gfloat ubound = 0.0;
+	GladeXML *xml = NULL;
+	gchar * filename = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "a_range_dialog", NULL);
+		g_free(filename);
+	}
+	else
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+	dialog = glade_xml_get_widget(xml,"a_range_dialog");
+	cbutton = glade_xml_get_widget(xml,"range_colorbutton");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
+	if (!GTK_IS_WIDGET(dialog))
+	{
+		return FALSE;
+	}
+
+	/* Set the controls to sane ranges corresponding to the gauge */
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lbound);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &ubound);
+	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
+	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
+	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+
+	gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_APPLY:
+			range = g_new0(MtxAlertRange, 1);
+			range->lowpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lowpoint_spin")));
+			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
+			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
+			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_colorbutton")),&range->color);
+			mtx_gauge_face_set_alert_range_struct(MTX_GAUGE_FACE(gauge),range);
+			g_free(range);
+			update_onscreen_a_ranges();
 
 			break;
 		default:
@@ -587,7 +655,8 @@ void reset_onscreen_controls(void)
 {
 	reset_text_controls();
 	reset_general_controls();
-	reset_onscreen_ranges();
+	reset_onscreen_c_ranges();
+	reset_onscreen_a_ranges();
 	reset_onscreen_tblocks();
 	reset_onscreen_tgroups();
 	reset_onscreen_polygons();
@@ -598,7 +667,8 @@ void update_attributes(void)
 {
 	update_text_controls();
 	update_general_controls();
-	update_onscreen_ranges();
+	update_onscreen_c_ranges();
+	update_onscreen_a_ranges();
 	update_onscreen_tblocks();
 	update_onscreen_tgroups();
 	update_onscreen_polygons();
@@ -671,7 +741,8 @@ EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void update_onscreen_ranges()
+
+void update_onscreen_c_ranges()
 {
 	GtkWidget *container = NULL;
 	static GtkWidget *table = NULL;
@@ -684,12 +755,12 @@ void update_onscreen_ranges()
 	gfloat high = 0.0;
 	MtxColorRange *range = NULL;
 	GArray * array = NULL;
-	extern GladeXML *ranges_xml;
+	extern GladeXML *c_ranges_xml;
 
-	if ((!ranges_xml) || (!GTK_IS_WIDGET(gauge)))
+	if ((!c_ranges_xml) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_color_ranges(MTX_GAUGE_FACE(gauge));
-	container = glade_xml_get_widget(ranges_xml,"color_range_viewport");
+	container = glade_xml_get_widget(c_ranges_xml,"color_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");
@@ -721,37 +792,37 @@ void update_onscreen_ranges()
 		range = g_array_index(array,MtxColorRange *, i);
 		button = gtk_check_button_new();
 		g_object_set_data(G_OBJECT(button),"range_index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_crange),NULL);
+		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_c_range),NULL);
 		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &low);
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &high);
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lowpoint);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_crange_data),GINT_TO_POINTER(CR_LOWPOINT));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_LOWPOINT));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,1,2,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->highpoint);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_crange_data),GINT_TO_POINTER(CR_HIGHPOINT));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_HIGHPOINT));
 		gtk_table_attach(GTK_TABLE(table),dummy,2,3,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		dummy = gtk_spin_button_new_with_range(0,1,0.001);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->inset);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_crange_data),GINT_TO_POINTER(CR_INSET));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_INSET));
 		gtk_table_attach(GTK_TABLE(table),dummy,3,4,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_spin_button_new_with_range(0,1,0.001);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lwidth);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_crange_data),GINT_TO_POINTER(CR_LWIDTH));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_LWIDTH));
 		gtk_table_attach(GTK_TABLE(table),dummy,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_color_button_new_with_color(&range->color);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_crange_data),GINT_TO_POINTER(CR_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_COLOR));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
@@ -759,15 +830,105 @@ void update_onscreen_ranges()
 	gtk_widget_show_all(container);
 }
 
-void reset_onscreen_ranges()
+
+void update_onscreen_a_ranges()
+{
+	GtkWidget *container = NULL;
+	static GtkWidget *table = NULL;
+	GtkWidget *dummy = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *button = NULL;
+	gint i = 0;
+	gint y = 1;
+	gfloat low = 0.0;
+	gfloat high = 0.0;
+	MtxAlertRange *range = NULL;
+	GArray * array = NULL;
+	extern GladeXML *a_ranges_xml;
+
+	if ((!a_ranges_xml) || (!GTK_IS_WIDGET(gauge)))
+		return;
+	array = mtx_gauge_face_get_alert_ranges(MTX_GAUGE_FACE(gauge));
+	container = glade_xml_get_widget(a_ranges_xml,"alert_range_viewport");
+	if (!GTK_IS_WIDGET(container))
+	{
+		printf("alert range viewport invalid!!\n");
+		return;
+	}
+	y=1;
+	if (GTK_IS_WIDGET(table))
+		gtk_widget_destroy(table);
+
+	table = gtk_table_new(2,6,FALSE);
+	gtk_container_add(GTK_CONTAINER(container),table);
+	if (array->len > 0)
+	{
+		/* Create headers */
+		label = gtk_label_new("Low");
+		gtk_table_attach(GTK_TABLE(table),label,1,2,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("High");
+		gtk_table_attach(GTK_TABLE(table),label,2,3,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Inset");
+		gtk_table_attach(GTK_TABLE(table),label,3,4,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("LWidth");
+		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Color");
+		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+	}
+	/* Repopulate the table with the current ranges... */
+	for (i=0;i<array->len; i++)
+	{
+		range = g_array_index(array,MtxAlertRange *, i);
+		button = gtk_check_button_new();
+		g_object_set_data(G_OBJECT(button),"range_index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_a_range),NULL);
+		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &low);
+		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &high);
+		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lowpoint);
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_LOWPOINT));
+
+		gtk_table_attach(GTK_TABLE(table),dummy,1,2,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->highpoint);
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_HIGHPOINT));
+		gtk_table_attach(GTK_TABLE(table),dummy,2,3,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		dummy = gtk_spin_button_new_with_range(0,1,0.001);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->inset);
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_INSET));
+		gtk_table_attach(GTK_TABLE(table),dummy,3,4,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		dummy = gtk_spin_button_new_with_range(0,1,0.001);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lwidth);
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_LWIDTH));
+		gtk_table_attach(GTK_TABLE(table),dummy,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		dummy = gtk_color_button_new_with_color(&range->color);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_COLOR));
+
+		gtk_table_attach(GTK_TABLE(table),dummy,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		y++;
+	}
+	gtk_widget_show_all(container);
+}
+
+
+void reset_onscreen_c_ranges()
 {
 	GtkWidget *container = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *ranges_xml;
+	extern GladeXML *c_ranges_xml;
 
-	if ((!ranges_xml))
+	if ((!c_ranges_xml))
 		return;
-	container = glade_xml_get_widget(ranges_xml,"color_range_viewport");
+	container = glade_xml_get_widget(c_ranges_xml,"color_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");
@@ -781,7 +942,29 @@ void reset_onscreen_ranges()
 }
 
 
-gboolean remove_crange(GtkWidget * widget, gpointer data)
+void reset_onscreen_a_ranges()
+{
+	GtkWidget *container = NULL;
+	GtkWidget *widget = NULL;
+	extern GladeXML *a_ranges_xml;
+
+	if ((!a_ranges_xml))
+		return;
+	container = glade_xml_get_widget(a_ranges_xml,"alert_range_viewport");
+	if (!GTK_IS_WIDGET(container))
+	{
+		printf("alert range viewport invalid!!\n");
+		return;
+	}
+	widget= gtk_bin_get_child(GTK_BIN(container));
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
+
+	gtk_widget_show_all(container);
+}
+
+
+gboolean remove_c_range(GtkWidget * widget, gpointer data)
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))
@@ -789,10 +972,25 @@ gboolean remove_crange(GtkWidget * widget, gpointer data)
 
 	index = (gint)g_object_get_data(G_OBJECT(widget),"range_index");
 	mtx_gauge_face_remove_color_range(MTX_GAUGE_FACE(gauge),index);
-	update_onscreen_ranges();
+	update_onscreen_c_ranges();
 
 	return TRUE;
 }
+
+
+gboolean remove_a_range(GtkWidget * widget, gpointer data)
+{
+	gint index = -1;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	index = (gint)g_object_get_data(G_OBJECT(widget),"range_index");
+	mtx_gauge_face_remove_alert_range(MTX_GAUGE_FACE(gauge),index);
+	update_onscreen_a_ranges();
+
+	return TRUE;
+}
+
 
 EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 {
@@ -1688,7 +1886,7 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean alter_crange_data(GtkWidget *widget, gpointer data)
+gboolean alter_c_range_data(GtkWidget *widget, gpointer data)
 {
 	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 	gfloat value = 0.0;
@@ -1709,6 +1907,36 @@ gboolean alter_crange_data(GtkWidget *widget, gpointer data)
 		case CR_COLOR:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_color_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
+			break;
+		default:
+			break;
+
+	}
+	return TRUE;
+}
+
+
+gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
+{
+	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+	gfloat value = 0.0;
+	GdkColor color;
+	AlrtField field = (AlrtField)data;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	switch (field)
+	{
+		case ALRT_LOWPOINT:
+		case ALRT_HIGHPOINT:
+		case ALRT_INSET:
+		case ALRT_LWIDTH:
+			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+			mtx_gauge_face_alter_alert_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
+			break;
+		case ALRT_COLOR:
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
+			mtx_gauge_face_alter_alert_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
 		default:
 			break;

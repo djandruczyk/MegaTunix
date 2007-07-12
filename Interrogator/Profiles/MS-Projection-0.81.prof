@@ -2,12 +2,12 @@
 name=MS-Projection 0.81
 
 [parameters]
-SignatureQueryString=
-ExtVerQueryString=
-VerNumber=81
+SignatureVia=MS_Signature
+TextVerVia=MS_Textrev
+NumVerVia=MS-VerNum
+Rt_Cmd_Key=MS-I_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Capabilities=
-Rt_Cmd_Key=CMD_UPPER_A
-VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
@@ -53,10 +53,12 @@ z_precision=0
 [page_0]
 length=128
 
-[bytecounts]
-CMD_UPPER_A=22
-CMD_UPPER_Q=1
-CMD_UPPER_V=128
+[interrogation]
+match_on=MS_Clock,MS-I_RTVars,MS-VerNum,MS-I_VEconst
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MS-VerNum=_NUMMATCH_,81
+MS-I_VEconst=_COUNT_,128
 
 [gui]
 RealtimeMapFile=BnG-std

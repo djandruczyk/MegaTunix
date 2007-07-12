@@ -34,7 +34,6 @@ gint preferred_delimiter;
 gint baudrate;
 gchar * serial_port_name = NULL;
 extern gint dbg_lvl;
-gint ecu_caps = 0;	/* Assume stock B&G code */
 extern GStaticMutex comms_mutex;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
@@ -122,6 +121,7 @@ void init(void)
 gboolean read_config(void)
 {
 	gint tmpi = 0;
+	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
@@ -141,12 +141,16 @@ gboolean read_config(void)
 			g_object_set_data(global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &tmpi))
 			g_object_set_data(global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
+		if (cfg_read_float(cfgfile, "Dashboards", "dash_1_size_ratio", &tmpf))
+			g_object_set_data(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		if (cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf))
 			g_object_set_data(global_data,"dash_2_name",g_strdup(tmpbuf));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
 			g_object_set_data(global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &tmpi))
 			g_object_set_data(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
+		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
+			g_object_set_data(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
 			g_object_set_data(global_data,"status_width",GINT_TO_POINTER(tmpi));
@@ -214,15 +218,23 @@ void save_config(void)
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
-	int x,y,tmp_width,tmp_height;
+	int x = 0;
+	int y = 0;
+	int tmp_width = 0;
+	int tmp_height = 0;
+	int orig_width = 0;
+	int orig_height = 0;
+	gfloat ratio = 0.0;
+	GtkWidget *dash = NULL;
 	extern gboolean ready;
-	ConfigFile *cfgfile;
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
-	cfgfile = cfg_open_file(filename);
+	ConfigFile *cfgfile = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	extern GHashTable *dynamic_widgets;
 
 	g_static_mutex_lock(&mutex);
+
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	cfgfile = cfg_open_file(filename);
 
 	if (!cfgfile)
 		cfgfile = cfg_new();
@@ -244,6 +256,12 @@ void save_config(void)
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
+			dash = g_object_get_data(G_OBJECT(widget),"dash");
+			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
+		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
+			gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+			ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+			cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
 		}
 	}
 	else
@@ -251,6 +269,7 @@ void save_config(void)
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_name");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_x_origin");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_y_origin");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_1_size_ratio");
 	}
 	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
 	if (tmpbuf)
@@ -262,6 +281,12 @@ void save_config(void)
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
+			dash = g_object_get_data(G_OBJECT(widget),"dash");
+			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
+		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
+			gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+			ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+			cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
 		}
 	}
 	else
@@ -269,6 +294,7 @@ void save_config(void)
 		cfg_remove_key(cfgfile, "Dashboards", "dash_2_name");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_2_x_origin");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_2_y_origin");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_2_size_ratio");
 	}
 				
 
@@ -278,8 +304,10 @@ void save_config(void)
 		cfg_write_int(cfgfile, "Window", "width", tmp_width);
 		cfg_write_int(cfgfile, "Window", "height", tmp_height);
 		gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
-		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
-		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+		if (x > 0)
+			cfg_write_int(cfgfile, "Window", "main_x_origin", x);
+		if (y > 0)
+			cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
 		{
 			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
@@ -287,8 +315,10 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"status_window")),&x,&y);
-			cfg_write_int(cfgfile, "Window", "status_x_origin", x);
-			cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+			if (x > 0)
+				cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+			if (y > 0)
+				cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 		}
 		if (g_hash_table_lookup(dynamic_widgets,"rtt_window"))
 		{
@@ -297,8 +327,10 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"rtt_window")),&x,&y);
-			cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
-			cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
+			if (x > 0)
+				cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
+			if (y > 0)
+				cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 		}
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
@@ -460,10 +492,13 @@ void mem_dealloc()
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			g_free(ms_data[i]);
-			g_free(ms_data_last[i]);
-			g_free(ms_data_backup[i]);
-			if (interdep_vars[i] != NULL)
+			if (ms_data[i])
+				g_free(ms_data[i]);
+			if (ms_data_last[i])
+				g_free(ms_data_last[i]);
+			if (ms_data_backup[i])
+				g_free(ms_data_backup[i]);
+			if (interdep_vars[i])
 			{
 				g_hash_table_destroy(interdep_vars[i]);
 				interdep_vars[i] = NULL;
@@ -593,40 +628,6 @@ Table_Params * initialize_table_params(void)
 	return table_params;
 }
 
-
-/*!
- *  \brief initialize_canidate() creates and initializes the Candidate
- *   datastructure to sane defaults and returns it
- *    */
-Canidate * initialize_canidate(void)
-{
-	Canidate *canidate = NULL;
-	canidate = g_malloc0(sizeof(Canidate));
-	canidate->name = NULL;
-	canidate->filename = NULL;
-	canidate->bytecounts = NULL;
-	canidate->sig_str = NULL;
-	canidate->text_version_str = NULL;
-	canidate->ver_num = -1;
-	canidate->load_tabs = NULL;
-	canidate->tab_confs = NULL;
-	canidate->rtv_map_file = NULL;
-	canidate->sliders_map_file = NULL;
-	canidate->rt_cmd_key = NULL;
-	canidate->ve_cmd_key = NULL;
-	canidate->ign_cmd_key = NULL;
-	canidate->raw_mem_cmd_key = NULL;
-	canidate->write_cmd = NULL;
-	canidate->burn_cmd = NULL;
-	canidate->page_cmd = NULL;
-	canidate->lookuptables = NULL;
-	canidate->total_pages = -1;
-	canidate->total_tables = -1;
-	canidate->capabilities = 0;
-	canidate->page_params = NULL;
-	canidate->table_params = NULL;
-	return canidate;
-}
 
 
 /*!

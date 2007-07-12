@@ -2,13 +2,13 @@
 name=MegaSquirtnSpark v3.0/3.0.1
 
 [parameters]
-SignatureQueryString=
-ExtVerQueryString=
-VerNumber=30
+SignatureVia=MS_Signature
+TextVerVia=MS_Textrev
+NumVerVia=MS-VerNum
+Rt_Cmd_Key=MS-I_RTVars
+VE_Cmd_Key=MS-I_VEconst
+Ign_Cmd_Key=MSnS-Ignition
 Capabilities=
-Rt_Cmd_Key=CMD_UPPER_A
-VE_Cmd_Key=CMD_UPPER_V
-Ign_Cmd_Key=CMD_UPPER_I
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
@@ -87,11 +87,14 @@ truepgnum=1
 length=95
 is_spark=TRUE
 
-[bytecounts]
-CMD_UPPER_A=22
-CMD_UPPER_Q=1
-CMD_UPPER_V=125
-CMD_UPPER_I=95
+[interrogation]
+match_on=MS_Clock,MS-I_RTVars,MS-VerNum,MS-I_VEconst,MSnS-Ignition
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MS-VerNum=_NUMMATCH_,30
+MS-I_VEconst=_COUNT_,125
+MSnS-Ignition=_COUNT_,95
+
 
 [gui]
 RealtimeMapFile=MSnS-3.0

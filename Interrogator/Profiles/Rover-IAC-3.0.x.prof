@@ -1,13 +1,13 @@
 [interrogation_profile]
-name=MS-3.0 Rover IAC v3.0.5
+name=MS-3.0 Rover IAC v3.0.x
 
 [parameters]
-SignatureQueryString=Rover IAC
-ExtVerQueryString=
-VerNumber=30
+SignatureVia=MS_Signature
+TextVerVia=MS_Textrev
+NumVerVia=MS-VerNum
+Rt_Cmd_Key=MS-I_RTVars
+VE_Cmd_Key=MS-I_VEconst
 Capabilities=
-Rt_Cmd_Key=CMD_UPPER_A
-VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
@@ -17,7 +17,7 @@ TotalTables=1
 TotalPages=1
 
 [table_0]
-Table_name=VE-Table, Rover IAC 3.0.5
+Table_name=VE-Table, Rover IAC 3.0.x
 is_fuel=TRUE
 reqfuel_offset=90
 divider_offset=91
@@ -53,11 +53,13 @@ z_precision=0
 [page_0]
 length=128
 
-[bytecounts]
-CMD_UPPER_A=22
-CMD_UPPER_Q=1
-CMD_UPPER_V=128
-CMD_UPPER_S=16
+[interrogation]
+match_on=MS_Clock,MS-I_RTVars,MS-VerNum,MS-I_VEconst,MS_Signature
+MS_Clock=_COUNT_,1
+MS-I_RTVars=_COUNT_,22
+MS-VerNum=_NUMMATCH_,30
+MS-I_VEconst=_COUNT_,128
+MS_Signature=_SUBMATCH_,Rover IAC
 
 [gui]
 RealtimeMapFile=BnG-std

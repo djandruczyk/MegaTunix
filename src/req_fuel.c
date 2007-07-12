@@ -454,7 +454,6 @@ void check_req_fuel_limits(gint table_num)
 	gchar * name = NULL;
 	GtkWidget *widget = NULL;
 	union config11 cfg11;
-	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable ** interdep_vars;
 	extern GHashTable *dynamic_widgets;
@@ -523,12 +522,12 @@ void check_req_fuel_limits(gint table_num)
 			(divider == last_divider))
 		return;
 
-	if (ecu_caps & DUALTABLE)
+	if (firmware->capabilities & DUALTABLE)
 	{
 	//	printf ("dualtable\n");
 		tmp = (float)num_inj/(float)divider;
 	}
-	else if ((ecu_caps & MSNS_E) && (((ms_data[firmware->table_params[table_num]->dtmode_page][firmware->table_params[table_num]->dtmode_offset] & 0x10) >> 4) == 1))
+	else if ((firmware->capabilities & MSNS_E) && (((ms_data[firmware->table_params[table_num]->dtmode_page][firmware->table_params[table_num]->dtmode_offset] & 0x10) >> 4) == 1))
 	{
 	//	printf ("msns-E with DT enabled\n");
 		tmp = (float)num_inj/(float)divider;

@@ -156,7 +156,7 @@ void toggle_serial_control_lines()
 	serial_params->newtio.c_cflag &= ~(CLOCAL);
 	serial_params->newtio.c_cflag |= (CRTSCTS);
 	tcsetattr(serial_params->fd,TCSAFLUSH,&temptio);
-	usleep (100000); // Wait 100 ms //
+	g_usleep (100000); // Wait 100 ms //
 	//Set back
 	tcsetattr(serial_params->fd,TCSAFLUSH,&oldtio);
 #endif
@@ -245,7 +245,8 @@ void setup_serial_params()
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	serial_params->newtio.c_cc[VMIN]     = 0;     
-	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+	//serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+	serial_params->newtio.c_cc[VTIME]    = 2;     /* 100ms timeout */
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 

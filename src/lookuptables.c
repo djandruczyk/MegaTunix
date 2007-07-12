@@ -27,19 +27,6 @@ extern gint dbg_lvl;
 
 
 /*!
- \brief load_lookuptables() loads the lookuptables specified in the ECU's
- interrogation profile. Any number of lookuptables are allowed and they 
- are referenced internally by a string name to a hashtable.
- \param canidate (Canidate *) pointer to the canidate 
- interrogation profile struct
- */
-void load_lookuptables(Canidate *canidate)
-{
-	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
-}
-
-
-/*!
  \brief get_table() gets a valid filehandle of the lookuptable from 
  get_file and passes it to load_table()
  \see load_table

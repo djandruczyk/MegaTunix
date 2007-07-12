@@ -2,8 +2,8 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>563</width>
-    <height>600</height>
+    <width>560</width>
+    <height>586</height>
   </dash_geometry>
   <gauge>
     <width>185</width>
@@ -36,22 +36,6 @@
     <y_offset>148</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_Advance.xml</gauge_xml_name>
     <datasource>sparkangle</datasource>
-  </gauge>
-  <gauge>
-    <width>168</width>
-    <height>145</height>
-    <x_offset>-6</x_offset>
-    <y_offset>272</y_offset>
-    <gauge_xml_name>Cobalt/Cobalt_CLT.xml</gauge_xml_name>
-    <datasource>cltdeg</datasource>
-  </gauge>
-  <gauge>
-    <width>142</width>
-    <height>162</height>
-    <x_offset>286</x_offset>
-    <y_offset>277</y_offset>
-    <gauge_xml_name>Cobalt/Cobalt_MAT.xml</gauge_xml_name>
-    <datasource>matdeg</datasource>
   </gauge>
   <gauge>
     <width>143</width>
@@ -92,5 +76,21 @@
     <y_offset>126</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_Boost.xml</gauge_xml_name>
     <datasource>bcDC</datasource>
+  </gauge>
+  <gauge>
+    <width>141</width>
+    <height>158</height>
+    <x_offset>7</x_offset>
+    <y_offset>267</y_offset>
+    <gauge_xml_name>Cobalt/Cobalt_CLT.xml</gauge_xml_name>
+    <datasource>cltdeg</datasource>
+  </gauge>
+  <gauge>
+    <width>137</width>
+    <height>142</height>
+    <x_offset>293</x_offset>
+    <y_offset>287</y_offset>
+    <gauge_xml_name>Cobalt/Cobalt_MAT.xml</gauge_xml_name>
+    <datasource>matdeg</datasource>
   </gauge>
 </dashboard>

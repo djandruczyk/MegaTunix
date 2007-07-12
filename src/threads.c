@@ -383,12 +383,17 @@ void *thread_dispatcher(gpointer data)
 	extern gboolean link_up;
 	extern gchar * serial_port_name;
 	extern volatile gboolean leaving;
+	GTimeVal cur;
 	Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
+		g_get_current_time(&cur);
+		g_time_val_add(&cur,100000); /* 100 ms timeout */
+		message = g_async_queue_timed_pop(io_queue,&cur);
+
 		if (leaving)
 		{
 			/* drain queue and exit thread */
@@ -396,12 +401,12 @@ void *thread_dispatcher(gpointer data)
 			{}
 			g_thread_exit(0);
 		}
-		message = g_async_queue_pop(io_queue);
-
 		if ((!link_up) && (!offline))
 			failurecount++;
+		if (!message) /* NULL message */
+			continue;
 
-		if (failurecount > 20)
+		if ((!offline) && (failurecount > 20))
 		{
 			queue_function(g_strdup("conn_warning"));
 			io_cmd(IO_CLOSE_SERIAL,NULL);

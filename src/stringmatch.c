@@ -38,6 +38,26 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_MSNS_E_",
 			GINT_TO_POINTER(MSNS_E));
 
+	/* Interrogation field types */
+	g_hash_table_insert(str_2_enum,"_CHAR_",
+			GINT_TO_POINTER(MTX_CHAR));
+	g_hash_table_insert(str_2_enum,"_UINT8_",
+			GINT_TO_POINTER(MTX_UINT8));
+	g_hash_table_insert(str_2_enum,"_SINT8_",
+			GINT_TO_POINTER(MTX_SINT8));
+	g_hash_table_insert(str_2_enum,"_UINT16_",
+			GINT_TO_POINTER(MTX_UINT16));
+	g_hash_table_insert(str_2_enum,"_SINT16_",
+			GINT_TO_POINTER(MTX_SINT16));
+	g_hash_table_insert(str_2_enum,"_COUNT_",
+			GINT_TO_POINTER(COUNT));
+	g_hash_table_insert(str_2_enum,"_SUBMATCH_",
+			GINT_TO_POINTER(SUBMATCH));
+	g_hash_table_insert(str_2_enum,"_NUMMATCH_",
+			GINT_TO_POINTER(NUMMATCH));
+	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
+			GINT_TO_POINTER(FULLMATCH));
+
 	/* Storage Types for reading interrogation tests */
 	g_hash_table_insert(str_2_enum,"_SIG_",
 			GINT_TO_POINTER(SIG));

@@ -175,7 +175,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	{
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
-		gtk_main_iteration();
+		while (gtk_events_pending())
+			gtk_main_iteration();
 		count++;
 	}
 	count = 0;
@@ -184,15 +185,19 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)));
 		g_async_queue_try_pop(dispatch_queue);
-		gtk_main_iteration();
+		while (gtk_events_pending())
+			gtk_main_iteration();
 		count++;
 	}
 
-	/* Free all buffers */
+
+	/* Grab and release all mutexes to get them to relinquish
+	 */
 	g_static_mutex_lock(&comms_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
+	/* Free all buffers */
 	mem_dealloc();
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
@@ -409,7 +414,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gchar * group_2_update = NULL;
 	gchar * tmpbuf = NULL;
 	extern gint dbg_lvl;
-	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
@@ -477,7 +481,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
-			if (ecu_caps & MSNS_E)
+			if (firmware->capabilities & MSNS_E)
 			{
 				tmpbuf = (gchar *)g_object_get_data(
 						G_OBJECT(widget),"table_num");
@@ -1352,7 +1356,6 @@ void update_ve_const()
 	union config11 cfg11;
 	union config12 cfg12;
 	extern gint **ms_data;
-	extern gint ecu_caps;
 	extern volatile gboolean leaving;
 	extern Firmware_Details *firmware;
 
@@ -1422,12 +1425,12 @@ void update_ve_const()
 		 * MSnS-E use the SAME in DT mode only
 		 * MSnS-E uses B&G form in single table mode
 		 */
-		if (ecu_caps & DUALTABLE)
+		if (firmware->capabilities & DUALTABLE)
 		{
 		//	printf("DT\n");
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
-		else if ((ecu_caps & MSNS_E) && (((ms_data[firmware->table_params[i]->dtmode_page][firmware->table_params[i]->dtmode_offset] & 0x10) >> 4) == 1))
+		else if ((firmware->capabilities & MSNS_E) && (((ms_data[firmware->table_params[i]->dtmode_page][firmware->table_params[i]->dtmode_offset] & 0x10) >> 4) == 1))
 		{
 		//	printf("MSnS-E DT\n");
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
@@ -1956,8 +1959,6 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-//	printf("key event\n");
-//	printf("widget name %s\n",glade_get_widget_name(widget));
 	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
 		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
 	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
@@ -1968,6 +1969,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	reverse_keys = (gboolean) g_object_get_data(G_OBJECT(widget),"reverse_keys");
 
 	value = ms_data[page][offset];
+	if (event->keyval == GDK_KP_Space)
+	{
+		printf("spacebar!\n");
+	}
 	if (event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
@@ -2381,28 +2386,61 @@ void prompt_to_save(void)
 	gint result = 0;
 	extern gboolean offline;
 	GtkWidget *dialog = NULL;
+	extern GtkWidget *main_window;
+	GtkWidget *label = NULL;
+	GtkWidget *hbox = NULL;
+	GdkPixbuf *pixbuf = NULL;
+	GtkWidget *image = NULL;
 
 	if (!offline)
 	{
-		dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_YES_NO,
-				"Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
+		dialog = gtk_dialog_new_with_buttons("Save internal log, yes/no ?",
+				GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_YES,GTK_RESPONSE_YES,
+				GTK_STOCK_NO,GTK_RESPONSE_NO,
+				NULL);
+		hbox = gtk_hbox_new(FALSE,0);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+		pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
+		image = gtk_image_new_from_pixbuf(pixbuf);
+		gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
+		label = gtk_label_new("Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time");
+		gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
+		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
+		gtk_widget_show_all(hbox);
+
+		//		gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),"Save internal log, yes/no ?");
+		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
 
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
+		g_object_unref(pixbuf);
 		if (result == GTK_RESPONSE_YES)
 			internal_datalog_dump(NULL,NULL);
 		gtk_widget_destroy (dialog);
+
 	}
 
-	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_MESSAGE_QUESTION,
-			GTK_BUTTONS_YES_NO,
-			"Save ECU Settings to file?");
+	dialog = gtk_dialog_new_with_buttons("Save ECU settings to file?",
+			GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_YES,GTK_RESPONSE_YES,
+			GTK_STOCK_NO,GTK_RESPONSE_NO,
+			NULL);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
+	label = gtk_label_new("Would you like to save the ECU settings to a file so that they can be restored at a future time?");
+	gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
+	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
+	gtk_widget_show_all(hbox);
+
+	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
 		select_file_for_ecu_backup(NULL,NULL);
 	gtk_widget_destroy (dialog);
 
 }
+
 

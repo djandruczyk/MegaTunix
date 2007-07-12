@@ -4,13 +4,13 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=11
+MTX_MICRO_VERSION=12
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.9.11)
+AM_INIT_AUTOMAKE(megatunix, 0.9.12)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -89,15 +89,33 @@ PKG_CHECK_MODULES(LIBXML2,libxml-2.0 )
 AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 
+
+dnl ===============
+dnl Debugging stuff
+dnl ===============
+
+dnl General Debugging code
+AC_ARG_ENABLE(debug,
+[  --enable-debug         enable debugging [default=no]],, enable_debug=no)
+
+if test "$enable_debug" = yes ; then
+DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
+fi
+AC_SUBST(DEBUG_FLAGS)
+
 dnl optimizations
 CFLAGS="-O2"
 AC_SUBST(CFLAGS)
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
-if test $cross_compiling = yes; then
+if test "$cross_compiling" = yes ; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	WIN32_RESOURCES="resources.o "
-	EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
+	if test "$enable_debug" = yes ; then
+		EXTRA_LIBS=" -lgw32c -luuid -lole32"
+	else
+		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
+	fi
 else
 	EXTRA_LIBS=""
 fi
@@ -110,20 +128,6 @@ dnl =================
 dnl big/little endian
 dnl =================
 AC_C_BIGENDIAN(,,)
-
-
-dnl ===============
-dnl Debugging stuff
-dnl ===============
-
-dnl General Debugging code
-AC_ARG_ENABLE(debug,
-[  --enable-debug         enable debugging [default=no]],, enable_debug=no)
-
-if test "$enable_debug" = yes; then
-DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
-fi
-AC_SUBST(DEBUG_FLAGS)
 
 dnl ==============
 dnl profiling
@@ -190,6 +194,7 @@ gaugedesigner/gauges/SportComp/Makefile
 gaugedesigner/gauges/UltraLite/Makefile
 gaugedesigner/gauges/Cobalt/Makefile
 gaugedesigner/gauges/Impact/Makefile
+gaugedesigner/gauges/Honda/Makefile
 src/resources.rc
 widgets/Makefile
 dashdesigner/Makefile

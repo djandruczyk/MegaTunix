@@ -61,7 +61,6 @@ int main (int argc, char **argv)
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
 
-//	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	mtx_gauge_face_set_show_drag_border (MTX_GAUGE_FACE (gauge), TRUE);
 
