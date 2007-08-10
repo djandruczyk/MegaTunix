@@ -245,9 +245,13 @@ EXPORT void kill_conn_warning()
  */
 void warn_user(gchar *message)
 {
+	extern gboolean interrogated;
 	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_NONE,message);
-	gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);
+	if (!interrogated)
+		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);
+	else
+		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CLOSE,NULL);
 			
 
 	g_signal_connect (G_OBJECT(warning_dialog),

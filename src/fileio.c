@@ -11,6 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <api-versions.h>
+#include <apicheck.h>
 #include <config.h>
 #include <configfile.h>
 #include <datalogging_gui.h>
@@ -125,7 +127,9 @@ void backup_all_ecu_settings(gchar *filename)
 	if (!cfgfile)
 		cfgfile = cfg_new();
 
-	update_logbar("tools_view",NULL,g_strdup_printf("Full Backup Commencing  to file %s\n",filename),TRUE,FALSE);
+	set_file_api(cfgfile,BACKUP_MAJOR_API,BACKUP_MINOR_API);
+
+	update_logbar("tools_view",NULL,g_strdup_printf("Full Backup Commencing  to file:\n\t%s\n",filename),TRUE,FALSE);
 	cfg_write_string(cfgfile,"Firmware","name",firmware->name);
 	for(i=0;i<firmware->total_pages;i++)
 	{
@@ -165,6 +169,8 @@ void restore_all_ecu_settings(gchar *filename)
 	gint page = 0;
 	gint offset = 0;
 	gint tmpi = 0;
+	gint major = 0;
+	gint minor = 0;
 	gchar *tmpbuf = NULL;
 	guchar *data = NULL;
 	gchar **keys = NULL;
@@ -175,6 +181,15 @@ void restore_all_ecu_settings(gchar *filename)
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
+		get_file_api(cfgfile,&major,&minor);
+		if (major != BACKUP_MAJOR_API) 
+		{
+			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tAPI MAJOR version mismatch: \"%i\" != \"%i\",\ncannot load this file for restoration\n",major, BACKUP_MAJOR_API),TRUE,FALSE);
+			return;
+		}
+		if (minor != BACKUP_MINOR_API) 
+			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tAPI MINOR version mismatch: \"%i\" != \"%i\",\nLoading this file,  though there is a version mismatch,  EXPECT ERRORS!\n",minor, BACKUP_MINOR_API),TRUE,FALSE);
+			
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
 		{

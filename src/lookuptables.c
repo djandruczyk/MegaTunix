@@ -21,10 +21,20 @@
 #include <lookuptables.h>
 #include <stdlib.h>
 #include <structures.h>
+#include <timeout_handlers.h>
+
+static gboolean ltc_visible = FALSE;
 
 GHashTable *lookuptables = NULL;
 extern gint dbg_lvl;
 
+enum
+{
+	INTERNAL_NAME_COL,
+	FILENAME_COL,
+	VIEW_EDIT_COL,
+	N_COLS,
+};
 
 /*!
  \brief get_table() gets a valid filehandle of the lookuptable from 
@@ -79,8 +89,9 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	gchar * tmp = NULL;
 	gchar * end = NULL;
 	GString *a_line; 
-	gint *array = NULL;
+	LookupTable *lookuptable = NULL;
 	gint tmparray[2048]; // bad idea being static!!
+	gchar ** vector = NULL;
 	gint i = 0;
 
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
@@ -114,10 +125,14 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	}
 	g_io_channel_shutdown(iochannel,FALSE,NULL);
 
-	array = g_memdup(&tmparray,i*sizeof(gint));
+	vector = g_strsplit(filename,PSEP,-1);
+	lookuptable = g_new0(LookupTable, 1);
+	lookuptable->array = g_memdup(&tmparray,i*sizeof(gint));
+	lookuptable->filename = g_strdup(vector[g_strv_length(vector)-1]);
+	g_strfreev(vector);
 	if (!lookuptables)
 		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
-	g_hash_table_insert(lookuptables,table_name,array);
+	g_hash_table_insert(lookuptables,table_name,lookuptable);
 
 	return TRUE;
 }
@@ -125,10 +140,10 @@ gboolean load_table(gchar *table_name, gchar *filename)
 
 /*!
  \brief reverse_lookup() looks for the INDEX of this value in the specified
- lookuptable.  This does an intersting weighted search in an attempt to handle
+ lookuptable.  This does an interesting weighted search in an attempt to handle
  lookuptables that contain the same value in multiple places.  When it finds
  a match it begins counting for sequential matches,  if so it increases the 
- "weight" of that match at the startpoint.  Followinghte weight search, 
+ "weight" of that match at the startpoint.  Following the weighted search, 
  another iteration of the weight array to find the biggest one, and then
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
@@ -148,7 +163,8 @@ gint reverse_lookup(GObject *object, gint value)
 
 	extern GHashTable *lookuptables;
 	GObject *dep_obj = NULL;
-	gint *lookuptable = NULL;
+	LookupTable *lookuptable = NULL;
+	gint *array = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
@@ -159,10 +175,11 @@ gint reverse_lookup(GObject *object, gint value)
 	if (dep_obj)
 		state = check_dependancies(dep_obj);
 	if (state)
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
 	else
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 
+	array = lookuptable->array;
 	len=255;
 	for (i=0;i<len;i++)
 		weight[i]=0;
@@ -170,11 +187,11 @@ gint reverse_lookup(GObject *object, gint value)
 	for (i=0;i<len;i++)
 	{
 		//		printf("counter is %i\n",i);
-		if (lookuptable[i] == value)
+		if (array[i] == value)
 		{
 			//			printf("match at %i\n",i);
 			j = i;
-			while (lookuptable[j] == value)
+			while (array[j] == value)
 			{
 				//				printf("searching for dups to upp the weight\n");
 				weight[i]++;
@@ -211,11 +228,13 @@ gint direct_reverse_lookup(gchar *table, gint value)
 	gint weight[255];
 
 	extern GHashTable *lookuptables;
-	gint *lookuptable = NULL;
+	LookupTable *lookuptable = NULL;
+	gint *array = NULL;
 
-	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 	if (!lookuptable)
 		return value;
+	array = lookuptable->array;
 
 	len=255;
 	for (i=0;i<len;i++)
@@ -224,11 +243,11 @@ gint direct_reverse_lookup(gchar *table, gint value)
 	for (i=0;i<len;i++)
 	{
 		//		printf("counter is %i\n",i);
-		if (lookuptable[i] == value)
+		if (array[i] == value)
 		{
 			//			printf("match at %i\n",i);
 			j = i;
-			while (lookuptable[j] == value)
+			while (array[j] == value)
 			{
 				//				printf("searching for dups to upp the weight\n");
 				weight[i]++;
@@ -267,7 +286,7 @@ gfloat lookup_data(GObject *object, gint offset)
 {
 	extern GHashTable *lookuptables;
 	GObject *dep_obj = NULL;
-	gint *lookuptable = NULL;
+	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
@@ -288,12 +307,12 @@ gfloat lookup_data(GObject *object, gint offset)
 	if (state)
 	{
 		//printf("ALTERNATE\n");
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
 	}
 	else
 	{
 		//printf("NORMAL\n");
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 	}
 
 	if (!lookuptable)
@@ -302,7 +321,7 @@ gfloat lookup_data(GObject *object, gint offset)
 			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")));
 		return 0.0;
 	}
-	return lookuptable[offset];
+	return lookuptable->array[offset];
 }
 
 
@@ -310,14 +329,205 @@ gfloat lookup_data(GObject *object, gint offset)
 gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	extern GHashTable *lookuptables;
-	gint *lookuptable = NULL;
+	LookupTable *lookuptable = NULL;
 
-	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 
 	if (!lookuptable)
 	{
 		return offset;
 	}
-	return lookuptable[offset];
+	return lookuptable->array[offset];
 }
 
+
+gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
+{
+	static gboolean ltc_created = FALSE;
+	static GtkWidget * lookuptables_config_window = NULL;
+	extern Firmware_Details *firmware;
+	GtkListStore *store = NULL;
+	GtkListStore *combostore = NULL;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer = NULL;
+	GtkTreeViewColumn *column = NULL;
+	GtkWidget * vbox = NULL;
+	GtkWidget * label = NULL;
+	GtkWidget * tree = NULL;
+	ConfigFile *cfgfile = NULL;
+	gint i = 0;
+	gchar * tmpbuf = NULL;
+	gchar ** vector = NULL;
+	gchar ** tmpvector = NULL;
+
+	if ((ltc_created) && (ltc_visible))
+		return TRUE;
+	if ((ltc_created) && (!ltc_visible))
+	{
+		gtk_widget_show_all(lookuptables_config_window);
+		return TRUE;
+	}
+	else	/* i.e.  NOT created,  build it */
+	{
+		lookuptables_config_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+		gtk_window_set_title(GTK_WINDOW(lookuptables_config_window),"MegaTunix LookupTables");
+		vbox = gtk_vbox_new(FALSE,0);
+		gtk_container_add(GTK_CONTAINER(lookuptables_config_window),vbox);
+		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
+		g_signal_connect(G_OBJECT(lookuptables_config_window),"delete_event", G_CALLBACK(lookuptables_configurator_hide),NULL);
+
+		ltc_created = TRUE;
+		ltc_visible = TRUE;
+		label = gtk_label_new("lookuptables_configurator");
+		gtk_box_pack_start (GTK_BOX(vbox),label,TRUE,TRUE,0);
+
+		store = gtk_list_store_new(N_COLS,	/* total cols */
+				G_TYPE_STRING, /* int name */
+				G_TYPE_STRING, /* filename  combo*/
+				G_TYPE_BOOLEAN,/* View/Edit */
+				G_TYPE_BOOLEAN); /* change */
+
+		combostore = gtk_list_store_new(1,G_TYPE_STRING);
+		vector = get_files(g_strdup(LOOKUPTABLES_DATA_DIR),g_strdup("inc"));
+		for (i=0;i<g_strv_length(vector);i++)
+		{
+			tmpvector = g_strsplit(vector[i],PSEP,-1);
+			gtk_list_store_append(combostore,&iter);
+			gtk_list_store_set(combostore,&iter,
+					0,tmpvector[g_strv_length(tmpvector)-1],
+					-1);
+			g_strfreev(tmpvector);
+		}
+		g_strfreev(vector);
+
+		cfgfile = cfg_open_file(firmware->profile_filename);
+		if (!cfgfile)
+			return FALSE;
+		cfg_read_string(cfgfile,"lookuptables","tables",&tmpbuf);
+		vector = g_strsplit(tmpbuf,",",-1);
+		g_free(tmpbuf);
+		for (i=0;i<g_strv_length(vector);i++)
+		{
+			cfg_read_string(cfgfile,"lookuptables",vector[i],&tmpbuf);
+			gtk_list_store_append(store,&iter);
+			gtk_list_store_set(store,&iter,
+					INTERNAL_NAME_COL,vector[i],
+					FILENAME_COL,tmpbuf,
+					VIEW_EDIT_COL,FALSE,
+					-1);
+			g_free(tmpbuf);
+		}
+		g_strfreev(vector);
+
+		tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+		gtk_box_pack_start(GTK_BOX(vbox),tree,TRUE,TRUE,0);
+		renderer = gtk_cell_renderer_text_new();
+		column = gtk_tree_view_column_new_with_attributes("Internal Name",renderer,"text",INTERNAL_NAME_COL,NULL);
+		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+		renderer = gtk_cell_renderer_combo_new();
+		g_object_set(G_OBJECT(renderer),"editable",TRUE,"model",combostore,"text-column",0,NULL);
+		g_signal_connect(G_OBJECT(renderer),"edited", G_CALLBACK(lookuptable_change),store);
+		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
+		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+		renderer = gtk_cell_renderer_toggle_new();
+		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
+		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+
+
+		gtk_widget_show_all (lookuptables_config_window);
+		return TRUE;
+	}
+
+}
+
+gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
+{
+	gtk_widget_hide(widget);
+	ltc_visible = FALSE;
+	return TRUE;
+}
+
+
+gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
+{
+	GtkListStore *store = NULL;
+	GtkTreeIter iter;
+	GtkTreeModel *model = data;
+	ConfigFile *cfgfile = NULL;
+	gchar * int_name = NULL;
+	gchar * old = NULL;
+	gchar * new_name = NULL;
+	gchar ** vector = NULL;
+	gboolean restart_tickler = FALSE;
+	extern gint realtime_id;
+	extern GHashTable *lookuptables;
+	extern GAsyncQueue *io_queue;
+	extern Firmware_Details *firmware;
+	gint count = 0;
+	LookupTable *lookuptable = NULL;
+
+	/* Get combo box model so we can set the combo to this new value */
+	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
+	gtk_tree_model_get_iter_from_string(model,&iter,path);
+	gtk_tree_model_get(model,&iter,INTERNAL_NAME_COL,&int_name,FILENAME_COL,&old,-1);
+	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
+		return TRUE;
+	
+	if (realtime_id)
+	{
+		restart_tickler = TRUE;
+		stop_tickler(RTV_TICKLER);
+		count = 0;
+		while ((g_async_queue_length(io_queue) > 0) && (count < 30))
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+			while (gtk_events_pending())
+				gtk_main_iteration();
+			count++;
+		}
+
+	}
+	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,int_name);
+	if (!lookuptable)
+		printf("BAD things man,  gonna crash!\n");
+	g_free(lookuptable->array); /* Free the old one */
+	g_free(lookuptable->filename); /* Free the old one */
+	g_free(lookuptable); /* Free the old one */
+	get_table(int_name,new_text,NULL); /* Load the new one in it's place */
+	gtk_list_store_set(GTK_LIST_STORE(model),&iter, FILENAME_COL, new_text,-1);
+	if (restart_tickler)
+		start_tickler(RTV_TICKLER);
+
+		cfgfile = cfg_open_file(firmware->profile_filename);
+		if (!cfgfile)
+			return FALSE;
+		g_hash_table_foreach(lookuptables,update_lt_config,cfgfile);
+	if (g_strrstr(firmware->profile_filename,".MegaTunix"))
+		cfg_write_file(cfgfile, firmware->profile_filename);
+	else
+	{
+		vector = g_strsplit(firmware->profile_filename,PSEP,-1);
+		new_name = g_build_filename(HOME(),".MegaTunix",INTERROGATOR_DATA_DIR,"Profiles",vector[g_strv_length(vector)-1],NULL);
+		g_strfreev(vector);
+		cfg_write_file(cfgfile, new_name);
+		g_free(firmware->profile_filename);
+		firmware->profile_filename=g_strdup(new_name);
+		g_free(new_name);
+	}
+	cfg_free(cfgfile);
+	g_free(cfgfile);
+		
+	//printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);
+	return TRUE;
+
+}
+
+void update_lt_config(gpointer key, gpointer value, gpointer data)
+{
+	ConfigFile *cfgfile = data;
+	LookupTable *lookuptable = value;
+//	printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);
+	cfg_write_string(cfgfile,"lookuptables",(gchar *)key,lookuptable->filename);
+
+}

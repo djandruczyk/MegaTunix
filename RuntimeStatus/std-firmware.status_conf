@@ -1,3 +1,7 @@
+[API]
+major=1
+minor=0
+
 [global]
 description=Status boxes configuration for Std firmware
 total_status=7

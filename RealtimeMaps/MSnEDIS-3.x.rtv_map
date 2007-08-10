@@ -1,3 +1,7 @@
+[API]
+major=1
+minor=0
+
 [realtime_map]
 applicable_firmwares=MegaSquirtnEDIS v3.008,MegaSquirtnEDIS v3.007,MegaSquirtnEDIS v3.005
 raw_total=22

@@ -38,6 +38,7 @@ static struct
 	const gchar *item;
 	FioAction action;
 }fio_items[] = {
+	{"lookuptables_setup_menuitem",-1},
 	{"import_tables_menuitem",VEX_IMPORT},
 	{"export_tables_menuitem",VEX_EXPORT},
 	{"restore_ecu_menuitem",ECU_RESTORE},

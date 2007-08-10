@@ -13,6 +13,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <api-versions.h>
+#include <apicheck.h>
 #include <config.h>
 #include <configfile.h>
 #include <defines.h>
@@ -90,7 +92,8 @@ void interrogate_ecu()
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
-	if (tests->len < 1)
+
+	if ((!tests) || (tests->len < 1))
 	{
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
 			dbg_func(g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
@@ -289,7 +292,8 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 		if (!firmware)
 			firmware = g_new0(Firmware_Details,1);
 
-		load_firmware_details(firmware,filename);
+		if (!load_firmware_details(firmware,filename))
+			return FALSE;
 		update_interrogation_gui(firmware,tests_hash);
 
 		if (firmware->rt_cmd_key)
@@ -331,7 +335,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 /* !brief loads up all firmware details from the passed filename (interrogation
  * profile), and configures megatunix for use.
  */
-void load_firmware_details(Firmware_Details *firmware, gchar * filename)
+gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;
@@ -344,6 +348,8 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	gchar **conv_exprs = NULL;
 	gchar **precisions = NULL;
 	gchar **expr_keys = NULL;
+	gint major = 0;
+	gint minor = 0;
 	gint len1 = 0;
 	gint len2 = 0;
 	gint len3 = 0;
@@ -355,6 +361,14 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if (!cfgfile)
 		if (dbg_lvl & (CRITICAL|INTERROGATOR))
 			dbg_func(g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
+	get_file_api(cfgfile,&major,&minor);
+	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+	{
+		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		return FALSE;
+	}
+
+	firmware->profile_filename = g_strdup(filename);
 
 	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
 	cfg_read_string(cfgfile,"parameters","TextVerVia",&firmware->TextVerVia);
@@ -965,7 +979,9 @@ void load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if (dbg_lvl & INTERROGATOR)
 		dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
 	thread_update_logbar("interr_view","warning",g_strdup_printf("Detected Firmware: %s\n",firmware->name),FALSE,FALSE);
+	thread_update_logbar("interr_view","info",g_strdup_printf("Loading Settings from: \"%s\"\n",firmware->profile_filename),FALSE,FALSE);
 
+	return TRUE;
 
 }
 
@@ -987,6 +1003,8 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	gchar ** vector = NULL;
 	gint total_tests = 0;
 	gint result = 0;
+	gint major = 0;
+	gint minor = 0;
 	gint i = 0;
 	gint j = 0;
 
@@ -997,6 +1015,12 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		return NULL;
+	get_file_api(cfgfile,&major,&minor);
+	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+	{
+		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		return NULL;
+	}
 
 	*tests_hash = g_hash_table_new(g_str_hash,g_str_equal);
 
@@ -1131,12 +1155,20 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** match_on = NULL;
+	gint major = 0;
+	gint minor = 0;
 	MatchClass class = 0;
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		return FALSE;
 
+	get_file_api(cfgfile,&major,&minor);
+	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+	{
+		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		return FALSE;
+	}
 
 	if (cfg_read_string(cfgfile,"interrogation","match_on",&tmpbuf) == FALSE)
 		printf("ERROR:!! match_on key missing from interrogation profile\n");

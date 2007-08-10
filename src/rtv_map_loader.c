@@ -13,6 +13,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <apicheck.h>
+#include <api-versions.h>
+#include <assert.h>
 #include <assert.h>
 #include <config.h>
 #include <configfile.h>
@@ -54,6 +57,8 @@ gboolean load_realtime_map(void )
 	gint i = 0;
 	gint j = 0;
 	gint tmpi = 0;
+	gint major = 0;
+	gint minor = 0;
 	gint offset = 0;
 	gchar * section = NULL;
 	GObject * object = NULL;
@@ -78,9 +83,17 @@ gboolean load_realtime_map(void )
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
 			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find realtime vars map file %s\n\n",filename));
+		g_free(filename);
 		return FALSE;
 	}
-
+	get_file_api(cfgfile,&major,&minor);
+	if ((major != RTV_MAP_MAJOR_API) || (minor != RTV_MAP_MINOR_API))
+	{
+		if (dbg_lvl & (RTMLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tRealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename));
+		g_free(filename);
+		return FALSE;
+	}
 	else
 	{
 		if (dbg_lvl & RTMLOADER)

@@ -59,8 +59,8 @@
 			  <property name="visible">True</property>
 			  <property name="label">gtk-quit</property>
 			  <property name="use_stock">True</property>
-			  <signal name="activate" handler="leave" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="leave" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -83,11 +83,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_VE Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image174">
+			    <widget class="GtkImage" id="image239">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -106,11 +106,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Spark Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:46:30 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:46:30 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image175">
+			    <widget class="GtkImage" id="image240">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -129,11 +129,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_AFR Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image176">
+			    <widget class="GtkImage" id="image241">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -152,11 +152,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Boost Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image177">
+			    <widget class="GtkImage" id="image242">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -175,11 +175,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Rotary Trailing Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Sun, 21 Jan 2007 14:47:42 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Sun, 21 Jan 2007 14:47:42 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image178">
+			    <widget class="GtkImage" id="image243">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -211,11 +211,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Runtime Variables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image179">
+			    <widget class="GtkImage" id="image244">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-jump-to</property>
 			      <property name="icon_size">1</property>
@@ -234,11 +234,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">ECU _Errors</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:54:39 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:54:39 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image180">
+			    <widget class="GtkImage" id="image245">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-dialog-error</property>
 			      <property name="icon_size">1</property>
@@ -265,18 +265,40 @@
 		    <widget class="GtkMenu" id="tools_menu_menu">
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="lookuptables_setup_menuitem">
+			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
+			  <property name="label" translatable="yes">_Lookuptables Setup</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="lookuptables_configurator" last_modification_time="Fri, 27 Jul 2007 19:00:52 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image246">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-justify-left</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="import_tables_menuitem">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">I_mport Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image181">
+			    <widget class="GtkImage" id="image247">
 			      <property name="visible">True</property>
-			      <property name="stock">gtk-goto-first</property>
+			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -293,13 +315,13 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">E_xport Tables</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image182">
+			    <widget class="GtkImage" id="image248">
 			      <property name="visible">True</property>
-			      <property name="stock">gtk-goto-last</property>
+			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -316,11 +338,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">Restore ECU</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image183">
+			    <widget class="GtkImage" id="image249">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -339,11 +361,11 @@
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Backup ECU</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image184">
+			    <widget class="GtkImage" id="image250">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
@@ -374,8 +396,8 @@
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">_About</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="about_popup" last_modification_time="Fri, 19 Jan 2007 21:27:09 GMT"/>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+			  <signal name="activate" handler="about_popup" last_modification_time="Fri, 19 Jan 2007 21:27:09 GMT"/>
 			</widget>
 		      </child>
 		    </widget>

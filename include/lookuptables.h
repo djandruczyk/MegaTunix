@@ -27,5 +27,9 @@ gint reverse_lookup(GObject *, gint );
 gint direct_reverse_lookup(gchar *, gint );
 gfloat lookup_data(GObject *, gint );
 gfloat direct_lookup_data(gchar *, gint );
+gboolean lookuptables_configurator(GtkWidget *, gpointer );
+gboolean lookuptables_configurator_hide(GtkWidget *, gpointer );
+gboolean lookuptable_change(GtkCellRenderer *, gchar  *, gchar  *, gpointer );
+void update_lt_config(gpointer , gpointer , gpointer );
 
 #endif

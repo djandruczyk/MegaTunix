@@ -1,3 +1,7 @@
+[API]
+major=1
+minor=0
+
 [interrogation_profile]
 name=MegaSquirtnEDIS v3.008
 

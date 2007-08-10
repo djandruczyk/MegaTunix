@@ -11,6 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <apicheck.h>
+#include <api-versions.h>
 #include <config.h>
 #include <conversions.h>
 #include <defines.h>
@@ -154,6 +156,8 @@ gchar * present_firmware_choices()
 	gchar *tmpbuf = NULL;
 	GSList *group = NULL;
 	ConfigFile *cfgfile = NULL;
+	gint major = 0;
+	gint minor = 0;
 	gint i = 0;
 	gint result = 0;
 	extern gchar * offline_firmware_choice;
@@ -191,6 +195,13 @@ gchar * present_firmware_choices()
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
+			i++;
+			continue;
+		}
+		get_file_api(cfgfile,&major,&minor);
+		if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+		{
+			thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
 			i++;
 			continue;
 		}

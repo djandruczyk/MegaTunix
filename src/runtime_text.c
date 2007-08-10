@@ -12,6 +12,8 @@
  */
 
 
+#include <apicheck.h>
+#include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
@@ -49,6 +51,8 @@ void load_rt_text()
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
+	gint major = 0;
+	gint minor = 0;
 	extern GObject *global_data;
 	extern volatile gboolean leaving;
 	extern gboolean tabs_loaded;
@@ -72,6 +76,15 @@ void load_rt_text()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
+		get_file_api(cfgfile,&major,&minor);
+		if ((major != RT_TEXT_MAJOR_API) || (minor != RT_TEXT_MINOR_API))
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
+			g_free(filename);
+			return;
+		}
+
 		if(!cfg_read_int(cfgfile,"global","rtt_total",&count))
 		{
 			if (dbg_lvl & CRITICAL)

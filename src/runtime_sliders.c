@@ -12,6 +12,8 @@
  */
 
 
+#include <apicheck.h>
+#include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
@@ -47,6 +49,8 @@ void load_sliders()
 	gint count = 0;
 	gint table = 0;
 	gint row = 0;
+	gint major = 0;
+	gint minor = 0;
 	gchar *ctrl_name = NULL;
 	gchar *source = NULL;
 	gchar *section = NULL;
@@ -76,6 +80,14 @@ void load_sliders()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
+		get_file_api(cfgfile,&major,&minor);
+		if ((major != RT_SLIDERS_MAJOR_API) || (minor != RT_SLIDERS_MINOR_API))
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\tRuntime Sliders profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API,filename));
+			g_free(filename);
+			return;
+		}
 		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
 		{
 			if (dbg_lvl & CRITICAL)
@@ -405,6 +417,8 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	gchar * source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
 	TabIdent ident = (TabIdent)g_object_get_data(G_OBJECT(widget),"tab_ident");
 		
+	if (!rtv_map)
+		return;
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
 	if (!rt_sliders)

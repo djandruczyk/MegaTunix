@@ -246,7 +246,7 @@ void setup_serial_params()
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	serial_params->newtio.c_cc[VMIN]     = 0;     
 	//serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-	serial_params->newtio.c_cc[VTIME]    = 2;     /* 100ms timeout */
+	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 

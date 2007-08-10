@@ -28,6 +28,7 @@
 /* Type definitions */
 typedef struct _Serial_Params Serial_Params;
 typedef struct _Firmware_Details Firmware_Details;
+typedef struct _LookupTable LookupTable;
 typedef struct _Reqd_Fuel Reqd_Fuel;
 typedef struct _Io_File Io_File;
 typedef struct _Viewable_Value Viewable_Value;
@@ -74,6 +75,17 @@ struct _Serial_Params
 };
 
 
+/*!
+ \brief _LookupTable is a mini-container holding hte filename and table
+ info for each lookuptable stored in the LookupTables hashtable
+ */
+struct _LookupTable
+{
+	gint *array;		/*! the table itself */
+	gchar *filename;	/*! The relative filename where 
+				    this table came from */
+};
+
 /*! 
  \brief _Firmware_Details stores all attributes about the firmware being used
  after detection (\see interrogate_ecu ) including lists of tabs to be loaded
@@ -84,13 +96,13 @@ struct _Serial_Params
 struct _Firmware_Details
 {
 	gchar *name;		/*! textual name */
+	gchar *profile_filename;/*! Interrogation profile filename */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
 	gchar *rtt_map_file;	/*! runtime text map filename */
 	gchar *status_map_file;	/*! runtime status map filename */
-	gchar *signature_str;	/*! ECU Signature String */
 	gchar *rt_cmd_key;	/*! string key to hashtable for RT command */
 	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */
 	gchar *ign_cmd_key;	/*! string key to hashtable for Ign command */

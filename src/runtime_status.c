@@ -12,6 +12,8 @@
  */
 
 
+#include <apicheck.h>
+#include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
@@ -53,6 +55,8 @@ void load_status(void)
 	gint * key_types = NULL;
 	gint num_keys = 0;
 	gint num_keytypes = 0;
+	gint major = 0;
+	gint minor = 0;
 	GtkWidget * window;
 	GtkWidget * label;
 	GtkWidget * frame;
@@ -71,6 +75,15 @@ void load_status(void)
         cfgfile = cfg_open_file(filename);
         if (cfgfile)
 	{
+		get_file_api(cfgfile,&major,&minor);
+		if ((major != RT_STATUS_MAJOR_API) || (minor != RT_STATUS_MINOR_API))
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_status()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
+			g_free(filename);
+			return;
+		}
+
 		if(!cfg_read_int(cfgfile,"global","total_status",&count))
 		{
 			if (dbg_lvl & CRITICAL)

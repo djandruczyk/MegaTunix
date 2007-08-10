@@ -37,8 +37,9 @@
  \param extension (gchar *) extension to search for 
  \returns vector char array of filenames or NULL if none found
  */
-gchar ** get_files(gchar *pathstub, gchar * extension)
+gchar ** get_files(gchar *input, gchar * extension)
 {
+	gchar *pathstub = NULL;
 	gchar *path = NULL;
 	gchar *parent = NULL;
 	gchar *list = NULL;
@@ -47,6 +48,12 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	gchar * tmpbuf = NULL;
 	GDir *dir = NULL;
 
+
+	if (!g_str_has_suffix(input, PSEP))
+		pathstub = g_strconcat(input,PSEP,NULL);
+	else
+		pathstub = g_strdup(input);
+	g_free(input);
 
 	path = g_build_filename(HOME(), ".MegaTunix",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
@@ -75,12 +82,12 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 		}
 
 		filename = (gchar *)g_dir_read_name(dir);
-		
+
 	}
 	g_free(path);
 	g_dir_close(dir);
 
-	syspath:
+syspath:
 #ifdef __WIN32__
 	parent = g_build_path(PSEP,HOME(),"dist",NULL);
 #else
@@ -118,7 +125,7 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	g_free(path);
 	g_dir_close(dir);
 
-	finish:
+finish:
 	g_free(pathstub);
 	g_free(extension);
 	if (!list)

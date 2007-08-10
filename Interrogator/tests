@@ -29,6 +29,10 @@
 #			strings. (i.e. _CHAR_, _UINT8_, _SINT8, etc )
 #	
 
+[API]
+major=1
+minor=0
+
 [interrogation_tests]
 total_tests=11
 

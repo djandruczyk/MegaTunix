@@ -129,9 +129,6 @@ gboolean read_config(void)
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		//cfg_read_int(cfgfile, "Global", "major_ver", &major_ver);
-		//cfg_read_int(cfgfile, "Global", "minor_ver", &minor_ver);
-		//cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);

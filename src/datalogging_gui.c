@@ -268,7 +268,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
-	string = g_strdup_printf("\"%s\"\r\n",firmware->signature_str);
+	string = g_strdup_printf("\"%s\"\r\n",firmware->name);
 	output = g_string_append(output,string); 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{

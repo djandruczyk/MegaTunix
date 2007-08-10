@@ -1,3 +1,7 @@
+[API]
+major=1
+minor=0
+
 [realtime_map]
 applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010a
 raw_total=41

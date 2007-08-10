@@ -2,6 +2,8 @@
 headers = \
 	3d_vetable.h \
 	about_gui.h \
+	api-versions.h \
+	apicheck.h \
 	binreloc.h \
 	comms.h \
         comms_gui.h \

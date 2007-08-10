@@ -13,6 +13,7 @@ megatunix_SOURCES = \
 	Makefile \
 	3d_vetable.c \
 	about_gui.c \
+	apicheck.c \
 	comms.c \
 	comms_gui.c \
 	conversions.c \

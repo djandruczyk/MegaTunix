@@ -3028,7 +3028,6 @@ most &quot;Weight&quot;</property>
 			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="clicked" handler="toggle_button_handler" last_modification_time="Wed, 31 Jan 2007 02:17:56 GMT"/>
-			  <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>

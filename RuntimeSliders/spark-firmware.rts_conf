@@ -1,3 +1,7 @@
+[API]
+major=1
+minor=0
+
 [global]
 description=Runtime Slider definitions for Spark firmwares
 rt_total_sliders=18
