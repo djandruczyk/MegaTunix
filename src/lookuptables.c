@@ -341,7 +341,7 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 }
 
 
-gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
+EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 {
 	static gboolean ltc_created = FALSE;
 	static GtkWidget * lookuptables_config_window = NULL;
@@ -378,7 +378,7 @@ gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 
 		ltc_created = TRUE;
 		ltc_visible = TRUE;
-		label = gtk_label_new("lookuptables_configurator");
+		label = gtk_label_new("MegaTunix LookupTables");
 		gtk_box_pack_start (GTK_BOX(vbox),label,TRUE,TRUE,0);
 
 		store = gtk_list_store_new(N_COLS,	/* total cols */
