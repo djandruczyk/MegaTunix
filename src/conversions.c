@@ -173,7 +173,8 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else
 	{
-		return_value = evaluator_evaluate_x(evaluator,value)+0.001;
+		//return_value = evaluator_evaluate_x(evaluator,value)+0.001;
+		return_value = evaluator_evaluate_x(evaluator,value);
 
 		if (dbg_lvl & CONVERSIONS)
 			dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value));
@@ -332,7 +333,8 @@ gfloat convert_after_upload(GtkWidget * widget)
 		g_static_mutex_unlock(&mutex);
 		return (return_value);		
 	}
-	return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001;
+//return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001;
+	return_value = evaluator_evaluate_x(evaluator,tmpi);
 
 	if (dbg_lvl & CONVERSIONS)
 		dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));

@@ -649,8 +649,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
-	tmpf = (gfloat)g_ascii_strtod(text,NULL);
-	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
+	tmpf = (gfloat)g_strtod(text,NULL);
+	//	printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" \n",base,text,tmpi,tmpf);
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
 	 * or base16, the problem is the limits are in base10
@@ -658,9 +658,13 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	if ((tmpf != (gfloat)tmpi) && (!is_float))
 	{
+		/* Pause signals while we change the value */
+		//		printf("resetting\n");
+		g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
+		g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler, data);
 	}
 	switch ((SpinButton)handler)
 	{
@@ -691,6 +695,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			real_value = convert_after_upload(widget);
 			ms_data[page][offset] = old;
 
+			//			printf("real_value %f\n",real_value);
+			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler, data);
 			if (is_float)
 			{
 				tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
@@ -712,6 +718,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 					g_free(tmpbuf);
 				}
 			}
+			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler, data);
 			break;
 
 		case TRIGGER_ANGLE:
@@ -816,6 +823,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 	}
 
+	g_object_set_data(G_OBJECT(widget),"not_sent",GINT_TO_POINTER(FALSE));
 	return TRUE;
 }
 

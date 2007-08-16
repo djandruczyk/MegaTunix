@@ -667,8 +667,8 @@ handler=_GENERIC_
 tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
 
 [hardware_latency_entry]
-keys=page,offset,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=4
 offset=34
 dl_type=_IMMEDIATE_

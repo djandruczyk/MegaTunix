@@ -49,8 +49,8 @@ static GLuint font_list_base;
 extern gint dbg_lvl;
 
 
-#define DEFAULT_WIDTH  475
-#define DEFAULT_HEIGHT 350                                                                                  
+#define DEFAULT_WIDTH  640
+#define DEFAULT_HEIGHT 480                                                                                  
 static GHashTable *winstat = NULL;
 /*!
  \brief create_ve3d_view does the initial work of creating the 3D 
@@ -733,7 +733,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	glShadeModel(GL_FLAT);
 	glEnable (GL_LINE_SMOOTH);
 	glEnable (GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -1198,7 +1198,7 @@ void ve3d_load_font_metrics(void)
 	PangoFontDescription *font_desc;
 	PangoFont *font;
 	PangoFontMetrics *font_metrics;
-	gchar font_string[] = "sans 8";
+	gchar font_string[] = "sans 10";
 	gint font_height;
 
 	if (dbg_lvl & OPENGL)
