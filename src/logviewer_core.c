@@ -249,8 +249,27 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
 		if (g_strrstr(a_line->str,"MARK"))
+		{
+			/* Should insert some sort of marker at this index
+			 * in the data arrays... 
+			 */
 			continue;
+		}
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
+		if ((!g_ascii_isdigit(data[0][0])) && (!g_ascii_isdigit(data[0][1])))
+		{
+			printf("non numerical line detected\n");
+			printf("text %s\n",data[0]);
+			g_strfreev(data);
+			continue;
+		}
+		if (g_strv_length(data) != log_info->field_count)
+		{
+			printf("Datalog error, field count assertion failure\nExpected %i fields, got %i instead\n",log_info->field_count,g_strv_length(data));
+			g_strfreev(data);
+			continue;
+		}
+
 		for (i=0;i<(log_info->field_count);i++)
 		{
 			object = g_array_index(log_info->log_list,GObject *, i);

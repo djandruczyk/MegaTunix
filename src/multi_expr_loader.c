@@ -139,6 +139,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	g_strfreev(lookuptables);
 	g_strfreev(dl_exprs);
 	g_strfreev(ul_exprs);
+	g_strfreev(keys);
 	g_object_set_data(G_OBJECT(object),"multi_expr_hash",hash);
 
 }
@@ -170,4 +171,5 @@ void free_multi_source(gpointer data)
 		evaluator_destroy(multi->evaluator);
 	if (multi->suffix)
 		g_free(multi->suffix);
+	g_free(multi);
 }

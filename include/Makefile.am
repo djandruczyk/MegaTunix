@@ -4,6 +4,7 @@ headers = \
 	about_gui.h \
 	api-versions.h \
 	apicheck.h \
+	args.h \
 	binreloc.h \
 	comms.h \
         comms_gui.h \

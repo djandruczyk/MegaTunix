@@ -188,11 +188,18 @@ void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
+	gchar *data = NULL;
 
 	for (i=0;i<group->num_keys;i++)
 	{
+		if (group->keytypes[i] == MTX_STRING)
+		{
+			data = (gchar *) g_object_get_data(group->object,group->keys[i]);
+			g_free(data);
+		}
 		g_object_set_data(group->object,group->keys[i],NULL);
 	}
+	g_object_unref(group->object);
 	g_strfreev(group->keys);
 	g_free(group->keytypes);
 	g_free(group);
@@ -282,7 +289,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		// ATTEMPTED FIX FOR GLIB 2.10
 
 		/* If this widget has a "depend_on" tag we need to 
-		 * load the dependancy information  and store it for 
+		 * load the dependency information and store it for 
 		 * use when needed...
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))

@@ -49,7 +49,7 @@
 
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
-extern gboolean offline;			/* Offline mode */
+extern volatile gboolean offline;			/* Offline mode */
 extern gboolean tabs_loaded;			/* Tabs loaded? */
 extern gboolean interrogated;			/* valid detection with MS */
 gint statuscounts_id = -1;
@@ -104,7 +104,10 @@ trypop:
 		for (i=0;i<len;i++)
 		{
 			if (leaving)
+			{
+				dealloc_message(message);
 				return TRUE;
+			}
 
 			val = g_array_index(message->funcs,UpdateFunction, i);
 
@@ -217,7 +220,7 @@ trypop:
 					break;
 				case UPD_START_STATUSCOUNTS:
 					if ((connected) && (interrogated))
-						 statuscounts_id = gtk_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+						statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 					break;
 				case UPD_START_REALTIME:
 					start_tickler(RTV_TICKLER);
@@ -262,10 +265,6 @@ trypop:
 				case UPD_DATALOGGER:
 					if ((connected) && (interrogated))
 						run_datalog();
-					break;
-				case UPD_RUN_COMMS_TEST:
-					if (connected)
-						io_cmd(IO_COMMS_TEST,NULL);
 					break;
 				case UPD_COMMS_STATUS:
 					update_comms_status();

@@ -379,6 +379,7 @@ void populate_viewer()
 			}
 		}
 	}
+	g_free(name);
 	lv_data->active_traces = g_hash_table_size(lv_data->traces);
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)

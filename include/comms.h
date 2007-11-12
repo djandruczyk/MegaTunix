@@ -19,7 +19,7 @@
 #include <structures.h>
 
 /* Prototypes */
-void comms_test(void);			/* new check_ecu_comms function */
+gint comms_test(void);			/* new check_ecu_comms function */
 void update_comms_status(void);		/* gui updater for comms status */
 void update_write_status(Output_Data *);	/* gui updater for write status */
 void readfrom_ecu(Io_Message *);	/* Function to get data FROM ecu */

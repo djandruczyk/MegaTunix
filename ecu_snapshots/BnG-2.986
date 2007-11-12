@@ -5,3 +5,6 @@ num_variables=125
 [Firmware]
 name=Standard Bowling & Grippo v2.0-3.01
 
+[API]
+major=1
+minor=0

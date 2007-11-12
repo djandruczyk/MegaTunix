@@ -446,9 +446,9 @@
 			  <property name="draw_value">False</property>
 			  <property name="value_pos">GTK_POS_LEFT</property>
 			  <property name="digits">0</property>
-			  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+			  <property name="update_policy">GTK_UPDATE_DELAYED</property>
 			  <property name="inverted">True</property>
-			  <property name="adjustment">1 1 100 1 10 10</property>
+			  <property name="adjustment">15 15 150 1 10 10</property>
 			  <signal name="value_changed" handler="logviewer_scroll_speed_change" last_modification_time="Wed, 28 Mar 2007 02:18:28 GMT"/>
 			</widget>
 			<packing>

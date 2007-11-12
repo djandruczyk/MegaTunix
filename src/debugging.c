@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <structures.h>
@@ -25,7 +26,7 @@
 
 gint dbg_lvl = 0;
 
-static FILE * dbgfile = NULL;
+GIOChannel * dbg_channel = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
@@ -45,40 +46,45 @@ static DebugLevel dbglevels[] =
 };
 
 /*!
- \brief open_debugfile() opens the file that holds debugging information.
+ \brief open_debug() opens the channel to the debugging information log.
  The path defaults to the current working directory.
  */
-void open_debugfile()
+void open_debug()
 {
 	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	gsize count = 0;
+	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
-	if(!dbgfile)
+	if(!dbg_channel)
 	{
 		filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
-		dbgfile = fopen(filename,"w");
-		g_free(filename);
-		if (dbgfile)
+		dbg_channel = g_io_channel_new_file(filename,"w",&error);
+		g_io_channel_set_encoding(dbg_channel,NULL,&error);
+		if (dbg_channel)
 		{
 			t = g_malloc(sizeof(time_t));
 			time(t);
 			tm = localtime(t);
 			g_free(t);
-			g_fprintf(dbgfile,"Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
-
+			tmpbuf = g_strdup_printf("Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
+			g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);
+			g_free(tmpbuf);
 		}
+		g_free(filename);
 	}
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
 
-void close_debugfile()
+void close_debug()
 {
 	g_static_mutex_lock(&dbg_mutex);
-	if (dbgfile)
-		fclose(dbgfile);
+	if (dbg_channel)
+		g_io_channel_close(dbg_channel);
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
@@ -90,12 +96,14 @@ void close_debugfile()
  */
 void dbg_func(gchar *str)
 {
+	gsize count = 0;
+	GError *error = NULL;
 	/*
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
 	*/
 
-	if (!dbgfile)
+	if (!dbg_channel)
 	{
 		g_free(str);
 		return;
@@ -103,20 +111,9 @@ void dbg_func(gchar *str)
 
 	g_static_mutex_lock(&dbg_mutex);
 
-	if (dbgfile)
+	if (dbg_channel)
 	{
-		/*
-		{
-			if (!t)
-				t = g_malloc(sizeof(time_t));
-			time(t);
-			tm = localtime(t);
-			g_fprintf(dbgfile,"%.2i:%.2i:%.2i  %s",tm->tm_hour,tm->tm_min,tm->tm_sec,str);
-		}
-		else
-		*/
-			g_fprintf(dbgfile,str);
-		fflush(dbgfile);
+		g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
 		g_free(str);
 	}
 	g_static_mutex_unlock(&dbg_mutex);
@@ -164,10 +161,10 @@ void populate_debugging(GtkWidget *parent)
 				(GtkAttachOptions) (0), 0, 0);
 		// If user set on turn on as well
 		if ((dbg_lvl & mask) >> shift)
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		// if hardcoded on, turn on..
 		if (dbglevels[i].enabled)
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;
 		if (j == 4)
 		{

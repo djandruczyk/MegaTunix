@@ -45,3 +45,6 @@ num_variables=189
 [Firmware]
 name=MegaSquirtnSpark-Extra 029x
 
+[API]
+major=1
+minor=0

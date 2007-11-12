@@ -11,13 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __WINSERIALIO_H__
-#define __WINSERIALIO_H__
+#ifndef __ARGS_H__
+#define __ARGS_H__
+
+#include <gtk/gtk.h>
 
 /* Prototypes */
-void win32_toggle_serial_control_lines(void);
-void win32_setup_serial_params(int);
-void win32_flush_serial(int, int);
+void handle_args(gint, gchar ** );
 /* Prototypes */
 
 #endif

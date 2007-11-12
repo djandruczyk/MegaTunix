@@ -74,9 +74,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GdkGLConfig *gl_config;
 	gchar * tmpbuf = NULL;
 	Ve_View_3D *ve_view;
-	extern GtkTooltips *tip;
 	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
+	extern GtkTooltips *tip;
 	gint table_num =  -1;
 	extern gboolean forced_update;
 
@@ -376,6 +376,14 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer) window);
 
+	button = gtk_check_button_new_with_label("Fixed Scale or Proportional");
+	ve_view->tracking_button = button;
+	g_object_set_data(G_OBJECT(button),"ve_view",ve_view);
+	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,TRUE,0);
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(set_scaling_mode),
+			NULL);
+
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
 	ve_view->tracking_button = button;
 	g_object_set_data(G_OBJECT(button),"ve_view",ve_view);
@@ -448,12 +456,6 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
-	if (ve_view->x_source_key)
-		g_free(ve_view->x_source_key);
-	if (ve_view->y_source_key)
-		g_free(ve_view->y_source_key);
-	if (ve_view->z_source_key)
-		g_free(ve_view->z_source_key);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -785,6 +787,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			min = tmpf;
 	}
 	ve_view->x_trans = min;
+	ve_view->x_max = max;
 	ve_view->x_scale = 1.0/(max-min);
 	min = 65535;
 	max = 0;
@@ -797,6 +800,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			min = tmpf;
 	}
 	ve_view->y_trans = min;
+	ve_view->y_max = max;
 	ve_view->y_scale = 1.0/(max-min);
 	min = 65535;
 	max = 0;
@@ -811,6 +815,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 	//printf ("max is %f\t min is %f\n", max, min);
 	ve_view->z_trans = min-((max-min)*0.15);
+	ve_view->z_max = max;
 	ve_view->z_scale = 1.0/((max-min)/0.75);
 /* 	ve_view->z_trans = 0; */
 /* 	ve_view->z_scale = 1.0 / 255.0; */
@@ -850,11 +855,20 @@ void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		glBegin(GL_LINE_STRIP);
 		for(y=0;y<ve_view->y_bincount;y++) 
 		{
-			tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
-				
-			tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
-				
-			tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			if (ve_view->fixed_scale)
+			{
+				tmpf1 = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
+				tmpf2 = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
+				tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			}
+			else
+			{
+				tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+
+				tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+
+				tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			}
 
 			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
@@ -869,11 +883,20 @@ void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		glBegin(GL_LINE_STRIP);
 		for(x=0;x<ve_view->x_bincount;x++)
 		{
-			tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
-				
-			tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
-				
-			tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			if (ve_view->fixed_scale)
+			{
+				tmpf1 = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
+				tmpf2 = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
+				tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			}
+			else
+			{
+				tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+
+				tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+
+				tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			}
 				
 			glColor3f(1.0,1.0,tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
@@ -919,7 +942,13 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
-	glVertex3f(
+	if (ve_view->fixed_scale)
+		glVertex3f(
+			(gfloat)ve_view->active_x/((gfloat)ve_view->x_bincount-1.0),
+			(gfloat)ve_view->active_y/((gfloat)ve_view->y_bincount-1.0),
+			cur_val->z_edit_value);
+	else
+		glVertex3f(
 			cur_val->x_edit_value,
 			cur_val->y_edit_value,
 			cur_val->z_edit_value);
@@ -929,36 +958,69 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glBegin(GL_LINE_STRIP);
 	glColor3f(1.0,0.0,0.0);
 
-	glVertex3f(
-			cur_val->x_edit_value,
-			cur_val->y_edit_value,
-			cur_val->z_edit_value);
-	glVertex3f(
-			cur_val->x_edit_value,
-			cur_val->y_edit_value,
-			bottom);
-	glVertex3f(
-			0.0,
-			cur_val->y_edit_value,
-			bottom);
+	if (ve_view->fixed_scale)
+	{
+		glVertex3f(
+				(gfloat)ve_view->active_x/((gfloat)ve_view->x_bincount-1.0),
+				(gfloat)ve_view->active_y/((gfloat)ve_view->y_bincount-1.0),
+				cur_val->z_edit_value);
+		glVertex3f(
+				(gfloat)ve_view->active_x/((gfloat)ve_view->x_bincount-1.0),
+				(gfloat)ve_view->active_y/((gfloat)ve_view->y_bincount-1.0),
+				bottom);
+		glVertex3f(
+				0.0,
+				(gfloat)ve_view->active_y/((gfloat)ve_view->y_bincount-1.0),
+				bottom);
+	}
+	else
+	{
+		glVertex3f(
+				cur_val->x_edit_value,
+				cur_val->y_edit_value,
+				cur_val->z_edit_value);
+		glVertex3f(
+				cur_val->x_edit_value,
+				cur_val->y_edit_value,
+				bottom);
+		glVertex3f(
+				0.0,
+				cur_val->y_edit_value,
+				bottom);
+	}
 
 	glEnd();
 
 	glBegin(GL_LINES);
-	glVertex3f(
-			cur_val->x_edit_value,
-			cur_val->y_edit_value,
-			bottom - ve_view->z_offset);
+	if (ve_view->fixed_scale)
+	{
+		glVertex3f(
+				(gfloat)ve_view->active_x/((gfloat)ve_view->x_bincount-1.0),
+				(gfloat)ve_view->active_y/((gfloat)ve_view->y_bincount-1.0),
+				bottom - ve_view->z_offset);
 
-	glVertex3f(
-			cur_val->x_edit_value,
-			0.0,
-			bottom);
+		glVertex3f(
+				(gfloat)ve_view->active_x/((gfloat)ve_view->x_bincount-1.0),
+				0.0,
+				bottom);
+	}
+	else
+	{
+		glVertex3f(
+				cur_val->x_edit_value,
+				cur_val->y_edit_value,
+				bottom - ve_view->z_offset);
+
+		glVertex3f(
+				cur_val->x_edit_value,
+				0.0,
+				bottom);
+	}
 	glEnd();
 }
 
 /*!
- \brief ve3d_draw_runtim_indicator is called during rerender and draws 
+ \brief ve3d_draw_runtime_indicator is called during rerender and draws 
 the
  green dot which tells where the engien is running at this instant.
  */
@@ -1005,8 +1067,16 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glLineWidth(MIN(w,h)/300.0);
 
 	glColor3f(0.0,1.0,0.0);
-	tmpf1 = (cur_val->x_val-ve_view->x_trans)*ve_view->x_scale;
-	tmpf2 = (cur_val->y_val-ve_view->y_trans)*ve_view->y_scale;
+	if (ve_view->fixed_scale)
+	{
+		tmpf1 = get_fixed_pos(ve_view,cur_val->x_eval,cur_val->x_val,_X_);
+		tmpf2 = get_fixed_pos(ve_view,cur_val->y_eval,cur_val->y_val,_Y_);
+	}
+	else
+	{
+		tmpf1 = (cur_val->x_val-ve_view->x_trans)*ve_view->x_scale;
+		tmpf2 = (cur_val->y_val-ve_view->y_trans)*ve_view->y_scale;
+	}
 	tmpf3 = (cur_val->z_val-ve_view->z_trans)*ve_view->z_scale;
 	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
 		out_of_bounds = TRUE;
@@ -1100,7 +1170,10 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	for (i=0;i<y_bincount;i++)
 	{
 		glBegin(GL_LINES);
-		tmpf2 = (evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+i])-ve_view->y_trans)*ve_view->y_scale;
+		if (ve_view->fixed_scale)
+			tmpf2 = (gfloat)i/((gfloat)y_bincount-1.0);
+		else
+			tmpf2 = (evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+i])-ve_view->y_trans)*ve_view->y_scale;
 
 		glVertex3f(1,tmpf2,0);
 		glVertex3f(1,tmpf2,1);
@@ -1112,7 +1185,10 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	{
 		glBegin(GL_LINES);
 
-		tmpf1 = (evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+i])-ve_view->x_trans)*ve_view->x_scale;
+		if (ve_view->fixed_scale)
+			tmpf1 = (gfloat)i/((gfloat)x_bincount-1.0);
+		else
+			tmpf1 = (evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+i])-ve_view->x_trans)*ve_view->x_scale;
 		glVertex3f(tmpf1,1,0);
 
 		glVertex3f(tmpf1,1,1);
@@ -1626,8 +1702,16 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf3 = z_weight[0]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
-	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	if (ve_view->fixed_scale)
+	{
+		tmpf1 = (gfloat)bin[0]/((gfloat)ve_view->x_bincount-1.0);
+		tmpf2 = (gfloat)bin[2]/((gfloat)ve_view->y_bincount-1.0);
+	}
+	else
+	{
+		tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
+		tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	}
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	if ((ve_view->tracking_focus) && (heaviest == 0))
@@ -1639,7 +1723,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf3 = z_weight[1]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	if (ve_view->fixed_scale)
+		tmpf2 = (gfloat)bin[3]/((gfloat)ve_view->y_bincount-1.0);
+	else
+		tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	if ((ve_view->tracking_focus) && (heaviest == 1))
@@ -1651,8 +1739,16 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf3 = z_weight[2]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
-	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	if (ve_view->fixed_scale)
+	{
+		tmpf1 = (gfloat)bin[1]/((gfloat)ve_view->x_bincount-1.0);
+		tmpf2 = (gfloat)bin[2]/((gfloat)ve_view->y_bincount-1.0);
+	}
+	else
+	{
+		tmpf1 = ((evaluator_evaluate_x(cur_val->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
+		tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	}
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	if ((ve_view->tracking_focus) && (heaviest == 2))
@@ -1664,7 +1760,10 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	tmpf3 = z_weight[3]*1.35;
 	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
-	tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	if (ve_view->fixed_scale)
+		tmpf2 = (gfloat)bin[3]/((gfloat)ve_view->y_bincount-1.0);
+	else
+		tmpf2 = ((evaluator_evaluate_x(cur_val->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(cur_val->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	if ((ve_view->tracking_focus) && (heaviest == 3))
@@ -1874,6 +1973,20 @@ gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 }
 
 
+gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
+{
+	extern gboolean forced_update;
+	Ve_View_3D *ve_view = NULL;
+
+	ve_view = g_object_get_data(G_OBJECT(widget),"ve_view");
+	if (!ve_view)
+		return FALSE;
+	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	forced_update = TRUE;
+	return TRUE;
+}
+
+
 void free_current_values(Cur_Vals *cur_val)
 {
 	if (cur_val->x_edit_text)
@@ -1890,3 +2003,52 @@ void free_current_values(Cur_Vals *cur_val)
 		g_free(cur_val->z_runtime_text);
 	g_free(cur_val);
 }
+
+
+gfloat get_fixed_pos(Ve_View_3D *ve_view,void * eval,gfloat value,Axis axis)
+{
+	gfloat tmp1 = 0.0;
+	gfloat tmp2 = 0.0;
+	gfloat tmp3 = 0.0;
+	gint i = 0;
+	extern gint **ms_data;
+	gint page = 0;
+	gint count = 0;
+	gint base = 0;
+
+	switch (axis)
+	{
+		case _X_:
+			page = ve_view->x_page;
+			count = ve_view->x_bincount;
+			base = ve_view->x_base;
+			break;
+		case _Y_:
+			page = ve_view->y_page;
+			count = ve_view->y_bincount;
+			base = ve_view->y_base;
+			break;
+		case _Z_:
+			page = ve_view->z_page;
+			count = ve_view->x_bincount*ve_view->y_bincount;
+			base = ve_view->z_base;
+			break;
+		default:
+			printf(__FILE__": Error, defautl case, should NOT have ran\n");
+			return 0;
+			break;
+	}
+	for (i=0;i<count-1;i++)
+	{
+		tmp1 = evaluator_evaluate_x(eval,ms_data[page][base+i]);
+		tmp2 = evaluator_evaluate_x(eval,ms_data[page][base+i+1]);
+		if ((tmp1 <= value) && (tmp2 >= value))
+			break;
+	}
+	//printf("Value %f is between bins %i (%f), and %i (%f)\n",value,i,tmp1,i+1,tmp2);
+	tmp3 = ((gfloat)i/((gfloat)count-1))+(((value-tmp1)/(tmp2-tmp1))/10.0);
+	//printf("percent of full scale is %f\n",tmp3);
+	return tmp3;
+
+}
+

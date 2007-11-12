@@ -1005,7 +1005,6 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				}
 				cairo_restore (cr); /* stack-pen-size */
 			}
-
 			counter += (deg_per_major_tick)*(M_PI/180);
 		}
 		g_strfreev(vector);

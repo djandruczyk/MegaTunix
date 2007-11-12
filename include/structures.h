@@ -58,6 +58,7 @@ typedef struct _Logview_Data Logview_Data;
 typedef struct _TTMon_Data TTMon_Data;
 typedef struct _MultiExpr MultiExpr;
 typedef struct _MultiSource MultiSource;
+typedef struct _CmdLineArgs CmdLineArgs;
 
 /*! 
  \brief _Serial_Params holds all variables related to the state of the serial
@@ -301,8 +302,9 @@ struct _Table_Params
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
 	gint x_bincount;	/*! how many RPM bins (X axis) */
+	gchar *table_name;	/*! Name for the 3D Table editor title */
 	gboolean x_multi_source;/*! uses multiple keyed sources? */
-	gchar *x_source_key;	/*! this is hte key to sources_hash to 
+	gchar *x_source_key;	/*! this is the key to sources_hash to 
 				 *  get the search key for x_multi_hash
 				 */
 	gchar *x_multi_expr_keys;/*! keys to x_multi_hash */
@@ -353,7 +355,6 @@ struct _Table_Params
 	gchar *z_conv_expr;	/*! z conversion expression */
 	void *z_eval;		/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
-	gchar *table_name;	/*! Name for the 3D Table editor title */
 };
 
 
@@ -611,9 +612,9 @@ struct _Ve_View_3D
 	gfloat x_scale;
 	gfloat y_scale;
 	gfloat z_scale;
-	gfloat x_div;
-	gfloat y_div;
-	gfloat z_div;
+	gfloat x_max;
+	gfloat y_max;
+	gfloat z_max;
 	gint x_precision;
 	gint y_precision;
 	gint z_precision;
@@ -656,6 +657,7 @@ struct _Ve_View_3D
 	gchar *table_name;
 	gint table_num;
 	gboolean tracking_focus;
+	gboolean fixed_scale;
 	GtkWidget *tracking_button;
 };
 
@@ -771,6 +773,26 @@ struct _MultiSource
 	void * evaluator;	/* evaluator pointer */
 	gchar * suffix;		/* textual suffix for this evaluator*/
 	gint precision;		/* Precision for floating point */
+};
+
+
+/*!
+ * \brief _Args struct is a container to hold the command line argument
+ * related variables, used to make mtx quiet, suppress portions of the gui
+ * and autolog to files.
+ */
+struct _CmdLineArgs
+{
+	gboolean debug;		/* Debug to console */
+	gboolean version;	/* Show Version */
+	gboolean be_quiet;	/* No error popups */
+	gboolean autolog_dump;	/* Automatically dump full logs periodically */
+	gboolean hide_rttext;	/* Hide Runtime Variable Window */
+	gboolean hide_status;	/* Hide Status Window */
+	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */
+	gint autolog_minutes;	/* How many minutes to log per file */
+	gchar * autolog_dump_dir;/* What dir to put logs into */
+	gchar *autolog_basename;/* Autolog base filename */
 };
 
 #endif

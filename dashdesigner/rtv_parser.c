@@ -13,10 +13,11 @@ GtkListStore *store = NULL;
 void retrieve_rt_vars(void)
 {
 	gchar **files = NULL;
+	GArray *classes = NULL;
 	struct Rtv_Data *rtv_data = NULL;
 	gint i = 0;
 //	printf("retrieve rt_vars from mtx realtime maps\n");
-	files = get_files(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,NULL),g_strdup("rtv_map"));
+	files = get_files(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,NULL),g_strdup("rtv_map"),&classes);
 	if (!files)
 		return;
 	while(files[i])
@@ -27,6 +28,7 @@ void retrieve_rt_vars(void)
 	rtv_data->rtv_list = NULL;
 	rtv_data->total_files = i;
 	load_rtvars(files,rtv_data);
+	g_array_free(classes,TRUE);
 
 }
 

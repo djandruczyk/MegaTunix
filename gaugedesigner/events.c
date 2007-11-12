@@ -298,6 +298,8 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 				g_free(tmpbuf);
 			poly->line_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"line_width_spin")));
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"poly_combobox")));
+			if (!tmpbuf)
+				tmpbuf = g_strdup("CIRCLE");
 			if (g_strcasecmp(tmpbuf,"CIRCLE") == 0)
 			{
 				poly->type = MTX_CIRCLE;
@@ -1021,7 +1023,7 @@ EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer data)
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
 	mtx_gauge_face_set_value(MTX_GAUGE_FACE (gauge),lower);
-	gtk_timeout_add(20,(GtkFunction)sweep_gauge, (gpointer)gauge);
+	g_timeout_add(20,(GtkFunction)sweep_gauge, (gpointer)gauge);
 	return TRUE;
 }
 

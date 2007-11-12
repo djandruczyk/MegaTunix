@@ -31,7 +31,6 @@
 #include <unistd.h>
 #include <3d_vetable.h>
 
-extern GStaticMutex comms_mutex;
 extern GStaticMutex serio_mutex;
 extern gint dbg_lvl;
 
@@ -62,110 +61,48 @@ void update_comms_status(void)
  \see update_comms_status
  */
 
-void comms_test()
+gint comms_test()
 {
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
+	static gint errcount = 0;
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
-	extern gboolean offline;
-	extern gint failurecount;
-	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
-	//printf("comms_test\n");
 	if (dbg_lvl & SERIAL_RD)
 		dbg_func(g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
-	{
-		if (dbg_lvl & SERIAL_RD)
-			dbg_func(g_strdup(__FILE__": comms_test()\n\t no Serial Params, leaving comms_test()...\n"));
-		return;
-	}
-
-	if (dbg_lvl & SERIAL_RD)
-		dbg_func(g_strdup(__FILE__": comms_test()\n\t Before locking serio_mutex\n"));
-	g_static_mutex_lock(&serio_mutex);
-	if (dbg_lvl & SERIAL_RD)
-		dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking serio_mutex\n"));
-	g_static_mutex_lock(&comm_test_mutex);
-	if (dbg_lvl & SERIAL_RD)
-		dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking comm_text_mutex\n"));
-	if (offline)
-	{
-		queue_function(g_strdup("kill_conn_warning"));
-		connected = FALSE;
-		g_static_mutex_unlock(&comm_test_mutex);
-		g_static_mutex_unlock(&serio_mutex);
-		return;
-	}
-
-	/* If serial not open */
-	if (!serial_params->open)
-	{
-		if (dbg_lvl & (SERIAL_RD|CRITICAL))
-			dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"));
-		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
-		g_static_mutex_unlock(&comm_test_mutex);
-		g_static_mutex_unlock(&serio_mutex);
-		return;
-	}
-
-	/* Try toggling the control lines */
-	//toggle_serial_control_lines();
-
-	/* Flush the toilet.... */
-	g_static_mutex_unlock(&serio_mutex);
-	flush_serial(serial_params->fd, TCIOFLUSH);	
-	g_static_mutex_lock(&serio_mutex);
+		return FALSE;
 
 	if (dbg_lvl & SERIAL_RD)
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	g_static_mutex_lock(&comms_mutex);
 	if (write(serial_params->fd,"C",1) != 1)
 	{
-		g_static_mutex_unlock(&comms_mutex);
 		err_text = (gchar *)g_strerror(errno);
 		if (dbg_lvl & (SERIAL_RD|CRITICAL))
 			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
-		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
-		g_static_mutex_unlock(&serio_mutex);
-		flush_serial(serial_params->fd, TCIOFLUSH);
 		connected = FALSE;
-		failurecount++;
-		g_static_mutex_unlock(&comm_test_mutex);
-		return;
+		return connected;
 	}
-	g_static_mutex_unlock(&comms_mutex);
-	g_static_mutex_unlock(&serio_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (!result) // Failure,  Attempt MS-II method
 	{
-		g_static_mutex_lock(&serio_mutex);
-		g_static_mutex_lock(&comms_mutex);
-		//if (write(serial_params->fd,"C",1) != 1)
 		if (write(serial_params->fd,"c",1) != 1)
 		{
-			g_static_mutex_unlock(&comms_mutex);
 			err_text = (gchar *)g_strerror(errno);
 			if (dbg_lvl & (SERIAL_RD|CRITICAL))
 				dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 			thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
-			//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
-			g_static_mutex_unlock(&serio_mutex);
-			flush_serial(serial_params->fd, TCIOFLUSH);
 			connected = FALSE;
-			failurecount++;
-			g_static_mutex_unlock(&comm_test_mutex);
-			return;
+			return connected;
 		}
-		g_static_mutex_unlock(&comms_mutex);
-		g_static_mutex_unlock(&serio_mutex);
 		result = handle_ecu_data(C_TEST,NULL);
 	}
 	if (result)	// Success
 	{
 		connected = TRUE;
+		errcount=0;
 		if (dbg_lvl & SERIAL_RD)
 			dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
 		queue_function(g_strdup("kill_conn_warning"));
@@ -177,16 +114,15 @@ void comms_test()
 	{
 		// An I/O Error occurred with the MegaSquirt ECU 
 		connected = FALSE;
-		queue_function(g_strdup("conn_warning"));
+		errcount++;
+		if (errcount > 2 )
+			queue_function(g_strdup("conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
 		if (dbg_lvl & (SERIAL_RD|IO_PROCESS))
 			dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),TRUE,FALSE);
 	}
-	/* Flush the toilet again.... */
-	flush_serial(serial_params->fd, TCIOFLUSH);
-	g_static_mutex_unlock(&comm_test_mutex);
-	return;
+	return connected;
 }
 
 
@@ -277,7 +213,7 @@ void writeto_ecu(Io_Message *message)
 	extern Firmware_Details *firmware;
 	extern Serial_Params *serial_params;
 	extern gint **ms_data;
-	extern gboolean offline;
+	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&serio_mutex);
@@ -390,7 +326,6 @@ void writeto_ecu(Io_Message *message)
 				dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"));
 		}
 
-		g_static_mutex_lock(&comms_mutex);
 		res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 		if (res != 1 )
 		{
@@ -404,7 +339,6 @@ void writeto_ecu(Io_Message *message)
 				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd));
 		}
 		res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
-		g_static_mutex_unlock(&comms_mutex);
 		if (res != count )
 		{
 			err_text = (gchar *)g_strerror(errno);
@@ -426,7 +360,6 @@ void writeto_ecu(Io_Message *message)
 	}
 	else if (output->mode == MTX_CHUNK_WRITE)
 	{
-		g_static_mutex_lock(&comms_mutex);
 		/* Initiate chunk write */
 		res = write (serial_params->fd,firmware->chunk_write_cmd,1);
 		if (res != 1 )
@@ -452,7 +385,6 @@ void writeto_ecu(Io_Message *message)
 			lbuff[2+i] = output->data[i];
 		}
 		res = write (serial_params->fd,lbuff,count);	/* Send write command */
-		g_static_mutex_unlock(&comms_mutex);
 		if (res != count )
 		{
 			err_text = (gchar *)g_strerror(errno);
@@ -489,7 +421,7 @@ void burn_ecu_flash()
 	gchar * err_text = NULL;
 	extern Firmware_Details * firmware;
 	extern Serial_Params *serial_params;
-	extern gboolean offline;
+	extern volatile gboolean offline;
 	extern gboolean connected;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -510,9 +442,7 @@ void burn_ecu_flash()
 	g_static_mutex_unlock(&serio_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
-	g_static_mutex_lock(&comms_mutex);
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
-	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
@@ -552,7 +482,7 @@ void readfrom_ecu(Io_Message *message)
 	extern gboolean connected;
 	extern gchar *handler_types[];
 	gchar *err_text = NULL;
-	extern gboolean offline;
+	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	if(serial_params->open == FALSE)
@@ -570,11 +500,9 @@ void readfrom_ecu(Io_Message *message)
 	/* Flush serial port... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
-	g_static_mutex_lock(&comms_mutex);
 	result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);
-	g_static_mutex_unlock(&comms_mutex);
 	if (result != message->out_len)	
 	{
 		err_text = (gchar *)g_strerror(errno);
@@ -588,9 +516,7 @@ void readfrom_ecu(Io_Message *message)
 
 	if (message->handler == RAW_MEMORY_DUMP)
 	{
-		g_static_mutex_lock(&comms_mutex);
 		result = write(serial_params->fd,&message->offset,1);
-		g_static_mutex_unlock(&comms_mutex);
 		if (result < 1)
 		{
 			err_text = (gchar *)g_strerror(errno);
@@ -689,7 +615,6 @@ forceburn:
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd));
 
-	g_static_mutex_lock(&comms_mutex);
 	res = write(serial_params->fd,firmware->page_cmd,1);
 	if (res != 1)
 	{
@@ -699,7 +624,6 @@ forceburn:
 	}
 	res = write(serial_params->fd,&ms_page,1);
 	g_usleep(100000);
-	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);

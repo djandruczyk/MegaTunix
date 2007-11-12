@@ -9,3 +9,6 @@ num_variables=125
 [Firmware]
 name=MegaSquirtnEDIS v3.008
 
+[API]
+major=1
+minor=0

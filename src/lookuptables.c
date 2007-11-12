@@ -109,7 +109,8 @@ gboolean load_table(gchar *table_name, gchar *filename)
 			go = FALSE;
 		else
 		{
-			str = g_strchug(g_strdup(a_line->str));
+		//	str = g_strchug(g_strdup(a_line->str));
+			str = g_strchug(a_line->str);
 			if (g_str_has_prefix(str,"DB"))
 			{
 				str+=2; // move 2 places in	
@@ -119,7 +120,6 @@ gboolean load_table(gchar *table_name, gchar *filename)
 				g_free(tmp);
 				i++;
 			}
-			//g_free(str);
 		}
 		g_string_free(a_line,TRUE);
 	}
@@ -347,14 +347,17 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	static GtkWidget * lookuptables_config_window = NULL;
 	extern Firmware_Details *firmware;
 	GtkListStore *store = NULL;
-	GtkListStore *combostore = NULL;
+	GtkTreeStore *combostore = NULL;
 	GtkTreeIter iter;
+	GtkTreeIter per_iter;
+	GtkTreeIter sys_iter;
 	GtkCellRenderer *renderer = NULL;
 	GtkTreeViewColumn *column = NULL;
 	GtkWidget * vbox = NULL;
 	GtkWidget * label = NULL;
 	GtkWidget * tree = NULL;
 	ConfigFile *cfgfile = NULL;
+	GArray *classes = NULL;
 	gint i = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
@@ -379,7 +382,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		ltc_created = TRUE;
 		ltc_visible = TRUE;
 		label = gtk_label_new("MegaTunix LookupTables");
-		gtk_box_pack_start (GTK_BOX(vbox),label,TRUE,TRUE,0);
+		gtk_box_pack_start (GTK_BOX(vbox),label,FALSE,TRUE,0);
 
 		store = gtk_list_store_new(N_COLS,	/* total cols */
 				G_TYPE_STRING, /* int name */
@@ -387,18 +390,36 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 				G_TYPE_BOOLEAN,/* View/Edit */
 				G_TYPE_BOOLEAN); /* change */
 
-		combostore = gtk_list_store_new(1,G_TYPE_STRING);
-		vector = get_files(g_strdup(LOOKUPTABLES_DATA_DIR),g_strdup("inc"));
+		combostore = gtk_tree_store_new(1,G_TYPE_STRING);/* lookuptable filename */
+				
+		gtk_tree_store_append(combostore,&per_iter,NULL);
+		gtk_tree_store_append(combostore,&sys_iter,NULL);
+		gtk_tree_store_set(combostore,&per_iter,
+				0,"Personal", -1);
+		gtk_tree_store_set(combostore,&sys_iter,
+				0,"System", -1);
+		vector = get_files(g_strdup(LOOKUPTABLES_DATA_DIR),g_strdup("inc"),&classes);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
 			tmpvector = g_strsplit(vector[i],PSEP,-1);
-			gtk_list_store_append(combostore,&iter);
-			gtk_list_store_set(combostore,&iter,
-					0,tmpvector[g_strv_length(tmpvector)-1],
-					-1);
+			if (g_array_index(classes,FileClass,i) == PERSONAL)
+			{
+				gtk_tree_store_append(combostore,&iter,&per_iter);
+				gtk_tree_store_set(combostore,&iter,
+						0,tmpvector[g_strv_length(tmpvector)-1],
+						-1);
+			}
+			if (g_array_index(classes,FileClass,i) == SYSTEM)
+			{
+				gtk_tree_store_append(combostore,&iter,&sys_iter);
+				gtk_tree_store_set(combostore,&iter,
+						0,tmpvector[g_strv_length(tmpvector)-1],
+						-1);
+			}
 			g_strfreev(tmpvector);
 		}
 		g_strfreev(vector);
+		g_array_free(classes,TRUE);
 
 		cfgfile = cfg_open_file(firmware->profile_filename);
 		if (!cfgfile)
@@ -420,6 +441,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		g_strfreev(vector);
 
 		tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+		gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree),TRUE);
 		gtk_box_pack_start(GTK_BOX(vbox),tree,TRUE,TRUE,0);
 		renderer = gtk_cell_renderer_text_new();
 		column = gtk_tree_view_column_new_with_attributes("Internal Name",renderer,"text",INTERNAL_NAME_COL,NULL);
@@ -473,6 +495,10 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
 		return TRUE;
 	
+	if (g_strcasecmp(new_text,"Personal") == 0)
+		return TRUE;
+	if (g_strcasecmp(new_text,"System") == 0)
+		return TRUE;
 	if (realtime_id)
 	{
 		restart_tickler = TRUE;

@@ -5,3 +5,6 @@ num_variables=128
 [Firmware]
 name=MS-3.0 Rover IAC v3.0.5
 
+[API]
+major=1
+minor=0

@@ -4,80 +4,84 @@ minor=0
 
 [global]
 description=Runtime Text definitions for std firmwares (B&G code)
-rtt_total=19
+rtt_total=20
 
 [rt_text_0]
+int_name=batt
+source=battvolt
+
+[rt_text_1]
 int_name=rpm
 source=rpm
 
-[rt_text_1]
+[rt_text_2]
 int_name=mapkpa
 source=mapkpa
 
-[rt_text_2]
+[rt_text_3]
 int_name=mapadc
 source=mapadc
 
-[rt_text_3]
+[rt_text_4]
 int_name=tpspercent
 source=tpspercent
 
-[rt_text_4]
+[rt_text_5]
 int_name=tpsadc
 source=tpsadc
 
-[rt_text_5]
+[rt_text_6]
 int_name=cltdeg
 source=cltdeg
 
-[rt_text_6]
+[rt_text_7]
 int_name=cltadc
 source=cltadc
 
-[rt_text_7]
+[rt_text_8]
 int_name=matdeg
 source=matdeg
 
-[rt_text_8]
+[rt_text_9]
 int_name=matadc
 source=matadc
 
-[rt_text_9]
+[rt_text_10]
 int_name=pw1
 source=pw1
 
-[rt_text_10]
+[rt_text_11]
 int_name=dc1
 source=dcycle1
 
-[rt_text_11]
+[rt_text_12]
 int_name=o2_volts
 source=o2volt
 
-[rt_text_12]
+[rt_text_13]
 int_name=AFR
 source=afr
 
-[rt_text_13]
+[rt_text_14]
 int_name=aircorr
 source=aircorr
 
-[rt_text_14]
+[rt_text_15]
 int_name=warmcorr
 source=warmcorr
 
-[rt_text_15]
+[rt_text_16]
 int_name=egocorr
 source=egocorr
 
-[rt_text_16]
+[rt_text_17]
 int_name=barocorr
 source=barocorr
 
-[rt_text_17]
+[rt_text_18]
 int_name=gammae
 source=gammae
 
-[rt_text_18]
+[rt_text_19]
 int_name=ve1
 source=vecurr1

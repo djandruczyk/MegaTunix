@@ -35,9 +35,11 @@
  the list as a vector char array. (free with g_strfreev)
  \param pathstub (gchar *) partial path to search for files
  \param extension (gchar *) extension to search for 
+ \param class (FileClass) enumeration pointer to array or classes for each
+ file found
  \returns vector char array of filenames or NULL if none found
  */
-gchar ** get_files(gchar *input, gchar * extension)
+gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 {
 	gchar *pathstub = NULL;
 	gchar *path = NULL;
@@ -46,6 +48,7 @@ gchar ** get_files(gchar *input, gchar * extension)
 	gchar * filename = NULL;
 	gchar **vector = NULL;
 	gchar * tmpbuf = NULL;
+	FileClass tmp = PERSONAL;
 	GDir *dir = NULL;
 
 
@@ -55,6 +58,7 @@ gchar ** get_files(gchar *input, gchar * extension)
 		pathstub = g_strdup(input);
 	g_free(input);
 
+	/* Personal files first */
 	path = g_build_filename(HOME(), ".MegaTunix",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
@@ -80,6 +84,15 @@ gchar ** get_files(gchar *input, gchar * extension)
 			g_free(list);
 			list = tmpbuf;
 		}
+		tmp = PERSONAL;
+		if (!*classes)
+		{
+			*classes = g_array_new(FALSE,TRUE,sizeof(FileClass));
+			g_array_append_val(*classes,tmp);
+		}
+		else
+			g_array_append_val(*classes,tmp);
+	
 
 		filename = (gchar *)g_dir_read_name(dir);
 
@@ -119,6 +132,15 @@ syspath:
 			g_free(list);
 			list = tmpbuf;
 		}
+		tmp = SYSTEM;
+		if (!*classes)
+		{
+			*classes = g_array_new(FALSE,TRUE,sizeof(FileClass));
+			g_array_append_val(*classes,tmp);
+		}
+		else
+			g_array_append_val(*classes,tmp);
+
 
 		filename = (gchar *)g_dir_read_name(dir);
 	}
@@ -380,11 +402,13 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 	GtkWidget *dialog = NULL;
 	char *filename;
 	gint result = -1;
+	gchar *msg = NULL;
+	gint handle = -1;
 
 	filename = gtk_file_chooser_get_filename (chooser);
 
 	/* If read only select again */
-	if (g_open(filename,O_RDWR,O_CREAT|O_APPEND) == -1)
+	if ((handle = g_open(filename,O_RDWR,O_CREAT|O_APPEND)) == -1)
 	{
 		dialog = gtk_message_dialog_new(NULL,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -398,6 +422,7 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 	/* File exists but is NOT R/O,  prompt to truncate or not */
 	else
 	{
+		close(handle);
 		dialog = gtk_message_dialog_new(NULL,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_QUESTION,
@@ -407,7 +432,13 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 		{
 			gtk_widget_destroy(dialog);
 			result = g_remove(filename);
-				return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
+			if (result == -1)
+			{
+				msg = g_strdup_printf("Removal of \"%s\" FAILED!!!",filename);
+				getfiles_errmsg(msg);
+				g_free(msg);
+			}
+			return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 		}
 		else
 		{
@@ -443,4 +474,19 @@ void free_mtxfileio(MtxFileIO *data)
 	if (data->default_extension)
 		g_free(data->default_extension);
 	return;
+}
+
+
+void getfiles_errmsg(const gchar * text)
+{
+	GtkWidget *dialog = NULL;
+
+	dialog = gtk_message_dialog_new(NULL,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR,
+			GTK_BUTTONS_CLOSE,
+			__FILE__":\n -- Error: %s\n",
+			text);
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
 }

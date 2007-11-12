@@ -33,7 +33,6 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 extern gint dbg_lvl;
-extern GStaticMutex comms_mutex;
 extern GStaticMutex serio_mutex;
 
 
@@ -56,6 +55,7 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 	guchar buf[2048];
 	guchar *ptr = buf;
 	gchar *err_text = NULL;
+	gchar *tmpbuf = NULL;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	extern Serial_Params *serial_params;
@@ -80,7 +80,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			total_wanted = 1024;
 			zerocount = 0;
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while (total_read < total_wanted )
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -101,7 +100,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 				if (zerocount > 1)  /* 2 bad reads, abort */
 					break;
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			flush_serial(serial_params->fd, TCIOFLUSH);
 			break;
@@ -116,7 +114,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			zerocount = 0;
 
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -140,13 +137,12 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 
 				if (dbg_lvl & IO_PROCESS)
 					dbg_func(g_strdup_printf(__FILE__"\tC_TEST read %i bytes, running total %i\n",res,total_read));
-				if (zerocount > 2)  /* 2 bad reads, abort */
+				if (zerocount > 1)  /* 2 bad reads, abort */
 				{
 					bad_read = TRUE;
 					break;
 				}
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
@@ -168,7 +164,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			total_wanted=1024;
 			zerocount=0;
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -194,7 +189,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 				if (zerocount > 1)  // 2 bad reads, abort
 					break;
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			dump_output(total_read,buf);
 			flush_serial(serial_params->fd, TCIOFLUSH);
@@ -208,14 +202,22 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			{
 				thread_update_logbar("error_status_view",NULL,g_strndup(((gchar *)buf)+1,total_read-1),FALSE,FALSE);
 				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
-					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",g_strndup(((gchar *)buf)+1,total_read-1)));
+				{
+					tmpbuf = g_strndup(((gchar *)buf)+1,total_read-1);
+					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+					g_free(tmpbuf);
+				}
 
 			}
 			else
 			{
 				thread_update_logbar("error_status_view",NULL,g_strdup("The data that came back was jibberish, try rebooting again.\n"),FALSE,FALSE);
 				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
-					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",g_strndup(((gchar *)buf)+1,total_read-1)));
+				{
+					tmpbuf = g_strndup(((gchar *)buf)+1,total_read-1);
+					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+					g_free(tmpbuf);
+				}
 			}
 			break;
 
@@ -229,7 +231,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			zerocount = 0;
 
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -259,7 +260,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 					break;
 				}
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
@@ -307,7 +307,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			zerocount = 0;
 
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -337,7 +336,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 					break;
 				}
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
@@ -366,7 +364,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 			zerocount = 0;
 
 			g_static_mutex_lock(&serio_mutex);
-			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				if (dbg_lvl & IO_PROCESS)
@@ -395,7 +392,6 @@ gboolean handle_ecu_data(InputHandler handler, Io_Message * message)
 					break;
 				}
 			}
-			g_static_mutex_unlock(&comms_mutex);
 			g_static_mutex_unlock(&serio_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
@@ -433,6 +429,7 @@ jumpout:
 void dump_output(gint total_read, guchar *buf)
 {
 	guchar *p = NULL;
+	gchar * tmpbuf = NULL;
 	gint j = 0;
 
 	p = buf;
@@ -442,8 +439,10 @@ void dump_output(gint total_read, guchar *buf)
 		if (dbg_lvl & SERIAL_RD)
 		{
 			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
-			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",g_strndup(((gchar *)buf),total_read)));
 			dbg_func(g_strdup_printf("Data is in HEX!!\n"));
+			tmpbuf = g_strndup(((gchar *)buf),total_read);
+			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
+			g_free(tmpbuf);
 		}
 		for (j=0;j<total_read;j++)
 		{

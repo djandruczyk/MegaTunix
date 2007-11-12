@@ -79,6 +79,7 @@ void interrogate_ecu()
 
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
 	if (dbg_lvl & INTERROGATOR)
 		dbg_func(g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
 
@@ -86,6 +87,7 @@ void interrogate_ecu()
 	{
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
 			dbg_func(g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),TRUE);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
@@ -98,6 +100,7 @@ void interrogate_ecu()
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
 			dbg_func(g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		g_static_mutex_unlock(&mutex);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),TRUE);
 		return;
 	}
 	/* how many tests.... */
@@ -218,10 +221,12 @@ void interrogate_ecu()
 	free_tests_array(tests);
 	g_hash_table_destroy(tests_hash);
 
+	if (!interrogated)
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),TRUE);
+
 	g_static_mutex_unlock(&mutex);
 	if (dbg_lvl & INTERROGATOR)
 		dbg_func(g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-
 	return;
 }
 
@@ -246,9 +251,10 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	gboolean match = FALSE;
 	gchar * filename = NULL;
 	gchar ** filenames = NULL;
+	GArray *classes = NULL;
 	extern Io_Cmds *cmds;
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"));	
+	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"),&classes);	
 	if (!filenames)
 	{
 		if (dbg_lvl & (INTERROGATOR|CRITICAL))
@@ -268,6 +274,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 		i++;
 	}
 	g_strfreev(filenames);
+	g_array_free(classes,TRUE);
 	// Update the screen with the data... 
 	for (i=0;i<num_tests;i++)
 	{
@@ -881,7 +888,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
+				printf("X multi_sources length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -915,7 +922,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
+				printf("Y multi_sources length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -950,7 +957,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("length mismatch!\n");
+				printf("Z multi_sources length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -1151,7 +1158,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	ConfigFile *cfgfile = NULL;
 	Detection_Test *test = NULL;
 	gint i = 0;
-	gint ok = 0;
+	gboolean pass = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** match_on = NULL;
@@ -1167,6 +1174,8 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		cfg_free(cfgfile);
+		g_free(cfgfile);
 		return FALSE;
 	}
 
@@ -1176,7 +1185,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 
 	for (i=0;i<g_strv_length(match_on);i++)
 	{
-		ok = -1;
+		pass = FALSE;
 //		printf("checking for match on %s\n",match_on[i]);
 		test = g_hash_table_lookup(tests_hash,match_on[i]);
 		if (!test)
@@ -1190,6 +1199,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 			if (dbg_lvl & INTERROGATOR)
 				dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			cfg_free(cfgfile);
+			g_free(cfgfile);
 			return FALSE;
 		}
 		vector = g_strsplit(tmpbuf,",",-1);
@@ -1204,31 +1214,32 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		{
 			case COUNT:
 				if (test->num_bytes == atoi(vector[1]))
-					ok=0;
+					pass=TRUE;
 				break;
 			case NUMMATCH:
 				if ((gint)(test->result_str[0]) == atoi(vector[1]))
-					ok=0;
+					pass=TRUE;
 				break;
 			case SUBMATCH:
 				if (strstr(test->result_str,vector[1]) != NULL)
-					ok=0;
+					pass=TRUE;
 				break;
 			case FULLMATCH:
 				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
-					ok=0;
+					pass=TRUE;
 				break;
 			default:
-				ok=-1;
+				pass=FALSE;
 		}
 		g_strfreev(vector);
-		if (ok == 0)
+		if (pass == TRUE)
 			continue;
 		else
 		{
 			if (dbg_lvl & INTERROGATOR)
 				dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			cfg_free(cfgfile);
+			g_free(cfgfile);
 			return FALSE;
 		}
 
@@ -1236,6 +1247,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	if (dbg_lvl & INTERROGATOR)
 		dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\t\"%s\" is a match for all conditions ...\n\n",filename));
 	cfg_free(cfgfile);
+	g_free(cfgfile);
 	return TRUE;
 }
 

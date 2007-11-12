@@ -49,30 +49,37 @@ GtkTooltips *tip = NULL;
  */
 int setup_gui()
 {
+	gchar *fname = NULL;
 	gchar *filename = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *top_vbox = NULL;
 	GladeXML *xml = NULL;
+	extern CmdLineArgs *args;
 	gint x = 0;
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
 	extern GObject *global_data;
 
-	filename = get_file(g_build_filename(GUI_DATA_DIR,"main.glade",NULL),NULL);
+	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
+	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("ERROR!  Could locate %s\n",fname);
+		g_free(fname);
+		printf("MegaTunix does NOT seem to be installed correctly, make sure\n\"make install\" has been run by root from the top level source directory...\n");
 		exit(-1);
 	}
 	else
 		xml = glade_xml_new(filename, "mtx_top_vbox",NULL);
+	g_free(fname);
 	g_free(filename);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(leave),NULL);
 	main_window = window;
+	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_vbox = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_vbox);
 
@@ -95,7 +102,8 @@ int setup_gui()
 	else
 		gtk_tooltips_disable(tip);
 
-	gtk_widget_show_all(main_window);
+	if (!args->hide_maingui)
+		gtk_widget_show_all(main_window);
 
 	return TRUE;
 }
@@ -118,8 +126,6 @@ void finalize_core_gui(GladeXML * xml)
 	gchar * tmpbuf = NULL;
 	extern gint temp_units;
 	extern gboolean tips_in_use;
-	extern gchar * serial_port_name;
-	extern gint baudrate;
 	extern GObject *global_data;
 	extern Serial_Params *serial_params;
 
@@ -256,37 +262,10 @@ void finalize_core_gui(GladeXML * xml)
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
 	gtk_tooltips_set_tip(tip,ebox,"Sets the comm port to use. Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
-	/* COMMS Tab commport entry */
+
+	/* COMM Port entry */
 	widget = glade_xml_get_widget(xml,"commport_entry");
 	register_widget("comms_serial_port_entry",widget);
-	if (serial_port_name)
-		gtk_entry_set_text(GTK_ENTRY(widget),serial_port_name);
-
-	/* COMMS Baud radio buttons */
-	widget = glade_xml_get_widget(xml,"9600-baud-rbutton");
-	register_widget("9600-baud-rbutton",widget);
-	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(BAUD_CHANGE));
-	g_object_set_data(G_OBJECT(widget),"new_baud",GINT_TO_POINTER(9600));
-	if (baudrate == 9600)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
-	}
-
-	widget = glade_xml_get_widget(xml,"115200-baud-rbutton");
-	register_widget("115200-baud-rbutton",widget);
-	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(BAUD_CHANGE));
-	g_object_set_data(G_OBJECT(widget),"new_baud",GINT_TO_POINTER(115200));
-	if (baudrate == 115200)
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
-	}
-
-
-	/* COMMS Tab Test ECU Comms button */
-	widget = glade_xml_get_widget(xml,"test_comms_button");
-	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(CHECK_ECU_COMMS));
 
 	/* COMMS Tab Read delay subtable */
 	ebox = glade_xml_get_widget(xml,"read_delay_ebox");

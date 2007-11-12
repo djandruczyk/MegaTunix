@@ -20,9 +20,10 @@
 /* Prototypes */
 gboolean open_serial(gchar *);
 void close_serial(void);
-void setup_serial_params(void);
+void setup_serial_params(gint);
 void toggle_serial_control_lines(void );
 void flush_serial(gint,gint);
+void *serial_repair_thread(gpointer );
 /* Prototypes */
 
 #endif

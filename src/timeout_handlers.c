@@ -42,9 +42,12 @@ void start_tickler(TicklerType type)
 {
 	extern GObject *global_data;
 	extern Serial_Params *serial_params;
+	extern volatile gboolean offline;
 	switch (type)
 	{
 		case RTV_TICKLER:
+			if (offline)
+				break;
 			if (realtime_id == 0)
 			{
 				flush_rt_arrays();
@@ -64,6 +67,8 @@ void start_tickler(TicklerType type)
 			}
 			break;
 		case TOOTHMON_TICKLER:
+			if (offline)
+				break;
 			if (toothmon_id == 0)
 				toothmon_id = g_timeout_add(400,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			else
@@ -73,6 +78,8 @@ void start_tickler(TicklerType type)
 			}
 			break;
 		case TRIGMON_TICKLER:
+			if (offline)
+				break;
 			if (trigmon_id == 0)
 				trigmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			else

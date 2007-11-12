@@ -12,6 +12,7 @@
  */
 
 
+#include <args.h>
 #include <binreloc.h>
 #include <comms_gui.h>
 #include <config.h>
@@ -53,7 +54,6 @@ GAsyncQueue *dispatch_queue;
  */
 gint main(gint argc, gchar ** argv)
 {
-	extern gchar * serial_port_name;
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -68,12 +68,14 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_set_locale();
 
+
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
 	cmds = g_malloc0(sizeof(Io_Cmds));
 
+	open_debug();	/* Open debug log */
 	init();			/* Initialize global vars */
-	open_debugfile();	/* Open debug log */
+	handle_args(argc,argv);
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
@@ -91,12 +93,10 @@ gint main(gint argc, gchar ** argv)
 			TRUE, // Joinable
 			NULL); //GError Pointer
 
-	dispatcher_id = gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
-
-	io_cmd(IO_OPEN_SERIAL,g_strdup(serial_port_name));
+	dispatcher_id = g_timeout_add(10,(GtkFunction)dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
+	g_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();

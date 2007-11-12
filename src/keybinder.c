@@ -26,7 +26,8 @@
 
 
 extern gint dbg_lvl;
-//	load_keys(widget,cfgfile,section,keys,keytypes,num_keys);
+
+
 void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint * keytypes, gint num_keys)
 {
 	gint i = 0;

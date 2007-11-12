@@ -161,7 +161,6 @@ gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar *
 		return FALSE;
 	if (!(line = cfg_find_string(sect, key)))
 		return FALSE;
-	//*value = g_strdup(line->value);
 	*value = g_strcompress(line->value);
 	return TRUE;
 }
@@ -274,7 +273,8 @@ void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * va
 	if ((line = cfg_find_string(sect, key)))
 	{
 		g_free(line->value);
-		tmpbuf = g_strchug(g_strchomp(g_strdup(value)));
+		//tmpbuf = g_strchug(g_strchomp(g_strdup(value)));
+		tmpbuf = g_strstrip(g_strdup(value));
 		line->value = g_strescape(tmpbuf,NULL);
 		g_free(tmpbuf);
 	}

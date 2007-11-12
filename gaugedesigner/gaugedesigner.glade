@@ -5070,7 +5070,7 @@ On Off Dash
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">90 0 359 0.10000000149 1 1</property>
+				      <property name="adjustment">90 0 360 0.10000000149 1 1</property>
 				    </widget>
 				  </child>
 				</widget>

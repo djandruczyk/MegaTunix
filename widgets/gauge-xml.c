@@ -120,13 +120,11 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 
 	/*free the document */
 	xmlFreeDoc(doc);
-
 	/*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
 	xmlCleanupParser();
-
 }
 
 void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)

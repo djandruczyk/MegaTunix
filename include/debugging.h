@@ -18,8 +18,8 @@
 #include <enums.h>
 
 /* Prototypes */
-void close_debugfile(void);
-void open_debugfile(void);
+void close_debug(void);
+void open_debug(void);
 void dbg_func(gchar *);
 void populate_debugging(GtkWidget *);
 /* Prototypes */

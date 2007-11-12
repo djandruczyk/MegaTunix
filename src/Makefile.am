@@ -14,6 +14,7 @@ megatunix_SOURCES = \
 	3d_vetable.c \
 	about_gui.c \
 	apicheck.c \
+	args.c \
 	comms.c \
 	comms_gui.c \
 	conversions.c \

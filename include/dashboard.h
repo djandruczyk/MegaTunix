@@ -33,6 +33,7 @@ void link_dash_datasources(GtkWidget *,gpointer);
 void dash_shape_combine(GtkWidget *);
 gboolean dash_motion_event(GtkWidget *, GdkEventMotion *, gpointer );
 gboolean dash_button_event(GtkWidget *, GdkEventButton *, gpointer );
+gboolean dash_key_event(GtkWidget *, GdkEventKey *, gpointer );
 void initialize_dashboards(void);
 gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );

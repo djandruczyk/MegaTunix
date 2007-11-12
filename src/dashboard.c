@@ -18,6 +18,8 @@
 #include <enums.h>
 #include <getfiles.h>
 #include <gauge.h>
+#include <gdk/gdkkeysyms.h>
+#include <gui_handlers.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <rtv_processor.h>
@@ -27,8 +29,10 @@
 
 gboolean dash_configure_event(GtkWidget * , GdkEventConfigure * );
 extern gint dbg_lvl;
+
+
 /*!
- \brief load_dashboard() loads hte specified dashboard configuration file
+ \brief load_dashboard() loads the specified dashboard configuration file
  and initializes the dash.
  \param  chooser, the fileshooser that triggered the signal
  \param data, user date
@@ -79,7 +83,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	g_signal_connect (G_OBJECT (window), "destroy_event",
 			G_CALLBACK (dummy), NULL);
 	ebox = gtk_event_box_new();
-	gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), TRUE);
+	//gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
 	gtk_container_add(GTK_CONTAINER(window),ebox);
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),GDK_POINTER_MOTION_MASK|
@@ -88,15 +92,20 @@ void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
+	g_signal_connect (G_OBJECT (window), "key_press_event",
+			G_CALLBACK (dash_key_event), NULL);
 
 
 	dash = gtk_fixed_new();
+	gtk_fixed_set_has_window(GTK_FIXED(dash),TRUE);
 	g_object_set_data(G_OBJECT(window),"dash",dash);
 	gtk_container_add(GTK_CONTAINER(ebox),dash);
 
 	/*Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
 
 	link_dash_datasources(dash,data);
 
@@ -149,7 +158,6 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	GtkWidget * dash  = NULL;
 
 
-
 	dash = g_object_get_data(G_OBJECT(widget),"dash");
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
@@ -158,7 +166,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
 	cur_width =  event->width;
 	cur_height =  event->height;
-	
+
 	ratio = (((gfloat)cur_height/(gfloat)orig_height)+((gfloat)cur_width/(gfloat)orig_width))/2.0;
 
 	if (((ratio - (gint)ratio)*100) < 1)
@@ -167,8 +175,8 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	g_signal_handlers_block_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
-        {
-                child = g_list_nth_data(children,i);
+	{
+		child = g_list_nth_data(children,i);
 		gauge = child->widget;
 		child_x = (gint)g_object_get_data(G_OBJECT(gauge),"orig_x_offset");
 		child_y = (gint)g_object_get_data(G_OBJECT(gauge),"orig_y_offset");
@@ -179,6 +187,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	}
 
 	dash_shape_combine(dash);
+
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
 	return FALSE;
 }
@@ -198,9 +207,7 @@ void load_elements(GtkWidget *dash, xmlNode *a_node)
 				load_gauge(dash,cur_node);
 		}
 		load_elements(dash,cur_node->children);
-
 	}
-
 }
 
 void load_geometry(GtkWidget *dash, xmlNode *node)
@@ -431,7 +438,6 @@ void dash_shape_combine(GtkWidget *dash)
 
 	g_static_mutex_lock(&mutex);
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
-
 	bitmap = gdk_pixmap_new(NULL,width,height,1);
 
 	colormap = gdk_colormap_get_system ();
@@ -441,7 +447,6 @@ void dash_shape_combine(GtkWidget *dash)
 	gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
 	gc = gdk_gc_new (bitmap);
 	gdk_gc_set_foreground (gc, &black);
-
 	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,width,height);
 
 	gdk_gc_set_foreground (gc, &white);
@@ -512,9 +517,52 @@ gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer da
 	return TRUE;
 }
 
+gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	extern GtkWidget *main_window;
+	extern GtkWidget *rtt_window;
+	extern GtkWidget *status_window;
+	if (event->type == GDK_KEY_RELEASE)
+		return FALSE;
+
+	switch (event->keyval)
+	{
+		case GDK_q:
+		case GDK_Q:
+			if (GTK_WIDGET_VISIBLE(main_window))
+				leave(NULL,GINT_TO_POINTER(FALSE));
+			else
+				leave(NULL,GINT_TO_POINTER(TRUE));
+			break;
+		case GDK_M:
+		case GDK_m:
+			if (GTK_WIDGET_VISIBLE(main_window))
+				gtk_widget_hide (main_window);
+			else
+				gtk_widget_show_all(main_window);
+			break;
+		case GDK_R:
+		case GDK_r:
+			if (GTK_WIDGET_VISIBLE(rtt_window))
+				gtk_widget_hide (rtt_window);
+			else
+				gtk_widget_show_all(rtt_window);
+			break;
+		case GDK_S:
+		case GDK_s:
+			if (GTK_WIDGET_VISIBLE(status_window))
+				gtk_widget_hide (status_window);
+			else
+				gtk_widget_show_all(status_window);
+			break;
+	}
+	return TRUE;
+}
+
 
 gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
+//	printf("button event\n");
 	gint edge = -1;
 
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
@@ -576,6 +624,7 @@ void initialize_dashboards()
 {
 	GtkWidget * label = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * tmpstr = NULL;
 	extern GObject *global_data;
 	extern GHashTable *dynamic_widgets;
 
@@ -583,7 +632,9 @@ void initialize_dashboards()
 	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_1_name");
 	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (g_ascii_strcasecmp(tmpbuf,"") != 0))
 	{
-		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL));
+		tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
+		gtk_label_set_text(GTK_LABEL(label),tmpstr);
+		g_free(tmpstr);
 		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
 	}
 
@@ -591,7 +642,9 @@ void initialize_dashboards()
 	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
 	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (g_ascii_strcasecmp(tmpbuf,"") != 0))
 	{
-		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL));
+		tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
+		gtk_label_set_text(GTK_LABEL(label),tmpstr);
+		g_free(tmpstr);
 		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
 	}
 }

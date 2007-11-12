@@ -70,19 +70,22 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 			if (num_attrs%2)
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_tags()\n\t numer of attributes is incorrect for widget \"%s\", key \"%s\" \n",section,key));
+					dbg_func(g_strdup_printf(__FILE__": load_tags()\n\t number of attributes is incorrect for widget \"%s\", key \"%s\" \n",section,key));
 				return;
 			}
 			switch (num_attrs)
 			{
 				case 2:
-					gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],NULL);
+					//gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],NULL);
+					gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],NULL);
 					break;
 				case 4:
-					gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],NULL);
+					//gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],NULL);
+					gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],attrs[2],attrs[3],NULL);
 					break;
 				case 6:
-					gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
+					//gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
+					gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
 					break;
 				default:
 					if (dbg_lvl & CRITICAL)
@@ -95,5 +98,6 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 		g_free(key);
 			
 	}
+	g_strfreev(tagnames);
 	return;
 }

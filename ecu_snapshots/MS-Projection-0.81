@@ -5,3 +5,6 @@ num_variables=128
 [Firmware]
 name=MS-Projection 0.81
 
+[API]
+major=1
+minor=0

@@ -61,7 +61,7 @@ extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern Serial_Params *serial_params;
-extern gchar * serial_port_name;
+extern gchar * default_serial_port;
 extern gint dbg_lvl;
 
 gboolean tips_in_use;
@@ -82,7 +82,8 @@ volatile gboolean leaving = FALSE;
  \brief leave() is the main shutdown function for MegaTunix. It shuts down
  whatever runnign handlers are still going, deallocates memory and quits
  \param widget (GtkWidget *) unused
- \param data (gpointer) unused
+ \param data (gpointer) quiet or not quiet, leave mode .quiet doesn't prompt 
+ to save anything
  */
 EXPORT void leave(GtkWidget *widget, gpointer data)
 {
@@ -90,36 +91,43 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	extern gint dispatcher_id;
 	extern gint statuscounts_id;
 	extern GStaticMutex serio_mutex;
-	extern GStaticMutex comms_mutex;
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
 	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *serial_repair_queue;
+	gboolean tmp = TRUE;
+	gboolean be_quiet = (gboolean) data;
 	GIOChannel * iochannel = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint count = 0;
 
-	prompt_to_save();
+
+	if (!be_quiet)
+		prompt_to_save();
 
 	if (leaving)
 		return;
 	leaving = TRUE;
+	/* Message to trigger serial repair queue to exit immediately */
+	g_async_queue_push(serial_repair_queue,&tmp);
+
 	if (dbg_lvl & CRITICAL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
 
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
 	}
-	g_static_mutex_lock(&mutex);
 
+	g_static_mutex_lock(&mutex);
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
 
 	save_config();
 
 	if (statuscounts_id)
-		gtk_timeout_remove(statuscounts_id);
+		g_source_remove(statuscounts_id);
 	statuscounts_id = 0;
 
 	/* Stop timeout functions */
@@ -160,15 +168,13 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
-	io_cmd(IO_CLOSE_SERIAL,NULL);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"));
 	if (dispatcher_id)
-		gtk_timeout_remove(dispatcher_id);
+		g_source_remove(dispatcher_id);
 	dispatcher_id = 0;
 
 	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait 
 	g_static_mutex_unlock(&rtv_mutex); // now unlock
+
 
 	/* This makes us wait until the io queue finishes */
 	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
@@ -193,15 +199,13 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 
 	/* Grab and release all mutexes to get them to relinquish
 	 */
-	g_static_mutex_lock(&comms_mutex);
-	g_static_mutex_unlock(&comms_mutex);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
 	/* Free all buffers */
 	mem_dealloc();
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
-	close_debugfile();
+	close_debug();
 	g_static_mutex_unlock(&mutex);
 	gtk_main_quit();
 	return;
@@ -219,24 +223,15 @@ gboolean comm_port_change(GtkEditable *editable)
 {
 	gchar *port;
 	gboolean result;
-	extern gboolean interrogated;
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
-	if(serial_params->open)
-	{
-		io_cmd(IO_CLOSE_SERIAL,NULL);
-	}
 	result = g_file_test(port,G_FILE_TEST_EXISTS);
 	if (result)
 	{
-		if (serial_port_name)
-			g_free(serial_port_name);
-		serial_port_name = g_strdup(port);
-		io_cmd(IO_OPEN_SERIAL,g_strdup(port));
-		io_cmd(IO_COMMS_TEST,NULL);
-		if (!interrogated)
-			io_cmd(IO_INTERROGATE_ECU,NULL);
+		/* This should append this new string to the vector of serial
+		 * ports to search,  but it doesn't do anything yet...
+		 */
 	}
 	else
 	{
@@ -418,7 +413,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
 	extern GHashTable *sources_hash;
-	extern gint baudrate;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -447,13 +441,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	switch ((SpinButton)handler)
 	{
-		case BAUD_CHANGE:
-			if (g_object_get_data(G_OBJECT(widget),"new_baud"))
-			{
-				baudrate = (gint)g_object_get_data(G_OBJECT(widget),"new_baud");
-				io_cmd(IO_CLOSE_SERIAL,NULL);
-				io_cmd(IO_OPEN_SERIAL,g_strdup(serial_port_name));
-			}
 			break;
 		case MAP_SENSOR_TYPE:
 			//printf("MAP SENSOR CHANGE\n");
@@ -843,10 +830,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gint tmpi = 0;
 	gchar * tmpbuf = NULL;
 	gboolean restart = FALSE;
-	GtkWidget *twidget = NULL;
 	extern gint realtime_id;
 	extern gboolean no_update;
-	extern gboolean offline;
+	extern volatile gboolean offline;
 	extern gboolean forced_update;
 	extern GHashTable *dynamic_widgets;
 
@@ -937,23 +923,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (offline)
 				break;
 			io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
-			break;
-		case CHECK_ECU_COMMS:
-			if (offline)
-				break;
-			twidget = g_hash_table_lookup(dynamic_widgets, "comms_serial_port_entry");
-			/* If not sent flag is defined, we need to trigger the
-			 * comm port change FIRST
-			 */
-			if (g_object_get_data(G_OBJECT(twidget),"not_sent"))
-			{
-				comm_port_change(GTK_EDITABLE(twidget));
-				/* No need to call comms test as that is part 
-				 * of a comm port change..
-				 */
-			}
-			else
-				io_cmd(IO_COMMS_TEST,NULL);
 			break;
 		case BURN_MS_FLASH:
 			io_cmd(IO_BURN_MS_FLASH,NULL);
@@ -2392,7 +2361,7 @@ EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 void prompt_to_save(void)
 {
 	gint result = 0;
-	extern gboolean offline;
+	extern volatile gboolean offline;
 	GtkWidget *dialog = NULL;
 	extern GtkWidget *main_window;
 	GtkWidget *label = NULL;

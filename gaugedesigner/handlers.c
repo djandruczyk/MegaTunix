@@ -75,7 +75,6 @@ EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
-	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
 
@@ -117,7 +116,6 @@ EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
-	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
 
@@ -198,7 +196,7 @@ void update_text_controls()
 
 	widget = glade_xml_get_widget(text_xml,"show_value_check");
 	mtx_gauge_face_get_attribute(g, SHOW_VALUE, &tmp1);
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	widget = glade_xml_get_widget(text_xml,"value_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
@@ -232,7 +230,7 @@ void reset_text_controls()
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup(""));
 
 	widget = glade_xml_get_widget(text_xml,"show_value_check");
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
 	widget = glade_xml_get_widget(text_xml,"value_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
@@ -356,7 +354,7 @@ void update_general_controls()
 
 	mtx_gauge_face_get_attribute(g,ANTIALIAS,&tmp1);
 	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	widget = glade_xml_get_widget(gen_xml,"background_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
@@ -402,7 +400,7 @@ void reset_general_controls()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
 	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
 	widget = glade_xml_get_widget(gen_xml,"background_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);

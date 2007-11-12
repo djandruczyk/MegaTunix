@@ -33,6 +33,7 @@
  */
 
 extern gint dbg_lvl;
+GtkWidget *status_window = NULL;
 
 void load_status(void)
 {
@@ -62,7 +63,9 @@ void load_status(void)
 	GtkWidget * frame;
 	GtkWidget * table;
 	extern GObject *global_data;
+	extern CmdLineArgs *args;
 	GdkColor color;
+
 
 	if (!firmware->status_map_file)
 	{
@@ -92,6 +95,7 @@ void load_status(void)
 		}
 
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
 		x = (gint)g_object_get_data(global_data,"status_x_origin");
 		y = (gint)g_object_get_data(global_data,"status_y_origin");
@@ -181,6 +185,7 @@ void load_status(void)
 			}
 
 			bind_keys(G_OBJECT(label),cfgfile,section,keys,key_types,num_keys);
+			g_strfreev(keys);
 			g_free(key_types);
 			/* Bind widgets to lists if thy have the bind_to_list flag set...
 			 *         */
@@ -204,7 +209,9 @@ void load_status(void)
 
 
 		}
-		gtk_widget_show_all(window);
+		status_window = window;
+		if (!args->hide_status)
+			gtk_widget_show_all(window);
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 

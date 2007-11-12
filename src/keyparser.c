@@ -45,7 +45,7 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 }
 
 /*!
- \brief parse_key_types() splits up a string list and converts the individual 
+ \brief parse_keytypes() splits up a string list and converts the individual 
  values into enumerations
  \param string (gchar *) input string
  \param count (gint *) reference to dest to place number of keys

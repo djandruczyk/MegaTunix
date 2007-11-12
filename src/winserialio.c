@@ -35,12 +35,11 @@ void win32_open_comm_port()
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
  by setting things basically for 8N1, no flow, no escapes, etc....
  */
-void win32_setup_serial_params()
+void win32_setup_serial_params(gint baudrate)
 {
 #ifdef __WIN32__
 	DCB dcb;
 	COMMTIMEOUTS timeouts;
-	extern gint baudrate;
 
 	if (serial_params->open == FALSE)
 		return;
@@ -53,7 +52,7 @@ void win32_setup_serial_params()
 
 	if (baudrate == 9600)
 		dcb.BaudRate = CBR_9600;
-	else if (baudrate == 9600)
+	else if (baudrate == 115200)
 		dcb.BaudRate = CBR_115200;
 	dcb.ByteSize = 8;
 	dcb.Parity   = NOPARITY;        // NOPARITY and friends are

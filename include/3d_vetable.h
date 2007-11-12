@@ -27,6 +27,13 @@
 #include <GL/glu.h>
 
 /* Private structures */
+typedef enum
+{
+	_X_,
+	_Y_,
+	_Z_,
+}Axis;
+
 typedef struct _Cur_Vals Cur_Vals;
 
 struct _Cur_Vals
@@ -72,6 +79,8 @@ void update_ve3d_if_necessary(int , int );
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
 gboolean set_tracking_focus(GtkWidget *, gpointer );
+gboolean set_scaling_mode(GtkWidget *, gpointer );
+gfloat get_fixed_pos(Ve_View_3D *, void *,gfloat, Axis);
 
 /* Prototypes */
 

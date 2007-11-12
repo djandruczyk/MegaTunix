@@ -20,6 +20,7 @@
 #include <glib/gstdio.h>
 #include <init.h>
 #include <listmgmt.h>
+#include "../mtxmatheval/mtxmatheval.h"
 #include <structures.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -32,9 +33,9 @@ gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
 gint baudrate;
-gchar * serial_port_name = NULL;
+gchar * default_serial_port = NULL;
+gchar *potential_ports = NULL;
 extern gint dbg_lvl;
-extern GStaticMutex comms_mutex;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
@@ -56,6 +57,7 @@ extern Serial_Params *serial_params;
 gint **ms_data = NULL;
 gint **ms_data_last = NULL;
 gint **ms_data_backup = NULL;
+CmdLineArgs *args = NULL;
 GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
@@ -89,9 +91,11 @@ void init(void)
 
 	/* initialize all global variables to known states */
 #ifdef __WIN32__
-	serial_port_name = g_strdup("COM1");
+	default_serial_port = g_strdup("COM1");
+	potential_ports = g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9");
 #else
-	serial_port_name = g_strdup("/dev/ttyS0");
+	default_serial_port = g_strdup("/dev/ttyS0");
+	potential_ports = g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3");
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
@@ -108,6 +112,16 @@ void init(void)
 	temp_units = FAHRENHEIT;/* Use SAE units by default */
 	lv_zoom = 1;		/* Logviewer scroll speed */
 	preferred_delimiter = TAB;
+
+	args = g_new0(CmdLineArgs, 1);
+	args->be_quiet = FALSE;
+	args->autolog_dump = FALSE;
+	args->hide_rttext = FALSE;
+	args->hide_status = FALSE;
+	args->hide_maingui = FALSE;
+	args->autolog_minutes = 5;
+	args->autolog_dump_dir = NULL;
+	args->autolog_basename = NULL;
 }
 
 
@@ -173,8 +187,31 @@ gboolean read_config(void)
 			g_object_set_data(global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_y_origin", &tmpi))
 			g_object_set_data(global_data,"main_y_origin",GINT_TO_POINTER(tmpi));
-		cfg_read_string(cfgfile, "Serial", "port_name", 
-				&serial_port_name);
+
+		if(cfg_read_string(cfgfile, "Serial", "port_name", &tmpbuf))
+		{
+			/* Handle the case where it's already defined,  
+			 * but we have a user override.  Prevents a memory
+			 * leak.
+			 */
+			if (default_serial_port)
+				g_free(default_serial_port);
+			default_serial_port = g_strdup(tmpbuf);
+			g_free(tmpbuf);
+		}
+				
+		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
+		{
+			/* Handle the case where it's already defined,  
+			 * but we have a user override.  Prevents a memory
+			 * leak.
+			 */
+			if (potential_ports)
+				g_free(potential_ports);
+			potential_ports = g_strdup(tmpbuf);
+			g_free(tmpbuf);
+		}
+				
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
 		cfg_read_int(cfgfile, "Serial", "baudrate", 
@@ -256,9 +293,12 @@ void save_config(void)
 			dash = g_object_get_data(G_OBJECT(widget),"dash");
 			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
 		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
-			gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
-			ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
-			cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
+			if (GTK_WIDGET_VISIBLE(widget))
+			{
+				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+				ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+				cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
+			}
 		}
 	}
 	else
@@ -281,9 +321,12 @@ void save_config(void)
 			dash = g_object_get_data(G_OBJECT(widget),"dash");
 			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
 		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
-			gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
-			ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
-			cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
+			if (GTK_WIDGET_VISIBLE(widget))
+			{
+				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+				ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+				cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
+			}
 		}
 	}
 	else
@@ -297,43 +340,56 @@ void save_config(void)
 
 	if (ready)
 	{
-		gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
-		cfg_write_int(cfgfile, "Window", "width", tmp_width);
-		cfg_write_int(cfgfile, "Window", "height", tmp_height);
-		gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
-		if (x > 0)
-			cfg_write_int(cfgfile, "Window", "main_x_origin", x);
-		if (y > 0)
-			cfg_write_int(cfgfile, "Window", "main_y_origin", y);
-		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
+		if (GTK_WIDGET_VISIBLE(main_window))
 		{
-			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
-
-			cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
-			cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
-			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"status_window")),&x,&y);
+			gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
+			cfg_write_int(cfgfile, "Window", "width", tmp_width);
+			cfg_write_int(cfgfile, "Window", "height", tmp_height);
+			gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
 			if (x > 0)
-				cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+				cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 			if (y > 0)
-				cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+				cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		}
-		if (g_hash_table_lookup(dynamic_widgets,"rtt_window"))
+		widget = g_hash_table_lookup(dynamic_widgets,"status_window");
+		if (widget)
 		{
-			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"rtt_window"))->window, &tmp_width,&tmp_height);
+			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
+			{
+				gdk_drawable_get_size(widget->window, &tmp_width,&tmp_height);
 
-			cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
-			cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
-			gtk_window_get_position(GTK_WINDOW(g_hash_table_lookup(dynamic_widgets,"rtt_window")),&x,&y);
-			if (x > 0)
-				cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
-			if (y > 0)
-				cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
+				cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
+				cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
+				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+				if (x > 0)
+					cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+				if (y > 0)
+					cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+			}
+		}
+		widget = g_hash_table_lookup(dynamic_widgets,"rtt_window");
+		if (widget)
+		{
+			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
+			{
+				gdk_drawable_get_size(widget->window, &tmp_width,&tmp_height);
+
+				cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
+				cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
+				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+				if (x > 0)
+					cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
+				if (y > 0)
+					cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
+			}
 		}
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "port_name", 
 				serial_params->port_name);
+	cfg_write_string(cfgfile, "Serial", "potential_ports", 
+				potential_ports);
 	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
 	cfg_write_int(cfgfile, "Serial", "baudrate", baudrate);
@@ -474,15 +530,20 @@ void mem_dealloc()
 {
 	gint i = 0;
 	extern Firmware_Details *firmware;
+	extern GStaticMutex serio_mutex;
 
-	g_static_mutex_lock(&comms_mutex);
+	g_static_mutex_lock(&serio_mutex);
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
 	if (serial_params)
 		g_free(serial_params);
 	serial_params = NULL;
-	g_static_mutex_unlock(&comms_mutex);
+	g_static_mutex_unlock(&serio_mutex);
+
+	/* Defautl serial port stuff.. */
+	g_free(default_serial_port);
+	g_free(potential_ports);
 
 	/* Firmware datastructure.... */
 	if (firmware)
@@ -641,7 +702,7 @@ void dealloc_message(Io_Message * message)
         if (message->payload)
                 g_free(message->payload);
         g_free(message);
-
+	message = NULL;
 }
 
 
@@ -696,30 +757,70 @@ void dealloc_qfunction(QFunction * qfunc)
  */
 void dealloc_table_params(Table_Params * table_params)
 {
-	/*
-	if(table_params->x_suffix)
-		g_free(table_params->x_suffix);
-	if(table_params->y_suffix)
-		g_free(table_params->y_suffix);
-	if(table_params->z_suffix)
-		g_free(table_params->z_suffix);
+	if(table_params->table_name)
+		g_free(table_params->table_name);
+	if(table_params->x_source_key)
+		g_free(table_params->x_source_key);
+	if(table_params->y_source_key)
+		g_free(table_params->y_source_key);
+	if(table_params->z_source_key)
+		g_free(table_params->z_source_key);
+	if(table_params->x_multi_expr_keys)
+		g_free(table_params->x_multi_expr_keys);
+	if(table_params->y_multi_expr_keys)
+		g_free(table_params->y_multi_expr_keys);
+	if(table_params->z_multi_expr_keys)
+		g_free(table_params->z_multi_expr_keys);
+	if(table_params->x_suffixes)
+		g_free(table_params->x_suffixes);
+	if(table_params->y_suffixes)
+		g_free(table_params->y_suffixes);
+	if(table_params->z_suffixes)
+		g_free(table_params->z_suffixes);
+	if(table_params->x_conv_exprs)
+		g_free(table_params->x_conv_exprs);
+	if(table_params->y_conv_exprs)
+		g_free(table_params->y_conv_exprs);
+	if(table_params->z_conv_exprs)
+		g_free(table_params->z_conv_exprs);
+	if(table_params->x_precisions)
+		g_free(table_params->x_precisions);
+	if(table_params->y_precisions)
+		g_free(table_params->y_precisions);
+	if(table_params->z_precisions)
+		g_free(table_params->z_precisions);
+	if (table_params->x_multi_hash)
+		g_hash_table_destroy(table_params->x_multi_hash);
+	if (table_params->y_multi_hash)
+		g_hash_table_destroy(table_params->y_multi_hash);
+	if (table_params->z_multi_hash)
+		g_hash_table_destroy(table_params->z_multi_hash);
 	if(table_params->x_conv_expr)
 		g_free(table_params->x_conv_expr);
 	if(table_params->y_conv_expr)
 		g_free(table_params->y_conv_expr);
 	if(table_params->z_conv_expr)
 		g_free(table_params->z_conv_expr);
-	if(table_params->table_name)
-		g_free(table_params->table_name);
-	*/
-	table_params->x_suffix = NULL;
-	table_params->y_suffix = NULL;
-	table_params->z_suffix = NULL;
-	table_params->x_conv_expr = NULL;
-	table_params->y_conv_expr = NULL;
-	table_params->z_conv_expr = NULL;
-	table_params->table_name = NULL;
+	if(table_params->x_source)
+		g_free(table_params->x_source);
+	if(table_params->y_source)
+		g_free(table_params->y_source);
+	if(table_params->z_source)
+		g_free(table_params->z_source);
+	if(table_params->x_suffix)
+		g_free(table_params->x_suffix);
+	if(table_params->y_suffix)
+		g_free(table_params->y_suffix);
+	if(table_params->z_suffix)
+		g_free(table_params->z_suffix);
+	if(table_params->x_eval)
+		evaluator_destroy(table_params->x_eval);
+	if(table_params->y_eval)
+		evaluator_destroy(table_params->y_eval);
+	if(table_params->z_eval)
+		evaluator_destroy(table_params->z_eval);
 
+	g_free(table_params);
 	return;
 }
 

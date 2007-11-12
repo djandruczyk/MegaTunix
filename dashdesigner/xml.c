@@ -62,11 +62,6 @@ void import_dash_xml(gchar * filename)
 	 */
 	xmlCleanupParser();
 
-	/*
-	 * this is to debug memory for regression tests
-	 */
-	xmlMemoryDump();
-
 	return ;
 }
 

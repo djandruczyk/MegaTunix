@@ -218,10 +218,12 @@ void  update_logbar(
  */
 EXPORT void conn_warning(void)
 {
+	extern CmdLineArgs *args;
 	gchar *buff = NULL;
+	if ((args->be_quiet) || (warning_present))
+		return;
 	buff = g_strdup("The MegaSquirt ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. Wrong Comm port is selected on the Communications Tab\n   2. The MegaSquirt serial link is not plugged in\n   3. The MegaSquirt ECU does not have adequate power.\n   4. The MegaSquirt ECU is in bootloader mode.\n\nSuggest checking the serial settings on the Communications page first, and then check the Serial Status log at the bottom of that page. If the Serial Status log says \"I/O with MegaSquirt Timeout\", it means one of a few possible problems:\n   1. You selected the wrong COM port (older systems came with two, most newer ones only have one, try the other one...)\n   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 Male/Female cable)\n   3. The cable is OK, but the MS doesn't have adequate power.\n   4. If you have the ECU in bootloader mode, none of the lights lite up, and a terminal program will show a \"Boot>\" prompt Disconnect the Boot jumper and power cycle the ECU.\n\nIf it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this can mean one of two things:\n   1. The COM port doesn't exist on your computer,\n\t\t\t\t\tOR\n   2. You don't have permission to open the port. (/dev/ttySx).\nUNIX ONLY: Change the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/ttyS*\" as root), NOTE: This has potential security implications. Check the Unix/Linux system documentation regarding \"security\" for more information...\n");
-	if (!warning_present)
-		warn_user(buff);
+	warn_user(buff);
 	g_free(buff);
 }
 
@@ -245,6 +247,10 @@ EXPORT void kill_conn_warning()
  */
 void warn_user(gchar *message)
 {
+	extern CmdLineArgs *args;
+	if (args->be_quiet)
+		return;
+
 	extern gboolean interrogated;
 	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_NONE,message);
@@ -274,7 +280,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 		set_offline_mode();
 	}
 	if (response == GTK_RESPONSE_CLOSE)
-	close_dialog(widget,NULL);
+		close_dialog(widget,NULL);
 	return TRUE;
 }
 

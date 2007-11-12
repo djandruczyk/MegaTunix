@@ -235,7 +235,8 @@ breakout:
 		draw_ve_marker();
 		update_tab_gauges();
 	}
-	g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
+	if (rtt_hash)
+		g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
