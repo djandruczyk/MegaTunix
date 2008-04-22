@@ -19,6 +19,7 @@
 #include <vex_support.h>
 
 
+extern GObject *global_data;
 static struct 
 {
 	const gchar *item;
@@ -45,23 +46,25 @@ static struct
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
 
-void setup_menu_handlers()
+EXPORT void setup_menu_handlers()
 {
 	GtkWidget *item = NULL;
 	gint i = 0;
 	GladeXML *xml = NULL;
-	extern GObject *global_data;
 	extern volatile gboolean leaving;
 
-	xml = (GladeXML *)g_object_get_data(global_data,"main_xml");
+
+	xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if ((!xml) || (leaving))
 		return;
+	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
+	gtk_widget_set_sensitive(item,TRUE);
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)
 	{
 		item = glade_xml_get_widget(xml,items[i].item);
 		if (GTK_IS_WIDGET(item))
-			g_object_set_data(G_OBJECT(item),"target_tab",
+			OBJ_SET(item,"target_tab",
 					GINT_TO_POINTER(items[i].tab));
 		if (!check_tab_existance(items[i].tab))
 			gtk_widget_set_sensitive(item,FALSE);
@@ -73,7 +76,7 @@ void setup_menu_handlers()
 		item = glade_xml_get_widget(xml,fio_items[i].item);
 		if (GTK_IS_WIDGET(item))
 		{
-			g_object_set_data(G_OBJECT(item),"fio_action",
+			OBJ_SET(item,"fio_action",
 					GINT_TO_POINTER(fio_items[i].action));
 			gtk_widget_set_sensitive(item,TRUE);
 		}
@@ -96,16 +99,16 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 	notebook = g_hash_table_lookup(dynamic_widgets, "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
 		return FALSE;
-	if (!g_object_get_data(G_OBJECT(widget),"target_tab"))
+	if (!OBJ_GET(widget,"target_tab"))
 		return FALSE;
-	target = (TabIdent)g_object_get_data(G_OBJECT(widget),"target_tab");
+	target = (TabIdent)OBJ_GET(widget,"target_tab");
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	for (i=0;i<total;i++)
 	{
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
-		if (!g_object_get_data(G_OBJECT(child),"tab_ident"))
+		if (!OBJ_GET(child,"tab_ident"))
 			continue;
-		c_tab = (TabIdent)g_object_get_data(G_OBJECT(child),"tab_ident");
+		c_tab = (TabIdent)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),i);
@@ -123,7 +126,7 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
-	action = (FioAction)g_object_get_data(G_OBJECT(widget),"fio_action");
+	action = (FioAction)OBJ_GET(widget,"fio_action");
 
 	switch (action)
 	{
@@ -163,9 +166,9 @@ gboolean check_tab_existance(TabIdent target)
 	for (i=0;i<total;i++)
 	{
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
-		if (!g_object_get_data(G_OBJECT(child),"tab_ident"))
+		if (!OBJ_GET(child,"tab_ident"))
 			continue;
-		c_tab = (TabIdent)g_object_get_data(G_OBJECT(child),"tab_ident");
+		c_tab = (TabIdent)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
 		{
 			return TRUE;

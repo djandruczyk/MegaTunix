@@ -19,8 +19,8 @@
 
 
 static GHashTable *str_2_enum = NULL;
-void dump_hash(gpointer,gpointer,gpointer);
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -33,22 +33,38 @@ void build_string_2_enum_table()
 	str_2_enum = g_hash_table_new(g_str_hash,g_str_equal);
 
 	/* Firmware capabilities */
+	g_hash_table_insert(str_2_enum,"_MS1_",
+			GINT_TO_POINTER(MS1));
+	g_hash_table_insert(str_2_enum,"_MS1_STD_",
+			GINT_TO_POINTER(MS1_STD));
 	g_hash_table_insert(str_2_enum,"_DUALTABLE_",
 			GINT_TO_POINTER(DUALTABLE));
 	g_hash_table_insert(str_2_enum,"_MSNS_E_",
 			GINT_TO_POINTER(MSNS_E));
+	g_hash_table_insert(str_2_enum,"_MS2_",
+			GINT_TO_POINTER(MS2));
+	g_hash_table_insert(str_2_enum,"_MS2_STD_",
+			GINT_TO_POINTER(MS2_STD));
+	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_",
+			GINT_TO_POINTER(MS2_EXTRA));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
 			GINT_TO_POINTER(MTX_CHAR));
-	g_hash_table_insert(str_2_enum,"_UINT8_",
-			GINT_TO_POINTER(MTX_UINT8));
-	g_hash_table_insert(str_2_enum,"_SINT8_",
-			GINT_TO_POINTER(MTX_SINT8));
-	g_hash_table_insert(str_2_enum,"_UINT16_",
-			GINT_TO_POINTER(MTX_UINT16));
-	g_hash_table_insert(str_2_enum,"_SINT16_",
-			GINT_TO_POINTER(MTX_SINT16));
+	g_hash_table_insert(str_2_enum,"_U08_",
+			GINT_TO_POINTER(MTX_U08));
+	g_hash_table_insert(str_2_enum,"_S08_",
+			GINT_TO_POINTER(MTX_S08));
+	g_hash_table_insert(str_2_enum,"_U16_",
+			GINT_TO_POINTER(MTX_U16));
+	g_hash_table_insert(str_2_enum,"_S16_",
+			GINT_TO_POINTER(MTX_S16));
+	g_hash_table_insert(str_2_enum,"_U32_",
+			GINT_TO_POINTER(MTX_U32));
+	g_hash_table_insert(str_2_enum,"_S32_",
+			GINT_TO_POINTER(MTX_S32));
+	g_hash_table_insert(str_2_enum,"_UNDEF_",
+			GINT_TO_POINTER(MTX_UNDEF));
 	g_hash_table_insert(str_2_enum,"_COUNT_",
 			GINT_TO_POINTER(COUNT));
 	g_hash_table_insert(str_2_enum,"_SUBMATCH_",
@@ -57,14 +73,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(NUMMATCH));
 	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
 			GINT_TO_POINTER(FULLMATCH));
-
-	/* Storage Types for reading interrogation tests */
-	g_hash_table_insert(str_2_enum,"_SIG_",
-			GINT_TO_POINTER(SIG));
-	g_hash_table_insert(str_2_enum,"_VNUM_",
-			GINT_TO_POINTER(VNUM));
-	g_hash_table_insert(str_2_enum,"_TEXTVER_",
-			GINT_TO_POINTER(TEXTVER));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",
@@ -267,8 +275,56 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_SD_MAF_HYBRID_",
 			GINT_TO_POINTER(SD_MAF_HYBRID));
 
+	/* Function Call */
+	g_hash_table_insert(str_2_enum,"_FUNC_CALL_",
+			GINT_TO_POINTER(FUNC_CALL));
+	g_hash_table_insert(str_2_enum,"_WRITE_CMD_",
+			GINT_TO_POINTER(WRITE_CMD));
+	g_hash_table_insert(str_2_enum,"_NULL_CMD_",
+			GINT_TO_POINTER(NULL_CMD));
 
-	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
+	/* XmlCmdType's */
+	g_hash_table_insert(str_2_enum,"_WRITE_VERIFY_",
+			GINT_TO_POINTER(WRITE_VERIFY));
+	g_hash_table_insert(str_2_enum,"_MISMATCH_COUNT_",
+			GINT_TO_POINTER(MISMATCH_COUNT));
+	g_hash_table_insert(str_2_enum,"_MS1_CLOCK_",
+			GINT_TO_POINTER(MS1_CLOCK));
+	g_hash_table_insert(str_2_enum,"_MS2_CLOCK_",
+			GINT_TO_POINTER(MS2_CLOCK));
+	g_hash_table_insert(str_2_enum,"_REVISION_",
+			GINT_TO_POINTER(REVISION));
+	g_hash_table_insert(str_2_enum,"_SIGNATURE_",
+			GINT_TO_POINTER(SIGNATURE));
+	g_hash_table_insert(str_2_enum,"_MS1_VECONST_",
+			GINT_TO_POINTER(MS1_VECONST));
+	g_hash_table_insert(str_2_enum,"_MS2_VECONST_",
+			GINT_TO_POINTER(MS2_VECONST));
+	g_hash_table_insert(str_2_enum,"_MS2_BOOTLOADER_",
+			GINT_TO_POINTER(MS2_BOOTLOADER));
+	g_hash_table_insert(str_2_enum,"_MS1_RT_VARS_",
+			GINT_TO_POINTER(MS1_RT_VARS));
+	g_hash_table_insert(str_2_enum,"_MS2_RT_VARS_",
+			GINT_TO_POINTER(MS2_RT_VARS));
+	g_hash_table_insert(str_2_enum,"_MS1_GETERROR_",
+			GINT_TO_POINTER(MS1_GETERROR));
+	g_hash_table_insert(str_2_enum,"_MS1_E_TRIGMON_",
+			GINT_TO_POINTER(MS1_E_TRIGMON));
+	g_hash_table_insert(str_2_enum,"_MS1_E_TOOTHMON_",
+			GINT_TO_POINTER(MS1_E_TOOTHMON));
+
+	/* Action's */
+	g_hash_table_insert(str_2_enum,"_SLEEP_",
+			GINT_TO_POINTER(SLEEP));
+
+	/*ArgType's */
+	g_hash_table_insert(str_2_enum,"_DATA_",
+			GINT_TO_POINTER(DATA));
+	g_hash_table_insert(str_2_enum,"_ACTION_",
+			GINT_TO_POINTER(ACTION));
+	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
+			GINT_TO_POINTER(STATIC_STRING));
+	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
 }
 

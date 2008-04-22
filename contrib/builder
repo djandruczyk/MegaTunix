@@ -3,5 +3,5 @@
 CVSDIR=/home/dave/cvs/MegaTunix
 
 SUFFIX=`grep SUFFIX ${CVSDIR}/MegaTunix.iss |cut -f2 -d= |tr -d [:cntrl:]`
-wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe L:/dave/cvs/Megatunix/MegaTunix.iss
+wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe L:/dave/cvs/MegaTunix/MegaTunix.iss
 mv ${CVSDIR}/Output/setup.exe ${CVSDIR}/Output/megatunix-${SUFFIX}-setup.exe

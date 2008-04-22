@@ -14,6 +14,7 @@
 #ifndef __UNIONS_H__
 #define __UNIONS_H__
 
+#include <gtk/gtk.h>
 
 /* Megasquirt unions defined in C provided by Perry Harrington */
 
@@ -455,6 +456,6 @@ union spark_config1
 		guchar unused		:4;
 	} bit;
 };
-#endif // Endian-ness check
+#endif /* Endian-ness check */
 
 #endif

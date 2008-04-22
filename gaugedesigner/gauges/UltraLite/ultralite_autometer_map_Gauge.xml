@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
 <gauge>
-  <bg_color>62965 62965 62965</bg_color>
-  <needle_color>61019 15359 2737</needle_color>
+  <bg_color>
+    <red>62965</red>
+    <green>62965</green>
+    <blue>62965</blue>
+  </bg_color>
+  <needle_color>
+    <red>61019</red>
+    <green>15359</green>
+    <blue>2737</blue>
+  </needle_color>
+  <needle_length>0.850000</needle_length>
   <needle_tail>0.250000</needle_tail>
   <needle_width>0.047000</needle_width>
-  <value_font_color>2643 2643 2643</value_font_color>
-  <gradient_begin_color>47288 47288 47288</gradient_begin_color>
-  <gradient_end_color>47288 47288 47288</gradient_end_color>
+  <needle_tip_width>0.000000</needle_tip_width>
+  <needle_tail_width>0.000000</needle_tail_width>
+  <value_font_color>
+    <red>2643</red>
+    <green>2643</green>
+    <blue>2643</blue>
+  </value_font_color>
+  <gradient_begin_color>
+    <red>47288</red>
+    <green>47288</green>
+    <blue>47288</blue>
+  </gradient_begin_color>
+  <gradient_end_color>
+    <red>47288</red>
+    <green>47288</green>
+    <blue>47288</blue>
+  </gradient_end_color>
   <precision>2</precision>
   <width>357</width>
   <height>379</height>
@@ -27,7 +50,11 @@
     <font_scale>0.242000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.442000</y_pos>
-    <color>2192 979 979</color>
+    <color>
+      <red>2192</red>
+      <green>979</green>
+      <blue>979</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Eras Demi ITC</font>
@@ -35,7 +62,11 @@
     <font_scale>0.105000</font_scale>
     <x_pos>0.010000</x_pos>
     <y_pos>-0.118000</y_pos>
-    <color>5285 5285 5285</color>
+    <color>
+      <red>5285</red>
+      <green>5285</green>
+      <blue>5285</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Sans</font>
@@ -43,7 +74,11 @@
     <font_scale>0.097000</font_scale>
     <x_pos>-0.141000</x_pos>
     <y_pos>-0.073000</y_pos>
-    <color>1057 1057 1057</color>
+    <color>
+      <red>1057</red>
+      <green>1057</green>
+      <blue>1057</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Eras Demi ITC</font>
@@ -51,7 +86,11 @@
     <font_scale>0.093000</font_scale>
     <x_pos>0.017000</x_pos>
     <y_pos>-0.098000</y_pos>
-    <color>9141 6714 6714</color>
+    <color>
+      <red>9141</red>
+      <green>6714</green>
+      <blue>6714</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Sans</font>
@@ -59,7 +98,11 @@
     <font_scale>0.136000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.617000</y_pos>
-    <color>2721 1507 1507</color>
+    <color>
+      <red>2721</red>
+      <green>1507</green>
+      <blue>1507</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Rockwell</font>
@@ -67,7 +110,11 @@
     <font_scale>0.075000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.300000</y_pos>
-    <color>6195 4375 4375</color>
+    <color>
+      <red>6195</red>
+      <green>4375</green>
+      <blue>4375</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Arial Black</font>
@@ -75,7 +122,11 @@
     <font_scale>0.150000</font_scale>
     <x_pos>-0.765000</x_pos>
     <y_pos>-0.050000</y_pos>
-    <color>3249 2036 2036</color>
+    <color>
+      <red>3249</red>
+      <green>2036</green>
+      <blue>2036</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Arial Black</font>
@@ -83,7 +134,11 @@
     <font_scale>0.085000</font_scale>
     <x_pos>0.025000</x_pos>
     <y_pos>-0.375000</y_pos>
-    <color>7340 59 59</color>
+    <color>
+      <red>7340</red>
+      <green>59</green>
+      <blue>59</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Arial Black</font>
@@ -91,21 +146,37 @@
     <font_scale>0.150000</font_scale>
     <x_pos>0.749000</x_pos>
     <y_pos>-0.050000</y_pos>
-    <color>1285 514 514</color>
+    <color>
+      <red>1285</red>
+      <green>514</green>
+      <blue>514</blue>
+    </color>
   </text_block>
   <tick_group>
     <font>Arial Black</font>
     <font_scale>0.150000</font_scale>
     <text>, 40, 80  ,120</text>
     <text_inset>0.068000</text_inset>
-    <text_color>2570 1285 1285</text_color>
+    <text_color>
+      <red>2570</red>
+      <green>1285</green>
+      <blue>1285</blue>
+    </text_color>
     <num_maj_ticks>5</num_maj_ticks>
-    <maj_tick_color>4626 3598 3598</maj_tick_color>
+    <maj_tick_color>
+      <red>4626</red>
+      <green>3598</green>
+      <blue>3598</blue>
+    </maj_tick_color>
     <maj_tick_inset>0.316000</maj_tick_inset>
     <maj_tick_length>0.170000</maj_tick_length>
     <maj_tick_width>0.200000</maj_tick_width>
     <num_min_ticks>7</num_min_ticks>
-    <min_tick_color>1285 514 514</min_tick_color>
+    <min_tick_color>
+      <red>1285</red>
+      <green>514</green>
+      <blue>514</blue>
+    </min_tick_color>
     <min_tick_inset>0.316000</min_tick_inset>
     <min_tick_length>0.074000</min_tick_length>
     <min_tick_width>0.075000</min_tick_width>
@@ -113,7 +184,11 @@
     <sweep_angle>160.000000</sweep_angle>
   </tick_group>
   <polygon>
-    <color>0 0 0</color>
+    <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>
@@ -125,7 +200,11 @@
     </Circle>
   </polygon>
   <polygon>
-    <color>0 0 0</color>
+    <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>
@@ -137,7 +216,11 @@
     </Circle>
   </polygon>
   <polygon>
-    <color>61166 15163 2570</color>
+    <color>
+      <red>61166</red>
+      <green>15163</green>
+      <blue>2570</blue>
+    </color>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>

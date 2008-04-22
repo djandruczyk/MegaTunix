@@ -42,7 +42,7 @@
 #include <string.h>
 
 
-G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA);
+G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA)
 
 
 /*!
@@ -64,10 +64,10 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
 	/* Motion event not needed, as unused currently */
-//	widget_class->motion_notify_event = mtx_gauge_face_motion_event;
+	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
 	widget_class->size_request = mtx_gauge_face_size_request;
 
-	//g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
+	/*g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));*/
 }
 
 
@@ -90,17 +90,18 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->xc = 0.0;
 	gauge->yc = 0.0;
 	gauge->radius = 0.0;
-	gauge->value = 0.0;//default values
+	gauge->value = 0.0;		/* default values */
 	gauge->lbound = 0.0;
 	gauge->ubound = 100.0;
 	gauge->precision = 2;
-	gauge->start_angle = 135; // *lower left quadrant
-	gauge->sweep_angle = 270; // CW sweep
-	gauge->needle_width = 0.05;  /* % of radius */
+	gauge->clamped = CLAMP_NONE;
+	gauge->start_angle = 135; 	/* lower left quadrant */
+	gauge->sweep_angle = 270; 	/* CW sweep */
+	gauge->needle_width = 0.05;  	/* % of radius */
 	gauge->needle_tip_width = 0.0;
 	gauge->needle_tail_width = 0.0;
-	gauge->needle_tail = 0.083;  /* % of radius */
-	gauge->needle_length = 0.850; /* % of radius */
+	gauge->needle_tail = 0.083;  	/* % of radius */
+	gauge->needle_length = 0.850; 	/* % of radius */
 	gauge->value_font = g_strdup("Bitstream Vera Sans");
 	gauge->value_xpos = 0.0;
 	gauge->value_ypos = 0.40;
@@ -162,8 +163,8 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 {
 	gint i = 0;
 	MtxXMLFuncs * funcs = NULL;
+	gint num_xml_funcs = sizeof(xml_functions) / sizeof(xml_functions[0]);
 	gauge->xmlfunc_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-	 gint num_xml_funcs = sizeof(xml_functions) / sizeof(xml_functions[0]);
 
 	gauge->xmlfunc_array = g_array_sized_new(FALSE,TRUE,sizeof (MtxXMLFuncs *),num_xml_funcs);
 
@@ -245,11 +246,12 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 /*!
  \brief updates the gauge position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
- \param widget (GtkWidget *) pointer to the gauge object
+ \param widget (MtxGaugeFace *) pointer to the gauge object
  */
-void cairo_update_gauge_position (GtkWidget *widget)
+void cairo_update_gauge_position (MtxGaugeFace *gauge)
 {
 #ifdef HAVE_CAIRO
+	GtkWidget *widget = NULL;
 	gfloat tmpf = 0.0;
 	gfloat needle_pos = 0.0;
 	gchar * message = NULL;
@@ -265,12 +267,13 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
 	gfloat lwidth = 0.0;
+	gfloat val = 0.0;
 	gboolean alert = FALSE;
 	MtxAlertRange *range = NULL;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 
-	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
+	widget = GTK_WIDGET(gauge);
 
 	/* Check if in alert bounds and alert as necessary */
 	alert = FALSE;
@@ -292,6 +295,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 			 * as pixmap copies are fast.
 			 */
 			gauge->last_alert_index = i;
+			widget = GTK_WIDGET(gauge);
 			gdk_draw_drawable(gauge->tmp_pixmap,
 					widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 					gauge->bg_pixmap,
@@ -371,7 +375,13 @@ cairo_jump_out_of_alerts:
 	}
 
 	/* gauge hands */
-	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
+	if (gauge->clamped == CLAMP_UPPER)
+		val = gauge->ubound;
+	else if (gauge->clamped == CLAMP_LOWER)
+		val = gauge->lbound;
+	else
+		val = gauge->value;
+	tmpf = (val-gauge->lbound)/(gauge->ubound-gauge->lbound);
 	needle_pos = (gauge->start_angle+(tmpf*gauge->sweep_angle))*(M_PI/180);
 
 
@@ -388,13 +398,6 @@ cairo_jump_out_of_alerts:
 	xc = gauge->xc;
 	yc = gauge->yc;
 
-	/* STORE needle coordinates to make the expese event a LOT more 
-	 * efficient */
-	for (i=0;i<6;i++)
-	{
-		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
-		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
-	}
 	gauge->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
 	gauge->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
 	gauge->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
@@ -430,11 +433,12 @@ cairo_jump_out_of_alerts:
 /*!
  \brief updates the gauge position,  This is the GDK implementation that
  looks doesn't do antialiasing,  but is the fastest one.
- \param widget (GtkWidget *) pointer to the gauge object
+ \param widget (MtxGaugeFace *) pointer to the gauge object
  */
-void gdk_update_gauge_position (GtkWidget *widget)
+void gdk_update_gauge_position (MtxGaugeFace *gauge)
 {
 #ifndef HAVE_CAIRO
+	GtkWidget *widget = NULL;
 	gint i= 0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
@@ -449,11 +453,12 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gchar * message = NULL;
 	gchar * tmpbuf = NULL;
 	gint lwidth = 0;
+	gfloat val = 0.0;
 	MtxAlertRange* range = NULL;
 	PangoRectangle logical_rect;
 
-	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
+	widget = GTK_WIDGET(gauge);
 	/* Check if in alert bounds and alert as necessary */
 	alert = FALSE;
 	for (i=0;i<gauge->a_ranges->len;i++)
@@ -538,7 +543,13 @@ gdk_jump_out_of_alerts:
 			GDK_JOIN_ROUND);
 
 	/* gauge hands */
-	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
+	if (gauge->clamped == CLAMP_UPPER)
+		val = gauge->ubound;
+	else if (gauge->clamped == CLAMP_LOWER)
+		val = gauge->lbound;
+	else
+		val = gauge->value;
+	tmpf = (val-gauge->lbound)/(gauge->ubound-gauge->lbound);
 	needle_pos = (gauge->start_angle+(tmpf*gauge->sweep_angle))*(M_PI/180.0);
 	xc= gauge->xc;
 	yc= gauge->yc;
@@ -548,12 +559,6 @@ gdk_jump_out_of_alerts:
 	tip_width = gauge->needle_tip_width * gauge->radius;
 	tail_width = gauge->needle_tail_width * gauge->radius;
 
-	/* Four POINT needle,  point 0 is the tip (easiest to find) */
-	for (i=0;i<6;i++)
-	{
-		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
-		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
-	}
 	gauge->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
 	gauge->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
 	gauge->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
@@ -653,7 +658,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		gauge->xc = gauge->w / 2;
 		gauge->yc = gauge->h / 2;
-		gauge->radius = MIN (gauge->w/2, gauge->h/2); // - 5;
+		gauge->radius = MIN (gauge->w/2, gauge->h/2); 
 
 #ifdef HAVE_CAIRO
 		if (gauge->font_options)
@@ -673,9 +678,9 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		gdk_gc_set_foreground (gc, &black);
 		gdk_draw_rectangle (gauge->bitmap,
 				gc,
-				TRUE,  // filled
-				0,     // x
-				0,     // y
+				TRUE,  /* filled */
+				0,     /* x */
+				0,     /* y */
 				gauge->w,
 				gauge->h);
 
@@ -686,48 +691,48 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		{
 			gdk_draw_rectangle (gauge->bitmap,
 					gc,
-					TRUE,  // filled
-					0,     // x
-					0,     // y
+					TRUE,  /* filled */
+					0,     /* x */
+					0,     /* y */
 					DRAG_BORDER,
 					DRAG_BORDER);
 			gdk_draw_rectangle (gauge->bitmap,
 					gc,
-					TRUE,  // filled
-					gauge->w-DRAG_BORDER,     // x
-					0,     // y
+					TRUE,  /* filled */
+					gauge->w-DRAG_BORDER,     /* x */
+					0,     /* y */
 					DRAG_BORDER,
 					DRAG_BORDER);
 			gdk_draw_rectangle (gauge->bitmap,
 					gc,
-					TRUE,  // filled
-					gauge->w-DRAG_BORDER,     // x
-					gauge->h-DRAG_BORDER,     // y
+					TRUE,  /* filled */
+					gauge->w-DRAG_BORDER,     /* x */
+					gauge->h-DRAG_BORDER,     /* y */
 					DRAG_BORDER,
 					DRAG_BORDER);
 			gdk_draw_rectangle (gauge->bitmap,
 					gc,
-					TRUE,  // filled
-					0,     // x
-					gauge->h-DRAG_BORDER,     // y
+					TRUE,  /* filled */
+					0,     /* x */
+					gauge->h-DRAG_BORDER,     /* y */
 					DRAG_BORDER,
 					DRAG_BORDER);
 		}
 		gdk_draw_arc (gauge->bitmap,
 				gc,
-				TRUE,     // filled
+				TRUE,     /* filled */
 				gauge->xc-gauge->radius,
 				gauge->yc-gauge->radius,
 				2*(gauge->radius),
 				2*(gauge->radius),
-				0,        // angle 1
-				360*64);  // angle 2: full circle
+				0,        /* angle 1 */
+				360*64);  /* angle 2: full circle */
 
 	}
 	if (gauge->radius > 0)
 	{
-		generate_gauge_background(widget);
-		update_gauge_position(widget);
+		generate_gauge_background(gauge);
+		update_gauge_position(gauge);
 	}
 
 	return TRUE;
@@ -785,9 +790,10 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (GtkWidget *) pointer to the gauge object
  */
-void cairo_generate_gauge_background(GtkWidget *widget)
+void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 {
 #ifdef HAVE_CAIRO
+	GtkWidget * widget = NULL;
 	cairo_t *cr = NULL;
 	double dashes[2] = {4.0,4.0};
 	gfloat deg_per_major_tick = 0.0;
@@ -818,10 +824,8 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
 
-	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
-
-	w = widget->allocation.width;
-	h = widget->allocation.height;
+	w = GTK_WIDGET(gauge)->allocation.width;
+	h = GTK_WIDGET(gauge)->allocation.height;
 
 	if (!gauge->bg_pixmap)
 		return;
@@ -908,7 +912,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 		angle2 = (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
-		//printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);
+		/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
 		lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
 		cairo_arc(cr, gauge->xc, gauge->yc, (range->inset * gauge->radius),(gauge->start_angle+(angle1*(gauge->sweep_angle)))*(M_PI/180.0), (gauge->start_angle+(angle2*(gauge->sweep_angle)))*(M_PI/180.0));
@@ -1125,6 +1129,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	cairo_destroy (cr);
 	/* SAVE copy of this on tmp pixmap */
+	widget = GTK_WIDGET(gauge);
 	gdk_draw_drawable(gauge->tmp_pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			gauge->bg_pixmap,
@@ -1142,9 +1147,10 @@ void cairo_generate_gauge_background(GtkWidget *widget)
  This is the gdk version.
  \param widget (GtkWidget *) pointer to the gauge object
  */
-void gdk_generate_gauge_background(GtkWidget *widget)
+void gdk_generate_gauge_background(MtxGaugeFace *gauge)
 {
 #ifndef HAVE_CAIRO
+	GtkWidget * widget = NULL;
 	gfloat deg_per_major_tick = 0.0;
 	gfloat deg_per_minor_tick = 0.0;
 	gint w = 0;
@@ -1186,11 +1192,10 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	GdkColor *e_color;
 	PangoRectangle logical_rect;
 
-
-	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
-
 	if (!gauge->bg_pixmap)
 		return;
+
+	widget = GTK_WIDGET(gauge);
 
 	w = widget->allocation.width;
 	h = widget->allocation.height;
@@ -1594,7 +1599,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 {
 	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	GdkWindowEdge edge = -1;
-//	printf("gauge button event\n");
+	/*printf("gauge button event\n");*/
 	/* Right side of window */
 	if (event->x > (gauge->w-10))
 	{
@@ -1654,7 +1659,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				break;
 		}
 	}
-//	printf("gauge button event ENDING\n");
+	/*printf("gauge button event ENDING\n");*/
 	return FALSE;
 }
 
@@ -1669,7 +1674,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 					       
 {
-//	printf("button release\n");
+	/*printf("button release\n");*/
 	return FALSE;
 }
 
@@ -1677,7 +1682,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-//	printf("motion in gauge, returning false\n");
+	/*printf("motion in gauge, returning false\n");*/
 	return FALSE;
 }
 					       

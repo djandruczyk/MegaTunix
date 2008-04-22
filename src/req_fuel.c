@@ -14,23 +14,26 @@
 #include <config.h>
 #include <configfile.h>
 #include <conversions.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <mode_select.h>
-#include <ms_structures.h>
 #include <notifications.h>
 #include <req_fuel.h>
 #include <serialio.h>
-#include <structures.h>
 #include <threads.h>
+#include <unions.h>
+#include <widgetmgmt.h>
 
 extern GdkColor red;
 extern GdkColor black;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -43,8 +46,8 @@ void req_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
 	Reqd_Fuel *reqd_fuel = NULL;
-	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
-		reqd_fuel = (Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	if (OBJ_GET(widget,"reqd_fuel"))
+		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
 	else
 	{
 		if (dbg_lvl & (REQ_FUEL|CRITICAL))
@@ -108,14 +111,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	gint page = -1;
 	Reqd_Fuel *reqd_fuel = NULL;
 
-	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	page = (gint)OBJ_GET(widget,"page");
 
-	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
-		reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	if (OBJ_GET(widget,"reqd_fuel"))
+		reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 	else
 	{
 		reqd_fuel = initialize_reqd_fuel(page);
-		g_object_set_data(G_OBJECT(widget),"reqd_fuel",reqd_fuel);
+		OBJ_SET(widget,"reqd_fuel",reqd_fuel);
 	}
 
 	if (reqd_fuel->visible)
@@ -125,7 +128,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	reqd_fuel->popup = popup;	
-	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	reqd_fuel->table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
 	tmpbuf = g_strdup_printf("Required Fuel Calculator for Page %i\n",reqd_fuel->page);
@@ -133,7 +136,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	g_free(tmpbuf);
 	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
 	gtk_widget_realize(popup);
-	g_object_set_data(G_OBJECT(popup),"reqd_fuel",reqd_fuel);
+	OBJ_SET(popup,"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(popup),"delete_event",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
@@ -192,14 +195,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	// Engine Displacement 
+	/* Engine Displacement */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->disp,1.0,1000,1.0,10.0,0);
 
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_DISP));
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",GINT_TO_POINTER(REQ_FUEL_DISP));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
 			NULL);
@@ -208,14 +211,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Number of Cylinders 
+	/* Number of Cylinders */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->cyls,1,12,1.0,4.0,0);
 
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_CYLS));
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",GINT_TO_POINTER(REQ_FUEL_CYLS));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
 			NULL);
@@ -224,14 +227,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Target AFR
+	/* Target AFR */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->target_afr,1.0,100.0,1.0,1.0,0);
 
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_AFR));
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",GINT_TO_POINTER(REQ_FUEL_AFR));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
 			NULL);
@@ -240,14 +243,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Rated Injector Flow
+	/* Rated Injector Flow */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->rated_inj_flow,10.0,255,0.1,1,0);
 
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",
 			GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
@@ -257,13 +260,13 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Rated fuel pressure in bar 
+	/* Rated fuel pressure in bar */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->rated_pressure,0.1,10.0,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",	
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",	
 			GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
@@ -273,14 +276,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Actual fuel pressure in bar 
+	/* Actual fuel pressure in bar */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->actual_pressure,0.1,10.0,0.1,1.0,0);
 
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
-	g_object_set_data(G_OBJECT(spinner),"handler",	
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"handler",	
 			GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
@@ -302,14 +305,14 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	// Preliminary Required Fuel Value
+	/* Preliminary Required Fuel Value */
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->calcd_reqd_fuel,0.1,25.5,0.1,1.0,0);
 
 	spinner = gtk_spin_button_new(adj,0,1);
 	reqd_fuel->calcd_val_spin = spinner;
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	OBJ_SET(spinner,"reqd_fuel",reqd_fuel);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table2), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -323,18 +326,18 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	button = gtk_button_new_with_label("Save and Close");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
+	OBJ_SET(button,"reqd_fuel",reqd_fuel);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(save_reqd_fuel),
 			NULL);
-	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
+	OBJ_SET(button,"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
 
 	button = gtk_button_new_with_label("Cancel");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
+	OBJ_SET(button,"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
@@ -361,7 +364,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 
-	reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 
 	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",reqd_fuel->table_num);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
@@ -380,7 +383,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
 	cfgfile = cfg_open_file(filename);
-	if (cfgfile)	// If it opened nicely 
+	if (cfgfile)	/* If it opened nicely  */
 	{
 		cfg_write_int(cfgfile,tmpbuf,"Displacement",reqd_fuel->disp);
 		cfg_write_int(cfgfile,tmpbuf,"Cylinders",reqd_fuel->cyls);
@@ -416,7 +419,7 @@ gboolean close_popup(GtkWidget * widget)
 {
 	Reqd_Fuel *reqd_fuel = NULL;
 
-	reqd_fuel = (Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 	gtk_widget_destroy(reqd_fuel->popup);
 	reqd_fuel->visible = FALSE;
 	return TRUE;
@@ -436,7 +439,9 @@ void check_req_fuel_limits(gint table_num)
 	gboolean lim_flag = FALSE;
 	gint dload_val = 0;
 	gint offset = 0;
+	gint canID = 0;
 	gint page = -1;
+	DataSize size = MTX_U08;
 	gint rpmk_offset = 0;
 	gint num_squirts = 0;
 	gint num_cyls = 0;
@@ -457,8 +462,8 @@ void check_req_fuel_limits(gint table_num)
 	extern gboolean paused_handlers;
 	extern GHashTable ** interdep_vars;
 	extern GHashTable *dynamic_widgets;
-	extern gint **ms_data;
 	extern Firmware_Details *firmware;
+	canID = firmware->canID;
 
 	/* F&H Dualtable required Fuel calc
 	 *
@@ -499,6 +504,7 @@ void check_req_fuel_limits(gint table_num)
 	 */
 
 	page = firmware->table_params[table_num]->z_page;
+	canID = firmware->canID;
 
 	rf_total = firmware->rf_params[table_num]->req_fuel_total;
 	last_rf_total = firmware->rf_params[table_num]->last_req_fuel_total;
@@ -524,17 +530,17 @@ void check_req_fuel_limits(gint table_num)
 
 	if (firmware->capabilities & DUALTABLE)
 	{
-	//	printf ("dualtable\n");
+		/*printf ("dualtable\n");*/
 		tmp = (float)num_inj/(float)divider;
 	}
-	else if ((firmware->capabilities & MSNS_E) && (((ms_data[firmware->table_params[table_num]->dtmode_page][firmware->table_params[table_num]->dtmode_offset] & 0x10) >> 4) == 1))
+	else if ((firmware->capabilities & MSNS_E) && (((get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & 0x10) >> 4) == 1))
 	{
-	//	printf ("msns-E with DT enabled\n");
+		/*printf ("msns-E with DT enabled\n");*/
 		tmp = (float)num_inj/(float)divider;
 	}
 	else	/* B&G style */
 	{
-	//	printf ("B&G\n");
+		/*printf ("B&G\n");*/
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
 	}
 
@@ -573,7 +579,7 @@ void check_req_fuel_limits(gint table_num)
 
 		/* Send rpmk value as it's needed for rpm calc on 
 		 * spark firmwares... */
-		cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
+		cfg11.value = get_ecu_data(canID,page,firmware->table_params[table_num]->cfg11_offset,size);
 		rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 		/* Top is two stroke, botton is four stroke.. */
 		if (cfg11.bit.eng_type)
@@ -581,13 +587,12 @@ void check_req_fuel_limits(gint table_num)
 		else
 			dload_val = (int)(12000.0/((double)num_cyls));
 
-		write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE, TRUE);
+		send_to_ecu(canID, page, rpmk_offset, MTX_U16, dload_val, TRUE);
 
 		offset = firmware->table_params[table_num]->reqfuel_offset;
-		write_ve_const(widget, page, offset, rf_per_squirt, FALSE, TRUE);
+		send_to_ecu(canID, page, offset, MTX_U08, rf_per_squirt, TRUE);
 		/* Call handler to empty interdependant hash table */
-		g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
-
+		g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,NULL);
 	}
 	g_free(g_name);
 
@@ -615,7 +620,7 @@ Reqd_Fuel * initialize_reqd_fuel(gint page)
 	reqd_fuel->page = page;
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",page);
 	cfgfile = cfg_open_file(filename);
-	// Set defaults 
+	/* Set defaults */
 	reqd_fuel->visible = FALSE;
 	reqd_fuel->disp = 350;
 	reqd_fuel->cyls = 8;

@@ -14,8 +14,8 @@
 #ifndef __DATALOGGING_GUI_H__
 #define __DATALOGGING_GUI_H__
 
+#include <defines.h>
 #include <gtk/gtk.h>
-#include <structures.h>
 
 
 /* Prototypes */
@@ -33,6 +33,7 @@ void dlog_select_defaults(void);
 void dlog_select_all(void);
 void dlog_deselect_all(void);
 void dump_log_to_disk(GIOChannel *);
+gboolean autolog_dump(gpointer);
 /* Prototypes */
 
 #endif

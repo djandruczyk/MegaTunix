@@ -1,9 +1,17 @@
-# MSnS-Extra Output Pins tab
-
 [global]
 description=Object data map for MSnS-Extra Output Pins
 tab_name=_Output Pins
 id_prefix=output_pins_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=0
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 

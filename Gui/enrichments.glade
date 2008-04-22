@@ -28,6 +28,7 @@
 
       <child>
 	<widget class="GtkVBox" id="vbox4">
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
@@ -54,7 +55,6 @@
 
 		      <child>
 			<widget class="GtkVBox" id="enrich_main_vbox">
-			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>

@@ -34,7 +34,7 @@ void * xmalloc(size_t num)
 	/*
 	 * Call malloc() and check return value.
 	 */
-	void           *ptr_new = malloc(num);
+	void *ptr_new = malloc(num);
 
 	if (!ptr_new)
 		error_fatal("unable to allocate memory");
@@ -66,7 +66,7 @@ void * xcalloc(size_t num, size_t size)
 	/*
 	 * Allocate memory and fill with zeroes.
 	 */
-	void           *ptr_new = xmalloc(num * size);
+	void *ptr_new = xmalloc(num * size);
 
 	bzero(ptr_new, num * size);
 	return ptr_new;

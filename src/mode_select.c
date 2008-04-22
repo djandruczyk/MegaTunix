@@ -14,11 +14,12 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
+#include <firmware.h>
 #include <mode_select.h>
-#include <structures.h>
 #include <threads.h>
 
 gchar *states[] = {"FALSE","TRUE"};
+extern GObject *global_data;
 
 
 /*!
@@ -50,14 +51,18 @@ void set_widget_active(gpointer widget, gpointer state)
 /*!
  \brief drain_hashtable() is called to send all the dat from a hashtable to
  the ECU
- \param offset (gpointer) offset in ms_data this value goes to
- \param value (gpointer) the value to send
- \param page (gpointer) the page to send
+ \param offset (gpointer) offset in ecu_data this value goes to
+ \param value (gpointer) pointer to OutputData Struct
+ \param page (gpointer) unused.
  */
-gboolean drain_hashtable(gpointer offset, gpointer value, gpointer page)
+gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
 {
 	extern Firmware_Details *firmware;
+	OutputData *data = (OutputData *)value;
+
 	/* called per element from the hash table to drain and send to ECU */
-	write_ve_const(NULL, (gint)page, (gint)offset,(gint)value, firmware->page_params[(gint)page]->is_spark, TRUE);
+	OBJ_SET(data->object,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+	data->need_page_change = TRUE;
+	io_cmd(firmware->write_command,data);
 	return TRUE;
 }

@@ -31,10 +31,10 @@ gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);
 */
 void mtx_gauge_face_size_request (GtkWidget *, GtkRequisition *);
 gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
-void cairo_generate_gauge_background(GtkWidget *);
-void cairo_update_gauge_position (GtkWidget *);
-void gdk_generate_gauge_background(GtkWidget *);
-void gdk_update_gauge_position (GtkWidget *);
+void cairo_generate_gauge_background(MtxGaugeFace *);
+void cairo_update_gauge_position (MtxGaugeFace *);
+void gdk_generate_gauge_background(MtxGaugeFace *);
+void gdk_update_gauge_position (MtxGaugeFace *);
 void mtx_gauge_face_init_colors(MtxGaugeFace *);
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);

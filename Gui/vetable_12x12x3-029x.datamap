@@ -1,12 +1,17 @@
-# 12x12 vetable, used by the SquirtnSpark-Extra firmware
-
 [global]
 description=Object data map for the combined VEtables tab
 tab_name=_VE Tables
 id_prefix=VE_
-groups=load_1,rpm_1,ve_1,load_2,rpm_2,ve_2,load_3,rpm_3,ve_3
+size=_U08_
+groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2,load_3,rpm_3,ve_3
 
-#----- Group config ----------------------------------------------------------
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=1
+size=_U08_
 
 [load_1]
 keys=page,dl_type,handler,raw_lower,raw_upper,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
@@ -537,8 +542,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [VE1_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
@@ -582,8 +587,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [VE2_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
@@ -627,8 +632,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [VE3_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num

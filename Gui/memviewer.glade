@@ -94,7 +94,7 @@
 					  <child>
 					    <widget class="GtkViewport" id="memviewer_tab0_viewport">
 					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_IN</property>
+					      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 					      <child>
 						<widget class="GtkHBox" id="memviewer_tab0_vp_hbox1">
@@ -147,6 +147,7 @@
 
 				      <child>
 					<widget class="GtkFrame" id="memviewer_tab0_settings_frame">
+					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="label_xalign">0</property>
 					  <property name="label_yalign">0.5</property>
@@ -353,7 +354,7 @@
 					  <child>
 					    <widget class="GtkViewport" id="memviewer_tab1_viewport">
 					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_IN</property>
+					      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 					      <child>
 						<widget class="GtkHBox" id="memviewer_tab1_vp_hbox1">
@@ -406,6 +407,7 @@
 
 				      <child>
 					<widget class="GtkFrame" id="memviewer_tab1_settings_frame">
+					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="label_xalign">0</property>
 					  <property name="label_yalign">0.5</property>
@@ -612,7 +614,7 @@
 					  <child>
 					    <widget class="GtkViewport" id="memviewer_tab2_viewport">
 					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_IN</property>
+					      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 					      <child>
 						<widget class="GtkHBox" id="memviewer_tab2_vp_hbox1">
@@ -665,6 +667,7 @@
 
 				      <child>
 					<widget class="GtkFrame" id="memviewer_tab2_settings_frame">
+					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="label_xalign">0</property>
 					  <property name="label_yalign">0.5</property>
@@ -871,7 +874,7 @@
 					  <child>
 					    <widget class="GtkViewport" id="memviewer_tab3_viewport">
 					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_IN</property>
+					      <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 					      <child>
 						<widget class="GtkHBox" id="memviewer_tab3_vp_hbox1">
@@ -924,6 +927,7 @@
 
 				      <child>
 					<widget class="GtkFrame" id="memviewer_tab3_settings_frame">
+					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="label_xalign">0</property>
 					  <property name="label_yalign">0.5</property>
@@ -1107,8 +1111,8 @@
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -1121,7 +1125,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">False</property>
+		      <property name="expand">True</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>

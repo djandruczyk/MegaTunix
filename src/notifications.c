@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
@@ -19,7 +20,6 @@
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
-#include <structures.h>
 #include <tabloader.h>
 
 extern GdkColor red;
@@ -27,6 +27,7 @@ extern GdkColor black;
 static gboolean warning_present = FALSE;
 static GtkWidget *warning_dialog;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -148,25 +149,35 @@ void  update_logbar(
 	extern volatile gboolean leaving;
 
 	if (leaving)
+	{
+		g_free(message);
 		return;
+	}
 
 	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,view_name);
 
 	if (!widget)
+	{
+		g_free(message);
 		return;
+	}
 	if (!GTK_IS_OBJECT(widget))
 	{
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name));
+		g_free(message);
 		return;
 	}
 
 	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
 	if (!textbuffer)
+	{
+		g_free(message);
 		return;
+	}
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
-	result = g_object_get_data(G_OBJECT(widget),"counter");	
+	result = OBJ_GET(widget,"counter");	
 	if (result == NULL)
 		counter = 0;
 	else
@@ -176,7 +187,7 @@ void  update_logbar(
 	{
 		counter++;
 		tmpbuf = g_strdup_printf(" %i. ",counter);
-		g_object_set_data(G_OBJECT(widget),"counter",GINT_TO_POINTER(counter));	
+		OBJ_SET(widget,"counter",GINT_TO_POINTER(counter));	
 	}
 
 	if (tagname == NULL)
@@ -218,7 +229,7 @@ void  update_logbar(
  */
 EXPORT void conn_warning(void)
 {
-	extern CmdLineArgs *args;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	gchar *buff = NULL;
 	if ((args->be_quiet) || (warning_present))
 		return;
@@ -247,11 +258,11 @@ EXPORT void kill_conn_warning()
  */
 void warn_user(gchar *message)
 {
-	extern CmdLineArgs *args;
+	extern gboolean interrogated;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	if (args->be_quiet)
 		return;
 
-	extern gboolean interrogated;
 	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_NONE,message);
 	if (!interrogated)
@@ -312,12 +323,22 @@ void set_title(gchar * text)
 	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
+	extern GHashTable *dynamic_widgets;
+	static GtkWidget *info_label = NULL;
 
 	if ((!main_window) || (leaving))
 		return;
+	if (!info_label)
+		info_label = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,"info_label");
 	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
 	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
 	g_free(tmpbuf);
+	if (GTK_IS_WIDGET(info_label))
+	{
+		tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
+		gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
+		g_free(tmpbuf);
+	}
 	g_free(text);
 }

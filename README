@@ -44,5 +44,5 @@ Optional:
   The Glade GUI designer can be installed to modify and add new gui tabs to
 megatunix for your own custom firmware needs.  This is ONLY needed if you want
 to modify megatunix or design custom tabs for your firmware.  
-I recommend glade-2.4.x
+I recommend glade-2.x
 

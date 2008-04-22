@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=0
+minor=2
 
 [interrogation_profile]
 name=Dualtable v1.02
@@ -8,17 +8,20 @@ name=Dualtable v1.02
 [parameters]
 SignatureVia=MS_Signature
 TextVerVia=MS_Textrev
-NumVerVia=MS-VerNum
-Rt_Cmd_Key=MS-I_RTVars
-VE_Cmd_Key=MS-I_VEconst
-Capabilities=_DUALTABLE_
-Write_Cmd=W
-Burn_Cmd=B
+NumVerVia=MS_VerNum
+RT_Command=ms1_std_rtvars
+RT_total_bytes=22
+Get_All_Command=ms1_read_all
+VE_Command=ms1_veconst
+Burn_Command=ms1_burn
+Burn_All_Command=ms1_burn
+Write_Command=ms1_generic_write
+Capabilities=_MS1_,_DUALTABLE_
 Page_Cmd=P
 MultiPage=TRUE
-ReadOnlyAbove=1
 ChunkWriteSupport=FALSE
 TotalTables=2
+ReadOnlyAbove=1
 TotalPages=2
 
 [table_0]
@@ -33,12 +36,14 @@ cfg13_offset=118
 x_page=0
 x_base_offset=100
 x_bincount=8
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
 x_precision=0
 y_page=0
 y_base_offset=108
+y_size=_U08_
 y_bincount=8
 y_multi_source=TRUE
 y_source_key=map_sensor
@@ -49,6 +54,7 @@ y_conv_exprs=x*1,x*1,x*1
 y_precisions=0,0,0
 z_page=0
 z_base_offset=0
+z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
@@ -66,6 +72,7 @@ cfg13_offset=118
 x_page=1
 x_base_offset=100
 x_bincount=8
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -73,6 +80,7 @@ x_precision=0
 y_base_offset=108
 y_page=1
 y_bincount=8
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4115,MPX4250
@@ -83,32 +91,35 @@ y_precisions=0,0,0
 z_source=vecurr2
 z_page=1
 z_base_offset=0
+z_size=_U08_
 z_suffix=VE %
 z_conv_expr=x*1
 z_precision=0
 
 [page_0]
+dl_by_default=TRUE
 truepgnum=0
 length=128
 
 [page_1]
+dl_by_default=TRUE
 truepgnum=1
 length=128
 
 [interrogation]
-match_on=MS_Clock,MS-I_RTVars,MS-VerNum,MS-I_VEconst,MS_Signature
-MS_Clock=_COUNT_,1
+match_on=MS-I_Clock,MS-I_RTVars,MS_VerNum,MS-I_VEconst,MS_Signature
+MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
-MS-VerNum=_NUMMATCH_,1
+MS_VerNum=_NUMMATCH_,1
 MS-I_VEconst=_COUNT_,128
 MS_Signature=_SUBMATCH_,v.1.02
 
 
 [gui]
-RealtimeMapFile=DT-std
-SliderMapFile=dt-firmware
-RuntimeTextMapFile=std-firmware
-StatusMapFile=std-firmware
+RealtimeMapFile=DT-Std
+SliderMapFile=DT-firmware
+RuntimeTextMapFile=DT-firmware
+StatusMapFile=MS1-Std-firmware
 
 LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,memviewer,warmupwizard
 TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-DT_1,vetable_8x8e-DT_2,tools,memviewer,warmupwizard

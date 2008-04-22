@@ -1,12 +1,17 @@
-# MSnS-E AFR tables 
-
 [global]
 description=Object data map for AFR-Tables 
 tab_name=_AFR Tables
 id_prefix=AFR_
-groups=load_1,load_2,rpm,afrtable1,afrtable2
+groups=defaults,load_1,load_2,rpm,afrtable1,afrtable2
 
 #----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=6
+size=_U08_
+raw_upper=255
 
 [load_1]
 keys=page,dl_type,handler,is_float,raw_lower,raw_upper,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
@@ -123,8 +128,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=5
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [AFR1_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
@@ -168,8 +173,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=6
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [AFR2_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num

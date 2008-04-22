@@ -3,7 +3,16 @@
 [global]
 description=Object data map for Raw Memory viewer (ECUS that support "F" cmd)
 tab_name=_Memory Viewer
+groups=defaults
 post_function=finish_memviewer
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

@@ -21,6 +21,7 @@ megatunix_SOURCES = \
 	core_gui.c \
 	dashboard.c \
 	dataio.c \
+	datamgmt.c \
 	datalogging_gui.c \
 	debugging.c \
 	dep_loader.c \
@@ -29,6 +30,7 @@ megatunix_SOURCES = \
 	fileio.c \
 	firmware.c \
 	gui_handlers.c \
+	helpers.c \
 	init.c \
 	interrogate.c \
 	keybinder.c \
@@ -66,9 +68,11 @@ megatunix_SOURCES = \
 	user_outputs.c \
 	vetable_gui.c \
 	vex_support.c \
+	visibility.c \
 	warmwizard_gui.c \
 	widgetmgmt.c \
-	winserialio.c
+	winserialio.c \
+	xmlcomm.c 
 
 megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la
 

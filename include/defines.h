@@ -16,7 +16,7 @@
 
 /* Definitions */
 #define BAUDRATE B9600
-//#define BAUDRATE B115200
+/*#define BAUDRATE B115200 */
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
 /* Windows specific for exporting symbols for glade... */
@@ -32,6 +32,10 @@
 #define HOME g_get_home_dir
 #endif
 
+/* g_object_get/set macros */
+
+#define OBJ_GET(object, name) g_object_get_data(G_OBJECT(object),name)
+#define OBJ_SET(object, name, data) g_object_set_data(G_OBJECT(object),name,data)
 
 /* Download modes */
 #define IMMEDIATE		0x10
@@ -40,7 +44,7 @@
 
 
 /* For datalogging and Logviewer */
-#define TABLE_COLS 5
+#define TABLE_COLS 6
 
 /* Multitherm */
 #define IAT 0

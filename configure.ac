@@ -4,13 +4,13 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=15
+MTX_MICRO_VERSION=16
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.9.15)
+AM_INIT_AUTOMAKE(megatunix, 0.9.16)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -21,6 +21,7 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_AWK
+AM_PROG_LIBTOOL
 AM_PROG_LEX
 if test "$LEX" != "flex"; 
 then
@@ -100,11 +101,11 @@ AC_ARG_ENABLE(debug,
 
 if test "$enable_debug" = yes ; then
 DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
+CFLAGS="-O0"
+else
+CFLAGS="-O2"
 fi
 AC_SUBST(DEBUG_FLAGS)
-
-dnl optimizations
-CFLAGS="-O2"
 AC_SUBST(CFLAGS)
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
@@ -190,11 +191,13 @@ src/Makefile
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
+gaugedesigner/gauges/Speco/Makefile
 gaugedesigner/gauges/SportComp/Makefile
 gaugedesigner/gauges/UltraLite/Makefile
 gaugedesigner/gauges/Cobalt/Makefile
 gaugedesigner/gauges/Impact/Makefile
 gaugedesigner/gauges/Honda/Makefile
+gaugedesigner/gauges/Ghost/Makefile
 src/resources.rc
 widgets/Makefile
 dashdesigner/Makefile

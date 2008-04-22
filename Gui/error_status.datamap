@@ -3,6 +3,15 @@
 [global]
 description=Object data map for MSnS-E Error status...
 tab_name=_Error Status
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -27,5 +36,6 @@ tooltip=This button will send the "!!X" string to the ECU to enter the bootloade
 keys=page,create_tags
 key_types=_INT_,_STRING_
 page=0
-create_tags=warning
+create_tags=warning,info
 warning=foreground,red
+info=foreground,dark green

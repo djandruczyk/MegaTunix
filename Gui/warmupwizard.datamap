@@ -1,9 +1,18 @@
-# Warmup Wizard,  all firmwares (almost)
-
 [global]
 description=Object data map for Warmup Wizard
 tab_name=_Warmup Wizard
 tab_ident=_WARMUP_WIZ_TAB_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
+
+#----- Widgets ---------------------------------------------------------------
 
 [topframe]
 keys=page,tab_ident

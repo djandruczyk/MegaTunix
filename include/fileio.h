@@ -16,7 +16,6 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <structures.h>
 
 /* Prototypes */
 EXPORT gboolean select_file_for_ecu_backup(GtkWidget *, gpointer );

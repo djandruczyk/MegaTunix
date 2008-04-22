@@ -19,14 +19,19 @@
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <firmware.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <math.h>
 #include <mode_select.h>
+#include <multi_expr_loader.h>
+#include <notifications.h>
+#include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
+#include <runtime_sliders.h>
+#include <runtime_text.h>
 #include <stdlib.h>
-#include <structures.h>
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
@@ -37,10 +42,10 @@ extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
 extern gint dbg_lvl;
+extern GObject *global_data;
 GHashTable *dash_gauges = NULL;
 
 gboolean forced_update = TRUE;
-gboolean no_update = FALSE;
 GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
 
 
@@ -48,7 +53,7 @@ GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
  \brief update_runtime_vars() updates all of the runtime sliders on all
  visible portions of the gui
  */
-gboolean update_runtime_vars()
+EXPORT gboolean update_runtime_vars()
 {
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
@@ -73,10 +78,13 @@ gboolean update_runtime_vars()
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
 	extern gint * algorithm;
+	extern GStaticMutex dash_mutex;
+	extern gboolean interrogated;
+
+	if (!interrogated)
+		return FALSE;
 
 	if (!firmware)
-		return FALSE;
-	if(no_update)
 		return FALSE;
 
 	count++;
@@ -97,8 +105,7 @@ gboolean update_runtime_vars()
 		g_free(string);
 		if (GTK_IS_WIDGET(tmpwidget))
 		{
-			ve_view = (Ve_View_3D *)g_object_get_data(
-					G_OBJECT(tmpwidget),"ve_view");
+			ve_view = (Ve_View_3D *)OBJ_GET(tmpwidget,"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
 				/* Get X values */
@@ -137,7 +144,7 @@ gboolean update_runtime_vars()
 					lookup_previous_value(ve_view->x_source,&xl);
 				}
 				/* Test X values, redraw if needed */
-				if (((fabs(x-xl)/x) > 0.01) || (forced_update))
+				if (((fabs(x-xl)/x) > 0.005) || (forced_update))
 					goto redraw;
 
 				/* Get Y values */
@@ -176,7 +183,7 @@ gboolean update_runtime_vars()
 					lookup_previous_value(ve_view->y_source,&yl);
 				}
 				/* Test Y values, redraw if needed */
-				if (((fabs(y-yl)/y) > 0.01) || (forced_update))
+				if (((fabs(y-yl)/y) > 0.001) || (forced_update))
 					goto redraw;
 
 				/* Get Z values */
@@ -215,7 +222,7 @@ gboolean update_runtime_vars()
 					lookup_previous_value(ve_view->z_source,&zl);
 				}
 				/* Test Z values, redraw if needed */
-				if (((fabs(z-zl)/z) > 0.01) || (forced_update))
+				if (((fabs(z-zl)/z) > 0.001) || (forced_update))
 					goto redraw;
 				goto breakout;
 
@@ -227,8 +234,10 @@ breakout:
 		}
 	}
 
+	g_static_mutex_lock(&dash_mutex);
 	if (dash_gauges)
 		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
+	g_static_mutex_unlock(&dash_mutex);
 
 	if ((active_page == VETABLES_TAB) ||(active_page == SPARKTABLES_TAB)||(active_page == AFRTABLES_TAB)||(active_page == BOOSTTABLES_TAB)||(active_page == ROTARYTABLES_TAB) || (forced_update))
 	{
@@ -274,9 +283,9 @@ breakout:
  */
 void reset_runtime_status()
 {
-	// Runtime screen
+	/* Runtime screen */
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-	// Warmup Wizard screen
+	/* Warmup Wizard screen */
 	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 }
 
@@ -304,14 +313,14 @@ void rt_update_status(gpointer key, gpointer data)
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 
-	source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
+	source = (gchar *)OBJ_GET(widget,"source");
 	if ((g_strcasecmp(source,last_source) != 0))
 	{
 		object = NULL;
 		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!object)
 			return;
-		history = (GArray *)g_object_get_data(object,"history");
+		history = (GArray *)OBJ_GET(object,"history");
 	}
 	if (!connected)
 	{
@@ -334,18 +343,18 @@ void rt_update_status(gpointer key, gpointer data)
 			dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source));
 	}
 
-	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
-	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
+	bitval = (gint)OBJ_GET(widget,"bitval");
+	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitshift = (gint)OBJ_GET(widget,"bitshift");
 
 
-	/// if the value hasn't changed, don't bother continuing 
+	/* if the value hasn't changed, don't bother continuing */
 	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
 		return;	
 
-	if (((value & bitmask) >> bitshift) == bitval) // enable it
+	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-	else	// disable it..
+	else	/* disable it.. */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
 	last_source = source;
@@ -377,11 +386,11 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gchar * tmpbuf = NULL;
 	gboolean is_float = FALSE;
 
-	history = (GArray *)g_object_get_data(slider->object,"history");
-	current_index = (gint)g_object_get_data(slider->object,"current_index");
-	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
+	history = (GArray *)OBJ_GET(slider->object,"history");
+	current_index = (gint)OBJ_GET(slider->object,"current_index");
+	is_float = (gboolean)OBJ_GET(slider->object,"is_float");
 	g_static_mutex_lock(&rtv_mutex);
-	//	printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);
+	/*printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);*/
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
@@ -476,9 +485,9 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gboolean is_float = FALSE;
 
 
-	history = (GArray *)g_object_get_data(rtt->object,"history");
-	current_index = (gint)g_object_get_data(rtt->object,"current_index");
-	is_float = (gboolean)g_object_get_data(rtt->object,"is_float");
+	history = (GArray *)OBJ_GET(rtt->object,"history");
+	current_index = (gint)OBJ_GET(rtt->object,"current_index");
+	is_float = (gboolean)OBJ_GET(rtt->object,"is_float");
 	g_static_mutex_lock(&rtv_mutex);
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
@@ -491,7 +500,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
 		 * */
-		//if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))
+		/*if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))*/
 		{
 			if (is_float)
 				tmpbuf = g_strdup_printf("%.2f",current);

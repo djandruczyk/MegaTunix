@@ -1,9 +1,17 @@
-# MSnS-E-021x table 1,3 Enrichments data map
-
 [global]
 description=Object data map for MSnS-E 029 series EGO Params
 tab_name=_EGO Settings
 id_prefix=ego_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=1
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 

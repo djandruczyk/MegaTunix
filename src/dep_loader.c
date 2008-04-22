@@ -26,6 +26,7 @@
 
 
 extern gint dbg_lvl;
+extern GObject *global_data;
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
  a datamap or realtimemap, and triggers the loading of al lthe keys/values that
@@ -63,8 +64,8 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 	g_object_ref(G_OBJECT(dep_obj));
 	gtk_object_sink(GTK_OBJECT(dep_obj));
 
-	g_object_set_data(dep_obj,"deps",deps);
-	g_object_set_data(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
+	OBJ_SET(dep_obj,"deps",deps);
+	OBJ_SET(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
 	for (i=0;i<num_deps;i++)
 	{
@@ -79,7 +80,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		{
 			type = translate_string(tmpbuf);
 			g_free(tmpbuf);
-			g_object_set_data(dep_obj,key,GINT_TO_POINTER(type));
+			OBJ_SET(dep_obj,key,GINT_TO_POINTER(type));
 		}
 		g_free(key);
 		if (type == VE_EMB_BIT)
@@ -91,7 +92,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
@@ -100,7 +101,17 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+			key = g_strdup_printf("%s_size",deps[i]);
+			if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
+			else
+			{
+				tmpi = translate_string(tmpbuf);
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				g_free(tmpbuf);
+			}
 			g_free(key);
 			key = g_strdup_printf("%s_bitshift",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
@@ -109,7 +120,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitmask",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
@@ -118,7 +129,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitval",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
@@ -127,7 +138,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 		}
@@ -140,7 +151,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
@@ -149,11 +160,21 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
-				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+			key = g_strdup_printf("%s_size",deps[i]);
+			if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
+			else
+			{
+				tmpi = translate_string(tmpbuf);
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				g_free(tmpbuf);
+			}
 			g_free(key);
 		}
 			
 	}
-	g_object_set_data(object,"dep_object",(gpointer)dep_obj);
+	OBJ_SET(object,"dep_object",(gpointer)dep_obj);
 
 }

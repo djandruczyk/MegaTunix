@@ -17,23 +17,24 @@
 #include <defines.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <firmware.h>
 #include <getfiles.h>
 #include <lookuptables.h>
 #include <stdlib.h>
-#include <structures.h>
 #include <timeout_handlers.h>
 
 static gboolean ltc_visible = FALSE;
 
 GHashTable *lookuptables = NULL;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 enum
 {
 	INTERNAL_NAME_COL,
 	FILENAME_COL,
 	VIEW_EDIT_COL,
-	N_COLS,
+	N_COLS
 };
 
 /*!
@@ -73,7 +74,7 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 
 
 /*!
- \brief load_table() physically handles load ingthe table datafrom disk, 
+ \brief load_table() physically handles loading the table datafrom disk, 
  populating and array and sotring a pointer to that array in the lookuptables
  hashtable referenced by the table_name passed
  \param table_name (gchar *) key to lookuptables hashtable
@@ -90,7 +91,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	gchar * end = NULL;
 	GString *a_line; 
 	LookupTable *lookuptable = NULL;
-	gint tmparray[2048]; // bad idea being static!!
+	gint tmparray[2048]; /* bad idea being static!!*/
 	gchar ** vector = NULL;
 	gint i = 0;
 
@@ -109,11 +110,11 @@ gboolean load_table(gchar *table_name, gchar *filename)
 			go = FALSE;
 		else
 		{
-		//	str = g_strchug(g_strdup(a_line->str));
+		/*	str = g_strchug(g_strdup(a_line->str));*/
 			str = g_strchug(a_line->str);
 			if (g_str_has_prefix(str,"DB"))
 			{
-				str+=2; // move 2 places in	
+				str+=2; /* move 2 places in	*/
 				end = g_strrstr(str,"T");
 				tmp = g_strndup(str,end-str);
 				tmparray[i]=atoi(tmp);
@@ -123,7 +124,8 @@ gboolean load_table(gchar *table_name, gchar *filename)
 		}
 		g_string_free(a_line,TRUE);
 	}
-	g_io_channel_shutdown(iochannel,FALSE,NULL);
+	g_io_channel_shutdown(iochannel,TRUE,NULL);
+	g_io_channel_unref(iochannel);
 
 	vector = g_strsplit(filename,PSEP,-1);
 	lookuptable = g_new0(LookupTable, 1);
@@ -132,7 +134,8 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	g_strfreev(vector);
 	if (!lookuptables)
 		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
-	g_hash_table_insert(lookuptables,table_name,lookuptable);
+	g_hash_table_insert(lookuptables,g_strdup(table_name),lookuptable);
+	/*g_hash_table_foreach(lookuptables,dump_lookuptables,NULL);*/
 
 	return TRUE;
 }
@@ -169,9 +172,9 @@ gint reverse_lookup(GObject *object, gint value)
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
 
-	table = (gchar *)g_object_get_data(object,"lookuptable");
-	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
-	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
+	table = (gchar *)OBJ_GET(object,"lookuptable");
+	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
+	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
 	if (dep_obj)
 		state = check_dependancies(dep_obj);
 	if (state)
@@ -186,14 +189,14 @@ gint reverse_lookup(GObject *object, gint value)
 
 	for (i=0;i<len;i++)
 	{
-		//		printf("counter is %i\n",i);
+		/*printf("counter is %i\n",i);*/
 		if (array[i] == value)
 		{
-			//			printf("match at %i\n",i);
+			/*printf("match at %i\n",i);*/
 			j = i;
 			while (array[j] == value)
 			{
-				//				printf("searching for dups to upp the weight\n");
+				/*printf("searching for dups to upp the weight\n");*/
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -207,13 +210,13 @@ gint reverse_lookup(GObject *object, gint value)
 	{
 		if (weight[i] > min)
 		{
-			//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
+			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
-	//	printf("closest index is %i\n",closest_index);
+	/*printf("closest index is %i\n",closest_index);*/
 
 	return closest_index;
 }
@@ -242,14 +245,14 @@ gint direct_reverse_lookup(gchar *table, gint value)
 
 	for (i=0;i<len;i++)
 	{
-		//		printf("counter is %i\n",i);
+		/*printf("counter is %i\n",i);*/
 		if (array[i] == value)
 		{
-			//			printf("match at %i\n",i);
+			/*printf("match at %i\n",i);*/
 			j = i;
 			while (array[j] == value)
 			{
-				//				printf("searching for dups to upp the weight\n");
+				/*printf("searching for dups to upp the weight\n");*/
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -263,13 +266,13 @@ gint direct_reverse_lookup(gchar *table, gint value)
 	{
 		if (weight[i] > min)
 		{
-			//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
+			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
-	//	printf("closest index is %i\n",closest_index);
+	/*printf("closest index is %i\n",closest_index);*/
 
 	return closest_index;
 }
@@ -280,7 +283,7 @@ gint direct_reverse_lookup(gchar *table, gint value)
  associated with the passed object and offset
  \param object (GObject *) container of parameters we need to do the lookup
  \param offset (gint) offset into lookuptable
- \returns the value at that offset of the lokuptable
+ \returns the value at that offset of the lookuptable
  */
 gfloat lookup_data(GObject *object, gint offset)
 {
@@ -291,9 +294,9 @@ gfloat lookup_data(GObject *object, gint offset)
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
 
-	table = (gchar *)g_object_get_data(object,"lookuptable");
-	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
-	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
+	table = (gchar *)OBJ_GET(object,"lookuptable");
+	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
+	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
 	/*
 	   if (GTK_IS_OBJECT(dep_obj))
 	   printf("checking dependancy\n");
@@ -306,19 +309,19 @@ gfloat lookup_data(GObject *object, gint offset)
 	}
 	if (state)
 	{
-		//printf("ALTERNATE\n");
+		/*printf("ALTERNATE\n");*/
 		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
 	}
 	else
 	{
-		//printf("NORMAL\n");
+		/*printf("NORMAL\n");*/
 		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 	}
 
 	if (!lookuptable)
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")));
+			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) OBJ_GET(object,"internal_names")));
 		return 0.0;
 	}
 	return lookuptable->array[offset];
@@ -354,8 +357,8 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	GtkCellRenderer *renderer = NULL;
 	GtkTreeViewColumn *column = NULL;
 	GtkWidget * vbox = NULL;
-	GtkWidget * label = NULL;
 	GtkWidget * tree = NULL;
+	GtkWidget * frame = NULL;
 	ConfigFile *cfgfile = NULL;
 	GArray *classes = NULL;
 	gint i = 0;
@@ -374,6 +377,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	{
 		lookuptables_config_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_title(GTK_WINDOW(lookuptables_config_window),"MegaTunix LookupTables");
+		gtk_window_set_default_size(GTK_WINDOW(lookuptables_config_window),300,200);
 		vbox = gtk_vbox_new(FALSE,0);
 		gtk_container_add(GTK_CONTAINER(lookuptables_config_window),vbox);
 		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
@@ -381,8 +385,10 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 
 		ltc_created = TRUE;
 		ltc_visible = TRUE;
-		label = gtk_label_new("MegaTunix LookupTables");
-		gtk_box_pack_start (GTK_BOX(vbox),label,FALSE,TRUE,0);
+		frame = gtk_frame_new("MegaTunix LookupTables");
+		gtk_box_pack_start (GTK_BOX(vbox),frame,FALSE,TRUE,5);
+		vbox = gtk_vbox_new(FALSE,0);
+		gtk_container_add(GTK_CONTAINER(frame),vbox);
 
 		store = gtk_list_store_new(N_COLS,	/* total cols */
 				G_TYPE_STRING, /* int name */
@@ -451,12 +457,12 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		g_signal_connect(G_OBJECT(renderer),"edited", G_CALLBACK(lookuptable_change),store);
 		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+
 		renderer = gtk_cell_renderer_toggle_new();
 		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
-
-
 		gtk_widget_show_all (lookuptables_config_window);
+		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
 		return TRUE;
 	}
 
@@ -544,7 +550,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	cfg_free(cfgfile);
 	g_free(cfgfile);
 		
-	//printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);
+	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
 	return TRUE;
 
 }
@@ -553,7 +559,28 @@ void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
 	ConfigFile *cfgfile = data;
 	LookupTable *lookuptable = value;
-//	printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);
+	/*printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);*/
 	cfg_write_string(cfgfile,"lookuptables",(gchar *)key,lookuptable->filename);
 
 }
+
+
+/*!
+ \brief dump_hash() is a debug function to dump the contents of the str_2_enum
+ hashtable to check for errors or problems
+ \param key (gpointer) key name in the hashtable
+ \param value (gpointer) value (enumeration value) in the hashtable
+ \param user_data (gpointer) unused...
+ */
+void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
+{
+	LookupTable *table;
+	table = (LookupTable *)value;
+	/*
+	if (dbg_lvl & CRITICAL)
+		dbg_func(g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename));
+		*/
+		printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename);
+}
+
+

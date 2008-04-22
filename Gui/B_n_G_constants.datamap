@@ -3,6 +3,15 @@
 [global]
 description=Object data map for B&G Constants (most firmwares except DT... )
 tab_name=_Engine Vitals
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

@@ -1,10 +1,17 @@
-# Raw Table Editor
-
 [global]
 description=Object data map for Raw Table Editor 
 tab_name=_Raw Memory Editor
 post_function=finish_raweditor
 id_prefix=raweditor_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

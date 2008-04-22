@@ -1,16 +1,16 @@
 
-Interrogator simplification and redesign to support MS-II
- - DONE, late spring 2007
-
-Gauges "always on top" choice to be user selectable,  contect menu for the 
-dash should be added (should be easy)
-- Work in progress june '07
-
-Add full offline playback mode selectable at any time. to allow playback of 
-logs wiht visual feeedback in 2d/3d views, and dashes.  Requires designing 
-parser/mapper to link datamap fields to  internal datasource names.
-- Still being thought about
+XML Command definition for MS-2
+ - in progress, feb '08
 
 Add full MS-II support including CAN submodules (requires internal core 
 modifications to handle the arrays for CAN controls.
-- Work in progress spring/summer 2007
+ - Update: feb '08  
+ Core work for ms-2 data completed. 
+ canID stuff, partially done, needs testing with an actual MS-2 
+ and Can submodule.
+ 
+Add full offline playback mode selectable at any time. to allow playback of 
+logs with visual feeedback in 2d/3d views, and dashes.  Requires designing 
+parser/mapper to link datamap fields to internal datasource names.
+- Still being thought about
+

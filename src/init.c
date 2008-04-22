@@ -15,16 +15,19 @@
 #include <configfile.h>
 #include <conversions.h>
 #include <defines.h>
+#include <enums.h>
 #include <debugging.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <init.h>
 #include <listmgmt.h>
 #include "../mtxmatheval/mtxmatheval.h"
-#include <structures.h>
+#include <serialio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <threads.h>
 #include <widgetmgmt.h>
 #include <unistd.h>
 
@@ -32,38 +35,20 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
-gint baudrate;
-gchar * default_serial_port = NULL;
-gchar *potential_ports = NULL;
-extern gint dbg_lvl;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
-extern gboolean tips_in_use;
-extern gint temp_units;
-extern gint main_x_origin;
-extern gint main_y_origin;
-extern gint lv_zoom;
-extern gint width;
-extern gint height;
-extern gint interval_min;
-extern gint interval_step;
-extern gint interval_max;
 extern GtkWidget *main_window;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
-gint **ms_data = NULL;
-gint **ms_data_last = NULL;
-gint **ms_data_backup = NULL;
-CmdLineArgs *args = NULL;
 GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
-GObject *global_data = NULL;
+extern GObject *global_data;
 gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
@@ -76,52 +61,59 @@ gboolean *tracking_focus = NULL;
 void init(void)
 {
 	/* defaults */
-	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	interval_min = 5;	/* 5 millisecond minimum interval delay */
-	interval_step = 5;	/* 5 ms steps */
-	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
-	g_object_set_data(global_data,"status_width",GINT_TO_POINTER(130));
-	g_object_set_data(global_data,"status_height",GINT_TO_POINTER(386));
-	g_object_set_data(global_data,"rtt_width",GINT_TO_POINTER(125));
-	g_object_set_data(global_data,"rtt_height",GINT_TO_POINTER(480));
-	g_object_set_data(global_data,"width",GINT_TO_POINTER(640));
-	g_object_set_data(global_data,"height",GINT_TO_POINTER(480));
-	g_object_set_data(global_data,"main_x_origin",GINT_TO_POINTER(160));
-	g_object_set_data(global_data,"main_y_origin",GINT_TO_POINTER(120));
+	GHashTable *table = NULL;
+	GHashTable *commands = NULL;
+	gboolean *hidden_list = NULL;
+	gint i = 0;
+
+	hidden_list = g_new0(gboolean, 100); /*static, 100 max tabs... */
+	for (i=0;i<100;i++)
+		hidden_list[i]=FALSE;
+
+	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
+	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
+	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
+	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
+	OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(125));
+	OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(480));
+	OBJ_SET(global_data,"width",GINT_TO_POINTER(640));
+	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
+	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
+	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
+	OBJ_SET(global_data,"hidden_list",hidden_list);
+	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
+	table = g_hash_table_new(g_str_hash,g_str_equal);
+	OBJ_SET(global_data,"potential_arguments",table);
+	commands = g_hash_table_new(g_str_hash,g_str_equal);
+	OBJ_SET(global_data,"commands_hash",commands);
 
 	/* initialize all global variables to known states */
+	OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
+	g_free(OBJ_GET(global_data,"potential_ports"));
 #ifdef __WIN32__
-	default_serial_port = g_strdup("COM1");
-	potential_ports = g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9");
+	OBJ_SET(global_data,"override_port",g_strdup("COM1"));
+	OBJ_SET(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9"));
 #else
-	default_serial_port = g_strdup("/dev/ttyS0");
-	potential_ports = g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3");
+	OBJ_SET(global_data,"override_port",g_strdup("/dev/ttyS0"));
+	 OBJ_SET(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"));
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
 	serial_params->read_wait = 10;	/* delay between reads in milliseconds */
-	baudrate = 9600;	/* default to MS-I */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
-	tips_in_use = TRUE;	/* Use tooltips by default */
-	temp_units = FAHRENHEIT;/* Use SAE units by default */
-	lv_zoom = 1;		/* Logviewer scroll speed */
 	preferred_delimiter = TAB;
 
-	args = g_new0(CmdLineArgs, 1);
-	args->be_quiet = FALSE;
-	args->autolog_dump = FALSE;
-	args->hide_rttext = FALSE;
-	args->hide_status = FALSE;
-	args->hide_maingui = FALSE;
-	args->autolog_minutes = 5;
-	args->autolog_dump_dir = NULL;
-	args->autolog_basename = NULL;
+
+	if (!widget_group_states)
+		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
+		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
 }
 
 
@@ -135,90 +127,104 @@ void init(void)
 gboolean read_config(void)
 {
 	gint tmpi = 0;
+	gint i = 0;
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
+	gchar **vector = NULL;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
+	gboolean *hidden_list;
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
-		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
+		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
+			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
+			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
-		if (cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf))
-			g_object_set_data(global_data,"dash_1_name",g_strdup(tmpbuf));
+		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
+		{
+			g_free(OBJ_GET(global_data,"dash_1_name"));
+			OBJ_SET(global_data,"dash_1_name",g_strdup(tmpbuf));
+			g_free(tmpbuf);
+		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &tmpi))
-			g_object_set_data(global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &tmpi))
-			g_object_set_data(global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_1_size_ratio", &tmpf))
-			g_object_set_data(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
-		if (cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf))
-			g_object_set_data(global_data,"dash_2_name",g_strdup(tmpbuf));
+			OBJ_SET(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
+		{
+			g_free(OBJ_GET(global_data,"dash_2_name"));
+			OBJ_SET(global_data,"dash_2_name",g_strdup(tmpbuf));
+			g_free(tmpbuf);
+		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
-			g_object_set_data(global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &tmpi))
-			g_object_set_data(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
-			g_object_set_data(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
-			g_object_set_data(global_data,"status_width",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
-			g_object_set_data(global_data,"status_height",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"status_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_x_origin", &tmpi))
-			g_object_set_data(global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_y_origin", &tmpi))
-			g_object_set_data(global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_width", &tmpi))
-			g_object_set_data(global_data,"rtt_width",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_height", &tmpi))
-			g_object_set_data(global_data,"rtt_height",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_x_origin", &tmpi))
-			g_object_set_data(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_y_origin", &tmpi))
-			g_object_set_data(global_data,"rtt_y_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"rtt_y_origin",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Window", "width", &tmpi))
-			g_object_set_data(global_data,"width",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"width",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Window", "height", &tmpi))
-			g_object_set_data(global_data,"height",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_x_origin", &tmpi))
-			g_object_set_data(global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_y_origin", &tmpi))
-			g_object_set_data(global_data,"main_y_origin",GINT_TO_POINTER(tmpi));
-
-		if(cfg_read_string(cfgfile, "Serial", "port_name", &tmpbuf))
+			OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(tmpi));
+		if (cfg_read_string(cfgfile, "Window", "hidden_tabs_list", &tmpbuf))
 		{
-			/* Handle the case where it's already defined,  
-			 * but we have a user override.  Prevents a memory
-			 * leak.
-			 */
-			if (default_serial_port)
-				g_free(default_serial_port);
-			default_serial_port = g_strdup(tmpbuf);
+			hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+			vector = g_strsplit(tmpbuf,",",-1);
+			for (i=0;i<g_strv_length(vector);i++)
+				hidden_list[atoi(vector[i])] = TRUE;
+			g_strfreev(vector);
 			g_free(tmpbuf);
 		}
-				
+
 		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
 		{
-			/* Handle the case where it's already defined,  
-			 * but we have a user override.  Prevents a memory
-			 * leak.
-			 */
-			if (potential_ports)
-				g_free(potential_ports);
-			potential_ports = g_strdup(tmpbuf);
+			g_free(OBJ_GET(global_data,"potential_ports"));
+			OBJ_SET(global_data,"potential_ports",g_strdup(tmpbuf));
 			g_free(tmpbuf);
 		}
-				
+		if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
+		{
+			g_free(OBJ_GET(global_data,"override_port"));
+			OBJ_SET(global_data,"override_port",g_strdup(tmpbuf));
+			g_free(tmpbuf);
+		}
+		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi));
+		OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
+
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
-		cfg_read_int(cfgfile, "Serial", "baudrate", 
-				&baudrate);
-		cfg_read_int(cfgfile, "Logviewer", "zoom", &lv_zoom);
+		if (cfg_read_int(cfgfile, "Serial", "baudrate", &tmpi))
+			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
+			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
-			g_object_set_data(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
+			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
@@ -254,14 +260,19 @@ void save_config(void)
 	GtkWidget *widget = NULL;
 	int x = 0;
 	int y = 0;
+	int i = 0;
+	int count = 0;
 	int tmp_width = 0;
 	int tmp_height = 0;
 	int orig_width = 0;
 	int orig_height = 0;
+	gint total = 0;
 	gfloat ratio = 0.0;
 	GtkWidget *dash = NULL;
 	extern gboolean ready;
 	ConfigFile *cfgfile = NULL;
+	gboolean * hidden_list;
+	GString *string = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	extern GHashTable *dynamic_widgets;
 
@@ -277,11 +288,12 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
-	cfg_write_boolean(cfgfile, "Global", "Tooltips", tips_in_use);
-	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
+	cfg_write_boolean(cfgfile, "Global", "Tooltips",(gboolean)OBJ_GET(global_data,"tips_in_use"));
+		
+	cfg_write_int(cfgfile, "Global", "Temp_Scale", (gint)OBJ_GET(global_data,"temp_units"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
-	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_1_name");
-	if (tmpbuf)
+	tmpbuf = OBJ_GET(global_data,"dash_1_name");
+	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
 		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
@@ -290,9 +302,9 @@ void save_config(void)
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
-			dash = g_object_get_data(G_OBJECT(widget),"dash");
-			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
-		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
+			dash = OBJ_GET(widget,"dash");
+			orig_width = (gint) OBJ_GET(dash,"orig_width");
+		        orig_height = (gint) OBJ_GET(dash,"orig_height");
 			if (GTK_WIDGET_VISIBLE(widget))
 			{
 				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
@@ -300,6 +312,7 @@ void save_config(void)
 				cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
 			}
 		}
+		tmpbuf = NULL;
 	}
 	else
 	{
@@ -308,8 +321,8 @@ void save_config(void)
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_y_origin");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_size_ratio");
 	}
-	tmpbuf = (gchar *)g_object_get_data(global_data,"dash_2_name");
-	if (tmpbuf)
+	tmpbuf = OBJ_GET(global_data,"dash_2_name");
+	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
 		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
@@ -318,9 +331,9 @@ void save_config(void)
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
-			dash = g_object_get_data(G_OBJECT(widget),"dash");
-			orig_width = (gint) g_object_get_data(G_OBJECT(dash),"orig_width");
-		        orig_height = (gint) g_object_get_data(G_OBJECT(dash),"orig_height");
+			dash = OBJ_GET(widget,"dash");
+			orig_width = (gint) OBJ_GET(dash,"orig_width");
+		        orig_height = (gint) OBJ_GET(dash,"orig_height");
 			if (GTK_WIDGET_VISIBLE(widget))
 			{
 				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
@@ -328,6 +341,7 @@ void save_config(void)
 				cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
 			}
 		}
+		tmpbuf = NULL;
 	}
 	else
 	{
@@ -383,19 +397,39 @@ void save_config(void)
 					cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 			}
 		}
+		widget = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+		total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
+		hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+		string = g_string_new(NULL);
+		for (i=0;i<total;i++)
+		{
+			if (hidden_list[i] == FALSE)
+				continue;
+			if (count == 0)
+				g_string_printf(string,"%i",i);
+			else
+				g_string_append_printf(string,",%i",i);
+			count++;
+		}
+		tmpbuf = g_strndup(string->str,string->len);
+		cfg_write_string(cfgfile, "Window", "hidden_tabs_list", tmpbuf);
+		g_free(tmpbuf);
+
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	if (serial_params->port_name)
-		cfg_write_string(cfgfile, "Serial", "port_name", 
+		cfg_write_string(cfgfile, "Serial", "override_port", 
 				serial_params->port_name);
 	cfg_write_string(cfgfile, "Serial", "potential_ports", 
-				potential_ports);
+				(gchar *)OBJ_GET(global_data,"potential_ports"));
+	cfg_write_boolean(cfgfile, "Serial", "autodetect_port", 
+				(gboolean)OBJ_GET(global_data,"autodetect_port"));
 	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
-	cfg_write_int(cfgfile, "Serial", "baudrate", baudrate);
+	cfg_write_int(cfgfile, "Serial", "baudrate", (gint)OBJ_GET(global_data,"baudrate"));
 			
-	cfg_write_int(cfgfile, "Logviewer", "zoom", lv_zoom);
-	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(gint) g_object_get_data(global_data,"lv_scroll_delay"));
+	cfg_write_int(cfgfile, "Logviewer", "zoom", (gint)OBJ_GET(global_data,"lv_zoom"));
+	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(gint) OBJ_GET(global_data,"lv_scroll_delay"));
 
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
@@ -465,26 +499,22 @@ void mem_alloc()
 	gint i=0;
 	gint j=0;
 	extern Firmware_Details *firmware;
-	/* Hash tables to store the interdependant deferred variables before
-	 * download...
-	 */
 
-	if (!ms_data)
-		ms_data = g_new0(gint *, firmware->total_pages);
-	if (!ms_data_last)
-		ms_data_last = g_new0(gint *, firmware->total_pages);
-	if (!ms_data_backup)
-		ms_data_backup = g_new0(gint *, firmware->total_pages);
+	if (!firmware->ecu_data)
+		firmware->ecu_data = g_new0(guint8 *, firmware->total_pages);
+	if (!firmware->ecu_data_last)
+		firmware->ecu_data_last = g_new0(guint8 *, firmware->total_pages);
+	if (!firmware->ecu_data_backup)
+		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
 	if (!ve_widgets)
 		ve_widgets = g_new0(GList **, firmware->total_pages);
 	if (!tab_gauges)
 		tab_gauges = g_new0(GList *, firmware->total_tables);
 	if (!sources_hash)
 		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-	if (!widget_group_states)
-		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
-		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
+	/* Hash tables to store the interdependant deferred variables before
+	 * download...
+	 */
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	if (!algorithm)
@@ -502,12 +532,12 @@ void mem_alloc()
 	{
 		interdep_vars[i] = g_hash_table_new(NULL,NULL);
 
-		if (!ms_data[i])
-			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);
-		if (!ms_data_last[i])
-			ms_data_last[i] = g_new0(gint, firmware->page_params[i]->length);
-		if (!ms_data_backup[i])
-			ms_data_backup[i] = g_new0(gint, firmware->page_params[i]->length);
+		if (!firmware->ecu_data[i])
+			firmware->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
+		if (!firmware->ecu_data_last[i])
+			firmware->ecu_data_last[i] = g_new0(guint8, firmware->page_params[i]->length);
+		if (!firmware->ecu_data_backup[i])
+			firmware->ecu_data_backup[i] = g_new0(guint8, firmware->page_params[i]->length);
 		if (!ve_widgets[i])
 		{
 			ve_widgets[i] = g_new0(GList *, firmware->page_params[i]->length);
@@ -541,21 +571,17 @@ void mem_dealloc()
 	serial_params = NULL;
 	g_static_mutex_unlock(&serio_mutex);
 
-	/* Defautl serial port stuff.. */
-	g_free(default_serial_port);
-	g_free(potential_ports);
-
 	/* Firmware datastructure.... */
 	if (firmware)
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			if (ms_data[i])
-				g_free(ms_data[i]);
-			if (ms_data_last[i])
-				g_free(ms_data_last[i]);
-			if (ms_data_backup[i])
-				g_free(ms_data_backup[i]);
+			if (firmware->ecu_data[i])
+				g_free(firmware->ecu_data[i]);
+			if (firmware->ecu_data_last[i])
+				g_free(firmware->ecu_data_last[i]);
+			if (firmware->ecu_data_backup[i])
+				g_free(firmware->ecu_data_backup[i]);
 			if (interdep_vars[i])
 			{
 				g_hash_table_destroy(interdep_vars[i]);
@@ -574,10 +600,18 @@ void mem_dealloc()
 			g_free(firmware->sliders_map_file);
 		if (firmware->status_map_file)
 			g_free(firmware->status_map_file);
-		if (firmware->write_cmd)
-			g_free(firmware->write_cmd);
-		if (firmware->burn_cmd)
-			g_free(firmware->burn_cmd);
+		if (firmware->get_all_command)
+			g_free(firmware->get_all_command);
+		if (firmware->ve_command)
+			g_free(firmware->ve_command);
+		if (firmware->rt_command)
+			g_free(firmware->rt_command);
+		if (firmware->write_command)
+			g_free(firmware->write_command);
+		if (firmware->burn_command)
+			g_free(firmware->burn_command);
+		if (firmware->burn_all_command)
+			g_free(firmware->burn_all_command);
 		if (firmware->page_cmd)
 			g_free(firmware->page_cmd);
 		for (i=0;i<firmware->total_pages;i++)
@@ -601,11 +635,11 @@ void mem_dealloc()
 		}
 		g_free(firmware->rf_params);
 		firmware->rf_params = NULL;
+		g_free(firmware->ecu_data);
+		g_free(firmware->ecu_data_last);
+		g_free(firmware->ecu_data_backup);
 		g_free(firmware);
 		firmware = NULL;
-		g_free(ms_data);
-		g_free(ms_data_last);
-		g_free(ms_data_backup);
 	}
 	if(widget_group_states)
 		g_hash_table_destroy(widget_group_states);
@@ -625,13 +659,26 @@ Io_Message * initialize_io_message()
 	Io_Message *message = NULL;
 
 	message = g_new0(Io_Message, 1);
-	message->out_str = NULL;
-	message->funcs = NULL;
+	message->functions = NULL;
+	message->command = NULL;
+	message->sequence = NULL;
 	message->payload = NULL;
+	message->recv_buf = NULL;
 
 	return message;
 }
 
+
+OutputData * initialize_outputdata()
+{
+	OutputData *output = NULL;
+
+	output = g_new0(OutputData, 1);
+	output->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref(output->object);
+	gtk_object_sink(GTK_OBJECT(output->object));
+	return output;
+}
 
 /*!
  *  \brief initialize_page_params() creates and initializes the page_params
@@ -642,7 +689,6 @@ Page_Params * initialize_page_params(void)
 	Page_Params *page_params = NULL;
 	page_params = g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
-	page_params->is_spark = FALSE;
 	page_params->spconfig_offset = -1;
 	return page_params;
 }
@@ -695,14 +741,74 @@ Table_Params * initialize_table_params(void)
  */
 void dealloc_message(Io_Message * message)
 {
-        if (message->out_str)
-                g_free(message->out_str);
-        if (message->funcs)
-                g_array_free(message->funcs,TRUE);
+	OutputData *data;
+	if (message->functions)
+		dealloc_array(message->functions, FUNCTIONS);
+	message->functions = NULL;
+	if (message->sequence)
+		dealloc_array(message->sequence, SEQUENCE);
+	message->sequence = NULL;
+	if (message->recv_buf)
+		g_free(message->recv_buf);
+	message->recv_buf = NULL;
+	if (message->command)
+		if (message->command->type == NULL_CMD)
+			g_free(message->command);
         if (message->payload)
+	{
+		data = (OutputData *)message->payload;
+		if (GTK_IS_OBJECT(data->object))
+			gtk_object_destroy(GTK_OBJECT(data->object));
                 g_free(message->payload);
+		message->payload = NULL;
+	}
         g_free(message);
 	message = NULL;
+}
+
+
+void dealloc_array(GArray *array, ArrayType type)
+{
+	DBlock *db = NULL;
+	PotentialArg *arg = NULL;
+	gint i = 0;
+
+	switch (type)
+	{
+		case FUNCTIONS:
+			g_array_free(array,TRUE);
+			break;
+		case SEQUENCE:
+			for (i=0;i<array->len;i++)
+			{
+				db = g_array_index(array,DBlock *,i);
+				if (!db)
+					continue;
+				if (db->data)
+					g_free(db->data);
+				g_free(db);
+			}
+			g_array_free(array,TRUE);
+			break;
+		case ARGS:
+			for (i=0;i<array->len;i++)
+			{
+				arg = g_array_index(array,PotentialArg *,i);
+				if (!arg)
+					continue;
+				if (arg->name)
+					g_free(arg->name);
+				if (arg->desc)
+					g_free(arg->desc);
+				if (arg->internal_name)
+					g_free(arg->internal_name);
+				if (arg->static_string)
+					g_free(arg->static_string);
+				g_free(arg);
+			}
+			g_array_free(array,TRUE);
+			break;
+	}
 }
 
 

@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=0
+minor=2
 
 [interrogation_profile]
 name=MegaSquirtnSpark-Extra Highres 029x
@@ -8,18 +8,21 @@ name=MegaSquirtnSpark-Extra Highres 029x
 [parameters]
 SignatureVia=MS_Signature
 TextVerVia=MS_Textrev
-NumVerVia=MS-VerNum
-Rt_Cmd_Key=MSnS-E_RTVars
-VE_Cmd_Key=MS-I_VEconst
-Capabilities=_MSNS_E_
-Write_Cmd=W
-Burn_Cmd=B
-Chunk_Write_Cmd=X
+NumVerVia=MS_VerNum
+RT_Command=ms1_extra_rtvars
+RT_total_bytes=41
+Get_All_Command=ms1_read_all
+VE_Command=ms1_veconst
+Burn_Command=ms1_burn
+Burn_All_Command=ms1_burn
+Write_Command=ms1_generic_write
+Chunk_Write_Command=ms1_chunk_write
+Capabilities=_MS1_,_MSNS_E_
 Page_Cmd=P
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
-TotalTables=11
 ReadOnlyAbove=8
+TotalTables=11
 # Since the first page is 0, 10 is the "eleventh" page
 ToothmonPage=9
 # Since the first page is 0, 9 is the "tenth" page
@@ -42,6 +45,7 @@ cfg13_offset=184
 x_page=1
 x_base_offset=158
 x_bincount=12
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -49,6 +53,7 @@ x_precision=0
 y_page=1
 y_base_offset=170
 y_bincount=12
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -58,6 +63,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=1
 z_base_offset=0
+z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
@@ -78,6 +84,7 @@ cfg13_offset=184
 x_page=2
 x_base_offset=158
 x_bincount=12
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -85,6 +92,7 @@ x_precision=0
 y_page=2
 y_base_offset=170
 y_bincount=12
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -94,6 +102,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=2
 z_base_offset=0
+z_size=_U08_
 z_source=vecurr2
 z_suffix=VE %
 z_conv_expr=x*1
@@ -104,6 +113,7 @@ table_name=Fuel VE-Table 3, MSnSpark-Extra
 x_page=5
 x_base_offset=144
 x_bincount=12
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -111,6 +121,7 @@ x_precision=0
 y_page=5
 y_base_offset=156
 y_bincount=12
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -120,6 +131,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=5
 z_base_offset=0
+z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
@@ -130,6 +142,7 @@ table_name=Spark Table 1, MSnSpark-Extra
 x_page=3
 x_base_offset=144
 x_bincount=12
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -137,6 +150,7 @@ x_precision=0
 y_page=3
 y_base_offset=156
 y_bincount=12
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -146,6 +160,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=3
 z_base_offset=0
+z_size=_U08_
 z_source=sparkangle
 z_suffix=Deg
 z_conv_expr=(x*(352/1000))-10
@@ -156,6 +171,7 @@ table_name=Spark Table 2, MSnSpark-Extra
 x_page=4
 x_base_offset=144
 x_bincount=12
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -163,6 +179,7 @@ x_precision=0
 y_page=4
 y_base_offset=156
 y_bincount=12
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -172,6 +189,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=4
 z_base_offset=0
+z_size=_U08_
 z_source=sparkangle
 z_suffix=Deg
 z_conv_expr=(x*(352/1000))-10
@@ -182,6 +200,7 @@ table_name=AFR Table 1, MSnSpark-Extra
 x_page=6
 x_base_offset=64
 x_bincount=8
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -189,6 +208,7 @@ x_precision=0
 y_page=6
 y_base_offset=72
 y_bincount=8
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -198,6 +218,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=6
 z_base_offset=0
+z_size=_U08_
 z_source=afr
 z_suffix=AFR
 z_conv_expr=x/10
@@ -208,6 +229,7 @@ table_name=AFR Table 2, MSnSpark-Extra
 x_page=6
 x_base_offset=144
 x_bincount=8
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -215,6 +237,7 @@ x_precision=0
 y_page=6
 y_base_offset=152
 y_bincount=8
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -224,6 +247,7 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=6
 z_base_offset=80
+z_size=_U08_
 z_source=afr
 z_suffix=AFR
 z_conv_expr=x/10
@@ -234,6 +258,7 @@ table_name=Boost Table 1, KPA target: RPM vs TPS, MSnSpark-Extra
 x_page=7
 x_base_offset=36
 x_bincount=6
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -241,12 +266,14 @@ x_precision=0
 y_page=7
 y_base_offset=42
 y_bincount=6
-y_source=tpsadc
+y_size=_U08_
+y_source=tpspercent
 y_suffix=TPS %
 y_conv_expr=x*(3921568/10000000)
 y_precision=1
 z_page=7
 z_base_offset=0
+z_size=_U08_
 z_multi_source=TRUE
 z_source_key=map_sensor
 z_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
@@ -261,6 +288,7 @@ table_name=Boost Table 2, DC Target: RPM vs TPS, MSnSpark-Extra
 x_page=7
 x_base_offset=84
 x_bincount=6
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -268,12 +296,14 @@ x_precision=0
 y_page=7
 y_base_offset=90
 y_bincount=6
-y_source=tpsadc
+y_size=_U08_
+y_source=tpspercent
 y_suffix=TPS %
 y_conv_expr=x*(3921568/10000000)
 y_precision=1
 z_page=7
 z_base_offset=48
+z_size=_U08_
 z_source=bcDC
 z_suffix=Duty %
 z_conv_expr=(x/255)*100
@@ -284,6 +314,7 @@ table_name=Boost Table 3, switched on demand, MSnSpark-Extra
 x_page=7
 x_base_offset=132
 x_bincount=6
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -291,12 +322,14 @@ x_precision=0
 y_page=7
 y_base_offset=138
 y_bincount=6
-y_source=tpsadc
+y_size=_U08_
+y_source=tpspercent
 y_suffix=TPS %
 y_conv_expr=x*(3921568/10000000)
 y_precision=1
 z_page=7
 z_base_offset=96
+z_size=_U08_
 z_multi_source=TRUE
 z_source_key=map_sensor
 z_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
@@ -310,6 +343,7 @@ table_name=Rotary Trailing, MSnSpark-Extra
 x_page=8
 x_base_offset=99
 x_bincount=6
+x_size=_U08_
 x_source=rpm
 x_suffix=RPM
 x_conv_expr=x*100
@@ -317,6 +351,7 @@ x_precision=0
 y_page=8
 y_base_offset=105
 y_bincount=6
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -326,66 +361,80 @@ y_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 y_precisions=0,0,0,0,0
 z_page=8
 z_base_offset=63
+z_size=_U08_
 z_source=
 z_suffix=Degrees
 z_conv_expr=(x*(352/1000))-10
 z_precision=1
 
 [page_0]
+dl_by_default=TRUE
 truepgnum=0
 length=189
 
 [page_1]
+dl_by_default=TRUE
 truepgnum=1
 length=189
 
 [page_2]
+dl_by_default=TRUE
 truepgnum=2
 length=189
 
 [page_3]
+dl_by_default=TRUE
 truepgnum=3
 length=189
 
 [page_4]
+dl_by_default=TRUE
 truepgnum=4
 length=189
 
 [page_5]
+dl_by_default=TRUE
 truepgnum=5
 length=189
 
 [page_6]
+dl_by_default=TRUE
 truepgnum=6
 length=189
 
 [page_7]
+dl_by_default=TRUE
 truepgnum=7
 length=189
 
 [page_8]
+dl_by_default=TRUE
 truepgnum=8
 length=189
 
 [page_9]
+dl_by_default=FALSE
 truepgnum=240
 length=189
 
 [page_10]
+dl_by_default=FALSE
 truepgnum=241
 length=189
 
 [page_11]
+dl_by_default=FALSE
 truepgnum=242
 length=256
 
 [page_12]
+dl_by_default=FALSE
 truepgnum=243
 length=256
 
 [interrogation]
-match_on=MS_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
-MS_Clock=_COUNT_,1
+match_on=MS-I_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
+MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,41
 MS-I_VEconst=_COUNT_,189
@@ -393,9 +442,9 @@ MS_Signature=_SUBMATCH_,format hr_0
 
 [gui]
 RealtimeMapFile=MSnS-Extra-HR-029x
-SliderMapFile=msns-extra-firmware
-RuntimeTextMapFile=msns-extra-firmware
-StatusMapFile=msns-e-firmware
+SliderMapFile=MSnS-Extra-firmware
+RuntimeTextMapFile=MSnS-Extra-firmware
+StatusMapFile=MSnS-Extra-firmware
 
 LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
 

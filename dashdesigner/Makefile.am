@@ -14,7 +14,7 @@ dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall 
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep

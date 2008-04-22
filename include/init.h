@@ -15,7 +15,8 @@
 #define __INIT_H__
 
 #include <gtk/gtk.h>
-#include <structures.h>
+#include <firmware.h>
+#include <threads.h>
 
 /* Prototypes */
 void init(void);
@@ -29,7 +30,9 @@ void dealloc_message(Io_Message * );
 void dealloc_w_update(Widget_Update * );
 void dealloc_table_params(Table_Params * );
 void dealloc_qfunction(QFunction * );
+void dealloc_array(GArray *, ArrayType );
 Io_Message * initialize_io_message(void);
+OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);
 Page_Params * initialize_page_params(void);
 Table_Params * initialize_table_params(void);

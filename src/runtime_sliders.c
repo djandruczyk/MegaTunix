@@ -16,13 +16,16 @@
 #include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
+#include <defines.h>
+#include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
+#include <notifications.h>
+#include <rtv_map_loader.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <structures.h>
 #include <widgetmgmt.h>
 
 GHashTable *rt_sliders = NULL;
@@ -32,6 +35,7 @@ GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -39,7 +43,7 @@ extern gint dbg_lvl;
  from the file specified in the firmware's interrogation profile, and populate
  the gui wiht the newly created sliders.
  */
-void load_sliders()
+EXPORT void load_sliders()
 {
 	ConfigFile *cfgfile = NULL;
 	Rt_Slider *slider = NULL;
@@ -57,9 +61,22 @@ void load_sliders()
 	gint i = 0;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
+	extern gboolean connected;
+	extern gboolean interrogated;
 
-	if ((!tabs_loaded) || (!firmware) || (leaving))
+	if (!((connected) && (interrogated)))
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": load_sliders()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
 		return;
+	}
+
+	if ((!tabs_loaded) || (leaving))
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": load_sliders()\n\tERROR, tabs not loaded or leaving, returning!\n\n"));
+		return;
+	}
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
 		if (ww_sliders)
@@ -71,6 +88,7 @@ void load_sliders()
 			dbg_func(g_strdup(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
+	set_title(g_strdup("Loading RT Sliders..."));
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
@@ -86,6 +104,7 @@ void load_sliders()
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\tRuntime Sliders profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API,filename));
 			g_free(filename);
+			set_title(g_strdup("ERROR RT Sliders API MISMATCH!!!"));
 			return;
 		}
 		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
@@ -133,7 +152,7 @@ void load_sliders()
 			g_free(ctrl_name);
 			g_free(source);
 		}
-		// Now warmup wizard.....
+		/* Now warmup wizard... */
 do_ww_sliders:
 		if (!cfg_read_int(cfgfile,"global","ww_total_sliders",&count))
 		{
@@ -188,6 +207,8 @@ finish_off:
 			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
 	}
 	g_free(filename);
+	set_title(g_strdup("RT Sliders Loaded..."));
+	return;
 }
 
 
@@ -282,7 +303,7 @@ finish_off:
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 	}
-	else
+	if (filename)
 		g_free(filename);
 }
 
@@ -326,11 +347,11 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->table_num = table_num;
 	slider->row = row;
 	slider->class = MTX_PROGRESS;
-	slider->friendly_name = (gchar *) g_object_get_data(object,"dlog_gui_name");
-	slider->lower = (gint)g_object_get_data(object,"lower_limit");
+	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	slider->lower = (gint)OBJ_GET(object,"lower_limit");
 
-	slider->upper = (gint)g_object_get_data(object,"upper_limit");
-	slider->history = (GArray *) g_object_get_data(object,"history");
+	slider->upper = (gint)OBJ_GET(object,"upper_limit");
+	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 
 	if (ident == RUNTIME_TAB)
@@ -414,8 +435,8 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	GObject * object = NULL;
 	extern Rtv_Map *rtv_map;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
-	gchar * source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
-	TabIdent ident = (TabIdent)g_object_get_data(G_OBJECT(widget),"tab_ident");
+	gchar * source = (gchar *)OBJ_GET(widget,"source");
+	TabIdent ident = (TabIdent)OBJ_GET(widget,"tab_ident");
 		
 	if (!rtv_map)
 		return;
@@ -439,7 +460,7 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->table_num = -1;
 	slider->row = -1;
 	slider->class = MTX_RANGE;
-	slider->history = (GArray *) g_object_get_data(object,"history");
+	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 	slider->textval = NULL;
 	slider->pbar = widget;

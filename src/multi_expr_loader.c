@@ -27,6 +27,7 @@
 
 
 extern gint dbg_lvl;
+extern GObject *global_data;
 /*!
  \brief multi_exprt_loader() is called when a "multi_expr_keys" key is found in
  a realtimemap, and triggers the loading of al lthe keys/values that
@@ -43,7 +44,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	gchar ** keys = NULL;
 	gchar ** l_limits = NULL;
 	gchar ** u_limits = NULL;
-	gchar ** lookuptables = NULL;
+	gchar ** ltables = NULL;
 	gchar ** dl_exprs = NULL;
 	gchar ** ul_exprs = NULL;
 	gint num_keys = 0;
@@ -95,7 +96,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	else
 	{
-		lookuptables = g_strsplit(tmpbuf,",",-1);
+		ltables = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
 	if (!cfg_read_string(cfgfile,section,"dl_conv_exprs",&tmpbuf))
@@ -127,7 +128,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 		multi = g_new0(MultiExpr, 1);
 		multi->lower_limit = (gint)strtol(l_limits[i],NULL,10);
 		multi->upper_limit = (gint)strtol(u_limits[i],NULL,10);
-		multi->lookuptable = g_strdup(lookuptables[i]);
+		multi->lookuptable = g_strdup(ltables[i]);
 		multi->dl_conv_expr = g_strdup(dl_exprs[i]);
 		multi->ul_conv_expr = g_strdup(ul_exprs[i]);
 		multi->dl_eval = evaluator_create(multi->dl_conv_expr);
@@ -136,11 +137,11 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
-	g_strfreev(lookuptables);
+	g_strfreev(ltables);
 	g_strfreev(dl_exprs);
 	g_strfreev(ul_exprs);
 	g_strfreev(keys);
-	g_object_set_data(G_OBJECT(object),"multi_expr_hash",hash);
+	OBJ_SET(object,"multi_expr_hash",hash);
 
 }
 

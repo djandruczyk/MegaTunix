@@ -1,8 +1,15 @@
-# Runtime display
-
 [global]
 description=Object data map for MegaSquirt Runtime Display
 tab_name=_Runtime Display
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -27,14 +34,6 @@ page=0
 tab_ident=_RUNTIME_TAB_
 
 #------- Runtime Status Indicators ------------------------------------------
-
-#[runtime_connected_label]
-#keys=page,bind_to_list,active_fg,inactive_fg
-#key_types=_INT_,_STRING_,_STRING_,_STRING_
-#active_fg=red
-#inactive_fg=dim grey
-#page=0
-#bind_to_list=connected_widgets
 
 [runtime_cranking_label]
 keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg

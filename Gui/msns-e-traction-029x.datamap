@@ -1,9 +1,17 @@
-# MSnS-E-021x table 1,3 Enrichments data map
-
 [global]
 description=Object data map for MSnS-E 029 series Traction Control
 tab_name=_Traction Control
 id_prefix=traction_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=0
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 

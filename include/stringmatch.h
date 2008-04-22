@@ -20,6 +20,7 @@
 /* Prototypes */
 void build_string_2_enum_table(void);
 gint translate_string(gchar *);
+void dump_hash(gpointer,gpointer,gpointer);
 /* Prototypes */
 
 #endif

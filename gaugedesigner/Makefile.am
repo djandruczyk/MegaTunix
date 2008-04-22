@@ -13,7 +13,7 @@ gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mt
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall 
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 

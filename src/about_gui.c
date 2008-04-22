@@ -18,6 +18,7 @@
 
 
 
+extern GObject *global_data;
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
  */

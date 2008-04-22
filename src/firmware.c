@@ -14,9 +14,9 @@
 #include <config.h>
 #include <firmware.h>
 #include <glib/gprintf.h>
-#include <structures.h>
 
 
+extern GObject *global_data;
 /*!
  \brief load_firmware_file loads the .s19 file into memory
  */

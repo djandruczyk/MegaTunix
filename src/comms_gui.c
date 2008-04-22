@@ -19,7 +19,6 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <string.h>
-#include <structures.h>
 #include <tabloader.h>
 #include <unistd.h>
 #include <widgetmgmt.h>
@@ -30,10 +29,8 @@ extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
 extern Serial_Params *serial_params;
-gint interval_min;
-gint interval_step;
-gint interval_max;
 GdkColor white = { 0, 65535, 65535, 65535 };
+extern GObject *global_data;
 
 
 /*!

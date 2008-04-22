@@ -25,8 +25,7 @@ Send suggestions, bug reports and general feedback to (SPAM not welcome)
 djandruczyk <at> yahoo <dot> com
 
 System requirements:
-	MegaTunix is developed on both Gentoo and Ubuntu Linux  distros, 
-the package names will vary if you don't use Gentoo.  Most RPM and Debian 
+	MegaTunix is developed on Ubuntu Linux.  Most RPM and Debian 
 based distros split packages into a runtime and devel package.  Runtime 
 ones are needed to run the program, and devel packages are needed for 
 programs like megatunix to compile against.
@@ -44,5 +43,5 @@ Optional:
   The Glade GUI designer can be installed to modify and add new gui tabs to
 megatunix for your own custom firmware needs.  This is ONLY needed if you want
 to modify megatunix or design custom tabs for your firmware.  
-I recommend glade-2.4.x
+I recommend glade-2.x
 

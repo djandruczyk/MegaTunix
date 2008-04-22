@@ -52,7 +52,8 @@ The key_type is special text as show below:
 			specialized handlers.
 	key_types	(string) List of keytypes for the respective keys
 			above. 
-	internal_name	(string) name for the variable internally to megatunix
+	internal_names	(CSV string) list of names for this variable 
+			internally to megatunix
 			used by the datalogger, loogviewer and Dashboard.
 	dlog_gui_name	(string) Name shown on datalogging tab
 	dlog_field_name	(string) name in datalog header for this variable

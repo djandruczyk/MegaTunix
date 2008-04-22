@@ -29,7 +29,7 @@ EXTRA_DIST = parser.h
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall 
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -pedantic
 
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)
 

@@ -28,8 +28,6 @@ int main (int argc, char ** argv )
 			G_CALLBACK(gtk_main_quit),NULL);
 	gtk_window_set_resizable(GTK_WINDOW(main_window),TRUE);
 
-
-	//gtk_widget_set_size_request(main_window,320,240);
 	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"dashdesigner.glade",NULL),NULL);
 	if (filename)
 		main_xml = glade_xml_new(filename, "main_vbox", NULL);

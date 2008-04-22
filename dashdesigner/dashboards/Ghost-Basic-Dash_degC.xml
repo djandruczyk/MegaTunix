@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
+<dashboard>
+  <dash_geometry>
+    <width>712</width>
+    <height>510</height>
+  </dash_geometry>
+  <gauge>
+    <width>310</width>
+    <height>300</height>
+    <x_offset>402</x_offset>
+    <y_offset>210</y_offset>
+    <gauge_xml_name>Ghost/Ghost_AFR_Gauge.xml</gauge_xml_name>
+    <datasource>afr</datasource>
+  </gauge>
+  <gauge>
+    <width>307</width>
+    <height>300</height>
+    <x_offset>1</x_offset>
+    <y_offset>210</y_offset>
+    <gauge_xml_name>Ghost/Ghost_RPM_Gauge.xml</gauge_xml_name>
+    <datasource>rpm</datasource>
+  </gauge>
+  <gauge>
+    <width>251</width>
+    <height>245</height>
+    <x_offset>231</x_offset>
+    <y_offset>52</y_offset>
+    <gauge_xml_name>Ghost/Ghost_EGOcorr_Gauge.xml</gauge_xml_name>
+    <datasource>egocorr</datasource>
+  </gauge>
+  <gauge>
+    <width>152</width>
+    <height>142</height>
+    <x_offset>481</x_offset>
+    <y_offset>59</y_offset>
+    <gauge_xml_name>Ghost/Ghost_MAT_degC_Gauge.xml</gauge_xml_name>
+    <datasource>matdeg</datasource>
+  </gauge>
+  <gauge>
+    <width>147</width>
+    <height>152</height>
+    <x_offset>83</x_offset>
+    <y_offset>54</y_offset>
+    <gauge_xml_name>Ghost/Ghost_CLT_degC_Gauge.xml</gauge_xml_name>
+    <datasource>cltdeg</datasource>
+  </gauge>
+</dashboard>

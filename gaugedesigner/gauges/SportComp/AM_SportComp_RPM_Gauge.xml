@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
 <gauge>
-  <bg_color>0 0 0</bg_color>
-  <needle_color>61019 15359 2737</needle_color>
+  <bg_color>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </bg_color>
+  <needle_color>
+    <red>61019</red>
+    <green>15359</green>
+    <blue>2737</blue>
+  </needle_color>
   <needle_length>0.831000</needle_length>
   <needle_tail>0.195000</needle_tail>
   <needle_width>0.038000</needle_width>
   <needle_tip_width>0.010000</needle_tip_width>
   <needle_tail_width>0.040000</needle_tail_width>
-  <value_font_color>52428 52428 52428</value_font_color>
-  <gradient_begin_color>65535 65535 65535</gradient_begin_color>
-  <gradient_end_color>0 0 0</gradient_end_color>
+  <value_font_color>
+    <red>52428</red>
+    <green>52428</green>
+    <blue>52428</blue>
+  </value_font_color>
+  <gradient_begin_color>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </gradient_begin_color>
+  <gradient_end_color>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_end_color>
   <precision>0</precision>
   <width>178</width>
   <height>162</height>
@@ -29,14 +49,22 @@
     <highpoint>6200.000000</highpoint>
     <lwidth>0.070000</lwidth>
     <inset>0.800000</inset>
-    <color>65194 50970 11930</color>
+    <color>
+      <red>65194</red>
+      <green>50970</green>
+      <blue>11930</blue>
+    </color>
   </color_range>
   <color_range>
     <lowpoint>6200.000000</lowpoint>
     <highpoint>8000.000000</highpoint>
     <lwidth>0.070000</lwidth>
     <inset>0.800000</inset>
-    <color>60666 19164 7316</color>
+    <color>
+      <red>60666</red>
+      <green>19164</green>
+      <blue>7316</blue>
+    </color>
   </color_range>
   <text_block>
     <font>arial Bold</font>
@@ -44,7 +72,11 @@
     <font_scale>0.180000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.610000</y_pos>
-    <color>55769 55769 55769</color>
+    <color>
+      <red>55769</red>
+      <green>55769</green>
+      <blue>55769</blue>
+    </color>
   </text_block>
   <text_block>
     <font>arial Bold</font>
@@ -52,7 +84,11 @@
     <font_scale>0.100000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.740000</y_pos>
-    <color>55769 55769 55769</color>
+    <color>
+      <red>55769</red>
+      <green>55769</green>
+      <blue>55769</blue>
+    </color>
   </text_block>
   <text_block>
     <font>arial Bold Italic</font>
@@ -60,21 +96,37 @@
     <font_scale>0.107000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.230000</y_pos>
-    <color>55769 55769 55769</color>
+    <color>
+      <red>55769</red>
+      <green>55769</green>
+      <blue>55769</blue>
+    </color>
   </text_block>
   <tick_group>
     <font>Arial Bold Italic</font>
     <font_scale>0.205000</font_scale>
     <text>0, ,1, ,2, ,3, ,4, ,5, ,6, ,7, ,8</text>
     <text_inset>0.280000</text_inset>
-    <text_color>55769 55769 55769</text_color>
+    <text_color>
+      <red>55769</red>
+      <green>55769</green>
+      <blue>55769</blue>
+    </text_color>
     <num_maj_ticks>17</num_maj_ticks>
-    <maj_tick_color>52428 52428 52428</maj_tick_color>
+    <maj_tick_color>
+      <red>52428</red>
+      <green>52428</green>
+      <blue>52428</blue>
+    </maj_tick_color>
     <maj_tick_inset>0.150000</maj_tick_inset>
     <maj_tick_length>0.120000</maj_tick_length>
     <maj_tick_width>0.220000</maj_tick_width>
     <num_min_ticks>4</num_min_ticks>
-    <min_tick_color>52428 52428 52428</min_tick_color>
+    <min_tick_color>
+      <red>52428</red>
+      <green>52428</green>
+      <blue>52428</blue>
+    </min_tick_color>
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.050000</min_tick_length>
     <min_tick_width>0.120000</min_tick_width>
@@ -82,7 +134,11 @@
     <sweep_angle>270.000000</sweep_angle>
   </tick_group>
   <polygon>
-    <color>61166 15163 2570</color>
+    <color>
+      <red>61166</red>
+      <green>15163</green>
+      <blue>2570</blue>
+    </color>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>

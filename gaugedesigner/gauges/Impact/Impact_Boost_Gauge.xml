@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
 <gauge>
-  <bg_color>0 0 0</bg_color>
-  <needle_color>44253 0 0</needle_color>
+  <bg_color>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </bg_color>
+  <needle_color>
+    <red>44253</red>
+    <green>0</green>
+    <blue>0</blue>
+  </needle_color>
+  <needle_length>0.850000</needle_length>
   <needle_tail>0.020000</needle_tail>
   <needle_width>0.032000</needle_width>
-  <value_font_color>65535 65535 65535</value_font_color>
-  <gradient_begin_color>57607 57607 57607</gradient_begin_color>
-  <gradient_end_color>0 0 0</gradient_end_color>
+  <needle_tip_width>0.000000</needle_tip_width>
+  <needle_tail_width>0.000000</needle_tail_width>
+  <value_font_color>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </value_font_color>
+  <gradient_begin_color>
+    <red>57607</red>
+    <green>57607</green>
+    <blue>57607</blue>
+  </gradient_begin_color>
+  <gradient_end_color>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_end_color>
   <precision>1</precision>
   <width>357</width>
   <height>379</height>
@@ -26,14 +49,22 @@
     <highpoint>40.000000</highpoint>
     <lwidth>0.020000</lwidth>
     <inset>0.829000</inset>
-    <color>1799 2056 25186</color>
+    <color>
+      <red>1799</red>
+      <green>2056</green>
+      <blue>25186</blue>
+    </color>
   </color_range>
   <color_range>
     <lowpoint>0.000000</lowpoint>
     <highpoint>40.000000</highpoint>
     <lwidth>0.017000</lwidth>
     <inset>0.794000</inset>
-    <color>1799 2056 25186</color>
+    <color>
+      <red>1799</red>
+      <green>2056</green>
+      <blue>25186</blue>
+    </color>
   </color_range>
   <text_block>
     <font>Impact</font>
@@ -41,7 +72,11 @@
     <font_scale>0.160000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.409000</y_pos>
-    <color>65535 65535 65535</color>
+    <color>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Impact</font>
@@ -49,7 +84,11 @@
     <font_scale>0.071000</font_scale>
     <x_pos>0.706000</x_pos>
     <y_pos>0.021000</y_pos>
-    <color>65535 65535 65535</color>
+    <color>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Impact</font>
@@ -57,7 +96,11 @@
     <font_scale>1.000000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.000000</y_pos>
-    <color>4228 4228 4228</color>
+    <color>
+      <red>4228</red>
+      <green>4228</green>
+      <blue>4228</blue>
+    </color>
   </text_block>
   <text_block>
     <font>Impact</font>
@@ -65,21 +108,37 @@
     <font_scale>0.128000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.320000</y_pos>
-    <color>17969 17969 17969</color>
+    <color>
+      <red>17969</red>
+      <green>17969</green>
+      <blue>17969</blue>
+    </color>
   </text_block>
   <tick_group>
     <font>Impact</font>
     <font_scale>0.160000</font_scale>
     <text>0,5,10,15,20,25,30,35,40</text>
     <text_inset>0.287000</text_inset>
-    <text_color>65535 65535 65535</text_color>
+    <text_color>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </text_color>
     <num_maj_ticks>9</num_maj_ticks>
-    <maj_tick_color>65535 65535 65535</maj_tick_color>
+    <maj_tick_color>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </maj_tick_color>
     <maj_tick_inset>0.146000</maj_tick_inset>
     <maj_tick_length>0.113000</maj_tick_length>
     <maj_tick_width>0.209000</maj_tick_width>
     <num_min_ticks>4</num_min_ticks>
-    <min_tick_color>44204 0 0</min_tick_color>
+    <min_tick_color>
+      <red>44204</red>
+      <green>0</green>
+      <blue>0</blue>
+    </min_tick_color>
     <min_tick_inset>0.146000</min_tick_inset>
     <min_tick_length>0.054000</min_tick_length>
     <min_tick_width>0.125000</min_tick_width>

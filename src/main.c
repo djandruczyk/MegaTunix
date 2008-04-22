@@ -23,26 +23,28 @@
 #include <dispatcher.h>
 #include <enums.h>
 #include <gdk/gdkgl.h>
+#include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
 #include <main.h>
 #include <serialio.h>
 #include <stringmatch.h>
-#include <structures.h>
 #include <threads.h>
 #include <timeout_handlers.h>
+#include <xmlcomm.h>
 
 
-extern gint temp_units;
 GThread * thread_dispatcher_id = NULL;
 gboolean ready = FALSE;
-gint dispatcher_id = -1;
+gint pf_dispatcher_id = -1;
+gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
-Serial_Params *serial_params;
-Io_Cmds *cmds;
-GAsyncQueue *io_queue;
-GAsyncQueue *dispatch_queue;
+Serial_Params *serial_params = NULL;
+GAsyncQueue *io_queue = NULL;
+GAsyncQueue *pf_dispatch_queue = NULL;
+GAsyncQueue *gui_dispatch_queue = NULL;
+GObject *global_data = NULL;
 
 /*!
  \brief main() is the typical main function in a C program, it performs
@@ -54,6 +56,8 @@ GAsyncQueue *dispatch_queue;
  */
 gint main(gint argc, gchar ** argv)
 {
+	gchar * filename = NULL;
+
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -68,32 +72,40 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_set_locale();
 
+	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref(global_data);
+	gtk_object_sink(GTK_OBJECT(global_data));
+	handle_args(argc,argv);
 
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
-	cmds = g_malloc0(sizeof(Io_Cmds));
 
 	open_debug();	/* Open debug log */
 	init();			/* Initialize global vars */
-	handle_args(argc,argv);
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
 
+	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"comm.xml",NULL),NULL);
+	load_comm_xml(filename);
+	g_free(filename);
+
 	/* Create Queue to listen for commands */
 	io_queue = g_async_queue_new();
-	dispatch_queue = g_async_queue_new();
+	pf_dispatch_queue = g_async_queue_new();
+	gui_dispatch_queue = g_async_queue_new();
 
 	read_config();
 	setup_gui();		
 
 	/* Startup the serial General I/O handler.... */
 	thread_dispatcher_id = g_thread_create(thread_dispatcher,
-			NULL, // Thread args
-			TRUE, // Joinable
-			NULL); //GError Pointer
+			NULL, /* Thread args */
+			TRUE, /* Joinable */
+			NULL); /*GError Pointer */
 
-	dispatcher_id = g_timeout_add(10,(GtkFunction)dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(50,(GtkFunction)pf_dispatcher,NULL);
+	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	g_timeout_add(250,(GtkFunction)early_interrogation,NULL);

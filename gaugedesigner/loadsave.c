@@ -42,7 +42,7 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		if (!gauge)
 			create_new_gauge(widget,NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
-		//printf("loading gauge file %s\n",filename);
+		/*printf("loading gauge file %s\n",filename);*/
 		update_attributes();
 		g_free (filename);
 	}

@@ -33,7 +33,7 @@ enum
 	VARNAME_COL,
 	TYPE_COL,
 	DATASOURCE_COL,
-	NUM_COLS,
+	NUM_COLS
 };
 
 /* Prototypes */

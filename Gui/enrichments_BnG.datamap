@@ -3,6 +3,24 @@
 [global]
 description=Object data map for Std B&G Enrichments
 tab_name=_Enrichments
+groups=defaults,warmup_bins
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=0
+size=_U08_
+raw_upper=255
+
+[warmup_bins]
+keys=page,use_color,dl_type,handler
+key_types=_INT_,_BOOL_,_ENUM_,_ENUM_
+page=0
+use_color=TRUE
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -203,84 +221,64 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [warmup_entry_1]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=68
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_2]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=69
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_3]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=70
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_4]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=71
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_5]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=72
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_6]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=73
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_7]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=74
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_8]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=75
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_9]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=76
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [warmup_entry_10]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=77
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+group=warmup_bins
 
 [accel_tpstrigthresh_entry]
 keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler

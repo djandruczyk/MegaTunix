@@ -15,7 +15,55 @@
 #define __REQ_FUEL_H__
 
 #include <gtk/gtk.h>
-#include <structures.h>
+
+typedef struct _Req_Fuel_Params Req_Fuel_Params;
+typedef struct _Reqd_Fuel Reqd_Fuel;
+
+/*!
+ \brief The _Req_Fuel_Params structure is used to store the current and last
+ values of the interdependant required fuel parameters for the function
+ that verifies req_fuel status and downloads it.  There is one structure
+ allocated PER Table (even if the table's aren't fuel..)
+ */
+struct _Req_Fuel_Params
+{
+	gint num_squirts;
+	gint num_cyls;
+	gint num_inj;
+	gint divider;
+	gint alternate;
+	gint last_num_squirts;
+	gint last_num_cyls;
+	gint last_num_inj;
+	gint last_divider;
+	gint last_alternate;
+	gfloat req_fuel_total;
+	gfloat last_req_fuel_total;
+};
+
+/*! 
+ Controls for the Required Fuel Calculator... 
+ \brief The _Req_Fuel struct contains jsut about all widgets for the rewuired
+ fuel popup.  most of the values are loaded/saved from the main config file
+ when used.
+ */
+struct _Reqd_Fuel
+{
+	GtkWidget *popup;		/*! the popup window */
+	GtkWidget *calcd_val_spin;	/*! Preliminary value */
+	GtkWidget *reqd_fuel_spin;	/*! Used value */
+	gfloat calcd_reqd_fuel;		/*! calculated value... */
+	gint disp;			/*! Engine size  1-1000 Cu-in */
+	gint cyls;			/*! # of Cylinders  1-12 */
+	gfloat rated_inj_flow;		/*! Rated injector flow */
+	gfloat rated_pressure;		/*! Rated fuel pressure */
+	gfloat actual_pressure;		/*! Actual fuel pressure */
+	gfloat actual_inj_flow;		/*! injector flow rate (lbs/hr) */
+	gfloat target_afr;		/*! Air fuel ratio 10-25.5 */
+	gint page;			/*! Which page is this for */
+	gint table_num;			/*! Which table this refers to */
+	gboolean visible;		/*! Is it visible? */
+};
 
 /* Prototypes */
 gint reqd_fuel_popup(GtkWidget *);

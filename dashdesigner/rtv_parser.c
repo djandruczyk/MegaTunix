@@ -16,7 +16,7 @@ void retrieve_rt_vars(void)
 	GArray *classes = NULL;
 	struct Rtv_Data *rtv_data = NULL;
 	gint i = 0;
-//	printf("retrieve rt_vars from mtx realtime maps\n");
+	/*printf("retrieve rt_vars from mtx realtime maps\n");*/
 	files = get_files(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,NULL),g_strdup("rtv_map"),&classes);
 	if (!files)
 		return;
@@ -40,6 +40,8 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gpointer orig = NULL;
 	gpointer value = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * section = NULL;
+	gchar ** vector = NULL;
 	gchar *dlog_name = NULL;
 	gchar *int_name = NULL;
 	gchar *element = NULL;
@@ -48,6 +50,8 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gint tmpi = 0;
 	gint i = 0;
 	gint j = 0;
+	gint k = 0;
+
 	while (files[i])
 	{
 		cfgfile = cfg_open_file(files[i]);
@@ -56,23 +60,32 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 			cfg_read_int(cfgfile,"realtime_map", "derived_total",&total);
 			for (j=0;j<total;j++)
 			{
-				tmpbuf = g_strdup_printf("derived_%i",j);
-				cfg_read_string(cfgfile,tmpbuf,"dlog_gui_name",&dlog_name);
-				cfg_read_string(cfgfile,tmpbuf,"internal_name",&int_name);
-				if (g_hash_table_lookup_extended(rtv_data->rtv_hash,int_name,&orig,&value))
+				section = g_strdup_printf("derived_%i",j);
+				cfg_read_string(cfgfile,section,"dlog_gui_name",&dlog_name);
+				if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
 				{
-					tmpi = (gint)value + 1;
-		//			printf("Value on pre-existing var %s is %i\n",(gchar *)orig,(gint)value);
-					g_hash_table_replace(rtv_data->rtv_hash,g_strdup(int_name),GINT_TO_POINTER(tmpi));
+					vector = g_strsplit(tmpbuf,",",-1);
+					g_free(tmpbuf);
+					for (k=0;k<g_strv_length(vector);k++)
+					{
+
+						if (g_hash_table_lookup_extended(rtv_data->rtv_hash,vector[k],&orig,&value))
+						{
+							tmpi = (gint)value + 1;
+							/*printf("Value on pre-existing var %s is %i\n",(gchar *)orig,(gint)value);*/
+							g_hash_table_replace(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
+						}
+						else
+						{
+							/*printf("inserting var %s with value %i\n",int_name,1);*/
+							g_hash_table_insert(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
+							g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
+							rtv_data->rtv_list = g_list_prepend(rtv_data->rtv_list,g_strdup(dlog_name));
+						}
+					}
+					g_strfreev(vector);
 				}
-				else
-				{
-		//			printf("inserting var %s with value %i\n",int_name,1);
-					g_hash_table_insert(rtv_data->rtv_hash,g_strdup(int_name),GINT_TO_POINTER(1));
-					g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(dlog_name),g_strdup(int_name));
-					rtv_data->rtv_list = g_list_prepend(rtv_data->rtv_list,g_strdup(dlog_name));
-				}
-				g_free(tmpbuf);
+				g_free(section);
 				g_free(dlog_name);
 				g_free(int_name);
 			}
@@ -85,16 +98,16 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
 	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
 	len = g_list_length(rtv_data->rtv_list);
-//	printf("list length is %i\n",len);
+	/*printf("list length is %i\n",len);*/
 	for (i=0;i<len;i++)
 	{
 		element = g_list_nth_data(rtv_data->rtv_list,i);
-//		printf("element %s\n",element);
+		/*printf("element %s\n",element);*/
 		int_name = g_hash_table_lookup(rtv_data->int_ext_hash,element);
 		icount = (gint)g_hash_table_lookup(rtv_data->rtv_hash,int_name);
-//		printf("int name %s\n",int_name);
+		/*printf("int name %s\n",int_name);*/
 		gtk_list_store_append(store,&iter);
-		//printf("var %s, %s, icount %i, total %i\n",element,int_name,icount,rtv_data->total_files);
+		/*printf("var %s, %s, icount %i, total %i\n",element,int_name,icount,rtv_data->total_files);*/
 		if (icount == rtv_data->total_files)
 			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(int_name),-1);
 		else

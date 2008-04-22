@@ -16,16 +16,14 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <fcntl.h>
 #include <getfiles.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <structures.h>
-
-
+#include <unistd.h>
 
 
 /*!
@@ -152,7 +150,7 @@ finish:
 	g_free(extension);
 	if (!list)
 	{
-		//dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);
+		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
 		return NULL;
 	}
 	vector = g_strsplit(list,",",0);
@@ -309,6 +307,7 @@ gchar * choose_file(MtxFileIO *data)
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
 			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), data->default_filename );
 		}
+		g_free(defdir);
 
 	}
 	else

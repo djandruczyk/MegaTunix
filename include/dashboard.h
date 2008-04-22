@@ -20,17 +20,28 @@
 #include <libxml/tree.h>
 
 
+typedef struct _Dash_Gauge Dash_Gauge;
+/*! 
+ \brief The _Dash_Gauge struct contains info on the dashboard guages for 
+ megatunix's two potential dashboards.
+ */
+struct _Dash_Gauge
+{
+	GObject *object;		/* Data storage object for RT vars */
+	gchar * source;			/* Data Source name */
+	GtkWidget *gauge;		/* pointer to gauge itself */
+	GtkWidget *dash;		/* pointer to gauge parent */
+};
+
 /* Prototypes */
 void load_dashboard(gchar *, gpointer);
 gboolean remove_dashboard(GtkWidget *, gpointer );
 void load_elements(GtkWidget *, xmlNode * );
 void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
-void load_integer_from_xml(xmlNode *, gint *);
-void load_string_from_xml(xmlNode *, gchar **);
 void update_dash_gauge(gpointer , gpointer , gpointer );
 void link_dash_datasources(GtkWidget *,gpointer);
-void dash_shape_combine(GtkWidget *);
+void dash_shape_combine(GtkWidget *, gboolean);
 gboolean dash_motion_event(GtkWidget *, GdkEventMotion *, gpointer );
 gboolean dash_button_event(GtkWidget *, GdkEventButton *, gpointer );
 gboolean dash_key_event(GtkWidget *, GdkEventKey *, gpointer );
@@ -39,6 +50,7 @@ gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );
 gboolean dummy(GtkWidget *,gpointer );
 EXPORT void create_gauge(GtkWidget *);
+gboolean hide_dash_resizers(gpointer );
 void update_tab_gauges(void);
 /* Prototypes */
 

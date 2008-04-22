@@ -1,10 +1,17 @@
-# MSnS-E Idle/Boost datamap
-
 [global]
 description=Object data map for Idle/Boost settings for MSnS-E
-#tab_name=_Idle/Boost\nLaunch
 tab_name=_Boost/_Knock
 id_prefix=boost_knock_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=0
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 

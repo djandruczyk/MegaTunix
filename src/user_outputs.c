@@ -15,15 +15,17 @@
 
 #include <assert.h>
 #include <config.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
 #include <keyparser.h>
 #include <lookuptables.h>
+#include <multi_expr_loader.h>
 #include "../mtxmatheval/mtxmatheval.h"
+#include <rtv_map_loader.h>
 #include <stdlib.h>
-#include <structures.h>
 #include <threads.h>
 #include <user_outputs.h>
 
@@ -42,6 +44,7 @@ enum
 
 extern gint dbg_lvl;
 static GList *views = NULL;
+extern GObject *global_data;
 
 gboolean force_view_recompute()
 {
@@ -73,15 +76,16 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 
 	model = create_model ();
 
-	g_object_set_data(G_OBJECT(model),"lim_offset",g_object_get_data(G_OBJECT(widget),"lim_offset"));
-	g_object_set_data(G_OBJECT(model),"src_offset",g_object_get_data(G_OBJECT(widget),"src_offset"));
-	g_object_set_data(G_OBJECT(model),"hys_offset",g_object_get_data(G_OBJECT(widget),"hys_offset"));
-	g_object_set_data(G_OBJECT(model),"ulimit_offset",g_object_get_data(G_OBJECT(widget),"ulimit_offset"));
-	g_object_set_data(G_OBJECT(model),"page",g_object_get_data(G_OBJECT(widget),"page"));
+	OBJ_SET(model,"lim_offset",OBJ_GET(widget,"lim_offset"));
+	OBJ_SET(model,"src_offset",OBJ_GET(widget,"src_offset"));
+	OBJ_SET(model,"hys_offset",OBJ_GET(widget,"hys_offset"));
+	OBJ_SET(model,"ulimit_offset",OBJ_GET(widget,"ulimit_offset"));
+	OBJ_SET(model,"page",OBJ_GET(widget,"page"));
+	OBJ_SET(model,"canID",OBJ_GET(widget,"canID"));
 
 	view = gtk_tree_view_new_with_model(model);
 	views = g_list_append(views,view);
-	g_object_set_data(G_OBJECT(model),"view",(gpointer)view);
+	OBJ_SET(model,"view",(gpointer)view);
 	gtk_container_add(GTK_CONTAINER(widget),view);
 	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
@@ -121,12 +125,12 @@ GtkTreeModel * create_model(void)
 		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
 		if (!object)
 			continue;
-		name = (gchar *) g_object_get_data(object,"dlog_gui_name");
+		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 		if (!name)
 			continue;
-		lower = (gint) g_object_get_data(object,"lower_limit"); 
-		upper = (gint) g_object_get_data(object,"upper_limit"); 
-		if ((!g_object_get_data(object,"lower_limit")) && (!g_object_get_data(object,"upper_limit")))
+		lower = (gint) OBJ_GET(object,"lower_limit"); 
+		upper = (gint) OBJ_GET(object,"upper_limit"); 
+		if ((!OBJ_GET(object,"lower_limit")) && (!OBJ_GET(object,"upper_limit")))
 			range = g_strdup_printf("Varies");
 		else
 			range = g_strdup_printf("%i-%i",lower,upper);
@@ -136,9 +140,6 @@ GtkTreeModel * create_model(void)
 				COL_OBJECT, object,
 				COL_NAME, name,
 				COL_RANGE, range,
-				//COL_ENTRY, g_strdup(""),
-				//COL_HYS, g_strdup(""),
-				//COL_ULIMIT, g_strdup(""),
 				COL_ENTRY, NULL,
 				COL_HYS, NULL,
 				COL_ULIMIT,NULL,
@@ -164,10 +165,10 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	gchar * tmpbuf = NULL;
 	gint output = -1;
 
-	output = (gint)g_object_get_data(G_OBJECT(widget),"output_num");
+	output = (gint)OBJ_GET(widget,"output_num");
 	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_NAME);
+	OBJ_SET(renderer, "column", (gint *)COL_NAME);
 	tmpbuf = g_strdup_printf("Output %i Var.",output);
 	col = gtk_tree_view_column_new_with_attributes (
 			tmpbuf,  
@@ -182,7 +183,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	/* --- Column #2, range --- */
 
 	renderer = gtk_cell_renderer_text_new ();
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_RANGE);
+	OBJ_SET(renderer, "column", (gint *)COL_RANGE);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Range",  
 			renderer,
@@ -195,7 +196,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	renderer = gtk_cell_renderer_text_new ();
 	g_signal_connect(renderer, "edited",
 			G_CALLBACK(cell_edited),model);
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_ENTRY);
+	OBJ_SET(renderer, "column", (gint *)COL_ENTRY);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Value",  
 			renderer,
@@ -210,7 +211,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	renderer = gtk_cell_renderer_text_new ();
 	g_signal_connect(renderer, "edited",
 			G_CALLBACK(cell_edited),model);
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_HYS);
+	OBJ_SET(renderer, "column", (gint *)COL_HYS);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Off Hysteresis",  
 			renderer,
@@ -219,7 +220,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 	/* If no hysteresis params, this column should NOT show */
-	if (g_object_get_data(G_OBJECT(widget),"hys_offset") == NULL)
+	if (OBJ_GET(widget,"hys_offset") == NULL)
 		gtk_tree_view_column_set_visible(col,FALSE);
 
 
@@ -228,7 +229,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	renderer = gtk_cell_renderer_text_new ();
 	g_signal_connect(renderer, "edited",
 			G_CALLBACK(cell_edited),model);
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_ULIMIT);
+	OBJ_SET(renderer, "column", (gint *)COL_ULIMIT);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Upper Limit",  
 			renderer,
@@ -237,7 +238,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 	/* If no upperlimit params, this column should NOT show */
-	if (g_object_get_data(G_OBJECT(widget),"ulimit_offset") == NULL)
+	if (OBJ_GET(widget,"ulimit_offset") == NULL)
 		gtk_tree_view_column_set_visible(col,FALSE);
 
 }
@@ -258,11 +259,10 @@ void cell_edited(GtkCellRendererText *cell,
 		gpointer data)
 {
 	GtkTreeModel *model = (GtkTreeModel *)data;
-	GtkTreeView *view = (GtkTreeView *)g_object_get_data(G_OBJECT(model),"view");
+	GtkTreeView *view = (GtkTreeView *)OBJ_GET(model,"view");
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
 	GtkTreeIter iter;
 	gboolean temp_dep;
-	extern gint temp_units;
 	gint lower = 0;
 	gint upper = 0;
 	gfloat new = 0;
@@ -277,32 +277,35 @@ void cell_edited(GtkCellRendererText *cell,
 	gfloat tmpf = 0.0;
 	void * evaluator = NULL;
 	gint result = 0;
+	gint canID = 0;
 	gint page = 0;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
-	gboolean ign_parm = FALSE;
+	DataSize size = 0;
 	gboolean is_float = FALSE;
 	MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
 	extern GHashTable *sources_hash;
 
-	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
-	page = (gint) g_object_get_data(G_OBJECT(model),"page");
-	src_offset = (gint) g_object_get_data(G_OBJECT(model),"src_offset");
-	lim_offset = (gint) g_object_get_data(G_OBJECT(model),"lim_offset");
-	hys_offset = (gint) g_object_get_data(G_OBJECT(model),"hys_offset");
-	ulimit_offset = (gint) g_object_get_data(G_OBJECT(model),"ulimit_offset");
+	column = (gint) OBJ_GET (cell, "column");
+	canID = (gint) OBJ_GET(model,"canID");
+	page = (gint) OBJ_GET(model,"page");
+	size = (DataSize) OBJ_GET(model,"size");
+	src_offset = (gint) OBJ_GET(model,"src_offset");
+	lim_offset = (gint) OBJ_GET(model,"lim_offset");
+	hys_offset = (gint) OBJ_GET(model,"hys_offset");
+	ulimit_offset = (gint) OBJ_GET(model,"ulimit_offset");
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
-	rt_offset = (gint) g_object_get_data(G_OBJECT(object),"offset");
-	is_float = (gboolean)g_object_get_data(G_OBJECT(object),"is_float");
+	rt_offset = (gint) OBJ_GET(object,"offset");
+	is_float = (gboolean)OBJ_GET(object,"is_float");
 	new = (gfloat)strtod(new_text,NULL);
-	if (g_object_get_data(G_OBJECT(object),"multi_expr_hash"))
+	if (OBJ_GET(object,"multi_expr_hash"))
 	{
-		hash = g_object_get_data(G_OBJECT(object),"multi_expr_hash");
-		key = (gchar *)g_object_get_data(G_OBJECT(object),"source_key");
+		hash = OBJ_GET(object,"multi_expr_hash");
+		key = (gchar *)OBJ_GET(object,"source_key");
 		if (key)
 		{
 			hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
@@ -328,10 +331,11 @@ void cell_edited(GtkCellRendererText *cell,
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
 					g_strdup_printf("%i",(gint)new), -1);
 
-		// Then evaluate it in reverse....
+		/* Then evaluate it in reverse.... */
 		tmpf = evaluator_evaluate_x(multi->dl_eval,new);
-		// Then if it used a lookuptable,  reverse map it if possible to 
-		// determine the ADC reading we need to send to ECU
+		/* Then if it used a lookuptable, reverse map it if possible 
+		 * to determine the ADC reading we need to send to ECU
+		 */
 		if (multi->lookuptable)
 			result = direct_reverse_lookup(multi->lookuptable,(gint)tmpf);
 		else
@@ -341,10 +345,10 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 	{
 
-		lower = (gint) g_object_get_data(G_OBJECT(object),"lower_limit");
-		upper = (gint) g_object_get_data(G_OBJECT(object),"upper_limit");
-		evaluator = (void *)g_object_get_data(G_OBJECT(object),"dl_evaluator");
-		temp_dep = (gboolean)g_object_get_data(G_OBJECT(object),"temp_dep");
+		lower = (gint) OBJ_GET(object,"lower_limit");
+		upper = (gint) OBJ_GET(object,"upper_limit");
+		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
+		temp_dep = (gboolean)OBJ_GET(object,"temp_dep");
 
 		if (new < lower)
 			new = lower;
@@ -360,29 +364,30 @@ void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
+			evaluator = evaluator_create(OBJ_GET(object,"dl_conv_expr"));
 			if (!evaluator)
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)g_object_get_data(G_OBJECT(object),"dl_conv_expr")));
-				g_object_set_data(object,"dl_evaluator",(gpointer)evaluator);
+					dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)OBJ_GET(object,"dl_conv_expr")));
+				OBJ_SET(object,"dl_evaluator",(gpointer)evaluator);
 			}
 		}
-		// First conver to fahrenheit temp scale if temp dependant 
+		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
 		{
-			if (temp_units == CELSIUS)
+			if ((gint)OBJ_GET(global_data,"temp_units") == CELSIUS)
 				x = (new*9.0/5.0)+32;
 			else
 				x = new;
 		}
 		else
 			x = new;
-		// Then evaluate it in reverse....
+		/* Then evaluate it in reverse.... */
 		tmpf = evaluator_evaluate_x(evaluator,x);
-		// Then if it used a lookuptable,  reverse map it if possible to 
-		// determine the ADC reading we need to send to ECU
-		if (g_object_get_data(object,"lookuptable"))
+		/* Then if it used a lookuptable,  reverse map it if possible
+		 * to determine the ADC reading we need to send to ECU
+		 */
+		if (OBJ_GET(object,"lookuptable"))
 			result = reverse_lookup(object,(gint)tmpf);
 		else
 			result = (gint)tmpf;
@@ -391,14 +396,14 @@ void cell_edited(GtkCellRendererText *cell,
 	switch (column)
 	{
 		case COL_HYS:
-			write_ve_const(NULL, page, hys_offset, result, ign_parm, TRUE);
+			send_to_ecu(canID, page, hys_offset, MTX_U08, result, TRUE);
 			break;
 		case COL_ULIMIT:
-			write_ve_const(NULL, page, ulimit_offset, result, ign_parm, TRUE);
+			send_to_ecu(canID, page, ulimit_offset, MTX_U08, result, TRUE);
 			break;
 		case COL_ENTRY:
-			write_ve_const(NULL, page, src_offset, rt_offset, ign_parm, TRUE);
-			write_ve_const(NULL, page, lim_offset, result, ign_parm, TRUE);
+			send_to_ecu(canID, page, src_offset, MTX_U08, rt_offset, TRUE);
+			send_to_ecu(canID, page, lim_offset, MTX_U08, result, TRUE);
 			break;
 	}
 	g_timeout_add(500,(GtkFunction)deferred_model_update,(GtkWidget *)view);
@@ -423,6 +428,7 @@ void update_model_from_view(GtkWidget * widget)
 	gint lim_offset = 0;
 	gint hys_offset = -1;
 	gint ulimit_offset = -1;
+	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint cur_val = 0;
@@ -436,8 +442,7 @@ void update_model_from_view(GtkWidget * widget)
 	gboolean temp_dep = FALSE;
 	gboolean looptest = FALSE;
 	void * evaluator = NULL;
-	extern gint ** ms_data;
-	extern gint temp_units;
+	gint temp_units;
 	gchar * tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar * hash_key = NULL;
@@ -447,29 +452,31 @@ void update_model_from_view(GtkWidget * widget)
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
-	src_offset = (gint)g_object_get_data(G_OBJECT(model),"src_offset");
-	lim_offset = (gint)g_object_get_data(G_OBJECT(model),"lim_offset");
-	hys_offset = (gint)g_object_get_data(G_OBJECT(model),"hys_offset");
-	ulimit_offset = (gint)g_object_get_data(G_OBJECT(model),"ulimit_offset");
-	page = (gint)g_object_get_data(G_OBJECT(model),"page");
+	temp_units = (gint)OBJ_GET(global_data,"temp_units");
+	src_offset = (gint)OBJ_GET(model,"src_offset");
+	lim_offset = (gint)OBJ_GET(model,"lim_offset");
+	hys_offset = (gint)OBJ_GET(model,"hys_offset");
+	ulimit_offset = (gint)OBJ_GET(model,"ulimit_offset");
+	page = (gint)OBJ_GET(model,"page");
+	canID = (gint)OBJ_GET(model,"canID");
 
-	offset = ms_data[page][src_offset];
-	cur_val = ms_data[page][lim_offset];
-	hys_val = ms_data[page][hys_offset];
-	ulimit_val = ms_data[page][ulimit_offset];
+	offset = get_ecu_data(canID,page,src_offset,MTX_U08);
+	cur_val = get_ecu_data(canID,page,lim_offset,MTX_U08);
+	hys_val = get_ecu_data(canID,page,hys_offset,MTX_U08);
+	ulimit_val = get_ecu_data(canID,page,ulimit_offset,MTX_U08);
 
 	looptest = TRUE;
 	while (looptest)
 	{
 		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
-		if (offset == (gint)g_object_get_data(object,"offset"))
+		if (offset == (gint)OBJ_GET(object,"offset"))
 		{
-			is_float =(gboolean)g_object_get_data(object,"is_float");
-			temp_dep =(gboolean)g_object_get_data(object,"temp_dep");
-			if (g_object_get_data(object,"multi_expr_hash"))
+			is_float =(gboolean)OBJ_GET(object,"is_float");
+			temp_dep =(gboolean)OBJ_GET(object,"temp_dep");
+			if (OBJ_GET(object,"multi_expr_hash"))
 			{
-				hash = g_object_get_data(object,"multi_expr_hash");
-				key = (gchar *)g_object_get_data(object,"source_key");
+				hash = OBJ_GET(object,"multi_expr_hash");
+				key = (gchar *)OBJ_GET(object,"source_key");
 				if (key)
 				{
 					hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
@@ -510,7 +517,7 @@ void update_model_from_view(GtkWidget * widget)
 				g_free(tmpbuf);
 
 				/* HYSTERESIS VALUE */
-				if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
+				if (OBJ_GET(model,"hys_offset") != NULL)
 				{
 					if (multi->lookuptable)
 						x = direct_lookup_data(multi->lookuptable,hys_val);
@@ -536,7 +543,7 @@ void update_model_from_view(GtkWidget * widget)
 
 				}
 				/* UPPER LIMIT VALUE */
-				if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+				if (OBJ_GET(model,"ulimit_offset") != NULL)
 				{
 					if (multi->lookuptable)
 						x = direct_lookup_data(multi->lookuptable,ulimit_val);
@@ -564,14 +571,14 @@ void update_model_from_view(GtkWidget * widget)
 
 			else /* Non multi-expression variable */
 			{
-				evaluator =(void *)g_object_get_data(object,"ul_evaluator");
+				evaluator =(void *)OBJ_GET(object,"ul_evaluator");
 				if (!evaluator) /* Not created yet */
 				{
-					expr = g_object_get_data(object,"ul_conv_expr");
+					expr = OBJ_GET(object,"ul_conv_expr");
 					if (expr == NULL)
 					{
 						if (dbg_lvl & CRITICAL)
-							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")));
+							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_name")));
 						exit (-3);
 					}
 					evaluator = evaluator_create(expr);
@@ -579,7 +586,7 @@ void update_model_from_view(GtkWidget * widget)
 					{
 						if (dbg_lvl & CRITICAL)
 							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						g_object_set_data(object,"ul_evaluator",evaluator);
+						OBJ_SET(object,"ul_evaluator",evaluator);
 					}
 					assert(evaluator);
 
@@ -588,7 +595,7 @@ void update_model_from_view(GtkWidget * widget)
 					assert(evaluator);
 
 				/* TEXT ENTRY part */
-				if (g_object_get_data(object,"lookuptable"))
+				if (OBJ_GET(object,"lookuptable"))
 					x = lookup_data(object,cur_val);
 				else
 					x = cur_val;
@@ -611,9 +618,9 @@ void update_model_from_view(GtkWidget * widget)
 				g_free(tmpbuf);
 
 				/* HYSTERESIS VALUE */
-				if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
+				if (OBJ_GET(model,"hys_offset") != NULL)
 				{
-					if (g_object_get_data(object,"lookuptable"))
+					if (OBJ_GET(object,"lookuptable"))
 						x = lookup_data(object,hys_val);
 					else
 						x = hys_val;
@@ -637,9 +644,9 @@ void update_model_from_view(GtkWidget * widget)
 
 				}
 				/* UPPER LIMIT VALUE */
-				if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+				if (OBJ_GET(model,"ulimit_offset") != NULL)
 				{
-					if (g_object_get_data(object,"lookuptable"))
+					if (OBJ_GET(object,"lookuptable"))
 						x = lookup_data(object,ulimit_val);
 					else
 						x = ulimit_val;
@@ -669,7 +676,7 @@ void update_model_from_view(GtkWidget * widget)
 			gtk_tree_path_free(treepath);
 
 
-//			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
+			/*printf("offset matched for object %s\n",(gchar *)OBJ_GET(object,"dlog_gui_name"));*/
 
 		}
 		else

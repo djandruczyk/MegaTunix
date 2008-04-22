@@ -13,6 +13,7 @@ headers = \
         core_gui.h \
         dashboard.h \
         dataio.h \
+	datamgmt.h \
         datalogging_gui.h \
         debugging.h \
         defines.h \
@@ -24,6 +25,7 @@ headers = \
 	firmware.h \
 	getfiles.h \
         gui_handlers.h \
+        helpers.h \
         init.h \
         interrogate.h \
 	keybinder.h \
@@ -38,7 +40,6 @@ headers = \
 	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
-        ms_structures.h \
         multi_expr_loader.h \
         notifications.h \
 	offline.h \
@@ -53,7 +54,6 @@ headers = \
         runtime_text.h \
         serialio.h \
 	stringmatch.h \
-        structures.h \
         tabloader.h \
         tag_loader.h \
         thermistor.h \
@@ -65,9 +65,12 @@ headers = \
 	user_outputs.h \
         vetable_gui.h \
 	vex_support.h \
+	visibility.h \
 	warmwizard_gui.h \
 	widgetmgmt.h \
-	winserialio.h 
+	winserialio.h \
+	xmlbase.h \
+	xmlcomm.h 
 
 
 EXTRA_DIST=$(headers)

@@ -55,7 +55,7 @@ VerNumber
 
 Capabilities
   - This is an enumeration not used by most firmwares.  It's best to leave this
-  one's value blank
+  one's value blank except for MS2, use _MS2_STD_ for those.
 
 Rt_Cmd_Key
   - This maps to a code regarding the command sent to the ECU to retrieve the
@@ -67,12 +67,6 @@ Rt_Cmd_Key
 VE_Cmd_Key
   - This maps to a code to retreive the VE/Constants block of data.  See above
   for code specifications.
-
-Ign_Cmd_Key
-  - This maps to a code to retrieve the Ignition/Constants block of data.  
-  THIS COMMAND is specific to the MSnEDIS and MSnSPARK (not extra) series
-  firmwares and should NOT be used for newer firmwares as the paging method
-  is preferred.
 
 Write_CMD
   - This is a single char sent to the ECU to Write data. The write algorithm 

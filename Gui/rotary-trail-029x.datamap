@@ -1,12 +1,17 @@
-# Rotary Trailing table
-
 [global]
 description=Object data map for Rotary Trailing Table
 tab_name=_Rotary Trailing
-id_prefix=RO_
-groups=load,rpm,table
+id_prefix=Rot_
+groups=defaults,load,rpm,table
 
 #----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=8
+size=_U08_
+raw_upper=255
 
 [load]
 keys=page,is_float,dl_type,handler,use_color,table_num,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list

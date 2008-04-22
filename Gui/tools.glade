@@ -559,45 +559,33 @@ to modify/load</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="tools_status_hbox">
+				<widget class="GtkScrolledWindow" id="tools_scrolledwindow">
+				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
-				  <property name="homogeneous">False</property>
-				  <property name="spacing">0</property>
+				  <property name="can_focus">True</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				  <child>
-				    <widget class="GtkScrolledWindow" id="tools_scrolledwindow">
+				    <widget class="GtkTextView" id="tools_view">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
-				      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
-				      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-				      <child>
-					<widget class="GtkTextView" id="tools_view">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="editable">False</property>
-					  <property name="overwrite">False</property>
-					  <property name="accepts_tab">True</property>
-					  <property name="justification">GTK_JUSTIFY_LEFT</property>
-					  <property name="wrap_mode">GTK_WRAP_NONE</property>
-					  <property name="cursor_visible">False</property>
-					  <property name="pixels_above_lines">0</property>
-					  <property name="pixels_below_lines">0</property>
-					  <property name="pixels_inside_wrap">0</property>
-					  <property name="left_margin">0</property>
-					  <property name="right_margin">0</property>
-					  <property name="indent">0</property>
-					  <property name="text" translatable="yes"></property>
-					</widget>
-				      </child>
+				      <property name="editable">False</property>
+				      <property name="overwrite">False</property>
+				      <property name="accepts_tab">True</property>
+				      <property name="justification">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap_mode">GTK_WRAP_NONE</property>
+				      <property name="cursor_visible">False</property>
+				      <property name="pixels_above_lines">0</property>
+				      <property name="pixels_below_lines">0</property>
+				      <property name="pixels_inside_wrap">0</property>
+				      <property name="left_margin">0</property>
+				      <property name="right_margin">0</property>
+				      <property name="indent">0</property>
+				      <property name="text" translatable="yes"></property>
 				    </widget>
-				    <packing>
-				      <property name="padding">5</property>
-				      <property name="expand">True</property>
-				      <property name="fill">True</property>
-				    </packing>
 				  </child>
 				</widget>
 			      </child>

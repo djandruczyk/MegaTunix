@@ -12,30 +12,33 @@
  */
 
 
+#include <args.h>
 #include <apicheck.h>
 #include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
+#include <firmware.h>
 #include <glib.h>
+#include <gui_handlers.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
-#include <gui_handlers.h>
+#include <notifications.h>
 #include <runtime_status.h>
-#include <structures.h>
 #include <widgetmgmt.h>
 
+
+
+extern gint dbg_lvl;
+GtkWidget *status_window = NULL;
+extern GObject *global_data;
 
 /*!
  \brief load_status() is called to create the ECU status window, load the 
  settings from the StatusMapFile.
  */
-
-extern gint dbg_lvl;
-GtkWidget *status_window = NULL;
-
-void load_status(void)
+EXPORT void load_status(void)
 {
 	ConfigFile *cfgfile = NULL;
 	extern Firmware_Details *firmware;
@@ -62,11 +65,14 @@ void load_status(void)
 	GtkWidget * label;
 	GtkWidget * frame;
 	GtkWidget * table;
-	extern GObject *global_data;
-	extern CmdLineArgs *args;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	GdkColor color;
+	extern gboolean connected;
+	extern gboolean interrogated;
 
 
+	if (!((connected) && (interrogated)))
+		return;
 	if (!firmware->status_map_file)
 	{
 		if (dbg_lvl & CRITICAL)
@@ -74,7 +80,15 @@ void load_status(void)
 		return;
 	}
 
+	set_title(g_strdup("Loading RT Status..."));
 	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
+	if (!filename)
+	{
+		if (dbg_lvl & (RTMLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": load_runtmie_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
+		set_title(g_strdup("ERROR RT Statusfile DOES NOT EXIST!!!"));
+		return;
+	}
         cfgfile = cfg_open_file(filename);
         if (cfgfile)
 	{
@@ -84,6 +98,7 @@ void load_status(void)
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": load_status()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
 			g_free(filename);
+			set_title(g_strdup("ERROR RT Status API MISMATCH!!!"));
 			return;
 		}
 
@@ -91,17 +106,18 @@ void load_status(void)
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
+			set_title(g_strdup("ERROR RT Status cfgfile problem!!!"));
 			return;
 		}
 
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
-		x = (gint)g_object_get_data(global_data,"status_x_origin");
-		y = (gint)g_object_get_data(global_data,"status_y_origin");
+		x = (gint)OBJ_GET(global_data,"status_x_origin");
+		y = (gint)OBJ_GET(global_data,"status_y_origin");
 		gtk_window_move(GTK_WINDOW(window),x,y);
-		w = (gint)g_object_get_data(global_data,"status_width");
-		h = (gint)g_object_get_data(global_data,"status_height");
+		w = (gint)OBJ_GET(global_data,"status_width");
+		h = (gint)OBJ_GET(global_data,"status_height");
 		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 		gtk_window_resize(GTK_WINDOW(window),w,h);
 		g_signal_connect(G_OBJECT(window),"delete_event",
@@ -223,6 +239,7 @@ void load_status(void)
 	}
 
 	g_free(filename);
+	set_title(g_strdup("RT Status Loaded..."));
 	return;
 }
 

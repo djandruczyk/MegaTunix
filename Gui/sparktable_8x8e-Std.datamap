@@ -1,13 +1,16 @@
-# 8x8 tables,  used by the SquirtnSpark and SquirtnEDIS firmwares but 
-# NOT by the SquirtnSpark-Extra code which uses 12x12 tables and more pages.
-
 [global]
 description=Object data map for the Spark Advance Table
 tab_name=_Spark Advance
 id_prefix=SP1_
-groups=load,rpm,sparktable
+groups=defaults,load,rpm,sparktable
 
 #----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=1
+size=_U08_
 
 [load]
 keys=page,dl_type,handler,raw_lower,raw_upper,ign_parm,use_color,tooltip
@@ -68,8 +71,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num

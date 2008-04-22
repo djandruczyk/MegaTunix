@@ -24,6 +24,7 @@ int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *gauge = NULL;
+	GdkColor  color = { 0, 50000,50000,0};
 
 	gtk_init (&argc, &argv);
 
@@ -34,29 +35,28 @@ int main (int argc, char **argv)
 	gtk_widget_realize(gauge);
 	gtk_widget_show_all (window);
 
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),LBOUND, 0.0);
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),UBOUND, 8000.0);
-	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),START_ANGLE, 135.0);
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),SWEEP_ANGLE, 270.0);
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), ANTIALIAS, (gfloat)TRUE);
-	GdkColor color = { 0, 50000,50000,0};
-	color.red = 50000;
-	color.green = 0;
-	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), PRECISION, (gfloat)1);
-	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
-
-
 	if (argc < 2)
 	{
-		printf("Attempting to load default \"output.xml\"\n");
-		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),"output.xml");
+		printf("Using defaults\n");
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),LBOUND, 0.0);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),UBOUND, 8000.0);
+		mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),START_ANGLE, 135.0);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),SWEEP_ANGLE, 270.0);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), ANTIALIAS, (gfloat)TRUE);
+		
+		color.red = 50000;
+		color.green = 0;
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), PRECISION, (gfloat)1);
 	}
 	else
 	{
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
+	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
+
+
 
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 

@@ -16,7 +16,38 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <structures.h>
+
+typedef struct _Vex_Import Vex_Import;
+
+
+/*!
+ \brief The Vex_Import structure holds all fields (lots) needed to load and
+ process a VEX (VEtabalt eXport file) and load it into megatunix.
+ \see vetable_import
+ \see vetable_export
+ */
+struct _Vex_Import
+{	
+	gchar *version;		/* String */
+	gchar *revision;	/* String */
+	gchar *comment;		/* String */
+	gchar *date;		/* String */
+	gchar *time;		/* String */
+	gint page;		/* Int */
+	gint table;		/* Int */
+	gint total_x_bins;	/* Int */
+	gint *x_bins;		/* Int Array, dynamic */
+	gint total_y_bins;	/* Int */
+	gint *y_bins;		/* Int Array, dynamic */
+	gint total_tbl_bins;	/* Int */
+	gint *tbl_bins;		/* Int Array, dynamic */
+	gboolean got_page;	/* Flag */
+	gboolean got_rpm;	/* Flag */
+	gboolean got_load;	/* Flag */
+	gboolean got_ve;	/* Flag */
+
+};
+
 
 /* Prototypes */
 EXPORT gboolean select_vex_for_import(GtkWidget *, gpointer );

@@ -15,11 +15,12 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <firmware.h>
 #include <gui_handlers.h>
 #include <raweditor.h>
-#include <structures.h>
 
 GArray *raw_editor_widgets = NULL;
+extern GObject *global_data;
 
 
 /*!
@@ -65,6 +66,8 @@ EXPORT void finish_raweditor(void)
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
+		if (!firmware->page_params[i]->dl_by_default)
+			continue;
 		tmpstr=g_strdup_printf("Page %i",i);
 		label = gtk_label_new(tmpstr);
 		g_free(tmpstr);
@@ -88,7 +91,7 @@ EXPORT void finish_raweditor(void)
 		ebox = gtk_event_box_new();
 		gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,5);
 		lbl_table = gtk_table_new((firmware->page_params[i]->length)/cols,1,TRUE);
-		g_object_set_data(G_OBJECT(lbl_table),"format",GINT_TO_POINTER(MTX_HEX));
+		OBJ_SET(lbl_table,"format",GINT_TO_POINTER(MTX_HEX));
 		gtk_container_add(GTK_CONTAINER(ebox),lbl_table);
 		g_signal_connect(G_OBJECT(ebox),"button_press_event",
 				G_CALLBACK(swap_base),NULL);
@@ -100,16 +103,13 @@ EXPORT void finish_raweditor(void)
 		for (j=0;j<firmware->page_params[i]->length;j++)
 		{
 			entry = gtk_entry_new();
-			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
-			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
-			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
-			g_object_set_data(G_OBJECT(entry),"raw_lower",GINT_TO_POINTER(0));
-			g_object_set_data(G_OBJECT(entry),"raw_upper",GINT_TO_POINTER(255));
-			if (firmware->page_params[i]->is_spark)
-				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
-
+			OBJ_SET(entry,"page",GINT_TO_POINTER(i));
+			OBJ_SET(entry,"offset",GINT_TO_POINTER(j));
+			OBJ_SET(entry,"base",GINT_TO_POINTER(16));
+			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(0));
+			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(255));
 			ve_widgets[i][j] = g_list_prepend(ve_widgets[i][j],(gpointer)entry);
-			g_object_set_data(G_OBJECT(entry),"handler",
+			OBJ_SET(entry,"handler",
 					GINT_TO_POINTER(GENERIC));
 			g_signal_connect (G_OBJECT(entry), "changed",
 					G_CALLBACK(entry_changed_handler),NULL);
@@ -179,7 +179,7 @@ gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 	table = (GtkTable *)gtk_bin_get_child(GTK_BIN(widget));
 	if (GTK_IS_TABLE(table))
-		format = (gint)g_object_get_data(G_OBJECT(table),"format");
+		format = (gint)OBJ_GET(table,"format");
 	else
 		return FALSE;
 
@@ -195,7 +195,7 @@ gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 				g_free(tmpbuf);
 			}
 		}
-		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_DECIMAL));
+		OBJ_SET(table,"format",GINT_TO_POINTER(MTX_DECIMAL));
 	}
 	else
 	{
@@ -209,7 +209,7 @@ gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 				g_free(tmpbuf);
 			}
 		}
-		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_HEX));
+		OBJ_SET(table,"format",GINT_TO_POINTER(MTX_HEX));
 	}
 
 	return FALSE;

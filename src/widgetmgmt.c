@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <defines.h>
 #include <widgetmgmt.h>
 #include <debugging.h>
 #include <dep_loader.h>
@@ -25,12 +26,12 @@
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
-#include <structures.h>
 #include <tabloader.h>
 #include <tag_loader.h>
 
 GHashTable *dynamic_widgets = NULL;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 /*!
  \brief populate_master() stores a pointer to all of the glade loaded 
@@ -59,7 +60,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		prefix = g_strdup("");
 
 	name = (char *)glade_get_widget_name(widget);
-	//printf("name of widget stored is %s\n",name);
+	/*printf("name of widget stored is %s\n",name);*/
 
 	if (name == NULL)
 	{
@@ -68,7 +69,6 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	}
 	if (g_strrstr((gchar *)name,"topframe"))
 	{
-		//g_free(name);
 		g_free(prefix);
 		return;
 	}
@@ -85,7 +85,6 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 
 	g_free(prefix);
 	g_free(fullname);
-//	g_free(name);
 }
 
 
@@ -162,10 +161,10 @@ void alter_widget_state(gpointer key, gpointer data)
 	gboolean state;
 	extern GHashTable *widget_group_states;
 
-	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"bind_to_list");
+	tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
-//	printf("setting state for %s in groups \"%s\" to:",(gchar *) g_object_get_data(G_OBJECT(widget),"name"),tmpbuf);
+	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/
 	for (i=0;i<num_groups;i++)
 	{
 		value = g_hash_table_lookup(widget_group_states,groups[i]);
@@ -176,7 +175,7 @@ void alter_widget_state(gpointer key, gpointer data)
 		}
 	}
 	g_strfreev(groups);
-//	printf("%i\n",state);
+	/*printf("%i\n",state);*/
 	gtk_widget_set_sensitive(GTK_WIDGET(widget),state);
 }
 

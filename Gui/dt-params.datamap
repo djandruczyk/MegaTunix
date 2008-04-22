@@ -4,6 +4,15 @@
 description=Object data map for Dualtable specific(0.90-1.02) Parameters
 tab_name=_DT Parameters
 id_prefix=dtp_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

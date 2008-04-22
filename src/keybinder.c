@@ -21,11 +21,11 @@
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
-#include <structures.h>
 #include <widgetmgmt.h>
 
 
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint * keytypes, gint num_keys)
@@ -44,7 +44,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					if (dbg_lvl & KEYPARSER)
 						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					g_object_set_data(object,
+					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 				}
@@ -60,7 +60,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 					tmpi = translate_string(tmpbuf);
 					if (dbg_lvl & KEYPARSER)
 						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					g_object_set_data(object,
+					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
@@ -76,7 +76,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					if (dbg_lvl & KEYPARSER)
 						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					g_object_set_data(object,
+					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					if (strstr(keys[i],"ul_complex"))
@@ -93,21 +93,21 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					if (dbg_lvl & KEYPARSER)
 						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section));
-					tmpstr = g_object_get_data(object,keys[i]);
+					tmpstr = OBJ_GET(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */
 					if ((tmpstr) && (g_strrstr(keys[i],"bind_to_list")!= NULL))
 					{
 						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);
-						g_object_set_data(object,
+						g_free(OBJ_GET(object,keys[i]));
+						OBJ_SET(object,
 								keys[i],
 								g_strdup(tmpstr));
 						g_free(tmpstr);
 					}
 					else
-						g_object_set_data(object,
-								keys[i],
-								g_strdup(tmpbuf));
+						OBJ_SET(object,keys[i],g_strdup(tmpbuf));
+								
 					g_free(tmpbuf);
 				}
 				else

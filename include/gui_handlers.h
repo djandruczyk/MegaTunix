@@ -20,7 +20,7 @@
 /* Prototypes */
 EXPORT gboolean prevent_close(GtkWidget *, gpointer );
 EXPORT void leave(GtkWidget *, gpointer);
-EXPORT gboolean comm_port_change(GtkEditable *);
+EXPORT gboolean comm_port_override(GtkEditable *);
 EXPORT gboolean std_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean std_entry_handler(GtkWidget *, gpointer);
 EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
@@ -39,7 +39,9 @@ gboolean trigger_group_update(gpointer );
 void update_widget(gpointer, gpointer );
 void switch_labels(gpointer , gpointer );
 void swap_labels(gchar *, gboolean );
+void toggle_groups_linked(GtkWidget *, gboolean);
 void prompt_to_save(void);
+gboolean prompt_r_u_sure(void);
 /* Prototypes */
 
 #endif

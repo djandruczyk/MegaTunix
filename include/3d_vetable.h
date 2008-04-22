@@ -14,8 +14,8 @@
 #ifndef __3D_VETABLE_H__
 #define __3D_VETABLE_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
-#include <structures.h>
 
 /* GL includes */
 #include <gtk/gtkwidget.h>
@@ -31,11 +31,100 @@ typedef enum
 {
 	_X_,
 	_Y_,
-	_Z_,
+	_Z_
 }Axis;
 
 typedef struct _Cur_Vals Cur_Vals;
+typedef struct _Ve_View_3D Ve_View_3D;
 
+
+/*!
+ \brief the _Ve_View_3D structure contains all the field to create and 
+ manipulate a 3D view of a MegaSquirt VE/Spark table, and should work in
+ theory for any sized table
+ */
+struct _Ve_View_3D
+{
+	gint beginX;
+	gint beginY;
+	gint active_y;
+	gint active_x;
+	gfloat dt;
+	gfloat sphi;
+	gfloat stheta;
+	gfloat sdepth;
+	gfloat zNear;
+	gfloat zFar;
+	gfloat aspect;
+	gfloat h_strafe;
+	gfloat v_strafe;
+	gfloat z_offset;
+	gfloat x_trans;
+	gfloat y_trans;
+	gfloat z_trans;
+	gfloat x_scale;
+	gfloat y_scale;
+	gfloat z_scale;
+	gfloat x_max;
+	gfloat y_max;
+	gfloat z_max;
+	gint x_precision;
+	gint y_precision;
+	gint z_precision;
+	gint x_mult;
+	gint y_mult;
+	gint z_mult;
+	/* Simple sources*/
+	gchar *x_source;
+	gchar *x_suffix;
+	gchar *x_conv_expr;
+	void *x_eval;
+	gchar *y_source;
+	gchar *y_suffix;
+	gchar *y_conv_expr;
+	void *y_eval;
+	gchar *z_source;
+	gchar *z_suffix;
+	gchar *z_conv_expr;
+	void *z_eval;
+	/* Multi-sources */
+	gchar * x_source_key;
+	gboolean x_multi_source;
+	GHashTable *x_multi_hash;
+	gchar * y_source_key;
+	gboolean y_multi_source;
+	GHashTable *y_multi_hash;
+	gchar * z_source_key;
+	gboolean z_multi_source;
+	GHashTable *z_multi_hash;
+
+	GtkWidget *drawing_area;
+	GtkWidget *window;
+	GtkWidget *burn_but;
+	GObject *dep_obj;
+	gint x_base;
+	gint x_page;
+	gint x_bincount;
+	DataSize x_size;
+	gint y_base;
+	gint y_page;
+	gint y_bincount;
+	DataSize y_size;
+	gint z_base;
+	gint z_page;
+	DataSize z_size;
+	gchar *table_name;
+	gint table_num;
+	gboolean tracking_focus;
+	gboolean fixed_scale;
+	GtkWidget *tracking_button;
+};
+
+
+/*!
+ \brief the _Cur_Vals structure contains The current data that pertains to the
+ 3D table view.
+ */
 struct _Cur_Vals
 {
 	gfloat x_val;
@@ -72,7 +161,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_axis(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_active_vertexes_marker(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
-void ve3d_load_font_metrics(void);
+void ve3d_load_font_metrics(GtkWidget *);
 void reset_3d_view(GtkWidget *);
 Ve_View_3D * initialize_ve3d_view();
 void update_ve3d_if_necessary(int , int );
@@ -81,6 +170,7 @@ void free_current_values(Cur_Vals *);
 gboolean set_tracking_focus(GtkWidget *, gpointer );
 gboolean set_scaling_mode(GtkWidget *, gpointer );
 gfloat get_fixed_pos(Ve_View_3D *, void *,gfloat, Axis);
+gint get_multiplier(DataSize );
 
 /* Prototypes */
 

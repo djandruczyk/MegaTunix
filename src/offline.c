@@ -39,6 +39,7 @@
 gchar * offline_firmware_choice = NULL;
 volatile gboolean offline = FALSE;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -52,13 +53,14 @@ void set_offline_mode(void)
 	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
-	Detection_Test *test = NULL;
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
 	gboolean tmp = TRUE;
+	GModule *module = NULL;
+	GArray *pfuncs = NULL;
+	PostFunction *pf = NULL;
 	extern Firmware_Details *firmware;
 	extern gboolean interrogated;
-	extern Io_Cmds *cmds;
         extern GAsyncQueue *serial_repair_queue;
 
 
@@ -94,42 +96,36 @@ void set_offline_mode(void)
 	load_firmware_details(firmware,filename);
 	update_interrogation_gui(firmware,tests_hash);
 
-	if (firmware->rt_cmd_key)
-	{
-		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->rt_cmd_key);
-		if (test)
-		{
-			cmds->realtime_cmd = g_strdup(test->test_vector[0]);
-			cmds->rt_cmd_len = g_strv_length(test->test_vector);
-			firmware->rtvars_size = test->num_bytes;
-		}
-	}
-	test = NULL;
-	if (firmware->ve_cmd_key)
-	{
-		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ve_cmd_key);
-		if (test)
-		{
-			cmds->veconst_cmd = g_strdup(test->test_vector[0]);
-			cmds->ve_cmd_len = g_strv_length(test->test_vector);
-		}
-	}
-	test = NULL;
-	if (firmware->ign_cmd_key)
-	{
-		test = (Detection_Test *)g_hash_table_lookup(tests_hash,firmware->ign_cmd_key);
-		if (test)
-		{
-			cmds->ignition_cmd = g_strdup(test->test_vector[0]);
-			cmds->ign_cmd_len = g_strv_length(test->test_vector);
-		}
-	}
-
 	interrogated = TRUE;
 
-	io_cmd(IO_LOAD_REALTIME_MAP,NULL);
-	io_cmd(IO_LOAD_GUI_TABS,NULL);
-	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
+
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("load_realtime_map");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("load_gui_tabs");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("disable_burner_buttons_cb");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	g_module_close(module);
+
+	io_cmd(NULL,pfuncs);
+	io_cmd(firmware->get_all_command,NULL);
 
 	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -142,6 +138,18 @@ void set_offline_mode(void)
 	offline_ecu_restore(NULL,NULL);
 	free_tests_array(tests);
 
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
+
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("reset_temps_cb");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	g_module_close(module);
+
+	io_cmd(NULL,pfuncs);
 }
 
 
@@ -230,8 +238,9 @@ gchar * present_firmware_choices()
 			g_free(tmpbuf);
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			button = gtk_radio_button_new(group);
-			g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
-			g_object_set_data(G_OBJECT(button),"handler",
+			g_free(OBJ_GET(button,"filename"));
+			OBJ_SET(button,"filename",g_strdup(filenames[i]));
+			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 			g_signal_connect(button,
 					"toggled",
@@ -280,8 +289,9 @@ gchar * present_firmware_choices()
 			g_free(tmpbuf);
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			button = gtk_radio_button_new(group);
-			g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
-			g_object_set_data(G_OBJECT(button),"handler",
+			g_free(OBJ_GET(button,"filename"));
+			OBJ_SET(button,"filename",g_strdup(filenames[i]));
+			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 			g_signal_connect(button,
 					"toggled",
@@ -295,7 +305,10 @@ gchar * present_firmware_choices()
 
 
 
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	if (i==1)
+		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
+	else
+		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
 	
@@ -344,7 +357,7 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 		filename = choose_file(fileio);
 
 
-	update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),TRUE,FALSE);
+	update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
 	restore_all_ecu_settings(filename);
 	g_free(filename);
 	free_mtxfileio(fileio);

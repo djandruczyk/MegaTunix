@@ -16,16 +16,18 @@
 
 #include <gtk/gtk.h>
 #include <enums.h>
-#include <structures.h>
+#include <threads.h>
 
 /* Prototypes */
 gint comms_test(void);			/* new check_ecu_comms function */
-void update_comms_status(void);		/* gui updater for comms status */
-void update_write_status(Output_Data *);	/* gui updater for write status */
+void update_comms_status(void);
+void update_write_status(void *);
+void update_write_status(void *);	/* gui updater for write status */
 void readfrom_ecu(Io_Message *);	/* Function to get data FROM ecu */
 void writeto_ecu(Io_Message *);	/* Func to send data to the ECU */
-void burn_ecu_flash(void);		/* run after burn completion */
+void burn_ms1_ecu_flash(void);		/* run after burn completion */
 void set_ms_page(guint8);	/* Sets the ECU page */
+void write_data(Io_Message *);
 /* Prototypes */
 
 #endif

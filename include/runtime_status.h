@@ -16,7 +16,6 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <structures.h>
 
 /* Prototypes */
 void load_status(void );

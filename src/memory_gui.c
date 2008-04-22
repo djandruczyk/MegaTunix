@@ -22,6 +22,7 @@ GArray *raw_memory_widgets = NULL;
 gint num_mem_pages = 4;
 gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!

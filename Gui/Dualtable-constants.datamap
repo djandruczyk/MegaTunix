@@ -3,6 +3,15 @@
 [global]
 description=Object data map for Dualtable (0.9-1.02)
 tab_name=_Dualtable Constants
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

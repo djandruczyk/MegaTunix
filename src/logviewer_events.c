@@ -18,10 +18,11 @@
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
-#include <structures.h>
+#include <timeout_handlers.h>
 
 
 extern Logview_Data *lv_data;
+extern GObject *global_data;
 
 
 /*! 
@@ -114,7 +115,7 @@ EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoint
 
 
 /*!
- \brief lv_motion_event() is called whenever there is pointer motion on the
+ \brief lv_mouse_motion_event() is called whenever there is pointer motion on the
  logviewer.  We use this to context highlight things and provide for popup
  menus...
  \param widget (GtkWidget *) widget receiving the event
@@ -122,7 +123,7 @@ EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoint
  \param data (gpointer) unused
  \returns TRUE on handled, FALSE otherwise
  */
-EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gint x = 0;
 	gint y = 0;
@@ -170,13 +171,13 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 void highlight_tinfo(gint tnum, gboolean state)
 {
 	GdkRectangle rect;
+	extern Logview_Data *lv_data;
 
 	rect.x = 0;
 	rect.y = lv_data->spread*tnum;
 	rect.width =  lv_data->info_width-1;
 	rect.height = lv_data->spread;
 
-	extern Logview_Data *lv_data;
 	if (state)
 		gdk_draw_rectangle(lv_data->pixmap,
 				lv_data->highlight_gc,
@@ -198,8 +199,44 @@ void highlight_tinfo(gint tnum, gboolean state)
 }
 
 
+EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
+{
+	Lv_Handler handler;
+	extern GHashTable *dynamic_widgets;
+	GtkWidget *tmpwidget = NULL;
+	handler = (Lv_Handler)OBJ_GET(widget,"handler");
+	switch(handler)
+	{
+		case LV_GOTO_START:
+			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			if (GTK_IS_RANGE(tmpwidget))
+				gtk_range_set_value(GTK_RANGE(tmpwidget),0.0);
+			break;
+		case LV_GOTO_END:
+			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			if (GTK_IS_RANGE(tmpwidget))
+				gtk_range_set_value(GTK_RANGE(tmpwidget),100.0);
+			break;
+		case LV_PLAY:
+			start_tickler(LV_PLAYBACK_TICKLER);
+			break;
+		case LV_STOP:
+			stop_tickler(LV_PLAYBACK_TICKLER);
+			break;
+		case LV_REWIND:
+			printf("rewind\n");
+			break;
+		case LV_FAST_FORWARD:
+			printf("fast forward\n");
+			break;
+		default:
+			break;
 
-EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+	}
+	return TRUE;
+}
+
+EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint x = 0;
 	gint y = 0;
@@ -218,8 +255,9 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 
 	return FALSE;
 
-	//printf("button with event is %i\n",event->button);
-	//printf("state of event is %i\n",state);
+	/*printf("button with event is %i\n",event->button);
+	 *printf("state of event is %i\n",state);
+	 */
 	if (x > lv_data->info_width) /* If out of bounds just return... */
 		return TRUE;
 
@@ -231,7 +269,7 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
-		//printf("right button released... \n");
+		/*printf("right button released... \n");*/
 		v_value->highlight = FALSE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,
@@ -244,7 +282,7 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	}
 	else if (event->button == 3) /* right mouse button */
 	{
-		//printf("right button pushed... \n");
+		/*printf("right button pushed... \n");*/
 		v_value->highlight = TRUE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,

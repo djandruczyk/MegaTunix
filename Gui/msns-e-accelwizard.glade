@@ -1261,6 +1261,10 @@
 			  </child>
 
 			  <child>
+			    <placeholder/>
+			  </child>
+
+			  <child>
 			    <widget class="GtkHBox" id="ae_params_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">True</property>

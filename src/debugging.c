@@ -20,11 +20,11 @@
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <math.h>
-#include <structures.h>
 #include <time.h>
 
 
 gint dbg_lvl = 0;
+extern GObject *global_data;
 
 GIOChannel * dbg_channel = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
@@ -115,6 +115,7 @@ void dbg_func(gchar *str)
 	{
 		g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
 		g_free(str);
+		g_io_channel_flush(dbg_channel,&error);
 	}
 	g_static_mutex_unlock(&dbg_mutex);
 }
@@ -149,20 +150,20 @@ void populate_debugging(GtkWidget *parent)
 		shift = dbglevels[i].dshift;
 
 		button = gtk_check_button_new_with_label(dbglevels[i].name);
-		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(dbglevels[i].handler));
-		g_object_set_data(G_OBJECT(button),"bitshift",GINT_TO_POINTER(shift));
-		g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(mask));
-		g_object_set_data(G_OBJECT(button),"bitval",GINT_TO_POINTER(1));
+		OBJ_SET(button,"handler",GINT_TO_POINTER(dbglevels[i].handler));
+		OBJ_SET(button,"bitshift",GINT_TO_POINTER(shift));
+		OBJ_SET(button,"bitmask",GINT_TO_POINTER(mask));
+		OBJ_SET(button,"bitval",GINT_TO_POINTER(1));
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(bitmask_button_handler),
 				NULL);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
-		// If user set on turn on as well
+		/* If user set on turn on as well */
 		if ((dbg_lvl & mask) >> shift)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-		// if hardcoded on, turn on..
+		/* if hardcoded on, turn on.. */
 		if (dbglevels[i].enabled)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;

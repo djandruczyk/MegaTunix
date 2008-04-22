@@ -5,6 +5,9 @@ gui_files = 	README \
 		template.glade \
 		afrtable_8x8x2.glade \
 		afrtable_8x8x2-029x.datamap \
+		afrtable_12x12x2.glade \
+		afrtable_12x12x2-MS-II.datamap \
+		afrtable_12x12x2-MS-II-Extra.datamap \
 		boost_6x6x3-029x.datamap \
 		boost_6x6x3.glade \
 		B_n_G_constants.glade \
@@ -23,10 +26,8 @@ gui_files = 	README \
 		logviewer.datamap \
 		memviewer.glade \
 		memviewer.datamap \
-		msnedis-3.0.x_ignition.glade \
-		msnedis-3.0.x_ignition.datamap \
-		msns-3.0_ignition.glade \
-		msns-3.0_ignition.datamap \
+		ms2-warmup.glade \
+		ms2-warmup.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \
@@ -60,16 +61,18 @@ gui_files = 	README \
 		msns-e-wheeldecode-029x.datamap \
 		msns-e-wheeldecode-hr_10x.glade \
 		msns-e-wheeldecode-hr_10x.datamap \
-		projection.glade \
-		projection.datamap \
 		raweditor.glade \
 		raweditor.datamap \
 		rotary-trail-029x.datamap \
 		rotary-trail.glade \
 		runtime.glade \
 		runtime.datamap \
-		sparktable_12x12x2-029x.datamap \
+		sparktable_12x12x1.glade \
+		sparktable_12x12x1-MS-II.datamap \
 		sparktable_12x12x2.glade \
+		sparktable_12x12x2-029x.datamap \
+		sparktable_12x12x3.glade \
+		sparktable_12x12x3-MS-II-Extra.datamap \
 		sparktable_8x8e.glade \
 		sparktable_8x8e-EDIS.datamap \
 		sparktable_8x8e-Std.datamap \
@@ -77,6 +80,8 @@ gui_files = 	README \
 		tools.datamap \
 		vetable_12x12x3-029x.datamap \
 		vetable_12x12x3.glade \
+		vetable_12x12x2-MS-II.datamap \
+		vetable_12x12x2.glade \
 		vetable_8x8e.glade \
 		vetable_8x8e-BnG.datamap \
 		vetable_8x8e-DT_1.datamap \

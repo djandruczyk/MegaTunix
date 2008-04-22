@@ -16,11 +16,12 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <structures.h>
+#include <threads.h>
 
 /* Prototypes */
 gboolean handle_ecu_data(InputHandler, Io_Message * );
 void dump_output(gint, guchar *);
+gint read_data(gint , void **);
 /* Prototypes */
 
 #endif

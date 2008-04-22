@@ -16,7 +16,6 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <ms_structures.h>
 
 /* Prototypes */
 void post_process_raw_memory(void *, gint);

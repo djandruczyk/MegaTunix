@@ -9,6 +9,12 @@ dashes_files = 	\
 		Cobalt_Dash_degC.xml \
 		Impact_Dash.xml \
 		Impact_Dash_degC.xml \
+		Gemini_Dash.xml \
+		Gemini_Dash_degC.xml \
+		Ghost-Basic-Dash_degC.xml \
+		Ghost-Basic-Dash.xml \
+		Ghost-Dash_degC.xml \
+		Ghost-Dash.xml \
 		Honda_Dash.xml \
 		Honda_Dash_degC.xml 
 

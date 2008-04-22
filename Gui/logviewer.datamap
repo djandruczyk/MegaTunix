@@ -3,7 +3,16 @@
 [global]
 description=Object data map for MegaSquirt visual logviewer/playback tool
 tab_name=_Logviewer
+groups=defaults
 post_function=finish_logviewer
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 

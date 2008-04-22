@@ -22,7 +22,7 @@ typedef struct _MtxFileIO MtxFileIO;
 typedef enum
 {
 	PERSONAL=0x99a,
-	SYSTEM,
+	SYSTEM
 }FileClass;
 
 struct _MtxFileIO

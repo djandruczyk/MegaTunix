@@ -54,7 +54,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 
-	filename = g_object_get_data(G_OBJECT(dash),"dash_xml_filename");
+	filename = OBJ_GET((dash),"dash_xml_filename");
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
@@ -104,7 +104,7 @@ gboolean check_datasources_set(GtkWidget *dash)
 	for (i=0;i<g_list_length(GTK_FIXED(dash)->children);i++)
 	{
 		child = g_list_nth_data(GTK_FIXED(dash)->children,i);
-		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(g_object_get_data(G_OBJECT(child->widget),"combo")),&iter);
+		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(OBJ_GET((child->widget),"combo")),&iter);
 		if (!state)
 		{
 			dialog = gtk_message_dialog_new(NULL,

@@ -1,8 +1,10 @@
 rtstatusdir = $(datadir)/MegaTunix/$(RTSTATUS_DATA_DIR)
 
 rtstatus_files = 	README \
-			std-firmware.status_conf \
-			msns-e-firmware.status_conf 
+			MS1-Std-firmware.status_conf \
+			MS2-Std-firmware.status_conf \
+			MS2-Extra-firmware.status_conf \
+			MSnS-Extra-firmware.status_conf 
 
 rtstatus_DATA = $(rtstatus_files)
 

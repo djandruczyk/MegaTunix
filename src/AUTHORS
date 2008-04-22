@@ -1,7 +1,6 @@
 Lead developer/App creator, owner:
 	David J. Andruczyk <djandruczyk at yahoo dot com>
 
-
 Assistance provided by:
 
 Bruce Bowling <bbowling at earthlink dot net> 
@@ -42,15 +41,15 @@ Baldur Gisalson <baldur @ ???? )
 Keith ?????  (sly4vems, AIM)
         Helped with Win32 port and debugging/testing
 
-Albert Fletcher < unknown >
-	Most generously donated a Apple G4 Mac Mini to be used for 
-	megatunix on PPC testing and improvement, which is used to test 
-	all OS-X builds.
-	
 Christopher Mire <cnm3332 at louisiana dot edu> 
 	Wrote the first gauge widget for megatunix of which I built upon
         and wrote GDK routines for low end boxes, and then added more on 
 	with an additional contribution from Ari, below.
+
+Albert Fletcher < unknown >
+        Most generously donated a Apple G4 Mac Mini to be used for 
+        megatunix on PPC testing and improvement, which is used to test 
+        all OS-X builds.
 
 Ari Karhu <ari at ultimatevw dot com>
 	Provided a gauge widget that I used a large amount of code from and
@@ -59,6 +58,9 @@ Ari Karhu <ari at ultimatevw dot com>
 TurboCamaro <msefi.com forum>
 	Created a whole set of AutoMeter SportComp gauges for the new gauge/
 	dashboard code.
+
+Joe <cegpope <at> gmail <dot> com>
+	Created ALL the MS-II tabs for me!! (saved me a boatload of work!)
 
 YOU could be here!!  Submit patches, dontate applicable hardware, provide 
 assistance and suggestions and you'll make the list, with all the prestige 

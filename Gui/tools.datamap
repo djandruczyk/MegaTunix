@@ -1,8 +1,15 @@
-# Tools Tab
-
 [global]
 description=Object data map for MegaSquirt Tools (backup/restore, etc...)
 tab_name=_Tools
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -87,5 +94,6 @@ tooltip=Enables the entering of new parameters for the CLT sensor
 keys=page,create_tags
 key_types=_INT_,_STRING_
 page=0
-create_tags=warning
+create_tags=warning,info
 warning=foreground,red
+info=foreground,dark green

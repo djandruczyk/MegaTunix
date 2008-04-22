@@ -17,6 +17,7 @@
 #include <debugging.h>
 #include <dep_loader.h>
 #include <enums.h>
+#include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gmodule.h>
@@ -28,13 +29,13 @@
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
-#include <structures.h>
 #include <tabloader.h>
 #include <tag_loader.h>
 #include <widgetmgmt.h>
 
 gboolean tabs_loaded = FALSE;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 
 /*!
@@ -42,24 +43,33 @@ extern gint dbg_lvl;
  It's purpose is to load all the glade files and datamaps as specified in the
  interrogation profile of the detected firmware. 
  */
-gboolean load_gui_tabs(void)
+EXPORT gboolean load_gui_tabs(void)
 {
 	extern Firmware_Details * firmware;
 	gint i = 0;
+	gint cur = 0;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
 	gchar * tab_name = NULL;
-	GtkWidget * label = NULL;
+	GtkWidget *label = NULL;
 	GtkWidget *topframe = NULL;
 	GHashTable *groups = NULL;
 	BindGroup *bindgroup = NULL;
-	GtkWidget * notebook;
+	GtkWidget *child = NULL;
+	GtkWidget *notebook = NULL;
+	GtkWidget *item = NULL;
+	extern GdkColor red;
 	extern volatile gboolean leaving;
 	extern GHashTable *dynamic_widgets;
+	gboolean * hidden_list = NULL;
+	extern gboolean connected;
+	extern volatile gboolean offline;
 
+	if (!(((connected) || (offline)) && (!tabs_loaded)))
+		return FALSE;
 	if (!firmware)
 		return FALSE;
 	if (!firmware->tab_list)
@@ -67,8 +77,10 @@ gboolean load_gui_tabs(void)
 	if (!firmware->tab_confs)
 		return FALSE;
 
+	set_title(g_strdup("Loading Gui Tabs..."));
 	bindgroup = g_new0(BindGroup,1);
 	notebook = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 
 	while (firmware->tab_list[i])
 	{
@@ -123,6 +135,7 @@ gboolean load_gui_tabs(void)
 			{
 				if (dbg_lvl & (TABLOADER|CRITICAL))
 					dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
+				set_title(g_strdup("ERROR Gui Tabs XML problem!!!"));
 				return FALSE;
 			}
 			else
@@ -130,6 +143,17 @@ gboolean load_gui_tabs(void)
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
 				glade_xml_signal_autoconnect(xml);
 				gtk_widget_show_all(topframe);
+			}
+			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
+			if (hidden_list[cur] == TRUE)
+			{
+				child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),cur);
+				label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
+				gtk_widget_hide(child);
+				gtk_widget_hide(label);
+				item = g_hash_table_lookup(dynamic_widgets,"show_tab_visibility_menuitem");
+				 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+
 			}
 			if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
 			{
@@ -174,6 +198,7 @@ gboolean load_gui_tabs(void)
 	if (dbg_lvl & TABLOADER)
 		dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
+	set_title(g_strdup("Gui Tabs Loaded..."));
 	return TRUE;
 }
 
@@ -188,16 +213,12 @@ void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
-	gchar *data = NULL;
 
 	for (i=0;i<group->num_keys;i++)
 	{
 		if (group->keytypes[i] == MTX_STRING)
-		{
-			data = (gchar *) g_object_get_data(group->object,group->keys[i]);
-			g_free(data);
-		}
-		g_object_set_data(group->object,group->keys[i],NULL);
+			g_free(OBJ_GET(group->object,group->keys[i]));
+		OBJ_SET(group->object,group->keys[i],NULL);
 	}
 	g_object_unref(group->object);
 	g_strfreev(group->keys);
@@ -236,6 +257,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	else
 		return NULL;
 
+
 	groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
 
 	for (x=0;x<num_groups;x++)
@@ -253,7 +275,9 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		else
 		{
 			if (dbg_lvl & TABLOADER)
-				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" section NOT found, aborting this group %s\n",section));
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" key in section \"%s\" NOT found, aborting this group.\n",section));
+			g_free(group);
+			g_free(section);
 			continue;
 		}
 		if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
@@ -267,6 +291,9 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		{
 			if (dbg_lvl & TABLOADER)
 				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"key_types\" section NOT found, aborting this group %s\n",section));
+			g_free(group->keys);
+			g_free(group);
+			g_free(section);
 			continue;
 		}
 
@@ -276,17 +303,17 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
-			return NULL;
+			g_free(group);
+			g_free(section);
+			continue;;
 
 		}
 		if (cfg_read_int(cfgfile,section,"page",&tmpi))
 			group->page = tmpi;
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		// ATTEMPTED FIX FOR GLIB 2.10
 		g_object_ref(group->object);
 		gtk_object_sink(GTK_OBJECT(group->object));
-		// ATTEMPTED FIX FOR GLIB 2.10
 
 		/* If this widget has a "depend_on" tag we need to 
 		 * load the dependency information and store it for 
@@ -304,7 +331,10 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		g_free(section);
 	}
 	g_strfreev(groupnames);
-	return groups;
+	if (group)
+		return groups;
+	else
+		return NULL;
 }
 
 
@@ -313,13 +343,14 @@ GHashTable * load_groups(ConfigFile *cfgfile)
  a group. (saves from having to duplicate a large number of keys.values for 
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
+ \param cfgfile
  \param widget (GtkWidget *) the widget to bind the data to
  \param groups (GHashTable *) the hashtable that holds the  group common data
  \param groupname (gchar *) textual name of the group to get the data for to
  be bound to the widget
  \returns the page of the group
  */
-gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
+gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
@@ -330,13 +361,13 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 	if (!group)
 	{
 		if (dbg_lvl & (TABLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in hashtable\n",groupname));
+			dbg_func(g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in file %s\n",groupname,cfg->filename));
 		return -1;
 	}
 	/* Copy data from the group object to the */
 	/* Grab hidden data if it exists */
-	if (g_object_get_data(group->object, "dep_object"))
-		g_object_set_data(G_OBJECT(widget),"dep_object",g_object_get_data(group->object, "dep_object"));
+	if (OBJ_GET(group->object, "dep_object"))
+		OBJ_SET(widget,"dep_object",OBJ_GET(group->object, "dep_object"));
 
 	for (i=0;i<group->num_keys;i++)
 	{
@@ -345,16 +376,15 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 			case MTX_INT:
 			case MTX_BOOL:
 			case MTX_ENUM:
-				tmpi = (gint)g_object_get_data(group->object,group->keys[i]);
-				g_object_set_data(G_OBJECT(widget),group->keys[i],GINT_TO_POINTER(tmpi));
+				tmpi = (gint)OBJ_GET(group->object,group->keys[i]);
+				OBJ_SET(widget,group->keys[i],GINT_TO_POINTER(tmpi));
 				break;
 			case MTX_STRING:
-				g_object_set_data(G_OBJECT(widget),group->keys[i],g_strdup(g_object_get_data(group->object,group->keys[i])));
-//				printf("setting %s on widget %s\n",group->keys[i],glade_get_widget_name(widget));
-				if (g_object_get_data(G_OBJECT(widget),"tooltip") != NULL)
-					gtk_tooltips_set_tip(tip,widget,(gchar *)g_object_get_data(G_OBJECT(widget),"tooltip"),NULL);
-				if (g_object_get_data(G_OBJECT(group->object), "bind_to_list"))
-					bind_to_lists(widget,(gchar *)g_object_get_data(G_OBJECT(group->object), "bind_to_list"));
+				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
+				if (OBJ_GET(widget,"tooltip") != NULL)
+					gtk_tooltips_set_tip(tip,widget,(gchar *)OBJ_GET(widget,"tooltip"),NULL);
+				if (OBJ_GET(group->object, "bind_to_list"))
+					bind_to_lists(widget,(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
 			default:
 				break;
@@ -379,7 +409,12 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	GList *tmp_list = NULL;
 	gint i = 0;
 
-	//printf("Widget %s is being bound to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);
+	if (!lists)
+	{
+		printf(__FILE__": Error, bind_to_lists(), lists is NULL\n");
+		return;
+	}
+	/*printf("Widget %s is being bound to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);*/
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	/* This looks convoluted,  but it allows for an arbritrary 
@@ -425,22 +460,19 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint widget_type = 0;
 	gchar * initializer = NULL;
 	GdkColor color;
-	extern GObject *global_data;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
 
 	if (GTK_IS_CONTAINER(widget))
-	{
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	}
 	section = (char *)glade_get_widget_name(widget);
 	if (section == NULL)
-	{
 		return;
-	}
-	g_object_set_data(G_OBJECT(widget),"name",g_strdup(section));
+
+	g_free(OBJ_GET(widget,"name"));
+	OBJ_SET(widget,"name",g_strdup(section));
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
@@ -455,7 +487,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
 		if (dbg_lvl & TABLOADER)
-			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumberk of keytypes for %s is %i\n",section,num_keys));
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keytypes for %s is %i\n",section,num_keys));
 		g_free(tmpbuf);
 	}
 	else
@@ -470,19 +502,27 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		return;
 	}
 	page = -1;
+	/* Bind the data in the "defaults" group per tab to EVERY var in that
+	 * tab
+	 */
+	page = bind_group_data(cfgfile,widget,groups,"defaults");
+
 	if (cfg_read_string(cfgfile,section,"group",&tmpbuf))
 	{
-		page = bind_group_data(widget,groups,tmpbuf);
+		page = bind_group_data(cfgfile,widget,groups,tmpbuf);
 		g_free(tmpbuf);
 	}
 
-	if ((!cfg_read_int(cfgfile,section,"page",&page)) && (page == -1))
+	if (page == -1)
 	{
-		if (dbg_lvl & (TABLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
+		if (!cfg_read_int(cfgfile,section,"page",&page)) 
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
 
+		}
 	}
-	/* Bind widgets to lists if thy have the bind_to_list flag set...
+	/* Bind widgets to lists if they have the bind_to_list flag set...
 	*/
 	tmpbuf = NULL;
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
@@ -530,7 +570,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget (a label) has "set_lanel" we set the label on it
+	/* If this widget (a label) has "set_label" we set the label on it
 	*/
 	if (cfg_read_string(cfgfile,section,"set_label",&tmpbuf))
 	{
@@ -538,11 +578,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget is temp dependant, set the curren units on it 
+	/* If this widget is temp dependant, set the current units on it 
 	*/
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
-		g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(FAHRENHEIT));
+		OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
 		g_free(tmpbuf);
 	}
 
@@ -562,14 +602,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		switch (widget_type)
 		{
 			case MTX_RANGE:
-				gtk_range_set_value(GTK_RANGE(widget),(gint)g_object_get_data(global_data,initializer));
+				gtk_range_set_value(GTK_RANGE(widget),(gint)OBJ_GET(global_data,initializer));
 				break;
 
 			case MTX_SPINBUTTON:
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)g_object_get_data(global_data,initializer));
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,initializer));
 				break;
 			case MTX_ENTRY:
-				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)g_object_get_data(global_data,initializer));
+				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)OBJ_GET(global_data,initializer));
 
 			default:
 				break;
@@ -586,8 +626,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		 * to single data offset in the ECU
 		 */
 		if (page < 0)
+		{
 			if (dbg_lvl & (TABLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n",section,page,offset));
+			return;
+		}
 		if (page < firmware->total_pages)
 		{
 			if (offset >= firmware->page_params[page]->length)

@@ -1,8 +1,17 @@
 # Datalogging datamap speccific to lal firmware variants
-
 [global]
 description=Object data map for Datalogging for all firmwares
 tab_name=_DataLogging
+id_prefix=dlog_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -13,49 +22,49 @@ page=0
 tab_ident=_DATALOGGING_TAB_
 #----- Buttons ---------------------------------------------------------------
 	
-[dlog_select_all_but]
+[select_all_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_DLOG_SELECT_ALL_
 page=0
 
-[dlog_deselect_all_but]
+[deselect_all_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_DLOG_DESELECT_ALL_
 page=0
 
-[dlog_select_defaults_but]
+[select_defaults_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_DLOG_SELECT_DEFAULTS_
 page=0
 
-[dlog_comma_delimit_radio_button]
+[comma_delimit_radio_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_COMMA_
 page=0
 
-[dlog_tab_delimit_radio_button]
+[tab_delimit_radio_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_TAB_
 page=0
 
-[dlog_start_logging_button]
+[start_logging_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_START_DATALOGGING_
 page=0
 
-[dlog_stop_logging_button]
+[stop_logging_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_STOP_DATALOGGING_
 page=0
 
-[dlog_dump_internal_but]
+[dump_internal_but]
 keys=page,tooltip
 key_types=_INT_,_STRING_
 page=0
@@ -63,9 +72,10 @@ tooltip="Write internal log to disk" is a new feature.  By default megatunix wil
 
 #----- Textview ----------------------------------------------------
 
-[dlog_view]
+[view]
 keys=page,create_tags
 key_types=_INT_,_STRING_
 page=0
-create_tags=warning
+create_tags=warning,info
 warning=foreground,red
+info=foreground,dark green

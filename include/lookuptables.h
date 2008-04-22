@@ -19,8 +19,21 @@
 #define __LOOKUPTABLES_H__
 
 #include <enums.h>
-#include <structures.h>
 
+
+typedef struct _LookupTable LookupTable;
+/*!
+ \brief _LookupTable is a mini-container holding hte filename and table
+ info for each lookuptable stored in the LookupTables hashtable
+ */
+struct _LookupTable
+{
+	gint *array;		/*! the table itself */
+	gchar *filename;	/*! The relative filename where 
+				    this table came from */
+};
+
+/* Prototypes */
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
 gint reverse_lookup(GObject *, gint );
@@ -31,5 +44,6 @@ gboolean lookuptables_configurator(GtkWidget *, gpointer );
 gboolean lookuptables_configurator_hide(GtkWidget *, gpointer );
 gboolean lookuptable_change(GtkCellRenderer *, gchar  *, gchar  *, gpointer );
 void update_lt_config(gpointer , gpointer , gpointer );
+void dump_lookuptables(gpointer , gpointer , gpointer);
 
 #endif

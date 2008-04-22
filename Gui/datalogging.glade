@@ -53,28 +53,28 @@
 		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkVBox" id="dlog_top_vbox">
+			<widget class="GtkVBox" id="top_vbox">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkFrame" id="dlog_filesel_frame">
+			    <widget class="GtkFrame" id="filesel_frame">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="dlog_file_sel_hbox1">
+				<widget class="GtkHBox" id="file_sel_hbox1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">0</property>
 
 				  <child>
-				    <widget class="GtkButton" id="dlog_select_log_button">
+				    <widget class="GtkButton" id="select_log_button">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Select Log File</property>
@@ -91,7 +91,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="dlog_file_label">
+				    <widget class="GtkLabel" id="file_label">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">No Log Selected Yet...</property>
 				      <property name="use_underline">False</property>
@@ -118,7 +118,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="dlog_file_sel_frame_title">
+				<widget class="GtkLabel" id="file_sel_frame_title">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">DataLog File Selection</property>
 				  <property name="use_underline">False</property>
@@ -148,14 +148,14 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="dlog_logable_vars_frame">
+			    <widget class="GtkFrame" id="logable_vars_frame">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkVBox" id="dlog_logable_vars_vbox1">
+				<widget class="GtkVBox" id="logable_vars_vbox1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
@@ -168,7 +168,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="dlog_logable_vars_frame_title">
+				<widget class="GtkLabel" id="logable_vars_frame_title">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Logable Variables</property>
 				  <property name="use_underline">False</property>
@@ -198,33 +198,33 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkVBox" id="dlog_format_delimit_vbox1">
+			    <widget class="GtkVBox" id="format_delimit_vbox1">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkHBox" id="dlog_format_delimit_hbox1">
+				<widget class="GtkHBox" id="format_delimit_hbox1">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">5</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="dlog_format_frame">
+				    <widget class="GtkFrame" id="format_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkVBox" id="dlog_format_vbox1">
+					<widget class="GtkVBox" id="format_vbox1">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="homogeneous">False</property>
 					  <property name="spacing">0</property>
 
 					  <child>
-					    <widget class="GtkTable" id="dlog_format_table">
+					    <widget class="GtkTable" id="format_table">
 					      <property name="visible">True</property>
 					      <property name="n_rows">1</property>
 					      <property name="n_columns">3</property>
@@ -233,7 +233,7 @@
 					      <property name="column_spacing">5</property>
 
 					      <child>
-						<widget class="GtkButton" id="dlog_deselect_all_but">
+						<widget class="GtkButton" id="deselect_all_but">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="label" translatable="yes">Deselect All</property>
@@ -253,7 +253,7 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkButton" id="dlog_select_all_but">
+						<widget class="GtkButton" id="select_all_but">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="label" translatable="yes">Select All</property>
@@ -273,7 +273,7 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkButton" id="dlog_select_defaults_but">
+						<widget class="GtkButton" id="select_defaults_but">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="label" translatable="yes">Select Defaults</property>
@@ -302,7 +302,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="dlog_format_frame_title">
+					<widget class="GtkLabel" id="format_frame_title">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">Options</property>
 					  <property name="use_underline">False</property>
@@ -332,21 +332,21 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="dlog_delimiter_frame">
+				    <widget class="GtkFrame" id="delimiter_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkVBox" id="dlog_delimiter_vbox1">
+					<widget class="GtkVBox" id="delimiter_vbox1">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="homogeneous">False</property>
 					  <property name="spacing">0</property>
 
 					  <child>
-					    <widget class="GtkTable" id="dlog_delim_table">
+					    <widget class="GtkTable" id="delim_table">
 					      <property name="visible">True</property>
 					      <property name="n_rows">1</property>
 					      <property name="n_columns">2</property>
@@ -355,7 +355,7 @@
 					      <property name="column_spacing">15</property>
 
 					      <child>
-						<widget class="GtkRadioButton" id="dlog_tab_delimit_radio_button">
+						<widget class="GtkRadioButton" id="tab_delimit_radio_button">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="label" translatable="yes">Tab</property>
@@ -377,7 +377,7 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkRadioButton" id="dlog_comma_delimit_radio_button">
+						<widget class="GtkRadioButton" id="comma_delimit_radio_button">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="label" translatable="yes">Comma</property>
@@ -387,7 +387,7 @@
 						  <property name="active">False</property>
 						  <property name="inconsistent">False</property>
 						  <property name="draw_indicator">True</property>
-						  <property name="group">dlog_tab_delimit_radio_button</property>
+						  <property name="group">tab_delimit_radio_button</property>
 						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sun, 21 Nov 2004 23:58:51 GMT"/>
 						</widget>
 						<packing>
@@ -409,7 +409,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="dlog_delimiter_frame_title">
+					<widget class="GtkLabel" id="delimiter_frame_title">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">Logging Delimiter</property>
 					  <property name="use_underline">False</property>
@@ -453,58 +453,46 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="dlog_status_frame">
+			    <widget class="GtkFrame" id="status_frame">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="dlog_status_hbox1">
+				<widget class="GtkScrolledWindow" id="status_swin">
+				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
-				  <property name="homogeneous">False</property>
-				  <property name="spacing">0</property>
+				  <property name="can_focus">True</property>
+				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				  <child>
-				    <widget class="GtkScrolledWindow" id="dlog_status_swin">
+				    <widget class="GtkTextView" id="view">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
-				      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
-				      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-				      <child>
-					<widget class="GtkTextView" id="dlog_view">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="editable">False</property>
-					  <property name="overwrite">False</property>
-					  <property name="accepts_tab">True</property>
-					  <property name="justification">GTK_JUSTIFY_LEFT</property>
-					  <property name="wrap_mode">GTK_WRAP_NONE</property>
-					  <property name="cursor_visible">False</property>
-					  <property name="pixels_above_lines">0</property>
-					  <property name="pixels_below_lines">0</property>
-					  <property name="pixels_inside_wrap">0</property>
-					  <property name="left_margin">0</property>
-					  <property name="right_margin">0</property>
-					  <property name="indent">0</property>
-					  <property name="text" translatable="yes"></property>
-					</widget>
-				      </child>
+				      <property name="editable">False</property>
+				      <property name="overwrite">False</property>
+				      <property name="accepts_tab">True</property>
+				      <property name="justification">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap_mode">GTK_WRAP_NONE</property>
+				      <property name="cursor_visible">False</property>
+				      <property name="pixels_above_lines">0</property>
+				      <property name="pixels_below_lines">0</property>
+				      <property name="pixels_inside_wrap">0</property>
+				      <property name="left_margin">0</property>
+				      <property name="right_margin">0</property>
+				      <property name="indent">0</property>
+				      <property name="text" translatable="yes"></property>
 				    </widget>
-				    <packing>
-				      <property name="padding">5</property>
-				      <property name="expand">True</property>
-				      <property name="fill">True</property>
-				    </packing>
 				  </child>
 				</widget>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="dlog_status_frame_title">
+				<widget class="GtkLabel" id="status_frame_title">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">DataLogging Status Messages</property>
 				  <property name="use_underline">False</property>
@@ -535,21 +523,21 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="dlog_operations_frame">
+			    <widget class="GtkFrame" id="operations_frame">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="dlog_operations_hbox1">
+				<widget class="GtkHBox" id="operations_hbox1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="homogeneous">True</property>
 				  <property name="spacing">5</property>
 
 				  <child>
-				    <widget class="GtkButton" id="dlog_start_logging_button">
+				    <widget class="GtkButton" id="start_logging_button">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
@@ -567,7 +555,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="dlog_dump_internal_but">
+				    <widget class="GtkButton" id="dump_internal_but">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Write internal log to disk</property>
@@ -584,7 +572,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="dlog_stop_logging_button">
+				    <widget class="GtkButton" id="stop_logging_button">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
@@ -604,7 +592,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="dlog_operations_frame_title">
+				<widget class="GtkLabel" id="operations_frame_title">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">DataLogging Operations</property>
 				  <property name="use_underline">False</property>
@@ -635,8 +623,8 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 		    </widget>

@@ -12,36 +12,41 @@
  */
 
 
+#include <args.h>
 #include <apicheck.h>
 #include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
+#include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
 #include <gui_handlers.h>
+#include <notifications.h>
+#include <rtv_map_loader.h>
 #include <runtime_status.h>
 #include <runtime_text.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <structures.h>
 #include <widgetmgmt.h>
 
 GHashTable *rtt_hash = NULL;
 GtkWidget *rtt_window = NULL;
 extern gint dbg_lvl;
+extern GObject *global_data;
 
 /*!
  \brief load_rt_text() is called to load up the runtime text configurations
  from the file specified in the firmware's interrogation profile, and populate
  a new window with the runtiem vars text value box.
  */
-void load_rt_text()
+EXPORT void load_rt_text()
 {
 	ConfigFile *cfgfile = NULL;
 	Rt_Text *rt_text = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *vbox = NULL;
+	GtkWidget *sep = NULL;
 	gint count = 0;
 	gchar *filename = NULL;
 	gchar *ctrl_name = NULL;
@@ -54,16 +59,18 @@ void load_rt_text()
 	gint h = 0;
 	gint major = 0;
 	gint minor = 0;
-	extern GObject *global_data;
-	extern CmdLineArgs *args;
 	extern volatile gboolean leaving;
-	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
 	extern Firmware_Details *firmware;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	extern gboolean connected;
+	extern gboolean interrogated;
 
-	if ((!tabs_loaded) || (!firmware) || (leaving))
+	if (leaving)
 		return;
-	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
+	if (!((connected) && (interrogated)))
+		return;
+	if (rtvars_loaded == FALSE) 
 	{
 		if (rtt_hash)
 			rtt_hash = NULL;
@@ -71,10 +78,18 @@ void load_rt_text()
 			dbg_func(g_strdup(__FILE__": load_rt_text()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
+	set_title(g_strdup("Loading RT Text..."));
 	if (!rtt_hash)
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 
 	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("rtt_conf"));
+	if (!filename)
+	{
+		if (dbg_lvl & (RTMLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": load_runtime_text()\n\t File \"%s.rtt_conf\" not found!!, exiting function\n",firmware->rtt_map_file));
+		set_title(g_strdup("ERROR RTT Map file DOES NOT EXIST!!!"));
+		return; 
+	}
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -84,6 +99,7 @@ void load_rt_text()
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
 			g_free(filename);
+			set_title(g_strdup("ERROR RT Text API MISMATCH!!!"));
 			return;
 		}
 
@@ -91,16 +107,17 @@ void load_rt_text()
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
+			set_title(g_strdup("ERROR RT Text cfgfile problem!!!"));
 			return;
 		}
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 		gtk_window_set_title(GTK_WINDOW(window),"Runtime Vars");
-		x = (gint)g_object_get_data(global_data,"rtt_x_origin");
-		y = (gint)g_object_get_data(global_data,"rtt_y_origin");
+		x = (gint)OBJ_GET(global_data,"rtt_x_origin");
+		y = (gint)OBJ_GET(global_data,"rtt_y_origin");
 		gtk_window_move(GTK_WINDOW(window),x,y);
-		w = (gint)g_object_get_data(global_data,"rtt_width");
-		h = (gint)g_object_get_data(global_data,"rtt_height");
+		w = (gint)OBJ_GET(global_data,"rtt_width");
+		h = (gint)OBJ_GET(global_data,"rtt_height");
 		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 		gtk_window_resize(GTK_WINDOW(window),w,h);
 
@@ -109,7 +126,7 @@ void load_rt_text()
 				G_CALLBACK(prevent_close),NULL);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
-		vbox = gtk_vbox_new(TRUE,3);
+		vbox = gtk_vbox_new(FALSE,1);
 		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 		gtk_container_add(GTK_CONTAINER(window),vbox);
 
@@ -136,6 +153,11 @@ void load_rt_text()
 							g_strdup(ctrl_name),
 							(gpointer)rt_text);
 			}
+			if (i < (count-1))
+			{
+				sep = gtk_hseparator_new();
+				gtk_box_pack_start(GTK_BOX(vbox),sep,FALSE,FALSE,1);
+			}
 			g_free(section);
 			g_free(ctrl_name);
 			g_free(source);
@@ -152,6 +174,8 @@ void load_rt_text()
 			dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
 	}
 	g_free(filename);
+	set_title(g_strdup("RT Text Loaded..."));
+	return;
 }
 
 
@@ -182,8 +206,8 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 	}
 
 	rtt->ctrl_name = g_strdup(ctrl_name);
-	rtt->friendly_name = (gchar *) g_object_get_data(object,"dlog_gui_name");
-	rtt->history = (GArray *) g_object_get_data(object,"history");
+	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->history = (GArray *) OBJ_GET(object,"history");
 	rtt->object = object;
 
 	hbox = gtk_hbox_new(FALSE,5);

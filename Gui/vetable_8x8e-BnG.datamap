@@ -1,12 +1,16 @@
-# Std B&G VEtable, (page 0), used by most firmwares except the *Extra series..
-
 [global]
 description=Object data map for VE-Table 1 (page 0)
 tab_name=_VE Table(1)
 id_prefix=VE1_
-groups=load,rpm,vetable
+groups=defaults,load,rpm,vetable
 
 #----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+key_types=_INT_,_ENUM_
+page=0
+size=_U08_
 
 [load]
 keys=page,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
@@ -70,8 +74,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
-datasource=tpsadc
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
 
 [VE1_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num

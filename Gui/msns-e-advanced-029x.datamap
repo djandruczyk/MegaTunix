@@ -4,6 +4,16 @@
 description=Object data map for Advanced settings 
 tab_name=_Advanced Options
 id_prefix=adv_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=0
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 

@@ -1,8 +1,16 @@
-# MSnS-E Multi Table Fuel Parameters data map, MSnS-Extra
-
 [global]
 description=Object data map for MSnS-Extra Fuel
 tab_name=_Fuel Parameters
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
+page=1
+size=_U08_
+raw_upper=255
 
 #----- Buttons ---------------------------------------------------------------
 
