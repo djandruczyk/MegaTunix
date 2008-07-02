@@ -460,11 +460,10 @@ handler=_GENERIC_
 tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
 
 [soft_revlimit_sparkangle_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=3
-is_float=TRUE
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
@@ -474,11 +473,10 @@ handler=_GENERIC_
 tooltip=The spark advance to run on the soft revlimiter.
 
 [soft_revlimit_max_time_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=157
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10

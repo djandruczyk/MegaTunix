@@ -61,6 +61,7 @@ The key_type is special text as show below:
 			datalogging tab
 	offset		(integer) offset in bytes from the beginning of 
 			the raw vars block of data from the ECU.
+	precision	(int) number of significant digits
 	dl_conv_expr	(string) see next line
 	ul_conv_expr	(string)  A string representation of a mathematical
 			expression. (something like x*60)  X is the value in

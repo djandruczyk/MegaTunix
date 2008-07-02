@@ -19,6 +19,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
+#include <listmgmt.h>
 #include <lookuptables.h>
 #include <stdlib.h>
 #include <timeout_handlers.h>
@@ -85,7 +86,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
 	GIOChannel *iochannel;
-	gboolean go = TRUE;
+	gboolean done = FALSE;
 	gchar * str = NULL;
 	gchar * tmp = NULL;
 	gchar * end = NULL;
@@ -102,12 +103,12 @@ gboolean load_table(gchar *table_name, gchar *filename)
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"));
 	}
-	while (go)	
+	while (!done)	
 	{
 		a_line = g_string_new("\0");
 		status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 		if (status == G_IO_STATUS_EOF)
-			go = FALSE;
+			done = TRUE;
 		else
 		{
 		/*	str = g_strchug(g_strdup(a_line->str));*/
@@ -335,9 +336,14 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 	LookupTable *lookuptable = NULL;
 
 	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
-
 	if (!lookuptable)
 	{
+		printf("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n",table);
+		return offset;
+	}
+	if (!lookuptable->array)
+	{
+		printf("FATAL_ERROR: direct_lookup_data, %s->array is null\n",table);
 		return offset;
 	}
 	return lookuptable->array[offset];
@@ -359,8 +365,11 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	GtkWidget * vbox = NULL;
 	GtkWidget * tree = NULL;
 	GtkWidget * frame = NULL;
+	ListElement *element = NULL;
 	ConfigFile *cfgfile = NULL;
 	GArray *classes = NULL;
+	GList *p_list = NULL;
+	GList *s_list = NULL;
 	gint i = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
@@ -410,22 +419,42 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 			tmpvector = g_strsplit(vector[i],PSEP,-1);
 			if (g_array_index(classes,FileClass,i) == PERSONAL)
 			{
-				gtk_tree_store_append(combostore,&iter,&per_iter);
-				gtk_tree_store_set(combostore,&iter,
-						0,tmpvector[g_strv_length(tmpvector)-1],
-						-1);
+				element = g_new0(ListElement, 1);
+				element->name = g_strdup(tmpvector[g_strv_length(tmpvector)-1]);
+				p_list = g_list_append(p_list,element);
 			}
 			if (g_array_index(classes,FileClass,i) == SYSTEM)
 			{
-				gtk_tree_store_append(combostore,&iter,&sys_iter);
-				gtk_tree_store_set(combostore,&iter,
-						0,tmpvector[g_strv_length(tmpvector)-1],
-						-1);
+				element = g_new0(ListElement, 1);
+				element->name = g_strdup(tmpvector[g_strv_length(tmpvector)-1]);
+				s_list = g_list_append(s_list,element);
 			}
 			g_strfreev(tmpvector);
 		}
 		g_strfreev(vector);
 		g_array_free(classes,TRUE);
+		p_list = g_list_sort(p_list,list_sort);
+		s_list = g_list_sort(s_list,list_sort);
+		for (i=0;i<g_list_length(p_list);i++)
+		{
+			gtk_tree_store_append(combostore,&iter,&per_iter);
+			element = g_list_nth_data(p_list,i);
+			gtk_tree_store_set(combostore,&iter,
+					0,element->name,
+					-1);
+		}
+		for (i=0;i<g_list_length(s_list);i++)
+		{
+			gtk_tree_store_append(combostore,&iter,&sys_iter);
+			element = g_list_nth_data(s_list,i);
+			gtk_tree_store_set(combostore,&iter,
+					0,element->name,
+					-1);
+		}
+		g_list_foreach(p_list,free_element,NULL);
+		g_list_foreach(s_list,free_element,NULL);
+		g_list_free(p_list);
+		g_list_free(s_list);
 
 		cfgfile = cfg_open_file(firmware->profile_filename);
 		if (!cfgfile)
@@ -453,7 +482,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		column = gtk_tree_view_column_new_with_attributes("Internal Name",renderer,"text",INTERNAL_NAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 		renderer = gtk_cell_renderer_combo_new();
-		g_object_set(G_OBJECT(renderer),"editable",TRUE,"model",combostore,"text-column",0,NULL);
+		g_object_set(G_OBJECT(renderer),"editable",TRUE,"model",combostore,"text-column",0,"style",PANGO_STYLE_ITALIC,NULL);
 		g_signal_connect(G_OBJECT(renderer),"edited", G_CALLBACK(lookuptable_change),store);
 		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);

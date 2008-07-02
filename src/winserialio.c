@@ -15,7 +15,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <serialio.h>
-#include <termios.h>
 #include <winserialio.h>
 #ifdef __WIN32__
  #include <io.h>
@@ -96,19 +95,19 @@ void win32_setup_serial_params(gint baud)
  \param mode (integer enum) either TCIFLUSH (input flush), TCOFLUSH (output flush), 
  or TCIOFLUSH (both input and output flush).
  */
-void win32_flush_serial(int fd, int mode)
+void win32_flush_serial(int fd, FlushDirection mode)
 {
 #ifdef __WIN32__
 	switch (mode)
 	{
-		case TCIFLUSH:
+		case INBOUND:
 			PurgeComm((HANDLE) _get_osfhandle (fd),PURGE_RXCLEAR);
 			break;
-		case TCOFLUSH:
+		case OUTBOUND:
 			FlushFileBuffers((HANDLE) _get_osfhandle (fd));
 			PurgeComm((HANDLE) _get_osfhandle (fd),PURGE_TXCLEAR);
 			break;
-		case TCIOFLUSH:
+		case BOTH:
 			FlushFileBuffers((HANDLE) _get_osfhandle (fd));
 			PurgeComm((HANDLE) _get_osfhandle (fd),PURGE_TXCLEAR|PURGE_RXCLEAR);
 			break;

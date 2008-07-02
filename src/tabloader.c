@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <combo_loader.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_loader.h>
@@ -39,11 +40,11 @@ extern GObject *global_data;
 
 
 /*!
- \brief load_gui_tabs() is called after interrogation completes successfully.
+ \brief load_gui_tabs_pf() is called after interrogation completes successfully.
  It's purpose is to load all the glade files and datamaps as specified in the
  interrogation profile of the detected firmware. 
  */
-EXPORT gboolean load_gui_tabs(void)
+EXPORT gboolean load_gui_tabs_pf(void)
 {
 	extern Firmware_Details * firmware;
 	gint i = 0;
@@ -89,7 +90,7 @@ EXPORT gboolean load_gui_tabs(void)
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			if (dbg_lvl & (TABLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
 			update_logbar("interr_view","warning",g_strdup_printf("Glade File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
@@ -99,7 +100,7 @@ EXPORT gboolean load_gui_tabs(void)
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
 			if (dbg_lvl & (TABLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]));
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]));
 			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
@@ -128,13 +129,13 @@ EXPORT gboolean load_gui_tabs(void)
 			populate_master(topframe,(gpointer)cfgfile);
 
 			if (dbg_lvl & TABLOADER)
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name));
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
 			g_free(tab_name);
 
 			if (topframe == NULL)
 			{
 				if (dbg_lvl & (TABLOADER|CRITICAL))
-					dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
+					dbg_func(g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
 				set_title(g_strdup("ERROR Gui Tabs XML problem!!!"));
 				return FALSE;
 			}
@@ -162,7 +163,9 @@ EXPORT gboolean load_gui_tabs(void)
 			}
 			cfg_free(cfgfile);
 			g_free(cfgfile);
+#ifndef DEBUG
 			g_object_unref(xml);
+#endif
 			update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 		}
 		else
@@ -177,17 +180,14 @@ EXPORT gboolean load_gui_tabs(void)
 		i++;
 
 		/* Allow gui to update as it should.... */
-		gdk_threads_enter();
 		while (gtk_events_pending())
 		{
 			if (leaving)
 			{
-				gdk_threads_leave();
 				return FALSE;
 			}
 			gtk_main_iteration();
 		}
-		gdk_threads_leave();
 
 		if (!firmware)
 			break;
@@ -196,7 +196,7 @@ EXPORT gboolean load_gui_tabs(void)
 	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
 	tabs_loaded = TRUE;
 	if (dbg_lvl & TABLOADER)
-		dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"));
+		dbg_func(g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup("Gui Tabs Loaded..."));
 	return TRUE;
@@ -227,12 +227,12 @@ void group_free(gpointer value)
 }
 
 /*!
- \brief load_groups() is called from the load_gui_tabs function in order to
+ \brief load_groups() is called from the load_gui_tabs_pf function in order to
  load common settings for a group of controls.
  \param cfgfile (ConfigFile *) the pointer to the configuration file to read
  the group information from.
  \see group_free
- \see load_gui_tabs
+ \see load_gui_tabs_pf
  \returns a GHashTable * to a newly created hashtable of the groups that were
  loaded. The groups are indexed in the hashtable by group name.
  */
@@ -513,14 +513,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	if (page == -1)
+	if (!cfg_read_int(cfgfile,section,"page",&page)) 
 	{
-		if (!cfg_read_int(cfgfile,section,"page",&page)) 
-		{
-			if (dbg_lvl & (TABLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
 
-		}
 	}
 	/* Bind widgets to lists if they have the bind_to_list flag set...
 	*/
@@ -583,6 +580,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
 		OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
+		g_free(tmpbuf);
+	}
+
+	/* If this widget has the "choices" key (combobox)
+	*/
+	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
+	{
+		combo_setup(G_OBJECT(widget),cfgfile,section);
 		g_free(tmpbuf);
 	}
 

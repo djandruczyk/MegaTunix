@@ -52,33 +52,31 @@ void rescale_table(GtkWidget *widget)
 	gint z_page = -1;
 	gint x_bins = -1;
 	gint y_bins = -1;
-	gint old = 0;
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
-	DataSize size = 0;
 	extern Firmware_Details *firmware;
 	GtkWidget *scaler = NULL;
+	GtkWidget *math_combo = NULL;
 	GtkWidget *tmpwidget = NULL;
+	gchar ** vector = NULL;
 	gchar * tmpbuf = NULL;
 	GList *list = NULL;
-	gfloat percentage = 0.0;
 	gint i = 0;
 	gint j = 0;
-	gint raw_lower = 0;
-	gint raw_upper = 255;
+	gint precision = 0;
 	gfloat value = 0.0;
-	gfloat real_value = 0.0;
-	GdkColor color;
-	gchar *widget_name = NULL;
-	extern GdkColor black;
-	gboolean use_color = FALSE;
+	gfloat factor = 0.0;
+	gfloat retval = 0.0;
+	ScaleOp scaleop = ADD;
 	extern gboolean forced_update;
 
-	widget_name = (gchar *) OBJ_GET(widget,"data");
+	tmpbuf = (gchar *) OBJ_GET(widget,"data");
+	vector = g_strsplit(tmpbuf,",",-1);
 
-	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
+	scaler = g_hash_table_lookup(dynamic_widgets,vector[0]);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
+	math_combo = g_hash_table_lookup(dynamic_widgets,vector[1]);
+	g_return_if_fail(GTK_IS_WIDGET(math_combo));
+	g_strfreev(vector);
+
 	tmpbuf = (gchar *)OBJ_GET(scaler,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
@@ -87,7 +85,11 @@ void rescale_table(GtkWidget *widget)
 	y_bins = firmware->table_params[table_num]->y_bincount;
 	z_page = firmware->table_params[table_num]->z_page;
 
-	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));
+	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(scaler),0,-1);
+	factor = (gfloat)g_strtod(tmpbuf,NULL);
+	g_free(tmpbuf);
+	scaleop = gtk_combo_box_get_active(GTK_COMBO_BOX(math_combo));
+
 	for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 	{
 		if (NULL != (list = ve_widgets[z_page][i]))
@@ -98,61 +100,50 @@ void rescale_table(GtkWidget *widget)
 				tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
 				if ((gboolean)OBJ_GET(tmpwidget,"marked"))
 				{
-					canID = (gint)OBJ_GET(tmpwidget,"canID");
-					page = (gint)OBJ_GET(tmpwidget,"page");
-					size = (DataSize)OBJ_GET(tmpwidget,"size");
-					offset = (gint)OBJ_GET(tmpwidget,"offset");
-					use_color = (gint)OBJ_GET(tmpwidget,"use_color");
-					if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-						raw_upper = (gint)OBJ_GET(tmpwidget,"raw_upper");
-					if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-						raw_lower = (gint)OBJ_GET(tmpwidget,"raw_lower");
-					value = get_ecu_data(canID,page,offset,size);
-					value = (value*percentage)/100.0;
-					if (value < raw_lower)
-						value = raw_lower;
-					if (value > raw_upper)
-						value = raw_upper;
+					precision = (gint)OBJ_GET(tmpwidget,"precision");
+					tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
+					value = (gfloat)g_strtod(tmpbuf,NULL);
+					g_free(tmpbuf);
+					retval = rescale(value,scaleop,factor);	
+					value = retval;
 
-					/* What we are doing is doing the 
-					 * forware/reverse conversion which
-					 * will give us an exact value if the 
-					 * user inputs something in
-					 * between,  thus we can reset the 
-					 * display to a sane value...
-					 */
-					old = get_ecu_data(canID,page,offset,size);
-					set_ecu_data(canID,page,offset,size,value);
-					real_value = convert_after_upload(tmpwidget);
-					set_ecu_data(canID,page,offset,size,old);
-
-					tmpbuf = g_strdup_printf("%i",(gint)real_value);
-					g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-							G_CALLBACK (entry_changed_handler),
-							NULL);
+					tmpbuf = g_strdup_printf("%1$.*2$f",retval,precision);
 					gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
-					g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-							G_CALLBACK (entry_changed_handler),
-							NULL);
+					g_signal_emit_by_name(G_OBJECT(tmpwidget),"activate");
 
 					g_free(tmpbuf);
 
-					send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
-					gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
 					widget_grab(tmpwidget,NULL,GINT_TO_POINTER(TRUE));
-					gtk_spin_button_set_value(GTK_SPIN_BUTTON(scaler),100.0);
-					if (use_color)
-					{
-						color = get_colors_from_hue(((gfloat)value/(float)raw_upper)*360.0,0.33, 1.0);
-						gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
-					}
-
-
+					gtk_entry_set_text(GTK_ENTRY(scaler),"0");
 				}
 			}
 		}
 	}
 	forced_update = TRUE;
+}
+
+
+gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
+{
+	switch (scaleop)
+	{
+		case ADD:
+			return input+factor;
+			break;
+		case SUBTRACT:
+			return input-factor;
+			break;
+		case MULTIPLY:
+			return input*factor;
+			break;
+		case DIVIDE:
+			return input/factor;
+			break;
+		default:
+			printf("!!! ERROR !!!, rescaler passed invalid enum\n");
+			break;
+	}
+	return 0;
 }
 
 /*!

@@ -50,10 +50,10 @@ GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
 
 
 /*!
- \brief update_runtime_vars() updates all of the runtime sliders on all
+ \brief update_runtime_vars_pf() updates all of the runtime sliders on all
  visible portions of the gui
  */
-EXPORT gboolean update_runtime_vars()
+EXPORT gboolean update_runtime_vars_pf()
 {
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
@@ -259,7 +259,7 @@ breakout:
 		if (!lookup_current_value("cltdeg",&coolant))
 		{
 			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
+				dbg_func(g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
 		}
 		if ((coolant != last_coolant) || (forced_update))
 			warmwizard_update_status(coolant);
@@ -379,16 +379,16 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gint current_index = 0;
+	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	gboolean is_float = FALSE;
 
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	current_index = (gint)OBJ_GET(slider->object,"current_index");
-	is_float = (gboolean)OBJ_GET(slider->object,"is_float");
+	precision = (gint)OBJ_GET(slider->object,"precision");
 	g_static_mutex_lock(&rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);*/
 	current = g_array_index(history, gfloat, current_index);
@@ -425,10 +425,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		 * */
 		if ((slider->textval) && ((abs(count-last_upd) > 2) || (forced_update)))
 		{
-			if (is_float)
-				tmpbuf = g_strdup_printf("%.2f",current);
-			else
-				tmpbuf = g_strdup_printf("%i",(gint)current);
+			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
 			gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 			g_free(tmpbuf);
@@ -438,10 +435,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	}
 	else if (slider->textval && ((abs(count-last_upd)%30) == 0))
 	{
-		if (is_float)
-			tmpbuf = g_strdup_printf("%.2f",current);
-		else
-			tmpbuf = g_strdup_printf("%i",(gint)current);
+		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
 		gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 		g_free(tmpbuf);
@@ -478,16 +472,16 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gint rate = rtt->rate;
 	gint last_upd = rtt->last_upd;
 	gint current_index = 0;
+	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	gboolean is_float = FALSE;
 
 
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	current_index = (gint)OBJ_GET(rtt->object,"current_index");
-	is_float = (gboolean)OBJ_GET(rtt->object,"is_float");
+	precision = (gint)OBJ_GET(rtt->object,"precision");
 	g_static_mutex_lock(&rtv_mutex);
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
@@ -502,10 +496,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		 * */
 		/*if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))*/
 		{
-			if (is_float)
-				tmpbuf = g_strdup_printf("%.2f",current);
-			else
-				tmpbuf = g_strdup_printf("%i",(gint)current);
+			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
 			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
 			g_free(tmpbuf);
@@ -514,10 +505,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	}
 	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
 	{
-		if (is_float)
-			tmpbuf = g_strdup_printf("%.2f",current);
-		else
-			tmpbuf = g_strdup_printf("%i",(gint)current);
+		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
 		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
 		g_free(tmpbuf);

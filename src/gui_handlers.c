@@ -14,6 +14,7 @@
 #include <3d_vetable.h>
 #include <args.h>
 #include <config.h>
+#include <combo_loader.h>
 #include <conversions.h>
 #include <datamgmt.h>
 #include <datalogging_gui.h>
@@ -33,6 +34,7 @@
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 /*#include <multitherm.h>*/
+#include <math.h>
 #include <offline.h>
 #include <mode_select.h>
 #include <notifications.h>
@@ -114,30 +116,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 			return;
 		prompt_to_save();
 	}
-
 	if (leaving)
 		return;
-	leaving = TRUE;
-	/* Message to trigger serial repair queue to exit immediately */
-	g_async_queue_push(serial_repair_queue,&tmp);
-
-	if (dbg_lvl & CRITICAL)
-	{
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
-	}
-
-	g_static_mutex_lock(&mutex);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
-
-	save_config();
-
-	if (statuscounts_id)
-		g_source_remove(statuscounts_id);
-	statuscounts_id = 0;
-
 	/* Stop timeout functions */
 
 	stop_tickler(RTV_TICKLER);
@@ -156,6 +136,36 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	stop_datalogging();
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
+
+	leaving = TRUE;
+	/* Message to trigger serial repair queue to exit immediately */
+	g_async_queue_push(serial_repair_queue,&tmp);
+
+	/* Commits any pending data to ECU flash */
+	if (dbg_lvl & CRITICAL)
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"));
+	if ((connected) && (interrogated) && (!offline))
+		io_cmd(firmware->burn_all_command,NULL);
+	if (dbg_lvl & CRITICAL)
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"));
+
+	if (dbg_lvl & CRITICAL)
+	{
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
+
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
+	}
+
+	g_static_mutex_lock(&mutex);
+	if (dbg_lvl & CRITICAL)
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
+
+	save_config();
+
+	if (statuscounts_id)
+		g_source_remove(statuscounts_id);
+	statuscounts_id = 0;
+
 	if (dynamic_widgets)
 	{
 		if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
@@ -170,13 +180,6 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 			dbg_func(g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 	}
 
-	/* Commits any pending data to ECU flash */
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"));
-	if ((connected) && (interrogated) && (!offline))
-		io_cmd(firmware->burn_all_command,NULL);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
 	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
 	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
@@ -220,7 +223,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 
 
 	/* Grab and release all mutexes to get them to relinquish
-	 */
+	*/
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
 	/* Free all buffers */
@@ -228,7 +231,13 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (dbg_lvl & CRITICAL)
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
+	/*
+	if (dbg_lvl & CRITICAL)
+		printf(__FILE__": LEAVE() Log closed, attempting to unlock mutex\n");
 	g_static_mutex_unlock(&mutex);
+	if (dbg_lvl & CRITICAL)
+		printf(__FILE__": LEAVE() Mutex unlocked, calling gtk_main_quit()\n");
+		*/
 	gtk_main_quit();
 	return;
 }
@@ -425,7 +434,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = -1;
 	gint handler = 0;
 	gint table_num = -1;
-	OutputData *q_data = NULL;
+	Deferred_Data *d_data = NULL;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
 	gchar * table_2_update = NULL;
@@ -499,19 +508,22 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~bitmask;/* clears bits */
 				tmp = tmp | (bitval << bitshift);
 				dload_val = tmp;
+				//printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, get_ecu_data(canID,page,offset,size));
 				if (dload_val == get_ecu_data(canID,page,offset,size))
 					return FALSE;
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
-				q_data = initialize_outputdata();
-				OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-				OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-				OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(offset));
-				OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-				OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+				//printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);
+
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
-						q_data);
+						d_data);
 				check_req_fuel_limits(table_num);
 			}
 			else
@@ -523,15 +535,15 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 					return FALSE;
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
-				q_data = initialize_outputdata();
-				OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-				OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-				OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(offset));
-				OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-				OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
-						q_data);
+						d_data);
 				check_req_fuel_limits(table_num);
 			}
 			break;
@@ -640,7 +652,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint spconfig_offset = -1;
 	gint oddfire_bit_offset = -1;
 	gfloat real_value = 0.0;
-	gboolean is_float = FALSE;
 	gboolean use_color = FALSE;
 	DataSize size = 0;
 	gint raw_lower = 0;
@@ -668,7 +679,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	else
 		base = (gint)OBJ_GET(widget,"base");
 	precision = (gint)OBJ_GET(widget,"precision");
-	is_float = (gboolean)OBJ_GET(widget,"is_float");
 	raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
@@ -682,8 +692,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 * or base16, the problem is the limits are in base10
 	 */
 
-
-	if ((tmpf != (gfloat)tmpi) && (!is_float))
+	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
 		/* Pause signals while we change the value */
 		/*		printf("resetting\n");*/
@@ -698,10 +707,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		case GENERIC:
 			if (base == 10)
 			{
-				if (is_float)
-					dload_val = convert_before_download(widget,tmpf);
-				else
-					dload_val = convert_before_download(widget,tmpi);
+				dload_val = convert_before_download(widget,tmpf);
 			}
 			else if (base == 16)
 				dload_val = convert_before_download(widget,tmpi);
@@ -724,16 +730,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 			/*printf("real_value %f\n",real_value);*/
 			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler, data);
-			if (is_float)
-			{
-				tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				g_free(tmpbuf);
-			}
-			else
-			{
+			
 				if (base == 10)
 				{
+					tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
 					tmpbuf = g_strdup_printf("%i",(gint)real_value);
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
@@ -744,7 +744,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
 				}
-			}
 			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler, data);
 			break;
 
@@ -1028,6 +1027,62 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
+ \brief std_combo_handler() handles all combo boxes
+ \param widget (GtkWidget *) the widget being modified
+ \param data (gpointer) not used
+ \returns TRUE
+ */
+EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = NULL;
+	gboolean state = FALSE;
+	guint8 bitmask = 0;
+	guint8 bitshift = 0;
+	guint8 bitval = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint canID = 0;
+	DataSize size = MTX_U08;
+	gchar * choice = NULL;
+	guint8 tmp = 0;
+	gint dload_val = 0;
+	gint dl_type = 0;
+
+	page = (gint) OBJ_GET(widget,"page");
+	offset = (gint) OBJ_GET(widget,"offset");
+	dl_type = (gint) OBJ_GET(widget,"dl_type");
+	canID = (gint)OBJ_GET(widget,"canID");
+	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitshift = (gint)OBJ_GET(widget,"bitshift");
+	size = (DataSize)OBJ_GET(widget,"size");
+
+	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+        gtk_tree_model_get(model,&iter,CHOICE_COL,&choice,-1);
+	bitval = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+//	printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );
+
+	tmp = get_ecu_data(canID,page,offset,size);
+	tmp = tmp & ~bitmask;	/*clears bits */
+	tmp = tmp | (bitval << bitshift);
+	dload_val = tmp;
+	if (dload_val == get_ecu_data(canID,page,offset,size))
+	{
+//		printf("dload val matched ecu settings, not changing\n");
+		return FALSE;
+	}
+
+	if (dl_type == IMMEDIATE)
+	{
+		dload_val = convert_before_download(widget,dload_val);
+		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+	}
+	return TRUE;
+}
+
+
+/*!
  \brief spin_button_handler() handles ALL spinbuttons in MegaTunix and does
  whatever is needed for the data before sending it to the ECU
  \param widget (GtkWidget *) the widget being modified
@@ -1061,7 +1116,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gchar *tmpbuf = NULL;
 	GtkWidget * tmpwidget = NULL;
-	OutputData *q_data = NULL;
+	Deferred_Data *d_data = NULL;
 	extern gint realtime_id;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -1176,15 +1231,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				dload_val = (gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 
 				firmware->rf_params[table_num]->divider = dload_val;
-				q_data = initialize_outputdata();
-				OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-				OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-				OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(divider_offset));
-				OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-				OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = divider_offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
-						q_data);
+						d_data);
 				err_flag = FALSE;
 				set_reqfuel_color(BLACK,table_num);
 				check_req_fuel_limits(table_num);
@@ -1212,30 +1267,29 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~bitmask;	/*clears top 4 bits */
 				tmp = tmp | ((tmpi-1) << bitshift);
 				dload_val = tmp;
-				/*printf("new num_cyls is %i, new data is %i\n",tmpi,tmp);*/
-				q_data = initialize_outputdata();
-				OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-				OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-				OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(offset));
-				OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-				OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
-						q_data);
+						d_data);
 
 				dload_val = 
 					(gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 
 				firmware->rf_params[table_num]->divider = dload_val;
-				q_data = initialize_outputdata();
-				OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-				OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-				OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(divider_offset));
-				OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-				OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = divider_offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
-						q_data);
+						d_data);
 
 				err_flag = FALSE;
 				set_reqfuel_color(BLACK,table_num);	
@@ -1255,15 +1309,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << bitshift);
 			dload_val = tmp;
 
-			q_data = initialize_outputdata();
-			OBJ_SET(q_data->object,"canID",GINT_TO_POINTER(canID));
-			OBJ_SET(q_data->object,"page",GINT_TO_POINTER(page));
-			OBJ_SET(q_data->object,"offset",GINT_TO_POINTER(offset));
-			OBJ_SET(q_data->object,"dload_val",GINT_TO_POINTER(dload_val));
-			OBJ_SET(q_data->object,"size",GINT_TO_POINTER(MTX_U08));
+			d_data = g_new0(Deferred_Data, 1);
+			d_data->canID = canID;
+			d_data->page = page;
+			d_data->offset = offset;
+			d_data->value = dload_val;
+			d_data->size = MTX_U08;
 			g_hash_table_insert(interdep_vars[page],
 					GINT_TO_POINTER(offset),
-					q_data);
+					d_data);
 
 			check_req_fuel_limits(table_num);
 			break;
@@ -1374,11 +1428,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief update_ve_const() is called after a read of the VE/Const block of 
+ \brief update_ve_const_pf() is called after a read of the VE/Const block of 
  data from the ECU.  It takes care of updating evey control that relates to
  an ECU variable on screen
  */
-EXPORT void update_ve_const()
+EXPORT void update_ve_const_pf()
 {
 	gint canID = 0;  
 	gint page = 0;
@@ -1456,11 +1510,12 @@ EXPORT void update_ve_const()
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
 		reqfuel = get_ecu_data(canID,page,firmware->table_params[i]->reqfuel_offset,size);
 
-		/*
-		 * printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
-		 * printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
-		 * printf("req_fuel_per_lsquirt is %i\n",reqfuel);
-		 */
+	/*	
+		  printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
+		  printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
+		  printf("req_fuel_per_l_squirt is %i\n",reqfuel);
+		  */
+		 
 
 
 		/* Calcs vary based on firmware. 
@@ -1470,26 +1525,27 @@ EXPORT void update_ve_const()
 		 */
 		if (firmware->capabilities & DUALTABLE)
 		{
-			/*	printf("DT\n"); */
+				//printf("DT\n"); 
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
 		else if ((firmware->capabilities & MSNS_E) && (((get_ecu_data(canID,firmware->table_params[i]->dtmode_page,firmware->table_params[i]->dtmode_offset,size)& 0x10) >> 4) == 1))
 		{
-			/*	printf("MSnS-E DT\n"); */
+				//printf("MSnS-E DT\n"); 
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
 		else
 		{
-			/*	printf("B&G\n"); */
+				//printf("B&G\n"); 
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
 		}
 
 		/* ReqFuel Total */
+		//printf("intermediate tmpf is %f\n",tmpf);
 		tmpf *= (float)reqfuel;
 		tmpf /= 10.0;
 		firmware->rf_params[i]->req_fuel_total = tmpf;
 		firmware->rf_params[i]->last_req_fuel_total = tmpf;
-		/*printf("req_fuel_total is %f\n",tmpf);*/
+		//printf("req_fuel_total  for table number %i is %f\n",i,tmpf);
 
 		/* Injections per cycle */
 		firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
@@ -1598,7 +1654,6 @@ void update_widget(gpointer object, gpointer user_data)
 	GtkWidget * widget = object;
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
-	gboolean is_float = FALSE;
 	gboolean use_color = FALSE;
 	gint i = 0;
 	gint tmpi = -1;
@@ -1610,6 +1665,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bitval = -1;
 	gint bitshift = -1;
 	gint bitmask = -1;
+	gint bits = 0;
+	gint highbit = 0;
 	gint base = -1;
 	gint precision = -1;
 	gint spconfig_offset = 0;
@@ -1625,6 +1682,11 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar **vector = NULL;
 	gchar * widget_text = NULL;
 	gchar * group_2_update = NULL;
+	gchar **choices = NULL;
+	gint num_choices = 0;
+	GtkTreeIter iter;
+	GtkTreeModel *model = NULL;
+	gchar * path = NULL;
 	gdouble spin_value = 0.0; 
 	gboolean update_color = TRUE;
 	GdkColor color;
@@ -1637,19 +1699,16 @@ void update_widget(gpointer object, gpointer user_data)
 		return;
 
 	upd_count++;
-	if ((upd_count%64) == 0)
+	if ((upd_count%128) == 0)
 	{
-		gdk_threads_enter();
 		while (gtk_events_pending())
 		{
 			if (leaving)
 			{
-				gdk_threads_leave();
 				return;
 			}
 			gtk_main_iteration();
 		}
-		gdk_threads_leave();
 
 	}
 	if (!GTK_IS_OBJECT(widget))
@@ -1677,7 +1736,6 @@ void update_widget(gpointer object, gpointer user_data)
 
 	precision = (gint)OBJ_GET(widget,"precision");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
-	is_float = (gboolean)OBJ_GET(widget,"is_float");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
@@ -1692,6 +1750,7 @@ void update_widget(gpointer object, gpointer user_data)
 			value = (value-32)*(5.0/9.0);
 	}
 
+	//printf("update_widget %s, page %i, offset %i bitval %i, mask %i, shift %i\n",(gchar *)glade_get_widget_name(widget), page,offset,bitval,bitmask,bitshift);
 	/* update widget whether spin,radio or checkbutton  
 	 * (checkbutton encompases radio)
 	 */
@@ -1705,22 +1764,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch (get_ecu_data(canID,page,oddfire_bit_offset,size))
 			{
 				case 4:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)value+90);
 					break;
 				case 2:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)value+45);
 					break;
 				case 0:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)value);
 					break;
 				default:
 					if (dbg_lvl & CRITICAL)
@@ -1736,22 +1786,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch ((get_ecu_data(canID,page,spconfig_offset,size) & 0x03))
 			{
 				case 2:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)value+45);
 					break;
 				case 1:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)(value+22.5));
 					break;
 				case 0:
-					if (is_float)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)value);
 					break;
 				default:
 					if (dbg_lvl & CRITICAL)
@@ -1767,24 +1808,12 @@ void update_widget(gpointer object, gpointer user_data)
 			update_color = TRUE;
 			if (base == 10)
 			{
-				if (is_float)
-				{
-					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
-						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-					else
-						update_color = FALSE;
-					g_free(tmpbuf);
-				}
+				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 				else
-				{
-					tmpbuf = g_strdup_printf("%i",(gint)value);
-					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
-						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-					else
-						update_color = FALSE;
-					g_free(tmpbuf);
-				}
+					update_color = FALSE;
+				g_free(tmpbuf);
 			}
 			else if (base == 16)
 			{
@@ -1867,6 +1896,38 @@ void update_widget(gpointer object, gpointer user_data)
 				}
 			}
 		}
+	}
+	else if (GTK_IS_COMBO_BOX(widget))
+	{
+//		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
+		tmpbuf = OBJ_GET(widget,"choices");
+		choices = parse_keys(tmpbuf,&num_choices,",");
+		g_strfreev(choices);
+		bits = bitmask >> bitshift;
+		for (i=0;i<8;i++)
+		{
+			if (bits & (gint)(pow(2,i)))
+				highbit = i+1;
+		}
+		tmpi = (gint)pow(2,(double)highbit);
+
+		if (tmpi != num_choices)
+		{
+			printf("BIG PROBLEM, combobox choices %i and bits %i don't match up\n",num_choices,tmpi);
+		}
+		tmpi = ((gint)value & bitmask) >> bitshift;
+		if (tmpi > num_choices)
+			printf("BIG PROBLEM, combobox data exceeds bounds of combobox offset %i, bitmask %i, bitshift %i, value %i\n",offset,bitmask,bitshift,tmpi);
+
+		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+		path = g_strdup_printf("%i",tmpi);
+		gtk_tree_model_get_iter_from_string (model, &iter, path);
+		g_free(path);
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+
+		if (toggle_groups)
+			combo_toggle_groups_linked(widget,tmpi);
+
 	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
@@ -1988,10 +2049,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	reverse_keys = (gboolean) OBJ_GET(widget,"reverse_keys");
 
 	value = get_ecu_data(canID,page,offset,size);
-	if (event->keyval == GDK_KP_Space)
-	{
-		printf("spacebar!\n");
-	}
+//	if (event->keyval == GDK_KP_Space)
+//	{
+//		printf("spacebar!\n");
+//	}
 	if (event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
@@ -2533,10 +2594,11 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 		return;
 	group_states = (gchar *)OBJ_GET(widget,"group_states");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
+	/*printf("groups to toggle %s to state %s\n",toggle_groups,group_states);*/
 
-	/*	printf("toggling groups\n");*/
+	/*printf("toggling groups\n");*/
 	groups = parse_keys(toggle_groups,&num_groups,",");
-	/*	printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
+	/*printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
 
 	for (i=0;i<num_groups;i++)
 	{
@@ -2553,6 +2615,74 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	}
 	/*printf ("DONE!\n\n\n");*/
 	g_strfreev(groups);
+}
+
+
+
+/*!
+ * \brief combo_toggle_groups_linked is used to change the state of controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param toggle_groups, comms sep list of group names
+ * \param new_state,  new state of the button linking to these groups
+ */
+void combo_toggle_groups_linked(GtkWidget *widget,gint active)
+{
+	gint num_groups = 0;
+	gint num_choices = 0;
+	gint i = 0;
+	gint j = 0;
+	gboolean state = FALSE;
+	gint page = 0;
+	gint offset = 0;
+
+	gchar **choices = NULL;
+	gchar **groups = NULL;
+	gchar * toggle_groups = NULL;
+	extern gboolean ready;
+	extern GHashTable *widget_group_states;
+
+	if (!ready)
+		return;
+	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
+	page = (gint)OBJ_GET(widget,"page");
+	offset = (gint)OBJ_GET(widget,"offset");
+
+	//printf("toggling combobox groups\n");
+	choices = parse_keys(toggle_groups,&num_choices,",");
+	//printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);
+
+	/* First TURN OFF all non active groups */
+	for (i=0;i<num_choices;i++)
+	{
+		groups = parse_keys(choices[i],&num_groups,":");
+		//printf("Choice %i, has %i groups\n",i,num_groups);
+		if (i == active)
+			continue;
+		state = FALSE;
+		for (j=0;j<num_groups;j++)
+		{
+			//printf("setting all widgets in group %s to state %i\n\n",groups[j],state);
+			g_hash_table_insert(widget_group_states,g_strdup(groups[j]),(gpointer)state);
+			g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
+		}
+		g_strfreev(groups);
+	}
+
+	/* First TURN ON all active groups */
+	groups = parse_keys(choices[active],&num_groups,":");
+	state = TRUE;
+	for (j=0;j<num_groups;j++)
+	{
+		//printf("setting all widgets in group %s to state %i\n\n",groups[j],state);
+		g_hash_table_insert(widget_group_states,g_strdup(groups[j]),(gpointer)state);
+		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+
+	//printf ("DONE!\n\n\n");
+	g_strfreev(choices);
 }
 
 

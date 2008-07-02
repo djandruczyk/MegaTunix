@@ -24,9 +24,8 @@ void update_comms_status(void);
 void update_write_status(void *);
 void update_write_status(void *);	/* gui updater for write status */
 void readfrom_ecu(Io_Message *);	/* Function to get data FROM ecu */
-void writeto_ecu(Io_Message *);	/* Func to send data to the ECU */
-void burn_ms1_ecu_flash(void);		/* run after burn completion */
-void set_ms_page(guint8);	/* Sets the ECU page */
+void writeto_ecu(Io_Message *);		/* Func to send data to the ECU */
+void queue_burn_ecu_flash(gint);	/* run after burn completion */
 void write_data(Io_Message *);
 /* Prototypes */
 

@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean update_runtime_vars(void);
+gboolean update_runtime_vars_pf(void);
 void reset_runtime_status(void);
 void rt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_values(gpointer,gpointer,gpointer);

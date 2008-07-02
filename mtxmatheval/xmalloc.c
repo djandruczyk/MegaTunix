@@ -24,6 +24,9 @@
 
 #include "common.h"
 #include "error.h"
+#ifdef __WIN32__
+ #include <windows.h>
+#endif
 
 #if !HAVE_BZERO && HAVE_MEMSET
 #define bzero(buf, bytes) ((void) memset (buf, 0, bytes))
@@ -68,6 +71,10 @@ void * xcalloc(size_t num, size_t size)
 	 */
 	void *ptr_new = xmalloc(num * size);
 
+#ifdef __WIN32__
+	ZeroMemory(ptr_new,num*size);
+#else
 	bzero(ptr_new, num * size);
+#endif
 	return ptr_new;
 }

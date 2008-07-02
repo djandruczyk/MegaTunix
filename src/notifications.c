@@ -24,10 +24,12 @@
 
 extern GdkColor red;
 extern GdkColor black;
-static gboolean warning_present = FALSE;
+extern GdkColor green;
+static volatile gboolean warning_present = FALSE;
 static GtkWidget *warning_dialog;
 extern gint dbg_lvl;
 extern GObject *global_data;
+
 
 
 /*!
@@ -64,7 +66,7 @@ void set_reqfuel_color(GuiColor color, gint table_num)
  \brief set_widget_color() sets all the widgets in the passed group to 
  the color passed.
  \param widget (gpointer) the widget to  change color
- \param color (gpointer) enumeration of the color to switch to..
+ \param color (GuiColor) enumeration of the color to switch to..
  */
 void set_widget_color(gpointer widget, gpointer color)
 {
@@ -115,6 +117,31 @@ void set_widget_color(gpointer widget, gpointer color)
 				gtk_widget_modify_text(GTK_WIDGET(widget),
 						GTK_STATE_INSENSITIVE,&black);
 			}
+			break;
+		case GREEN:
+			if (GTK_IS_BUTTON(widget))
+			{
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_NORMAL,&green);
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_PRELIGHT,&green);
+			}
+			else if (GTK_IS_LABEL(widget))
+			{
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_NORMAL,&green);
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_PRELIGHT,&green);
+			}
+			else
+			{	
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_NORMAL,&green);
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_INSENSITIVE,&green);
+			}
+			break;
+		default:
 			break;
 	}
 }
@@ -229,8 +256,9 @@ void  update_logbar(
  */
 EXPORT void conn_warning(void)
 {
-	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	gchar *buff = NULL;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
+
 	if ((args->be_quiet) || (warning_present))
 		return;
 	buff = g_strdup("The MegaSquirt ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. Wrong Comm port is selected on the Communications Tab\n   2. The MegaSquirt serial link is not plugged in\n   3. The MegaSquirt ECU does not have adequate power.\n   4. The MegaSquirt ECU is in bootloader mode.\n\nSuggest checking the serial settings on the Communications page first, and then check the Serial Status log at the bottom of that page. If the Serial Status log says \"I/O with MegaSquirt Timeout\", it means one of a few possible problems:\n   1. You selected the wrong COM port (older systems came with two, most newer ones only have one, try the other one...)\n   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 Male/Female cable)\n   3. The cable is OK, but the MS doesn't have adequate power.\n   4. If you have the ECU in bootloader mode, none of the lights lite up, and a terminal program will show a \"Boot>\" prompt Disconnect the Boot jumper and power cycle the ECU.\n\nIf it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this can mean one of two things:\n   1. The COM port doesn't exist on your computer,\n\t\t\t\t\tOR\n   2. You don't have permission to open the port. (/dev/ttySx).\nUNIX ONLY: Change the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/ttyS*\" as root), NOTE: This has potential security implications. Check the Unix/Linux system documentation regarding \"security\" for more information...\n");
@@ -260,7 +288,7 @@ void warn_user(gchar *message)
 {
 	extern gboolean interrogated;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
-	if (args->be_quiet)
+	if ((args->be_quiet))
 		return;
 
 	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
@@ -306,7 +334,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 gboolean close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
-	warning_present = FALSE;
+	g_timeout_add(2000,set_warning_flag,NULL);
 	warning_dialog = NULL;
 	return TRUE;
 }
@@ -341,4 +369,10 @@ void set_title(gchar * text)
 		g_free(tmpbuf);
 	}
 	g_free(text);
+}
+
+gboolean set_warning_flag(gpointer user_data)
+{
+	warning_present = FALSE;
+	return FALSE;
 }

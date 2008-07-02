@@ -48,6 +48,7 @@ GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
+GtkWidget **te_windows = NULL;
 extern GObject *global_data;
 gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
@@ -506,6 +507,9 @@ void mem_alloc()
 		firmware->ecu_data_last = g_new0(guint8 *, firmware->total_pages);
 	if (!firmware->ecu_data_backup)
 		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
+	if (!te_windows)
+		te_windows = g_new0(GtkWidget *, firmware->total_te_tables);
+
 	if (!ve_widgets)
 		ve_widgets = g_new0(GList **, firmware->total_pages);
 	if (!tab_gauges)
@@ -587,7 +591,11 @@ void mem_dealloc()
 				g_hash_table_destroy(interdep_vars[i]);
 				interdep_vars[i] = NULL;
 			}
+			if (firmware->page_params[i])
+				g_free(firmware->page_params[i]);
 		}
+		g_free(firmware->page_params);
+
 		if (firmware->name)
 			g_free(firmware->name);
 		if (firmware->tab_list)
@@ -612,27 +620,25 @@ void mem_dealloc()
 			g_free(firmware->burn_command);
 		if (firmware->burn_all_command)
 			g_free(firmware->burn_all_command);
-		if (firmware->page_cmd)
-			g_free(firmware->page_cmd);
-		for (i=0;i<firmware->total_pages;i++)
-		{
-			if (firmware->page_params[i])
-				g_free(firmware->page_params[i]);
-		}
-		g_free(firmware->page_params);
+		if (firmware->page_command)
+			g_free(firmware->page_command);
 		firmware->page_params = NULL;
+		for (i=0;i<firmware->total_te_tables;i++)
+		{
+			if (firmware->te_params[i])
+				dealloc_te_params(firmware->te_params[i]);
+		}
+		g_free(firmware->te_params);
+		firmware->te_params = NULL;
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			if (firmware->table_params[i])
 				dealloc_table_params(firmware->table_params[i]);
-		}
-		g_free(firmware->table_params);
-		firmware->table_params = NULL;
-		for (i=0;i<firmware->total_tables;i++)
-		{
 			if (firmware->rf_params[i])
 				g_free(firmware->rf_params[i]);
 		}
+		g_free(firmware->table_params);
+		firmware->table_params = NULL;
 		g_free(firmware->rf_params);
 		firmware->rf_params = NULL;
 		g_free(firmware->ecu_data);
@@ -730,6 +736,35 @@ Table_Params * initialize_table_params(void)
 	table_params->table_name = NULL;
 
 	return table_params;
+}
+
+         
+/*!
+ *  \brief initialize_te_params() creates and initializes the TE_Params
+ *   datastructure to sane defaults and returns it
+ *    */
+TE_Params * initialize_te_params(void)
+{
+	TE_Params *te_params = NULL;
+	te_params = g_malloc0(sizeof(TE_Params));
+	te_params->x_page = -1;
+	te_params->y_page = -1;
+	te_params->x_base = -1;
+	te_params->y_base = -1;
+	te_params->bincount = -1;
+	te_params->x_precision = 0;
+	te_params->y_precision = 0;
+	te_params->x_name = NULL;
+	te_params->y_name = NULL;
+	te_params->x_units = NULL;
+	te_params->y_units = NULL;
+	te_params->x_dl_conv_expr = NULL;
+	te_params->x_ul_conv_expr = NULL;
+	te_params->y_dl_conv_expr = NULL;
+	te_params->y_ul_conv_expr = NULL;
+	te_params->title = NULL;
+
+	return te_params;
 }
 
 
@@ -859,7 +894,7 @@ void dealloc_qfunction(QFunction * qfunc)
 /*!
  \brief dealloc_table_params() deallocates the structure used for firmware
  table parameters
- \param table_params (TableParams *) pointer to struct to deallocate
+ \param table_params (Table_Params *) pointer to struct to deallocate
  */
 void dealloc_table_params(Table_Params * table_params)
 {
@@ -930,4 +965,37 @@ void dealloc_table_params(Table_Params * table_params)
 	return;
 }
 
+
+/*!
+ \brief dealloc_te_params() deallocates the structure used for firmware
+ te parameters
+ \param te_params (TE_Params *) pointer to struct to deallocate
+ */
+void dealloc_te_params(TE_Params * te_params)
+{
+	if(te_params->title)
+		g_free(te_params->title);
+	if(te_params->x_dl_conv_expr)
+		g_free(te_params->x_dl_conv_expr);
+	if(te_params->y_dl_conv_expr)
+		g_free(te_params->y_dl_conv_expr);
+	if(te_params->x_ul_conv_expr)
+		g_free(te_params->x_ul_conv_expr);
+	if(te_params->y_ul_conv_expr)
+		g_free(te_params->y_ul_conv_expr);
+	if(te_params->x_source)
+		g_free(te_params->x_source);
+	if(te_params->y_source)
+		g_free(te_params->y_source);
+	if(te_params->x_name)
+		g_free(te_params->x_name);
+	if(te_params->y_name)
+		g_free(te_params->y_name);
+	if(te_params->x_units)
+		g_free(te_params->x_units);
+	if(te_params->y_units)
+		g_free(te_params->y_units);
+	g_free(te_params);
+	return;
+}
 

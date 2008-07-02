@@ -16,9 +16,19 @@
 
 #include <gtk/gtk.h>
 
+typedef struct _ListElement ListElement;
+struct _ListElement 
+{
+	gchar *filename;	/* Filename  of interrogation profile */
+	gchar *name;		/* Shortname in choice box */
+};
+
 /* Prototypes */
 GList * get_list(gchar * );
 void store_list(gchar * , GList * );
+gint list_sort(gconstpointer, gconstpointer);
+void free_element(gpointer, gpointer);
+void simple_free_element(gpointer, gpointer);
 /* Prototypes */
 
 #endif

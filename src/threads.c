@@ -38,12 +38,14 @@
 #include <unistd.h>
 
 
+gboolean force_page_change;
 extern gboolean connected;			/* valid connection with MS */
 extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern gint dbg_lvl;
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
+volatile gint last_page = 0;
 
 
 /*!
@@ -83,6 +85,11 @@ void io_cmd(gchar *io_cmd_name, void *data)
 	else
 	{
 		command = g_hash_table_lookup(commands_hash,io_cmd_name);
+		if (!command)
+		{
+			printf("Command %s is INVALID, aborting call\n",io_cmd_name);
+			return;;
+		}
 		message = initialize_io_message();
 		message->command = command;
 		if (data)
@@ -160,8 +167,8 @@ void *thread_dispatcher(gpointer data)
 							message->command,
 							message->command->func_call_arg);
 
-				if (!result)
-					message->command->defer_post_functions=TRUE;
+				//if (!result)
+			//		message->command->defer_post_functions=TRUE;
 				}
 				break;
 			case WRITE_CMD:
@@ -170,7 +177,7 @@ void *thread_dispatcher(gpointer data)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				break;
 			case NULL_CMD:
-				/*printf("null_cmd, just passing thru\n");*/
+				//printf("null_cmd, just passing thru\n");
 				break;
 
 			default:
@@ -214,6 +221,10 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 	guint8 *data = NULL;
+	guint16 u16 = 0;
+	gint16 s16 = 0;
+	guint32 u32 = 0;
+	gint32 s32 = 0;
 
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
@@ -223,10 +234,15 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 		case MTX_CHAR:
 		case MTX_S08:
 		case MTX_U08:
+	//		printf("8 bit var %i at offset %i\n",value,offset);
+			break;
 		case MTX_S16:
 		case MTX_U16:
+	//		printf("16 bit var %i at offset %i\n",value,offset);
+			break;
 		case MTX_S32:
 		case MTX_U32:
+	//		printf("32 bit var %i at offset %i\n",value,offset);
 			break;
 		default:
 			printf("ERROR!!! Size undefined for var at canID %i, page %i, offset %i\n",canID,page,offset);
@@ -257,28 +273,124 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 			case MTX_S08:
 				data[0] = (gint8)value;
 				break;
-			case MTX_S16:
 			case MTX_U16:
-				data[1] = (guint8)value;
-				data[0] = (guint8)((guint16)value >> 8);
+				u16 = GUINT16_TO_BE((guint16)value);
+				data[0] = (guint8)u16;
+				data[1] = (guint8)((guint16)u16 >> 8);
+				break;
+			case MTX_S16:
+				s16 = GINT16_TO_BE((gint16)value);
+				data[0] = (guint8)s16;
+				data[1] = (guint8)((gint16)s16 >> 8);
 				break;
 			case MTX_S32:
+				s32 = GINT32_TO_BE((gint32)value);
+				data[0] = (guint8)s32;
+				data[1] = (guint8)((gint32)s32 >> 8);
+				data[2] = (guint8)((gint32)s32 >> 16);
+				data[3] = (guint8)((gint32)s32 >> 24);
+				break;
 			case MTX_U32:
-				data[3] = (guint8)value;
-				data[2] = (guint8)((guint32)value >> 8);
-				data[1] = (guint8)((guint32)value >> 16);
-				data[0] = (guint8)((guint32)value >> 24);
+				u32 = GUINT32_TO_BE((guint32)value);
+				data[0] = (guint8)u32;
+				data[1] = (guint8)((guint32)u32 >> 8);
+				data[2] = (guint8)((guint32)u32 >> 16);
+				data[3] = (guint8)((guint32)u32 >> 24);
 				break;
 			default:
 				break;
 		}
 		OBJ_SET(output->object,"data", (gpointer)data);
 	}
-	output->need_page_change = TRUE;
+
+	/* If the ecu is multi-page, run the handler to take care of queing
+	 * burns and/or page changing
+	 */
+	if (firmware->multi_page)
+		handle_page_change(page,last_page);
+	else
+		printf("firmware is not multi page\n");
+
 	output->queue_update = queue_update;
 	io_cmd(firmware->write_command,output);
+	last_page = page;
 	return;
 }
+
+
+void handle_page_change(gint page, gint last)
+{
+	extern Firmware_Details *firmware;
+	guint8 ** ecu_data = firmware->ecu_data;
+	guint8 ** ecu_data_last = firmware->ecu_data_last;
+
+	//printf("handle page change \n");
+
+	if ((page == last) && (!force_page_change))
+	{
+		//printf("page == last and force_page_change is not set\n");
+		return;
+	}
+	/* If current page is NOT a dl_by_default page, but the last one WAS
+	 * then a burn is required otherwise settings will be lost in the
+	 * last
+	 */
+	if ((!firmware->page_params[page]->dl_by_default) && (firmware->page_params[last]->dl_by_default))
+	{
+		//printf("current was not dl by default  but last was,  burning\n");
+		queue_burn_ecu_flash(last);
+		if (firmware->capabilities & MS1)
+			queue_ms1_page_change(page);
+		return;
+	}
+	/* If current page is NOT a dl_by_default page, OR the last one was
+	 * not then a burn is NOT required.
+	 */
+	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
+	{
+		if ((page != last) && (firmware->capabilities & MS1))
+			queue_ms1_page_change(page);
+		return;
+	}
+	/* If current and last pages are DIFFERENT,  do a memory buffer scan
+	 * to see if previous and last match,  if so return, otherwise burn
+	 * then change page
+	 */
+	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
+	{
+		//printf("page and last don't match AND there's a ram difference\n");
+		queue_burn_ecu_flash(last);
+		if (firmware->capabilities & MS1)
+			queue_ms1_page_change(page);
+	}
+	else if ((page != last) && (firmware->capabilities & MS1))
+	{
+		queue_ms1_page_change(page);
+		//printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
+	}
+
+
+}
+
+
+void queue_ms1_page_change(gint page)
+{
+	extern Firmware_Details * firmware;
+	extern volatile gboolean offline;
+	OutputData *output = NULL;
+
+	if (offline)
+		return;
+
+	output = initialize_outputdata();
+	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
+	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+	io_cmd(firmware->page_command,output);
+	last_page = page;
+	return;
+}
+
 
 
 /*!
@@ -307,7 +419,11 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
 	OBJ_SET(output->object,"data", (gpointer)data);
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
-	output->need_page_change = TRUE;
+
+	if (firmware->multi_page)
+		handle_page_change(page,last_page);
+	else
+		printf("firmware is not multi page\n");
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
 	return;

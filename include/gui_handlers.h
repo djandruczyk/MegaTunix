@@ -33,7 +33,7 @@ EXPORT gboolean set_algorithm(GtkWidget *, gpointer );
 EXPORT void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
-void update_ve_const(void);
+void update_ve_const_pf(void);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );
 void update_widget(gpointer, gpointer );
@@ -42,6 +42,7 @@ void swap_labels(gchar *, gboolean );
 void toggle_groups_linked(GtkWidget *, gboolean);
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
+void combo_toggle_groups_linked(GtkWidget *,gint);
 /* Prototypes */
 
 #endif

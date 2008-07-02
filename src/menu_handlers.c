@@ -46,7 +46,7 @@ static struct
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
 
-EXPORT void setup_menu_handlers()
+EXPORT void setup_menu_handlers_pf()
 {
 	GtkWidget *item = NULL;
 	gint i = 0;

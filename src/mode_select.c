@@ -58,11 +58,10 @@ void set_widget_active(gpointer widget, gpointer state)
 gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
 {
 	extern Firmware_Details *firmware;
-	OutputData *data = (OutputData *)value;
+	Deferred_Data *data = (Deferred_Data *)value;
 
+	send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
+	g_free(data);
 	/* called per element from the hash table to drain and send to ECU */
-	OBJ_SET(data->object,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
-	data->need_page_change = TRUE;
-	io_cmd(firmware->write_command,data);
 	return TRUE;
 }

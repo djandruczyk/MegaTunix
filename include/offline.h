@@ -16,6 +16,7 @@
 
 #include <gtk/gtk.h>
 
+
 /* Prototypes */
 void set_offline_mode(void);
 gchar * present_firmware_choices(void);

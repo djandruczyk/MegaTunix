@@ -4,7 +4,7 @@ minor=0
 
 [global]
 description=Status boxes configuration for Std firmware
-total_status=7
+total_status=10
 
 [status_0]
 create_label=CONNECTED
@@ -99,4 +99,46 @@ source=enginebit
 bitval=1
 bitshift=5
 bitmask=32
+
+[status_7]
+create_label=BURN NEEDED
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=7
+keys=bind_to_list,bitval,bitshift,bitmask,source
+key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitshift=0
+bitmask=1
+
+[status_8]
+create_label=LOST DATA
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=8
+keys=bind_to_list,bitval,bitshift,bitmask,source
+key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitshift=1
+bitmask=2
+
+[status_9]
+create_label=CONFIG ERROR
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=9
+keys=bind_to_list,bitval,bitshift,bitmask,source
+key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitshift=2
+bitmask=4
 

@@ -15,8 +15,8 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [temp]
-keys=page,size,dl_type,handler,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,is_float,precision,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_BOOL_,_INT_,_STRING_
+keys=page,size,dl_type,handler,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_INT_,_STRING_
 page=0
 size=_S16_
 dl_type=_IMMEDIATE_
@@ -26,7 +26,6 @@ raw_upper=2000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 use_color=FALSE
-is_float=TRUE
 precision=1
 tooltip=The temp table is common to the cranking pulse, priming pulse, ase, ase tapre, idle step, idle pwm and cold advance tables.
 
@@ -734,25 +733,23 @@ size=_S16_
 offset=580
 
 [cold_prime_entry]
-keys=offset,size,is_float,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_ENUM_,_BOOL_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=566
 size=_S16_
 raw_lower=0
 raw_upper=650
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 
 [hot_prime_entry]
-keys=offset,size,is_float,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_ENUM_,_BOOL_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=568
 size=_S16_
 raw_lower=0
 raw_upper=650
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10

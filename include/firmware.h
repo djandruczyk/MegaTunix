@@ -22,7 +22,9 @@
 typedef struct _Io_File Io_File;
 typedef struct _Firmware_Details Firmware_Details;
 typedef struct _Table_Params Table_Params;
+typedef struct _TE_Params TE_Params;
 typedef struct _Page_Params Page_Params;
+typedef struct _Deferred_Data Deferred_Data;
 
 
 /*!
@@ -65,7 +67,7 @@ struct _Firmware_Details
 	gchar *burn_all_command;/*! New burn all command string */
 	gchar *burn_command;	/*! New burn command string */
 	gchar *raw_mem_command;	/*! New raw_mem command string */
-	gchar *page_cmd;	/*! Command to send to change pages ... */
+	gchar *page_command;	/*! New page change command */
 	gchar *SignatureVia;	/*! Key to retrieve signature string */
 	gchar *TextVerVia;	/*! Key to retrieve text version string */
 	gchar *NumVerVia;	/*! Key to retrieve numerical version string */
@@ -80,12 +82,14 @@ struct _Firmware_Details
 	gboolean chunk_support;	/*! Supports Chunk Write */
 	gboolean can_capable;	/*! Supports CAnbus and sub modules */
 	gint total_pages;	/*! How many pages do we handle? */
+	gint total_te_tables;	/*! How many te tables do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
 	Page_Params **page_params;/*! special vars per page */
 	Table_Params **table_params;/*! details each table */
 	Req_Fuel_Params **rf_params;/*! req_fuel params */
+	TE_Params **te_params;	/*! Table Editor Tables */
 	guint8 **ecu_data;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_last;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_backup;	/* ECU data arrays, 2 levels */
@@ -189,6 +193,66 @@ struct _Page_Params
 	gboolean dl_by_default;	/*! Download this page or not? */
 	gint is_spark;		/*! does this require alt write cmd? */
 	gint spconfig_offset;	/*! Where spconfig value is located */
+};
+
+
+/*! 
+ \brief The _TE_Params structure contains fields defining table editor params
+ One struct is allocated per table, and multiple tables per page are allowed
+ This differs a bit in lingo to how the MS-II developers named things in 
+ their code.  On those, table is analagous to "page", why they used the 
+ language they did is beyond me, but it makes little sense to say "fuel table
+ 2 inside of table5,  makes more sense to say "fuel table 2 in page5".
+ This structure defines a specific 2d  table arranged in a column
+ format.  Current design restriction is that a table can't span more
+ than on CAN IDs which only makes sense.
+ */
+struct _TE_Params
+{
+	gchar *title;		/*! Title used on TE window */
+	gchar *gauge_name;	/*! Gauge to stick in lower left */
+	gchar *gauge_datasource;/*! Gauge datasource */
+	gchar *bg_color;	/*! BG Color (string) */
+	gchar *grat_color;	/*! Graticule Color (string) */
+	gchar *trace_color;	/*! Trace Color (string) */
+	gchar *cross_color;	/*! Cross Color (string) */
+	gchar *marker_color;	/*! Marker Color (string) */
+	GList *entries;		/*! Entry widget pointers */
+	gint bincount;		/* Number of bins for x and 1 */
+
+	gint x_page;		/*! what page this column resides in */
+	gint x_base;		/*! offset of column in page  */
+	gint x_raw_lower;	/*! X raw lower in ECU units */
+	gint x_raw_upper;	/*! X raw upper in ECU units */
+	DataSize x_size;	/*! enumeration size for the var */
+	gchar *x_dl_conv_expr;	/*! dl conv expr */
+	gchar *x_ul_conv_expr;	/*! ul conv expr */
+	gchar *x_source;	/*! column datsource */
+	gint x_precision;	/*! column precisions */
+	gchar *x_name;	/*! column name */
+	gchar *x_units;	/*! column units */
+
+	gint y_page;		/*! what page this column resides in */
+	gint y_base;		/*! offset of column in page  */
+	gint y_raw_lower;	/*! Y raw lower in ECU units */
+	gint y_raw_upper;	/*! Y raw upper in ECU units */
+	DataSize y_size;	/*! enumeration size for the var */
+	gchar *y_dl_conv_expr;	/*! dl conv expr */
+	gchar *y_ul_conv_expr;	/*! ul conv expr */
+	gchar *y_source;	/*! column datsource */
+	gint y_precision;	/*! column precisions */
+	gchar *y_name;	/*! column name */
+	gchar *y_units;	/*! column units */
+};
+
+
+struct _Deferred_Data
+{
+	gint canID;		/* canBus ID */
+	gint page;		/* ECU Page */
+	gint offset;		/* OFfset in page */
+	gint value;		/* Value at this offset in this page */
+	DataSize size;		/* Size of this data */
 };
 
 

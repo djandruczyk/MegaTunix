@@ -22,6 +22,7 @@
 void rescale_table(GtkWidget * );
 void reqfuel_rescale_table(GtkWidget * );
 void draw_ve_marker(void );
+gfloat rescale(gfloat , ScaleOp , gfloat );
 
 /* Prototypes */
 

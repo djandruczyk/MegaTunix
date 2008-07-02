@@ -48,7 +48,7 @@ struct _Rt_Slider
 };
 
 /* Prototypes */
-void load_sliders(void );
+void load_sliders_pf(void );
 void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
 Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );

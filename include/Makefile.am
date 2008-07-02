@@ -1,5 +1,6 @@
 
 headers = \
+	2d_table_editor.h \
 	3d_vetable.h \
 	about_gui.h \
 	api-versions.h \
@@ -8,6 +9,7 @@ headers = \
 	binreloc.h \
 	comms.h \
         comms_gui.h \
+        combo_loader.h \
         configfile.h \
         conversions.h \
         core_gui.h \
@@ -31,6 +33,7 @@ headers = \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
+	locking.h \
         logo.h \
         logviewer_core.h \
         logviewer_events.h \

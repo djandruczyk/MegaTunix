@@ -474,7 +474,7 @@ Viewable_Value * build_v_value(GObject *object)
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->object = object;
 	/* IS it a floating point value? */
-	v_value->is_float = (gboolean)OBJ_GET(object,"is_float");
+	v_value->precision = (gint)OBJ_GET(object,"precision");
 	v_value->lower = (gint)OBJ_GET(object,"lower_limit");
 	v_value->upper = (gint)OBJ_GET(object,"upper_limit");
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
@@ -628,7 +628,7 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
 
-	while (hue > 360.0)
+	while (hue >= 360.0)
 		hue -= 360.0;
 	tmp = hue/60.0;
 	i = floor(tmp);
@@ -805,10 +805,7 @@ void draw_valtext(gboolean force_draw)
 				lv_data->info_width-1-v_value->ink_rect->x-val_x,
 				v_value->ink_rect->height);
 
-		if (v_value->is_float)
-			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%.3f",val));
-		else
-			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%i",(gint)val));
+		layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%1$.*2$f",val,v_value->precision));
 
 		pango_layout_set_font_description(layout,lv_data->font_desc);
 		pango_layout_get_pixel_extents(layout,v_value->ink_rect,v_value->log_rect);
@@ -819,13 +816,13 @@ void draw_valtext(gboolean force_draw)
 
 
 /*!
- \brief rt_update_logview_traces() updates each trace in turn and then scrolls 
+ \brief update_logview_traces_pf() updates each trace in turn and then scrolls 
  the display
  \param force_redraw (gboolean) flag to force all data to be redrawn not 
  just the new data...
  \returns TRUE
  */
-EXPORT gboolean rt_update_logview_traces(gboolean force_redraw)
+EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
 	extern gboolean connected;
 	extern gboolean interrogated;

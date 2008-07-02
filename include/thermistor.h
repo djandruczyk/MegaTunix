@@ -15,6 +15,12 @@ struct samples {
   double t1, t2, t3, r1, r2, r3;
 };
 
+typedef enum 
+{
+	CLT=0xabc, 
+	IAT 
+}SensorType;
+
 struct inc_entry {
   int ms_val;
   int adc;
@@ -25,10 +31,8 @@ struct inc_entry {
 
 class thermistor {
     
-    
-    
   public:
-    thermistor(char scale, samples &input, int bias, int type, char *cmnt);	// Parameterized constructor
+    thermistor(char scale, samples &input, int bias, SensorType type, char *cmnt);	// Parameterized constructor
     thermistor(thermistor &);									// Copy constructor
     int write_inc_file();
     void modify_s19_file(char filename[]);
@@ -37,10 +41,10 @@ class thermistor {
   protected:
     char temp_scale;		// C for Centigrade, F for Fahrenheit
     double CA, CB, CC;		// Steinhart-Hart coefficients
-    int bias_value;			// iat bias resistor value in ohms
-    char *comment;			// User comments about sensor
+    int bias_value;		// iat bias resistor value in ohms
+    char *comment;		// User comments about sensor
     inc_entry entries[256];	// array to hold all entries to be written to inc file
-    int sensor;				// is this IAT (0) or CLT (1)?
+    SensorType sensor;		// is this IAT (0) or CLT (1)?
     
     // set_coefficients takes the temp-resistance input samples and 
     // sets the coefficients for this thermistor
@@ -48,7 +52,5 @@ class thermistor {
 
     // t_of_r takes a resistance and returns the temp in Kelvins
      int t_of_r(int r);
-  
 };
-
 #endif

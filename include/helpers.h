@@ -18,20 +18,21 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void enable_interrogation_button_cb(void);
-void start_statuscounts_cb(void);
-void spawn_read_ve_const_cb(void);
-void enable_get_data_buttons_cb(void);
-void enable_ttm_buttons_cb(void);
-void enable_reboot_button_cb(void);
-void conditional_start_rtv_tickler_cb(void);
-void set_store_black_cb(void);
-void enable_3d_buttons_cb(void);
-void disable_burner_buttons_cb(void);
-void reset_temps_cb(void);
-void simple_read_cb(void *, XmlCmdType);
+void start_statuscounts_pf(void);
+void spawn_read_ve_const_pf(void);
+void enable_get_data_buttons_pf(void);
+void enable_ttm_buttons_pf(void);
+void enable_reboot_button_pf(void);
+void conditional_start_rtv_tickler_pf(void);
+void set_store_black_pf(void);
+void enable_3d_buttons_pf(void);
+void disable_burner_buttons_pf(void);
+void reset_temps_pf(void);
+void simple_read_pf(void *, XmlCmdType);
 gboolean read_ve_const(void *, XmlCmdType);
 gboolean ms2_burn_all_helper(void *, XmlCmdType);
+void post_single_burn_pf(void *data);
+void post_burn_pf(void);
 /* Prototypes */
 
 #endif

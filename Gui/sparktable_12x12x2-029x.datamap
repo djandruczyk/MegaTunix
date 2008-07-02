@@ -43,8 +43,8 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,is_float,precision,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_,_STRING_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,precision,use_color,tooltip
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_INT_,_BOOL_,_STRING_
 page=3
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
@@ -52,7 +52,6 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 raw_lower=0
 raw_upper=255
-is_float=TRUE
 precision=1
 use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -88,8 +87,8 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_2]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,is_float,precision,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_,_STRING_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,precision,use_color,tooltip
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_INT_,_BOOL_,_STRING_
 page=4
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
@@ -97,7 +96,6 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 raw_lower=0
 raw_upper=255
-is_float=TRUE
 precision=1
 use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -353,12 +351,12 @@ table_num=3
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate.  A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
-[SP1_recalc_scaling_button]
+[SP1_rescale_button]
 keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=3
 handler=_RESCALE_TABLE_
-data=SP_SP1_rescale_spinner
+data=SP_SP1_rescale_entry,SP_SP1_rescale_combo
 
 [SP2_3d_view_button]
 keys=page,table_num,tooltip,bind_to_list
@@ -368,26 +366,38 @@ table_num=4
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate.  A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
-[SP2_recalc_scaling_button]
+[SP2_rescale_button]
 keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=4
 handler=_RESCALE_TABLE_
-data=SP_SP2_rescale_spinner
+data=SP_SP2_rescale_entry,SP_SP2_rescale_combo
 
-#----- Rescale Spinner ------------------------------------------------------
+#----- Rescale Entries ------------------------------------------------------
 
-[SP1_rescale_spinner]
-keys=page,table_num
-key_types=_INT_,_STRING_
-page=3
+[SP1_rescale_entry]
+keys=table_num
+key_types=_STRING_
 table_num=3
 
-[SP2_rescale_spinner]
-keys=page,table_num
-key_types=_INT_,_STRING_
-page=4
+[SP2_rescale_entry]
+keys=table_num
+key_types=_STRING_
 table_num=4
+
+#----- Rescale Combos ------------------------------------------------------
+
+[SP1_rescale_combo]
+keys=table_num,post_function_with_arg
+key_types=_STRING_,_STRING_
+table_num=3
+post_function_with_arg=lock_entry
+
+[SP2_rescale_combo]
+keys=table_num,post_function_with_arg
+key_types=_STRING_,_STRING_
+table_num=4
+post_function_with_arg=lock_entry
 
 #----- MAIN SparkTable Container ---------------------------------------------
 

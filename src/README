@@ -17,8 +17,7 @@ using the Gnome desktop.   MegaTunix uses the GTK+2 libraries which are the
 foundation libraries by which Gnome's gui is based upon.  The fix is to run 
 "gnome-font-properties" and set the "Application Font" size to a smaller 
 point size.  On the authors' system a Application Font of "Sans" at 8pt, 
-looks the best.  The author runs at 1600x1200 on an ancient 21 inch monitor 
-so your ideal font size may vary.
+looks the best.  
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
 Send suggestions, bug reports and general feedback to (SPAM not welcome) 
@@ -31,13 +30,13 @@ ones are needed to run the program, and devel packages are needed for
 programs like megatunix to compile against.
 
 MegaTunix requires the following libraries (and their dependancies);
-* minimum GTK-2.6  (2.10 or newer recommended) and the dev package
+* minimum GTK-2.10 and the dev package
   - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
 * Gtkglext-1.x (and the dev package)
   - gtkglext depends on gtk+ and glib
-* Xorg or XFree86 development libraries (xorg-devel or XF86-devel)
-  - libglade-2.0 (and dev package)
-  - libglade depends on libxml-2.x and gtk+
+* Xorg  development libraries (xorg-devel)
+  - libglade-2.x (and dev package)
+  - libglade depends on libxml-2.x and gtk+-2.x
 
 Optional:
   The Glade GUI designer can be installed to modify and add new gui tabs to

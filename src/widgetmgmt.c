@@ -247,3 +247,14 @@ void set_fixed_size( GtkWidget *widget, int nchars )
 	gtk_widget_set_size_request( widget, geo.width * nchars, 
 			geo.height );
 }
+
+EXPORT void lock_entry(GtkWidget *widget)
+{
+	GtkComboBox *box = GTK_COMBO_BOX(widget);
+	GtkEntry *entry = NULL;
+	entry =  GTK_ENTRY (GTK_BIN (box)->child);
+	if (GTK_IS_ENTRY(entry))
+		gtk_editable_set_editable(GTK_EDITABLE(entry),FALSE);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
+
+}

@@ -31,10 +31,10 @@
 
 [API]
 major=1
-minor=2
+minor=3
 
 [interrogation_tests]
-total_tests=8
+total_tests=7
 
 [test_00]
 test_name=MS-I_Clock
@@ -64,7 +64,7 @@ test_desc=MSnS-Extra Runtime Vars
 test_name=MS_VerNum
 actual_test=Q
 test_arg_types=_CHAR_
-test_desc=ECU Numeric Revision
+test_desc=ECU Revision
 
 [test_05]
 test_name=MS-I_VEconst
@@ -77,10 +77,4 @@ test_name=MS_Signature
 actual_test=S
 test_arg_types=_CHAR_
 test_desc=ECU Signature
-
-[test_07]
-test_name=MS_Textrev
-actual_test=T
-test_arg_types=_CHAR_
-test_desc=ECU Text Version
 

@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_status(void );
+void load_status_pf(void );
 /* Prototypes */
 
 #endif

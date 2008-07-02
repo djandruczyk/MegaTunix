@@ -519,6 +519,8 @@ void check_req_fuel_limits(gint table_num)
 	alternate = firmware->rf_params[table_num]->alternate;
 	last_alternate = firmware->rf_params[table_num]->last_alternate;
 
+	//printf("rf_total %.2f, num_cyls %i, num_inj %i, num_squirts %i, divider %i, alt %i\n",rf_total,num_cyls,num_inj,num_squirts,divider,alternate);
+	//printf("l_rf_total %.2f, l_num_cyls %i, l_num_inj %i, l_num_squirts %i, l_divider %i, l_alt %i\n",last_rf_total,last_num_cyls,last_num_inj,last_num_squirts,last_divider,last_alternate);
 
 	if ((rf_total == last_rf_total) &&
 			(num_cyls == last_num_cyls) &&
@@ -530,18 +532,19 @@ void check_req_fuel_limits(gint table_num)
 
 	if (firmware->capabilities & DUALTABLE)
 	{
-		/*printf ("dualtable\n");*/
+		//printf ("dualtable\n");
 		tmp = (float)num_inj/(float)divider;
 	}
 	else if ((firmware->capabilities & MSNS_E) && (((get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & 0x10) >> 4) == 1))
 	{
-		/*printf ("msns-E with DT enabled\n");*/
+		//printf ("msns-E with DT enabled\n");
 		tmp = (float)num_inj/(float)divider;
 	}
 	else	/* B&G style */
 	{
-		/*printf ("B&G\n");*/
+		//printf ("B&G\n");
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
+		//printf("num_inj/(divider*(alt+1)) == %i\n",tmp);
 	}
 
 	rf_per_squirt = ((float)rf_total * 10.0)/tmp;
@@ -587,10 +590,12 @@ void check_req_fuel_limits(gint table_num)
 		else
 			dload_val = (int)(12000.0/((double)num_cyls));
 
-		send_to_ecu(canID, page, rpmk_offset, MTX_U16, dload_val, TRUE);
+		send_to_ecu(canID, page, rpmk_offset+1, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
+		send_to_ecu(canID, page, rpmk_offset, MTX_U08, (dload_val& 0x00ff), TRUE);
 
 		offset = firmware->table_params[table_num]->reqfuel_offset;
-		send_to_ecu(canID, page, offset, MTX_U08, rf_per_squirt, TRUE);
+		send_to_ecu(canID, page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
+		//printf("rf per squirt is offset %i, val %i\n",offset,(gint)rf_per_squirt);
 		/* Call handler to empty interdependant hash table */
 		g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,NULL);
 	}

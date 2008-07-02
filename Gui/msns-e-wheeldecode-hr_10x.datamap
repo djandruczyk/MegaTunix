@@ -35,14 +35,13 @@ bind_to_list=trigger_return
 tooltip=The trigger return points are ONLY used for cranking if you select "Trigger Return" based cranking below. These points (depending on your wheel used) should end up at around 10deg BTDC for easy starting. See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
 
 [oddfire]
-keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,precision,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,dl_type,bind_to_list,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
 page=6
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
-is_float=TRUE
 precision=2
 dl_type=_IMMEDIATE_
 handler=_ODDFIRE_ANGLE_
@@ -607,12 +606,11 @@ dl_type=_IMMEDIATE_
 tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
 
 [trigger_angle_entry]
-keys=page,offset,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,spconfig_offset,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,spconfig_offset,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=3
 offset=168
 precision=2
-is_float=TRUE
 dl_conv_expr=x*(284/100)
 ul_conv_expr=x/(284/100)
 dl_type=_IMMEDIATE_
@@ -621,12 +619,11 @@ spconfig_offset=173
 tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
 
 [crank_angle_entry]
-keys=page,offset,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=171
 precision=2
-is_float=TRUE
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
 dl_type=_IMMEDIATE_
@@ -635,12 +632,11 @@ handler=_GENERIC_
 tooltip=This is the Crank Timing (when not using trigger return)
 
 [fixed_angle_entry]
-keys=page,offset,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=169
 precision=2
-is_float=TRUE
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
 dl_type=_IMMEDIATE_
@@ -649,12 +645,11 @@ handler=_GENERIC_
 tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
 
 [trim_angle_entry]
-keys=page,offset,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=170
 precision=2
-is_float=TRUE
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 dl_type=_IMMEDIATE_
@@ -683,11 +678,10 @@ handler=_GENERIC_
 tooltip=Hardware latency factor.  Used to trim out ignition skew at high RPM's Adjust this to tune out the hardware latency in the ignition code so as to maintain rock steady timing
 
 [crankdwell_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=110
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -696,11 +690,10 @@ handler=_GENERIC_
 tooltip=This is the ignition dwell during cranking. 
 
 [rundwell_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=111
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -710,11 +703,10 @@ handler=_GENERIC_
 tooltip=This is the ignition dwell during normal engine running. 
 
 [min_discharge_entry]
-keys=page,offset,is_float,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=143
-is_float=TRUE
 precision=1
 raw_lower=0
 raw_upper=15

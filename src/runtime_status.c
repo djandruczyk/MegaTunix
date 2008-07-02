@@ -35,10 +35,10 @@ GtkWidget *status_window = NULL;
 extern GObject *global_data;
 
 /*!
- \brief load_status() is called to create the ECU status window, load the 
+ \brief load_status_pf() is called to create the ECU status window, load the 
  settings from the StatusMapFile.
  */
-EXPORT void load_status(void)
+EXPORT void load_status_pf(void)
 {
 	ConfigFile *cfgfile = NULL;
 	extern Firmware_Details *firmware;
@@ -96,7 +96,7 @@ EXPORT void load_status(void)
 		if ((major != RT_STATUS_MAJOR_API) || (minor != RT_STATUS_MINOR_API))
 		{
 			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
+				dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
 			g_free(filename);
 			set_title(g_strdup("ERROR RT Status API MISMATCH!!!"));
 			return;
@@ -105,7 +105,7 @@ EXPORT void load_status(void)
 		if(!cfg_read_int(cfgfile,"global","total_status",&count))
 		{
 			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
+				dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
 			set_title(g_strdup("ERROR RT Status cfgfile problem!!!"));
 			return;
 		}
@@ -139,18 +139,18 @@ EXPORT void load_status(void)
 			if (!cfg_read_string(cfgfile,section,"create_label",&tmpbuf))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
 				break;
 			}
 			if (!cfg_read_int(cfgfile,section,"row",&row))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 			if (!cfg_read_int(cfgfile,section,"col",&col))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 			frame = gtk_frame_new(NULL);
 			gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
@@ -181,7 +181,7 @@ EXPORT void load_status(void)
 			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 			else
 			{
@@ -192,7 +192,7 @@ EXPORT void load_status(void)
 			if (!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 			else
 			{
@@ -235,7 +235,7 @@ EXPORT void load_status(void)
 	else
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_status()\n\tCould not load %s\n",filename));
+			dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\tCould not load %s\n",filename));
 	}
 
 	g_free(filename);

@@ -31,7 +31,7 @@ struct _Viewable_Value
 	PangoRectangle *ink_rect;	/*! Ink rectangle around text */
 	GObject *object;		/*! object */
 	gchar *vname;			/*! Name of widget being logged */
-	gboolean is_float;		/*! TRUE or FALSE */
+	gint precision;			/*! number of digits */
 	gboolean force_update;		/*! flag to force update on addition */
 	gboolean highlight;		/*! flag it highlight it.. */
 	gint last_y;			/*! Last point on screen of trace */
@@ -60,7 +60,7 @@ GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
 void draw_infotext();
 void draw_valtext(gboolean);
-gboolean rt_update_logview_traces(gboolean);
+gboolean update_logview_traces_pf(gboolean);
 gboolean pb_update_logview_traces(gboolean);
 void trace_update(gboolean );
 gboolean logviewer_log_position_change(GtkWidget *, gpointer);

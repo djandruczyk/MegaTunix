@@ -30,11 +30,14 @@
 #include <widgetmgmt.h>
 
 
-gboolean dash_configure_event(GtkWidget * , GdkEventConfigure * );
+
 extern gint dbg_lvl;
 static gboolean timer_active = FALSE;
+static volatile gboolean moving = FALSE;
+static volatile gboolean resizing = FALSE;
 GStaticMutex dash_mutex = G_STATIC_MUTEX_INIT;
 extern GObject *global_data;
+static volatile gboolean fullscreen = FALSE;
 
 
 /*!
@@ -56,6 +59,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	gint y = 0;
 	gfloat * ratio = NULL;
 	extern GdkColor black;
+	//extern GdkColor white;
 	extern GtkWidget * main_window;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
@@ -68,9 +72,8 @@ void load_dashboard(gchar *filename, gpointer data)
 
 	LIBXML_TEST_VERSION
 
-		/*parse the file and get the DOM */
-		doc = xmlReadFile(filename, NULL, 0);
-
+	/*parse the file and get the DOM */
+	doc = xmlReadFile(filename, NULL, 0);
 	if (doc == NULL)
 	{
 		printf("error: could not parse file %s\n",filename);
@@ -81,6 +84,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
+
 
 	g_signal_connect(G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
@@ -93,13 +97,15 @@ void load_dashboard(gchar *filename, gpointer data)
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),GDK_POINTER_MOTION_MASK|
 			GDK_BUTTON_PRESS_MASK |GDK_BUTTON_RELEASE_MASK);
+			
 	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
 			G_CALLBACK (dash_motion_event), NULL);
+	g_signal_connect (G_OBJECT (window), "focus-in-event",
+			G_CALLBACK (focus_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
 	g_signal_connect (G_OBJECT (window), "key_press_event",
 			G_CALLBACK (dash_key_event), NULL);
-
 
 	dash = gtk_fixed_new();
 	gtk_fixed_set_has_window(GTK_FIXED(dash),TRUE);
@@ -140,7 +146,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	/*printf("move/resize to %i,%i, %ix%i\n",x,y,width,height); */
 	gtk_window_move(GTK_WINDOW(window), x,y);
 	if (ratio)
-		gtk_window_set_default_size(GTK_WINDOW(window), width**ratio,height**ratio);
+		gtk_window_set_default_size(GTK_WINDOW(window), (gint)(width*(*ratio)),(gint)(height*(*ratio)));
 	else
 		gtk_window_set_default_size(GTK_WINDOW(window), width,height);
 	gtk_widget_show_all(window);
@@ -153,6 +159,9 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	gint orig_height = 0;
 	gint cur_width = 0;
 	gint cur_height = 0;
+	gfloat x_ratio = 0.0;
+	gfloat y_ratio = 0.0;
+	gboolean w_constricted = FALSE;
 	GtkFixedChild *child = NULL;
 	GtkWidget *gauge = NULL;
 	GList *children = NULL;
@@ -164,21 +173,21 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	gfloat ratio = 0.0;
 	GtkWidget * dash  = NULL;
 
-
 	dash = OBJ_GET(widget,"dash");
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
 
 	orig_width = (gint) OBJ_GET(dash,"orig_width");
 	orig_height = (gint) OBJ_GET(dash,"orig_height");
-	cur_width =  event->width;
-	cur_height =  event->height;
+	cur_width = event->width;
+	cur_height = event->height;
 
-	ratio = (((gfloat)cur_height/(gfloat)orig_height)+((gfloat)cur_width/(gfloat)orig_width))/2.0;
-
-	if (((ratio - (gint)ratio)*100) < 1)
-		return FALSE;
-
+	x_ratio = (float)cur_width/(float)orig_width;
+	y_ratio = (float)cur_height/(float)orig_height;
+	ratio = x_ratio > y_ratio ? y_ratio:x_ratio;
+	w_constricted = x_ratio > y_ratio ? FALSE:TRUE;
+	
+	//printf("dash_config_event\n");
 	g_signal_handlers_block_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
@@ -189,7 +198,10 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 		child_y = (gint)OBJ_GET(gauge,"orig_y_offset");
 		child_w = (gint)OBJ_GET(gauge,"orig_width");
 		child_h = (gint)OBJ_GET(gauge,"orig_height");
-		gtk_fixed_move(GTK_FIXED(dash),gauge,ratio*child_x,ratio*child_y);
+		if (w_constricted)
+			gtk_fixed_move(GTK_FIXED(dash),gauge,ratio*child_x,ratio*child_y+(((y_ratio-x_ratio)*orig_height)/2));
+		else
+			gtk_fixed_move(GTK_FIXED(dash),gauge,ratio*child_x-(((y_ratio-x_ratio)*orig_width)/2),ratio*child_y);
 		gtk_widget_set_size_request(gauge,child_w*ratio,child_h*ratio);
 	}
 	dash_shape_combine(dash,FALSE);
@@ -251,10 +263,11 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 	
 	hints.min_width = 100;
 	hints.min_height = 100;
-	hints.min_aspect = (gfloat)width/(gfloat)height;
-	hints.max_aspect = hints.min_aspect;
+//	hints.min_aspect = (gfloat)width/(gfloat)height;
+//	hints.max_aspect = hints.min_aspect;
 
-	gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_ASPECT|GDK_HINT_MIN_SIZE);
+	//gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_ASPECT|GDK_HINT_MIN_SIZE);
+	gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_MIN_SIZE);
 
 }
 
@@ -451,27 +464,32 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	}
 
 	gdk_gc_set_foreground (gc1, &white);
-	children = GTK_FIXED(dash)->children;
-	for (i=0;i<g_list_length(children);i++)
+	if (fullscreen)
+		gdk_draw_rectangle(bitmap,gc1,TRUE,0,0,width,height);
+	else
 	{
-		child = g_list_nth_data(children,i);
-		x = child->x;
-		y = child->y;
-		gtk_widget_size_request(child->widget,&req);
-		w = req.width;
-		h = req.height;
-		radius = MIN(w,h)/2;
-		xc = x+w/2;
-		yc = y+h/2;
-		gdk_draw_arc (bitmap,
-				gc1,
-				TRUE,     /* filled */
-				xc-radius,
-				yc-radius,
-				2*radius,
-				2*radius,
-				0,        /* angle 1 */
-				360*64);  /* angle 2: full circle */
+		children = GTK_FIXED(dash)->children;
+		for (i=0;i<g_list_length(children);i++)
+		{
+			child = g_list_nth_data(children,i);
+			x = child->x;
+			y = child->y;
+			gtk_widget_size_request(child->widget,&req);
+			w = req.width;
+			h = req.height;
+			radius = MIN(w,h)/2;
+			xc = x+w/2;
+			yc = y+h/2;
+			gdk_draw_arc (bitmap,
+					gc1,
+					TRUE,     /* filled */
+					xc-radius,
+					yc-radius,
+					2*radius,
+					2*radius,
+					0,        /* angle 1 */
+					360*64);  /* angle 2: full circle */
+		}
 	}
 	if (GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 	{
@@ -528,10 +546,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	{
 		case GDK_q:
 		case GDK_Q:
-			if (GTK_WIDGET_VISIBLE(main_window))
-				leave(NULL,GINT_TO_POINTER(FALSE));
-			else
-				leave(NULL,GINT_TO_POINTER(TRUE));
+				leave(NULL,NULL);
 			break;
 		case GDK_M:
 		case GDK_m:
@@ -568,6 +583,14 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 	/*printf("button event\n"); */
 	gint edge = -1;
 
+	GtkWidget *dash = GTK_BIN(widget)->child;
+	if (!timer_active)
+	{
+		dash_shape_combine(dash,FALSE);
+		g_timeout_add(4000,hide_dash_resizers,dash);
+		timer_active = TRUE;
+	}
+
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
 	{
 		/*printf("dash button event\n"); */
@@ -598,10 +621,12 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 		else
 			edge = -1;
 
-	
+
 		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
 		{
 			/*printf("MOVE drag\n"); */
+			moving = TRUE;
+			g_signal_handlers_block_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),G_CALLBACK(dash_configure_event),NULL);
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
 					event->x_root,
@@ -612,6 +637,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 		else if (GTK_IS_WINDOW(widget->parent))
 		{
 			/*printf("RESIZE drag\n"); */
+			resizing = TRUE;
 			gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					edge,
 					event->button,
@@ -620,12 +646,27 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 					event->time);
 		}
 	}
+	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 3))
+	{
+		if (fullscreen)
+		{
+			fullscreen = FALSE;
+			gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+		}
+		else
+		{
+			fullscreen = TRUE;
+			gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+		}
+	}
 	return FALSE;
 }
 
-EXPORT void initialize_dashboards()
+EXPORT void initialize_dashboards_pf()
 {
 	GtkWidget * label = NULL;
+	extern GtkWidget *main_window;
+	gboolean retval = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar * tmpstr = NULL;
 	gboolean nodash1 = TRUE;
@@ -663,8 +704,17 @@ EXPORT void initialize_dashboards()
 	 * So we force the dash chooser
 	 */
 	if ((nodash1) && (nodash2) && (args->hide_maingui))
-		present_dash_filechooser(NULL,GINT_TO_POINTER(1));
+	{
+		retval = present_dash_filechooser(NULL,GINT_TO_POINTER(1));
+		return;
+		if (!retval)
+		{
+			CmdLineArgs *args = OBJ_GET(global_data,"args");
+			args->be_quiet = TRUE;
+			g_signal_emit_by_name(main_window,"destroy_event");
+		}
 
+	}
 }
 
 
@@ -691,6 +741,7 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 
 
 	filename = choose_file(fileio);
+	free_mtxfileio(fileio);
 	if (filename)
 	{
 		if (dash_gauges)
@@ -702,11 +753,11 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 				gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
 		}
 		load_dashboard(filename,data);
+		return TRUE;
 	}
+	else
+	      	return FALSE;
 
-	free_mtxfileio(fileio);
-
-	return TRUE;
 }
 
 
@@ -830,4 +881,20 @@ gboolean hide_dash_resizers(gpointer data)
 		dash_shape_combine(data,TRUE);
 	timer_active = FALSE;
 	return FALSE;
+}
+
+gboolean focus_event(GtkWidget *widget, gpointer data)
+{
+	if (moving)
+	{
+		g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),G_CALLBACK(dash_configure_event),NULL);
+		moving = FALSE;
+	}
+	if (resizing)
+	{
+		resizing = FALSE;
+		gtk_widget_queue_draw(widget);
+	}
+	return FALSE;
+
 }

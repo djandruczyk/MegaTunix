@@ -46,10 +46,6 @@
 /* For datalogging and Logviewer */
 #define TABLE_COLS 6
 
-/* Multitherm */
-#define IAT 0
-#define CLT 1
-
 #define ASCII_LOWER_CAPS_DIFF 32
 
 #define DEFAULT_BIAS 2490

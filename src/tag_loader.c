@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <math.h>
 #include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
@@ -27,6 +28,7 @@
 
 extern gint dbg_lvl;
 extern GObject *global_data;
+
 /*!
  \brief load_tags() loads tags from the datamap file in reference to a 
  textview.  A tag defines a set of attributes that can be applied to
@@ -48,13 +50,13 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gint num_tags = 0;
 	gint i = 0;
 	GtkTextBuffer *textbuffer = NULL;
-	
+
 	cfg_read_string(cfgfile,section,"create_tags",&tmpbuf);
 	tagnames = parse_keys(tmpbuf,&num_tags,",");
 	g_free(tmpbuf);
 
 	textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(object));
-	
+
 	for (i=0;i<num_tags;i++)
 	{
 		key = g_strdup_printf("%s",tagnames[i]);
@@ -93,12 +95,14 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 						dbg_func(g_strdup(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n"));
 
 			}
-			
+
 			g_strfreev(attrs);
 		}
 		g_free(key);
-			
+
 	}
 	g_strfreev(tagnames);
 	return;
 }
+
+

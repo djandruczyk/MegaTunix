@@ -672,11 +672,10 @@ handler=_GENERIC_
 tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
 
 [fuel_switch_delay_entry]
-keys=page,offset,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=93
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -687,11 +686,10 @@ handler=_GENERIC_
 tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
 
 [spark_switch_delay_entry]
-keys=page,offset,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=87
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10

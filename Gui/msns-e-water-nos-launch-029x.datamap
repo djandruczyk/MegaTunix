@@ -458,11 +458,10 @@ handler=_GENERIC_
 tooltip=When the engine RPM is between this an MAX rpm and the other conditions are met, nitrous enrich will be added to the exist fuel pulsewidth.
 
 [nos_min_pw_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=69
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -472,11 +471,10 @@ handler=_GENERIC_
 tooltip=The pulsewidth to add on top of the existing PW at the NOS min RPM. Pulsewidths are interpolated between the two extremes.
 
 [nos_max_pw_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=70
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -496,11 +494,10 @@ handler=_GENERIC_
 tooltip=The minimum TPS value in RAW ADC counts to be reached before Nitrous enrichment can be activated...
 
 [nos_spark_retard_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=68
-is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
@@ -511,11 +508,10 @@ handler=_GENERIC_
 tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a spark ECU Personality.
 
 [nos_delay_after_launch_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=157
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -525,11 +521,10 @@ handler=_GENERIC_
 tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
 
 [nos_flat_shift_delay_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=158
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -613,11 +608,10 @@ handler=_GENERIC_
 tooltip=This control sets the threshold where the throttle has to be opened MORE than this amount (in raw ADC counts) for Launch control to be activated...
 
 [launch_soft_angle_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=42
-is_float=TRUE
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
@@ -666,11 +660,10 @@ handler=_GENERIC_
 tooltip=This control and the previous one work together and this enables a timing retard if the engine goes above this RPM (at least that's what I think it does, but the docs are iffy on that point)
 
 [flat_shift_retard_angle_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=141
-is_float=TRUE
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)

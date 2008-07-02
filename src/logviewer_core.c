@@ -302,11 +302,12 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			/*printf("data[%i]=%s\n",i,data[i]);*/
 			if (x == 0) /* only check fir first line */
 			{
-				if (g_strrstr(data[i], ".") == NULL)
-					OBJ_SET(object,"is_float", GINT_TO_POINTER(FALSE));
-				else
-					OBJ_SET(object,"is_float", GINT_TO_POINTER(TRUE));
+				if (g_strrstr(data[i], ".") != NULL)
+				{
+					printf("!! ERROR, bug detected,  code to detect precision in logfiles isn't written yet!!!!\n Please slap the author\n");
+				}
 			}
+
 		}
 		g_strfreev(data);
 		x++;

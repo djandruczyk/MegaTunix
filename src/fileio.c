@@ -49,16 +49,26 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	extern gboolean interrogated;
 	extern GtkWidget *main_window;
+	extern Firmware_Details *firmware;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+
 
 	if (!interrogated)
 		return FALSE;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Save your ECU Settings to file");
 	fileio->parent = main_window;
 	fileio->on_top = TRUE;
-	fileio->default_filename = g_strdup("ECU_Backup.ecu");
+	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.ecu",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
+	//fileio->default_filename = g_strdup("ECU_Backup.ecu");
 	fileio->default_extension = g_strdup("ecu");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
@@ -202,7 +212,7 @@ void restore_all_ecu_settings(gchar *filename)
 			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tAPI MINOR version mismatch: \"%i\" != \"%i\",\nLoading this file,  though there is a version mismatch,  EXPECT ERRORS!\n",minor, BACKUP_MINOR_API),FALSE,FALSE);
 
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
-		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
+		if (g_strcasecmp(g_strdelimit(tmpbuf," ,",'_'),g_strdelimit(firmware->name," ,",'_')) != 0)
 		{
 			if (dbg_lvl & CRITICAL)
 				dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\nFirmware name mismatch:\n\"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name));
@@ -267,14 +277,14 @@ void restore_all_ecu_settings(gchar *filename)
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const");
+	pf->name = g_strdup("update_ve_const_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("set_store_black_cb");
+	pf->name = g_strdup("set_store_black_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;

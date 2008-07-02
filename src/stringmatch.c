@@ -292,8 +292,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS1_CLOCK));
 	g_hash_table_insert(str_2_enum,"_MS2_CLOCK_",
 			GINT_TO_POINTER(MS2_CLOCK));
-	g_hash_table_insert(str_2_enum,"_REVISION_",
-			GINT_TO_POINTER(REVISION));
+	g_hash_table_insert(str_2_enum,"_NUM_REV_",
+			GINT_TO_POINTER(NUM_REV));
+	g_hash_table_insert(str_2_enum,"_TEXT_REV_",
+			GINT_TO_POINTER(TEXT_REV));
 	g_hash_table_insert(str_2_enum,"_SIGNATURE_",
 			GINT_TO_POINTER(SIGNATURE));
 	g_hash_table_insert(str_2_enum,"_MS1_VECONST_",

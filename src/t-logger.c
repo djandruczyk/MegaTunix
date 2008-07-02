@@ -139,7 +139,7 @@ EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *
 }
 
 
-EXPORT void crunch_trigtooth_data()
+EXPORT void crunch_trigtooth_data_pf()
 {
 	_crunch_trigtooth_data(ttm_data->page);
 }
@@ -224,7 +224,7 @@ void _crunch_trigtooth_data(gint page)
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value("rpm",&ttm_data->rpm);
-	printf("Current RPM %f\n",ttm_data->rpm);
+//printf("Current RPM %f\n",ttm_data->rpm);
 	if (page == 9) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire
@@ -254,16 +254,20 @@ void _crunch_trigtooth_data(gint page)
 			ttm_data->missing = lower - 1;
 		else 
 			ttm_data->missing = upper - 1;
+		/*
 		for (i=1;i<cap_idx;i++)
 			printf("read %i trigger times followed by %i missing, thus %i-%i wheel\n",ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing,ttm_data->missing+ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing);
 		for (i=0;i<cap_idx;i++)
 			printf("Missing teeth at index %i\n",ttm_data->captures[i]);
+			*/
 
 		/*printf("max/min is %f\n ceil %f. floor %f",ratio,ceil(ratio),floor(ratio) );*/
 		/*printf("wheel is a missing %i style\n",ttm_data->missing);*/
 
+		/*
 		printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
 		printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
+		*/
 		suggested_sample_time = 186000/((1.0/(((float)min*ttm_data->units)/1000000.0)));
 		if (suggested_sample_time < 0)
 			suggested_sample_time = 0;
@@ -271,8 +275,10 @@ void _crunch_trigtooth_data(gint page)
 
 		ttm_data->sample_time = suggested_sample_time < min_sampling_time ? min_sampling_time : suggested_sample_time;
 
+		/*
 		printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
 		printf("Sampling time set to %i ms.\n",ttm_data->sample_time);
+		*/
 
 		if (toothmon_id != 0)
 		{
@@ -281,6 +287,7 @@ void _crunch_trigtooth_data(gint page)
 		}
 
 	}
+	/*
 	printf("Data for this block\n");
 	for (i=0;i<93;i++)
 	{
@@ -289,6 +296,7 @@ void _crunch_trigtooth_data(gint page)
 			printf("\n");
 	}
 	printf("\n");
+	*/
 	/* vertical scale calcs:
 	 * PROBLEM:  max_time can be anywhere from 0-65535, need to 
 	 * develop a way to have nice even scale along the Y axis so you
@@ -318,7 +326,7 @@ void _crunch_trigtooth_data(gint page)
 }
 
 
-EXPORT void update_trigtooth_display()
+EXPORT void update_trigtooth_display_pf()
 {
 	_update_trigtooth_display(ttm_data->page);
 }

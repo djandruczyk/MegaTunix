@@ -7,8 +7,8 @@ applicable_firmwares=Dualtable v1.02,Dualtable v1.01,Dualtable v0.90-1.0
 derived_total=39
 
 [derived_0]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=hr_clock
 dlog_gui_name=HR Clock
 dlog_field_name=Time
@@ -16,13 +16,13 @@ offset=0
 lower_limit=0
 upper_limit=2147483648
 special=hr_clock
-is_float=TRUE
+precision=3
 tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
 log_by_default=TRUE
 
 [derived_1]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_secl
 dlog_gui_name=MS Clock
 dlog_field_name=SecL
@@ -31,13 +31,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="MS Clock" is the MegaSquirt clock returned by the ECU, this runs from 0-255 and recylcles indefinitely, resolution 1 second.
 log_by_default=TRUE
 
 [derived_2]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_rpm
 dlog_gui_name=RAW RPM
 dlog_field_name=RPM/100
@@ -46,13 +45,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpm/100
 log_by_default=TRUE
 
 [derived_3]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=rpm
 dlog_gui_name=RPM
 dlog_field_name=RPM
@@ -61,13 +59,12 @@ lower_limit=0
 upper_limit=25500
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-is_float=FALSE
 tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of 100rpm with the this firmware. 
 log_by_default=FALSE
 
 [derived_4]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=enginebit
 dlog_gui_name=EngineBits
 dlog_field_name=Engine
@@ -76,13 +73,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
 log_by_default=TRUE
 
 [derived_5]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=gammae
 dlog_gui_name=GammaE
 dlog_field_name=Gammae
@@ -91,13 +87,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="GammaE" is the summation of ALL enrichments (temp enrich,accel enrich, warmup enrich, etc..) in the MegaSquirt ECU.
 log_by_default=TRUE
 
 [derived_6]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsvolt
 dlog_gui_name=TPS Volts
 dlog_field_name=TPSvolts
@@ -106,13 +101,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="TPS Volts" is the reading from the Throttle Position sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
 log_by_default=FALSE
 
 [derived_7]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapvolt
 dlog_gui_name=MAP Volts
 dlog_field_name=MAPvolts
@@ -121,13 +116,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="MAP Volts" is the reading from the Manifold Absolute Pressure sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
 log_by_default=FALSE
 
 [derived_8]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barovolt
 dlog_gui_name=BARO Volts
 dlog_field_name=BAROvolts
@@ -136,13 +131,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="BARO Volts" is the reading from the Manifold Absolute Pressure sensor at ECU powerup, used for barometer correction. The value is converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
 log_by_default=FALSE
 
 [derived_9]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=matvolt
 dlog_gui_name=MAT Volts
 dlog_field_name=MATvolts
@@ -151,13 +146,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="MAT Volts" is the reading from the Manifold Air Temperature sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
 log_by_default=FALSE
 
 [derived_10]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltvolt
 dlog_gui_name=CLT Volts
 dlog_field_name=CLTvolts
@@ -166,13 +161,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="CLT Volts" is the reading from the Engine Coolant Temperature sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
 log_by_default=FALSE
 
 [derived_11]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsadc
 dlog_gui_name=TPS ADC
 dlog_field_name=TPScounts
@@ -181,13 +176,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="TPS ADC" is the raw ADC counts from the Throttle Position sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_12]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapadc
 dlog_gui_name=MAP ADC
 dlog_field_name=MAPcounts
@@ -196,13 +190,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="MAP ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_13]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=baroadc
 dlog_gui_name=BARO ADC
 dlog_field_name=BAROcounts
@@ -211,13 +204,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="BARO ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor when read at ECU powerup for Baro correction. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_14]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=matadc
 dlog_gui_name=MAT ADC
 dlog_field_name=MATcounts
@@ -226,13 +218,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="MAT ADC" is the raw ADC counts from the Manifold Air Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_15]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltadc
 dlog_gui_name=CLT ADC
 dlog_field_name=CLTcounts
@@ -241,13 +232,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="CLT ADC" is the raw ADC counts from the Engine Coolant Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_16]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpspercent
 dlog_gui_name=TPS %
 dlog_field_name=TPSpercent
@@ -256,13 +246,13 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=(x/100)*255
 ul_conv_expr=(x/255)*100
-is_float=TRUE
+precision=1
 tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a adc of 255 is equal to 100% open).
 log_by_default=TRUE
 
 [derived_17]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,depend_on,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,tooltip,depend_on,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapkpa
 dlog_gui_name=MAP kPa
 dlog_field_name=MAPkpa
@@ -280,13 +270,12 @@ map_sensor_offset=116
 map_sensor_bitmask=3
 map_sensor_bitshift=0
 map_sensor_bitval=1
-is_float=FALSE
 tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA is atmospheric pressure at sea level.
 log_by_default=TRUE
 
 [derived_18]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,depend_on,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,tooltip,depend_on,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barokpa
 dlog_gui_name=BARO kPa
 dlog_field_name=BAROkpa
@@ -304,13 +293,12 @@ map_sensor_offset=116
 map_sensor_bitmask=3
 map_sensor_bitshift=0
 map_sensor_bitval=1
-is_float=FALSE
 tooltip="BARO KPA" is the Barometer Pressure in KPA (Kilopascals) This is read by the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA is atmospheric pressure at sea level.
 log_by_default=FALSE
 
 [derived_19]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,temp_dep,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
 internal_names=matdeg
 dlog_gui_name=MAT (\302\260)
 dlog_field_name=MATdeg
@@ -321,13 +309,12 @@ lookuptable=mat_table
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
-is_float=FALSE
 tooltip="MAT (\302\260)" is the Manifold Air Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
 log_by_default=TRUE
 
 [derived_20]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,temp_dep,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
 internal_names=cltdeg
 dlog_gui_name=CLT (\302\260)
 dlog_field_name=CLTdeg
@@ -338,13 +325,12 @@ lookuptable=clt_table
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
-is_float=FALSE
 tooltip="CLT (\302\260)" is the Engine Coolant Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
 log_by_default=TRUE
 
 [derived_21]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2volt
 dlog_gui_name=O<sub>2</sub> Volts
 dlog_field_name=O2
@@ -353,13 +339,13 @@ lower_limit=0
 upper_limit=5
 dl_conv_expr=x*(255/5)
 ul_conv_expr=x*(5/255)
-is_float=TRUE
+precision=2
 tooltip="O2 Volts" is the Exhaust Oxygen Sensor voltage. Range 0-5 Volts, resolution 19.6 mv.
 log_by_default=TRUE
 
 [derived_22]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2adc
 dlog_gui_name=O<sub>2</sub> ADC
 dlog_field_name=O2counts
@@ -368,13 +354,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="O2 ADC" is the raw ADC counts for the Exhaust Gas Oxygen reading, Range 0-255, resolution 1 adc
 log_by_default=FALSE
 
 [derived_23]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,depend_on,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr
 dlog_gui_name=AFR
 dlog_field_name=AFR
@@ -392,13 +377,13 @@ o2_sensor_offset=118
 o2_sensor_bitmask=2
 o2_sensor_bitshift=1
 o2_sensor_bitval=1
-is_float=TRUE
+precision=1
 tooltip="AFR" Is the Air Fuel ratio the engine is running at.  This is calculated from a lookuptable, if this reading seems wrong make sure you've specified the proper lookuptable in the Interrogation Profile and selected the right sensor type in the Enrichments Tab.
 log_by_default=FALSE
 
 [derived_24]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,is_float,tooltip,depend_on,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=lambda
 dlog_gui_name=Lambda
 dlog_field_name=Lambda
@@ -416,13 +401,13 @@ o2_sensor_offset=118
 o2_sensor_bitmask=2
 o2_sensor_bitshift=1
 o2_sensor_bitval=1
-is_float=TRUE
+precision=3
 tooltip="Lambda" is a representation of AFR (Air Fuel Ratio).  1.0 is stoichiometric combustion (AFR 14.7:1), less than 1 is a "rich" mixture and greater than 1 is a "lean" mixture
 log_by_default=FALSE
 
 [derived_25]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=battvolt
 dlog_gui_name=BATT Volts
 dlog_field_name=BATTvolts
@@ -431,13 +416,13 @@ lower_limit=6
 upper_limit=18
 dl_conv_expr=(x/6)*(255/5)
 ul_conv_expr=x*(5/255)*6
-is_float=TRUE
+precision=2
 tooltip="BATT Volts" is the Battery voltage in DC volts.
 log_by_default=FALSE
 
 [derived_26]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=battadc
 dlog_gui_name=BATT ADC
 dlog_field_name=BATTcounts
@@ -446,13 +431,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="BATT ADC" is the raw ADC counts for the Battery Voltage input, Range 0-255, resolution 1 adc
 log_by_default=FALSE
 
 [derived_27]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=aircorr
 dlog_gui_name=AIRCorr
 dlog_field_name=Gair
@@ -461,13 +445,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="AIRcorr" is the Air temperature correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
 log_by_default=TRUE
 
 [derived_28]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barocorr
 dlog_gui_name=BAROCorr
 dlog_field_name=Gbaro
@@ -476,13 +459,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="BAROcorr" is the Barometer correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
 log_by_default=TRUE
 
 [derived_29]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egocorr
 dlog_gui_name=EGOCorr
 dlog_field_name=Gego
@@ -491,13 +473,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="EGOcorr" is the Exhaust Gas Correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel. The EGO Feedback settings on the Enrichments tab have the most effect on this parameter.
 log_by_default=TRUE
 
 [derived_30]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=warmcorr
 dlog_gui_name=WARMCorr
 dlog_field_name=Gwarm
@@ -506,13 +487,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="WARMcorr" is the Warmup Correction factor.  This influenced by the Coolant Temp sensor input and the Warmup Enrichment bins on the Enrichments tab.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
 log_by_default=TRUE
 
 [derived_31]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsaccel
 dlog_gui_name=TPSAccel
 dlog_field_name=TPSacc
@@ -521,13 +501,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="TPSaccel\" is the amount of Acceleration enrichment being dispensed. Units are in milliseconds x10, so 10 ms shows upa as 100 in the log
 log_by_default=TRUE
 
 [derived_32]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr1
 dlog_gui_name=VE 1
 dlog_field_name=Gve1
@@ -536,13 +515,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="VE 1" is the instantaneous volumetric efficiency for table 1 that the MS is calculating fuel for.
 log_by_default=TRUE
 
 [derived_33]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw1
 dlog_gui_name=PW 1
 dlog_field_name=PW1
@@ -551,13 +529,13 @@ lower_limit=0
 upper_limit=26
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-is_float=TRUE
+precision=1
 tooltip="PW 1" is the pulsewidth in milliseconds for the injectors tied to injector channel 1.
 log_by_default=TRUE
 
 [derived_34]
-keys=internal_names,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle1
 dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
@@ -583,13 +561,13 @@ cyls_bitshift=4
 divider_page=0
 divider_offset=91
 divider_size=_U08_
-is_float=TRUE
+precision=1
 tooltip="DC 1\" is the injector Duty cycle for injectors connected to injector channel 1.
 log_by_default=TRUE
 
 [derived_35]
-keys=internal_names,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle2
 dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
@@ -615,13 +593,13 @@ cyls_bitshift=4
 divider_page=1
 divider_offset=91
 divider_size=_U08_
-is_float=TRUE
+precision=1
 tooltip="DC 2\" is the injector Duty cycle for injectors connected to injector channel 2.
 log_by_default=TRUE
 
 [derived_36]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw2
 dlog_gui_name=PW 2
 dlog_field_name=PW2
@@ -630,13 +608,13 @@ lower_limit=0
 upper_limit=26
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-is_float=TRUE
+precision=1
 tooltip="PW 2" is the pulsewidth in milliseconds for the injectors tied to injector channel 2.
 log_by_default=TRUE
 
 [derived_37]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr2
 dlog_gui_name=VE 2
 dlog_field_name=Gve2
@@ -645,13 +623,12 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
 tooltip="VE 2" is the instantaneous volumetric efficiency for table 2 that the MS is calculating fuel for.
 log_by_default=TRUE
 
 [derived_38]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=idledc
 dlog_gui_name=Idle DC
 dlog_field_name=IdleDC
@@ -660,6 +637,6 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-is_float=FALSE
+FALSE
 tooltip="IdleDC" is the duty cycle for the PWM Idle control 
 log_by_default=FALSE

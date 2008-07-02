@@ -273,6 +273,7 @@ void cell_edited(GtkCellRendererText *cell,
 	gint rt_offset = -1;
 	gint hys_offset = -1;
 	gint ulimit_offset = -1;
+	gint precision = 0;
 	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
 	void * evaluator = NULL;
@@ -282,7 +283,6 @@ void cell_edited(GtkCellRendererText *cell,
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	DataSize size = 0;
-	gboolean is_float = FALSE;
 	MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
 	extern GHashTable *sources_hash;
@@ -300,7 +300,7 @@ void cell_edited(GtkCellRendererText *cell,
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
 	rt_offset = (gint) OBJ_GET(object,"offset");
-	is_float = (gboolean)OBJ_GET(object,"is_float");
+	precision = (gint)OBJ_GET(object,"precision");
 	new = (gfloat)strtod(new_text,NULL);
 	if (OBJ_GET(object,"multi_expr_hash"))
 	{
@@ -324,12 +324,7 @@ void cell_edited(GtkCellRendererText *cell,
 		if (new > multi->upper_limit)
 			new = multi->upper_limit;
 
-		if (is_float)
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-					g_strdup_printf("%.2f",new), -1);
-		else
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-					g_strdup_printf("%i",(gint)new), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
 		/* Then evaluate it in reverse.... */
 		tmpf = evaluator_evaluate_x(multi->dl_eval,new);
@@ -355,12 +350,7 @@ void cell_edited(GtkCellRendererText *cell,
 		if (new > upper)
 			new = upper;
 
-		if (is_float)
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-					g_strdup_printf("%.2f",new), -1);
-		else
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-					g_strdup_printf("%i",(gint)new), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
 		if (!evaluator)
 		{
@@ -438,7 +428,7 @@ void update_model_from_view(GtkWidget * widget)
 	gfloat tmpf = 0.0;
 	gfloat result = 0.0;
 	gchar * expr = NULL;
-	gboolean is_float = FALSE;
+	gint precision = 0;
 	gboolean temp_dep = FALSE;
 	gboolean looptest = FALSE;
 	void * evaluator = NULL;
@@ -471,7 +461,7 @@ void update_model_from_view(GtkWidget * widget)
 		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 		if (offset == (gint)OBJ_GET(object,"offset"))
 		{
-			is_float =(gboolean)OBJ_GET(object,"is_float");
+			precision =(gint)OBJ_GET(object,"precision");
 			temp_dep =(gboolean)OBJ_GET(object,"temp_dep");
 			if (OBJ_GET(object,"multi_expr_hash"))
 			{
@@ -508,10 +498,7 @@ void update_model_from_view(GtkWidget * widget)
 				}
 				else
 					result = tmpf;
-				if (is_float)
-					tmpbuf =  g_strdup_printf("%.2f",result);
-				else
-					tmpbuf =  g_strdup_printf("%i",(gint)result);
+				tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
 				g_free(tmpbuf);
@@ -534,10 +521,7 @@ void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					if (is_float)
-						tmpbuf = g_strdup_printf("%.2f",result);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)result);
+					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
 					g_free(tmpbuf);
 
@@ -560,10 +544,7 @@ void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					if (is_float)
-						tmpbuf = g_strdup_printf("%.2f",result);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)result);
+					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
 					g_free(tmpbuf);
 				}
@@ -609,10 +590,7 @@ void update_model_from_view(GtkWidget * widget)
 				}
 				else
 					result = tmpf;
-				if (is_float)
-					tmpbuf =  g_strdup_printf("%.2f",result);
-				else
-					tmpbuf =  g_strdup_printf("%i",(gint)result);
+				tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
 				g_free(tmpbuf);
@@ -635,10 +613,7 @@ void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					if (is_float)
-						tmpbuf = g_strdup_printf("%.2f",result);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)result);
+					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
 					g_free(tmpbuf);
 
@@ -661,10 +636,7 @@ void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					if (is_float)
-						tmpbuf = g_strdup_printf("%.2f",result);
-					else
-						tmpbuf = g_strdup_printf("%i",(gint)result);
+					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
 					g_free(tmpbuf);
 				}

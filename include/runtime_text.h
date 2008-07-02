@@ -37,7 +37,7 @@ struct _Rt_Text
 };
 
 /* Prototypes */
-void load_rt_text(void );
+void load_rt_text_pf(void );
 Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *);
 /* Prototypes */
 

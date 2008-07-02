@@ -29,7 +29,6 @@
 			<internal_name>num_bytes</internal_name>
 			<size>_U08_</size>
 		</arg>
-	
 		<arg>
 			<name>MS1_PAGE</name>
 			<desc>Page inside ECU firmware</desc>
@@ -73,6 +72,13 @@
 			<action_arg>50000</action_arg>
 		</arg>
 		<arg>
+			<name>PAUSE_100MS</name>
+			<desc>Pause for 100ms.</desc>
+			<type>_ACTION_</type>
+			<action>_SLEEP_</action>
+			<action_arg>100000</action_arg>
+		</arg>
+		<arg>
 			<name>PAUSE_500MS</name>
 			<desc>Pause for 500ms.</desc>
 			<type>_ACTION_</type>
@@ -88,6 +94,16 @@
 	</potential_args>
 	<commands>
 		<cmd>
+			<name>ms1_change_page</name>
+			<desc> Sets the ms1 page to the passed page number</desc>
+			<type>_WRITE_CMD_</type>
+			<base>P</base>
+			<args>
+				<arg>MS1_PAGE</arg>
+				<arg>PAUSE_100MS</arg>
+			</args>
+		</cmd>
+		<cmd>
 			<name>ms1_extra_reboot_get_error</name>
 			<desc>Reboots the ECU and grabs the error string</desc>
 			<type>_WRITE_CMD_</type>
@@ -96,11 +112,11 @@
 				<arg>PAUSE_50MS</arg>
 				<arg>SEND_X</arg>
 			</args>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_GETERROR_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>enable_reboot_button_cb</function>
+				<function>enable_reboot_button_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -108,13 +124,13 @@
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>A</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>update_runtime_vars</function>
-				<function>rt_update_logview_traces</function>
-				<function>run_datalog</function>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+				<function>run_datalog_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -122,13 +138,13 @@
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>R</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>update_runtime_vars</function>
-				<function>rt_update_logview_traces</function>
-				<function>run_datalog</function>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+				<function>run_datalog_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -140,13 +156,13 @@
 				<arg>MS2_CAN_ID</arg>
 				<arg>MS2_TABLE_INDEX</arg>
 			</args>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS2_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>update_runtime_vars</function>
-				<function>rt_update_logview_traces</function>
-				<function>run_datalog</function>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+				<function>run_datalog_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -220,7 +236,7 @@
 				<arg>MS2_NUM_BYTES</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_WRITE_VERIFY_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -236,7 +252,7 @@
 				<arg>MS2_CAN_ID</arg>
 				<arg>MS2_TABLE_INDEX</arg>
 			</args>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MISMATCH_COUNT_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -249,8 +265,8 @@
 			</args>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>post_burn_cb</function>
-				<function>set_store_black_cb</function>
+				<function>post_burn_pf</function>
+				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -258,11 +274,11 @@
 			<desc>Calls a function to burn ALL applicable ms2 pages to flash</desc>
 			<type>_FUNC_CALL_</type>
 			<func_call_name>ms2_burn_all_helper</func_call_name>
-			<func_call_arg>_MS2_STD_</func_call_arg>
+			<func_call_arg>_MS2_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>post_burn_cb</function>
-				<function>set_store_black_cb</function>
+				<function>post_burn_pf</function>
+				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -275,6 +291,10 @@
 				<arg>MS2_TABLE_INDEX</arg>
 				<arg>PAUSE_500MS</arg>
 			</args>
+			<post_functions>
+				<function_w_arg>post_single_burn_pf</function_w_arg>
+				<function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
 		</cmd>
 		<cmd>
 			<name>ms2_table_reflash</name>
@@ -292,7 +312,7 @@
 			<desc>Triggers the ecu to echo back it's 8bit clock</desc>
 			<type>_WRITE_CMD_</type>
 			<base>C</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_CLOCK_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -300,39 +320,47 @@
 			<desc>Triggers the ecu to echo back it's 16 bit clock</desc>
 			<type>_WRITE_CMD_</type>
 			<base>c</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS2_CLOCK_</helper_func_arg>
 		</cmd>
 		<cmd>
-			<name>ms1_get_revision</name>
+			<name>ms1_get_textrev</name>
 			<desc>Triggers the ecu to echo back it's textual revision</desc>
 			<type>_WRITE_CMD_</type>
 			<base>T</base>
-			<helper_func>simple_read_cb</helper_func>
-			<helper_func_arg>_REVISION_</helper_func_arg>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
-			<name>ms2_get_revision</name>
+			<name>ms2_get_textrev</name>
 			<desc>Triggers the ecu to echo back it's textual revision</desc>
 			<type>_WRITE_CMD_</type>
-			<base>R</base>
-			<helper_func>simple_read_cb</helper_func>
-			<helper_func_arg>_REVISION_</helper_func_arg>
+			<base>Q</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>get_signature</name>
 			<desc>Triggers the ecu to echo back it's api signature</desc>
 			<type>_WRITE_CMD_</type>
 			<base>S</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_SIGNATURE_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>get_numrev</name>
+			<desc>Triggers the ecu to echo back it's version number</desc>
+			<type>_WRITE_CMD_</type>
+			<base>Q</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_NUM_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>ms1_veconst</name>
 			<desc>Triggers the MS1 to return the VE/Constants for the previously set page</desc>
 			<type>_WRITE_CMD_</type>
 			<base>V</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_VECONST_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -346,7 +374,7 @@
 				<arg>MS2_OFFSET</arg>
 				<arg>MS2_NUM_BYTES</arg>
 			</args>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS2_VECONST_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -366,7 +394,7 @@
 			<desc>Triggers the ecu to reboot into the bootloader</desc>
 			<type>_WRITE_CMD_</type>
 			<base>!!!x</base>
-			<helper_func>simple_read_cb</helper_func>
+			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS2_BOOTLOADER_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -376,17 +404,17 @@
 			<func_call_name>interrogate_ecu</func_call_name>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>load_realtime_map</function>
-				<function>initialize_dashboards</function>
-				<function>load_status</function>
-				<function>load_rt_text</function>
-				<function>load_gui_tabs</function>
-				<function>load_sliders</function>
-				<function>start_statuscounts_cb</function>
-				<function>populate_dlog_choices</function>
-				<function>enable_interrogation_button_cb</function>
-				<function>spawn_read_ve_const_cb</function>
-				<function>reset_temps_cb</function>
+
+				<function>load_realtime_map_pf</function>
+				<function>initialize_dashboards_pf</function>
+				<function>load_status_pf</function>
+				<function>load_rt_text_pf</function>
+				<function>load_gui_tabs_pf</function>
+				<function>load_sliders_pf</function>
+				<function>start_statuscounts_pf</function>
+				<function>populate_dlog_choices_pf</function>
+				<function>spawn_read_ve_const_pf</function>
+				<function>reset_temps_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -397,12 +425,12 @@
 			<func_call_arg>_MS2_VECONST_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>update_ve_const</function>
-				<function>setup_menu_handlers</function>
-				<function>enable_3d_buttons_cb</function>
-				<function>set_store_black_cb</function>
-				<function>enable_get_data_buttons_cb</function>
-				<function>conditional_start_rtv_tickler_cb</function>
+				<function>update_ve_const_pf</function>
+				<function>setup_menu_handlers_pf</function>
+				<function>enable_3d_buttons_pf</function>
+				<function>set_store_black_pf</function>
+				<function>enable_get_data_buttons_pf</function>
+				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -413,13 +441,13 @@
 			<func_call_arg>_MS1_VECONST_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>update_ve_const</function>
-				<function>setup_menu_handlers</function>
-				<function>enable_3d_buttons_cb</function>
-				<function>set_store_black_cb</function>
-				<function>enable_get_data_buttons_cb</function>
-				<function>enable_ttm_buttons_cb</function>
-				<function>conditional_start_rtv_tickler_cb</function>
+				<function>update_ve_const_pf</function>
+				<function>setup_menu_handlers_pf</function>
+				<function>enable_3d_buttons_pf</function>
+				<function>set_store_black_pf</function>
+				<function>enable_get_data_buttons_pf</function>
+				<function>enable_ttm_buttons_pf</function>
+				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -430,8 +458,8 @@
 			<func_call_arg>_MS1_E_TRIGMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>crunch_trigtooth_data</function>
-				<function>update_trigtooth_display</function>
+				<function>crunch_trigtooth_data_pf</function>
+				<function>update_trigtooth_display_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -442,8 +470,8 @@
 			<func_call_arg>_MS1_E_TOOTHMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function_w_arg>crunch_trigtooth_data</function_w_arg>
-				<function_w_arg>update_trigtooth_display</function_w_arg>
+				<function_w_arg>crunch_trigtooth_data_pf</function_w_arg>
+				<function_w_arg>update_trigtooth_display_pf</function_w_arg>
 			</post_functions>
 		</cmd>
 	</commands>

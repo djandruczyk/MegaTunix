@@ -11,12 +11,14 @@ bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
+	2d_table_editor.c \
 	3d_vetable.c \
 	about_gui.c \
 	apicheck.c \
 	args.c \
 	comms.c \
 	comms_gui.c \
+	combo_loader.c \
 	conversions.c \
 	core_gui.c \
 	dashboard.c \
@@ -36,6 +38,7 @@ megatunix_SOURCES = \
 	keybinder.c \
 	keyparser.c \
 	listmgmt.c \
+	locking.c \
 	logviewer_core.c \
 	logviewer_events.c \
 	logviewer_gui.c \

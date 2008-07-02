@@ -478,11 +478,10 @@ ul_conv_expr=x/10
 bind_to_list=interdep_1_ctrl
 
 [inj_open_time_1_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=1
 offset=151
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -490,11 +489,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj_open_time_2_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=2
 offset=151
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -502,11 +500,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [batt_correction_1_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=1
 offset=155
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -514,11 +511,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [batt_correction_2_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=2
 offset=155
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -542,11 +538,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [pwm_time_thresh_1_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=1
 offset=154
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -554,11 +549,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [pwm_time_thresh_2_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=2
 offset=154
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10

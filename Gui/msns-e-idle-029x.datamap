@@ -274,14 +274,13 @@ handler=_GENERIC_
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,raw_lower,raw_upper,precision,reverse_keys,is_float,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=11
 raw_lower=0
 raw_upper=255
 precision=1
-is_float=TRUE
 reverse_keys=TRUE
 dl_conv_expr=10000/x
 ul_conv_expr=10000/x
@@ -325,11 +324,10 @@ handler=_GENERIC_
 tooltip=Needs work
 
 [dashpot_settle_time_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=3
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -385,11 +383,10 @@ handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [fast_recovery_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=13
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -399,11 +396,10 @@ handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [slow_recovery_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=1
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -413,11 +409,10 @@ handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [closure_speed_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=10
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -427,11 +422,10 @@ handler=_GENERIC_
 tooltip=Controls how fast the PWM Idle valve can close in seconds.
 
 [startup_delay_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=12
-is_float=TRUE
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
@@ -485,11 +479,10 @@ handler=_GENERIC_
 tooltip=DutyCycle at which point the PWM valve can be considered closed. Odds are due to print pressure inside the valve it make take DC values of 20% or more to lift the valve off it's seat.
 
 [idle_advance_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=174
-is_float=TRUE
 precision=2
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10

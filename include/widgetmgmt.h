@@ -26,6 +26,7 @@ void alter_widget_state(gpointer, gpointer);
 void get_geo(GtkWidget *, const char *, PangoRectangle *);
 void set_fixed_size(GtkWidget *, int);
 void set_widget_labels(gchar *);
+EXPORT void lock_entry(GtkWidget *);
 /* Prototypes */
 
 #endif

@@ -384,11 +384,10 @@ handler=_GENERIC_
 tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego1_switching_voltage_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=187
-is_float=TRUE
 precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
@@ -397,11 +396,10 @@ handler=_GENERIC_
 tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
 [ego2_switching_voltage_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=2
 offset=187
-is_float=TRUE
 precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)

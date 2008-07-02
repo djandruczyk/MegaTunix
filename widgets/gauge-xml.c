@@ -36,6 +36,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 {
 	xmlNode *cur_node = NULL;
 	MtxXMLFuncs *xml_funcs = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) 
 	{
@@ -43,7 +44,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 		{
 			/*printf("node type: Element, name: \"%s\"\n", cur_node->name);*/
 			xml_funcs = NULL;
-			xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,cur_node->name);
+			xml_funcs = g_hash_table_lookup(priv->xmlfunc_hash,cur_node->name);
 			/* If current element name has a set of function 
 			 * handlers, call the handlers passing the child node.
 			 * NOTE in cases where the xml tag has no data the 
@@ -77,6 +78,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar *tmpbuf = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -104,17 +106,17 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
 		load_elements(gauge, root_element);
-		gauge->xc = gauge->w / 2;
-		gauge->yc = gauge->h / 2;
-		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
+		priv->xc = priv->w / 2;
+		priv->yc = priv->h / 2;
+		priv->radius = MIN (priv->w/2, priv->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
 		if (GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent))
-			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),gauge->w,gauge->h);
+			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),priv->w,priv->h);
 		generate_gauge_background(gauge);
-		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),gauge->lbound);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),priv->lbound);
 		mtx_gauge_face_redraw_canvas (gauge);
 
-		gauge->xml_filename = g_strdup(filename);
+		priv->xml_filename = g_strdup(filename);
 	}
 	g_free(tmpbuf);
 
@@ -135,6 +137,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	LIBXML_TEST_VERSION;
 
@@ -163,9 +166,9 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	 * key names right and the memory addresses right.  It looks confusing
 	 * but it works great.  See gauge-xml.h for the static struct binding
 	 * keynames to import/export generic handler functions */
-	for (i=0;i<gauge->xmlfunc_array->len;i++)
+	for (i=0;i<priv->xmlfunc_array->len;i++)
 	{
-		xml_funcs = g_array_index(gauge->xmlfunc_array,MtxXMLFuncs *, i);
+		xml_funcs = g_array_index(priv->xmlfunc_array,MtxXMLFuncs *, i);
 		helper->element_name = xml_funcs->varname;
 		helper->src = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_funcs->varname);
 		xml_funcs->export_func(helper);
@@ -191,10 +194,10 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	 * this is to debug memory for regression tests
 	 */
 	xmlMemoryDump();
-	if (gauge->xml_filename)
-		g_free(gauge->xml_filename);
+	if (priv->xml_filename)
+		g_free(priv->xml_filename);
 
-	gauge->xml_filename = g_strdup(filename);
+	priv->xml_filename = g_strdup(filename);
 }
 
 
@@ -224,6 +227,7 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 {
 	xmlNode *cur_node = NULL;
 	MtxColorRange *range = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_color_range_import, xml node is empty!!\n");
@@ -249,7 +253,7 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->c_ranges,range);
+	g_array_append_val(priv->c_ranges,range);
 }
 
 
@@ -257,6 +261,7 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 {
 	xmlNode *cur_node = NULL;
 	MtxAlertRange *range = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_alert_range_import, xml node is empty!!\n");
@@ -282,7 +287,7 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->a_ranges,range);
+	g_array_append_val(priv->a_ranges,range);
 }
 
 
@@ -290,6 +295,7 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 {
 	xmlNode *cur_node = NULL;
 	MtxTextBlock *tblock = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_text_block_import, xml node is empty!!\n");
@@ -317,7 +323,7 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->t_blocks,tblock);
+	g_array_append_val(priv->t_blocks,tblock);
 }
 
 
@@ -325,6 +331,7 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 {
 	xmlNode *cur_node = NULL;
 	MtxTickGroup *tgroup = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_tick_group_import, xml node is empty!!\n");
@@ -374,7 +381,7 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->tick_groups,tgroup);
+	g_array_append_val(priv->tick_groups,tgroup);
 }
 
 
@@ -382,6 +389,7 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
 	xmlNode *cur_node = NULL;
 	MtxPolygon *poly = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
@@ -431,7 +439,7 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->polygons,poly);
+	g_array_append_val(priv->polygons,poly);
 }
 
 
@@ -589,11 +597,12 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 	gint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxColorRange *range = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
 
-	for (i=0;i<helper->gauge->c_ranges->len;i++)
+	for (i=0;i<priv->c_ranges->len;i++)
 	{
-		range = g_array_index(helper->gauge->c_ranges,MtxColorRange *, i);
+		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
 
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
@@ -623,11 +632,12 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 	gint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxAlertRange *range = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
 
-	for (i=0;i<helper->gauge->a_ranges->len;i++)
+	for (i=0;i<priv->a_ranges->len;i++)
 	{
-		range = g_array_index(helper->gauge->a_ranges,MtxAlertRange *, i);
+		range = g_array_index(priv->a_ranges,MtxAlertRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "alert_range",NULL );
 
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
@@ -657,10 +667,11 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxTextBlock *tblock = NULL;
 	xmlNodePtr node = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 
-	for (i=0;i<helper->gauge->t_blocks->len;i++)
+	for (i=0;i<priv->t_blocks->len;i++)
 	{
-		tblock = g_array_index(helper->gauge->t_blocks,MtxTextBlock *, i);
+		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "text_block",NULL );
 
 		tmpbuf = g_strdup_printf("%s",tblock->font);
@@ -694,10 +705,11 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxTickGroup *tgroup = NULL;
 	xmlNodePtr node = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 
-	for (i=0;i<helper->gauge->tick_groups->len;i++)
+	for (i=0;i<priv->tick_groups->len;i++)
 	{
-		tgroup = g_array_index(helper->gauge->tick_groups,MtxTickGroup *, i);
+		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
 
 		tmpbuf = g_strdup_printf("%s",tgroup->font);
@@ -900,10 +912,11 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxPolygon *poly = NULL;
 	xmlNodePtr node = NULL;
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 
-	for (i=0;i<helper->gauge->polygons->len;i++)
+	for (i=0;i<priv->polygons->len;i++)
 	{
-		poly = g_array_index(helper->gauge->polygons,MtxPolygon *, i);
+		poly = g_array_index(priv->polygons,MtxPolygon *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "polygon",NULL );
 		generic_xml_color_export(node,"color",&poly->color);
 
@@ -968,7 +981,8 @@ void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge)
 {
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->xml_filename);
+	return g_strdup(priv->xml_filename);
 }
 #endif

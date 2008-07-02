@@ -50,7 +50,7 @@ struct _BindGroup
 
 
 /* Prototypes */
-gboolean load_gui_tabs(void);
+gboolean load_gui_tabs_pf(void);
 void group_free(gpointer );
 GHashTable * load_groups(ConfigFile *);
 void bind_data(GtkWidget *, gpointer);

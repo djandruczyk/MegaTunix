@@ -38,8 +38,9 @@ GtkWidget *mtx_pie_gauge_new ()
  */
 gfloat mtx_pie_gauge_get_value (MtxPieGauge *gauge)
 {
+	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	g_return_val_if_fail ((MTX_IS_PIE_GAUGE (gauge)),0.0);
-	return	gauge->value;
+	return	priv->value;
 }
 
 
@@ -50,9 +51,10 @@ gfloat mtx_pie_gauge_get_value (MtxPieGauge *gauge)
  */
 void mtx_pie_gauge_set_value (MtxPieGauge *gauge, gfloat value)
 {
+	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_PIE_GAUGE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->value = value;
+	priv->value = value;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	mtx_pie_gauge_redraw(gauge);
 }

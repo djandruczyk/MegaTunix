@@ -50,11 +50,6 @@
 
 extern GAsyncQueue *pf_dispatch_queue;
 extern GAsyncQueue *gui_dispatch_queue;
-extern gboolean connected;			/* valid connection with MS */
-extern volatile gboolean offline;			/* Offline mode */
-extern gboolean tabs_loaded;			/* Tabs loaded? */
-extern gboolean interrogated;			/* valid detection with MS */
-gboolean force_page_change = FALSE;
 extern GObject *global_data;
 
 
@@ -79,7 +74,7 @@ gboolean pf_dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-	/*printf("dispatch queue length is %i\n",g_async_queue_length(dispatch_queue));*/
+//	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));
 	if (leaving)
 		return TRUE;
 	message = g_async_queue_try_pop(pf_dispatch_queue);
@@ -106,7 +101,7 @@ trypop:
 				printf("ERROR postfunction was null, continuing\n");
 				continue;
 			}
-			/*printf ("Should run function %s, %p\n",pf->name,pf->function);*/
+			//printf ("Should run function %s, %p\n",pf->name,pf->function);
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
@@ -122,33 +117,30 @@ trypop:
 					pf->function();
 			}
 
-			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
 				if (leaving)
 				{
-					gdk_threads_leave();
 					goto dealloc;
 				}
 				gtk_main_iteration();
 			}
-			gdk_threads_leave();
 		}
 	}
 dealloc:
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 	count++;
-	/* try to handle up to 4 messages at a time.  If this is 
+	/* try to handle up to 10 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if(count < 3)
+	if(count < 10)
 	{
-		/*printf("trying to handle another message\n");*/
+		//printf("trying to handle another message\n");
 		goto trypop;
 	}
-	/*printf("returning\n");*/
+	//printf("returning\n");
 	return TRUE;
 }
 
@@ -180,7 +172,7 @@ gboolean gui_dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-	/*printf("dispatch queue length is %i\n",g_async_queue_length(dispatch_queue));*/
+	//printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));
 	if (leaving)
 		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);
@@ -250,17 +242,14 @@ trypop:
 					*/
 			}
 
-			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
 				if (leaving)
 				{
-					gdk_threads_leave();
 					goto dealloc;
 				}
 				gtk_main_iteration();
 			}
-			gdk_threads_leave();
 		}
 	}
 dealloc:

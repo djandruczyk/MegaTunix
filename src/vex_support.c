@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <3d_vetable.h>
 #include <config.h>
 #include <comms.h>
 #include <datamgmt.h>
@@ -114,6 +115,8 @@ void select_table_for_export(gint table_num)
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 	extern GtkWidget *main_window;
+	struct tm *tm = NULL;
+        time_t *t = NULL;
 
 	if (!interrogated)
 		return;
@@ -122,13 +125,17 @@ void select_table_for_export(gint table_num)
 	{
 		return;
 	}
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
 	fileio->parent = main_window;
 	fileio->on_top = TRUE;
-	fileio->default_filename= g_strdup_printf("%s.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ",'_'));
+	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("vex");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
@@ -270,15 +277,18 @@ gboolean all_table_export(GIOChannel *iochannel)
 	gint table = -1;
 	gsize count = 0;
 	gint index = 0;
+	gint x_page = 0;
 	gint y_page = 0;
 	gint z_page = 0;
-	gint x_page = 0;
+	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	gint x_base = 0;
 	DataSize y_size = 0;
 	DataSize z_size = 0;
 	DataSize x_size = 0;
+	gint x_mult = 0;
+	gint y_mult = 0;
+	gint z_mult = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
 	extern Firmware_Details *firmware;
@@ -293,15 +303,18 @@ gboolean all_table_export(GIOChannel *iochannel)
 	for (z=0;z<firmware->total_tables;z++)
 	{
 		table = z;
-		z_page = firmware->table_params[table]->z_page;
 		x_page = firmware->table_params[table]->x_page;
 		y_page = firmware->table_params[table]->y_page;
+		z_page = firmware->table_params[table]->z_page;
+		x_base = firmware->table_params[table]->x_base;
 		z_base = firmware->table_params[table]->z_base;
 		y_base = firmware->table_params[table]->y_base;
-		x_base = firmware->table_params[table]->x_base;
+		x_size = firmware->table_params[table]->x_size;
 		z_size = firmware->table_params[table]->z_size;
 		y_size = firmware->table_params[table]->y_size;
-		x_size = firmware->table_params[table]->x_size;
+		x_mult = get_multiplier(x_size);
+		y_mult = get_multiplier(y_size);
+		z_mult = get_multiplier(z_size);
 		y_bincount = firmware->table_params[table]->y_bincount;
 		x_bincount = firmware->table_params[table]->x_bincount;
 
@@ -322,11 +335,11 @@ gboolean all_table_export(GIOChannel *iochannel)
 		g_string_append_printf(output,"VE Table RPM Range              [%2i]\n",x_bincount);
 
 		for (i=0;i<x_bincount;i++)
-			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+i,x_size));
+			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
 
 		g_string_append_printf(output, "VE Table Load Range (MAP)       [%2i]\n",y_bincount);
 		for (i=0;i<y_bincount;i++)
-			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+i,y_size));
+			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
 
 		g_string_append_printf(output,"VE Table                        [%3i][%3i]\n",x_bincount,y_bincount);
 		g_string_append_printf(output, "           ");
@@ -344,9 +357,9 @@ gboolean all_table_export(GIOChannel *iochannel)
 			for (j=0;j<y_bincount;j++)
 			{
 				if (j == 0)
-					g_string_append_printf (output,"  %3d",get_ecu_data(canID,z_page,index+z_base,z_size));
+					g_string_append_printf (output,"  %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 				else
-					g_string_append_printf (output,"   %3d",get_ecu_data(canID,z_page,index+z_base,z_size));
+					g_string_append_printf (output,"   %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 				index++;
 			}
 			g_string_append_printf(output,"\n");
@@ -387,15 +400,18 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 	gint table = -1;
 	gsize count = 0;
 	gint index = 0;
+	gint x_page = 0;
 	gint y_page = 0;
 	gint z_page = 0;
-	gint x_page = 0;
+	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	gint x_base = 0;
-	gint y_size = 0;
-	gint z_size = 0;
-	gint x_size = 0;
+	DataSize x_size = 0;
+	DataSize y_size = 0;
+	DataSize z_size = 0;
+	gint x_mult = 0;
+	gint y_mult = 0;
+	gint z_mult = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
 	extern Firmware_Details *firmware;
@@ -408,17 +424,20 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 	output = g_string_sized_new(64); /*pre-allocate 64 chars */
 	/*printf("total tables %i\n",firmware->total_tables);*/
 	table = table_num;
-	z_page = firmware->table_params[table]->z_page;
 	x_page = firmware->table_params[table]->x_page;
 	y_page = firmware->table_params[table]->y_page;
-	z_base = firmware->table_params[table]->z_base;
-	y_base = firmware->table_params[table]->y_base;
+	z_page = firmware->table_params[table]->z_page;
 	x_base = firmware->table_params[table]->x_base;
-	z_size = firmware->table_params[table]->z_size;
-	y_size = firmware->table_params[table]->y_size;
+	y_base = firmware->table_params[table]->y_base;
+	z_base = firmware->table_params[table]->z_base;
 	x_size = firmware->table_params[table]->x_size;
-	y_bincount = firmware->table_params[table]->y_bincount;
+	y_size = firmware->table_params[table]->y_size;
+	z_size = firmware->table_params[table]->z_size;
+	x_mult = get_multiplier(x_size);
+	y_mult = get_multiplier(y_size);
+	z_mult = get_multiplier(z_size);
 	x_bincount = firmware->table_params[table]->x_bincount;
+	y_bincount = firmware->table_params[table]->y_bincount;
 
 	t = g_malloc(sizeof(time_t));
 	time(t);
@@ -437,11 +456,11 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 	g_string_append_printf(output, "VE Table RPM Range              [%2i]\n",x_bincount);
 
 	for (i=0;i<x_bincount;i++)
-		g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+i,x_size));
+		g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
 
 	g_string_append_printf(output, "VE Table Load Range (MAP)       [%2i]\n",y_bincount);
 	for (i=0;i<y_bincount;i++)
-		g_string_append_printf(output, "   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+i,y_size));
+		g_string_append_printf(output, "   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
 
 	g_string_append_printf(output, "VE Table                        [%3i][%3i]\n",x_bincount,y_bincount);
 	g_string_append_printf(output, "           ");
@@ -459,9 +478,9 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 		for (j=0;j<y_bincount;j++)
 		{
 			if (j == 0)
-				g_string_append_printf (output, "  %3d",get_ecu_data(canID,z_page,index+z_base,z_size));
+				g_string_append_printf (output, "  %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 			else
-				g_string_append_printf (output, "   %3d",get_ecu_data(canID,z_page,index+z_base,z_size));
+				g_string_append_printf (output, "   %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 			index++;
 		}
 		g_string_append_printf(output,"\n");
@@ -556,7 +575,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const");
+	pf->name = g_strdup("update_ve_const_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
@@ -638,7 +657,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const");
+	pf->name = g_strdup("update_ve_const_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
@@ -960,13 +979,13 @@ GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string
 			update_logbar("tools_view","warning",g_strdup("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 			break;
 		}
-		if ((value < 0) || (value > 255))
-		{
-			status = G_IO_STATUS_ERROR;
-			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
-			break;
-		}
-		else
+//		if ((value < 0) || (value > 255))
+//		{
+//			status = G_IO_STATUS_ERROR;
+//			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
+//			break;
+//		}
+//		else
 			switch (arg)
 			{
 				case VEX_RPM_RANGE:
@@ -1066,18 +1085,18 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-			if ((value < 0) || (value > 255))
-			{
-				status = G_IO_STATUS_ERROR;
-				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
-				goto breakout;
-			}
-			else
+//			if ((value < 0) || (value > 255))
+//			{
+//				status = G_IO_STATUS_ERROR;
+//				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
+//				goto breakout;
+//			}
+//			else
 				vex->tbl_bins[j+(i*x_bins)] = value;
 		}		
 		g_string_free(a_line, TRUE);
 	}
-breakout:
+//breakout:
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		vex->got_ve = TRUE;
@@ -1147,15 +1166,18 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	extern Firmware_Details *firmware;
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_backup = firmware->ecu_data_backup;
-	guint8 *data = NULL;
+	void *data = NULL;
+	guchar *ptr = NULL;
+	guint16 *ptr16 = NULL;
+	guint32 *ptr32 = NULL;
 	gint total = 0;
 	gint canID = 0;
 	gint page = -1;
 	gint base = 0;
 	DataSize size = 0;
+	gint mult = 0;
 	gint table = -1;
 
-	printf("feed data\n");
 	/* Since we assume the page is where the table is this can cause
 	 * major problems with some firmwares that use two tables inside
 	 * of one page....
@@ -1199,23 +1221,37 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->x_page;
 	base = firmware->table_params[table]->x_base;
 	size = firmware->table_params[table]->x_size;
+	mult = get_multiplier(size);
 	if (firmware->chunk_support)
 	{
-		printf("chunk write X vars\n");
+		total = vex->total_x_bins;
+		data = g_malloc0(mult*total);;
+		if (mult == 1)
+		{
+			ptr = (guchar *)data;
+			for (i=0;i<total;i++)
+				ptr[i]=vex->x_bins[i];
+		}
+		if (mult == 2)
+		{
+			ptr16 = (guint16 *)data;
+			for (i=0;i<total;i++)
+				ptr16[i]=GINT16_TO_BE(vex->x_bins[i]);
+		}
+		if (mult == 4)
+		{
+			ptr32 = (guint32 *)data;
+			for (i=0;i<total;i++)
+				ptr32[i]=GINT_TO_BE(vex->x_bins[i]);
+		}
 
-		total = (vex->total_x_bins);
-		data = g_new0(guint8, total);
-		for (i=0;i<total;i++)
-			data[i]=(guchar)vex->x_bins[i];
-		chunk_write(canID,page,base,total,data);
+		chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
-		printf("std write X vars\n");
-
 		for (i=0;i<vex->total_x_bins;i++)
 		{
-			if (vex->x_bins[i] != get_ecu_data_last(canID,page,base+i,size))
+			if (vex->x_bins[i] != get_ecu_data_last(canID,page,base+(i*mult),size))
 				send_to_ecu(canID,page,base+i,size, vex->x_bins[i], TRUE);
 		}
 	}
@@ -1224,22 +1260,37 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->y_page;
 	base = firmware->table_params[table]->y_base;
 	size = firmware->table_params[table]->y_size;
+	mult = get_multiplier(size);
 	if (firmware->chunk_support)
 	{
-		printf("chunk write Y vars\n");
-		total = (vex->total_y_bins);
-		data = g_new0(guchar, total);
-		for (i=0;i<total;i++)
-			data[i]=(guchar)vex->y_bins[i];
-		chunk_write(canID,page,base,total,data);
+		total = vex->total_y_bins;
+		data = g_malloc0(mult*total);
+		if (mult == 1)
+		{
+			ptr = (guchar *)data;
+			for (i=0;i<total;i++)
+				ptr[i]=vex->y_bins[i];
+		}
+		if (mult == 2)
+		{
+			ptr16 = (guint16 *)data;
+			for (i=0;i<total;i++)
+				ptr16[i]=GINT16_TO_BE(vex->y_bins[i]);
+		}
+		if (mult == 4)
+		{
+			ptr32 = (guint32 *)data;
+			for (i=0;i<total;i++)
+				ptr32[i]=GINT_TO_BE(vex->y_bins[i]);
+		}
+		chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
-		printf("std write Y vars\n");
 		for (i=0;i<vex->total_y_bins;i++)
 		{
 			if (vex->y_bins[i] != get_ecu_data_last(canID,page,base+i,size))
-				send_to_ecu(canID,page,base+i,size,vex->y_bins[i], TRUE);
+				send_to_ecu(canID,page,base+(i*mult),size,vex->y_bins[i], TRUE);
 		}
 	}
 
@@ -1247,22 +1298,37 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->z_page;
 	base = firmware->table_params[table]->z_base;
 	size = firmware->table_params[table]->z_size;
+	mult = get_multiplier(size);
 	if (firmware->chunk_support)
 	{
-		printf("chunk write Z vars\n");
 		total = (vex->total_y_bins)*(vex->total_x_bins);
-		data = g_new0(guchar, total);
-		for (i=0;i<total;i++)
-			data[i]=(guchar)vex->tbl_bins[i];
-		chunk_write(canID,page,base,total,data);
+		data = g_malloc0(mult*total);
+		if (mult == 1)
+		{
+			ptr = (guchar *)data;
+			for (i=0;i<total;i++)
+				ptr[i]=vex->tbl_bins[i];
+		}
+		if (mult == 2)
+		{
+			ptr16 = (guint16 *)data;
+			for (i=0;i<total;i++)
+				ptr16[i]=GINT16_TO_BE(vex->tbl_bins[i]);
+		}
+		if (mult == 4)
+		{
+			ptr32 = (guint32 *)data;
+			for (i=0;i<total;i++)
+				ptr32[i]=GINT_TO_BE(vex->tbl_bins[i]);
+		}
+		chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
-		printf("std write Z vars\n");
 		for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
 		{
 			if (vex->tbl_bins[i] != get_ecu_data_last(canID,page,base+i,size))
-				send_to_ecu(canID,page,base+i,size,vex->tbl_bins[i], TRUE);
+				send_to_ecu(canID,page,base+(i*mult),size,vex->tbl_bins[i], TRUE);
 		}
 	}
 	io_cmd(firmware->burn_all_command,NULL);
@@ -1321,7 +1387,7 @@ void revert_to_previous_data()
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const");
+	pf->name = g_strdup("update_ve_const_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;

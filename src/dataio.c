@@ -52,7 +52,6 @@ gint read_data(gint total_wanted, void **buffer)
 	gboolean bad_read = FALSE;
 	guchar buf[4096];
 	guchar *ptr = buf;
-	gchar *err_text = NULL;
 	gboolean ignore_errors = FALSE;
 	extern gboolean connected;
 	extern Serial_Params *serial_params;
@@ -83,9 +82,8 @@ gint read_data(gint total_wanted, void **buffer)
 		/* Increment bad read counter.... */
 		if (res < 0) /* I/O Error */
 		{
-			err_text = (gchar *)g_strerror(errno);
 			if (dbg_lvl & (IO_PROCESS|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",err_text));
+				dbg_func(g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
 			break;
 		}
@@ -106,8 +104,9 @@ gint read_data(gint total_wanted, void **buffer)
 		if (dbg_lvl & (IO_PROCESS|CRITICAL))
 			dbg_func(g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
 		if (dbg_lvl & (SERIAL_WR|SERIAL_RD|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",g_strerror(errno)));
-		flush_serial(serial_params->fd, TCIOFLUSH);
+			dbg_func(g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",(gchar *)g_strerror(errno)));
+
+		flush_serial(serial_params->fd, BOTH);
 		serial_params->errcount++;
 		connected = FALSE;
 	}

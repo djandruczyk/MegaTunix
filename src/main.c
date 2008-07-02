@@ -22,18 +22,19 @@
 #include <debugging.h>
 #include <dispatcher.h>
 #include <enums.h>
+#include <errno.h>
 #include <gdk/gdkgl.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
+#include <locking.h>
 #include <main.h>
 #include <serialio.h>
 #include <stringmatch.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <xmlcomm.h>
-
 
 GThread * thread_dispatcher_id = NULL;
 gboolean ready = FALSE;
@@ -61,9 +62,6 @@ gint main(gint argc, gchar ** argv)
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
-	gdk_threads_init();
-	gdk_threads_enter();
-
 	gtk_init(&argc, &argv);
 	glade_init();
 	gbr_init(NULL);
@@ -76,6 +74,9 @@ gint main(gint argc, gchar ** argv)
 	g_object_ref(global_data);
 	gtk_object_sink(GTK_OBJECT(global_data));
 	handle_args(argc,argv);
+
+	/* This will exit mtx if the locking fails! */
+	create_mtx_lock();
 
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
@@ -112,6 +113,5 @@ gint main(gint argc, gchar ** argv)
 
 	ready = TRUE;
 	gtk_main();
-	gdk_threads_leave();
 	return (0) ;
 }

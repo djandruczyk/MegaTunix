@@ -36,11 +36,11 @@ extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
- \brief load_rt_text() is called to load up the runtime text configurations
+ \brief load_rt_text_pf() is called to load up the runtime text configurations
  from the file specified in the firmware's interrogation profile, and populate
  a new window with the runtiem vars text value box.
  */
-EXPORT void load_rt_text()
+EXPORT void load_rt_text_pf()
 {
 	ConfigFile *cfgfile = NULL;
 	Rt_Text *rt_text = NULL;
@@ -75,7 +75,7 @@ EXPORT void load_rt_text()
 		if (rtt_hash)
 			rtt_hash = NULL;
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": load_rt_text()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+			dbg_func(g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Loading RT Text..."));
@@ -86,7 +86,7 @@ EXPORT void load_rt_text()
 	if (!filename)
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_runtime_text()\n\t File \"%s.rtt_conf\" not found!!, exiting function\n",firmware->rtt_map_file));
+			dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.rtt_conf\" not found!!, exiting function\n",firmware->rtt_map_file));
 		set_title(g_strdup("ERROR RTT Map file DOES NOT EXIST!!!"));
 		return; 
 	}
@@ -97,7 +97,7 @@ EXPORT void load_rt_text()
 		if ((major != RT_TEXT_MAJOR_API) || (minor != RT_TEXT_MINOR_API))
 		{
 			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
+				dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
 			g_free(filename);
 			set_title(g_strdup("ERROR RT Text API MISMATCH!!!"));
 			return;
@@ -106,7 +106,7 @@ EXPORT void load_rt_text()
 		if(!cfg_read_int(cfgfile,"global","rtt_total",&count))
 		{
 			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
+				dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
 			set_title(g_strdup("ERROR RT Text cfgfile problem!!!"));
 			return;
 		}
@@ -137,12 +137,12 @@ EXPORT void load_rt_text()
 			if(!cfg_read_string(cfgfile,section,"int_name",&ctrl_name))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 			{
 				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
+					dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
 			}
 
 			rt_text = add_rtt(vbox,ctrl_name,source);
@@ -171,7 +171,7 @@ EXPORT void load_rt_text()
 	else
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
+			dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
 	}
 	g_free(filename);
 	set_title(g_strdup("RT Text Loaded..."));

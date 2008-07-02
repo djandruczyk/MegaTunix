@@ -148,7 +148,9 @@ typedef enum
 typedef enum
 {	
 	RED=0xc0,
-	BLACK
+	BLACK,
+	GREEN,
+	BLUE
 }GuiColor;
 
 typedef enum
@@ -390,7 +392,8 @@ typedef enum
 	MISMATCH_COUNT,
 	MS1_CLOCK,
 	MS2_CLOCK,
-	REVISION,
+	NUM_REV,
+	TEXT_REV,
 	SIGNATURE,
 	MS1_VECONST,
 	MS2_VECONST,
@@ -420,5 +423,20 @@ typedef enum
 	SEQUENCE,
 	ARGS
 }ArrayType;
+
+typedef enum
+{
+	INBOUND=0x2E0,
+	OUTBOUND,
+	BOTH
+}FlushDirection;
+
+typedef enum
+{
+	ADD=0,
+	SUBTRACT,
+	MULTIPLY,
+	DIVIDE
+}ScaleOp;
 
 #endif

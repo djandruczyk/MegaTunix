@@ -74,7 +74,10 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 	/* canID unused currently */
 	extern Firmware_Details *firmware;
 	gint result = 0;
-	guint8 byte[4];
+	guint16 u16 = 0;
+	gint16 s16 = 0;
+	guint32 u32 = 0;
+	gint32 s32 = 0;
 
 	switch (size)
 	{
@@ -87,33 +90,25 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 			return (gint8)data[offset];
 			break;
 		case MTX_U16:
-			byte[1] = (guint8)data[offset];
-			byte[0] = (guint8)data[offset+1];
-			result = byte[0] + (byte[1] << 8);
+			u16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
+			result = GUINT16_FROM_BE(u16);
 //			printf("U16 bit, returning %i\n",result);
 			return (guint16)result;
 			break;
 		case MTX_S16:
-			byte[1] = (guint8)data[offset];
-			byte[0] = (guint8)data[offset+1];
-			result = byte[0] + (byte[1] << 8);
+			s16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
+			result = GINT16_FROM_BE(s16);
 			return (gint16)result;
 //			printf("S16 bit, returning %i\n",result);
 			break;
 		case MTX_U32:
-			byte[3] = (guint8)data[offset];
-			byte[2] = (guint8)data[offset+1];
-			byte[1] = (guint8)data[offset+2];
-			byte[0] = (guint8)data[offset+3];
-			result = byte[0] + (byte[1] << 8) + (byte[2] << 16) + (byte[3] << 24);
+			u32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
+			result = GUINT_FROM_BE(u32);
 			return (guint32)result;
 			break;
 		case MTX_S32:
-			byte[3] = (guint8)data[offset];
-			byte[2] = (guint8)data[offset+1];
-			byte[1] = (guint8)data[offset+2];
-			byte[0] = (guint8)data[offset+3];
-			result = byte[0] + (byte[1] << 8) + (byte[2] << 16) + (byte[3] << 24);
+			s32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
+			result = GINT_FROM_BE(u32);
 			return (gint32)result;
 			break;
 		default:
@@ -128,6 +123,10 @@ void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new)
 	/* canID unused currently */
 	extern Firmware_Details *firmware;
 	guint8 *data = firmware->ecu_data[page];
+	guint16 u16 = 0;
+	gint16 s16 = 0;
+	guint32 u32 = 0;
+	gint32 s32 = 0;
 	switch (size)
 	{
 		case MTX_CHAR:
@@ -138,16 +137,29 @@ void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new)
 			data[offset] = (gint8)new;
 			break;
 		case MTX_U16:
+			u16 = GUINT16_TO_BE((guint16)new);
+			data[offset] = (guint8)u16;
+			data[offset+1] = (guint8)((guint16)u16 >> 8);
+			break;
 		case MTX_S16:
-			data[offset+1] = (guint8)new;
-			data[offset] = (guint8)((guint16)new >> 8);
+			s16 = GINT16_TO_BE((gint16)new);
+			data[offset] = (guint8)s16;
+			data[offset+1] = (guint8)((gint16)s16 >> 8);
 			break;
 		case MTX_U32:
+			u32 = GUINT32_TO_BE((guint32)new);
+			data[offset] = (guint8)u32;
+			data[offset+1] = (guint8)((guint32)u32 >> 8);
+			data[offset+2] = (guint8)((guint32)u32 >> 16);
+			data[offset+3] = (guint8)((guint32)u32 >> 24);
+			break;
 		case MTX_S32:
-			data[offset+3] = (guint8)new;
-			data[offset+2] = (guint8)((guint32)new >> 8);
-			data[offset+1] = (guint8)((guint32)new >> 16);
-			data[offset] = (guint8)((guint32)new >> 24);
+			s32 = GINT32_TO_BE((gint32)new);
+			data[offset] = (guint8)s32;
+			data[offset+1] = (guint8)((gint32)s32 >> 8);
+			data[offset+2] = (guint8)((gint32)s32 >> 16);
+			data[offset+3] = (guint8)((gint32)s32 >> 24);
+			break;
 		default:
 			printf("ERROR< attempted set of data with NO SIZE defined\n");
 	}

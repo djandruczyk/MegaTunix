@@ -28,10 +28,11 @@ G_BEGIN_DECLS
 #define MTX_IS_PIE_GAUGE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MTX_TYPE_PIE_GAUGE))
 #define MTX_IS_PIE_GAUGE_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), MTX_TYPE_PIE_GAUGE))
 #define MTX_PIE_GAUGE_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), MTX_TYPE_PIE_GAUGE, MtxPieGaugeClass))
-/*#define MTX_PIE_GAUGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_PIE_GAUGE, MtxPieGaugePrivate))*/
+#define MTX_PIE_GAUGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_PIE_GAUGE, MtxPieGaugePrivate))
 
 
 typedef struct _MtxPieGauge		MtxPieGauge;
+typedef struct _MtxPieGaugePrivate	MtxPieGaugePrivate;
 typedef struct _MtxPieGaugeClass	MtxPieGaugeClass;
 
 /*! ColorIndex enum,  for indexing into the color arrays */
@@ -46,9 +47,9 @@ typedef enum
 	NUM_COLORS
 }ColorIndex;
 
-struct _MtxPieGauge
-{	/* public data */
-	GtkDrawingArea parent;
+
+struct _MtxPieGaugePrivate
+{
 	GdkPixmap *pixmap;	/*! Update/backing pixmap */
 	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
 	gfloat min;		/*! Minimum Value */
@@ -79,6 +80,13 @@ struct _MtxPieGauge
 	GdkColormap *colormap;	/*! Colormap for GC's */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	GdkColor colors[NUM_COLORS];
+
+};
+
+
+struct _MtxPieGauge
+{	/* public data */
+	GtkDrawingArea parent;
 };
 
 struct _MtxPieGaugeClass

@@ -40,11 +40,11 @@ extern GObject *global_data;
 
 
 /*!
- \brief load_realtime_map() loads the realtime map specified in the detected
+ \brief load_realtime_map_pf() loads the realtime map specified in the detected
  firmware's interrogation profile, and sets up the necessary arrays for storage
  of data coming from the ECU (temporary arrays for the last 50 or so entries)
  */
-EXPORT gboolean load_realtime_map(void )
+EXPORT gboolean load_realtime_map_pf(void )
 {
 	ConfigFile *cfgfile;
 	extern Firmware_Details *firmware;
@@ -81,7 +81,7 @@ EXPORT gboolean load_realtime_map(void )
 	if (!filename)
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
 		set_title(g_strdup("ERROR RT Map file DOES NOT EXIST!!!"));
 		return FALSE;
 	}
@@ -89,7 +89,7 @@ EXPORT gboolean load_realtime_map(void )
 	if (!cfgfile)
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find realtime vars map file %s\n\n",filename));
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find realtime vars map file %s\n\n",filename));
 		g_free(filename);
 		set_title(g_strdup("ERROR RT Map file could NOT be opened!!!"));
 		return FALSE;
@@ -98,7 +98,7 @@ EXPORT gboolean load_realtime_map(void )
 	if ((major != RTV_MAP_MAJOR_API) || (minor != RTV_MAP_MINOR_API))
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tRealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename));
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tRealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename));
 		g_free(filename);
 		set_title(g_strdup("ERROR RT Map API MISMATCH!!!"));
 		return FALSE;
@@ -106,7 +106,7 @@ EXPORT gboolean load_realtime_map(void )
 	else
 	{
 		if (dbg_lvl & RTMLOADER)
-			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tLoading realtime map from %s\n",filename));
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tLoading realtime map from %s\n",filename));
 	}
 	g_free(filename);
 
@@ -114,7 +114,7 @@ EXPORT gboolean load_realtime_map(void )
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup(__FILE__": load_realtime_map()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
+			dbg_func(g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 		set_title(g_strdup("ERROR RT Map missing data!!!"));
@@ -123,7 +123,7 @@ EXPORT gboolean load_realtime_map(void )
 	if (strstr(tmpbuf,firmware->name) == NULL)	
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 		g_free(tmpbuf);
@@ -138,7 +138,7 @@ EXPORT gboolean load_realtime_map(void )
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 	{
 		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n"));
+			dbg_func(g_strdup(__FILE__": load_realtime_map_pf()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n"));
 	}
 
 	tmpbuf = NULL;
@@ -165,7 +165,7 @@ EXPORT gboolean load_realtime_map(void )
 		if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
 			if (dbg_lvl & (RTMLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n\n ",section));
+				dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n\n ",section));
 			g_free(section);
 			set_title(g_strdup("ERROR RT Map missing data problem!!!"));
 			return FALSE;
@@ -179,7 +179,7 @@ EXPORT gboolean load_realtime_map(void )
 		if(!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 		{
 			if (dbg_lvl & (RTMLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"key_types\" in the \"[%s]\" section, ABORTING!!\n\n",section));
+				dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"key_types\" in the \"[%s]\" section, ABORTING!!\n\n",section));
 			g_free(section);
 		set_title(g_strdup("ERROR RT Map missing data problem!!!"));
 			return FALSE;
@@ -192,7 +192,7 @@ EXPORT gboolean load_realtime_map(void )
 		if (num_keytypes != num_keys)
 		{
 			if (dbg_lvl & (RTMLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tNumber of keys (%i) and keytypes(%i)\n\tdoes NOT match for: \"%s\", ABORTING!!!\n\n",num_keys,num_keytypes,section));
+				dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tNumber of keys (%i) and keytypes(%i)\n\tdoes NOT match for: \"%s\", ABORTING!!!\n\n",num_keys,num_keytypes,section));
 			g_free(section);
 			g_free(keytypes);
 			g_strfreev(keys);
@@ -202,7 +202,7 @@ EXPORT gboolean load_realtime_map(void )
 		if (!cfg_read_int(cfgfile,section,"offset",&offset))
 		{
 			if (dbg_lvl & (RTMLOADER|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n",section));
+				dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n",section));
 			g_free(section);
 			g_free(keytypes);
 			g_strfreev(keys);
@@ -239,7 +239,7 @@ EXPORT gboolean load_realtime_map(void )
 					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
 					{
 						if (dbg_lvl & RTMLOADER)
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
 						OBJ_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
@@ -247,7 +247,7 @@ EXPORT gboolean load_realtime_map(void )
 					else
 					{
 						if (dbg_lvl & (RTMLOADER|CRITICAL))
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					}
 					break;
 				case MTX_ENUM:
@@ -255,7 +255,7 @@ EXPORT gboolean load_realtime_map(void )
 					{
 						tmpi = translate_string(tmpbuf);
 						if (dbg_lvl & RTMLOADER)
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
 						OBJ_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
@@ -264,14 +264,14 @@ EXPORT gboolean load_realtime_map(void )
 					else
 					{
 						if (dbg_lvl & (RTMLOADER|CRITICAL))
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					}
 					break;
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
 						if (dbg_lvl & RTMLOADER)
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
 						OBJ_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
@@ -281,14 +281,14 @@ EXPORT gboolean load_realtime_map(void )
 					else
 					{
 						if (dbg_lvl & (RTMLOADER|CRITICAL))
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					}
 					break;
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						if (dbg_lvl & RTMLOADER)
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
 						OBJ_SET(object,
 								keys[j],
 								g_strdup(tmpbuf));
@@ -304,7 +304,7 @@ EXPORT gboolean load_realtime_map(void )
 					else
 					{
 						if (dbg_lvl & (RTMLOADER|CRITICAL))
-							dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+							dbg_func(g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					}
 					break;
 				default:
@@ -324,7 +324,7 @@ EXPORT gboolean load_realtime_map(void )
 	cfg_free(cfgfile);
 	g_free(cfgfile);
 	if (dbg_lvl & RTMLOADER)
-		dbg_func(g_strdup(__FILE__": load_realtime_map()\n\t All is well, leaving...\n\n"));
+		dbg_func(g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
 	rtvars_loaded = TRUE;
 	set_title(g_strdup("RT Map loaded..."));
 	return TRUE;

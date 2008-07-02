@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <comms.h>
 #include <conversions.h>
 #include <dataio.h>
 #include <datamgmt.h>
@@ -36,31 +37,20 @@ extern gint dbg_lvl;
 extern GObject *global_data;
 
 
-EXPORT void enable_interrogation_button_cb(void)
-{
-	extern GHashTable *dynamic_widgets;
-	extern volatile gboolean offline;
-	extern gboolean interrogated;
-
-	if ((!offline) && (!interrogated))
-		gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
-}
-
-
-EXPORT void start_statuscounts_cb(void)
+EXPORT void start_statuscounts_pf(void)
 {
 	start_tickler(SCOUNTS_TICKLER);
 }
 
 
-EXPORT void enable_reboot_button_cb(void)
+EXPORT void enable_reboot_button_pf(void)
 {
 	extern GHashTable *dynamic_widgets;
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"error_status_reboot_button"),TRUE);
 }
 
 
-EXPORT void spawn_read_ve_const_cb(void)
+EXPORT void spawn_read_ve_const_pf(void)
 {
 	extern Firmware_Details *firmware;
 	if (!firmware)
@@ -74,24 +64,39 @@ EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
+	extern volatile gboolean outstanding_data;
 	OutputData *output = NULL;
 	Command *command = NULL;
+	extern volatile gint last_page;
 	gint i = 0;
-	if (type != MS2_STD)
+	if (type != MS2)
 		return FALSE;
 	if (!offline)
 	{
-		for (i=0;i<firmware->total_pages;i++)
+		/* MS2 extra is slightly different as it's paged like MS1 */
+		if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
 		{
-			if (!firmware->page_params[i]->dl_by_default)
-				continue;
 			output = initialize_outputdata();
-			OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-			OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
+			OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[last_page]->truepgnum));
 			OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 			OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-			output->need_page_change = FALSE;
 			io_cmd(firmware->burn_command,output);
+		}
+		else if (!(firmware->capabilities & MS2_EXTRA))
+		{
+			/* MS2 std allows all pages to be in ram at will*/
+			for (i=0;i<firmware->total_pages;i++)
+			{
+				if (!firmware->page_params[i]->dl_by_default)
+					continue;
+				output = initialize_outputdata();
+				OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
+				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd(firmware->burn_command,output);
+			}
 		}
 	}
 	command = (Command *)data;
@@ -103,26 +108,30 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
+	extern volatile gboolean outstanding_data;
+	extern volatile gint last_page;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint i = 0;
 
-	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	switch (type)
 	{
 		case MS1_VECONST:
 
 			if (!offline)
 			{
+				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+				if (outstanding_data)
+					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
+					queue_ms1_page_change(i);
 					output = initialize_outputdata();
 					OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
 					OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
 					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					output->need_page_change = TRUE;
 					io_cmd(firmware->ve_command,output);
 				}
 			}
@@ -132,6 +141,9 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_VECONST:
 			if (!offline)
 			{
+				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
@@ -143,7 +155,6 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
 					OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
 					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					output->need_page_change = FALSE;
 					io_cmd(firmware->ve_command,output);
 				}
 			}
@@ -153,10 +164,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS1_E_TRIGMON:
 			if (!offline)
 			{
+				if (outstanding_data)
+					queue_burn_ecu_flash(last_page);
+				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->truepgnum));
-				output->need_page_change = TRUE;
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -165,10 +178,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS1_E_TOOTHMON:
 			if (!offline)
 			{
+				if (outstanding_data)
+					queue_burn_ecu_flash(last_page);
+				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->truepgnum));
-				output->need_page_change = TRUE;
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -181,19 +196,19 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 }
 
 
-EXPORT void enable_get_data_buttons_cb(void)
+EXPORT void enable_get_data_buttons_pf(void)
 {
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 }
 
 
-EXPORT void enable_ttm_buttons_cb(void)
+EXPORT void enable_ttm_buttons_pf(void)
 {
 	g_list_foreach(get_list("ttm_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 }
 
 
-EXPORT void conditional_start_rtv_tickler_cb(void)
+EXPORT void conditional_start_rtv_tickler_pf(void)
 {
 	static gboolean just_starting = TRUE;
 
@@ -205,7 +220,7 @@ EXPORT void conditional_start_rtv_tickler_cb(void)
 }
 
 
-EXPORT void set_store_black_cb(void)
+EXPORT void set_store_black_pf(void)
 {
 	gint j = 0;
 	extern Firmware_Details *firmware;
@@ -215,23 +230,23 @@ EXPORT void set_store_black_cb(void)
 		set_reqfuel_color(BLACK,j);
 }
 
-EXPORT void enable_3d_buttons_cb(void)
+EXPORT void enable_3d_buttons_pf(void)
 {
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 }
 
 
-EXPORT void disable_burner_buttons_cb(void)
+EXPORT void disable_burner_buttons_pf(void)
 {
 	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 }
 
-EXPORT void reset_temps_cb(void)
+EXPORT void reset_temps_pf(void)
 {
 	reset_temps(OBJ_GET(global_data,"temp_units"));
 }
 
-EXPORT void simple_read_cb(void * data, XmlCmdType type)
+EXPORT void simple_read_pf(void * data, XmlCmdType type)
 {
 	Io_Message *message  = NULL;
 	OutputData *output  = NULL;
@@ -249,6 +264,7 @@ EXPORT void simple_read_cb(void * data, XmlCmdType type)
 	static gboolean just_starting = TRUE;
 	extern gboolean forced_update;
 	extern gboolean force_page_change;
+	extern volatile gboolean offline;
 
 
 	message = (Io_Message *)data;
@@ -268,11 +284,31 @@ EXPORT void simple_read_cb(void * data, XmlCmdType type)
 		case MS2_CLOCK:
 			printf("MS2_CLOCK not written yet\n");
 			break;
-		case REVISION:
-			printf("REVISON not written yet\n");
+		case NUM_REV:
+			if (offline)
+				break;
+			count = read_data(-1,&message->recv_buf);
+			ptr8 = (guchar *)message->recv_buf;
+			if (count > 0)
+				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
+			else
+				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup(""));
+			break;
+		case TEXT_REV:
+			if (offline)
+				break;
+			count = read_data(-1,&message->recv_buf);
+			if (count > 0)
+				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+			else
+				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
 			break;
 		case SIGNATURE:
-			printf("SIGNATURE not written yet\n");
+			if (offline)
+				break;
+			 count = read_data(-1,&message->recv_buf);
+                         if (count > 0)
+				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:
@@ -383,13 +419,10 @@ EXPORT void simple_read_cb(void * data, XmlCmdType type)
  \brief burn_ecu_flash() issues the commands to the ECU to burn the contents
  of RAM to flash.
  */
-EXPORT void post_burn_cb()
+EXPORT void post_burn_pf()
 {
 	gint i = 0;
 	extern Firmware_Details * firmware;
-
-	if (dbg_lvl & SERIAL_WR)
-		dbg_func(g_strdup(__FILE__": post_burn_cb()\n\tBurn to Flash Completed\n"));
 
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
@@ -398,6 +431,28 @@ EXPORT void post_burn_cb()
 			continue;
 		backup_current_data(firmware->canID,i);
 	}
+
+	if (dbg_lvl & SERIAL_WR)
+		dbg_func(g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
+
+	return;
+}
+
+
+EXPORT void post_single_burn_pf(void *data)
+{
+	Io_Message *message = (Io_Message *)data;
+	OutputData *output = (OutputData *)message->payload;
+	extern Firmware_Details * firmware;
+	gint page = (gint)OBJ_GET(output->object,"page");
+
+	/* sync temp buffer with current burned settings */
+	if (!firmware->page_params[page]->dl_by_default)
+		return;
+	backup_current_data(firmware->canID,page);
+
+	if (dbg_lvl & SERIAL_WR)
+		dbg_func(g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
 }

@@ -27,7 +27,9 @@
 #include <runtime_gui.h>
 #include <serialio.h>
 #include <string.h>
-#include <termios.h>
+#ifndef __WIN32__
+ #include <termios.h>
+#endif
 #include <threads.h>
 #include <unistd.h>
 #ifdef __WIN32__
@@ -62,7 +64,7 @@ gboolean open_serial(gchar * port_name)
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
 #ifdef __WIN32__
-	fd = open(port_name, O_RDWR | O_NOCTTY | O_BINARY );
+	fd = open(port_name, O_RDWR | O_BINARY );
 #else
 	fd = open(port_name, O_RDWR | O_NOCTTY);
 #endif
@@ -111,7 +113,7 @@ gboolean open_serial(gchar * port_name)
  \param fd (gint) filedescriptor to flush
  \param type (gint) how to flush it (enumeration)
  */
-void flush_serial(gint fd, gint type)
+void flush_serial(gint fd, FlushDirection type)
 {
 	g_static_mutex_lock(&serio_mutex);
 #ifdef __WIN32__
@@ -119,7 +121,20 @@ void flush_serial(gint fd, gint type)
 		win32_flush_serial(fd, type);
 #else
 	if ((serial_params) && (serial_params->fd))
-		tcflush(serial_params->fd, type);
+	{
+		switch (type)
+		{
+			case INBOUND:
+				tcflush(serial_params->fd, TCIFLUSH);
+				break;
+			case OUTBOUND:
+				tcflush(serial_params->fd, TCOFLUSH);
+				break;
+			case BOTH:
+				tcflush(serial_params->fd, TCIOFLUSH);
+				break;
+		}
+	}
 #endif	
 	g_static_mutex_unlock(&serio_mutex);
 }

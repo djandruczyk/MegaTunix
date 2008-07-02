@@ -79,9 +79,12 @@ gui_files = 	README \
 		tools.glade \
 		tools.datamap \
 		vetable_12x12x3-029x.datamap \
+		vetable_12x12x3-MS-II-Extra.datamap \
 		vetable_12x12x3.glade \
 		vetable_12x12x2-MS-II.datamap \
 		vetable_12x12x2.glade \
+		vetable_16x16x3-MS-II-Extra.datamap \
+		vetable_16x16x3.glade \
 		vetable_8x8e.glade \
 		vetable_8x8e-BnG.datamap \
 		vetable_8x8e-DT_1.datamap \

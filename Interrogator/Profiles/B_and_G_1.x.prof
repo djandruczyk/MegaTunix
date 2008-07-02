@@ -1,14 +1,13 @@
 [API]
 major=1
-minor=2
+minor=3
 
 [interrogation_profile]
 name=Old Bowling & Grippo v1.0
 
 [parameters]
-SignatureVia=MS_Signature
-TextVerVia=MS_Textrev
-NumVerVia=MS_VerNum
+TextVerVia=ms1_get_textrev
+NumVerVia=get_numrev
 RT_Command=ms1_std_rtvars
 RT_total_bytes=22
 Get_All_Command=ms1_read_all
@@ -16,8 +15,8 @@ VE_Command=ms1_veconst
 Burn_Command=ms1_burn
 Burn_All_Command=ms1_burn
 Write_Command=ms1_generic_write
+Page_Command=ms1_change_page
 Capabilities=_MS1_,_MS1_STD_
-Page_Cmd=P
 MultiPage=FALSE
 ChunkWriteSupport=FALSE
 TotalTables=1

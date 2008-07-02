@@ -43,3 +43,25 @@ void store_list(gchar * key, GList * list)
 	g_hash_table_insert(lists_hash,g_strdup(key),(gpointer)list);
 	return;
 }
+
+
+gint list_sort(gconstpointer a, gconstpointer b)
+{
+	ListElement *a1 = (ListElement *)a;
+	ListElement *b1 = (ListElement *)b;
+	return g_ascii_strcasecmp(a1->name,b1->name);
+}
+
+
+void free_element(gpointer data, gpointer user_data)
+{
+	ListElement *a = (ListElement *)data;
+	g_free(a->filename);
+	g_free(a->name);
+	g_free(a);
+}
+
+void simple_free_element(gpointer data, gpointer user_data)
+{
+	g_free((gchar *)data);
+}

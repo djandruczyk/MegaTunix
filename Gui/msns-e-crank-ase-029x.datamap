@@ -23,10 +23,9 @@ raw_upper=255
 use_color=TRUE
 
 [crank]
-keys=page,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,use_color
-key_types=_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_BOOL_
+keys=page,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,use_color
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_BOOL_
 page=8
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -499,11 +498,10 @@ handler=_GENERIC_
 tooltip=The Flood Clear TPS Threshold is the value at which if the throttle is above this point (in ADC counts) during cranking (only!) the ECU will stop all injection events in order to allow the engine to recover from a flooded situation.
 
 [fixed_prime_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=8
 offset=45
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -619,11 +617,10 @@ handler=_GENERIC_
 tooltip=This is the Intake Air temp setpoint for IAT Based ignition retard. IAT Retard won't take effect unless the Intake air temp is above the this threshold by the amount above AND the Manifold (MAP) pressure exceeeds the setpoint above.
 
 [iat_max_adv_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=49
-is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)

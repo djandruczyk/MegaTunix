@@ -169,11 +169,10 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [cpulse_neg40_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=64
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -181,11 +180,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [cpulse_pos170_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=65
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -193,11 +191,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [prime_pulse_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=119
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -281,11 +278,10 @@ offset=77
 group=warmup_bins
 
 [accel_tpstrigthresh_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=83
-is_float=TRUE
 precision=1
 dl_conv_expr=x*(512/100)
 ul_conv_expr=x/(512/100)
@@ -293,11 +289,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accel_enrich_duration_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=84
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -305,11 +300,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accel_cold_enrich_addon_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=82
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -325,11 +319,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accelbins_entry_1]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=78
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -337,11 +330,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accelbins_entry_2]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=79
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -349,11 +341,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accelbins_entry_3]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=80
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -361,11 +352,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [accelbins_entry_4]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=81
-is_float=TRUE
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -403,11 +393,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [ego_switching_voltage_entry]
-keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=122
-is_float=TRUE
 precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
