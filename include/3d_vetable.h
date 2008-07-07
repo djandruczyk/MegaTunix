@@ -105,6 +105,8 @@ struct _Ve_View_3D
 	gint x_mult;
 	gint y_mult;
 	gint z_mult;
+	gint z_minval;
+	gint z_maxval;
 	/* Simple sources*/
 	gchar *x_source;
 	gchar *x_suffix;

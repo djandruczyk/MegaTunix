@@ -58,6 +58,7 @@ int setup_gui()
 	GtkWidget *child = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *notebook = NULL;
+	GtkWidget *dialog = NULL;
 	gint i = 0;
 	GladeXML *xml = NULL;
 	gint tabcount = 0;
@@ -75,7 +76,15 @@ int setup_gui()
 	{
 		printf("ERROR!  Could locate %s\n",fname);
 		g_free(fname);
-		printf("MegaTunix does NOT seem to be installed correctly, make sure\n\"make install\" has been run by root from the top level source directory...\n");
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"\n<b>MegaTunix</b> doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i> ??\n\n");
+
+		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"destroy_event", G_CALLBACK(gtk_main_quit), dialog);
+		gtk_widget_show_all(dialog);
+		gtk_main();
+		if (global_data)
+			g_object_unref(global_data);
 		exit(-1);
 	}
 	else

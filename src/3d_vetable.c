@@ -1896,6 +1896,8 @@ Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_mult = 0;
 	ve_view->y_mult = 0;
 	ve_view->z_mult = 0;
+	ve_view->z_minval = 0;
+	ve_view->z_maxval = 0;
 	ve_view->x_bincount = 0;
 	ve_view->y_bincount = 0;
 	ve_view->table_name = NULL;
@@ -2537,6 +2539,8 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint z_mult = 0;
+	gint tmpi = 0;
+	gfloat scaler = 0.0;
 	gint canID = firmware->canID;
 	Quad * quad = NULL;
 
@@ -2555,7 +2559,18 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	y_mult = ve_view->y_mult;
 	z_mult = ve_view->z_mult;
 
+	ve_view->z_minval=1000;
+	ve_view->z_maxval=0;
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
+	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
+	{
+		tmpi = get_ecu_data(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
+		if (tmpi >ve_view->z_maxval)
+			ve_view->z_maxval = tmpi;
+		if (tmpi < ve_view->z_minval)
+			ve_view->z_minval = tmpi;
+	}
+	scaler = (256.0/(ve_view->z_maxval-ve_view->z_minval));
 	for(y=0;y<ve_view->y_bincount-1;++y)
 	{
 		for(x=0;x<ve_view->x_bincount-1;++x)
@@ -2567,22 +2582,22 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 			else
 			{
@@ -2590,22 +2605,22 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = ((evaluator_evaluate_x(cur_val->x_eval,get_ecu_data(canID,x_page,x_base+(x*x_mult),ve_view->x_size))-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((evaluator_evaluate_x(cur_val->y_eval,get_ecu_data(canID,y_page,y_base+(y*y_mult),ve_view->y_size))-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((evaluator_evaluate_x(cur_val->x_eval,get_ecu_data(canID,x_page,x_base+((x+1.0)*x_mult),ve_view->x_size))-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((evaluator_evaluate_x(cur_val->y_eval,get_ecu_data(canID,y_page,y_base+(y*y_mult),ve_view->y_size))-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((evaluator_evaluate_x(cur_val->x_eval,get_ecu_data(canID,x_page,x_base+((x+1.0)*x_mult),ve_view->x_size))-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((evaluator_evaluate_x(cur_val->y_eval,get_ecu_data(canID,y_page,y_base+((y+1.0)*y_mult),ve_view->y_size))-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((evaluator_evaluate_x(cur_val->x_eval,get_ecu_data(canID,x_page,x_base+(x*x_mult),ve_view->x_size))-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((evaluator_evaluate_x(cur_val->y_eval,get_ecu_data(canID,y_page,y_base+((y+1.0)*y_mult),ve_view->y_size))-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)/256.0)*360.0,0.33, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 		}
 	}
