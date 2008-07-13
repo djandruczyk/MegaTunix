@@ -168,12 +168,7 @@ page=4
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 [VE1_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -182,12 +177,7 @@ page=4
 label=Kpa
 alt_label=TPSADC
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 [VE2_load_tbl_lab]
 keys=page,label,alt_label,depend_on
@@ -196,12 +186,7 @@ page=4
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 [VE2_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -210,12 +195,7 @@ page=4
 label=Kpa
 alt_label=TPSADC
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 [VE3_load_tbl_lab]
 keys=page,label,alt_label,depend_on
@@ -224,12 +204,7 @@ page=4
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 [VE3_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -237,13 +212,8 @@ key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=4
 label=Kpa
 alt_label=TPSADC
+alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=4
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
 
 #----- Buttons ---------------------------------------------------------------
 

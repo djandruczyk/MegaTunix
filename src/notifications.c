@@ -27,7 +27,6 @@ extern GdkColor black;
 extern GdkColor green;
 static volatile gboolean warning_present = FALSE;
 static GtkWidget *warning_dialog;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -190,8 +189,7 @@ void  update_logbar(
 	}
 	if (!GTK_IS_OBJECT(widget))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name));
 		g_free(message);
 		return;
 	}

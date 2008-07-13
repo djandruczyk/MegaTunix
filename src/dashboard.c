@@ -31,7 +31,6 @@
 
 
 
-extern gint dbg_lvl;
 static gboolean timer_active = FALSE;
 static volatile gboolean moving = FALSE;
 static volatile gboolean resizing = FALSE;
@@ -363,8 +362,7 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!G_IS_OBJECT(rtv_obj))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source));
 			continue ;
 		}
 		d_gauge = g_new0(Dash_Gauge, 1);

@@ -34,7 +34,6 @@ gint statuscounts_id = 0;
 static gint trigmon_id = 0;
 static gboolean restart_realtime = FALSE;
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -76,10 +75,7 @@ void start_tickler(TicklerType type)
 			if (playback_id == 0)
 				playback_id = g_timeout_add((gint)OBJ_GET(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
-			}
+				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
 		case TOOTHMON_TICKLER:
 			if (offline)
@@ -101,10 +97,7 @@ void start_tickler(TicklerType type)
 				toothmon_id = g_timeout_add(3000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			}
 			else
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
-			}
+				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
 			break;
 		case TRIGMON_TICKLER:
 			if (offline)
@@ -126,10 +119,7 @@ void start_tickler(TicklerType type)
 				trigmon_id = g_timeout_add(750,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			}
 			else
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
-			}
+				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
 			break;
 		case SCOUNTS_TICKLER:
 			if (offline)
@@ -139,8 +129,7 @@ void start_tickler(TicklerType type)
 			if (statuscounts_id == 0)
 				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 			else
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;
 
 	}
@@ -249,8 +238,7 @@ gboolean signal_read_rtvars()
 	if (length > 2)
 		return TRUE;
 
-	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
-		dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
+	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
 
 	if (firmware->capabilities & MS2)
 	{
@@ -275,8 +263,7 @@ gboolean signal_read_rtvars()
  */
 gboolean signal_toothtrig_read(TicklerType type)
 {
-	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
-		dbg_func(g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
 	 * Also gets us access to current RPM and other vars for calculating 

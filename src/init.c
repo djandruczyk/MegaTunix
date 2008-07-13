@@ -238,8 +238,7 @@ gboolean read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup(DEFAULT_PORT);
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
 		g_free(filename);
 		save_config();
 		return FALSE;	/* No file found */

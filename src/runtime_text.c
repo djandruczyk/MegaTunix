@@ -32,7 +32,6 @@
 
 GHashTable *rtt_hash = NULL;
 GtkWidget *rtt_window = NULL;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -74,8 +73,7 @@ EXPORT void load_rt_text_pf()
 	{
 		if (rtt_hash)
 			rtt_hash = NULL;
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Loading RT Text..."));
@@ -85,8 +83,7 @@ EXPORT void load_rt_text_pf()
 	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("rtt_conf"));
 	if (!filename)
 	{
-		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.rtt_conf\" not found!!, exiting function\n",firmware->rtt_map_file));
+		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.rtt_conf\" not found!!, exiting function\n",firmware->rtt_map_file));
 		set_title(g_strdup("ERROR RTT Map file DOES NOT EXIST!!!"));
 		return; 
 	}
@@ -96,8 +93,7 @@ EXPORT void load_rt_text_pf()
 		get_file_api(cfgfile,&major,&minor);
 		if ((major != RT_TEXT_MAJOR_API) || (minor != RT_TEXT_MINOR_API))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\tRuntime Text profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API,filename));
 			g_free(filename);
 			set_title(g_strdup("ERROR RT Text API MISMATCH!!!"));
 			return;
@@ -105,8 +101,7 @@ EXPORT void load_rt_text_pf()
 
 		if(!cfg_read_int(cfgfile,"global","rtt_total",&count))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
 			set_title(g_strdup("ERROR RT Text cfgfile problem!!!"));
 			return;
 		}
@@ -135,15 +130,9 @@ EXPORT void load_rt_text_pf()
 			rt_text = NULL;
 			section = g_strdup_printf("rt_text_%i",i);
 			if(!cfg_read_string(cfgfile,section,"int_name",&ctrl_name))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename));
 			if (!cfg_read_string(cfgfile,section,"source",&source))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
 
 			rt_text = add_rtt(vbox,ctrl_name,source);
 			if (rt_text)
@@ -169,10 +158,7 @@ EXPORT void load_rt_text_pf()
 		g_free(cfgfile);
 	}
 	else
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
-	}
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
 	g_free(filename);
 	set_title(g_strdup("RT Text Loaded..."));
 	return;
@@ -197,11 +183,16 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
+	if (!rtv_map)
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		return NULL;
+	}
+
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
 		return NULL;
 	}
 

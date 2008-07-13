@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=1
+minor=2
 
 [realtime_map]
 applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010a
@@ -376,12 +376,7 @@ alt_lookuptable=wbo2_table
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 depend_on=o2_sensor
-o2_sensor_type=_VE_EMB_BIT_
-o2_sensor_page=1
-o2_sensor_offset=184
-o2_sensor_bitmask=2
-o2_sensor_bitshift=1
-o2_sensor_bitval=1
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 precision=1
 tooltip="AFR" Is the Air Fuel ratio the engine is running at.  This is calculated from a lookuptable, if this reading seems wrong make sure you've specified the proper lookuptable in the Interrogation Profile and selected the right sensor type in the Enrichments Tab.
 log_by_default=FALSE
@@ -400,12 +395,7 @@ alt_lookuptable=wbo2_table
 dl_conv_expr=x*147
 ul_conv_expr=x/147
 depend_on=o2_sensor
-o2_sensor_type=_VE_EMB_BIT_
-o2_sensor_page=1
-o2_sensor_offset=184
-o2_sensor_bitmask=2
-o2_sensor_bitshift=1
-o2_sensor_bitval=1
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 precision=3
 tooltip="Lambda" is a representation of AFR (Air Fuel Ratio).  1.0 is stoichiometric combustion (AFR 14.7:1), less than 1 is a "rich" mixture and greater than 1 is a "lean" mixture
 log_by_default=FALSE

@@ -29,7 +29,6 @@
 #include <timeout_handlers.h>
 
 Log_Info *log_info = NULL;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -93,8 +92,7 @@ void load_logviewer_file(GIOChannel *iochannel)
 {
 	if (!iochannel)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
 		return;
 	}
 	log_info = initialize_log_info();

@@ -35,7 +35,6 @@ static gboolean blocked = FALSE;
 static gfloat hue = -60.0;
 static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
-extern gint dbg_lvl;
 
 Logview_Data *lv_data = NULL;
 gboolean playback_mode = FALSE;
@@ -77,8 +76,7 @@ void present_viewer_choices(void)
 
 	if (!darea)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n"));
 		return;
 	}
 
@@ -246,8 +244,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	object = (GObject *)OBJ_GET(widget,"object");
 	if (!object)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
 	}
 	OBJ_SET(object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
@@ -308,15 +305,9 @@ void populate_viewer()
 			name = g_strdup(OBJ_GET(object,"dlog_gui_name"));
 		}
 		if (!name)
-		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup("ERROR, name is NULL\n"));
-		}
+			dbg_func(CRITICAL,g_strdup("ERROR, name is NULL\n"));
 		if (!object)
-		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup("ERROR, object is NULL\n"));
-		}
+			dbg_func(CRITICAL,g_strdup("ERROR, object is NULL\n"));
 
 		being_viewed = (gboolean)OBJ_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/

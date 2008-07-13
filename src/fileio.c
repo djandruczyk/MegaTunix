@@ -40,7 +40,6 @@
 #endif
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
@@ -68,7 +67,6 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	fileio->parent = main_window;
 	fileio->on_top = TRUE;
 	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.ecu",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
-	//fileio->default_filename = g_strdup("ECU_Backup.ecu");
 	fileio->default_extension = g_strdup("ecu");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
@@ -214,8 +212,7 @@ void restore_all_ecu_settings(gchar *filename)
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_strcasecmp(g_strdelimit(tmpbuf," ,",'_'),g_strdelimit(firmware->name," ,",'_')) != 0)
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\nFirmware name mismatch:\n\"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": restore_all_ecu_settings()\nFirmware name mismatch:\n\"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name));
 			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\nFirmware name mismatch:\n\"%s\" != \"%s\"\ncannot load this file for restoration\n",tmpbuf,firmware->name),FALSE,FALSE);
 			if (tmpbuf)
 				g_free(tmpbuf);
@@ -234,8 +231,7 @@ void restore_all_ecu_settings(gchar *filename)
 				if (tmpi != firmware->page_params[page]->length)
 				{
 					update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length),FALSE,FALSE);
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length));
 				}
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
@@ -243,8 +239,7 @@ void restore_all_ecu_settings(gchar *filename)
 				if (num_keys != firmware->page_params[page]->length)
 				{
 					update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length),FALSE,FALSE);
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length));
 				}
 				if (firmware->chunk_support)
 				{

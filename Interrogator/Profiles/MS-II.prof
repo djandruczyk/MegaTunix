@@ -209,6 +209,7 @@ z_precision=1
 
 [te_table_0]
 title=Cold Ignition Advance Offset
+is_fuel=FALSE
 bincount=10
 x_page=0
 x_base_offset=470
@@ -232,7 +233,6 @@ y_ul_conv_expr=(x/10)
 y_raw_lower=-10
 y_raw_upper=-10
 y_precision=1
-
 
 
 [page_0]

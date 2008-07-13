@@ -64,7 +64,6 @@
 #define ONE_SECOND 	 1	// one second
 
 static GLuint font_list_base;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -252,8 +251,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	if (!gl_ability)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"));
 		return FALSE;
 	}
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -639,8 +637,7 @@ GdkGLConfig* get_gl_config(void)
 			GDK_GL_MODE_DOUBLE);
 	if (gl_config == NULL)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));
 
 		/* Try single-buffered visual */
 		gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
@@ -650,8 +647,7 @@ GdkGLConfig* get_gl_config(void)
 			/* Should make a non-GL basic drawing area version
 			   instead of dumping the user out of here, or at least 
 			   render a non-GL found text on the drawing area */
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"));
+			dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"));
 			exit (-1);
 		}
 	}
@@ -672,8 +668,7 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -706,8 +701,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
 
 
 	/*** OpenGL BEGIN ***/
@@ -768,8 +762,7 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
 
 	/* Left Button */
 	if (event->state & GDK_BUTTON1_MASK)
@@ -811,8 +804,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_button_press_event()\n"));
 
 	gtk_widget_grab_focus (widget);
 
@@ -839,8 +831,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	GdkGLProc proc = NULL;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -854,8 +845,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
 		if (proc == NULL)
 		{
-			if (dbg_lvl & (OPENGL|CRITICAL))
-				dbg_func(g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"));
+			dbg_func(OPENGL|CRITICAL,g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"));
 			exit (-11);
 		}
 	}
@@ -898,8 +888,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -969,8 +958,7 @@ void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint y = 0;
 	Quad * quad = NULL;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
 
 	glLineWidth(1.25);
@@ -1059,8 +1047,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 
 	drawOrthoText(cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
 	drawOrthoText(cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
@@ -1168,13 +1155,11 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
-		if (dbg_lvl & (OPENGL|CRITICAL))
-			dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
+		dbg_func(OPENGL|CRITICAL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
 		return;
 	}
 
@@ -1281,8 +1266,7 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint y_mult = 0;
 	extern GHashTable *dynamic_widgets;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_draw_axis()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_axis()\n"));
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -1404,16 +1388,14 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 	gint font_height;
 	font_desc = pango_font_description_copy(widget->style->font_desc);
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
 
 	font_list_base = (GLuint) glGenLists (128);
 	font = gdk_gl_font_use_pango_font (font_desc, 0, 128,
 			(int)font_list_base);
 	if (font == NULL)
 	{
-		if (dbg_lvl & (OPENGL|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font CRITICAL FAILURE\n"));
+		dbg_func(OPENGL|CRITICAL,g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font CRITICAL FAILURE\n"));
 
 		exit (-1);
 	}
@@ -1468,8 +1450,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
 
 	g_static_mutex_lock(&mutex);
 
@@ -1496,8 +1477,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"UP\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"UP\"\n"));
 
 			/* Ctrl+Up moves the Load axis up */
 			if (event->state & GDK_CONTROL_MASK)
@@ -1522,8 +1502,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 
 		case GDK_Down:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"DOWN\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"DOWN\"\n"));
 
 			/* Ctrl+Down moves the Load axis down */
 			if (event->state & GDK_CONTROL_MASK)
@@ -1547,8 +1526,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 
 		case GDK_Left:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"LEFT\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"LEFT\"\n"));
 
 			/* Ctrl+Down moves the RPM axis left (down) */
 			if (event->state & GDK_CONTROL_MASK)
@@ -1571,8 +1549,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					&ve_view->drawing_area->allocation, FALSE);
 			break;
 		case GDK_Right:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"RIGHT\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"RIGHT\"\n"));
 
 			/* Ctrl+Down moves the RPM axis right (up) */
 			if (event->state & GDK_CONTROL_MASK)
@@ -1597,8 +1574,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 
 		case GDK_Page_Up:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"Page Up\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"Page Up\"\n"));
 
 			max = (gint)pow(2,z_mult*8) -10;
 			if (event->state & GDK_CONTROL_MASK)
@@ -1654,8 +1630,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_Q:
 		case GDK_q:
 		case GDK_equal:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"PLUS\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"PLUS\"\n"));
 
 			max = (gint)pow(2,z_mult*8)-1;
 			if (event->state & GDK_CONTROL_MASK)
@@ -1705,8 +1680,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			break;
 		case GDK_Page_Down:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"Page Down\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"Page Down\"\n"));
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
@@ -1760,8 +1734,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_W:
 		case GDK_w:
 		case GDK_KP_Subtract:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"MINUS\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"MINUS\"\n"));
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
@@ -1812,8 +1785,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		case GDK_t:
 		case GDK_T:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup("\t\"t/T\"\n"));
+			dbg_func(OPENGL,g_strdup("\t\"t/T\"\n"));
 			cur_state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ve_view->tracking_button));
 			if (cur_state)
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ve_view->tracking_button),FALSE);
@@ -1822,15 +1794,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 
 		default:
-			if (dbg_lvl & OPENGL)
-				dbg_func(g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval));
+			dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval));
 			g_static_mutex_unlock(&mutex);
 			return FALSE;
 	}
 	if (update_widgets)
 	{
-		if (dbg_lvl & OPENGL)
-			dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
+		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
 		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 		cur_vals = get_current_values(ve_view);
@@ -2499,32 +2469,6 @@ gfloat get_fixed_pos(Ve_View_3D *ve_view,void * eval,gfloat value,Axis axis)
 }
 
 
-gint get_multiplier(DataSize size)
-{
-	gint mult = 0;
-
-	switch (size)
-	{
-		case MTX_CHAR:
-		case MTX_U08:
-		case MTX_S08:
-			mult = 1;
-			break;
-		case MTX_U16:
-		case MTX_S16:
-			mult = 2;
-			break;
-		case MTX_U32:
-		case MTX_S32:
-			mult = 2;
-			break;
-		default:
-			break;
-	}
-	return mult;
-}
-
-
 void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern Firmware_Details *firmware;
@@ -2544,8 +2488,7 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint canID = firmware->canID;
 	Quad * quad = NULL;
 
-	if (dbg_lvl & OPENGL)
-		dbg_func(g_strdup(__FILE__": generate_quad_mesh() \n"));
+	dbg_func(OPENGL,g_strdup(__FILE__": generate_quad_mesh() \n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;

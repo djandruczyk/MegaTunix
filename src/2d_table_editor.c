@@ -21,6 +21,7 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <stdlib.h>
+#include <widgetmgmt.h>
 
 
 extern GtkWidget **te_windows;

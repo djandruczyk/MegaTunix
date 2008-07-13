@@ -42,7 +42,6 @@ gboolean connected = FALSE;
 gboolean port_open = FALSE;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
 GAsyncQueue *serial_repair_queue = NULL;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -76,8 +75,7 @@ gboolean open_serial(gchar * port_name)
 		serial_params->open = TRUE;
 		port_open = TRUE;
 		serial_params->fd = fd;
-		if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
-			dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",port_name));
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",port_name));
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",port_name),FALSE,FALSE);
 	}
 	else
@@ -92,8 +90,7 @@ gboolean open_serial(gchar * port_name)
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
-		if (dbg_lvl & (SERIAL_RD|SERIAL_WR|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",port_name,err_text),FALSE,FALSE);
@@ -261,8 +258,7 @@ void close_serial()
 	port_open = FALSE;
 
 	/* An Closing the comm port */
-	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
-		dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"));
+	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"));
 	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),FALSE,FALSE);
 	g_static_mutex_unlock(&serio_mutex);
 	return;

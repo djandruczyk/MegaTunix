@@ -58,8 +58,7 @@ gint read_data(gint total_wanted, void **buffer)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
-	if (dbg_lvl & IO_PROCESS)
-		dbg_func(g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
+	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
 	total_read = 0;
 	zerocount = 0;
@@ -72,8 +71,7 @@ gint read_data(gint total_wanted, void **buffer)
 	g_static_mutex_lock(&serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
-		if (dbg_lvl & IO_PROCESS)
-			dbg_func(g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
+		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
 		total_read += res = read(serial_params->fd,
 				ptr+total_read,
@@ -82,16 +80,14 @@ gint read_data(gint total_wanted, void **buffer)
 		/* Increment bad read counter.... */
 		if (res < 0) /* I/O Error */
 		{
-			if (dbg_lvl & (IO_PROCESS|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
+			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
 			break;
 		}
 		if (res == 0)
 			zerocount++;
 
-		if (dbg_lvl & IO_PROCESS)
-			dbg_func(g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
+		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 		if (zerocount > 1)  /* 2 bad reads, abort */
 		{
 			bad_read = TRUE;
@@ -101,10 +97,8 @@ gint read_data(gint total_wanted, void **buffer)
 	g_static_mutex_unlock(&serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
-		if (dbg_lvl & (IO_PROCESS|CRITICAL))
-			dbg_func(g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
-		if (dbg_lvl & (SERIAL_WR|SERIAL_RD|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",(gchar *)g_strerror(errno)));
+		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
+		dbg_func(SERIAL_WR|SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",(gchar *)g_strerror(errno)));
 
 		flush_serial(serial_params->fd, BOTH);
 		serial_params->errcount++;
@@ -114,8 +108,7 @@ gint read_data(gint total_wanted, void **buffer)
 	if (buffer)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
-	if (dbg_lvl & IO_PROCESS)
-		dbg_func(g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
+	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
 	g_static_mutex_unlock(&mutex);
 	return total_read;
 }
@@ -139,24 +132,19 @@ void dump_output(gint total_read, guchar *buf)
 		p = buf;
 		if (dbg_lvl & SERIAL_RD)
 		{
-			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
+			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
 			tmpbuf = g_strndup(((gchar *)buf),total_read);
-			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
+			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
 			g_free(tmpbuf);
-			dbg_func(g_strdup_printf("Data is in HEX!!\n"));
+			dbg_func(SERIAL_RD,g_strdup_printf("Data is in HEX!!\n"));
 		}
 		for (j=0;j<total_read;j++)
 		{
-			if (dbg_lvl & SERIAL_RD)
-				dbg_func(g_strdup_printf("%.2x ", p[j]));
+			dbg_func(SERIAL_RD,g_strdup_printf("%.2x ", p[j]));
 			if (!((j+1)%8))
-			{
-				if (dbg_lvl & SERIAL_RD)
-					dbg_func(g_strdup("\n"));
-			}
+				dbg_func(SERIAL_RD,g_strdup("\n"));
 		}
-		if (dbg_lvl & SERIAL_RD)
-			dbg_func(g_strdup("\n\n"));
+		dbg_func(SERIAL_RD,g_strdup("\n\n"));
 	}
 
 }

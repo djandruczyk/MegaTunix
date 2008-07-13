@@ -402,7 +402,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
 				{
 					tmpbuf = g_strndup(((gchar *)message->recv_buf)+1,count-1);
-					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+					dbg_func(IO_PROCESS|SERIAL_RD,g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
 					g_free(tmpbuf);
 				}
 
@@ -432,8 +432,7 @@ EXPORT void post_burn_pf()
 		backup_current_data(firmware->canID,i);
 	}
 
-	if (dbg_lvl & SERIAL_WR)
-		dbg_func(g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
+	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
 }
@@ -451,8 +450,7 @@ EXPORT void post_single_burn_pf(void *data)
 		return;
 	backup_current_data(firmware->canID,page);
 
-	if (dbg_lvl & SERIAL_WR)
-		dbg_func(g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
+	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
 }

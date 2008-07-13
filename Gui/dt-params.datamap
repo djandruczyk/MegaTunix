@@ -333,12 +333,7 @@ alt_f_label=Fast Idle Cutoff Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 depend_on=idle_mode_button
-idle_mode_button_type=_VE_EMB_BIT_
-idle_mode_button_page=0
-idle_mode_button_offset=118
-idle_mode_button_bitshift=4
-idle_mode_button_bitmask=16
-idle_mode_button_bitval=0
+idle_mode_button=_VE_EMB_BIT_,_U08_,0,118,16,4,0
 
 [slow_idle_temp_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list

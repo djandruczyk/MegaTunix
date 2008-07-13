@@ -30,7 +30,6 @@
 #include <tag_loader.h>
 
 GHashTable *dynamic_widgets = NULL;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -78,10 +77,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
-	}
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
 
 	g_free(prefix);
 	g_free(fullname);
@@ -103,8 +99,7 @@ void register_widget(gchar *name, GtkWidget * widget)
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name));
 	}
 	else
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
@@ -199,8 +194,7 @@ void set_widget_labels(gchar *input)
 	vector = parse_keys(input,&count,",");
 	if (count%2 != 0)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
 		return;
 	}
 	for(i=0;i<count;i+=2)
@@ -209,10 +203,7 @@ void set_widget_labels(gchar *input)
 		if ((widget) && (GTK_IS_LABEL(widget)))
 			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
 		else
-		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
-		}
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
 	}
 	g_strfreev(vector);
 
@@ -258,3 +249,50 @@ EXPORT void lock_entry(GtkWidget *widget)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
 
 }
+
+gint get_multiplier(DataSize size)
+{
+	gint mult = 0;
+
+	switch (size)
+	{
+		case MTX_CHAR:
+		case MTX_U08:
+		case MTX_S08:
+			mult = 1;
+			break;
+		case MTX_U16:
+		case MTX_S16:
+			mult = 2;
+			break;
+		case MTX_U32:
+		case MTX_S32:
+			mult = 2;
+			break;
+		default:
+			break;
+	}
+	return mult;
+}
+
+
+gboolean check_size(DataSize size)
+{
+	switch (size)
+	{
+		case MTX_CHAR:
+		case MTX_U08:
+		case MTX_S08:
+		case MTX_U16:
+		case MTX_S16:
+		case MTX_U32:
+		case MTX_S32:
+			return TRUE;
+			break;
+		default:
+			return FALSE;
+			break;
+	}
+	return FALSE;
+}
+

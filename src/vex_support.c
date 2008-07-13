@@ -32,9 +32,9 @@
 #include <vex_support.h>
 #include <xmlcomm.h>
 #include <threads.h>
+#include <widgetmgmt.h>
 
 gchar *vex_comment;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -69,9 +69,18 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	GIOChannel *iochannel = NULL;
 	extern gboolean interrogated;
 	extern GtkWidget *main_window;
+	extern Firmware_Details *firmware;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
 
 	if (!interrogated)
 		return FALSE;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
@@ -79,6 +88,7 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio->parent = main_window;
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.vex");
+	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("vex");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
@@ -368,10 +378,7 @@ gboolean all_table_export(GIOChannel *iochannel)
 	status = g_io_channel_write_chars(
 			iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
-	}
+		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
 	g_string_free(output,TRUE);
 
 	update_logbar("tools_view",NULL,g_strdup("VE-Table(s) Exported Successfully\n"),FALSE,FALSE);
@@ -489,8 +496,7 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
 			iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
 	}
 	g_string_free(output,TRUE);
 
@@ -523,8 +529,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 
 	if (!iochannel)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return FALSE;
 	}
 	vex = g_new0(Vex_Import, 1);
@@ -533,10 +538,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 	/*reset_import_flags();*/
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": all_table_import()\n\tError seeking to beginning of the file\n"));
-	}
+		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tError seeking to beginning of the file\n"));
 	/* process lines while we can */
 	while (go)
 	{
@@ -567,8 +569,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": all_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": all_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return FALSE;
 	}
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
@@ -607,8 +608,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 
 	if (!iochannel)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return;
 	}
 	vex = g_new0(Vex_Import, 1);
@@ -617,10 +617,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	/*reset_import_flags();*/
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": single_table_import()\n\tError seeking to beginning of the file\n"));
-	}
+		dbg_func(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tError seeking to beginning of the file\n"));
 	/* process lines while we can */
 	while (go)
 	{
@@ -649,8 +646,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": single_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": single_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return;
 	}
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
@@ -692,8 +688,7 @@ GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochannel)
 				status = handler_dispatch(vex, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
 				{
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"));
+					dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"));
 					return status;
 				}
 				goto breakout;
@@ -761,8 +756,7 @@ GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
 
 	if (!string)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);
@@ -815,8 +809,7 @@ GIOStatus process_page(Vex_Import *vex, gchar *string)
 
 	if (!string)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);	
@@ -943,8 +936,7 @@ GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string
 
 	if (!string)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, "[", 2);
@@ -1034,8 +1026,7 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
 
 	if (!string)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	/* Get first number of [  x][  y] in the string line */
@@ -1186,8 +1177,7 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	table = vex->table;
 	if ((table < 0) || (table >= firmware->total_tables))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": feed_import_data_to_ecu()\n\ttable passed (%i) is out of range(%i)\n",table,firmware->total_tables));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": feed_import_data_to_ecu()\n\ttable passed (%i) is out of range(%i)\n",table,firmware->total_tables));
 		return;
 	}
 
@@ -1195,16 +1185,14 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	if (firmware->table_params[table]->x_bincount != vex->total_x_bins)
 	{
 		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins),FALSE,FALSE);
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins));
 
 		return;
 	}
 	if (firmware->table_params[table]->y_bincount != vex->total_y_bins)
 	{
 		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins),FALSE,FALSE);
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins));
 		return;
 	}
 

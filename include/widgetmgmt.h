@@ -14,6 +14,7 @@
 #ifndef __WIDGETMGMT_H__
 #define __WIDGETMGMT_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
@@ -27,6 +28,8 @@ void get_geo(GtkWidget *, const char *, PangoRectangle *);
 void set_fixed_size(GtkWidget *, int);
 void set_widget_labels(gchar *);
 EXPORT void lock_entry(GtkWidget *);
+gint get_multiplier(DataSize );
+gboolean check_size(DataSize );
 /* Prototypes */
 
 #endif

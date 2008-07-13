@@ -22,7 +22,6 @@
 #endif
 
 extern Serial_Params *serial_params;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 /*!
@@ -68,10 +67,7 @@ void win32_setup_serial_params(gint baud)
 
 	/* Set the port properties and write the string out the port. */
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
-	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
-	}
+		dbg_func(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	timeouts.ReadIntervalTimeout         = 0;

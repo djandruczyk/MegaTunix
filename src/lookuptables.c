@@ -27,7 +27,6 @@
 static gboolean ltc_visible = FALSE;
 
 GHashTable *lookuptables = NULL;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 enum
@@ -66,8 +65,7 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 	}
 	if (!status)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name));
 		exit (-2);
 	}
 
@@ -100,8 +98,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"));
 	}
 	while (!done)	
 	{
@@ -321,8 +318,7 @@ gfloat lookup_data(GObject *object, gint offset)
 
 	if (!lookuptable)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) OBJ_GET(object,"internal_names")));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) OBJ_GET(object,"internal_names")));
 		return 0.0;
 	}
 	return lookuptable->array[offset];
@@ -541,8 +537,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		count = 0;
 		while ((g_async_queue_length(io_queue) > 0) && (count < 30))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
 			while (gtk_events_pending())
 				gtk_main_iteration();
 			count++;
@@ -605,11 +600,7 @@ void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {
 	LookupTable *table;
 	table = (LookupTable *)value;
-	/*
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename));
-		*/
-		printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename);
+	printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename);
 }
 
 

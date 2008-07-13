@@ -37,7 +37,6 @@ gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
-extern gint dbg_lvl;
 extern Rtv_Map *rtv_map;
 extern GObject *global_data;
 
@@ -78,8 +77,7 @@ EXPORT void populate_dlog_choices_pf()
 		return;
 	if (!rtvars_loaded)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Populating Datalogger..."));
@@ -266,8 +264,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	extern Firmware_Details *firmware;
 	if (!iochannel)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
 		return;
 	}
 	/* Count total logable variables */
@@ -333,8 +330,7 @@ EXPORT void run_datalog_pf(void)
 	iochannel = (GIOChannel *) OBJ_GET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data");
 	if (!iochannel)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": run_datalog_pf()\n\tIo_File undefined, returning NOW!!!\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": run_datalog_pf()\n\tIo_File undefined, returning NOW!!!\n"));
 		return;
 	}
 
@@ -455,13 +451,21 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	GIOChannel *iochannel = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern GtkWidget *main_window;
+	extern Firmware_Details *firmware;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for datalog export");
 	fileio->parent = main_window;
 	fileio->on_top =TRUE;
-	fileio->default_filename= g_strdup("Untitled.log");
+	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.log",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
@@ -518,13 +522,23 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern GtkWidget *main_window;
+	extern Firmware_Details *firmware;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+
+
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
 	fileio->parent = main_window;
 	fileio->on_top =TRUE;
-	fileio->default_filename= g_strdup("Untitled.log");
+	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.log",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 

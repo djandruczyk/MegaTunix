@@ -26,7 +26,6 @@
 
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 /*!
  \brief multi_exprt_loader() is called when a "multi_expr_keys" key is found in
@@ -54,8 +53,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 
 	if (!cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expressions()\n\t Can't find \"multi_expr_keys\" in the \"[%s]\" section, exiting!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expressions()\n\t Can't find \"multi_expr_keys\" in the \"[%s]\" section, exiting!\n",section));
 		exit (-4);
 	}
 	else
@@ -68,8 +66,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 
 	if (!cfg_read_string(cfgfile,section,"lower_limits",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -79,8 +76,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	if (!cfg_read_string(cfgfile,section,"upper_limits",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"upper_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"upper_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -90,8 +86,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	if (!cfg_read_string(cfgfile,section,"multi_lookuptables",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -101,8 +96,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	if (!cfg_read_string(cfgfile,section,"dl_conv_exprs",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -112,8 +106,7 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	if (!cfg_read_string(cfgfile,section,"ul_conv_exprs",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else

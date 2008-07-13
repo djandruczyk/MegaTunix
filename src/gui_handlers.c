@@ -121,44 +121,32 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	/* Stop timeout functions */
 
 	stop_tickler(RTV_TICKLER);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
 	stop_tickler(TOOTHMON_TICKLER);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_toothmon\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_toothmon\n"));
 	stop_tickler(TRIGMON_TICKLER);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_trigmon\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_trigmon\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"));
 
 	stop_datalogging();
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	leaving = TRUE;
 	/* Message to trigger serial repair queue to exit immediately */
 	g_async_queue_push(serial_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
 	if ((connected) && (interrogated) && (!offline))
 		io_cmd(firmware->burn_all_command,NULL);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
-	if (dbg_lvl & CRITICAL)
-	{
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
-	}
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
 
 	g_static_mutex_lock(&mutex);
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
 
 	save_config();
 
@@ -176,8 +164,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 			g_io_channel_shutdown(iochannel,TRUE,NULL);
 			g_io_channel_unref(iochannel);
 		}
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 	}
 
 
@@ -188,8 +175,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	/* This makes us wait until the io queue finishes */
 	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
 		while (gtk_events_pending())
 			gtk_main_iteration();
 		count++;
@@ -197,8 +183,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	count = 0;
 	while ((g_async_queue_length(gui_dispatch_queue) > 0) && (count < 10))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining gui Dispatch Queue, current length %i\n",g_async_queue_length(gui_dispatch_queue)));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining gui Dispatch Queue, current length %i\n",g_async_queue_length(gui_dispatch_queue)));
 		g_async_queue_try_pop(gui_dispatch_queue);
 		while (gtk_events_pending())
 			gtk_main_iteration();
@@ -206,8 +191,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	}
 	while ((g_async_queue_length(pf_dispatch_queue) > 0) && (count < 10))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": LEAVE() draining postfunction Dispatch Queue, current length %i\n",g_async_queue_length(pf_dispatch_queue)));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining postfunction Dispatch Queue, current length %i\n",g_async_queue_length(pf_dispatch_queue)));
 		g_async_queue_try_pop(pf_dispatch_queue);
 		while (gtk_events_pending())
 			gtk_main_iteration();
@@ -228,16 +212,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	g_static_mutex_unlock(&serio_mutex);
 	/* Free all buffers */
 	mem_dealloc();
-	if (dbg_lvl & CRITICAL)
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
-	/*
-	if (dbg_lvl & CRITICAL)
-		printf(__FILE__": LEAVE() Log closed, attempting to unlock mutex\n");
-	g_static_mutex_unlock(&mutex);
-	if (dbg_lvl & CRITICAL)
-		printf(__FILE__": LEAVE() Mutex unlocked, calling gtk_main_quit()\n");
-		*/
 	gtk_main_quit();
 	return;
 }
@@ -548,8 +524,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		default:
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset));
 			return FALSE;
 			break;
 
@@ -713,8 +688,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 				dload_val = convert_before_download(widget,tmpi);
 			else
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base));
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base));
 				return TRUE;
 			}
 			/* What we are doing is doing the forward/reverse 
@@ -751,8 +725,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": std_entry_handler()\n\tERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": std_entry_handler()\n\tERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;  
 				break;
 
@@ -789,8 +762,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;  
 				break;
 
@@ -880,8 +852,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	if (handler == 0)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n"));
 		return FALSE;
 	}
 
@@ -1019,8 +990,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			set_offline_mode();
 			break;
 		default:
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n"));
+			dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n"));
 	}		
 	return TRUE;
 }
@@ -1132,8 +1102,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	if (!GTK_IS_WIDGET(widget))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
 		return FALSE;
 	}
 
@@ -1325,8 +1294,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;  
 				break;
 
@@ -1363,8 +1331,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;  
 				break;
 
@@ -1408,8 +1375,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": spin_button_handler()\n\tERROR spinbutton not handled, handler = %i\n",handler));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": spin_button_handler()\n\tERROR spinbutton not handled, handler = %i\n",handler));
 			dl_type = 0;  
 			break;
 	}
@@ -1773,8 +1739,7 @@ void update_widget(gpointer object, gpointer user_data)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
 
 			}
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
@@ -1795,8 +1760,7 @@ void update_widget(gpointer object, gpointer user_data)
 						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
 
 			}
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
@@ -1825,8 +1789,7 @@ void update_widget(gpointer object, gpointer user_data)
 				g_free(tmpbuf);
 			}
 			else
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"));
+				dbg_func(CRITICAL,g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"));
 
 			if ((use_color) && (update_color))
 			{
@@ -1856,8 +1819,7 @@ void update_widget(gpointer object, gpointer user_data)
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 					break;
 				default:
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
 
 
 			}
@@ -1877,8 +1839,7 @@ void update_widget(gpointer object, gpointer user_data)
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 					break;
 				default:
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
 
 
 			}
@@ -1980,8 +1941,7 @@ void update_widget(gpointer object, gpointer user_data)
 				tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 				if (!tmpbuf)
 				{
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)));
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)));
 					goto noalgo;
 				}
 
@@ -2225,8 +2185,7 @@ testit:
 	frame_name = (gchar *)OBJ_GET(parent,"rescaler_frame");
 	if (!frame_name)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n"));
 		return FALSE;
 	}
 

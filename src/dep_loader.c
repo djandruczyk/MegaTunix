@@ -19,13 +19,14 @@
 #include <defines.h>
 #include <dep_loader.h>
 #include <enums.h>
+#include <firmware.h>
 #include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
+#include <widgetmgmt.h>
 
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
@@ -43,15 +44,17 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 	gchar *tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar ** deps = NULL;
+	gchar ** vector = NULL;
 	gint num_deps = 0;
 	gint tmpi = 0;
 	gint type = 0;
 	gint i = 0;
+	gint len = 0;
+	extern Firmware_Details *firmware;
 	
 	if (!cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t CAn't find \"depend_on\" in the \"[%s]\" section, exiting!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Can't find \"depend_on\" in the \"[%s]\" section, exiting!\n",section));
 		exit (-4);
 	}
 	else
@@ -69,73 +72,87 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 
 	for (i=0;i<num_deps;i++)
 	{
-		key = g_strdup_printf("%s_type",deps[i]);
+		key = g_strdup_printf("%s",deps[i]);
 		if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section));
 			exit (-4);
 		}
 		else
 		{
-			type = translate_string(tmpbuf);
-			g_free(tmpbuf);
-			OBJ_SET(dep_obj,key,GINT_TO_POINTER(type));
+			vector = g_strsplit(tmpbuf,",",-1);
+			len = g_strv_length(vector);
+			/* 7 args is VE_EMB_BIT, 4 args is VE_VAR */
+			if (!((len == 7) || (len == 4)))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t invalid number of arguments \"%i\" in section \"[%s]\", EXITING!!\n",g_strv_length(vector),section));
+				exit (-4);
+			}
 		}
-		g_free(key);
+		type = translate_string(vector[DEP_TYPE]);
 		if (type == VE_EMB_BIT)
 		{
-			key = g_strdup_printf("%s_page",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
-			}
-			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-			g_free(key);
-			key = g_strdup_printf("%s_offset",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
-			}
-			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-			g_free(key);
 			key = g_strdup_printf("%s_size",deps[i]);
-			if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
+			tmpi = translate_string(vector[DEP_SIZE]);
+			if (!check_size(tmpi))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n",vector[DEP_SIZE],section));
 				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
-			else
-			{
-				tmpi = translate_string(tmpbuf);
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-				g_free(tmpbuf);
-			}
-			g_free(key);
-			key = g_strdup_printf("%s_bitshift",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
 			}
 			else
 				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
+
+			key = g_strdup_printf("%s_page",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_PAGE],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > firmware->total_pages))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 2 (page) \"%s\" in section \"[%s]\" is invalid, EXITING!!\n",vector[DEP_PAGE],section));
+				exit (-4);
+			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+
+			key = g_strdup_printf("%s_offset",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_OFFSET],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > firmware->page_params[(gint)strtol(vector[DEP_PAGE],NULL,10)]->length))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 3 (offset) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n",vector[DEP_OFFSET],section));
+				exit (-4);
+			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+
 			key = g_strdup_printf("%s_bitmask",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
+			tmpi = (gint)strtol(vector[DEP_BITMASK],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > 255))
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 4 (bitmask) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n",vector[DEP_BITMASK],section));
+				exit (-4);
 			}
 			else
 				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
-			key = g_strdup_printf("%s_bitval",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
+
+			key = g_strdup_printf("%s_bitshift",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_BITSHIFT],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > 8))
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 5 (bitshift) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n",vector[DEP_BITSHIFT],section));
+				exit (-4);
+			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+
+			key = g_strdup_printf("%s_bitval",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_BITVAL],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > 255))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 6 (bitval) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n",vector[DEP_BITVAL],section));
+				exit (-4);
 			}
 			else
 				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
@@ -144,35 +161,41 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		}
 		if (type == VE_VAR)
 		{
-			key = g_strdup_printf("%s_page",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
-			}
-			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-			g_free(key);
-			key = g_strdup_printf("%s_offset",deps[i]);
-			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
-			}
-			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-			g_free(key);
 			key = g_strdup_printf("%s_size",deps[i]);
-			if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
-			else
+			tmpi = translate_string(vector[DEP_SIZE]);
+			if (!check_size(tmpi))
 			{
-				tmpi = translate_string(tmpbuf);
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
-				g_free(tmpbuf);
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n",vector[DEP_SIZE],section));
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
+
+			key = g_strdup_printf("%s_page",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_PAGE],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > firmware->total_pages))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 2 (page) \"%s\" in section \"[%s]\" is invalid, EXITING!!\n",vector[DEP_PAGE],section));
+				exit (-4);
+			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+
+			key = g_strdup_printf("%s_offset",deps[i]);
+			tmpi = (gint)strtol(vector[DEP_OFFSET],NULL,10);
+			if ((tmpi < 0 ) || (tmpi > firmware->page_params[(gint)strtol(vector[DEP_PAGE],NULL,10)]->length))
+			{
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 3 (offset) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n",vector[DEP_OFFSET],section));
+				exit (-4);
+			}
+			else
+				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+			g_free(key);
+
 		}
+		g_strfreev(vector);
 			
 	}
 	OBJ_SET(object,"dep_object",(gpointer)dep_obj);

@@ -33,7 +33,6 @@
 #include <3d_vetable.h>
 
 extern GStaticMutex serio_mutex;
-extern gint dbg_lvl;
 extern GObject *global_data;
 volatile gboolean outstanding_data = FALSE;
 
@@ -72,18 +71,15 @@ gint comms_test()
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 
-	if (dbg_lvl & SERIAL_RD)
-		dbg_func(g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
+	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
 
-	if (dbg_lvl & SERIAL_RD)
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
+	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
 	if (write(serial_params->fd,"C",1) != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
-		if (dbg_lvl & (SERIAL_RD|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
+		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);
 		connected = FALSE;
 		return connected;
@@ -94,8 +90,7 @@ gint comms_test()
 		if (write(serial_params->fd,"c",1) != 1)
 		{
 			err_text = (gchar *)g_strerror(errno);
-			if (dbg_lvl & (SERIAL_RD|CRITICAL))
-				dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
+			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 			thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);
 			connected = FALSE;
 			return connected;
@@ -106,8 +101,7 @@ gint comms_test()
 	{
 		connected = TRUE;
 		errcount=0;
-		if (dbg_lvl & SERIAL_RD)
-			dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
+		dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
 		queue_function(g_strdup("kill_conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("ECU Connected..."));
 		thread_update_logbar("comms_view","info",g_strdup_printf("ECU Comms Test Successfull\n"),FALSE,FALSE);
@@ -121,8 +115,7 @@ gint comms_test()
 		if (errcount > 2 )
 			queue_function(g_strdup("conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
-		if (dbg_lvl & (SERIAL_RD|IO_PROCESS))
-			dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
+		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),FALSE,FALSE);
 	}
 	return connected;
@@ -318,18 +311,14 @@ void write_data(Io_Message *message)
 			for (j=0;j<block->len;j++)
 			{
 //				printf("comms.c data[%i] is %i\n",j,block->data[j]);
-				if (dbg_lvl & (SERIAL_WR))
-				{
-					if (i == 0)
-						dbg_func(g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
-					else
-						dbg_func(g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]));
-				}
+				if (i == 0)
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
+				else
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]));
 //				printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);
 				res = write (serial_params->fd,&(block->data[j]),1);	/* Send write command */
 				if (res != 1)
-					if (dbg_lvl & (SERIAL_WR|CRITICAL))
-						dbg_func(g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
 				if (firmware->capabilities & MS2)
 					g_usleep(firmware->interchardelay*1000);
 

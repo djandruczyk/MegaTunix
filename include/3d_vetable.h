@@ -211,7 +211,6 @@ gboolean set_scaling_mode(GtkWidget *, gpointer );
 gboolean set_rendering_mode(GtkWidget *, gpointer );
 gboolean set_shading_mode(GtkWidget *, gpointer );
 gfloat get_fixed_pos(Ve_View_3D *, void *,gfloat, Axis);
-gint get_multiplier(DataSize );
 void drawOrthoText(char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 

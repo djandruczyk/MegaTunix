@@ -112,7 +112,21 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
 			conditions are met.
 	depend_on	(string) list of arbritrary names of variables to
 			match against to use an alternate lookuptable.
-			depend 
+			The depend_on key isa CSV list of named to look for
+			to gather the required info about each dependancy.
+			i.e. depend_on=o2_sensor.  Ther MUST be a key called
+			o2_sensor=  eith either 7 or 4 parameters depending if
+			its a VE_EMB_BIT or VE_VAR respectively. 
+			for example:
+		o2_sensor=_VE_EMB_BIT_,_U08_,0,100,8,3,1
+		Field 1 is the type (_VE_EMB_BIT_, or _VE_VAR_)
+		Field 2 is the size (_U08_ _U16_, _U32_, Use _U08_ if unsure)
+		Field 3 is the page of this dependancy
+		Field 4 is the offset of this dependancy
+		Field 5 (EMB_BIT) is the bitMASK
+		Field 6 (EMB_BIT) is the bitSHIFT
+		Field 7 (EMB_BIT) is the bitVALUE that we are looking for.
+		
 	*_type		(enum) Type of variable (VE_VAR or VE_EMB_BIT)
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_vars

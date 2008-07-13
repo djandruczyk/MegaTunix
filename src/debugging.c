@@ -91,10 +91,10 @@ void close_debug()
 /*!
  \brief dbg_func() writes debugggin output to the console based on if the
  passed debug level is marked in the current debugging mask.
+ \param level (Dbg_Class enumeration) the debug level
  \param str (gchar *) message to print out
- \param class (Dbg_Class enumeration) the debug level
  */
-void dbg_func(gchar *str)
+void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
 	GError *error = NULL;
@@ -102,6 +102,13 @@ void dbg_func(gchar *str)
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
 	*/
+
+	/* IF we don't debug this level, free message and exit */
+	if (!(dbg_lvl & level))
+	{
+		g_free(str);
+		return;
+	}
 
 	if (!dbg_channel)
 	{
@@ -114,6 +121,10 @@ void dbg_func(gchar *str)
 	if (dbg_channel)
 	{
 		g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
+#ifdef DEBUG
+		if (level & CRITICAL)
+			printf("%s",str);
+#endif
 		g_free(str);
 		g_io_channel_flush(dbg_channel,&error);
 	}

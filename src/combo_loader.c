@@ -26,7 +26,6 @@
 
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)

@@ -24,7 +24,6 @@
 #include <widgetmgmt.h>
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -42,40 +41,31 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
-					if (dbg_lvl & KEYPARSER)
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
+					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-				{
-					if (dbg_lvl & (KEYPARSER|CRITICAL))
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
-				}
+					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
 				break;
 			case MTX_ENUM:
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					tmpi = translate_string(tmpbuf);
-					if (dbg_lvl & KEYPARSER)
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
+					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
 				}
 				else
-				{
-					if (dbg_lvl & (KEYPARSER|CRITICAL))
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
-				}
+						dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					if (dbg_lvl & KEYPARSER)
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
+					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
@@ -83,16 +73,12 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 						load_complex_params(object,cfgfile,section);
 				}
 				else
-				{
-					if (dbg_lvl & (KEYPARSER|CRITICAL))
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
-				}
+						dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
 				break;
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
-					if (dbg_lvl & KEYPARSER)
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section));
+					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section));
 					tmpstr = OBJ_GET(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */
@@ -111,10 +97,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 					g_free(tmpbuf);
 				}
 				else
-				{
-					if (dbg_lvl & (KEYPARSER|CRITICAL))
-						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
-				}
+						dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
 				break;
 			default:
 				break;

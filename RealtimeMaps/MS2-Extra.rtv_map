@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=1
+minor=2
 
 [realtime_map]
 applicable_firmwares=MS-II V2.0 RC2

@@ -32,7 +32,6 @@
 
 extern GdkColor red;
 extern GdkColor black;
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -50,22 +49,18 @@ void req_fuel_change(GtkWidget *widget)
 		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
 	else
 	{
-		if (dbg_lvl & (REQ_FUEL|CRITICAL))
-			dbg_func(g_strdup(__FILE__": req_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
+		dbg_func(REQ_FUEL|CRITICAL,g_strdup(__FILE__": req_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
 		return;
 	}
 
 	reqd_fuel->actual_inj_flow = ((double)reqd_fuel->rated_inj_flow *
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
-	if (dbg_lvl & REQ_FUEL)
-	{
-		dbg_func(g_strdup_printf(__FILE__": req_fuel_change()\n\tRated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow));
-		dbg_func(g_strdup_printf(__FILE__": req_fuel_change()\n\tRated fuel pressure is %f bar\n",reqd_fuel->rated_pressure));
-		dbg_func(g_strdup_printf(__FILE__": req_fuel_change()\n\tActual fuel pressure is %f bar\n",reqd_fuel->actual_pressure));
-		dbg_func(g_strdup_printf(__FILE__": req_fuel_change()\n\tCalculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow));
-		dbg_func(g_strdup_printf(__FILE__": req_fuel_change()\n\tTarget AFR is %f lbs/hr\n",reqd_fuel->target_afr));
-	}
+	dbg_func(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tRated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow));
+	dbg_func(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tRated fuel pressure is %f bar\n",reqd_fuel->rated_pressure));
+	dbg_func(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tActual fuel pressure is %f bar\n",reqd_fuel->actual_pressure));
+	dbg_func(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tCalculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow));
+	dbg_func(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tTarget AFR is %f lbs/hr\n",reqd_fuel->target_afr));
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \

@@ -20,7 +20,6 @@
 #include <stringmatch.h>
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 /*!
  \brief parse_keys() splits up a string list into a vector and returns it
@@ -35,8 +34,7 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 	gchar **result = NULL;	
 	if (!string)
 	{
-		if (dbg_lvl & (KEYPARSER|CRITICAL))
-			dbg_func(g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"));
+		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"));
 		*count = 0;
 		return NULL;
 	}
@@ -62,8 +60,7 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 
 	if (!string)
 	{
-		if (dbg_lvl & (KEYPARSER|CRITICAL))
-			dbg_func(g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"));
+		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"));
 		*count = 0;
 		return 0;
 	}
@@ -74,11 +71,9 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
-		if (dbg_lvl & KEYPARSER)
-			dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]));
+		dbg_func(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]));
 		keytypes[i] = translate_string(vector[i]);
-		if (dbg_lvl & KEYPARSER)
-			dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]));
+		dbg_func(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]));
 		i++;
 	}
 	g_strfreev(vector);

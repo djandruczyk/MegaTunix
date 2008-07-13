@@ -39,7 +39,7 @@ struct _DebugLevel
 /* Prototypes */
 void close_debug(void);
 void open_debug(void);
-void dbg_func(gchar *);
+void dbg_func(Dbg_Class, gchar *);
 void populate_debugging(GtkWidget *);
 /* Prototypes */
 

@@ -21,7 +21,6 @@
 GArray *raw_memory_widgets = NULL;
 gint num_mem_pages = 4;
 gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 
@@ -106,10 +105,7 @@ EXPORT void finish_memviewer(void)
 			name = g_strdup_printf("memviewer_tab%i_hex_radio_button",z);
 			button = g_hash_table_lookup(dynamic_widgets,name);
 			if (!button)
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 			g_free(name);
@@ -119,10 +115,7 @@ EXPORT void finish_memviewer(void)
 			name = g_strdup_printf("memviewer_tab%i_binary_radio_button",z);
 			button = g_hash_table_lookup(dynamic_widgets,name);
 			if (!button)
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 			g_free(name);
@@ -132,10 +125,7 @@ EXPORT void finish_memviewer(void)
 			name = g_strdup_printf("memviewer_tab%i_decimal_radio_button",z);
 			button = g_hash_table_lookup(dynamic_widgets,name);
 			if (!button)
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 			g_free(name);

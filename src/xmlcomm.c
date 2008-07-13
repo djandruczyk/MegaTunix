@@ -22,7 +22,6 @@
 #include <xmlbase.h>
 
 
-extern gint dbg_lvl;
 extern GObject *global_data;
 
 void load_comm_xml(gchar *filename)

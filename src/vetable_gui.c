@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <threads.h>
 #include <vetable_gui.h>
+#include <widgetmgmt.h>
 
 
 extern GObject *global_data;

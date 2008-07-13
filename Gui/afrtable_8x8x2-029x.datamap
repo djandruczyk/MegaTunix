@@ -72,12 +72,7 @@ precision=2
 lookuptable=nbo2_table
 alt_lookuptable=wbo2_table
 depend_on=o2_sensor
-o2_sensor_type=_VE_EMB_BIT_
-o2_sensor_page=1
-o2_sensor_offset=184
-o2_sensor_bitval=1
-o2_sensor_bitshift=1
-o2_sensor_bitmask=2
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
@@ -95,12 +90,7 @@ precision=2
 lookuptable=nbo2_table
 alt_lookuptable=wbo2_table
 depend_on=o2_sensor
-o2_sensor_type=_VE_EMB_BIT_
-o2_sensor_page=2
-o2_sensor_offset=184
-o2_sensor_bitval=1
-o2_sensor_bitshift=1
-o2_sensor_bitmask=2
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
@@ -239,12 +229,7 @@ page=0
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=an_ego_button
-an_ego_button_type=_VE_EMB_BIT_
-an_ego_button_page=0
-an_ego_button_offset=109
-an_ego_button_bitval=1
-an_ego_button_bitshift=4
-an_ego_button_bitmask=16
+an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR1_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -253,12 +238,7 @@ page=0
 label=KPa
 alt_label=TPSADC
 depend_on=an_ego_button
-an_ego_button_type=_VE_EMB_BIT_
-an_ego_button_page=0
-an_ego_button_offset=109
-an_ego_button_bitval=1
-an_ego_button_bitshift=4
-an_ego_button_bitmask=16
+an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR2_load_tbl_lab]
 keys=page,label,alt_label,depend_on
@@ -267,12 +247,7 @@ page=0
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=an_ego_button
-an_ego_button_type=_VE_EMB_BIT_
-an_ego_button_page=0
-an_ego_button_offset=109
-an_ego_button_bitval=1
-an_ego_button_bitshift=4
-an_ego_button_bitmask=16
+an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR2_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -281,12 +256,7 @@ page=0
 label=KPa
 alt_label=TPSADC
 depend_on=an_ego_button
-an_ego_button_type=_VE_EMB_BIT_
-an_ego_button_page=0
-an_ego_button_offset=109
-an_ego_button_bitval=1
-an_ego_button_bitshift=4
-an_ego_button_bitmask=16
+an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR1_afrtable_filler_label]
 keys=page,label,alt_label,depend_on
@@ -295,12 +265,7 @@ page=0
 alt_label=Narrowband O2 Sensor in use, beware of poor precision
 label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor_type=_VE_EMB_BIT_
-ego_sensor_page=1
-ego_sensor_offset=184
-ego_sensor_bitval=1
-ego_sensor_bitshift=1
-ego_sensor_bitmask=2
+ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 
 [AFR2_afrtable_filler_label]
 keys=page,label,alt_label,depend_on
@@ -309,12 +274,7 @@ page=0
 alt_label=Narrowband O2 Sensor in use, beware of poor precision
 label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor_type=_VE_EMB_BIT_
-ego_sensor_page=2
-ego_sensor_offset=184
-ego_sensor_bitval=1
-ego_sensor_bitshift=1
-ego_sensor_bitmask=2
+ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 
 #----- widgets ---------------------------------------------------------------
 

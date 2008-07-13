@@ -42,7 +42,6 @@ enum
 	NUM_COLS
 } ;
 
-extern gint dbg_lvl;
 static GList *views = NULL;
 extern GObject *global_data;
 
@@ -69,8 +68,7 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 
 	if (!rtvars_loaded)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
@@ -357,8 +355,7 @@ void cell_edited(GtkCellRendererText *cell,
 			evaluator = evaluator_create(OBJ_GET(object,"dl_conv_expr"));
 			if (!evaluator)
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)OBJ_GET(object,"dl_conv_expr")));
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)OBJ_GET(object,"dl_conv_expr")));
 				OBJ_SET(object,"dl_evaluator",(gpointer)evaluator);
 			}
 		}
@@ -558,15 +555,13 @@ void update_model_from_view(GtkWidget * widget)
 					expr = OBJ_GET(object,"ul_conv_expr");
 					if (expr == NULL)
 					{
-						if (dbg_lvl & CRITICAL)
-							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_name")));
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_name")));
 						exit (-3);
 					}
 					evaluator = evaluator_create(expr);
 					if (!evaluator)
 					{
-						if (dbg_lvl & CRITICAL)
-							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 						OBJ_SET(object,"ul_evaluator",evaluator);
 					}
 					assert(evaluator);

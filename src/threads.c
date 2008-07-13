@@ -36,13 +36,13 @@
 #include <tabloader.h>
 #include <xmlcomm.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 
 gboolean force_page_change;
 extern gboolean connected;			/* valid connection with MS */
 extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
-extern gint dbg_lvl;
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 volatile gint last_page = 0;
@@ -148,8 +148,7 @@ void *thread_dispatcher(gpointer data)
 		}
 		if ((!port_open) && (!offline))
 		{
-			if (dbg_lvl & (THREADS|CRITICAL))
-				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
+			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
 			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
 			continue;
@@ -181,8 +180,7 @@ void *thread_dispatcher(gpointer data)
 				break;
 
 			default:
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\t Hit default case, this SHOULD NOT HAPPEN it's a bug, notify author! \n"));
+				dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": thread_dispatcher()\n\t Hit default case, this SHOULD NOT HAPPEN it's a bug, notify author! \n"));
 
 				break;
 
@@ -226,8 +224,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	guint32 u32 = 0;
 	gint32 s32 = 0;
 
-	if (dbg_lvl & SERIAL_WR)
-		dbg_func(g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
 
 	switch (size)
 	{
@@ -409,8 +406,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 
-	if (dbg_lvl & SERIAL_WR)
-		dbg_func(g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, num_bytes %i, data %p\n",page,offset,num_bytes,data));
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, num_bytes %i, data %p\n",page,offset,num_bytes,data));
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));

@@ -30,7 +30,6 @@
 
 
 
-extern gint dbg_lvl;
 GtkWidget *status_window = NULL;
 extern GObject *global_data;
 
@@ -75,8 +74,7 @@ EXPORT void load_status_pf(void)
 		return;
 	if (!firmware->status_map_file)
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
 		return;
 	}
 
@@ -84,8 +82,7 @@ EXPORT void load_status_pf(void)
 	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
 	if (!filename)
 	{
-		if (dbg_lvl & (RTMLOADER|CRITICAL))
-			dbg_func(g_strdup_printf(__FILE__": load_runtmie_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtmie_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
 		set_title(g_strdup("ERROR RT Statusfile DOES NOT EXIST!!!"));
 		return;
 	}
@@ -95,8 +92,7 @@ EXPORT void load_status_pf(void)
 		get_file_api(cfgfile,&major,&minor);
 		if ((major != RT_STATUS_MAJOR_API) || (minor != RT_STATUS_MINOR_API))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
 			g_free(filename);
 			set_title(g_strdup("ERROR RT Status API MISMATCH!!!"));
 			return;
@@ -104,8 +100,7 @@ EXPORT void load_status_pf(void)
 
 		if(!cfg_read_int(cfgfile,"global","total_status",&count))
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
 			set_title(g_strdup("ERROR RT Status cfgfile problem!!!"));
 			return;
 		}
@@ -138,20 +133,13 @@ EXPORT void load_status_pf(void)
 			section = g_strdup_printf("status_%i",i);
 			if (!cfg_read_string(cfgfile,section,"create_label",&tmpbuf))
 			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
 				break;
 			}
 			if (!cfg_read_int(cfgfile,section,"row",&row))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
 			if (!cfg_read_int(cfgfile,section,"col",&col))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
 			frame = gtk_frame_new(NULL);
 			gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
 			gtk_table_attach(GTK_TABLE(table),frame,
@@ -179,10 +167,7 @@ EXPORT void load_status_pf(void)
 
 			gtk_container_add(GTK_CONTAINER(frame),label);
 			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
 			else
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
@@ -190,10 +175,7 @@ EXPORT void load_status_pf(void)
 			}
 
 			if (!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
-			{
-				if (dbg_lvl & CRITICAL)
-					dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
-			}
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
 			else
 			{
 				key_types = parse_keytypes(tmpbuf,&num_keytypes,",");
@@ -234,8 +216,7 @@ EXPORT void load_status_pf(void)
 	}
 	else
 	{
-		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": load_status_pf()\n\tCould not load %s\n",filename));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tCould not load %s\n",filename));
 	}
 
 	g_free(filename);

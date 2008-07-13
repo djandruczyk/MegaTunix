@@ -70,12 +70,7 @@ page=1
 alt_label=mSec Btwn Steps
 label=Ign Pulses Btwn Steps
 depend_on=step_ctr
-step_ctr_type=_VE_EMB_BIT_
-step_ctr_page=1
-step_ctr_offset=188
-step_ctr_bitval=0
-step_ctr_bitshift=0
-step_ctr_bitmask=1
+step_ctr=_VE_EMB_BIT_,_U08_,1,188,1,0,0
 bind_to_list=ego_ign_events
 
 [ego2_ign_events_label]
@@ -85,12 +80,7 @@ page=1
 alt_label=mSec Btwn Steps
 label=Ign Pulses Btwn Steps
 depend_on=step_ctr
-step_ctr_type=_VE_EMB_BIT_
-step_ctr_page=1
-step_ctr_offset=188
-step_ctr_bitval=0
-step_ctr_bitshift=0
-step_ctr_bitmask=1
+step_ctr=_VE_EMB_BIT_,_U08_,1,188,1,0,0
 bind_to_list=ego_ign_events
 
 #----- Radio/Checkbuttons ----------------------------------------------------

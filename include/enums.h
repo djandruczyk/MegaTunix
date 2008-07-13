@@ -439,4 +439,15 @@ typedef enum
 	DIVIDE
 }ScaleOp;
 
+typedef enum
+{
+	DEP_TYPE=0,
+	DEP_SIZE,
+	DEP_PAGE,
+	DEP_OFFSET,
+	DEP_BITMASK,
+	DEP_BITSHIFT,
+	DEP_BITVAL
+}DepVector;
+
 #endif
