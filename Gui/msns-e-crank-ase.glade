@@ -3631,6 +3631,799 @@ when CLT below</property>
 				  <property name="fill">True</property>
 				</packing>
 			      </child>
+
+			      <child>
+				<widget class="GtkFrame" id="IATCorr_frame">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+
+				  <child>
+				    <widget class="GtkTable" id="table5">
+				      <property name="border_width">5</property>
+				      <property name="visible">True</property>
+				      <property name="n_rows">3</property>
+				      <property name="n_columns">5</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">5</property>
+
+				      <child>
+					<widget class="GtkLabel" id="label19">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Air Density Correction:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkComboBox" id="IATCorTy_combo">
+					  <property name="visible">True</property>
+					  <property name="add_tearoffs">True</property>
+					  <property name="focus_on_click">True</property>
+					  <signal name="changed" handler="std_combo_handler" last_modification_time="Fri, 18 Jul 2008 17:21:16 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkComboBox" id="IATCor_combo">
+					  <property name="visible">True</property>
+					  <property name="add_tearoffs">True</property>
+					  <property name="focus_on_click">True</property>
+					  <signal name="changed" handler="std_combo_handler" last_modification_time="Fri, 18 Jul 2008 17:21:16 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkEntry" id="RPMRedHi_entry">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					  <property name="editable">True</property>
+					  <property name="visibility">True</property>
+					  <property name="max_length">5</property>
+					  <property name="text" translatable="yes">0</property>
+					  <property name="has_frame">True</property>
+					  <property name="invisible_char">*</property>
+					  <property name="activates_default">False</property>
+					  <property name="width_chars">5</property>
+					  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">4</property>
+					  <property name="right_attach">5</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkEntry" id="RPMRedLo_entry">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					  <property name="editable">True</property>
+					  <property name="visibility">True</property>
+					  <property name="max_length">5</property>
+					  <property name="text" translatable="yes">0</property>
+					  <property name="has_frame">True</property>
+					  <property name="invisible_char">*</property>
+					  <property name="activates_default">False</property>
+					  <property name="width_chars">5</property>
+					  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">4</property>
+					  <property name="right_attach">5</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="RPMRedLo_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Start to reduce Correction at (RPM):</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">3</property>
+					  <property name="right_attach">4</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="IATCorTy_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Correction Based on:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="RPMRedHi_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">End Correction at (RPM):</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">3</property>
+					  <property name="right_attach">4</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkTable" id="IATCorr_table">
+					  <property name="visible">True</property>
+					  <property name="n_rows">3</property>
+					  <property name="n_columns">8</property>
+					  <property name="homogeneous">False</property>
+					  <property name="row_spacing">0</property>
+					  <property name="column_spacing">0</property>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_0">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_0">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_1">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">2</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_2">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">3</property>
+					      <property name="right_attach">4</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_2">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">3</property>
+					      <property name="right_attach">4</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_3">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">4</property>
+					      <property name="right_attach">5</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_3">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">4</property>
+					      <property name="right_attach">5</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_4">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">5</property>
+					      <property name="right_attach">6</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_4">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">5</property>
+					      <property name="right_attach">6</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_5">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">6</property>
+					      <property name="right_attach">7</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_5">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">6</property>
+					      <property name="right_attach">7</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_6">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">7</property>
+					      <property name="right_attach">8</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCorS_entry_6">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">7</property>
+					      <property name="right_attach">8</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="label23">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Temp</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_padding">5</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="label24">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Correction (%)</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="x_padding">5</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="IATCTemp_entry_1">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">3</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">2</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="label25">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Air Density Correction Table</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">8</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">5</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="label26">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes"></property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">2</property>
+					  <property name="right_attach">3</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+				    </widget>
+				  </child>
+
+				  <child>
+				    <widget class="GtkLabel" id="label18">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">CLT/IAT Corrected Air Density</property>
+				      <property name="use_underline">False</property>
+				      <property name="use_markup">True</property>
+				      <property name="justify">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap">False</property>
+				      <property name="selectable">False</property>
+				      <property name="xalign">0.5</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				      <property name="width_chars">-1</property>
+				      <property name="single_line_mode">False</property>
+				      <property name="angle">0</property>
+				    </widget>
+				    <packing>
+				      <property name="type">label_item</property>
+				    </packing>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>

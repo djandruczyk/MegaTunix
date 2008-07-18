@@ -35,10 +35,11 @@ extern GObject *global_data;
  variables
  \param object (GObject *) place to store the retrieved data
  \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
- \param section (gchar *) sectio nto read the data from
+ \param section (gchar *) section to read the data from
+ \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
+void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
 	GObject *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -52,9 +53,9 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 	gint len = 0;
 	extern Firmware_Details *firmware;
 	
-	if (!cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
+	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Can't find \"depend_on\" in the \"[%s]\" section, exiting!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Can't find \"%s\" in the \"[%s]\" section, exiting!\n",source_key,section));
 		exit (-4);
 	}
 	else

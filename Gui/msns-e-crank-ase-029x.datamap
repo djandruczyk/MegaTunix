@@ -2,7 +2,7 @@
 description=Object data map for MSnS-E 024 series Cranking/Warmup Enrichments
 tab_name=_Cranking/Warmup
 id_prefix=CR_WU_
-groups=defaults,warmup,crank,ase
+groups=defaults,warmup,crank,ase,IATCTemp,IATCorS
 
 #----- Groups -----------------------------------------------------------------
 
@@ -43,6 +43,32 @@ handler=_GENERIC_
 raw_upper=255
 use_color=TRUE
 
+[IATCTemp]
+keys=page,dl_type,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,handler,raw_upper,use_color
+key_types=_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_BOOL_
+page=8
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature,IAT_controls
+raw_upper=255
+use_color=TRUE
+
+[IATCorS]
+keys=page,dl_type,bind_to_list,handler,raw_lower,raw_upper,use_color
+key_types=_INT_,_ENUM_,_STRING_,_ENUM_,_INT_,_INT_,_BOOL_
+page=8
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+temp_dep=TRUE
+bind_to_list=IAT_controls
+raw_lower=50
+raw_upper=150
+use_color=TRUE
+
+
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
@@ -82,6 +108,26 @@ temp_dep=TRUE
 post_function_with_arg=register_rt_range
 source=matdeg
 tab_ident=_ENRICHMENTS_TAB_
+
+[RPMRedLo_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=IAT_controls
+
+[RPMRedHi_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=IAT_controls
+
+[IATCorTy_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=IAT_controls
+
+[IATCorr_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=IAT_controls
 
 #----- Buttons ----------------------------------------------------------------
 
@@ -473,7 +519,58 @@ f_label=and IAT above \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
-#----- Spin Buttons ----------------------------------------------------------
+
+#----- Combo Buttons ----------------------------------------------------------
+
+[IATCor_combo]
+keys=page,offset,choices,bitshift,bitmask,toggle_groups,dl_type,handler
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=8
+offset=16
+bitshift=3
+bitmask=8
+choices=Normal,Table Corrected
+toggle_groups=,IAT_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[IATCorTy_combo]
+keys=page,offset,choices,bitshift,bitmask,bind_to_list,dl_type,handler
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=8
+offset=16
+bitshift=4
+bitmask=16
+bind_to_list=IAT_controls
+choices=Coolant Temp (CLT),Intake Air Temp (IAT)
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Entries -------------------------------------------------------------
+
+[RPMRedLo_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=8
+offset=54
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=IAT_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the Lower RPM limit of IAT CLT/IAT based correction. (where correction begins)
+
+[RPMRedHi_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=8
+offset=55
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=IAT_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where correction ends)
 
 [crank_rpm_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,dl_type,handler,tooltip
@@ -822,3 +919,86 @@ key_types=_INT_
 offset=177
 group=ase
 
+[IATCTemp_entry_0]
+keys=offset
+key_types=_INT_
+offset=56
+group=IATCTemp
+
+[IATCTemp_entry_1]
+keys=offset
+key_types=_INT_
+offset=57
+group=IATCTemp
+
+[IATCTemp_entry_2]
+keys=offset
+key_types=_INT_
+offset=58
+group=IATCTemp
+
+[IATCTemp_entry_3]
+keys=offset
+key_types=_INT_
+offset=59
+group=IATCTemp
+
+[IATCTemp_entry_4]
+keys=offset
+key_types=_INT_
+offset=60
+group=IATCTemp
+
+[IATCTemp_entry_5]
+keys=offset
+key_types=_INT_
+offset=61
+group=IATCTemp
+
+[IATCTemp_entry_6]
+keys=offset
+key_types=_INT_
+offset=62
+group=IATCTemp
+
+[IATCorS_entry_0]
+keys=offset
+key_types=_INT_
+offset=47
+group=IATCorS
+
+[IATCorS_entry_1]
+keys=offset
+key_types=_INT_
+offset=48
+group=IATCorS
+
+[IATCorS_entry_2]
+keys=offset
+key_types=_INT_
+offset=49
+group=IATCorS
+
+[IATCorS_entry_3]
+keys=offset
+key_types=_INT_
+offset=50
+group=IATCorS
+
+[IATCorS_entry_4]
+keys=offset
+key_types=_INT_
+offset=51
+group=IATCorS
+
+[IATCorS_entry_5]
+keys=offset
+key_types=_INT_
+offset=52
+group=IATCorS
+
+[IATCorS_entry_6]
+keys=offset
+key_types=_INT_
+offset=53
+group=IATCorS

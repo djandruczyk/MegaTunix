@@ -209,7 +209,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-	                load_dependancies(G_OBJECT(object),cfgfile,section);
+	                load_dependancies(G_OBJECT(object),cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))

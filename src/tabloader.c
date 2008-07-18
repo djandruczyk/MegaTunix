@@ -309,7 +309,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(G_OBJECT(group->object),cfgfile,section);
+			load_dependancies(G_OBJECT(group->object),cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -530,7 +530,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies(G_OBJECT(widget),cfgfile,section);
+		load_dependancies(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 

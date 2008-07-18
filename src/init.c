@@ -700,7 +700,7 @@ Page_Params * initialize_page_params(void)
 
          
 /*!
- *  \brief initialize_canidate() creates and initializes the Candidate
+ *  \brief initialize_table_params() creates and initializes the Table_Params
  *   datastructure to sane defaults and returns it
  *    */
 Table_Params * initialize_table_params(void)
@@ -733,6 +733,18 @@ Table_Params * initialize_table_params(void)
 	table_params->y_conv_expr = NULL;
 	table_params->z_conv_expr = NULL;
 	table_params->table_name = NULL;
+	/* X lookuptable container */
+	table_params->x_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+        g_object_ref(G_OBJECT(table_params->x_object));
+        gtk_object_sink(GTK_OBJECT(table_params->x_object));
+	/* Y lookuptable container */
+	table_params->y_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+        g_object_ref(G_OBJECT(table_params->y_object));
+        gtk_object_sink(GTK_OBJECT(table_params->y_object));
+	/* Z lookuptable container */
+	table_params->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+        g_object_ref(G_OBJECT(table_params->z_object));
+        gtk_object_sink(GTK_OBJECT(table_params->z_object));
 
 	return table_params;
 }

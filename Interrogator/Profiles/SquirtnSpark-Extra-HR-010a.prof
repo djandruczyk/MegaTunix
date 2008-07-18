@@ -221,6 +221,10 @@ z_base_offset=0
 z_size=_U08_
 z_source=afr
 z_suffix=AFR
+z_lookuptable=nb02_table
+z_alt_lookuptable=wb02_table
+z_depend_on=z_o2_sensor
+z_o2_sensor=_VE_EMB_BIT,_U08_,1,184,2,1,1
 z_conv_expr=x/10
 z_precision=2
 

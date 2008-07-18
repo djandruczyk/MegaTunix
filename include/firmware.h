@@ -139,6 +139,7 @@ struct _Table_Params
 	gchar *x_conv_expr;	/*! x conversion expression */
 	void *x_eval;		/*! evaluator for x variable */
 	gint x_precision;	/*! how many decimal places */
+	GObject *x_object;	/*! Container for lookuptable deps */
 
 	gint y_page;		/*! what page the load (Y axis) resides in */
 	gint y_base;		/*! where load table starts  (Y Axis) */
@@ -159,6 +160,7 @@ struct _Table_Params
 	gchar *y_conv_expr;	/*! y conversion expression */
 	void *y_eval;		/*! evaluator for y variable */
 	gint y_precision;	/*! how many decimal places */
+	GObject *y_object;	/*! Container for lookuptable deps */
 
 	gint z_page;		/*! what page the vetable resides in */
 	gint z_base;		/*! where the vetable starts */
@@ -178,6 +180,7 @@ struct _Table_Params
 	gchar *z_conv_expr;	/*! z conversion expression */
 	void *z_eval;		/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
+	GObject *z_object;	/*! Container for lookuptable deps */
 };
 
 

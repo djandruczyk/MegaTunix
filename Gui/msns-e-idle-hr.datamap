@@ -186,7 +186,7 @@ bind_to_list=pwm_idle_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-#----- Spinbuttons ----------------------------------------------------------
+#----- Entries ----------------------------------------------------------
 
 [bng_fast_idle_cutoff_temp_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
