@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <configfile.h>
 #include <debugging.h>
@@ -330,6 +331,12 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	extern GHashTable *lookuptables;
 	LookupTable *lookuptable = NULL;
+
+	if (!table)
+	{
+		printf("FATAL_ERROR: direct_lookup_data, table paramer is null\n");
+		assert(table);
+	}
 
 	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 	if (!lookuptable)

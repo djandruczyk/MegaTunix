@@ -367,6 +367,7 @@ z_conv_expr=(x*(352/1000))-10
 z_precision=1
 
 [page_0]
+dl_by_default=TRUE
 truepgnum=0
 length=189
 

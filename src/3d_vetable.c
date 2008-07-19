@@ -708,6 +708,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
 		return FALSE;
 
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(65.0, 1.0, 0.1, 4);
@@ -1409,12 +1410,9 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 
 
 /*!
- \brief ve3d_key_press_event is called whenever the user hits a key on 
-the 3D
- view. It looks for arrow keys, Plus/Minus and Pgup/PgDown.  Arrows 
-move the
- red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value 
-by 10
+ \brief ve3d_key_press_event is called whenever the user hits a key on the 3D
+ view. It looks for arrow keys, Plus/Minus and Pgup/PgDown.  Arrows  move the
+ red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value by 10
  units
  */
 EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
@@ -1441,6 +1439,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gint max = 0;
 	gint dload_val = 0;
 	gint canID = 0;
+	gint step = 1;
 	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
@@ -1474,19 +1473,22 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	y_size = ve_view->y_size;
 	z_size = ve_view->z_size;
 
+	if (event->state & GDK_SHIFT_MASK)
+		step = 10;
+	else 
+		step = 1;
 	switch (event->keyval)
 	{
 		case GDK_Up:
 			dbg_func(OPENGL,g_strdup("\t\"UP\"\n"));
-
 			/* Ctrl+Up moves the Load axis up */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				max = (gint)pow(2,y_mult*8) -10;
+				max = (gint)pow(2,y_mult*8) -step;
 				if (get_ecu_data(canID,y_page,offset,y_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) + 10;
+					dload_val = get_ecu_data(canID,y_page,offset,y_size) + step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1496,21 +1498,19 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_y < (y_bincount-1))
 					ve_view->active_y += 1;
+				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 			}
-			gdk_window_invalidate_rect (ve_view->drawing_area->window,
-					&ve_view->drawing_area->allocation, FALSE);
 			break;
 
 		case GDK_Down:
 			dbg_func(OPENGL,g_strdup("\t\"DOWN\"\n"));
-
 			/* Ctrl+Down moves the Load axis down */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				if (get_ecu_data(canID,y_page,offset,y_size) > 10)
+				if (get_ecu_data(canID,y_page,offset,y_size) > step)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) - 10;
+					dload_val = get_ecu_data(canID,y_page,offset,y_size) - step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1520,9 +1520,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_y > 0)
 					ve_view->active_y -= 1;
+				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 			}
-			gdk_window_invalidate_rect (ve_view->drawing_area->window,
-					&ve_view->drawing_area->allocation, FALSE);
 			break;
 
 		case GDK_Left:
@@ -1532,9 +1531,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				if (get_ecu_data(canID,x_page,offset,x_size) > 10)
+				if (get_ecu_data(canID,x_page,offset,x_size) > step)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) - 10;
+					dload_val = get_ecu_data(canID,x_page,offset,x_size) - step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1544,21 +1543,19 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_x > 0)
 					ve_view->active_x -= 1;
+				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 			}
-			gdk_window_invalidate_rect (ve_view->drawing_area->window,
-					&ve_view->drawing_area->allocation, FALSE);
 			break;
 		case GDK_Right:
 			dbg_func(OPENGL,g_strdup("\t\"RIGHT\"\n"));
-
 			/* Ctrl+Down moves the RPM axis right (up) */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				max = (gint)pow(2,x_mult*8) -10;
+				max = (gint)pow(2,x_mult*8) -step;
 				if (get_ecu_data(canID,x_page,offset,x_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) + 10;
+					dload_val = get_ecu_data(canID,x_page,offset,x_size) + step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1568,18 +1565,15 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_x < (x_bincount-1))
 					ve_view->active_x += 1;
+				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 			}
-			gdk_window_invalidate_rect (ve_view->drawing_area->window,
-					&ve_view->drawing_area->allocation, FALSE);
 			break;
-
 		case GDK_Page_Up:
 			dbg_func(OPENGL,g_strdup("\t\"Page Up\"\n"));
-
 			max = (gint)pow(2,z_mult*8) -10;
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-q/+/=, big increase ROW!\n");
+				//printf("Ctrl-PgUp, big increase ROW!\n");
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1590,13 +1584,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Alt-q/+/=, big increase COL!\n");
+				//printf("Alt-PgUp, big increase COL!\n");
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1610,8 +1604,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 					}
 				}
+				break;
 			}
-
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
@@ -1631,7 +1625,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_q:
 		case GDK_equal:
 			dbg_func(OPENGL,g_strdup("\t\"PLUS\"\n"));
-
 			max = (gint)pow(2,z_mult*8)-1;
 			if (event->state & GDK_CONTROL_MASK)
 			{
@@ -1646,13 +1639,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Ctrl-q/+/=, increase COL!\n");
+				//printf("Alt-q/+/=, increase COL!\n");
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1663,9 +1656,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			else
 			{
@@ -1684,7 +1677,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-q/+/=, big decrease ROW!\n");
+				//printf("Ctrl-PgDn, big decrease ROW!\n");
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1695,13 +1688,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Ctrl-q/+/=, big decrease COL!\n");
+				//printf("Alt-PgDn, big decrease COL!\n");
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1712,9 +1705,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			else
 			{
@@ -1728,8 +1721,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				}
 			}
 			break;
-
-
 		case GDK_minus:
 		case GDK_W:
 		case GDK_w:
@@ -1738,7 +1729,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-q/+/=, decrease ROW!\n");
+				//printf("Ctrl-w/-, decrease ROW!\n");
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1749,13 +1740,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						size = z_size;
 						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
-
 					}
 				}
+				break;
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Ctrl-q/+/=, decrease COL!\n");
+				//printf("ALT-w/-, decrease COL!\n");
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1769,6 +1760,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 					}
 				}
+				break;
 			}
 			else
 			{
@@ -1782,7 +1774,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				}
 			}
 			break;
-
 		case GDK_t:
 		case GDK_T:
 			dbg_func(OPENGL,g_strdup("\t\"t/T\"\n"));
@@ -1804,9 +1795,11 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 		cur_vals = get_current_values(ve_view);
+		ve3d_calculate_scaling(ve_view,cur_vals);
 		generate_quad_mesh(ve_view, cur_vals);
 		free_current_values(cur_vals);
 		forced_update = TRUE;
+		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
 
 	g_static_mutex_unlock(&mutex);
@@ -1884,9 +1877,9 @@ Ve_View_3D * initialize_ve3d_view()
 3D view
  This function scans through the table params to see if the passed 
 page/offset
- is part of a  table and then checks if hte table is visible if so it 
+ is part of a table and then checks if the table is visible if so it 
 forces
- a redraw of that table. (convoluted, but it works)
+ a redraw of that table. (convoluted and butt ugly, but it works)
  */
 void update_ve3d_if_necessary(int page, int offset)
 {
@@ -1936,6 +1929,7 @@ void update_ve3d_if_necessary(int page, int offset)
 
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
+				printf("updating ve3d!\n");
 				cur_vals = get_current_values(ve_view);
 				generate_quad_mesh(ve_view, cur_vals);
 				free_current_values(cur_vals);
@@ -2148,7 +2142,7 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 
 
 /*!
- \brief get_current_valuea isa helper function that populates a structure
+ \brief get_current_values is a helper function that populates a structure
  of data comon to all the redraw subhandlers to avoid duplication of
  effort
  /param ve_view, base structure
@@ -2178,6 +2172,9 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	x_mult = ve_view->x_mult;
 	y_mult = ve_view->y_mult;
 	z_mult = ve_view->z_mult;
+	cur_val->x_edit_value = 0;
+	cur_val->y_edit_value = 0;
+	cur_val->z_edit_value = 0;
 	/* X */
 	if (ve_view->x_multi_source)
 	{
@@ -2309,6 +2306,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		cur_val->z_edit_value = (evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,ve_view->z_page,ve_view->z_base+(((ve_view->active_y*ve_view->y_bincount)+ve_view->active_x)*z_mult),ve_view->z_size))-ve_view->z_trans)*ve_view->z_scale;
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
+		printf("z_edit_val (multi) is %f\n",cur_val->z_edit_value);
 		/* runtime value */
 		lookup_current_value(multi->source,&z_val);
 		cur_val->z_val = z_val;
@@ -2321,6 +2319,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		cur_val->z_edit_value = (evaluator_evaluate_x(cur_val->z_eval,get_ecu_data(canID,ve_view->z_page,ve_view->z_base+(((ve_view->active_y*ve_view->y_bincount)+ve_view->active_x)*z_mult),ve_view->z_size))-ve_view->z_trans)*ve_view->z_scale;
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
+		printf("z_edit_val (normal) is %f\n",cur_val->z_edit_value);
 		/* runtime value */
 		lookup_current_value(ve_view->z_source,&z_val);
 		cur_val->z_val = z_val;
