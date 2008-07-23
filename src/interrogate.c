@@ -19,6 +19,7 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_loader.h>
 #include <enums.h>
 #include <errno.h>
 #include <getfiles.h>
@@ -475,6 +476,26 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		g_strfreev(list);
 	}
 
+	/* Allocate space for Page Params structures.... */
+	firmware->page_params = g_new0(Page_Params *,firmware->total_pages);
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		firmware->page_params[i] = initialize_page_params();
+		section = g_strdup_printf("page_%i",i);
+
+		if (firmware->multi_page)
+			if(!cfg_read_int(cfgfile,section,"truepgnum",&firmware->page_params[i]->truepgnum))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		if(!cfg_read_boolean(cfgfile,section,"dl_by_default",&firmware->page_params[i]->dl_by_default))
+		{
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dl_by_default\" flag not found in \"%s\" section in interrogation profile, assuming TRUE\n",section));
+			firmware->page_params[i]->dl_by_default = TRUE;
+		}
+		if(!cfg_read_int(cfgfile,section,"length",&firmware->page_params[i]->length))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"length\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		g_free(section);
+	}
+
 	/* Allocate space for Table Offsets structures.... */
 	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
@@ -645,9 +666,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
-			if(cfg_read_string(cfgfile,section,"z_depend_on",&tmpbuf))
+			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
 			{
-				g_free(tmpbuf);
 				load_dependancies(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
@@ -725,25 +745,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_string(cfgfile,section,"title",&firmware->te_params[i]->title))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"title\" variable not found in interrogation profile, ERROR\n"));
-		g_free(section);
-	}
-
-	firmware->page_params = g_new0(Page_Params *,firmware->total_pages);
-	for (i=0;i<firmware->total_pages;i++)
-	{
-		firmware->page_params[i] = initialize_page_params();
-		section = g_strdup_printf("page_%i",i);
-
-		if (firmware->multi_page)
-			if(!cfg_read_int(cfgfile,section,"truepgnum",&firmware->page_params[i]->truepgnum))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-		if(!cfg_read_boolean(cfgfile,section,"dl_by_default",&firmware->page_params[i]->dl_by_default))
-		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dl_by_default\" flag not found in \"%s\" section in interrogation profile, assuming TRUE\n",section));
-			firmware->page_params[i]->dl_by_default = TRUE;
-		}
-		if(!cfg_read_int(cfgfile,section,"length",&firmware->page_params[i]->length))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"length\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		g_free(section);
 	}
 

@@ -180,6 +180,7 @@ struct _Table_Params
 	gchar *z_conv_expr;	/*! z conversion expression */
 	void *z_eval;		/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
+	gchar * z_depend_on;	/*! Z axis dependancy string name */
 	GObject *z_object;	/*! Container for lookuptable deps */
 };
 

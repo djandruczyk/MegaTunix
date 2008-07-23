@@ -120,6 +120,10 @@ struct _Ve_View_3D
 	gchar *z_suffix;
 	gchar *z_conv_expr;
 	void *z_eval;
+	gchar * z_depend_on;
+	GObject **x_objects;
+	GObject **y_objects;
+	GObject ***z_objects;
 	/* Multi-sources */
 	gchar * x_source_key;
 	gboolean x_multi_source;
@@ -210,9 +214,11 @@ gboolean set_tracking_focus(GtkWidget *, gpointer );
 gboolean set_scaling_mode(GtkWidget *, gpointer );
 gboolean set_rendering_mode(GtkWidget *, gpointer );
 gboolean set_shading_mode(GtkWidget *, gpointer );
-gfloat get_fixed_pos(Ve_View_3D *, void *,gfloat, Axis);
+gfloat get_fixed_pos(Ve_View_3D *, gfloat, Axis);
 void drawOrthoText(char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
+void queue_ve3d_update(Ve_View_3D *,gboolean );
+gboolean ve3d_force_redraw(gpointer);
 
 /* Prototypes */
 
