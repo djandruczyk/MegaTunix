@@ -443,7 +443,7 @@
 	      <property name="tab_pos">GTK_POS_LEFT</property>
 	      <property name="scrollable">True</property>
 	      <property name="enable_popup">True</property>
-	      <signal name="switch_page" handler="page_changed" last_modification_time="Tue, 27 Feb 2007 15:55:01 GMT"/>
+	      <signal name="switch_page" handler="notebook_page_changed" last_modification_time="Tue, 27 Feb 2007 15:55:01 GMT"/>
 
 	      <child>
 		<widget class="GtkFrame" id="about_frame">

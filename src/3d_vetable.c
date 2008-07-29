@@ -659,6 +659,7 @@ gint free_ve3d_view(GtkWidget *widget)
 void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
+	extern gboolean forced_update;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
@@ -671,6 +672,8 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -0.5;
 	ve_view->v_strafe = -0.5;
+	forced_update = TRUE;
+	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 }
@@ -752,7 +755,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-
+	//printf("expose event \n");
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
@@ -814,6 +817,7 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
+	//printf("motion notify event\n");
 
 	/* Left Button */
 	if (event->state & GDK_BUTTON1_MASK)
@@ -856,6 +860,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_button_press_event()\n"));
+	//printf("button press event\n");
 
 	gtk_widget_grab_focus (widget);
 
@@ -883,6 +888,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLProc proc = NULL;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
+	//printf("realize\n");
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -931,6 +937,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf = 0.0;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
+	//printf("CALC Scaling\n");
 
 	min = 65535;
 	max = 0;
@@ -993,6 +1000,7 @@ void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
+	//printf("draw grid\n");
 
 	glLineWidth(1.25);
 
@@ -1081,6 +1089,8 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
+	//printf("draw edit indicator\n");
+	
 
 	drawOrthoText(cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
 	drawOrthoText(cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
@@ -1189,6 +1199,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
+	//printf("draw runtime indicator\n");
 
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
@@ -1290,6 +1301,7 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	extern GHashTable *dynamic_widgets;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_axis()\n"));
+	//printf("draw axis \n");
 
 	/* Set line thickness and color */
 	glLineWidth(1.0);
@@ -1452,7 +1464,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
-	Cur_Vals *cur_vals = NULL;
 	extern Firmware_Details *firmware;
 	extern gboolean forced_update;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -1807,10 +1818,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
 		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
-		cur_vals = get_current_values(ve_view);
-		ve3d_calculate_scaling(ve_view,cur_vals);
-		generate_quad_mesh(ve_view, cur_vals);
-		free_current_values(cur_vals);
+		ve_view->mesh_created=FALSE;
 		forced_update = TRUE;
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
@@ -1934,46 +1942,32 @@ void update_ve3d_if_necessary(int page, int offset)
 			ve_view = (Ve_View_3D *)OBJ_GET(tmpwidget,"ve_view");
 
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
-			{
-				queue_ve3d_update(ve_view, FALSE);
-			//	printf("queuing ve3d update!\n");
-			}
+				queue_ve3d_update(ve_view);
 
 		}
 	}
 }
 
-void queue_ve3d_update(Ve_View_3D *ve_view,gboolean reset)
+void queue_ve3d_update(Ve_View_3D *ve_view)
 {
-	static gboolean update_queued = FALSE;
+	static gint flag;
 
-	if (reset)
+
+	if (flag == 0)
 	{
-		update_queued=FALSE;
-		return;
-	}
-	if (update_queued)
-		return;
-	else
-	{
-		g_timeout_add(1000,ve3d_force_redraw,ve_view);
-		update_queued=TRUE;
+		flag = 1;
+		ve_view->mesh_created=FALSE;
+		gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+		g_timeout_add(3000,sleep_and_reset,&flag);
 	}
 
 	return;
 }
 
-gboolean ve3d_force_redraw(gpointer data)
+gboolean sleep_and_reset(gpointer data)
 {
-	Ve_View_3D *ve_view = (Ve_View_3D *)data;
-	Cur_Vals *cur_vals = NULL;
-
-	//printf("updating ve3d!\n");
-	cur_vals = get_current_values(ve_view);
-	generate_quad_mesh(ve_view, cur_vals);
-	free_current_values(cur_vals);
-	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-	queue_ve3d_update(ve_view,TRUE);
+	gint *flag = (gint *)data;
+	*flag = 0;
 	return FALSE;
 }
 
@@ -1998,6 +1992,8 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
 	extern Firmware_Details *firmware;
+
+	//printf("draw active vertexes marker \n");
 
 	for (i=0;i<ve_view->x_bincount-1;i++)
 	{
@@ -2343,16 +2339,14 @@ gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
 	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
-	Cur_Vals *cur_vals = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 		return FALSE;
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	cur_vals = get_current_values(ve_view);
-	generate_quad_mesh(ve_view, cur_vals);
-	free_current_values(cur_vals);
-	forced_update = TRUE;
+	ve_view->mesh_created=FALSE;
+	gdk_window_invalidate_rect (widget->window, &widget->allocation,FALSE);
+
 	return TRUE;
 }
 
@@ -2422,7 +2416,7 @@ gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 			count = ve_view->y_bincount;
 			break;
 		default:
-			printf(__FILE__": Error, defautl case, should NOT have ran\n");
+			printf(__FILE__": Error, default case, should NOT have ran\n");
 			return 0;
 			break;
 	}

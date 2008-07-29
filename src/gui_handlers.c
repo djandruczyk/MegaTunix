@@ -2201,15 +2201,16 @@ testit:
 
 
 /*
- \brief page_changed() is fired off whenever a new notebook page is chosen.
- This fucntion just sets a variable marking the current page.  this is to
+ \brief notebook_page_changed() is fired off whenever a new notebook page 
+ is chosen.
+ This function just sets a variable marking the current page.  this is to
  prevent the runtime sliders from being updated if they aren't visible
  \param notebook (GtkNotebook *) nbotebook that emitted the event
  \param page (GtkNotebookPage *) page
  \param page_no (guint) page number that's now active
  \param data (gpointer) unused
  */
-EXPORT void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;

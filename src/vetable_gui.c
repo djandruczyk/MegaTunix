@@ -460,7 +460,6 @@ void draw_ve_marker()
 	base = firmware->table_params[table]->x_base;
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier(size);
-	z_mult = get_multiplier(firmware->table_params[table]->z_size);
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
 		if (evaluator_evaluate_x(eval[table][_X_],get_ecu_data(canID,page,base,size)) >= x_source)
@@ -498,7 +497,6 @@ void draw_ve_marker()
 	base = firmware->table_params[table]->y_base;
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier(size);
-	z_mult = get_multiplier(firmware->table_params[table]->z_size);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
 		if (evaluator_evaluate_x(eval[table][_Y_],get_ecu_data(canID,page,base,size)) >= y_source)
@@ -543,16 +541,22 @@ void draw_ve_marker()
 		goto redraw;
 	for (i=0;i<4;i++)
 	{
-		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.03))
+		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.05))
+		{
+			last_z_weight[i] = z_weight[i];
 			goto redraw;
+		}
 	}
-	for (i=0;i<4;i++)
-		last_z_weight[i] = z_weight[i];
+//	for (i=0;i<4;i++)
+//		last_z_weight[i] = z_weight[i];
 	return;
 
 redraw:
+	page = firmware->table_params[table]->z_page;
+	base = firmware->table_params[table]->z_base;
+	size = firmware->table_params[table]->z_size;
+	z_mult = get_multiplier(size);
 	/*printf("bottom bin %i, top bin %i, bottom_weight %f, top_weight %f\n",bin[2],bin[3],bottom_w,top_w);*/
-
 	if ((bin[0] == -1) || (bin[2] == -1))
 		z_bin[0] = -1;
 	else
@@ -579,7 +583,7 @@ redraw:
 				{
 					size = firmware->table_params[table]->z_size;
 					raw_upper = (gint)OBJ_GET(last_widgets[table][last[table][i]],"raw_upper");
-					value = get_ecu_data(canID,firmware->table_params[table]->z_page,firmware->table_params[table]->z_base+(z_bin[i]*z_mult),size);
+					value = get_ecu_data(canID,page,base+(z_bin[i]*z_mult),size);
 					newcolor = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
 					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&newcolor);
 				}
@@ -603,8 +607,8 @@ redraw:
 			heaviest = i;
 		}
 	}
-	for (i=0;i<4;i++)
-		last_z_weight[i] = z_weight[i];
+	//for (i=0;i<4;i++)
+	//	last_z_weight[i] = z_weight[i];
 
 	for (i=0;i<4;i++)
 	{

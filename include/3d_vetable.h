@@ -217,8 +217,8 @@ gboolean set_shading_mode(GtkWidget *, gpointer );
 gfloat get_fixed_pos(Ve_View_3D *, gfloat, Axis);
 void drawOrthoText(char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
-void queue_ve3d_update(Ve_View_3D *,gboolean );
-gboolean ve3d_force_redraw(gpointer);
+void queue_ve3d_update(Ve_View_3D *);
+gboolean sleep_and_reset(gpointer);
 
 /* Prototypes */
 

@@ -37,7 +37,6 @@
 
 extern gboolean connected;
 extern gint active_page;
-extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
@@ -67,7 +66,7 @@ EXPORT gboolean update_runtime_vars_pf()
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
 	gfloat x,y,z = 0.0;
-	gfloat xl,yl,zl = 0.0;
+	static gfloat xl,yl,zl = 9999.9;
 	gchar * string = NULL;
 	GHashTable *hash = NULL;
 	extern GHashTable *sources_hash;
@@ -135,16 +134,16 @@ EXPORT gboolean update_runtime_vars_pf()
 						printf("multi is null!!\n");
 
 					lookup_current_value(multi->source,&x);
-					lookup_previous_value(multi->source,&xl);
 				}
 				else
-				{
 					lookup_current_value(ve_view->x_source,&x);
-					lookup_previous_value(ve_view->x_source,&xl);
-				}
+
 				/* Test X values, redraw if needed */
-				if (((fabs(x-xl)/x) > 0.005) || (forced_update))
+				if (((fabs(x-xl)/x) > 0.001) || (forced_update))
+				{
+					xl = x;
 					goto redraw;
+				}
 
 				/* Get Y values */
 				if (ve_view->y_multi_source)
@@ -174,16 +173,16 @@ EXPORT gboolean update_runtime_vars_pf()
 						printf("multi is null!!\n");
 
 					lookup_current_value(multi->source,&y);
-					lookup_previous_value(multi->source,&yl);
 				}
 				else
-				{
 					lookup_current_value(ve_view->y_source,&y);
-					lookup_previous_value(ve_view->y_source,&yl);
-				}
+
 				/* Test Y values, redraw if needed */
 				if (((fabs(y-yl)/y) > 0.001) || (forced_update))
+				{
+					yl = y;
 					goto redraw;
+				}
 
 				/* Get Z values */
 				if (ve_view->z_multi_source)
@@ -213,16 +212,16 @@ EXPORT gboolean update_runtime_vars_pf()
 						printf("multi is null!!\n");
 
 					lookup_current_value(multi->source,&y);
-					lookup_previous_value(multi->source,&yl);
 				}
 				else
-				{
 					lookup_current_value(ve_view->z_source,&z);
-					lookup_previous_value(ve_view->z_source,&zl);
-				}
+
 				/* Test Z values, redraw if needed */
 				if (((fabs(z-zl)/z) > 0.001) || (forced_update))
+				{
+					zl = z;
 					goto redraw;
+				}
 				goto breakout;
 
 redraw:
