@@ -20,13 +20,13 @@
 enum
 {
 	CHOICE_COL,
-	BITMASK_COL,
-	BITSHIFT_COL,
+	BITVAL_COL,
 	COMBO_COLS
 }ComboCols;
 
 /* Prototypes */
 void combo_setup(GObject *, ConfigFile *, gchar * );
+gboolean combo_match_selected(GtkEntryCompletion *, GtkTreeModel *, GtkTreeIter *, gpointer);
 /* Prototypes */
 
 #endif

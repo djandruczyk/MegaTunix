@@ -16,14 +16,15 @@
 #include <config.h>
 #include <configfile.h>
 #include <combo_loader.h>
+#include <combo_mask.h>
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <gtk/gtk.h>
 #include <math.h>
 #include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
-
 
 
 extern GObject *global_data;
@@ -32,21 +33,33 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** choices = NULL;
+	gchar ** vector = NULL;
 	gint num_choices = 0;
+	gint num_bitvals = 0;
 	gint i = 0;
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint bits = 0;
 	gint highbit = 0;
 	gint tmpi = 0;
+	gchar *tmpstr = NULL;
+	gchar *regexp = NULL;
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
-        GtkCellRenderer *renderer;
+        GtkCellRenderer *renderer = NULL;
+	GtkEntryCompletion *completion = NULL;
+        GtkWidget *entry = NULL;
 
 	cfg_read_string(cfgfile,section,"choices",&tmpbuf);
+
 	choices = parse_keys(tmpbuf,&num_choices,",");
+	tmpstr = g_strdelimit(tmpbuf,",",'|');
+	regexp = g_strdup_printf("^%s$",tmpstr);
 	g_free(tmpbuf);
 
+	cfg_read_string(cfgfile,section,"bitvals",&tmpbuf);
+	vector = parse_keys(tmpbuf,&num_bitvals,",");
+	g_free(tmpbuf);
 	cfg_read_int(cfgfile,section,"bitmask",&bitmask);
 	cfg_read_int(cfgfile,section,"bitshift",&bitshift);
 	bits = bitmask >> bitshift;
@@ -63,16 +76,33 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		return;
 	}
 
-	store = gtk_list_store_new(COMBO_COLS,G_TYPE_STRING,G_TYPE_INT,G_TYPE_INT);
+	store = gtk_list_store_new(COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR);
 
 	for (i=0;i<num_choices;i++)
 	{
 		gtk_list_store_append(store,&iter);
-		gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITMASK_COL,bitmask,BITSHIFT_COL,bitshift,-1);
+		gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITVAL_COL,(gint)g_ascii_strtoull(vector[i],NULL,10),-1);
 
 	}
+	g_strfreev(vector);
+	g_strfreev(choices);
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
-	renderer = gtk_cell_renderer_text_new();
-	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(object),renderer,FALSE);
-	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(object),renderer,"markup",CHOICE_COL,NULL);
+	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
+
+	entry = g_object_new (TYPE_MASK_ENTRY, NULL);
+	MASK_ENTRY (entry)->mask = g_strdup(regexp);
+	g_free(regexp);
+	
+	gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
+	gtk_container_add (GTK_CONTAINER (object), entry);
+
+	completion = gtk_entry_completion_new();
+	gtk_entry_set_completion(GTK_ENTRY(entry),completion);
+	gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
+	gtk_entry_completion_set_text_column(completion,CHOICE_COL);
+			
+
+//	renderer = gtk_cell_renderer_text_new();
+//	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(object),renderer,FALSE);
+//	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(object),renderer,"markup",CHOICE_COL,NULL);
 }

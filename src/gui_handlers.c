@@ -56,6 +56,7 @@
 #include <widgetmgmt.h>
 
 
+gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
@@ -1007,9 +1008,9 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
-	guint8 bitmask = 0;
-	guint8 bitshift = 0;
-	guint8 bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	guchar bitval = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint canID = 0;
@@ -1021,17 +1022,26 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 
 	page = (gint) OBJ_GET(widget,"page");
 	offset = (gint) OBJ_GET(widget,"offset");
+	bitmask = (gint) OBJ_GET(widget,"bitmask");
+	bitshift = (gint) OBJ_GET(widget,"bitshift");
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
 	canID = (gint)OBJ_GET(widget,"canID");
-	bitmask = (gint)OBJ_GET(widget,"bitmask");
-	bitshift = (gint)OBJ_GET(widget,"bitshift");
 	size = (DataSize)OBJ_GET(widget,"size");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-        gtk_tree_model_get(model,&iter,CHOICE_COL,&choice,-1);
-	bitval = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-//	printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );
+	if (state == 0)	
+	{
+		/* Not selected by combo popdown button, thus is being edited. 
+		 * Do a model scan to see if we actually hit the jackpot or 
+		 * not, and get the iter for it...
+		 */
+		if (!search_model(model,widget,&iter))
+			return FALSE;
+	}
+        gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
+			BITVAL_COL,&bitval,-1);
+	//printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );
 
 	tmp = get_ecu_data(canID,page,offset,size);
 	tmp = tmp & ~bitmask;	/*clears bits */
@@ -1628,11 +1638,11 @@ void update_widget(gpointer object, gpointer user_data)
 	DataSize size = 0;
 	gint canID = 0;
 	gdouble value = 0.0;
-	gint bitval = -1;
-	gint bitshift = -1;
-	gint bitmask = -1;
-	gint bits = 0;
-	gint highbit = 0;
+	gboolean valid = FALSE;
+	guchar t_bitval = -1;
+	guchar bitval = -1;
+	guchar bitshift = -1;
+	guchar bitmask = -1;
 	gint base = -1;
 	gint precision = -1;
 	gint spconfig_offset = 0;
@@ -1648,11 +1658,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar **vector = NULL;
 	gchar * widget_text = NULL;
 	gchar * group_2_update = NULL;
-	gchar **choices = NULL;
-	gint num_choices = 0;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
-	gchar * path = NULL;
 	gdouble spin_value = 0.0; 
 	gboolean update_color = TRUE;
 	GdkColor color;
@@ -1861,30 +1868,21 @@ void update_widget(gpointer object, gpointer user_data)
 	else if (GTK_IS_COMBO_BOX(widget))
 	{
 //		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
-		tmpbuf = OBJ_GET(widget,"choices");
-		choices = parse_keys(tmpbuf,&num_choices,",");
-		g_strfreev(choices);
-		bits = bitmask >> bitshift;
-		for (i=0;i<8;i++)
-		{
-			if (bits & (gint)(pow(2,i)))
-				highbit = i+1;
-		}
-		tmpi = (gint)pow(2,(double)highbit);
 
-		if (tmpi != num_choices)
-		{
-			printf("BIG PROBLEM, combobox choices %i and bits %i don't match up\n",num_choices,tmpi);
-		}
 		tmpi = ((gint)value & bitmask) >> bitshift;
-		if (tmpi > num_choices)
-			printf("BIG PROBLEM, combobox data exceeds bounds of combobox offset %i, bitmask %i, bitshift %i, value %i\n",offset,bitmask,bitshift,tmpi);
-
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-		path = g_strdup_printf("%i",tmpi);
-		gtk_tree_model_get_iter_from_string (model, &iter, path);
-		g_free(path);
-		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+		valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
+		while (valid)
+		{
+			gtk_tree_model_get(GTK_TREE_MODEL(model),&iter,BITVAL_COL,&t_bitval,-1);
+			if (tmpi == t_bitval)
+			{
+				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+				break;
+			}
+			valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
+
+		}
 
 		if (toggle_groups)
 			combo_toggle_groups_linked(widget,tmpi);
@@ -2646,3 +2644,18 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 }
 
 
+gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
+{
+	gchar *choice = NULL;
+	gboolean valid = TRUE;
+	gchar * cur_text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(box));
+	valid = gtk_tree_model_get_iter_first(model,iter);
+	while (valid)
+	{
+		gtk_tree_model_get(model,iter,CHOICE_COL, &choice, -1);
+		if (strcmp(cur_text,choice) == 0)
+			return TRUE;
+		valid = gtk_tree_model_iter_next (model, iter);
+	}
+	return FALSE;
+}
