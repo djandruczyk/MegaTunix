@@ -13,6 +13,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <configfile.h>
 #include <combo_loader.h>
@@ -46,7 +47,6 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gchar *regexp = NULL;
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
-        GtkCellRenderer *renderer = NULL;
 	GtkEntryCompletion *completion = NULL;
         GtkWidget *entry = NULL;
 
@@ -81,11 +81,14 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	for (i=0;i<num_choices;i++)
 	{
 		gtk_list_store_append(store,&iter);
-		gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITVAL_COL,(gint)g_ascii_strtoull(vector[i],NULL,10),-1);
+		assert(choices[i]);
+		assert(vector[i]);
+		gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITVAL_COL,(guchar)g_ascii_strtoull(vector[i],NULL,10),-1);
 
 	}
 	g_strfreev(vector);
 	g_strfreev(choices);
+
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
 	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
 
@@ -101,8 +104,4 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
 	gtk_entry_completion_set_text_column(completion,CHOICE_COL);
 			
-
-//	renderer = gtk_cell_renderer_text_new();
-//	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(object),renderer,FALSE);
-//	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(object),renderer,"markup",CHOICE_COL,NULL);
 }
