@@ -34,13 +34,20 @@ G_BEGIN_DECLS
 
 
 #define DRAG_BORDER 7
-/* MtxClampAt enum,  display clamping */
+/* MtxClampType enum,  display clamping */
 typedef enum
 {
 	CLAMP_UPPER = 0xaa,
 	CLAMP_LOWER,
 	CLAMP_NONE
 }MtxClampType;
+
+/* MtxRotType enum,  needle sweep rotation */
+typedef enum
+{
+	MTX_ROT_CCW = 0xbb,
+	MTX_ROT_CW
+}MtxRotType;
 
 
 /* MtxPolyType enumeration,  for polygon support */
@@ -153,6 +160,7 @@ typedef enum
 	DUMMY = 0,
 	START_ANGLE,
 	SWEEP_ANGLE,
+	ROTATION,
 	LBOUND,
 	UBOUND,
 	VALUE_FONTSCALE,
@@ -441,6 +449,7 @@ struct _MtxGaugeFacePrivate
 	gfloat value;		/*! Value represneting needle position */
 	gfloat lbound;		/*! Lower Bound to clamp at */
 	gfloat ubound;		/*! Upper Bound to Clamp at */
+	MtxRotType rotation;	/*! Rotation enumeration */
 	gfloat span;		/*! Span from lbound to ubound */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	gboolean show_value;	/*! Show the Valueon screen or not */

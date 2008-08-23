@@ -277,6 +277,11 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 
 	glade_xml_signal_autoconnect(xml);
 
+	OBJ_SET((glade_xml_get_widget(xml,"cw_rbutton")),"handler",GINT_TO_POINTER(ROTATION));
+	OBJ_SET((glade_xml_get_widget(xml,"cw_rbutton")),"special_value",GINT_TO_POINTER(MTX_ROT_CW));
+	OBJ_SET((glade_xml_get_widget(xml,"ccw_rbutton")),"handler",GINT_TO_POINTER(ROTATION));
+	OBJ_SET((glade_xml_get_widget(xml,"ccw_rbutton")),"special_value",GINT_TO_POINTER(MTX_ROT_CCW));
+	OBJ_SET((glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(ANTIALIAS));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_length_spin")),"handler",GINT_TO_POINTER(NEEDLE_LENGTH));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_tip_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_TIP_WIDTH));
@@ -286,7 +291,6 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 	OBJ_SET((glade_xml_get_widget(xml,"sweep_angle_spin")),"handler",GINT_TO_POINTER(SWEEP_ANGLE));
 	OBJ_SET((glade_xml_get_widget(xml,"lbound_spin")),"handler",GINT_TO_POINTER(LBOUND));
 	OBJ_SET((glade_xml_get_widget(xml,"ubound_spin")),"handler",GINT_TO_POINTER(UBOUND));
-	OBJ_SET((glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(ANTIALIAS));
 	OBJ_SET((glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(COL_BG));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
 	OBJ_SET((glade_xml_get_widget(xml,"gradient_begin_color_button")),"handler",GINT_TO_POINTER(COL_GRADIENT_BEGIN));
@@ -316,6 +320,17 @@ void update_general_controls()
 		return;
 
 	hold_handlers = TRUE;
+
+	mtx_gauge_face_get_attribute(g,ROTATION,&tmp1);
+	if (tmp1 == MTX_ROT_CW)
+		widget = glade_xml_get_widget(gen_xml,"cw_rbutton");
+	else
+		widget = glade_xml_get_widget(gen_xml,"ccw_rbutton");
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	mtx_gauge_face_get_attribute(g,ANTIALIAS,&tmp1);
+	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	widget = glade_xml_get_widget(gen_xml,"needle_length_spin");
 	mtx_gauge_face_get_attribute(g,NEEDLE_LENGTH,&tmp1);
@@ -352,10 +367,6 @@ void update_general_controls()
 	widget = glade_xml_get_widget(gen_xml,"ubound_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	mtx_gauge_face_get_attribute(g,ANTIALIAS,&tmp1);
-	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
-
 	widget = glade_xml_get_widget(gen_xml,"background_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
 
@@ -381,6 +392,15 @@ void reset_general_controls()
 
 	hold_handlers = TRUE;
 
+	widget = glade_xml_get_widget(gen_xml,"cw_button");
+	gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(gen_xml,"ccw_button");
+	gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+
 	widget = glade_xml_get_widget(gen_xml,"needle_width_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
@@ -398,9 +418,6 @@ void reset_general_controls()
 
 	widget = glade_xml_get_widget(gen_xml,"ubound_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
-
-	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
 	widget = glade_xml_get_widget(gen_xml,"background_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);

@@ -400,6 +400,9 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 		case SWEEP_ANGLE:
 			priv->sweep_angle = value;
 			break;
+		case ROTATION:
+			priv->rotation = value;
+			break;
 		case LBOUND:
 			priv->lbound = value;
 			break;
@@ -470,6 +473,9 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 			break;
 		case SWEEP_ANGLE:
 			*value = priv->sweep_angle;
+			break;
+		case ROTATION:
+			*value = priv->rotation;
 			break;
 		case LBOUND:
 			*value = priv->lbound;

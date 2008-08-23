@@ -82,6 +82,9 @@ EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
 
+	tmp = glade_xml_get_widget(xml,"animate_button");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
 	reset_onscreen_controls();
 	direct_path = FALSE;
 	gtk_widget_show_all(parent);
@@ -713,6 +716,27 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
+{
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	gint value = (gint)OBJ_GET((widget),"special_value");
+	gint handler = (gint)OBJ_GET((widget),"handler");
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+
+	if (state)
+		mtx_gauge_face_set_attribute(g,handler, value);
+
+	return TRUE;
+}
 
 EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 {

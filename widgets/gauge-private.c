@@ -94,6 +94,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value = 0.0;		/* default values */
 	priv->lbound = 0.0;
 	priv->ubound = 100.0;
+	priv->rotation = MTX_ROT_CW;
 	priv->precision = 2;
 	priv->clamped = CLAMP_NONE;
 	priv->start_angle = 135; 	/* lower left quadrant */
@@ -107,7 +108,6 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value_xpos = 0.0;
 	priv->value_ypos = 0.40;
 	priv->value_font_scale = 0.2;
-	priv->span = priv->ubound - priv->lbound;
 #ifdef HAVE_CAIRO
 	priv->cr = NULL;
 	priv->antialias = TRUE;
@@ -149,6 +149,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"height", &priv->h);
 	g_object_set_data(G_OBJECT(gauge),"main_start_angle", &priv->start_angle);
 	g_object_set_data(G_OBJECT(gauge),"main_sweep_angle", &priv->sweep_angle);
+	g_object_set_data(G_OBJECT(gauge),"rotation", &priv->rotation);
 	g_object_set_data(G_OBJECT(gauge),"lbound", &priv->lbound);
 	g_object_set_data(G_OBJECT(gauge),"ubound", &priv->ubound);
 	g_object_set_data(G_OBJECT(gauge),"value_font", &priv->value_font);
@@ -389,7 +390,11 @@ cairo_jump_out_of_alerts:
 	else
 		val = priv->value;
 	tmpf = (val-priv->lbound)/(priv->ubound-priv->lbound);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+
+	if (priv->rotation == MTX_ROT_CW)
+		needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+	else
+		needle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
 
 
 	cairo_set_source_rgb (cr, priv->colors[COL_NEEDLE].red/65535.0,
@@ -558,7 +563,10 @@ gdk_jump_out_of_alerts:
 	else
 		val = priv->value;
 	tmpf = (val-priv->lbound)/(priv->ubound-priv->lbound);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180.0);
+	if (priv->rotation == MTX_ROT_CW)
+		needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180.0);
+	else
+		needle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180.0);
 	xc= priv->xc;
 	yc= priv->yc;
 	n_width = priv->needle_width * priv->radius;
