@@ -933,7 +933,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 		/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
 		lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
+	if (priv->rotation == MTX_ROT_CW)
 		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
+	else
+		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
 
 		cairo_stroke(cr);
 
@@ -952,7 +955,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
 
 		insetfrom = priv->radius * tgroup->maj_tick_inset;
-		counter = tgroup->start_angle *(M_PI/180.0);
+		if (priv->rotation == MTX_ROT_CW)
+			counter = tgroup->start_angle *(M_PI/180.0);
+		else
+			counter = (tgroup->start_angle+tgroup->sweep_angle) *(M_PI/180.0);
 		if (tgroup->text)
 		{
 			vector = g_strsplit(tgroup->text,",",-1);
@@ -1016,7 +1022,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 				cairo_set_line_width (cr, lwidth);
 				for (k=1;k<=tgroup->num_min_ticks;k++)
 				{
-					subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
+					if (priv->rotation == MTX_ROT_CW)
+						subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
+					else
+						subcounter = -(k*deg_per_minor_tick)*(M_PI/180.0);
 					cairo_move_to (cr,
 							priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
 							priv->yc + (priv->radius - mintick_inset) * sin (counter+subcounter));
@@ -1027,7 +1036,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 				}
 				cairo_restore (cr); /* stack-pen-size */
 			}
-			counter += (deg_per_major_tick)*(M_PI/180);
+			if (priv->rotation == MTX_ROT_CW)
+				counter += (deg_per_major_tick)*(M_PI/180);
+			else
+				counter -= (deg_per_major_tick)*(M_PI/180);
 		}
 		g_strfreev(vector);
 	}
@@ -1415,9 +1427,21 @@ void gdk_generate_gauge_background(MtxGaugeFace *gauge)
 		angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
 		angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
 
-		/* positions of the range in degrees */
-		start_pos = priv->start_angle+(angle1*span);
-		stop_pos = priv->start_angle+(angle2*span);
+		if (priv->rotation == MTX_ROT_CW)
+		{
+			/* positions of the range in degrees */
+			start_pos = priv->start_angle+(angle1*span);
+			stop_pos = priv->start_angle+(angle2*span);
+			span = priv->sweep_angle;
+		}
+		else
+		{
+			/* positions of the range in degrees */
+			start_pos = priv->start_angle+priv->sweep_angle-(angle1*span);
+			stop_pos = priv->start_angle+priv->sweep_angle-(angle2*span);
+			span = -priv->sweep_angle;
+		}
+
 		/* Converted to funky GDK units */
 		start_angle = -start_pos*64;
 		span = -(stop_pos-start_pos)*64;
@@ -1455,7 +1479,10 @@ void gdk_generate_gauge_background(MtxGaugeFace *gauge)
 			pango_layout_set_font_description(priv->layout,priv->font_desc);
 		}
 
-		counter = (tgroup->start_angle)*(M_PI/180);
+		if (priv->rotation == MTX_ROT_CW)
+			counter = (tgroup->start_angle)*(M_PI/180);
+		else
+			counter = (tgroup->start_angle+tgroup->sweep_angle)*(M_PI/180);
 		for (j=0;j<tgroup->num_maj_ticks;j++)
 		{
 			inset = tgroup->maj_tick_length * priv->radius;
@@ -1502,7 +1529,10 @@ void gdk_generate_gauge_background(MtxGaugeFace *gauge)
 						GDK_JOIN_BEVEL);
 				for (k=1;k<=tgroup->num_min_ticks;k++)
 				{
-					subcounter = (k*deg_per_minor_tick)*(M_PI/180);
+					if (priv->rotation == MTX_ROT_CW)
+						subcounter = (k*deg_per_minor_tick)*(M_PI/180);
+					else
+						subcounter = -(k*deg_per_minor_tick)*(M_PI/180);
 					gdk_draw_line(priv->bg_pixmap,priv->gc,
 
 							priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
@@ -1513,7 +1543,10 @@ void gdk_generate_gauge_background(MtxGaugeFace *gauge)
 				}
 
 			}
-			counter += (deg_per_major_tick)*(M_PI/180);
+			if (priv->rotation == MTX_ROT_CW)
+				counter += (deg_per_major_tick)*(M_PI/180);
+			else
+				counter -= (deg_per_major_tick)*(M_PI/180);
 
 		}
 	}
