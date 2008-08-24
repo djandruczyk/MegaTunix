@@ -14,15 +14,12 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <serialio.h>
 #include <winserialio.h>
 #ifdef __WIN32__
  #include <io.h>
  #include <windows.h>
 #endif
 
-extern Serial_Params *serial_params;
-extern GObject *global_data;
 
 /*!
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
@@ -33,9 +30,6 @@ void win32_setup_serial_params(gint fd, gint baud)
 #ifdef __WIN32__
 	DCB dcb;
 	COMMTIMEOUTS timeouts;
-
-	if (serial_params->open == FALSE)
-		return;
 
 	ZeroMemory(&dcb, sizeof(dcb));
 	dcb.DCBlength = sizeof(dcb);
@@ -67,7 +61,7 @@ void win32_setup_serial_params(gint fd, gint baud)
 
 	/* Set the port properties and write the string out the port. */
 	if(SetCommState((HANDLE) _get_osfhandle (fd) ,&dcb) == 0)
-		dbg_func(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
+		printf(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n");
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	timeouts.ReadIntervalTimeout         = 0;

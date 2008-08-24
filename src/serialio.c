@@ -152,7 +152,7 @@ void setup_serial_params(gint baudrate)
 	/*printf("setup_serial_params entered\n");*/
 	g_static_mutex_lock(&serio_mutex);
 #ifdef __WIN32__
-	win32_setup_serial_params(baudrate);
+	win32_setup_serial_params(serial_params->fd, baudrate);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);

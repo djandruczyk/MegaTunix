@@ -188,6 +188,8 @@ include/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
+msloader/Makefile
+msloader/resources.rc
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
