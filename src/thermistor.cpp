@@ -2,7 +2,7 @@
 #include <math.h>
 using namespace std;
 #include <fstream>
-#include <string>
+#include <cstring>
 #include <gtk/gtk.h>
 #include "thermistor.h"
 
