@@ -3,6 +3,7 @@
 using namespace std;
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
 #include <gtk/gtk.h>
 #include "thermistor.h"
 
