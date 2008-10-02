@@ -94,8 +94,12 @@ void load_dashboard(gchar *filename, gpointer data)
 	ebox = gtk_event_box_new();
 	gtk_container_add(GTK_CONTAINER(window),ebox);
 
-	gtk_widget_add_events(GTK_WIDGET(ebox),GDK_POINTER_MOTION_MASK|
-			GDK_BUTTON_PRESS_MASK |GDK_BUTTON_RELEASE_MASK);
+	gtk_widget_add_events(GTK_WIDGET(ebox),
+			GDK_POINTER_MOTION_MASK|
+			GDK_BUTTON_PRESS_MASK |
+			GDK_BUTTON_RELEASE_MASK |
+			GDK_KEY_PRESS_MASK 
+			);
 			
 	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
 			G_CALLBACK (dash_motion_event), NULL);
@@ -544,7 +548,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	{
 		case GDK_q:
 		case GDK_Q:
-				leave(NULL,NULL);
+			leave(NULL,NULL);
 			break;
 		case GDK_M:
 		case GDK_m:
@@ -570,6 +574,19 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				gtk_widget_hide (status_window);
 			else
 				gtk_widget_show_all(status_window);
+			break;
+		case GDK_f:
+		case GDK_F:
+			if (fullscreen)
+			{
+				fullscreen = FALSE;
+				gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+			}
+			else
+			{
+				fullscreen = TRUE;
+				gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+			}
 			break;
 	}
 	return TRUE;
@@ -644,7 +661,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 					event->time);
 		}
 	}
-	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 3))
+	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 2))
 	{
 		if (fullscreen)
 		{

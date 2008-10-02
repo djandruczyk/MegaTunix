@@ -26,6 +26,7 @@
 #include <math.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <timeout_handlers.h>
 #include <unistd.h>
@@ -504,7 +505,7 @@ gboolean autolog_dump(gpointer data)
 	args = (CmdLineArgs *)OBJ_GET(global_data,"args");
 
 	filename = g_strdup_printf("%s%s%s_%.3i.log",args->autolog_dump_dir,PSEP,args->autolog_basename,dlog_index);
-
+		
 	iochannel = g_io_channel_new_file(filename, "a+",NULL);
 	dump_log_to_disk(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);

@@ -51,6 +51,7 @@ bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the ECU type to MS-II. (NOT the same as a microsquirt).
 
 [usquirt_radiobutton]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
@@ -62,6 +63,7 @@ bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the ECU type to Microsquirt
 
 [undefined_radiobutton]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
@@ -73,6 +75,7 @@ bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=When set to undefined the ECU will NOT function and will return an alternating 0, 8000 RPM and no other sensor inputs.  This is because the MS-II vs microsquirt's have inverted ignition outputs and this can cause the coil to fail.
 
 [button1]
 keys=table_num

@@ -15,9 +15,13 @@
 #include <args.h>
 #include <config.h>
 #include <datalogging_gui.h>
+#include <debugging.h>
 #include <defines.h>
+#include <errno.h>
 #include <glib.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -36,6 +40,7 @@ void handle_args(gint argc, gchar * argv[])
 	GOptionContext *context = NULL;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	gint result = 0;
 
 	args = init_args();
 	GOptionEntry entries[] =
@@ -70,6 +75,15 @@ void handle_args(gint argc, gchar * argv[])
 			args->autolog_minutes = 5;
 		if (!args->autolog_dump_dir)
 			args->autolog_dump_dir = (gchar *)HOME();
+		else
+		{
+			if (!(g_file_test(args->autolog_dump_dir, G_FILE_TEST_IS_DIR)))
+			{
+				result = g_mkdir_with_parents(args->autolog_dump_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+				if (!result)
+					dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tAutolog dump dir creation ERROR: \"%s\"\n",g_strerror(errno)));
+			}
+		}
 		if (!args->autolog_basename)
 		{
 			t = g_malloc(sizeof(time_t));

@@ -348,17 +348,17 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->parent = main_window;
 	fileio->on_top = TRUE;
-	fileio->title = g_strdup("Offline mode REQUIRES you to load ECU Settings from a file");
+	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->shortcut_folders = g_strdup("ecu_snapshots,MTX_ecu_snapshots");
 
-	while (!filename)
-		filename = choose_file(fileio);
-
-
-	update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
-	restore_all_ecu_settings(filename);
-	g_free(filename);
+	filename = choose_file(fileio);
+	if (filename)
+	{
+		update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
+		restore_all_ecu_settings(filename);
+		g_free(filename);
+	}
 	free_mtxfileio(fileio);
 	return TRUE;
 

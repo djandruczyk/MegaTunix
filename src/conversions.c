@@ -19,6 +19,7 @@
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <glade/glade.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <notifications.h>
@@ -270,7 +271,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	size = (DataSize)OBJ_GET(widget,"size");
 	canID = (gint)OBJ_GET(widget,"canID");
 	if (size == 0)
-		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i\n",page,offset);
+		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i, widget %s\n",page,offset,(char *)glade_get_widget_name(widget));
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
