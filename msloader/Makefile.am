@@ -22,3 +22,5 @@ resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
 bin_PROGRAMS = msloader 
+
+EXTRA_DIST = msloader.ico

@@ -133,8 +133,10 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &ubound);
 	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),(ubound-lbound)/2.0);
 	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),ubound);
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	switch (result)
@@ -202,8 +204,10 @@ EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &ubound);
 	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),(ubound-lbound)/2.0);
 	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),ubound);
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	switch (result)
@@ -788,12 +792,12 @@ void update_onscreen_c_ranges()
 	gfloat high = 0.0;
 	MtxColorRange *range = NULL;
 	GArray * array = NULL;
-	extern GladeXML *c_ranges_xml;
+	extern GladeXML *topxml;
 
-	if ((!c_ranges_xml) || (!GTK_IS_WIDGET(gauge)))
+	if ((!topxml) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_color_ranges(MTX_GAUGE_FACE(gauge));
-	container = glade_xml_get_widget(c_ranges_xml,"color_range_viewport");
+	container = glade_xml_get_widget(topxml,"color_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");
@@ -877,12 +881,12 @@ void update_onscreen_a_ranges()
 	gfloat high = 0.0;
 	MtxAlertRange *range = NULL;
 	GArray * array = NULL;
-	extern GladeXML *a_ranges_xml;
+	extern GladeXML *topxml;
 
-	if ((!a_ranges_xml) || (!GTK_IS_WIDGET(gauge)))
+	if ((!topxml) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_alert_ranges(MTX_GAUGE_FACE(gauge));
-	container = glade_xml_get_widget(a_ranges_xml,"alert_range_viewport");
+	container = glade_xml_get_widget(topxml,"alert_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("alert range viewport invalid!!\n");
@@ -921,30 +925,30 @@ void update_onscreen_a_ranges()
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lowpoint);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_LOWPOINT));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_LOWPOINT));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,1,2,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->highpoint);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_HIGHPOINT));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_HIGHPOINT));
 		gtk_table_attach(GTK_TABLE(table),dummy,2,3,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		dummy = gtk_spin_button_new_with_range(0,1,0.001);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->inset);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_INSET));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_INSET));
 		gtk_table_attach(GTK_TABLE(table),dummy,3,4,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_spin_button_new_with_range(0,1,0.001);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lwidth);
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_LWIDTH));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_LWIDTH));
 		gtk_table_attach(GTK_TABLE(table),dummy,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
 		dummy = gtk_color_button_new_with_color(&range->color);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(CR_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_COLOR));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
@@ -957,11 +961,11 @@ void reset_onscreen_c_ranges()
 {
 	GtkWidget *container = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *c_ranges_xml;
+	extern GladeXML *topxml;
 
-	if ((!c_ranges_xml))
+	if ((!topxml))
 		return;
-	container = glade_xml_get_widget(c_ranges_xml,"color_range_viewport");
+	container = glade_xml_get_widget(topxml,"color_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");
@@ -979,11 +983,11 @@ void reset_onscreen_a_ranges()
 {
 	GtkWidget *container = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *a_ranges_xml;
+	extern GladeXML *topxml;
 
-	if ((!a_ranges_xml))
+	if ((!topxml))
 		return;
-	container = glade_xml_get_widget(a_ranges_xml,"alert_range_viewport");
+	container = glade_xml_get_widget(topxml,"alert_range_viewport");
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("alert range viewport invalid!!\n");
@@ -1122,13 +1126,13 @@ void update_onscreen_tblocks()
 	gint y = 1;
 	MtxTextBlock *tblock = NULL;
 	GArray * array = NULL;
-	extern GladeXML *text_xml;
+	extern GladeXML *topxml;
 
-	if ((!text_xml) || (!gauge))
+	if ((!topxml) || (!gauge))
 		return;
 
 	array = mtx_gauge_face_get_text_blocks(MTX_GAUGE_FACE(gauge));
-	toptable = glade_xml_get_widget(text_xml,"text_blocks_layout_table");
+	toptable = glade_xml_get_widget(topxml,"text_blocks_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -1212,26 +1216,26 @@ void update_onscreen_tblocks()
 void update_onscreen_tgroups()
 {
 	GtkWidget *toptable = NULL;
-	static GtkWidget *table = NULL;
 	GtkWidget *subtable = NULL;
+	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *frame = NULL;
 	GtkWidget *dummy = NULL;
 	GtkWidget *tg_main_table = NULL;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	MtxTickGroup *tgroup = NULL;
 	GArray * array = NULL;
-	extern GladeXML *tick_groups_xml;
+	extern GladeXML *topxml;
+	GladeXML *xml;
 
-	if ((!tick_groups_xml) || (!gauge))
+	if ((!topxml) || (!gauge))
 		return;
 
 	array = mtx_gauge_face_get_tick_groups(MTX_GAUGE_FACE(gauge));
 
-	toptable = glade_xml_get_widget(tick_groups_xml,"tick_groups_layout_table");
+	toptable = glade_xml_get_widget(topxml,"tick_groups_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -1244,8 +1248,8 @@ void update_onscreen_tgroups()
 		printf("Can't locate primary glade file!!!!\n");
 		return;
 	}
-
-
+	/* Get it and blow it away for re-creation */
+	table = OBJ_GET((toptable), "layout_table");
 	if (GTK_IS_WIDGET(table))
 		gtk_widget_destroy(table);
 
@@ -1405,27 +1409,26 @@ void update_onscreen_polygons()
 	GtkWidget *notebook = NULL;
 	GtkWidget *tmpwidget = NULL;
 	GHashTable *hash = NULL;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	gint j = 0;
 	MtxPolygon *poly = NULL;
 	GArray * array = NULL;
-	extern GladeXML *polygons_xml;
+	extern GladeXML *topxml;
+	GladeXML *xml;
 
-	if ((!polygons_xml) || (!gauge))
+	if ((!topxml) || (!gauge))
 		return;
 
 	array = mtx_gauge_face_get_polygons(MTX_GAUGE_FACE(gauge));
 
-	toptable = glade_xml_get_widget(polygons_xml,"polygons_layout_table");
+	toptable = glade_xml_get_widget(topxml,"polygons_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
 		return;
 	}
-
 	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (!filename)
 	{
@@ -1461,7 +1464,13 @@ void update_onscreen_polygons()
 		gtk_widget_show(button);
 		/* Load glade template */
 		xml = glade_xml_new(filename, "polygon_notebook", NULL);
+		if (!xml)
+			printf("GladeXML issue!\n");
 		notebook = glade_xml_get_widget(xml,"polygon_notebook");
+		if (!notebook)
+			printf("notebook poly issue!\n");
+		if (!subtable)
+			printf("subtable poly issue!\n");
 		gtk_table_attach(GTK_TABLE(subtable),notebook,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
 		gtk_widget_show(notebook);
 		gdk_flush();
@@ -1683,11 +1692,11 @@ void reset_onscreen_tblocks()
 {
 	GtkWidget *toptable = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *text_xml;
+	extern GladeXML *topxml;
 
-	if ((!text_xml) || (!gauge))
+	if ((!topxml) || (!gauge))
 		return;
-	toptable = glade_xml_get_widget(text_xml,"text_blocks_layout_table");
+	toptable = glade_xml_get_widget(topxml,"text_blocks_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -1706,11 +1715,11 @@ void reset_onscreen_tgroups()
 {
 	GtkWidget *toptable = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *tick_groups_xml;
+	extern GladeXML *topxml;
 
-	if ((!tick_groups_xml))
+	if ((!topxml))
 		return;
-	toptable = glade_xml_get_widget(tick_groups_xml,"tick_groups_layout_table");
+	toptable = glade_xml_get_widget(topxml,"tick_groups_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -1729,11 +1738,11 @@ void reset_onscreen_polygons()
 {
 	GtkWidget *toptable = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *polygons_xml;
+	extern GladeXML *topxml;
 
-	if ((!polygons_xml))
+	if ((!topxml))
 		return;
-	toptable = glade_xml_get_widget(polygons_xml,"polygons_layout_table");
+	toptable = glade_xml_get_widget(topxml,"polygons_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");

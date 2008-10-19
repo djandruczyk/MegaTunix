@@ -32,4 +32,4 @@ glade_files = dashdesigner.glade
 
 dash_DATA = $(glade_files)
 
-EXTRA_DIST = $(dash_DATA)
+EXTRA_DIST = $(dash_DATA) dashdesigner.ico

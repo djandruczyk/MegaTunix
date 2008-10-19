@@ -28,6 +28,16 @@ typedef enum
 
 typedef enum
 {
+	GENERAL_TAB = 0,
+	TEXTBLOCK_TAB,
+	ALERT_TAB,
+	TICKGROUP_TAB,
+	WARNING_TAB,
+	POLYGON_TAB
+}pages;
+
+typedef enum
+{
 	IMPORT_XML = 0x1AA,
 	EXPORT_XML
 }StdButton;
