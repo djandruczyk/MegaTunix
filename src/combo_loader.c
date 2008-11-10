@@ -91,10 +91,12 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
 	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
-
+/*
 	entry = g_object_new (TYPE_MASK_ENTRY, NULL);
 	MASK_ENTRY (entry)->mask = g_strdup(regexp);
 	g_free(regexp);
+	*/
+	entry = mask_entry_new_with_mask(regexp);
 	
 	gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
 	gtk_container_add (GTK_CONTAINER (object), entry);
@@ -103,5 +105,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gtk_entry_set_completion(GTK_ENTRY(entry),completion);
 	gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
 	gtk_entry_completion_set_text_column(completion,CHOICE_COL);
+	gtk_entry_completion_set_inline_completion(completion,TRUE);
+	gtk_entry_completion_set_popup_single_match(completion,FALSE);
 			
 }

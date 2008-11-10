@@ -21,6 +21,28 @@
 
 G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init));
 
+/*!
+ \brief gets called when a user wants a new mask entry
+ \returns a pointer to a newly created mask entry widget
+ */
+GtkWidget *mask_entry_new ()
+{
+        return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
+}
+
+
+/*!
+ \brief gets called when a user wants a new mask entry
+ \returns a pointer to a newly created mask entry widget
+ */
+GtkWidget *mask_entry_new_with_mask (gchar *mask)
+{
+	MaskEntry * widget = g_object_new (TYPE_MASK_ENTRY, NULL);
+	widget->mask = g_strdup(mask);
+	return GTK_WIDGET(widget);
+}
+
+
 void mask_entry_set_background (MaskEntry *entry)
 {
 	static const GdkColor error_color = { 0, 65535, 60000, 60000 };

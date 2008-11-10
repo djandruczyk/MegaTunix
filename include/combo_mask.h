@@ -41,6 +41,8 @@ struct _MaskEntryClass
 };
 
 void mask_entry_editable_init (GtkEditableClass *iface);
+GtkWidget *mask_entry_new (void);
+GtkWidget *mask_entry_new_with_mask (gchar *mask);
 
 
 #endif

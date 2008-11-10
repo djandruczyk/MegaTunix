@@ -28,7 +28,7 @@ keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_STOP_REALTIME_
 page=0
-tooltip=Stops the Realtime Variables and the log.
+tooltip=Stops the Runtime Data display and the log.
 
 [logviewer_start_playback]
 keys=handler,page,tooltip
@@ -49,7 +49,7 @@ keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_SELECT_PARAMS_
 page=0
-tooltip=This will popup a window where you can select the fields you wish to view in either the Realtime view or Logfile for playback.  Traces can be selected/removed while the log is playing as well.
+tooltip=This will popup a window where you can select the fields you wish to view in either the Runtime view or Logfile for playback.  Traces can be selected/removed while the log is playing as well.
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
@@ -58,7 +58,7 @@ keys=page,handler,tooltip
 key_types=_INT_,_ENUM_,_STRING_
 page=0
 handler=_REALTIME_VIEW_
-tooltip=Enables Realtime mode for the logviewer.  The logviewer will act like a stripchart view allwing viewing of signals from the ECU live, with the added ability to scroll back in time (to the point where RT vars were started from)
+tooltip=Enables Runtime mode for the logviewer.  The logviewer will act like a stripchart view allwing viewing of signals from the ECU live, with the added ability to scroll back in time (to the point where RT vars were started from)
 
 [logviewer_playback_radio_button]
 keys=page,handler

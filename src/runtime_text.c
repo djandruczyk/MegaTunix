@@ -45,7 +45,7 @@ EXPORT void load_rt_text_pf()
 	Rt_Text *rt_text = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *vbox = NULL;
-	GtkWidget *sep = NULL;
+	GtkWidget *frame = NULL;
 	gint count = 0;
 	gchar *filename = NULL;
 	gchar *ctrl_name = NULL;
@@ -113,17 +113,19 @@ EXPORT void load_rt_text_pf()
 		gtk_window_move(GTK_WINDOW(window),x,y);
 		w = (gint)OBJ_GET(global_data,"rtt_width");
 		h = (gint)OBJ_GET(global_data,"rtt_height");
-		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
-		gtk_window_resize(GTK_WINDOW(window),w,h);
+		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
+//		gtk_window_resize(GTK_WINDOW(window),w,h);
 
 		register_widget("rtt_window",window);
 		g_signal_connect(G_OBJECT(window),"destroy_event",
 				G_CALLBACK(prevent_close),NULL);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
+		frame = gtk_frame_new("Runtime Data");
+		gtk_container_add(GTK_CONTAINER(window),frame);
 		vbox = gtk_vbox_new(FALSE,1);
 		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
-		gtk_container_add(GTK_CONTAINER(window),vbox);
+		gtk_container_add(GTK_CONTAINER(frame),vbox);
 
 		for (i=0;i<count;i++)
 		{
@@ -142,11 +144,13 @@ EXPORT void load_rt_text_pf()
 							g_strdup(ctrl_name),
 							(gpointer)rt_text);
 			}
+			/*
 			if (i < (count-1))
 			{
 				sep = gtk_hseparator_new();
 				gtk_box_pack_start(GTK_BOX(vbox),sep,FALSE,FALSE,1);
 			}
+			*/
 			g_free(section);
 			g_free(ctrl_name);
 			g_free(source);

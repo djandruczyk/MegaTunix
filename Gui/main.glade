@@ -209,7 +209,7 @@
 			<widget class="GtkImageMenuItem" id="runtime_vars_menuitem">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
-			  <property name="label" translatable="yes">_Runtime Variables</property>
+			  <property name="label" translatable="yes">_Runtime Data</property>
 			  <property name="use_underline">True</property>
 			  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
@@ -1784,7 +1784,7 @@ Detect</property>
 					    <widget class="GtkButton" id="start_rt_button">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Start Reading Realtime Vars</property>
+					      <property name="label" translatable="yes">Start Reading Runtime Vars</property>
 					      <property name="use_underline">True</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
@@ -1802,7 +1802,7 @@ Detect</property>
 					    <widget class="GtkButton" id="stop_rt_button">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Stop Reading Realtime Vars</property>
+					      <property name="label" translatable="yes">Stop Reading Runtime Vars</property>
 					      <property name="use_underline">True</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
@@ -2024,7 +2024,7 @@ Detect</property>
 					  <child>
 					    <widget class="GtkLabel" id="label27">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Good Realtime Reads</property>
+					      <property name="label" translatable="yes">Good Runtime Reads</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
