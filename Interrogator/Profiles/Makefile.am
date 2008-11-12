@@ -8,6 +8,7 @@ profiles = README \
 	MS-II.prof \
 	SquirtnSpark-Extra-HR-029x.prof \
 	SquirtnSpark-Extra-HR-010a.prof \
+	SquirtnSpark-Extra-HR-011x.prof \
 	SquirtnSpark-Extra-029x.prof \
 	SquirtnSpark-Extra-029yx.prof 
 
