@@ -14,9 +14,7 @@
 
 
 #include <config.h>
-#ifdef HAVE_CAIRO
 #include <cairo/cairo.h>
-#endif
 #include <piegauge.h>
 #include <piegauge-private.h>
 #include <gtk/gtk.h>

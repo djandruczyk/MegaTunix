@@ -27,9 +27,7 @@
 
 
 #include <config.h>
-#ifdef HAVE_CAIRO
 #include <cairo/cairo.h>
-#endif
 #include <gauge.h>
 #include <gauge-private.h>
 #include <gtk/gtk.h>
@@ -40,8 +38,6 @@
 #include <string.h>
 #include <time.h>
 #include <string.h>
-
-
 
 /*!
  \brief sets the color for the index passed.  The index to use used is an opaque enum
@@ -1147,11 +1143,7 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
  */
 void update_gauge_position(MtxGaugeFace *gauge)
 {
-#ifdef HAVE_CAIRO
 	cairo_update_gauge_position (gauge);
-#else
-	gdk_update_gauge_position (gauge);
-#endif
 }
 
 
@@ -1163,11 +1155,7 @@ void update_gauge_position(MtxGaugeFace *gauge)
  */
 void generate_gauge_background(MtxGaugeFace *gauge)
 {
-#ifdef HAVE_CAIRO
 	cairo_generate_gauge_background(gauge);
-#else
-	gdk_generate_gauge_background(gauge);
-#endif
 }
 
 

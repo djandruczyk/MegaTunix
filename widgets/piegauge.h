@@ -68,11 +68,9 @@ struct _MtxPieGaugePrivate
 	gchar *value_font;	/* Font string for value */
 	gfloat value_font_scale;/* Font scale */
 	gchar *valname;		/* Value text to the let of the number */
-#ifdef HAVE_CAIRO
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
 	cairo_font_options_t * font_options;
-#endif
 	PangoLayout *layout;	/*! Pango TextLayout object */
 	PangoFontDescription *font_desc;/*! Pango Font description */
 	GdkGC * bm_gc;		/*! Graphics Context for bitmap */

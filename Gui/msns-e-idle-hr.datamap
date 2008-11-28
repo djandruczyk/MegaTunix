@@ -73,7 +73,7 @@ bind_to_list=pwm_idle_controls
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=warmup_idle_controls
+bind_to_list=warmup_idle_controls,pwm_idle_controls
 
 [closed_loop_idle_frame_title]
 keys=page,bind_to_list

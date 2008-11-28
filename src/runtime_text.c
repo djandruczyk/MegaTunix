@@ -121,8 +121,11 @@ EXPORT void load_rt_text_pf()
 				G_CALLBACK(prevent_close),NULL);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
+		vbox = gtk_vbox_new(FALSE,1);
+		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
+		gtk_container_add(GTK_CONTAINER(window),vbox);
 		frame = gtk_frame_new("Runtime Data");
-		gtk_container_add(GTK_CONTAINER(window),frame);
+		gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 		vbox = gtk_vbox_new(FALSE,1);
 		gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 		gtk_container_add(GTK_CONTAINER(frame),vbox);

@@ -49,30 +49,13 @@ AC_DEFUN([PKG_CHECK_GTK],
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
-		AC_ARG_ENABLE(cairo,
-		[  --disable-cairo	enable cairo ],disable_cairo=yes, disable_cairo=no)
-		if test "$disable_cairo" = no; then
-			AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
-			WIN32_SUBRELEASE="-win2K_XP"
-
-			using_cairo=yes
-		else
-			echo "We found cairo, but it was DISABLED by the user"
-			using_cairo=no
-			WIN32_SUBRELEASE="-win9x"
-fi
-	],
-	[
-		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
-		using_cairo=no
-		WIN32_SUBRELEASE="-win9x"
+		WIN32_SUBRELEASE="-win2K_XP"
 	])
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 	AC_SUBST(WIN32_SUBRELEASE)
 ])
 
-dnl Check for GTK+ being 2.8 or newer cairo enabled) or not.
 PKG_CHECK_GTK()
 
 dnl check for gtkglext library
@@ -222,7 +205,6 @@ echo "
 Configuration:
 
     Install Path:                       ${prefix}
-    Using Cairo:                        ${using_cairo}
     General Debugging:                  ${enable_debug}
     Profiling:                          ${enable_profiling}
 "
