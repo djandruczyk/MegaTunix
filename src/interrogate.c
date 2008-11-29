@@ -1068,6 +1068,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 			return FALSE;
 		}
 		vector = g_strsplit(tmpbuf,",",-1);
+		g_free(tmpbuf);
 		/* Possible choices are "Count", "submatch" and "fullmatch", so
 		 * stringparse to get them into a consistent form
 		 */

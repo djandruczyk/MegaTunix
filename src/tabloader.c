@@ -122,6 +122,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			bind_data(topframe,(gpointer)bindgroup);
 			if (groups)
 				g_hash_table_destroy(groups);
+			groups = NULL;
 
 			populate_master(topframe,(gpointer)cfgfile);
 

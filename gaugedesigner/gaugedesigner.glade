@@ -130,7 +130,7 @@
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0 -10000000 10000000 0.00999999977648 1 1</property>
+	      <property name="adjustment">0 -10000000 10000000 0.00999999977648 1 0</property>
 	      <signal name="value_changed" handler="link_range_spinners" last_modification_time="Sun, 22 Oct 2006 17:53:06 GMT"/>
 	    </widget>
 	    <packing>
@@ -153,7 +153,7 @@
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">1 -10000000 10000000 0.00999999977648 1 1</property>
+	      <property name="adjustment">1 -10000000 10000000 0.00999999977648 1 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -175,7 +175,7 @@
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0.800000011921 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+	      <property name="adjustment">0.800000011921 0 1 0.0010000000475 0.00999999977648 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -197,7 +197,7 @@
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0.0799999982119 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+	      <property name="adjustment">0.0799999982119 0 1 0.0010000000475 0.00999999977648 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -607,7 +607,7 @@
 		  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		  <property name="snap_to_ticks">False</property>
 		  <property name="wrap">False</property>
-		  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+		  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
@@ -629,7 +629,7 @@
 		  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		  <property name="snap_to_ticks">False</property>
 		  <property name="wrap">False</property>
-		  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+		  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
@@ -668,7 +668,7 @@
 		  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		  <property name="snap_to_ticks">False</property>
 		  <property name="wrap">False</property>
-		  <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+		  <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
@@ -1467,7 +1467,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
+				  <property name="adjustment">0 -360 360 0.10000000149 1 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:31 GMT"/>
 				</widget>
 				<packing>
@@ -1490,7 +1490,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
+				  <property name="adjustment">0 -360 360 0.10000000149 1 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 				</widget>
 				<packing>
@@ -1513,7 +1513,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -10000000 9999999 1 10 10</property>
+				  <property name="adjustment">0 -10000000 9999999 1 10 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:31 GMT"/>
 				</widget>
 				<packing>
@@ -1536,7 +1536,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">100 -10000000 10000000 1 10 10</property>
+				  <property name="adjustment">100 -10000000 10000000 1 10 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 				</widget>
 				<packing>
@@ -1559,7 +1559,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.0649999976158 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.0649999976158 0 1 0.0010000000475 0.00999999977648 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 				</widget>
 				<packing>
@@ -1710,7 +1710,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 				</widget>
 				<packing>
@@ -1733,7 +1733,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">1 0 1 0.0010000000475 0.00999999977648 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 				</widget>
 				<packing>
@@ -1810,7 +1810,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 				</widget>
 				<packing>
@@ -1887,7 +1887,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.035000000149 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.035000000149 0 1 0.0010000000475 0.00999999977648 0</property>
 				  <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 				</widget>
 				<packing>
@@ -2174,7 +2174,7 @@
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">1 0 5 1 10 10</property>
+				      <property name="adjustment">1 0 5 1 10 0</property>
 				      <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 				    </widget>
 				    <packing>
@@ -2319,7 +2319,7 @@
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				      <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				      <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:38:45 GMT"/>
 				    </widget>
 				    <packing>
@@ -2342,7 +2342,7 @@
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">0.15000000596 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				      <property name="adjustment">0.15000000596 -1 1 0.0010000000475 0.00999999977648 0</property>
 				      <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:39:02 GMT"/>
 				    </widget>
 				    <packing>
@@ -2386,7 +2386,7 @@
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				      <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0</property>
 				      <signal name="value_changed" handler="generic_spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 				    </widget>
 				    <packing>
@@ -3402,7 +3402,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.255 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.254999995232 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -3424,7 +3424,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.135000005364 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.135000005364 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3700,7 +3700,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.20000000298 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.20000000298 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -3767,7 +3767,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">11 0 100 1 10 10</property>
+			      <property name="adjustment">11 0 100 1 10 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -3876,7 +3876,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.0649999976158 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.0649999976158 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -3898,7 +3898,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">4 0 100 1 10 10</property>
+			      <property name="adjustment">4 0 100 1 10 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -4004,7 +4004,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">3</property>
@@ -4026,7 +4026,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.10000000149 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.10000000149 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -4132,7 +4132,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.0500000007451 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.0500000007451 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -4154,7 +4154,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.17499999702 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.17499999702 0 1 0.0010000000475 0.00999999977648 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">3</property>
@@ -4299,7 +4299,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
+			      <property name="adjustment">0 -360 360 0.10000000149 1 0</property>
 			      <signal name="value_changed" handler="tg_spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:49:49 GMT"/>
 			    </widget>
 			    <packing>
@@ -4322,7 +4322,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
+			      <property name="adjustment">0 -360 360 0.10000000149 1 0</property>
 			      <signal name="value_changed" handler="tg_spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:49:58 GMT"/>
 			    </widget>
 			    <packing>
@@ -4458,7 +4458,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -99999 99999 0.10000000149 1 1</property>
+			      <property name="adjustment">0 -99999 99999 0.10000000149 1 0</property>
 			      <signal name="value_changed" handler="tg_spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:50:18 GMT"/>
 			    </widget>
 			    <packing>
@@ -4482,7 +4482,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -99999 99999 0.10000000149 1 1</property>
+			      <property name="adjustment">0 -99999 99999 0.10000000149 1 0</property>
 			      <signal name="value_changed" handler="tg_spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:50:07 GMT"/>
 			    </widget>
 			    <packing>
@@ -4981,7 +4981,7 @@ On Off Dash
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 0 1 0.0010000000475 0.10000000149 0.10000000149</property>
+			      <property name="adjustment">0 0 1 0.0010000000475 0.10000000149 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -5046,7 +5046,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -5068,7 +5068,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -5090,7 +5090,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -5112,7 +5112,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -5300,7 +5300,7 @@ On Off Dash
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 359 0.10000000149 1 1</property>
+				      <property name="adjustment">0 0 359 0.10000000149 1 0</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -5335,7 +5335,7 @@ On Off Dash
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">90 0 360 0.10000000149 1 1</property>
+				      <property name="adjustment">90 0 360 0.10000000149 1 0</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -5485,7 +5485,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -5507,7 +5507,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -5529,7 +5529,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -5650,7 +5650,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -5672,7 +5672,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0.125 0 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -5694,7 +5694,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -5716,7 +5716,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+				  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -5952,7 +5952,7 @@ On Off Dash
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 1000 1 10 10</property>
+				  <property name="adjustment">0 0 1000 1 10 0</property>
 				  <signal name="value_changed" handler="adj_generic_num_points" last_modification_time="Fri, 16 Feb 2007 22:06:35 GMT"/>
 				</widget>
 				<packing>
@@ -6108,10 +6108,10 @@ On Off Dash
 	  <child>
 	    <widget class="GtkLabel" id="label228">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">An Alert Range defines a region of the gauge that will cause a ring of color to appear when the gauge value is within the limits of the range. This is useful as an attention getting if a parameter is REALLY out of range (overheating, etc)</property>
+	      <property name="label" translatable="yes">An Alert Range defines a region of the gauge that will cause a ring of color to appear when the gauge value is within the limits of the range. This is useful as an attention getter if a parameter is REALLY out of range (i.e. overheating, failed sensor, etc)</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
-	      <property name="justify">GTK_JUSTIFY_CENTER</property>
+	      <property name="justify">GTK_JUSTIFY_FILL</property>
 	      <property name="wrap">True</property>
 	      <property name="selectable">False</property>
 	      <property name="xalign">0</property>
@@ -6160,7 +6160,7 @@ On Off Dash
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0 -10000000 10000000 0.00999999977648 1 1</property>
+	      <property name="adjustment">0 -10000000 10000000 0.00999999977648 1 0</property>
 	      <signal name="value_changed" handler="link_range_spinners" last_modification_time="Sun, 22 Oct 2006 17:53:06 GMT"/>
 	    </widget>
 	    <packing>
@@ -6183,7 +6183,7 @@ On Off Dash
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">1 -10000000 10000000 0.00999999977648 1 1</property>
+	      <property name="adjustment">1 -10000000 10000000 0.00999999977648 1 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -6205,7 +6205,7 @@ On Off Dash
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">1 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+	      <property name="adjustment">1 0 1 0.0010000000475 0.00999999977648 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -6227,7 +6227,7 @@ On Off Dash
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0.10000000149 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+	      <property name="adjustment">0.10000000149 0 1 0.0010000000475 0.00999999977648 0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -6390,7 +6390,7 @@ On Off Dash
   <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
   <property name="local_only">True</property>
   <property name="select_multiple">False</property>
-  <property name="show_hidden">True</property>
+  <property name="show_hidden">False</property>
   <property name="do_overwrite_confirmation">False</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>

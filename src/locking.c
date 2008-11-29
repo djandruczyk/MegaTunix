@@ -52,6 +52,7 @@ void unix_create_mtx_lock()
 	struct flock lock_struct;
 	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
+	g_free(lockfile);
 
 	lock_struct.l_type=F_WRLCK;
 	lock_struct.l_start=0;

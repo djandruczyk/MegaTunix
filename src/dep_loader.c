@@ -90,6 +90,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 		}
+		g_free(key);
 		type = translate_string(vector[DEP_TYPE]);
 		if (type == VE_EMB_BIT)
 		{
