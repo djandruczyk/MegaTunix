@@ -29,7 +29,10 @@ void generic_xml_gint_import(xmlNode *node, gpointer dest)
 		return;
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
+	{
+		printf("TXT none node\n");
 		return;
+	}
 	*val = (gint)g_ascii_strtod((gchar*)node->children->content,NULL);
 }
 
@@ -134,6 +137,7 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 	xmlNode *cur_node = NULL;
 	GdkColor *color = NULL;
 	gchar **vector = NULL;
+	gint tmp = 0;
 
 	if (!node->children)
 	{
@@ -157,11 +161,20 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 			if (cur_node->type == XML_ELEMENT_NODE)
 			{
 				if (g_strcasecmp((gchar *)cur_node->name,"red") == 0)
-					generic_xml_gint_import(cur_node,&color->red);
+				{
+					generic_xml_gint_import(cur_node,&tmp);
+					color->red=tmp;
+				}
 				if (g_strcasecmp((gchar *)cur_node->name,"green") == 0)
-					generic_xml_gint_import(cur_node,&color->green);
+				{
+					generic_xml_gint_import(cur_node,&tmp);
+					color->green=tmp;
+				}
 				if (g_strcasecmp((gchar *)cur_node->name,"blue") == 0)
-					generic_xml_gint_import(cur_node,&color->blue);
+				{
+					generic_xml_gint_import(cur_node,&tmp);
+					color->blue=tmp;
+				}
 			}
 			cur_node = cur_node->next;
 		}

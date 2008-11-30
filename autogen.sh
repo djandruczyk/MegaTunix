@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/sh 
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
+os=`uname -s`
 test -z "$srcdir" && srcdir=.
 
 DIE=0
@@ -57,7 +58,7 @@ fi
 }
 
 (grep "^AM_PROG_LIBTOOL" "$CONFIGURE" >/dev/null) && {
-  (libtool --version) < /dev/null > /dev/null 2>&1 || {
+  (if [ $os == "Darwin" ] ; then glibtool --version ; else libtool --version ; fi) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool\' installed."
     echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
@@ -139,8 +140,12 @@ do
       fi
       if grep "^AM_PROG_LIBTOOL" "$bn" >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
-	  echo "Running libtoolize..."
-	  libtoolize --force --copy
+	  echo "Running libtoolize..11
+	  if [ $os == "Darwin" ] then
+	    glibtoolize --force --copy
+	  else
+	    libtoolize --force --copy
+	  fi
 	fi
       fi
       echo "Running aclocal $aclocalinclude ..."
