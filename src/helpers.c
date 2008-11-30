@@ -320,7 +320,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
-			backup_current_data(0,page);
+			backup_current_data(canID,page);
 			ms_ve_goodread_count++;
 			break;
 		case MS1_RT_VARS:
@@ -416,8 +416,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 }
 
 /*!
- \brief burn_ecu_flash() issues the commands to the ECU to burn the contents
- of RAM to flash.
+ \brief post_burn_pf() handles post burn ecu data mgmt
  */
 EXPORT void post_burn_pf()
 {

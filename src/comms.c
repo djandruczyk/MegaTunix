@@ -214,7 +214,6 @@ void queue_burn_ecu_flash(gint page)
 	extern volatile gboolean offline;
 	OutputData *output = NULL;
 
-
 	if (offline)
 		return;
 
@@ -224,7 +223,6 @@ void queue_burn_ecu_flash(gint page)
 	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
-
 }
 
 

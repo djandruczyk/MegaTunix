@@ -18,6 +18,7 @@
 #include <conversions.h>
 #include <dataio.h>
 #include <datalogging_gui.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -300,6 +301,10 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 		OBJ_SET(output->object,"data", (gpointer)data);
 	}
 
+	/* Set it here otherwise there's a risk of a missed burn due to 
+ 	 * a potential race conditin in the burn checker
+ 	 */
+	set_ecu_data(canID,page,offset,size,value);
 	/* If the ecu is multi-page, run the handler to take care of queing
 	 * burns and/or page changing
 	 */
@@ -321,11 +326,11 @@ void handle_page_change(gint page, gint last)
 	guint8 ** ecu_data = firmware->ecu_data;
 	guint8 ** ecu_data_last = firmware->ecu_data_last;
 
-	//printf("handle page change \n");
+	printf("handle page change!, page %i, last %i\n",page,last);
 
 	if ((page == last) && (!force_page_change))
 	{
-		//printf("page == last and force_page_change is not set\n");
+		printf("page == last and force_page_change is not set\n");
 		return;
 	}
 	/* If current page is NOT a dl_by_default page, but the last one WAS
@@ -334,7 +339,7 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) && (firmware->page_params[last]->dl_by_default))
 	{
-		//printf("current was not dl by default  but last was,  burning\n");
+		printf("current was not dl by default  but last was,  burning\n");
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
@@ -345,8 +350,12 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
 	{
+		printf("current is not dl by default or last was not as well\n");
 		if ((page != last) && (firmware->capabilities & MS1))
+		{
+			printf("page diff and MS1\n");
 			queue_ms1_page_change(page);
+		}
 		return;
 	}
 	/* If current and last pages are DIFFERENT,  do a memory buffer scan
@@ -355,15 +364,15 @@ void handle_page_change(gint page, gint last)
 	 */
 	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
 	{
-		//printf("page and last don't match AND there's a ram difference\n");
+		printf("page and last don't match AND there's a ram difference, burning\n");
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
 	}
 	else if ((page != last) && (firmware->capabilities & MS1))
 	{
+		printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
 		queue_ms1_page_change(page);
-		//printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
 	}
 
 
@@ -415,6 +424,11 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
 	OBJ_SET(output->object,"data", (gpointer)data);
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+
+	/* save it otherwise the burn checker can miss it due to a potential
+ 	 * race condition
+ 	 */
+	store_new_block(canID,page,offset,data,num_bytes);
 
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
