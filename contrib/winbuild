@@ -1,26 +1,8 @@
 #!/bin/sh
 
-# Win9x version requires GTK+ runtime 2.6.10
-# so we change the symlinks in /target to use the right libs
-OLD_GTK=2.6.10
 NEW_GTK=2.12.9
 
 . cross
-
-# rm /target/etc && \
-# rm /target/lib && \
-# rm /target/include && \
-# rm /target/share && \
-# ln -sf /target/etc-$OLD_GTK /target/etc && \
-# ln -sf /target/lib-$OLD_GTK /target/lib && \
-# ln -sf /target/include-$OLD_GTK /target/include && \
-# ln -sf /target/share-$OLD_GTK /target/share 
-# cross-configure --disable-cairo $* && \
-# 	make clean && \
-# 	make -j5 && \
-# 	./contrib/builder && \
-# 	make distclean 
-
 
 rm /target/etc 
 rm /target/lib
@@ -32,6 +14,6 @@ ln -sf /target/include-$NEW_GTK /target/include
 ln -sf /target/share-$NEW_GTK /target/share 
 cross-configure $* && \
 	make -j5  && \
-	./contrib/builder
+	./contrib/builder &&
 . uncross
-make distclean
+#make distclean

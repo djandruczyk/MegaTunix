@@ -79,7 +79,7 @@ void handle_args(gint argc, gchar * argv[])
 		{
 			if (!(g_file_test(args->autolog_dump_dir, G_FILE_TEST_IS_DIR)))
 			{
-				result = g_mkdir_with_parents(args->autolog_dump_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+				result = g_mkdir_with_parents(args->autolog_dump_dir, 755);
 				if (!result)
 					dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tAutolog dump dir creation ERROR: \"%s\"\n",g_strerror(errno)));
 			}

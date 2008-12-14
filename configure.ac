@@ -19,11 +19,6 @@ AM_MAINTAINER_MODE
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-if test "$CXX" != "g++";
-then
-	echo "You need the 'g++' package"
-	exit 1
-fi
 AC_PROG_LN_S
 AC_PROG_AWK
 AM_PROG_LIBTOOL
