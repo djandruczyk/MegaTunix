@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=MegaTunix Dash Designer
+GenericName=dashdesigner
+Comment=megatunix Dash Designer
+Exec=dashdesigner
+Icon=dashdesigner
+Type=Application
+Categories=Automotive;Other;Utility

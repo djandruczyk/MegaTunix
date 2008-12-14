@@ -1,0 +1,63 @@
+This directory contains the menu files (*.desktop) for each application
+
+This is part of freedesktop.org and is used by gnome, and similar windoweach application to build their menus.
+
+< http://freedesktop.org > 
+and the specification:
+< http://standards.freedesktop.org/menu-spec/menu-spec-1.0.html >
+
+The cliffnotes version:
+
+The menu systems looks in key directories for menu files. The directories 
+are searched in order. While the exact location is somewhat system 
+dependent, it's usually something like the following:
+
+/usr/share/*   (system dist dir)
+/usr/local/share/*  (locally installed software override)
+~/.local/share/* (User overrides)
+
+For our case, configures figures out the correct directory and 
+populates it properly in the Makefiles.
+
+For a given menu entry, there are three directories which have to have entries:
+
+"applications" contains the text file ending in .desktop with parameters for 
+each entry. We need one for each application, and this is what sets the text, 
+icons, and category for each application.
+
+"icons" contains png or xbm icon referred to in the application menu file
+desktop. We use xbm so it can live in the source tree and not cause CVS
+headaches. For now we have separate icons so we can make them unique later.
+
+"desktop-directories" is the container menu item the applications will 
+show up under. We'll need just one for MegaTunix. It also honors the 
+"category" setting. In our source tree this is the "desktop" subdir.
+
+Once these files are dropped in their relevant directory under /usr/local
+they immediately show up in the gnome menu, or any other scheme which uses 
+freedesktop. (several do. Debian itself uses something different, but
+they will converge)
+
+The applications menu entry are loaded in by "category": Existing categories are things like Accessory, office, internet, etc.
+
+The entries will be listed in the first category that matches. 
+
+If we do not add a "category", mtx will show up under other, or accessories.
+
+We can add a category by dropping a file like automotive.menu in the the 
+appropriate xdg directory. Typically the xdg root is /etc/xdg, and we 
+add the category file in /etc/xdg/menus/applications-merged. (for sure 
+this is what ubuntu uses)
+
+This automotive.menu file adds & activates a new category called automotive, 
+which the mtx menus are loaded under. In our source tree this is the "category"
+dir.
+
+These menu entries work for sure with gnome based systems like ubuntu & 
+xubuntu. It also is used by KDE. Other menu systems are starting to 
+utilize the spec. 
+
+Even if the specific system does not utilize this spec, it should not break 
+anything to have the files in /usr/local/share (or whereever) on the system. 
+
+Alan Barrow alan@pinztrek.com 7 Dec, 2008

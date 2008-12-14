@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=MegaTunix
+GenericName=MegaTunix
+Comment=megatunix
+Exec=megatunix
+Icon=megatunix
+Type=Application
+Categories=Automotive;Favorites,Other;Utility
