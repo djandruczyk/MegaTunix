@@ -1,0 +1,16 @@
+Source: megatunix
+Section: Electronics
+Priority: optional
+Maintainer: Alan Barrow <alan@pinztrek.com>
+Build-Depends: debhelper (>= 5), autotools-dev, libgtkglext1-dev, flex, bison, glade-gnome-2, libglade2-dev, gdb, automake1.9
+Standards-Version: 3.7.2
+
+Package: megatunix
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libglade2-0
+Description: MegaTunix by David Andruczyk
+ MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your MegaSquirt powered vehicle.
+ Please send suggestions to the author for ways to improve MegaTunix. 
+ David J. Andruczyk(2007) 
+ < http://megatunix.sourceforge.net >
+

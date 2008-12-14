@@ -202,6 +202,10 @@ RuntimeText/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
+menu/Makefile
+desktop/Makefile
+category/Makefile
+icons/Makefile
 MegaTunix.iss
 WIN_NOTES.txt
 ])

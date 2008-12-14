@@ -17,7 +17,7 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-gaugedesigner_SOURCES = gd_init.c main.c events.c loadsave.c events.h loadsave.h handlers.c handlers.h
+gaugedesigner_SOURCES = gd_init.h gd_init.c main.c events.c loadsave.c events.h loadsave.h handlers.c handlers.h
 
 gaugedesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 

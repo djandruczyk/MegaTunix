@@ -326,7 +326,8 @@ void handle_page_change(gint page, gint last)
 	guint8 ** ecu_data = firmware->ecu_data;
 	guint8 ** ecu_data_last = firmware->ecu_data_last;
 
-	printf("handle page change!, page %i, last %i\n",page,last);
+	/*printf("handle page change!, page %i, last %i\n",page,last);
+	 */
 
 	if ((page == last) && (!force_page_change))
 	{
@@ -350,10 +351,12 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
 	{
-		printf("current is not dl by default or last was not as well\n");
+		/*printf("current is not dl by default or last was not as well\n");
+		 */
 		if ((page != last) && (firmware->capabilities & MS1))
 		{
-			printf("page diff and MS1\n");
+			/*printf("page diff and MS1\n");
+			 */
 			queue_ms1_page_change(page);
 		}
 		return;
@@ -364,14 +367,16 @@ void handle_page_change(gint page, gint last)
 	 */
 	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
 	{
-		printf("page and last don't match AND there's a ram difference, burning\n");
+		/*printf("page and last don't match AND there's a ram difference, burning\n");
+		 */
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
 	}
 	else if ((page != last) && (firmware->capabilities & MS1))
 	{
-		printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
+		/*printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
+		 */
 		queue_ms1_page_change(page);
 	}
 
