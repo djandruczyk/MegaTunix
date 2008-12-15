@@ -584,7 +584,6 @@ bind_to_list=IAT_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where correction ends)
-=======
 
 #----- Combo Buttons ----------------------------------------------------------
 

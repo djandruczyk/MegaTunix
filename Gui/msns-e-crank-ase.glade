@@ -4423,8 +4423,6 @@ when CLT below</property>
 				  <property name="fill">False</property>
 				</packing>
 			      </child>
-=======
-
 			      <child>
 				<widget class="GtkFrame" id="IATCorr_frame">
 				  <property name="visible">True</property>
