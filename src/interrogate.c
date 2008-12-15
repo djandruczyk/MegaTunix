@@ -484,8 +484,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		section = g_strdup_printf("page_%i",i);
 
 		if (firmware->multi_page)
-			if(!cfg_read_int(cfgfile,section,"truepgnum",&firmware->page_params[i]->truepgnum))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"phys_ecu_page",&firmware->page_params[i]->phys_ecu_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"phys_ecu_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_boolean(cfgfile,section,"dl_by_default",&firmware->page_params[i]->dl_by_default))
 		{
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dl_by_default\" flag not found in \"%s\" section in interrogation profile, assuming TRUE\n",section));

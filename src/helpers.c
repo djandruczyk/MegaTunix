@@ -78,7 +78,7 @@ EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
 		{
 			output = initialize_outputdata();
 			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
-			OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[last_page]->truepgnum));
+			OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
 			OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 			OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 			io_cmd(firmware->burn_command,output);
@@ -92,7 +92,7 @@ EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
 					continue;
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->burn_command,output);
@@ -130,7 +130,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					queue_ms1_page_change(i);
 					output = initialize_outputdata();
 					OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-					OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					io_cmd(firmware->ve_command,output);
 				}
@@ -150,7 +150,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 						continue;
 					output = initialize_outputdata();
 					OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-					OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 					OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
 					OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
@@ -169,7 +169,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -183,7 +183,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);

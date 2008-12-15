@@ -248,7 +248,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
 	OBJ_SET(output->object,"value", GINT_TO_POINTER(value));
 	OBJ_SET(output->object,"size", GINT_TO_POINTER(size));
@@ -395,7 +395,7 @@ void queue_ms1_page_change(gint page)
 
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->page_command,output);
 	last_page = page;
@@ -424,7 +424,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
 	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
 	OBJ_SET(output->object,"data", (gpointer)data);

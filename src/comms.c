@@ -192,7 +192,7 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
-			//printf("data mismatch on page %i, (%i)\n",i,firmware->page_params[i]->truepgnum);
+			//printf("data mismatch on page %i, (%i)\n",i,firmware->page_params[i]->phys_ecu_page);
 			set_group_color(RED,"burners");
 			outstanding_data = TRUE;
 			return;
@@ -220,7 +220,7 @@ void queue_burn_ecu_flash(gint page)
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(firmware->canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
 }
