@@ -90,7 +90,9 @@ gui_files = 	README \
 		vetable_8x8e-DT_1.datamap \
 		vetable_8x8e-DT_2.datamap \
 		warmupwizard.datamap \
-		warmupwizard.glade 
+		warmupwizard.glade \
+		test.datamap \
+		test.glade
 
 gui_DATA = $(gui_files)
 
