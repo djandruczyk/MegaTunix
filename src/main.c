@@ -109,7 +109,7 @@ gint main(gint argc, gchar ** argv)
 	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	g_timeout_add(250,(GtkFunction)early_interrogation,NULL);
+	g_timeout_add(500,(GtkFunction)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();

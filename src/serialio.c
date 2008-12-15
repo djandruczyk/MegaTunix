@@ -65,7 +65,7 @@ gboolean open_serial(gchar * port_name)
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
-	fd = open(port_name, O_RDWR | O_NOCTTY);
+	fd = open(port_name, O_RDWR | O_NOCTTY );
 #endif
 	if (fd > 0)
 	{
@@ -344,9 +344,14 @@ void *serial_repair_thread(gpointer data)
 				continue;
 			}
 			g_usleep(100000);
+			thread_update_logbar("comms_view",NULL,g_strdup_printf("Attempting to open port %s\n",vector[i]),FALSE,FALSE);
 			if (open_serial(vector[i]))
 			{
+				thread_update_logbar("comms_view",NULL,g_strdup_printf("Searching for ECU\n"),FALSE,FALSE);
+				thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
 				setup_serial_params(9600);
+				thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
+
 				if (comms_test())
 				{	/* We have a winner !!  Abort loop */
 					serial_is_open = TRUE;
@@ -355,6 +360,7 @@ void *serial_repair_thread(gpointer data)
 				else
 				{
 					setup_serial_params(115200);
+					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 115200 Baud for ECU link\n"),FALSE,FALSE);
 					if (comms_test())
 					{	/* We have a winner !!  
 						   Abort loop */
