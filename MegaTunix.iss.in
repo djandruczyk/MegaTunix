@@ -1,10 +1,10 @@
 ; -- MegaTunix.iss --
-;SUFFIX=@VERSION@@WIN32_SUBRELEASE@
+;SUFFIX=@VERSION@
 
 
 [Setup]
 AppName=MegaTunix
-AppVerName=MegaTunix v. @VERSION@@WIN32_SUBRELEASE@
+AppVerName=MegaTunix v. @VERSION@
 DefaultDirName={pf}\MegaTunix
 DefaultGroupName=MegaTunix
 UninstallDisplayIcon={app}\megatunix.exe

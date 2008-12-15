@@ -61,7 +61,7 @@ z_precision=0
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=0
+phys_ecu_page=0
 length=125
 
 [interrogation]

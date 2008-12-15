@@ -436,37 +436,37 @@ z_precision=1
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=4
+phys_ecu_page=4
 length=1024
 
 [page_1]
 dl_by_default=TRUE
-truepgnum=5
+phys_ecu_page=5
 length=1024
 
 [page_2]
 dl_by_default=TRUE
-truepgnum=10
+phys_ecu_page=10
 length=1024
 
 [page_3]
 dl_by_default=TRUE
-truepgnum=8
+phys_ecu_page=8
 length=1024
 
 [page_4]
 dl_by_default=TRUE
-truepgnum=9
+phys_ecu_page=9
 length=1024
 
 [page_5]
 dl_by_default=FALSE
-truepgnum=240
+phys_ecu_page=240
 length=1024
 
 [page_6]
 dl_by_default=FALSE
-truepgnum=241
+phys_ecu_page=241
 length=1024
 
 [interrogation]

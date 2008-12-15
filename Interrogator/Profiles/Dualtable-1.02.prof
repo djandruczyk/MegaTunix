@@ -98,12 +98,12 @@ z_precision=0
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=0
+phys_ecu_page=0
 length=128
 
 [page_1]
 dl_by_default=TRUE
-truepgnum=1
+phys_ecu_page=1
 length=128
 
 [interrogation]

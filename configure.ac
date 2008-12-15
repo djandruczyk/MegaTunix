@@ -47,13 +47,9 @@ dnl check paths for necessary files
 dnl MACRO definition to determine if running GTK> 2.8 or not for use of cairo
 AC_DEFUN([PKG_CHECK_GTK], 
 [
-	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
-	[ 
-		WIN32_SUBRELEASE="-win2K_XP"
-	])
+	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],,)
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
-	AC_SUBST(WIN32_SUBRELEASE)
 ])
 
 PKG_CHECK_GTK()

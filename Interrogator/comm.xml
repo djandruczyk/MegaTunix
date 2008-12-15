@@ -12,7 +12,7 @@
 			<name>MS2_TABLE_INDEX</name>
 			<desc>This is the table index in the firmware,  0-3 are lookuptables, 4-5 are data, and 6 is rtvars, these are analagous to pages from MS-I extra</desc>
 			<type>_DATA_</type>
-			<internal_name>truepgnum</internal_name>
+			<internal_name>phys_ecu_page</internal_name>
 			<size>_U08_</size>
 		</arg>
 		<arg>
@@ -33,7 +33,7 @@
 			<name>MS1_PAGE</name>
 			<desc>Page inside ECU firmware</desc>
 			<type>_DATA_</type>
-			<internal_name>truepgnum</internal_name>
+			<internal_name>phys_ecu_page</internal_name>
 			<size>_U08_</size>
 		</arg>
 		<arg>

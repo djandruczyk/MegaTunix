@@ -377,67 +377,67 @@ z_precision=1
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=0
+phys_ecu_page=0
 length=189
 
 [page_1]
 dl_by_default=TRUE
-truepgnum=1
+phys_ecu_page=1
 length=189
 
 [page_2]
 dl_by_default=TRUE
-truepgnum=2
+phys_ecu_page=2
 length=189
 
 [page_3]
 dl_by_default=TRUE
-truepgnum=3
+phys_ecu_page=3
 length=189
 
 [page_4]
 dl_by_default=TRUE
-truepgnum=4
+phys_ecu_page=4
 length=189
 
 [page_5]
 dl_by_default=TRUE
-truepgnum=5
+phys_ecu_page=5
 length=189
 
 [page_6]
 dl_by_default=TRUE
-truepgnum=6
+phys_ecu_page=6
 length=189
 
 [page_7]
 dl_by_default=TRUE
-truepgnum=7
+phys_ecu_page=7
 length=189
 
 [page_8]
 dl_by_default=TRUE
-truepgnum=8
+phys_ecu_page=8
 length=189
 
 [page_9]
 dl_by_default=FALSE
-truepgnum=240
+phys_ecu_page=240
 length=189
 
 [page_10]
 dl_by_default=FALSE
-truepgnum=241
+phys_ecu_page=241
 length=189
 
 [page_11]
 dl_by_default=FALSE
-truepgnum=242
+phys_ecu_page=242
 length=256
 
 [page_12]
 dl_by_default=FALSE
-truepgnum=243
+phys_ecu_page=243
 length=256
 
 [interrogation]
