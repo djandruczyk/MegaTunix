@@ -1,14 +1,10 @@
 
  MegaTunix v. @VERSION@@WIN32_SUBRELEASE@ requires the GTK+ Runtime.
 
- If you are running a Windows 9x OS (Win95, 98, ME, NT) then you are 
- unfortunately out of luck.  MegaTunix requires either:
- Linux
- Windows 2000 or newer.
- OS-X (and supporting toolkits via MacPorts/DarwinPorts.
+ Win9x is no longer supported
 
- If you run Windows 2000 or newer (2k, XP, 2k03) you will need the GTK+ 
- runtime,  preferrably 2.12.9 or newer
+ Windows 2000, XP, 203 and Vista require the GTK+ runtime, preferrably
+ 2.12.9 or newer in order to function!
 
  http://downloads.sourceforge.net/gladewin32/gtk-2.12.9-win32-2.exe
 
