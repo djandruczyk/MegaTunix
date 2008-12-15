@@ -79,6 +79,7 @@ static const struct
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"height"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"main_start_angle"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"main_sweep_angle"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"rotation"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"lbound"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"ubound"},
 	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font"},

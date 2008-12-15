@@ -2,6 +2,7 @@
 #include "../widgets/gauge.h"
 #include <getfiles.h>
 #include <glib.h>
+#include <gd_init.h>
 #include <stdio.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
@@ -11,12 +12,12 @@
 extern GtkWidget *gauge;
 gchar * cwd = NULL;
 gboolean direct_path = FALSE;
+GladeXML *topxml = NULL;
 
 int main (int argc, char ** argv )
 {
 	GtkWidget *window;
 	GtkWidget *tmp;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * dirname = NULL;
@@ -25,23 +26,27 @@ int main (int argc, char ** argv )
 
 	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
-		xml = glade_xml_new(filename, "main_window", NULL);
+		topxml = glade_xml_new(filename, "main_window", NULL);
 	else
 	{
 		printf("Can't locate primary glade file!!!!\n");
 		exit(-1);
 	}
-	glade_xml_signal_autoconnect(xml);
-	window = glade_xml_get_widget(xml,"main_window");
+	glade_xml_signal_autoconnect(topxml);
+	window = glade_xml_get_widget(topxml,"main_window");
 
-	tmp = glade_xml_get_widget(xml,"save_gauge_menuitem");
+	tmp = glade_xml_get_widget(topxml,"save_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
 
-	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
+	tmp = glade_xml_get_widget(topxml,"save_as_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
 
-	tmp = glade_xml_get_widget(xml,"close_gauge_menuitem");
+	tmp = glade_xml_get_widget(topxml,"close_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
+
+	init_text_attributes(topxml);
+	init_general_attributes(topxml);
+	
 	if (argc == 2)
 	{
 		tmpbuf = g_get_current_dir();

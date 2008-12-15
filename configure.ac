@@ -4,13 +4,13 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=17
+MTX_MICRO_VERSION=18
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.9.17)
+AM_INIT_AUTOMAKE(megatunix, 0.9.18)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -49,30 +49,13 @@ AC_DEFUN([PKG_CHECK_GTK],
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
-		AC_ARG_ENABLE(cairo,
-		[  --disable-cairo	enable cairo ],disable_cairo=yes, disable_cairo=no)
-		if test "$disable_cairo" = no; then
-			AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
-			WIN32_SUBRELEASE="-win2K_XP"
-
-			using_cairo=yes
-		else
-			echo "We found cairo, but it was DISABLED by the user"
-			using_cairo=no
-			WIN32_SUBRELEASE="-win9x"
-fi
-	],
-	[
-		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
-		using_cairo=no
-		WIN32_SUBRELEASE="-win9x"
+		WIN32_SUBRELEASE="-win2K_XP"
 	])
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 	AC_SUBST(WIN32_SUBRELEASE)
 ])
 
-dnl Check for GTK+ being 2.8 or newer cairo enabled) or not.
 PKG_CHECK_GTK()
 
 dnl check for gtkglext library
@@ -158,11 +141,7 @@ REALTIME_MAPS_DATA_DIR=RealtimeMaps
 RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
-if test "$datarootdir" != ""; then
-	DATA_DIR=$datarootdir/MegaTunix
-else
-	DATA_DIR=$datadir/MegaTunix
-fi
+DATA_DIR=$datarootdir/MegaTunix
 
 AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(SNAPSHOTS_DATA_DIR)
@@ -188,6 +167,8 @@ include/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
+msloader/Makefile
+msloader/resources.rc
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
@@ -212,6 +193,10 @@ RuntimeText/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
+menu/Makefile
+desktop/Makefile
+category/Makefile
+icons/Makefile
 MegaTunix.iss
 WIN_NOTES.txt
 ])
@@ -220,7 +205,6 @@ echo "
 Configuration:
 
     Install Path:                       ${prefix}
-    Using Cairo:                        ${using_cairo}
     General Debugging:                  ${enable_debug}
     Profiling:                          ${enable_profiling}
 "

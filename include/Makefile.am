@@ -10,6 +10,7 @@ headers = \
 	comms.h \
         comms_gui.h \
         combo_loader.h \
+        combo_mask.h \
         configfile.h \
         conversions.h \
         core_gui.h \

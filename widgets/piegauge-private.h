@@ -29,6 +29,8 @@ gboolean mtx_pie_gauge_expose (GtkWidget *, GdkEventExpose *);
 * gboolean mtx_pie_gauge_motion_event (GtkWidget *,GdkEventMotion *);
 */
 void mtx_pie_gauge_size_request (GtkWidget *, GtkRequisition *);
+void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name);
+void mtx_pie_gauge_init (MtxPieGauge *gauge);
 gboolean mtx_pie_gauge_button_release (GtkWidget *,GdkEventButton *);
 void cairo_generate_pie_gauge_background(MtxPieGauge *);
 void cairo_update_pie_gauge_position (MtxPieGauge *);

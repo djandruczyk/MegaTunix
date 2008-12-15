@@ -1,0 +1,15 @@
+megatunix (0.9.18) stable; urgency=low
+
+  * 0.9.18 stable release
+
+ -- David Andruczyk <djandruczyk@yahoo.com>  Sun, 14 Dec 2008 14:52:15 -0500
+megatunix (0.9.18) unstable; urgency=low
+
+  * Packaged from latest CVS version
+
+ -- Alan Barrow <alan@pinztrek.com>  Thu, 04 Dec 2008 15:18:15 -0500
+megatunix (0.9.17) unstable; urgency=low
+
+  * Initial Packaging.
+
+ -- Alan Barrow <alan@pinztrek.com>  Tue, 02 Dec 2008 15:18:15 -0500

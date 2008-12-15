@@ -34,13 +34,20 @@ G_BEGIN_DECLS
 
 
 #define DRAG_BORDER 7
-/* MtxClampAt enum,  display clamping */
+/* MtxClampType enum,  display clamping */
 typedef enum
 {
 	CLAMP_UPPER = 0xaa,
 	CLAMP_LOWER,
 	CLAMP_NONE
 }MtxClampType;
+
+/* MtxRotType enum,  needle sweep rotation */
+typedef enum
+{
+	MTX_ROT_CCW = 0xbb,
+	MTX_ROT_CW
+}MtxRotType;
 
 
 /* MtxPolyType enumeration,  for polygon support */
@@ -153,6 +160,7 @@ typedef enum
 	DUMMY = 0,
 	START_ANGLE,
 	SWEEP_ANGLE,
+	ROTATION,
 	LBOUND,
 	UBOUND,
 	VALUE_FONTSCALE,
@@ -201,7 +209,7 @@ struct _MtxDispatchHelper
  * \brief
  * _MtxColorRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
- * of these structs as they are stored in a dynamic array and redraw on
+ * of these structs as they are stored in a dynamic array and redrawn on
  * gauge background generation
  */
 struct _MtxColorRange
@@ -218,7 +226,7 @@ struct _MtxColorRange
  * \brief
  * _MtxAlertRange is a container struct that holds all the information needed
  * for an alert range span on a gauge. Any gauge can have an arbritrary number
- * of these structs as they are stored in a dynamic array and redraw on
+ * of these structs as they are stored in a dynamic array and redrawn on
  * gauge update if the gauge value is within the limits of the alert. 
  */
 struct _MtxAlertRange
@@ -279,7 +287,7 @@ struct _MtxTickGroup
 
 /*! \struct _MtxPoint
  * \brief
- * _MtxPoint houses a coordinate in gauge space in float point coords which
+ * _MtxPoint houses a coordinate in gauge space in floating point coords which
  * are percentages of radius to keep everything scalable
  */
 struct _MtxPoint
@@ -369,8 +377,9 @@ struct _MtxRectangle
 /*! \struct _MtxGenPoly
  * \brief
  * _MtxGenPoly is a container structure for generic polygons that can't be
- * described by the generic choice above. It allows for any number of points
- * with one fixed color, in a filled or unfilled state.
+ * described by the generic choices above. It allows for any number of points
+ * with one fixed color, in a filled or unfilled state the  ui for these though
+ * needs improvement.
  */
 struct _MtxGenPoly
 {
@@ -382,10 +391,10 @@ struct _MtxGenPoly
  * \brief This small container struct is used to store a set of import and 
  * export functions use by the XML code to export or import gauge settings
  * The import function takes two args,  one is the text string from the XML
- * to be parsed, the other is the pointer to the destination variable that
+ * to be parsed, the other is the pointer to the destination pointer that
  * the import function should put the parsed data. The export function takes 
- * a pointer to the destination variable and returns an xmlChar * valid to
- * stick directly into the XML file.
+ * a pointer to the source dispatch helper struct and returns an 
+ * xmlChar * valid to stick directly into the XML file.
  */
 struct _MtxXMLFuncs
 {
@@ -407,11 +416,9 @@ struct _MtxGaugeFacePrivate
 	gdouble xc;		/*! X Center */
 	gdouble yc;		/*! Y Center */
 	gdouble radius;		/*! Radius of display */
-#ifdef HAVE_CAIRO
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
 	cairo_font_options_t * font_options;
-#endif
 	PangoLayout *layout;	/*! Pango TextLayout object */
 	PangoFontDescription *font_desc;/*! Pango Font description */
 	GdkGC * bm_gc;		/*! Graphics Context for bitmap */
@@ -441,6 +448,7 @@ struct _MtxGaugeFacePrivate
 	gfloat value;		/*! Value represneting needle position */
 	gfloat lbound;		/*! Lower Bound to clamp at */
 	gfloat ubound;		/*! Upper Bound to Clamp at */
+	MtxRotType rotation;	/*! Rotation enumeration */
 	gfloat span;		/*! Span from lbound to ubound */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	gboolean show_value;	/*! Show the Valueon screen or not */
@@ -450,11 +458,7 @@ struct _MtxGaugeFacePrivate
 	gfloat needle_tip_width;/*! % of rad width of needle tip */
 	gfloat needle_tail_width;/*! % of rad width of needle tip */
 	gint needle_polygon_points;
-#ifdef HAVE_CAIRO
 	MtxPoint needle_coords[6];	/*! 6 point needle for now */
-#else
-	GdkPoint needle_coords[6];	/*! 6 point needle for now */
-#endif
 };
 
 struct _MtxGaugeFace
@@ -467,7 +471,7 @@ struct _MtxGaugeFaceClass
 	GtkDrawingAreaClass parent_class;
 };
 
-GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
+GType mtx_gauge_face_get_type (void);
 void generate_gauge_background(MtxGaugeFace *);
 void update_gauge_position (MtxGaugeFace *);
 GtkWidget* mtx_gauge_face_new ();

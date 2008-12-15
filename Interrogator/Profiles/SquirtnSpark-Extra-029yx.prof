@@ -222,7 +222,11 @@ z_size=_U08_
 z_source=afr
 z_suffix=AFR
 z_conv_expr=x/10
-z_precision=1
+z_lookuptable=nbo2_table
+z_alt_lookuptable=wbo2_table
+z_depend_on=z_o2_sensor
+z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+z_precision=2
 
 [table_6]
 table_name=AFR Table 2, MSnSpark-Extra
@@ -251,6 +255,10 @@ z_size=_U08_
 z_source=afr
 z_suffix=AFR
 z_conv_expr=x/10
+z_lookuptable=nbo2_table
+z_alt_lookuptable=wbo2_table
+z_depend_on=z_o2_sensor
+z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 z_precision=1
 
 [table_7]

@@ -27,9 +27,7 @@
 
 
 #include <config.h>
-#ifdef HAVE_CAIRO
 #include <cairo/cairo.h>
-#endif
 #include <gauge.h>
 #include <gauge-private.h>
 #include <gauge-xml.h>
@@ -42,7 +40,30 @@
 #include <string.h>
 
 
-G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA)
+
+
+GType mtx_gauge_face_get_type(void)
+{
+	static GType mtx_gauge_face_type = 0;
+
+	if (!mtx_gauge_face_type)
+	{
+		static const GTypeInfo mtx_gauge_face_info =
+		{
+			sizeof(MtxGaugeFaceClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) mtx_gauge_face_class_init,
+			NULL,
+			NULL,
+			sizeof(MtxGaugeFace),
+			0,
+			(GInstanceInitFunc) mtx_gauge_face_init,
+		};
+		mtx_gauge_face_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxGaugeFace", &mtx_gauge_face_info, 0);
+	}
+	return mtx_gauge_face_type;
+}
 
 
 /*!
@@ -67,7 +88,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
 	widget_class->size_request = mtx_gauge_face_size_request;
 
-	g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
+	g_type_class_add_private (class_name, sizeof (MtxGaugeFacePrivate));
 }
 
 
@@ -94,6 +115,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value = 0.0;		/* default values */
 	priv->lbound = 0.0;
 	priv->ubound = 100.0;
+	priv->rotation = MTX_ROT_CW;
 	priv->precision = 2;
 	priv->clamped = CLAMP_NONE;
 	priv->start_angle = 135; 	/* lower left quadrant */
@@ -107,13 +129,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value_xpos = 0.0;
 	priv->value_ypos = 0.40;
 	priv->value_font_scale = 0.2;
-	priv->span = priv->ubound - priv->lbound;
-#ifdef HAVE_CAIRO
 	priv->cr = NULL;
 	priv->antialias = TRUE;
-#else
-	priv->antialias = FALSE;
-#endif
 	priv->show_value = TRUE;
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
@@ -149,6 +166,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"height", &priv->h);
 	g_object_set_data(G_OBJECT(gauge),"main_start_angle", &priv->start_angle);
 	g_object_set_data(G_OBJECT(gauge),"main_sweep_angle", &priv->sweep_angle);
+	g_object_set_data(G_OBJECT(gauge),"rotation", &priv->rotation);
 	g_object_set_data(G_OBJECT(gauge),"lbound", &priv->lbound);
 	g_object_set_data(G_OBJECT(gauge),"ubound", &priv->ubound);
 	g_object_set_data(G_OBJECT(gauge),"value_font", &priv->value_font);
@@ -256,7 +274,6 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
  */
 void cairo_update_gauge_position (MtxGaugeFace *gauge)
 {
-#ifdef HAVE_CAIRO
 	GtkWidget *widget = NULL;
 	gfloat tmpf = 0.0;
 	gfloat needle_pos = 0.0;
@@ -389,7 +406,11 @@ cairo_jump_out_of_alerts:
 	else
 		val = priv->value;
 	tmpf = (val-priv->lbound)/(priv->ubound-priv->lbound);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+
+	if (priv->rotation == MTX_ROT_CW)
+		needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+	else
+		needle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
 
 
 	cairo_set_source_rgb (cr, priv->colors[COL_NEEDLE].red/65535.0,
@@ -433,164 +454,6 @@ cairo_jump_out_of_alerts:
 
 
 	cairo_destroy(cr);
-#endif
-}
-
-
-/*!
- \brief updates the gauge position,  This is the GDK implementation that
- looks doesn't do antialiasing,  but is the fastest one.
- \param widget (MtxGaugeFace *) pointer to the gauge object
- */
-void gdk_update_gauge_position (MtxGaugeFace *gauge)
-{
-#ifndef HAVE_CAIRO
-	GtkWidget *widget = NULL;
-	gint i= 0;
-	gfloat xc = 0.0;
-	gfloat yc = 0.0;
-	gfloat tmpf = 0.0;
-	gfloat needle_pos = 0.0;
-	gint n_width = 0;
-	gint n_tail = 0;
-	gint n_tip = 0;
-	gint tip_width = 0;
-	gint tail_width = 0;
-	gboolean alert = FALSE;
-	gchar * message = NULL;
-	gchar * tmpbuf = NULL;
-	gint lwidth = 0;
-	gfloat val = 0.0;
-	MtxAlertRange* range = NULL;
-	PangoRectangle logical_rect;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-
-
-	widget = GTK_WIDGET(gauge);
-	/* Check if in alert bounds and alert as necessary */
-	alert = FALSE;
-	for (i=0;i<priv->a_ranges->len;i++)
-	{
-		range = g_array_index(priv->a_ranges,MtxAlertRange *, i);
-		if ((priv->value >= range->lowpoint)  &&
-				(priv->value <= range->highpoint))
-		{
-			alert = TRUE;
-			if (priv->last_alert_index == i)
-				goto gdk_jump_out_of_alerts;
-
-			/* If we alert, in order to save CPU, we copy the 
-			 * background pixmap to a temp pixmap and render on 
-			 * that and STORE the index of this alert.  Next time
-			 * acount we'll detect we ALREADY drew the alert and 
-			 * just copy hte pixmap (saving all the render time)
-			 * as pixmap copies are fast.
-			 */
-			priv->last_alert_index = i;
-			gdk_draw_drawable(priv->tmp_pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->bg_pixmap,
-				0,0,
-				0,0,
-				widget->allocation.width,widget->allocation.height);
-			gdk_gc_set_rgb_fg_color(priv->gc,&range->color);
-			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
-			gdk_gc_set_line_attributes(priv->gc,lwidth,
-					GDK_LINE_SOLID,
-					GDK_CAP_BUTT,
-					GDK_JOIN_BEVEL);
-			gdk_draw_arc(priv->tmp_pixmap,priv->gc,FALSE,
-					priv->xc-priv->radius*range->inset,
-					priv->yc-priv->radius*range->inset,
-					2*(priv->radius*range->inset),
-					2*(priv->radius*range->inset),
-					0,
-					360*64);
-			break;
-		}
-	}
-gdk_jump_out_of_alerts:
-	/* Copy background pixmap to intermediary for final rendering */
-	if (!alert)
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->bg_pixmap,
-				0,0,
-				0,0,
-				widget->allocation.width,widget->allocation.height);
-	else
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->tmp_pixmap,
-				0,0,
-				0,0,
-				widget->allocation.width,widget->allocation.height);
-
-	/* the text */
-	if (priv->show_value)
-	{
-		gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_VALUE_FONT]);
-		message = g_strdup_printf("%.*f", priv->precision,priv->value);
-
-		tmpbuf = g_strdup_printf("%s %i",priv->value_font,(gint)(priv->radius *priv->value_font_scale*0.82));
-		priv->font_desc = pango_font_description_from_string(tmpbuf);
-		g_free(tmpbuf);
-		pango_layout_set_font_description(priv->layout,priv->font_desc);
-		pango_layout_set_text(priv->layout,message,-1);
-		pango_layout_get_pixel_extents(priv->layout,NULL,&logical_rect);
-		g_free(message);
-
-		gdk_draw_layout(priv->pixmap,priv->gc,
-				priv->xc-(logical_rect.width/2)+(priv->value_xpos*priv->radius),
-				priv->yc-(logical_rect.height/2)+(priv->value_ypos*priv->radius),priv->layout);
-	}
-
-	gdk_gc_set_line_attributes(priv->gc,1,
-			GDK_LINE_SOLID,
-			GDK_CAP_ROUND,
-			GDK_JOIN_ROUND);
-
-	/* gauge hands */
-	if (priv->clamped == CLAMP_UPPER)
-		val = priv->ubound;
-	else if (priv->clamped == CLAMP_LOWER)
-		val = priv->lbound;
-	else
-		val = priv->value;
-	tmpf = (val-priv->lbound)/(priv->ubound-priv->lbound);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180.0);
-	xc= priv->xc;
-	yc= priv->yc;
-	n_width = priv->needle_width * priv->radius;
-	n_tail = priv->needle_tail * priv->radius;
-	n_tip = priv->needle_length * priv->radius;
-	tip_width = priv->needle_tip_width * priv->radius;
-	tail_width = priv->needle_tail_width * priv->radius;
-
-	priv->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
-	priv->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
-	priv->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
-	priv->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
-	
-	 priv->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
-	 priv->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
-
-	 priv->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
-	 priv->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
-	 priv->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
-	 priv->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
-	 priv->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
-	 priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
-	 priv->needle_polygon_points = 6;
-
-	/* Draw the needle */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_NEEDLE]);
-	gdk_draw_polygon(priv->pixmap,
-			priv->gc,
-			TRUE,priv->needle_coords,
-			priv->needle_polygon_points);
-	
-#endif
 }
 
 
@@ -669,13 +532,11 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2); 
 
-#ifdef HAVE_CAIRO
 		if (priv->font_options)
 			cairo_font_options_destroy(priv->font_options);
 		priv->font_options = cairo_font_options_create();
 		cairo_font_options_set_antialias(priv->font_options,
 				CAIRO_ANTIALIAS_GRAY);
-#endif
 
 		/* Shape combine mask bitmap */
 		colormap = gdk_colormap_get_system ();
@@ -768,22 +629,17 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_IS_WINDOW(widget->parent))
 	{
-#ifdef HAVE_CAIRO
-
 #if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
 			gtk_widget_input_shape_combine_mask(widget->parent,priv->bitmap,0,0);
-#endif
 #endif
 		gtk_widget_shape_combine_mask(widget->parent,priv->bitmap,0,0);
 	}
 	else
 	{
-#ifdef HAVE_CAIRO
 #if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
 			gdk_window_input_shape_combine_mask(widget->window,priv->bitmap,0,0);
-#endif
 #endif
 		gdk_window_shape_combine_mask(widget->window,priv->bitmap,0,0);
 	}
@@ -801,7 +657,6 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
  */
 void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 {
-#ifdef HAVE_CAIRO
 	GtkWidget * widget = NULL;
 	cairo_t *cr = NULL;
 	double dashes[2] = {4.0,4.0};
@@ -925,7 +780,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 		/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
 		lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
+	if (priv->rotation == MTX_ROT_CW)
 		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
+	else
+		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
 
 		cairo_stroke(cr);
 
@@ -944,7 +802,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
 
 		insetfrom = priv->radius * tgroup->maj_tick_inset;
-		counter = tgroup->start_angle *(M_PI/180.0);
+		if (priv->rotation == MTX_ROT_CW)
+			counter = tgroup->start_angle *(M_PI/180.0);
+		else
+			counter = (tgroup->start_angle+tgroup->sweep_angle) *(M_PI/180.0);
 		if (tgroup->text)
 		{
 			vector = g_strsplit(tgroup->text,",",-1);
@@ -1008,7 +869,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 				cairo_set_line_width (cr, lwidth);
 				for (k=1;k<=tgroup->num_min_ticks;k++)
 				{
-					subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
+					if (priv->rotation == MTX_ROT_CW)
+						subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
+					else
+						subcounter = -(k*deg_per_minor_tick)*(M_PI/180.0);
 					cairo_move_to (cr,
 							priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
 							priv->yc + (priv->radius - mintick_inset) * sin (counter+subcounter));
@@ -1019,7 +883,10 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 				}
 				cairo_restore (cr); /* stack-pen-size */
 			}
-			counter += (deg_per_major_tick)*(M_PI/180);
+			if (priv->rotation == MTX_ROT_CW)
+				counter += (deg_per_major_tick)*(M_PI/180);
+			else
+				counter -= (deg_per_major_tick)*(M_PI/180);
 		}
 		g_strfreev(vector);
 	}
@@ -1147,454 +1014,6 @@ void cairo_generate_gauge_background(MtxGaugeFace *gauge)
 			0,0,
 			widget->allocation.width,widget->allocation.height);
 	priv->last_alert_index = -1;
-#endif
-}
-
-
-/*!
- \brief draws the static elements of the gauge (only on resize), This includes
- the border, units and name strings,  tick marks and warning regions
- This is the gdk version.
- \param widget (GtkWidget *) pointer to the gauge object
- */
-void gdk_generate_gauge_background(MtxGaugeFace *gauge)
-{
-#ifndef HAVE_CAIRO
-	GtkWidget * widget = NULL;
-	gfloat deg_per_major_tick = 0.0;
-	gfloat deg_per_minor_tick = 0.0;
-	gint w = 0;
-	gint h = 0;
-	gint i = 0;
-	gint j = 0;
-	gint k = 0;
-	gint count = 0;
-	gfloat rad = 0.0;
-	gchar **vector = NULL;
-	gint lwidth = 0;
-	gint inset = 0;
-	gint insetfrom = 0;
-	gfloat tmpf = 0.0;
-	gfloat counter = 0.0;
-	gfloat subcounter = 0.0;
-	gchar * tmpbuf = NULL;
-	gint redstep = 0;
-	gint greenstep = 0;
-	gint bluestep = 0;
-	gfloat mintick_inset = 0.0;
-	gfloat angle1 = 0.0;
-	gfloat angle2 = 0.0;
-	gfloat start_pos = 0.0;
-	gfloat stop_pos = 0.0;
-	gfloat start_angle = 0.0;
-	gfloat span = 0.0;
-	gint r_sign = 0;
-	gint g_sign = 0;
-	gint b_sign = 0;
-	gint num_points = 0;
-	MtxColorRange *range = NULL;
-	MtxTextBlock *tblock = NULL;
-	MtxTickGroup *tgroup = NULL;
-	MtxPolygon *poly = NULL;
-	GdkPoint *points = NULL;
-	GdkColor color;
-	GdkColor *b_color;
-	GdkColor *e_color;
-	PangoRectangle logical_rect;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-
-	if (!priv->bg_pixmap)
-		return;
-
-	widget = GTK_WIDGET(gauge);
-
-	w = widget->allocation.width;
-	h = widget->allocation.height;
-
-
-	/* Wipe the display, black */
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			DRAG_BORDER,
-			DRAG_BORDER);
-	/* Wipe the display, black */
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, priv->w-DRAG_BORDER,0,
-			DRAG_BORDER,
-			DRAG_BORDER);
-	/* Wipe the display, black */
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,priv->h-DRAG_BORDER,
-			DRAG_BORDER,
-			DRAG_BORDER);
-	/* Wipe the display, black */
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,
-			DRAG_BORDER,
-			DRAG_BORDER);
-	gdk_draw_arc(priv->bg_pixmap,widget->style->black_gc,TRUE,
-			priv->xc-priv->radius,
-			priv->yc-priv->radius,
-			2*(priv->radius),
-			2*(priv->radius),
-			0,360*64);
-
-
-	/* The main grey (will have a thin overlay on top of it) 
-	 * This is a FILLED circle */
-
-	/* Gradients */
-
-	lwidth = MIN (priv->xc,priv->yc)/20 < 1 ? 1: MIN (priv->xc,priv->yc)/20;
-	gdk_gc_set_line_attributes(priv->gc,lwidth,
-			GDK_LINE_SOLID,
-			GDK_CAP_BUTT,
-			GDK_JOIN_BEVEL);
-
-	tmpf = (gfloat)lwidth/(gfloat)(2*priv->radius);
-	tmpf = (1.0-(tmpf));
-
-	/* This is a HORRENDOUSLY UGLY hack to get pretty gradients
-	 * like cairo does. (cairo does the gradient in something like
-	 * 3 calls instead of all the follow ugliness, but they render 
-	 * nearly identical which is what counts....
-	 */
-	b_color = &priv->colors[COL_GRADIENT_BEGIN];
-	e_color = &priv->colors[COL_GRADIENT_END];
-
-	redstep = abs(b_color->red-e_color->red)/36;
-	greenstep = abs(b_color->green-e_color->green)/36;
-	bluestep = abs(b_color->blue-e_color->blue)/36;
-
-	/* Outer Gradient */
-	if (b_color->red > e_color->red)
-		r_sign = -1;
-	else
-		r_sign = 1;
-	if (b_color->green > e_color->green)
-		g_sign = -1;
-	else
-		g_sign = 1;
-	if (b_color->blue > e_color->blue)
-		b_sign = -1;
-	else
-		b_sign = 1;
-	for(i=0;i<36;i++)
-	{
-		color.red=b_color->red + (i * r_sign * redstep);
-		color.green=b_color->green + (i * g_sign * greenstep);
-		color.blue=b_color->blue + (i * b_sign * bluestep);
-		gdk_gc_set_rgb_fg_color(priv->gc,&color);
-
-		gdk_draw_arc(priv->bg_pixmap,priv->gc,FALSE,
-				priv->xc-priv->radius*tmpf,
-				priv->yc-priv->radius*tmpf,
-				2*(priv->radius*tmpf),
-				2*(priv->radius*tmpf),
-				(45+(i*5))*64,5*64);
-	}
-	if (b_color->red > e_color->red)
-		r_sign = -1;
-	else
-		r_sign = 1;
-	if (b_color->green > e_color->green)
-		g_sign = -1;
-	else
-		g_sign = 1;
-	if (b_color->blue > e_color->blue)
-		b_sign = -1;
-	else
-		b_sign = 1;
-	for(i=0;i<36;i++)
-	{
-		color.red=e_color->red - (i * r_sign * redstep);
-		color.green=e_color->green - (i * g_sign * greenstep);
-		color.blue=e_color->blue - (i * b_sign * bluestep);
-		gdk_gc_set_rgb_fg_color(priv->gc,&color);
-
-		gdk_draw_arc(priv->bg_pixmap,priv->gc,FALSE,
-				priv->xc-priv->radius*tmpf,
-				priv->yc-priv->radius*tmpf,
-				2*(priv->radius*tmpf),
-				2*(priv->radius*tmpf),
-				(225+(i*5))*64,5*64);
-	}
-	/* Inner Gradient */
-	if (b_color->red > e_color->red)
-		r_sign = -1;
-	else
-		r_sign = 1;
-	if (b_color->green > e_color->green)
-		g_sign = -1;
-	else
-		g_sign = 1;
-	if (b_color->blue > e_color->blue)
-		b_sign = -1;
-	else
-		b_sign = 1;
-	tmpf = (gfloat)lwidth/(gfloat)(2*priv->radius);
-	tmpf = (1.0-(3*tmpf));
-	for(i=0;i<36;i++)
-	{
-		color.red=b_color->red + (i * r_sign * redstep);
-		color.green=b_color->green + (i * g_sign * greenstep);
-		color.blue=b_color->blue + (i * b_sign * bluestep);
-		gdk_gc_set_rgb_fg_color(priv->gc,&color);
-
-		gdk_draw_arc(priv->bg_pixmap,priv->gc,FALSE,
-				priv->xc-priv->radius*tmpf,
-				priv->yc-priv->radius*tmpf,
-				2*(priv->radius*tmpf),
-				2*(priv->radius*tmpf),
-				(225+(i*5))*64,5*64);
-	}
-	if (b_color->red > e_color->red)
-		r_sign = -1;
-	else
-		r_sign = 1;
-	if (b_color->green > e_color->green)
-		g_sign = -1;
-	else
-		g_sign = 1;
-	if (b_color->blue > e_color->blue)
-		b_sign = -1;
-	else
-		b_sign = 1;
-	for(i=0;i<36;i++)
-	{
-		color.red=e_color->red - (i * r_sign * redstep);
-		color.green=e_color->green - (i * g_sign * greenstep);
-		color.blue=e_color->blue - (i * b_sign * bluestep);
-		gdk_gc_set_rgb_fg_color(priv->gc,&color);
-
-		gdk_draw_arc(priv->bg_pixmap,priv->gc,FALSE,
-				priv->xc-priv->radius*tmpf,
-				priv->yc-priv->radius*tmpf,
-				2*(priv->radius*tmpf),
-				2*(priv->radius*tmpf),
-				(45+(i*5))*64,5*64);
-	}
-
-	/* Create the INNER filled black arc to draw the ticks and everything
-	 * else onto
-	 */
-	tmpf = (gfloat)lwidth/(gfloat)(2*priv->radius);
-	tmpf = (1.0-(4*tmpf));
-	gdk_gc_set_line_attributes(priv->gc,1,
-			GDK_LINE_SOLID,
-			GDK_CAP_BUTT,
-			GDK_JOIN_BEVEL);
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_BG]);
-
-	gdk_draw_arc(priv->bg_pixmap,priv->gc,TRUE,
-			priv->xc-priv->radius*tmpf,
-			priv->yc-priv->radius*tmpf,
-			2*(priv->radius*tmpf),
-			2*(priv->radius*tmpf),
-			0,360*64);
-
-	/* The warning color ranges */
-	for (i=0;i<priv->c_ranges->len;i++)
-	{
-		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
-		gdk_gc_set_rgb_fg_color(priv->gc,&range->color);
-		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
-		span = priv->sweep_angle;
-		angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
-		angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
-
-		/* positions of the range in degrees */
-		start_pos = priv->start_angle+(angle1*span);
-		stop_pos = priv->start_angle+(angle2*span);
-		/* Converted to funky GDK units */
-		start_angle = -start_pos*64;
-		span = -(stop_pos-start_pos)*64;
-
-		lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
-		gdk_gc_set_line_attributes(priv->gc,lwidth,
-				GDK_LINE_SOLID,
-				GDK_CAP_BUTT,
-				GDK_JOIN_BEVEL);
-		gdk_draw_arc(priv->bg_pixmap,priv->gc,FALSE, 
-				priv->xc-priv->radius*range->inset, 
-				priv->yc-priv->radius*range->inset,
-				2*(priv->radius*range->inset),
-				2*(priv->radius*range->inset),
-				start_angle,
-				span);
-	}
-
-	/* NEW STYLE gauge ticks */
-	for (i=0;i<priv->tick_groups->len;i++)
-	{
-		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
-		deg_per_major_tick = tgroup->sweep_angle/(float)(tgroup->num_maj_ticks-1);
-		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
-		/* Major ticks first */
-		insetfrom = priv->radius * tgroup->maj_tick_inset;
-		count = 0;
-		if (tgroup->text)
-		{
-			vector = g_strsplit(tgroup->text,",",-1);
-			count = g_strv_length(vector);
-			tmpbuf = g_strdup_printf("%s %i",tgroup->font,(gint)(priv->radius*tgroup->font_scale*0.82));
-			priv->font_desc = pango_font_description_from_string(tmpbuf);
-			g_free(tmpbuf);
-			pango_layout_set_font_description(priv->layout,priv->font_desc);
-		}
-
-		counter = (tgroup->start_angle)*(M_PI/180);
-		for (j=0;j<tgroup->num_maj_ticks;j++)
-		{
-			inset = tgroup->maj_tick_length * priv->radius;
-			lwidth = (priv->radius/10)*tgroup->maj_tick_width < 1 ? 1: (priv->radius/10)*tgroup->maj_tick_width;
-			gdk_gc_set_line_attributes(priv->gc,lwidth,
-					GDK_LINE_SOLID,
-					GDK_CAP_BUTT,
-					GDK_JOIN_BEVEL);
-
-			gdk_gc_set_rgb_fg_color(priv->gc,&tgroup->maj_tick_color);
-			gdk_draw_line(priv->bg_pixmap,priv->gc,
-
-					priv->xc + (priv->radius - insetfrom) * cos (counter),
-					priv->yc + (priv->radius - insetfrom) * sin (counter),
-					priv->xc + ((priv->radius - insetfrom - inset) * cos (counter)),
-					priv->yc + ((priv->radius - insetfrom - inset) * sin (counter)));
-			if ((vector) && (j < count)) /* If not null */
-			{
-				gdk_gc_set_rgb_fg_color(priv->gc,&tgroup->text_color);
-				pango_layout_set_text(priv->layout,vector[j],-1);
-				pango_layout_get_pixel_extents(priv->layout,NULL,&logical_rect);
-
-				rad = sqrt(pow(logical_rect.width,2)+pow(logical_rect.height,2))/2.0;
-				/* Fudge factor due to differenced ins pango vs
-				 * cairo font extents/rectangles
-				 */
-				rad*=0.62;
-
-				gdk_draw_layout(priv->bg_pixmap,priv->gc,
-						priv->xc + (priv->radius - tgroup->text_inset*priv->radius - rad) * cos (counter) - (logical_rect.width/2),
-						priv->yc + (priv->radius - tgroup->text_inset*priv->radius - rad) * sin (counter) - (logical_rect.height/2),priv->layout);
-			}
-
-			/* Now the minor ticks... */
-			if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
-			{
-				mintick_inset = priv->radius * tgroup->min_tick_inset;
-				gdk_gc_set_rgb_fg_color(priv->gc,&tgroup->min_tick_color);
-				inset = tgroup->min_tick_length * priv->radius;
-				lwidth = (priv->radius/10)*tgroup->min_tick_width < 1 ? 1: (priv->radius/10)*tgroup->min_tick_width;
-				gdk_gc_set_line_attributes(priv->gc,lwidth,
-						GDK_LINE_SOLID,
-						GDK_CAP_BUTT,
-						GDK_JOIN_BEVEL);
-				for (k=1;k<=tgroup->num_min_ticks;k++)
-				{
-					subcounter = (k*deg_per_minor_tick)*(M_PI/180);
-					gdk_draw_line(priv->bg_pixmap,priv->gc,
-
-							priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
-							priv->yc + (priv->radius - mintick_inset) * sin (counter+subcounter),
-							priv->xc + ((priv->radius - mintick_inset - inset) * cos (counter+subcounter)),
-							priv->yc + ((priv->radius - mintick_inset - inset) * sin (counter+subcounter)));
-
-				}
-
-			}
-			counter += (deg_per_major_tick)*(M_PI/180);
-
-		}
-	}
-
-	/* Polygons */
-	for (i=0;i<priv->polygons->len;i++)
-	{
-		poly = g_array_index(priv->polygons,MtxPolygon *, i);
-		gdk_gc_set_rgb_fg_color(priv->gc,&poly->color);
-		gdk_gc_set_line_attributes(priv->gc,
-				poly->line_width*priv->radius,
-				poly->line_style,
-				GDK_CAP_BUTT,
-				poly->join_style);
-		switch (poly->type)
-		{
-			case MTX_CIRCLE:
-				gdk_draw_arc(priv->bg_pixmap, priv->gc,
-						poly->filled,
-						priv->xc+((MtxCircle *)poly->data)->x*priv->radius-(((MtxCircle *)poly->data)->radius*priv->radius),
-						priv->yc+((MtxCircle *)poly->data)->y*priv->radius-(((MtxCircle *)poly->data)->radius*priv->radius),
-						2*((MtxCircle *)poly->data)->radius*priv->radius,
-						2*((MtxCircle *)poly->data)->radius*priv->radius,
-						0,360*64);
-				break;
-			case MTX_RECTANGLE:
-				gdk_draw_rectangle(priv->bg_pixmap,
-						priv->gc,
-						poly->filled, 
-						priv->xc+((MtxRectangle *)poly->data)->x*priv->radius,
-						priv->yc+((MtxRectangle *)poly->data)->y*priv->radius,
-						((MtxRectangle *)poly->data)->width*priv->radius,
-						((MtxRectangle *)poly->data)->height*priv->radius);
-				break;
-			case MTX_ARC:
-				gdk_draw_arc(priv->bg_pixmap, priv->gc,
-						poly->filled,
-						priv->xc+((MtxArc *)poly->data)->x*priv->radius-(((MtxArc *)poly->data)->width*priv->radius),
-						priv->yc+((MtxArc *)poly->data)->y*priv->radius-(((MtxArc *)poly->data)->height*priv->radius),
-						2*((MtxArc *)poly->data)->width*priv->radius,
-						2*((MtxArc *)poly->data)->height*priv->radius,
-						-((MtxArc *)poly->data)->start_angle*64,
-						-((MtxArc *)poly->data)->sweep_angle*64);
-				break;
-			case MTX_GENPOLY:
-				num_points = ((MtxGenPoly *)poly->data)->num_points;
-				points = g_new0(GdkPoint, num_points);
-				for (j=0;j<num_points;j++)
-				{
-					points[j].x = priv->xc + (((MtxGenPoly *)poly->data)->points[j].x * priv->radius);
-					points[j].y = priv->yc + (((MtxGenPoly *)poly->data)->points[j].y * priv->radius);
-				}
-				gdk_draw_polygon(priv->bg_pixmap,
-						priv->gc,
-						poly->filled,
-						points,
-						num_points);
-				g_free(points);
-				break;
-			default:
-				break;
-		}
-	}
-	/* text Blocks */
-	for (i=0;i<priv->t_blocks->len;i++)
-	{
-		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
-		gdk_gc_set_rgb_fg_color(priv->gc,&tblock->color);
-		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(priv->radius*tblock->font_scale*0.82));
-		priv->font_desc = pango_font_description_from_string(tmpbuf);
-		g_free(tmpbuf);
-		pango_layout_set_font_description(priv->layout,priv->font_desc);
-		pango_layout_set_text(priv->layout,tblock->text,-1);
-		pango_layout_get_pixel_extents(priv->layout,NULL,&logical_rect);
-
-		gdk_draw_layout(priv->bg_pixmap,priv->gc,
-				priv->xc-(logical_rect.width/2)+(tblock->x_pos*priv->radius),
-				priv->yc-(logical_rect.height/2)+(tblock->y_pos*priv->radius),priv->layout);
-	}
-	/* SAVE copy of this on tmp pixmap */
-	gdk_draw_drawable(priv->tmp_pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
-	priv->last_alert_index = -1;
-
-#endif
 }
 
 

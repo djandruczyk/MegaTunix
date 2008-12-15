@@ -15,9 +15,7 @@
 
 
 #include <config.h>
-#ifdef HAVE_CAIRO
 #include <cairo/cairo.h>
-#endif
 #include <piegauge.h>
 #include <piegauge-private.h>
 #include <gtk/gtk.h>
@@ -29,7 +27,30 @@
 #include <string.h>
 
 
-G_DEFINE_TYPE (MtxPieGauge, mtx_pie_gauge, GTK_TYPE_DRAWING_AREA)
+
+
+GType mtx_pie_gauge_get_type(void)
+{
+	static GType mtx_pie_gauge_type = 0;
+
+	if (!mtx_pie_gauge_type)
+	{
+		static const GTypeInfo mtx_pie_gauge_info =
+		{
+			sizeof(MtxPieGaugeClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) mtx_pie_gauge_class_init,
+			NULL,
+			NULL,
+			sizeof(MtxPieGauge),
+			0,
+			(GInstanceInitFunc) mtx_pie_gauge_init,
+		};
+		mtx_pie_gauge_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxPieGauge", &mtx_pie_gauge_info, 0);
+	}
+	return mtx_pie_gauge_type;
+}
 
 /*!
  \brief Initializes the mtx pie gauge class and links in the primary
@@ -53,7 +74,7 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 	/*widget_class->motion_notify_event = mtx_pie_gauge_motion_event; */
 	widget_class->size_request = mtx_pie_gauge_size_request;
 
-	g_type_class_add_private (obj_class, sizeof (MtxPieGaugePrivate)); 
+	g_type_class_add_private (class_name, sizeof (MtxPieGaugePrivate)); 
 }
 
 
@@ -86,12 +107,8 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	priv->value_xpos = 0;
 	priv->value_ypos = 0;
 	priv->value_font_scale = 0.2;
-#ifdef HAVE_CAIRO
 	priv->cr = NULL;
 	priv->antialias = TRUE;
-#else
-	priv->antialias = FALSE;
-#endif
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
 	mtx_pie_gauge_init_colors(gauge);
@@ -142,7 +159,6 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
  */
 void cairo_update_pie_gauge_position (MtxPieGauge *gauge)
 {
-#ifdef HAVE_CAIRO
 	GtkWidget * widget = NULL;
 	cairo_font_weight_t weight;
 	cairo_font_slant_t slant;
@@ -223,70 +239,6 @@ void cairo_update_pie_gauge_position (MtxPieGauge *gauge)
 	cairo_line_to (cr, tip.x,tip.y);
 	cairo_stroke(cr);
 	cairo_destroy(cr);
-#endif
-}
-
-
-/*!
- \brief updates the gauge position,  This is the GDK implementation that
- doesn't do antialiasing,  but is the fastest one.
- \param widget (MtxPieGauge *) pointer to the gauge object
- */
-void gdk_update_pie_gauge_position (MtxPieGauge *gauge)
-{
-#ifndef HAVE_CAIRO
-	GtkWidget *widget = NULL;
-	gfloat tmpf = 0.0;
-	gfloat needle_pos = 0.0;
-	gchar * message = NULL;
-	gchar * tmpbuf = NULL;
-	GdkPoint tip;
-	PangoRectangle logical_rect;
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
-
-	widget = GTK_WIDGET(gauge);
-
-	/* Check if in alert bounds and alert as necessary */
-	gdk_draw_drawable(priv->pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
-	/* the text */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_VALUE_FONT]);
-	message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
-
-	tmpbuf = g_strdup_printf("%s 8",priv->value_font);
-	priv->font_desc = pango_font_description_from_string(tmpbuf);
-	g_free(tmpbuf);
-	pango_layout_set_font_description(priv->layout,priv->font_desc);
-	pango_layout_set_text(priv->layout,message,-1);
-	pango_layout_get_pixel_extents(priv->layout,NULL,&logical_rect);
-	g_free(message);
-
-	gdk_draw_layout(priv->pixmap,priv->gc,
-			priv->pie_radius*2 + 5 +priv->value_xpos,
-			priv->pie_yc - logical_rect.height+priv->value_ypos,priv->layout);
-
-	gdk_gc_set_line_attributes(priv->gc,1,
-			GDK_LINE_SOLID,
-			GDK_CAP_ROUND,
-			GDK_JOIN_ROUND);
-
-	/* gauge hands */
-	tmpf = (priv->value-priv->min)/(priv->max-priv->min);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180.0);
-	tip.x = priv->pie_xc + (priv->pie_radius * cos (needle_pos));
-	tip.y = priv->pie_yc + (priv->pie_radius * sin (needle_pos));
-
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_NEEDLE]);
-	gdk_draw_line(priv->pixmap,
-			priv->gc,
-			priv->pie_xc,priv->pie_yc,
-			tip.x,tip.y);
-
-#endif
 }
 
 
@@ -340,13 +292,11 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
 
-#ifdef HAVE_CAIRO
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
 	priv->font_options = cairo_font_options_create();
 	cairo_font_options_set_antialias(priv->font_options,
 			CAIRO_ANTIALIAS_GRAY);
-#endif
 
 	generate_pie_gauge_background(gauge);
 	update_pie_gauge_position(gauge);
@@ -386,7 +336,6 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
  */
 void cairo_generate_pie_gauge_background(MtxPieGauge *gauge)
 {
-#ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
@@ -450,73 +399,6 @@ void cairo_generate_pie_gauge_background(MtxPieGauge *gauge)
 			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
 	cairo_stroke(cr);
 	cairo_destroy (cr);
-#endif
-}
-
-
-/*!
- \brief draws the static elements of the gauge (only on resize), This includes
- the border, units and name strings,  tick marks and warning regions
- This is the gdk version.
- \param widget (MtxPieGauge *) pointer to the gauge object
- */
-void gdk_generate_pie_gauge_background(MtxPieGauge *gauge)
-{
-#ifndef HAVE_CAIRO
-	gint w = 0;
-	gint h = 0;
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
-
-	if (!priv->bg_pixmap)
-		return;
-
-	w = GTK_WIDGET(gauge)->allocation.width;
-	h = GTK_WIDGET(gauge)->allocation.height;
-
-	/* Wipe the display, selected BG color */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_BG]);
-	gdk_draw_rectangle(priv->bg_pixmap,
-			priv->gc,
-			TRUE, 0,0,
-			w,
-			h);
-
-	/* Black Border pie gauge  */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_NEEDLE]);
-	gdk_draw_arc(priv->bg_pixmap,priv->gc,TRUE,
-			priv->pie_xc-priv->pie_radius-1,
-			priv->pie_yc-priv->pie_radius-1,
-			2*priv->pie_radius+2,
-			2*priv->pie_radius+2,
-			180*64,-180*64);
-	/* Yellow pie gauge  */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_MID]);
-	gdk_draw_arc(priv->bg_pixmap,priv->gc,TRUE,
-			priv->pie_xc-priv->pie_radius,
-			priv->pie_yc-priv->pie_radius,
-			2*priv->pie_radius,
-			2*priv->pie_radius,
-			180*64,-180*64);
-
-	/* Green Slice */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_LOW]);
-	gdk_draw_arc(priv->bg_pixmap,priv->gc,TRUE,
-			priv->pie_xc-priv->pie_radius,
-			priv->pie_yc-priv->pie_radius,
-			2*priv->pie_radius,
-			2*priv->pie_radius,
-			180*64,-45*64);
-
-	/* Red Slice */
-	gdk_gc_set_rgb_fg_color(priv->gc,&priv->colors[COL_HIGH]);
-	gdk_draw_arc(priv->bg_pixmap,priv->gc,TRUE,
-			priv->pie_xc-priv->pie_radius,
-			priv->pie_yc-priv->pie_radius,
-			2*priv->pie_radius,
-			2*priv->pie_radius,
-			45*64,-45*64);
-
-#endif
 }
 
 
@@ -561,11 +443,7 @@ void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 void generate_pie_gauge_background(MtxPieGauge *gauge)
 {
 	g_return_if_fail (MTX_IS_PIE_GAUGE (gauge));
-#ifdef HAVE_CAIRO
 	cairo_generate_pie_gauge_background(gauge);
-#else
-	gdk_generate_pie_gauge_background(gauge);
-#endif
 }
 
 
@@ -577,9 +455,5 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 void update_pie_gauge_position(MtxPieGauge *gauge)
 {
 	g_return_if_fail (MTX_IS_PIE_GAUGE (gauge));
-#ifdef HAVE_CAIRO
 	cairo_update_pie_gauge_position (gauge);
-#else
-	gdk_update_pie_gauge_position (gauge);
-#endif
 }
