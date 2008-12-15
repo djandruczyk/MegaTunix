@@ -74,15 +74,16 @@ gboolean pf_dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-//	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));
+	//	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));
 	if (leaving)
 		return TRUE;
-	if (g_async_queue_length(pf_dispatch_queue) >40)
+	/*	if (g_async_queue_length(pf_dispatch_queue) >40)
 		printf("WARNING: Postfunction dispatch queue is over 40\n");
+		*/
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
-	/*	printf("no messages waiting, returning\n");*/
+		/*	printf("no messages waiting, returning\n");*/
 		return TRUE;
 	}
 
