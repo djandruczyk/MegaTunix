@@ -4,13 +4,13 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=18
+MTX_MICRO_VERSION=19
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.9.18)
+AM_INIT_AUTOMAKE(megatunix, 0.9.19)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -47,13 +47,9 @@ dnl check paths for necessary files
 dnl MACRO definition to determine if running GTK> 2.8 or not for use of cairo
 AC_DEFUN([PKG_CHECK_GTK], 
 [
-	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
-	[ 
-		WIN32_SUBRELEASE="-win2K_XP"
-	])
+	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],,)
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
-	AC_SUBST(WIN32_SUBRELEASE)
 ])
 
 PKG_CHECK_GTK()
@@ -141,11 +137,7 @@ REALTIME_MAPS_DATA_DIR=RealtimeMaps
 RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
-if test "$datarootdir" != ""; then
-	DATA_DIR=$datarootdir/MegaTunix
-else
-	DATA_DIR=$datadir/MegaTunix
-fi
+DATA_DIR=$datarootdir/MegaTunix
 
 AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(SNAPSHOTS_DATA_DIR)
