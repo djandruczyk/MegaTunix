@@ -331,7 +331,8 @@ void handle_page_change(gint page, gint last)
 
 	if ((page == last) && (!force_page_change))
 	{
-		printf("page == last and force_page_change is not set\n");
+		/*printf("page == last and force_page_change is not set\n");
+ 		 */
 		return;
 	}
 	/* If current page is NOT a dl_by_default page, but the last one WAS
