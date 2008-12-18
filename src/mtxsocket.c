@@ -20,12 +20,13 @@
 #include <fcntl.h>
 #include <glib.h>
 #include <mtxsocket.h>
-#include <poll.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
+#include <poll.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
+#include <sys/select.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -91,51 +92,48 @@ void *socket_thread_manager(gpointer data)
 	socklen_t length = sizeof(client);
 	gint fd = 0;
 
-	while (1)
+	while (TRUE)
 	{
 		fd = accept(socket,(struct sockaddr *)&client, &length);
-//		printf("Connection accepted from %s, creating thread for it\n",inet_ntoa(client.sin_addr));
 		g_thread_create(socket_client,
 				GINT_TO_POINTER(fd), /* Thread args */
-				TRUE,	/* Joinable */
-				NULL);	/* GError pointer */
-		/* Keep track of thread ID's */
+				TRUE,   /* Joinable */
+				NULL);  /* GError pointer */
 	}
 }
 
 
 /*!
- * \brief socket_client is a thread that is spawned for each remote connection
- * to megatunix.  It's purpose in life it to answer remote requests.  If the
- * remote side is closed down, it sees a zero byte read and exits, killing off
- * the thread..
- *\param data  gpointer representation of the socket filedescriptor
+ \brief socket_client is a thread that is spawned for each remote connection
+ to megatunix.  It's purpose in life it to answer remote requests.  If the
+ remote side is closed down, it sees a zero byte read and exits, killing off
+ the thread..
+ \param data  gpointer representation of the socket filedescriptor
  */
 void *socket_client(gpointer data)
 {
 	gint fd = (gint)data;
 	gchar buf[1024];
 	struct pollfd ufds;
+	 ufds.fd = fd;
+	 ufds.events = POLLIN;
+	 gint timeo = 500; /* 500 ms timeout */
+	 gint res = 0;
 
-	ufds.fd = fd;
-	ufds.events = POLLIN;
-	gint timeo = 500; /* 500 ms timeout */
-	gint res = 0;
-
-	while(TRUE)
-	{
-		res = poll(&ufds,1,timeo);
-		if (res) /* Data Arrived */
-		{
+	 while (TRUE)
+	 {
+		 res = poll(&ufds,1,timeo);
+		 if (res) /* Data Arrived */
+		 {
 			res = recv(fd,&buf,1024,0);
-			if (res == 0) /* conn died? */
+			if (res == 0)
 			{
 				close(fd);
 				g_thread_exit(0);
 			}
-			if(!validate_remote_cmd(fd, buf,res))
+			if (!validate_remote_cmd(fd,buf,res))
 				g_thread_exit(0);
-		}
+		 }
 	}
 }
 
@@ -157,7 +155,7 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
 	gchar ** vector = NULL;
 	gint args = 0;
-	gint res = 0;
+	gsize res = 0;
 	gint tmpi = 0;
 	gint cmd = 0;
 	gfloat tmpf = 0.0;
@@ -167,7 +165,7 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 	tmpbuf = g_ascii_strup(vector[0],-1);
 	cmd = translate_string(tmpbuf);
 	g_free(tmpbuf);
-	
+
 	switch (cmd)
 	{
 		case GET_RT_VAR:
@@ -200,7 +198,6 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			return FALSE;
 			break;
 		default:
-			printf( "default, unhandled currently\n");
 			res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
 			return TRUE;
 			break;
