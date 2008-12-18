@@ -474,7 +474,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	GObject * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
-	
+
 	if (!internal_name)
 	{
 		*value = 0.0;
@@ -490,6 +490,33 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 		index -= 1;  /* get PREVIOUS one */
 	*value = g_array_index(history,gfloat,index);
 	g_static_mutex_unlock(&rtv_mutex);
+	return TRUE;
+}
+
+/*!
+ \brief lookup_precision() gets the current precision of the derived
+ variable requested by name.
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gint *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_precision(gchar *internal_name, gint *precision)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+
+	if (!internal_name)
+	{
+		*precision = 3;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+	{
+		*precision = 3;
+		return FALSE;
+	}
+	*precision = (gint )OBJ_GET(object,"precision");
 	return TRUE;
 }
 

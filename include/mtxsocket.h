@@ -17,12 +17,10 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void setnonblocking(int);
 int setup_socket(void);
 void *socket_thread_manager(gpointer);
-void socket_close(gpointer);
-//gboolean socket_client(GIOChannel *, GIOCondition, gpointer );
 void * socket_client(gpointer );
+gboolean validate_remote_cmd(gint, gchar *, gint);
 /* Prototypes */
 
 #endif

@@ -21,31 +21,18 @@
 #include <glib.h>
 #include <mtxsocket.h>
 #include <poll.h>
+#include <rtv_map_loader.h>
+#include <rtv_processor.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stringmatch.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
+#define ERR_MSG "Bad Request\n"
+
 extern GObject *global_data;
-
-
-void setnonblocking(int sock)
-{
-	int opts;
-
-	opts = fcntl(sock,F_GETFL);
-	if (opts < 0) {
-		perror("fcntl(F_GETFL)");
-		exit(-1);
-	}
-	opts = (opts | O_NONBLOCK);
-	if (fcntl(sock,F_SETFL,opts) < 0) {
-		perror("fcntl(F_SETFL)");
-		exit(-1);
-	}
-	return;
-}
 
 int setup_socket(void)
 {
@@ -128,7 +115,6 @@ void *socket_client(gpointer data)
 {
 	gint fd = (gint)data;
 	gchar buf[1024];
-	gchar * ptr = buf;
 	struct pollfd ufds;
 
 	ufds.fd = fd;
@@ -147,7 +133,77 @@ void *socket_client(gpointer data)
 				close(fd);
 				g_thread_exit(0);
 			}
-			res = send(fd,buf,res,0);
+			if(!validate_remote_cmd(fd, buf,res))
+				g_thread_exit(0);
 		}
 	}
+}
+
+
+/*!
+ \brief This function validates incoming commands from the TCP socket 
+ thread(s).  Commands need to be comma separated, ASCII text, minimum of two
+ arguments (more are allowed)
+ Currently implemented args:
+ GET_RT_VAR,<rt_varname> (second are is text name of variable)
+ GET_RTV_LIST
+ GET_RAW_ECU,<canID>,<page>,<offset>,<bytes>
+ SET_RAW_ECU,<canID>,<page>,<offset>,<bytes>,<data>
+ \param fd, client filedescriptor
+ \param buf, input buffer
+ \param len, length of input buffer
+ */
+gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
+{
+	gchar ** vector = NULL;
+	gint args = 0;
+	gint res = 0;
+	gint tmpi = 0;
+	gint cmd = 0;
+	gfloat tmpf = 0.0;
+	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
+	vector = g_strsplit(tmpbuf,",",-1);
+	args = g_strv_length(vector);
+	tmpbuf = g_ascii_strup(vector[0],-1);
+	cmd = translate_string(tmpbuf);
+	g_free(tmpbuf);
+	
+	switch (cmd)
+	{
+		case GET_RT_VAR:
+			if  (args != 2) 
+				res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
+			else if (lookup_current_value(vector[1],&tmpf))
+			{
+				lookup_precision(vector[1],&tmpi);
+				tmpbuf = g_strdup_printf("%1$.*2$f\n",tmpf,tmpi);
+				res = send(fd,tmpbuf,strlen(tmpbuf),0);
+				g_free(tmpbuf);
+			}
+			else
+			{
+				tmpbuf = g_strdup("Variable Not Found\n");
+				res = send(fd,tmpbuf,strlen(tmpbuf),0);
+				g_free(tmpbuf);
+			}
+			break;
+		case HELP:
+			tmpbuf = g_strdup("See MegaTunix Documentation.\n");
+			res = send(fd,tmpbuf,strlen(tmpbuf),0);
+			g_free(tmpbuf);
+			break;
+		case QUIT:
+			tmpbuf = g_strdup("Buh Bye...\n");
+			res = send(fd,tmpbuf,strlen(tmpbuf),0);
+			g_free(tmpbuf);
+			close(fd);
+			return FALSE;
+			break;
+		default:
+			printf( "default, unhandled currently\n");
+			res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
+			return TRUE;
+			break;
+	}
+	return TRUE;
 }

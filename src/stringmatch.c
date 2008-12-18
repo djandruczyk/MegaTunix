@@ -325,6 +325,21 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(ACTION));
 	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
 			GINT_TO_POINTER(STATIC_STRING));
+
+	/* TCP Socket Commands */
+	g_hash_table_insert(str_2_enum,"HELP",
+			GINT_TO_POINTER(HELP));
+	g_hash_table_insert(str_2_enum,"QUIT",
+			GINT_TO_POINTER(QUIT));
+	g_hash_table_insert(str_2_enum,"GET_RT_VAR",
+			GINT_TO_POINTER(GET_RT_VAR));
+	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
+			GINT_TO_POINTER(GET_RTV_LIST));
+	g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
+			GINT_TO_POINTER(GET_RAW_ECU));
+	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
+			GINT_TO_POINTER(SET_RAW_ECU));
+
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
 }
