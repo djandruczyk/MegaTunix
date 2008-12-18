@@ -29,6 +29,7 @@
 #include <init.h>
 #include <locking.h>
 #include <main.h>
+#include <mtxsocket.h>
 #include <serialio.h>
 #include <stringmatch.h>
 #include <threads.h>
@@ -36,6 +37,7 @@
 #include <xmlcomm.h>
 
 GThread * thread_dispatcher_id = NULL;
+GThread * socket_thread_id = NULL;
 gboolean ready = FALSE;
 gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
@@ -57,6 +59,7 @@ GObject *global_data = NULL;
 gint main(gint argc, gchar ** argv)
 {
 	gchar * filename = NULL;
+	gint socket = 0;
 
 	if(!g_thread_supported())
 		g_thread_init(NULL);
@@ -105,6 +108,17 @@ gint main(gint argc, gchar ** argv)
 
 	pf_dispatcher_id = g_timeout_add(50,(GtkFunction)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
+
+	/* Open TCP socket for remote access */
+	socket = setup_socket();
+	if (socket)
+	{
+		socket_thread_id = g_thread_create(socket_thread_manager,
+				GINT_TO_POINTER(socket), /* Thread args */
+	                        TRUE, /* Joinable */
+	                        NULL); /*GError Pointer */
+	}
+
 
 	/* Kickoff fast interrogation */
 	g_timeout_add(500,(GtkFunction)early_interrogation,NULL);

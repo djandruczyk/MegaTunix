@@ -17,6 +17,9 @@
 /* Definitions */
 #define BAUDRATE B9600
 /*#define BAUDRATE B115200 */
+/* TCP port */
+#define MTX_PORT 12764 /* (ascii math) (m*t)+x */
+
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
 /* Windows specific for exporting symbols for glade... */
