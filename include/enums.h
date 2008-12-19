@@ -455,9 +455,10 @@ typedef enum
 	HELP = 0x3F0,
 	QUIT,
 	GET_RT_VAR,
+	GET_RT_VARS,
 	GET_RTV_LIST,
 	GET_RAW_ECU,
-	SET_RAW_ECU,
+	SET_RAW_ECU
 
 }TcpCommand;
 
