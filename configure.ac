@@ -92,9 +92,9 @@ if test "$cross_compiling" = yes ; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	WIN32_RESOURCES="resources.o "
 	if test "$enable_debug" = yes ; then
-		EXTRA_LIBS=" -lgw32c -luuid -lole32"
+		EXTRA_LIBS=" -lgw32c -luuid -lole32 -lws2_32"
 	else
-		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
+		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32 -lws2_32"
 	fi
 else
 	EXTRA_LIBS=""

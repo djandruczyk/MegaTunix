@@ -118,6 +118,9 @@ gint main(gint argc, gchar ** argv)
 	                        TRUE, /* Joinable */
 	                        NULL); /*GError Pointer */
 	}
+	else
+		dbg_func(CRITICAL,g_strdup(__FILE__": main()\n\tERROR setting up TCP control socket\n"));
+
 
 
 	/* Kickoff fast interrogation */

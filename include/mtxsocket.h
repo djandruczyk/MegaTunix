@@ -19,7 +19,9 @@
 /* Prototypes */
 int setup_socket(void);
 void *socket_thread_manager(gpointer);
+//gboolean socket_client(GIOChannel *, GIOCondition, gpointer );
 void * socket_client(gpointer );
+void socket_close(gpointer );
 gboolean validate_remote_cmd(gint, gchar *, gint);
 /* Prototypes */
 
