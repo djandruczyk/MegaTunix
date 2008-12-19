@@ -14,6 +14,7 @@
 #ifndef __MTXSOCKET_H__
 #define __MTXSOCKET_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
@@ -23,6 +24,12 @@ void *socket_thread_manager(gpointer);
 void * socket_client(gpointer );
 void socket_close(gpointer );
 gboolean validate_remote_cmd(gint, gchar *, gint);
+/* Socket handler functions */
+void return_socket_error(gint);
+void socket_get_rt_vars(gint, gchar *);
+void socket_get_rtv_list(gint);
+void socket_get_ecu_var(gint, gchar *, DataSize);
+
 /* Prototypes */
 
 #endif

@@ -331,12 +331,22 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(HELP));
 	g_hash_table_insert(str_2_enum,"QUIT",
 			GINT_TO_POINTER(QUIT));
-	g_hash_table_insert(str_2_enum,"GET_RT_VAR",
-			GINT_TO_POINTER(GET_RT_VAR));
 	g_hash_table_insert(str_2_enum,"GET_RT_VARS",
 			GINT_TO_POINTER(GET_RT_VARS));
 	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
 			GINT_TO_POINTER(GET_RTV_LIST));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U8",
+			GINT_TO_POINTER(GET_ECU_VAR_U8));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S8",
+			GINT_TO_POINTER(GET_ECU_VAR_S8));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U16",
+			GINT_TO_POINTER(GET_ECU_VAR_U16));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S16",
+			GINT_TO_POINTER(GET_ECU_VAR_S16));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U32",
+			GINT_TO_POINTER(GET_ECU_VAR_U32));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S32",
+			GINT_TO_POINTER(GET_ECU_VAR_S32));
 	g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
 			GINT_TO_POINTER(GET_RAW_ECU));
 	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",

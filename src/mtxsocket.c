@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -190,11 +191,6 @@ void *socket_client(gpointer data)
  \brief This function validates incoming commands from the TCP socket 
  thread(s).  Commands need to be comma separated, ASCII text, minimum of two
  arguments (more are allowed)
- Currently implemented args:
- GET_RT_VAR,<rt_varname> (second are is text name of variable)
- GET_RTV_LIST
- GET_RAW_ECU,<canID>,<page>,<offset>,<bytes>
- SET_RAW_ECU,<canID>,<page>,<offset>,<bytes>,<data>
  \param fd, client filedescriptor
  \param buf, input buffer
  \param len, length of input buffer
@@ -202,16 +198,11 @@ void *socket_client(gpointer data)
 gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
 	gchar ** vector = NULL;
-	gchar ** vars = NULL;
+	gchar * arg2 = NULL;
 	gint args = 0;
 	gsize res = 0;
-	gint tmpi = 0;
 	gint cmd = 0;
-	gint i = 0;
-	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
-	GString *output = NULL;
-	gfloat tmpf = 0.0;
+	gboolean retval = TRUE;
 	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
 	vector = g_strsplit(tmpbuf,",",2);
 	args = g_strv_length(vector);
@@ -221,89 +212,175 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 		return TRUE;
 	}
 	tmpbuf = g_ascii_strup(vector[0],-1);
+	arg2 = g_strdup(vector[1]);
+	g_strfreev(vector);
 	cmd = translate_string(tmpbuf);
 	g_free(tmpbuf);
 
 	switch (cmd)
 	{
-		case GET_RT_VAR:
-			if  (args != 2) 
-			{
-				res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
-				res = send(fd,"\n\r",strlen("\n\r"),0);
-			}
-			else if (lookup_current_value(vector[1],&tmpf))
-			{
-				lookup_precision(vector[1],&tmpi);
-				tmpbuf = g_strdup_printf("\r%1$.*2$f\n\r",tmpf,tmpi);
-				res = send(fd,tmpbuf,strlen(tmpbuf),0);
-				g_free(tmpbuf);
-			}
-			else
-			{
-				tmpbuf = g_strdup("\rVariable Not Found\n\r");
-				res = send(fd,tmpbuf,strlen(tmpbuf),0);
-				g_free(tmpbuf);
-			}
-			break;
 		case GET_RT_VARS:
 			if  (args != 2) 
-			{
-				res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
-				res = send(fd,"\n\r",strlen("\n\r"),0);
-			}
+				return_socket_error(fd);
 			else
-			{
-				vars = g_strsplit(vector[1],",",-1);
-				output = g_string_sized_new(8);
-				for (i=0;i<g_strv_length(vars);i++)
-				{
-					lookup_current_value(vars[i],&tmpf);
-					lookup_precision(vars[i],&tmpi);
-					if (i < (g_strv_length(vars)-1))
-						g_string_append_printf(output,"%1$.*2$f,",tmpf,tmpi);
-					else
-						g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
-				}
-				res = send(fd,output->str,output->len,0);
-				g_string_free(output,TRUE);
-				g_strfreev(vars);
-			}
+				socket_get_rt_vars(fd, arg2);
 			break;
-			
 		case GET_RTV_LIST:
-			for (i=0;i<rtv_map->rtv_list->len;i++)
-			{
-				object = g_array_index(rtv_map->rtv_list,GObject *, i);
-				tmpbuf = (gchar *) OBJ_GET(object,"internal_names");
-				if (tmpbuf)
-				{
-					res = send(fd,tmpbuf,strlen(tmpbuf),0);
-					res = send(fd,"\r\n",strlen("\r\n"),0);
-				}
-			}
+			socket_get_rtv_list(fd);
+			break;
+		case GET_ECU_VAR_U8:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_U08);
+			break;
+		case GET_ECU_VAR_S8:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_S08);
+			break;
+		case GET_ECU_VAR_U16:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_U16);
+			break;
+		case GET_ECU_VAR_S16:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_S16);
+			break;
+		case GET_ECU_VAR_U32:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_U32);
+			break;
+		case GET_ECU_VAR_S32:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_get_ecu_var(fd,arg2,MTX_S32);
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
-			res = send(fd,tmpbuf,strlen(tmpbuf),0);
+			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			break;
 		case QUIT:
 			tmpbuf = g_strdup("\rBuh Bye...\n\r");
-			res = send(fd,tmpbuf,strlen(tmpbuf),0);
+			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 #ifdef __WIN32__
 			closesocket(fd);
 #else
 			close(fd);
 #endif
-			return FALSE;
+			retval = FALSE;
 			break;
 		default:
 			res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
 			res = send(fd,"\n\r",strlen("\n\r"),0);
-			return TRUE;
 			break;
 	}
-	return TRUE;
+	g_free(arg2);
+	return retval;
+}
+
+
+void return_socket_error(gint fd)
+{
+	send(fd,ERR_MSG,strlen(ERR_MSG),0);
+	send(fd,"\n\r",strlen("\n\r"),0);
+}
+
+
+void socket_get_rt_vars(gint fd, gchar *arg2)
+{
+	gint res = 0;
+	gchar **vars = NULL;
+	gint i = 0;
+	gint tmpi = 0;
+	gfloat tmpf = 0.0;
+	GString *output;
+
+		vars = g_strsplit(arg2,",",-1);
+		output = g_string_sized_new(8);
+		for (i=0;i<g_strv_length(vars);i++)
+		{
+			lookup_current_value(vars[i],&tmpf);
+			lookup_precision(vars[i],&tmpi);
+			if (i < (g_strv_length(vars)-1))
+				g_string_append_printf(output,"%1$.*2$f,",tmpf,tmpi);
+			else
+				g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
+		}
+		res = send(fd,output->str,output->len,0);
+		g_string_free(output,TRUE);
+		g_strfreev(vars);
+}
+
+
+void socket_get_rtv_list(gint fd)
+{
+	extern Rtv_Map *rtv_map;
+	gint i = 0;
+	gint res = 0;
+	gint len = 0;
+	gchar * tmpbuf = NULL;
+	GObject * object = NULL;
+
+	for (i=0;i<rtv_map->rtv_list->len;i++)
+	{
+		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		tmpbuf = g_strdup_printf("%s\r\n",(gchar *)OBJ_GET(object,"internal_names"));
+		if (tmpbuf)
+		{
+			len = strlen(tmpbuf);
+			res = send(fd,tmpbuf,len,0);
+			if (res != len)
+				printf("SHORT WRITE!\n");
+			g_free(tmpbuf);
+		}
+	}
+}
+
+
+void socket_get_ecu_var(gint fd, gchar *arg2, DataSize size)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint res = 0;
+	gint tmpi = 0;
+	gchar ** vars = NULL;
+	gchar * tmpbuf = NULL;
+	gint len = 0;
+
+	/* We want canID, page, offset
+	 * If firmware in use doesn't have canBUS capability
+	 * just use zero for the option, likewise for page
+	 */
+	vars = g_strsplit(arg2,",",-1);
+	if (g_strv_length(vars) != 3)
+	{
+		return_socket_error(fd);
+		g_strfreev(vars); 
+	}
+	else
+	{
+		canID = atoi(vars[0]);
+		page = atoi(vars[1]);
+		offset = atoi(vars[2]);
+		tmpi = get_ecu_data(canID,page,offset,size);
+		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
+		len = strlen(tmpbuf);
+		res = send(fd,tmpbuf,len,0);
+		if (len != res)
+			printf("SHORT WRITE!\n");
+		g_free(tmpbuf);
+		g_strfreev(vars); 
+	}
 }

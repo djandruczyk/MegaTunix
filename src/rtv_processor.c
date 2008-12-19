@@ -452,7 +452,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 	{
-		*value = 0.0;
+		*value = -1;
 		return FALSE;
 	}
 	history = (GArray *)OBJ_GET(object,"history");
@@ -510,13 +510,13 @@ gboolean lookup_precision(gchar *internal_name, gint *precision)
 
 	if (!internal_name)
 	{
-		*precision = 3;
+		*precision = 0;
 		return FALSE;
 	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 	{
-		*precision = 3;
+		*precision = 0;
 		return FALSE;
 	}
 	*precision = (gint )OBJ_GET(object,"precision");
