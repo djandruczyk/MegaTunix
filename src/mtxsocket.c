@@ -228,13 +228,13 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 		case GET_RTV_LIST:
 			socket_get_rtv_list(fd);
 			break;
-		case GET_ECU_VAR_U8:
+		case GET_ECU_VAR_U08:
 			if  (args != 2) 
 				return_socket_error(fd);
 			else
 				socket_get_ecu_var(fd,arg2,MTX_U08);
 			break;
-		case GET_ECU_VAR_S8:
+		case GET_ECU_VAR_S08:
 			if  (args != 2) 
 				return_socket_error(fd);
 			else
@@ -265,7 +265,8 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 				socket_get_ecu_var(fd,arg2,MTX_S32);
 			break;
 		case HELP:
-			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
+			tmpbuf = g_strdup("\r\nSupported Calls:\n\rhelp\n\rquit\n\rget_rtv_list <-- returns runtime variable listing\n\rget_rt_vars,<var1>,<var2>,... <-- returns values of specified variables\n\rget_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>\n\r\tReturns the ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r");
+//			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
 			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			break;
