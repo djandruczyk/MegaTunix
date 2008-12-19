@@ -202,6 +202,7 @@ void *socket_client(gpointer data)
 gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
 	gchar ** vector = NULL;
+	gchar ** vars = NULL;
 	gint args = 0;
 	gsize res = 0;
 	gint tmpi = 0;
@@ -209,9 +210,10 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 	gint i = 0;
 	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
+	GString *output = NULL;
 	gfloat tmpf = 0.0;
 	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
-	vector = g_strsplit(tmpbuf,",",-1);
+	vector = g_strsplit(tmpbuf,",",2);
 	args = g_strv_length(vector);
 	if (!vector[0])
 	{
@@ -244,6 +246,31 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 				g_free(tmpbuf);
 			}
 			break;
+		case GET_RT_VARS:
+			if  (args != 2) 
+			{
+				res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
+				res = send(fd,"\n\r",strlen("\n\r"),0);
+			}
+			else
+			{
+				vars = g_strsplit(vector[1],",",-1);
+				output = g_string_sized_new(8);
+				for (i=0;i<g_strv_length(vars);i++)
+				{
+					lookup_current_value(vars[i],&tmpf);
+					lookup_precision(vars[i],&tmpi);
+					if (i < (g_strv_length(vars)-1))
+						g_string_append_printf(output,"%1$.*2$f,",tmpf,tmpi);
+					else
+						g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
+				}
+				res = send(fd,output->str,output->len,0);
+				g_string_free(output,TRUE);
+				g_strfreev(vars);
+			}
+			break;
+			
 		case GET_RTV_LIST:
 			for (i=0;i<rtv_map->rtv_list->len;i++)
 			{
