@@ -139,6 +139,7 @@ EXPORT void update_write_status(void *data)
 	gint i = 0;
 	gint page = 0;
 	gint offset = 0;
+	gint length = 0;
 	guint8 *sent_data = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
 	extern GList ***ve_widgets;
@@ -148,6 +149,19 @@ EXPORT void update_write_status(void *data)
 
 	if (!output)
 		goto red_or_black;
+	else
+	{
+		page = (gint)OBJ_GET(output->object,"page");
+		offset = (gint)OBJ_GET(output->object,"offset");
+		length = (gint)OBJ_GET(output->object,"num_bytes");
+
+		if (!message->status) /* Bad write! */
+		{
+			dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
+			printf("bad write, rolling back\n");
+			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
+		}
+	}
 
 	mode = (WriteMode)OBJ_GET(output->object,"mode");
 	if (mode == MTX_CHUNK_WRITE)
@@ -157,8 +171,6 @@ EXPORT void update_write_status(void *data)
 			g_free(sent_data);
 		goto red_or_black;
 	}
-	page = (gint)OBJ_GET(output->object,"page");
-	offset = (gint)OBJ_GET(output->object,"offset");
 	paused_handlers = TRUE;
 
 	/*printf ("page %i, offset %i\n",data->page,data->offset); */
@@ -230,7 +242,7 @@ void queue_burn_ecu_flash(gint page)
  \brief write_data() physiclaly sends the data to the ECU.
  \param message (Io_Message *) a pointer to a Io_Message
  */
-void write_data(Io_Message *message)
+gboolean write_data(Io_Message *message)
 {
 	extern gboolean connected;
 	OutputData *output = message->payload;
@@ -247,9 +259,8 @@ void write_data(Io_Message *message)
 	WriteMode mode = MTX_CMD_WRITE;
 	guint8 *data = NULL;
 	gint num_bytes = 0;
+	gboolean retval = TRUE;
 	DBlock *block = NULL;
-	/*gint j = 0;
-	gchar * tmpbuf = NULL;*/
 	extern Serial_Params *serial_params;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -268,9 +279,7 @@ void write_data(Io_Message *message)
 		data = (guint8 *)OBJ_GET(output->object,"data");
 		num_bytes = (gint)OBJ_GET(output->object,"num_bytes");
 		mode = (WriteMode)OBJ_GET(output->object,"mode");
-
 	}
-
 	if (offline)
 	{
 		//printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value); 
@@ -287,13 +296,13 @@ void write_data(Io_Message *message)
 		}
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
-		return;		/* can't write anything if offline */
+		return TRUE;		/* can't write anything if offline */
 	}
 	if (!connected)
 	{
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
-		return;		/* can't write anything if disconnected */
+		return FALSE;		/* can't write anything if disconnected */
 	}
 
 	for (i=0;i<message->sequence->len;i++)
@@ -316,7 +325,10 @@ void write_data(Io_Message *message)
 //				printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);
 				res = write (serial_params->fd,&(block->data[j]),1);	/* Send write command */
 				if (res != 1)
+				{
 					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					retval = FALSE;
+				}
 				if (firmware->capabilities & MS2)
 					g_usleep(firmware->interchardelay*1000);
 
@@ -324,7 +336,11 @@ void write_data(Io_Message *message)
 		}
 
 	}
-	if (output)
+	/* If sucessfull update ecu_data as well, this way, current and pending match,  
+	 * in the case of a failed write, the update_write_status() function will catch it and rollback
+	 * as needed
+	 */
+	if ((output) && (retval))
 	{
 		if (mode == MTX_SIMPLE_WRITE)
 			set_ecu_data(canID,page,offset,size,value);
@@ -334,7 +350,7 @@ void write_data(Io_Message *message)
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
-	return;
+	return retval;
 }
 
 

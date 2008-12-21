@@ -47,6 +47,7 @@ extern gboolean interrogated;			/* valid connection with MS */
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 volatile gint last_page = 0;
+extern GStaticMutex serio_mutex;
 
 
 /*!
@@ -172,7 +173,7 @@ void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
-				write_data(message);
+				message->status = write_data(message);
 				if (message->command->helper_function)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				break;
@@ -341,7 +342,8 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) && (firmware->page_params[last]->dl_by_default))
 	{
-		printf("current was not dl by default  but last was,  burning\n");
+		/*printf("current was not dl by default  but last was,  burning\n");
+		*/
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
@@ -353,11 +355,11 @@ void handle_page_change(gint page, gint last)
 	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
 	{
 		/*printf("current is not dl by default or last was not as well\n");
-		 */
+		*/
 		if ((page != last) && (firmware->capabilities & MS1))
 		{
-			/*printf("page diff and MS1\n");
-			 */
+			/*printf("page diff and MS1, changing page\n");
+			*/
 			queue_ms1_page_change(page);
 		}
 		return;
@@ -366,10 +368,11 @@ void handle_page_change(gint page, gint last)
 	 * to see if previous and last match,  if so return, otherwise burn
 	 * then change page
 	 */
+	g_static_mutex_lock(&serio_mutex);
 	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
 	{
-		/*printf("page and last don't match AND there's a ram difference, burning\n");
-		 */
+		/*printf("page and last don't match AND there's a ram difference, burning, before changing\n");
+		*/
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
@@ -380,8 +383,7 @@ void handle_page_change(gint page, gint last)
 		 */
 		queue_ms1_page_change(page);
 	}
-
-
+	g_static_mutex_unlock(&serio_mutex);
 }
 
 
@@ -438,8 +440,10 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
+	/*
 	else
 		printf("firmware is not multi page\n");
+		*/
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
 	return;

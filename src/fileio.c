@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <threads.h>
+#include <timeout_handlers.h>
 #include <unistd.h>
 #include <vex_support.h>
 #ifdef __WIN32__
@@ -191,8 +192,10 @@ void restore_all_ecu_settings(gchar *filename)
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
+	gboolean restart = FALSE;
+	extern gint realtime_id;
 	gchar *tmpbuf = NULL;
-	guchar *data = NULL;
+	guint8 *data = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
@@ -221,6 +224,11 @@ void restore_all_ecu_settings(gchar *filename)
 			return;
 		}
 		set_title(g_strdup("Restoring ECU settings from File"));
+		if (realtime_id)
+		{
+			stop_tickler(RTV_TICKLER);
+			restart = TRUE;
+		}
 		for (page=0;page<firmware->total_pages;page++)
 		{
 			if (!(firmware->page_params[page]->dl_by_default))
@@ -243,9 +251,9 @@ void restore_all_ecu_settings(gchar *filename)
 				}
 				if (firmware->chunk_support)
 				{
-					data = g_new0(guchar, firmware->page_params[page]->length);
+					data = g_new0(guint8, firmware->page_params[page]->length);
 					for (offset=0;offset<num_keys;offset++)
-						data[offset]=(guchar)atoi(keys[offset]);
+						data[offset]=(guint8)atoi(keys[offset]);
 					chunk_write(canID,page,0,num_keys,data);
 
 				}
@@ -287,5 +295,6 @@ void restore_all_ecu_settings(gchar *filename)
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
-
+	if (restart)
+		start_tickler(RTV_TICKLER);
 }

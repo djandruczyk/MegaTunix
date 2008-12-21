@@ -250,6 +250,10 @@ EXPORT void lock_entry(GtkWidget *widget)
 
 }
 
+
+/*
+ \brief,  returns number of bytes for passed DataSize enumeration
+ */
 gint get_multiplier(DataSize size)
 {
 	gint mult = 0;
@@ -267,7 +271,7 @@ gint get_multiplier(DataSize size)
 			break;
 		case MTX_U32:
 		case MTX_S32:
-			mult = 2;
+			mult = 4;
 			break;
 		default:
 			break;

@@ -150,7 +150,7 @@ gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 /*!
  \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
  newly sent reqfuel variable.
- \param widget_name (gchar *) is the widget name of the scaler widget 
+ \param widget_name is the widget of the scaler widget 
  that was used. From this widget we extract the table number and other 
  needed data to properly do the rescaling.
  */
@@ -160,6 +160,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
+	DataSize z_size = MTX_U08;
 	gint z_base = -1;
 	gint z_page = -1;
 	gint x_bins = -1;
@@ -173,11 +174,12 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	gchar * tmpbuf = NULL;
 	GList *list = NULL;
 	gfloat percentage = 0.0;
+	gint mult = 0;
 	gint i = 0;
 	gint j = 0;
 	gint x = 0;
 	gchar **vector = NULL;
-	guchar *data = NULL;
+	guint8 *data = NULL;
 	gint raw_lower = 0;
 	gint raw_upper = 255;
 	gfloat value = 0.0;
@@ -199,7 +201,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 		printf("table_num not defined!!!\n");
 		return;
 	}
-	tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
+	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
 	tmpbuf = (gchar *)OBJ_GET(widget,"data");
@@ -214,7 +216,6 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	firmware->rf_params[table_num]->req_fuel_total = new_reqfuel;
 	check_req_fuel_limits(table_num);
 
-
 	tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 	vector = g_strsplit(tmpbuf,",",-1);
 	if (!vector)
@@ -224,12 +225,14 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	{
 		table_num = (gint)strtol(vector[x],NULL,10);
 
+		z_size = firmware->table_params[table_num]->z_size;
+		mult = get_multiplier(z_size);
 		z_base = firmware->table_params[table_num]->z_base;
 		x_bins = firmware->table_params[table_num]->x_bincount;
 		y_bins = firmware->table_params[table_num]->y_bincount;
 		z_page = firmware->table_params[table_num]->z_page;
 		canID = firmware->canID;
-		data = g_new0(guchar, x_bins*y_bins);
+		data = g_new0(guint8, x_bins*y_bins*mult);
 
 		for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 		{
@@ -282,7 +285,21 @@ void reqfuel_rescale_table(GtkWidget *widget)
 
 						if (!firmware->chunk_support)
 							send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
-						data[i] = (guchar)value;
+						if (mult == 1)
+							data[i] = (guint8)value;
+						else if (mult == 2)
+						{
+							data[i*2] = ((gint)value & 0x00ff);
+							data[(i*2)+1] = ((gint)value & 0xff00) >> 8;
+						}
+						else if (mult == 4)
+						{
+							data[i*4] = ((gint)value & 0x00ff);
+							data[(i*4)+1] = ((gint)value & 0xff00) >> 8;
+							data[(i*4)+2] = ((gint)value & 0xff0000) >> 16;
+							data[(i*4)+3] = ((gint)value & 0xff000000) >> 24;
+						}
+
 						gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
 						if (use_color)
 						{
@@ -296,7 +313,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 			}
 		}
 		if (firmware->chunk_support)
-			chunk_write(canID,z_page,z_base,x_bins*y_bins,data);
+			chunk_write(canID,z_page,z_base,x_bins*y_bins*mult,data);
 	}
 	g_strfreev(vector);
 	color_changed = TRUE;

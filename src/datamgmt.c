@@ -22,10 +22,10 @@
 extern GObject *global_data;
 /*!
  \brief get_ecu_data() is a func to return the data requested.
- \param canID, canIdentifier (currently unused)
- \param page ( ecu firmware page)
- \param offset (RAW BYTE offset)
- \param size (size to be returned...
+ \param canID, CAN Identifier (currently unused)
+ \param page, (ecu firmware page)
+ \param offset, (RAW BYTE offset)
+ \param size, (size to be returned)
  */
 gint get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
 {
@@ -36,10 +36,10 @@ gint get_ecu_data(gint canID, gint page, gint offset, DataSize size)
 
 /*!
  \brief get_ecu_data_last() is a func to return the data requested.
- \param canID, canIdentifier (currently unused)
- \param page ( ecu firmware page)
- \param offset (RAW BYTE offset)
- \param size (size to be returned...
+ \param canID, CAN Identifier (currently unused)
+ \param page, (ecu firmware page)
+ \param offset, (RAW BYTE offset)
+ \param size, (size to be returned)
  */
 gint get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {
@@ -120,9 +120,14 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 
 void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
 {
-	/* canID unused currently */
 	extern Firmware_Details *firmware;
-	guint8 *data = firmware->ecu_data[page];
+	_set_sized_data(firmware->ecu_data[page],offset,size,new);
+}
+
+
+void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new) 
+{
+	/* canID unused currently */
 	guint16 u16 = 0;
 	gint16 s16 = 0;
 	guint32 u32 = 0;
@@ -161,7 +166,7 @@ void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new)
 			data[offset+3] = (guint8)((gint32)s32 >> 24);
 			break;
 		default:
-			printf("ERROR< attempted set of data with NO SIZE defined\n");
+			printf("ERROR! attempted set of data with NO SIZE defined\n");
 	}
 }
  

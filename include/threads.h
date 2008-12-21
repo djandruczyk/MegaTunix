@@ -78,6 +78,7 @@ struct _Io_Message
 	void *payload;		/*! data passed along, arbritrary size.. */
 	void *recv_buf;		/* data that comes from ECU */
 	Command *command;	/* Command struct */
+	gboolean status;	/* True == success, false == failure */
 };
 
 

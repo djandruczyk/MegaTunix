@@ -1364,12 +1364,12 @@ void revert_to_previous_data()
 			{
 				if (get_ecu_data_backup(canID,page,offset,MTX_U08) != get_ecu_data(canID,page,offset,MTX_U08))
 				{
-					set_ecu_data(canID,page,offset,MTX_U08,get_ecu_data_backup(canID,page,offset,MTX_U08));
+					//set_ecu_data(canID,page,offset,MTX_U08,get_ecu_data_backup(canID,page,offset,MTX_U08));
 					send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
 				}
 			}
 		}
-		memcpy(ecu_data[page], ecu_data_backup[page],firmware->page_params[page]->length);
+		//memcpy(ecu_data[page], ecu_data_backup[page],firmware->page_params[page]->length);
 	}
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
