@@ -454,6 +454,7 @@ typedef enum
 {
 	HELP = 0x3F0,
 	QUIT,
+	GET_SIGNATURE,
 	GET_RT_VARS,
 	GET_RTV_LIST,
 	GET_ECU_VAR_U08,

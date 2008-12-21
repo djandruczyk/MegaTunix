@@ -308,7 +308,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				break;
 			 count = read_data(-1,&message->recv_buf);
                          if (count > 0)
+			 {
 				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 firmware->actual_signature = g_strndup(message->recv_buf,count);
+			 }
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:

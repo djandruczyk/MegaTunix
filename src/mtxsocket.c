@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <fcntl.h>
+#include <firmware.h>
 #include <glib.h>
 #include <mtxsocket.h>
 #include <rtv_map_loader.h>
@@ -197,6 +198,7 @@ void *socket_client(gpointer data)
  */
 gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
+	extern Firmware_Details *firmware;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
 	gint args = 0;
@@ -264,6 +266,10 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			else
 				socket_get_ecu_var(fd,arg2,MTX_S32);
 			break;
+		case GET_SIGNATURE:
+			send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+			res = send(fd,"\n\r",strlen("\n\r"),0);
+			break;
 		case HELP:
 			tmpbuf = g_strdup("\r\nSupported Calls:\n\rhelp\n\rquit\n\rget_rtv_list <-- returns runtime variable listing\n\rget_rt_vars,<var1>,<var2>,... <-- returns values of specified variables\n\rget_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>\n\r\tReturns the ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r");
 //			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
@@ -282,8 +288,7 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			retval = FALSE;
 			break;
 		default:
-			res = send(fd,ERR_MSG,strlen(ERR_MSG),0);
-			res = send(fd,"\n\r",strlen("\n\r"),0);
+			return_socket_error(fd);
 			break;
 	}
 	g_free(arg2);
