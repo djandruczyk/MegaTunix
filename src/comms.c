@@ -145,8 +145,6 @@ EXPORT void update_write_status(void *data)
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
-//	printf("update_write_status\n");
-
 	if (!output)
 		goto red_or_black;
 	else
@@ -154,16 +152,14 @@ EXPORT void update_write_status(void *data)
 		page = (gint)OBJ_GET(output->object,"page");
 		offset = (gint)OBJ_GET(output->object,"offset");
 		length = (gint)OBJ_GET(output->object,"num_bytes");
+		mode = (WriteMode)OBJ_GET(output->object,"mode");
 
 		if (!message->status) /* Bad write! */
 		{
 			dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
-			printf("bad write, rolling back\n");
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
 	}
-
-	mode = (WriteMode)OBJ_GET(output->object,"mode");
 	if (mode == MTX_CHUNK_WRITE)
 	{
 		sent_data = (guint8 *)OBJ_GET(output->object,"data");
@@ -204,7 +200,6 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
-			//printf("data mismatch on page %i, (%i)\n",i,firmware->page_params[i]->phys_ecu_page);
 			set_group_color(RED,"burners");
 			outstanding_data = TRUE;
 			return;

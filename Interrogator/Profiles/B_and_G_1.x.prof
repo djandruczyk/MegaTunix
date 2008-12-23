@@ -13,7 +13,7 @@ RT_total_bytes=22
 Get_All_Command=ms1_read_all
 VE_Command=ms1_veconst
 Burn_Command=ms1_burn
-Burn_All_Command=ms1_burn
+Burn_All_Command=ms1_burn_all
 Write_Command=ms1_generic_write
 Page_Command=ms1_change_page
 Capabilities=_MS1_,_MS1_STD_
@@ -61,7 +61,7 @@ z_precision=0
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=0
+phys_ecu_page=0
 length=125
 
 [interrogation]

@@ -42,7 +42,7 @@ void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 	gboolean * val = (gboolean *)dest;
 	if (!node->children)
 	{
-		printf("ERROR, generic_xml_gint_import, xml node is empty!!\n");
+		printf("ERROR, generic_xml_gboolean_import, xml node is empty!!\n");
 		return;
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
@@ -163,17 +163,17 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 				if (g_strcasecmp((gchar *)cur_node->name,"red") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->red=tmp;
+					color->red=(guint16)tmp;
 				}
 				if (g_strcasecmp((gchar *)cur_node->name,"green") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->green=tmp;
+					color->green=(guint16)tmp;
 				}
 				if (g_strcasecmp((gchar *)cur_node->name,"blue") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->blue=tmp;
+					color->blue=(guint16)tmp;
 				}
 			}
 			cur_node = cur_node->next;

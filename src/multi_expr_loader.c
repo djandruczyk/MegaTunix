@@ -22,6 +22,7 @@
 #include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stringmatch.h>
 
 

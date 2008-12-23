@@ -462,3 +462,16 @@ gboolean free_ve3d_sliders(gint table_num)
 	g_free(widget);
 	return FALSE;
 }
+
+
+EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	return TRUE;
+}
+
+
+EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+{
+	return TRUE;
+}
+

@@ -60,7 +60,7 @@ EXPORT void spawn_read_ve_const_pf(void)
 }
 
 
-EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
+EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -69,12 +69,12 @@ EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
 	Command *command = NULL;
 	extern volatile gint last_page;
 	gint i = 0;
-	if (type != MS2)
+	if ((type != MS2) && (type != MS1))
 		return FALSE;
 	if (!offline)
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+		if (((firmware->capabilities & MS2_EXTRA) || firmware->capabilities & MS1) && (outstanding_data))
 		{
 			output = initialize_outputdata();
 			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
@@ -375,7 +375,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - ptr16[0] > 65535))
 			{
 				ms_reset_count++;
-				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,ptr16[0]);
+			/*	printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,ptr16[0]);
+			 */
 				gdk_beep();
 			}
 			else

@@ -14,7 +14,7 @@ RT_total_bytes=41
 Get_All_Command=ms1_read_all
 VE_Command=ms1_veconst
 Burn_Command=ms1_burn
-Burn_All_Command=ms1_burn
+Burn_All_Command=ms1_burn_all
 Write_Command=ms1_generic_write
 Chunk_Write_Command=ms1_chunk_write
 Page_Command=ms1_change_page
@@ -221,6 +221,10 @@ z_base_offset=0
 z_size=_U08_
 z_source=afr
 z_suffix=AFR
+z_lookuptable=nb02_table
+z_alt_lookuptable=wb02_table
+z_depend_on=z_o2_sensor
+z_o2_sensor=_VE_EMB_BIT,_U08_,1,184,2,1,1
 z_conv_expr=x/10
 z_lookuptable=nbo2_table
 z_alt_lookuptable=wbo2_table
@@ -377,67 +381,67 @@ z_precision=1
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=0
+phys_ecu_page=0
 length=189
 
 [page_1]
 dl_by_default=TRUE
-truepgnum=1
+phys_ecu_page=1
 length=189
 
 [page_2]
 dl_by_default=TRUE
-truepgnum=2
+phys_ecu_page=2
 length=189
 
 [page_3]
 dl_by_default=TRUE
-truepgnum=3
+phys_ecu_page=3
 length=189
 
 [page_4]
 dl_by_default=TRUE
-truepgnum=4
+phys_ecu_page=4
 length=189
 
 [page_5]
 dl_by_default=TRUE
-truepgnum=5
+phys_ecu_page=5
 length=189
 
 [page_6]
 dl_by_default=TRUE
-truepgnum=6
+phys_ecu_page=6
 length=189
 
 [page_7]
 dl_by_default=TRUE
-truepgnum=7
+phys_ecu_page=7
 length=189
 
 [page_8]
 dl_by_default=TRUE
-truepgnum=8
+phys_ecu_page=8
 length=189
 
 [page_9]
 dl_by_default=FALSE
-truepgnum=240
+phys_ecu_page=240
 length=189
 
 [page_10]
 dl_by_default=FALSE
-truepgnum=241
+phys_ecu_page=241
 length=189
 
 [page_11]
 dl_by_default=FALSE
-truepgnum=242
+phys_ecu_page=242
 length=256
 
 [page_12]
 dl_by_default=FALSE
-truepgnum=243
+phys_ecu_page=243
 length=256
 
 [interrogation]

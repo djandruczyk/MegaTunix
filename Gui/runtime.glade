@@ -67,13 +67,25 @@
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="runtime_rt_table0">
+				<widget class="GtkEventBox" id="runtime_rt_ebox1">
 				  <property name="visible">True</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">2</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">5</property>
+				  <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+				  <property name="visible_window">True</property>
+				  <property name="above_child">False</property>
+				  <signal name="button_press_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:30:15 GMT"/>
+				  <signal name="button_release_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:30:22 GMT"/>
+				  <signal name="motion_notify_event" handler="rtslider_motion_handler" last_modification_time="Mon, 22 Dec 2008 00:30:29 GMT"/>
+
+				  <child>
+				    <widget class="GtkTable" id="runtime_rt_table0">
+				      <property name="visible">True</property>
+				      <property name="n_rows">2</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">5</property>
+				    </widget>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="padding">3</property>
@@ -83,13 +95,25 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkTable" id="runtime_rt_table1">
+				<widget class="GtkEventBox" id="runtime_rt_ebox2">
 				  <property name="visible">True</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">2</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">5</property>
+				  <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+				  <property name="visible_window">True</property>
+				  <property name="above_child">False</property>
+				  <signal name="button_press_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:30:46 GMT"/>
+				  <signal name="button_release_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:31:08 GMT"/>
+				  <signal name="motion_notify_event" handler="rtslider_motion_handler" last_modification_time="Mon, 22 Dec 2008 00:31:02 GMT"/>
+
+				  <child>
+				    <widget class="GtkTable" id="runtime_rt_table1">
+				      <property name="visible">True</property>
+				      <property name="n_rows">2</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">5</property>
+				    </widget>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="padding">3</property>
@@ -144,13 +168,25 @@
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="runtime_rt_table2">
+				<widget class="GtkEventBox" id="runtime_rt_ebox3">
 				  <property name="visible">True</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">2</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">5</property>
+				  <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+				  <property name="visible_window">True</property>
+				  <property name="above_child">False</property>
+				  <signal name="button_press_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:31:39 GMT"/>
+				  <signal name="button_release_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:31:33 GMT"/>
+				  <signal name="motion_notify_event" handler="rtslider_motion_handler" last_modification_time="Mon, 22 Dec 2008 00:31:25 GMT"/>
+
+				  <child>
+				    <widget class="GtkTable" id="runtime_rt_table2">
+				      <property name="visible">True</property>
+				      <property name="n_rows">2</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">5</property>
+				    </widget>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="padding">3</property>
@@ -160,13 +196,25 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkTable" id="runtime_rt_table3">
+				<widget class="GtkEventBox" id="runtime_rt_ebox4">
 				  <property name="visible">True</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">2</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">5</property>
+				  <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+				  <property name="visible_window">True</property>
+				  <property name="above_child">False</property>
+				  <signal name="button_press_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:31:47 GMT"/>
+				  <signal name="button_release_event" handler="rtslider_button_handler" last_modification_time="Mon, 22 Dec 2008 00:31:52 GMT"/>
+				  <signal name="motion_notify_event" handler="rtslider_motion_handler" last_modification_time="Mon, 22 Dec 2008 00:31:59 GMT"/>
+
+				  <child>
+				    <widget class="GtkTable" id="runtime_rt_table3">
+				      <property name="visible">True</property>
+				      <property name="n_rows">2</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">5</property>
+				    </widget>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="padding">3</property>

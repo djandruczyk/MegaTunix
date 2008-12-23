@@ -46,7 +46,7 @@ extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
-volatile gint last_page = 0;
+volatile gint last_page = -1;
 extern GStaticMutex serio_mutex;
 
 
@@ -330,6 +330,11 @@ void handle_page_change(gint page, gint last)
 	/*printf("handle page change!, page %i, last %i\n",page,last);
 	 */
 
+	if (last == -1)  /* First Write of the day, burn not needed... */
+	{
+		queue_ms1_page_change(page);
+		return;
+	}
 	if ((page == last) && (!force_page_change))
 	{
 		/*printf("page == last and force_page_change is not set\n");

@@ -238,7 +238,7 @@ gboolean signal_read_rtvars()
 	if (length > 2)
 		return TRUE;
 
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
+	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
 
 	if (firmware->capabilities & MS2)
 	{
@@ -263,7 +263,7 @@ gboolean signal_read_rtvars()
  */
 gboolean signal_toothtrig_read(TicklerType type)
 {
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
 	 * Also gets us access to current RPM and other vars for calculating 

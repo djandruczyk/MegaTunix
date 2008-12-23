@@ -150,21 +150,21 @@ void process_rt_vars(void *incoming)
 
 			if (OBJ_GET(object,"lookuptable"))
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));*/
 				x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
 				x = _get_sized_data((guint8 *)incoming,0,offset,size);
 			}
 
-			dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)));
+			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
 			tmpf = evaluator_evaluate_x(evaluator,x);
 store_it:
 			if (temp_dep)
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));*/
 				if (temp_units == CELSIUS)
 					result = (tmpf-32.0)*(5.0/9.0);
 				else

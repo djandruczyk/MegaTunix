@@ -1341,7 +1341,6 @@ void revert_to_previous_data()
 	GArray *pfuncs = NULL;
 	/* Called to back out a load of a VEtable from VEX import */
 	extern Firmware_Details *firmware;
-	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_backup = firmware->ecu_data_backup;
 	extern GHashTable *dynamic_widgets;
 
@@ -1364,12 +1363,10 @@ void revert_to_previous_data()
 			{
 				if (get_ecu_data_backup(canID,page,offset,MTX_U08) != get_ecu_data(canID,page,offset,MTX_U08))
 				{
-					//set_ecu_data(canID,page,offset,MTX_U08,get_ecu_data_backup(canID,page,offset,MTX_U08));
 					send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
 				}
 			}
 		}
-		//memcpy(ecu_data[page], ecu_data_backup[page],firmware->page_params[page]->length);
 	}
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));

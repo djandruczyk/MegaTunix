@@ -20,15 +20,15 @@
 /* Prototypes */
 int setup_socket(void);
 void *socket_thread_manager(gpointer);
-//gboolean socket_client(GIOChannel *, GIOCondition, gpointer );
 void * socket_client(gpointer );
-void socket_close(gpointer );
 gboolean validate_remote_cmd(gint, gchar *, gint);
 /* Socket handler functions */
 void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);
 void socket_get_rtv_list(gint);
 void socket_get_ecu_var(gint, gchar *, DataSize);
+void socket_set_ecu_var(gint, gchar *, DataSize);
+
 
 /* Prototypes */
 

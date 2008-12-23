@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <comms.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -26,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
+#include <threads.h>
 #ifdef __WIN32__
 #include <winsock2.h>
 #else
@@ -106,7 +108,7 @@ int setup_socket(void)
 		return(-1);
 	}
 
-	printf("\nSocket TCP/IP ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));
+	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));
 	return sock;
 }
 
@@ -199,6 +201,7 @@ void *socket_client(gpointer data)
 gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
 	extern Firmware_Details *firmware;
+	extern volatile gint last_page;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
 	gint args = 0;
@@ -266,12 +269,52 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			else
 				socket_get_ecu_var(fd,arg2,MTX_S32);
 			break;
+		case SET_ECU_VAR_U08:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_U08);
+			break;
+		case SET_ECU_VAR_S08:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_S08);
+			break;
+		case SET_ECU_VAR_U16:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_U16);
+			break;
+		case SET_ECU_VAR_S16:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_S16);
+			break;
+		case SET_ECU_VAR_U32:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_U32);
+			break;
+		case SET_ECU_VAR_S32:
+			if  (args != 2) 
+				return_socket_error(fd);
+			else
+				socket_set_ecu_var(fd,arg2,MTX_S32);
+			break;
+		case BURN_FLASH:
+			queue_burn_ecu_flash(last_page);
+			break;
+			
 		case GET_SIGNATURE:
 			send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
 			res = send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
-			tmpbuf = g_strdup("\r\nSupported Calls:\n\rhelp\n\rquit\n\rget_rtv_list <-- returns runtime variable listing\n\rget_rt_vars,<var1>,<var2>,... <-- returns values of specified variables\n\rget_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>\n\r\tReturns the ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r");
+			tmpbuf = g_strdup("\r\nSupported Calls:\n\rhelp\n\rquit\n\rget_signature <-- Returns ECU Signature\n\rget_rtv_list <-- returns runtime variable listing\n\rget_rt_vars,<var1>,<var2>,... <-- returns values of specified variables\n\rget_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>\n\r\tReturns the ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\rset_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data>\n\r\tSets teh ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\rburn_flash <-- Burns contents of ecu ram for current page to flash\n\r");
 //			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
 			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
@@ -312,20 +355,20 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 	gfloat tmpf = 0.0;
 	GString *output;
 
-		vars = g_strsplit(arg2,",",-1);
-		output = g_string_sized_new(8);
-		for (i=0;i<g_strv_length(vars);i++)
-		{
-			lookup_current_value(vars[i],&tmpf);
-			lookup_precision(vars[i],&tmpi);
-			if (i < (g_strv_length(vars)-1))
-				g_string_append_printf(output,"%1$.*2$f,",tmpf,tmpi);
-			else
-				g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
-		}
-		res = send(fd,output->str,output->len,0);
-		g_string_free(output,TRUE);
-		g_strfreev(vars);
+	vars = g_strsplit(arg2,",",-1);
+	output = g_string_sized_new(8);
+	for (i=0;i<g_strv_length(vars);i++)
+	{
+		lookup_current_value(vars[i],&tmpf);
+		lookup_precision(vars[i],&tmpi);
+		if (i < (g_strv_length(vars)-1))
+			g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
+		else
+			g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
+	}
+	res = send(fd,output->str,output->len,0);
+	g_string_free(output,TRUE);
+	g_strfreev(vars);
 }
 
 
@@ -387,6 +430,36 @@ void socket_get_ecu_var(gint fd, gchar *arg2, DataSize size)
 		if (len != res)
 			printf("SHORT WRITE!\n");
 		g_free(tmpbuf);
+		g_strfreev(vars); 
+	}
+}
+
+
+void socket_set_ecu_var(gint fd, gchar *arg2, DataSize size)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint data = 0;
+	gchar ** vars = NULL;
+
+	/* We want canID, page, offset, data
+	 * If firmware in use doesn't have canBUS capability
+	 * just use zero for the option, likewise for page
+	 */
+	vars = g_strsplit(arg2,",",-1);
+	if (g_strv_length(vars) != 4)
+	{
+		return_socket_error(fd);
+		g_strfreev(vars); 
+	}
+	else
+	{
+		canID = atoi(vars[0]);
+		page = atoi(vars[1]);
+		offset = atoi(vars[2]);
+		data = atoi(vars[3]);
+		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
 }
