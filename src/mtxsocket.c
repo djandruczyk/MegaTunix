@@ -201,7 +201,6 @@ void *socket_client(gpointer data)
 gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 {
 	extern Firmware_Details *firmware;
-	extern volatile gint last_page;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
 	gint args = 0;
@@ -306,7 +305,8 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 				socket_set_ecu_var(fd,arg2,MTX_S32);
 			break;
 		case BURN_FLASH:
-			queue_burn_ecu_flash(last_page);
+			io_cmd(firmware->burn_all_command,NULL);
+
 			break;
 			
 		case GET_SIGNATURE:
