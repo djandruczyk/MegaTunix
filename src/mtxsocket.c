@@ -310,7 +310,11 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			break;
 			
 		case GET_SIGNATURE:
-			send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+			if (firmware->actual_signature)
+				send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+			else
+				send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+
 			res = send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
