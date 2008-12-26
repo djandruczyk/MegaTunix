@@ -83,7 +83,7 @@
 			  <property name="digits">3</property>
 			  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			  <property name="inverted">False</property>
-			  <property name="adjustment">100 1 100.010002136 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			  <property name="adjustment">100 1 100.010002136 0.0010000000475 0.00999999977648 0</property>
 			  <signal name="value_changed" handler="logviewer_log_position_change" last_modification_time="Sun, 09 Jan 2005 01:25:06 GMT"/>
 			</widget>
 		      </child>
@@ -448,7 +448,7 @@
 			  <property name="digits">0</property>
 			  <property name="update_policy">GTK_UPDATE_DELAYED</property>
 			  <property name="inverted">True</property>
-			  <property name="adjustment">15 15 150 1 10 10</property>
+			  <property name="adjustment">15 15 150 1 10 0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -586,7 +586,7 @@
 	      <property name="digits">3</property>
 	      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 	      <property name="inverted">False</property>
-	      <property name="adjustment">0 1 100.010002136 0.0010000000475 0.00999999977648 0.00999999977648</property>
+	      <property name="adjustment">0 1 100.010002136 0.0010000000475 0.00999999977648 0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -829,7 +829,7 @@
 	      <property name="digits">0</property>
 	      <property name="update_policy">GTK_UPDATE_DELAYED</property>
 	      <property name="inverted">True</property>
-	      <property name="adjustment">25 15 150 1 10 10</property>
+	      <property name="adjustment">25 15 150 1 10 0</property>
 	      <signal name="value_changed" handler="logviewer_scroll_speed_change" last_modification_time="Wed, 28 Mar 2007 02:18:28 GMT"/>
 	    </widget>
 	    <packing>

@@ -262,6 +262,8 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 	gchar **data = NULL;
 	gint i = 0;
 	gint x = 0;
+	gint precision = 0;
+	gchar ** vector = NULL;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
 	GObject *object = NULL;
@@ -273,6 +275,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			/* Should insert some sort of marker at this index
 			 * in the data arrays... 
 			 */
+			printf("MARK found in logfile. MTX doesn't do anything with these yet...!\n");
 			continue;
 		}
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
@@ -298,11 +301,14 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			g_array_append_val(tmp_array,val);
 
 			/*printf("data[%i]=%s\n",i,data[i]);*/
-			if (x == 0) /* only check fir first line */
+			if (x == 0) /* only check first line */
 			{
 				if (g_strrstr(data[i], ".") != NULL)
 				{
-					printf("!! ERROR, bug detected,  code to detect precision in logfiles isn't written yet!!!!\n Please slap the author\n");
+					vector = g_strsplit(data[i],".",-1);
+					precision = strlen(vector[1]);
+					g_strfreev(vector);
+					OBJ_SET(object,"precision",GINT_TO_POINTER(precision));
 				}
 			}
 

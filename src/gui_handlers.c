@@ -169,9 +169,11 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	}
 
 
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
 	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex lock\n"));
 	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
-
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	/* This makes us wait until the io queue finishes */
 	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
@@ -209,8 +211,11 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 
 	/* Grab and release all mutexes to get them to relinquish
 	*/
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before serio_mutex lock\n"));
 	g_static_mutex_lock(&serio_mutex);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex lock\n"));
 	g_static_mutex_unlock(&serio_mutex);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex UNlock\n"));
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

@@ -224,8 +224,12 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
+		if ((gint)OBJ_GET(global_data,"lv_zoom") < 1)
+			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
 			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
+		if ((gint)OBJ_GET(global_data,"lv_scroll_delay") < 40)
+			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
