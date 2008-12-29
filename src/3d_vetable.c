@@ -70,6 +70,7 @@ extern GObject *global_data;
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
 static GHashTable *winstat = NULL;
+GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 
 
 /* let's get what we need and calculate FPS */
@@ -1466,12 +1467,11 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	Ve_View_3D *ve_view = NULL;
 	extern Firmware_Details *firmware;
 	extern gboolean forced_update;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
 
-	g_static_mutex_lock(&mutex);
+	g_static_mutex_lock(&key_mutex);
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -1810,7 +1810,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		default:
 			dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval));
-			g_static_mutex_unlock(&mutex);
+			g_static_mutex_unlock(&key_mutex);
 			return FALSE;
 	}
 	if (update_widgets)
@@ -1823,7 +1823,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
 
-	g_static_mutex_unlock(&mutex);
+	g_static_mutex_unlock(&key_mutex);
 	return TRUE;
 }
 
