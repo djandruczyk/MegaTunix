@@ -16,6 +16,7 @@
 
 #include <gtk/gtk.h>
 #include <firmware.h>
+#include <mtxsocket.h>
 #include <threads.h>
 
 /* Prototypes */
@@ -32,6 +33,7 @@ void dealloc_table_params(Table_Params * );
 void dealloc_te_params(TE_Params * );
 void dealloc_qfunction(QFunction * );
 void dealloc_array(GArray *, ArrayType );
+void dealloc_client_data(MtxSocketClient *);
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);

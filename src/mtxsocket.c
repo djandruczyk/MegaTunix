@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <firmware.h>
 #include <glib.h>
+#include <init.h>
 #include <mtxsocket.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
@@ -127,13 +128,19 @@ void *socket_thread_manager(gpointer data)
 #else
 	socklen_t length = sizeof(client);
 #endif
+	MtxSocketClient * cli_data = NULL;
 	gint fd = 0;
 
 	while (TRUE)
 	{
 		fd = accept(socket,(struct sockaddr *)&client, &length);
+		cli_data = g_new0(MtxSocketClient, 1);
+		cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
+		cli_data->port = ntohs(client.sin_port);
+		cli_data->fd = fd;
+		
 		g_thread_create(socket_client,
-				GINT_TO_POINTER(fd), /* Thread args */
+				cli_data, /* Thread args */
 				TRUE,   /* Joinable */
 				NULL);  /* GError pointer */
 	}
@@ -149,27 +156,51 @@ void *socket_thread_manager(gpointer data)
  */
 void *socket_client(gpointer data)
 {
-	gint fd = (gint)data;
+	MtxSocketClient *client = (MtxSocketClient *) data;
+	gint fd = client->fd;
 	char buf[1024];
+	gchar * tmpbuf = NULL;
 	fd_set rd;
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 	gint res = 0;
 
+/* Wait for API choice (i.e. if only a CR is received, set mode
+ * to ASCII, otherwise check passed data for valid API, if valid set mode to
+ * binary, otherwise drop the connection
+ */
+	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, hit enter for ASCII mode\n",VERSION);
+	send(fd,tmpbuf,strlen(tmpbuf),0);
+	g_free(tmpbuf);
+	res = recv(fd,&buf,1024,0);
+	/*printf("received\"%s\"\n",g_strescape(g_strndup(buf,res),NULL));*/
+	/* A simple CR/LF is enough to trigger ASCII mode*/
+	if (g_strncasecmp(buf,"\r\n",res) == 0)
+	{
+		send(fd,"ASCII mode enabled\n\r",strlen("ASCII mode enabled\n\r"),0);
+		client->mode = MTX_ASCII;
+	}
+	else
+		client->mode = MTX_BINARY;
+	
+	
 	while (TRUE)
 	{
 		if (!fd)
+		{
+			dealloc_client_data(client);
 			return(0);
+		}
 		res = select(fd+1,&rd,NULL,NULL,NULL);
-		if (res < 0) /* Error, cocket closed, abort */
+		if (res < 0) /* Error, socket closed, abort */
 		{
 #ifdef __WIN32__
 			closesocket(fd);
 #else
 			close(fd);
 #endif
-		//	g_thread_exit(0);
-			return 0;
+			dealloc_client_data(client);
+			g_thread_exit(0);
 		}
 		if (res > 0) /* Data Arrived */
 		{
@@ -181,10 +212,28 @@ void *socket_client(gpointer data)
 #else
 				close(fd);
 #endif
+				dealloc_client_data(client);
 				g_thread_exit(0);
 			}
-			if (!validate_remote_cmd(fd,buf,res))
+			/* If command validator returns false, the connection
+ 			 * was quit, thus close and exit nicely
+ 			 */
+			if (client->mode == MTX_ASCII)
+				res = validate_remote_ascii_cmd(fd,buf,res);
+			else if (client->mode == MTX_BINARY)
+				res = validate_remote_binary_cmd(fd,buf,res);
+			else	
+				printf("MTXsocket bug!, client->mode undefined!\n");
+			if (!res)
+			{
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				dealloc_client_data(client);
 				g_thread_exit(0);
+			}
 		}
 	}
 }
@@ -198,7 +247,7 @@ void *socket_client(gpointer data)
  \param buf, input buffer
  \param len, length of input buffer
  */
-gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
+gboolean validate_remote_ascii_cmd(gint fd, gchar * buf, gint len)
 {
 	extern Firmware_Details *firmware;
 	gchar ** vector = NULL;
@@ -208,7 +257,10 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 	gint cmd = 0;
 	gboolean retval = TRUE;
 	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
+	if (!tmpbuf)
+		return TRUE;
 	vector = g_strsplit(tmpbuf,",",2);
+	g_free(tmpbuf);
 	args = g_strv_length(vector);
 	if (!vector[0])
 	{
@@ -308,18 +360,23 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			io_cmd(firmware->burn_all_command,NULL);
 
 			break;
-			
+
 		case GET_SIGNATURE:
-			if (firmware->actual_signature)
-				send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+			if (!firmware)
+				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
 			else
-				send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+			{
+				if (firmware->actual_signature)
+					send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+				else
+					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+			}
 
 			res = send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\r\nSupported Calls:\n\rhelp\n\rquit\n\rget_signature <-- Returns ECU Signature\n\rget_rtv_list <-- returns runtime variable listing\n\rget_rt_vars,<var1>,<var2>,... <-- returns values of specified variables\n\rget_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>\n\r\tReturns the ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\rset_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data>\n\r\tSets teh ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\rburn_flash <-- Burns contents of ecu ram for current page to flash\n\r");
-//			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
+			//			tmpbuf = g_strdup("\rSee MegaTunix Documentation.\n\r");
 			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			break;
@@ -327,11 +384,6 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 			tmpbuf = g_strdup("\rBuh Bye...\n\r");
 			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
 			retval = FALSE;
 			break;
 		default:
@@ -340,6 +392,13 @@ gboolean validate_remote_cmd(gint fd, gchar * buf, gint len)
 	}
 	g_free(arg2);
 	return retval;
+}
+
+
+gboolean validate_remote_binary_cmd(gint fd, gchar * buf, gint len)
+{
+	printf("not written yet\n");
+	return FALSE;
 }
 
 

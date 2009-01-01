@@ -783,6 +783,31 @@ TE_Params * initialize_te_params(void)
 }
 
 
+/*!
+ \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
+sockets
+*/
+void dealloc_client_data(MtxSocketClient *client)
+{
+	extern Firmware_Details *firmware;
+	gint i = 0;
+	if (client)
+	{
+		if (client->ip)
+			g_free(client->ip);
+
+		if (client->ecu_data)
+		{
+			for (i=0;i<firmware->total_pages;i++)
+			{
+				if (client->ecu_data[i])
+					g_free(client->ecu_data[i]);
+			}
+			g_free(client->ecu_data);
+		}
+		g_free(client);
+	}
+}
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O

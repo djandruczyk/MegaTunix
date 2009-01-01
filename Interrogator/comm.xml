@@ -426,6 +426,7 @@
 				<function>populate_dlog_choices_pf</function>
 				<function>spawn_read_ve_const_pf</function>
 				<function>reset_temps_pf</function>
+				<function>open_tcpip_socket_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>

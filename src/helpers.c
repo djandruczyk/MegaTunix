@@ -23,6 +23,7 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <mode_select.h>
+#include <mtxsocket.h>
 #include <notifications.h>
 #include <rtv_processor.h>
 #include <stdio.h>
@@ -35,7 +36,7 @@
 
 extern gint dbg_lvl;
 extern GObject *global_data;
-
+GThread *socket_thread_id = NULL;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -456,4 +457,32 @@ EXPORT void post_single_burn_pf(void *data)
 	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
+}
+
+
+/*!
+ *\brief open_tcpip_socket_pf opens up the TCP control socket once the ecu is
+ interrogated.
+ */
+EXPORT void open_tcpip_socket_pf()
+{
+	extern gboolean interrogated;
+	extern volatile gboolean offline;
+	gint socket = 0;
+
+	if ((interrogated) || (offline))
+	{
+		printf("open socket\n");
+		/* Open TCP socket for remote access */
+		socket = setup_socket();
+		if (socket)
+		{
+			socket_thread_id = g_thread_create(socket_thread_manager,
+					GINT_TO_POINTER(socket), /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": main()\n\tERROR setting up TCP control socket\n"));
+	}
 }

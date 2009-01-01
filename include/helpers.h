@@ -33,6 +33,8 @@ gboolean read_ve_const(void *, XmlCmdType);
 gboolean burn_all_helper(void *, XmlCmdType);
 void post_single_burn_pf(void *data);
 void post_burn_pf(void);
+void open_tcpip_socket_pf(void);
+
 /* Prototypes */
 
 #endif

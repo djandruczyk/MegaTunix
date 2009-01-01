@@ -437,4 +437,10 @@ typedef enum
 
 }TcpCommand;
 
+typedef enum
+{
+	MTX_ASCII = 0x410,
+	MTX_BINARY
+}SocketMode;
+
 #endif
