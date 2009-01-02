@@ -24,21 +24,23 @@ struct _MtxSocketClient
 	gchar *ip;
 	guint16 port;
 	SocketMode mode;
-	guint8 *** ecu_data;
+	guint8 ** ecu_data;
 	gint fd;
 };
 /* Prototypes */
 int setup_socket(void);
 void *socket_thread_manager(gpointer);
 void * socket_client(gpointer );
-gboolean validate_remote_ascii_cmd(gint, gchar *, gint);
-gboolean validate_remote_binary_cmd(gint, gchar *, gint);
+gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
+gboolean validate_remote_binary_cmd(MtxSocketClient *, gchar *, gint);
 /* Socket handler functions */
 void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);
 void socket_get_rtv_list(gint);
-void socket_get_ecu_var(gint, gchar *, DataSize);
-void socket_set_ecu_var(gint, gchar *, DataSize);
+void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
+void socket_get_ecu_vars(MtxSocketClient *, gchar *);
+void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
+gboolean check_for_changes(MtxSocketClient *);
 /* Prototypes */
 
 #endif

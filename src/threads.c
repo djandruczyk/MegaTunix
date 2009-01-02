@@ -311,8 +311,6 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	 */
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
-	else
-		printf("firmware is not multi page\n");
 
 	output->queue_update = queue_update;
 	io_cmd(firmware->write_command,output);
@@ -445,10 +443,6 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
-	/*
-	else
-		printf("firmware is not multi page\n");
-		*/
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
 	return;

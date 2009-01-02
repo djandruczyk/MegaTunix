@@ -337,6 +337,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(GET_RT_VARS));
 	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
 			GINT_TO_POINTER(GET_RTV_LIST));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VARS",
+			GINT_TO_POINTER(GET_ECU_VARS));
 	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U08",
 			GINT_TO_POINTER(GET_ECU_VAR_U08));
 	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S08",
