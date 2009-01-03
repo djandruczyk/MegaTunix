@@ -15,7 +15,6 @@
 #define CRTSCTS 0
 #endif
 
-
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
@@ -75,7 +74,6 @@ gint main(gint argc, gchar ** argv)
 	gboolean result = FALSE;
 	
 	printf("MegaTunix msloader %s\n",VERSION);
-	g_usleep(100000);
 	verify_args(argc, argv);
 	/* If we got this far, all is good argument wise */
 	port_fd = setup_port(argv[1]);
@@ -146,7 +144,7 @@ gint main(gint argc, gchar ** argv)
 		exit (-1);
 	}
 	upload_firmware(port_fd,file_fd);
-	printf("Firmware upload completed!!!\n");
+	printf("Firmware upload completed...\n");
 	reboot_ecu(port_fd);
 	printf("Ecu Reboot complete!!!\n");
 	close_port(port_fd);

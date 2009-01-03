@@ -1,10 +1,11 @@
 #include <config.h>
 #include <defines.h>
+#include <fcntl.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <signal.h>
 
 EXPORT void load_firmware (GtkButton*);
@@ -20,9 +21,27 @@ GPid pid;
 int main (int argc, char *argv[])
 {
 	GtkWidget *textview = NULL;
+	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
+	gchar * fname = NULL;
 	gtk_init (&argc, &argv);
-	filename = get_file(g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL),NULL);
+	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
+	filename = get_file(g_strdup(fname),NULL);
+	if (!filename)
+	{
+		printf("ERROR! Could NOT locate %s\n",fname);
+		g_free(fname);
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"\n<b>MegaTunix/mtxloader</b> doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i> ??\n\n");
+
+		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"destroy_event", G_CALLBACK(gtk_main_quit), dialog);
+		gtk_widget_show_all(dialog);
+		gtk_main();
+		exit(-1);
+	}
+
+	g_free(fname);
 	xml = glade_xml_new (filename, NULL, NULL);
 	g_free(filename);
 	main_window = glade_xml_get_widget (xml, "main_window");
@@ -73,13 +92,12 @@ parse_output (gchar *line)
 			adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
 			adj->value = adj->upper;
 		}
-
-
-
 		++ptr;
 	}
 
 	g_strfreev (lines);
+	while (gtk_events_pending())
+		gtk_main_iteration();
 }
 
 /* This is a watch function that is called when the IO channel has data to read. */
@@ -105,7 +123,6 @@ read_output (GIOChannel *channel,
 			g_error_free (error);
 		}
 
-		/* Disable the stop button and enable the load button for future action. */
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
@@ -140,8 +157,6 @@ EXPORT void load_firmware (GtkButton *button)
 	file_button = glade_xml_get_widget (xml, "filechooser_button");
 	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_button));
-
-	printf ("Filename is %s\n",filename);
 
 	if (g_utf8_strlen(port, -1) == 0)
 		return;
@@ -180,7 +195,6 @@ EXPORT void abort_load (GtkButton *button)
   gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
   gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
   gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), TRUE);
-  
   kill (pid, SIGINT);
 }
 

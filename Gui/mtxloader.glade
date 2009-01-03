@@ -307,9 +307,11 @@
 	  <child>
 	    <widget class="GtkButton" id="abort_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="abort_load" last_modification_time="Sat, 03 Jan 2009 04:55:40 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment1">
@@ -326,7 +328,6 @@
 		  <child>
 		    <widget class="GtkHBox" id="hbox2">
 		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">2</property>
 
