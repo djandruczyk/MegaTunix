@@ -61,6 +61,7 @@ AC_SUBST(GLEXT_LIBS)
 
 dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
+LIBGLADE_LIBS+="-Wl,--export-dynamic"
 AC_SUBST(LIBGLADE_CFLAGS)
 AC_SUBST(LIBGLADE_LIBS)
 

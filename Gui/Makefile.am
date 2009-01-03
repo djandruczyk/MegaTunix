@@ -61,6 +61,7 @@ gui_files = 	README \
 		msns-e-wheeldecode-029x.datamap \
 		msns-e-wheeldecode-hr_10x.glade \
 		msns-e-wheeldecode-hr_10x.datamap \
+		mtxloader.glade \
 		raweditor.glade \
 		raweditor.datamap \
 		rotary-trail-029x.datamap \

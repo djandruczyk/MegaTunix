@@ -1099,7 +1099,8 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	drawOrthoText("Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
 
 	/* Render a red dot at the active VE map position */
-	glPointSize(MIN(w,h)/55.0);
+	//glPointSize(MIN(w,h)/55.0);
+	glPointSize(50.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
