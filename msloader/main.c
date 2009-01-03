@@ -33,9 +33,6 @@
  #include <termios.h>
 #endif
 
-
-
-
 typedef enum
 {
 	NOT_LISTENING=0xcba,
@@ -77,6 +74,8 @@ gint main(gint argc, gchar ** argv)
 	gchar * tmpbuf = NULL;
 	gboolean result = FALSE;
 	
+	printf("MegaTunix msloader %s\n",VERSION);
+	g_usleep(100000);
 	verify_args(argc, argv);
 	/* If we got this far, all is good argument wise */
 	port_fd = setup_port(argv[1]);
@@ -171,9 +170,9 @@ void verify_args(gint argc, gchar **argv)
 
 void usage_and_exit(gchar * msg)
 {
-	printf("\n\nERROR!!!\n\t%s\n",msg);
+	printf("\nERROR!!!\n - %s\n",msg);
 	g_free(msg);
-	printf("\n\nINVALID USAGE\n\n  msloader /path/to/port  /path/to/.s19\n\n");
+	printf("\nINVALID USAGE\n - msloader /path/to/port /path/to/.s19\n\n");
 	exit (-1);
 }
 

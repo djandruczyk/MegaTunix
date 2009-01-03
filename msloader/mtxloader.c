@@ -10,6 +10,7 @@
 EXPORT void load_firmware (GtkButton*);
 EXPORT void abort_load (GtkButton*);
 EXPORT gboolean leave (GtkWidget *, gpointer);
+EXPORT gboolean about_popup (GtkWidget *, gpointer);
 
 GIOChannel *channel = NULL;
 GladeXML *xml = NULL;
@@ -92,9 +93,9 @@ read_output (GIOChannel *channel,
 	gchar *line;
 	gsize len, term;
 
-  /* Read the current line of data from the IO channel. */
+	/* Read the current line of data from the IO channel. */
 	status = g_io_channel_read_line (channel, &line, &len, &term, &error);
-	
+
 	/* If some type of error has occurred, handle it. */
 	if (status != G_IO_STATUS_NORMAL || line == NULL || error != NULL) 
 	{
@@ -104,19 +105,21 @@ read_output (GIOChannel *channel,
 			g_error_free (error);
 		}
 
-    /* Disable the stop button and enable the ping button for future action. */
-    gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
-    gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
-    
-    if (channel != NULL)
-      g_io_channel_shutdown (channel, TRUE, NULL);
-    channel = NULL;
-    
+		/* Disable the stop button and enable the load button for future action. */
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), TRUE);
+
+		if (channel != NULL)
+			g_io_channel_shutdown (channel, TRUE, NULL);
+		channel = NULL;
+
 		return FALSE;
 	}
 
-  /* Parse the line if an error has not occurred. */
-  parse_output (line);
+	/* Parse the line if an error has not occurred. */
+	parse_output (line);
 	g_free (line);
 
 	return TRUE;
@@ -126,24 +129,19 @@ read_output (GIOChannel *channel,
 EXPORT void load_firmware (GtkButton *button)
 {
 	GtkWidget *port_entry = NULL;
+	GtkWidget *file_button = NULL;
 	gint argc, fout, ret;
 	const gchar *port;
 	gchar *command = NULL;
 	gchar *filename = NULL;
 	gchar **argv = NULL;
-	MtxFileIO *fileio = NULL;
 
 	port_entry = glade_xml_get_widget (xml, "port_entry");
+	file_button = glade_xml_get_widget (xml, "filechooser_button");
 	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
-	fileio = g_new0(MtxFileIO, 1);
-	//fileio->external_path = g_strdup("MTX_Firmware");
-	fileio->title = g_strdup("Pick your new s19 file");
-	fileio->parent = main_window;
-	fileio->on_top = TRUE;
-	fileio->default_extension = g_strdup("s19");
-	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_button));
 
-	filename = choose_file(fileio);
+	printf ("Filename is %s\n",filename);
 
 	if (g_utf8_strlen(port, -1) == 0)
 		return;
@@ -164,7 +162,9 @@ EXPORT void load_firmware (GtkButton *button)
 	{
 		/* Disable the msloader button and enable the Abort button. */
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), TRUE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), TRUE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), FALSE);
 
 		/* Create a new IO channel and monitor it for data to read. */
 		channel = g_io_channel_unix_new (fout);
@@ -177,7 +177,9 @@ EXPORT void load_firmware (GtkButton *button)
 EXPORT void abort_load (GtkButton *button)
 {
   gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
+  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
   gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
+  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), TRUE);
   
   kill (pid, SIGINT);
 }
@@ -188,3 +190,31 @@ EXPORT gboolean leave(GtkWidget * widget, gpointer data)
 	gtk_main_quit();
 	return FALSE;
 }
+
+
+/*!
+ \brief about_popup makes the about tab and presents the MegaTunix logo
+ */
+EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
+{
+#if GTK_MINOR_VERSION >= 8
+	if (gtk_minor_version >= 8)
+	{
+		gchar *authors[] = {"David J. Andruczyk",NULL};
+		gchar *artists[] = {"Alan Barrow",NULL};
+		gtk_show_about_dialog(NULL,
+				"name","MegaTunix Firmware Loading Software",
+				"version",VERSION,
+				"copyright","David J. Andruczyk(2008)",
+				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MS-I MegaSquirt powered vehicle.  Please send suggestions to the author for ways to improve mtxloader.",
+				"license","GPL v2",
+				"website","http://megatunix.sourceforge.net",
+				"authors",authors,
+				"artists",artists,
+				"documenters",authors,
+				NULL);
+	}
+#endif
+	return TRUE;
+}
+
