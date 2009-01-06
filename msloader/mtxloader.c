@@ -13,10 +13,12 @@ EXPORT void load_firmware (GtkButton*);
 EXPORT void abort_load (GtkButton*);
 EXPORT gboolean leave (GtkWidget *, gpointer);
 EXPORT gboolean about_popup (GtkWidget *, gpointer);
+void textbuffer_changed(GtkTextBuffer *,gpointer);
 void load_defaults();
 void save_defaults();
 
-GIOChannel *channel = NULL;
+GIOChannel *child_stdout = NULL;
+GIOChannel *child_stdin = NULL;
 GladeXML *xml = NULL;
 GtkWidget *main_window = NULL;
 GPid pid;
@@ -24,6 +26,9 @@ GPid pid;
 int main (int argc, char *argv[])
 {
 	GtkWidget *textview = NULL;
+	GtkTextBuffer * textbuffer = NULL;
+	GtkTextIter iter;
+	GtkTextMark *mark;
 	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
 	gchar * fname = NULL;
@@ -49,6 +54,11 @@ int main (int argc, char *argv[])
 	g_free(filename);
 	main_window = glade_xml_get_widget (xml, "main_window");
 	textview = glade_xml_get_widget (xml, "textview");
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+	mark = gtk_text_mark_new("end",FALSE);
+	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(textbuffer),&iter);
+	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(textbuffer),mark,&iter);
+	g_signal_connect(G_OBJECT(textbuffer),"changed",G_CALLBACK(textbuffer_changed),NULL);
 	glade_xml_signal_autoconnect (xml);
 	load_defaults();
 	gtk_widget_show_all (main_window);
@@ -88,6 +98,7 @@ parse_output (gchar *line)
 		}
 		gtk_text_buffer_get_end_iter (textbuffer, &iter);
 		tmpbuf = g_strdup_printf("%s\n",*ptr);
+		printf("%s",tmpbuf);
 		gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 		g_free(tmpbuf);
 		parent = gtk_widget_get_parent(textview);
@@ -151,7 +162,7 @@ EXPORT void load_firmware (GtkButton *button)
 {
 	GtkWidget *port_entry = NULL;
 	GtkWidget *file_button = NULL;
-	gint argc, fout, ret;
+	gint argc, fin, fout, ret;
 	const gchar *port;
 	gchar *command = NULL;
 	gchar *filename = NULL;
@@ -186,9 +197,10 @@ EXPORT void load_firmware (GtkButton *button)
 		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), FALSE);
 
 		/* Create a new IO channel and monitor it for data to read. */
-		channel = g_io_channel_unix_new (fout);
-		g_io_add_watch (channel, G_IO_IN | G_IO_ERR | G_IO_HUP, read_output, NULL);
-		g_io_channel_unref (channel);
+		child_stdout = g_io_channel_unix_new (fout);
+		child_stdin = g_io_channel_unix_new (fin);
+		g_io_add_watch (child_stdout, G_IO_IN | G_IO_ERR | G_IO_HUP, read_output, NULL);
+		g_io_channel_unref (child_stdout);
 	}
 }
 
@@ -280,4 +292,20 @@ void save_defaults()
 		cfg_free(cfgfile);
 		g_free(filename);
 	}
+}
+
+
+void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
+{
+	GtkTextMark *insert, *end;
+	GtkTextIter end_iter;
+	GtkTextIter insert_iter;
+	gchar * text = NULL;
+	insert = gtk_text_buffer_get_insert (buffer);
+	end = gtk_text_buffer_get_mark (buffer,"end");
+	gtk_text_buffer_get_iter_at_mark(buffer,&insert_iter,insert);
+	gtk_text_buffer_get_iter_at_mark(buffer,&end_iter,end);
+
+	text = gtk_text_buffer_get_text(buffer,&insert_iter,&end_iter,TRUE);
+	printf("insert text \"%s\"\n",text);
 }
