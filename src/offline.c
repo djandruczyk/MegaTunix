@@ -217,7 +217,6 @@ gchar * present_firmware_choices()
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 		{

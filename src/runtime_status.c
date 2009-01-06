@@ -204,15 +204,11 @@ EXPORT void load_status_pf(void)
 				g_strfreev(tmpvector);
 			}
 			g_free(section);
-
-
 		}
 		status_window = window;
 		if (!args->hide_status)
 			gtk_widget_show_all(window);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
-
 	}
 	else
 	{

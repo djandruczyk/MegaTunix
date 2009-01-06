@@ -163,8 +163,6 @@ void backup_all_ecu_settings(gchar *filename)
 	update_logbar("tools_view",NULL,g_strdup_printf("Full Backup Complete...\n"),FALSE,FALSE);
 	cfg_write_file(cfgfile,filename);
 	cfg_free(cfgfile);
-	g_free(cfgfile);
-
 }
 
 
@@ -220,7 +218,6 @@ void restore_all_ecu_settings(gchar *filename)
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 			return;
 		}
 		set_title(g_strdup("Restoring ECU settings from File"));

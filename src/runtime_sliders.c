@@ -168,7 +168,6 @@ do_ww_sliders:
 		}
 finish_off:
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	else
 	{
@@ -255,7 +254,6 @@ void load_ve3d_sliders(gint table_num)
 		}
 finish_off:
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	if (filename)
 		g_free(filename);

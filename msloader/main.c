@@ -146,7 +146,7 @@ gint main(gint argc, gchar ** argv)
 	upload_firmware(port_fd,file_fd);
 	printf("Firmware upload completed...\n");
 	reboot_ecu(port_fd);
-	printf("Ecu Reboot complete!!!\n");
+	printf("Ecu Reboot complete.\n");
 	close_port(port_fd);
 	
 	return (0) ;
@@ -156,7 +156,7 @@ void verify_args(gint argc, gchar **argv)
 {
 	/* Invalid arg count, abort */
 	if (argc != 3)
-		usage_and_exit(g_strdup("Invalid number of arguments!!"));
+		usage_and_exit(g_strdup("Invalid number of arguments!"));
 
 	
 	if (!g_file_test(argv[1], G_FILE_TEST_EXISTS))

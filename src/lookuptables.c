@@ -579,7 +579,6 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		g_free(new_name);
 	}
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 		
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
 	return TRUE;

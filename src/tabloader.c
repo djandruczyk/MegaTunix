@@ -158,7 +158,6 @@ EXPORT gboolean load_gui_tabs_pf(void)
 				g_free(tmpbuf);
 			}
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 #ifndef DEBUG
 			g_object_unref(xml);
 #endif

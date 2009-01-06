@@ -395,7 +395,6 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 		cfg_write_file(cfgfile,filename);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	g_free(filename);
 	g_free(tmpbuf);
@@ -645,7 +644,6 @@ Reqd_Fuel * initialize_reqd_fuel(gint page)
 		cfg_read_float(cfgfile,tmpbuf,"Target_AFR",
 				&reqd_fuel->target_afr);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	g_free(tmpbuf);
 	g_free(filename);

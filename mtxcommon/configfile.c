@@ -375,7 +375,7 @@ void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key)
 
 
 /*!
- \brief cfg_free() freesthe memory for a cfg
+ \brief cfg_free() frees the memory for a cfg
  \param cfg (ConfigFile*) source of the data
  */
 void cfg_free(ConfigFile * cfg)
@@ -406,6 +406,7 @@ void cfg_free(ConfigFile * cfg)
 	}
 	g_list_free(cfg->sections);
 	g_free(cfg->filename);
+	g_free(cfg);
 }
 
 

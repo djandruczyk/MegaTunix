@@ -162,7 +162,6 @@ EXPORT void load_rt_text_pf()
 		if (!args->hide_rttext)
 			gtk_widget_show_all(window);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));

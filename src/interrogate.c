@@ -749,7 +749,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	}
 
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 	g_free(filename);
 
 
@@ -963,8 +962,6 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 		g_hash_table_insert(*tests_hash,test->test_name,test);
 	}
 	cfg_free(cfgfile);
-	g_free(cfgfile);
-
 	g_free(filename);
 	return tests;
 }
@@ -1036,7 +1033,6 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	{
 		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		return FALSE;
 	}
 
@@ -1063,7 +1059,6 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		{
 			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 			g_strfreev(match_on);
 			return FALSE;
 		}
@@ -1104,7 +1099,6 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		{
 			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 			g_strfreev(match_on);
 			return FALSE;
 		}
@@ -1113,7 +1107,6 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	g_strfreev(match_on);
 	dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\t\"%s\" is a match for all conditions ...\n\n",filename));
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 	return TRUE;
 }
 

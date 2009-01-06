@@ -1,4 +1,5 @@
 #include <config.h>
+#include <configfile.h>
 #include <defines.h>
 #include <fcntl.h>
 #include <getfiles.h>
@@ -12,6 +13,8 @@ EXPORT void load_firmware (GtkButton*);
 EXPORT void abort_load (GtkButton*);
 EXPORT gboolean leave (GtkWidget *, gpointer);
 EXPORT gboolean about_popup (GtkWidget *, gpointer);
+void load_defaults();
+void save_defaults();
 
 GIOChannel *channel = NULL;
 GladeXML *xml = NULL;
@@ -47,6 +50,7 @@ int main (int argc, char *argv[])
 	main_window = glade_xml_get_widget (xml, "main_window");
 	textview = glade_xml_get_widget (xml, "textview");
 	glade_xml_signal_autoconnect (xml);
+	load_defaults();
 	gtk_widget_show_all (main_window);
 	gtk_main ();
 
@@ -201,6 +205,7 @@ EXPORT void abort_load (GtkButton *button)
 
 EXPORT gboolean leave(GtkWidget * widget, gpointer data)
 {
+	save_defaults();
 	gtk_main_quit();
 	return FALSE;
 }
@@ -232,3 +237,47 @@ EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+void load_defaults()
+{
+	ConfigFile *cfgfile;
+	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
+	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{
+		if(cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
+		{
+			gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget (xml, "port_entry")),tmpbuf);
+			g_free(tmpbuf);
+		}
+		if(cfg_read_string(cfgfile, "MTXLoader", "last_file", &tmpbuf))
+		{
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")),tmpbuf);
+			g_free(tmpbuf);
+		}
+		cfg_free(cfgfile);
+		g_free(filename);
+	}
+}
+
+
+void save_defaults()
+{
+	ConfigFile *cfgfile;
+	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
+	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{
+		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")));
+		if (tmpbuf)
+			cfg_write_string(cfgfile, "MTXLoader", "last_file", tmpbuf);
+		g_free(tmpbuf);
+		cfg_write_file(cfgfile,filename);
+		cfg_free(cfgfile);
+		g_free(filename);
+	}
+}

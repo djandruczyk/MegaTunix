@@ -108,7 +108,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		set_title(g_strdup("ERROR RT Map missing data!!!"));
 		return FALSE;
 	}
@@ -116,7 +115,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		g_free(tmpbuf);
 		set_title(g_strdup("ERROR RT Map signature MISMATCH!!!"));
 		return FALSE;
@@ -292,8 +290,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		g_strfreev(keys);
 	}
 	cfg_free(cfgfile);
-	g_free(cfgfile);
-		dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
+	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
 	rtvars_loaded = TRUE;
 	set_title(g_strdup("RT Map loaded..."));
 	return TRUE;

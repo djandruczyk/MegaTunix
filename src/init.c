@@ -235,7 +235,6 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
 		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		g_free(filename);
 		return TRUE;
 	}
@@ -442,7 +441,6 @@ void save_config(void)
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 	g_free(filename);
 	g_static_mutex_unlock(&mutex);
 }
