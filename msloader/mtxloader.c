@@ -4,31 +4,27 @@
 #include <fcntl.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <glade/glade.h>
+#include <loader.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <signal.h>
 
-EXPORT void load_firmware (GtkButton*);
-EXPORT void abort_load (GtkButton*);
+EXPORT gboolean load_firmware (GtkButton*);
+EXPORT gboolean get_signature (GtkButton*);
 EXPORT gboolean leave (GtkWidget *, gpointer);
 EXPORT gboolean about_popup (GtkWidget *, gpointer);
-void textbuffer_changed(GtkTextBuffer *,gpointer);
-void load_defaults();
-void save_defaults();
+void load_defaults(void);
+void save_defaults(void);
+void output(gchar *);
+void boot_jumper_prompt(void);
 
-GIOChannel *child_stdout = NULL;
-GIOChannel *child_stdin = NULL;
 GladeXML *xml = NULL;
 GtkWidget *main_window = NULL;
-GPid pid;
 
 int main (int argc, char *argv[])
 {
-	GtkWidget *textview = NULL;
-	GtkTextBuffer * textbuffer = NULL;
-	GtkTextIter iter;
-	GtkTextMark *mark;
 	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
 	gchar * fname = NULL;
@@ -53,12 +49,6 @@ int main (int argc, char *argv[])
 	xml = glade_xml_new (filename, NULL, NULL);
 	g_free(filename);
 	main_window = glade_xml_get_widget (xml, "main_window");
-	textview = glade_xml_get_widget (xml, "textview");
-	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-	mark = gtk_text_mark_new("end",FALSE);
-	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(textbuffer),&iter);
-	gtk_text_buffer_add_mark(GTK_TEXT_BUFFER(textbuffer),mark,&iter);
-	g_signal_connect(G_OBJECT(textbuffer),"changed",G_CALLBACK(textbuffer_changed),NULL);
 	glade_xml_signal_autoconnect (xml);
 	load_defaults();
 	gtk_widget_show_all (main_window);
@@ -69,149 +59,148 @@ int main (int argc, char *argv[])
 
 /* Parse a line of output, which may actually be more than one line. To handle
  * multiple lines, the string is split with g_strsplit(). */
-static void
-parse_output (gchar *line)
+void output (gchar *line)
 {
-	gchar **lines, **ptr;
-	gchar * tmpbuf = NULL;
 	GtkWidget *textview;
-	GtkTextIter iter;
 	GtkTextBuffer * textbuffer = NULL;
+	GtkTextIter iter;
 	GtkWidget *parent = NULL;
 	GtkAdjustment * adj = NULL;
 
-
-	/* Load the list store, split the string into lines and create a pointer. */
 	textview = glade_xml_get_widget (xml, "textview");
-	lines = g_strsplit (line, "\n", -1);
-	ptr = lines;
-
-	/* Loop through each of the lines, parsing its content. */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-	while (*ptr != NULL)
+	gtk_text_buffer_get_end_iter (textbuffer, &iter);
+	gtk_text_buffer_insert(textbuffer,&iter,line,-1);
+	parent = gtk_widget_get_parent(textview);
+	if (parent != NULL)
 	{
-		/* If this is an empty string, move to the next string. */
-		if (g_ascii_strcasecmp (*ptr, "") == 0)
-		{
-			++ptr;
-			continue;
-		}
-		gtk_text_buffer_get_end_iter (textbuffer, &iter);
-		tmpbuf = g_strdup_printf("%s\n",*ptr);
-		printf("%s",tmpbuf);
-		gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
-		g_free(tmpbuf);
-		parent = gtk_widget_get_parent(textview);
-		if (parent != NULL)
-		{
-			adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
-			adj->value = adj->upper;
-		}
-		++ptr;
+		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
+		adj->value = adj->upper;
 	}
-
-	g_strfreev (lines);
 	while (gtk_events_pending())
 		gtk_main_iteration();
 }
 
-/* This is a watch function that is called when the IO channel has data to read. */
-static gboolean
-read_output (GIOChannel *channel,
-		         GIOCondition condition,
-		         gpointer data)
+
+/* Perform a ping operation when the Ping button is clicked. */
+EXPORT gboolean get_signature (GtkButton *button)
 {
-	GError *error = NULL;
-	GIOStatus status;
-	gchar *line;
-	gsize len, term;
+	GtkWidget *widget =  NULL;
+	gchar * port = NULL;
+	gint port_fd = 0;
 
-	/* Read the current line of data from the IO channel. */
-	status = g_io_channel_read_line (channel, &line, &len, &term, &error);
-
-	/* If some type of error has occurred, handle it. */
-	if (status != G_IO_STATUS_NORMAL || line == NULL || error != NULL) 
+	widget = glade_xml_get_widget (xml, "port_entry");
+	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+	if (g_utf8_strlen(port, -1) == 0)
+		return FALSE;
+	/* If we got this far, all is good argument wise */
+	port_fd = setup_port(port);
+	if (port_fd > 0)
+		output("Port successfully opened\n");
+	else
 	{
-		if (error) 
-		{
-			g_warning ("Error reading IO channel: %s", error->message);
-			g_error_free (error);
-		}
-
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), TRUE);
-
-		if (channel != NULL)
-			g_io_channel_shutdown (channel, TRUE, NULL);
-		channel = NULL;
-
+		output("Could NOT open Port check permissions\n");
 		return FALSE;
 	}
-
-	/* Parse the line if an error has not occurred. */
-	parse_output (line);
-	g_free (line);
-
+	get_ecu_signature(port_fd);
+	close_port(port_fd);
 	return TRUE;
 }
 
-/* Perform a ping operation when the Ping button is clicked. */
-EXPORT void load_firmware (GtkButton *button)
-{
-	GtkWidget *port_entry = NULL;
-	GtkWidget *file_button = NULL;
-	gint argc, fin, fout, ret;
-	const gchar *port;
-	gchar *command = NULL;
-	gchar *filename = NULL;
-	gchar **argv = NULL;
 
-	port_entry = glade_xml_get_widget (xml, "port_entry");
-	file_button = glade_xml_get_widget (xml, "filechooser_button");
-	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
-	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_button));
+EXPORT gboolean load_firmware (GtkButton *button)
+{
+	GtkWidget *widget = NULL;
+	gchar *port;
+	gchar *filename = NULL;
+	gint port_fd = 0;
+	gint file_fd = 0;
+	EcuState ecu_state = NOT_LISTENING;
+	gint result = FALSE;
+
+	widget = glade_xml_get_widget (xml, "port_entry");
+	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+	widget = glade_xml_get_widget (xml, "filechooser_button");
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
 	if (g_utf8_strlen(port, -1) == 0)
-		return;
+		return FALSE;
 	if (filename == NULL)
-		return;
+		return FALSE;
 
-	command = g_strdup_printf("msloader %s %s",port,filename);
-
-	g_shell_parse_argv (command, &argc, &argv, NULL);
-	ret = g_spawn_async_with_pipes (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL,&pid, NULL, &fout, NULL, NULL);
-
-	g_strfreev (argv);
-	g_free (command);
-
-	if (!ret)
-		g_warning ("The 'msloader' instruction has failed!");
+	/* If we got this far, all is good argument wise */
+	port_fd = setup_port(port);
+	if (port_fd > 0)
+		output("Port successfully opened\n");
 	else
 	{
-		/* Disable the msloader button and enable the Abort button. */
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), TRUE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), TRUE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), FALSE);
-		gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), FALSE);
-
-		/* Create a new IO channel and monitor it for data to read. */
-		child_stdout = g_io_channel_unix_new (fout);
-		child_stdin = g_io_channel_unix_new (fin);
-		g_io_add_watch (child_stdout, G_IO_IN | G_IO_ERR | G_IO_HUP, read_output, NULL);
-		g_io_channel_unref (child_stdout);
+		output("Could NOT open Port check permissions\n");
+		return FALSE;
 	}
-}
+#ifdef __WIN32__
+	file_fd = open(filename, O_RDWR | O_BINARY );
+#else
+	file_fd = g_open(filename,O_RDONLY,S_IRUSR);
+#endif
+	if (file_fd > 0 )
+		output("Firmware file successfully opened\n");
+	else
+	{
+		output("Could NOT open firmware file, check permissions/paths\n");
+		return FALSE;
+	}
+	ecu_state = detect_ecu(port_fd);
+	switch (ecu_state)
+	{
+		case NOT_LISTENING:
+			output("NO response to signature request\n");
+			break;
+		case IN_BOOTLOADER:
+			output("ECU is in bootloader mode\n");
+			break;
+		case LIVE_MODE:
+			output("ECU detected in LIVE! mode, attempting to access bootloader\n");
+			result = jump_to_bootloader(port_fd);
+			if (result)
+			{
+				ecu_state = detect_ecu(port_fd);
+				if (ecu_state == IN_BOOTLOADER)
+				{
+					output("ECU is in bootloader mode, good!\n");
+					break;
+				}
+				else
+					output("Could NOT attain bootloader mode\n");
+			}
+			else
+				output("Could NOT attain bootloader mode\n");
+			break;
+	}
+	if (ecu_state != IN_BOOTLOADER)
+	{
+		boot_jumper_prompt();
+		ecu_state = detect_ecu(port_fd);
+		if (ecu_state != IN_BOOTLOADER)
+		{
+			output("Unable to get to the bootloader, update FAILED!\n");
+			return FALSE;
+		}
+		else
+			output("Got into the bootloader, good!\n");
 
-/* Kill the current msloader process when the Stop button is pressed. */
-EXPORT void abort_load (GtkButton *button)
-{
-  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort"), FALSE);
-  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "abort_button"), FALSE);
-  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load"), TRUE);
-  gtk_widget_set_sensitive (glade_xml_get_widget (xml, "load_button"), TRUE);
-  kill (pid, SIGINT);
+	}
+	result = prepare_for_upload(port_fd);
+	if (!result)
+	{
+		output("Failure getting ECU into a state to accept the new firmware\n");
+		return FALSE;
+	}
+	upload_firmware(port_fd,file_fd);
+	output("Firmware upload completed...\n");
+	reboot_ecu(port_fd);
+	output("ECU reboot complete\n");
+	close_port(port_fd);
+	return TRUE;
 }
 
 
@@ -309,3 +298,13 @@ void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
 	text = gtk_text_buffer_get_text(buffer,&insert_iter,&end_iter,TRUE);
 	printf("insert text \"%s\"\n",text);
 }
+
+
+void boot_jumper_prompt()
+{
+	GtkWidget *dialog = NULL;
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"\nPlease Jumper the boot jumper on\nthe ECU and power cycle it\nand click OK when done");
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+

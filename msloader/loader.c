@@ -213,6 +213,94 @@ EcuState detect_ecu(gint fd)
 }
 
 
+void get_ecu_signature(gint fd)
+{
+	gint res = 0;
+	gint size = 1024;
+	guchar buf[1024];
+	guchar *ptr = buf;
+	gchar * tmpbuf = NULL;
+	gint total_read = 0;
+	gint total_wanted = 0;
+	gint zerocount = 0;
+	gchar  *message = NULL;
+	gint attempt = 0;
+
+	/* Probe for response 
+	 * First check for signature (running state)
+	 * If that fails, see if we are in bootloader mode already
+	 */
+
+sig_check:
+	if (attempt > 2)
+	{
+		output("Max attempts reached, sorry\n");
+		return;
+	}
+	res = write (fd,"S",1);
+	flush_serial(fd,BOTH);
+	if (res != 1)
+		output("Failure sending signature request!\n");
+	g_usleep(300000); /* 300ms timeout */
+	total_read = 0;
+	total_wanted = size;
+	zerocount = 0;
+	while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
+	{
+		total_read += res = read(fd,
+				ptr+total_read,
+				total_wanted-total_read);
+
+		/* If we get nothing back (i.e. timeout, assume done)*/
+		if (res <= 0)
+			zerocount++;
+
+		if (zerocount > 1)
+			break;
+	}
+	if (total_read > 0)
+	{
+		message = g_strndup(((gchar *)buf),total_read);
+		/* Check for "what" or "Boot" */
+		if (g_strrstr_len(message,total_read, "what"))
+		{
+			g_free(message);
+			attempt++;
+			output("ECU is in bootloader mode, attempting reboot\n");
+			res = write (fd,"X",1);
+			flush_serial(fd,BOTH);
+			g_usleep(500000);
+			goto sig_check;
+		}
+		else if (g_strrstr_len(message,total_read, "Boot"))
+		{
+			g_free(message);
+			output("ECU is in bootloader mode, attempting reboot\n");
+			attempt++;
+			res = write (fd,"X",1);
+			flush_serial(fd,BOTH);
+			g_usleep(500000);
+			goto sig_check;
+		}
+		else if (g_strrstr_len(message,total_read, "invalid"))
+		{
+			g_free(message);
+			output("ECU has corrupted firmware!\n");
+			return;
+		}
+		else	
+		{
+			tmpbuf = g_strdup_printf("Detected signature: \"%s\"\n",message);
+			output(tmpbuf);
+			g_free(tmpbuf);
+			g_free(message);
+			return;
+		}
+	}
+	return;
+}
+
+
 gboolean jump_to_bootloader(gint fd)
 {
 	gint res = 0;
