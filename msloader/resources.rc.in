@@ -1,4 +1,4 @@
-100 ICON "msloader.ico"
+100 ICON "mtxloader.ico"
 1 VERSIONINFO
 FILEVERSION @MTX_MAJOR_VERSION@, @MTX_MINOR_VERSION@, @MTX_MICRO_VERSION@, 0
 PRODUCTVERSION @MTX_MAJOR_VERSION@, @MTX_MINOR_VERSION@, @MTX_MICRO_VERSION@, 0
@@ -11,12 +11,12 @@ FILETYPE 1
 		BLOCK "040904E4"
 		{
 			VALUE "CompanyName", "N/A"
-				VALUE "FileDescription", "MegaTunix MSLoader Software"
+				VALUE "FileDescription", "MegaTunix MtxLoader Software"
 				VALUE "FileVersion", "@MTX_MAJOR_VERSION@.@MTX_MINOR_VERSION@.@MTX_MICRO_VERSION@"
-				VALUE "InternalName", "MSLoader"
+				VALUE "InternalName", "MTXLoader"
 				VALUE "LegalCopyright", "GNU Public License v2"
 				VALUE "OriginalFilename", "Lots of em..."
-				VALUE "ProductName", "MSLoader"
+				VALUE "ProductName", "MTXLoader"
 				VALUE "ProductVersion", "@MTX_MAJOR_VERSION@.@MTX_MINOR_VERSION@.@MTX_MICRO_VERSION@"
 		}
 	}

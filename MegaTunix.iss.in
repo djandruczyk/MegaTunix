@@ -1,10 +1,10 @@
 ; -- MegaTunix.iss --
-;SUFFIX=@VERSION@@WIN32_SUBRELEASE@
+;SUFFIX=@VERSION@
 
 
 [Setup]
 AppName=MegaTunix
-AppVerName=MegaTunix v. @VERSION@@WIN32_SUBRELEASE@
+AppVerName=MegaTunix v. @VERSION@
 DefaultDirName={pf}\MegaTunix
 DefaultGroupName=MegaTunix
 UninstallDisplayIcon={app}\megatunix.exe
@@ -25,6 +25,7 @@ Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"; Flags:
 Source: "z:\home\dave\cvs\MegaTunix\widgets\demo.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\cvs\MegaTunix\dashdesigner\dashdesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\cvs\MegaTunix\msloader\mtxloader.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\cvs\MegaTunix\msloader\msloader.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
@@ -32,6 +33,7 @@ Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recur
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxDashDesigner"; Filename: "{app}\dashdesigner.exe"; WorkingDir: "{app}"
+Name: "{group}\MtxLoader"; Filename: "{app}\mtxloader.exe"; WorkingDir: "{app}"
 Name: "{userdesktop}\MegaTunix @VERSION@"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 

@@ -25,9 +25,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
+#else
+#include <winserialio.h>
 #endif
 
 #ifndef CRTSCTS
@@ -49,65 +50,67 @@ gint setup_port(gchar * port_name)
 #else
 	fd = open(port_name, O_RDWR | O_NOCTTY);
 #endif
-	if (fd < 0)
-		return -1;	/* ERROR, port did NOT open */
+	if (fd > 0)
+	{
 
 #ifdef __WIN32__
-	win32_setup_serial_params(fd, 9600);
+
+		win32_setup_serial_params(fd, 9600);
 #else
 
-	/* Save serial port status */
-	tcgetattr(fd,&oldtio);
-	flush_serial(fd, TCIOFLUSH);
+		/* Save serial port status */
+		tcgetattr(fd,&oldtio);
+		flush_serial(fd, TCIOFLUSH);
 
-	memset(&newtio, 0, sizeof(newtio));
-	/* 
-	 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
-	 * cfsetospeed
-	 * CRTSCTS : output hardware flow control (only used if the cable has
-	 * all necessary lines. See sect. 7 of Serial-HOWTO)
-	 * CS8     : 8n1 (8bit,no parity,1 stopbit)
-	 * CLOCAL  : local connection, no modem contol
-	 * CREAD   : enable receiving characters
-	 */
+		memset(&newtio, 0, sizeof(newtio));
+		/* 
+		 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
+		 * cfsetospeed
+		 * CRTSCTS : output hardware flow control (only used if the cable has
+		 * all necessary lines. See sect. 7 of Serial-HOWTO)
+		 * CS8     : 8n1 (8bit,no parity,1 stopbit)
+		 * CLOCAL  : local connection, no modem contol
+		 * CREAD   : enable receiving characters
+		 */
 
-	/* Set baud (posix way) */
+		/* Set baud (posix way) */
 
-	cfsetispeed(&newtio, B9600);
-	cfsetospeed(&newtio, B9600);
+		cfsetispeed(&newtio, B9600);
+		cfsetospeed(&newtio, B9600);
 
-	/* Mask and set to 8N1 mode... */
-	newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
-	/* Set additional flags, note |= syntax.. */
-	/* Enable receiver, ignore modem ctrls lines, use 8 bits */
-	newtio.c_cflag |= CLOCAL | CREAD | CS8;
+		/* Mask and set to 8N1 mode... */
+		newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
+		/* Set additional flags, note |= syntax.. */
+		/* Enable receiver, ignore modem ctrls lines, use 8 bits */
+		newtio.c_cflag |= CLOCAL | CREAD | CS8;
 
-	/* RAW Input */
-	/* Ignore signals, enable canonical, etc */
-	newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+		/* RAW Input */
+		/* Ignore signals, enable canonical, etc */
+		newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
-	/* Disable software flow control */
-	newtio.c_iflag &= ~(IXON | IXOFF );
+		/* Disable software flow control */
+		newtio.c_iflag &= ~(IXON | IXOFF );
 
-	/* Set raw output */
-	newtio.c_oflag &= ~OPOST;
-	/* 
-	 *            initialize all control characters 
-	 *                       default values can be found in /usr/include/termios.h, and are given
-	 *                                  in the comments, but we don't need them here
-	 *                                           */
-	newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
-	newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
-	newtio.c_cc[VERASE]   = 0;     /* del */
-	newtio.c_cc[VKILL]    = 0;     /* @ */
-	newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
-	newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	newtio.c_cc[VMIN]     = 0;
-	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+		/* Set raw output */
+		newtio.c_oflag &= ~OPOST;
+		/* 
+		 *            initialize all control characters 
+		 *                       default values can be found in /usr/include/termios.h, and are given
+		 *                                  in the comments, but we don't need them here
+		 *                                           */
+		newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
+		newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
+		newtio.c_cc[VERASE]   = 0;     /* del */
+		newtio.c_cc[VKILL]    = 0;     /* @ */
+		newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
+		newtio.c_cc[VEOL]     = 0;     /* '\0' */
+		newtio.c_cc[VMIN]     = 0;
+		newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 
-	tcsetattr(fd,TCSAFLUSH,&newtio);
+		tcsetattr(fd,TCSAFLUSH,&newtio);
 
 #endif
+	}
 	return fd;
 
 }

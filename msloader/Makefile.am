@@ -6,8 +6,8 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-msloader_LDADD = @GTK_LIBS@ @WIN32_RESOURCES@ ../mtxcommon/libmtxcommon.la 
-mtxloader_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ @WIN32_RESOURCES@ ../mtxcommon/libmtxcommon.la 
+msloader_LDADD = @GTK_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+mtxloader_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
@@ -17,7 +17,7 @@ CLEANFILES = *~ core gmon.out nohup.out
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep
 
 msloader_SOURCES = main.c winserialio.c loader.c
-mtxloader_SOURCES = mtxloader.c loader.c 
+mtxloader_SOURCES = mtxloader.c loader.c winserialio.c
 
 msloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la
 mtxloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la
@@ -27,4 +27,4 @@ resources.o:
 
 bin_PROGRAMS = msloader mtxloader
 
-EXTRA_DIST = msloader.ico
+EXTRA_DIST = mtxloader.ico

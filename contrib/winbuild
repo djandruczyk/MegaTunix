@@ -12,8 +12,9 @@ ln -sf /target/etc-$NEW_GTK /target/etc
 ln -sf /target/lib-$NEW_GTK /target/lib
 ln -sf /target/include-$NEW_GTK /target/include
 ln -sf /target/share-$NEW_GTK /target/share 
+make distclean
 cross-configure $* && \
 	make -j5  && \
-	./contrib/builder &&
-. uncross
-#make distclean
+	./contrib/builder && \
+. uncross && \
+make distclean

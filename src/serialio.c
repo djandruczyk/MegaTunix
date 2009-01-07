@@ -62,13 +62,11 @@ gboolean open_serial(gchar * port_name)
 	/*printf("Opening serial port %s\n",port_name);*/
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
-	dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__" open_serial() before open port %s\n",port_name));
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
 	fd = open(port_name, O_RDWR | O_NOCTTY );
 #endif
-	dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__" open_serial() after open port %s\n",port_name));
 	if (fd > 0)
 	{
 		/* SUCCESS */

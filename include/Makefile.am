@@ -33,6 +33,7 @@ headers = \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
+	loader.h \
 	locking.h \
         logo.h \
         logviewer_core.h \
