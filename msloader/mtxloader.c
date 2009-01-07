@@ -95,9 +95,7 @@ EXPORT gboolean get_signature (GtkButton *button)
 		return FALSE;
 	/* If we got this far, all is good argument wise */
 	port_fd = setup_port(port);
-	if (port_fd > 0)
-		output("Port successfully opened\n");
-	else
+	if (port_fd < 1)
 	{
 		output("Could NOT open Port check permissions\n");
 		return FALSE;

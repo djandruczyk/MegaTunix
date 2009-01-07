@@ -201,7 +201,7 @@ EcuState detect_ecu(gint fd)
 		}
 		else	
 		{
-			tmpbuf = g_strdup_printf("Detected signature: \"%s\"\n",message);
+			tmpbuf = g_strdup_printf("ECU signature: \"%s\"\n",message);
 			output(tmpbuf);
 			g_free(tmpbuf);
 			g_free(message);
@@ -238,7 +238,7 @@ sig_check:
 		return;
 	}
 	res = write (fd,"S",1);
-	flush_serial(fd,BOTH);
+	flush_serial(fd,OUTBOUND);
 	if (res != 1)
 		output("Failure sending signature request!\n");
 	g_usleep(300000); /* 300ms timeout */
@@ -262,7 +262,13 @@ sig_check:
 	{
 		message = g_strndup(((gchar *)buf),total_read);
 		/* Check for "what" or "Boot" */
-		if (g_strrstr_len(message,total_read, "what"))
+		if (g_strrstr_len(message,total_read, "Vector"))
+		{
+			g_free(message);
+			output("ECU has corrupted firmware!\n");
+			return;
+		}
+		else if (g_strrstr_len(message,total_read, "what"))
 		{
 			g_free(message);
 			attempt++;
@@ -281,12 +287,6 @@ sig_check:
 			flush_serial(fd,BOTH);
 			g_usleep(500000);
 			goto sig_check;
-		}
-		else if (g_strrstr_len(message,total_read, "invalid"))
-		{
-			g_free(message);
-			output("ECU has corrupted firmware!\n");
-			return;
 		}
 		else	
 		{
@@ -378,15 +378,17 @@ gboolean prepare_for_upload(gint fd)
 void upload_firmware(gint fd, gint file_fd)
 {
 	gint res = 0;
-	gchar buf[64];
-	gint chunk = 64;
+	gchar buf[128];
+	gint chunk = 128;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	GTimeVal last;
 	GTimeVal now;
+	GTimeVal begin;
 	gfloat elapsed = 0.0;
 	gint rate = 0;
 
+	g_get_current_time(&begin);
 	g_get_current_time(&now);
 	res = read(file_fd,buf,chunk);
 	while (res > 0)
@@ -405,6 +407,11 @@ void upload_firmware(gint fd, gint file_fd)
 		res = read(file_fd,buf,chunk);
 	}
 	flush_serial(fd,BOTH);
+	g_get_current_time(&now);
+	tmpbuf = g_strdup_printf("Upload completed in %li Seconds\n",now.tv_sec-begin.tv_sec);
+	output(tmpbuf);
+	g_free(tmpbuf);
+
 	return;
 }
 
