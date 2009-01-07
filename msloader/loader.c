@@ -297,8 +297,9 @@ void upload_firmware(gint fd, gint file_fd)
 	GTimeVal last;
 	GTimeVal now;
 	gfloat elapsed = 0.0;
+	gint rate = 0;
 
-	g_get_current_time(&last);
+	g_get_current_time(&now);
 	res = read(file_fd,buf,chunk);
 	while (res > 0)
 	{
@@ -306,8 +307,11 @@ void upload_firmware(gint fd, gint file_fd)
 		g_get_current_time(&now);
 		i+=res;
 		write (fd,buf,chunk);
-		elapsed = (now.tv_sec-last.tv_sec) + ((now.tv_usec-last.tv_usec)/1000000);
-		tmpbuf = g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,(gint)(chunk/elapsed));
+		elapsed = now.tv_usec - last.tv_usec;
+		if (elapsed < 0)
+			elapsed += 1000000;
+		rate = (chunk*1000000)/elapsed;
+		tmpbuf = g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,rate);
 		output(tmpbuf);
 		g_free(tmpbuf);
 		res = read(file_fd,buf,chunk);
@@ -321,8 +325,8 @@ void reboot_ecu(gint fd)
 {
 	gint res = 0;
 
-	output("Sleeping 5 Seconds\n");
-	g_usleep(5000000);
+	output("Sleeping 3 Seconds\n");
+	g_usleep(3000000);
 	res = write (fd,"X",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
