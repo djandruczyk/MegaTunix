@@ -27,6 +27,7 @@ typedef enum
 /* Prototypes */
 gint setup_port(gchar * );
 void flush_serial(gint, FlushDirection);
+void get_ecu_signature(gint);
 EcuState detect_ecu(gint);
 gboolean jump_to_bootloader(gint);
 gboolean prepare_for_upload(gint);
