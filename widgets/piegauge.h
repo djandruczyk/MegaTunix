@@ -71,12 +71,8 @@ struct _MtxPieGaugePrivate
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
 	cairo_font_options_t * font_options;
-	PangoLayout *layout;	/*! Pango TextLayout object */
-	PangoFontDescription *font_desc;/*! Pango Font description */
-	GdkGC * bm_gc;		/*! Graphics Context for bitmap */
 	GdkGC * gc;		/*! Graphics Context for drawing */
 	GdkColormap *colormap;	/*! Colormap for GC's */
-	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	GdkColor colors[NUM_COLORS];
 
 };

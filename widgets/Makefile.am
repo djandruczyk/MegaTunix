@@ -14,7 +14,7 @@ noinst_PROGRAMS = demo piedemo apifix
 
 noinst_LTLIBRARIES = libmtxgauge.la
 
-libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h piegauge.c piegauge.h piegauge-private.c piegauge-private.h
+libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h piegauge.c piegauge.h piegauge-private.c piegauge-private.h curve.c curve.h curve-private.c curve-private.h
 
 libmtxgauge_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 
