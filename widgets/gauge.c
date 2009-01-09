@@ -1137,29 +1137,6 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
 
 
 /*!
- \brief updates the gauge position,  This is a wrapper function conditionally
- compiled to call a corresponsing GDK or cairo function.
- \param widget (MtxGaugeFace *) pointer to the gauge object
- */
-void update_gauge_position(MtxGaugeFace *gauge)
-{
-	cairo_update_gauge_position (gauge);
-}
-
-
-
-/*!
- \brief generates the gauge background, This is a wrapper function 
- conditionally compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the gauge object
- */
-void generate_gauge_background(MtxGaugeFace *gauge)
-{
-	cairo_generate_gauge_background(gauge);
-}
-
-
-/*!
  \brief gets called when  a user wants a new gauge
  \returns a pointer to a newly created gauge widget
  */

@@ -47,6 +47,8 @@ void mtx_curve_get_points (MtxCurve *curve, gint *num_points, GdkPoint *array)
  */
 void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
 {
+	gint i = 0;
+
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 	g_object_freeze_notify (G_OBJECT (curve));
@@ -54,6 +56,22 @@ void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
 		g_free(priv->points);
 	priv->points = g_memdup(array,(num_points*sizeof(GdkPoint)));
 	priv->num_points = num_points;
+	priv->highest_x = -10000;
+	priv->highest_y = -10000;
+	priv->lowest_x = 10000;
+	priv->lowest_y = 10000;
+	for (i=0;i<num_points;i++)
+	{
+		if (priv->points[i].x < priv->lowest_x)
+			priv->lowest_x = priv->points[i].x;
+		if (priv->points[i].x > priv->highest_x)
+			priv->highest_x = priv->points[i].x;
+		if (priv->points[i].y < priv->lowest_y)
+			priv->lowest_y = priv->points[i].y;
+		if (priv->points[i].y > priv->highest_y)
+			priv->highest_y = priv->points[i].y;
+	}
+	printf("highest %i,%i, lowest %i,%i\n",priv->highest_x,priv->highest_y,priv->lowest_x,priv->lowest_y);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 }

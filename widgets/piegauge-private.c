@@ -153,7 +153,7 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
  looks a bit nicer, though is a little bit slower
  \param widget (MtxPieGauge *) pointer to the gauge object
  */
-void cairo_update_pie_gauge_position (MtxPieGauge *gauge)
+void update_pie_gauge_position (MtxPieGauge *gauge)
 {
 	GtkWidget * widget = NULL;
 	cairo_font_weight_t weight;
@@ -322,7 +322,7 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (MtxPieGauge *) pointer to the gauge object
  */
-void cairo_generate_pie_gauge_background(MtxPieGauge *gauge)
+void generate_pie_gauge_background(MtxPieGauge *gauge)
 {
 	cairo_t *cr = NULL;
 	gint w = 0;
@@ -423,25 +423,3 @@ void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 }
 
 
-/*!
- \brief generates the gauge background, This is a wrapper function 
- conditionally compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the gauge object
- */
-void generate_pie_gauge_background(MtxPieGauge *gauge)
-{
-	g_return_if_fail (MTX_IS_PIE_GAUGE (gauge));
-	cairo_generate_pie_gauge_background(gauge);
-}
-
-
-/*!
- \brief updates the gauge position,  This is a wrapper function conditionally
- compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the gauge object
- */
-void update_pie_gauge_position(MtxPieGauge *gauge)
-{
-	g_return_if_fail (MTX_IS_PIE_GAUGE (gauge));
-	cairo_update_pie_gauge_position (gauge);
-}

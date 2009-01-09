@@ -23,16 +23,14 @@
 
 gboolean mtx_curve_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_curve_expose (GtkWidget *, GdkEventExpose *);
-/* Not needed yet
-* gboolean mtx_curve_button_press (GtkWidget *,GdkEventButton *);
-* gboolean mtx_curve_motion_event (GtkWidget *,GdkEventMotion *);
-*/
+gboolean mtx_curve_button_event (GtkWidget *,GdkEventButton *);
+gboolean mtx_curve_motion_event (GtkWidget *,GdkEventMotion *);
 void mtx_curve_size_request (GtkWidget *, GtkRequisition *);
 void mtx_curve_class_init (MtxCurveClass *class_name);
 void mtx_curve_init (MtxCurve *gauge);
 gboolean mtx_curve_button_release (GtkWidget *,GdkEventButton *);
-void cairo_generate_curve_background(MtxCurve *);
-void cairo_update_curve_position (MtxCurve *);
+void generate_curve_background(MtxCurve *);
+void update_curve_position (MtxCurve *);
 void mtx_curve_init_colors(MtxCurve *);
 void mtx_curve_redraw (MtxCurve *gauge);
 void generate_curve_background(MtxCurve *);

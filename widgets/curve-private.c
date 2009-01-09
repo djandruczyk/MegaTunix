@@ -22,6 +22,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -66,10 +67,10 @@ void mtx_curve_class_init (MtxCurveClass *class_name)
 	/* GtkWidget signals */
 	widget_class->configure_event = mtx_curve_configure;
 	widget_class->expose_event = mtx_curve_expose;
-	/*widget_class->button_press_event = mtx_curve_button_press; */
-	/*widget_class->button_release_event = mtx_curve_button_release; */
+	widget_class->button_press_event = mtx_curve_button_event;
+	widget_class->button_release_event = mtx_curve_button_event;
 	/* Motion event not needed, as unused currently */
-	/*widget_class->motion_notify_event = mtx_curve_motion_event; */
+	widget_class->motion_notify_event = mtx_curve_motion_event; 
 	widget_class->size_request = mtx_curve_size_request;
 
 	g_type_class_add_private (class_name, sizeof (MtxCurvePrivate)); 
@@ -96,8 +97,14 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
 	priv->points = NULL;
+	priv->coords = NULL;
 	priv->num_points = 0;
+	priv->border = 5;
+	priv->scale = 1.0;
+	priv->font = g_strdup("Sans 10");
 	priv->type = GTK_UPDATE_CONTINUOUS;
+	priv->active_coord = -1;
+	priv->selected = FALSE;
 	mtx_curve_init_colors(curve);
 }
 
@@ -118,6 +125,10 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[COL_FG].red=0.8*65535;
 	priv->colors[COL_FG].green=0.8*65535;
 	priv->colors[COL_FG].blue=0.8*65535;
+	/*! Selected Trace */
+	priv->colors[COL_SEL].red=0.9*65535;
+	priv->colors[COL_SEL].green=0.0*65535;
+	priv->colors[COL_SEL].blue=0.0*65535;
 	/*! Axis Color*/
 	priv->colors[COL_AXIS].red=0.2*65535;
 	priv->colors[COL_AXIS].green=0.2*65535;
@@ -134,13 +145,16 @@ void mtx_curve_init_colors(MtxCurve *curve)
  looks a bit nicer, though is a little bit slower
  \param widget (MtxCurve *) pointer to the curve object
  */
-void cairo_update_curve_position (MtxCurve *curve)
+void update_curve_position (MtxCurve *curve)
 {
 	GtkWidget * widget = NULL;
 	cairo_font_weight_t weight;
 	cairo_font_slant_t slant;
 	gchar * tmpbuf = NULL;
 	gchar * message = NULL;
+	gfloat x_scale = 0;
+	gfloat y_scale = 0;
+	gint i = 0;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -187,32 +201,56 @@ void cairo_update_curve_position (MtxCurve *curve)
 
 	cairo_move_to (cr, 
 			priv->w/2-(extents.width/2),
-			priv->h - (extents.height*2));
+			(extents.height*2));
 	cairo_show_text (cr, message);
 	g_free(message);
 
 	cairo_stroke (cr);
 
-	/* curve hands */
-/*
-	tmpf = (priv->value-priv->min)/(priv->max-priv->min);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+	/* curve  */
+	x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.0001);
+	y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.0001);
+	priv->scale = (x_scale < y_scale) ? x_scale:y_scale;
 
+	if(priv->coords)
+		g_free(priv->coords);
+	priv->coords = g_new0(GdkPoint, priv->num_points);
+	for (i=0;i<priv->num_points;i++)
+	{
+		priv->coords[i].x = ((priv->points[i].x - priv->lowest_x)*priv->scale) + priv->border;
+		priv->coords[i].y = priv->h - (((priv->points[i].y - priv->lowest_y)*priv->scale) + priv->border);
 
-	cairo_set_source_rgb (cr, priv->colors[COL_NEEDLE].red/65535.0,
-			priv->colors[COL_NEEDLE].green/65535.0,
-			priv->colors[COL_NEEDLE].blue/65535.0);
+	}
+	
+	cairo_set_source_rgb (cr, priv->colors[COL_FG].red/65535.0,
+			priv->colors[COL_FG].green/65535.0,
+			priv->colors[COL_FG].blue/65535.0);
 	cairo_set_line_width (cr, 1.5);
 
-
-	tip.x = priv->pie_xc + (priv->pie_radius * cos (needle_pos));
-	tip.y = priv->pie_yc + (priv->pie_radius * sin (needle_pos));
-
-	cairo_move_to (cr, priv->pie_xc,priv->pie_yc);
-	cairo_line_to (cr, tip.x,tip.y);
+	for (i=0;i<priv->num_points-1;i++)
+	{
+		cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
+		cairo_line_to (cr, priv->coords[i+1].x,priv->coords[i+1].y);
+	}
 	cairo_stroke(cr);
+	for (i=0;i<priv->num_points;i++)
+	{
+		cairo_rectangle(cr,priv->coords[i].x-3,priv->coords[i].y-3,6,6);
+		cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
+	}
+	cairo_fill(cr);
+
+	if (priv->selected)
+	{
+		cairo_set_source_rgb (cr, 
+				priv->colors[COL_SEL].red/65535.0,
+				priv->colors[COL_SEL].green/65535.0,
+				priv->colors[COL_SEL].blue/65535.0);
+		cairo_move_to (cr, priv->coords[priv->active_coord].x,priv->coords[priv->active_coord].y);
+		cairo_rectangle(cr,priv->coords[priv->active_coord].x-3,priv->coords[priv->active_coord].y-3,6,6);
+	}
+	cairo_fill(cr);
 	cairo_destroy(cr);
-*/
 }
 
 
@@ -303,7 +341,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (MtxCurve *) pointer to the curve object
  */
-void cairo_generate_curve_background(MtxCurve *curve)
+void generate_curve_background(MtxCurve *curve)
 {
 	cairo_t *cr = NULL;
 	gint w = 0;
@@ -375,8 +413,53 @@ void cairo_generate_curve_background(MtxCurve *curve)
 
 gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
-	/* We don't care, but return FALSE to propogate properly */
-		printf("motion in curve, returning false\n");
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	gint i = 0;
+	if (!priv->selected)
+		return FALSE;
+	i = priv->active_coord;
+	priv->coords[i].x = event->x;
+	priv->coords[i].y = event->y;
+
+	priv->points[i].x = ((event->x - priv->border)/priv->scale) + priv ->lowest_x;
+	priv->points[i].y = -(((event->y - priv->h) - priv->border)/priv->scale) + priv ->lowest_y;
+//	priv->coords[i].y -priv->h =  - (((priv->points[i].y - priv->lowest_y)*priv->scale) + priv->border);
+	mtx_curve_redraw(MTX_CURVE(curve));
+	return TRUE;
+}
+					       
+
+gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	gint i = 0;
+	printf("button event on button %i in curve, returning false\n",event->button);
+	if ((event->button == 1 ) && (event->type == GDK_BUTTON_PRESS))	
+	{
+		for (i=0;i<priv->num_points;i++)
+		{
+			if (((abs(event->x - priv->coords[i].x)) < 10) && (abs(event->y - priv->coords[i].y) < 10))
+			{
+				priv->active_coord = i;
+				priv->selected = TRUE;
+				mtx_curve_redraw(MTX_CURVE(curve));
+				return TRUE;
+			}
+
+		}
+		priv->active_coord = -1;
+		priv->selected = FALSE;
+		mtx_curve_redraw(MTX_CURVE(curve));
+	}
+	if ((event->button == 1 ) && 
+			(event->type == GDK_BUTTON_RELEASE) &&
+			(priv->selected))	
+	{
+		priv->selected = FALSE;
+
+		mtx_curve_redraw(MTX_CURVE(curve));
+		return TRUE;
+	}
 	return FALSE;
 }
 					       
@@ -401,30 +484,9 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_curve_redraw (MtxCurve *curve)
 {
-	update_curve_position(curve);
+	update_curve_position (curve);
 	gdk_window_clear(GTK_WIDGET(curve)->window);
 }
 
 
-/*!
- \brief generates the curve background, This is a wrapper function 
- conditionally compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the curve object
- */
-void generate_curve_background(MtxCurve *curve)
-{
-	g_return_if_fail (MTX_IS_CURVE (curve));
-	cairo_generate_curve_background(curve);
-}
 
-
-/*!
- \brief updates the curve position,  This is a wrapper function conditionally
- compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the curve object
- */
-void update_curve_position(MtxCurve *curve)
-{
-	g_return_if_fail (MTX_IS_CURVE (curve));
-	cairo_update_curve_position (curve);
-}

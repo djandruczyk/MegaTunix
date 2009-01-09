@@ -272,7 +272,7 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
  looks a bit nicer, though is a little bit slower
  \param widget (MtxGaugeFace *) pointer to the gauge object
  */
-void cairo_update_gauge_position (MtxGaugeFace *gauge)
+void update_gauge_position (MtxGaugeFace *gauge)
 {
 	GtkWidget *widget = NULL;
 	gfloat tmpf = 0.0;
@@ -655,7 +655,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (GtkWidget *) pointer to the gauge object
  */
-void cairo_generate_gauge_background(MtxGaugeFace *gauge)
+void generate_gauge_background(MtxGaugeFace *gauge)
 {
 	GtkWidget * widget = NULL;
 	cairo_t *cr = NULL;
