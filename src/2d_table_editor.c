@@ -42,6 +42,8 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GArray *x_entries = NULL;
+	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
 	gchar * tmpbuf = NULL;
 	extern GList ***ve_widgets;
@@ -63,16 +65,21 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 
 		xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
 		window = glade_xml_get_widget(xml,"table_editor_window");
-		parent = glade_xml_get_widget(xml,"te_right_frame");
-		curve = mtx_curve_new();
-		gtk_container_add(GTK_CONTAINER(parent),curve);
-		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+
+		g_signal_connect(G_OBJECT(window),"delete_event",
+				G_CALLBACK(close_2d_editor),window);
 		tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
 		gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 		g_free(tmpbuf);
 		gtk_window_set_default_size(GTK_WINDOW(window),500,400);
-		g_signal_connect(G_OBJECT(window),"delete_event",
-				G_CALLBACK(close_2d_editor),window);
+
+		parent = glade_xml_get_widget(xml,"te_right_frame");
+		curve = mtx_curve_new();
+		gtk_container_add(GTK_CONTAINER(parent),curve);
+		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+		mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
+		g_signal_connect(G_OBJECT(curve),"coords-changed",
+				G_CALLBACK(coords_changed), NULL);
 
 		label = glade_xml_get_widget(xml,"x_units");
 		gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
@@ -96,12 +103,15 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 
 		x_mult = get_multiplier(firmware->te_params[table_num]->x_size);
 		y_mult = get_multiplier(firmware->te_params[table_num]->y_size);
+		x_entries = g_array_new(FALSE,TRUE,sizeof(GtkWidget *));
+		y_entries = g_array_new(FALSE,TRUE,sizeof(GtkWidget *));
 		for (i=0;i<rows;i++)
 		{
 			/* X Column */
 			entry = gtk_entry_new();
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),6);
 			OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
+			g_array_insert_val(x_entries,i,entry);
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
@@ -135,6 +145,7 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 			entry = gtk_entry_new();
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),6);
 			OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
+			g_array_insert_val(y_entries,i,entry);
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
@@ -166,6 +177,10 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 		OBJ_SET(window,"widget_list",widget_list);
+		OBJ_SET(curve,"x_entries",x_entries);
+		OBJ_SET(curve,"y_entries",y_entries);
+		OBJ_SET(window,"x_entries",x_entries);
+		OBJ_SET(window,"y_entries",y_entries);
 	}
 
 	gtk_widget_show_all(window);
@@ -177,6 +192,8 @@ gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
 	GList *list = OBJ_GET(widget, "widget_list");
 	g_list_foreach(list,remove_widget,(gpointer)list);
+	g_array_free(OBJ_GET(widget, "x_entries"),TRUE);
+	g_array_free(OBJ_GET(widget, "y_entries"),TRUE);
 	gtk_widget_destroy(widget);
 	return FALSE;
 }
@@ -201,7 +218,7 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	Axis axis;
 	gint index = 0;
 	gchar * text = NULL;
-	gint tmpf = 0;
+	gfloat tmpf = 0.0;
 	
 	index = (gint) OBJ_GET(widget,"curve_index");
 	axis = (Axis) OBJ_GET(widget,"curve_axis");
@@ -217,4 +234,35 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
 	
+}
+
+
+void coords_changed(GtkWidget *curve, gpointer data)
+{
+	MtxCurveCoord point;
+	gint index = 0;
+	GArray *array;
+	gint precision = 0;
+	GtkWidget *entry = NULL;
+	gchar * tmpbuf = NULL;
+	
+	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
+	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
+	/* X Coord */
+	array = OBJ_GET(curve,"x_entries");
+	entry = g_array_index(array,GtkWidget *,index);
+	precision = (gint)OBJ_GET(entry, "precision");
+	tmpbuf = g_strdup_printf("%1$.*2$f",point.x,precision);
+	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
+	g_signal_emit_by_name(entry, "activate");
+	g_free(tmpbuf);
+
+	/* Y Coord */
+	array = OBJ_GET(curve,"y_entries");
+	entry  = g_array_index(array,GtkWidget *,index);
+	precision = (gint)OBJ_GET(entry, "precision");
+	tmpbuf = g_strdup_printf("%1$.*2$f",point.y,precision);
+	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
+	g_signal_emit_by_name(entry, "activate");
+	g_free(tmpbuf);
 }

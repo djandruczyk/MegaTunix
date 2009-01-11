@@ -26,6 +26,8 @@
 #include <string.h>
 
 
+static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
+
 GType mtx_curve_get_type(void)
 {
 	static GType mtx_curve_type = 0;
@@ -52,26 +54,33 @@ GType mtx_curve_get_type(void)
 /*!
  \brief Initializes the mtx pie curve class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param class_name (MtxCurveClass *) pointer to the class
+ \param klass (MtxCurveClass *) pointer to the class
  */
-void mtx_curve_class_init (MtxCurveClass *class_name)
+void mtx_curve_class_init (MtxCurveClass *klass)
 {
-	GObjectClass *obj_class;
+	GObjectClass *gobject_class;
 	GtkWidgetClass *widget_class;
 
-	obj_class = G_OBJECT_CLASS (class_name);
-	widget_class = GTK_WIDGET_CLASS (class_name);
+	gobject_class = G_OBJECT_CLASS (klass);
+	widget_class = GTK_WIDGET_CLASS (klass);
 
 	/* GtkWidget signals */
 	widget_class->configure_event = mtx_curve_configure;
 	widget_class->expose_event = mtx_curve_expose;
 	widget_class->button_press_event = mtx_curve_button_event;
 	widget_class->button_release_event = mtx_curve_button_event;
+	widget_class->enter_notify_event = mtx_curve_focus_event;
+	widget_class->leave_notify_event = mtx_curve_focus_event;
 	/* Motion event not needed, as unused currently */
 	widget_class->motion_notify_event = mtx_curve_motion_event; 
 	widget_class->size_request = mtx_curve_size_request;
 
-	g_type_class_add_private (class_name, sizeof (MtxCurvePrivate)); 
+	g_type_class_add_private (klass, sizeof (MtxCurvePrivate)); 
+	mtx_curve_signals[CHANGED_SIGNAL] = 
+		g_signal_new("coords-changed", G_TYPE_FROM_CLASS(klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		G_STRUCT_OFFSET (MtxCurveClass, coords_changed),
+		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 
@@ -88,7 +97,11 @@ void mtx_curve_init (MtxCurve *curve)
 	*/ 
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gtk_widget_add_events (GTK_WIDGET (curve),GDK_BUTTON_PRESS_MASK
-			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
+			        |GDK_BUTTON_RELEASE_MASK
+				|GDK_POINTER_MOTION_MASK
+				|GDK_POINTER_MOTION_HINT_MASK
+				|GDK_ENTER_NOTIFY_MASK
+				|GDK_LEAVE_NOTIFY_MASK);
 	priv->w = 100;		
 	priv->h = 100;
 	priv->cr = NULL;
@@ -104,11 +117,12 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->y_scale = 1.0;
 	priv->locked_scale = 1.0;
 	priv->font = g_strdup("Sans 10");
-	priv->type = GTK_UPDATE_CONTINUOUS;
 	priv->active_coord = -1;
 	priv->vertex_selected = FALSE;
-	priv->show_vertexes = TRUE;
+	priv->show_vertexes = FALSE;
 	priv->show_grat = TRUE;
+	priv->coord_changed = FALSE;
+	priv->auto_hide = TRUE;
 	mtx_curve_init_colors(curve);
 }
 
@@ -179,39 +193,6 @@ void update_curve_position (MtxCurve *curve)
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 
-	/* Update the VALUE text */
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_TEXT].red/65535.0,
-			priv->colors[COL_TEXT].green/65535.0,
-			priv->colors[COL_TEXT].blue/65535.0);
-	tmpbuf = g_utf8_strup(priv->font,-1);
-	if (g_strrstr(tmpbuf,"BOLD"))
-		weight = CAIRO_FONT_WEIGHT_BOLD;
-	else
-		weight = CAIRO_FONT_WEIGHT_NORMAL;
-	if (g_strrstr(tmpbuf,"OBLIQUE"))
-		slant = CAIRO_FONT_SLANT_OBLIQUE;
-	else if (g_strrstr(tmpbuf,"ITALIC"))
-		slant = CAIRO_FONT_SLANT_ITALIC;
-	else
-		slant = CAIRO_FONT_SLANT_NORMAL;
-	g_free(tmpbuf);
-	cairo_select_font_face (cr, priv->font,  slant, weight);
-
-	cairo_set_font_size (cr, 15);
-
-	message = g_strdup_printf("%s", priv->title);
-
-	cairo_text_extents (cr, message, &extents);
-
-	cairo_move_to (cr, 
-			priv->w/2-(extents.width/2),
-			(extents.height*2));
-	cairo_show_text (cr, message);
-	g_free(message);
-
-	cairo_stroke (cr);
-
 	/* curve  */
 	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
 	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
@@ -220,17 +201,17 @@ void update_curve_position (MtxCurve *curve)
 	if(priv->points)
 		g_free(priv->points);
 	priv->points = g_new0(GdkPoint, priv->num_points);
+
 	/* Convert from user provided floating point coords to integer X,Y 
  	 * coords so things display nicely.  NOTE: motion event will do a 
  	 * reverse conversion to take screen coords to original values, and
  	 * take into account specified precision so that signals feed useful
- 	 * data back to connected apps
+ 	 * data back to connected handlers
  	 */
 	for (i=0;i<priv->num_points;i++)
 	{
-		priv->points[i].x = (gint)((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border;
-		priv->points[i].y = priv->h - (gint)(((priv->coords[i].y - priv->lowest_y)*priv->y_scale) + priv->border);
-
+		priv->points[i].x = (gint)(((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border);
+		priv->points[i].y = (gint)(priv->h - (((priv->coords[i].y - priv->lowest_y)*priv->y_scale) + priv->border));
 	}
 
 	cairo_set_source_rgb (cr, priv->colors[COL_FG].red/65535.0,
@@ -245,7 +226,7 @@ void update_curve_position (MtxCurve *curve)
 		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
 	}
 	cairo_stroke(cr);
-	/* The rectangles for each vertex itself */
+	/* The circles for each vertex itself */
 	if (priv->show_vertexes)
 	{
 		for (i=0;i<priv->num_points;i++)
@@ -263,7 +244,6 @@ void update_curve_position (MtxCurve *curve)
 				priv->colors[COL_SEL].green/65535.0,
 				priv->colors[COL_SEL].blue/65535.0);
 		cairo_move_to (cr, priv->points[priv->active_coord].x,priv->points[priv->active_coord].y);
-//		cairo_rectangle(cr,priv->points[priv->active_coord].x-3,priv->points[priv->active_coord].y-3,6,6);
 		cairo_new_sub_path(cr);
 		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*M_PI);
 	}
@@ -303,6 +283,72 @@ void update_curve_position (MtxCurve *curve)
 			cairo_stroke(cr);
 		}
 
+	}
+
+	/* Update the Title text */
+	cairo_set_source_rgb (cr, 
+			priv->colors[COL_TEXT].red/65535.0,
+			priv->colors[COL_TEXT].green/65535.0,
+			priv->colors[COL_TEXT].blue/65535.0);
+	tmpbuf = g_utf8_strup(priv->font,-1);
+	if (g_strrstr(tmpbuf,"BOLD"))
+		weight = CAIRO_FONT_WEIGHT_BOLD;
+	else
+		weight = CAIRO_FONT_WEIGHT_NORMAL;
+	if (g_strrstr(tmpbuf,"OBLIQUE"))
+		slant = CAIRO_FONT_SLANT_OBLIQUE;
+	else if (g_strrstr(tmpbuf,"ITALIC"))
+		slant = CAIRO_FONT_SLANT_ITALIC;
+	else
+		slant = CAIRO_FONT_SLANT_NORMAL;
+	g_free(tmpbuf);
+	cairo_select_font_face (cr, priv->font,  slant, weight);
+
+	cairo_set_font_size (cr, 15);
+
+	message = g_strdup_printf("%s", priv->title);
+
+	cairo_text_extents (cr, message, &extents);
+
+	cairo_move_to (cr, 
+			priv->w/2-(extents.width/2),
+			(extents.height*2));
+	cairo_show_text (cr, message);
+	g_free(message);
+
+	cairo_stroke (cr);
+	if (priv->vertex_selected)
+	{
+		cairo_set_font_size (cr, 9);
+		message = g_strdup_printf("(%1$.*2$f,%3$.*4$f)",
+				priv->coords[priv->active_coord].x,
+				priv->x_precision,
+				priv->coords[priv->active_coord].y,
+				priv->y_precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,priv->points[priv->active_coord].x,
+				priv->points[priv->active_coord].y);
+		cairo_line_to (cr, 
+				priv->w - (extents.width/2.0) - (3*priv->border),
+				(extents.height*7)+ priv->border);
+		cairo_stroke (cr);
+		cairo_set_source_rgba (cr,0,0,0,0.85);
+		cairo_rectangle(cr,priv->w - extents.width - (4*priv->border),
+                                (extents.height*7) + (priv->border),
+				extents.width + (2*priv->border),
+				-(extents.height + (2*priv->border)));
+		cairo_fill (cr);
+		cairo_set_source_rgb (cr, 
+				priv->colors[COL_TEXT].red/65535.0,
+				priv->colors[COL_TEXT].green/65535.0,
+				priv->colors[COL_TEXT].blue/65535.0);
+		cairo_move_to (cr, 
+				priv->w - extents.width - (3*priv->border),
+				extents.height*7);
+		cairo_show_text (cr, message);
+		g_free(message);
+
+		cairo_stroke (cr);
 	}
 
 	cairo_destroy(cr);
@@ -477,16 +523,15 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	priv->points[i].x = event->x;
 	priv->points[i].y = event->y;
 
-
 	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x- priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
 	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
+
 	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
 	priv->coords[i].y = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
-//	priv->coords[i].x = ((event->x- priv->border)/priv->x_scale) + priv ->lowest_x;
-//	priv->coords[i].y = -((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y;
-	printf("New coords are at (%f,%f)\n",priv->coords[i].x, priv->coords[i].y);
+	recalc_extremes(priv);
+	priv->coord_changed = TRUE;
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return TRUE;
 }
@@ -504,6 +549,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 			{
 				priv->active_coord = i;
 				priv->vertex_selected = TRUE;
+				priv->coord_changed = FALSE;
 				mtx_curve_redraw(MTX_CURVE(curve));
 				return TRUE;
 			}
@@ -520,6 +566,8 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 		priv->vertex_selected = FALSE;
 
 		mtx_curve_redraw(MTX_CURVE(curve));
+		if (priv->coord_changed)
+			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;
 	}
 	return FALSE;
@@ -551,4 +599,45 @@ void mtx_curve_redraw (MtxCurve *curve)
 }
 
 
+/*!
+ \brief Recalculates the extremes of all coords in the graph
+ \param priv (MtxCurvePrivate *) pointer to private data
+ */
+void recalc_extremes(MtxCurvePrivate *priv)
+{
+        gint i = 0;
+        priv->highest_x = -10000;
+        priv->highest_y = -10000;
+        priv->lowest_x = 10000;
+        priv->lowest_y = 10000;
+        for (i=0;i<priv->num_points;i++)
+        {
+                if (priv->coords[i].x < priv->lowest_x)
+                        priv->lowest_x = priv->coords[i].x;
+                if (priv->coords[i].x > priv->highest_x)
+                        priv->highest_x = priv->coords[i].x;
+                if (priv->coords[i].y < priv->lowest_y)
+                        priv->lowest_y = priv->coords[i].y;
+                if (priv->coords[i].y > priv->highest_y)
+                        priv->highest_y = priv->coords[i].y;
+        }
+        /*printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
+ 	*/
+}
 
+
+gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	if ((event->type == GDK_ENTER_NOTIFY) && (priv->auto_hide))
+	{
+		priv->show_vertexes = TRUE;
+		mtx_curve_redraw(MTX_CURVE(curve));
+	}
+	if ((event->type  ==GDK_LEAVE_NOTIFY) && (priv->auto_hide))
+	{
+		priv->show_vertexes = FALSE;
+		mtx_curve_redraw(MTX_CURVE(curve));
+	}
+	return FALSE;
+}

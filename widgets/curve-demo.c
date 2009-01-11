@@ -19,6 +19,8 @@
 #include <math.h>
 
 
+void coords_changed(MtxCurve *, gpointer);
+
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
@@ -41,8 +43,11 @@ int main (int argc, char **argv)
 	gtk_widget_realize(curve);
 	mtx_curve_set_coords(MTX_CURVE(curve),10,points);
 	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
+	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),FALSE);
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
-	mtx_curve_set_y_precision(MTX_CURVE(curve),2);
+	mtx_curve_set_y_precision(MTX_CURVE(curve),1);
+	g_signal_connect(G_OBJECT(curve), "coords-changed",
+			G_CALLBACK(coords_changed),NULL);
 
 	gtk_widget_show_all (window);
 
@@ -54,3 +59,11 @@ int main (int argc, char **argv)
 	return 0;
 }
 
+void coords_changed(MtxCurve *curve, gpointer data)
+{
+	gint index = mtx_curve_get_active_coord_index(curve);
+	MtxCurveCoord point;
+	mtx_curve_get_coords_at_index(curve,index,&point);
+	printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);
+	
+}

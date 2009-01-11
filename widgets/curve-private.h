@@ -29,7 +29,6 @@ struct _MtxCurvePrivate
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
         MtxCurveCoord *coords;       /* Points array */
         GdkPoint *points;       /* Onscreen coords array (for mouse) */
-        GtkUpdateType type;     /* Update mode */
         gint num_points;        /* Total Points*/
         gint w;                 /* Width of full widget */
         gint h;                 /* Height of full widget */
@@ -45,8 +44,10 @@ struct _MtxCurvePrivate
         gfloat x_scale;         /* X coord points->coords scaler */
         gfloat y_scale;         /* Y coord points->coords scaler */
         gboolean vertex_selected;/* Do we have one selected? */
+        gboolean auto_hide;	/* Auto hide vertex on focus out */
         gboolean show_vertexes; /* Show vertex rectangles */
-        gboolean show_grat      ;/* Draw graticule? */
+        gboolean show_grat;	/* Draw graticule? */
+        gboolean coord_changed;	/* Flag */
         GdkGC *gc;              /* Graphics Context */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
@@ -62,6 +63,7 @@ gboolean mtx_curve_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_curve_expose (GtkWidget *, GdkEventExpose *);
 gboolean mtx_curve_button_event (GtkWidget *,GdkEventButton *);
 gboolean mtx_curve_motion_event (GtkWidget *,GdkEventMotion *);
+gboolean mtx_curve_focus_event (GtkWidget *, GdkEventCrossing *);
 void mtx_curve_size_request (GtkWidget *, GtkRequisition *);
 void mtx_curve_class_init (MtxCurveClass *class_name);
 void mtx_curve_init (MtxCurve *gauge);
@@ -72,6 +74,7 @@ void mtx_curve_init_colors(MtxCurve *);
 void mtx_curve_redraw (MtxCurve *gauge);
 void generate_curve_background(MtxCurve *);
 void update_curve_position (MtxCurve *);
+void recalc_extremes (MtxCurvePrivate *);
 
 
 #endif

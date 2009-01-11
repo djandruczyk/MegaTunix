@@ -230,44 +230,44 @@ y_units=deg
 y_name=Offset
 y_dl_conv_expr=(x*10)
 y_ul_conv_expr=(x/10)
-y_raw_lower=-10
-y_raw_upper=-10
+y_raw_lower=-100
+y_raw_upper=100
 y_precision=1
 
 
 [page_0]
 dl_by_default=TRUE
-truepgnum=4
+phys_ecu_page=4
 length=994
 
 [page_1]
 dl_by_default=TRUE
-truepgnum=5
+phys_ecu_page=5
 length=946
 
 [page_2]
 dl_by_default=FALSE
-truepgnum=0
+phys_ecu_page=0
 length=2048
 
 [page_3]
 dl_by_default=FALSE
-truepgnum=1
+phys_ecu_page=1
 length=2048
 
 [page_4]
 dl_by_default=FALSE
-truepgnum=2
+phys_ecu_page=2
 length=2048
 
 [page_5]
 dl_by_default=FALSE
-truepgnum=3
+phys_ecu_page=3
 length=2048
 
 [page_6]
 dl_by_default=FALSE
-truepgnum=6
+phys_ecu_page=6
 length=112
 
 [interrogation]

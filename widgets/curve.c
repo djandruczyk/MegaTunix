@@ -29,30 +29,6 @@ GtkWidget *mtx_curve_new ()
 
 
 /*!
- \brief Recalculates the extremes of all coords in the graph
- \param priv (MtxCurvePrivate *) pointer to private data
- */
-void recalc_extremes(MtxCurvePrivate *priv)
-{
-	gint i = 0;
-	priv->highest_x = -10000;
-	priv->highest_y = -10000;
-	priv->lowest_x = 10000;
-	priv->lowest_y = 10000;
-	for (i=0;i<priv->num_points;i++)
-	{
-		if (priv->coords[i].x < priv->lowest_x)
-			priv->lowest_x = priv->coords[i].x;
-		if (priv->coords[i].x > priv->highest_x)
-			priv->highest_x = priv->coords[i].x;
-		if (priv->coords[i].y < priv->lowest_y)
-			priv->lowest_y = priv->coords[i].y;
-		if (priv->coords[i].y > priv->highest_y)
-			priv->highest_y = priv->coords[i].y;
-	}
-	//printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
-}
-/*!
  \brief gets the current value 
  \param curve (MtxCurve *) pointer to curve
  */
@@ -74,7 +50,7 @@ gboolean mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord 
  */
 gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
 {
-	//gint i = 0;
+	/* gint i = 0; */
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
@@ -83,8 +59,10 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 	priv->coords = g_memdup(array,(num_points*sizeof(MtxCurveCoord)));
 	priv->num_points = num_points;
 	recalc_extremes(priv);
-	//for (i=0;i<num_points;i++)
-	//	printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
+	/*
+ 	for (i=0;i<num_points;i++)
+		printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
+	*/
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 	return TRUE;
@@ -136,6 +114,8 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->coords[index].x = point.x;
 	priv->coords[index].y = point.y;
+	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);
+ 	*/
 	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
@@ -263,6 +243,35 @@ gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
 
 
 /*!
+ \brief sets the auto_hide vertexes param
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->auto_hide = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the auto_hide param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gboolean mtx_curve_get_auto_hide_vertexes (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->auto_hide;
+}
+
+
+/*!
  \brief sets the show_grat param
  \param curve (MtxCurve *) pointer to curve
  */
@@ -323,7 +332,7 @@ gint mtx_curve_get_y_precision (MtxCurve *curve)
  \param precision (gint) precision in significant digits
  \returns true or false on success/failure
  */
-gint mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
+gboolean mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
@@ -338,12 +347,25 @@ gint mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
  \param precision (gint) precision in significant digits
  \returns true or false on success/failure
  */
-gint mtx_curve_set_y_precision (MtxCurve *curve, gint precision)
+gboolean mtx_curve_set_y_precision (MtxCurve *curve, gint precision)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	priv->y_precision = precision;
 	return TRUE;
+}
+
+
+/*!
+ \brief gets the active_vertex index
+ \param curve (MtxCurve *) pointer to curve
+ \returns active vertex
+ */
+gint mtx_curve_get_active_coord_index (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
+	return priv->active_coord;
 }
 
 

@@ -42,6 +42,12 @@ typedef enum
 	NUM_COLORS
 }ColorIndex;
 
+enum
+{	
+	CHANGED_SIGNAL,
+	LAST_SIGNAL
+};
+
 struct _MtxCurve
 {	/* public data */
 	GtkDrawingArea parent;
@@ -50,6 +56,7 @@ struct _MtxCurve
 struct _MtxCurveClass
 {
 	GtkDrawingAreaClass parent_class;
+	void (*coords_changed) (MtxCurve *curve);
 };
 
 struct _MtxCurveCoord
@@ -69,6 +76,9 @@ gboolean mtx_curve_set_coords (MtxCurve *, gint , MtxCurveCoord *);
 gboolean mtx_curve_get_coords_at_index (MtxCurve *, gint , MtxCurveCoord * );
 gboolean mtx_curve_set_coords_at_index (MtxCurve *, gint , MtxCurveCoord );
 gboolean mtx_curve_set_empty_array(MtxCurve *, gint);
+gint mtx_curve_get_active_coord_index(MtxCurve *);
+
+/* Precision of data */
 gboolean mtx_curve_set_x_precision(MtxCurve *, gint);
 gboolean mtx_curve_set_y_precision(MtxCurve *, gint);
 gint mtx_curve_get_x_precision(MtxCurve *);
@@ -84,6 +94,8 @@ gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
 gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
 
 /* Rendering */
+gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *, gboolean);
+gboolean mtx_curve_get_get_auto_hide_vertexes (MtxCurve *);
 gboolean mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
 gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
 gboolean mtx_curve_set_show_graticule (MtxCurve *, gboolean );
