@@ -106,7 +106,8 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->font = g_strdup("Sans 10");
 	priv->type = GTK_UPDATE_CONTINUOUS;
 	priv->active_coord = -1;
-	priv->selected = FALSE;
+	priv->vertex_selected = FALSE;
+	priv->show_vertexes = TRUE;
 	mtx_curve_init_colors(curve);
 }
 
@@ -144,7 +145,7 @@ void mtx_curve_init_colors(MtxCurve *curve)
 
 /*!
  \brief updates the curve position,  This is the CAIRO implementation that
- looks a bit nicer, though is a little bit slower
+ looks a bit nicer, though is a little bit slower than a raw GDK version
  \param widget (MtxCurve *) pointer to the curve object
  */
 void update_curve_position (MtxCurve *curve)
@@ -227,20 +228,25 @@ void update_curve_position (MtxCurve *curve)
 			priv->colors[COL_FG].blue/65535.0);
 	cairo_set_line_width (cr, 1.5);
 
+	/* The "curve" itself */
 	for (i=0;i<priv->num_points-1;i++)
 	{
 		cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
 		cairo_line_to (cr, priv->coords[i+1].x,priv->coords[i+1].y);
 	}
 	cairo_stroke(cr);
-	for (i=0;i<priv->num_points;i++)
+	/* The rectangles for each vertex itself */
+	if (priv->show_vertexes)
 	{
-		cairo_rectangle(cr,priv->coords[i].x-3,priv->coords[i].y-3,6,6);
-		cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
+		for (i=0;i<priv->num_points;i++)
+		{
+			cairo_rectangle(cr,priv->coords[i].x-3,priv->coords[i].y-3,6,6);
+			cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
+		}
+		cairo_fill(cr);
 	}
-	cairo_fill(cr);
 
-	if (priv->selected)
+	if (priv->vertex_selected)
 	{
 		cairo_set_source_rgb (cr, 
 				priv->colors[COL_SEL].red/65535.0,
@@ -415,7 +421,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gint i = 0;
-	if (!priv->selected)
+	if (!priv->vertex_selected)
 		return FALSE;
 	i = priv->active_coord;
 	priv->coords[i].x = event->x;
@@ -439,21 +445,21 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 			if (((abs(event->x - priv->coords[i].x)) < 10) && (abs(event->y - priv->coords[i].y) < 10))
 			{
 				priv->active_coord = i;
-				priv->selected = TRUE;
+				priv->vertex_selected = TRUE;
 				mtx_curve_redraw(MTX_CURVE(curve));
 				return TRUE;
 			}
 
 		}
 		priv->active_coord = -1;
-		priv->selected = FALSE;
+		priv->vertex_selected = FALSE;
 		mtx_curve_redraw(MTX_CURVE(curve));
 	}
 	if ((event->button == 1 ) && 
 			(event->type == GDK_BUTTON_RELEASE) &&
-			(priv->selected))	
+			(priv->vertex_selected))	
 	{
-		priv->selected = FALSE;
+		priv->vertex_selected = FALSE;
 
 		mtx_curve_redraw(MTX_CURVE(curve));
 		return TRUE;

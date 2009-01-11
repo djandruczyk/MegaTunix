@@ -64,7 +64,8 @@ struct _MtxCurvePrivate
 	gfloat locked_scale; 	/* minimum fixed scale for both axis' */
 	gfloat x_scale; 	/* X coord points->coords scaler */
 	gfloat y_scale; 	/* Y coord points->coords scaler */
-	gboolean selected;	/* Do we have one selected? */
+	gboolean vertex_selected;/* Do we have one selected? */
+	gboolean show_vertexes;	/* Show vertex rectangles */
 	GdkGC *gc;		/* Graphics Context */
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
@@ -97,6 +98,8 @@ void mtx_curve_set_title (MtxCurve *,gchar *);
 const gchar * mtx_curve_get_title (MtxCurve *);
 gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
 gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
+void mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
+gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
 void mtx_curve_set_update_policy (MtxCurve *, GtkUpdateType );
 GtkUpdateType mtx_curve_get_update_policy (MtxCurve *);
 

@@ -159,26 +159,27 @@ void mtx_curve_set_update_policy (MtxCurve *curve, GtkUpdateType type)
 
 
 /*!
- \brief sets the update policy
+ \brief gets the update policy
  \param curve (MtxCurve *) pointer to curve
- \param type (GtkUpdateType) new value
  \returns update policy
  */
 GtkUpdateType mtx_curve_get_update_policy (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
 	return priv->type;
 }
 
 
 /*!
- \brief sets the update policy
+ \brief gets the title of the display
  \param curve (MtxCurve *) pointer to curve
  \returns title text(DO NOT FREE this)
  */
 const gchar * mtx_curve_get_title (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->title;
 }
 
@@ -195,6 +196,34 @@ void mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 	priv->title = g_strdup(new_title);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+}
+
+
+/*!
+ \brief sets the show_vertex param
+ \param curve (MtxCurve *) pointer to curve
+ \returns title text(DO NOT FREE this)
+ */
+void mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->show_vertexes = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+}
+
+
+/*!
+ \brief gets the show_vertexes param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->show_vertexes;
 }
 
 
