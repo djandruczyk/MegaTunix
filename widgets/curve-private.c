@@ -98,6 +98,8 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->coords = NULL;
 	priv->num_points = 0;
 	priv->border = 5;
+	priv->x_precision = 0;
+	priv->y_precision = 0;
 	priv->x_scale = 1.0;
 	priv->y_scale = 1.0;
 	priv->locked_scale = 1.0;
@@ -218,6 +220,12 @@ void update_curve_position (MtxCurve *curve)
 	if(priv->points)
 		g_free(priv->points);
 	priv->points = g_new0(GdkPoint, priv->num_points);
+	/* Convert from user provided floating point coords to integer X,Y 
+ 	 * coords so things display nicely.  NOTE: motion event will do a 
+ 	 * reverse conversion to take screen coords to original values, and
+ 	 * take into account specified precision so that signals feed useful
+ 	 * data back to connected apps
+ 	 */
 	for (i=0;i<priv->num_points;i++)
 	{
 		priv->points[i].x = (gint)((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border;
@@ -462,14 +470,23 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gint i = 0;
+	gchar * tmpbuf = 0;
 	if (!priv->vertex_selected)
 		return FALSE;
 	i = priv->active_coord;
 	priv->points[i].x = event->x;
 	priv->points[i].y = event->y;
 
-	priv->coords[i].x = ((event->x- priv->border)/priv->x_scale) + priv ->lowest_x;
-	priv->coords[i].y = -((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y;
+
+	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x- priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
+	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
+	g_free(tmpbuf);
+	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
+	priv->coords[i].y = (gfloat)g_strtod(tmpbuf,NULL);
+	g_free(tmpbuf);
+//	priv->coords[i].x = ((event->x- priv->border)/priv->x_scale) + priv ->lowest_x;
+//	priv->coords[i].y = -((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y;
+	printf("New coords are at (%f,%f)\n",priv->coords[i].x, priv->coords[i].y);
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return TRUE;
 }

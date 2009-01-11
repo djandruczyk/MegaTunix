@@ -63,20 +63,20 @@ GType mtx_curve_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_curve_new (void);
 
 /* Point manipulation */
-void mtx_curve_get_coords (MtxCurve *, gint *, MtxCurveCoord *);
+gboolean mtx_curve_get_coords (MtxCurve *, gint *, MtxCurveCoord *);
 /* Do NOT free array of returned points! */
-void mtx_curve_set_coords (MtxCurve *, gint , MtxCurveCoord *);
+gboolean mtx_curve_set_coords (MtxCurve *, gint , MtxCurveCoord *);
 gboolean mtx_curve_get_coords_at_index (MtxCurve *, gint , MtxCurveCoord * );
 gboolean mtx_curve_set_coords_at_index (MtxCurve *, gint , MtxCurveCoord );
-void mtx_curve_set_empty_array(MtxCurve *, gint);
-void mtx_curve_set_x_precision(MtxCurve *, gint);
-void mtx_curve_set_y_precision(MtxCurve *, gint);
+gboolean mtx_curve_set_empty_array(MtxCurve *, gint);
+gboolean mtx_curve_set_x_precision(MtxCurve *, gint);
+gboolean mtx_curve_set_y_precision(MtxCurve *, gint);
 gint mtx_curve_get_x_precision(MtxCurve *);
 gint mtx_curve_get_y_precision(MtxCurve *);
 
 
 /* Title */
-void mtx_curve_set_title (MtxCurve *,gchar *);
+gboolean mtx_curve_set_title (MtxCurve *,gchar *);
 const gchar * mtx_curve_get_title (MtxCurve *);
 
 /* Colors */
@@ -84,9 +84,9 @@ gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
 gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
 
 /* Rendering */
-void mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
+gboolean mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
 gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
-void mtx_curve_set_show_graticule (MtxCurve *, gboolean );
+gboolean mtx_curve_set_show_graticule (MtxCurve *, gboolean );
 gboolean mtx_curve_get_show_graticule (MtxCurve *);
 
 

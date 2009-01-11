@@ -42,6 +42,7 @@ int main (int argc, char **argv)
 	mtx_curve_set_coords(MTX_CURVE(curve),10,points);
 	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
+	mtx_curve_set_y_precision(MTX_CURVE(curve),2);
 
 	gtk_widget_show_all (window);
 

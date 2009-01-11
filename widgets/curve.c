@@ -56,12 +56,13 @@ void recalc_extremes(MtxCurvePrivate *priv)
  \brief gets the current value 
  \param curve (MtxCurve *) pointer to curve
  */
-void mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord *array)
+gboolean mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord *array)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	array = priv->coords;
 	*num_points = priv->num_points;
+	return TRUE;
 }
 
 
@@ -71,11 +72,11 @@ void mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord *arr
  \param num_points (gint) new value
  \param array (MtxCurveCoord*) Array of points
  */
-void mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
+gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
 {
 	//gint i = 0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	if (priv->coords)
 		g_free(priv->coords);
@@ -86,6 +87,7 @@ void mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *arra
 	//	printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
 }
 
 
@@ -94,12 +96,11 @@ void mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *arra
  \param curve (MtxCurve *) pointer to curve
  \param num_points (gint) size of array to create
  */
-void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
+gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 {
 	gint i = 0;
-
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	if (priv->coords)
 		g_free(priv->coords);
@@ -116,6 +117,7 @@ void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
 }
 
 
@@ -219,13 +221,15 @@ const gchar * mtx_curve_get_title (MtxCurve *curve)
  \param curve (MtxCurve *) pointer to curve
  \returns title text(DO NOT FREE this)
  */
-void mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
+gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->title = g_strdup(new_title);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
 }
 
 
@@ -233,13 +237,15 @@ void mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
  \brief sets the show_vertex param
  \param curve (MtxCurve *) pointer to curve
  */
-void mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
+gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_vertexes = value;
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
 }
 
 
@@ -260,13 +266,15 @@ gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
  \brief sets the show_grat param
  \param curve (MtxCurve *) pointer to curve
  */
-void mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
+gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_grat = value;
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
 }
 
 
@@ -280,6 +288,62 @@ gboolean mtx_curve_get_show_graticule (MtxCurve *curve)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->show_grat;
+}
+
+
+/*!
+ \brief gets the x_precision param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gint mtx_curve_get_x_precision (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
+	return priv->x_precision;
+}
+
+
+/*!
+ \brief gets the y_precision param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gint mtx_curve_get_y_precision (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
+	return priv->y_precision;
+}
+
+
+/*!
+ \brief sets the x_precision param
+ \param curve (MtxCurve *) pointer to curve
+ \param precision (gint) precision in significant digits
+ \returns true or false on success/failure
+ */
+gint mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	priv->x_precision = precision;
+	return TRUE;
+}
+
+
+/*!
+ \brief sets the y_precision param
+ \param curve (MtxCurve *) pointer to curve
+ \param precision (gint) precision in significant digits
+ \returns true or false on success/failure
+ */
+gint mtx_curve_set_y_precision (MtxCurve *curve, gint precision)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	priv->y_precision = precision;
+	return TRUE;
 }
 
 

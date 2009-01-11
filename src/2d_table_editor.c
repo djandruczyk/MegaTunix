@@ -145,7 +145,6 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
-			OBJ_SET(entry,"base",GINT_TO_POINTER(10));
 			offset = (i*y_mult) + firmware->te_params[table_num]->y_base;
 			OBJ_SET(entry,"offset",GINT_TO_POINTER(offset));
 
@@ -164,9 +163,11 @@ EXPORT gboolean create_2d_table_editor(GtkWidget *widget,gpointer data)
 
 			update_widget(G_OBJECT(entry),NULL);
 		}
+		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
+		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
+		OBJ_SET(window,"widget_list",widget_list);
 	}
 
-	OBJ_SET(window,"widget_list",widget_list);
 	gtk_widget_show_all(window);
 	return TRUE;
 }
@@ -196,26 +197,24 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *curve = (GtkWidget *)data;
-	GdkPoint point;
+	MtxCurveCoord point;
 	Axis axis;
 	gint index = 0;
-	gint base = 0;
 	gchar * text = NULL;
-	gint tmpi = 0;
+	gint tmpf = 0;
 	
 	index = (gint) OBJ_GET(widget,"curve_index");
 	axis = (Axis) OBJ_GET(widget,"curve_axis");
-	base = (Axis) OBJ_GET(widget,"base");
-	mtx_curve_get_point_at_index(MTX_CURVE(curve),index,&point);
+	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-        tmpi = (gint)strtol(text,NULL,base);
+        tmpf = (gfloat)strtod(text,NULL);
 	if (axis == _X_)
-		point.x = tmpi;
+		point.x = tmpf;
 	else if (axis == _Y_)
-		point.y = tmpi;
+		point.y = tmpf;
 	else
 		printf("ERROR in update_2d_curve()!!!\n");
-	mtx_curve_set_point_at_index(MTX_CURVE(curve),index,point);
+	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
 	
 }

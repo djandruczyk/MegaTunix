@@ -39,6 +39,8 @@ struct _MtxCurvePrivate
         gint highest_y;         /* Highest Y value in points[] */
         gint border;            /* Border in pixels */
         gint active_coord;      /* Active Coordinate */
+	gint x_precision;	/* Precision for X axis */
+	gint y_precision;	/* Precision for X axis */
         gfloat locked_scale;    /* minimum fixed scale for both axis' */
         gfloat x_scale;         /* X coord points->coords scaler */
         gfloat y_scale;         /* Y coord points->coords scaler */
