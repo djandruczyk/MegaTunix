@@ -38,7 +38,7 @@ typedef enum
 	COL_BG = 0,
 	COL_FG,
 	COL_SEL,
-	COL_AXIS,
+	COL_GRAT,
 	COL_TEXT,
 	NUM_COLORS
 }ColorIndex;
@@ -66,6 +66,7 @@ struct _MtxCurvePrivate
 	gfloat y_scale; 	/* Y coord points->coords scaler */
 	gboolean vertex_selected;/* Do we have one selected? */
 	gboolean show_vertexes;	/* Show vertex rectangles */
+	gboolean show_grat	;/* Draw graticule? */
 	GdkGC *gc;		/* Graphics Context */
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
 				   too hold onto or not */
@@ -100,6 +101,8 @@ gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
 gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
 void mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
 gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
+void mtx_curve_set_show_graticule (MtxCurve *, gboolean );
+gboolean mtx_curve_get_show_graticule (MtxCurve *);
 void mtx_curve_set_update_policy (MtxCurve *, GtkUpdateType );
 GtkUpdateType mtx_curve_get_update_policy (MtxCurve *);
 

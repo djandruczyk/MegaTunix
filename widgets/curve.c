@@ -202,7 +202,6 @@ void mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 /*!
  \brief sets the show_vertex param
  \param curve (MtxCurve *) pointer to curve
- \returns title text(DO NOT FREE this)
  */
 void mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 {
@@ -224,6 +223,33 @@ gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->show_vertexes;
+}
+
+
+/*!
+ \brief sets the show_grat param
+ \param curve (MtxCurve *) pointer to curve
+ */
+void mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->show_grat = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+}
+
+
+/*!
+ \brief gets the show_vertexes param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gboolean mtx_curve_get_show_graticule (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->show_grat;
 }
 
 

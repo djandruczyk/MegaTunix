@@ -26,8 +26,6 @@
 #include <string.h>
 
 
-
-
 GType mtx_curve_get_type(void)
 {
 	static GType mtx_curve_type = 0;
@@ -108,6 +106,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->active_coord = -1;
 	priv->vertex_selected = FALSE;
 	priv->show_vertexes = TRUE;
+	priv->show_grat = TRUE;
 	mtx_curve_init_colors(curve);
 }
 
@@ -132,10 +131,10 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[COL_SEL].red=0.9*65535;
 	priv->colors[COL_SEL].green=0.0*65535;
 	priv->colors[COL_SEL].blue=0.0*65535;
-	/*! Axis Color*/
-	priv->colors[COL_AXIS].red=0.2*65535;
-	priv->colors[COL_AXIS].green=0.2*65535;
-	priv->colors[COL_AXIS].blue=0.2*65535;
+	/*! Graticule Color*/
+	priv->colors[COL_GRAT].red=0.45*65535;
+	priv->colors[COL_GRAT].green=0.45*65535;
+	priv->colors[COL_GRAT].blue=0.45*65535;
 	/*! Text/Title Color */
 	priv->colors[COL_TEXT].red=1.0*65535;
 	priv->colors[COL_TEXT].green=1.0*65535;
@@ -155,6 +154,9 @@ void update_curve_position (MtxCurve *curve)
 	cairo_font_slant_t slant;
 	gchar * tmpbuf = NULL;
 	gchar * message = NULL;
+	gfloat tmpf = 0.0;
+	gint max_lines;
+	gint spread = 0;
 	gint i = 0;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
@@ -222,7 +224,7 @@ void update_curve_position (MtxCurve *curve)
 		priv->coords[i].y = priv->h - (((priv->points[i].y - priv->lowest_y)*priv->y_scale) + priv->border);
 
 	}
-	
+
 	cairo_set_source_rgb (cr, priv->colors[COL_FG].red/65535.0,
 			priv->colors[COL_FG].green/65535.0,
 			priv->colors[COL_FG].blue/65535.0);
@@ -245,7 +247,7 @@ void update_curve_position (MtxCurve *curve)
 		}
 		cairo_fill(cr);
 	}
-
+	/* Selected vertex drawn in alt color... */
 	if (priv->vertex_selected)
 	{
 		cairo_set_source_rgb (cr, 
@@ -256,6 +258,43 @@ void update_curve_position (MtxCurve *curve)
 		cairo_rectangle(cr,priv->coords[priv->active_coord].x-3,priv->coords[priv->active_coord].y-3,6,6);
 	}
 	cairo_fill(cr);
+
+	if (priv->show_grat)
+	{
+		cairo_set_source_rgba (cr, 
+				priv->colors[COL_GRAT].red/65535.0,
+				priv->colors[COL_GRAT].green/65535.0,
+				priv->colors[COL_GRAT].blue/65535.0,
+				0.5);
+		max_lines = (priv->w - 2*priv->border)/50;
+		tmpf = ((priv->w - 2*priv->border)%50)/50.0;
+		if (tmpf > 0.5)
+			max_lines++;
+		if (max_lines == 0)
+			max_lines = 1;
+		spread = (priv->w - 2*priv->border)/max_lines;
+		for(i = 0;i<max_lines;i++)
+		{
+			cairo_move_to (cr,priv->border+i*spread,0);
+			cairo_line_to (cr,priv->border+i*spread,priv->h);
+			cairo_stroke(cr);
+		}
+		max_lines = (priv->h - 2*priv->border)/50;
+		tmpf = ((priv->h - 2*priv->border)%50)/50.0;
+		if (tmpf > 0.5)
+			max_lines++;
+		if (max_lines == 0)
+			max_lines = 1;
+		spread = (priv->h - 2*priv->border)/max_lines;
+		for(i = 0;i<max_lines;i++)
+		{
+			cairo_move_to (cr,0,priv->border+i*spread);
+			cairo_line_to (cr,priv->w,priv->border+i*spread);
+			cairo_stroke(cr);
+		}
+
+	}
+
 	cairo_destroy(cr);
 }
 
