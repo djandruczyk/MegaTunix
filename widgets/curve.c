@@ -14,6 +14,7 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <curve.h>
+#include <curve-private.h>
 #include <gtk/gtk.h>
 
 
@@ -71,7 +72,6 @@ void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
 		if (priv->points[i].y > priv->highest_y)
 			priv->highest_y = priv->points[i].y;
 	}
-	printf("highest %i,%i, lowest %i,%i\n",priv->highest_x,priv->highest_y,priv->lowest_x,priv->lowest_y);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 }
@@ -169,3 +169,32 @@ GtkUpdateType mtx_curve_get_update_policy (MtxCurve *curve)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	return priv->type;
 }
+
+
+/*!
+ \brief sets the update policy
+ \param curve (MtxCurve *) pointer to curve
+ \returns title text(DO NOT FREE this)
+ */
+const gchar * mtx_curve_get_title (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	return priv->title;
+}
+
+
+/*!
+ \brief sets the curve title
+ \param curve (MtxCurve *) pointer to curve
+ \returns title text(DO NOT FREE this)
+ */
+void mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->title = g_strdup(new_title);
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+}
+
+

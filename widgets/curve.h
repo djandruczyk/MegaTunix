@@ -61,7 +61,9 @@ struct _MtxCurvePrivate
 	gint highest_y;		/* Highest Y value in points[] */
 	gint border;		/* Border in pixels */
 	gint active_coord;	/* Active Coordinate */
-	gfloat scale; 		/* points->coords scaler */
+	gfloat locked_scale; 	/* minimum fixed scale for both axis' */
+	gfloat x_scale; 	/* X coord points->coords scaler */
+	gfloat y_scale; 	/* Y coord points->coords scaler */
 	gboolean selected;	/* Do we have one selected? */
 	GdkGC *gc;		/* Graphics Context */
 	cairo_t *cr;		/*! Cairo context,  not sure if this is good
@@ -91,6 +93,8 @@ void mtx_curve_set_points (MtxCurve *, gint , GdkPoint *);
 /* Do NOT free array of returned points! */
 void mtx_curve_get_points (MtxCurve *, gint *, GdkPoint *);
 gboolean mtx_curve_set_point_at_index (MtxCurve *, gint , GdkPoint );
+void mtx_curve_set_title (MtxCurve *,gchar *);
+const gchar * mtx_curve_get_title (MtxCurve *);
 gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
 gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
 void mtx_curve_set_update_policy (MtxCurve *, GtkUpdateType );

@@ -23,7 +23,7 @@ int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *curve = NULL;
-	GdkPoint points[5];
+	GdkPoint points[10];
 	gint i = 0;
 
 	gtk_init (&argc, &argv);
@@ -31,14 +31,16 @@ int main (int argc, char **argv)
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
 	curve = mtx_curve_new ();
+	
 	gtk_container_add (GTK_CONTAINER (window), curve);
-	for (i=0;i<5;i++)
+	for (i=0;i<10;i++)
 	{
-		points[i].x=i*10;
-		points[i].y=i*10;
+		points[i].x=i*1000;
+		points[i].y=exp(i/2.0);
 	}
 	gtk_widget_realize(curve);
-	mtx_curve_set_points(MTX_CURVE(curve),5,points);
+	mtx_curve_set_points(MTX_CURVE(curve),10,points);
+	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
 
 	gtk_widget_show_all (window);
 

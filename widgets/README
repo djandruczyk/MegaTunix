@@ -8,8 +8,15 @@ Companion tools gaugedesigner and dashdesigner built by DJA to allow graphical
 designing of custom gauges which are stored in XML, as well as dash clusters 
 which are also stored in XML.
 
+Additional widgets include pie gauge, which is a knockoff copy of the tiny
+pie slice gauges from megalogviewer, though antialiased, so it looks nicer.
+Another additional widget is MtxCurve, which is a simple 2D display,  you
+pass it an array for X/Y coords (integers) and it auto-scales and displays it
+
+
 credits:
 Christopher Mire (czb83)
 David Andruczyk < djandruczyk at yahoo dot com>
 Ari Karhu <ari at ultimatevw dot com>
+
 

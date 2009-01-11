@@ -100,7 +100,9 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->coords = NULL;
 	priv->num_points = 0;
 	priv->border = 5;
-	priv->scale = 1.0;
+	priv->x_scale = 1.0;
+	priv->y_scale = 1.0;
+	priv->locked_scale = 1.0;
 	priv->font = g_strdup("Sans 10");
 	priv->type = GTK_UPDATE_CONTINUOUS;
 	priv->active_coord = -1;
@@ -152,8 +154,6 @@ void update_curve_position (MtxCurve *curve)
 	cairo_font_slant_t slant;
 	gchar * tmpbuf = NULL;
 	gchar * message = NULL;
-	gfloat x_scale = 0;
-	gfloat y_scale = 0;
 	gint i = 0;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
@@ -208,17 +208,17 @@ void update_curve_position (MtxCurve *curve)
 	cairo_stroke (cr);
 
 	/* curve  */
-	x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.0001);
-	y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.0001);
-	priv->scale = (x_scale < y_scale) ? x_scale:y_scale;
+	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
+	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
+	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
 
 	if(priv->coords)
 		g_free(priv->coords);
 	priv->coords = g_new0(GdkPoint, priv->num_points);
 	for (i=0;i<priv->num_points;i++)
 	{
-		priv->coords[i].x = ((priv->points[i].x - priv->lowest_x)*priv->scale) + priv->border;
-		priv->coords[i].y = priv->h - (((priv->points[i].y - priv->lowest_y)*priv->scale) + priv->border);
+		priv->coords[i].x = ((priv->points[i].x - priv->lowest_x)*priv->x_scale) + priv->border;
+		priv->coords[i].y = priv->h - (((priv->points[i].y - priv->lowest_y)*priv->y_scale) + priv->border);
 
 	}
 	
@@ -421,9 +421,8 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	priv->coords[i].x = event->x;
 	priv->coords[i].y = event->y;
 
-	priv->points[i].x = ((event->x - priv->border)/priv->scale) + priv ->lowest_x;
-	priv->points[i].y = -(((event->y - priv->h) - priv->border)/priv->scale) + priv ->lowest_y;
-//	priv->coords[i].y -priv->h =  - (((priv->points[i].y - priv->lowest_y)*priv->scale) + priv->border);
+	priv->points[i].x = ((event->x - priv->border)/priv->x_scale) + priv ->lowest_x;
+	priv->points[i].y = -(((event->y - priv->h) - priv->border)/priv->y_scale) + priv ->lowest_y;
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return TRUE;
 }
@@ -433,7 +432,6 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gint i = 0;
-	printf("button event on button %i in curve, returning false\n",event->button);
 	if ((event->button == 1 ) && (event->type == GDK_BUTTON_PRESS))	
 	{
 		for (i=0;i<priv->num_points;i++)
