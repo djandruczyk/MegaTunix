@@ -215,13 +215,13 @@ void update_curve_position (MtxCurve *curve)
 	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
 
-	if(priv->coords)
-		g_free(priv->coords);
-	priv->coords = g_new0(GdkPoint, priv->num_points);
+	if(priv->points)
+		g_free(priv->points);
+	priv->points = g_new0(GdkPoint, priv->num_points);
 	for (i=0;i<priv->num_points;i++)
 	{
-		priv->coords[i].x = ((priv->points[i].x - priv->lowest_x)*priv->x_scale) + priv->border;
-		priv->coords[i].y = priv->h - (((priv->points[i].y - priv->lowest_y)*priv->y_scale) + priv->border);
+		priv->points[i].x = (gint)((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border;
+		priv->points[i].y = priv->h - (gint)(((priv->coords[i].y - priv->lowest_y)*priv->y_scale) + priv->border);
 
 	}
 
@@ -233,8 +233,8 @@ void update_curve_position (MtxCurve *curve)
 	/* The "curve" itself */
 	for (i=0;i<priv->num_points-1;i++)
 	{
-		cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
-		cairo_line_to (cr, priv->coords[i+1].x,priv->coords[i+1].y);
+		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
+		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
 	}
 	cairo_stroke(cr);
 	/* The rectangles for each vertex itself */
@@ -242,8 +242,8 @@ void update_curve_position (MtxCurve *curve)
 	{
 		for (i=0;i<priv->num_points;i++)
 		{
-			cairo_rectangle(cr,priv->coords[i].x-3,priv->coords[i].y-3,6,6);
-			cairo_move_to (cr, priv->coords[i].x,priv->coords[i].y);
+			cairo_arc(cr,priv->points[i].x,priv->points[i].y,3,0,2*M_PI);
+			cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
 		}
 		cairo_fill(cr);
 	}
@@ -254,10 +254,12 @@ void update_curve_position (MtxCurve *curve)
 				priv->colors[COL_SEL].red/65535.0,
 				priv->colors[COL_SEL].green/65535.0,
 				priv->colors[COL_SEL].blue/65535.0);
-		cairo_move_to (cr, priv->coords[priv->active_coord].x,priv->coords[priv->active_coord].y);
-		cairo_rectangle(cr,priv->coords[priv->active_coord].x-3,priv->coords[priv->active_coord].y-3,6,6);
+		cairo_move_to (cr, priv->points[priv->active_coord].x,priv->points[priv->active_coord].y);
+//		cairo_rectangle(cr,priv->points[priv->active_coord].x-3,priv->points[priv->active_coord].y-3,6,6);
+		cairo_new_sub_path(cr);
+		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*M_PI);
 	}
-	cairo_fill(cr);
+	cairo_stroke(cr);
 
 	if (priv->show_grat)
 	{
@@ -463,11 +465,11 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	if (!priv->vertex_selected)
 		return FALSE;
 	i = priv->active_coord;
-	priv->coords[i].x = event->x;
-	priv->coords[i].y = event->y;
+	priv->points[i].x = event->x;
+	priv->points[i].y = event->y;
 
-	priv->points[i].x = ((event->x - priv->border)/priv->x_scale) + priv ->lowest_x;
-	priv->points[i].y = -(((event->y - priv->h) - priv->border)/priv->y_scale) + priv ->lowest_y;
+	priv->coords[i].x = ((event->x- priv->border)/priv->x_scale) + priv ->lowest_x;
+	priv->coords[i].y = -((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y;
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return TRUE;
 }
@@ -481,7 +483,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 	{
 		for (i=0;i<priv->num_points;i++)
 		{
-			if (((abs(event->x - priv->coords[i].x)) < 10) && (abs(event->y - priv->coords[i].y) < 10))
+			if (((abs(event->x - priv->points[i].x)) < 10) && (abs(event->y - priv->points[i].y) < 10))
 			{
 				priv->active_coord = i;
 				priv->vertex_selected = TRUE;

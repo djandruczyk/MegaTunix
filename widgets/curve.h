@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 typedef struct _MtxCurve		MtxCurve;
 typedef struct _MtxCurveClass	MtxCurveClass;
+typedef struct _MtxCurveCoord	MtxCurveCoord;
 
 /*! ColorIndex enum,  for indexing into the color arrays */
 typedef enum  
@@ -51,17 +52,27 @@ struct _MtxCurveClass
 	GtkDrawingAreaClass parent_class;
 };
 
+struct _MtxCurveCoord
+{
+	gfloat x;
+	gfloat y;
+};
+
 GType mtx_curve_get_type (void) G_GNUC_CONST;
 
 GtkWidget* mtx_curve_new (void);
 
 /* Point manipulation */
-void mtx_curve_get_points (MtxCurve *, gint *, GdkPoint *);
+void mtx_curve_get_coords (MtxCurve *, gint *, MtxCurveCoord *);
 /* Do NOT free array of returned points! */
-void mtx_curve_set_points (MtxCurve *, gint , GdkPoint *);
-gboolean mtx_curve_get_point_at_index (MtxCurve *, gint , GdkPoint * );
-gboolean mtx_curve_set_point_at_index (MtxCurve *, gint , GdkPoint );
+void mtx_curve_set_coords (MtxCurve *, gint , MtxCurveCoord *);
+gboolean mtx_curve_get_coords_at_index (MtxCurve *, gint , MtxCurveCoord * );
+gboolean mtx_curve_set_coords_at_index (MtxCurve *, gint , MtxCurveCoord );
 void mtx_curve_set_empty_array(MtxCurve *, gint);
+void mtx_curve_set_x_precision(MtxCurve *, gint);
+void mtx_curve_set_y_precision(MtxCurve *, gint);
+gint mtx_curve_get_x_precision(MtxCurve *);
+gint mtx_curve_get_y_precision(MtxCurve *);
 
 
 /* Title */

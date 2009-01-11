@@ -27,8 +27,8 @@ struct _MtxCurvePrivate
         GdkColor colors[NUM_COLORS];    /* Colors Array */
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
-        GdkPoint *points;       /* Points array */
-        GdkPoint *coords;       /* Onscreen coords array (for mouse) */
+        MtxCurveCoord *coords;       /* Points array */
+        GdkPoint *points;       /* Onscreen coords array (for mouse) */
         GtkUpdateType type;     /* Update mode */
         gint num_points;        /* Total Points*/
         gint w;                 /* Width of full widget */

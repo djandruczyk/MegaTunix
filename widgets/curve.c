@@ -29,7 +29,7 @@ GtkWidget *mtx_curve_new ()
 
 
 /*!
- \brief Recalculates the extremes of all points in the graph
+ \brief Recalculates the extremes of all coords in the graph
  \param priv (MtxCurvePrivate *) pointer to private data
  */
 void recalc_extremes(MtxCurvePrivate *priv)
@@ -41,25 +41,26 @@ void recalc_extremes(MtxCurvePrivate *priv)
 	priv->lowest_y = 10000;
 	for (i=0;i<priv->num_points;i++)
 	{
-		if (priv->points[i].x < priv->lowest_x)
-			priv->lowest_x = priv->points[i].x;
-		if (priv->points[i].x > priv->highest_x)
-			priv->highest_x = priv->points[i].x;
-		if (priv->points[i].y < priv->lowest_y)
-			priv->lowest_y = priv->points[i].y;
-		if (priv->points[i].y > priv->highest_y)
-			priv->highest_y = priv->points[i].y;
+		if (priv->coords[i].x < priv->lowest_x)
+			priv->lowest_x = priv->coords[i].x;
+		if (priv->coords[i].x > priv->highest_x)
+			priv->highest_x = priv->coords[i].x;
+		if (priv->coords[i].y < priv->lowest_y)
+			priv->lowest_y = priv->coords[i].y;
+		if (priv->coords[i].y > priv->highest_y)
+			priv->highest_y = priv->coords[i].y;
 	}
+	//printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
 }
 /*!
  \brief gets the current value 
  \param curve (MtxCurve *) pointer to curve
  */
-void mtx_curve_get_points (MtxCurve *curve, gint *num_points, GdkPoint *array)
+void mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord *array)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
-	array = priv->points;
+	array = priv->coords;
 	*num_points = priv->num_points;
 }
 
@@ -68,18 +69,21 @@ void mtx_curve_get_points (MtxCurve *curve, gint *num_points, GdkPoint *array)
  \brief sets the current points 
  \param curve (MtxCurve *) pointer to curve
  \param num_points (gint) new value
- \param array (GdkPoint*) Array of points
+ \param array (MtxCurveCoord*) Array of points
  */
-void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
+void mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
 {
+	//gint i = 0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 	g_object_freeze_notify (G_OBJECT (curve));
-	if (priv->points)
-		g_free(priv->points);
-	priv->points = g_memdup(array,(num_points*sizeof(GdkPoint)));
+	if (priv->coords)
+		g_free(priv->coords);
+	priv->coords = g_memdup(array,(num_points*sizeof(MtxCurveCoord)));
 	priv->num_points = num_points;
 	recalc_extremes(priv);
+	//for (i=0;i<num_points;i++)
+	//	printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 }
@@ -97,9 +101,9 @@ void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 	g_object_freeze_notify (G_OBJECT (curve));
-	if (priv->points)
-		g_free(priv->points);
-	priv->points = g_new0(GdkPoint,num_points);
+	if (priv->coords)
+		g_free(priv->coords);
+	priv->coords = g_new0(MtxCurveCoord,num_points);
 	priv->num_points = num_points;
 	priv->highest_x = 0;
 	priv->highest_y = 0;
@@ -107,8 +111,8 @@ void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 	priv->lowest_y = 0;
 	for (i=0;i<num_points;i++)
 	{
-		priv->points[i].x = 0;
-		priv->points[i].y = 0;
+		priv->coords[i].x = 0;
+		priv->coords[i].y = 0;
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
@@ -121,15 +125,15 @@ void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
  \param index (gfloat) index of point
  \param point (gfloat) new point coords
  */
-gboolean mtx_curve_set_point_at_index (MtxCurve *curve, gint index, GdkPoint point)
+gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoord point)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_return_val_if_fail (priv->num_points > index,FALSE);
 	g_return_val_if_fail (index >= 0,FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
-	priv->points[index].x = point.x;
-	priv->points[index].y = point.y;
+	priv->coords[index].x = point.x;
+	priv->coords[index].y = point.y;
 	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
@@ -143,14 +147,14 @@ gboolean mtx_curve_set_point_at_index (MtxCurve *curve, gint index, GdkPoint poi
  \param index (gfloat) index of point
  \param point (gfloat) new point coords
  */
-gboolean mtx_curve_get_point_at_index (MtxCurve *curve, gint index, GdkPoint *point)
+gboolean mtx_curve_get_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoord *point)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_return_val_if_fail (priv->num_points > index,FALSE);
 	g_return_val_if_fail (index >= 0,FALSE);
-	point->x = priv->points[index].x;
-	point->y = priv->points[index].y;
+	point->x = priv->coords[index].x;
+	point->y = priv->coords[index].y;
 	return TRUE;
 }
 
