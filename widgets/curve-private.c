@@ -132,9 +132,9 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[COL_SEL].green=0.0*65535;
 	priv->colors[COL_SEL].blue=0.0*65535;
 	/*! Graticule Color*/
-	priv->colors[COL_GRAT].red=0.45*65535;
-	priv->colors[COL_GRAT].green=0.45*65535;
-	priv->colors[COL_GRAT].blue=0.45*65535;
+	priv->colors[COL_GRAT].red=0.50*65535;
+	priv->colors[COL_GRAT].green=0.50*65535;
+	priv->colors[COL_GRAT].blue=0.50*65535;
 	/*! Text/Title Color */
 	priv->colors[COL_TEXT].red=1.0*65535;
 	priv->colors[COL_TEXT].green=1.0*65535;

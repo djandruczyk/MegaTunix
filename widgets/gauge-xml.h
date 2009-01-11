@@ -24,6 +24,26 @@
 #include <libxml/tree.h>
 
 
+typedef struct _MtxXMLFuncs             MtxXMLFuncs;
+
+/*! \struct _MtxXMLFuncs
+ * \brief This small container struct is used to store a set of import and
+ * export functions use by the XML code to export or import gauge settings
+ * The import function takes two args,  one is the text string from the XML
+ * to be parsed, the other is the pointer to the destination pointer that
+ * the import function should put the parsed data. The export function takes
+ * a pointer to the source dispatch helper struct and returns an
+ * xmlChar * valid to stick directly into the XML file.
+ */
+struct _MtxXMLFuncs
+{
+        void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer);
+        void (*export_func) (MtxDispatchHelper *);
+        gchar * varname;
+        gpointer dest_var;
+};
+
+
 
 /* Prototypes */
 void testload(GtkWidget *);

@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 #define MTX_IS_GAUGE_FACE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_IS_GAUGE_FACE_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_GAUGE_FACE_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFaceClass))
-#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
 
 #define DRAG_BORDER 7
@@ -178,14 +177,12 @@ typedef enum
 }MtxGenAttr;
 
 
-typedef struct _MtxGaugeFacePrivate	MtxGaugeFacePrivate;
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
 typedef struct _MtxAlertRange		MtxAlertRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
-typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 typedef struct _MtxDispatchHelper	MtxDispatchHelper;
 typedef struct _MtxPoint		MtxPoint;
 typedef struct _MtxPolygon		MtxPolygon;
@@ -385,80 +382,6 @@ struct _MtxGenPoly
 {
 	gint num_points;	/* Number of points */
 	MtxPoint *points;	/* Dynamic array of points */
-};
-
-/*! \struct _MtxXMLFuncs
- * \brief This small container struct is used to store a set of import and 
- * export functions use by the XML code to export or import gauge settings
- * The import function takes two args,  one is the text string from the XML
- * to be parsed, the other is the pointer to the destination pointer that
- * the import function should put the parsed data. The export function takes 
- * a pointer to the source dispatch helper struct and returns an 
- * xmlChar * valid to stick directly into the XML file.
- */
-struct _MtxXMLFuncs
-{
-	void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer);
-	void (*export_func) (MtxDispatchHelper *);
-	gchar * varname;
-	gpointer dest_var;
-};
-
-struct _MtxGaugeFacePrivate
-{
-	/* Private data */
-	GdkBitmap *bitmap;	/*! for shape_combine stuff */
-	GdkPixmap *pixmap;	/*! Update/backing pixmap */
-	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
-	GdkPixmap *tmp_pixmap;	/*! Tmp pixmap for alerts for speed boost */
-	gint w;			/*! width */
-	gint h;			/*! height */
-	gdouble xc;		/*! X Center */
-	gdouble yc;		/*! Y Center */
-	gdouble radius;		/*! Radius of display */
-	cairo_t *cr;		/*! Cairo context,  not sure if this is good
-				   too hold onto or not */
-	cairo_font_options_t * font_options;
-	PangoLayout *layout;	/*! Pango TextLayout object */
-	PangoFontDescription *font_desc;/*! Pango Font description */
-	GdkGC * bm_gc;		/*! Graphics Context for bitmap */
-	GdkGC * gc;		/*! Graphics Context for drawing */
-	GdkColormap *colormap;	/*! Colormap for GC's */
-	gchar *value_font;	/* Array of Font name strings */
-	GArray *xmlfunc_array; /*! Array list mapping varnames to xml */
-	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
-				   *  parsing functions */
-	GArray *t_blocks;	/* Array of MtxTextBlock structs */
-	GArray *c_ranges;	/* Array of MtxColorRange structs */
-	GArray *a_ranges;	/* Array of MtxAlertRange structs */
-	GArray *tick_groups;	/*! Array to contain the tick groups */
-	GArray *polygons;	/*! Array to contain polygon defs */
-	gchar * xml_filename;	/*! Filename of XML for this gauge  */
-	gboolean show_drag_border;	/*! Show drag border flag */
-	MtxClampType clamped;	/*! Isthe display clamped? */
-	gint last_alert_index;	/*! index of last active alert struct */
-	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
-					     parts of a gauge object */
-	gfloat value_font_scale;/* Array of font scales */
-	gfloat value_xpos;	/* Array of X offsets for strings */
-	gfloat value_ypos;	/* Array of X offsets for strings */
-	gint precision;		/*! number of decimal places for val */
-	gfloat start_angle; 	/*! Start point, (Cairo, CW rotation) */
-	gfloat sweep_angle;	/*! Sweep of gauge (cairo, CW increasing) */
-	gfloat value;		/*! Value represneting needle position */
-	gfloat lbound;		/*! Lower Bound to clamp at */
-	gfloat ubound;		/*! Upper Bound to Clamp at */
-	MtxRotType rotation;	/*! Rotation enumeration */
-	gfloat span;		/*! Span from lbound to ubound */
-	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
-	gboolean show_value;	/*! Show the Valueon screen or not */
-	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
-	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
-	gfloat needle_length;	/*! % of rad length of main needle */
-	gfloat needle_tip_width;/*! % of rad width of needle tip */
-	gfloat needle_tail_width;/*! % of rad width of needle tip */
-	gint needle_polygon_points;
-	MtxPoint needle_coords[6];	/*! 6 point needle for now */
 };
 
 struct _MtxGaugeFace

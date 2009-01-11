@@ -34,14 +34,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-/* Private structures */
-typedef enum
-{
-	_X_,
-	_Y_,
-	_Z_
-}Axis;
-
 typedef struct _RGB3f RGB3f;
 typedef struct _Quad Quad;
 typedef struct _Cur_Vals Cur_Vals;

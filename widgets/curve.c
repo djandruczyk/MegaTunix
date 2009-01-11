@@ -29,6 +29,29 @@ GtkWidget *mtx_curve_new ()
 
 
 /*!
+ \brief Recalculates the extremes of all points in the graph
+ \param priv (MtxCurvePrivate *) pointer to private data
+ */
+void recalc_extremes(MtxCurvePrivate *priv)
+{
+	gint i = 0;
+	priv->highest_x = -10000;
+	priv->highest_y = -10000;
+	priv->lowest_x = 10000;
+	priv->lowest_y = 10000;
+	for (i=0;i<priv->num_points;i++)
+	{
+		if (priv->points[i].x < priv->lowest_x)
+			priv->lowest_x = priv->points[i].x;
+		if (priv->points[i].x > priv->highest_x)
+			priv->highest_x = priv->points[i].x;
+		if (priv->points[i].y < priv->lowest_y)
+			priv->lowest_y = priv->points[i].y;
+		if (priv->points[i].y > priv->highest_y)
+			priv->highest_y = priv->points[i].y;
+	}
+}
+/*!
  \brief gets the current value 
  \param curve (MtxCurve *) pointer to curve
  */
@@ -44,9 +67,30 @@ void mtx_curve_get_points (MtxCurve *curve, gint *num_points, GdkPoint *array)
 /*!
  \brief sets the current points 
  \param curve (MtxCurve *) pointer to curve
- \param value (gfloat) new value
+ \param num_points (gint) new value
+ \param array (GdkPoint*) Array of points
  */
 void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_if_fail (MTX_IS_CURVE (curve));
+	g_object_freeze_notify (G_OBJECT (curve));
+	if (priv->points)
+		g_free(priv->points);
+	priv->points = g_memdup(array,(num_points*sizeof(GdkPoint)));
+	priv->num_points = num_points;
+	recalc_extremes(priv);
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+}
+
+
+/*!
+ \brief sets the current points to empty array
+ \param curve (MtxCurve *) pointer to curve
+ \param num_points (gint) size of array to create
+ */
+void mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 {
 	gint i = 0;
 
@@ -55,22 +99,16 @@ void mtx_curve_set_points (MtxCurve *curve, gint num_points, GdkPoint *array)
 	g_object_freeze_notify (G_OBJECT (curve));
 	if (priv->points)
 		g_free(priv->points);
-	priv->points = g_memdup(array,(num_points*sizeof(GdkPoint)));
+	priv->points = g_new0(GdkPoint,num_points);
 	priv->num_points = num_points;
-	priv->highest_x = -10000;
-	priv->highest_y = -10000;
-	priv->lowest_x = 10000;
-	priv->lowest_y = 10000;
+	priv->highest_x = 0;
+	priv->highest_y = 0;
+	priv->lowest_x = 0;
+	priv->lowest_y = 0;
 	for (i=0;i<num_points;i++)
 	{
-		if (priv->points[i].x < priv->lowest_x)
-			priv->lowest_x = priv->points[i].x;
-		if (priv->points[i].x > priv->highest_x)
-			priv->highest_x = priv->points[i].x;
-		if (priv->points[i].y < priv->lowest_y)
-			priv->lowest_y = priv->points[i].y;
-		if (priv->points[i].y > priv->highest_y)
-			priv->highest_y = priv->points[i].y;
+		priv->points[i].x = 0;
+		priv->points[i].y = 0;
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
@@ -88,11 +126,31 @@ gboolean mtx_curve_set_point_at_index (MtxCurve *curve, gint index, GdkPoint poi
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_return_val_if_fail (priv->num_points > index,FALSE);
+	g_return_val_if_fail (index >= 0,FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->points[index].x = point.x;
 	priv->points[index].y = point.y;
+	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the value of one point
+ \param curve (MtxCurve *) pointer to curve
+ \param index (gfloat) index of point
+ \param point (gfloat) new point coords
+ */
+gboolean mtx_curve_get_point_at_index (MtxCurve *curve, gint index, GdkPoint *point)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_return_val_if_fail (priv->num_points > index,FALSE);
+	g_return_val_if_fail (index >= 0,FALSE);
+	point->x = priv->points[index].x;
+	point->y = priv->points[index].y;
 	return TRUE;
 }
 
@@ -136,38 +194,6 @@ gboolean mtx_curve_get_color (MtxCurve *curve, ColorIndex index, GdkColor *color
         color->blue = priv->colors[index].blue;
         color->pixel = priv->colors[index].pixel;
 	return TRUE;
-}
-
-
-/*!
- \brief sets the update policy
- \param curve (MtxCurve *) pointer to curve
- \param type (GtkUpdateType) new value
- */
-void mtx_curve_set_update_policy (MtxCurve *curve, GtkUpdateType type)
-{
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
-	g_return_if_fail ((type == GTK_UPDATE_CONTINUOUS) ||
-			  (type == GTK_UPDATE_DISCONTINUOUS) ||
-			  (type == GTK_UPDATE_DELAYED));
-	g_object_freeze_notify (G_OBJECT (curve));
-	priv->type = type;
-	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
-}
-
-
-/*!
- \brief gets the update policy
- \param curve (MtxCurve *) pointer to curve
- \returns update policy
- */
-GtkUpdateType mtx_curve_get_update_policy (MtxCurve *curve)
-{
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
-	return priv->type;
 }
 
 

@@ -20,6 +20,41 @@
 #include <gtk/gtk.h>
 #include <curve.h>
 
+#define MTX_CURVE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_CURVE, MtxCurvePrivate))
+typedef struct _MtxCurvePrivate MtxCurvePrivate;
+struct _MtxCurvePrivate
+{
+        GdkColor colors[NUM_COLORS];    /* Colors Array */
+        GdkPixmap *pixmap;      /*! Update/backing pixmap */
+        GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
+        GdkPoint *points;       /* Points array */
+        GdkPoint *coords;       /* Onscreen coords array (for mouse) */
+        GtkUpdateType type;     /* Update mode */
+        gint num_points;        /* Total Points*/
+        gint w;                 /* Width of full widget */
+        gint h;                 /* Height of full widget */
+        gint lowest_x;          /* Lowest X value in points[] */
+        gint highest_x;         /* Highest X value in points[] */
+        gint lowest_y;          /* Lowest Y value in points[] */
+        gint highest_y;         /* Highest Y value in points[] */
+        gint border;            /* Border in pixels */
+        gint active_coord;      /* Active Coordinate */
+        gfloat locked_scale;    /* minimum fixed scale for both axis' */
+        gfloat x_scale;         /* X coord points->coords scaler */
+        gfloat y_scale;         /* Y coord points->coords scaler */
+        gboolean vertex_selected;/* Do we have one selected? */
+        gboolean show_vertexes; /* Show vertex rectangles */
+        gboolean show_grat      ;/* Draw graticule? */
+        GdkGC *gc;              /* Graphics Context */
+        cairo_t *cr;            /*! Cairo context,  not sure if this is good
+                                   too hold onto or not */
+        cairo_font_options_t * font_options;
+        gchar * font;           /*! Font to use */
+        gchar * title;          /*! Title to use */
+
+        GdkColormap *colormap;  /*! Colormap for GC's */
+};
+
 
 gboolean mtx_curve_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_curve_expose (GtkWidget *, GdkEventExpose *);

@@ -2635,6 +2635,8 @@ Detect</property>
 </widget>
 
 <widget class="GtkWindow" id="table_editor_window">
+  <property name="width_request">460</property>
+  <property name="height_request">340</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">2D Table Editor</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -2757,7 +2759,7 @@ Detect</property>
 
       <child>
 	<widget class="GtkHBox" id="hbox12">
-	  <property name="border_width">6</property>
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">5</property>
@@ -2780,7 +2782,7 @@ Detect</property>
 		  <property name="column_spacing">5</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="y_units">
+		    <widget class="GtkLabel" id="x_title">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes"></property>
 		      <property name="use_underline">False</property>
@@ -2798,10 +2800,10 @@ Detect</property>
 		      <property name="angle">0</property>
 		    </widget>
 		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">1</property>
-		      <property name="bottom_attach">2</property>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
 		      <property name="x_options">expand</property>
 		      <property name="y_options"></property>
 		    </packing>
@@ -2836,7 +2838,7 @@ Detect</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="x_title">
+		    <widget class="GtkLabel" id="y_units">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes"></property>
 		      <property name="use_underline">False</property>
@@ -2854,10 +2856,10 @@ Detect</property>
 		      <property name="angle">0</property>
 		    </widget>
 		    <packing>
-		      <property name="left_attach">0</property>
-		      <property name="right_attach">1</property>
-		      <property name="top_attach">0</property>
-		      <property name="bottom_attach">1</property>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
 		      <property name="x_options">expand</property>
 		      <property name="y_options"></property>
 		    </packing>
@@ -2892,6 +2894,27 @@ Detect</property>
 		  </child>
 
 		  <child>
+		    <widget class="GtkFrame" id="te_y_frame">
+		      <property name="visible">True</property>
+		      <property name="label_xalign">0</property>
+		      <property name="label_yalign">0.5</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+
+		      <child>
+			<placeholder/>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="x_options"></property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
 		    <widget class="GtkFrame" id="te_gaugeframe">
 		      <property name="visible">True</property>
 		      <property name="label_xalign">0</property>
@@ -2907,7 +2930,7 @@ Detect</property>
 		      <property name="right_attach">2</property>
 		      <property name="top_attach">3</property>
 		      <property name="bottom_attach">4</property>
-		      <property name="x_options">fill</property>
+		      <property name="x_options"></property>
 		    </packing>
 		  </child>
 
@@ -2927,27 +2950,7 @@ Detect</property>
 		      <property name="right_attach">1</property>
 		      <property name="top_attach">2</property>
 		      <property name="bottom_attach">3</property>
-		      <property name="x_options">fill</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkFrame" id="te_y_frame">
-		      <property name="visible">True</property>
-		      <property name="label_xalign">0</property>
-		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">2</property>
-		      <property name="bottom_attach">3</property>
-		      <property name="x_options">fill</property>
+		      <property name="x_options"></property>
 		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
@@ -2956,8 +2959,8 @@ Detect</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
 	    </packing>
 	  </child>
 
@@ -2969,9 +2972,7 @@ Detect</property>
 	      <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
 
 	      <child>
-		<widget class="GtkDrawingArea" id="te_drawingarea">
-		  <property name="visible">True</property>
-		</widget>
+		<placeholder/>
 	      </child>
 	    </widget>
 	    <packing>

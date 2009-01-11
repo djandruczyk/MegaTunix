@@ -444,4 +444,11 @@ typedef enum
 	MTX_BINARY
 }SocketMode;
 
+typedef enum
+{
+	_X_ = 0x420,
+	_Y_,
+	_Z_
+}Axis;
+
 #endif

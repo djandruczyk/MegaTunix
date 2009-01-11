@@ -20,6 +20,10 @@
 
 /* Prototypes */
 gboolean create_2d_table_editor(GtkWidget *,gpointer);
+gboolean update_2d_curve(GtkWidget *,gpointer);
+gboolean close_2d_editor(GtkWidget *, gpointer);
+void remove_widget(gpointer, gpointer);
+
 /* Prototypes */
 
 #endif
