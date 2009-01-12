@@ -41,9 +41,6 @@ typedef enum
 	OFFLINE_MODE,
 	SELECT_DLOG_EXP,
 	SELECT_DLOG_IMP,
-	SELECT_FIRMWARE_LOAD,
-	ENTER_SENSOR_INFO,
-	DOWNLOAD_FIRMWARE,
 	DLOG_SELECT_DEFAULTS,
 	DLOG_SELECT_ALL,
 	DLOG_DESELECT_ALL,
@@ -74,8 +71,6 @@ typedef enum
         CELSIUS,
 	COMMA,
 	TAB,
-	USE_ALT_IAT,
-	USE_ALT_CLT,
 	REALTIME_VIEW,
 	PLAYBACK_VIEW,
 	HEX_VIEW,
@@ -450,5 +445,12 @@ typedef enum
 	_Y_,
 	_Z_
 }Axis;
+
+typedef enum
+{
+        CLT=0x430,
+        IAT
+}SensorType;
+
 
 #endif

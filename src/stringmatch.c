@@ -191,12 +191,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(SELECT_DLOG_IMP));
 	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_EXP_",
 			GINT_TO_POINTER(SELECT_DLOG_EXP));
-	g_hash_table_insert(str_2_enum,"_SELECT_FIRMWARE_LOAD_",
-			GINT_TO_POINTER(SELECT_FIRMWARE_LOAD));
-	g_hash_table_insert(str_2_enum,"_DOWNLOAD_FIRMWARE_",
-			GINT_TO_POINTER(DOWNLOAD_FIRMWARE));
-	g_hash_table_insert(str_2_enum,"_ENTER_SENSOR_INFO_",
-			GINT_TO_POINTER(ENTER_SENSOR_INFO));
 	g_hash_table_insert(str_2_enum,"_CLOSE_LOGFILE_",
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
@@ -221,10 +215,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(BINARY_VIEW));
 	g_hash_table_insert(str_2_enum,"_DECIMAL_VIEW_",
 			GINT_TO_POINTER(DECIMAL_VIEW));
-	g_hash_table_insert(str_2_enum,"_USE_ALT_IAT_",
-			GINT_TO_POINTER(USE_ALT_IAT));
-	g_hash_table_insert(str_2_enum,"_USE_ALT_CLT_",
-			GINT_TO_POINTER(USE_ALT_CLT));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
 

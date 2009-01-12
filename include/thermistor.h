@@ -15,12 +15,6 @@ struct samples {
   double t1, t2, t3, r1, r2, r3;
 };
 
-typedef enum 
-{
-	CLT=0xabc, 
-	IAT 
-}SensorType;
-
 struct inc_entry {
   int ms_val;
   int adc;
@@ -28,6 +22,7 @@ struct inc_entry {
   int temp_c;
   int ohms;
 };
+
 
 class thermistor {
     

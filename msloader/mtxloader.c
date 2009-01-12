@@ -1,24 +1,19 @@
 #include <config.h>
 #include <configfile.h>
 #include <defines.h>
+#include <enums.h>
 #include <fcntl.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <glib/gstring.h>
 #include <glade/glade.h>
 #include <loader.h>
+#include <mtxloader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-EXPORT gboolean load_firmware (GtkButton*);
-EXPORT gboolean get_signature (GtkButton*);
-EXPORT gboolean leave (GtkWidget *, gpointer);
-EXPORT gboolean about_popup (GtkWidget *, gpointer);
-void load_defaults(void);
-void save_defaults(void);
-void output(gchar *);
-void boot_jumper_prompt(void);
 
 GladeXML *xml = NULL;
 GtkWidget *main_window = NULL;
@@ -46,9 +41,10 @@ int main (int argc, char *argv[])
 	}
 
 	g_free(fname);
-	xml = glade_xml_new (filename, NULL, NULL);
+	xml = glade_xml_new (filename, "main_window", NULL);
 	g_free(filename);
 	main_window = glade_xml_get_widget (xml, "main_window");
+	init_controls();
 	glade_xml_signal_autoconnect (xml);
 	load_defaults();
 	gtk_widget_show_all (main_window);
@@ -97,7 +93,7 @@ EXPORT gboolean get_signature (GtkButton *button)
 	port_fd = setup_port(port);
 	if (!(port_fd  > 0))
 	{
-		output("Could NOT open Port check permissions\n");
+		output("Could NOT open Port, You should check perms.\n");
 		return FALSE;
 	}
 	get_ecu_signature(port_fd);
@@ -306,3 +302,80 @@ void boot_jumper_prompt()
 	gtk_widget_destroy(dialog);
 }
 
+
+void init_controls()
+{
+	GtkWidget *widget = NULL;
+	GtkWidget *widget2 = NULL;
+	widget = glade_xml_get_widget (xml, "enter_clt_button");
+	OBJ_SET(widget, "sensor", GINT_TO_POINTER(CLT));
+	widget2 = glade_xml_get_widget (xml, "use_clt_toggle");
+	OBJ_SET(widget2, "button", widget);
+
+	widget = glade_xml_get_widget (xml, "enter_iat_button");
+	OBJ_SET(widget, "sensor", GINT_TO_POINTER(IAT));
+	widget2 = glade_xml_get_widget (xml, "use_iat_toggle");
+	OBJ_SET(widget2, "button", widget);
+
+}
+
+EXPORT gboolean use_sensor(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *button = NULL;
+	button = (GtkWidget *)OBJ_GET(widget, "button");
+	gtk_widget_set_sensitive(button,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	return TRUE;
+}
+
+
+EXPORT gboolean get_sensor_info(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *dialog = NULL;
+	GtkWidget *temp1,*temp2,*temp3,*ohms1,*ohms2,*ohms3,*units,*bias;
+	samples sample;
+	gint response = 0;
+	gchar *fname = NULL;
+	gchar *filename = NULL;
+	GladeXML *d_xml = NULL;
+	gchar unit;
+	gint bias_val = 0;
+	SensorType type;
+
+	type = (SensorType)GPOINTER_TO_INT(OBJ_GET(widget,"sensor"));
+	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
+	filename = get_file(g_strdup(fname),NULL);
+	g_free(fname);
+	d_xml = glade_xml_new (filename, "get_sensor_dialog", NULL);
+	g_free(filename);
+	dialog = glade_xml_get_widget (d_xml, "get_sensor_dialog");
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (response == GTK_RESPONSE_OK)
+	{	
+		temp1 = glade_xml_get_widget(d_xml,"temp1");
+		temp2 = glade_xml_get_widget(d_xml,"temp1");
+		temp3 = glade_xml_get_widget(d_xml,"temp1");
+		ohms1 = glade_xml_get_widget(d_xml,"ohms1");
+		ohms2 = glade_xml_get_widget(d_xml,"ohms2");
+		ohms3 = glade_xml_get_widget(d_xml,"ohms3");
+		units = glade_xml_get_widget(d_xml,"F_radio");
+		bias = glade_xml_get_widget(d_xml,"bias");
+		sample.t1 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp1),0,-1),NULL,10);
+		sample.t2 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp2),0,-1),NULL,10);
+		sample.t3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp3),0,-1),NULL,10);
+		sample.r1 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms1),0,-1),NULL,10);
+		sample.r2 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms2),0,-1),NULL,10);
+		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
+		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
+		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
+		bias_val = strtol(gtk_editable_get_chars(GTK_EDITABLE(bias),0,-1),NULL,10);
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(units)))
+			unit = 'F';
+		else
+			unit = 'C';
+		//thermistor(unit,&samples,bias_val,type,NULL);
+		//write_inc_file();
+	
+	}
+	gtk_widget_destroy(dialog);
+	return TRUE;
+}

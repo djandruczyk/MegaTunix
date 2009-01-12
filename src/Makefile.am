@@ -66,7 +66,6 @@ megatunix_SOURCES = \
 	tabloader.c \
 	tag_loader.c \
 	threads.c \
-	thermistor.cpp \
 	timeout_handlers.c \
 	t-logger.c \
 	tuning_gui.c \
@@ -91,7 +90,6 @@ megatunix_LDFLAGS =
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
 AM_CFLAGS = $(COMMON_FLAGS) -Wall 
-AM_CPPFLAGS = $(COMMON_FLAGS) -Wall 
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
