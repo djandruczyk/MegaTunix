@@ -18,7 +18,7 @@ CLEANFILES = *~ core gmon.out nohup.out
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep
 
 msloader_SOURCES = main.c winserialio.c loader.c
-mtxloader_SOURCES = loader.c winserialio.c thermistor.cpp mtxloader.c
+mtxloader_SOURCES = loader.c winserialio.c thermistor.c mtxloader.c
 
 msloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la
 mtxloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la

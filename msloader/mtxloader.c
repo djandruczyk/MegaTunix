@@ -128,7 +128,7 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		output("Port successfully opened\n");
 	else
 	{
-		output("Could NOT open Port check permissions\n");
+		output("Could NOT open Port, You should check perms\n");
 		return FALSE;
 	}
 #ifdef __WIN32__
@@ -308,14 +308,18 @@ void init_controls()
 	GtkWidget *widget = NULL;
 	GtkWidget *widget2 = NULL;
 	widget = glade_xml_get_widget (xml, "enter_clt_button");
-	OBJ_SET(widget, "sensor", GINT_TO_POINTER(CLT));
+	if (GTK_IS_WIDGET(widget))
+		OBJ_SET(widget, "sensor", GINT_TO_POINTER(CLT));
 	widget2 = glade_xml_get_widget (xml, "use_clt_toggle");
-	OBJ_SET(widget2, "button", widget);
+	if (GTK_IS_WIDGET(widget2))
+		OBJ_SET(widget2, "button", widget);
 
 	widget = glade_xml_get_widget (xml, "enter_iat_button");
-	OBJ_SET(widget, "sensor", GINT_TO_POINTER(IAT));
+	if (GTK_IS_WIDGET(widget))
+		OBJ_SET(widget, "sensor", GINT_TO_POINTER(IAT));
 	widget2 = glade_xml_get_widget (xml, "use_iat_toggle");
-	OBJ_SET(widget2, "button", widget);
+	if (GTK_IS_WIDGET(widget2))
+		OBJ_SET(widget2, "button", widget);
 
 }
 

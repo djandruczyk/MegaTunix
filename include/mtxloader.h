@@ -30,7 +30,7 @@ struct _samples {
   double t1, t2, t3, r1, r2, r3;
 };
 
- struct inc_entry {
+ struct _inc_entry {
   int ms_val;
   int adc;
   int temp_f;

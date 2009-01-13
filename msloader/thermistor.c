@@ -1,34 +1,41 @@
+#include <defines.h>
 #include <enums.h>
-#include <iostream>
 #include <math.h>
-using namespace std;
-#include <fstream>
-#include <cstring>
-#include <cstdlib>
+#include <mtxloader.h>
 #include <gtk/gtk.h>
-#include "thermistor.h"
+#include <stdlib.h>
+#include <string.h>
+#include <thermistor.h>
 
 
+static TempScale temp_scale;
+static double CA, CB, CC;
+static int bias_value;
+static gchar *comment;
+static inc_entry entries[256];
+static SensorType sensor;
 
-/*****************************************************************************
-* Parameterized constructor for the thermistor class. This is the actual
-* useful one, which sets up the value of the bias resistor, accepts the input
-* temp-resistance pairs and generates the rest of the data.
-******************************************************************************
-*/
-thermistor::thermistor(char scale, samples &input, int bias, SensorType sensor, char *cmnt) {
+int t_of_r(int);
+void modify_s19_file(char *); 
+void set_coefficients(samples *in);
+void run_therm(TempScale, samples *, int, SensorType, char *);
+void run_therm(TempScale scale, samples *input, int bias, SensorType type,char *cmnt)
+{
 	double temp_k;
-	int temptemp;
-	int denstemp;
+	int temptemp = 0;
+	int denstemp = 0;
+	int i = 0;
+	float j = 0;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+	GString *output = NULL;
+	gsize ocount = 0;
 
-	temp_scale = scale;
 	bias_value = bias;
 	set_coefficients(input);
-	this->sensor = sensor;
+	sensor = type;
 	comment = cmnt;
-	cout << "comment in thermistor: " << comment << endl;
-	int i;
-	float j;
+	printf("comment in thermistor: %s\n",comment);
 	for (i = 1, j = 1.0; i < 255; ++i, j += 1) {
 		entries[i].adc = i;
 		entries[i].ohms = (int)((bias_value / (1 - j/255)) - bias_value);
@@ -43,7 +50,9 @@ thermistor::thermistor(char scale, samples &input, int bias, SensorType sensor, 
 				if (temptemp < 0) { temptemp = 0;}
 				if (temptemp > 255) {temptemp = 255; }
 				entries[i].ms_val = temptemp;
-				// Both ends of scale get limp-home value,170 deg F
+				/* Both ends of scale get limp-home value
+ * 				 * 170 deg F
+ * 				 */
 				entries[0].ms_val = 210;
 				entries[255].ms_val = 210;
 				break;
@@ -51,7 +60,9 @@ thermistor::thermistor(char scale, samples &input, int bias, SensorType sensor, 
 
 				denstemp = (int)(TEMP_K_100_DENSITY * 100 / temp_k);
 				entries[i].ms_val = denstemp;
-				// Both ends of scale get limp-home value, 100% density
+				/* Both ends of scale get limp-home value, 
+ * 				 * 100% density
+ * 				 */
 				entries[0].ms_val = 100;
 				entries[255].ms_val = 100;
 				break;
@@ -61,36 +72,6 @@ thermistor::thermistor(char scale, samples &input, int bias, SensorType sensor, 
 		}
 	}
 
-}
-
-
-/****************************************************************************
-* This is the copy constructor for the thermistor class, though it's doubtful
-* it'll ever get used.	
-****************************************************************************/
-thermistor::thermistor(thermistor & other) {
-	this->temp_scale = other.temp_scale;
-	this->CA = other.CA;
-	this->CB = other.CB;
-	this->CC = other.CC;
-	this->bias_value = other.bias_value;
-	this->comment = g_strdup(other.comment);
-	for (int i = 0; i < 256; ++i) {
-		this->entries[i] = other.entries[i];
-	}
-	this->sensor = other.sensor;
-}
-
-
-/****************************************************************************
-* Write this thermistor's inc file
-****************************************************************************/
-int thermistor::write_inc_file() 
-{
-	gchar *filename = NULL;
-	GIOChannel *iochannel = NULL;
-	GString *output = NULL;
-	gsize ocount = 0;
 	switch (sensor)
 	{
 		case CLT:
@@ -117,7 +98,7 @@ int thermistor::write_inc_file()
 			g_string_append_printf(output,"THERMFACTOR:\n;\t\tADC\tFahrenheit - Centigrade - resistance\n");
 			g_string_append_printf(output,"\tDB\t210T;	   0 - sensor failure, use limp home value.\n");
 
-			for (int i = 1; i < 255; ++i) 
+			for (i = 1; i < 255; ++i) 
 				g_string_append_printf(output,"\tDB\t%iT;\t%i\t%i\t%i\t%i ohms\n",entries[i].ms_val,i,entries[i].temp_f,entries[i].temp_c,entries[i].ohms);
 			g_string_append_printf(output, "\tDB	210T;	 255 - sensor failure, use limp home value.\n");
 			break;
@@ -129,7 +110,7 @@ int thermistor::write_inc_file()
 			g_string_append_printf(output,"AIRDENFACTOR:\n;\tADC\tFahrenheit - Centigrade - resistance\n");
 			g_string_append_printf(output,"\tDB\t100T;	   0 - sensor failure, use limp home value.\n");
 
-			for (int i = 1; i < 255; ++i) {
+			for (i = 1; i < 255; ++i) {
 				g_string_append_printf(output,"\tDB\t%iT;\t%i\t%i\t%i\t%i ohms\n",entries[i].ms_val,i,entries[i].temp_f,entries[i].temp_c,entries[i].ohms);
 			}
 			g_string_append_printf(output, "\tDB	100T;	 255 - sensor failure, use limp home value.\n");
@@ -140,7 +121,7 @@ int thermistor::write_inc_file()
 		printf("all is good with output of .inc file\n");
 	g_string_free(output,TRUE);
 	g_free(filename);
-	return 0;
+	return;
 }
 
 
@@ -149,20 +130,23 @@ int thermistor::write_inc_file()
 * IAT thermistor, it should modify the 256 entries starting at F500, if it is
 * a CLT thermistor, it should modify those starting at F600.
 ****************************************************************************/
-void thermistor::modify_s19_file(char filename[]) 
+void modify_s19_file(char *filename) 
 {
+/*
 	char *mangled_name = NULL;
 	char replace_locate[9];
 	int start_addr = 0;
 	int end_addr = 0;
 	char line[44];
+	gchar *tmpfile = NULL;
 	unsigned char sum;
+	GIOChannel *in;
+	GIOChannel *out;
 	int namelen, i, j, modified;
 
-	namelen = strlen(filename + 1);
-	mangled_name = new char[namelen + 4];
-	strncpy(mangled_name, "temp", 4);
-	strncpy(&mangled_name[4], filename, namelen);
+	tmpfile = g_strconcat(filename,".tmp");
+	in = g_io_channel_new_file(filename, "w",NULL);
+	out = g_io_channel_new_file(tmpfile, "w",NULL);
 	ifstream infile(filename);
 	ofstream outfile(mangled_name);
 	hex(outfile);
@@ -183,10 +167,6 @@ void thermistor::modify_s19_file(char filename[])
 			break;
 	}
 	modified = 0;
-	if (!infile.is_open()) {
-		cout << "Error: Couldn't open " << filename << endl;
-		exit(1);
-	}
 	while (infile.getline(line, 44)) {
 		if (strncmp(line, replace_locate, 8) && !modified) {
 			outfile << line << endl;
@@ -226,14 +206,7 @@ void thermistor::modify_s19_file(char filename[])
 	outfile.close();
 	remove(filename);
 	rename(mangled_name, filename);
-}
-
-
-/****************************************************************************
-* Ragnarok. Er, no, actually just the destruction of this isolated object
-****************************************************************************/
-thermistor::~thermistor(void) {
-	delete [] comment;
+*/
 }
 
 
@@ -242,27 +215,28 @@ thermistor::~thermistor(void) {
 * input_pairs structure "in" and generates the three Steinhart-Hart
 * coefficients needed and stores them into the variables CA, CB and CC.
 ***************************************************************************/
-void thermistor::set_coefficients(samples &in) {
+void set_coefficients(samples *in) 
+{
 
 	double c11,c12,c13,c21,c22,c23,c31,c32,c33;
 
-	if (temp_scale == 'F') {
-		in.t1 = (in.t1 - 32) * 5/9;
-		in.t2 = (in.t2 - 32) * 5/9;
-		in.t3 = (in.t3 - 32) * 5/9;
+	if (temp_scale == F) {
+		in->t1 = (in->t1 - 32) * 5/9;
+		in->t2 = (in->t2 - 32) * 5/9;
+		in->t3 = (in->t3 - 32) * 5/9;
 	}
 
-	c11 = log(in.r1);
-	c12 = pow(log(in.r1),3);
-	c13 = 1/(in.t1 + C_TO_K);
+	c11 = log(in->r1);
+	c12 = pow(log(in->r1),3);
+	c13 = 1/(in->t1 + C_TO_K);
 
-	c21 = log(in.r2);
-	c22 = pow(log(in.r2),3);
-	c23 = 1/(in.t2 + C_TO_K);
+	c21 = log(in->r2);
+	c22 = pow(log(in->r2),3);
+	c23 = 1/(in->t2 + C_TO_K);
 
-	c31 = log(in.r3);
-	c32 = pow(log(in.r3),3);
-	c33 = 1/(in.t3 + C_TO_K);
+	c31 = log(in->r3);
+	c32 = pow(log(in->r3),3);
+	c33 = 1/(in->t3 + C_TO_K);
 
 	CC = ((c23-c13) - (c33-c13)*(c21-c11)/(c31-c11))/((c22-c12) - (c32-c12)*(c21-c11)/(c31-c11));
 
@@ -278,7 +252,8 @@ void thermistor::set_coefficients(samples &in) {
 * t_of_r calculates the temperature Kelvin from an input in ohms and using
 * the Steinhart-Hart coefficients stored in CA, CB and CC.
 ***************************************************************************/
-int thermistor::t_of_r(int r) {
+int t_of_r(int r) 
+{
 
 	double dr = (double)r;
 
