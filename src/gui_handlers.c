@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <2d_table_editor.h>
 #include <3d_vetable.h>
 #include <args.h>
 #include <config.h>
@@ -964,6 +965,11 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			set_title(g_strdup("Offline Mode..."));
 			set_offline_mode();
 			break;
+		case TE_TABLE:
+		        tmpi = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
+			create_2d_table_editor(tmpi);
+			break;
+
 		default:
 			dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n"));
 	}		

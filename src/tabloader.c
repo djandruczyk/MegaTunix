@@ -149,7 +149,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_hide(child);
 				gtk_widget_hide(label);
 				item = g_hash_table_lookup(dynamic_widgets,"show_tab_visibility_menuitem");
-				 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 
 			}
 			if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
@@ -365,6 +365,10 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 			case MTX_ENUM:
 				tmpi = (gint)OBJ_GET(group->object,group->keys[i]);
 				OBJ_SET(widget,group->keys[i],GINT_TO_POINTER(tmpi));
+				if (strstr(group->keys[i], "temp_dep"))
+				{
+					OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
+				}
 				break;
 			case MTX_STRING:
 				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
@@ -420,6 +424,22 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 		store_list(tmpvector[i],tmp_list);
 	}
 	g_strfreev(tmpvector);
+}
+
+void remove_from_list(gchar * listname, gpointer data)
+{
+	GList *list = NULL;
+
+	if (!listname)
+	{
+		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");
+		return;
+	}
+
+	list = get_list(listname);
+	list = g_list_remove(list,(gpointer)data);
+
+	store_list(listname,list);
 }
 
 /*!

@@ -58,6 +58,7 @@ gint bind_group_data(ConfigFile *,GtkWidget *, GHashTable *, gchar *);
 void bind_to_lists(GtkWidget * , gchar * );
 void run_post_function_with_arg(gchar *, GtkWidget *);
 void run_post_function(gchar * );
+void remove_from_list(gchar *, gpointer);
 /* Prototypes */
 
 #endif

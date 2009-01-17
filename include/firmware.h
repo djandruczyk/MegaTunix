@@ -193,7 +193,7 @@ struct _Table_Params
 struct _Page_Params
 {
 	gint length;		/*! How big this page is... */
-	gint truepgnum;		/*! True pagenumber to send */
+	gint phys_ecu_page;	/*! True pagenumber to send */
 	gboolean dl_by_default;	/*! Download this page or not? */
 	gint is_spark;		/*! does this require alt write cmd? */
 	gint spconfig_offset;	/*! Where spconfig value is located */
@@ -224,6 +224,7 @@ struct _TE_Params
 	GList *entries;		/*! Entry widget pointers */
 	gint bincount;		/* Number of bins for x and 1 */
 
+	gboolean x_temp_dep;	/*! Temperature dependant? */
 	gint x_page;		/*! what page this column resides in */
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
@@ -236,6 +237,7 @@ struct _TE_Params
 	gchar *x_name;	/*! column name */
 	gchar *x_units;	/*! column units */
 
+	gboolean y_temp_dep;	/*! Temperature dependant? */
 	gint y_page;		/*! what page this column resides in */
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */
