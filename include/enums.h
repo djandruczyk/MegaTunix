@@ -188,7 +188,8 @@ typedef enum
 	DUALTABLE	= 1<<3,
 	MS2		= 1<<4,
 	MS2_STD		= 1<<5,
-	MS2_EXTRA	= 1<<6
+	MS2_EXTRA	= 1<<6,
+	MS2_E_COMPMON	= 1<<7
 }Capability;
 
 typedef enum
@@ -363,7 +364,7 @@ typedef enum
 	MS1_E_TOOTHMON,
 	MS2_E_TRIGMON,
 	MS2_E_TOOTHMON,
-	MS2_E_COMPMON
+	MS2_E_COMPOSITEMON
 }XmlCmdType;
 
 typedef enum

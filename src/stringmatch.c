@@ -46,6 +46,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS2_STD));
 	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_",
 			GINT_TO_POINTER(MS2_EXTRA));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
+			GINT_TO_POINTER(MS2_E_COMPMON));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -309,8 +311,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS2_E_TRIGMON));
 	g_hash_table_insert(str_2_enum,"_MS2_E_TOOTHMON_",
 			GINT_TO_POINTER(MS2_E_TOOTHMON));
-	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
-			GINT_TO_POINTER(MS2_E_COMPMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPOSITEMON_",
+			GINT_TO_POINTER(MS2_E_COMPOSITEMON));
 
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",

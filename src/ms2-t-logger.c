@@ -129,18 +129,20 @@ void _ms2_crunch_trigtooth_data(gint page)
 	{
 
 		ttm_data->last[index] = ttm_data->current[index];
-		high = get_ecu_data(canID,page,i+2,MTX_U08);
+		high = get_ecu_data(canID,page,i,MTX_U08);
 		mid = get_ecu_data(canID,page,i+1,MTX_U08);
-		low = get_ecu_data(canID,page,i,MTX_U08);
+		low = get_ecu_data(canID,page,i+2,MTX_U08);
+		printf("low %i, mid %i, high %i\n",low,mid,high);
 		ttm_data->current[index] = ((high & 0x0f) << 16) + (mid << 8) +low;
+		printf("Data at [%i] is %li\n",index,ttm_data->current[index]);
 		if ((ttm_data->current[index] < min) && (ttm_data->current[index] != 0))
 			min = ttm_data->current[index];
 		if (ttm_data->current[index] > max)
 			max = ttm_data->current[index];
 		index++;
 	}
-	if (max >148576)
-		max = 148576;
+//	if (max >148576)
+//		max = 148576;
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
 
