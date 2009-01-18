@@ -604,6 +604,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gchar *text = NULL;
 	gchar *tmpbuf = NULL;
 	gfloat tmpf = -1;
+	gfloat value = -1;
 	gint tmpi = -1;
 	gint tmp = -1;
 	gint page = -1;
@@ -616,6 +617,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint precision = -1;
 	gint spconfig_offset = -1;
 	gint oddfire_bit_offset = -1;
+	gint temp_units = 0;
+	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
 	gboolean use_color = FALSE;
 	DataSize size = 0;
@@ -639,6 +642,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	offset = (gint)OBJ_GET(widget,"offset");
 	size = (DataSize)OBJ_GET(widget,"size");
 	canID = (gint)OBJ_GET(widget,"canID");
+	temp_units = (gint)OBJ_GET(global_data,"temp_units");
+	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
@@ -670,9 +675,18 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	switch ((SpinButton)handler)
 	{
 		case GENERIC:
+			if (temp_dep)
+			{
+				if (temp_units == CELSIUS)
+					value = (tmpf*(9.0/5.0))+32;
+				else
+					value = tmp;
+			}
+			else
+					value = tmpf;
 			if (base == 10)
 			{
-				dload_val = convert_before_download(widget,tmpf);
+				dload_val = convert_before_download(widget,value);
 			}
 			else if (base == 16)
 				dload_val = convert_before_download(widget,tmpi);
@@ -1066,13 +1080,13 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint bitshift = -1;
 	gint spconfig_offset = 0;
 	gint oddfire_bit_offset = 0;
-	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
 	gint tmp = 0;
 	gint handler = -1;
 	gint divider_offset = 0;
 	gint table_num = -1;
 	gint temp_units = 0;
+	gboolean temp_dep = FALSE;
 	gfloat value = 0.0;
 	gchar *tmpbuf = NULL;
 	GtkWidget * tmpwidget = NULL;
@@ -1096,7 +1110,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(
 			widget,"reqd_fuel");
 	handler = (SpinButton)OBJ_GET(widget,"handler");
@@ -1107,6 +1120,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	size = (DataSize) OBJ_GET(widget,"size");
 	bitmask = (gint) OBJ_GET(widget,"bitmask");
 	bitshift = (gint) OBJ_GET(widget,"bitshift");
+	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 

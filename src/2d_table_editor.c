@@ -61,6 +61,9 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
 	window = glade_xml_get_widget(xml,"table_editor_window");
 
+	
+	g_signal_connect(G_OBJECT(window),"destroy_event",
+			G_CALLBACK(close_2d_editor),window);
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(close_2d_editor),window);
 	tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
@@ -131,6 +134,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 				G_CALLBACK(update_2d_curve),curve);
 		g_signal_connect(G_OBJECT(entry),"changed",
 				G_CALLBACK(entry_changed_handler),NULL);
+		g_signal_connect(G_OBJECT(entry),"key_press_event",
+				G_CALLBACK(key_event),NULL);
+		g_signal_connect(G_OBJECT(entry),"key_release_event",
+				G_CALLBACK(key_event),NULL);
+		g_signal_connect(G_OBJECT(entry),"focus_out_event",
+				G_CALLBACK(focus_out_handler),NULL);
 		g_signal_connect(G_OBJECT(entry),"activate",
 				G_CALLBACK(std_entry_handler),NULL);
 
@@ -171,6 +180,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 				G_CALLBACK(update_2d_curve),curve);
 		g_signal_connect(G_OBJECT(entry),"changed",
 				G_CALLBACK(entry_changed_handler),NULL);
+		g_signal_connect(G_OBJECT(entry),"key_press_event",
+				G_CALLBACK(key_event),NULL);
+		g_signal_connect(G_OBJECT(entry),"key_release_event",
+				G_CALLBACK(key_event),NULL);
+		g_signal_connect(G_OBJECT(entry),"focus_out_event",
+				G_CALLBACK(focus_out_handler),NULL);
 		g_signal_connect(G_OBJECT(entry),"activate",
 				G_CALLBACK(std_entry_handler),NULL);
 

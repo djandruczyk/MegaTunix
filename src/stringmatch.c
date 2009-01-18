@@ -305,6 +305,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS1_E_TRIGMON));
 	g_hash_table_insert(str_2_enum,"_MS1_E_TOOTHMON_",
 			GINT_TO_POINTER(MS1_E_TOOTHMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_TRIGMON_",
+			GINT_TO_POINTER(MS2_E_TRIGMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_TOOTHMON_",
+			GINT_TO_POINTER(MS2_E_TOOTHMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
+			GINT_TO_POINTER(MS2_E_COMPMON));
 
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",

@@ -11,19 +11,19 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __T_LOGGER_H__
-#define __T_LOGGER_H__
+#ifndef __MS2_T_LOGGER_H__
+#define __MS2_T_LOGGER_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
 
 
-typedef struct _TTMon_Data TTMon_Data;
+typedef struct _MS2_TTMon_Data MS2_TTMon_Data;
 /*!
- * \brief _TTMon_Data struct is a container used to hold private data
- * for the Trigger and Tooth Loggers (MSnS-E only)
+ * \brief _MS2_TTMon_Data struct is a container used to hold private data
+ * for the Trigger and Tooth and Composite Loggers (MS2-Extra only)
  */
-struct _TTMon_Data
+struct _MS2_TTMon_Data
 {
 	gint page;		/*! page used to discern them apart */
 	GdkPixmap *pixmap;	/*! Pixmap */
@@ -41,9 +41,9 @@ struct _TTMon_Data
 	gfloat usable_begin;	/*! Usable begin point for bars */
 	gfloat font_height;	/*! Font height needed for some calcs */
 	gfloat rpm;		/*! Current RPM */
-	gushort *current;	/*! Current block of times */
-	gushort *last;		/*! Last block of times */
-	gushort *captures;	/*! Array of capture points */
+	gulong *current;	/*! Current block of times */
+	gulong *last;		/*! Last block of times */
+	gulong *captures;	/*! Array of capture points */
 	gint wrap_pt;		/*! Wrap point */
 	gint vdivisor;		/*! Vertical scaling divisor */
 	gfloat peak;		/*! Vertical Peak Value */
@@ -54,15 +54,10 @@ struct _TTMon_Data
 };
 
 /* Prototypes */
-EXPORT void setup_logger_display(GtkWidget *);
-EXPORT void reset_ttm_buttons(void);
-EXPORT gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
-EXPORT gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-void _crunch_trigtooth_data(gint);
-void crunch_trigtooth_data_pf(void);
-void update_trigtooth_display(gint);
-void update_trigtooth_display_pf(void);
-void bind_ttm_to_page(gint page);
+EXPORT void ms2_setup_ms2_logger_display(GtkWidget *);
+EXPORT gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+void _ms2_crunch_trigtooth_data(gint);
+void ms2_update_trigtooth_display(gint);
 /* Prototypes */
 
 #endif

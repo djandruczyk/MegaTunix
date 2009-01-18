@@ -27,45 +27,17 @@
 #include <rtv_processor.h>
 
 
-TTMon_Data *ttm_data;
+MS2_TTMon_Data *ttm_data;
 extern GObject *global_data;
 
-#define CTR 187
-#define UNITS 188
 
-/*!
- \brief 
- */
-void bind_ttm_to_page(gint page)
-{
-	ttm_data->page = page;
-}
-
-
-EXPORT void reset_ttm_buttons()
-{
-	GtkWidget *widget = NULL;
-	extern GHashTable *dynamic_widgets;
-	widget = g_hash_table_lookup(dynamic_widgets,"toothlogger_disable_radio_button");
-	if (GTK_IS_WIDGET(widget))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	else
-		printf("tooth disable button not found!!!\n");
-	widget = g_hash_table_lookup(dynamic_widgets,"triggerlogger_disable_radio_button");
-	if (GTK_IS_WIDGET(widget))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	else
-		printf("trigger disable button not found!!!\n");
-
-}
-
-
-EXPORT void setup_logger_display(GtkWidget * src_widget)
+EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
 	extern Firmware_Details *firmware;
 
-	ttm_data = g_new0(TTMon_Data,1);
+	ttm_data = g_new0(MS2_TTMon_Data,1);
 	ttm_data->page = -1;
+	ttm_data->units = 1;
 	ttm_data->pixmap = NULL;
 	ttm_data->darea = src_widget;
 	ttm_data->min_time = 65535;
@@ -78,15 +50,15 @@ EXPORT void setup_logger_display(GtkWidget * src_widget)
 	ttm_data->missing = 0;
 	ttm_data->sample_time = 0;
 	ttm_data->capabilities = firmware->capabilities;
-	ttm_data->captures = g_new0(gushort, 93);
-	ttm_data->current = g_new0(gushort,93);
-	ttm_data->last = g_new0(gushort,93);
+	ttm_data->captures = g_new0(gulong, 341);
+	ttm_data->current = g_new0(gulong,341);
+	ttm_data->last = g_new0(gulong,341);
 
 	OBJ_SET(src_widget,"ttmon_data",(gpointer)ttm_data);
 	return;
 }
 
-EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
+EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	gint w = 0;
 	gint h = 0;
@@ -121,39 +93,21 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 	if (ttm_data->page < 0)
 		return TRUE;
 
-	_crunch_trigtooth_data(ttm_data->page);
+	_ms2_crunch_trigtooth_data(ttm_data->page);
 	if (ttm_data->peak > 0)
 		update_trigtooth_display(ttm_data->page);
 	return TRUE;
 }
 
-EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
-{
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			ttm_data->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
 
-	return TRUE;
-}
-
-
-EXPORT void crunch_trigtooth_data_pf()
-{
-	if (ttm_data->capabilities & MSNS_E)
-		_crunch_trigtooth_data(ttm_data->page);
-	if (ttm_data->capabilities & MS2_EXTRA)
-		_ms2_crunch_trigtooth_data(ttm_data->page);
-}
-
-void _crunch_trigtooth_data(gint page)
+void _ms2_crunch_trigtooth_data(gint page)
 {
 	extern Firmware_Details *firmware;
 	gint canID = firmware->canID;
-	DataSize size = MTX_U08;
 	gint i = 0;
+	guint8 high = 0;
+	guint8 mid = 0;
+	guint8 low = 0;
 	gint tmp = 0;
 	gint min = -1;
 	gint max = -1;
@@ -164,72 +118,39 @@ void _crunch_trigtooth_data(gint page)
 	extern gint toothmon_id;
 	gint lower = 0;
 	gint upper = 0;
-	gushort total = 0;
-	gint position = get_ecu_data(canID,page,CTR,size);
 	gint index = 0;
 
-/*
-	g_printf("Counter position on page %i is %i\n",page,position);
-	if (position > 0)
-		g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	else
-		g_printf("data block from position 0 to 185 (93 words)\n");
-*/
-
-	/*printf("position is %i\n",position);*/
 	index=0;
-	for (i=0;i<93;i++)
-		ttm_data->last[i] = ttm_data->current[i];
 
-
-	for (i=position;i<185;i+=2)
+	min = 148576;
+	max = 1;
+	printf("processing data for page %i\n",page);
+	for (i=0;i<1024;i+=3)
 	{
-		/*total = (get_ecu_data(canID,page,i,size)*256)+get_ecu_data(canID,page,i+1,size);*/
-		total = get_ecu_data(canID,page,i,MTX_U16);
-		ttm_data->current[index] = total;
+
+		ttm_data->last[index] = ttm_data->current[index];
+		high = get_ecu_data(canID,page,i+2,MTX_U08);
+		mid = get_ecu_data(canID,page,i+1,MTX_U08);
+		low = get_ecu_data(canID,page,i,MTX_U08);
+		ttm_data->current[index] = ((high & 0x0f) << 16) + (mid << 8) +low;
+		if ((ttm_data->current[index] < min) && (ttm_data->current[index] != 0))
+			min = ttm_data->current[index];
+		if (ttm_data->current[index] > max)
+			max = ttm_data->current[index];
 		index++;
 	}
-	if (position != 0)
-	{
-		for (i=0;i<position;i+=2)
-		{
-			/*total = (get_ecu_data(canID,page,i,size)*256)+get_ecu_data(canID,page,i+1,size);*/
-			total = get_ecu_data(canID,page,i,MTX_U16);
-			ttm_data->current[index] = total;
-			index++;
-		}
-	}
-	/*g_printf("\n");*/
-
-	if (get_ecu_data(canID,page,UNITS,size) == 1)
-	{
-		/*g_printf("0.1 ms units\n");*/
-		ttm_data->units=100;
-	}
-	else
-	{
-		/*g_printf("1uS units\n");*/
-		ttm_data->units=1;
-	}
-
-	min = 65535;
-	max = 1;
-	for (i=0;i<93;i++)
-	{
-		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
-			min = ttm_data->current[i];
-		if (ttm_data->current[i] > max)
-			max = ttm_data->current[i];
-	}
+	if (max >148576)
+		max = 148576;
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
-	/* Ratio of min to max,  may not work for complex wheel
+
+	/* Ratio of min to max,  does not work for complex wheel
 	 * patterns
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value("rpm",&ttm_data->rpm);
 //printf("Current RPM %f\n",ttm_data->rpm);
-	if (page == 9) /* TOOTH logger, we should search for min/max's */
+	if (page == 5) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire
 		 * sample of data organized so the beginning of the array
@@ -245,7 +166,7 @@ void _crunch_trigtooth_data(gint page)
 		 */
 
 		cap_idx = 0;
-		for (i=0;i<93;i++)
+		for (i=0;i<341;i++)
 		{
 			ttm_data->captures[i] = 0;
 			/* Crude test,  ok for m-n wheels, but not complex*/
@@ -275,7 +196,7 @@ void _crunch_trigtooth_data(gint page)
 		suggested_sample_time = 186000/((1.0/(((float)min*ttm_data->units)/1000000.0)));
 		if (suggested_sample_time < 0)
 			suggested_sample_time = 0;
-		min_sampling_time = 500; /* milliseconds */
+		min_sampling_time = 100; /* milliseconds */
 
 		ttm_data->sample_time = suggested_sample_time < min_sampling_time ? min_sampling_time : suggested_sample_time;
 
@@ -293,7 +214,7 @@ void _crunch_trigtooth_data(gint page)
 	}
 	/*
 	printf("Data for this block\n");
-	for (i=0;i<93;i++)
+	for (i=0;i<341;i++)
 	{
 		printf("%.4x ", ttm_data->current[i]);
 		if (!((i+1)%16))
@@ -302,43 +223,35 @@ void _crunch_trigtooth_data(gint page)
 	printf("\n");
 	*/
 	/* vertical scale calcs:
-	 * PROBLEM:  max_time can be anywhere from 0-65535, need to 
+	 * PROBLEM:  max_time can be anywhere from 0-1048576, need to 
 	 * develop a way to have nice even scale along the Y axis so you
 	 * know what the values are
-	 * for values of 0-100000
+	 * for values of 0-10000000
 	 */
 	ttm_data->peak = ttm_data->max_time *1.25; /* Add 25% padding */
 	tmp = ttm_data->peak;
 
-	if (tmp < 750)
-		ttm_data->vdivisor = 100;
-	else if ((tmp >= 750) && (tmp < 1500))
-		ttm_data->vdivisor = 250;
-	else if ((tmp >= 1500) && (tmp < 3000))
-		ttm_data->vdivisor = 500;
-	else if ((tmp >= 3000) && (tmp < 6000))
+	if (tmp < 7500)
 		ttm_data->vdivisor = 1000;
-	else if ((tmp >= 6000) && (tmp < 12000))
-		ttm_data->vdivisor = 1500;
-	else if ((tmp >= 12000) && (tmp < 24000))
-		ttm_data->vdivisor = 3000;
-	else if ((tmp >= 24000) && (tmp < 48000))
-		ttm_data->vdivisor = 6000;
-	else if (tmp >= 48000)
-		ttm_data->vdivisor = 12000;
+	else if ((tmp >= 7500) && (tmp < 15000))
+		ttm_data->vdivisor = 2500;
+	else if ((tmp >= 15000) && (tmp < 30000))
+		ttm_data->vdivisor = 5000;
+	else if ((tmp >= 30000) && (tmp < 60000))
+		ttm_data->vdivisor = 10000;
+	else if ((tmp >= 60000) && (tmp < 120000))
+		ttm_data->vdivisor = 15000;
+	else if ((tmp >= 120000) && (tmp < 240000))
+		ttm_data->vdivisor = 30000;
+	else if ((tmp >= 240000) && (tmp < 480000))
+		ttm_data->vdivisor = 60000;
+	else if (tmp >= 480000) 
+		ttm_data->vdivisor = 120000;
 
 }
 
 
-EXPORT void update_trigtooth_display_pf()
-{
-	if (ttm_data->capabilities & MSNS_E)
-		update_trigtooth_display(ttm_data->page);
-	if (ttm_data->capabilities & MS2_EXTRA)
-		ms2_update_trigtooth_display(ttm_data->page);
-}
-
-void update_trigtooth_display(gint page)
+void ms2_update_trigtooth_display(gint page)
 {
 	gint w = 0;
 	gint h = 0;
@@ -367,7 +280,7 @@ void update_trigtooth_display(gint page)
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr,h/20);
 
-	/*g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);*/
+g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
 	if (ttm_data->units == 1)
 		message = g_strdup_printf("%i",(gint)(ttm_data->peak));
@@ -414,25 +327,26 @@ void update_trigtooth_display(gint page)
 	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
 	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
-	cairo_set_line_width(cr,w/186.0);
+	cairo_set_line_width(cr,w/341.0);
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
 	/* Draw the bars, left to right */
-	for (i=0;i<93;i++)
+	printf("peak %f \n",ttm_data->peak);
+	for (i=0;i<341;i++)
 	{
-		/*g_printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/93.0),0);*/
-		cairo_move_to(cr,ttm_data->usable_begin+(i*w/93.0),h-(y_shift/2));
+		/*g_printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/341.0),0);*/
+		cairo_move_to(cr,ttm_data->usable_begin+(i*w/341.0),h-(y_shift/2));
 		val = ttm_data->current[i];
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
-		cairo_line_to(cr,ttm_data->usable_begin+(i*w/93.0),cur_pos);
+		cairo_line_to(cr,ttm_data->usable_begin+(i*w/341.0),cur_pos);
 	}
 	cairo_set_font_size(cr,20);
 	if (ttm_data->units == 1)
-		if (ttm_data->page == 9)
+		if (ttm_data->page == 5)
 			message = g_strdup("Tooth times in usec.");
 		else
 			message = g_strdup("Trigger times in usec.");
 	else
-		if (ttm_data->page == 9)
+		if (ttm_data->page == 6)
 			message = g_strdup("Tooth times in msec.");
 		else
 			message = g_strdup("Trigger times in msec.");

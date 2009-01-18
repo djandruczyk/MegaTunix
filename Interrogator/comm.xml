@@ -442,6 +442,7 @@
 				<function>enable_3d_buttons_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
+				<function>enable_ttm_buttons_pf</function>
 				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>
@@ -480,6 +481,30 @@
 			<type>_FUNC_CALL_</type>
 			<func_call_name>read_ve_const</func_call_name>
 			<func_call_arg>_MS1_E_TOOTHMON_</func_call_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
+			<post_functions>
+				<function_w_arg>crunch_trigtooth_data_pf</function_w_arg>
+				<function_w_arg>update_trigtooth_display_pf</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>ms2_e_read_trigmon</name>
+			<desc>Reads trigmon page </desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>read_ve_const</func_call_name>
+			<func_call_arg>_MS2_E_TRIGMON_</func_call_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
+			<post_functions>
+				<function>crunch_trigtooth_data_pf</function>
+				<function>update_trigtooth_display_pf</function>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>ms2_e_read_toothmon</name>
+			<desc>Reads toothmon page </desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>read_ve_const</func_call_name>
+			<func_call_arg>_MS2_E_TOOTHMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
 				<function_w_arg>crunch_trigtooth_data_pf</function_w_arg>

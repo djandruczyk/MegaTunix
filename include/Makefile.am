@@ -44,6 +44,7 @@ headers = \
 	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
+	ms2-t-logger.h \
 	mtxloader.h \
 	mtxsocket.h \
         multi_expr_loader.h \

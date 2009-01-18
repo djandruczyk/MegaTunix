@@ -104,7 +104,7 @@ void start_tickler(TicklerType type)
 				break;
 			if (realtime_id != 0)
 			{
-				/* TTM and Realtime are mutulally exclusive,
+				/* TTM and Realtime are mutually exclusive,
 				 * and TTM takes precedence,  so disabled 
 				 * realtime, and manually fire it once per
 				 * TTM read so the gauges will still update
@@ -263,6 +263,7 @@ gboolean signal_read_rtvars()
  */
 gboolean signal_toothtrig_read(TicklerType type)
 {
+	extern Firmware_Details *firmware;
 	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
@@ -273,10 +274,16 @@ gboolean signal_toothtrig_read(TicklerType type)
 	switch (type)
 	{
 		case TOOTHMON_TICKLER:
-			io_cmd("ms1_e_read_toothmon",NULL);
+			if (firmware->capabilities & MSNS_E)
+				io_cmd("ms1_e_read_toothmon",NULL);
+			if (firmware->capabilities & MS2_EXTRA)
+				io_cmd("ms2_e_read_toothmon",NULL);
 			break;
 		case TRIGMON_TICKLER:
-			io_cmd("ms1_e_read_trigmon",NULL);
+			if (firmware->capabilities & MSNS_E)
+				io_cmd("ms1_e_read_trigmon",NULL);
+			if (firmware->capabilities & MS2_EXTRA)
+				io_cmd("ms2_e_read_trigmon",NULL);
 			break;
 		default:
 			break;

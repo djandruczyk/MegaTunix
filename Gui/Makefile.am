@@ -28,6 +28,7 @@ gui_files = 	README \
 		memviewer.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
+		ms2e-toothtrigger-2.0.x.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \
