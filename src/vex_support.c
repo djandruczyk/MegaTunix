@@ -50,15 +50,15 @@ static struct
 
 } import_handlers[] = 
 {
-	{ "EVEME", HEADER, VEX_EVEME},
-	{ "UserRev:", HEADER, VEX_USER_REV}, 
-	{ "UserComment:", HEADER, VEX_USER_COMMENT},
-	{ "Date:", HEADER, VEX_DATE},
-	{ "Time:", HEADER, VEX_TIME},
-	{ "Page", PAGE, VEX_NONE},
-	{ "VE Table RPM Range\0", RANGE, VEX_RPM_RANGE},
-	{ "VE Table Load Range\0", RANGE, VEX_LOAD_RANGE},
-	{ "VE Table\0", TABLE, VEX_NONE}
+	{ "EVEME", VEX_HEADER, VEX_EVEME},
+	{ "UserRev:", VEX_HEADER, VEX_USER_REV}, 
+	{ "UserComment:", VEX_HEADER, VEX_USER_COMMENT},
+	{ "Date:", VEX_HEADER, VEX_DATE},
+	{ "Time:", VEX_HEADER, VEX_TIME},
+	{ "Page", VEX_PAGE, VEX_NONE},
+	{ "VE Table RPM Range\0", VEX_RANGE, VEX_RPM_RANGE},
+	{ "VE Table Load Range\0", VEX_RANGE, VEX_LOAD_RANGE},
+	{ "VE Table\0", VEX_TABLE, VEX_NONE}
 };
 
 
@@ -725,16 +725,16 @@ GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportPar
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
 	{
-		case HEADER:
+		case VEX_HEADER:
 			status = process_header(vex, arg, string);
 			break;
-		case PAGE:
+		case VEX_PAGE:
 			status = process_page(vex, string);
 			break;
-		case RANGE:
+		case VEX_RANGE:
 			status = process_vex_range(vex, arg, string, iochannel);
 			break;
-		case TABLE:
+		case VEX_TABLE:
 			status = process_vex_table(vex, string, iochannel);
 			break;
 	}

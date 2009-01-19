@@ -82,6 +82,8 @@ typedef enum
 	START_TRIGMON_LOGGER,
 	STOP_TOOTHMON_LOGGER,
 	STOP_TRIGMON_LOGGER,
+	START_COMPOSITE_LOGGER,
+	STOP_COMPOSITE_LOGGER,
 	COMM_AUTODETECT
 }ToggleButton;
 
@@ -148,26 +150,6 @@ typedef enum
 	GREEN,
 	BLUE
 }GuiColor;
-
-typedef enum
-{
-	HEADER=0xd0,
-	PAGE,
-	RANGE,
-	TABLE
-}ImportParserFunc;
-
-typedef enum
-{
-	VEX_EVEME=0xe0,
-	VEX_USER_REV,
-	VEX_USER_COMMENT,
-	VEX_DATE,
-	VEX_TIME,
-	VEX_RPM_RANGE,
-	VEX_LOAD_RANGE,
-	VEX_NONE
-}ImportParserArg;
 
 typedef enum
 {

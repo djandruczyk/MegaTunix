@@ -44,6 +44,7 @@ headers = \
 	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
+	ms1-t-logger.h \
 	ms2-t-logger.h \
 	mtxloader.h \
 	mtxsocket.h \
@@ -67,13 +68,13 @@ headers = \
         threads.h \
         timeout_handlers.h \
         tuning_gui.h \
-	t-logger.h \
         unions.h \
 	user_outputs.h \
         vetable_gui.h \
 	vex_support.h \
 	visibility.h \
 	warmwizard_gui.h \
+	watches.h \
 	widgetmgmt.h \
 	winserialio.h \
 	xmlbase.h \

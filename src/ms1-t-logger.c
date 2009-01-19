@@ -20,7 +20,7 @@
 #include <glib/gprintf.h>
 #include <math.h>
 #include <ms2-t-logger.h>
-#include <t-logger.h>
+#include <ms1-t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <logviewer_gui.h>
@@ -466,4 +466,52 @@ void update_trigtooth_display(gint page)
 		return;
 	gdk_window_clear(ttm_data->darea->window);
 
+}
+
+EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
+{
+	gint handler = (gint)OBJ_GET(widget, "handler");
+	extern GHashTable *dynamic_widgets;
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	{       /* It's pressed (or checked) */
+		switch ((ToggleButton)handler)
+		{
+
+			case START_TOOTHMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				start_tickler(TOOTHMON_TICKLER);
+				break;
+			case START_TRIGMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				start_tickler(TRIGMON_TICKLER);
+				break;
+			case START_COMPOSITE_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				break;
+			case STOP_TOOTHMON_LOGGER:
+				stop_tickler(TOOTHMON_TICKLER);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_TRIGMON_LOGGER:
+				stop_tickler(TRIGMON_TICKLER);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_COMPOSITE_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
+				break;
+			default:
+				break;
+		}
+	}
+	return TRUE;
 }

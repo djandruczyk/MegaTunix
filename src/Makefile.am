@@ -48,6 +48,7 @@ megatunix_SOURCES = \
 	menu_handlers.c \
 	memory_gui.c \
 	mode_select.c \
+	ms1-t-logger.c \
 	ms2-t-logger.c \
 	mtxsocket.c \
 	multi_expr_loader.c \
@@ -68,13 +69,13 @@ megatunix_SOURCES = \
 	tag_loader.c \
 	threads.c \
 	timeout_handlers.c \
-	t-logger.c \
 	tuning_gui.c \
 	user_outputs.c \
 	vetable_gui.c \
 	vex_support.c \
 	visibility.c \
 	warmwizard_gui.c \
+	watches.c \
 	widgetmgmt.c \
 	winserialio.c \
 	xmlcomm.c 

@@ -17,6 +17,28 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
+
+typedef enum
+{
+	VEX_HEADER=0xd0,
+	VEX_PAGE,
+	VEX_RANGE,
+	VEX_TABLE
+}ImportParserFunc;
+
+typedef enum
+{
+	VEX_EVEME=0xe0,
+	VEX_USER_REV,
+	VEX_USER_COMMENT,
+	VEX_DATE,
+	VEX_TIME,
+	VEX_RPM_RANGE,
+	VEX_LOAD_RANGE,
+	VEX_NONE
+}ImportParserArg;
+
+
 typedef struct _Vex_Import Vex_Import;
 
 

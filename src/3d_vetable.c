@@ -911,6 +911,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
 	glEnable (GL_LINE_SMOOTH);
+	//glEnable (GL_POLYGON_SMOOTH);
 	glEnable (GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);

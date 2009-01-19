@@ -19,8 +19,8 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <math.h>
+#include <ms1-t-logger.h>
 #include <ms2-t-logger.h>
-#include <t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <logviewer_gui.h>
@@ -113,18 +113,14 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gint max = -1;
 	gint cap_idx = 0;
 	gfloat ratio = 0.0;
-	gfloat suggested_sample_time= 0.0;
-	gint min_sampling_time = 0;
-	extern gint toothmon_id;
 	gint lower = 0;
 	gint upper = 0;
 	gint index = 0;
 
 	index=0;
 
-	min = 148576;
+	min = 1048576;
 	max = 1;
-	printf("processing data for page %i\n",page);
 	for (i=0;i<1024;i+=3)
 	{
 
@@ -132,17 +128,13 @@ void _ms2_crunch_trigtooth_data(gint page)
 		high = get_ecu_data(canID,page,i,MTX_U08);
 		mid = get_ecu_data(canID,page,i+1,MTX_U08);
 		low = get_ecu_data(canID,page,i+2,MTX_U08);
-		printf("low %i, mid %i, high %i\n",low,mid,high);
 		ttm_data->current[index] = ((high & 0x0f) << 16) + (mid << 8) +low;
-		printf("Data at [%i] is %li\n",index,ttm_data->current[index]);
 		if ((ttm_data->current[index] < min) && (ttm_data->current[index] != 0))
 			min = ttm_data->current[index];
 		if (ttm_data->current[index] > max)
 			max = ttm_data->current[index];
 		index++;
 	}
-//	if (max >148576)
-//		max = 148576;
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
 
@@ -181,38 +173,6 @@ void _ms2_crunch_trigtooth_data(gint page)
 			ttm_data->missing = lower - 1;
 		else 
 			ttm_data->missing = upper - 1;
-		/*
-		for (i=1;i<cap_idx;i++)
-			printf("read %i trigger times followed by %i missing, thus %i-%i wheel\n",ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing,ttm_data->missing+ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing);
-		for (i=0;i<cap_idx;i++)
-			printf("Missing teeth at index %i\n",ttm_data->captures[i]);
-			*/
-
-		/*printf("max/min is %f\n ceil %f. floor %f",ratio,ceil(ratio),floor(ratio) );*/
-		/*printf("wheel is a missing %i style\n",ttm_data->missing);*/
-
-		/*
-		printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
-		printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
-		*/
-		suggested_sample_time = 186000/((1.0/(((float)min*ttm_data->units)/1000000.0)));
-		if (suggested_sample_time < 0)
-			suggested_sample_time = 0;
-		min_sampling_time = 100; /* milliseconds */
-
-		ttm_data->sample_time = suggested_sample_time < min_sampling_time ? min_sampling_time : suggested_sample_time;
-
-		/*
-		printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
-		printf("Sampling time set to %i ms.\n",ttm_data->sample_time);
-		*/
-
-		if (toothmon_id != 0)
-		{
-			g_source_remove(toothmon_id);
-			toothmon_id = g_timeout_add(ttm_data->sample_time,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
-		}
-
 	}
 	/*
 	printf("Data for this block\n");
@@ -329,7 +289,7 @@ g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
 	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
-	cairo_set_line_width(cr,w/341.0);
+	cairo_set_line_width(cr,w/682.0);
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
 	/* Draw the bars, left to right */
 	printf("peak %f \n",ttm_data->peak);
@@ -382,4 +342,49 @@ g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 		return;
 	gdk_window_clear(ttm_data->darea->window);
 
+}
+
+
+gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
+{
+	gint handler = (gint)OBJ_GET(widget,"handler");
+	extern GHashTable *dynamic_widgets;
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	{       /* It's pressed (or checked) */
+		switch ((ToggleButton)handler)
+		{
+
+			case START_TOOTHMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				break;
+			case START_TRIGMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				break;
+			case START_COMPOSITE_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				break;
+			case STOP_TOOTHMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_TRIGMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_COMPOSITE_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
+				break;
+			default:
+				break;
+		}
+	}
+	return TRUE;
 }

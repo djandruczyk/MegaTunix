@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __T_LOGGER_H__
-#define __T_LOGGER_H__
+#ifndef __MS1_T_LOGGER_H__
+#define __MS1_T_LOGGER_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
@@ -58,6 +58,8 @@ EXPORT void setup_logger_display(GtkWidget *);
 EXPORT void reset_ttm_buttons(void);
 EXPORT gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 EXPORT gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+EXPORT gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
+
 void _crunch_trigtooth_data(gint);
 void crunch_trigtooth_data_pf(void);
 void update_trigtooth_display(gint);
