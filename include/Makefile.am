@@ -33,7 +33,6 @@ headers = \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
-	loader.h \
 	locking.h \
         logo.h \
         logviewer_core.h \
@@ -44,6 +43,7 @@ headers = \
 	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
+	ms1_loader.h \
 	ms1-t-logger.h \
 	ms2-t-logger.h \
 	mtxloader.h \

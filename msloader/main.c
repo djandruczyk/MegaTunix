@@ -17,7 +17,7 @@
 #include <getfiles.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <loader.h>
+#include <ms1_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -42,22 +42,19 @@ gint main(gint argc, gchar ** argv)
 	gint port_fd = 0;
 	gint file_fd = 0;
 	EcuState ecu_state = NOT_LISTENING;
-	gchar * tmpbuf = NULL;
 	gboolean result = FALSE;
 	
 	verify_args(argc, argv);
 
-	tmpbuf = g_strdup_printf("MegaTunix msloader %s\n",VERSION);
-	output(tmpbuf);
-	g_free(tmpbuf);
+	output(g_strdup_printf("MegaTunix msloader %s\n",VERSION),TRUE);
 
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(argv[1]);
+	port_fd = setup_port(argv[1], 9600);
 	if (port_fd > 0)
-		output("Port successfully opened\n");
+		output("Port successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open Port check permissions\n");
+		output("Could NOT open Port check permissions\n",FALSE);
 		exit(-1);
 	}
 #ifdef __WIN32__
@@ -66,63 +63,63 @@ gint main(gint argc, gchar ** argv)
 	file_fd = g_open(argv[2],O_RDONLY,S_IRUSR);
 #endif
 	if (file_fd > 0 )
-		output("Firmware file successfully opened\n");
+		output("Firmware file successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open firmware file, check permissions/paths\n");
+		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
 		exit(-1);
 	}
 	ecu_state = detect_ecu(port_fd);
 	switch (ecu_state)
 	{
 		case NOT_LISTENING:
-			output("NO response to signature request\n");
+			output("NO response to signature request\n",FALSE);
 			break;
 		case IN_BOOTLOADER:
-			output("ECU is in bootloader mode, good!\n");
+			output("ECU is in bootloader mode, good!\n",FALSE);
 			break;
 		case LIVE_MODE:
-			output("ECU detected in LIVE! mode, attempting to access bootloader\n");
+			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
 			result = jump_to_bootloader(port_fd);
 			if (result)
 			{
 				ecu_state = detect_ecu(port_fd);
 				if (ecu_state == IN_BOOTLOADER)
 				{
-					output("ECU is in bootloader mode, good!\n");
+					output("ECU is in bootloader mode, good!\n",FALSE);
 					break;
 				}
 				else
-					output("Could NOT attain bootloader mode\n");
+					output("Could NOT attain bootloader mode\n",FALSE);
 			}
 			else
-				output("Could NOT attain bootloader mode\n");
+				output("Could NOT attain bootloader mode\n",FALSE);
 			break;
 	}
 	if (ecu_state != IN_BOOTLOADER)
 	{
-		output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n");
+		output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n",FALSE);
 		getc(stdin);
 		ecu_state = detect_ecu(port_fd);
 		if (ecu_state != IN_BOOTLOADER)
 		{
-			output("Unable to get to the bootloader, update FAILED!\n");
+			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
 			exit (-1);
 		}
 		else
-			output("Got into the bootloader, good!\n");
+			output("Got into the bootloader, good!\n",FALSE);
 
 	}
 	result = prepare_for_upload(port_fd);
 	if (!result)
 	{
-		output("Failure getting ECU into a state to accept the new firmware\n");
+		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
 		exit (-1);
 	}
 	upload_firmware(port_fd,file_fd);
-	output("Firmware upload completed...\n");
+	output("Firmware upload completed...\n",FALSE);
 	reboot_ecu(port_fd);
-	output("ECU reboot complete\n");
+	output("ECU reboot complete\n",FALSE);
 	close_port(port_fd);
 	
 	return (0) ;
@@ -151,7 +148,9 @@ void usage_and_exit(gchar * msg)
 }
 
 
-void output(gchar *msg)
+void output(gchar *msg, gboolean free_it)
 {
 	printf("%s",msg);
+	if (free_it)
+		g_free(msg);
 }

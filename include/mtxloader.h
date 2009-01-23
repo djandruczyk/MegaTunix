@@ -48,7 +48,7 @@ EXPORT gboolean get_sensor_info (GtkWidget *, gpointer);
 void load_defaults(void);
 void save_defaults(void);
 void init_controls(void);
-void output(gchar *);
+void output(gchar *, gboolean);
 void boot_jumper_prompt(void);
 
 

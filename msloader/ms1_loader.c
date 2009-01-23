@@ -21,7 +21,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <getfiles.h>
-#include <loader.h>
+#include <ms1_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -42,9 +42,10 @@ struct termios oldtio;
 struct termios newtio;
 #endif
 
-gint setup_port(gchar * port_name)
+gint setup_port(gchar * port_name, gint baud)
 {
 	gint fd = 0;
+	gint _baud = 0;
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
@@ -55,7 +56,7 @@ gint setup_port(gchar * port_name)
 
 #ifdef __WIN32__
 
-		win32_setup_serial_params(fd, 9600);
+		win32_setup_serial_params(fd, baud);
 #else
 
 		/* Save serial port status */
@@ -75,8 +76,14 @@ gint setup_port(gchar * port_name)
 
 		/* Set baud (posix way) */
 
-		cfsetispeed(&newtio, B9600);
-		cfsetospeed(&newtio, B9600);
+		if (baud == 9600)
+			_baud = B9600;
+		else if (baud == 115200)
+			_baud = B115200;
+		else
+			printf("INVALID BAUD RATE %i\n",baud);
+		cfsetispeed(&newtio, _baud);
+		cfsetospeed(&newtio, _baud);
 
 		/* Mask and set to 8N1 mode... */
 		newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
@@ -156,7 +163,6 @@ EcuState detect_ecu(gint fd)
 	gint size = 1024;
 	guchar buf[1024];
 	guchar *ptr = buf;
-	gchar * tmpbuf = NULL;
 	gint total_read = 0;
 	gint total_wanted = 0;
 	gint zerocount = 0;
@@ -170,7 +176,7 @@ EcuState detect_ecu(gint fd)
 	res = write (fd,"S",1);
 	flush_serial(fd,BOTH);
 	if (res != 1)
-		output("Failure sending signature request!\n");
+		output("Failure sending signature request!\n",FALSE);
 	g_usleep(300000); /* 300ms timeout */
 	total_read = 0;
 	total_wanted = size;
@@ -204,9 +210,7 @@ EcuState detect_ecu(gint fd)
 		}
 		else	
 		{
-			tmpbuf = g_strdup_printf("ECU signature: \"%s\"\n",message);
-			output(tmpbuf);
-			g_free(tmpbuf);
+			output(g_strdup_printf("ECU signature: \"%s\"\n",message),TRUE);
 			g_free(message);
 			return  LIVE_MODE;
 		}
@@ -222,7 +226,6 @@ void get_ecu_signature(gint fd)
 	gint size = 1024;
 	guchar buf[1024];
 	guchar *ptr = buf;
-	gchar * tmpbuf = NULL;
 	gint total_read = 0;
 	gint total_wanted = 0;
 	gint zerocount = 0;
@@ -237,13 +240,13 @@ void get_ecu_signature(gint fd)
 sig_check:
 	if (attempt > 2)
 	{
-		output("Max attempts reached, sorry\n");
+		output("Max attempts reached, sorry\n",FALSE);
 		return;
 	}
 	res = write (fd,"S",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
-		output("Failure sending signature request!\n");
+		output("Failure sending signature request!\n",FALSE);
 	g_usleep(300000); /* 300ms timeout */
 	total_read = 0;
 	total_wanted = size;
@@ -268,14 +271,14 @@ sig_check:
 		if (g_strrstr_len(message,total_read, "Vector"))
 		{
 			g_free(message);
-			output("ECU has corrupted firmware!\n");
+			output("ECU has corrupted firmware!\n",FALSE);
 			return;
 		}
 		else if (g_strrstr_len(message,total_read, "what"))
 		{
 			g_free(message);
 			attempt++;
-			output("ECU is in bootloader mode, attempting reboot\n");
+			output("ECU is in bootloader mode, attempting reboot\n",FALSE);
 			res = write (fd,"X",1);
 			flush_serial(fd,BOTH);
 			g_usleep(500000);
@@ -284,7 +287,7 @@ sig_check:
 		else if (g_strrstr_len(message,total_read, "Boot"))
 		{
 			g_free(message);
-			output("ECU is in bootloader mode, attempting reboot\n");
+			output("ECU is in bootloader mode, attempting reboot\n",FALSE);
 			attempt++;
 			res = write (fd,"X",1);
 			flush_serial(fd,BOTH);
@@ -293,9 +296,7 @@ sig_check:
 		}
 		else	
 		{
-			tmpbuf = g_strdup_printf("Detected signature: \"%s\"\n",message);
-			output(tmpbuf);
-			g_free(tmpbuf);
+			output(g_strdup_printf("Detected signature: \"%s\"\n",message),TRUE);
 			g_free(message);
 			return;
 		}
@@ -313,7 +314,7 @@ gboolean jump_to_bootloader(gint fd)
 	g_usleep(100000); /* 100ms timeout  */
 	if (res != 2)
 	{
-		output("Error trying to get \"Boot>\" Prompt,\n");
+		output("Error trying to get \"Boot>\" Prompt,\n",FALSE);
 		return FALSE;
 	}
 
@@ -326,12 +327,11 @@ gboolean prepare_for_upload(gint fd)
 	gint res = 0;
 	gchar buf[1024];
 	gchar * message = NULL;
-	gchar * tmpbuf = NULL;
 
 	res = write(fd,"W",1);
 	if (res != 1)
 	{
-		output("Error trying to initiate ECU wipe\n");
+		output("Error trying to initiate ECU wipe\n",FALSE);
 		return FALSE;
 	}
 	flush_serial(fd,OUTBOUND);
@@ -341,11 +341,11 @@ gboolean prepare_for_upload(gint fd)
 	if (g_strrstr_len(buf,res,"Complete"))
 	{
 		g_free(message);
-		output("ECU Wipe complete\n");
+		output("ECU Wipe complete\n",FALSE);
 		res = write(fd,"U",1);
 		if (res != 1)
 		{
-			output("Error trying to initiate ECU upgrade\n");
+			output("Error trying to initiate ECU upgrade\n",FALSE);
 			return FALSE;
 		}
 		flush_serial(fd,OUTBOUND);
@@ -353,26 +353,22 @@ gboolean prepare_for_upload(gint fd)
 		res = read(fd,&buf,1024);
 		if (g_strrstr_len(buf,res,"waiting"))
 		{
-			output("Ready to update ECU firmware\n");
+			output("Ready to update ECU firmware\n",FALSE);
 			return TRUE;
 		}
 		else
 		{
 			message = g_strndup(buf,res);
-			tmpbuf = (g_strdup_printf("ECU returned \"%s\"\n",message));	
+			output(g_strdup_printf("ECU returned \"%s\"\n",message),TRUE);	
 			g_free(message);
-			output(tmpbuf);
-			g_free(tmpbuf);
-			output("Error getting \"ready to update\" message from ECU\n");
+			output("Error getting \"ready to update\" message from ECU\n",FALSE);
 			return FALSE;
 		}
 	}
 	else
 	{
-		tmpbuf = g_strdup_printf("Error wiping ECU, result \"%s\"\n",message);
+		output(g_strdup_printf("Error wiping ECU, result \"%s\"\n",message),TRUE);
 		g_free(message);
-		output(tmpbuf);
-		g_free(tmpbuf);
 		return FALSE;
 	}
 }
@@ -383,7 +379,6 @@ void upload_firmware(gint fd, gint file_fd)
 	gint res = 0;
 	gchar buf[128];
 	gint chunk = 128;
-	gchar * tmpbuf = NULL;
 	gint i = 0;
 	GTimeVal last;
 	GTimeVal now;
@@ -404,16 +399,12 @@ void upload_firmware(gint fd, gint file_fd)
 		if (elapsed < 0)
 			elapsed += 1000000;
 		rate = (chunk*1000000)/elapsed;
-		tmpbuf = g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,rate);
-		output(tmpbuf);
-		g_free(tmpbuf);
+		output(g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,rate),TRUE);
 		res = read(file_fd,buf,chunk);
 	}
 	flush_serial(fd,BOTH);
 	g_get_current_time(&now);
-	tmpbuf = g_strdup_printf("Upload completed in %li Seconds\n",now.tv_sec-begin.tv_sec);
-	output(tmpbuf);
-	g_free(tmpbuf);
+	output(g_strdup_printf("Upload completed in %li Seconds\n",now.tv_sec-begin.tv_sec),TRUE);
 
 	return;
 }
@@ -423,12 +414,12 @@ void reboot_ecu(gint fd)
 {
 	gint res = 0;
 
-	output("Sleeping 3 Seconds\n");
+	output("Sleeping 3 Seconds\n",FALSE);
 	g_usleep(3000000);
 	res = write (fd,"X",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
-		output("Error trying to Reboot ECU\n");
+		output("Error trying to Reboot ECU\n",FALSE);
 
 	return ;
 }

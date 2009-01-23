@@ -8,7 +8,7 @@
 #include <glib/gstdio.h>
 #include <glib/gstring.h>
 #include <glade/glade.h>
-#include <loader.h>
+#include <ms1_loader.h>
 #include <mtxloader.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,7 +55,7 @@ int main (int argc, char *argv[])
 
 /* Parse a line of output, which may actually be more than one line. To handle
  * multiple lines, the string is split with g_strsplit(). */
-void output (gchar *line)
+void output (gchar *line, gboolean free_it)
 {
 	GtkWidget *textview;
 	GtkTextBuffer * textbuffer = NULL;
@@ -73,6 +73,8 @@ void output (gchar *line)
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
 		adj->value = adj->upper;
 	}
+	if (free_it)
+		g_free(line);
 	while (gtk_events_pending())
 		gtk_main_iteration();
 }
@@ -90,10 +92,10 @@ EXPORT gboolean get_signature (GtkButton *button)
 	if (g_utf8_strlen(port, -1) == 0)
 		return FALSE;
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(port);
+	port_fd = setup_port(port,9600);
 	if (!(port_fd  > 0))
 	{
-		output("Could NOT open Port, You should check perms.\n");
+		output("Could NOT open Port, You should check perms.\n",FALSE);
 		return FALSE;
 	}
 	get_ecu_signature(port_fd);
@@ -123,12 +125,12 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		return FALSE;
 
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(port);
+	port_fd = setup_port(port,9600);
 	if (port_fd > 0)
-		output("Port successfully opened\n");
+		output("Port successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open Port, You should check perms\n");
+		output("Could NOT open Port, You should check perms\n",FALSE);
 		return FALSE;
 	}
 #ifdef __WIN32__
@@ -137,37 +139,37 @@ EXPORT gboolean load_firmware (GtkButton *button)
 	file_fd = g_open(filename,O_RDONLY,S_IRUSR);
 #endif
 	if (file_fd > 0 )
-		output("Firmware file successfully opened\n");
+		output("Firmware file successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open firmware file, check permissions/paths\n");
+		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
 		return FALSE;
 	}
 	ecu_state = detect_ecu(port_fd);
 	switch (ecu_state)
 	{
 		case NOT_LISTENING:
-			output("NO response to signature request\n");
+			output("NO response to signature request\n",FALSE);
 			break;
 		case IN_BOOTLOADER:
-			output("ECU is in bootloader mode\n");
+			output("ECU is in bootloader mode\n",FALSE);
 			break;
 		case LIVE_MODE:
-			output("ECU detected in LIVE! mode, attempting to access bootloader\n");
+			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
 			result = jump_to_bootloader(port_fd);
 			if (result)
 			{
 				ecu_state = detect_ecu(port_fd);
 				if (ecu_state == IN_BOOTLOADER)
 				{
-					output("ECU is in bootloader mode, good!\n");
+					output("ECU is in bootloader mode, good!\n",FALSE);
 					break;
 				}
 				else
-					output("Could NOT attain bootloader mode\n");
+					output("Could NOT attain bootloader mode\n",FALSE);
 			}
 			else
-				output("Could NOT attain bootloader mode\n");
+				output("Could NOT attain bootloader mode\n",FALSE);
 			break;
 	}
 	if (ecu_state != IN_BOOTLOADER)
@@ -176,23 +178,23 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		ecu_state = detect_ecu(port_fd);
 		if (ecu_state != IN_BOOTLOADER)
 		{
-			output("Unable to get to the bootloader, update FAILED!\n");
+			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
 			return FALSE;
 		}
 		else
-			output("Got into the bootloader, good!\n");
+			output("Got into the bootloader, good!\n",FALSE);
 
 	}
 	result = prepare_for_upload(port_fd);
 	if (!result)
 	{
-		output("Failure getting ECU into a state to accept the new firmware\n");
+		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
 		return FALSE;
 	}
 	upload_firmware(port_fd,file_fd);
-	output("Firmware upload completed...\n");
+	output("Firmware upload completed...\n",FALSE);
 	reboot_ecu(port_fd);
-	output("ECU reboot complete\n");
+	output("ECU reboot complete\n",FALSE);
 	close_port(port_fd);
 	return TRUE;
 }
@@ -376,8 +378,9 @@ EXPORT gboolean get_sensor_info(GtkWidget *widget, gpointer data)
 			unit = 'F';
 		else
 			unit = 'C';
-		//thermistor(unit,&samples,bias_val,type,NULL);
-		//write_inc_file();
+		/*thermistor(unit,&samples,bias_val,type,NULL);
+		write_inc_file();
+		*/
 	
 	}
 	gtk_widget_destroy(dialog);

@@ -17,8 +17,8 @@ AM_CPPFLAGS = $(COMMON_FLAGS) -Wall -pedantic
 CLEANFILES = *~ core gmon.out nohup.out 
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep
 
-msloader_SOURCES = main.c winserialio.c loader.c
-mtxloader_SOURCES = loader.c winserialio.c thermistor.c mtxloader.c
+msloader_SOURCES = main.c winserialio.c ms1_loader.c
+mtxloader_SOURCES = ms1_loader.c winserialio.c thermistor.c mtxloader.c
 
 msloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la
 mtxloader_DEPENDENCIES = @WIN32_RESOURCES@  ../mtxcommon/libmtxcommon.la
