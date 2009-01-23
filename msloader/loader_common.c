@@ -285,12 +285,10 @@ FirmwareType detect_firmware(gchar * filename)
 			type = MS2;
 			g_free(buf);
 			g_io_channel_shutdown(chan,FALSE,&error);
-			printf("MS2!\n");
 			return type;
 		}
 		g_free(buf);
 	}
 	g_io_channel_shutdown(chan, FALSE,&error);
-	printf("MS1!\n");
 	return type;
 }

@@ -216,6 +216,7 @@ void load_defaults()
 	ConfigFile *cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
+	GtkFileFilter *filter = NULL;
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -228,6 +229,11 @@ void load_defaults()
 		if(cfg_read_string(cfgfile, "MTXLoader", "last_file", &tmpbuf))
 		{
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")),tmpbuf);
+			filter = gtk_file_filter_new();
+			gtk_file_filter_add_pattern(filter,"*.s19");
+			gtk_file_filter_add_pattern(filter,"*.S19");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")),filter);
+
 			g_free(tmpbuf);
 		}
 		cfg_free(cfgfile);

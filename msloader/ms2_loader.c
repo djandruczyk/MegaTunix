@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.1.2.1 2009/01/23 23:10:15 extace Exp $
+ * $Id: ms2_loader.c,v 1.1.2.2 2009/01/23 23:29:32 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -130,7 +130,6 @@ void ms2_setup_port(int port_fd)
 
 void do_ms2_load(int port_fd, int file_fd)
 {
-	printf("MS2 loader!\n");
 	count = read_s19(file_fd);
 	if (count == 0)
 		return;
@@ -510,7 +509,6 @@ void send_S12(gint port_fd, gint count)
 
 void enter_boot_mode(gint port_fd)
 {
-    printf("Sending jumperless flash command\n");
     write(port_fd, "!", 1);
     if (debug>4) {
         output( "!",FALSE);
