@@ -1,14 +1,15 @@
 #include <config.h>
 #include <configfile.h>
 #include <defines.h>
-#include <enums.h>
 #include <fcntl.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <glib/gstring.h>
 #include <glade/glade.h>
+#include <loader_common.h>
 #include <ms1_loader.h>
+#include <ms2_loader.h>
 #include <mtxloader.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +45,6 @@ int main (int argc, char *argv[])
 	xml = glade_xml_new (filename, "main_window", NULL);
 	g_free(filename);
 	main_window = glade_xml_get_widget (xml, "main_window");
-	init_controls();
 	glade_xml_signal_autoconnect (xml);
 	load_defaults();
 	gtk_widget_show_all (main_window);
@@ -92,14 +92,29 @@ EXPORT gboolean get_signature (GtkButton *button)
 	if (g_utf8_strlen(port, -1) == 0)
 		return FALSE;
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(port,9600);
+	
+	port_fd = open_port(port);
 	if (!(port_fd  > 0))
 	{
 		output("Could NOT open Port, You should check perms.\n",FALSE);
 		return FALSE;
 	}
-	get_ecu_signature(port_fd);
+	setup_port(port_fd,9600);
+	if (!get_ecu_signature(port_fd))
+	{
+		printf("9600 baud sig failed, closing and retrying\n");
+		close_port(port_fd);
+		printf("closed\n");
+		port_fd = open_port(port);
+		printf("opened\n");
+		setup_port(port_fd,115200);
+		printf("Setup 115200\n");
+		printf("calling get_sig\n");
+		get_ecu_signature(port_fd);
+		printf("after get_sig\n");
+	}
 	close_port(port_fd);
+
 	return TRUE;
 }
 
@@ -111,8 +126,7 @@ EXPORT gboolean load_firmware (GtkButton *button)
 	gchar *filename = NULL;
 	gint port_fd = 0;
 	gint file_fd = 0;
-	EcuState ecu_state = NOT_LISTENING;
-	gint result = FALSE;
+	FirmwareType type = MS1;
 
 	widget = glade_xml_get_widget (xml, "port_entry");
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
@@ -125,7 +139,7 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		return FALSE;
 
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(port,9600);
+	port_fd = open_port(port);
 	if (port_fd > 0)
 		output("Port successfully opened\n",FALSE);
 	else
@@ -145,56 +159,18 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
 		return FALSE;
 	}
-	ecu_state = detect_ecu(port_fd);
-	switch (ecu_state)
+	type = detect_firmware(filename);
+	if (type == MS1)
 	{
-		case NOT_LISTENING:
-			output("NO response to signature request\n",FALSE);
-			break;
-		case IN_BOOTLOADER:
-			output("ECU is in bootloader mode\n",FALSE);
-			break;
-		case LIVE_MODE:
-			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
-			result = jump_to_bootloader(port_fd);
-			if (result)
-			{
-				ecu_state = detect_ecu(port_fd);
-				if (ecu_state == IN_BOOTLOADER)
-				{
-					output("ECU is in bootloader mode, good!\n",FALSE);
-					break;
-				}
-				else
-					output("Could NOT attain bootloader mode\n",FALSE);
-			}
-			else
-				output("Could NOT attain bootloader mode\n",FALSE);
-			break;
+		setup_port(port_fd, 9600);
+		do_ms1_load(port_fd,file_fd);
 	}
-	if (ecu_state != IN_BOOTLOADER)
+	else if (type == MS2)
 	{
-		boot_jumper_prompt();
-		ecu_state = detect_ecu(port_fd);
-		if (ecu_state != IN_BOOTLOADER)
-		{
-			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
-			return FALSE;
-		}
-		else
-			output("Got into the bootloader, good!\n",FALSE);
+		setup_port(port_fd,115200);
+		do_ms2_load(port_fd,file_fd);
+	}
 
-	}
-	result = prepare_for_upload(port_fd);
-	if (!result)
-	{
-		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
-		return FALSE;
-	}
-	upload_firmware(port_fd,file_fd);
-	output("Firmware upload completed...\n",FALSE);
-	reboot_ecu(port_fd);
-	output("ECU reboot complete\n",FALSE);
 	close_port(port_fd);
 	return TRUE;
 }
@@ -305,84 +281,3 @@ void boot_jumper_prompt()
 }
 
 
-void init_controls()
-{
-	GtkWidget *widget = NULL;
-	GtkWidget *widget2 = NULL;
-	widget = glade_xml_get_widget (xml, "enter_clt_button");
-	if (GTK_IS_WIDGET(widget))
-		OBJ_SET(widget, "sensor", GINT_TO_POINTER(CLT));
-	widget2 = glade_xml_get_widget (xml, "use_clt_toggle");
-	if (GTK_IS_WIDGET(widget2))
-		OBJ_SET(widget2, "button", widget);
-
-	widget = glade_xml_get_widget (xml, "enter_iat_button");
-	if (GTK_IS_WIDGET(widget))
-		OBJ_SET(widget, "sensor", GINT_TO_POINTER(IAT));
-	widget2 = glade_xml_get_widget (xml, "use_iat_toggle");
-	if (GTK_IS_WIDGET(widget2))
-		OBJ_SET(widget2, "button", widget);
-
-}
-
-EXPORT gboolean use_sensor(GtkWidget *widget, gpointer data)
-{
-	GtkWidget *button = NULL;
-	button = (GtkWidget *)OBJ_GET(widget, "button");
-	gtk_widget_set_sensitive(button,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-	return TRUE;
-}
-
-
-EXPORT gboolean get_sensor_info(GtkWidget *widget, gpointer data)
-{
-	GtkWidget *dialog = NULL;
-	GtkWidget *temp1,*temp2,*temp3,*ohms1,*ohms2,*ohms3,*units,*bias;
-	samples sample;
-	gint response = 0;
-	gchar *fname = NULL;
-	gchar *filename = NULL;
-	GladeXML *d_xml = NULL;
-	gchar unit;
-	gint bias_val = 0;
-	SensorType type;
-
-	type = (SensorType)GPOINTER_TO_INT(OBJ_GET(widget,"sensor"));
-	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
-	filename = get_file(g_strdup(fname),NULL);
-	g_free(fname);
-	d_xml = glade_xml_new (filename, "get_sensor_dialog", NULL);
-	g_free(filename);
-	dialog = glade_xml_get_widget (d_xml, "get_sensor_dialog");
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (response == GTK_RESPONSE_OK)
-	{	
-		temp1 = glade_xml_get_widget(d_xml,"temp1");
-		temp2 = glade_xml_get_widget(d_xml,"temp1");
-		temp3 = glade_xml_get_widget(d_xml,"temp1");
-		ohms1 = glade_xml_get_widget(d_xml,"ohms1");
-		ohms2 = glade_xml_get_widget(d_xml,"ohms2");
-		ohms3 = glade_xml_get_widget(d_xml,"ohms3");
-		units = glade_xml_get_widget(d_xml,"F_radio");
-		bias = glade_xml_get_widget(d_xml,"bias");
-		sample.t1 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp1),0,-1),NULL,10);
-		sample.t2 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp2),0,-1),NULL,10);
-		sample.t3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(temp3),0,-1),NULL,10);
-		sample.r1 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms1),0,-1),NULL,10);
-		sample.r2 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms2),0,-1),NULL,10);
-		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
-		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
-		sample.r3 = strtol(gtk_editable_get_chars(GTK_EDITABLE(ohms3),0,-1),NULL,10);
-		bias_val = strtol(gtk_editable_get_chars(GTK_EDITABLE(bias),0,-1),NULL,10);
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(units)))
-			unit = 'F';
-		else
-			unit = 'C';
-		/*thermistor(unit,&samples,bias_val,type,NULL);
-		write_inc_file();
-		*/
-	
-	}
-	gtk_widget_destroy(dialog);
-	return TRUE;
-}

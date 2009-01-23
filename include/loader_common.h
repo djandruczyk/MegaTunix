@@ -11,30 +11,26 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __LOADER_H__
-#define __LOADER_H__
+#ifndef __LOADER_COMMON_H__
+#define __LOADER_COMMON_H__
 
-#include <enums.h>
+#include <winserialio.h>
 #include <gtk/gtk.h>
 
 typedef enum
 {
-	NOT_LISTENING=0xcba,
-	IN_BOOTLOADER,
-	LIVE_MODE
-}EcuState;
+	MS1=0xcca,
+	MS2
+}FirmwareType;
+
 
 /* Prototypes */
-gint setup_port(gchar * );
+gint open_port(gchar *);
+gint setup_port(gint, gint);
 void flush_serial(gint, FlushDirection);
-void get_ecu_signature(gint);
-EcuState detect_ecu(gint);
-gboolean jump_to_bootloader(gint);
-gboolean prepare_for_upload(gint);
-void upload_firmware(gint, gint);
-void reboot_ecu(gint);
+gboolean get_ecu_signature(gint);
 void close_port(gint);
-void output(gchar *);
+FirmwareType detect_firmware(gchar *);
 
 
 #endif

@@ -14,7 +14,7 @@
 #ifndef __MS1_LOADER_H__
 #define __MS1_LOADER_H__
 
-#include <enums.h>
+#include <winserialio.h>
 #include <gtk/gtk.h>
 
 typedef enum
@@ -25,16 +25,12 @@ typedef enum
 }EcuState;
 
 /* Prototypes */
-gint setup_port(gchar *, gint );
-void flush_serial(gint, FlushDirection);
-void get_ecu_signature(gint);
+void do_ms1_load(gint, gint);
 EcuState detect_ecu(gint);
 gboolean jump_to_bootloader(gint);
 gboolean prepare_for_upload(gint);
 void upload_firmware(gint, gint);
 void reboot_ecu(gint);
-void close_port(gint);
 void output(gchar *, gboolean);
-
 
 #endif

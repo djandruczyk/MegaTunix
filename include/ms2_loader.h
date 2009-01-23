@@ -11,21 +11,21 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __WINSERIALIO_H__
-#define __WINSERIALIO_H__
+#ifndef __MS2_LOADER_H__
+#define __MS2_LOADER_H__
 
-typedef enum
-{
-	INBOUND=0x2E0,
-	OUTBOUND,
-	BOTH
-}FlushDirection;
-
+#include <winserialio.h>
+#include <gtk/gtk.h>
 
 /* Prototypes */
-void win32_setup_serial_params(int, int);
-void win32_toggle_serial_control_lines(void);
-void win32_flush_serial(int, FlushDirection);
-/* Prototypes */
+void do_ms2_load(gint, gint);
+gint read_s19(gint);
+void enter_boot_mode(gint);
+gboolean wakeup_S12(gint);
+void erase_S12(gint);
+void send_S12(gint, gint);
+void free_s19(gint);
+void reset_proc(gint);
+void output(gchar *, gboolean);
 
 #endif

@@ -14,13 +14,13 @@
 
 #include <config.h>
 #include <defines.h>
-#include <enums.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <getfiles.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <getfiles.h>
+#include <loader_common.h>
 #include <ms1_loader.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,120 +42,66 @@ struct termios oldtio;
 struct termios newtio;
 #endif
 
-gint setup_port(gchar * port_name, gint baud)
+
+void do_ms1_load(gint port_fd, gint file_fd)
 {
-	gint fd = 0;
-	gint _baud = 0;
-#ifdef __WIN32__
-	fd = open(port_name, O_RDWR | O_BINARY );
-#else
-	fd = open(port_name, O_RDWR | O_NOCTTY);
-#endif
-	if (fd > 0)
+	gboolean result = FALSE;
+	EcuState ecu_state = NOT_LISTENING;
+	ecu_state = detect_ecu(port_fd);
+	switch (ecu_state)
 	{
-
-#ifdef __WIN32__
-
-		win32_setup_serial_params(fd, baud);
-#else
-
-		/* Save serial port status */
-		tcgetattr(fd,&oldtio);
-		flush_serial(fd, TCIOFLUSH);
-
-		memset(&newtio, 0, sizeof(newtio));
-		/* 
-		 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
-		 * cfsetospeed
-		 * CRTSCTS : output hardware flow control (only used if the cable has
-		 * all necessary lines. See sect. 7 of Serial-HOWTO)
-		 * CS8     : 8n1 (8bit,no parity,1 stopbit)
-		 * CLOCAL  : local connection, no modem contol
-		 * CREAD   : enable receiving characters
-		 */
-
-		/* Set baud (posix way) */
-
-		if (baud == 9600)
-			_baud = B9600;
-		else if (baud == 115200)
-			_baud = B115200;
-		else
-			printf("INVALID BAUD RATE %i\n",baud);
-		cfsetispeed(&newtio, _baud);
-		cfsetospeed(&newtio, _baud);
-
-		/* Mask and set to 8N1 mode... */
-		newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
-		/* Set additional flags, note |= syntax.. */
-		/* Enable receiver, ignore modem ctrls lines, use 8 bits */
-		newtio.c_cflag |= CLOCAL | CREAD | CS8;
-
-		/* RAW Input */
-		/* Ignore signals, enable canonical, etc */
-		newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-
-		/* Disable software flow control */
-		newtio.c_iflag &= ~(IXON | IXOFF );
-
-		/* Set raw output */
-		newtio.c_oflag &= ~OPOST;
-		/* 
-		 *            initialize all control characters 
-		 *                       default values can be found in /usr/include/termios.h, and are given
-		 *                                  in the comments, but we don't need them here
-		 *                                           */
-		newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
-		newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
-		newtio.c_cc[VERASE]   = 0;     /* del */
-		newtio.c_cc[VKILL]    = 0;     /* @ */
-		newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
-		newtio.c_cc[VEOL]     = 0;     /* '\0' */
-		newtio.c_cc[VMIN]     = 0;
-		newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-
-		tcsetattr(fd,TCSAFLUSH,&newtio);
-
-#endif
+		case NOT_LISTENING:
+			output("NO response to signature request\n",FALSE);
+			break;
+		case IN_BOOTLOADER:
+			output("ECU is in bootloader mode, good!\n",FALSE);
+			break;
+		case LIVE_MODE:
+			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
+			result = jump_to_bootloader(port_fd);
+			if (result)
+			{
+				ecu_state = detect_ecu(port_fd);
+				if (ecu_state == IN_BOOTLOADER)
+				{
+					output("ECU is in bootloader mode, good!\n",FALSE);
+					break;
+				}
+				else
+					output("Could NOT attain bootloader mode\n",FALSE);
+			}
+			else
+				output("Could NOT attain bootloader mode\n",FALSE);
+			break;
 	}
-	return fd;
+	if (ecu_state != IN_BOOTLOADER)
+	{
+		output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n",FALSE);
+		getc(stdin);
+		ecu_state = detect_ecu(port_fd);
+		if (ecu_state != IN_BOOTLOADER)
+		{
+			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
+			exit (-1);
+		}
+		else
+			output("Got into the bootloader, good!\n",FALSE);
 
-}
+	}
+	result = prepare_for_upload(port_fd);
+	if (!result)
+	{
+		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
+		exit (-1);
+	}
+	upload_firmware(port_fd,file_fd);
+	output("Firmware upload completed...\n",FALSE);
+	reboot_ecu(port_fd);
+	output("ECU reboot complete\n",FALSE);
 
-
-void close_port(gint fd)
-{
-#ifndef __WIN32__
-	tcsetattr(fd,TCSAFLUSH,&oldtio);
-#endif
-	close(fd);
 	return;
 }
 
-
-void flush_serial(gint fd, FlushDirection type)
-{
-#ifdef __WIN32__
-	if (fd)
-		win32_flush_serial(fd, type); 
-#else
-	if (fd)
-	{
-		switch (type)
-		{
-			case INBOUND:
-				tcflush(fd, TCIFLUSH);
-				break;
-			case OUTBOUND:
-				tcflush(fd, TCOFLUSH);
-				break;
-			case BOTH:
-				tcflush(fd, TCIOFLUSH);
-				break;
-		}
-	}
-#endif
-}
 
 EcuState detect_ecu(gint fd)
 {
@@ -219,90 +165,6 @@ EcuState detect_ecu(gint fd)
 	return NOT_LISTENING;
 }
 
-
-void get_ecu_signature(gint fd)
-{
-	gint res = 0;
-	gint size = 1024;
-	guchar buf[1024];
-	guchar *ptr = buf;
-	gint total_read = 0;
-	gint total_wanted = 0;
-	gint zerocount = 0;
-	gchar  *message = NULL;
-	gint attempt = 0;
-
-	/* Probe for response 
-	 * First check for signature (running state)
-	 * If that fails, see if we are in bootloader mode already
-	 */
-
-sig_check:
-	if (attempt > 2)
-	{
-		output("Max attempts reached, sorry\n",FALSE);
-		return;
-	}
-	res = write (fd,"S",1);
-	flush_serial(fd,OUTBOUND);
-	if (res != 1)
-		output("Failure sending signature request!\n",FALSE);
-	g_usleep(300000); /* 300ms timeout */
-	total_read = 0;
-	total_wanted = size;
-	zerocount = 0;
-	while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
-	{
-		total_read += res = read(fd,
-				ptr+total_read,
-				total_wanted-total_read);
-
-		/* If we get nothing back (i.e. timeout, assume done)*/
-		if (res <= 0)
-			zerocount++;
-
-		if (zerocount > 1)
-			break;
-	}
-	if (total_read > 0)
-	{
-		message = g_strndup(((gchar *)buf),total_read);
-		/* Check for "what" or "Boot" */
-		if (g_strrstr_len(message,total_read, "Vector"))
-		{
-			g_free(message);
-			output("ECU has corrupted firmware!\n",FALSE);
-			return;
-		}
-		else if (g_strrstr_len(message,total_read, "what"))
-		{
-			g_free(message);
-			attempt++;
-			output("ECU is in bootloader mode, attempting reboot\n",FALSE);
-			res = write (fd,"X",1);
-			flush_serial(fd,BOTH);
-			g_usleep(500000);
-			goto sig_check;
-		}
-		else if (g_strrstr_len(message,total_read, "Boot"))
-		{
-			g_free(message);
-			output("ECU is in bootloader mode, attempting reboot\n",FALSE);
-			attempt++;
-			res = write (fd,"X",1);
-			flush_serial(fd,BOTH);
-			g_usleep(500000);
-			goto sig_check;
-		}
-		else	
-		{
-			output(g_strdup_printf("Detected signature: \"%s\"\n",message),TRUE);
-			g_free(message);
-			return;
-		}
-	}
-	return;
-}
 
 
 gboolean jump_to_bootloader(gint fd)

@@ -17,7 +17,9 @@
 #include <getfiles.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <loader_common.h>
 #include <ms1_loader.h>
+#include <ms2_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -41,15 +43,14 @@ gint main(gint argc, gchar ** argv)
 {
 	gint port_fd = 0;
 	gint file_fd = 0;
-	EcuState ecu_state = NOT_LISTENING;
-	gboolean result = FALSE;
+	FirmwareType type;
 	
 	verify_args(argc, argv);
 
 	output(g_strdup_printf("MegaTunix msloader %s\n",VERSION),TRUE);
 
 	/* If we got this far, all is good argument wise */
-	port_fd = setup_port(argv[1], 9600);
+	port_fd = open_port(argv[1]);
 	if (port_fd > 0)
 		output("Port successfully opened\n",FALSE);
 	else
@@ -69,61 +70,22 @@ gint main(gint argc, gchar ** argv)
 		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
 		exit(-1);
 	}
-	ecu_state = detect_ecu(port_fd);
-	switch (ecu_state)
+	type = detect_firmware(argv[2]);
+	if (type == MS1)
 	{
-		case NOT_LISTENING:
-			output("NO response to signature request\n",FALSE);
-			break;
-		case IN_BOOTLOADER:
-			output("ECU is in bootloader mode, good!\n",FALSE);
-			break;
-		case LIVE_MODE:
-			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
-			result = jump_to_bootloader(port_fd);
-			if (result)
-			{
-				ecu_state = detect_ecu(port_fd);
-				if (ecu_state == IN_BOOTLOADER)
-				{
-					output("ECU is in bootloader mode, good!\n",FALSE);
-					break;
-				}
-				else
-					output("Could NOT attain bootloader mode\n",FALSE);
-			}
-			else
-				output("Could NOT attain bootloader mode\n",FALSE);
-			break;
+		setup_port(port_fd, 9600);
+		do_ms1_load(port_fd,file_fd);
 	}
-	if (ecu_state != IN_BOOTLOADER)
+	else if (type == MS2)
 	{
-		output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n",FALSE);
-		getc(stdin);
-		ecu_state = detect_ecu(port_fd);
-		if (ecu_state != IN_BOOTLOADER)
-		{
-			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
-			exit (-1);
-		}
-		else
-			output("Got into the bootloader, good!\n",FALSE);
+		setup_port(port_fd,115200);
+		do_ms2_load(port_fd,file_fd);
+	}
 
-	}
-	result = prepare_for_upload(port_fd);
-	if (!result)
-	{
-		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
-		exit (-1);
-	}
-	upload_firmware(port_fd,file_fd);
-	output("Firmware upload completed...\n",FALSE);
-	reboot_ecu(port_fd);
-	output("ECU reboot complete\n",FALSE);
 	close_port(port_fd);
-	
 	return (0) ;
 }
+
 
 void verify_args(gint argc, gchar **argv)
 {

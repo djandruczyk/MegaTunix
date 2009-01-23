@@ -370,13 +370,6 @@ typedef enum
 
 typedef enum
 {
-	INBOUND=0x2E0,
-	OUTBOUND,
-	BOTH
-}FlushDirection;
-
-typedef enum
-{
 	ADD=0,
 	SUBTRACT,
 	MULTIPLY,

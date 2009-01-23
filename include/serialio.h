@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 #include <config.h>
 #include <defines.h>
-#include <enums.h>
+#include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
 #endif
