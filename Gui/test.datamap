@@ -34,11 +34,36 @@ keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups
 key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
+#choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,INVALID,INVALID
+#bitvals=0,1,2,3,4,5,6,7
+choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC
+bitvals=0,1,2,3,4,5
+toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
+offset=547
+bitmask=7
+bitshift=0
+
+[combobox3]
+keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
 choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,INVALID,INVALID
 bitvals=0,1,2,3,4,5,6,7
 toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
 offset=547
 bitmask=7
+bitshift=0
+
+[combobox2]
+keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=MS2,Usquirt,Undefined
+bitvals=1,2,255
+offset=744
+bitmask=255
 bitshift=0
 
 [ms2_radiobutton]
@@ -76,8 +101,3 @@ bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When set to undefined the ECU will NOT function and will return an alternating 0, 8000 RPM and no other sensor inputs.  This is because the MS-II vs microsquirt's have inverted ignition outputs and this can cause the coil to fail.
-
-[button1]
-keys=table_num
-key_types=_STRING_
-table_num=0

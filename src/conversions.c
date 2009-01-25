@@ -20,6 +20,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <glade/glade.h>
+#include <gui_handlers.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <notifications.h>
@@ -387,10 +388,7 @@ void convert_temps(gpointer widget, gpointer units)
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
-	gint precision = 0;
 	gchar * text = NULL;
-	gfloat tmpf = 0.0;
-	gfloat new = 0.0;
 	GtkAdjustment * adj = NULL;
 	gboolean state = FALSE;
 	gint widget_temp = -1;
@@ -434,25 +432,19 @@ void convert_temps(gpointer widget, gpointer units)
 			adj->lower = ((lower *(9.0/5.0))+32)+0.001;
 
 			gtk_adjustment_changed(adj);
+			/*
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == CELSIUS))
 		{
-			precision = (gint)OBJ_GET(widget,"precision");
-			text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-			tmpf = (gfloat)g_strtod(text,NULL);
-			g_free(text);
-			new = ((tmpf *(9.0/5.0))+32)+0.001;
-			text = g_strdup_printf("%1$.*2$f",new,precision);
-			gtk_entry_set_text(
-					GTK_ENTRY(widget),
-					text);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
 		{
@@ -493,25 +485,19 @@ void convert_temps(gpointer widget, gpointer units)
 			adj->lower = ((lower-32)*(5.0/9.0))+0.001;
 			adj->upper = ((upper-32)*(5.0/9.0))+0.001;
 			gtk_adjustment_changed(adj);
+			/*
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == FAHRENHEIT))
 		{
-			precision = (gint)OBJ_GET(widget,"precision");
-			text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-			tmpf = (gfloat)g_strtod(text,NULL);
-			g_free(text);
-			new = ((tmpf - 32)*(5.0/9.0))+0.001;
-			text = g_strdup_printf("%1$.*2$f",new,precision);
-			gtk_entry_set_text(
-					GTK_ENTRY(widget),
-					text);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
 		{

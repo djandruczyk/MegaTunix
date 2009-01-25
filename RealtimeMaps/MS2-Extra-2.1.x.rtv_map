@@ -3,7 +3,7 @@ major=1
 minor=2
 
 [realtime_map]
-applicable_firmwares=MS-II V2.0.x
+applicable_firmwares=MS-II-Extra V2.0.x
 applicable_signatures=MS2/Extra 2.0
 derived_total=108
 raw_list=raw_secl

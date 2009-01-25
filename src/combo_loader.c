@@ -62,6 +62,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	g_free(tmpbuf);
 	cfg_read_int(cfgfile,section,"bitmask",&bitmask);
 	cfg_read_int(cfgfile,section,"bitshift",&bitshift);
+/*
 	bits = bitmask >> bitshift;
 	for (i=0;i<8;i++)
 	{
@@ -70,11 +71,13 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	}
 	tmpi = (gint)pow(2,(double)highbit);
 
-	if (tmpi != num_choices)
+*/
+	if (num_bitvals != num_choices)
 	{
-		printf("BIG PROBLEM, combobox  choices %i and bits %i don't match up\n",num_choices,tmpi);
+		printf("BIG PROBLEM, combobox  choices %i and bits %i don't match up\n",num_choices,num_bitvals);
 		return;
 	}
+
 
 	store = gtk_list_store_new(COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR);
 

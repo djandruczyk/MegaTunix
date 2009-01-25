@@ -29,7 +29,7 @@ extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
 extern Serial_Params *serial_params;
-GdkColor white = { 0, 65535, 65535, 65535 };
+extern GdkColor white;
 extern GObject *global_data;
 
 

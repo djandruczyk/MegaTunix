@@ -76,6 +76,7 @@ GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
+GdkColor white = { 0, 65535, 65535, 65535};
 
 gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
@@ -1843,26 +1844,31 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 	{
-//		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
+		//		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
 
 		tmpi = ((gint)value & bitmask) >> bitshift;
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 		valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
+		i = 0;
 		while (valid)
 		{
 			gtk_tree_model_get(GTK_TREE_MODEL(model),&iter,BITVAL_COL,&t_bitval,-1);
 			if (tmpi == t_bitval)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
-				break;
+				gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
+				goto combo_toggle;
 			}
 			valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
+			i++;
 
 		}
-
+		//printf("COULD NOT FIND MATCH for data for combo %p, data %i!!\n",widget,tmpi);
+		gtk_widget_modify_base(GTK_BIN(widget)->child,GTK_STATE_NORMAL,&red);
+		return;
+combo_toggle:
 		if (toggle_groups)
-			combo_toggle_groups_linked(widget,tmpi);
-
+			combo_toggle_groups_linked(widget,i);
 	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
@@ -2558,8 +2564,8 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
  * are "linked" to various other controls for the purpose of making the 
  * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
  * grey out a group of related controls.
- * \param toggle_groups, comms sep list of group names
- * \param new_state,  new state of the button linking to these groups
+ * \param widget, combo button
+ * \param active, which entry in list was selected
  */
 void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 {
