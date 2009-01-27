@@ -73,7 +73,7 @@
 			      <child>
 				<widget class="GtkDrawingArea" id="ttm_darea">
 				  <property name="visible">True</property>
-				  <signal name="configure_event" handler="logger_display_config_event" last_modification_time="Fri, 22 Sep 2006 16:57:10 GMT"/>
+				  <signal name="configure_event" handler="ms2_logger_display_config_event" last_modification_time="Tue, 27 Jan 2009 00:12:22 GMT"/>
 				  <signal name="expose_event" handler="logger_display_expose_event" last_modification_time="Fri, 22 Sep 2006 16:57:47 GMT"/>
 				</widget>
 			      </child>
@@ -90,13 +90,13 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkVBox" id="vbox1">
+			<widget class="GtkVBox" id="tlog_vbox1">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">5</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox1">
+			    <widget class="GtkHBox" id="tlog_hbox1">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
@@ -185,7 +185,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
+				      <property name="active">True</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <signal name="toggled" handler="ms2_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:26 GMT"/>
@@ -208,7 +208,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
+				      <property name="active">False</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <property name="group">toothlogger_disable_radio_button</property>
@@ -276,7 +276,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
+				      <property name="active">False</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <signal name="toggled" handler="ms2_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:32 GMT"/>
@@ -299,7 +299,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
+				      <property name="active">True</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <property name="group">triggerlogger_enable_radio_button</property>
@@ -322,7 +322,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkTable" id="composite_logger_table">
+				<widget class="GtkTable" id="compositelogger_buttons_table">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">2</property>
@@ -367,7 +367,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
+				      <property name="active">False</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <signal name="toggled" handler="ms2_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:32 GMT"/>
@@ -390,7 +390,7 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
+				      <property name="active">True</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <property name="group">compositelogger_enable_radio_button</property>

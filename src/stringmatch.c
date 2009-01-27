@@ -46,8 +46,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS2_STD));
 	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_",
 			GINT_TO_POINTER(MS2_EXTRA));
-	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
-			GINT_TO_POINTER(MS2_E_COMPMON));
+	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_COMPOSITEMON_",
+			GINT_TO_POINTER(MS2_EXTRA_COMPOSITEMON));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -177,8 +177,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_TOOTHMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(START_TRIGMON_LOGGER));
+	g_hash_table_insert(str_2_enum,"_START_COMPOSITEMON_LOGGER_",
+			GINT_TO_POINTER(START_TRIGMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
 			GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
+	g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",
+			GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_DLOG_SELECT_ALL_",

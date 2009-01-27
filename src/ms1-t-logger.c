@@ -25,6 +25,7 @@
 #include <timeout_handlers.h>
 #include <logviewer_gui.h>
 #include <rtv_processor.h>
+#include <widgetmgmt.h>
 
 
 TTMon_Data *ttm_data;
@@ -45,18 +46,15 @@ void bind_ttm_to_page(gint page)
 EXPORT void reset_ttm_buttons()
 {
 	GtkWidget *widget = NULL;
-	extern GHashTable *dynamic_widgets;
-	widget = g_hash_table_lookup(dynamic_widgets,"toothlogger_disable_radio_button");
+	widget = lookup_widget("toothlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	else
-		printf("tooth disable button not found!!!\n");
-	widget = g_hash_table_lookup(dynamic_widgets,"triggerlogger_disable_radio_button");
+	widget = lookup_widget("triggerlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	else
-		printf("trigger disable button not found!!!\n");
-
+	widget = lookup_widget("compositelogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 }
 
 
@@ -490,11 +488,6 @@ EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
-			case START_COMPOSITE_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
-				break;
 			case STOP_TOOTHMON_LOGGER:
 				stop_tickler(TOOTHMON_TICKLER);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
@@ -504,10 +497,6 @@ EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				stop_tickler(TRIGMON_TICKLER);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
-				break;
-			case STOP_COMPOSITE_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
 				break;
 			default:
 				break;

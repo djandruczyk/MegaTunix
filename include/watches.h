@@ -39,6 +39,7 @@ struct _DataWatch
 	gint high;
 	gint exact;
 	gint threshold;
+	gpointer user_data;
 	WatchStyle style;
 	gboolean state;
 	gchar * function;
@@ -46,9 +47,11 @@ struct _DataWatch
 };
 /* Prototypes */
 EXPORT void fire_off_rtv_watches_pf();
-guint32 create_bit_watch(gchar *, gint, gint, gchar *);
+guint32 create_single_bit_watch(gchar *, gint, gint, gchar *, gpointer);
 void watch_destroy(gpointer);
+void remove_watch(guint32);
 void process_watches(gpointer, gpointer, gpointer);
+gboolean watch_active(guint32 );
 /* Prototypes */
 
 #endif

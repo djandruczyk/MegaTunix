@@ -119,6 +119,11 @@ gboolean deregister_widget(gchar *name)
 }
 
 
+GtkWidget * lookup_widget(const gchar * name)
+{
+	return (g_hash_table_lookup(dynamic_widgets,name));
+}
+
 /*!
  \brief get_State() returns either TRUE or false based on the encoded value 
  passed across as a string.  The string is split up using g_strsplit, the 

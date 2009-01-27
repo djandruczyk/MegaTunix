@@ -25,6 +25,8 @@ typedef struct _MS2_TTMon_Data MS2_TTMon_Data;
  */
 struct _MS2_TTMon_Data
 {
+	gboolean stop;		/*! Stop display */
+	GtkWidget *widget;	/*! nasty hack! */
 	gint page;		/*! page used to discern them apart */
 	GdkPixmap *pixmap;	/*! Pixmap */
 	GtkWidget *darea;	/*! Pointer to drawing area */

@@ -431,10 +431,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&firmware->toothmon_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"));
-		if (firmware->capabilities & MS2_E_COMPMON)
+		if (firmware->capabilities & MS2_EXTRA_COMPOSITEMON)
 		{
-			if(!cfg_read_int(cfgfile,"parameters","CompmonPage",&firmware->compmon_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompmonPage\" value not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_int(cfgfile,"parameters","CompositemonPage",&firmware->compositemon_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompositemonPage\" value not found in interrogation profile, ERROR\n"));
 		}
 	}
 	if(!cfg_read_string(cfgfile,"gui","LoadTabs",

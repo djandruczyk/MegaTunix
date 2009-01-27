@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.1.2.2 2009/01/23 23:29:32 extace Exp $
+ * $Id: ms2_loader.c,v 1.1.2.3 2009/01/27 01:50:13 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -130,6 +130,7 @@ void ms2_setup_port(int port_fd)
 
 void do_ms2_load(int port_fd, int file_fd)
 {
+	total_bytes = 0;
 	count = read_s19(file_fd);
 	if (count == 0)
 		return;

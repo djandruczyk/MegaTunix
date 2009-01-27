@@ -25,6 +25,8 @@ typedef struct _TTMon_Data TTMon_Data;
  */
 struct _TTMon_Data
 {
+	gboolean stop;		/*! Stop display */
+	GtkWidget *widget;	/*! nasty hack! */
 	gint page;		/*! page used to discern them apart */
 	GdkPixmap *pixmap;	/*! Pixmap */
 	GtkWidget *darea;	/*! Pointer to drawing area */

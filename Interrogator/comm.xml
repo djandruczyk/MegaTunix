@@ -485,8 +485,8 @@
 			<func_call_arg>_MS1_E_TOOTHMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function_w_arg>crunch_trigtooth_data_pf</function_w_arg>
-				<function_w_arg>update_trigtooth_display_pf</function_w_arg>
+				<function>crunch_trigtooth_data_pf</function>
+				<function>update_trigtooth_display_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -497,8 +497,7 @@
 			<func_call_arg>_MS2_E_TRIGMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>crunch_trigtooth_data_pf</function>
-				<function>update_trigtooth_display_pf</function>
+				<function>ms2_ttm_watch</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -509,8 +508,18 @@
 			<func_call_arg>_MS2_E_TOOTHMON_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function_w_arg>crunch_trigtooth_data_pf</function_w_arg>
-				<function_w_arg>update_trigtooth_display_pf</function_w_arg>
+				<function>ms2_ttm_watch</function>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>ms2_e_read_compositemon</name>
+			<desc>Reads compositemon page </desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>read_ve_const</func_call_name>
+			<func_call_arg>_MS2_E_COMPOSITEMON_</func_call_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
+			<post_functions>
+				<function>ms2_ttm_watch</function>
 			</post_functions>
 		</cmd>
 	</commands>

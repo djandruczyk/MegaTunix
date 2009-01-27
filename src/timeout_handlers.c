@@ -127,9 +127,11 @@ void start_tickler(TicklerType type)
 			if (!((connected) && (interrogated)))
 				break;
 			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+				statuscounts_id = g_timeout_add(250,(GtkFunction)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
+			break;
+		default:
 			break;
 
 	}
@@ -198,7 +200,8 @@ void stop_tickler(TicklerType type)
 				g_source_remove(statuscounts_id);
 				statuscounts_id = 0;
 			break;
-
+		default:
+			break;
 	}
 }
 
@@ -276,14 +279,10 @@ gboolean signal_toothtrig_read(TicklerType type)
 		case TOOTHMON_TICKLER:
 			if (firmware->capabilities & MSNS_E)
 				io_cmd("ms1_e_read_toothmon",NULL);
-			if (firmware->capabilities & MS2_EXTRA)
-				io_cmd("ms2_e_read_toothmon",NULL);
 			break;
 		case TRIGMON_TICKLER:
 			if (firmware->capabilities & MSNS_E)
 				io_cmd("ms1_e_read_trigmon",NULL);
-			if (firmware->capabilities & MS2_EXTRA)
-				io_cmd("ms2_e_read_trigmon",NULL);
 			break;
 		default:
 			break;

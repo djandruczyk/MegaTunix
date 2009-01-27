@@ -162,6 +162,23 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			command = (Command *)data;
 			io_cmd(NULL,command->post_functions);
 			break;
+		case MS2_E_COMPOSITEMON:
+			if (!offline)
+			{
+				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+					queue_burn_ecu_flash(last_page);
+				output = initialize_outputdata();
+				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->compositemon_page));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
+				OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
+				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd(firmware->ve_command,output);
+			}
+			command = (Command *)data;
+			io_cmd(NULL,command->post_functions);
+			break;
 		case MS2_E_TRIGMON:
 			if (!offline)
 			{

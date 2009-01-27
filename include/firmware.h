@@ -86,7 +86,7 @@ struct _Firmware_Details
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
-	gint compmon_page;	/*! Composite Monitor RO Page (ms2-extra only)*/
+	gint compositemon_page;	/*! Composite Monitor RO Page (ms2-extra only)*/
 	Page_Params **page_params;/*! special vars per page */
 	Table_Params **table_params;/*! details each table */
 	Req_Fuel_Params **rf_params;/*! req_fuel params */

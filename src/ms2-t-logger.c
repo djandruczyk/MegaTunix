@@ -25,6 +25,8 @@
 #include <timeout_handlers.h>
 #include <logviewer_gui.h>
 #include <rtv_processor.h>
+#include <watches.h>
+#include <widgetmgmt.h>
 
 
 MS2_TTMon_Data *ttm_data;
@@ -356,29 +358,44 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 		{
 
 			case START_TOOTHMON_LOGGER:
+				ttm_data->stop = FALSE;
+				ttm_data->widget = widget;
+				OBJ_SET(widget,"io_cmd_function","ms2_e_read_toothmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				io_cmd("ms2_e_read_toothmon",NULL);
 				break;
 			case START_TRIGMON_LOGGER:
+				ttm_data->stop = FALSE;
+				ttm_data->widget = widget;
+				OBJ_SET(widget,"io_cmd_function","ms2_e_read_trigmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				io_cmd("ms2_e_read_trigmon",NULL);
 				break;
-			case START_COMPOSITE_LOGGER:
+			case START_COMPOSITEMON_LOGGER:
+				ttm_data->stop = FALSE;
+				ttm_data->widget = widget;
+				OBJ_SET(widget,"io_cmd_function","ms2_e_read_compositemon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				io_cmd("ms2_e_read_compositemon",NULL);
 				break;
 			case STOP_TOOTHMON_LOGGER:
+				ttm_data->stop = TRUE;
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
+				ttm_data->stop = TRUE;
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
 				break;
-			case STOP_COMPOSITE_LOGGER:
+			case STOP_COMPOSITEMON_LOGGER:
+				ttm_data->stop = TRUE;
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
 				break;
@@ -387,4 +404,29 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 		}
 	}
 	return TRUE;
+}
+
+
+/*!
+ \brief ms2_ttm_update is a function called by a watch that was set looking
+ for the state of a particular variable. When that var is set  this function
+ is fired off to take care of updating the MS2 TTM display
+ \param data (gpointer) arbritary data passed.
+ */
+void ms2_ttm_update(gpointer data)
+{
+	gint page = 0;
+
+	page = (gint)OBJ_GET(ttm_data->widget,"page");
+	_ms2_crunch_trigtooth_data(page);
+	update_trigtooth_display(page);
+	if (ttm_data->stop)
+		return;
+	io_cmd((gchar *)OBJ_GET(ttm_data->widget,"io_cmd_function"),NULL);
+}
+
+
+EXPORT void ms2_ttm_watch(void)
+{
+	create_single_bit_watch("status3",1,TRUE,"ms2_ttm_update", (gpointer)ttm_data->widget);
 }

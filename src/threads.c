@@ -95,7 +95,9 @@ void io_cmd(gchar *io_cmd_name, void *data)
 		message = initialize_io_message();
 		message->command = command;
 		if (data)
+		{
 			message->payload = data;
+		}
 		if (command->type != FUNC_CALL)
 			build_output_string(message,command,data);
 	}

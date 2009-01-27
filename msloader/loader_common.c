@@ -31,7 +31,6 @@
 #ifdef __WIN32__
 #include <winserialio.h>
 #else
-#define __USE_BSD
 #include <termios.h>
 #endif
 
@@ -52,9 +51,8 @@ gint open_port(gchar * port_name)
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
-	fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY);
+	fd = open(port_name, O_RDWR | O_NOCTTY );
 #endif
-	fcntl(fd,F_SETFL,0);
 	return fd;
 }
 
@@ -114,8 +112,6 @@ gint setup_port(gint fd, gint baud)
 	 default values can be found in /usr/include/termios.h, and are given
 	 in the comments, but we don't need them here
 	 *                                           */
-	if (baud == 9600)
-	{
 	newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
 	newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
 	newtio.c_cc[VERASE]   = 0;     /* del */
@@ -124,20 +120,9 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	newtio.c_cc[VMIN]     = 0;
 	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-	}
-	else
-	{
-		cc_t    ttydefchars[NCCS] = {
-			CEOF,   CEOL,   CEOL,   CERASE, CWERASE, CKILL, CREPRINT,
-			_POSIX_VDISABLE, CINTR, CQUIT,  CSUSP,  CDSUSP, CSTART, CSTOP,  CLNEXT,
-			CFLUSH, 1, 0,  0, _POSIX_VDISABLE
-		};
-
-		memcpy(newtio.c_cc, ttydefchars, NCCS);
-		//newtio.c_cc[VMIN]     = 0;
-		//newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-
-	}
+	/* MS2 quirk */
+	if (baud == 115200)
+		newtio.c_cc[VTIME]    = 21;     /* 2100ms timeout */
 
 	tcsetattr(fd,TCSAFLUSH,&newtio);
 
@@ -184,8 +169,8 @@ void flush_serial(gint fd, FlushDirection type)
 gboolean get_ecu_signature(gint fd)
 {
 	gint res = 0;
-	gint size = 1024;
-	guchar buf[1024];
+	gint size = 128;
+	guchar buf[128];
 	guchar *ptr = buf;
 	gint total_read = 0;
 	gint total_wanted = 0;
@@ -198,11 +183,9 @@ gboolean get_ecu_signature(gint fd)
 	 * If that fails, see if we are in bootloader mode already
 	 */
 
-	printf("get_ecu_signature\n");
 	flush_serial(fd,BOTH);
 sig_check:
-	printf("Attempt %i\n",attempt);
-	if (attempt > 2)
+	if (attempt > 1)
 		return FALSE;
 	res = write (fd,"S",1);
 	flush_serial(fd,OUTBOUND);
@@ -217,12 +200,8 @@ sig_check:
 		total_read += res = read(fd,
 				ptr+total_read,
 				total_wanted-total_read);
-
 		/* If we get nothing back (i.e. timeout, assume done)*/
 		if (res <= 0)
-			zerocount++;
-
-		if (zerocount > 1)
 			break;
 	}
 	if (total_read > 0)

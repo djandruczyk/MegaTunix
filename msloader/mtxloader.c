@@ -102,16 +102,10 @@ EXPORT gboolean get_signature (GtkButton *button)
 	setup_port(port_fd,9600);
 	if (!get_ecu_signature(port_fd))
 	{
-		printf("9600 baud sig failed, closing and retrying\n");
 		close_port(port_fd);
-		printf("closed\n");
 		port_fd = open_port(port);
-		printf("opened\n");
 		setup_port(port_fd,115200);
-		printf("Setup 115200\n");
-		printf("calling get_sig\n");
 		get_ecu_signature(port_fd);
-		printf("after get_sig\n");
 	}
 	close_port(port_fd);
 
