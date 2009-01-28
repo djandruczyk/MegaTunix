@@ -85,7 +85,7 @@ void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
 		return;
-	*val = g_ascii_strtod((gchar*)node->children->content,NULL);
+	*val = g_ascii_strtod((gchar*)g_strdelimit(node->children->content,",.",'.'),NULL);
 }
 
 
