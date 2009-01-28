@@ -40,6 +40,8 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 #include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>

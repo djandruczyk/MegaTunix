@@ -638,7 +638,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
-	tmpf = (gfloat)g_strtod(text,NULL);
+	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	/*	printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" \n",base,text,tmpi,tmpf);*/
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 

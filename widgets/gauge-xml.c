@@ -567,7 +567,7 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(x_vector);i++)
 				{
-					data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
+					data->points[i].x = g_ascii_strtod(g_strdelimit(x_vector[i],",.",'.'),NULL);
 				}
 				g_strfreev(x_vector);
 				tmpbuf = NULL;
@@ -579,7 +579,7 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(y_vector);i++)
 				{
-					data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
+					data->points[i].y = g_ascii_strtod(g_strdelimit(y_vector[i],",.",'.'),NULL);
 				}
 				g_strfreev(y_vector);
 				tmpbuf = NULL;

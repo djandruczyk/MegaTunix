@@ -85,17 +85,18 @@ void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
 		return;
-	*val = g_ascii_strtod((gchar*)g_strdelimit(node->children->content,",.",'.'),NULL);
+	*val = g_ascii_strtod((gchar*)g_strdelimit((gchar *)node->children->content,",.",'.'),NULL);
 }
 
 
 void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val)
 {
-	gchar * tmpbuf = NULL;
-	tmpbuf = g_strdup_printf("%f",*val);
+	gchar tmpbuf[10];
+	gchar * buf = NULL;
+	buf = g_ascii_dtostr(tmpbuf,10,*val);
+	/*tmpbuf = g_strdup_printf("%f",*val); */
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
-			BAD_CAST tmpbuf);
-	g_free(tmpbuf);
+			BAD_CAST buf);
 }
 
 

@@ -91,7 +91,6 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 			}
 		}
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		i++;
 	}
 

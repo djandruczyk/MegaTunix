@@ -87,7 +87,7 @@ void rescale_table(GtkWidget *widget)
 	z_page = firmware->table_params[table_num]->z_page;
 
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(scaler),0,-1);
-	factor = (gfloat)g_strtod(tmpbuf,NULL);
+	factor = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 	g_free(tmpbuf);
 	scaleop = gtk_combo_box_get_active(GTK_COMBO_BOX(math_combo));
 
@@ -103,7 +103,7 @@ void rescale_table(GtkWidget *widget)
 				{
 					precision = (gint)OBJ_GET(tmpwidget,"precision");
 					tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
-					value = (gfloat)g_strtod(tmpbuf,NULL);
+					value = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 					g_free(tmpbuf);
 					retval = rescale(value,scaleop,factor);	
 					value = retval;
@@ -209,7 +209,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	g_return_if_fail(GTK_IS_WIDGET(tmpwidget));
 	/*new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));*/
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
-	new_reqfuel = (gfloat)g_ascii_strtod(tmpbuf,NULL);
+	new_reqfuel = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
 
 	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
