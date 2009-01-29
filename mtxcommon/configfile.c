@@ -225,7 +225,7 @@ gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat *
 	if (!cfg_read_string(cfg, section, key, &str))
 		return FALSE;
 
-	*value = (gfloat) g_ascii_strtod(str, NULL);
+	*value = (gfloat) g_ascii_strtod(g_strdelimit(str,",.",'.'), NULL);
 	g_free(str);
 
 	return TRUE;

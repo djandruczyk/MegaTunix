@@ -14,28 +14,25 @@ page=5
 #----- Buttons ---------------------------------------------------------------
 
 [toothlogger_enable_radio_button]
-keys=handler,page,bind_to_list,tickltype,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_ENUM_,_STRING_
+keys=handler,page,bind_to_list,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
-tickltype=_TOOTHMON_TICKLER_
 page=5
 bind_to_list=ttm_buttons
 tooltip=Enables Tooth Logger display
 
 [triggerlogger_enable_radio_button]
-keys=handler,page,bind_to_list,tickltype,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_ENUM_,_STRING_
+keys=handler,page,bind_to_list,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_TRIGMON_LOGGER_
-tickltype=_TRIGMON_TICKLER_
 page=6
 bind_to_list=ttm_buttons
 tooltip=Enables Trigger Logger display
 
 [compositelogger_enable_radio_button]
-keys=handler,page,bind_to_list,tickltype,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_ENUM_,_STRING_
+keys=handler,page,bind_to_list,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_COMPOSITEMON_LOGGER_
-tickltype=_COMPOSITEMON_TICKLER_
 page=7
 bind_to_list=ttm_buttons
 tooltip=Enables Composite Logger display

@@ -178,7 +178,7 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(START_TRIGMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_START_COMPOSITEMON_LOGGER_",
-			GINT_TO_POINTER(START_TRIGMON_LOGGER));
+			GINT_TO_POINTER(START_COMPOSITEMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
 			GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",

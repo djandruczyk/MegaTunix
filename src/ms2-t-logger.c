@@ -104,6 +104,8 @@ EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConf
 
 void _ms2_crunch_trigtooth_data(gint page)
 {
+	static GTimeVal last;
+	GTimeVal current;
 	extern Firmware_Details *firmware;
 	gint canID = firmware->canID;
 	gint i = 0;
@@ -118,11 +120,15 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gint lower = 0;
 	gint upper = 0;
 	gint index = 0;
-
+ 
 	index=0;
 
 	min = 1048576;
 	max = 1;
+	g_get_current_time(&current);
+	ttm_data->sample_time = ((current.tv_sec-last.tv_sec)*1000) + ((current.tv_usec-last.tv_usec)/1000.0);
+	last = current;
+
 	for (i=0;i<1024;i+=3)
 	{
 
@@ -137,8 +143,8 @@ void _ms2_crunch_trigtooth_data(gint page)
 			max = ttm_data->current[index];
 		index++;
 	}
-	ttm_data->min_time = min;
-	ttm_data->max_time = max;
+	ttm_data->min_time = min*0.66;
+	ttm_data->max_time = max*0.66;
 
 	/* Ratio of min to max,  does not work for complex wheel
 	 * patterns
@@ -194,8 +200,14 @@ void _ms2_crunch_trigtooth_data(gint page)
 	 */
 	ttm_data->peak = ttm_data->max_time *1.25; /* Add 25% padding */
 	tmp = ttm_data->peak;
+	printf("25 over peak is %i\n",tmp);
+	printf("min is %i\n",ttm_data->min_time);
 
-	if (tmp < 7500)
+	if (tmp < 1000)
+		ttm_data->vdivisor = 200;
+	else if (tmp < 2500)
+		ttm_data->vdivisor = 500;
+	else if (tmp < 7500)
 		ttm_data->vdivisor = 1000;
 	else if ((tmp >= 7500) && (tmp < 15000))
 		ttm_data->vdivisor = 2500;
@@ -244,12 +256,8 @@ void ms2_update_trigtooth_display(gint page)
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr,h/20);
 
-g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
-	if (ttm_data->units == 1)
-		message = g_strdup_printf("%i",(gint)(ttm_data->peak));
-	else
-		message = g_strdup_printf("%i",(gint)((ttm_data->peak)/10.0));
+	message = g_strdup_printf("%i us.",(gint)(ttm_data->peak));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -260,10 +268,7 @@ g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Draw left side axis scale */
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
-		if (ttm_data->units == 1)
-			message = g_strdup_printf("%i",(gint)ctr);
-		else
-			message = g_strdup_printf("%i",(gint)(ctr/10.0));
+		message = g_strdup_printf("%i",(gint)ctr);
 		/*g_printf("marker \"%s\"\n",message);*/
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
@@ -291,7 +296,7 @@ g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
 	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
-	cairo_set_line_width(cr,w/682.0);
+	cairo_set_line_width(cr,w/341.0);
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
 	/* Draw the bars, left to right */
 	printf("peak %f \n",ttm_data->peak);
@@ -304,16 +309,20 @@ g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 		cairo_line_to(cr,ttm_data->usable_begin+(i*w/341.0),cur_pos);
 	}
 	cairo_set_font_size(cr,20);
-	if (ttm_data->units == 1)
-		if (ttm_data->page == 5)
+	switch (ttm_data->page)
+	{
+		case 5:
 			message = g_strdup("Tooth times in usec.");
-		else
+			break;
+		case 6:
 			message = g_strdup("Trigger times in usec.");
-	else
-		if (ttm_data->page == 6)
-			message = g_strdup("Tooth times in msec.");
-		else
-			message = g_strdup("Trigger times in msec.");
+			break;
+		case 7:
+			message = g_strdup("Composite, not sure yet..");
+			break;
+		default:
+			break;
+	}
 
 	cairo_text_extents (cr, message, &extents);
 	cairo_move_to(cr,ttm_data->usable_begin+((w)/2)-(extents.width/2),extents.height*1.125);

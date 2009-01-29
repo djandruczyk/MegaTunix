@@ -172,7 +172,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
 				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 				OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
-				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
+				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
 				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 			}
