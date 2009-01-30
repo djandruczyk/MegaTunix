@@ -127,122 +127,122 @@ page=3
 table_num=8
 
 [SP1_gaugeframe1]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [SP1_gaugeframe2]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [SP1_gaugeframe3]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [SP1_gaugeframe4]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [SP1_gaugeframe5]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
 [SP2_gaugeframe1]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=7
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [SP2_gaugeframe2]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=7
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [SP2_gaugeframe3]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=7
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [SP2_gaugeframe4]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=7
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [SP2_gaugeframe5]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=7
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
 [SP3_gaugeframe1]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=8
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [SP3_gaugeframe2]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=8
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [SP3_gaugeframe3]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=8
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [SP3_gaugeframe4]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=8
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [SP3_gaugeframe5]
-keys=post_function_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=8
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
@@ -416,22 +416,22 @@ table_num=8
 #----- Rescale Combos ------------------------------------------------------
 
 [SP1_rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=6
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 [SP2_rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=7
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 [SP3_rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=8
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 #----- MAIN SparkTable Container ---------------------------------------------
 

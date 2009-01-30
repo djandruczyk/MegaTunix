@@ -58,29 +58,29 @@ tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees
 #----- Gauges --------------------------------------------------------------
 
 [gaugeframe1]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=10
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=10
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
 datasource=tpsadc
 
 [gaugeframe3]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=10
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
@@ -210,10 +210,10 @@ table_num=10
 #----- Rescale Combos ------------------------------------------------------
 
 [rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=10
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 #----- MAIN VETable Container ------------------------------------------------
 

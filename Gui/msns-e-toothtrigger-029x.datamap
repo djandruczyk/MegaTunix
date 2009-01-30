@@ -1,7 +1,7 @@
 [global]
 description=Object data map for MSnS-E 029 Tooth/Trigger monitor
 tab_name=Trigger _Monitor
-post_function=reset_ttm_buttons
+post_functions=reset_ttm_buttons
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
@@ -71,9 +71,9 @@ bind_to_list=trigmon_buttons
 #----- DrawingAreas ----------------------------------------------------------
 
 [ttm_darea]
-keys=page,post_function_with_arg
+keys=page,post_functions_with_arg
 key_types=_INT_,_STRING_
 page=0
-post_function_with_arg=setup_logger_display
+post_functions_with_arg=setup_logger_display
 
 

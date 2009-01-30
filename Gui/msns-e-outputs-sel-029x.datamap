@@ -158,7 +158,7 @@ tooltip=Sets Output4 to be controlled by the fan Control Parameters
 #----- TreeViews -------------------------------------------------------------
 
 [output1_swin]
-keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_function_with_arg,output_num
+keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 page=0
 offset=8
@@ -167,11 +167,11 @@ lim_offset=7
 hys_offset=126
 ulimit_offset=88
 bind_to_list=output_1
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=1
 
 [output2_swin]
-keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_function_with_arg,output_num
+keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 page=0
 offset=10
@@ -180,28 +180,28 @@ lim_offset=9
 hys_offset=127
 ulimit_offset=89
 bind_to_list=output_2
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=2
 
 [output3_swin]
-keys=page,offset,src_offset,lim_offset,bind_to_list,post_function_with_arg,output_num
+keys=page,offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
 key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 page=0
 offset=132
 src_offset=132
 lim_offset=133
 bind_to_list=output_3
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=3
 
 [output4_swin]
-keys=page,offset,src_offset,lim_offset,bind_to_list,post_function_with_arg,output_num
+keys=page,offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
 key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 page=0
 offset=138
 src_offset=138
 lim_offset=139
 bind_to_list=output_4,output4_table
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=4
 

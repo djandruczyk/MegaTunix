@@ -4,7 +4,7 @@
 description=Object data map for MegaSquirt visual logviewer/playback tool
 tab_name=_Logviewer
 groups=defaults
-post_function=finish_logviewer
+post_functions=finish_logviewer
 
 #----- Groups ----------------------------------------------------------------
 

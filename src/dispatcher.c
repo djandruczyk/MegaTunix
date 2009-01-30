@@ -208,7 +208,7 @@ trypop:
 					break;
 				case UPD_RUN_FUNCTION:
 					qfunc = (QFunction *)message->payload;
-					run_post_function(qfunc->func_name);
+					run_post_functions(qfunc->func_name);
 					dealloc_qfunction(qfunc);
 					message->payload = NULL;
 					break;

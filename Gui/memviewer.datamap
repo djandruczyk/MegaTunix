@@ -4,7 +4,7 @@
 description=Object data map for Raw Memory viewer (ECUS that support "F" cmd)
 tab_name=_Memory Viewer
 groups=defaults
-post_function=finish_memviewer
+post_functions=finish_memviewer
 
 #----- Groups ----------------------------------------------------------------
 

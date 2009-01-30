@@ -56,47 +56,47 @@ tooltip=The Spark Advance Entries control the engine igntion timing.  The values
 #----- Gauges ----------------------------------------------------------------
 
 [gaugeframe1]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [gaugeframe3]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [gaugeframe4]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [gaugeframe5]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
@@ -185,10 +185,10 @@ table_num=1
 #----- Rescale Combo ------------------------------------------------------
 
 [rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=1
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 #----- MAIN SparkTable Container ---------------------------------------------
 

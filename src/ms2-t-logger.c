@@ -33,6 +33,15 @@ MS2_TTMon_Data *ttm_data;
 extern GObject *global_data;
 
 
+EXPORT void ms2_ttm_reset_zoom()
+{
+	GtkWidget *widget = NULL;
+	widget = lookup_widget("ttm_zoom");
+	if (GTK_IS_WIDGET(widget))
+		gtk_range_set_value(GTK_RANGE(widget),1.0);
+}
+
+
 EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
 	extern Firmware_Details *firmware;
@@ -55,6 +64,7 @@ EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	ttm_data->captures = g_new0(gulong, 341);
 	ttm_data->current = g_new0(gulong,341);
 	ttm_data->last = g_new0(gulong,341);
+	ttm_data->zoom = 1.0;
 
 	OBJ_SET(src_widget,"ttmon_data",(gpointer)ttm_data);
 	return;
@@ -97,7 +107,7 @@ EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConf
 
 	_ms2_crunch_trigtooth_data(ttm_data->page);
 	if (ttm_data->peak > 0)
-		update_trigtooth_display(ttm_data->page);
+		ms2_update_trigtooth_display(ttm_data->page);
 	return TRUE;
 }
 
@@ -136,15 +146,15 @@ void _ms2_crunch_trigtooth_data(gint page)
 		high = get_ecu_data(canID,page,i,MTX_U08);
 		mid = get_ecu_data(canID,page,i+1,MTX_U08);
 		low = get_ecu_data(canID,page,i+2,MTX_U08);
-		ttm_data->current[index] = ((high & 0x0f) << 16) + (mid << 8) +low;
+		ttm_data->current[index] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
 		if ((ttm_data->current[index] < min) && (ttm_data->current[index] != 0))
 			min = ttm_data->current[index];
 		if (ttm_data->current[index] > max)
 			max = ttm_data->current[index];
 		index++;
 	}
-	ttm_data->min_time = min*0.66;
-	ttm_data->max_time = max*0.66;
+	ttm_data->min_time = min;
+	ttm_data->max_time = max;
 
 	/* Ratio of min to max,  does not work for complex wheel
 	 * patterns
@@ -200,14 +210,14 @@ void _ms2_crunch_trigtooth_data(gint page)
 	 */
 	ttm_data->peak = ttm_data->max_time *1.25; /* Add 25% padding */
 	tmp = ttm_data->peak;
-	printf("25 over peak is %i\n",tmp);
-	printf("min is %i\n",ttm_data->min_time);
 
-	if (tmp < 1000)
+	if (tmp < 500)
+		ttm_data->vdivisor = 50;
+	else if ((tmp >= 500) && (tmp < 1000))
+		ttm_data->vdivisor = 100;
+	else if ((tmp >= 1000) && (tmp < 2500))
 		ttm_data->vdivisor = 200;
-	else if (tmp < 2500)
-		ttm_data->vdivisor = 500;
-	else if (tmp < 7500)
+	else if ((tmp >= 2500) && (tmp < 7500))
 		ttm_data->vdivisor = 1000;
 	else if ((tmp >= 7500) && (tmp < 15000))
 		ttm_data->vdivisor = 2500;
@@ -221,8 +231,10 @@ void _ms2_crunch_trigtooth_data(gint page)
 		ttm_data->vdivisor = 30000;
 	else if ((tmp >= 240000) && (tmp < 480000))
 		ttm_data->vdivisor = 60000;
-	else if (tmp >= 480000) 
+	else if ((tmp >= 480000)  && (tmp < 960000))
 		ttm_data->vdivisor = 120000;
+	else
+		ttm_data->vdivisor = 240000;
 
 }
 
@@ -232,6 +244,7 @@ void ms2_update_trigtooth_display(gint page)
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
+	gfloat tmpf = 0;
 	gint space = 0;
 	gfloat tmpx = 0.0;
 	gfloat ctr = 0.0;
@@ -254,10 +267,11 @@ void ms2_update_trigtooth_display(gint page)
 
 	/* get our font */
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr,h/20);
+	cairo_set_font_size(cr,h/30);
+	cairo_set_line_width(cr,1);
 
 	/* Get width of largest value and save it */
-	message = g_strdup_printf("%i us.",(gint)(ttm_data->peak));
+	message = g_strdup_printf("%i",(gint)(ttm_data->peak));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -272,7 +286,6 @@ void ms2_update_trigtooth_display(gint page)
 		/*g_printf("marker \"%s\"\n",message);*/
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
-		/*g_printf("drawing at %f\n",cur_pos);*/
 		cairo_move_to(cr,tmpx-extents.x_advance,cur_pos);
 		cairo_show_text(cr,message);
 		g_free(message);
@@ -296,26 +309,27 @@ void ms2_update_trigtooth_display(gint page)
 	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
 	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
-	cairo_set_line_width(cr,w/341.0);
+	tmpf = w/(682.0/ttm_data->zoom) >= 2.0 ? 2.0 : w/(682.0/ttm_data->zoom);
+	cairo_set_line_width(cr,tmpf);
+	
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
 	/* Draw the bars, left to right */
-	printf("peak %f \n",ttm_data->peak);
-	for (i=0;i<341;i++)
+	for (i=0;i<(gint)(341.0/ttm_data->zoom);i++)
 	{
 		/*g_printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/341.0),0);*/
-		cairo_move_to(cr,ttm_data->usable_begin+(i*w/341.0),h-(y_shift/2));
+		cairo_move_to(cr,ttm_data->usable_begin+(i*w/(341.0/ttm_data->zoom)),h-(y_shift/2));
 		val = ttm_data->current[i];
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
-		cairo_line_to(cr,ttm_data->usable_begin+(i*w/341.0),cur_pos);
+		cairo_line_to(cr,ttm_data->usable_begin+(i*w/(341.0/ttm_data->zoom)),cur_pos);
 	}
-	cairo_set_font_size(cr,20);
+	cairo_set_font_size(cr,h/20);
 	switch (ttm_data->page)
 	{
 		case 5:
-			message = g_strdup("Tooth times in usec.");
+			message = g_strdup("Tooth times in microseconds.");
 			break;
 		case 6:
-			message = g_strdup("Trigger times in usec.");
+			message = g_strdup("Trigger times in microseconds.");
 			break;
 		case 7:
 			message = g_strdup("Composite, not sure yet..");
@@ -330,7 +344,7 @@ void ms2_update_trigtooth_display(gint page)
 	cairo_show_text(cr,message);
 	g_free(message);
 
-	cairo_set_font_size(cr,12);
+	cairo_set_font_size(cr,11);
 	message = g_strdup_printf("Engine RPM:  %.1f",ttm_data->rpm);
 	cairo_text_extents (cr, message, &extents);
 	space +=extents.height;
@@ -368,8 +382,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 
 			case START_TOOTHMON_LOGGER:
 				ttm_data->stop = FALSE;
-				ttm_data->widget = widget;
-				OBJ_SET(widget,"io_cmd_function","ms2_e_read_toothmon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
@@ -377,8 +390,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				break;
 			case START_TRIGMON_LOGGER:
 				ttm_data->stop = FALSE;
-				ttm_data->widget = widget;
-				OBJ_SET(widget,"io_cmd_function","ms2_e_read_trigmon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
@@ -386,8 +398,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				break;
 			case START_COMPOSITEMON_LOGGER:
 				ttm_data->stop = FALSE;
-				ttm_data->widget = widget;
-				OBJ_SET(widget,"io_cmd_function","ms2_e_read_compositemon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
@@ -426,16 +437,24 @@ void ms2_ttm_update(gpointer data)
 {
 	gint page = 0;
 
-	page = (gint)OBJ_GET(ttm_data->widget,"page");
+	page = (gint)OBJ_GET(ttm_data->darea,"page");
 	_ms2_crunch_trigtooth_data(page);
-	update_trigtooth_display(page);
+	ms2_update_trigtooth_display(page);
 	if (ttm_data->stop)
 		return;
-	io_cmd((gchar *)OBJ_GET(ttm_data->widget,"io_cmd_function"),NULL);
+	io_cmd((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
 }
 
 
 EXPORT void ms2_ttm_watch(void)
 {
-	create_single_bit_watch("status3",1,TRUE,"ms2_ttm_update", (gpointer)ttm_data->widget);
+	create_single_bit_watch("status3",1,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
+}
+
+
+EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
+{
+	if (ttm_data)
+		ttm_data->zoom = (gfloat)gtk_range_get_value(GTK_RANGE(widget));
+	return TRUE;
 }

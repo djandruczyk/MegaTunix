@@ -1,7 +1,7 @@
 [global]
 description=Object data map for MS2-Extra 2.0.x Tooth/Trigger monitor
 tab_name=Trigger _Monitor
-post_function=reset_ttm_buttons
+post_functions=reset_ttm_buttons,ms2_ttm_reset_zoom
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
@@ -87,6 +87,6 @@ bind_to_list=composite_buttons
 #----- DrawingAreas ----------------------------------------------------------
 
 [ttm_darea]
-keys=post_function_with_arg
+keys=post_functions_with_arg
 key_types=_STRING_
-post_function_with_arg=ms2_setup_logger_display
+post_functions_with_arg=ms2_setup_logger_display

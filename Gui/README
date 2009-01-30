@@ -172,8 +172,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 			specific. (Specified in the interrogation profile)
 			Used primarily for status indicators using data 
 			from the realtime variables datasources...
-	post_function	(string) This is the textual name of a pre-existing 
-			function within megatunix that will be ran after the
+	post_functions	(string) This is the textual list of pre-existing 
+			functions within megatunix that will be ran after the
 			tab is loaded and the datamap has been processed. The
 			function will take no arguments and return nothing.
 			This is used mainly for hybrid tabs that have their

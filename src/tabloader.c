@@ -152,9 +152,9 @@ EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 
 			}
-			if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
+			if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
 			{
-				run_post_function(tmpbuf);
+				run_post_functions(tmpbuf);
 				g_free(tmpbuf);
 			}
 			cfg_free(cfgfile);
@@ -659,14 +659,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
 
 
-	if (cfg_read_string(cfgfile,section,"post_function_with_arg",&tmpbuf))
+	if (cfg_read_string(cfgfile,section,"post_functions_with_arg",&tmpbuf))
 	{
-		run_post_function_with_arg(tmpbuf,widget);
+		run_post_functions_with_arg(tmpbuf,widget);
 		g_free(tmpbuf);
 	}
-	if (cfg_read_string(cfgfile,section,"post_function",&tmpbuf))
+	if (cfg_read_string(cfgfile,section,"post_functions",&tmpbuf))
 	{
-		run_post_function(tmpbuf);
+		run_post_functions(tmpbuf);
 		g_free(tmpbuf);
 	}
 	g_free(keytypes);
@@ -676,61 +676,69 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 
 /*!
- \brief run_post_function() is called to run a function AFTER tab loading.
+ \brief run_post_functions() is called to run a function AFTER tab loading.
  It'll search the exported symbols of MegaTunix for the function and if
  found execute it
- \param function_name (gchar *) textual name of the function to run.
+ \param functions (gchar *) CSV list of functions to run
  */
-void run_post_function(gchar * function_name)
+void run_post_functions(gchar * functions)
 {
 	void (*function)(void);
+	gchar ** vector = NULL;
+	gint i = 0;
 	GModule *module = NULL;
 
+	vector = g_strsplit(functions,",",-1);
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
+		return;
 	}
-	else
+	for (i=0;i<g_strv_length(vector);i++)
 	{
-		function();
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		if (!g_module_symbol(module,vector[i],(void *)&function))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		else
+			function();
 	}
+	g_strfreev(vector);
+	if (!g_module_close(module))
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
 }
 
 
 
 /*!
- \brief run_post_function_with_arg() is called to run a function AFTER 
+ \brief run_post_functions_with_arg() is called to run a function AFTER 
  tab loading is complete. It'll search the exported symbols of MegaTunix 
  for the function and if found execute it with the passed widget as an
  argument.
- \param function_name (gchar *) textual name of the function to run.
+ \param functions (gchar *) CSV list of functions to run
  \param widget (GtkWidget *) pointer to widget to be passed to the function
  */
-void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
+void run_post_functions_with_arg(gchar * functions, GtkWidget *widget)
 {
 	void (*function)(GtkWidget *);
+	gchar ** vector = NULL;;
+	gint i = 0;
 	GModule *module = NULL;
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
+		return;
 	}
-	else
+	vector = g_strsplit(functions,",",-1);
+	for (i=0;i<g_strv_length(vector);i++)
 	{
-		function(widget);
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		if (!g_module_symbol(module,vector[i],(void *)&function))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		else
+			function(widget);
 	}
+	g_strfreev(vector);
+	if (!g_module_close(module))
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
 }
