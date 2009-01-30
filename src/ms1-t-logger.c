@@ -40,6 +40,7 @@ extern GObject *global_data;
 void bind_ttm_to_page(gint page)
 {
 	ttm_data->page = page;
+	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
 }
 
 

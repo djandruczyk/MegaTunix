@@ -129,29 +129,24 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gfloat ratio = 0.0;
 	gint lower = 0;
 	gint upper = 0;
-	gint index = 0;
  
-	index=0;
-
 	min = 1048576;
 	max = 1;
 	g_get_current_time(&current);
 	ttm_data->sample_time = ((current.tv_sec-last.tv_sec)*1000) + ((current.tv_usec-last.tv_usec)/1000.0);
 	last = current;
 
-	for (i=0;i<1024;i+=3)
+	for (i=0;i<341;i++)
 	{
-
-		ttm_data->last[index] = ttm_data->current[index];
-		high = get_ecu_data(canID,page,i,MTX_U08);
-		mid = get_ecu_data(canID,page,i+1,MTX_U08);
-		low = get_ecu_data(canID,page,i+2,MTX_U08);
-		ttm_data->current[index] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
-		if ((ttm_data->current[index] < min) && (ttm_data->current[index] != 0))
-			min = ttm_data->current[index];
-		if (ttm_data->current[index] > max)
-			max = ttm_data->current[index];
-		index++;
+		ttm_data->last[i] = ttm_data->current[i];
+		high = get_ecu_data(canID,page,(i*3),MTX_U08);
+		mid = get_ecu_data(canID,page,(i*3)+1,MTX_U08);
+		low = get_ecu_data(canID,page,(i*3)+2,MTX_U08);
+		ttm_data->current[i] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
+		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
+			min = ttm_data->current[i];
+		if (ttm_data->current[i] > max)
+			max = ttm_data->current[i];
 	}
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;

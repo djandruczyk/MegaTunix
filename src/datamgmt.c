@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
@@ -30,6 +31,9 @@ extern GObject *global_data;
 gint get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
 {
 	extern Firmware_Details *firmware;
+	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
+		return 0;
+
 	return _get_sized_data(firmware->ecu_data[page],page,offset,size);
 }
 
@@ -44,6 +48,8 @@ gint get_ecu_data(gint canID, gint page, gint offset, DataSize size)
 gint get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {
 	extern Firmware_Details *firmware;
+	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
+		return 0;
 	return _get_sized_data(firmware->ecu_data_last[page],page,offset,size);
 }
 
@@ -58,6 +64,8 @@ gint get_ecu_data_last(gint canID, gint page, gint offset, DataSize size)
 gint get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size) 
 {
 	extern Firmware_Details *firmware;
+	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
+		return 0;
 	return _get_sized_data(firmware->ecu_data_backup[page],page,offset,size);
 }
 
@@ -78,6 +86,7 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
+	assert(offset >= 0);
 
 	switch (size)
 	{
