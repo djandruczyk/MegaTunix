@@ -55,19 +55,6 @@ key_types=_INT_,_STRING_
 page=9
 bind_to_list=spark_controls
 
-[toothlogger_buttons_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=9
-bind_to_list=toothmon_buttons
-
-[triggerlogger_buttons_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=10
-bind_to_list=trigmon_buttons
-
-
 #----- DrawingAreas ----------------------------------------------------------
 
 [ttm_darea]

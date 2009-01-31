@@ -61,8 +61,6 @@ EXPORT void reset_ttm_buttons()
 
 EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
-	extern Firmware_Details *firmware;
-
 	ttm_data = g_new0(TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->pixmap = NULL;
@@ -76,7 +74,6 @@ EXPORT void setup_logger_display(GtkWidget * src_widget)
 	ttm_data->font_desc = NULL;
 	ttm_data->missing = 0;
 	ttm_data->sample_time = 0;
-	ttm_data->capabilities = firmware->capabilities;
 	ttm_data->captures = g_new0(gushort, 93);
 	ttm_data->current = g_new0(gushort,93);
 	ttm_data->last = g_new0(gushort,93);
@@ -141,10 +138,7 @@ EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *
 
 EXPORT void crunch_trigtooth_data_pf()
 {
-	if (ttm_data->capabilities & MSNS_E)
-		_crunch_trigtooth_data(ttm_data->page);
-	if (ttm_data->capabilities & MS2_EXTRA)
-		_ms2_crunch_trigtooth_data(ttm_data->page);
+	_crunch_trigtooth_data(ttm_data->page);
 }
 
 void _crunch_trigtooth_data(gint page)
@@ -331,10 +325,7 @@ void _crunch_trigtooth_data(gint page)
 
 EXPORT void update_trigtooth_display_pf()
 {
-	if (ttm_data->capabilities & MSNS_E)
-		update_trigtooth_display(ttm_data->page);
-	if (ttm_data->capabilities & MS2_EXTRA)
-		ms2_update_trigtooth_display(ttm_data->page);
+	update_trigtooth_display(ttm_data->page);
 }
 
 void update_trigtooth_display(gint page)
@@ -479,25 +470,21 @@ EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 
 			case START_TOOTHMON_LOGGER:
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
 				start_tickler(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
 			case STOP_TOOTHMON_LOGGER:
 				stop_tickler(TOOTHMON_TICKLER);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
 				stop_tickler(TRIGMON_TICKLER);
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"compositelogger_buttons_table")),TRUE);
 				break;
 			default:
 				break;

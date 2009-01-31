@@ -44,8 +44,6 @@ EXPORT void ms2_ttm_reset_zoom()
 
 EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
-	extern Firmware_Details *firmware;
-
 	ttm_data = g_new0(MS2_TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->units = 1;
@@ -60,7 +58,6 @@ EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	ttm_data->font_desc = NULL;
 	ttm_data->missing = 0;
 	ttm_data->sample_time = 0;
-	ttm_data->capabilities = firmware->capabilities;
 	ttm_data->captures = g_new0(gulong, 341);
 	ttm_data->current = g_new0(gulong,341);
 	ttm_data->last = g_new0(gulong,341);
