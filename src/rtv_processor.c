@@ -130,6 +130,7 @@ void process_rt_vars(void *incoming)
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_names")));
 					exit (-3);
 				}
+				printf("creating evaluator (rtv_processor)\n");
 				evaluator = evaluator_create(expr);
 				if (!evaluator)
 				{

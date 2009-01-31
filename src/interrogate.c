@@ -299,16 +299,13 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	}
 	else
 	{
-
 		if (!firmware)
 			firmware = g_new0(Firmware_Details,1);
 
 		if (!load_firmware_details(firmware,filename))
 			return FALSE;
 		update_interrogation_gui(firmware,tests_hash);
-
 		return TRUE;
-
 	}
 }
 

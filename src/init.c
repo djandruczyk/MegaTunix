@@ -831,7 +831,10 @@ void dealloc_message(Io_Message * message)
 	{
 		data = (OutputData *)message->payload;
 		if (GTK_IS_OBJECT(data->object))
+		{
 			gtk_object_destroy(GTK_OBJECT(data->object));
+			g_object_unref(data->object);
+		}
                 g_free(message->payload);
 		message->payload = NULL;
 	}
