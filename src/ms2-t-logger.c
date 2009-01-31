@@ -449,7 +449,15 @@ EXPORT void ms2_ttm_watch(void)
 
 EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 {
+	gint page = 0;
 	if (ttm_data)
+	{
 		ttm_data->zoom = (gfloat)gtk_range_get_value(GTK_RANGE(widget));
+		if (ttm_data->pixmap)
+		{
+			page = (gint)OBJ_GET(ttm_data->darea,"page");
+			ms2_update_trigtooth_display(page);
+		}
+	}
 	return TRUE;
 }
