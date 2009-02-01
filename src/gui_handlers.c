@@ -28,6 +28,7 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <init.h>
 #include <keyparser.h>
 #include <listmgmt.h>
@@ -987,7 +988,13 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gboolean state = FALSE;
 	gint bitmask = 0;
 	gint bitshift = 0;
+	gint total = 0;
 	guchar bitval = 0;
+	gchar * set_labels = NULL;
+	gchar * tmpbuf = NULL;
+	gchar ** vector = NULL;
+	gint i = 0;
+	gint tmpi = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint canID = 0;
@@ -1004,6 +1011,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
 	canID = (gint)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
+	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
@@ -1018,6 +1026,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	}
         gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
 			BITVAL_COL,&bitval,-1);
+
 	//printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );
 
 	tmp = get_ecu_data(canID,page,offset,size);
@@ -1029,7 +1038,26 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 //		printf("dload val matched ecu settings, not changing\n");
 		return FALSE;
 	}
+	if (set_labels)
+	{
+		total = get_choice_count(model);
+		tmpi = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		vector = g_strsplit(set_labels,",",-1);
+		if ((g_strv_length(vector)%(total+1)) != 0)
+		{
+			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem wiht set_widget_labels, counts don't match up\n"));
+			goto combo_download;
+		}
+		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
+		{
+			tmpbuf = g_strconcat(vector[i*(total+1)],",",vector[(i*(total+1))+1+tmpi],NULL);
+			set_widget_labels(tmpbuf);
+			g_free(tmpbuf);
+		}
+		g_strfreev(vector);
+	}
 
+combo_download:
 	if (dl_type == IMMEDIATE)
 	{
 		dload_val = convert_before_download(widget,dload_val);
@@ -1627,7 +1655,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint raw_upper = 0;
 	gboolean cur_state = FALSE;
 	gboolean new_state = FALSE;
-	gint algo = -0;
+	gint algo = 0;
+	gint total = 0;
 	gchar * toggle_groups = NULL;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
@@ -1649,7 +1678,7 @@ void update_widget(gpointer object, gpointer user_data)
 		return;
 
 	upd_count++;
-	if ((upd_count%128) == 0)
+	if ((upd_count%64) == 0)
 	{
 		while (gtk_events_pending())
 		{
@@ -1869,6 +1898,25 @@ void update_widget(gpointer object, gpointer user_data)
 combo_toggle:
 		if (toggle_groups)
 			combo_toggle_groups_linked(widget,i);
+		if (set_labels)
+		{
+			total = get_choice_count(model);
+			tmpi = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			vector = g_strsplit(set_labels,",",-1);
+			if ((g_strv_length(vector)%(total+1)) != 0)
+			{
+				dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem wiht set_widget_labels, counts don't match up\n"));
+				return;
+			}
+			for (i=0;i<(g_strv_length(vector)/(total+1));i++)
+			{
+				tmpbuf = g_strconcat(vector[i*(total+1)],",",vector[(i*(total+1))+1+tmpi],NULL);
+				set_widget_labels(tmpbuf);
+				g_free(tmpbuf);
+			}
+			g_strfreev(vector);
+		}
+
 	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
@@ -2635,9 +2683,27 @@ gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 	while (valid)
 	{
 		gtk_tree_model_get(model,iter,CHOICE_COL, &choice, -1);
-		if (strcasecmp(cur_text,choice) == 0)
+		if (g_ascii_strcasecmp(cur_text,choice) == 0)
 			return TRUE;
 		valid = gtk_tree_model_iter_next (model, iter);
 	}
 	return FALSE;
+}
+
+
+gint get_choice_count(GtkTreeModel *model)
+{
+	gchar *choice = NULL;
+	gboolean valid = TRUE;
+	GtkTreeIter iter;
+	gint i = 0;
+
+	valid = gtk_tree_model_get_iter_first(model,&iter);
+	while (valid)
+	{
+		gtk_tree_model_get(model,&iter,CHOICE_COL, &choice, -1);
+		valid = gtk_tree_model_iter_next (model, &iter);
+		i++;
+	}
+	return i;
 }

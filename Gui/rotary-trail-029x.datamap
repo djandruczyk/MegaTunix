@@ -58,27 +58,24 @@ tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees
 #----- Gauges --------------------------------------------------------------
 
 [gaugeframe1]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=10
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=10
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
 datasource=tpsadc
 
 [gaugeframe3]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=10
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
@@ -87,55 +84,46 @@ datasource=mapkpa
 #----- Widgets ----------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident,table_num
-key_types=_INT_,_ENUM_,_STRING_
-page=7
+keys=tab_ident,table_num
+key_types=_ENUM_,_STRING_
 tab_ident=_ROTARYTABLES_TAB_
 table_num=10
 
 [trailing_output_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=7
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=rotary_trailing
 
 [basetable]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=7
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=rotary_trailing
-
-
 
 #----- Labels ----------------------------------------------------------------
 
 [title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=8
+keys=set_label
+key_types=_STRING_
 set_label=Rotary Trailing Table 
 
 #----- widgets ---------------------------------------------------------------
 
 [trail_hbox0]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=8
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=spark_controls
 
 [load_tbl_lab]
-keys=page,label,alt_label,depend_on
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=8
+keys=label,alt_label,depend_on
+key_types=_STRING_,_STRING_,_STRING_
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
 alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
 
 [load_tbl_units]
-keys=page,label,alt_label,depend_on
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=8
+keys=label,alt_label,depend_on
+key_types=_STRING_,_STRING_,_STRING_
 label=Kpa
 alt_label=TPSADC
 depend_on=alpha_n_button
@@ -144,59 +132,47 @@ alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
-page=8
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
-page=8
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [tracking_checkbutton]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_TRACKING_FOCUS_
-page=1
 table_num=10
 
 [export_button]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_EXPORT_SINGLE_TABLE_
-page=1
 table_num=10
 
 [import_button]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_IMPORT_SINGLE_TABLE_
-page=1
 table_num=10
 
 [3d_view_button]
-#keys=page,table_num,x_source,y_source,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=8
+keys=table_num,tooltip,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_
 table_num=10
-#x_source=raw_rpm
-#y_source=mapkpa
-#z_source=mapkpa
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Rotary Trailing-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [rescale_button]
-keys=page,handler,data
-key_types=_INT_,_ENUM_,_STRING_
-page=8
+keys=handler,data
+key_types=_ENUM_,_STRING_
 handler=_RESCALE_TABLE_
 data=Rot_rescale_entry,Rot_rescale_combo
 
@@ -218,9 +194,8 @@ post_functions_with_arg=lock_entry
 #----- MAIN VETable Container ------------------------------------------------
 
 [main_table]
-keys=page,rescaler_frame
-key_types=_INT_,_STRING_
-page=8
+keys=rescaler_frame
+key_types=_STRING_
 rescaler_frame=Rot_rescale_frame
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------
@@ -517,60 +492,48 @@ key_types=_INT_
 offset=98
 group=table
 
-[trailing_split_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=8
+[trailing_split_combo]
+keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Off,On
+bitvals=0,1
 offset=111
-bitval=0
-bitshift=0
 bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off Trailing Split Support.
-
-[trailing_split_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=8
-offset=111
-bitval=1
 bitshift=0
-bitmask=1
-toggle_groups=rotary_trailing
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns on Trailing Split Support.
+toggle_groups=NA,rotary_trailing
+tooltip=Turns on/off Trailing Split Support.
 
-[fc_trailing_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[trailing_output_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
-offset=11
-bitval=0
-bitshift=4
-bitmask=16
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table.
+dl_type=_IMMEDIATE_
+choices=FC Trailing,FD Trailing
+bitvals=0,1
+offset=11
+bitmask=16
+bitshift=4
+tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table. When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
-[fd_trailing_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[combobox1]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
-offset=11
-bitval=1
-bitshift=4
-bitmask=16
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
+dl_type=_IMMEDIATE_
+choices=FC Trailing,FD Trailing
+bitvals=0,1
+offset=11
+bitmask=16
+bitshift=4
+tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table. When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
 [fixed_split_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=8
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 offset=112
 precision=2
 dl_conv_expr=(x+10)/(352/1000)

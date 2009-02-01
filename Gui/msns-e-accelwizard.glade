@@ -1277,7 +1277,7 @@
 				  <property name="spacing">0</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="ae_main_params_table">
+				    <widget class="GtkFrame" id="ae_main_params_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
@@ -1287,95 +1287,11 @@
 					<widget class="GtkTable" id="ae_params_left_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
-					  <property name="n_rows">12</property>
+					  <property name="n_rows">9</property>
 					  <property name="n_columns">2</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
-					  <property name="column_spacing">0</property>
-
-					  <child>
-					    <widget class="GtkLabel" id="ae_trigger_label">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Accel Enrichments Trigger</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">0</property>
-					      <property name="bottom_attach">1</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="ae_accel_units_label">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Accel Timer Units</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">3</property>
-					      <property name="bottom_attach">4</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="ae_decay_accel_choice_label">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Accel Enrichment Decay</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">7</property>
-					      <property name="bottom_attach">8</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
+					  <property name="column_spacing">5</property>
 
 					  <child>
 					    <widget class="GtkTable" id="ae_decay_subtable">
@@ -1447,8 +1363,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">9</property>
-					      <property name="bottom_attach">10</property>
+					      <property name="top_attach">6</property>
+					      <property name="bottom_attach">7</property>
 					      <property name="x_options">fill</property>
 					    </packing>
 					  </child>
@@ -1522,8 +1438,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">5</property>
-					      <property name="bottom_attach">6</property>
+					      <property name="top_attach">3</property>
+					      <property name="bottom_attach">4</property>
 					      <property name="x_options">fill</property>
 					      <property name="y_options">fill</property>
 					    </packing>
@@ -1712,8 +1628,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">11</property>
-					      <property name="bottom_attach">12</property>
+					      <property name="top_attach">8</property>
+					      <property name="bottom_attach">9</property>
 					      <property name="x_options">fill</property>
 					      <property name="y_options">fill</property>
 					    </packing>
@@ -1726,8 +1642,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">10</property>
-					      <property name="bottom_attach">11</property>
+					      <property name="top_attach">7</property>
+					      <property name="bottom_attach">8</property>
 					      <property name="y_padding">2</property>
 					      <property name="x_options">fill</property>
 					    </packing>
@@ -1740,8 +1656,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">2</property>
-					      <property name="bottom_attach">3</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
 					      <property name="y_padding">2</property>
 					      <property name="x_options">fill</property>
 					      <property name="y_options">fill</property>
@@ -1755,151 +1671,151 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">6</property>
-					      <property name="bottom_attach">7</property>
+					      <property name="top_attach">4</property>
+					      <property name="bottom_attach">5</property>
 					      <property name="y_padding">2</property>
 					      <property name="x_options">fill</property>
 					    </packing>
 					  </child>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="ae_decay_radio_button">
+					    <widget class="GtkLabel" id="ae_trigger_label">
 					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Decay</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">1</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">8</property>
-					      <property name="bottom_attach">9</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkRadioButton" id="ae_decay_none_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">None</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">ae_decay_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
+					      <property name="label" translatable="yes">Accel Enrich
+Trigger</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_CENTER</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">8</property>
-					      <property name="bottom_attach">9</property>
-					      <property name="x_options">expand</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="accel_cycles_radio_button">
+					    <widget class="GtkComboBoxEntry" id="ae_trigger_combo">
 					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Cycles</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
 					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">4</property>
-					      <property name="bottom_attach">5</property>
-					      <property name="x_options">expand</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="accel_seconds_radio_button">
+					    <widget class="GtkLabel" id="ae_accel_units_label">
 					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Seconds</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">accel_cycles_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
+					      <property name="label" translatable="yes">Accel Timer 
+Units</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_CENTER</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">4</property>
-					      <property name="bottom_attach">5</property>
-					      <property name="x_options">expand</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="ae_trigger_mapdot_radio_button">
+					    <widget class="GtkComboBoxEntry" id="ae_timer_units_combo">
 					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">MAPdot</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
 					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkRadioButton" id="ae_trigger_tpsdot_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">TPSdot</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">ae_trigger_mapdot_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="ae_decay_accel_choice_label">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Accel Enrich
+Decay</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_CENTER</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">5</property>
+					      <property name="bottom_attach">6</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkComboBoxEntry" id="ae_decay_combo">
+					      <property name="visible">True</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
+					      <property name="focus_on_click">True</property>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">5</property>
+					      <property name="bottom_attach">6</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options">fill</property>
 					    </packing>
 					  </child>
 					</widget>
@@ -1930,7 +1846,7 @@ of decay time</property>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
-				      <property name="expand">False</property>
+				      <property name="expand">True</property>
 				      <property name="fill">True</property>
 				    </packing>
 				  </child>
@@ -1959,86 +1875,11 @@ of decay time</property>
 					<widget class="GtkTable" id="ae_params_right_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
-					  <property name="n_rows">4</property>
+					  <property name="n_rows">3</property>
 					  <property name="n_columns">2</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
-					  <property name="column_spacing">0</property>
-
-					  <child>
-					    <widget class="GtkRadioButton" id="normal_ae_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Normal AE</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkRadioButton" id="rpm_based_ae_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">RPM Based</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">normal_ae_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">1</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="rpm_ae_choice_label">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Alternative AE Scheme</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">0</property>
-					      <property name="bottom_attach">1</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options">expand</property>
-					    </packing>
-					  </child>
+					  <property name="column_spacing">5</property>
 
 					  <child>
 					    <widget class="GtkHSeparator" id="hseparator2">
@@ -2047,8 +1888,8 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">2</property>
-					      <property name="bottom_attach">3</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
 					      <property name="y_padding">2</property>
 					      <property name="x_options">fill</property>
 					      <property name="y_options">fill</property>
@@ -2240,9 +2081,56 @@ of decay time</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">3</property>
-					      <property name="bottom_attach">4</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
 					      <property name="y_options">fill</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="rpm_ae_choice_label">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Alternative AE 
+Scheme</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_CENTER</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkComboBoxEntry" id="alt_ae_combo">
+					      <property name="visible">True</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
+					      <property name="focus_on_click">True</property>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
 					    </packing>
 					  </child>
 					</widget>
@@ -2273,8 +2161,8 @@ of decay time</property>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 
@@ -2325,161 +2213,11 @@ of decay time</property>
 					  <child>
 					    <widget class="GtkTable" id="mapdot_subparams_table">
 					      <property name="visible">True</property>
-					      <property name="n_rows">5</property>
+					      <property name="n_rows">3</property>
 					      <property name="n_columns">2</property>
 					      <property name="homogeneous">False</property>
 					      <property name="row_spacing">0</property>
-					      <property name="column_spacing">0</property>
-
-					      <child>
-						<widget class="GtkRadioButton" id="ae_off_ib_never_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Never</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="ae_off_during_normal_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Normal</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">4</property>
-						  <property name="bottom_attach">5</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="ae_off_ib_in_boost_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">In Boost</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">ae_off_ib_never_radio_button</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">1</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="ae_off_during_ase_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Off During ASE</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">ae_off_during_normal_radio_button</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">1</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">4</property>
-						  <property name="bottom_attach">5</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkLabel" id="ae_off_during_label">
-						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Turn Accel Enrich off during</property>
-						  <property name="use_underline">False</property>
-						  <property name="use_markup">False</property>
-						  <property name="justify">GTK_JUSTIFY_LEFT</property>
-						  <property name="wrap">False</property>
-						  <property name="selectable">False</property>
-						  <property name="xalign">0</property>
-						  <property name="yalign">0.5</property>
-						  <property name="xpad">0</property>
-						  <property name="ypad">0</property>
-						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						  <property name="width_chars">-1</property>
-						  <property name="single_line_mode">False</property>
-						  <property name="angle">0</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
-						  <property name="x_options">expand</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkLabel" id="disable_ae_in_boost_label">
-						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Turn Accel Enrich off in Boost</property>
-						  <property name="use_underline">False</property>
-						  <property name="use_markup">False</property>
-						  <property name="justify">GTK_JUSTIFY_LEFT</property>
-						  <property name="wrap">False</property>
-						  <property name="selectable">False</property>
-						  <property name="xalign">0</property>
-						  <property name="yalign">0.5</property>
-						  <property name="xpad">0</property>
-						  <property name="ypad">0</property>
-						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						  <property name="width_chars">-1</property>
-						  <property name="single_line_mode">False</property>
-						  <property name="angle">0</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">0</property>
-						  <property name="bottom_attach">1</property>
-						  <property name="x_options">expand</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
+					      <property name="column_spacing">5</property>
 
 					      <child>
 						<widget class="GtkHSeparator" id="hseparator6">
@@ -2488,8 +2226,102 @@ of decay time</property>
 						<packing>
 						  <property name="left_attach">0</property>
 						  <property name="right_attach">2</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="disable_ae_in_boost_label">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">Accel Enrich
+in Boost</property>
+						  <property name="use_underline">False</property>
+						  <property name="use_markup">False</property>
+						  <property name="justify">GTK_JUSTIFY_CENTER</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkComboBoxEntry" id="ae_in_boost_combo">
+						  <property name="visible">True</property>
+						  <property name="add_tearoffs">False</property>
+						  <property name="has_frame">True</property>
+						  <property name="focus_on_click">True</property>
+						  <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">1</property>
+						  <property name="right_attach">2</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						  <property name="x_options">fill</property>
+						  <property name="y_options">fill</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="ae_off_during_label">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">Accel Enrich
+during ASE</property>
+						  <property name="use_underline">False</property>
+						  <property name="use_markup">False</property>
+						  <property name="justify">GTK_JUSTIFY_LEFT</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
 						  <property name="top_attach">2</property>
 						  <property name="bottom_attach">3</property>
+						  <property name="x_options">fill</property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkComboBoxEntry" id="ae_during_ase_combo">
+						  <property name="visible">True</property>
+						  <property name="add_tearoffs">False</property>
+						  <property name="has_frame">True</property>
+						  <property name="focus_on_click">True</property>
+						  <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">1</property>
+						  <property name="right_attach">2</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
+						  <property name="x_options">fill</property>
+						  <property name="y_options">fill</property>
 						</packing>
 					      </child>
 					    </widget>
@@ -2498,20 +2330,6 @@ of decay time</property>
 					      <property name="right_attach">2</property>
 					      <property name="top_attach">2</property>
 					      <property name="bottom_attach">3</property>
-					      <property name="x_options">fill</property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkHSeparator" id="hseparator7">
-					      <property name="visible">True</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="y_padding">2</property>
 					      <property name="x_options">fill</property>
 					    </packing>
 					  </child>
@@ -2545,6 +2363,20 @@ of decay time</property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkHSeparator" id="hseparator7">
+					      <property name="visible">True</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_padding">2</property>
+					      <property name="x_options">fill</property>
+					    </packing>
+					  </child>
 					</widget>
 				      </child>
 
@@ -2573,8 +2405,8 @@ of decay time</property>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 				</widget>
@@ -2615,55 +2447,25 @@ of decay time</property>
 					<widget class="GtkTable" id="ae_decel_params_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
-					  <property name="n_rows">2</property>
+					  <property name="n_rows">1</property>
 					  <property name="n_columns">2</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
-					  <property name="column_spacing">0</property>
+					  <property name="column_spacing">5</property>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="ae_decel_off_never_radio_button">
+					    <widget class="GtkComboBoxEntry" id="ae_decel_combo">
 					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Never</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
 					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkRadioButton" id="ae_decel_off_above_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">Above Setpoint</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">ae_decel_off_never_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Aug 2006 22:41:14 GMT"/>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 01 Feb 2009 00:51:58 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">expand</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
@@ -2671,10 +2473,11 @@ of decay time</property>
 					  <child>
 					    <widget class="GtkLabel" id="ae_disable_when_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Turn Decel Enrich off when:</property>
+					      <property name="label" translatable="yes">Turn Decel Enrich
+off when:</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="justify">GTK_JUSTIFY_CENTER</property>
 					      <property name="wrap">False</property>
 					      <property name="selectable">False</property>
 					      <property name="xalign">0</property>
@@ -2688,10 +2491,10 @@ of decay time</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
+					      <property name="right_attach">1</property>
 					      <property name="top_attach">0</property>
 					      <property name="bottom_attach">1</property>
-					      <property name="x_options">expand</property>
+					      <property name="x_options"></property>
 					      <property name="y_options">expand</property>
 					    </packing>
 					  </child>

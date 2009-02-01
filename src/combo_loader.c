@@ -54,15 +54,27 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	regexp = g_strdup_printf("%s",tmpstr);
 	g_free(tmpbuf);
 
-	cfg_read_string(cfgfile,section,"bitvals",&tmpbuf);
+	if (!cfg_read_string(cfgfile,section,"bitvals",&tmpbuf))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
+		return;
+	}
 	vector = parse_keys(tmpbuf,&num_bitvals,",");
 	g_free(tmpbuf);
-	cfg_read_int(cfgfile,section,"bitmask",&bitmask);
-	cfg_read_int(cfgfile,section,"bitshift",&bitshift);
+	if (!cfg_read_int(cfgfile,section,"bitmask",&bitmask))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
+		return;
+	}
+	if(!cfg_read_int(cfgfile,section,"bitshift",&bitshift))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
+		return;
+	}
 
 	if (num_bitvals != num_choices)
 	{
-		printf("BIG PROBLEM, combobox  choices %i and bits %i don't match up\n",num_choices,num_bitvals);
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": combo_loader()\n\t\"bitvals\" BIG PROBLEM, combobox  choices %i and bits %i don't match up\n",num_choices,num_bitvals));
 		return;
 	}
 

@@ -119,302 +119,158 @@ bind_to_list=maf_controls
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[limit_spark_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=1
-bitshift=4
-bitmask=48
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Hard limiter style to spark drop. (Not avail on EDIS or non ignition modes)
-
-[limit_fuel_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=2
-bitshift=4
-bitmask=48
-toggle_groups=limit_spark_ctrls
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Hard limiter style to fuel cutoff. 
-
-[limit_fuel_spark_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=3
-bitshift=4
-bitmask=48
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Hard limiter style to fuel cutoff and spark drop. (Not avail on EDIS or non ignition modes)
-
-[staging_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[staging_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,set_widgets_label,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
 offset=76
-bitval=0
-bitshift=2
+bitvals=0,1,2,3
 bitmask=12
-toggle_groups=staging_ctrls
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off all of Injector Staging.
-
-[staging_rpm_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,set_widgets_label,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=1
 bitshift=2
-bitmask=12
-set_widgets_label=adv_staging_point_label,Staging point (RPM/100),adv_staging_delta_label,Staging Off Delta (RPM/100)
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets Injector staging to trigger based on RPM
-
-[staging_map_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,set_widgets_label,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=2
-bitshift=2
-bitmask=12
-toggle_groups=map_second_staging
-group_states=DISABLED
-set_widgets_label=adv_staging_point_label,Staging point (KPa),adv_staging_delta_label,Staging Off Delta (KPa)
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Injector staging to trigger based on Manifold Pressure (in KPa)
+choices=Off,RPM based,MAP based,TPS based
+toggle_groups=,staging_ctrls:map_second_staging,staging_ctrls,staging_ctrls:map_second_staging
+set_widgets_label=adv_staging_point_label,,Staging point (RPM/100),Staging point (KPa),Staging point (TPSADC),adv_staging_delta_label,,Staging Off Delta (RPM/100),Staging Off Delta (KPa),Staging Off Delta (TPSADC)
+tooltip=Sets the staging mode to be based on RPM only, MAP, or TPS.
 
-[staging_tps_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,set_widgets_label,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=3
-bitshift=2
-bitmask=12
-set_widgets_label=adv_staging_point_label,Staging point (TPSADC),adv_staging_delta_label,Staging Off Delta (TPSADC)
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Injector staging to trigger based on Throttle Position (in ADC counts)
-
-[sec_stage_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[adtl_staging_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=109
-bitval=0
-bitshift=6
+bitvals=0,3
 bitmask=192
-toggle_groups=sec_stage_ctrls
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the staging algorithm to just trigger on one variable.  See above controls
-
-[sec_stage_map_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=109
-bitval=3
 bitshift=6
-bitmask=192
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the Staging algorithm to depends on the above conditions AS WELL as the manifold pressure values below.
-
-[hybrid_an_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitval=0
-bitshift=5
-bitmask=32
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off Hybrid Alpha-N Mode
+choices=Off,Manifold Pressure
+toggle_groups=,sec_stage_ctrls
+tooltip=Sets the staging algorithm to just trigger on one variable or AS WELL as the manifold pressure values below.
 
-[hybrid_an_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitval=1
-bitshift=5
-bitmask=32
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns on Hybrid Alpha-N Mode
-
-[maf_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=0
-bitshift=5
-bitmask=32
-toggle_groups=maf_controls
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off Support for MAF Sensors using the X7 pin.
-
-[maf_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=1
-bitshift=5
-bitmask=32
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off Support for MAF Sensors using the X7 pin (make sure it's not already in use!!!)
-
-[maf_aircorr_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=0
-bitshift=6
-bitmask=64
-bind_to_list=maf_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses Intake Air Temp sensor data for Air temp corrrection.
-
-[maf_aircorr_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=1
-bitshift=6
-bitmask=64
-bind_to_list=maf_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=the MAF sensor takes care of air density differences itself and outptus appropriately scaled data. (i.e. this turns off the MS's aircorr compensation)
-
-[false_trig_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=1
-bitshift=2
-bitmask=4
-bind_to_list=025_spark
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off False Trigger detection code in the firmware.
-
-[false_trig_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=0
-bitshift=2
-bitmask=4
-bind_to_list=025_spark
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns on False Trigger detection code in the firmware.  Filters if trigger time is too short in wheel mode.  In non-wheel mode, disables half of triggers
-
-[orfc_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[orfc_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=66
-bitval=0
-bitshift=6
+bitvals=0,1
 bitmask=64
-toggle_groups=orfc_params
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables Over-Run Fuel cut. (i.e. cutting fuel on decel, i.e. engine braking)
-
-[orfc_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=1
 bitshift=6
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,orfc_params
+tooltip=Disables or Enables Over-Run Fuel cut. (i.e. cutting fuel on decel, i.e. engine braking)
+
+[limiter_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+offset=46
+bitvals=1,2,3
+bitmask=48
+bitshift=4
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Spark,Fuel,Fuel & Spark
+toggle_groups=limit_spark_ctrls,,limit_spark_ctrls
+tooltip=Sets the hard revlimiter type, Spark only, Fuel only, or Both
+
+[hybrid_an_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+page=0
+offset=11
+bitvals=0,1
+bitmask=32
+bitshift=5
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+tooltip=Enables or Disables Hybrid A/N mode
+
+[maf_x7_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+offset=184
+bitvals=0,1
+bitmask=32
+bitshift=5
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,maf_controls
+tooltip=Enables or Disables use of MAF sensor on X7 input pin
+
+[maf_corr_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+offset=184
+bitvals=0,1
 bitmask=64
-dl_type=_IMMEDIATE_
+bitshift=6
 handler=_GENERIC_
-tooltip=Enables Over-Run Fuel cut. (i.e. cutting fuel on decel, i.e. engine braking)
+dl_type=_IMMEDIATE_
+choices=Use IAT Sensor,Internal to MAF
+bind_to_list=maf_controls
+tooltip=Uses either Intake air temp for temp correction, or leaves it internal to the MAF sensor, which iwll output a temp compensated signal.
 
-[an_barocorr_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[false_trig_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+offset=92
+bitvals=1,0
+bitmask=4
+bitshift=2
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Enabled,Disabled
+bind_to_list=025_spark
+tooltip=Enables or disables the False Trigger detection code in the firmware. Filters if triggertime is too short in wheel mode.
+
+[barocorr_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=184
-bitval=0
-bitshift=3
+bitvals=0,1
 bitmask=8
-bind_to_list=alpha-n_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables the use of constant Baro correction in Alpha-N mode
-
-[an_barocorr_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=1
 bitshift=3
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,barocorr_params
+tooltip=Enables or disables the use of constant baro correction. Requires use of additional map sensor on x6 or x7
+
+[const_baro_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+page=0
+offset=184
+bitvals=0,1
+bitmask=128
+bitshift=7
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+tooltip=Enables or Disables constant baro correction in normal modes
+
+[const_an_baro_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+offset=184
+bitvals=0,1
 bitmask=8
+bitshift=3
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
 bind_to_list=alpha-n_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the use of constant Baro correction in Alpha-N mode
-
-[constant_barocorr_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=0
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables the use of constant Baro correction.
-
-[constant_barocorr_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=184
-bitval=1
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the use of constant Baro correction. NOTE: THIS REQUIRES the fitting of an additional MAP sensor to the X7input with approprite circuitry.
+choices=Disabled,Enabled
+tooltip=Enables or Disables constant baro correction in Alpha-N mode
 
 #----- Spinbuttons ----------------------------------------------------------
 
@@ -650,27 +506,16 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in seconds
 
-[barocorr_yes_radio_button]
-keys=page,offset,toggle_groups,group_states,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=184
-bitshift=3
-bitval=1
-bitmask=8
-toggle_groups=barocorr_params
-group_states=ENABLED
+[adv_latency_entry]
+keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=34
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+raw_lower=0
+raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-
-[barocorr_no_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=184
-bitshift=3
-bitval=0
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+tooltip=Hardware Latency Compensation (ignition latency compensator)
 
