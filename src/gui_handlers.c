@@ -2635,7 +2635,7 @@ gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 	while (valid)
 	{
 		gtk_tree_model_get(model,iter,CHOICE_COL, &choice, -1);
-		if (strcmp(cur_text,choice) == 0)
+		if (strcasecmp(cur_text,choice) == 0)
 			return TRUE;
 		valid = gtk_tree_model_iter_next (model, iter);
 	}

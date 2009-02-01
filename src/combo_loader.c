@@ -51,7 +51,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 
 	choices = parse_keys(tmpbuf,&num_choices,",");
 	tmpstr = g_strdelimit(tmpbuf,",",'|');
-	regexp = g_strdup_printf("^%s$",tmpstr);
+	regexp = g_strdup_printf("%s",tmpstr);
 	g_free(tmpbuf);
 
 	cfg_read_string(cfgfile,section,"bitvals",&tmpbuf);
@@ -81,17 +81,24 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	g_strfreev(choices);
 
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
-	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
-	entry = mask_entry_new_with_mask(regexp);
-	
-	gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
-	gtk_container_add (GTK_CONTAINER (object), entry);
+	if (GTK_IS_COMBO_BOX_ENTRY(object))
+	{
+		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
+		entry = mask_entry_new_with_mask(regexp);
+		/* NAsty hack, but otherwise the entry is an obnoxious size.. */
+		gtk_entry_set_width_chars(GTK_ENTRY(entry),10);
 
-	completion = gtk_entry_completion_new();
-	gtk_entry_set_completion(GTK_ENTRY(entry),completion);
-	gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
-	gtk_entry_completion_set_text_column(completion,CHOICE_COL);
-	gtk_entry_completion_set_inline_completion(completion,TRUE);
-	gtk_entry_completion_set_popup_single_match(completion,FALSE);
+		gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
+		gtk_container_add (GTK_CONTAINER (object), entry);
+
+		completion = gtk_entry_completion_new();
+		gtk_entry_set_completion(GTK_ENTRY(entry),completion);
+		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
+		gtk_entry_completion_set_text_column(completion,CHOICE_COL);
+		gtk_entry_completion_set_inline_completion(completion,TRUE);
+		gtk_entry_completion_set_inline_selection(completion,TRUE);
+		gtk_entry_completion_set_popup_single_match(completion,FALSE);
+		OBJ_SET(object,"arrow-size",GINT_TO_POINTER(1));
+	}
 			
 }

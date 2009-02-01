@@ -49,7 +49,7 @@ void mask_entry_set_background (MaskEntry *entry)
 
 	if (entry->mask)
 	{
-		if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
+		if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), G_REGEX_CASELESS, 0))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
 			return;
