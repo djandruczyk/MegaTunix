@@ -991,6 +991,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gint total = 0;
 	guchar bitval = 0;
 	gchar * set_labels = NULL;
+	gchar * swap_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gint i = 0;
@@ -1012,6 +1013,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	canID = (gint)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
+	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
@@ -1038,6 +1040,8 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 //		printf("dload val matched ecu settings, not changing\n");
 		return FALSE;
 	}
+	if (swap_list)
+		swap_labels(swap_list,bitval);
 	if (set_labels)
 	{
 		total = get_choice_count(model);
@@ -1898,6 +1902,8 @@ void update_widget(gpointer object, gpointer user_data)
 combo_toggle:
 		if (toggle_groups)
 			combo_toggle_groups_linked(widget,i);
+		if (swap_list)
+			swap_labels(swap_list,tmpi);
 		if (set_labels)
 		{
 			total = get_choice_count(model);
