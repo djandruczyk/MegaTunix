@@ -1709,7 +1709,6 @@ Trigger</property>
 
 					  <child>
 					    <widget class="GtkComboBoxEntry" id="ae_trigger_combo">
-					      <property name="height_request">21</property>
 					      <property name="visible">True</property>
 					      <property name="add_tearoffs">False</property>
 					      <property name="has_frame">True</property>
