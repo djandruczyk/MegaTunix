@@ -146,340 +146,172 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 
 #----- Radio Buttons ----------------------------------------------------------
 
-[s4w_off_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[decoder_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=11
-bitshift=2
-bitval=0
-bitmask=4
-toggle_groups=s4w_controls
-group_states=DISBLED
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Disables Stim 4 Wheel mode.
+dl_type=_IMMEDIATE_
+choices=025 Style,024s9 Style
+toggle_groups=,025_spark
+bitvals=0,1
+offset=92
+bitmask=8
+bitshift=3
+tooltip=Sets the wheel decode algorithm to either 025 style or 024s9 style.
 
-[s4w_on_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[style_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=-1,-2
+bitvals=0,1
+offset=0
+bitmask=8
+bitshift=3
+tooltip=Sets the wheel to be of the "-1" variety, (i.e. 36-1, 12-1, 4-1, etc) or of the "-2" variety, (i.e. 60-2)
+
+[2nd_trig_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,2nd_trigger
+bitvals=0,1
 offset=11
-bitshift=2
-bitval=1
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enabled Stim 4 Wheel mode.
+bitmask=1
+bitshift=0
+tooltip=Sets the second trigger input
 
-[oddfire_no_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[2nd_trig_edge_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Rising Edge,Falling Edge,Both Edges
+bind_to_list=2nd_trigger
+bitvals=0,1,2
+offset=33
+bitmask=3
+bitshift=0
+tooltip=Sets the second trigger input to trigger on the Rising or Falling Edge.
+
+[2nd_trig_missing_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=No Missing,Missing
+bind_to_list=2nd_trigger
+bitvals=0,1
+offset=66
+bitmask=1
+bitshift=0
+tooltip=I have no idea what the hell this one is for. See http://megasquirt.sf.net/extra for more information.
+
+[oddfire_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=3
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,oddfire_controls
+bitvals=0,1
 offset=173
-bitshift=4
-bitval=0
 bitmask=16
-toggle_groups=oddfire_controls
-group_states=DISBLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables Oddfire Controls
-
-[oddfire_yes_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=3
-offset=173
 bitshift=4
-bitval=1
+tooltip=Enables/Disables Oddfire controls
+
+[dwell_style_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Fixed Dwell,Dwell Control
+toggle_groups=fixed_dwell,dwell_control
+bitvals=0,1
+offset=109
+bitmask=2
+bitshift=1
+tooltip=Selects Fixed dwell or dwell control
+
+[fixed_dwell_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=50%,75%,HEI4 minimum
+bitvals=0,1,2
+offset=12
+bitmask=96
+bitshift=5
+tooltip=Selects the amount fo dwell when in fixed mode
+
+[dual_dist_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+bitvals=0,1
+offset=92
 bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables Oddfire Controls
+bitshift=4
+tooltip=Use dual distributor mode or not
 
-[invert_ignition_no_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[invert_ign_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=3
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Normal,Inverted
+bitvals=0,1
 offset=173
-bitshift=3
-bitval=0
 bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the ignition Output to Normal Polarity.
-
-[invert_ignition_yes_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=3
-offset=173
 bitshift=3
-bitval=1
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the ignition Output to Inverted Polarity.
+tooltip=Sets ignition output polarity
 
-[trig_ret_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[crank_trig_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
-offset=173
-bitshift=2
-bitval=0
-bitmask=4
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Trigger Return,Time Based
 toggle_groups=trigger_return,time_based
-group_states=ENABLED,DISBLED
 bind_to_list=nonedis_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the cranking timing control to use Trigger Return (second column of Trigger points table above) instead of time based timing (which can be error prone if the engine doesn't have a stable and consistent cranking RPM)
-
-[time_based_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=3
+bitvals=0,1
 offset=173
-bitshift=2
-bitval=1
 bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=nonedis_controls,spark_controls
-tooltip=Sets the Ignition mode to use Time-based triggering, instead of trigger
-return.  NOTE: This can cause abnormal/inaccurate timing if your cranking speeds are slow or change significantly in speed (i.e. high compression or weak starter/battery)
+bitshift=2
+tooltip=Sets the cranking timing control to use Trigger Return (second column of Trigger points table above) or time based timing (which can be error prone if the engine doesn't have a stable and consistent cranking RPM)
 
-
-[2nd_trig_no_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[s4w_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,s4w_controls
+bitvals=0,1
 offset=11
-bitshift=0
-bitval=0
-bitmask=1
-toggle_groups=2nd_trigger
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets second trigger input to NO.
+bitmask=4
+bitshift=2
+tooltip=Enables or Disables Stim-4-Wheel mode (bench debugging tool)
 
-[2nd_trig_yes_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitshift=0
-bitval=1
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets second trigger input to YES.
-
-[2nd_trig_rising_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=0
-offset=33
-bitshift=0
-bitval=0
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=2nd_trigger
-tooltip=Sets the second trigger input to trigger on the Rising Edge.
-
-[2nd_trig_falling_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=0
-offset=33
-bitshift=0
-bitval=1
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=2nd_trigger
-tooltip=Sets the second trigger input to trigger on the Falling Edge (like IRQ).
-
-[2nd_trig_rising_falling_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=0
-offset=33
-bitshift=0
-bitval=2
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=2nd_trigger
-tooltip=Sets the second trigger input to trigger on the Rsing AND Falling edges
-
-[2nd_trig_no_missing_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=0
-offset=66
-bitshift=0
-bitval=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=2nd_trigger
-tooltip=I have no idea what the hell this one is for. See http://megasquirt.sf.net/extra for more information.
-
-[2nd_trig_missing_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
-page=0
-offset=66
-bitshift=0
-bitval=1
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=2nd_trigger
-tooltip=I have no idea what the hell this one is for. See http://megasquirt.sf.net/extra for more information.
-
-[minus_1_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitshift=3
-bitval=0
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the wheel to be of the "-1" variety, (i.e. 36-1, 12-1, 4-1, etc)
-
-[minus_2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitshift=3
-bitval=1
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the wheel to be of the "-2" variety, (i.e. 60-2)
-
-[025_style_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitshift=3
-bitval=0
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Use the 025 style Wheel decoding algorithm.
-
-[024s9_style_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitshift=3
-bitval=1
-bitmask=8
-toggle_groups=025_spark
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Use the 024s9 style Wheel decoding algorithm.
-
-[dual_dizzy_no_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitshift=4
-bitval=0
-bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Just use 1 distributor
-
-[dual_dizzy_yes_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitshift=4
-bitval=1
-bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Use 2 distributors and two spark outputs.  The spark output sequence is interleaved between distributors.
-
-[fixed_duty_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=109
-bitshift=1
-bitval=0
-bitmask=2
-toggle_groups=dwell_control,fixed_dwell
-group_states=DISABLED,ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Use fixed dwell values. (No dwell control)
-
-[dwell_ctrl_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=109
-bitshift=1
-bitval=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses the Dwell control parameters below.
-
-[75_percent_duty_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitshift=5
-bitval=0
-bitmask=96
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the spark output dwell to 75% DC
-
-[min_hei_dwell_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitshift=5
-bitval=1
-bitmask=96
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the spark output dwell to the minimum for the HEI4 module
-
-[50_percent_duty_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitshift=5
-bitval=2
-bitmask=96
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the spark output dwell to 50% DC.
-
-#----- Entries -----------------------------------------------------------
+#----- SpinButtons -----------------------------------------------------------
 
 [trigger_entry_1]
 keys=offset
@@ -667,15 +499,6 @@ raw_upper=100
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
-
-[hardware_latency_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=4
-offset=34
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Hardware latency factor.  Used to trim out ignition skew at high RPM's Adjust this to tune out the hardware latency in the ignition code so as to maintain rock steady timing
 
 [crankdwell_entry]
 keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
