@@ -99,6 +99,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		entry = mask_entry_new_with_mask(regexp);
 		/* NAsty hack, but otherwise the entry is an obnoxious size.. */
 		gtk_entry_set_width_chars(GTK_ENTRY(entry),10);
+		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(gint)OBJ_GET(global_data,"font_size")));
 
 		gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
 		gtk_container_add (GTK_CONTAINER (object), entry);

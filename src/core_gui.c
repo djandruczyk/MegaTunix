@@ -93,6 +93,8 @@ int setup_gui()
 	g_free(filename);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	printf ("Font size is %i\n",PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc)));
+	OBJ_SET(global_data,"font_size",GINT_TO_POINTER(PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc))));
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
