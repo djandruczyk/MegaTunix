@@ -145,245 +145,133 @@ handler=_BURN_MS_FLASH_
 page=8
 bind_to_list=burners
 
-#----- Radio/Check Buttons ---------------------------------------------------
+#----- Radio/CheckCombo Buttons ----------------------------------------------
 
-[priming_check_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[prime_when_combo]
+keys=page,width,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=8
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=P-Pulse>0,Always
+width=14
 offset=42
-bitval=1
+bitvals=0,1
 bitshift=0
 bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=We don't prime the fuel pump if the priming pulse is turned off. Why the hell you'd want this set, I have no idea...
+tooltip=Prime the pump when priming pule is above 0, or Always?
 
-[prime_on_boot_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[prime_mode_combo]
+keys=page,width,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=8
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=On Power Up,Twice,After 2 Secs
+width=14
 offset=42
-bitval=0
+bitvals=0,2,3
 bitshift=1
 bitmask=6
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Prime the fuel pump no matter what on system power up.
+tooltip=Priming mode, on powerup, double prime pulse, or after 2 second delay
 
-[prime_twice_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[prime_source_combo]
+keys=page,width,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=8
-offset=42
-bitval=2
-bitshift=1
-bitmask=6
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Fires the priming pulses twice. (useful if the default max priming pulse length (25.5 ms) is too short.
-
-[delayed_prime_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=8
-offset=42
-bitval=3
-bitshift=1
-bitmask=6
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Waits two seconds after priming the fuel pump before firing the priming pulses to allow fuel pressure to build.
-
-[prime_via_table_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=8
+choices=Priming Table,Fixed
+width=14
+toggle_groups=,fixed_priming
 offset=42
-bitval=0
+bitvals=0,1
 bitshift=3
 bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Use Priming Table below to determine priming pulses.  USeful becase priming pulses don't necessarily scale linearily with engine temp. (cold engions need a LOT more priming, then a slightly cool one)
+tooltip=Use Lookuptable for priming pulse (below left), or used fixed values
 
-[prime_fixed_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,toggle_groups,group_states,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+[1st_start_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=8
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,xtra_crank
 offset=42
-bitval=1
-bitshift=3
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-toggle_groups=fixed_priming
-group_states=ENABLED
-tooltip=Uses the fixes priming pulse value to the left and completely ignores the priming table below.
-
-[clt_crank_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=8
-offset=42
-bitval=1
-bitshift=4
-bitmask=48
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses the Coolant Temp (CLT) as the axis for the cranking table to determine the cranking pulsewidths.
-
-[mat_crank_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=8
-offset=42
-bitval=2
-bitshift=4
-bitmask=48
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses the Manifold Air Temp (MAT) as the axis for the cranking table to determine the cranking pulsewidths.
-
-[clt_mat_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=8
-offset=42
-bitval=3
-bitshift=4
-bitmask=48
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses the AVERAGE of the Coolant (CLT) and Manifold Air Temp (MAT) as the axis for the cranking table to determine the cranking pulsewidths.
-
-[ase_seconds_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=1
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The ASE Counter uses the units of seconds.
-
-[ase_cycles_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=0
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The ASE Counter uses the units of engine cycles (ignition pulses).
-
-[ase_decay_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=0
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Once the engine has started, We immediately begin decaying the ASE value from the inital amount as set in the ASE table towards zero in the amount of time defined below by the ASE Total Decay Time Control.
-
-[ase_fixed_decay_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=1
-bitshift=1
-bitmask=2
-toggle_groups=fixed_decay
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Once the engine has started,  we will hold at this level of ASE as defined by the "ASE Fixed Hold Time" control then will decay to zero in the remaining time left as defined by the ASE Total Decay Time control.
-
-[normal_map_ase_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=0
-bitshift=2
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Due to the rapidly changing MAP signal at engine startup (jumping from near 100 to the idle value) we can choose to leave this as is, or OVERRIDE the VEtable fro a set time with a fixed MAP value in order to stabilize the engine somewhat.  This is helpful for engines with lopey idle MAP signals from hot cams.
-
-[fixed_map_ase_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=5
-offset=179
-bitval=1
-bitshift=2
-bitmask=4
-toggle_groups=fixed_map
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Due to the rapidly changing MAP signal at engine startup (jumping from near 100 to the idle value) we can choose to leave this as is, or OVERRIDE the VEtable fro a set time with a fixed MAP value in order to stabilize the engine somewhat.  This is helpful for engines with lopey idle MAP signals from hot cams.
-
-[extra_cranking_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=8
-offset=42
-bitval=0
+bitvals=0,1
 bitshift=6
 bitmask=64
-toggle_groups=xtra_crank
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This requires you to pump the acclerator pedal 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the Flood Clear level (in ADC counts) for the three pumps before you crank for this to take effect.  The ECU then multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have the multiplier set to 150%, then when active the cranking pulsewidth will be 15ms.
 
-[extra_cranking_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[crank_source_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=8
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=CLT only,MAT only,CLT/MAT Avg
 offset=42
-bitval=1
-bitshift=6
-bitmask=64
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This requires you to pump the acclerator pedal 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the Flood Clear level (in ADC counts) for the three pumps before you crank for this to take effect.  The ECU then multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have the multiplier set to 150%, then when active the cranking pulsewidth will be 15ms.
+bitvals=1,2,3
+bitshift=4
+bitmask=48
+tooltip=Uses either the Coolant Temp (CLT), Manifold Air Temp (MAT) or an Average of the two as the axis for the cranking table to determine the cranking pulsewidths.
 
-[clt_iat_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,toggle_groups,group_states,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=0
-offset=46
-bitval=1
+[ase_time_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+page=5
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Seconds,Cycles
+offset=179
+bitvals=0,1
+bitshift=0
+bitmask=1
+tooltip=The ASE Counter uses the units of seconds or Engine cycles.
+
+[ase_decay_combo]
+keys=page,width,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=5
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Decay Immediately,Hold then Decay
+width=15
+toggle_groups=,fixed_decay
+offset=179
+bitvals=0,1
+bitshift=1
+bitmask=2
+tooltip=Once the engine has started, We ether immediately begin decaying the ASE value from the inital amount as set in the ASE table towards zero in the amount of time defined below by the ASE Total Decay Time Control or we hold for X amount of time before decaying.
+
+[ase_mapmode_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=5
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Normal,Fixed
+toggle_groups=,fixed_map
+offset=179
+bitvals=0,1
 bitshift=2
 bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-toggle_groups=clt_iat_controls
-group_states=ENABLED
-tooltip=Enables the CLT/IAT Ignition Advance/Retard controls.  These allow global adjustements to the timing tables based on conditions such as over/under temp thresholds (CLT/IAT), to prevent engine damage under high load and aid in performance in cold temps.
+tooltip=Due to the rapidly changing MAP signal at engine startup (jumping from near 100 to the idle value) we can choose to leave this as is, or OVERRIDE the VEtable for a set time with a fixed MAP value in order to stabilize the engine somewhat.  This is helpful for engines with lopey idle MAP signals from hot cams.
 
-[clt_iat_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[clt_iat_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Disabled,Enabled
+toggle_groups=,clt_iat_controls
 offset=46
-bitval=0
+bitvals=0,1
 bitshift=2
 bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Diaables the CLT/IAT Ignition Advance/Retard controls.  These allow global adjustements to the timing tables based on conditions such as over/under temp thresholds (CLT/IAT), to prevent engine damage under high load and aid in performance in cold temps.
+tooltip=Enables/Disbales the CLT/IAT Ignition Advance/Retard controls.  These allow global adjustements to the timing tables based on conditions such as over/under temp thresholds (CLT/IAT), to prevent engine damage under high load and aid in performance in cold temps.
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
@@ -398,6 +286,12 @@ keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=4
 bind_to_list=fixed_priming
+
+[extra_fuel_mult_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=4
+bind_to_list=xtra_crank
 
 [ase_label_1]
 keys=page,c_label,f_label,temp_dep,bind_to_list
@@ -493,20 +387,20 @@ bind_to_list=temperature
 keys=page,set_label
 key_types=_INT_,_STRING_
 page=4
-set_label=Advance 1 deg. every \302\260F.
+set_label=Adv. 1 deg per (\302\260F.)
 
 [iat_ret_per_temp_label]
 keys=page,set_label
 key_types=_INT_,_STRING_
 page=4
-set_label=Retard 1 deg every \302\260F.
+set_label=Ret 1 deg per (\302\260F.)
 
 [iat_adv_clt_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
-c_label=when below CLT setpoint \302\260C.
-f_label=when below CLT setpoint \302\260F.
+c_label=& below CLT (\302\260C.)
+f_label=& below CLT (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 
@@ -514,8 +408,8 @@ bind_to_list=temperature
 keys=page,c_label,f_label,temp_dep,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
-c_label=and IAT above \302\260C.
-f_label=and IAT above \302\260F.
+c_label=& IAT above (\302\260C.)
+f_label=& IAT above (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 

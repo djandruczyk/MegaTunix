@@ -282,14 +282,14 @@ bitshift=0
 tooltip=Tells the ECU to NOT turn off NOS during traction control (dangerous) or to turn it off during traction (safer)
 
 [traction_stable_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,fixed_size,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,width,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=RPM stable for 0.1sec,Cycle Count Only
 bind_to_list=global_traction
-fixed_size=FALSE
+width=19
 bitvals=0,1
 offset=109
 bitmask=4
