@@ -43,6 +43,12 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=x2_water_injection,x3_water_injection
 
+[flat_shift_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls
+
 [water_inj_params_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -173,204 +179,106 @@ bind_to_list=temperature,x2_nitrous_control,x3_nitrous_control
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[water_inj_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[wi_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=46
-bitval=1
+bitvals=0,1
 bitshift=3
 bitmask=8
-toggle_groups=nos_features,water_controls,x2_tach_pin,x3_tach_pin
-group_states=DISABLED,ENABLED,ENABLED,DISABLED,DISABLED
+choices=Disabled,Enabled
+toggle_groups=nos_features:x2_tach_pin,water_controls:x3_tach_pin
 bind_to_list=water_features,x2_water_injection,x3_water_injection
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
 
-[water_inj_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=0
-bitshift=3
-bitmask=8
-bind_to_list=water_features,x2_water_injection,x3_water_injection
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
-
-[nos_enrich_bank1_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=0
-bitshift=5
-bitmask=32
-bind_to_list=dt_controls,nos_params
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 1
-
-[nos_enrich_bank2_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=1
-bitshift=5
-bitmask=32
-bind_to_list=dt_controls,nos_params
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 2
-
-[nos_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[nos_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=11
-bitval=1
+bitvals=0,1
 bitshift=7
 bitmask=128
-toggle_groups=nos_subfeatures,nos_params,water_features,x2_tach_pin,x3_tach_pin
-group_states=ENABLED,ENABLED,DISABLED,DISABLED,DISABLED
+choices=Disabled,Enabled
+toggle_groups=water_features:x2_tach_pin,x3_tach_pin,nos_subfeatures:nos_params
 bind_to_list=nos_features
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
-[nos_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[nos_enr_bank_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
-offset=11
-bitval=0
-bitshift=7
-bitmask=128
-bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
+offset=66
+bitvals=0,1
+bitshift=5
+bitmask=32
+choices=Bank 1,Bank2
+bind_to_list=dt_controls,nos_params
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
-[nos_antilag_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[nos_antilag_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=66
-bitval=1
+bitvals=0,1
 bitshift=6
 bitmask=64
-toggle_groups=antilag_controls
-group_states=ENABLED
+choices=Disabled,Enabled
+toggle_groups=,antilag_controls
 bind_to_list=nos_params,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
-[nos_antilag_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=0
-bitshift=6
-bitmask=64
-bind_to_list=nos_params,x2_nitrous_control,x3_nitrous_control
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
-
-[launch_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[launch_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
-bitval=1
+bitvals=0,1
 bitshift=2
 bitmask=4
-toggle_groups=launch_controls
-group_states=ENABLED
+choices=Disabled,Enabled
+toggle_groups=,launch_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
 
-[launch_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
-bitshift=2
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
-
-[variable_launch_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[var_launch_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
-bitval=1
+bitvals=0,1
 bitshift=1
 bitmask=2
+choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
 
-[variable_launch_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=0
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
-
-[lc_fuel_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[launch_limit_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=76
-bitval=2
+bitvals=1,2,3
 bitshift=0
 bitmask=3
-toggle_groups=lc_spark_ctrls
-group_states=DISABLED
+choices=Fuel,Spark,Both
+toggle_groups=,lc_spark_ctrls,lc_spark_ctrls
 bind_to_list=launch_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the launch control revlimiter style to be fuel drop only. 
-
-[lc_spark_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=1
-bitshift=0
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the launch control revlimiter style to be of the spark drop only variety.
-
-[lc_fuel_spark_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=3
-bitshift=0
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the launch control revlimiter style to be of the fuel AND spark drop only variety.
+tooltip=Sets the launch control revlimiter style to be either fuel drop, spark drop, or both
 
 #----- Spinbuttons ----------------------------------------------------------
 
