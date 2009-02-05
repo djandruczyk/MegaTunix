@@ -80,447 +80,187 @@ bind_to_list=fan_controls,temperature
 
 #------ Radio Buttons --------------------------------------------------------
 
-[idle_ctrl_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[fidle_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Idle Control,Spark A
+toggle_groups=idle_control,
 offset=1
-bitval=0
+bitvals=0,1
 bitshift=0
 bitmask=1
-toggle_groups=idle_control
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=By Setting this control you have Idle contro; (either PWM or BnG) style. By selecting spark A you loose idle control altogether.
+tooltip=By Setting this control you have Idle control (either PWM or BnG) style. By selecting spark A you loose idle control altogether.
 
-[idle_spark_a_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[led17_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
-offset=1
-bitval=1
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=By Setting this control you have Spark A on the Fast Idle pin. NOTE: this causes you to sacrifice all IDLE controls and they will be greyed out.
-
-[led17_squirt_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+dl_type=_IMMEDIATE_
+choices=Squirt Ind.,Spark A
 offset=1
-bitval=0
+bitvals=0,1
 bitshift=1
 bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the LED17 pin to be the "Squirt" Indicator. (it flashes when the injectors are being fired)
+tooltip=Sets the LED17 pin to be the "Squirt" Indicator (it flashes when the injectors are being fired) or the Spark A output (requires additional hardware). 
 
-[led17_spark_a_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[led18_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=1
-bitval=1
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the LED17 pin to be used for the Spark A output. NOTE this requires an external driver for a coil, like a VB921.
-
-[led18_warmup_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=0
-bitshift=2
-bitmask=76
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the LED 18 port to display the Warmup Enrich indicator. Whe nwarmup enrich is active this LED is lit.
-
-[led18_irq_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+choices=Warmup Ind.,IRQ Trigger,Output 4,Spark C
+toggle_groups=,,output_4,
 offset=1
-bitval=1
-bitshift=2
-bitmask=76
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the LED18 port to display ignition triggers (useful for debugging) or to drive a Tach.
-
-[led18_spark_c_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=3
+bitvals=0,1,2,3
 bitshift=2
 bitmask=12
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the LED18 port to be used for the Spark C output. NOTE: this requires an external coil driver chip, like a VB921.
+tooltip=Sets the LED18 pin to be used for either the Warmup indicator,  IRQ Trigger indicator, Output4, or Spark C. (Requires additonal hardware for Spark C)
 
-[led18_output_4_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[led19_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
-offset=1
-bitval=2
-bitshift=2
-bitmask=76
-toggle_groups=output_4
-group_states=ENABLED
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=This sets the LED 18 port to be used for User Output 4.
-
-[led18_fan_ctrl_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=18
-bitshift=2
-bitmask=76
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the LED 18 port to be used for Fan Control.
-
-[led19_accel_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+choices=Accel Ind.,Spark B
 offset=1
-bitval=0
+bitvals=0,1
 bitshift=4
 bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the LED 19 port to be the Accel Indicator.  When Acel enrich is triggered this displays it.
+tooltip=Sets the LED19 pin to be either the Accel Indicator, or the Spark B output (requires additional hardware)
 
-[led19_spark_b_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[tachout_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=1
-bitval=1
-bitshift=4
-bitmask=16
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=This sets the LED 19 port to be the Spark B Output. NOTE: This requires an external driver chip to run the coil like a VB921.
-
-[x2_water_inj_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=0
-bitshift=5
-bitmask=32
-toggle_groups=x2_water_injection,x2_nitrous_control,x2_tacho_pin,fan_controls
-group_states=ENABLED,ENABLED,DISABLED,DISABLED
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the X2 port for Water Injection or Nitrous Oxide functionality. NOTE: This disables Fan control.
-
-[x2_fan_ctrl_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=1
-bitshift=5
-bitmask=32
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the X2 port for Fan control (external relay required) and disables Nitrous (NOS) and Water Injection.
-
-[x4_output_1_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
+choices=Off,X2 (JS0),X3 (JS1),X4 (JS2),X5 (JS3),Output 3,Pin 10
+toggle_groups=x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control
+offset=144
+bitvals=0,1,2,3,4,5,6
 bitshift=0
-bitmask=1
+bitmask=7
+tooltip=Picks a pin for tachometer output
+
+[tachout_rate_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Normal,Half Speed
+bind_to_list=tachout_params
+offset=144
+bitvals=0,1
+bitshift=7
+bitmask=128
+tooltip=Sets the Tach output to be the same as engine firing speed or 1/2 engine firing speed.
+
+[x2_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Water Injection,Fan Control
+toggle_groups=x2_water_injection:x2_nitrous_control,x2_tacho_pin:fan_controls
+offset=1
+bitvals=0,1
+bitshift=5
+bitmask=32
+tooltip=This sets the X2 port for Water Injection/Nitrous Oxide functionality OR Fan control. (external relay required for fan control)
+
+[x4_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Output 1,Boost Ctrl.
 toggle_groups=output_1,x4_tach_pin
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the X4/JS2 port for use for User Output 1.
-
-[x4_boost_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
 offset=12
-bitval=1
+bitvals=0,1
 bitshift=0
 bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This sets the X4/JS2 port for use for the Boost Controller.
+tooltip=This sets the X4 port for Output 1 (see user outputs tab), or sets this pin to the Boost Controller functionality
 
-[output_3_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[output3_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Output 3,Spark D
+toggle_groups=output_3,spark_d
 offset=12
-bitval=0
+bitvals=0,1
 bitshift=4
 bitmask=16
-toggle_groups=output_3
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the Output 3 Port (U1, pin15) to be used for User Controlled Output 3. This disables Spark D.
+tooltip=Sets the Output 3 Port (U1, pin15) to be used for User Controlled Output 3. or Spark D
 
-[spark_d_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_group,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[pin10_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=12
-bitval=1
-bitshift=4
-bitmask=16
-bind_to_group=spark_d
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the Output 3 Port (U1 Pin 15) to be used for Spark Output D.
-
-[shiftlight_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+dl_type=_IMMEDIATE_
+choices=Shiftlight,Spark E
+toggle_groups=shiftlight_controller,spark_e
 offset=116
-bitval=0
+bitvals=0,1
 bitshift=3
 bitmask=8
-toggle_groups=shiftlight_controller
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality.  This disables Spark Output E. 
+tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark E. (Requires external Hardware)
 
-[spark_e_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[knock_pin_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=116
-bitval=1
-bitshift=3
-bitmask=8
-bind_to_list=spark_e
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets PTC4 (pin11) to be the Spark E Output. NOTE: This requires an external driver chip like a VB921.
-
-[knock_input_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+dl_type=_IMMEDIATE_
+choices=Knock Input,Spark F
+toggle_groups=knock_controller,spark_f
 offset=116
-bitval=0
+bitvals=0,1
 bitshift=4
 bitmask=16
-toggle_groups=knock_controller
-group_states=ENABLED,DISABLED
-bind_to_list=js10_ctrl
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the ???? pin to be setup for knock detect (input) functionality.  This disables Spark Output F. 
+tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark E. (Requires external Hardware)
 
-[spark_f_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[multiplex_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=116
-bitval=1
-bitshift=4
-bitmask=16
-bind_to_list=js10_ctrl
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the ???? pin to be setup for Spark F output. NOTE: This requires and external driver chip like a VB921.
-
-[normal_ignition_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+dl_type=_IMMEDIATE_
+choices=Normal,Toyota DLI
+toggle_groups=knock_controller,spark_f
 offset=1
-bitval=0
+bitvals=0,1
 bitshift=7
 bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the Ignition Mode to Normal
+tooltip=Sets the ignition mode to either Normal or Toyota DLI multiplex (see msns-extra documentation)
 
-[toyota_dli_ignition_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[shiftlight_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
-offset=1
-bitval=1
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets the Ignition Mode to Toyota DLI Multiplex. (Not sure exactly what this does)
-
-[tach_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=0
-bitshift=0
-bitmask=7
-toggle_groups=tachout_params
-group_states=DISABLED
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables the Tach output signal.
-
-[tach_x2_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=1
-bitshift=0
-bitmask=7
-bind_to_list=x2_tach_pin
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the Tach Output signal on X2. If Fan control is enabled these signals will conflict.
-
-[tach_x3_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=2
-bitshift=0
-bitmask=7
-bind_to_list=x3_tach_pin
-toggle_groups=x3_water_injection,x3_nitrous_control
-group_states=DISABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the Tach Output signal on X3. If Nitrous or water injection is enabled it will fight with this.
-
-[tach_x4_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=3
-bitshift=0
-bitmask=7
-bind_to_list=x4_tach_pin
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the Tach Output signal on X4. If Boost Control or Output 1 is selected, this will not be choosable.
-
-[tach_x5_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=4
-bitshift=0
-bitmask=7
-bind_to_list=x5_tach_pin
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the Tach Output signal on X5. This is shared with output 2, so make sure that is set so it never activates so they don't fight over each other.
-
-[tach_output3_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=5
-bitshift=0
-bitmask=7
-bind_to_list=output3_tach_pin
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the Tach Output signal on Output 3. 
-
-[tach_pin10_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=6
-bitshift=0
-bitmask=7
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=pin10_tach_pin
-tooltip=Enables the Tach Output signal on Pin 10
-
-[tachout_normal_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=0
-bitshift=7
-bitmask=128
-bind_to_list=tachout_params
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the Tach output to be the same as the engine firing speed
-
-[tachout_half_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=144
-bitval=1
-bitshift=7
-bitmask=128
-bind_to_list=tachout_params
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets the Tach output to be 1/2 the same as the engine firing speed
-
-[shiftlight_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+choices=Disabled,Enabled
+bind_to_list=shiftlight_controller
+toggle_groups=spark_e:spark_f:knock_controller:js10_ctrl,shift_controls
 offset=12
-bitval=0
+bitvals=0,1
 bitshift=1
 bitmask=2
-bind_to_list=shiftlight_controller
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables Shiftlight functionality
+tooltip=Enables or Disables the shiftlight function
 
-[shiftlight_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=1
-bitshift=1
-bitmask=2
-bind_to_list=shiftlight_controller
-toggle_groups=shift_controls,spark_e,spark_f,knock_controller,js10_ctrl
-group_states=ENABLED,DISABLED,DISABLED,DISABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enabled Shiftlight functionality
 
 #------ Spin Buttons --------------------------------------------------------
 

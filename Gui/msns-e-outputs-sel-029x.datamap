@@ -56,104 +56,59 @@ page=0
 bind_to_list=output_4
 
 #----- RadioButtons ----------------------------------------------------------
-[out1_normal_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+
+[output1_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Normal,Inverted
+bitvals=0,1
 offset=66
-bitval=0
-bitshift=1
 bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 1 to be SET when the parameters in the table above are met
-
-[out1_inverted_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=1
 bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 1 to be CLEARED (i.e. inverted behavior) when the parameters in the table above are met
+tooltip=Sets output to be set or inverted when the params in hte table t othe left are met.
 
-[out2_normal_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[output2_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Normal,Inverted
+bitvals=0,1
 offset=66
-bitval=0
-bitshift=2
 bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 2 to be SET when the parameters in the table above are met
-
-[out2_inverted_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=1
 bitshift=2
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 2 to be CLEARED (i.e. inverted behavior) when the parameters in the table above are met
+tooltip=Sets output to be set or inverted when the params in hte table t othe left are met.
 
-[out3_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[output3_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 page=0
+handler=_GENERIC_
+dl_type=_IMMEDIATE_
+choices=Source Only,Output1+Source
+bitvals=0,1
 offset=116
-bitval=0
-bitshift=7
 bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets User Output 3 to only take it's cues from the table above.
-
-[out3_combined_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=116
-bitval=1
 bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip= Sets Output 3 to ONLY be active when the above conditions are met AND when output 1 is ON.
+tooltip=Sets User Output 3 to only take it's cues from the table to the left,  or when set to source+output1,  the output is only set if BOTH conditions are met.
 
-[out4_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[output4_combo]
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
-offset=1
-bitval=0
-bitshift=6
-bitmask=64
-dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Sets Output 4 to be control by the parameters in the above table
-
-[out4_fan_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=1
-bitshift=6
-bitmask=64
-toggle_groups=output4_table
-group_states=DISABLED
 dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output4 to be controlled by the fan Control Parameters 
-
+choices=Source,Fan Control
+toggle_groups=output4_table,
+bitvals=0,1
+offset=1
+bitmask=64
+bitshift=6
+tooltip=Sets Output 4 to be controlled either by hte table to the left, or via the Fan Control params (see output pins tab).
 
 #----- TreeViews -------------------------------------------------------------
 
