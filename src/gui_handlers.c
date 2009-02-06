@@ -993,6 +993,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * set_labels = NULL;
 	gchar * swap_list = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * table_2_update = NULL;
 	gchar ** vector = NULL;
 	gint i = 0;
 	gint tmpi = 0;
@@ -1014,6 +1015,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	size = (DataSize)OBJ_GET(widget,"size");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
+	table_2_update = (gchar *)OBJ_GET(widget,"update_table");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
@@ -1042,6 +1044,8 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	}
 	if (swap_list)
 		swap_labels(swap_list,bitval);
+	if (table_2_update)
+		g_timeout_add(2000,force_update_table,table_2_update);
 	if (set_labels)
 	{
 		total = get_choice_count(model);
