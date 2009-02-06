@@ -262,19 +262,19 @@ an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
 keys=page,label,alt_label,depend_on
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=0
-alt_label=Narrowband O2 Sensor in use, beware of poor precision
-label=Wideband O2 Sensor in use.
+label=Narrowband O2 Sensor in use, beware of poor precision
+alt_label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,0
 
 [AFR2_afrtable_filler_label]
 keys=page,label,alt_label,depend_on
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=0
-alt_label=Narrowband O2 Sensor in use, beware of poor precision
-label=Wideband O2 Sensor in use.
+label=Narrowband O2 Sensor in use, beware of poor precision
+alt_label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,0
 
 #----- widgets ---------------------------------------------------------------
 
