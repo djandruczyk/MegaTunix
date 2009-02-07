@@ -162,6 +162,7 @@ void alter_widget_state(gpointer key, gpointer data)
 	extern GHashTable *widget_group_states;
 
 	tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
+	
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/

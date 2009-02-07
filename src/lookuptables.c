@@ -296,12 +296,14 @@ gfloat lookup_data(GObject *object, gint offset)
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
 	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
+	
 	/*
 	   if (GTK_IS_OBJECT(dep_obj))
-	   printf("checking dependancy\n");
+	   printf("checking dependancy %s\n",OBJ_GET(object,"internal_names"));
 	   else
 	   printf("no dependancy\n");
 	   */
+
 	if (dep_obj)
 	{
 		state = check_dependancies(dep_obj);

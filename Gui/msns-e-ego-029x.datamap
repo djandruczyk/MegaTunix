@@ -418,8 +418,8 @@ bind_to_list=tps_oloop
 tooltip=When this TPS point is reached we jump to OpenLoop. This value is in ADC counts. Set to 255 to disable going to OpenLoop
 
 [kpa_oloop_thresh_entry]
-keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=64
 source_key=map_sensor

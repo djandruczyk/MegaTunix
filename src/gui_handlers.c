@@ -2673,7 +2673,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	state = TRUE;
 	for (j=0;j<num_groups;j++)
 	{
-		//printf("setting all widgets in group %s to state %i\n\n",groups[j],state);
+		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
 		g_hash_table_insert(widget_group_states,g_strdup(groups[j]),(gpointer)state);
 		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 	}

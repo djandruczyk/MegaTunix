@@ -92,6 +92,9 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 		}
 		g_free(key);
 		type = translate_string(vector[DEP_TYPE]);
+		key = g_strdup_printf("%s_type",deps[i]);
+		OBJ_SET(dep_obj,key,GINT_TO_POINTER(type));
+		g_free(key);
 		if (type == VE_EMB_BIT)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);

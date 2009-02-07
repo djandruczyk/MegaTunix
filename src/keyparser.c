@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <configfile.h>
 #include <defines.h>
@@ -32,6 +33,7 @@ extern GObject *global_data;
 gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **result = NULL;	
+	assert(string);
 	if (!string)
 	{
 		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"));
@@ -58,6 +60,7 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 	gint i = 0;
 	gint ct = 0;
 
+	assert(string);
 	if (!string)
 	{
 		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"));

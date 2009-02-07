@@ -54,62 +54,66 @@ gboolean check_dependancies(GObject *object )
 		tmpbuf = g_strdup_printf("%s_type",deps[i]);
 		type = (gint)OBJ_GET(object,tmpbuf);
 		g_free(tmpbuf);
-		if (type == VE_EMB_BIT)
+		switch (type)
 		{
-			/*printf("VE_EMB_BIT\n");*/
-			tmpbuf = g_strdup_printf("%s_page",deps[i]);
-			page = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("page %i\n",page);*/
-			g_free(tmpbuf);
+			case VE_EMB_BIT:
+				/*printf("VE_EMB_BIT\n");*/
+				tmpbuf = g_strdup_printf("%s_page",deps[i]);
+				page = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("page %i\n",page);*/
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-			offset = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("offset %i\n",offset);*/
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
+				offset = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("offset %i\n",offset);*/
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_canID",deps[i]);
-			canID = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("canID %i\n",canID);*/
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_canID",deps[i]);
+				canID = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("canID %i\n",canID);*/
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_size",deps[i]);
-			size = (DataSize)OBJ_GET(object,tmpbuf);
-			/*printf("size %i\n",size); */
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_size",deps[i]);
+				size = (DataSize)OBJ_GET(object,tmpbuf);
+				/*printf("size %i\n",size); */
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_bitshift",deps[i]);
-			bitshift = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("bitshift %i\n",bitshift); */
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitshift",deps[i]);
+				bitshift = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("bitshift %i\n",bitshift); */
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
-			bitmask = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("bitmask %i\n",bitmask); */
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
+				bitmask = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("bitmask %i\n",bitmask); */
+				g_free(tmpbuf);
 
-			tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
-			bitval = (gint)OBJ_GET(object,tmpbuf);
-			/*printf("bitval %i\n",bitval); */
-			g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
+				bitval = (gint)OBJ_GET(object,tmpbuf);
+				/*printf("bitval %i\n",bitval); */
+				g_free(tmpbuf);
 
-			if (!(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift) == bitval)	
-			{
-				/*printf("dep_proc returning FALSE\n"); */
-				return FALSE;
-			}
+				if (!(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift) == bitval)	
+				{
+					/*printf("dep_proc returning FALSE\n");*/
+					return FALSE;
+				}
+				break;
+			case VE_VAR:
+
+				tmpbuf = g_strdup_printf("%s_page",deps[i]);
+				page = (gint)OBJ_GET(object,g_strdup_printf("%s_page",deps[i]));
+				g_free(tmpbuf);
+
+				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
+				offset = (gint)OBJ_GET(object,g_strdup_printf("%s_offset",deps[i]));
+				g_free(tmpbuf);
+				break;
+			default:
+				printf("CASE NOT HANDLED, dep_processor!\n");
+
 		}
-/*		else if (type == VE_VAR)
-		{
-			tmpbuf = g_strdup_printf("%s_page",deps[i]);
-			page = (gint)OBJ_GET(object,g_strdup_printf("%s_page",deps[i]));
-			g_free(tmpbuf);
-
-			tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-			offset = (gint)OBJ_GET(object,g_strdup_printf("%s_offset",deps[i]));
-			g_free(tmpbuf);
-		}
-*/
 	}
-	/*printf("dep_proc returning TRUE\n"); */
+	/*printf("dep_proc returning TRUE\n");*/
 	return TRUE;
 }
