@@ -77,8 +77,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	size = (DataSize)OBJ_GET(widget,"size");
 
-	lower = (gfloat)(gint)OBJ_GET(widget,"raw_lower");
-
 	if (NULL == OBJ_GET(widget,"raw_upper"))
 	{
 		switch (size)
@@ -108,6 +106,32 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else
 		upper = (gfloat)(gint)OBJ_GET(widget,"raw_upper");
+
+	if (NULL == OBJ_GET(widget,"raw_lower"))
+	{
+		switch (size)
+		{
+			case MTX_U08:
+			case MTX_U16:
+			case MTX_U32:
+				lower = 0;
+				break;
+			case MTX_CHAR:
+			case MTX_S08:
+				lower = -128;
+				break;
+			case MTX_S16:
+				lower = -32768;
+				break;
+			case MTX_S32:
+				lower = -2147483648;
+				break;
+			default:
+				break;
+		}
+	}
+	else
+		lower = (gfloat)(gint)OBJ_GET(widget,"raw_lower");
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{

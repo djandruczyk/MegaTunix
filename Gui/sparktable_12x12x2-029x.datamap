@@ -396,10 +396,11 @@ rescaler_frame=SP_SP2_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [SP1_trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
+keys=size,offset,dl_conv_expr,ul_conv_expr,precision,use_color
+key_types=_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=170
 group=spark_1
+size=_S08_
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 precision=2
@@ -424,10 +425,11 @@ precision=2
 use_color=FALSE
 
 [SP2_trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
+keys=size,offset,dl_conv_expr,ul_conv_expr,precision,use_color
+key_types=_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=170
 group=spark_1
+size=_S08_
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 precision=2
