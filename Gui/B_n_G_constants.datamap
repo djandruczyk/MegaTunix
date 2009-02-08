@@ -67,9 +67,25 @@ bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
+[fuel_strat_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+page=0
+offset=118
+bitvals=0,1
+bitshift=2
+bitmask=4
+choices=Speed Density,Alpha-N
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+algorithms=_SPEED_DENSITY_,_ALPHA_N_
+applicable_tables=0
+swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units
+tooltip=Sets the Algorithm used to calculate the fuel to be injected.
+
 [speed_density_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,algorithm,applicable_tables
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=118
 bitshift=2
@@ -81,8 +97,8 @@ algorithm=_SPEED_DENSITY_
 applicable_tables=0
 
 [alpha_n_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,algorithm,handler,swap_labels,applicable_tables
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=118
 bitshift=2
@@ -94,167 +110,100 @@ algorithm=_ALPHA_N_
 swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units
 applicable_tables=0
 
-[multi_port_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[inj_style_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=116
+bitvals=0,1
 bitshift=3
-bitval=0
 bitmask=8
+choices=Multi-Port,Throttle Body
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the Injection style
 
-[tbi_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[stroke_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=116
-bitshift=3
-bitval=1
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[four_stroke_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+bitvals=0,1
 bitshift=2
-bitval=0
 bitmask=4
+choices=4 Stroke,2 Stroke
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the engine stroke to either 4 stroke or 2 stroke
 
-[two_stroke_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
-bitshift=2
-bitval=1
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[even_fire_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[eng_style_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
+bitvals=0,1
 bitshift=0
-bitval=0
 bitmask=1
+choices=Even Fire,Odd Fire
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the Engine firing pattern to even or odd fire
 
-[odd_fire_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
-bitshift=0
-bitval=1
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[115kpa_map_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,group_2_update,source_key,source_value
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+[map_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,group_2_update,source_key,source_values,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=116
+bitvals=0,1
 bitshift=0
-bitval=0
 bitmask=3
+choices=115 KPa,250 KPa
 dl_type=_IMMEDIATE_
 handler=_MAP_SENSOR_TYPE_
 group_2_update=multi_expression
 source_key=map_sensor
-source_value=MPX4115
+source_values=MPX4115,MPX4250
+tooltip=Sets the MAP sensor to 115KPa or 25KPa (forced induction capable)
 
-[250kpa_map_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,group_2_update,source_key,source_value
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=0
-offset=116
-bitshift=0
-bitval=1
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_MAP_SENSOR_TYPE_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX4250
-
-[baro_enabled_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[baro_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
+bitvals=0,1
 bitshift=3
-bitval=1
 bitmask=8
+choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Enables or Disables barometer correction.
 
-[baro_disabled_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[o2_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
-bitshift=3
-bitval=0
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[nbo2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+bitvals=0,1
 bitshift=1
-bitval=0
 bitmask=2
+choices=Narrow-Band,Wide-Band
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the O2 sensor type
 
-[wbo2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
-bitshift=1
-bitval=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[simul_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+[alt_simul_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,table_num,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
+bitvals=0,1
 bitshift=0
-bitval=0
 bitmask=255
 table_num=0
+choices=Simultaneous,Alternate
 dl_type=_DEFERRED_
 handler=_ALT_SIMUL_
-
-[alternate_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
-page=0
-offset=92
-bitshift=0
-bitval=1
-bitmask=255
-table_num=0
-dl_type=_DEFERRED_
-handler=_ALT_SIMUL_
+tooltip=Sets the Injector firing pattern
 
 #----- SpinButtons -----------------------------------------------------------
 

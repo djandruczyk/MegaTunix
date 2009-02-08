@@ -96,7 +96,7 @@ bind_to_list=ego_ign_events
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [sensor1_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,swap_labels,dl_type,handler,update_table,tooltip
+keys=page,offset,choices,bitvals,bitshift,bitmask,swap_labels,dl_type,handler,table_2_update,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=1
 offset=184
@@ -104,14 +104,14 @@ bitvals=0,1
 bitshift=1
 bitmask=2
 choices=Narrow-Band,Wide-Band
-update_table=5
+table_2_update=5
 swap_labels=AFR_AFR1_afrtable_filler_label
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the O2 sensor type.
 
 [sensor2_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,swap_labels,dl_type,handler,update_table,tooltip
+keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,swap_labels,dl_type,handler,table_2_update,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=2
 offset=184
@@ -120,7 +120,7 @@ bitshift=1
 bitmask=2
 choices=Narrow-Band,Wide-Band
 bind_to_list=dt_controls
-update_table=6
+table_2_update=6
 swap_labels=AFR_AFR2_afrtable_filler_label
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

@@ -143,62 +143,54 @@ bind_to_list=dt_controls
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[speed_density_1_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip,algorithm,applicable_tables
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_ENUM_,_STRING_
+[fuel_strat1_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 offset=184
+bitvals=0,1
 bitshift=2
-bitval=0
 bitmask=4
+choices=Speed Density,Alpha-N
+toggle_groups=,alpha-n_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-algorithm=_SPEED_DENSITY_
+algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=0,2,3,4,10
-tooltip=Sets the Fueling mode to be Speed Density (primary inputs are RPM, manifold pressure and intake air temp)
+swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units,Rot_load_tbl_lab,Rot_load_tbl_units
+tooltip=Sets the Fueling mode to be either Speed Density (primary inputs are RPM, manifold pressure and intake air temp) or Alpha-N (primary inputs are RPM and Throttle position.)
 
-[alpha_n_1_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,swap_labels,algorithm,applicable_tables,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_ENUM_,_STRING_,_STRING_
-page=1
+[fuel_strat2_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,algorithms,applicable_tables,bind_to_list,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+page=2
 offset=184
+bitvals=0,1
 bitshift=2
-bitval=1
 bitmask=4
-toggle_groups=alpha-n_controls
-group_states=ENABLED
+choices=Speed Density,Alpha-N
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-algorithm=_ALPHA_N_
-applicable_tables=0,2,3,4,10
-swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units,RO_load_tbl_lab,RO_load_tbl_units
-tooltip=Sets the Fueling mode to be Alpha-N (primary inputs are RPM (the "N") and Throttle Position (the "Alpha"))
+bind_to_list=dt_controls
+algorithms=_SPEED_DENSITY_,_ALPHA_N_
+applicable_tables=1
+swap_labels=VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units
+tooltip=Sets the Fueling mode to be either Speed Density (primary inputs are RPM, manifold pressure and intake air temp) or Alpha-N (primary inputs are RPM and Throttle position.)
 
-[alt_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[alt_simul_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,table_num,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=1
 offset=150
+bitvals=0,1
 bitshift=0
-bitval=1
 bitmask=255
+choices=Simultaneous,Alternating
 table_num=0
 dl_type=_DEFERRED_
 handler=_ALT_SIMUL_
 bind_to_list=alt_simul
-
-[simul_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=1
-offset=150
-bitshift=0
-bitval=0
-bitmask=255
-table_num=0
-dl_type=_DEFERRED_
-handler=_ALT_SIMUL_
-bind_to_list=alt_simul
+tooltip=Sets injector firing pattern when in single table mode.  Choices are "Alternating" which is analagous to "bank fire", and Simultaneous which is the same as "batch fire" whjere all injector channels fire at once.
 
 [stroke_combo]
 keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
@@ -225,37 +217,6 @@ choices=Even Fire,Odd Fire
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Pretty obvious...
-
-[speed_density_2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler,algorithm,applicable_tables,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_ENUM_,_STRING_,_STRING_
-page=2
-offset=184
-bitshift=2
-bitval=0
-bitmask=4
-bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-algorithm=_SPEED_DENSITY_
-applicable_tables=1
-tooltip=Sets the Fueling mode to be Speed Density (primary inputs are RPM, manifold pressure and intake air temp)
-
-[alpha_n_2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler,algorithm,swap_labels,applicable_tables,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=2
-offset=184
-bitshift=2
-bitval=1
-bitmask=4
-bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-swap_labels=VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units
-algorithm=_ALPHA_N_
-applicable_tables=1
-tooltip=Sets the Fueling mode to be Alpha-N (primary inputs are RPM (the "N") and Throttle Position (the "Alpha"))
 
 [baro_combo]
 keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip

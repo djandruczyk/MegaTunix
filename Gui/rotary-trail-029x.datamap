@@ -106,6 +106,24 @@ keys=set_label
 key_types=_STRING_
 set_label=Rotary Trailing Table 
 
+[load_tbl_lab]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+label=MAP Bins
+alt_label=TPS Bins
+depend_on=alpha_n_button
+alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
+
+[load_tbl_units]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+label=KPa
+alt_label=TPSADC
+depend_on=alpha_n_button
+alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
+
 #----- widgets ---------------------------------------------------------------
 
 [trail_hbox0]
