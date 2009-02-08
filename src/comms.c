@@ -331,9 +331,9 @@ gboolean write_data(Io_Message *message)
 		}
 
 	}
-	/* If sucessfull update ecu_data as well, this way, current and pending match,  
-	 * in the case of a failed write, the update_write_status() function will catch it and rollback
-	 * as needed
+	/* If sucessfull update ecu_data as well, this way, current 
+	 * and pending match, in the case of a failed write, the 
+	 * update_write_status() function will catch it and rollback as needed
 	 */
 	if ((output) && (retval))
 	{

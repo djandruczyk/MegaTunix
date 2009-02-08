@@ -116,3 +116,10 @@ void output(gchar *msg, gboolean free_it)
 	if (free_it)
 		g_free(msg);
 }
+
+void boot_jumper_prompt(void)
+{
+	printf("Please close the boot jumper on the ECU and power cycle it\n");
+	printf("Press any key when done..\n");
+	getc(stdin);
+}

@@ -32,129 +32,101 @@ bind_to_list=burners
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[dt_mode_checkbutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[dtmode_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
+bitvals=0,1
 bitshift=0
-bitval=1
 bitmask=1
+choices=Single Table,Dual Table
+toggle_groups=,dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Sets the Table Mode, single table, or dual independant tables
 
-[inj1_off_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[inj1_assign_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
+bitvals=0,1,2
 bitshift=1
-bitval=0
 bitmask=6
+choices=Off,Table 1,Table 2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Defines which table controls injector 1
 
-[inj1_table1_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[inj2_assign_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
-bitshift=1
-bitval=1
-bitmask=6
+bitvals=0,1,2
+bitshift=3
+bitmask=24
+choices=Off,Table 1,Table 2
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Defines which table controls injector 2
 
-[inj1_table2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[inj1_gammae_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
-bitshift=1
-bitval=2
-bitmask=6
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[inj1_gammae_check_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=92
+bitvals=0,1
 bitshift=5
-bitval=1
 bitmask=32
+choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Enables or Disables Gammae (enrichments) on injector channel 1
 
-[inj2_off_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+[inj2_gammae_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
-bitshift=3
-bitval=0
-bitmask=24
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[inj2_table1_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=92
-bitshift=3
-bitval=1
-bitmask=24
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[inj2_table2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=92
-bitshift=3
-bitval=2
-bitmask=24
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[inj2_gammae_check_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=92
+bitvals=0,1
 bitshift=6
-bitval=1
 bitmask=64
+choices=Disabled,Enabled
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+tooltip=Enables or Disables Gammae (enrichments) on injector channel 1
 
-[b_n_g_idle_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,swap_labels
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[idle_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=0
 offset=118
+bitvals=0,1
 bitshift=4
-bitval=0
 bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+choices=B&G On-Off,PWM Controlled
+toggle_groups=,enh_idle
 swap_labels=fast_idle_temp_label
-
-[pwm_idle_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,toggle_groups,group_states
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
-page=0
-offset=118
-bitshift=4
-bitval=1
-bitmask=16
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-toggle_groups=enh_idle
-group_states=ENABLED
+tooltip=Sets the Idle Control mode
+
+[boost_speed_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=1
+offset=119
+bitvals=1,2,3
+bitshift=0
+bitmask=3
+choices=39 Hz,19 Hz,10 Hz
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the boost controller PWM frequency
 
 #----- SpinButtons -----------------------------------------------------------
 
@@ -205,39 +177,6 @@ page=1
 offset=126
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[39hz_radiobutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=119
-bitshift=0
-bitval=1
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[19hz_radiobutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=119
-bitshift=0
-bitval=2
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[10hz_radiobutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=119
-bitshift=0
-bitval=3
-bitmask=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -361,4 +300,10 @@ keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
 bind_to_list=enh_idle
+
+[injector_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=dt_controls
 

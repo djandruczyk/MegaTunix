@@ -259,30 +259,6 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the Second O2 sensor type. This is only applicable to Dual Table mode.
 
-[nbo2_2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
-page=2
-offset=184
-bitshift=1
-bitval=0
-bitmask=2
-bind_to_list=dt_controls,second_o2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
-[wbo2_2_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
-page=2
-offset=184
-bitshift=1
-bitval=1
-bitmask=2
-bind_to_list=dt_controls,second_o2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-
 [map_type_combo]
 keys=page,offset,choices,bitvals,bitshift,bitmask,group_2_update,dl_type,handler,source_key,source_values,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_

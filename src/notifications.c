@@ -360,11 +360,14 @@ void set_title(gchar * text)
 
 	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
 	g_free(tmpbuf);
-	if (GTK_IS_WIDGET(info_label))
+	if (info_label)
 	{
-		tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
-		gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
-		g_free(tmpbuf);
+		if (GTK_IS_WIDGET(info_label))
+		{
+			tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
+			gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
+			g_free(tmpbuf);
+		}
 	}
 	g_free(text);
 }

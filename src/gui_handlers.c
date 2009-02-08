@@ -46,6 +46,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stringmatch.h>
 #include <tabloader.h>
 #include <ms1-t-logger.h>
 #include <threads.h>
@@ -416,14 +417,13 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
-	table_2_update = (gchar *)OBJ_GET(widget,"update_table");
+	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
 
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	switch ((SpinButton)handler)
+	switch ((MtxButton)handler)
 	{
-			break;
 		case MAP_SENSOR_TYPE:
 			/*printf("MAP SENSOR CHANGE\n");*/
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
@@ -620,7 +620,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	handler = (SpinButton)OBJ_GET(widget,"handler");
+	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
 	page = (gint)OBJ_GET(widget,"page");
 	offset = (gint)OBJ_GET(widget,"offset");
@@ -656,7 +656,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		g_free(tmpbuf);
 		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler, data);
 	}
-	switch ((SpinButton)handler)
+	switch ((MtxButton)handler)
 	{
 		case GENERIC:
 			if (temp_dep)
@@ -986,6 +986,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
+	gint handler = 0; 
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint total = 0;
@@ -994,28 +995,42 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * swap_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * table_2_update = NULL;
+	gchar * group_2_update = NULL;
 	gchar ** vector = NULL;
 	gint i = 0;
 	gint tmpi = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint canID = 0;
+	gint table_num = 0;
 	DataSize size = MTX_U08;
 	gchar * choice = NULL;
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
+	Deferred_Data *d_data = NULL;
+	extern Firmware_Details *firmware;
+	extern GHashTable **interdep_vars;
+	extern GHashTable *sources_hash;
+
+	if ((paused_handlers) || (!ready))
+		return TRUE;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
 
 	page = (gint) OBJ_GET(widget,"page");
 	offset = (gint) OBJ_GET(widget,"offset");
 	bitmask = (gint) OBJ_GET(widget,"bitmask");
 	bitshift = (gint) OBJ_GET(widget,"bitshift");
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
+	handler = (gint) OBJ_GET(widget,"handler");
 	canID = (gint)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
-	table_2_update = (gchar *)OBJ_GET(widget,"update_table");
+	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
+	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
@@ -1031,17 +1046,84 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
         gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
 			BITVAL_COL,&bitval,-1);
 
-	//printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );
-
-	tmp = get_ecu_data(canID,page,offset,size);
-	tmp = tmp & ~bitmask;	/*clears bits */
-	tmp = tmp | (bitval << bitshift);
-	dload_val = tmp;
-	if (dload_val == get_ecu_data(canID,page,offset,size))
+	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
+	switch ((MtxButton)handler)
 	{
-//		printf("dload val matched ecu settings, not changing\n");
-		return FALSE;
+		case MAP_SENSOR_TYPE:
+			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
+			{
+				tmpbuf = OBJ_GET(widget,"source_values");
+				vector = g_strsplit(tmpbuf,",",-1);
+				if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
+				{
+					return FALSE;
+				}
+				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
+				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
+			}
+			/* FAll Through */
+		case GENERIC:
+			tmp = get_ecu_data(canID,page,offset,size);
+			tmp = tmp & ~bitmask;	/*clears bits */
+			tmp = tmp | (bitval << bitshift);
+			dload_val = tmp;
+			if (dload_val == get_ecu_data(canID,page,offset,size))
+				return FALSE;
+			break;
+		case ALT_SIMUL:
+			/* Alternate or simultaneous */
+			if (firmware->capabilities & MSNS_E)
+			{
+				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
+				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				tmp = get_ecu_data(canID,page,offset,size);
+				tmp = tmp & ~bitmask;/* clears bits */
+				tmp = tmp | (bitval << bitshift);
+				dload_val = tmp;
+				//printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, get_ecu_data(canID,page,offset,size));
+				if (dload_val == get_ecu_data(canID,page,offset,size))
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				//printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);
+
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
+				g_hash_table_insert(interdep_vars[page],
+						GINT_TO_POINTER(offset),
+						d_data);
+				check_req_fuel_limits(table_num);
+			}
+			else
+			{
+				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
+				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				dload_val = bitval;
+				if (dload_val == get_ecu_data(canID,page,offset,size))
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
+				g_hash_table_insert(interdep_vars[page],
+						GINT_TO_POINTER(offset),
+						d_data);
+				check_req_fuel_limits(table_num);
+			}
+			break;
+		default:
+			printf("std_combo_handler, default case!!!  wrong wrong wrong!!\n");
+			break;
 	}
+
 	if (swap_list)
 		swap_labels(swap_list,bitval);
 	if (table_2_update)
@@ -1131,7 +1213,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(
 			widget,"reqd_fuel");
-	handler = (SpinButton)OBJ_GET(widget,"handler");
+	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
 	canID = (gint) OBJ_GET(widget,"canID");
 	page = (gint) OBJ_GET(widget,"page");
@@ -1146,7 +1228,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	tmpi = (int)(value+.001);
 
 
-	switch ((SpinButton)handler)
+	switch ((MtxButton)handler)
 	{
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
@@ -1894,6 +1976,50 @@ void update_widget(gpointer object, gpointer user_data)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 				gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
+				if (group_2_update)
+				{
+					if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
+					{
+						tmpbuf = OBJ_GET(widget,"source_values");
+						vector = g_strsplit(tmpbuf,",",-1);
+						if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
+						{
+							dbg_func(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values,  length mismatch, check datamap\n"));
+							return ;
+						}
+						/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
+						g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
+						g_strfreev(vector);
+					}
+				}
+				tmpbuf = (gchar *)OBJ_GET(widget,"algorithms");
+				if (tmpbuf)
+				{
+					vector = g_strsplit(tmpbuf,",",-1);
+					if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
+					{
+						dbg_func(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with algorithms, length mismatch, check datamap\n"));
+						return ;
+					}
+					algo = translate_string(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);
+					g_strfreev(vector);
+
+					tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
+					if (!tmpbuf)
+					{
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)));
+						goto noalgo;
+					}
+
+					vector = g_strsplit(tmpbuf,",",-1);
+					i = 0;
+					while (vector[i])
+					{
+						algorithm[(gint)strtol(vector[i],NULL,10)]=(Algorithm)algo;
+						i++;
+					}
+					g_strfreev(vector);
+				}
 				goto combo_toggle;
 			}
 			valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
@@ -1943,12 +2069,6 @@ combo_toggle:
 		 * Second if, If currrent bit is NOT set but button IS  then
 		 * un-set it.
 		 */
-		/*
-		   if ((((tmpi & bitmask) >> bitshift) == bitval) && (!cur_state))
-		   new_state = TRUE;
-		   else if ((((tmpi & bitmask) >> bitshift) != bitval) && (cur_state))
-		   new_state = FALSE;
-		   */
 		if (((tmpi & bitmask) >> bitshift) == bitval)
 			new_state = TRUE;
 		else if (((tmpi & bitmask) >> bitshift) != bitval)
@@ -2694,7 +2814,10 @@ gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 	{
 		gtk_tree_model_get(model,iter,CHOICE_COL, &choice, -1);
 		if (g_ascii_strcasecmp(cur_text,choice) == 0)
+		{
+			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(box),iter);
 			return TRUE;
+		}
 		valid = gtk_tree_model_iter_next (model, iter);
 	}
 	return FALSE;

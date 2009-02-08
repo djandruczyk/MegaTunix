@@ -275,7 +275,7 @@ void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
 void boot_jumper_prompt()
 {
 	GtkWidget *dialog = NULL;
-		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"\nPlease Jumper the boot jumper on\nthe ECU and power cycle it\nand click OK when done");
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(main_window),GTK_DIALOG_MODAL,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"\nPlease jumper the boot jumper on\nthe ECU and power cycle it\nand click OK when done");
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }

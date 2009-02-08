@@ -1615,12 +1615,12 @@ Sensors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkHSeparator" id="hseparator12">
+					<widget class="GtkHSeparator" id="hseparator22">
 					  <property name="visible">True</property>
 					</widget>
 					<packing>
-					  <property name="padding">1</property>
-					  <property name="expand">False</property>
+					  <property name="padding">0</property>
+					  <property name="expand">True</property>
 					  <property name="fill">True</property>
 					</packing>
 				      </child>
@@ -1635,54 +1635,11 @@ Sensors</property>
 					    <widget class="GtkTable" id="table24">
 					      <property name="border_width">5</property>
 					      <property name="visible">True</property>
-					      <property name="n_rows">5</property>
+					      <property name="n_rows">3</property>
 					      <property name="n_columns">2</property>
 					      <property name="homogeneous">False</property>
-					      <property name="row_spacing">0</property>
-					      <property name="column_spacing">0</property>
-
-					      <child>
-						<widget class="GtkHSeparator" id="hseparator13">
-						  <property name="visible">True</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">2</property>
-						  <property name="bottom_attach">3</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkLabel" id="use_target_label">
-						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Use Target
-Tables when</property>
-						  <property name="use_underline">False</property>
-						  <property name="use_markup">False</property>
-						  <property name="justify">GTK_JUSTIFY_LEFT</property>
-						  <property name="wrap">False</property>
-						  <property name="selectable">False</property>
-						  <property name="xalign">0</property>
-						  <property name="yalign">0.5</property>
-						  <property name="xpad">0</property>
-						  <property name="ypad">0</property>
-						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						  <property name="width_chars">-1</property>
-						  <property name="single_line_mode">False</property>
-						  <property name="angle">0</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
+					      <property name="row_spacing">2</property>
+					      <property name="column_spacing">5</property>
 
 					      <child>
 						<widget class="GtkComboBoxEntry" id="ego_target_combo">
@@ -1695,87 +1652,10 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">1</property>
 						  <property name="right_attach">2</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
 						  <property name="x_options">fill</property>
 						  <property name="y_options">fill</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkLabel" id="ctrl_algo_label">
-						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Control Algorithm for AFR Tables</property>
-						  <property name="use_underline">False</property>
-						  <property name="use_markup">False</property>
-						  <property name="justify">GTK_JUSTIFY_LEFT</property>
-						  <property name="wrap">False</property>
-						  <property name="selectable">False</property>
-						  <property name="xalign">0</property>
-						  <property name="yalign">0.5</property>
-						  <property name="xpad">0</property>
-						  <property name="ypad">0</property>
-						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						  <property name="width_chars">-1</property>
-						  <property name="single_line_mode">False</property>
-						  <property name="angle">0</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">0</property>
-						  <property name="bottom_attach">1</property>
-						  <property name="x_options">expand</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="an_control_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Alpha-N</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 16 Jul 2006 01:14:29 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">1</property>
-						  <property name="right_attach">2</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_padding">5</property>
-						  <property name="x_options">shrink</property>
-						  <property name="y_options">shrink</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="sd_control_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Speed Density</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">True</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">an_control_radio_button</property>
-						  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 16 Jul 2006 01:14:16 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_padding">5</property>
-						  <property name="x_options">expand|shrink</property>
-						  <property name="y_options">shrink</property>
 						</packing>
 					      </child>
 
@@ -1848,23 +1728,98 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">0</property>
 						  <property name="right_attach">2</property>
-						  <property name="top_attach">4</property>
-						  <property name="bottom_attach">5</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
 						  <property name="x_options">fill</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkComboBoxEntry" id="tafr_strat_combo">
+						  <property name="visible">True</property>
+						  <property name="add_tearoffs">False</property>
+						  <property name="has_frame">True</property>
+						  <property name="focus_on_click">True</property>
+						  <signal name="changed" handler="std_combo_handler" last_modification_time="Fri, 06 Feb 2009 00:51:44 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">1</property>
+						  <property name="right_attach">2</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						  <property name="x_options">fill</property>
+						  <property name="y_options">fill</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="ctrl_algo_label">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">Control Algorithm
+for AFR Tables</property>
+						  <property name="use_underline">False</property>
+						  <property name="use_markup">False</property>
+						  <property name="justify">GTK_JUSTIFY_LEFT</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="use_target_label">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">Use Target
+Tables when</property>
+						  <property name="use_underline">False</property>
+						  <property name="use_markup">False</property>
+						  <property name="justify">GTK_JUSTIFY_LEFT</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
+						  <property name="y_options"></property>
 						</packing>
 					      </child>
 					    </widget>
 					    <packing>
 					      <property name="padding">0</property>
-					      <property name="expand">False</property>
+					      <property name="expand">True</property>
 					      <property name="fill">True</property>
 					    </packing>
 					  </child>
 
 					  <child>
 					    <widget class="GtkTable" id="table25">
+					      <property name="border_width">5</property>
 					      <property name="visible">True</property>
-					      <property name="n_rows">4</property>
+					      <property name="n_rows">3</property>
 					      <property name="n_columns">3</property>
 					      <property name="homogeneous">False</property>
 					      <property name="row_spacing">2</property>
@@ -1891,8 +1846,8 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">1</property>
 						  <property name="right_attach">2</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
 						  <property name="x_padding">5</property>
 						  <property name="x_options">expand|shrink|fill</property>
 						  <property name="y_options">shrink|fill</property>
@@ -1920,8 +1875,8 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">1</property>
 						  <property name="right_attach">2</property>
-						  <property name="top_attach">2</property>
-						  <property name="bottom_attach">3</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
 						  <property name="x_padding">5</property>
 						  <property name="x_options">expand|shrink|fill</property>
 						  <property name="y_options">shrink|fill</property>
@@ -1951,8 +1906,8 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">2</property>
 						  <property name="right_attach">3</property>
-						  <property name="top_attach">2</property>
-						  <property name="bottom_attach">3</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
 						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
@@ -1981,8 +1936,8 @@ Tables when</property>
 						<packing>
 						  <property name="left_attach">2</property>
 						  <property name="right_attach">3</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
 						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
@@ -2014,7 +1969,7 @@ Tables when</property>
 						  <property name="left_attach">0</property>
 						  <property name="right_attach">1</property>
 						  <property name="top_attach">0</property>
-						  <property name="bottom_attach">4</property>
+						  <property name="bottom_attach">3</property>
 						  <property name="x_options"></property>
 						</packing>
 					      </child>
@@ -2022,9 +1977,10 @@ Tables when</property>
 					      <child>
 						<widget class="GtkLabel" id="oloop_selection_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Open Loop O2 Correction</property>
+						  <property name="label" translatable="yes">Go to open loop
+based upon:</property>
 						  <property name="use_underline">False</property>
-						  <property name="use_markup">False</property>
+						  <property name="use_markup">True</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
 						  <property name="wrap">False</property>
 						  <property name="selectable">False</property>
@@ -2043,29 +1999,13 @@ Tables when</property>
 						  <property name="top_attach">0</property>
 						  <property name="bottom_attach">1</property>
 						  <property name="x_padding">5</property>
-						  <property name="x_options">fill</property>
 						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkHSeparator" id="hseparator15">
-						  <property name="visible">True</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">1</property>
-						  <property name="right_attach">3</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_padding">5</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">fill</property>
 						</packing>
 					      </child>
 					    </widget>
 					    <packing>
 					      <property name="padding">0</property>
-					      <property name="expand">False</property>
+					      <property name="expand">True</property>
 					      <property name="fill">True</property>
 					    </packing>
 					  </child>

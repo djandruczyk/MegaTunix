@@ -45,6 +45,11 @@ bind_to_list=dt_controls
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
+[tps_tafr_thresh_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=tafr_thresh
+
 [tps_oloop_thresh_label]
 keys=bind_to_list
 key_types=_STRING_
@@ -183,46 +188,33 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables or Disables Target AFR functionality for VETable(s) 2 only (DT).  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
-[sd_control_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip,algorithm,applicable_tables,group_2_update
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_ENUM_,_STRING_,_STRING_
+[tafr_strat_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=109
-bitval=0
+bitvals=0,1
 bitshift=4
 bitmask=16
-algorithm=_SPEED_DENSITY_
-applicable_tables=5,6
+choices=Speed Density,Alpha-N
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-group_2_update=multi_expression
-tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N). This mode is for Speed Density
-
-[an_control_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,swap_labels,algorithm,applicable_tables,tooltip,group_2_update
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=0
-offset=109
-bitval=1
-bitshift=4
-bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-algorithm=_ALPHA_N_
+algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=5,6
 group_2_update=multi_expression
 swap_labels=AFR_AFR1_load_tbl_lab,AFR_AFR1_load_tbl_units,AFR_AFR2_load_tbl_lab,AFR_AFR2_load_tbl_units
-tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N). This mode is for Alpha-N
+tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N).
 
 [ego_target_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=109
 bitvals=0,1
 bitshift=5
 bitmask=32
-choices=Always,Above TPS Thresh.
+choices=Always,> TPS Thresh.
+toggle_groups=,tafr_thresh
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Target AFR when turned on will be used ALWAYS or only above a certain TPS threshold
@@ -235,11 +227,11 @@ offset=46
 bitvals=0,1
 bitshift=0
 bitmask=1
-choices=TPS,KPa
+choices=TPS,MAP
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 toggle_groups=tps_oloop,kpa_oloop
-tooltip=Jump to Open Loop mode when TPS or KPA threshold below is exceeded. (set the control below to 255 to disable jumping to open loop control)
+tooltip=Jump to Open Loop mode when TPS or MAP threshold below is exceeded. (set the control below to 255 to disable jumping to open loop control)
 
 #----- Spin Buttons ----------------------------------------------------------
 
@@ -399,12 +391,13 @@ handler=_GENERIC_
 tooltip=This is the override EGO +/- Limit when the manifold pressure exceeds the above setpoint.
 
 [tps_tafr_thresh_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=121
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+bind_to_list=tafr_thresh
 tooltip=When this TPS point is reached we switch from the B&G EGO settings to the Target AFR table(s).
 
 [tps_oloop_thresh_entry]

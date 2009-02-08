@@ -184,30 +184,6 @@ bitmask=128
 toggle_groups=,ae_decel_cutoff
 tooltip=Sets whether we disable decel enrich or not
 
-[ae_decel_off_never_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=0
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Doesn't turn off decel enrich at all.
-
-[ae_decel_off_above_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=1
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Turns off decel enrichment above the setpoint to the right.
-
 #----- Spinbuttons ----------------------------------------------------------
 
 [map_ae_rate_4_entry]

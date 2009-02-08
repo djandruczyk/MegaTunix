@@ -459,7 +459,7 @@ void check_req_fuel_limits(gint table_num)
 	extern Firmware_Details *firmware;
 	canID = firmware->canID;
 
-	/* F&H Dualtable required Fuel calc
+	/* Dualtable required Fuel calc
 	 *
 	 *                                  /    num_inj_x  \
 	 *                 rf_per_squirt * (-----------------)
@@ -584,9 +584,8 @@ void check_req_fuel_limits(gint table_num)
 		else
 			dload_val = (int)(12000.0/((double)num_cyls));
 
-		send_to_ecu(canID, page, rpmk_offset+1, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
-		send_to_ecu(canID, page, rpmk_offset, MTX_U08, (dload_val& 0x00ff), TRUE);
-
+		send_to_ecu(canID, page, rpmk_offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
+		send_to_ecu(canID, page, rpmk_offset+1, MTX_U08, (dload_val& 0x00ff), TRUE);
 		offset = firmware->table_params[table_num]->reqfuel_offset;
 		send_to_ecu(canID, page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
 		//printf("rf per squirt is offset %i, val %i\n",offset,(gint)rf_per_squirt);

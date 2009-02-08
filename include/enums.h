@@ -116,7 +116,7 @@ typedef enum
 	BAUD_CHANGE,
 	MAP_SENSOR_TYPE,
 	ALT_SIMUL
-}SpinButton;
+}MtxButton;
 
 /* Runtime Status flags */
 typedef enum 

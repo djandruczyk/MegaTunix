@@ -186,58 +186,6 @@ handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
-[ase_hot_start_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=751
-bitval=1
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables ASE on hot starts
-
-[ase_hot_start_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=751
-bitval=0
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables ASE on hot starts
-
-[use_twopoint_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=926
-bitval=0
-bitshift=0
-bitmask=1
-toggle_groups=twopoint_controls,table_controls
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses Two-point interpolation instead of tables for various warmup params
-
-[use_tables_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=926
-bitval=1
-bitshift=0
-bitmask=1
-toggle_groups=twopoint_controls,table_controls
-group_states=DISABLED,ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Uses 10 entry Table interpolation instead of two point interpolation for various warmup params
-
 [cpulse_edit_button]
 keys=te_table_num,handler
 key_types=_STRING_,_ENUM_
@@ -279,6 +227,35 @@ keys=te_table_num,handler
 key_types=_STRING_,_ENUM_
 te_table_num=6
 handler=_TE_TABLE_
+
+#----- Combo Boxes -----------------------------------------------------------
+
+[source_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+page=0
+offset=926
+bitvals=0,1
+bitshift=0
+bitmask=1
+choices=Use 2 Points,Use Tables
+toggle_groups=twopoint_controls,table_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Uses either Two-point interpolation or interpolated tables below for various warmup params
+
+[hot_ase_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+page=0
+offset=751
+bitvals=0,1
+bitshift=0
+bitmask=1
+choices=Disabled,Enabled
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Enables or Disables ASE on hot starts
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 

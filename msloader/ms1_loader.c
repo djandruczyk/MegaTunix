@@ -76,13 +76,13 @@ void do_ms1_load(gint port_fd, gint file_fd)
 	}
 	if (ecu_state != IN_BOOTLOADER)
 	{
-		output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n",FALSE);
-		getc(stdin);
+		//output("Please jump the boot jumper on the ECU and power cycle it\n\nPress any key to continue\n",FALSE);
+		boot_jumper_prompt();
 		ecu_state = detect_ecu(port_fd);
 		if (ecu_state != IN_BOOTLOADER)
 		{
 			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
-			exit (-1);
+			boot_jumper_prompt();
 		}
 		else
 			output("Got into the bootloader, good!\n",FALSE);
