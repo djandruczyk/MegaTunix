@@ -283,48 +283,21 @@ bind_to_list=dt_controls,second_o2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[250kpa_rbutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,source_key,source_value,group_2_update
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+[map_type_combo]
+keys=page,offset,choices,bitvals,bitshift,bitmask,group_2_update,dl_type,handler,source_key,source_values,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=1
 offset=182
+bitvals=1,2,3
 bitshift=0
-bitval=1
 bitmask=3
-dl_type=_IMMEDIATE_
-handler=_MAP_SENSOR_TYPE_
+choices=Standard 250KPa,Optional 300KPa, Optional 400KPa
 group_2_update=multi_expression
 source_key=map_sensor
-source_value=MPX4250
-
-[300kpa_rbutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,source_key,source_value,group_2_update
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=1
-offset=182
-bitshift=0
-bitval=2
-bitmask=3
+source_values=MPX4250,MPX6300,MPX6400
 dl_type=_IMMEDIATE_
 handler=_MAP_SENSOR_TYPE_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX6300
-
-[400kpa_rbutton]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,source_key,source_value,group_2_update
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=1
-offset=182
-bitshift=0
-bitval=3
-bitmask=3
-dl_type=_IMMEDIATE_
-handler=_MAP_SENSOR_TYPE_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX6400
-
+tooltip=Sets the Type of MAP Sensor in use.
 
 #----- SpinButtons -----------------------------------------------------------
 
