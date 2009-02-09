@@ -2674,41 +2674,11 @@ Detect</property>
 		<widget class="GtkMenu" id="menuitem1_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="get_data_menubutton">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Get Data</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="std_button_handler" last_modification_time="Sat, 10 May 2008 20:57:24 GMT"/>
-
-		      <child internal-child="image">
-			<widget class="GtkImage" id="image289">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-refresh</property>
-			  <property name="icon_size">1</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="burn_to_flash_menuitem">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Burn to Flash</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="std_button_handler" last_modification_time="Sat, 10 May 2008 20:57:56 GMT"/>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkImageMenuItem" id="close_tableeditor_menubutton">
+		    <widget class="GtkImageMenuItem" id="close_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label">gtk-quit</property>
 		      <property name="use_stock">True</property>
-		      <signal name="activate" handler="close_table_editor_handler" last_modification_time="Sat, 10 May 2008 20:57:24 GMT"/>
+		      <signal name="activate" handler="close_menu_handler" last_modification_time="Mon, 09 Feb 2009 03:35:42 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
@@ -2730,10 +2700,9 @@ Detect</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Curve Wizard</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="popup_curve_editor" last_modification_time="Sat, 10 May 2008 20:57:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image290">
+			<widget class="GtkImage" id="image297">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>

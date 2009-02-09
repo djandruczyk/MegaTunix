@@ -25,7 +25,7 @@ raw_lower=-400
 raw_upper=2000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-use_color=FALSE
+use_color=TRUE
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
@@ -245,8 +245,8 @@ handler=_GENERIC_
 tooltip=Uses either Two-point interpolation or interpolated tables below for various warmup params
 
 [hot_ase_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=751
 bitvals=0,1

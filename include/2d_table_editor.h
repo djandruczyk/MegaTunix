@@ -24,6 +24,7 @@ gboolean update_2d_curve(GtkWidget *,gpointer);
 gboolean close_2d_editor(GtkWidget *, gpointer);
 void coords_changed(GtkWidget *, gpointer);
 void remove_widget(gpointer, gpointer);
+gboolean close_menu_handler(GtkWidget *, gpointer);
 
 /* Prototypes */
 

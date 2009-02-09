@@ -640,7 +640,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
-	/*	printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" \n",base,text,tmpi,tmpf);*/
+	/*printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);*/
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
 	 * or base16, the problem is the limits are in base10
@@ -664,7 +664,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 				if (temp_units == CELSIUS)
 					value = (tmpf*(9.0/5.0))+32;
 				else
-					value = tmp;
+					value = tmpi;
 			}
 			else
 					value = tmpf;
@@ -802,7 +802,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	if (use_color)
 	{
-		color = get_colors_from_hue(((gfloat)dload_val/raw_upper)*360.0,0.33, 1.0);
+		color = get_colors_from_hue(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 	}
 
@@ -1742,6 +1742,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint precision = -1;
 	gint spconfig_offset = 0;
 	gint oddfire_bit_offset = 0;
+	gint raw_lower = 0;
 	gint raw_upper = 0;
 	gboolean cur_state = FALSE;
 	gboolean new_state = FALSE;
@@ -1794,6 +1795,7 @@ void update_widget(gpointer object, gpointer user_data)
 	offset = (gint)OBJ_GET(widget,"offset");
 	canID = (gint)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
+	raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	bitval = (gint)OBJ_GET(widget,"bitval");
 	bitshift = (gint)OBJ_GET(widget,"bitshift");
@@ -1896,7 +1898,8 @@ void update_widget(gpointer object, gpointer user_data)
 
 			if ((use_color) && (update_color))
 			{
-				color = get_colors_from_hue(((gfloat)get_ecu_data(canID,page,offset,size)/raw_upper)*360.0,0.33, 1.0);
+				color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
+
 				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 			}
 			if (update_color)
@@ -1955,7 +1958,7 @@ void update_widget(gpointer object, gpointer user_data)
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 				if (use_color)
 				{
-					color = get_colors_from_hue(((gfloat)get_ecu_data(canID,page,offset,size)/raw_upper)*360.0,0.33, 1.0);
+					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
 					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 				}
 			}

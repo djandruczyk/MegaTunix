@@ -33,6 +33,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 {
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
+	GtkWidget *widget = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *parent = NULL;
 	GtkWidget *curve = NULL;
@@ -61,6 +62,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
 	window = glade_xml_get_widget(xml,"table_editor_window");
 
+	glade_xml_signal_autoconnect(xml);
 	
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(close_2d_editor),window);
@@ -70,6 +72,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 	g_free(tmpbuf);
 	gtk_window_set_default_size(GTK_WINDOW(window),500,400);
+
+	widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
+	gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
+
+	widget = glade_xml_get_widget(xml,"close_menuitem");
+	OBJ_SET(widget,"window",(gpointer)window);
 
 	parent = glade_xml_get_widget(xml,"te_right_frame");
 	curve = mtx_curve_new();
@@ -287,4 +295,12 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
 	g_free(tmpbuf);
+}
+
+
+EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
+{
+	printf("Close handler!\n");
+	close_2d_editor(OBJ_GET(widget,"window"),NULL);
+	return TRUE;
 }

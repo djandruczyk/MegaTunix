@@ -621,6 +621,8 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 
 	while (hue >= 360.0)
 		hue -= 360.0;
+	while (hue < 0.0)
+		hue += 360.0;
 	tmp = hue/60.0;
 	i = floor(tmp);
 	fract = tmp-i;
