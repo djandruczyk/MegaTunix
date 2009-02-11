@@ -180,12 +180,11 @@ bind_to_list=temperature,x2_nitrous_control,x3_nitrous_control
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [wi_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=46
 bitvals=0,1
-bitshift=3
 bitmask=8
 choices=Disabled,Enabled
 toggle_groups=nos_features:x2_tach_pin,water_controls:x3_tach_pin
@@ -195,12 +194,11 @@ handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
 
 [nos_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=11
 bitvals=0,1
-bitshift=7
 bitmask=128
 choices=Disabled,Enabled
 toggle_groups=water_features:x2_tach_pin,x3_tach_pin,nos_subfeatures:nos_params
@@ -210,12 +208,11 @@ handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
 [nos_enr_bank_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=66
 bitvals=0,1
-bitshift=5
 bitmask=32
 choices=Bank 1,Bank2
 bind_to_list=dt_controls,nos_params
@@ -224,12 +221,11 @@ handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
 [nos_antilag_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=66
 bitvals=0,1
-bitshift=6
 bitmask=64
 choices=Disabled,Enabled
 toggle_groups=,antilag_controls
@@ -239,12 +235,11 @@ handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
 [launch_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitvals=0,1
-bitshift=2
 bitmask=4
 choices=Disabled,Enabled
 toggle_groups=,launch_controls
@@ -253,12 +248,11 @@ handler=_GENERIC_
 tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
 
 [var_launch_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
 bitvals=0,1
-bitshift=1
 bitmask=2
 choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
@@ -266,12 +260,11 @@ handler=_GENERIC_
 tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
 
 [launch_limit_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=76
 bitvals=1,2,3
-bitshift=0
 bitmask=3
 choices=Fuel,Spark,Both
 toggle_groups=,lc_spark_ctrls,lc_spark_ctrls

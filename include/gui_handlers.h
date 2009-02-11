@@ -44,6 +44,7 @@ void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 void combo_toggle_groups_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
+guint get_bitshift(guint );
 /* Prototypes */
 
 #endif

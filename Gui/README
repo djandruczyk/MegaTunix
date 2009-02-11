@@ -78,7 +78,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			config bitfield (linked to the control that uses this
 			parameter)
 	bitval		(integer) the value of part of a bitfield (see below)
-	bitshift	(integer) the starting point in a bitfield for bitval
 	bitmask		(integer) the bitmask of bitval..
 	temp_dep	(boolean) Temperature dependant widget (flag)
 	label		(string)  normal label to use (See "swap_labels")
@@ -97,7 +96,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_Vars)
 	*_bitmask	(integer) bitmask to mask value at page,offset
-	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
 	swap_labels	(comma seperated string list). List of widget names OR
 			GROUPNAMES (created with bind_to_list) to
@@ -189,9 +187,9 @@ NOTE: regaring expr_symbols and expr_types:
 	The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  IF expr_symbols contains "cyls,reqfuel"
 and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
-be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
+be searched for. "cyls_page","cyls_offset","cyls_bitmask".
 "reqfuel_page" and "reqfuel_offset". (Embedded bitfields need, the page,offset
-bitmask and bitshift to be resolved completely), VE_VAR's ony need the page 
+and bitmask to be resolved completely), VE_VAR's ony need the page 
 and offset to be resolved.
 completely.
 
@@ -200,12 +198,11 @@ HOW Bitfields are used:
 which is either a toggle (two choices) or radio (multiple choices) 
 or a spinbutton in which a numerical value is stored into a bitfield 
 (num_cylinders, etc..)  For buttons, in the datamap file we use bitval, 
-bitmask, and bitshift.
+and bitmask.
 
 When clicking a button, what megatunix  does is retrieve the byte at the 
 page/offset set by that control, mask off the other bits in that byte with
-the bitmask. (byte & bitmask)  After this the new value is shifted by
-the "bitshift" value and copied into the byte.
+the bitmask. (byte & bitmask)and set the new bits appropriately
 
 When updating the button after reading the data from the ECU, we mask it and 
 then shift it.  

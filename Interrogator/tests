@@ -31,7 +31,7 @@
 
 [API]
 major=1
-minor=3
+minor=4
 
 [interrogation_tests]
 total_tests=7

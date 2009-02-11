@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=3
+minor=4
 
 [interrogation_profile]
 name=MS-II-Extra V2.1.0j
@@ -30,12 +30,10 @@ CompositemonPage=7
 [table_0]
 table_name=VE-Table 1, MS-II-Extra 12x12
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=768
 x_bincount=12
@@ -70,12 +68,10 @@ z_precision=0
 [table_1]
 table_name=VE-Table 2, MS-II-Extra 12x12
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=792
 x_bincount=12
@@ -110,12 +106,10 @@ z_precision=0
 [table_2]
 table_name=VE-Table 3, MS-II-Extra 12x12
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=816
 x_bincount=12
@@ -150,12 +144,10 @@ z_precision=0
 [table_3]
 table_name=VE-Table 1, MS-II-Extra 16x16
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=768
 x_bincount=16
@@ -190,12 +182,10 @@ z_precision=0
 [table_4]
 table_name=VE-Table 2, MS-II-Extra 16x16
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=800
 x_bincount=16
@@ -230,12 +220,10 @@ z_precision=0
 [table_5]
 table_name=VE-Table 3, MS-II-Extra 16x16
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=608
+divider_page=0
 divider_offset=610
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 x_page=4
 x_base_offset=832
 x_bincount=16

@@ -101,12 +101,11 @@ bind_to_list=ego_ign_events
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [sensor1_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,swap_labels,dl_type,handler,table_2_update,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,swap_labels,dl_type,handler,table_2_update,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=1
 offset=184
 bitvals=0,1
-bitshift=1
 bitmask=2
 choices=Narrow-Band,Wide-Band
 table_2_update=5
@@ -116,12 +115,11 @@ handler=_GENERIC_
 tooltip=Sets the O2 sensor type.
 
 [sensor2_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,swap_labels,dl_type,handler,table_2_update,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,swap_labels,dl_type,handler,table_2_update,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=2
 offset=184
 bitvals=0,1
-bitshift=1
 bitmask=2
 choices=Narrow-Band,Wide-Band
 bind_to_list=dt_controls
@@ -132,12 +130,11 @@ handler=_GENERIC_
 tooltip=Sets the Second O2 sensor type. This is only applicable to Dual Table mode.
 
 [ego_sensors_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=2
 offset=188
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Only 1,Two (DT Only)
 bind_to_list=dt_controls
@@ -147,12 +144,11 @@ handler=_GENERIC_
 tooltip=Sets the number of O<sub>2</sub> sensors.
 
 [ego_step_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,swap_labels,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,swap_labels,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=188
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=milliseconds,Ignition Pulses
 swap_labels=ego_igno_events
@@ -161,12 +157,11 @@ handler=_GENERIC_
 tooltip=Sets the O<sub>2</sub> signal convergence time units to be in milliseconds or engine cycles. (after X milliseconds or Engine cycles the ecu will try to trim in the fuel)
 
 [ego_tafr1_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
 bitvals=0,1
-bitshift=7
 bitmask=128
 choices=Disabled,Enabled
 toggle_groups=,afr1
@@ -175,12 +170,11 @@ handler=_GENERIC_
 tooltip=Enables or Disables Target AFR functionality for VETable(s) 1/3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [ego_tafr2_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=7
 bitmask=128
 choices=Disabled,Enabled
 toggle_groups=,afr2
@@ -189,12 +183,11 @@ handler=_GENERIC_
 tooltip=Enables or Disables Target AFR functionality for VETable(s) 2 only (DT).  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [tafr_strat_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=109
 bitvals=0,1
-bitshift=4
 bitmask=16
 choices=Speed Density,Alpha-N
 dl_type=_IMMEDIATE_
@@ -206,12 +199,11 @@ swap_labels=AFR_AFR1_load_tbl_lab,AFR_AFR1_load_tbl_units,AFR_AFR2_load_tbl_lab,
 tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N).
 
 [ego_target_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=109
 bitvals=0,1
-bitshift=5
 bitmask=32
 choices=Always,> TPS Thresh.
 toggle_groups=,tafr_thresh
@@ -220,12 +212,11 @@ handler=_GENERIC_
 tooltip=Target AFR when turned on will be used ALWAYS or only above a certain TPS threshold
 
 [ego_oloop_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=46
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=TPS,MAP
 dl_type=_IMMEDIATE_

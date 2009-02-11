@@ -88,8 +88,8 @@ bind_to_list=ae_mapdot_controls,ae_normal_controls
 #----- Radio/Check/Combo/buttons ---------------------------------------------
 
 [ae_trigger_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -99,12 +99,11 @@ bind_to_list=ae_normal_controls
 bitvals=0,1
 offset=66
 bitmask=128
-bitshift=7
 tooltip=Sets the Acceleration Enrichment methodology to be based on MAP (manifold pressure) rate of change (MAPdot) or TPS (Throttle position) rate of change (TPSdot)
 
 [alt_ae_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -112,74 +111,68 @@ choices=Normal AE,RPM Based
 toggle_groups=ae_normal_controls,ae_rpm_controls
 bitvals=0,1
 offset=184
-bitshift=4
 bitmask=16
 tooltip=Chooses between normal AE algorithms (TPSdot or Map dot) or an RPM based enrichment, but its triggered by the MAPdot or TPSdot minimum thresholds below depending on which algorithm was chosen.
 
 [ae_timer_units_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,set_widgets_label,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,set_widgets_label,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Seconds,Cycles
 offset=11
 bitvals=0,1
-bitshift=3
 bitmask=8
 set_widgets_label=ae_accel_time_label,Accel Time (sec),Accel Time (cycles)
 tooltip=Sets AE time units to either seconds or engine cycles
 
 [ae_in_boost_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Enabled,Disabled
 offset=66
 bitvals=0,1
-bitshift=4
 bitmask=16
 tooltip=Sets whether we disable accel enrich when in boost or not. If set to enabled, AE still functions when in boost,  when set to disabled, AE will not occur when in boost.
 
 [ae_during_ase_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Enabled,Disabled
 offset=184
 bitvals=0,1
-bitshift=2
 bitmask=4
 tooltip=Sets whether we disable accel enrich when in ASE (AfterStart Enrichment) or not. 
 
 [ae_decay_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Disabled,Enabled
 offset=116
 bitvals=0,1
-bitshift=6
 bitmask=64
 toggle_groups=,ae_decay_controls
 tooltip=Sets whether we decay AE over time or not
 
 [ae_decel_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Never,Above Setpoint
 offset=92
 bitvals=0,1
-bitshift=7
 bitmask=128
 toggle_groups=,ae_decel_cutoff
 tooltip=Sets whether we disable decel enrich or not

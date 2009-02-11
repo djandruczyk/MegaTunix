@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=3
+minor=4
 
 [interrogation_profile]
 name=Standard Bowling & Grippo v2.0-3.01
@@ -25,13 +25,23 @@ TotalPages=1
 [table_0]
 table_name=VE-Table 0, B&G 2.0-3.01
 is_fuel=TRUE
+reqfuel_page=0
 reqfuel_offset=90
+divider_page=0
 divider_offset=91
+alternate_page=0
 alternate_offset=92
+rpmk_page=0
 rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
+num_cyl_page=0
+num_cyl_offset=116
+num_cyl_mask=240
+num_inj_page=0
+num_inj_offset=117
+num_inj_mask=240
+stroke_page=0
+stroke_offset=116
+stroke_mask=4
 x_page=0
 x_base_offset=100
 x_bincount=8

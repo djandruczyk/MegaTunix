@@ -147,12 +147,11 @@ bind_to_list=obp_spark_ctrls,spark_controls,nonedis_controls,boost_controls
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [boost_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Disabled,Enabled
 toggle_groups=x4_tach_pin,boost_controls
@@ -161,12 +160,11 @@ handler=_GENERIC_
 tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
 
 [knock_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
 bitvals=0,1
-bitshift=6
 bitmask=64
 choices=Disabled,Enabled
 toggle_groups=,knock_controls
@@ -175,12 +173,11 @@ handler=_GENERIC_
 tooltip=The knock controller feature will attempt to alter ignition timing and/or boost in order to limit detonation.
 
 [boost_pwm_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=14
 bitvals=1,2,3,4,5,6,7
-bitshift=0
 bitmask=7
 choices=39Hz,19.5Hz,13Hz,9.8Hz,7.8Hz,6.5Hz,5.6Hz
 bind_to_list=boost_controls
@@ -189,12 +186,11 @@ handler=_GENERIC_
 tooltip=Sets the Boost Actuator PWM rate to the specified value.  Higher rates are better for fast acting valves,  slower rates are more suitable for valves that have higher damping or that respond slower.
 
 [more_boost_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=6
 bitmask=64
 choices=More Boost,Less Boost
 bind_to_list=boost_controls
@@ -203,12 +199,11 @@ handler=_GENERIC_
 tooltip=When "More Boost" is selected a higher Duty Cycle means MORE boost will be generated, otherwise higher duty cycle means LESS boost wil be generated..
 
 [boost_input_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=116
 bitvals=0,1
-bitshift=6
 bitmask=64
 choices=No,Yes
 bind_to_list=boost_controls
@@ -217,12 +212,11 @@ handler=_GENERIC_
 tooltip=When set to Yes, Boost Table 3 will be used based on the state of pin6 of JP1. (table 3 USED when input is LOW)
 
 [obp_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,bind_to_list,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=76
 bitvals=1,2,3
-bitshift=4
 bitmask=48
 choices=Spark,Fuel,Fuel & Spark
 bind_to_list=boost_controls

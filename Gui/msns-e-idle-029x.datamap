@@ -135,12 +135,11 @@ bind_to_list=temperature
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [idle_mode_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=8
 offset=16
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=B&G On/Off,PWM
 toggle_groups=bng_idle_controls,pwm_idle_controls
@@ -149,12 +148,11 @@ handler=_GENERIC_
 tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information. The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, either it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
 
 [idle_when_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=8
 offset=16
 bitvals=1,2
-bitshift=1
 bitmask=6
 choices=Warmup Only,Closed Loop Only
 toggle_groups=warmup_idle_controls,cloop_idle_controls

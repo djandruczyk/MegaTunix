@@ -111,14 +111,25 @@ struct _Firmware_Details
 struct _Table_Params
 {
 	gboolean is_fuel;	/*! If true next 7 params must exist */
-	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
 	gint dtmode_page;	/*! DT mode page (msns-e ONLY) */
-	gint cfg11_offset;	/*! Where config11 value is located */
-	gint cfg12_offset;	/*! Where config12 value is located */
-	gint cfg13_offset;	/*! Where config13 value is located */
+	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
+	gint dtmode_mask;	/*! DT mode mask (msns-e ONLY) */
+	gint num_cyl_page;	/*! page where num_cylinders value is located */
+	gint num_cyl_offset;	/*! Where num_cylinders value is located */
+	gint num_cyl_mask;	/*! MASK for num_cyliners */
+	gint num_inj_page;	/*! page where num_injectors value is located */
+	gint num_inj_offset;	/*! Where num_injectors value is located */
+	gint num_inj_mask;	/*! MASK for num_injectors */
+	gint stroke_page;	/*! page where stroke value is located */
+	gint stroke_offset;	/*! Where stroke value is located */
+	gint stroke_mask;	/*! MASK for stroke */
+	gint alternate_page;	/*! page Where alternate value is located */
 	gint alternate_offset;	/*! Where alternate value is located */
+	gint divider_page;	/*! page Where divider value is located */
 	gint divider_offset;	/*! Where divider value is located */
+	gint rpmk_page;		/*! page Where rpmk value is located */
 	gint rpmk_offset;	/*! Where rpmk value is located */
+	gint reqfuel_page;	/*! page Where reqfuel value is located */
 	gint reqfuel_offset;	/*! Where reqfuel value is located */
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */

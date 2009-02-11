@@ -724,11 +724,8 @@ reqfuel_1_offset=90
 injectors_1_page=0
 injectors_1_offset=117
 injectors_1_bitmask=240
-injectors_1_bitshift=4
 divider_1_page=0
 divider_1_offset=91
 alternate_page=0
 alternate_offset=92
 alternate_bitmask=1
-alternate_bitshift=0
-

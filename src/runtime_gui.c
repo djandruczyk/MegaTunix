@@ -334,7 +334,7 @@ void rt_update_status(gpointer key, gpointer data)
 
 	bitval = (gint)OBJ_GET(widget,"bitval");
 	bitmask = (gint)OBJ_GET(widget,"bitmask");
-	bitshift = (gint)OBJ_GET(widget,"bitshift");
+	bitshift = get_bitshift(bitmask);
 
 
 	/* if the value hasn't changed, don't bother continuing */

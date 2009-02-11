@@ -403,17 +403,14 @@ reqfuel_offset=148
 injectors_page=4
 injectors_offset=183
 injectors_bitmask=240
-injectors_bitshift=4
 divider_page=4
 divider_offset=149
 alternate_page=4
 alternate_offset=150
 alternate_bitmask=1
-alternate_bitshift=0
 dtmode_page=0
 dtmode_offset=33
 dtmode_bitmask=16
-dtmode_bitshift=4
 
 [VE2_curr_reqfuel_entry]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
@@ -434,7 +431,6 @@ reqfuel_offset=148
 injectors_page=4
 injectors_offset=183
 injectors_bitmask=240
-injectors_bitshift=4
 divider_page=4
 divider_offset=149
 
@@ -458,17 +454,14 @@ reqfuel_offset=148
 injectors_page=4
 injectors_offset=183
 injectors_bitmask=240
-injectors_bitshift=4
 divider_page=4
 divider_offset=149
 alternate_page=4
 alternate_offset=150
 alternate_bitmask=1
-alternate_bitshift=0
 dtmode_page=0
 dtmode_offset=33
 dtmode_bitmask=16
-dtmode_bitshift=4
 
 
 #----- Widgets --------------------------------------------------------------

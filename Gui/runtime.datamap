@@ -36,74 +36,68 @@ tab_ident=_RUNTIME_TAB_
 #------- Runtime Status Indicators ------------------------------------------
 
 [runtime_cranking_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=1
 bitmask=2
 
 [runtime_running_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=0
 bitmask=1
 
 [runtime_warmup_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=3
 bitmask=8
 
 [runtime_ase_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=2
 bitmask=4
 
 [runtime_accel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=4
 bitmask=16
 
 [runtime_decel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=5
 bitmask=32
 

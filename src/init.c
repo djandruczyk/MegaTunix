@@ -710,9 +710,6 @@ Table_Params * initialize_table_params(void)
 	Table_Params *table_params = NULL;
 	table_params = g_malloc0(sizeof(Table_Params));
 	table_params->is_fuel = FALSE;
-	table_params->cfg11_offset = -1;
-	table_params->cfg12_offset = -1;
-	table_params->cfg13_offset = -1;
 	table_params->alternate_offset = -1;
 	table_params->divider_offset = -1;
 	table_params->rpmk_offset = -1;

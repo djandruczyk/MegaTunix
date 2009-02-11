@@ -39,7 +39,6 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gint num_bitvals = 0;
 	gint i = 0;
 	gint bitmask = 0;
-	gint bitshift = 0;
 	gint width = 0;
 	gchar *tmpstr = NULL;
 	gchar *regexp = NULL;
@@ -63,11 +62,6 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	vector = parse_keys(tmpbuf,&num_bitvals,",");
 	g_free(tmpbuf);
 	if (!cfg_read_int(cfgfile,section,"bitmask",&bitmask))
-	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
-		return;
-	}
-	if(!cfg_read_int(cfgfile,section,"bitshift",&bitshift))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
 		return;

@@ -78,13 +78,9 @@ gboolean check_dependancies(GObject *object )
 				/*printf("size %i\n",size); */
 				g_free(tmpbuf);
 
-				tmpbuf = g_strdup_printf("%s_bitshift",deps[i]);
-				bitshift = (gint)OBJ_GET(object,tmpbuf);
-				/*printf("bitshift %i\n",bitshift); */
-				g_free(tmpbuf);
-
 				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
 				bitmask = (gint)OBJ_GET(object,tmpbuf);
+				bitshift = get_bitshift(bitmask);
 				/*printf("bitmask %i\n",bitmask); */
 				g_free(tmpbuf);
 

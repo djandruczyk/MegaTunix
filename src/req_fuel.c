@@ -447,12 +447,14 @@ void check_req_fuel_limits(gint table_num)
 	gint last_num_inj = -1;
 	gint last_divider= -1;
 	gint last_alternate = -1;
+	guint8 tmpi = 0;
+	guint8 mask = 0;
+	guint8 shift = 0;
 	gfloat rf_total = 0.0;
 	gfloat last_rf_total = 0.0;
 	gchar * g_name = NULL;
 	gchar * name = NULL;
 	GtkWidget *widget = NULL;
-	union config11 cfg11;
 	extern gboolean paused_handlers;
 	extern GHashTable ** interdep_vars;
 	extern GHashTable *dynamic_widgets;
@@ -478,7 +480,7 @@ void check_req_fuel_limits(gint table_num)
 	 *                      \    divider    /
 	 */
 
-	/* B&G, MSnS, MSnEDIS Required Fuel Calc
+	/* B&G, MSnS, MS2?, MSnEDIS Required Fuel Calc
 	 *
 	 *                                   /       num_inj         \
 	 *                  rf_per_squirt * (-------------------------)
@@ -513,8 +515,10 @@ void check_req_fuel_limits(gint table_num)
 	alternate = firmware->rf_params[table_num]->alternate;
 	last_alternate = firmware->rf_params[table_num]->last_alternate;
 
-	//printf("rf_total %.2f, num_cyls %i, num_inj %i, num_squirts %i, divider %i, alt %i\n",rf_total,num_cyls,num_inj,num_squirts,divider,alternate);
-	//printf("l_rf_total %.2f, l_num_cyls %i, l_num_inj %i, l_num_squirts %i, l_divider %i, l_alt %i\n",last_rf_total,last_num_cyls,last_num_inj,last_num_squirts,last_divider,last_alternate);
+	/*
+	printf("rf_total %.2f, num_cyls %i, num_inj %i, num_squirts %i, divider %i, alt %i\n",rf_total,num_cyls,num_inj,num_squirts,divider,alternate);
+	printf("l_rf_total %.2f, l_num_cyls %i, l_num_inj %i, l_num_squirts %i, l_divider %i, l_alt %i\n",last_rf_total,last_num_cyls,last_num_inj,last_num_squirts,last_divider,last_alternate);
+	*/
 
 	if ((rf_total == last_rf_total) &&
 			(num_cyls == last_num_cyls) &&
@@ -522,26 +526,42 @@ void check_req_fuel_limits(gint table_num)
 			(num_squirts == last_num_squirts) &&
 			(alternate == last_alternate) &&
 			(divider == last_divider))
+	{
+	/*	printf("No changes, returning\n");*/
 		return;
+	}
 
 	if (firmware->capabilities & DUALTABLE)
 	{
-		//printf ("dualtable\n");
+		/*printf ("dualtable\n");*/
 		tmp = (float)num_inj/(float)divider;
 	}
-	else if ((firmware->capabilities & MSNS_E) && (((get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & 0x10) >> 4) == 1))
-	{
-		//printf ("msns-E with DT enabled\n");
-		tmp = (float)num_inj/(float)divider;
+	else if (firmware->capabilities & MSNS_E)
+	{	
+		shift = get_bitshift(firmware->table_params[table_num]->dtmode_mask);
+		if ((get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & firmware->table_params[table_num]->dtmode_mask) >> shift) 
+		{
+		/*	printf ("msns-E with DT enabled\n");*/
+			tmp = (float)num_inj/(float)divider;
+		}
+			else
+			{
+			/*	printf("MSnS-E non-DT\n"); */
+				tmp = (float)(num_inj)/((float)(divider)*((float)(alternate)+1.0));
+			}
 	}
 	else	/* B&G style */
 	{
-		//printf ("B&G\n");
+	/*	printf ("B&G\n");*/
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
-		//printf("num_inj/(divider*(alt+1)) == %i\n",tmp);
+	/*	printf("num_inj/(divider*(alt+1)) == %f\n",tmp);*/
 	}
 
 	rf_per_squirt = ((float)rf_total * 10.0)/tmp;
+	/*
+	printf("RF per squirt is %f\n",rf_per_squirt);
+	printf("Table number %i\n",table_num);
+	*/
 
 	if (rf_per_squirt > 255)
 		lim_flag = TRUE;
@@ -574,20 +594,32 @@ void check_req_fuel_limits(gint table_num)
 		if (paused_handlers)
 			return;
 
-		/* Send rpmk value as it's needed for rpm calc on 
-		 * spark firmwares... */
-		cfg11.value = get_ecu_data(canID,page,firmware->table_params[table_num]->cfg11_offset,size);
-		rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
-		/* Top is two stroke, botton is four stroke.. */
-		if (cfg11.bit.eng_type)
-			dload_val = (int)(6000.0/((double)num_cyls));
-		else
-			dload_val = (int)(12000.0/((double)num_cyls));
 
-		send_to_ecu(canID, page, rpmk_offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
-		send_to_ecu(canID, page, rpmk_offset+1, MTX_U08, (dload_val& 0x00ff), TRUE);
-		offset = firmware->table_params[table_num]->reqfuel_offset;
-		send_to_ecu(canID, page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
+		if (firmware->capabilities & MS2)
+		{
+			offset = firmware->table_params[table_num]->reqfuel_offset;
+			send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, MTX_U16, (gint)(rf_per_squirt*100.0), TRUE);
+			printf("MS2 reqfuel per squirt, value %i \n",(gint)(rf_per_squirt*100.0));
+		}
+		else
+		{
+			/* Send rpmk value as it's needed for rpm calc on 
+			 * spark firmwares... */
+			tmpi = get_ecu_data(canID,firmware->table_params[table_num]->stroke_page,firmware->table_params[table_num]->stroke_offset,size);
+			mask = firmware->table_params[table_num]->stroke_mask;
+			shift = get_bitshift(firmware->table_params[table_num]->stroke_mask);
+			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
+			/* Top is two stroke, botton is four stroke.. */
+			if ((tmpi & mask) >> shift)
+				dload_val = (int)(6000.0/((double)num_cyls));
+			else
+				dload_val = (int)(12000.0/((double)num_cyls));
+
+			send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
+			send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset+1, MTX_U08, (dload_val& 0x00ff), TRUE);
+			offset = firmware->table_params[table_num]->reqfuel_offset;
+			send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
+		}
 		//printf("rf per squirt is offset %i, val %i\n",offset,(gint)rf_per_squirt);
 		/* Call handler to empty interdependant hash table */
 		g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,NULL);

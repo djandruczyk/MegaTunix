@@ -30,8 +30,8 @@ bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [combobox1]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 #choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,INVALID,INVALID
@@ -41,11 +41,10 @@ bitvals=0,1,2,3,4,5
 toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
 offset=547
 bitmask=7
-bitshift=0
 
 [combobox3]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,INVALID,INVALID
@@ -53,50 +52,45 @@ bitvals=0,1,2,3,4,5,6,7
 toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
 offset=547
 bitmask=7
-bitshift=0
 
 [combobox2]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_
+keys=handler,dl_type,offset,choices,bitvals,bitmask
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=MS2,MicroSquirt,Undefined
 bitvals=1,2,255
 offset=744
 bitmask=255
-bitshift=0
 
 [ms2_radiobutton]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=744
 bitval=1
-bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the ECU type to MS-II. (NOT the same as a microsquirt).
 
 [usquirt_radiobutton]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=744
 bitval=2
-bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the ECU type to Microsquirt
 
 [undefined_radiobutton]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=744
 bitval=255
-bitshift=0
 bitmask=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

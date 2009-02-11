@@ -127,7 +127,7 @@ void start_tickler(TicklerType type)
 			if (!((connected) && (interrogated)))
 				break;
 			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(250,(GtkFunction)update_errcounts,NULL);
+				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;

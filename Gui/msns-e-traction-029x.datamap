@@ -238,8 +238,8 @@ bind_to_list=traction_labels
 #----- Radio/CheckCombo/buttons ----------------------------------------------
 
 [traction_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -248,12 +248,11 @@ toggle_groups=,global_traction:traction_labels
 bitvals=0,1
 offset=92
 bitmask=32
-bitshift=5
 tooltip=Enables or Disabled traction control
 
 [traction_mode_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,swap_labels,toggle_groups,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,swap_labels,toggle_groups,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -264,12 +263,11 @@ bind_to_list=global_traction
 bitvals=0,1
 offset=109
 bitmask=8
-bitshift=3
 tooltip=Sets the traction mode to be dependant on RPM rate of change (RPMdot). This doesn't require any additional sensors, or VSS rate of change (Ths requires sensors and additional input circuitry)
 
 [nos_traction_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -278,12 +276,11 @@ bind_to_list=global_traction,nos_params
 bitvals=0,1
 offset=109
 bitmask=1
-bitshift=0
 tooltip=Tells the ECU to NOT turn off NOS during traction control (dangerous) or to turn it off during traction (safer)
 
 [traction_stable_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,width,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,width,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -293,7 +290,6 @@ width=19
 bitvals=0,1
 offset=109
 bitmask=4
-bitshift=2
 tooltip=If set to cycle count only, traction control takes effect only until that point, otherwise until the RPM reading is stable for 100ms (0.1 seconds)
 
 #----- Spin Buttons ----------------------------------------------------------

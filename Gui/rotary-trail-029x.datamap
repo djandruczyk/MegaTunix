@@ -511,21 +511,20 @@ offset=98
 group=table
 
 [trailing_split_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 choices=Off,On
 bitvals=0,1
 offset=111
 bitmask=1
-bitshift=0
 toggle_groups=NA,rotary_trailing
 tooltip=Turns on/off Trailing Split Support.
 
 [trailing_output_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -533,20 +532,6 @@ choices=FC Trailing,FD Trailing
 bitvals=0,1
 offset=11
 bitmask=16
-bitshift=4
-tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table. When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
-
-[combobox1]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
-choices=FC Trailing,FD Trailing
-bitvals=0,1
-offset=11
-bitmask=16
-bitshift=4
 tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table. When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
 [fixed_split_entry]

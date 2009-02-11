@@ -410,9 +410,9 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	offset = (gint)OBJ_GET(widget,"offset");
 	size = (DataSize)OBJ_GET(widget,"size");
 	dl_type = (gint)OBJ_GET(widget,"dl_type");
-	bitshift = (gint)OBJ_GET(widget,"bitshift");
 	bitval = (gint)OBJ_GET(widget,"bitval");
 	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitshift = get_bitshift(bitmask);
 	handler = (gint)OBJ_GET(widget,"handler");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
@@ -1022,7 +1022,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	page = (gint) OBJ_GET(widget,"page");
 	offset = (gint) OBJ_GET(widget,"offset");
 	bitmask = (gint) OBJ_GET(widget,"bitmask");
-	bitshift = (gint) OBJ_GET(widget,"bitshift");
+	bitshift = get_bitshift(bitmask);
 	dl_type = (gint) OBJ_GET(widget,"dl_type");
 	handler = (gint) OBJ_GET(widget,"handler");
 	canID = (gint)OBJ_GET(widget,"canID");
@@ -1220,7 +1220,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	offset = (gint) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
 	bitmask = (gint) OBJ_GET(widget,"bitmask");
-	bitshift = (gint) OBJ_GET(widget,"bitshift");
+	bitshift = get_bitshift(bitmask);
 	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
@@ -1512,8 +1512,10 @@ EXPORT void update_ve_const_pf()
 	gfloat tmpf = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
-	union config11 cfg11;
-	union config12 cfg12;
+	guint mask = 0;
+	guint shift = 0;
+	guint tmpi = 0;
+	
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
 	extern volatile gboolean offline;
@@ -1564,31 +1566,34 @@ EXPORT void update_ve_const_pf()
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		/*printf("\n");*/
-		page = firmware->table_params[i]->z_page;
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
-		cfg11.value = get_ecu_data(canID,page,firmware->table_params[i]->cfg11_offset,size);	
-		cfg12.value = get_ecu_data(canID,page,firmware->table_params[i]->cfg12_offset,size);	
-		firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
-		firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
-		firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
-		firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
+		tmpi = get_ecu_data(canID,firmware->table_params[i]->num_cyl_page,firmware->table_params[i]->num_cyl_offset,size);	
+		mask = firmware->table_params[i]->num_cyl_mask;
+		shift = get_bitshift(firmware->table_params[i]->num_cyl_mask);
+		firmware->rf_params[i]->num_cyls = ((tmpi & mask) >> shift)+1;
+		firmware->rf_params[i]->last_num_cyls = ((tmpi & mask) >> shift)+1;
 
-		firmware->rf_params[i]->divider = get_ecu_data(canID,page,firmware->table_params[i]->divider_offset,size);
+		tmpi = get_ecu_data(canID,firmware->table_params[i]->num_inj_page,firmware->table_params[i]->num_inj_offset,size);	
+		mask = firmware->table_params[i]->num_cyl_mask;
+		shift = get_bitshift(firmware->table_params[i]->num_cyl_mask);
+		firmware->rf_params[i]->num_inj = ((tmpi & mask) >> shift)+1;
+		firmware->rf_params[i]->last_num_inj = ((tmpi & mask) >> shift)+1;
+
+		firmware->rf_params[i]->divider = get_ecu_data(canID,firmware->table_params[i]->divider_page,firmware->table_params[i]->divider_offset,size);
 		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-		firmware->rf_params[i]->alternate = get_ecu_data(canID,page,firmware->table_params[i]->alternate_offset,size);
+		firmware->rf_params[i]->alternate = get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
-		reqfuel = get_ecu_data(canID,page,firmware->table_params[i]->reqfuel_offset,size);
+		printf("reqfuel_page %i, reqfuel_offset %i\n",firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset);
+		reqfuel = get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,size);
 
-	/*	
+	
 		  printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
 		  printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
 		  printf("req_fuel_per_l_squirt is %i\n",reqfuel);
-		  */
+
 		 
-
-
 		/* Calcs vary based on firmware. 
 		 * DT uses num_inj/divider
 		 * MSnS-E uses the SAME in DT mode only
@@ -1596,27 +1601,36 @@ EXPORT void update_ve_const_pf()
 		 */
 		if (firmware->capabilities & DUALTABLE)
 		{
-				//printf("DT\n"); 
+			/*	printf("DT\n"); */
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
-		else if ((firmware->capabilities & MSNS_E) && (((get_ecu_data(canID,firmware->table_params[i]->dtmode_page,firmware->table_params[i]->dtmode_offset,size)& 0x10) >> 4) == 1))
+		else if (firmware->capabilities & MSNS_E)
 		{
-				//printf("MSnS-E DT\n"); 
-			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
+			shift = get_bitshift(firmware->table_params[i]->dtmode_mask);
+			if ((get_ecu_data(canID,firmware->table_params[i]->dtmode_page,firmware->table_params[i]->dtmode_offset,size) & firmware->table_params[i]->dtmode_mask) >> shift)
+			{
+			/*	printf("MSnS-E DT\n"); */
+				tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
+			}
+			else
+			{
+			/*	printf("MSnS-E non-DT\n"); */
+				tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
+			}
 		}
 		else
 		{
-				//printf("B&G\n"); 
+			printf("B&G\n"); 
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
 		}
 
 		/* ReqFuel Total */
-		//printf("intermediate tmpf is %f\n",tmpf);
+		/*printf("intermediate tmpf is %f\n",tmpf);*/
 		tmpf *= (float)reqfuel;
 		tmpf /= 10.0;
 		firmware->rf_params[i]->req_fuel_total = tmpf;
 		firmware->rf_params[i]->last_req_fuel_total = tmpf;
-		//printf("req_fuel_total  for table number %i is %f\n",i,tmpf);
+		/*printf("req_fuel_total for table number %i is %f\n",i,tmpf);*/
 
 		/* Injections per cycle */
 		firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
@@ -1727,6 +1741,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean temp_dep = FALSE;
 	gboolean use_color = FALSE;
 	gint i = 0;
+	gint j = 0;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
@@ -1798,8 +1813,8 @@ void update_widget(gpointer object, gpointer user_data)
 	raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	bitval = (gint)OBJ_GET(widget,"bitval");
-	bitshift = (gint)OBJ_GET(widget,"bitshift");
 	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitshift = get_bitshift(bitmask);
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
@@ -2015,11 +2030,11 @@ void update_widget(gpointer object, gpointer user_data)
 					}
 
 					vector = g_strsplit(tmpbuf,",",-1);
-					i = 0;
-					while (vector[i])
+					j = 0;
+					while (vector[j])
 					{
-						algorithm[(gint)strtol(vector[i],NULL,10)]=(Algorithm)algo;
-						i++;
+						algorithm[(gint)strtol(vector[j],NULL,10)]=(Algorithm)algo;
+						j++;
 					}
 					g_strfreev(vector);
 				}
@@ -2772,6 +2787,11 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 
 	//printf("toggling combobox groups\n");
 	choices = parse_keys(toggle_groups,&num_choices,",");
+	if (active >= num_choices)
+	{
+		printf("active is %i, num_choices %i\n",active,num_choices);
+		printf("active is out of bounds for widget %s\n",glade_get_widget_name(widget));
+	}
 	//printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);
 
 	/* First TURN OFF all non active groups */
@@ -2842,4 +2862,13 @@ gint get_choice_count(GtkTreeModel *model)
 		i++;
 	}
 	return i;
+}
+
+guint get_bitshift(guint mask)
+{
+	gint i = 0;
+	for (i=0;i<32;i++)
+		if (mask & (1 << i))
+			return i;
+	return 0;
 }

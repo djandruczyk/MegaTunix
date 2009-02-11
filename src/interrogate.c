@@ -515,20 +515,40 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		cfg_read_boolean(cfgfile,section,"is_fuel",&firmware->table_params[i]->is_fuel);
 		if (firmware->table_params[i]->is_fuel)
 		{
+			if(!cfg_read_int(cfgfile,section,"divider_page",&firmware->table_params[i]->divider_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"divider_offset",&firmware->table_params[i]->divider_offset))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"reqfuel_page",&firmware->table_params[i]->reqfuel_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&firmware->table_params[i]->reqfuel_offset))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if(!cfg_read_int(cfgfile,section,"cfg11_offset",&firmware->table_params[i]->cfg11_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"cfg11_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if(!cfg_read_int(cfgfile,section,"cfg12_offset",&firmware->table_params[i]->cfg12_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"cfg12_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if(!cfg_read_int(cfgfile,section,"cfg13_offset",&firmware->table_params[i]->cfg13_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"cfg13_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"stroke_page",&firmware->table_params[i]->stroke_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"stroke_offset",&firmware->table_params[i]->stroke_offset))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"stroke_mask",&firmware->table_params[i]->stroke_mask))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_cyl_page",&firmware->table_params[i]->num_cyl_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_cyl_offset",&firmware->table_params[i]->num_cyl_offset))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_cyl_mask",&firmware->table_params[i]->num_cyl_mask))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_inj_page",&firmware->table_params[i]->num_inj_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_inj_offset",&firmware->table_params[i]->num_inj_offset))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"num_inj_mask",&firmware->table_params[i]->num_inj_mask))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_int(cfgfile,section,"rpmk_page",&firmware->table_params[i]->rpmk_page))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"rpmk_offset",&firmware->table_params[i]->rpmk_offset))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if (!(firmware->capabilities & DUALTABLE))
 			{
+				if(!cfg_read_int(cfgfile,section,"alternate_page",&firmware->table_params[i]->alternate_page))
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"alternate_offset",&firmware->table_params[i]->alternate_offset))
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
@@ -538,6 +558,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"dtmode_page",&firmware->table_params[i]->dtmode_page))
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				if(!cfg_read_int(cfgfile,section,"dtmode_mask",&firmware->table_params[i]->dtmode_mask))
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
 		}
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->table_params[i]->x_page))

@@ -30,20 +30,20 @@ GIOChannel * dbg_channel = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
-	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT, FALSE},
-	{ "OpenGL", DEBUG_LEVEL, OPENGL, OPENGL_SHIFT, FALSE},
-	{ "Conversions", DEBUG_LEVEL, CONVERSIONS, CONVERSIONS_SHIFT, FALSE},
-	{ "Serial Reads", DEBUG_LEVEL, SERIAL_RD, SERIAL_RD_SHIFT, FALSE},
-	{ "Serial Writes", DEBUG_LEVEL, SERIAL_WR, SERIAL_WR_SHIFT, FALSE},
-	{ "I/O Messages", DEBUG_LEVEL, IO_MSG, IO_MSG_SHIFT, FALSE},
-	{ "I/O Processing", DEBUG_LEVEL, IO_PROCESS, IO_PROCESS_SHIFT, FALSE},
-	{ "Threads", DEBUG_LEVEL, THREADS, THREADS_SHIFT, FALSE},
-	{ "Req Fuel", DEBUG_LEVEL, REQ_FUEL, REQ_FUEL_SHIFT, FALSE},
-	{ "Tabloader", DEBUG_LEVEL, TABLOADER, TABLOADER_SHIFT, FALSE},
-	{ "KeyParser", DEBUG_LEVEL, KEYPARSER, KEYPARSER_SHIFT, FALSE},
-	{ "RealTime Maps", DEBUG_LEVEL, RTMLOADER, RTMLOADER_SHIFT, FALSE},
-	{ "Complex Math", DEBUG_LEVEL, COMPLEX_EXPR, COMPLEX_EXPR_SHIFT, FALSE},
-	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, FALSE},
+	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, FALSE},
+	{ "OpenGL", DEBUG_LEVEL, OPENGL, FALSE},
+	{ "Conversions", DEBUG_LEVEL, CONVERSIONS, FALSE},
+	{ "Serial Reads", DEBUG_LEVEL, SERIAL_RD, FALSE},
+	{ "Serial Writes", DEBUG_LEVEL, SERIAL_WR, FALSE},
+	{ "I/O Messages", DEBUG_LEVEL, IO_MSG, FALSE},
+	{ "I/O Processing", DEBUG_LEVEL, IO_PROCESS, FALSE},
+	{ "Threads", DEBUG_LEVEL, THREADS, FALSE},
+	{ "Req Fuel", DEBUG_LEVEL, REQ_FUEL, FALSE},
+	{ "Tabloader", DEBUG_LEVEL, TABLOADER, FALSE},
+	{ "KeyParser", DEBUG_LEVEL, KEYPARSER, FALSE},
+	{ "RealTime Maps", DEBUG_LEVEL, RTMLOADER, FALSE},
+	{ "Complex Math", DEBUG_LEVEL, COMPLEX_EXPR, FALSE},
+	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, FALSE},
 };
 
 /*!
@@ -140,7 +140,6 @@ void populate_debugging(GtkWidget *parent)
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
-	gint shift = 0;
 	gint mask = 0;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
 
@@ -159,11 +158,9 @@ void populate_debugging(GtkWidget *parent)
 	for (i=0;i<num_levels;i++)
 	{
 		mask = dbglevels[i].dclass;
-		shift = dbglevels[i].dshift;
 
 		button = gtk_check_button_new_with_label(dbglevels[i].name);
 		OBJ_SET(button,"handler",GINT_TO_POINTER(dbglevels[i].handler));
-		OBJ_SET(button,"bitshift",GINT_TO_POINTER(shift));
 		OBJ_SET(button,"bitmask",GINT_TO_POINTER(mask));
 		OBJ_SET(button,"bitval",GINT_TO_POINTER(1));
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -173,7 +170,7 @@ void populate_debugging(GtkWidget *parent)
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
 		/* If user set on turn on as well */
-		if ((dbg_lvl & mask) >> shift)
+		if ((dbg_lvl & mask) == mask)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		/* if hardcoded on, turn on.. */
 		if (dbglevels[i].enabled)

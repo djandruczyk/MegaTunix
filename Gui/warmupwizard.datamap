@@ -298,62 +298,56 @@ page=0
 bind_to_list=connected_widgets
 
 [ww_cranking_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=1
 bitmask=2
 
 [ww_running_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=0
 bitmask=1
 
 [ww_warmup_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=3
 bitmask=8
 
 [ww_ase_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=2
 bitmask=4
 
 [ww_accel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=4
 bitmask=16
 
 [ww_decel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
+keys=page,bind_to_list,source,bitval,bitmask
+key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_
 page=0
 bind_to_list=ww_status
 source=enginebit
 bitval=1
-bitshift=5
 bitmask=32
 

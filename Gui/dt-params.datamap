@@ -33,12 +33,11 @@ bind_to_list=burners
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [dtmode_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Single Table,Dual Table
 toggle_groups=,dt_controls
@@ -47,12 +46,11 @@ handler=_GENERIC_
 tooltip=Sets the Table Mode, single table, or dual independant tables
 
 [inj1_assign_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitvals=0,1,2
-bitshift=1
 bitmask=6
 choices=Off,Table 1,Table 2
 dl_type=_IMMEDIATE_
@@ -60,12 +58,11 @@ handler=_GENERIC_
 tooltip=Defines which table controls injector 1
 
 [inj2_assign_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
 bitvals=0,1,2
-bitshift=3
 bitmask=24
 choices=Off,Table 1,Table 2
 bind_to_list=dt_controls
@@ -74,12 +71,11 @@ handler=_GENERIC_
 tooltip=Defines which table controls injector 2
 
 [inj1_gammae_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=5
 bitmask=32
 choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
@@ -87,12 +83,11 @@ handler=_GENERIC_
 tooltip=Enables or Disables Gammae (enrichments) on injector channel 1
 
 [inj2_gammae_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=6
 bitmask=64
 choices=Disabled,Enabled
 bind_to_list=dt_controls
@@ -101,12 +96,11 @@ handler=_GENERIC_
 tooltip=Enables or Disables Gammae (enrichments) on injector channel 1
 
 [idle_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,swap_labels,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=0
 offset=118
 bitvals=0,1
-bitshift=4
 bitmask=16
 choices=B&G On-Off,PWM Controlled
 toggle_groups=,enh_idle
@@ -116,12 +110,11 @@ handler=_GENERIC_
 tooltip=Sets the Idle Control mode
 
 [boost_speed_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=119
 bitvals=1,2,3
-bitshift=0
 bitmask=3
 choices=39 Hz,19 Hz,10 Hz
 dl_type=_IMMEDIATE_

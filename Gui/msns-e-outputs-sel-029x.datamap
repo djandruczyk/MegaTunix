@@ -58,8 +58,8 @@ bind_to_list=output_4
 #----- RadioButtons ----------------------------------------------------------
 
 [output1_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -67,12 +67,11 @@ choices=Normal,Inverted
 bitvals=0,1
 offset=66
 bitmask=2
-bitshift=1
-tooltip=Sets output to be set or inverted when the params in hte table t othe left are met.
+tooltip=Sets output to be set or inverted when the params in the table t othe left are met.
 
 [output2_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -80,12 +79,11 @@ choices=Normal,Inverted
 bitvals=0,1
 offset=66
 bitmask=4
-bitshift=2
-tooltip=Sets output to be set or inverted when the params in hte table t othe left are met.
+tooltip=Sets output to be set or inverted when the params in the table t othe left are met.
 
 [output3_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -93,12 +91,11 @@ choices=Source Only,Output1+Source
 bitvals=0,1
 offset=116
 bitmask=128
-bitshift=7
 tooltip=Sets User Output 3 to only take it's cues from the table to the left,  or when set to source+output1,  the output is only set if BOTH conditions are met.
 
 [output4_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bitshift,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
@@ -107,8 +104,7 @@ toggle_groups=output4_table,
 bitvals=0,1
 offset=1
 bitmask=64
-bitshift=6
-tooltip=Sets Output 4 to be controlled either by hte table to the left, or via the Fan Control params (see output pins tab).
+tooltip=Sets Output 4 to be controlled either by the table to the left, or via the Fan Control params (see output pins tab).
 
 #----- TreeViews -------------------------------------------------------------
 

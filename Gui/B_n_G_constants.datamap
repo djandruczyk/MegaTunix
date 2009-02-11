@@ -68,12 +68,11 @@ bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [fuel_strat_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,algorithms,applicable_tables,swap_labels,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=118
 bitvals=0,1
-bitshift=2
 bitmask=4
 choices=Speed Density,Alpha-N
 dl_type=_IMMEDIATE_
@@ -84,12 +83,11 @@ swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units
 tooltip=Sets the Algorithm used to calculate the fuel to be injected.
 
 [inj_style_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=116
 bitvals=0,1
-bitshift=3
 bitmask=8
 choices=Multi-Port,Throttle Body
 dl_type=_IMMEDIATE_
@@ -97,12 +95,11 @@ handler=_GENERIC_
 tooltip=Sets the Injection style
 
 [stroke_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=116
 bitvals=0,1
-bitshift=2
 bitmask=4
 choices=4 Stroke,2 Stroke
 dl_type=_IMMEDIATE_
@@ -110,12 +107,11 @@ handler=_GENERIC_
 tooltip=Sets the engine stroke to either 4 stroke or 2 stroke
 
 [eng_style_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Even Fire,Odd Fire
 dl_type=_IMMEDIATE_
@@ -123,12 +119,11 @@ handler=_GENERIC_
 tooltip=Sets the Engine firing pattern to even or odd fire
 
 [map_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,group_2_update,source_key,source_values,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,group_2_update,source_key,source_values,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=116
 bitvals=0,1
-bitshift=0
 bitmask=3
 choices=115 KPa,250 KPa
 dl_type=_IMMEDIATE_
@@ -139,12 +134,11 @@ source_values=MPX4115,MPX4250
 tooltip=Sets the MAP sensor to 115KPa or 25KPa (forced induction capable)
 
 [baro_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
 bitvals=0,1
-bitshift=3
 bitmask=8
 choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
@@ -152,12 +146,11 @@ handler=_GENERIC_
 tooltip=Enables or Disables barometer correction.
 
 [o2_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
 bitvals=0,1
-bitshift=1
 bitmask=2
 choices=Narrow-Band,Wide-Band
 dl_type=_IMMEDIATE_
@@ -165,12 +158,11 @@ handler=_GENERIC_
 tooltip=Sets the O2 sensor type
 
 [alt_simul_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,table_num,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,table_num,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=92
 bitvals=0,1
-bitshift=0
 bitmask=255
 table_num=0
 choices=Simultaneous,Alternate
@@ -198,13 +190,11 @@ reqfuel_1_offset=90
 injectors_1_page=0
 injectors_1_offset=117
 injectors_1_bitmask=240
-injectors_1_bitshift=4
 divider_1_page=0
 divider_1_offset=91
 alternate_page=0
 alternate_offset=92
 alternate_bitmask=1
-alternate_bitshift=0
 
 [req_fuel_per_squirt_0_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
@@ -284,17 +274,15 @@ expr_types=_VE_EMB_BIT_,_VE_VAR_
 cylinders_1_page=0
 cylinders_1_offset=116
 cylinders_1_bitmask=240
-cylinders_1_bitshift=4
 divider_1_page=0
 divider_1_offset=91
 
 [num_injectors_0_spin]
-keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+keys=page,offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=117
 bitmask=240
-bitshift=4
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
@@ -306,15 +294,13 @@ expr_types=_VE_EMB_BIT_
 injectors_1_page=0
 injectors_1_offset=117
 injectors_1_bitmask=240
-injectors_1_bitshift=4
 
 [num_cylinders_0_spin]
-keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+keys=page,offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=116
 bitmask=240
-bitshift=4
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
@@ -326,5 +312,4 @@ expr_types=_VE_EMB_BIT_
 cylinders_1_page=0
 cylinders_1_offset=116
 cylinders_1_bitmask=240
-cylinders_1_bitshift=4
 

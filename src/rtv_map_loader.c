@@ -380,12 +380,6 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
-				name=g_strdup_printf("%s_bitshift",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
 				break;
 			case VE_VAR:
 				/* VE table std variable,  page/offset only */

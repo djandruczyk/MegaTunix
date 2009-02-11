@@ -23,6 +23,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <glade/glade.h>
+#include <gui_handlers.h>
 #include <lookuptables.h>
 #include <math.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -248,9 +249,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
 				bitmask = (gint) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_bitshift",symbols[i]);
-				bitshift = (gint) OBJ_GET(object,tmpbuf);
+				bitshift = get_bitshift(bitmask);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size))&bitmask) >> bitshift);

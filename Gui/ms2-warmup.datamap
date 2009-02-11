@@ -231,12 +231,11 @@ handler=_TE_TABLE_
 #----- Combo Boxes -----------------------------------------------------------
 
 [source_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=926
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Use 2 Points,Use Tables
 toggle_groups=twopoint_controls,table_controls
@@ -245,12 +244,11 @@ handler=_GENERIC_
 tooltip=Uses either Two-point interpolation or interpolated tables below for various warmup params
 
 [hot_ase_combo]
-keys=page,offset,choices,bitvals,bitshift,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=751
 bitvals=0,1
-bitshift=0
 bitmask=1
 choices=Disabled,Enabled
 dl_type=_IMMEDIATE_
