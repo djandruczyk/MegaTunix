@@ -47,7 +47,6 @@ static gboolean color_changed = FALSE;
 void rescale_table(GtkWidget *widget)
 {
 	extern GList ***ve_widgets;
-	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
 	gint z_base = -1;
 	gint z_page = -1;
@@ -72,9 +71,9 @@ void rescale_table(GtkWidget *widget)
 	tmpbuf = (gchar *) OBJ_GET(widget,"data");
 	vector = g_strsplit(tmpbuf,",",-1);
 
-	scaler = g_hash_table_lookup(dynamic_widgets,vector[0]);
+	scaler = lookup_widget(vector[0]);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
-	math_combo = g_hash_table_lookup(dynamic_widgets,vector[1]);
+	math_combo = lookup_widget(vector[1]);
 	g_return_if_fail(GTK_IS_WIDGET(math_combo));
 	g_strfreev(vector);
 
@@ -158,7 +157,6 @@ void reqfuel_rescale_table(GtkWidget *widget)
 {
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
-	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
 	DataSize z_size = MTX_U08;
 	gint z_base = -1;
@@ -205,7 +203,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
 	tmpbuf = (gchar *)OBJ_GET(widget,"data");
-	tmpwidget = g_hash_table_lookup(dynamic_widgets,tmpbuf);
+	tmpwidget = lookup_widget(tmpbuf);
 	g_return_if_fail(GTK_IS_WIDGET(tmpwidget));
 	/*new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));*/
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);

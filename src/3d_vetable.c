@@ -630,7 +630,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 gint free_ve3d_view(GtkWidget *widget)
 {
 	Ve_View_3D *ve_view;
-	extern GHashTable *dynamic_widgets;
 	gchar * tmpbuf = NULL;
 
 	ve_view = (Ve_View_3D
@@ -640,7 +639,7 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_hash_table_remove(winstat,GINT_TO_POINTER(ve_view->table_num));
 
 	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
-	OBJ_SET(g_hash_table_lookup(dynamic_widgets,tmpbuf),"ve_view",NULL);
+	OBJ_SET(lookup_widget(tmpbuf),"ve_view",NULL);
 	deregister_widget(tmpbuf);
 	g_free(tmpbuf);
 
@@ -1088,7 +1087,6 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern Firmware_Details *firmware;
 	gfloat bottom = 0.0;
-	extern GHashTable *dynamic_widgets;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
@@ -1197,7 +1195,6 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf3 = 0.0;
 	gfloat bottom = 0.0;
 	gboolean out_of_bounds = FALSE;
-	extern GHashTable *dynamic_widgets;
 	extern Firmware_Details *firmware;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
@@ -1302,7 +1299,6 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gchar *label;
-	extern GHashTable *dynamic_widgets;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_axis()\n"));
 	//printf("draw axis \n");
@@ -1902,7 +1898,6 @@ forces
 void update_ve3d_if_necessary(int page, int offset)
 {
 	extern Firmware_Details *firmware;
-	extern GHashTable *dynamic_widgets;
 	gint total_tables = firmware->total_tables;
 	gboolean need_update = FALSE;
 	gint i = 0;
@@ -1938,7 +1933,7 @@ void update_ve3d_if_necessary(int page, int offset)
 	for (i=0;i<count;i++)
 	{
 		string = g_strdup_printf("ve_view_%i",table_list[i]);
-		tmpwidget = g_hash_table_lookup(dynamic_widgets,string);
+		tmpwidget = lookup_widget(string);
 		g_free(string);
 		if (GTK_IS_WIDGET(tmpwidget))
 		{

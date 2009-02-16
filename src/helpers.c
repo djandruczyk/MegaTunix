@@ -46,8 +46,7 @@ EXPORT void start_statuscounts_pf(void)
 
 EXPORT void enable_reboot_button_pf(void)
 {
-	extern GHashTable *dynamic_widgets;
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"error_status_reboot_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
 }
 
 

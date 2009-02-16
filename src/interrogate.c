@@ -38,6 +38,7 @@
 #include <sys/stat.h>
 #include <threads.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 extern gboolean connected;
 extern GtkTextBuffer *textbuffer;
@@ -58,7 +59,6 @@ gboolean interrogated = FALSE;
 EXPORT gboolean interrogate_ecu()
 {
 	GArray *tests = NULL;
-	extern GHashTable *dynamic_widgets;
 	GHashTable *tests_hash = NULL;
 	Detection_Test *test = NULL;
 	guchar uint8 = 0;
@@ -101,8 +101,8 @@ EXPORT gboolean interrogate_ecu()
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget("offline_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget("interrogate_button"),FALSE);
 	/* how many tests.... */
 	tests_to_run = tests->len;
 
@@ -219,8 +219,8 @@ EXPORT gboolean interrogate_ecu()
 	interrogated = determine_ecu(tests,tests_hash);	
 	if (interrogated)
 	{
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),FALSE);
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget("interrogate_button"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget("offline_button"),FALSE);
 	}
 
 	free_tests_array(tests);
@@ -228,8 +228,8 @@ EXPORT gboolean interrogate_ecu()
 
 	if (!interrogated)
 	{
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),TRUE);
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget("interrogate_button"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget("offline_button"),TRUE);
 	}
 
 	g_static_mutex_unlock(&mutex);
@@ -523,6 +523,13 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&firmware->table_params[i]->reqfuel_offset))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			if(!cfg_read_string(cfgfile,section,"reqfuel_size",&tmpbuf))
+				firmware->table_params[i]->reqfuel_size = MTX_U08;
+			else
+			{
+				firmware->table_params[i]->reqfuel_size = translate_string(tmpbuf);
+				g_free(tmpbuf);
+			}
 			if(!cfg_read_int(cfgfile,section,"stroke_page",&firmware->table_params[i]->stroke_page))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"stroke_offset",&firmware->table_params[i]->stroke_offset))
@@ -541,11 +548,14 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_inj_mask",&firmware->table_params[i]->num_inj_mask))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if(!cfg_read_int(cfgfile,section,"rpmk_page",&firmware->table_params[i]->rpmk_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if(!cfg_read_int(cfgfile,section,"rpmk_offset",&firmware->table_params[i]->rpmk_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
-			if (!(firmware->capabilities & DUALTABLE))
+			if (!(firmware->capabilities & MS2))
+			{
+				if(!cfg_read_int(cfgfile,section,"rpmk_page",&firmware->table_params[i]->rpmk_page))
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				if(!cfg_read_int(cfgfile,section,"rpmk_offset",&firmware->table_params[i]->rpmk_offset))
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			}
+			if (!(firmware->capabilities & MS1_DT))
 			{
 				if(!cfg_read_int(cfgfile,section,"alternate_page",&firmware->table_params[i]->alternate_page))
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));

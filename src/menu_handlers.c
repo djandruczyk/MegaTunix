@@ -17,6 +17,7 @@
 #include <fileio.h>
 #include <menu_handlers.h>
 #include <vex_support.h>
+#include <widgetmgmt.h>
 
 
 extern GObject *global_data;
@@ -88,7 +89,6 @@ EXPORT void setup_menu_handlers_pf()
  */
 EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *notebook = NULL;
 	TabIdent target = -1;
 	TabIdent c_tab = 0;
@@ -96,7 +96,7 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 	GtkWidget * child = NULL;
 	gint i = 0;
 	
-	notebook = g_hash_table_lookup(dynamic_widgets, "toplevel_notebook");
+	notebook = lookup_widget( "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
 		return FALSE;
 	if (!OBJ_GET(widget,"target_tab"))
@@ -152,14 +152,13 @@ EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
  */
 gboolean check_tab_existance(TabIdent target)
 {
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *notebook = NULL;
 	TabIdent c_tab = 0;
 	gint total = 0;
 	GtkWidget * child = NULL;
 	gint i = 0;
 	
-	notebook = g_hash_table_lookup(dynamic_widgets, "toplevel_notebook");
+	notebook = lookup_widget( "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
 		return FALSE;
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));

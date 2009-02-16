@@ -27,6 +27,7 @@
 #include <string.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 Log_Info *log_info = NULL;
 extern GObject *global_data;
@@ -45,7 +46,6 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 
 	reset_logviewer_state();
 	free_log_info();
@@ -78,7 +78,7 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 	g_io_channel_unref(iochannel);
 
 	update_logbar("dlog_view",NULL,g_strdup("LogView File Closed\n"),FALSE,FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_controls_hbox"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("logviewer_controls_hbox"),TRUE);
 	free_mtxfileio(fileio);
 	return TRUE;
 }
@@ -135,7 +135,6 @@ void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	GArray *array = NULL;
 	GObject *object = NULL;
 	gint i = 0;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean offline;
 	extern Rtv_Map *rtv_map;
 
@@ -195,8 +194,8 @@ read_again:
 			g_array_append_val(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
-		OBJ_SET(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),"log_info",(gpointer)log_info);
+		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), TRUE);
+		OBJ_SET(lookup_widget("logviewer_trace_darea"),"log_info",(gpointer)log_info);
 
 	}
 	g_free(delimiter);

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <3d_vetable.h>
 #include <comms.h>
 #include <config.h>
 #include <dataio.h>
@@ -30,7 +31,7 @@
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <unistd.h>
-#include <3d_vetable.h>
+#include <widgetmgmt.h>
 
 extern GStaticMutex serio_mutex;
 extern GObject *global_data;
@@ -44,12 +45,11 @@ volatile gboolean outstanding_data = FALSE;
 void update_comms_status(void)
 {
 	extern gboolean connected;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = NULL;
 
-	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
+	if (NULL != (widget = lookup_widget("runtime_connected_label")))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
-	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ww_connected_label")))
+	if (NULL != (widget = lookup_widget("ww_connected_label")))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
 	return;
 }

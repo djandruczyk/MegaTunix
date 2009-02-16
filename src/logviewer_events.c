@@ -19,6 +19,7 @@
 #include <logviewer_gui.h>
 #include <math.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 
 extern Logview_Data *lv_data;
@@ -202,18 +203,17 @@ void highlight_tinfo(gint tnum, gboolean state)
 EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
 	Lv_Handler handler;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *tmpwidget = NULL;
 	handler = (Lv_Handler)OBJ_GET(widget,"handler");
 	switch(handler)
 	{
 		case LV_GOTO_START:
-			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			tmpwidget = lookup_widget("logviewer_log_position_hscale");
 			if (GTK_IS_RANGE(tmpwidget))
 				gtk_range_set_value(GTK_RANGE(tmpwidget),0.0);
 			break;
 		case LV_GOTO_END:
-			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			tmpwidget = lookup_widget("logviewer_log_position_hscale");
 			if (GTK_IS_RANGE(tmpwidget))
 				gtk_range_set_value(GTK_RANGE(tmpwidget),100.0);
 			break;

@@ -131,6 +131,7 @@ struct _Table_Params
 	gint rpmk_offset;	/*! Where rpmk value is located */
 	gint reqfuel_page;	/*! page Where reqfuel value is located */
 	gint reqfuel_offset;	/*! Where reqfuel value is located */
+	DataSize reqfuel_size;	/*! Size of variable, (ms2 uses larger) */
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
 	DataSize x_size;	/*! enumeration size for the var */

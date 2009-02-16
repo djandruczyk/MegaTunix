@@ -18,6 +18,7 @@
 #include <glade/glade.h>
 #include <stdlib.h>
 #include <visibility.h>
+#include <widgetmgmt.h>
 
 
 static GtkWidget *vis_window = NULL;
@@ -96,7 +97,6 @@ gboolean hide_tab(GtkWidget *widget, gpointer data)
 	GladeXML *main_xml = NULL;
 	extern GdkColor red;
 	extern GdkColor black;
-	extern GHashTable *dynamic_widgets;
 	gint index = (gint)data;
 	gint total = (gint)OBJ_GET(global_data,"notebook_rows");
 	gint i = 0;
@@ -128,7 +128,7 @@ gboolean hide_tab(GtkWidget *widget, gpointer data)
 		if (hidden_list[i])
 			hidden = TRUE;
 	}
-	item = g_hash_table_lookup(dynamic_widgets,"show_tab_visibility_menuitem");
+	item = lookup_widget("show_tab_visibility_menuitem");
 	if (hidden)
 		 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 	else

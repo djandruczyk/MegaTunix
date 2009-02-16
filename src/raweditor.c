@@ -18,6 +18,7 @@
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <raweditor.h>
+#include <widgetmgmt.h>
 
 GArray *raw_editor_widgets = NULL;
 extern GObject *global_data;
@@ -51,11 +52,10 @@ EXPORT void finish_raweditor(void)
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
 	extern Firmware_Details *firmware;
-	extern GHashTable *dynamic_widgets;
 	extern GList *** ve_widgets;
 	extern volatile gboolean leaving;
 
-	top = g_hash_table_lookup(dynamic_widgets,"raweditor_top_vbox1");
+	top = lookup_widget("raweditor_top_vbox1");
 	if (!GTK_IS_WIDGET(top))
 		return;
 

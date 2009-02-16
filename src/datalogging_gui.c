@@ -30,6 +30,7 @@
 #include <sys/types.h>
 #include <timeout_handlers.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 
 /* global vars (owned here...) */
@@ -63,7 +64,6 @@ EXPORT void populate_dlog_choices_pf()
 	GObject * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern GtkTooltips *tip;
 	extern gint preferred_delimiter;
 	extern gboolean tabs_loaded;
@@ -83,7 +83,7 @@ EXPORT void populate_dlog_choices_pf()
 	}
 	set_title(g_strdup("Populating Datalogger..."));
 
-	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
+	vbox = lookup_widget("dlog_logable_vars_vbox1");
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);
@@ -96,16 +96,16 @@ EXPORT void populate_dlog_choices_pf()
 	switch (preferred_delimiter)
 	{
 		case COMMA:
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
-			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")));
 			break;
 		case TAB:
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")),TRUE);
-			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_tab_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(lookup_widget("dlog_tab_delimit_radio_button")));
 			break;
 		default:
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
-			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")));
 			break;
 
 	}
@@ -162,18 +162,17 @@ EXPORT void populate_dlog_choices_pf()
  */
 void start_datalogging(void)
 {
-	extern GHashTable *dynamic_widgets;
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
 
 	if (logging_active)
 		return;   /* Logging already running ... */
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),FALSE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
+	if (lookup_widget("dlog_logable_vars_vbox1"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_logable_vars_vbox1"),FALSE);
+	if (lookup_widget("dlog_format_delimit_hbox1"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_format_delimit_hbox1"),FALSE);
+	if (lookup_widget("dlog_select_log_button"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_select_log_button"),FALSE);
 
 	header_needed = TRUE;
 	logging_active = TRUE;
@@ -192,35 +191,34 @@ void start_datalogging(void)
  */
 void stop_datalogging()
 {
-	extern GHashTable *dynamic_widgets;
 	GIOChannel *iochannel = NULL;
 	if (!logging_active)
 		return;
 
 	logging_active = FALSE;
 
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),TRUE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),TRUE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"),FALSE);
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"),FALSE);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),"No Log Selected Yet");
+	if (lookup_widget("dlog_logable_vars_vbox1"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_logable_vars_vbox1"),TRUE);
+	if (lookup_widget("dlog_format_delimit_hbox1"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_format_delimit_hbox1"),TRUE);
+	if (lookup_widget("dlog_select_log_button"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_select_log_button"),TRUE);
+	if (lookup_widget("dlog_stop_logging_button"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_stop_logging_button"),FALSE);
+	if (lookup_widget("dlog_start_logging_button"))
+		gtk_widget_set_sensitive(lookup_widget("dlog_start_logging_button"),FALSE);
+	gtk_label_set_text(GTK_LABEL(lookup_widget("dlog_file_label")),"No Log Selected Yet");
 
 
 	update_logbar("dlog_view",NULL,g_strdup("DataLogging Stopped...\n"),FALSE,FALSE);
-	iochannel = (GIOChannel *) OBJ_GET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data");
+	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (iochannel)
 	{
 		g_io_channel_shutdown(iochannel,TRUE,NULL);
 		g_io_channel_unref(iochannel);
 	}
 
-	OBJ_SET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data",NULL);
+	OBJ_SET(lookup_widget("dlog_select_log_button"),"data",NULL);
 
 	return;
 }
@@ -318,7 +316,6 @@ EXPORT void run_datalog_pf(void)
 	gint current_index = 0;
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 	extern gboolean connected;
 
@@ -328,7 +325,7 @@ EXPORT void run_datalog_pf(void)
 	if (!logging_active) /* Logging isn't enabled.... */
 		return;
 
-	iochannel = (GIOChannel *) OBJ_GET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data");
+	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": run_datalog_pf()\n\tIo_File undefined, returning NOW!!!\n"));
@@ -450,7 +447,6 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
@@ -484,10 +480,10 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"),TRUE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"),TRUE);
-	OBJ_SET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data",(gpointer)iochannel);
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
+	gtk_widget_set_sensitive(lookup_widget("dlog_stop_logging_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("dlog_start_logging_button"),TRUE);
+	OBJ_SET(lookup_widget("dlog_select_log_button"),"data",(gpointer)iochannel);
+	gtk_label_set_text(GTK_LABEL(lookup_widget("dlog_file_label")),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
 	update_logbar("dlog_view",NULL,g_strdup("DataLog File Opened\n"),FALSE,FALSE);
 
 	free_mtxfileio(fileio);

@@ -51,7 +51,6 @@
 #include <ms1-t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
-#include <unions.h>
 #include <user_outputs.h>
 #include <vetable_gui.h>
 #include <vex_support.h>
@@ -94,7 +93,6 @@ volatile gboolean leaving = FALSE;
  */
 EXPORT void leave(GtkWidget *widget, gpointer data)
 {
-	extern GHashTable *dynamic_widgets;
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
 	extern gint statuscounts_id;
@@ -158,18 +156,15 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 		g_source_remove(statuscounts_id);
 	statuscounts_id = 0;
 
-	if (dynamic_widgets)
-	{
-		if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
-			iochannel = (GIOChannel *) OBJ_GET(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),"data");
+	if (lookup_widget("dlog_select_log_button"))
+		iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 
-		if (iochannel)	
-		{
-			g_io_channel_shutdown(iochannel,TRUE,NULL);
-			g_io_channel_unref(iochannel);
-		}
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
+	if (iochannel)	
+	{
+		g_io_channel_shutdown(iochannel,TRUE,NULL);
+		g_io_channel_unref(iochannel);
 	}
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
 
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
@@ -263,7 +258,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	extern gchar *offline_firmware_choice;
 	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
-	extern GHashTable *dynamic_widgets;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -280,7 +274,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		{
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
-				gtk_entry_set_editable(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"active_port_entry")),FALSE);
+				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
 				toggle_groups_linked(widget,TRUE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
@@ -341,8 +335,8 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		{
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
-				gtk_entry_set_editable(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"active_port_entry")),TRUE);
-				gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"active_port_entry")),OBJ_GET(global_data,"override_port"));
+				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
+				gtk_entry_set_text(GTK_ENTRY(lookup_widget("active_port_entry")),OBJ_GET(global_data,"override_port"));
 				toggle_groups_linked(widget,FALSE);
 				break;
 			case TRACKING_FOCUS:
@@ -471,7 +465,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -491,7 +485,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -829,7 +823,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	extern gint realtime_id;
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
-	extern GHashTable *dynamic_widgets;
 	extern Firmware_Details *firmware;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -871,7 +864,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case INTERROGATE_ECU:
 			set_title(g_strdup("User initiated interrogation..."));
 			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
-			widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+			widget = lookup_widget("interrogate_button");
 			if (GTK_IS_WIDGET(widget))
 				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			io_cmd("interrogation", NULL);
@@ -952,7 +945,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (!interrogated)
 				break;
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button")),FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_logfile_button")),FALSE);
 			present_viewer_choices();
 			break;
 		case REQ_FUEL_POPUP:
@@ -1093,7 +1086,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -1104,7 +1097,11 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 				dload_val = bitval;
 				if (dload_val == get_ecu_data(canID,page,offset,size))
+				{
+					printf("ms2, alt/simul. no change\n");
 					return FALSE;
+				}
+				printf("alt_simul changed\n");
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				d_data = g_new0(Deferred_Data, 1);
@@ -1113,7 +1110,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -1194,7 +1191,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	extern gint realtime_id;
 	Reqd_Fuel *reqd_fuel = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
@@ -1279,15 +1275,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 		case LOGVIEW_ZOOM:
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
-			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");	
+			tmpwidget = lookup_widget("logviewer_trace_darea");	
 			if (tmpwidget)
-				lv_configure_event(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),NULL,NULL);
+				lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 			/*	g_signal_emit_by_name(tmpwidget,"configure_event",NULL);*/
 			break;
 
 		case NUM_SQUIRTS_1:
 		case NUM_SQUIRTS_2:
-			/* This actuall effects another variable */
+			/* This actually affects another variable */
 			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 			divider_offset = firmware->table_params[table_num]->divider_offset;
@@ -1311,7 +1307,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = divider_offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 				err_flag = FALSE;
@@ -1338,8 +1334,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			else
 			{
 				tmp = get_ecu_data(canID,page,offset,size);
-				tmp = tmp & ~bitmask;	/*clears top 4 bits */
-				tmp = tmp | ((tmpi-1) << bitshift);
+				tmp = tmp & ~bitmask;	/*clears bits */
+				if (firmware->capabilities & MS2)
+					tmp = tmp | ((tmpi) << bitshift);
+				else
+					tmp = tmp | ((tmpi-1) << bitshift);
 				dload_val = tmp;
 				d_data = g_new0(Deferred_Data, 1);
 				d_data->canID = canID;
@@ -1347,7 +1346,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 
@@ -1361,7 +1360,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = divider_offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[page],
+				g_hash_table_insert(interdep_vars[table_num],
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 
@@ -1379,8 +1378,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			firmware->rf_params[table_num]->num_inj = tmpi;
 
 			tmp = get_ecu_data(canID,page,offset,size);
-			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bitshift);
+			tmp = tmp & ~bitmask;	/*clears bits */
+			if (firmware->capabilities & MS2)
+				tmp = tmp | ((tmpi) << bitshift);
+			else
+				tmp = tmp | ((tmpi-1) << bitshift);
 			dload_val = tmp;
 
 			d_data = g_new0(Deferred_Data, 1);
@@ -1389,7 +1391,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			d_data->offset = offset;
 			d_data->value = dload_val;
 			d_data->size = MTX_U08;
-			g_hash_table_insert(interdep_vars[page],
+			g_hash_table_insert(interdep_vars[table_num],
 					GINT_TO_POINTER(offset),
 					d_data);
 
@@ -1515,6 +1517,8 @@ EXPORT void update_ve_const_pf()
 	guint mask = 0;
 	guint shift = 0;
 	guint tmpi = 0;
+	guint8 addon = 0;
+	gint mult = 0;
 	
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
@@ -1562,6 +1566,16 @@ EXPORT void update_ve_const_pf()
 	 */
 
 	/* All Tables */
+	if (firmware->capabilities & MS2)
+	{
+		addon = 0;
+		mult = 100;
+	}
+	else
+	{
+		addon = 1;
+		mult = 1;
+	}
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
@@ -1572,36 +1586,40 @@ EXPORT void update_ve_const_pf()
 		tmpi = get_ecu_data(canID,firmware->table_params[i]->num_cyl_page,firmware->table_params[i]->num_cyl_offset,size);	
 		mask = firmware->table_params[i]->num_cyl_mask;
 		shift = get_bitshift(firmware->table_params[i]->num_cyl_mask);
-		firmware->rf_params[i]->num_cyls = ((tmpi & mask) >> shift)+1;
-		firmware->rf_params[i]->last_num_cyls = ((tmpi & mask) >> shift)+1;
+		firmware->rf_params[i]->num_cyls = ((tmpi & mask) >> shift)+addon;
+		firmware->rf_params[i]->last_num_cyls = ((tmpi & mask) >> shift)+addon;
 
 		tmpi = get_ecu_data(canID,firmware->table_params[i]->num_inj_page,firmware->table_params[i]->num_inj_offset,size);	
 		mask = firmware->table_params[i]->num_cyl_mask;
 		shift = get_bitshift(firmware->table_params[i]->num_cyl_mask);
-		firmware->rf_params[i]->num_inj = ((tmpi & mask) >> shift)+1;
-		firmware->rf_params[i]->last_num_inj = ((tmpi & mask) >> shift)+1;
+
+		firmware->rf_params[i]->num_inj = ((tmpi & mask) >> shift)+addon;
+		firmware->rf_params[i]->last_num_inj = ((tmpi & mask) >> shift)+addon;
 
 		firmware->rf_params[i]->divider = get_ecu_data(canID,firmware->table_params[i]->divider_page,firmware->table_params[i]->divider_offset,size);
 		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
 		firmware->rf_params[i]->alternate = get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
+		reqfuel = get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,firmware->table_params[i]->reqfuel_size);
+
+		/*
 		printf("reqfuel_page %i, reqfuel_offset %i\n",firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset);
-		reqfuel = get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,size);
-
 	
-		  printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
-		  printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
-		  printf("req_fuel_per_l_squirt is %i\n",reqfuel);
-
+		printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
+		printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
+		printf("req_fuel_per_1_squirt is %i\n",reqfuel);
+		*/
 		 
 		/* Calcs vary based on firmware. 
 		 * DT uses num_inj/divider
 		 * MSnS-E uses the SAME in DT mode only
 		 * MSnS-E uses B&G form in single table mode
 		 */
-		if (firmware->capabilities & DUALTABLE)
+		if (firmware->capabilities & MS1_DT)
 		{
-			/*	printf("DT\n"); */
+			/*
+			 * printf("DT\n");
+			 */
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
 		else if (firmware->capabilities & MSNS_E)
@@ -1609,31 +1627,44 @@ EXPORT void update_ve_const_pf()
 			shift = get_bitshift(firmware->table_params[i]->dtmode_mask);
 			if ((get_ecu_data(canID,firmware->table_params[i]->dtmode_page,firmware->table_params[i]->dtmode_offset,size) & firmware->table_params[i]->dtmode_mask) >> shift)
 			{
-			/*	printf("MSnS-E DT\n"); */
+				/*
+				 * printf("MSnS-E DT\n"); 
+				 */
 				tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 			}
 			else
 			{
-			/*	printf("MSnS-E non-DT\n"); */
+				/*
+				 * printf("MSnS-E non-DT\n"); 
+				 */
 				tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
 			}
 		}
 		else
 		{
-			printf("B&G\n"); 
+			/*
+			 * printf("B&G\n"); 
+			 */
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
 		}
 
 		/* ReqFuel Total */
-		/*printf("intermediate tmpf is %f\n",tmpf);*/
+		/*
+		 * printf("intermediate tmpf is %f\n",tmpf);
+		 */
 		tmpf *= (float)reqfuel;
-		tmpf /= 10.0;
+		tmpf /= (10.0*mult);
 		firmware->rf_params[i]->req_fuel_total = tmpf;
 		firmware->rf_params[i]->last_req_fuel_total = tmpf;
-		/*printf("req_fuel_total for table number %i is %f\n",i,tmpf);*/
+		/*
+		 * printf("req_fuel_total for table number %i is %f\n",i,tmpf);
+		 */
 
 		/* Injections per cycle */
 		firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
+		/*
+		 * printf("num_squirts for table number %i is %i\n",i,firmware->rf_params[i]->num_squirts);
+		 */
 		if (firmware->rf_params[i]->num_squirts < 1 )
 			firmware->rf_params[i]->num_squirts = 1;
 		firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
@@ -2318,7 +2349,6 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	/* Select all chars on click */
 	/*
@@ -2365,7 +2395,7 @@ testit:
 		return FALSE;
 	}
 
-	frame = g_hash_table_lookup(dynamic_widgets, frame_name);
+	frame = lookup_widget( frame_name);
 	if ((total_marked > 0) && (frame != NULL))
 		gtk_widget_set_sensitive(GTK_WIDGET(frame),TRUE);
 	else
@@ -2393,7 +2423,6 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
 	GtkWidget *sub = NULL;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	tab_ident = (TabIdent)OBJ_GET(widget,"tab_ident");
@@ -2408,7 +2437,7 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 	if (OBJ_GET(widget,"sub-notebook"))
 	{
 		/*printf(" This tab has a sub-notebook\n"); */
-		sub = g_hash_table_lookup(dynamic_widgets, (OBJ_GET(widget,"sub-notebook")));
+		sub = lookup_widget( (OBJ_GET(widget,"sub-notebook")));
 		if (GTK_IS_WIDGET(sub))
 		{
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
@@ -2478,14 +2507,13 @@ void swap_labels(gchar * input, gboolean state)
 	gchar **fields = NULL;
 	gint i = 0;
 	gint num_widgets = 0;
-	extern GHashTable *dynamic_widgets;
 
 	fields = parse_keys(input,&num_widgets,",");
 
 	for (i=0;i<num_widgets;i++)
 	{
 		widget = NULL;
-		widget = g_hash_table_lookup(dynamic_widgets,fields[i]);
+		widget = lookup_widget(fields[i]);
 		if (GTK_IS_WIDGET(widget))
 			switch_labels((gpointer)widget,(gpointer)state);
 		else if ((list = get_list(fields[i])) != NULL)
@@ -2556,7 +2584,6 @@ EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
 	extern gboolean forced_update;
-	extern GHashTable *dynamic_widgets;
 
 	if (GTK_IS_OBJECT(widget))
 	{

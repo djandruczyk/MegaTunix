@@ -35,6 +35,7 @@
 #include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 
 gchar * offline_firmware_choice = NULL;
@@ -50,7 +51,6 @@ extern GObject *global_data;
  */
 void set_offline_mode(void)
 {
-	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
 	GArray *tests = NULL;
@@ -72,10 +72,10 @@ void set_offline_mode(void)
 	{
 		offline = FALSE;
 		interrogated = FALSE;
-		widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+		widget = lookup_widget("interrogate_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		widget = g_hash_table_lookup(dynamic_widgets,"offline_button");
+		widget = lookup_widget("offline_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		return;
@@ -86,7 +86,7 @@ void set_offline_mode(void)
 	interrogated = TRUE;
 
 	/* Disable interrogation button */
-	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
@@ -135,10 +135,10 @@ void set_offline_mode(void)
 	io_cmd(NULL,pfuncs);
 	io_cmd(firmware->get_all_command,NULL);
 
-	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-	widget = g_hash_table_lookup(dynamic_widgets,"offline_button");
+	widget = lookup_widget("offline_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));

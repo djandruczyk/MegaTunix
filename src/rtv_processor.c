@@ -198,7 +198,7 @@ store_it:
  \param object (GObject *) pointer to the object containing the conversion 
  expression and other relevant data
  \param incoming (void *) pointer to the raw data
- \param type (ConvType) enumeration stating if this is an upload or 
+ \param type (ConvType) enumeration stating if this is an upload or
  download conversion
  \returns a float of the result of the mathematical expression
  */
@@ -212,8 +212,8 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	gint page = 0;
 	DataSize size = MTX_U08;
 	gint offset = 0;
-	gint bitmask = 0;
-	gint bitshift = 0;
+	guint bitmask = 0;
+	guint bitshift = 0;
 	gint canID = 0;
 	void * evaluator = NULL;
 	gchar **names = NULL;
@@ -238,21 +238,34 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case VE_EMB_BIT:
+				size = MTX_U08;
+
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
 				page = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
+				//printf("page is %i\n",page);
+
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
 				offset = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
+				//printf("offset is %i\n",offset);
+
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
 				canID = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
+				//printf("canID is %i\n",canID);
+
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
 				bitmask = (gint) OBJ_GET(object,tmpbuf);
-				bitshift = get_bitshift(bitmask);
 				g_free(tmpbuf);
+				//printf("bitmask is %i\n",bitmask);
+				bitshift = get_bitshift(bitmask);
+				//printf("bitshift is %i\n",bitshift);
+
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size))&bitmask) >> bitshift);
+				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
+				//printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
+				//printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case VE_VAR:

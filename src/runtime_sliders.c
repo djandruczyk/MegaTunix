@@ -280,7 +280,6 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	GtkWidget *table = NULL;
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
@@ -316,7 +315,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"));
 		return NULL;
 	}
-	table = g_hash_table_lookup(dynamic_widgets,name);
+	table = lookup_widget(name);
 	if (!table)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));

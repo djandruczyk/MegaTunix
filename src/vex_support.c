@@ -180,7 +180,6 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 
 	if (!interrogated)
@@ -207,7 +206,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
 
 	all_table_import(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -223,7 +222,6 @@ void select_table_for_import(gint table_num)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 
@@ -256,7 +254,7 @@ void select_table_for_import(gint table_num)
 		return;
 	}
 	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
 
 	single_table_import(iochannel,table_num);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -525,7 +523,6 @@ gboolean all_table_import(GIOChannel *iochannel)
 	GModule *module = NULL;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
 	{
@@ -565,7 +562,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -604,7 +601,6 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	GModule *module = NULL;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
 	{
@@ -642,7 +638,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -1342,7 +1338,6 @@ void revert_to_previous_data()
 	/* Called to back out a load of a VEtable from VEX import */
 	extern Firmware_Details *firmware;
 	guint8 **ecu_data_backup = firmware->ecu_data_backup;
-	extern GHashTable *dynamic_widgets;
 
 	for (page=0;page<firmware->total_pages;page++)
 	{
@@ -1380,7 +1375,7 @@ void revert_to_previous_data()
 	g_module_close(module);
 	io_cmd(NULL,pfuncs);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),FALSE);
 	update_logbar("tools_view","warning",g_strdup("Reverting to previous settings....\n"),FALSE,FALSE);
 	io_cmd(firmware->burn_all_command,NULL);
 }

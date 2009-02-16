@@ -74,7 +74,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	fullname = g_strdup_printf("%s%s",prefix,name);
-	if (!g_hash_table_lookup(dynamic_widgets,fullname))
+	if (!lookup_widget(fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
@@ -95,7 +95,7 @@ void register_widget(gchar *name, GtkWidget * widget)
 {
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-	if (g_hash_table_lookup(dynamic_widgets,name))
+	if (lookup_widget(name))
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
@@ -205,7 +205,7 @@ void set_widget_labels(gchar *input)
 	}
 	for(i=0;i<count;i+=2)
 	{
-		widget = g_hash_table_lookup(dynamic_widgets,vector[i]);
+		widget = lookup_widget(vector[i]);
 		if ((widget) && (GTK_IS_LABEL(widget)))
 			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
 		else

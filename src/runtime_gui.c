@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>
+#include <widgetmgmt.h>
 
 extern gboolean connected;
 extern gint active_page;
@@ -62,7 +63,6 @@ EXPORT gboolean update_runtime_vars_pf()
 	extern GHashTable **ve3d_sliders;
 	GtkWidget * tmpwidget=NULL;
 	extern Firmware_Details *firmware;
-	extern GHashTable * dynamic_widgets;
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
 	gfloat x,y,z = 0.0;
@@ -99,7 +99,7 @@ EXPORT gboolean update_runtime_vars_pf()
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		string = g_strdup_printf("ve_view_%i",i);
-		tmpwidget = g_hash_table_lookup(dynamic_widgets,string);
+		tmpwidget = lookup_widget(string);
 		g_free(string);
 		if (GTK_IS_WIDGET(tmpwidget))
 		{

@@ -21,6 +21,7 @@
 #include <notifications.h>
 #include <offline.h>
 #include <tabloader.h>
+#include <widgetmgmt.h>
 
 extern GdkColor red;
 extern GdkColor black;
@@ -55,7 +56,7 @@ void set_group_color(GuiColor color, gchar *group)
 void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
-	name = g_strdup_printf("reqfuel_%i_ctrl",table_num);
+	name = g_strdup_printf("interdep_%i_ctrl",table_num);
 	g_list_foreach(get_list(name), set_widget_color,(gpointer)color);
 	g_free(name);
 }
@@ -171,7 +172,6 @@ void  update_logbar(
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern volatile gboolean leaving;
 
 	if (leaving)
@@ -180,7 +180,7 @@ void  update_logbar(
 		return;
 	}
 
-	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,view_name);
+	widget = (GtkWidget *)lookup_widget(view_name);
 
 	if (!widget)
 	{
@@ -349,13 +349,12 @@ void set_title(gchar * text)
 	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
-	extern GHashTable *dynamic_widgets;
 	static GtkWidget *info_label = NULL;
 
 	if ((!main_window) || (leaving))
 		return;
 	if (!info_label)
-		info_label = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,"info_label");
+		info_label = (GtkWidget *)lookup_widget("info_label");
 	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
 	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);

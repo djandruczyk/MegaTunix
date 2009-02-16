@@ -36,8 +36,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS1));
 	g_hash_table_insert(str_2_enum,"_MS1_STD_",
 			GINT_TO_POINTER(MS1_STD));
-	g_hash_table_insert(str_2_enum,"_DUALTABLE_",
-			GINT_TO_POINTER(DUALTABLE));
+	g_hash_table_insert(str_2_enum,"_MS1_DT_",
+			GINT_TO_POINTER(MS1_DT));
 	g_hash_table_insert(str_2_enum,"_MSNS_E_",
 			GINT_TO_POINTER(MSNS_E));
 	g_hash_table_insert(str_2_enum,"_MS2_",

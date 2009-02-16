@@ -277,7 +277,6 @@ void save_config(void)
 	gboolean * hidden_list;
 	GString *string = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	extern GHashTable *dynamic_widgets;
 
 	g_static_mutex_lock(&mutex);
 
@@ -299,7 +298,7 @@ void save_config(void)
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
-		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
+		widget =  lookup_widget(tmpbuf);
 		if (GTK_IS_WIDGET(widget))
 		{
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
@@ -328,7 +327,7 @@ void save_config(void)
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
-		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
+		widget =  lookup_widget(tmpbuf);
 		if (GTK_IS_WIDGET(widget))
 		{
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
@@ -368,7 +367,7 @@ void save_config(void)
 			if (y > 0)
 				cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"status_window");
+		widget = lookup_widget("status_window");
 		if (widget)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
@@ -384,7 +383,7 @@ void save_config(void)
 					cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 			}
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"rtt_window");
+		widget = lookup_widget("rtt_window");
 		if (widget)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
@@ -400,7 +399,7 @@ void save_config(void)
 					cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 			}
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+		widget = lookup_widget("toplevel_notebook");
 		total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
 		hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 		string = g_string_new(NULL);
@@ -521,7 +520,7 @@ void mem_alloc()
 	 * download...
 	 */
 	if (!interdep_vars)
-		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
+		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
 	if (!algorithm)
 		algorithm = g_new0(gint, firmware->total_tables);
 	if (!tracking_focus)
@@ -531,12 +530,11 @@ void mem_alloc()
 	{
 		tab_gauges[i] = NULL;
 		algorithm[i] = SPEED_DENSITY;
+		interdep_vars[i] = g_hash_table_new(NULL,NULL);
 	}
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		interdep_vars[i] = g_hash_table_new(NULL,NULL);
-
 		if (!firmware->ecu_data[i])
 			firmware->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
 		if (!firmware->ecu_data_last[i])
@@ -587,11 +585,6 @@ void mem_dealloc()
 				g_free(firmware->ecu_data_last[i]);
 			if (firmware->ecu_data_backup[i])
 				g_free(firmware->ecu_data_backup[i]);
-			if (interdep_vars[i])
-			{
-				g_hash_table_destroy(interdep_vars[i]);
-				interdep_vars[i] = NULL;
-			}
 			if (firmware->page_params[i])
 				g_free(firmware->page_params[i]);
 		}
@@ -637,6 +630,11 @@ void mem_dealloc()
 				dealloc_table_params(firmware->table_params[i]);
 			if (firmware->rf_params[i])
 				g_free(firmware->rf_params[i]);
+			if (interdep_vars[i])
+			{
+				g_hash_table_destroy(interdep_vars[i]);
+				interdep_vars[i] = NULL;
+			}
 		}
 		g_free(firmware->table_params);
 		firmware->table_params = NULL;

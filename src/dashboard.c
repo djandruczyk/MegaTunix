@@ -682,10 +682,9 @@ EXPORT void initialize_dashboards_pf()
 	gchar * tmpstr = NULL;
 	gboolean nodash1 = TRUE;
 	gboolean nodash2 = TRUE;
-	extern GHashTable *dynamic_widgets;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 
-	label = g_hash_table_lookup(dynamic_widgets,"dash_1_label");
+	label = lookup_widget("dash_1_label");
 	if (OBJ_GET(global_data,"dash_1_name") != NULL)
 		tmpbuf = (gchar *)OBJ_GET(global_data,"dash_1_name");
 	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
@@ -698,7 +697,7 @@ EXPORT void initialize_dashboards_pf()
 		nodash1 = FALSE;
 	}
 
-	label = g_hash_table_lookup(dynamic_widgets,"dash_2_label");
+	label = lookup_widget("dash_2_label");
 	if (OBJ_GET(global_data,"dash_2_name") != NULL)
 		tmpbuf = (gchar *)OBJ_GET(global_data,"dash_2_name");
 	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))

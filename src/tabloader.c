@@ -63,7 +63,6 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *item = NULL;
 	extern GdkColor red;
 	extern volatile gboolean leaving;
-	extern GHashTable *dynamic_widgets;
 	gboolean * hidden_list = NULL;
 	extern gboolean connected;
 	extern volatile gboolean offline;
@@ -79,7 +78,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 
 	set_title(g_strdup("Loading Gui Tabs..."));
 	bindgroup = g_new0(BindGroup,1);
-	notebook = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 
 	while (firmware->tab_list[i])
@@ -148,7 +147,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 				label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
 				gtk_widget_hide(child);
 				gtk_widget_hide(label);
-				item = g_hash_table_lookup(dynamic_widgets,"show_tab_visibility_menuitem");
+				item = lookup_widget("show_tab_visibility_menuitem");
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 
 			}

@@ -46,6 +46,7 @@
 #include <threads.h>
 #include <ms1-t-logger.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 
 extern GAsyncQueue *pf_dispatch_queue;
@@ -169,7 +170,6 @@ gboolean gui_dispatcher(gpointer data)
 	QFunction *qfunc = NULL;
 	extern volatile gboolean leaving;
 	//extern gint mem_view_style[];
-	extern GHashTable *dynamic_widgets;
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
 		return TRUE;
@@ -219,12 +219,12 @@ trypop:
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
-							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
 							break;
 						case MTX_LABEL:
-							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
 							break;

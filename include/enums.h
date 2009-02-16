@@ -167,7 +167,7 @@ typedef enum
 	MS1		= 1<<0,
 	MS1_STD		= 1<<1,
 	MSNS_E		= 1<<2,
-	DUALTABLE	= 1<<3,
+	MS1_DT		= 1<<3,
 	MS2		= 1<<4,
 	MS2_STD		= 1<<5,
 	MS2_EXTRA	= 1<<6,
