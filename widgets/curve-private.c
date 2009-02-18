@@ -290,10 +290,6 @@ void update_curve_position (MtxCurve *curve)
 	}
 
 	/* Update the Title text */
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_TEXT].red/65535.0,
-			priv->colors[COL_TEXT].green/65535.0,
-			priv->colors[COL_TEXT].blue/65535.0);
 	tmpbuf = g_utf8_strup(priv->font,-1);
 	if (g_strrstr(tmpbuf,"BOLD"))
 		weight = CAIRO_FONT_WEIGHT_BOLD;
@@ -314,9 +310,20 @@ void update_curve_position (MtxCurve *curve)
 
 	cairo_text_extents (cr, message, &extents);
 
+	cairo_set_source_rgba (cr,0.0,0,0,0.75);
+	cairo_rectangle(cr,priv->w/2 - (extents.width/2)-priv->border,
+                               	extents.height-priv->border,
+				extents.width+(2*priv->border),
+				extents.height+(2*priv->border));
+	cairo_fill (cr);
+	cairo_set_source_rgb (cr, 
+			priv->colors[COL_TEXT].red/65535.0,
+			priv->colors[COL_TEXT].green/65535.0,
+			priv->colors[COL_TEXT].blue/65535.0);
 	cairo_move_to (cr, 
 			priv->w/2-(extents.width/2),
 			(extents.height*2));
+
 	cairo_show_text (cr, message);
 	g_free(message);
 
@@ -337,7 +344,7 @@ void update_curve_position (MtxCurve *curve)
 				priv->w - (extents.width/2.0) - (3*priv->border),
 				(extents.height*7)+ priv->border);
 		cairo_stroke (cr);
-		cairo_set_source_rgba (cr,0,0,0,0.85);
+		cairo_set_source_rgba (cr,0,0,0,0.75);
 		cairo_rectangle(cr,priv->w - extents.width - (4*priv->border),
                                 (extents.height*7) + (priv->border),
 				extents.width + (2*priv->border),
