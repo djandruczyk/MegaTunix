@@ -60,7 +60,8 @@ typedef enum
 	REQFUEL_RESCALE_TABLE,
 	EXPORT_SINGLE_TABLE,
 	IMPORT_SINGLE_TABLE,
-	TE_TABLE
+	TE_TABLE,
+	TE_TABLE_GROUP
 }StdButton;
 
 /* Toggle/Radio buttons */

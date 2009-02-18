@@ -123,6 +123,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->show_grat = TRUE;
 	priv->coord_changed = FALSE;
 	priv->auto_hide = TRUE;
+	priv->vertex_id = 0;
 	mtx_curve_init_colors(curve);
 }
 
@@ -227,6 +228,9 @@ void update_curve_position (MtxCurve *curve)
 	}
 	cairo_stroke(cr);
 	/* The circles for each vertex itself */
+	cairo_set_source_rgb (cr, 0.0,
+			0.7,
+			1.0);
 	if (priv->show_vertexes)
 	{
 		for (i=0;i<priv->num_points;i++)
@@ -328,6 +332,7 @@ void update_curve_position (MtxCurve *curve)
 		cairo_text_extents (cr, message, &extents);
 		cairo_move_to(cr,priv->points[priv->active_coord].x,
 				priv->points[priv->active_coord].y);
+		cairo_set_source_rgb (cr, 0.1,1.0,0.1); 
 		cairo_line_to (cr, 
 				priv->w - (extents.width/2.0) - (3*priv->border),
 				(extents.height*7)+ priv->border);
@@ -631,13 +636,25 @@ gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	if ((event->type == GDK_ENTER_NOTIFY) && (priv->auto_hide))
 	{
+		if (priv->vertex_id > 0)
+			g_source_remove(priv->vertex_id);
 		priv->show_vertexes = TRUE;
 		mtx_curve_redraw(MTX_CURVE(curve));
 	}
-	if ((event->type  ==GDK_LEAVE_NOTIFY) && (priv->auto_hide))
-	{
-		priv->show_vertexes = FALSE;
-		mtx_curve_redraw(MTX_CURVE(curve));
-	}
+	if ((event->type == GDK_LEAVE_NOTIFY) && (priv->auto_hide))
+		priv->vertex_id = g_timeout_add(2000,delay_turnoff_vertexes,curve);
+	return FALSE;
+}
+
+
+gboolean delay_turnoff_vertexes(gpointer data)
+{
+	MtxCurve *curve = (MtxCurve*) data;
+	if (!GTK_IS_WIDGET(curve))
+		return FALSE;
+
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	priv->show_vertexes = FALSE;
+	mtx_curve_redraw(MTX_CURVE(curve));
 	return FALSE;
 }

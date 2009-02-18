@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS-2 Globals tab
-tab_name=MS2 _Globals
+tab_name=_Global Settings
 id_prefix=MS2_GLOB_
 groups=defaults
 
@@ -36,6 +36,21 @@ bind_to_list=interdep_0_ctrl
 #----- Widgets ---------------------------------------------------------------
 
 [global_params_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
+[inj_params_frame]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
+[inj_char_frame]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
+[inputs_frame]
 keys=bind_to_list
 key_types=_STRING_
 bind_to_list=valid_ecu_ctrls

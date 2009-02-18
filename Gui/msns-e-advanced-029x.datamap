@@ -328,7 +328,7 @@ ul_conv_expr=x/10
 bind_to_list=spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=The Amount of time to run on the soft limitera. If this timeout is exceeded the hard limiter will kick in, even if hte hard revlimit RPM has not yet been reached.
+tooltip=The Amount of time to run on the soft limitera. If this timeout is exceeded the hard limiter will kick in, even if the hard revlimit RPM has not yet been reached.
 
 [hard_revlimit_rpm_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip

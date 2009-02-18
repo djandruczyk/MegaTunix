@@ -127,6 +127,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(IMPORT_SINGLE_TABLE));
 	g_hash_table_insert(str_2_enum,"_TE_TABLE_",
 			GINT_TO_POINTER(TE_TABLE));
+	g_hash_table_insert(str_2_enum,"_TE_TABLE_GROUP_",
+			GINT_TO_POINTER(TE_TABLE_GROUP));
 	g_hash_table_insert(str_2_enum,"_MAP_SENSOR_TYPE_",
 			GINT_TO_POINTER(MAP_SENSOR_TYPE));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",

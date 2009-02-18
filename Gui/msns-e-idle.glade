@@ -1244,27 +1244,14 @@ during which modes?</property>
 
 				      <child>
 					<widget class="GtkTable" id="closed_loop_idle_params_table">
-					  <property name="border_width">6</property>
+					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="sensitive">False</property>
-					  <property name="n_rows">17</property>
+					  <property name="n_rows">16</property>
 					  <property name="n_columns">2</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
 					  <property name="column_spacing">0</property>
-
-					  <child>
-					    <widget class="GtkHSeparator" id="hseparator10">
-					      <property name="visible">True</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">4</property>
-					      <property name="bottom_attach">5</property>
-					      <property name="x_options">fill</property>
-					    </packing>
-					  </child>
 
 					  <child>
 					    <widget class="GtkLabel" id="fast_idle_speed_label">
@@ -1381,7 +1368,7 @@ during which modes?</property>
 					  <child>
 					    <widget class="GtkLabel" id="dashpot_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">&lt;i&gt;Dashpot Settings&lt;/i&gt;</property>
+					      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;               Dashpot Settings               &lt;/span&gt;</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">True</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1399,8 +1386,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">5</property>
-					      <property name="bottom_attach">6</property>
+					      <property name="top_attach">4</property>
+					      <property name="bottom_attach">5</property>
 					      <property name="x_options">expand</property>
 					      <property name="y_options"></property>
 					    </packing>
@@ -1427,8 +1414,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">7</property>
-					      <property name="bottom_attach">8</property>
+					      <property name="top_attach">6</property>
+					      <property name="bottom_attach">7</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1455,8 +1442,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">6</property>
-					      <property name="bottom_attach">7</property>
+					      <property name="top_attach">5</property>
+					      <property name="bottom_attach">6</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1483,8 +1470,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">8</property>
-					      <property name="bottom_attach">9</property>
+					      <property name="top_attach">7</property>
+					      <property name="bottom_attach">8</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1511,8 +1498,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">9</property>
-					      <property name="bottom_attach">10</property>
+					      <property name="top_attach">8</property>
+					      <property name="bottom_attach">9</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1539,8 +1526,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">10</property>
-					      <property name="bottom_attach">11</property>
+					      <property name="top_attach">9</property>
+					      <property name="bottom_attach">10</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1567,8 +1554,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">11</property>
-					      <property name="bottom_attach">12</property>
+					      <property name="top_attach">10</property>
+					      <property name="bottom_attach">11</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1595,8 +1582,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">12</property>
-					      <property name="bottom_attach">13</property>
+					      <property name="top_attach">11</property>
+					      <property name="bottom_attach">12</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1623,8 +1610,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">13</property>
-					      <property name="bottom_attach">14</property>
+					      <property name="top_attach">12</property>
+					      <property name="bottom_attach">13</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1651,8 +1638,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">14</property>
-					      <property name="bottom_attach">15</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1679,8 +1666,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">15</property>
-					      <property name="bottom_attach">16</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1707,8 +1694,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">0</property>
 					      <property name="right_attach">1</property>
-					      <property name="top_attach">16</property>
-					      <property name="bottom_attach">17</property>
+					      <property name="top_attach">15</property>
+					      <property name="bottom_attach">16</property>
 					      <property name="x_options">expand|shrink|fill</property>
 					      <property name="y_options">shrink|fill</property>
 					    </packing>
@@ -1737,6 +1724,36 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
+					      <property name="top_attach">5</property>
+					      <property name="bottom_attach">6</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="idle_restore_rpm_entry">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">4</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
 					      <property name="top_attach">6</property>
 					      <property name="bottom_attach">7</property>
 					      <property name="x_options"></property>
@@ -1745,7 +1762,7 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="idle_restore_rpm_entry">
+					    <widget class="GtkEntry" id="dashpot_settle_time_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1775,13 +1792,13 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="dashpot_settle_time_entry">
+					    <widget class="GtkEntry" id="dashpot_add_dc_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">4</property>
+					      <property name="max_length">3</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
@@ -1805,13 +1822,13 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="dashpot_add_dc_entry">
+					    <widget class="GtkEntry" id="deadband_range_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">3</property>
+					      <property name="max_length">4</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
@@ -1835,7 +1852,7 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="deadband_range_entry">
+					    <widget class="GtkEntry" id="upper_limit_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1865,7 +1882,7 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="upper_limit_entry">
+					    <widget class="GtkEntry" id="lower_limit_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1895,67 +1912,7 @@ during which modes?</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="lower_limit_entry">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
-					      <property name="editable">True</property>
-					      <property name="visibility">True</property>
-					      <property name="max_length">4</property>
-					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
-					      <property name="invisible_char">*</property>
-					      <property name="activates_default">False</property>
-					      <property name="width_chars">5</property>
-					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
-					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
-					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">1</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">12</property>
-					      <property name="bottom_attach">13</property>
-					      <property name="x_options"></property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
 					    <widget class="GtkEntry" id="slow_recovery_entry">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
-					      <property name="editable">True</property>
-					      <property name="visibility">True</property>
-					      <property name="max_length">4</property>
-					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
-					      <property name="invisible_char">*</property>
-					      <property name="activates_default">False</property>
-					      <property name="width_chars">5</property>
-					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
-					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
-					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">1</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">14</property>
-					      <property name="bottom_attach">15</property>
-					      <property name="x_options"></property>
-					      <property name="y_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkEntry" id="fast_recovery_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1985,6 +1942,36 @@ during which modes?</property>
 					  </child>
 
 					  <child>
+					    <widget class="GtkEntry" id="fast_recovery_entry">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">4</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">12</property>
+					      <property name="bottom_attach">13</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
 					    <widget class="GtkEntry" id="startup_delay_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2007,8 +1994,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">16</property>
-					      <property name="bottom_attach">17</property>
+					      <property name="top_attach">15</property>
+					      <property name="bottom_attach">16</property>
 					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
@@ -2037,8 +2024,8 @@ during which modes?</property>
 					    <packing>
 					      <property name="left_attach">1</property>
 					      <property name="right_attach">2</property>
-					      <property name="top_attach">15</property>
-					      <property name="bottom_attach">16</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
 					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>

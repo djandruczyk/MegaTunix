@@ -163,6 +163,8 @@ void alter_widget_state(gpointer key, gpointer data)
 
 	tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
 	
+	if (!tmpbuf)
+		printf("Error with widget %s, bind_to_list is null\n",glade_get_widget_name(widget));
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/

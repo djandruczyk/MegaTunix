@@ -529,7 +529,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief entry_changed_handler() gets called anytiem a text entries is changed
+ \brief entry_changed_handler() gets called anytime a text entries is changed
  (i.e. during edit) it's main purpose is to turn the entry red to signify
  to the user it's being modified but not yet SENT to the ecu
  \param widget (GtkWidget *) the widget being modified
@@ -550,7 +550,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 /*!
  \brief focus_out_handler() auto-sends data IF IT IS CHANGED to the ecu thus
- hopefully ending hte user confusion about why data isn't sent.
+ hopefully ending the user confusion about why data isn't sent.
  \param widget (GtkWidget *) the widget being modified
  \param event (GdkEvent *) not used
  \param data (gpointer) not used
@@ -634,7 +634,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
-	/*printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);*/
+	/*
+	 * printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);
+	 */
+	
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
 	 * or base16, the problem is the limits are in base10
@@ -645,9 +648,11 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		/* Pause signals while we change the value */
 		/*		printf("resetting\n");*/
 		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler, data);
+		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
+		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler, data);
 		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler, data);
 	}
 	switch ((MtxButton)handler)
@@ -658,10 +663,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 				if (temp_units == CELSIUS)
 					value = (tmpf*(9.0/5.0))+32;
 				else
-					value = tmpi;
+					value = tmpf;
 			}
 			else
-					value = tmpf;
+				value = tmpf;
 			if (base == 10)
 			{
 				dload_val = convert_before_download(widget,value);
@@ -684,13 +689,12 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			real_value = convert_after_upload(widget);
 			set_ecu_data(canID,page,offset,size,old);
 
-			/*printf("real_value %f\n",real_value);*/
 			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler, data);
+			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler, data);
 			
 				if (base == 10)
 				{
 					tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
-					tmpbuf = g_strdup_printf("%i",(gint)real_value);
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
 				}
@@ -700,6 +704,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
 				}
+			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler, data);
 			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler, data);
 			break;
 
@@ -959,6 +964,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case TE_TABLE:
 		        tmpi = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
 			create_2d_table_editor(tmpi);
+			break;
+		case TE_TABLE_GROUP:
+			create_2d_table_editor_group(widget);
 			break;
 
 		default:

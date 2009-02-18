@@ -40,6 +40,7 @@ struct _MtxCurvePrivate
         gint active_coord;      /* Active Coordinate */
 	gint x_precision;	/* Precision for X axis */
 	gint y_precision;	/* Precision for X axis */
+	gint vertex_id;		/* timeout ID */
         gfloat locked_scale;    /* minimum fixed scale for both axis' */
         gfloat x_scale;         /* X coord points->coords scaler */
         gfloat y_scale;         /* Y coord points->coords scaler */
@@ -75,6 +76,7 @@ void mtx_curve_redraw (MtxCurve *gauge);
 void generate_curve_background(MtxCurve *);
 void update_curve_position (MtxCurve *);
 void recalc_extremes (MtxCurvePrivate *);
+gboolean delay_turnoff_vertexes(gpointer);
 
 
 #endif

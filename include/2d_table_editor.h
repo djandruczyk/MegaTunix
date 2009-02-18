@@ -19,12 +19,14 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean create_2d_table_editor_group(GtkWidget *);
 gboolean create_2d_table_editor(gint );
 gboolean update_2d_curve(GtkWidget *,gpointer);
 gboolean close_2d_editor(GtkWidget *, gpointer);
 void coords_changed(GtkWidget *, gpointer);
 void remove_widget(gpointer, gpointer);
 gboolean close_menu_handler(GtkWidget *, gpointer);
+void clean_curve(gpointer, gpointer);
 
 /* Prototypes */
 

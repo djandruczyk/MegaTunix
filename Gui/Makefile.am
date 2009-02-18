@@ -28,6 +28,8 @@ gui_files = 	README \
 		memviewer.datamap \
 		ms2-globals.glade \
 		ms2-globals.datamap \
+		ms2-idle_ego_rev.glade \
+		ms2-idle_ego_rev.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
 		ms2-e-toothtrigger.glade \

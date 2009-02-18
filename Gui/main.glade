@@ -2727,7 +2727,7 @@ Detect</property>
       </child>
 
       <child>
-	<widget class="GtkHBox" id="hbox12">
+	<widget class="GtkHBox" id="te_layout_hbox1">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>

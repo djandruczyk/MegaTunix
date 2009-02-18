@@ -213,30 +213,30 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value));
 		if(value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (no eval)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (no eval)!!\n",upper));
 			value = upper;
 		}
 		if (value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (no eval)!!\n",lower));
 			value = lower;
 		}
 		return_value = (gint)value;
 	}
 	else
 	{
-		return_value = evaluator_evaluate_x(evaluator,value)+0.00001; 
+		return_value = evaluator_evaluate_x(evaluator,value); 
 
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value));
 
 		if (return_value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (evaluated)!!\n",upper));
 			return_value = upper;
 		}
 		if (return_value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (evaluated)!!\n",lower));
 			return_value = lower;
 		}
 	}
@@ -432,6 +432,7 @@ void convert_temps(gpointer widget, gpointer units)
 
 	if ((int)units == FAHRENHEIT) 
 	{
+		//printf("fahr %s\n",glade_get_widget_name(widget));
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	
@@ -487,6 +488,7 @@ void convert_temps(gpointer widget, gpointer units)
 	}
 	else
 	{
+		//printf("cels %s\n",glade_get_widget_name(widget));
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	

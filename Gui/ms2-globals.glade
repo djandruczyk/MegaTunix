@@ -69,7 +69,7 @@
 			      <property name="column_spacing">5</property>
 
 			      <child>
-				<widget class="GtkFrame" id="frame4">
+				<widget class="GtkFrame" id="inputs_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -575,7 +575,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkFrame" id="frame3">
+				<widget class="GtkFrame" id="inj_char_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -930,7 +930,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkFrame" id="frame2">
+				<widget class="GtkFrame" id="inj_params_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -1757,7 +1757,7 @@
 					      <child>
 						<widget class="GtkLabel" id="label6">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Prime, ASE, WUE, Baro Tables</property>
+						  <property name="label" translatable="yes">Prime, ASE, WUE, Baro</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1784,7 +1784,7 @@
 					      <child>
 						<widget class="GtkLabel" id="label8">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Idle Ctrl Algorithm</property>
+						  <property name="label" translatable="yes">Idle Control Algorithm</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2185,7 +2185,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="label2">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">ECU Type                                 </property>
+					      <property name="label" translatable="yes">ECU Type                         </property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>

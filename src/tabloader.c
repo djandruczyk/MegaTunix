@@ -396,7 +396,6 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
 	GList *dest_list = NULL;
-	GList *tmp_list = NULL;
 	gint i = 0;
 
 	if (!lists)
@@ -404,7 +403,6 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 		printf(__FILE__": Error, bind_to_lists(), lists is NULL\n");
 		return;
 	}
-	/*printf("Widget %s is being bound to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);*/
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	/* This looks convoluted,  but it allows for an arbritrary 
@@ -418,9 +416,12 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	for (i=0;i<bind_num_keys;i++)
 	{
 		dest_list = get_list(tmpvector[i]);
-		tmp_list = g_list_prepend(dest_list,(gpointer)widget);
+		if (!dest_list)
+			dest_list = g_list_prepend(dest_list,(gpointer)widget);
+		else if (!g_list_find(dest_list,(gpointer)widget))
+			dest_list = g_list_prepend(dest_list,(gpointer)widget);
 
-		store_list(tmpvector[i],tmp_list);
+		store_list(tmpvector[i],dest_list);
 	}
 	g_strfreev(tmpvector);
 }
@@ -473,7 +474,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	section = (char *)glade_get_widget_name(widget);
+	section = (gchar *)glade_get_widget_name(widget);
 	if (section == NULL)
 		return;
 
@@ -495,7 +496,10 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 	else
+	{
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t key_types is missing for widget %s, CRITICAL!!!\n",section));
 		return;
+	}
 
 	if (num_keytypes != num_keys)
 	{
@@ -585,14 +589,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget has the "choices" key (combobox)
-	*/
-	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
-	{
-		combo_setup(G_OBJECT(widget),cfgfile,section);
-		g_free(tmpbuf);
-	}
-
 	/* If this widget has "initializer" there's a global variable 
 	 * with it's name on it 
 	 */
@@ -656,6 +652,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 
 	bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
+
+	/* If this widget has the "choices" key (combobox)
+	*/
+	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
+	{
+		combo_setup(G_OBJECT(widget),cfgfile,section);
+		g_free(tmpbuf);
+	}
 
 
 	if (cfg_read_string(cfgfile,section,"post_functions_with_arg",&tmpbuf))
