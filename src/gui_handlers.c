@@ -275,7 +275,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
-				toggle_groups_linked(widget,TRUE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
 				if(offline_firmware_choice)
@@ -337,7 +336,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
 				gtk_entry_set_text(GTK_ENTRY(lookup_widget("active_port_entry")),OBJ_GET(global_data,"override_port"));
-				toggle_groups_linked(widget,FALSE);
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -1106,10 +1104,8 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				dload_val = bitval;
 				if (dload_val == get_ecu_data(canID,page,offset,size))
 				{
-					printf("ms2, alt/simul. no change\n");
 					return FALSE;
 				}
-				printf("alt_simul changed\n");
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				d_data = g_new0(Deferred_Data, 1);

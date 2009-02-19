@@ -288,6 +288,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
 				offset = (gint) OBJ_GET(object,tmpbuf);
+				//printf("offset of %s is %i\n",tmpbuf,offset);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
 				size = (DataSize) OBJ_GET(object,tmpbuf);

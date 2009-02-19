@@ -348,7 +348,8 @@ void *serial_repair_thread(gpointer data)
 			if (open_serial(vector[i]))
 			{
 				thread_update_logbar("comms_view",NULL,g_strdup_printf("Searching for ECU\n"),FALSE,FALSE);
-				thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+				if (autodetect)
+					thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
 				setup_serial_params(9600);
 				thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
 
