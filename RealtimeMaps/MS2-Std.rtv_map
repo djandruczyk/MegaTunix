@@ -1063,8 +1063,9 @@ size=_S16_
 lower_limit=0
 upper_limit=255
 complex_expr=TRUE
-#ul_conv_expr=(accelEnrich/10) + (step(tspden) * tpsfuelcut) + ((1 - step(tspden)) * 100)
 ul_conv_expr=(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)
+# This SHOULD work, but it does not..  weird..
+#ul_conv_expr=(accelEnrich/10) + (tspden * tspfuelcut) + ((1 - tspden) * 100)
 expr_symbols=accelEnrich,tpsfuelcut,tpsden
 expr_types=_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_
 accelEnrich_offset=42

@@ -434,15 +434,31 @@ cairo_jump_out_of_alerts:
 	priv->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
 	priv->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
 
-	priv->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
-	priv->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
+	if (n_tail < 0)
+	{
+		priv->needle_coords[2].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * sin(needle_pos));
+		priv->needle_coords[2].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * -cos(needle_pos));
+	}
+	else
+	{
+		priv->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
+		priv->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
+	}
 
 	priv->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
 	priv->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
 	priv->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
 	priv->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
-	priv->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
-	priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+	if (n_tail < 0)
+	{
+		priv->needle_coords[5].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * -sin(needle_pos));
+		priv->needle_coords[5].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * cos(needle_pos));
+	}
+	else
+	{
+		priv->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
+		priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+	}
 	priv->needle_polygon_points = 6;
 
 	cairo_move_to (cr, priv->needle_coords[0].x,priv->needle_coords[0].y);
@@ -1049,15 +1065,31 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		priv->tattle_coords[1].x = xc + ((t_tip) * cos (tattle_pos))+((tip_width) * sin(tattle_pos));
 		priv->tattle_coords[1].y = yc + ((t_tip) * sin (tattle_pos))+((tip_width) * -cos(tattle_pos));
 
+	if (t_tail < 0)
+	{
+		priv->tattle_coords[2].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * sin(tattle_pos));
+		priv->tattle_coords[2].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * -cos(tattle_pos));
+	}
+	else
+	{
 		priv->tattle_coords[2].x = xc + (t_width) * sin(tattle_pos);
 		priv->tattle_coords[2].y = yc + (t_width) * -cos(tattle_pos);
+	}
 
 		priv->tattle_coords[3].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * sin (tattle_pos));
 		priv->tattle_coords[3].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * -cos (tattle_pos));
 		priv->tattle_coords[4].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * -sin (tattle_pos));
 		priv->tattle_coords[4].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * cos (tattle_pos));
+	if (t_tail < 0)
+	{
+		priv->tattle_coords[5].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * -sin(tattle_pos));
+		priv->tattle_coords[5].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * cos(tattle_pos));
+	}
+	else
+	{
 		priv->tattle_coords[5].x = xc + (t_width) * -sin (tattle_pos);
 		priv->tattle_coords[5].y = yc + (t_width) * cos (tattle_pos);
+	}
 		priv->needle_polygon_points = 6;
 
 		cairo_move_to (cr, priv->tattle_coords[0].x,priv->tattle_coords[0].y);
