@@ -47,13 +47,13 @@ struct _MtxGaugeFacePrivate
         GdkGC * bm_gc;          /*! Graphics Context for bitmap */
         GdkGC * gc;             /*! Graphics Context for drawing */
         GdkColormap *colormap;  /*! Colormap for GC's */
-        gchar *value_font;      /* Array of Font name strings */
+        gchar *value_font;      /*! Array of Font name strings */
         GArray *xmlfunc_array; /*! Array list mapping varnames to xml */
         GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml
                                    *  parsing functions */
-        GArray *t_blocks;       /* Array of MtxTextBlock structs */
-        GArray *c_ranges;       /* Array of MtxColorRange structs */
-        GArray *a_ranges;       /* Array of MtxAlertRange structs */
+        GArray *t_blocks;       /*! Array of MtxTextBlock structs */
+        GArray *c_ranges;       /*! Array of MtxColorRange structs */
+        GArray *a_ranges;       /*! Array of MtxAlertRange structs */
         GArray *tick_groups;    /*! Array to contain the tick groups */
         GArray *polygons;       /*! Array to contain polygon defs */
         gchar * xml_filename;   /*! Filename of XML for this gauge  */
@@ -62,13 +62,16 @@ struct _MtxGaugeFacePrivate
         gint last_alert_index;  /*! index of last active alert struct */
         GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
                                              parts of a gauge object */
-        gfloat value_font_scale;/* Array of font scales */
-        gfloat value_xpos;      /* Array of X offsets for strings */
-        gfloat value_ypos;      /* Array of X offsets for strings */
+	gboolean show_tattletale;	/*! Show a Tattletale? */
+	gfloat tattletale_alpha;/*! TattleTale transparency */
+        gfloat value_font_scale;/*! Array of font scales */
+        gfloat value_xpos;      /*! Array of X offsets for strings */
+        gfloat value_ypos;      /*! Array of X offsets for strings */
         gint precision;         /*! number of decimal places for val */
         gfloat start_angle;     /*! Start point, (Cairo, CW rotation) */
         gfloat sweep_angle;     /*! Sweep of gauge (cairo, CW increasing) */
         gfloat value;           /*! Value represneting needle position */
+	gfloat peak;		/*! Peak Value */
         gfloat lbound;          /*! Lower Bound to clamp at */
         gfloat ubound;          /*! Upper Bound to Clamp at */
         MtxRotType rotation;    /*! Rotation enumeration */
@@ -82,6 +85,7 @@ struct _MtxGaugeFacePrivate
         gfloat needle_tail_width;/*! % of rad width of needle tip */
         gint needle_polygon_points;
         MtxPoint needle_coords[6];      /*! 6 point needle for now */
+        MtxPoint tattle_coords[6];      /*! 6 point needle for now */
 };
 
 

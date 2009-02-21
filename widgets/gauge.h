@@ -44,7 +44,7 @@ typedef enum
 /* MtxRotType enum,  needle sweep rotation */
 typedef enum
 {
-	MTX_ROT_CCW = 0xbb,
+	MTX_ROT_CCW = 0,
 	MTX_ROT_CW
 }MtxRotType;
 
@@ -52,7 +52,7 @@ typedef enum
 /* MtxPolyType enumeration,  for polygon support */
 typedef enum
 {
-	MTX_CIRCLE = 0xbb,
+	MTX_CIRCLE = 0xcc,
 	MTX_ARC,
 	MTX_RECTANGLE,
 	MTX_GENPOLY,
@@ -172,6 +172,8 @@ typedef enum
 	NEEDLE_TAIL_WIDTH,
 	PRECISION,
 	ANTIALIAS,
+	TATTLETALE,
+	TATTLETALE_ALPHA,
 	SHOW_VALUE,
 	NUM_ATTRIBUTES
 }MtxGenAttr;
@@ -399,12 +401,15 @@ void generate_gauge_background(MtxGaugeFace *);
 void update_gauge_position (MtxGaugeFace *);
 GtkWidget* mtx_gauge_face_new ();
 
+/* Gauge General Attributes */
 void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat value);
 gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat * value);
 
+/* Get/Set value */
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 
+/* Value Font */
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
@@ -443,14 +448,23 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
+/* Colors */
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
+
+/* XML */
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);
 void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
+
+/* Misc */
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
+
+/* Tattletale */
+float mtx_gauge_face_get_peak (MtxGaugeFace *gauge);
+gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *gauge);
 
 G_END_DECLS
 

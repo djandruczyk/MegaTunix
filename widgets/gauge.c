@@ -104,6 +104,11 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 		priv->clamped = CLAMP_LOWER;
 	else
 		priv->clamped = CLAMP_NONE;
+	if (value > priv->peak)
+	{
+		priv->peak=value;
+		generate_gauge_background(gauge);
+	}
 	priv->value = value;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -404,6 +409,8 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 			break;
 		case UBOUND:
 			priv->ubound = value;
+			if (priv->peak > priv->ubound)
+				priv->peak = priv->ubound;
 			break;
 		case NEEDLE_TAIL:
 			priv->needle_tail = value;
@@ -429,11 +436,17 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 		case VALUE_YPOS:
 			priv->value_ypos = value;
 			break;
+		case TATTLETALE_ALPHA:
+			priv->tattletale_alpha = value;
+			break;
 		case PRECISION:
 			priv->precision = (gint)value;
 			break;
 		case ANTIALIAS:
 			priv->antialias = (gint)value;
+			break;
+		case TATTLETALE:
+			priv->show_tattletale = (gint)value;
 			break;
 		case SHOW_VALUE:
 			priv->show_value = (gint)value;
@@ -503,11 +516,17 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 		case VALUE_YPOS:
 			*value = priv->value_ypos;
 			break;
+		case TATTLETALE_ALPHA:
+			*value = priv->tattletale_alpha;
+			break;
 		case PRECISION:
 			*value = (gfloat)priv->precision;
 			break;
 		case ANTIALIAS:
 			*value = (gfloat)priv->antialias;
+			break;
+		case TATTLETALE:
+			*value = (gfloat)priv->show_tattletale;
 			break;
 		case SHOW_VALUE:
 			*value = (gfloat)priv->show_value;
@@ -1162,6 +1181,91 @@ void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 	mtx_gauge_face_redraw_canvas (gauge);
 	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
 	gdk_window_clear_area_e(GTK_WIDGET(gauge)->window,0,0,priv->w, priv->h);
+}
+
+
+/*!
+ \brief enables showing of gauge tattletale
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	priv->show_tattletale = state;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief gets whether tattletale is enabled or not
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	return priv->show_tattletale;
+}
+
+
+/*!
+ \brief sets alpha for tattletale
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	priv->tattletale_alpha = alpha;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief gets tattletale alpha value
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+gfloat mtx_gauge_face_get_tattletale_alpha(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),0.0);
+	return priv->tattletale_alpha;
+}
+
+
+/*!
+ \brief gets the peak value 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ */
+gfloat mtx_gauge_face_get_peak (MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),0.0);
+	return	priv->peak;
+}
+
+
+/*!
+ \brief clears the peak value 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ */
+gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
+	priv->peak = priv->lbound;
+	return TRUE;
 }
 
 

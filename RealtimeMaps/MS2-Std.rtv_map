@@ -5,7 +5,7 @@ minor=2
 [realtime_map]
 applicable_firmwares=MS-II V2.88
 applicable_signatures=** V2.88Embedded Code by B&G **
-derived_total=67
+derived_total=69
 raw_list=raw_secl
 #raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
 
@@ -1063,7 +1063,8 @@ size=_S16_
 lower_limit=0
 upper_limit=255
 complex_expr=TRUE
-ul_conv_expr=(accelEnrich/10) + (step(tspden) * tpsfuelcut) + ((1 - step(tspden)) * 100)
+#ul_conv_expr=(accelEnrich/10) + (step(tspden) * tpsfuelcut) + ((1 - step(tspden)) * 100)
+ul_conv_expr=(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)
 expr_symbols=accelEnrich,tpsfuelcut,tpsden
 expr_types=_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_
 accelEnrich_offset=42
@@ -1074,3 +1075,46 @@ tpsfuelcut_offset=44
 tpsfuelcut_size=_S16_
 tooltip="AccDecEnrich" Is the current accel/decel enrichment
 log_by_default=TRUE
+
+[derived_67]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
+internal_names=afr_err_l
+dlog_gui_name=AFR Error Left
+dlog_field_name=AfrErrL
+offset=12
+lower_limit=-25
+upper_limit=25
+complex_expr=TRUE
+ul_conv_expr=(afr/10)-(afrtgt/10)
+expr_symbols=afr,afrtgt
+expr_types=_RAW_VAR_,_RAW_VAR_
+afr_offset=28
+afr_size=_S16_
+afrtgt_offset=12
+afrtgt_size=_U08_
+precision=1
+tooltip="AFR Error Left" is the difference between target AFR and actual AFR for the first O2 channel
+log_by_default=TRUE
+
+[derived_68]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
+internal_names=afr_err_r
+dlog_gui_name=AFR Error right
+dlog_field_name=AfrErrR
+offset=13
+lower_limit=-25
+upper_limit=25
+complex_expr=TRUE
+ul_conv_expr=(afr/10)-(afrtgt/10)
+expr_symbols=afr,afrtgt
+expr_types=_RAW_VAR_,_RAW_VAR_
+afr_offset=30
+afr_size=_S16_
+afrtgt_offset=13
+afrtgt_size=_U08_
+precision=1
+tooltip="AFR Error Right" is the difference between target AFR and actual AFR for the second O2 channel.
+log_by_default=TRUE
+

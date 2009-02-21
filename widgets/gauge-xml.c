@@ -106,6 +106,9 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
 		load_elements(gauge, root_element);
+		/* Fix for api change, default to CW gauges */
+		if ((priv->rotation != MTX_ROT_CW) && (priv->rotation != MTX_ROT_CCW))
+			priv->rotation = MTX_ROT_CW;
 		priv->xc = priv->w / 2;
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2) - 5;

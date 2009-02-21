@@ -34,6 +34,8 @@ EXPORT gboolean init_general_attributes(GladeXML *xml)
 	OBJ_SET((glade_xml_get_widget(xml,"ccw_rbutton")),"handler",GINT_TO_POINTER(ROTATION));
 	OBJ_SET((glade_xml_get_widget(xml,"ccw_rbutton")),"special_value",GINT_TO_POINTER(MTX_ROT_CCW));
 	OBJ_SET((glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(ANTIALIAS));
+	OBJ_SET((glade_xml_get_widget(xml,"tattletale_check")),"handler",GINT_TO_POINTER(TATTLETALE));
+	OBJ_SET((glade_xml_get_widget(xml,"tattletale_alpha_spin")),"handler",GINT_TO_POINTER(TATTLETALE_ALPHA));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_length_spin")),"handler",GINT_TO_POINTER(NEEDLE_LENGTH));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
 	OBJ_SET((glade_xml_get_widget(xml,"needle_tip_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_TIP_WIDTH));

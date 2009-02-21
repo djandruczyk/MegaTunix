@@ -134,6 +134,9 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->show_value = TRUE;
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
+	priv->show_tattletale = FALSE;
+	priv->tattletale_alpha = 0.5;
+	priv->peak = priv->lbound;
 	priv->a_ranges = g_array_new(FALSE,TRUE,sizeof(MtxAlertRange *));
 	priv->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	priv->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
@@ -161,6 +164,8 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"needle_tail_width", &priv->needle_tail_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_width", &priv->needle_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_tail", &priv->needle_tail);
+	g_object_set_data(G_OBJECT(gauge),"show_tattletale", &priv->show_tattletale);
+	g_object_set_data(G_OBJECT(gauge),"tattletale_alpha", &priv->tattletale_alpha);
 	g_object_set_data(G_OBJECT(gauge),"precision", &priv->precision);
 	g_object_set_data(G_OBJECT(gauge),"width", &priv->w);
 	g_object_set_data(G_OBJECT(gauge),"height", &priv->h);
@@ -398,7 +403,7 @@ cairo_jump_out_of_alerts:
 		cairo_stroke (cr);
 	}
 
-	/* gauge hands */
+	/* gauge needle */
 	if (priv->clamped == CLAMP_UPPER)
 		val = priv->ubound;
 	else if (priv->clamped == CLAMP_LOWER)
@@ -411,8 +416,6 @@ cairo_jump_out_of_alerts:
 		needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
 	else
 		needle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
-
-
 	cairo_set_source_rgb (cr, priv->colors[COL_NEEDLE].red/65535.0,
 			priv->colors[COL_NEEDLE].green/65535.0,
 			priv->colors[COL_NEEDLE].blue/65535.0);
@@ -450,8 +453,6 @@ cairo_jump_out_of_alerts:
 	cairo_line_to (cr, priv->needle_coords[5].x,priv->needle_coords[5].y);
 	cairo_fill_preserve (cr);
 	cairo_stroke(cr);
-
-
 
 	cairo_destroy(cr);
 }
@@ -681,6 +682,16 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	gfloat mintick_inset = 0.0;
 	gfloat lwidth = 0.0;
 	gfloat angle1, angle2;
+	gfloat val = 0.0;
+	gfloat tmpf = 0.0;
+	gfloat tattle_pos = 0.0;
+	gfloat t_width = 0.0;
+	gfloat t_tail = 0.0;
+	gfloat t_tip = 0.0;
+	gfloat tip_width = 0.0;
+	gfloat tail_width = 0.0;
+	gfloat xc = 0.0;
+	gfloat yc = 0.0;
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 	MtxPolygon *poly = NULL;
@@ -1004,6 +1015,60 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	}
 	cairo_stroke(cr);
 
+	/* Tattletale (ghost needle showing peak value) */
+	if (priv->show_tattletale)
+	{
+		if (priv->clamped == CLAMP_UPPER)
+			val = priv->ubound;
+		else if (priv->clamped == CLAMP_LOWER)
+			val = priv->lbound;
+		else
+			val = priv->peak;
+		tmpf = (val-priv->lbound)/(priv->ubound-priv->lbound);
+
+		if (priv->rotation == MTX_ROT_CW)
+			tattle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
+		else
+			tattle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
+		cairo_set_source_rgba (cr, priv->colors[COL_NEEDLE].red/65535.0,
+				priv->colors[COL_NEEDLE].green/65535.0,
+				priv->colors[COL_NEEDLE].blue/65535.0,
+				priv->tattletale_alpha);
+		cairo_set_line_width (cr, 1);
+
+		t_width = priv->needle_width * priv->radius;
+		t_tail = priv->needle_tail * priv->radius;
+		t_tip = priv->needle_length * priv->radius;
+		tip_width = priv->needle_tip_width * priv->radius;
+		tail_width = priv->needle_tail_width * priv->radius;
+		xc = priv->xc;
+		yc = priv->yc;
+
+		priv->tattle_coords[0].x = xc + ((t_tip) * cos (tattle_pos))+((tip_width) * -sin(tattle_pos));
+		priv->tattle_coords[0].y = yc + ((t_tip) * sin (tattle_pos))+((tip_width) * cos(tattle_pos));
+		priv->tattle_coords[1].x = xc + ((t_tip) * cos (tattle_pos))+((tip_width) * sin(tattle_pos));
+		priv->tattle_coords[1].y = yc + ((t_tip) * sin (tattle_pos))+((tip_width) * -cos(tattle_pos));
+
+		priv->tattle_coords[2].x = xc + (t_width) * sin(tattle_pos);
+		priv->tattle_coords[2].y = yc + (t_width) * -cos(tattle_pos);
+
+		priv->tattle_coords[3].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * sin (tattle_pos));
+		priv->tattle_coords[3].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * -cos (tattle_pos));
+		priv->tattle_coords[4].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * -sin (tattle_pos));
+		priv->tattle_coords[4].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * cos (tattle_pos));
+		priv->tattle_coords[5].x = xc + (t_width) * -sin (tattle_pos);
+		priv->tattle_coords[5].y = yc + (t_width) * cos (tattle_pos);
+		priv->needle_polygon_points = 6;
+
+		cairo_move_to (cr, priv->tattle_coords[0].x,priv->tattle_coords[0].y);
+		cairo_line_to (cr, priv->tattle_coords[1].x,priv->tattle_coords[1].y);
+		cairo_line_to (cr, priv->tattle_coords[2].x,priv->tattle_coords[2].y);
+		cairo_line_to (cr, priv->tattle_coords[3].x,priv->tattle_coords[3].y);
+		cairo_line_to (cr, priv->tattle_coords[4].x,priv->tattle_coords[4].y);
+		cairo_line_to (cr, priv->tattle_coords[5].x,priv->tattle_coords[5].y);
+		cairo_fill_preserve (cr);
+		cairo_stroke(cr);
+	}
 	cairo_destroy (cr);
 	/* SAVE copy of this on tmp pixmap */
 	widget = GTK_WIDGET(gauge);
@@ -1086,6 +1151,11 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 			case 3: /* right button */
 				if (GTK_IS_WINDOW(widget->parent))
 					gtk_main_quit();
+				else if (priv->show_tattletale)
+				{
+					priv->peak = priv->lbound;
+					generate_gauge_background(MTX_GAUGE_FACE(widget));
+				}
 				break;
 		}
 	}
