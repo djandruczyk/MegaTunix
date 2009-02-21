@@ -5,7 +5,7 @@ minor=2
 [realtime_map]
 applicable_firmwares=MS-II V2.88
 applicable_signatures=** V2.88Embedded Code by B&G **
-derived_total=65
+derived_total=67
 raw_list=raw_secl
 #raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
 
@@ -430,7 +430,7 @@ keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_co
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsaccel
 dlog_gui_name=Accel Enr.
-dlog_field_name=AccelEnrich
+dlog_field_name=tpsaccel
 offset=42
 size=_S16_
 lower_limit=0
@@ -1050,4 +1050,27 @@ upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 tooltip="Fuel Comp." is composition factor based on how much ethanol is in the fuel.
+log_by_default=TRUE
+
+[derived_66]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,complex_expr,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+internal_names=accdecenrich,accDecEnrich
+dlog_gui_name=AccDecEnrich
+dlog_field_name=AccelEnrich
+offset=42
+size=_S16_
+lower_limit=0
+upper_limit=255
+complex_expr=TRUE
+ul_conv_expr=(accelEnrich/10) + (step(tspden) * tpsfuelcut) + ((1 - step(tspden)) * 100)
+expr_symbols=accelEnrich,tpsfuelcut,tpsden
+expr_types=_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_
+accelEnrich_offset=42
+accelEnrich_size=_S16_
+tpsden_offset=11
+tpsden_bitmask=32
+tpsfuelcut_offset=44
+tpsfuelcut_size=_S16_
+tooltip="AccDecEnrich" Is the current accel/decel enrichment
 log_by_default=TRUE

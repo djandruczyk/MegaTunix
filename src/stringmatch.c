@@ -110,6 +110,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(VE_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_VE_VAR_",
 			GINT_TO_POINTER(VE_VAR));
+	g_hash_table_insert(str_2_enum,"_RAW_EMB_BIT_",
+			GINT_TO_POINTER(RAW_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_RAW_VAR_",
 			GINT_TO_POINTER(RAW_VAR));
 

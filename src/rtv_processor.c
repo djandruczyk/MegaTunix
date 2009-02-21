@@ -243,25 +243,16 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
 				page = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
-				//printf("page is %i\n",page);
-
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
 				offset = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
-				//printf("offset is %i\n",offset);
-
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
 				canID = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
-				//printf("canID is %i\n",canID);
-
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
 				bitmask = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
-				//printf("bitmask is %i\n",bitmask);
 				bitshift = get_bitshift(bitmask);
-				//printf("bitshift is %i\n",bitshift);
-
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
 				//printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
@@ -288,7 +279,6 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
 				offset = (gint) OBJ_GET(object,tmpbuf);
-				//printf("offset of %s is %i\n",tmpbuf,offset);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
 				size = (DataSize) OBJ_GET(object,tmpbuf);
@@ -296,6 +286,19 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
+				break;
+			case RAW_EMB_BIT:
+				size = MTX_U08;
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (gint) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
+				bitmask = (gint) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				bitshift = get_bitshift(bitmask);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size)) & bitmask) >> bitshift);
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));

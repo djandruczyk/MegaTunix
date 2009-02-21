@@ -4,7 +4,7 @@ minor=0
 
 [global]
 description=Runtime Text definitions for MS-II Std.
-rtt_total=17
+rtt_total=20
 
 [rt_text_0]
 int_name=rpm
@@ -74,3 +74,14 @@ source=vecurr1
 int_name=ve2
 source=vecurr2
 
+[rt_text_17]
+int_name=accdecenrich
+source=accdecenrich
+
+[rt_text_18]
+int_name=tpsDOT
+source=tpsdot
+
+[rt_text_19]
+int_name=mapDOT
+source=mapdot

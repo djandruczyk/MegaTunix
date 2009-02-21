@@ -438,6 +438,23 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				break;
+			case RAW_EMB_BIT:
+				/* RAW data embedded bitfield 2 params */
+				name=NULL;
+				name=g_strdup_printf("%s_offset",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
+				name=NULL;
+				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
+				name=NULL;
+				break;
+
 			default:
 				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"));
 
