@@ -356,8 +356,8 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	pbar = mtx_progress_bar_new();
-	/* 1.5 Seconds peak hold time */
-	mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(pbar),1500);
+	/* 1.1 Seconds peak hold time */
+	mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(pbar),1100);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 

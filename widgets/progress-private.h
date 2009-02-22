@@ -42,7 +42,6 @@ struct _MtxProgressBarPrivate
         MtxColor colors[NUM_COLORS];
 };
 
-//static void mtx_progress_bar_class_init (MtxProgressBarClass *class_name);
 void mtx_progress_bar_init_colors(MtxProgressBar *);
 gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event);
 void mtx_progress_bar_real_update(GtkProgress *);

@@ -35,6 +35,9 @@ GtkWidget *mtx_progress_bar_new ()
 /*!
  \brief sets current fraction
  \returns nothing
+ * If fraction is greater that peak, set peak to match, If there was a hold timeout
+ * running,  cancel it.
+ * If fraction is LESS than peak, check for hold function, if none, start one.
  */
 void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 {
@@ -45,11 +48,16 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 	if (fraction > priv->peak)
 	{
 		priv->peak = fraction;
-		if (priv->hold_id == 0)
+		if (priv->hold_id > 0)
 		{
-			priv->hold_id = g_timeout_add(priv->hold_time,mtx_progress_bar_peak_reset,pbar);
+			g_source_remove(priv->hold_id);
+			priv->hold_id = 0;
 		}
 	}
+	else
+		if (priv->hold_id == 0)
+			priv->hold_id = g_timeout_add(priv->hold_time,mtx_progress_bar_peak_reset,pbar);
+
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar),fraction);
 	return;
 }
@@ -99,7 +107,7 @@ gint mtx_progress_bar_get_hold_time (MtxProgressBar *pbar)
 void mtx_progress_bar_set_hold_time (MtxProgressBar *pbar, gint hold_time)
 {
 	MtxProgressBarPrivate *priv = NULL; 
-	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
+	g_return_if_fail ((MTX_IS_PROGRESS_BAR (pbar)));
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->hold_time = hold_time;
 }
