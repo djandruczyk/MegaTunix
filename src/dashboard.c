@@ -82,7 +82,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
+	//gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
 
 
 	g_signal_connect(G_OBJECT (window), "configure_event",
@@ -549,7 +549,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_M:
 		case GDK_m:
 			if (GTK_WIDGET_VISIBLE(main_window))
-				gtk_widget_hide (main_window);
+				gtk_widget_hide_all (main_window);
 			else
 				gtk_widget_show_all(main_window);
 			break;
@@ -558,7 +558,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (!GTK_IS_WIDGET(rtt_window))
 				break;
 			if (GTK_WIDGET_VISIBLE(rtt_window))
-				gtk_widget_hide (rtt_window);
+				gtk_widget_hide_all (rtt_window);
 			else
 				gtk_widget_show_all(rtt_window);
 			break;
@@ -567,7 +567,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (!GTK_IS_WIDGET(status_window))
 				break;
 			if (GTK_WIDGET_VISIBLE(status_window))
-				gtk_widget_hide (status_window);
+				gtk_widget_hide_all (status_window);
 			else
 				gtk_widget_show_all(status_window);
 			break;

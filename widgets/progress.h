@@ -58,6 +58,8 @@ GType mtx_progress_bar_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_progress_bar_new ();
 void mtx_progress_bar_set_fraction(MtxProgressBar *, gfloat);
 gfloat mtx_progress_bar_get_fraction(MtxProgressBar *);
+void mtx_progress_bar_set_hold_time(MtxProgressBar *, gint);
+gint mtx_progress_bar_get_hold_time(MtxProgressBar *);
 
 
 G_END_DECLS

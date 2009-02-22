@@ -24,12 +24,22 @@
 #define MTX_PROGRESS_BAR_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_PROGRESS_BAR, MtxProgressBarPrivate))
 
 typedef struct _MtxProgressBarPrivate      MtxProgressBarPrivate;
+typedef struct _MtxColor      MtxColor;
+
+
+struct _MtxColor
+{
+	gfloat red;
+	gfloat green;
+	gfloat blue;
+};
 
 struct _MtxProgressBarPrivate
 {
 	gfloat peak;
-	gint peak_timeout;
-        GdkColor colors[NUM_COLORS];
+	gint hold_id;
+	gint hold_time;
+        MtxColor colors[NUM_COLORS];
 };
 
 //static void mtx_progress_bar_class_init (MtxProgressBarClass *class_name);

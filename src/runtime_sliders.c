@@ -22,6 +22,7 @@
 #include <glade/glade-xml.h>
 #include <glib.h>
 #include <notifications.h>
+#include <progress.h>
 #include <rtv_map_loader.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
@@ -354,7 +355,9 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	pbar = gtk_progress_bar_new();
+	pbar = mtx_progress_bar_new();
+	/* 1.5 Seconds peak hold time */
+	mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(pbar),1500);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 

@@ -19,7 +19,9 @@
 #include <gtk/gtk.h>
 
 
+/* Prototypes */
 gboolean mtx_progress_bar_peak_reset(gpointer data);
+
 /*!
  \brief gets called when  a user wants a new pbar
  \returns a pointer to a newly created pbar widget
@@ -32,7 +34,7 @@ GtkWidget *mtx_progress_bar_new ()
 
 /*!
  \brief sets current fraction
- \returns a pointer to a newly created progressbar widget
+ \returns nothing
  */
 void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 {
@@ -43,9 +45,9 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 	if (fraction > priv->peak)
 	{
 		priv->peak = fraction;
-		if (priv->peak_timeout == 0)
+		if (priv->hold_id == 0)
 		{
-			priv->peak_timeout = g_timeout_add(800,mtx_progress_bar_peak_reset,pbar);
+			priv->hold_id = g_timeout_add(priv->hold_time,mtx_progress_bar_peak_reset,pbar);
 		}
 	}
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar),fraction);
@@ -60,20 +62,44 @@ gboolean mtx_progress_bar_peak_reset(gpointer data)
 	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),FALSE);
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->peak =0;
-	priv->peak_timeout = 0;
+	priv->hold_id = 0;
 	mtx_progress_bar_real_update(GTK_PROGRESS(pbar));
 	return FALSE;
 }
 
 
 /*!
- \brief sets current fraction
- \returns a pointer to a newly created pbar widget
+ \brief gets current fraction
+ \returns current fraction (0-1.0)
  */
 gfloat mtx_progress_bar_get_fraction (MtxProgressBar *pbar)
+{
+	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
+	return gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+}
+
+
+/*!
+ \brief gets hold time
+ \returns hold time in ms
+ */
+gint mtx_progress_bar_get_hold_time (MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = NULL; 
 	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
-	return gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+	return priv->hold_time;
+}
+
+
+/*!
+ \brief sets hold time
+ \returns nothing
+ */
+void mtx_progress_bar_set_hold_time (MtxProgressBar *pbar, gint hold_time)
+{
+	MtxProgressBarPrivate *priv = NULL; 
+	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
+	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
+	priv->hold_time = hold_time;
 }

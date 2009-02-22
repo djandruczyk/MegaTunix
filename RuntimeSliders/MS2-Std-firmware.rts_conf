@@ -123,10 +123,10 @@ row=1
 source=vecurr2
 
 [rt_slider_19]
-slider_name=tpsaccel
+slider_name=accdecenrich
 table=3
 row=2
-source=tpsaccel
+source=accdecenrich
 
 [rt_slider_20]
 slider_name=idledc

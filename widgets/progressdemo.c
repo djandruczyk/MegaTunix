@@ -57,8 +57,6 @@ gboolean update_gauge(gpointer data)
 
 	GtkWidget * gauge = data;
 	interval = (upper-lower)/100.0;
-	/*mtx_gauge_face_get_attribute(MTX_PROGRESS_BAR(gauge), LBOUND, &lower);*/
-	/*mtx_gauge_face_get_attribute(MTX_PROGRESS_BAR(gauge), UBOUND, &upper);*/
 	cur_val = mtx_progress_bar_get_fraction(MTX_PROGRESS_BAR (gauge));
 	if (cur_val >= upper)
 		rising = FALSE;
@@ -77,8 +75,6 @@ gboolean update_gauge(gpointer data)
 		if (cur_val < lower)
 			cur_val = lower;
 	}
-
-
 	mtx_progress_bar_set_fraction (MTX_PROGRESS_BAR (gauge),cur_val);
 	return TRUE;
 

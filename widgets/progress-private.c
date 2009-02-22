@@ -96,6 +96,8 @@ void mtx_progress_bar_init (MtxProgressBar *pbar)
 	*/ 
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->peak = 0.0;
+	priv->hold_id = 0;
+	priv->hold_time = 750;
 	mtx_progress_bar_init_colors(pbar);
 }
 
@@ -108,17 +110,17 @@ void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	/*! Main Background */
-	priv->colors[COL_BG].red=0.95*65535;
-	priv->colors[COL_BG].green=0.95*65535;
-	priv->colors[COL_BG].blue=0.95*65535;
-	/*! Gauge BG Color Begin */
-	priv->colors[COL_BAR].red=0.0*65535;
-	priv->colors[COL_BAR].green=0.0*65535;
-	priv->colors[COL_BAR].blue=1.0*65535;
-	/*! Gauge BG Color Middle */
-	priv->colors[COL_PEAK].red=1.0*65535;
-	priv->colors[COL_PEAK].green=0.0*65535;
-	priv->colors[COL_PEAK].blue=0.0*65535;
+	priv->colors[COL_BG].red=0.95;
+	priv->colors[COL_BG].green=0.95;
+	priv->colors[COL_BG].blue=0.95;
+	/*! Bar */
+	priv->colors[COL_BAR].red=0.2;
+	priv->colors[COL_BAR].green=0.2;
+	priv->colors[COL_BAR].blue=1.0;
+	/*! Peak */
+	priv->colors[COL_PEAK].red=1.0;
+	priv->colors[COL_PEAK].green=0.0;
+	priv->colors[COL_PEAK].blue=0.0;
 }
 
 
@@ -168,14 +170,19 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 	if (progress->offscreen_pixmap)
 	{
 		cr = gdk_cairo_create (GTK_PROGRESS (pbar)->offscreen_pixmap);
-		//cairo_set_source_rgb(cr,priv->colors[COL_BG].red/65535,
-	//			priv->colors[COL_BG].green/65535,
-//				priv->colors[COL_BG].blue/65535);
-		cairo_set_source_rgb(cr,1,1,1);
+		cairo_set_source_rgb(cr,0,0,0);
 		cairo_rectangle (cr,0,0,
 				widget->allocation.width,
 				widget->allocation.height);
+		cairo_stroke(cr);
+		cairo_set_source_rgb(cr,priv->colors[COL_BG].red,
+				priv->colors[COL_BG].green,
+				priv->colors[COL_BG].blue);
+		cairo_rectangle (cr,1,1,
+				widget->allocation.width-2,
+				widget->allocation.height-2);
 		cairo_fill(cr);
+		cairo_destroy(cr);
 
 		if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
 				orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
@@ -193,8 +200,10 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 		{
 			mtx_progress_bar_paint_continuous (pbar, current, peak, orientation);
 
-			//if (GTK_PROGRESS (pbar)->show_text)
-			//	mtx_progress_bar_paint_text (pbar, -1, current, orientation);
+			/*
+			   if (GTK_PROGRESS (pbar)->show_text)
+			   mtx_progress_bar_paint_text (pbar, -1, current, orientation);
+			   */
 		}
 		pbar->dirty = FALSE;
 
@@ -260,25 +269,20 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 	cr = gdk_cairo_create (GTK_PROGRESS (pbar)->offscreen_pixmap);
 	if (peak > current)
 	{
-		cairo_set_source_rgb(cr,priv->colors[COL_PEAK].red/65535,
-				priv->colors[COL_PEAK].green/65535,
-				priv->colors[COL_PEAK].blue/65535);
+		cairo_set_source_rgb(cr,priv->colors[COL_PEAK].red,
+				priv->colors[COL_PEAK].green,
+				priv->colors[COL_PEAK].blue);
 		cairo_rectangle (cr,p_area.x,p_area.y,p_area.width,p_area.height);
 		cairo_fill(cr);
 	}
 
 	/* Show the immediate value */
-	cairo_set_source_rgb(cr,priv->colors[COL_BAR].red/65535,
-			priv->colors[COL_BAR].green/65535,
-			priv->colors[COL_BAR].blue/65535);
+	cairo_set_source_rgb(cr,priv->colors[COL_BAR].red,
+			priv->colors[COL_BAR].green,
+			priv->colors[COL_BAR].blue);
 	cairo_rectangle (cr,b_area.x,b_area.y,b_area.width,b_area.height);
 	cairo_fill(cr);
-
-	//	gtk_paint_box (widget->style,
-	//			GTK_PROGRESS (pbar)->offscreen_pixmap,
-	//			GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-	//			&area, widget, "bar",
-	//			area.x, area.y, area.width, area.height);
+	cairo_destroy(cr);
 
 }
 

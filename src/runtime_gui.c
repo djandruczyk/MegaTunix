@@ -26,6 +26,7 @@
 #include <mode_select.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
+#include <progress.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
@@ -259,7 +260,6 @@ breakout:
 		if ((coolant != last_coolant) || (forced_update))
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
-
 	}
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
 	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
@@ -388,7 +388,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
-
+	
 	if ((current != previous) || (forced_update))
 	{
 		percentage = (current-lower)/(upper-lower);
@@ -397,7 +397,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		switch (slider->class)
 		{
 			case MTX_PROGRESS:
-				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				mtx_progress_bar_set_fraction(MTX_PROGRESS_BAR
 						(slider->pbar),
 						tmpf);
 				break;
@@ -477,6 +477,9 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		current_index-=1;
 	previous = g_array_index(history, gfloat, current_index);
 	g_static_mutex_unlock(&rtv_mutex);
+
+	if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
+		return;
 
 	if ((current != previous) || (forced_update))
 	{
