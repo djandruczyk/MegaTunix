@@ -213,12 +213,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value));
 		if(value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (no eval)!!\n",upper));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",upper));
 			value = upper;
 		}
 		if (value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (no eval)!!\n",lower));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",lower));
 			value = lower;
 		}
 		return_value = (gint)value;
@@ -231,12 +231,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 		if (return_value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (evaluated)!!\n",upper));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",upper));
 			return_value = upper;
 		}
 		if (return_value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %i (evaluated)!!\n",lower));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",lower));
 			return_value = lower;
 		}
 	}

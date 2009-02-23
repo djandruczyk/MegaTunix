@@ -58,12 +58,11 @@ gint open_port(gchar * port_name)
 
 gint setup_port(gint fd, gint baud)
 {
-	gint _baud = 0;
-
 #ifdef __WIN32__
 
 	win32_setup_serial_params(fd, baud);
 #else
+	gint _baud = 0;
 
 	/* Save serial port status */
 	tcgetattr(fd,&oldtio);

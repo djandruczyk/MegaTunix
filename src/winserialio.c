@@ -70,11 +70,21 @@ void win32_setup_serial_params(gint fd, gint baud)
 		dbg_func(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
 
 	/* Set timeout params in a fashion that mimics linux behavior */
+	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
 	timeouts.ReadIntervalTimeout         = 0;
-	timeouts.ReadTotalTimeoutConstant    = 100;
+	if (baud == 112500)
+		timeouts.ReadTotalTimeoutConstant    = 250;
+	else
+		timeouts.ReadTotalTimeoutConstant    = 100;
 	timeouts.ReadTotalTimeoutMultiplier  = 0;
 	timeouts.WriteTotalTimeoutMultiplier = 0;
 	timeouts.WriteTotalTimeoutConstant   = 0;
+
+	/*timeouts.ReadTotalTimeoutConstant    = 250;
+	timeouts.ReadTotalTimeoutMultiplier  = 0;
+	timeouts.WriteTotalTimeoutMultiplier = 0;
+	timeouts.WriteTotalTimeoutConstant   = 0;
+	*/
 	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
 

@@ -82,7 +82,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-	//gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
+	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
 
 
 	g_signal_connect(G_OBJECT (window), "configure_event",

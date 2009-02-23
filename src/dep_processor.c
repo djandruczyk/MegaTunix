@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <gui_handlers.h>
 
 
 extern GObject *global_data;

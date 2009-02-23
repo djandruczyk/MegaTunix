@@ -598,7 +598,7 @@ void *restore_update(gpointer data)
 	while (remaining_xfers > 5)
 	{
 		remaining_xfers = g_async_queue_length(io_queue);
-		g_usleep(5000);
+		g_usleep(10000);
 		if (remaining_xfers <= (last_xferd-50))
 		{
 			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Transactions remaining, please wait\n",remaining_xfers),FALSE,FALSE);

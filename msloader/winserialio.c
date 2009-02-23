@@ -54,7 +54,7 @@ void win32_setup_serial_params(gint fd, gint baud)
 	dcb.fRtsControl = RTS_CONTROL_DISABLE;  /* Disable RTS line */
 	dcb.fOutX = FALSE;		/* Disable Xoff */
 	dcb.fInX  = FALSE;		/* Disable Xin */
-	dcb.fErrorChar = FALSE;		/* Don't replcae bad chars */
+	dcb.fErrorChar = FALSE;		/* Don't replace bad chars */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
 	dcb.wReserved = FALSE;		/* as per msdn */
@@ -64,13 +64,17 @@ void win32_setup_serial_params(gint fd, gint baud)
 		printf(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n");
 
 	/* Set timeout params in a fashion that mimics linux behavior */
-	timeouts.ReadIntervalTimeout         = 0;
-	timeouts.ReadTotalTimeoutConstant    = 100;
-	timeouts.ReadTotalTimeoutMultiplier  = 0;
-	timeouts.WriteTotalTimeoutMultiplier = 0;
-	timeouts.WriteTotalTimeoutConstant   = 0;
-	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
+	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
+	timeouts.ReadIntervalTimeout         = 0;
+	if (baud == 112500)
+		timeouts.ReadTotalTimeoutConstant    = 250;
+	else
+		timeouts.ReadTotalTimeoutConstant    = 100;
+	timeouts.ReadTotalTimeoutMultiplier  = 1;
+	timeouts.WriteTotalTimeoutMultiplier = 1;
+	timeouts.WriteTotalTimeoutConstant   = 25;
+	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
 	return;
 #endif
