@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Chris Mire (czb)
  *
- * Megasquirt gauge widget
+ * Megasquirt pbar widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -18,27 +18,27 @@
 #include <progress.h>
 #include <math.h>
 
-gboolean update_gauge(gpointer );
+gboolean update_pbar(gpointer );
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
-	GtkWidget *gauge = NULL;
+	GtkWidget *pbar = NULL;
 
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-	gauge = mtx_progress_bar_new ();
+	pbar = mtx_progress_bar_new ();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			                        GTK_PROGRESS_BOTTOM_TO_TOP);
 
-	gtk_container_add (GTK_CONTAINER (window), gauge);
-	/*gtk_widget_realize(gauge);*/
+
+	gtk_container_add (GTK_CONTAINER (window), pbar);
+	/*gtk_widget_realize(pbar);*/
 	gtk_widget_show_all (window);
 
-	/*mtx_progress_bar_set_value(MTX_PROGRESS_BAR(gauge), 0.0);*/
-	/*mtx_gauge_face_set_attribute(MTX_PROGRESS_BAR(gauge),LBOUND, 0.0);*/
-	/*mtx_gauge_face_set_attribute(MTX_PROGRESS_BAR(gauge),UBOUND, 8000.0);*/
-	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
+	gtk_timeout_add(20,(GtkFunction)update_pbar,(gpointer)pbar);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
@@ -47,7 +47,7 @@ int main (int argc, char **argv)
 	return 0;
 }
 
-gboolean update_gauge(gpointer data)
+gboolean update_pbar(gpointer data)
 {
 	static gfloat lower = 0.0;
 	static gfloat upper = 1.0;
@@ -55,9 +55,9 @@ gboolean update_gauge(gpointer data)
 	gfloat interval = 0.0;
 	static gboolean rising = TRUE;
 
-	GtkWidget * gauge = data;
+	GtkWidget * pbar = data;
 	interval = (upper-lower)/100.0;
-	cur_val = mtx_progress_bar_get_fraction(MTX_PROGRESS_BAR (gauge));
+	cur_val = mtx_progress_bar_get_fraction(MTX_PROGRESS_BAR (pbar));
 	if (cur_val >= upper)
 		rising = FALSE;
 	if (cur_val <= lower)
@@ -75,7 +75,7 @@ gboolean update_gauge(gpointer data)
 		if (cur_val < lower)
 			cur_val = lower;
 	}
-	mtx_progress_bar_set_fraction (MTX_PROGRESS_BAR (gauge),cur_val);
+	mtx_progress_bar_set_fraction (MTX_PROGRESS_BAR (pbar),cur_val);
 	return TRUE;
 
 }
