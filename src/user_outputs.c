@@ -299,7 +299,7 @@ void cell_edited(GtkCellRendererText *cell,
 
 	rt_offset = (gint) OBJ_GET(object,"offset");
 	precision = (gint) OBJ_GET(object,"precision");
-	new = (gfloat)g_ascii_strtod(g_strdelimit(new_text,",.",'.'),NULL);
+	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
 	if (OBJ_GET(object,"multi_expr_hash"))
 	{
 		hash = OBJ_GET(object,"multi_expr_hash");

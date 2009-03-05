@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <widgetmgmt.h>
 
-GHashTable *rtt_hash = NULL;
 GtkWidget *rtt_window = NULL;
 extern GObject *global_data;
 
@@ -43,6 +42,7 @@ EXPORT void load_rt_text_pf()
 {
 	ConfigFile *cfgfile = NULL;
 	Rt_Text *rt_text = NULL;
+	GHashTable *rtt_hash = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *frame = NULL;
@@ -71,14 +71,13 @@ EXPORT void load_rt_text_pf()
 		return;
 	if (rtvars_loaded == FALSE) 
 	{
-		if (rtt_hash)
-			rtt_hash = NULL;
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Loading RT Text..."));
 	if (!rtt_hash)
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
 
 	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("rtt_conf"));
 	if (!filename)

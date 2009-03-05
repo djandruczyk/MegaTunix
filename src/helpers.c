@@ -25,6 +25,7 @@
 #include <mode_select.h>
 #include <mtxsocket.h>
 #include <notifications.h>
+#include <runtime_gui.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -536,3 +537,24 @@ EXPORT void open_tcpip_socket_pf()
 			dbg_func(CRITICAL,g_strdup(__FILE__": main()\n\tERROR setting up TCP control socket\n"));
 	}
 }
+
+
+EXPORT void startup_default_timeouts_pf()
+{
+	gint source = 0;
+	gint rate = 0;
+
+	rate = (gint)OBJ_GET(global_data,"rtslider_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
+	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
+
+	rate = (gint)OBJ_GET(global_data,"rttext_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
+	OBJ_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
+
+	rate = (gint)OBJ_GET(global_data,"dashboard_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_dashboards,NULL);
+	OBJ_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
+
+}
+

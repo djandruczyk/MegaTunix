@@ -43,7 +43,6 @@ extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
 extern GObject *global_data;
-GHashTable *dash_gauges = NULL;
 
 gboolean forced_update = TRUE;
 GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
@@ -57,15 +56,8 @@ EXPORT gboolean update_runtime_vars_pf()
 {
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
-	extern GHashTable *rtt_hash;
-	extern GHashTable *rt_sliders;
-	extern GHashTable *enr_sliders;
-	extern GHashTable *ww_sliders;
-	extern GHashTable **ve3d_sliders;
 	GtkWidget * tmpwidget=NULL;
 	extern Firmware_Details *firmware;
-	gfloat coolant = 0.0;
-	static gfloat last_coolant = 0.0;
 	gfloat x,y,z = 0.0;
 	static gfloat xl,yl,zl = 9999.9;
 	gchar * string = NULL;
@@ -77,7 +69,6 @@ EXPORT gboolean update_runtime_vars_pf()
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
 	extern gint * algorithm;
-	extern GStaticMutex dash_mutex;
 	extern gboolean interrogated;
 
 	if (!interrogated)
@@ -228,38 +219,15 @@ EXPORT gboolean update_runtime_vars_pf()
 redraw:
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			}
-breakout:
-			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
+breakout:
 
-	g_static_mutex_lock(&dash_mutex);
-	if (dash_gauges)
-		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
-	g_static_mutex_unlock(&dash_mutex);
 
 	if ((active_page == VETABLES_TAB) ||(active_page == SPARKTABLES_TAB)||(active_page == AFRTABLES_TAB)||(active_page == BOOSTTABLES_TAB)||(active_page == ROTARYTABLES_TAB) || (forced_update))
 	{
 		draw_ve_marker();
 		update_tab_gauges();
-	}
-	if (rtt_hash)
-		g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
-	/* Update all the dynamic RT Sliders */
-	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
-		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
-	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
-		g_hash_table_foreach(enr_sliders,rt_update_values,NULL);
-
-	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
-	{
-		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
-
-		if (!lookup_current_value("cltdeg",&coolant))
-			dbg_func(CRITICAL,g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
-		if ((coolant != last_coolant) || (forced_update))
-			warmwizard_update_status(coolant);
-		last_coolant = coolant;
 	}
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
 	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
@@ -362,7 +330,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
-	gint rate = slider->rate;
 	gint last_upd = slider->last_upd;
 	gfloat tmpf = 0.0;
 	gfloat upper = 0.0;
@@ -431,15 +398,11 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		last_upd = count;
 	}
 
-	rate++;
-	if (rate > 25)
-		rate = 25;
 	if (last_upd > 5000)
 		last_upd = 0;
 	count++;
 	if (count > 5000)
 		count = 0;
-	slider->rate = rate;
 	slider->count = count;
 	slider->last_upd = last_upd;
 	return;
@@ -458,7 +421,6 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	Rt_Text *rtt = (Rt_Text *)value;
 	gint count = rtt->count;
-	gint rate = rtt->rate;
 	gint last_upd = rtt->last_upd;
 	gint current_index = 0;
 	gint precision = 0;
@@ -504,16 +466,67 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		last_upd = count;
 	}
 
-	rate++;
-	if (rate > 25)
-		rate = 25;
 	if (last_upd > 5000)
 		last_upd = 0;
 	count++;
 	if (count > 5000)
 		count = 0;
-	rtt->rate = rate;
 	rtt->count = count;
 	rtt->last_upd = last_upd;
 	return;
+}
+
+
+gboolean update_rtsliders(gpointer data)
+{
+	gfloat coolant = 0.0;
+	static gfloat last_coolant = 0.0;
+	gint i = 0;
+	GHashTable **ve3d_sliders;
+	extern Firmware_Details *firmware;
+	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
+
+	/* Update all the dynamic RT Sliders */
+	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
+		g_hash_table_foreach(OBJ_GET(global_data,"rt_sliders"),rt_update_values,NULL);
+	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
+		g_hash_table_foreach(OBJ_GET(global_data,"enr_sliders"),rt_update_values,NULL);
+	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
+	{
+		g_hash_table_foreach(OBJ_GET(global_data,"ww_sliders"),rt_update_values,NULL);
+
+		if (!lookup_current_value("cltdeg",&coolant))
+			dbg_func(CRITICAL,g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
+		if ((coolant != last_coolant) || (forced_update))
+			warmwizard_update_status(coolant);
+		last_coolant = coolant;
+	}
+	if (ve3d_sliders)
+	{
+		for (i=0;i<firmware->total_tables;i++)
+		{
+			if (ve3d_sliders[i])
+				g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
+		}
+	}
+	return TRUE;
+}
+
+
+gboolean update_rttext(gpointer data)
+{
+	if (OBJ_GET(global_data,"rtt_hash"))
+		g_hash_table_foreach(OBJ_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
+	return TRUE;
+}
+
+
+gboolean update_dashboards(gpointer data)
+{
+	extern GStaticMutex dash_mutex;
+	g_static_mutex_lock(&dash_mutex);
+	if (OBJ_GET(global_data,"dash_hash"))
+		g_hash_table_foreach(OBJ_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
+	g_static_mutex_unlock(&dash_mutex);
+	return TRUE;
 }

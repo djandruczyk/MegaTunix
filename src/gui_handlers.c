@@ -1188,6 +1188,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint divider_offset = 0;
 	gint table_num = -1;
 	gint temp_units = 0;
+	gint source = 0;
 	gboolean temp_dep = FALSE;
 	gfloat value = 0.0;
 	gchar *tmpbuf = NULL;
@@ -1238,6 +1239,30 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				start_tickler(RTV_TICKLER);
 				forced_update=TRUE;
 			}
+			break;
+		case RTSLIDER_FPS:
+			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
+			source = (gint)OBJ_GET(global_data,"rtslider_id");
+			if (source)
+				g_source_remove(source);
+			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GtkFunction)update_rtsliders,NULL);
+			OBJ_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
+			break;
+		case RTTEXT_FPS:
+			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
+			source = (gint)OBJ_GET(global_data,"rttext_id");
+			if (source)
+				g_source_remove(source);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
+			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
+			break;
+		case DASHBOARD_FPS:
+			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
+			source = (gint)OBJ_GET(global_data,"dashboard_id");
+			if (source)
+				g_source_remove(source);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_dashboards,NULL);
+			OBJ_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;

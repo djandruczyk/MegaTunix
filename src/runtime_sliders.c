@@ -29,10 +29,6 @@
 #include <stdlib.h>
 #include <widgetmgmt.h>
 
-GHashTable *rt_sliders = NULL;
-GHashTable *enr_sliders = NULL;
-GHashTable *ww_sliders = NULL;
-GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 extern GObject *global_data;
@@ -49,6 +45,8 @@ EXPORT void load_sliders_pf()
 	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
+	GHashTable *rt_sliders = NULL;
+	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -77,19 +75,18 @@ EXPORT void load_sliders_pf()
 	}
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
-		if (ww_sliders)
-			ww_sliders = NULL;
-		if (rt_sliders)
-			rt_sliders = NULL;
-
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Loading RT Sliders..."));
+	rt_sliders = OBJ_GET(global_data,"rt_sliders");
+	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rt_sliders",rt_sliders);
+	OBJ_SET(global_data,"ww_sliders",ww_sliders);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
@@ -190,6 +187,7 @@ void load_ve3d_sliders(gint table_num)
 	ConfigFile *cfgfile = NULL;
 	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
+	GHashTable **ve3d_sliders = NULL;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -203,14 +201,14 @@ void load_ve3d_sliders(gint table_num)
 
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
-		if (ve3d_sliders)
-			ve3d_sliders[table_num]=NULL;
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
+	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
+	OBJ_SET(global_data,"ve3d_sliders",ve3d_sliders);
 
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
@@ -385,6 +383,9 @@ EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;
 	extern Rtv_Map *rtv_map;
+	GHashTable *rt_sliders = NULL;
+	GHashTable *ww_sliders = NULL;
+	GHashTable *enr_sliders = NULL;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
 	gchar * source = (gchar *)OBJ_GET(widget,"source");
 	TabIdent ident = (TabIdent)OBJ_GET(widget,"tab_ident");
@@ -393,12 +394,18 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		return;
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
+	rt_sliders = OBJ_GET(global_data,"rt_sliders");
+	ww_sliders = OBJ_GET(global_data,"ww_sliders");
+	enr_sliders = OBJ_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!enr_sliders)
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rt_sliders",rt_sliders);
+	OBJ_SET(global_data,"ww_sliders",ww_sliders);
+	OBJ_SET(global_data,"enr_sliders",enr_sliders);
 	
 	if  (!G_IS_OBJECT(object))
 	{
@@ -442,8 +449,10 @@ EXPORT void register_rt_range(GtkWidget * widget)
  */
 gboolean free_ve3d_sliders(gint table_num)
 {
-	extern GHashTable **ve3d_sliders;
+	GHashTable **ve3d_sliders;
 	gchar * widget = NULL;
+
+	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
 	if (ve3d_sliders)
 	{
 		if (ve3d_sliders[table_num])

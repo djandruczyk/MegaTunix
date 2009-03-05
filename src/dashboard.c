@@ -340,14 +340,16 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	gint i = 0;
 	GObject * rtv_obj = NULL;
 	gchar * source = NULL;
-	extern GHashTable *dash_gauges;
+	GHashTable *dash_hash;
 	extern Rtv_Map *rtv_map;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	if (!dash_gauges)
-		dash_gauges = g_hash_table_new(g_str_hash,g_str_equal);
+	dash_hash = OBJ_GET(global_data,"dash_hash");
+	if (!dash_hash)
+		dash_hash = g_hash_table_new(g_str_hash,g_str_equal);
+	OBJ_SET(global_data,"dash_hash",dash_hash);
 
 	children = GTK_FIXED(dash)->children;
 	len = g_list_length(children);
@@ -374,7 +376,7 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		d_gauge->source = source;
 		d_gauge->gauge = child->widget;
 		d_gauge->dash = dash;
-		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_%i_gauge_%i",(gint)data,i),(gpointer)d_gauge);
+		g_hash_table_insert(dash_hash,g_strdup_printf("dash_%i_gauge_%i",(gint)data,i),(gpointer)d_gauge);
 
 	}
 }
@@ -735,7 +737,7 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 	GtkWidget *label = NULL;
 	extern GtkWidget *main_window;
 	extern gboolean interrogated;
-	extern GHashTable *dash_gauges;
+	GHashTable *dash_hash = OBJ_GET(global_data,"dash_hash");
 
 	if (!interrogated)
 		return FALSE;
@@ -754,8 +756,8 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 	free_mtxfileio(fileio);
 	if (filename)
 	{
-		if (dash_gauges)
-			g_hash_table_foreach_remove(dash_gauges,remove_dashcluster,data);
+		if (dash_hash)
+			g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
 		if (GTK_IS_WIDGET(widget))
 		{
 			label = OBJ_GET(widget,"label");
@@ -774,7 +776,7 @@ EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 
 gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
-	extern GHashTable *dash_gauges;
+	GHashTable *dash_hash = OBJ_GET(global_data,"dash_hash");
 	GtkWidget *label = NULL;
 
 	if(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
@@ -797,8 +799,8 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 			OBJ_SET(global_data,"dash_2_name",NULL);
 		}
 	}
-	if (dash_gauges)
-		g_hash_table_foreach_remove(dash_gauges,remove_dashcluster,data);
+	if (dash_hash)
+		g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
 	g_static_mutex_unlock(&dash_mutex);
 	return TRUE;
 }

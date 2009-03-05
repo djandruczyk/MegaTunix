@@ -81,6 +81,9 @@ void init(void)
 	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
+	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(20));
+	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
+	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(25));
 	OBJ_SET(global_data,"hidden_list",hidden_list);
 	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);
@@ -143,6 +146,12 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
 			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
+			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "RTText_FPS", &tmpi))
+			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "Dashboard_FPS", &tmpi))
+			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
@@ -293,6 +302,9 @@ void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(gboolean)OBJ_GET(global_data,"tips_in_use"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (gint)OBJ_GET(global_data,"temp_units"));
+	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (gint)OBJ_GET(global_data,"rtslider_fps"));
+	cfg_write_int(cfgfile, "Global", "RTText_FPS", (gint)OBJ_GET(global_data,"rttext_fps"));
+	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (gint)OBJ_GET(global_data,"dashboard_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
 	tmpbuf = OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))

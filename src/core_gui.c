@@ -322,11 +322,23 @@ void finalize_core_gui(GladeXML * xml)
 		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),OBJ_GET(global_data,"override_port"));
 
 	/* COMMS Tab Read delay subtable */
-	ebox = glade_xml_get_widget(xml,"read_delay_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"Sets the time delay between read attempts for getting the RealTime variables from the ECU, typically should be set around 50 for about 12-18 reads per second from the ECU. Lower values will update things faster but wll use more CPU resources.  This will control the rate at which the Runtime Display page updates.",NULL);
+	ebox = glade_xml_get_widget(xml,"rates_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"These controls set the polling rate of the serial port (i.e. every 30 ms), as well as the update rates for the runtime text, runtime sliders, and dashboards.  The Datalogging always happens at the raw serial polling rate.  This allows you to reduce the update rate of other things that are less relevant and conserver CPU resources for slower systems.",NULL);
 	widget = glade_xml_get_widget(xml,"read_delay_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),serial_params->read_wait);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
+
+	widget = glade_xml_get_widget(xml,"rtslider_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"rtslider_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTSLIDER_FPS));
+
+	widget = glade_xml_get_widget(xml,"rttext_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"rttext_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTTEXT_FPS));
+
+	widget = glade_xml_get_widget(xml,"dashboard_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"dashboard_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(DASHBOARD_FPS));
 
 	/* COMMS Tab Start/Stop RT buttons */
 	button = glade_xml_get_widget(xml,"start_rt_button");

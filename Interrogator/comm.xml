@@ -429,6 +429,7 @@
 				<function>spawn_read_ve_const_pf</function>
 				<function>reset_temps_pf</function>
 				<function>open_tcpip_socket_pf</function>
+				<function>startup_default_timeouts_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>

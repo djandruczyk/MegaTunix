@@ -65,9 +65,11 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 
 gboolean mtx_progress_bar_peak_reset(gpointer data)
 {
-	MtxProgressBar* pbar = MTX_PROGRESS_BAR(data);
+	MtxProgressBar *pbar = (MtxProgressBar *)data;
 	MtxProgressBarPrivate *priv = NULL; 
-	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),FALSE);
+	if (!GTK_IS_WIDGET(pbar))
+		return FALSE;
+
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->peak =0;
 	priv->hold_id = 0;
