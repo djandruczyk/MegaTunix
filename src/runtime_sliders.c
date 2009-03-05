@@ -373,7 +373,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 
 
 /*!
- \brief register_rt_Range() creates the slider from the passed data, 
+ \brief register_rt_range() creates the slider from the passed data, 
  and attaches it the the gui. This is called during gui tab loading to embed
  sliders into regular tabs.
  \param widget (GtkWidget *) name of widget defined in Gui datamap file. Used
@@ -383,7 +383,10 @@ EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;
 	extern Rtv_Map *rtv_map;
+	GtkWidget *parent = NULL;
+	GtkProgressBarOrientation orient;
 	GHashTable *rt_sliders = NULL;
+	GHashTable *aw_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	GHashTable *enr_sliders = NULL;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
@@ -395,15 +398,19 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
 	rt_sliders = OBJ_GET(global_data,"rt_sliders");
+	aw_sliders = OBJ_GET(global_data,"aw_sliders");
 	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	enr_sliders = OBJ_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	if (!aw_sliders)
+		aw_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!enr_sliders)
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	OBJ_SET(global_data,"rt_sliders",rt_sliders);
+	OBJ_SET(global_data,"aw_sliders",aw_sliders);
 	OBJ_SET(global_data,"ww_sliders",ww_sliders);
 	OBJ_SET(global_data,"enr_sliders",enr_sliders);
 	
@@ -416,8 +423,30 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;
-	slider->class = MTX_RANGE;
+	if (GTK_IS_SCALE(widget))
+		slider->class = MTX_RANGE;
+	else if (GTK_IS_PROGRESS(widget))
+	{
+		/* We don't like GTK+'s progress bar, so rip it out and 
+		 * stick in my custom version instead.  Get the orientation
+		 * first...
+		 */
+		orient = gtk_progress_bar_get_orientation(GTK_PROGRESS_BAR(widget));
+		parent = gtk_widget_get_parent(widget);
+		gtk_widget_destroy(widget);
+		widget = mtx_progress_bar_new();
+		/* 1.1 Seconds peak hold time */
+		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(widget),1100);
+		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(widget),
+				orient);
+		gtk_container_add(GTK_CONTAINER(parent),widget);
+		slider->class = MTX_PROGRESS;
+	}
 	slider->history = (GArray *) OBJ_GET(object,"history");
+	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	slider->lower = (gint)OBJ_GET(object,"lower_limit");
+
+	slider->upper = (gint)OBJ_GET(object,"upper_limit");
 	slider->object = object;
 	slider->textval = NULL;
 	slider->pbar = widget;
@@ -432,6 +461,9 @@ EXPORT void register_rt_range(GtkWidget * widget)
 			break;
 		case WARMUP_WIZ_TAB:
 			g_hash_table_insert(ww_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
+			break;
+		case ACCEL_WIZ_TAB:
+			g_hash_table_insert(aw_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
 			break;
 		default:
 			break;

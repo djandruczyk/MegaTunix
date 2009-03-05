@@ -243,6 +243,8 @@ void build_string_2_enum_table()
 	/* Page Identifiers */
 	g_hash_table_insert(str_2_enum,"_DATALOGGING_TAB_",
 			GINT_TO_POINTER(DATALOGGING_TAB));
+	g_hash_table_insert(str_2_enum,"_ACCEL_WIZ_TAB_",
+			GINT_TO_POINTER(ACCEL_WIZ_TAB));
 	g_hash_table_insert(str_2_enum,"_ENRICHMENTS_TAB_",
 			GINT_TO_POINTER(ENRICHMENTS_TAB));
 	g_hash_table_insert(str_2_enum,"_RUNTIME_TAB_",

@@ -219,12 +219,16 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	gchar **names = NULL;
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
+	gint lower_limit = 0;
+	gint upper_limit = 0;
 	gdouble result = 0.0;
 
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
 	total_symbols = (gint)OBJ_GET(object,"total_symbols");
+	lower_limit = (gint)OBJ_GET(object,"lower_limit");
+	upper_limit = (gint)OBJ_GET(object,"upper_limit");
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
@@ -338,6 +342,10 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	assert(evaluator);
 
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
+	if (result < lower_limit)
+		result = lower_limit;
+	if (result > upper_limit)
+		result = upper_limit;
 	for (i=0;i<total_symbols;i++)
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));

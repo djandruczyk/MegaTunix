@@ -53,6 +53,28 @@ bind_to_list=ae_tpsdot_controls,ae_normal_controls
 
 #----- Widgets ---------------------------------------------------------------
 
+[topframe]
+keys=page,tab_ident
+key_types=_INT_,_ENUM_
+page=0
+tab_ident=_ACCEL_WIZ_TAB_
+
+[tpsdot_pbar]
+keys=page,post_functions_with_arg,source,tab_ident
+key_types=_INT_,_STRING_,_STRING_,_ENUM_
+page=0
+post_functions_with_arg=register_rt_range
+source=tpsDOT
+tab_ident=_ACCEL_WIZ_TAB_
+
+[mapdot_pbar]
+keys=page,post_functions_with_arg,source,tab_ident
+key_types=_INT_,_STRING_,_STRING_,_ENUM_
+page=0
+post_functions_with_arg=register_rt_range
+source=mapDOT
+tab_ident=_ACCEL_WIZ_TAB_
+
 [accel_map_layout_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_

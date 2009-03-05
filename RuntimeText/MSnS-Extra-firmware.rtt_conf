@@ -4,7 +4,7 @@ minor=0
 
 [global]
 description=Runtime Text definitions for MSnS-E firmwares 
-rtt_total=24
+rtt_total=25
 
 [rt_text_0]
 int_name=batt
@@ -101,4 +101,8 @@ source=vecurr2
 [rt_text_23]
 int_name=sparkangle
 source=sparkangle
+
+[rt_text_24]
+int_name=tpsDOT
+source=tpsDOT
 
