@@ -84,6 +84,7 @@ void init(void)
 	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(20));
 	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(25));
+	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(15));
 	OBJ_SET(global_data,"hidden_list",hidden_list);
 	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);
@@ -152,6 +153,8 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Dashboard_FPS", &tmpi))
 			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
+			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
@@ -305,6 +308,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (gint)OBJ_GET(global_data,"rtslider_fps"));
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (gint)OBJ_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (gint)OBJ_GET(global_data,"dashboard_fps"));
+	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (gint)OBJ_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
 	tmpbuf = OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))

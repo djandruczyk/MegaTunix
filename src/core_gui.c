@@ -340,6 +340,10 @@ void finalize_core_gui(GladeXML * xml)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"dashboard_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(DASHBOARD_FPS));
 
+	widget = glade_xml_get_widget(xml,"ve3d_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"ve3d_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(VE3D_FPS));
+
 	/* COMMS Tab Start/Stop RT buttons */
 	button = glade_xml_get_widget(xml,"start_rt_button");
 	register_widget("comms_start_rt_button",button);

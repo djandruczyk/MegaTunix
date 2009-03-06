@@ -89,7 +89,7 @@ EXPORT void populate_dlog_choices_pf()
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);
 	gtk_table_set_col_spacings(GTK_TABLE(table),0);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 
 	/* Update status of the delimiter buttons... */
 
@@ -140,7 +140,7 @@ EXPORT void populate_dlog_choices_pf()
 		if ((gboolean)OBJ_GET(object,"log_by_default")==TRUE)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
-				(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL|GTK_SHRINK),
 				(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
 				0, 0);
 		j++;

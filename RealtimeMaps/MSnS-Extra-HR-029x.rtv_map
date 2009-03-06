@@ -885,7 +885,7 @@ tpsadc_size=_U08_
 tpslast_offset=38
 tpslast_size=_U08_
 tooltip="tpsDOT" Is the current TPS rate of change
-log_by_default=TRUE
+log_by_default=FALSE
 
 [derived_56]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
@@ -909,4 +909,4 @@ mapadc_size=_U08_
 tpslast_offset=38
 tpslast_size=_U08_
 tooltip="mapDOT" Is the current MAP rate of change
-
+log_by_default=FALSE

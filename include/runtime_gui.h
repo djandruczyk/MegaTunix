@@ -27,6 +27,7 @@ void rt_update_status(gpointer, gpointer);
 gboolean update_rttext(gpointer);
 gboolean update_rtsliders(gpointer);
 gboolean update_dashboards(gpointer);
+gboolean update_ve3ds(gpointer);
 /* Prototypes */
 
 #endif

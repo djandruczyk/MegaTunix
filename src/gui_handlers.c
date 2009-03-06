@@ -1264,6 +1264,14 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_dashboards,NULL);
 			OBJ_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
+		case VE3D_FPS:
+			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
+			source = (gint)OBJ_GET(global_data,"ve3d_id");
+			if (source)
+				g_source_remove(source);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_ve3ds,NULL);
+			OBJ_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
+			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;
 			req_fuel_change(widget);
@@ -2451,11 +2459,15 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 	gint sub_page = 0;
 	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
+	extern gboolean rt_forced_update;
 	GtkWidget *sub = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	tab_ident = (TabIdent)OBJ_GET(widget,"tab_ident");
 	active_page = tab_ident;
+
+	if (active_page == RUNTIME_TAB)
+		rt_forced_update = TRUE;
 
 	if (OBJ_GET(widget,"table_num"))
 	{

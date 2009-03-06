@@ -556,5 +556,9 @@ EXPORT void startup_default_timeouts_pf()
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_dashboards,NULL);
 	OBJ_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
+	rate = (gint)OBJ_GET(global_data,"ve3d_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_ve3ds,NULL);
+	OBJ_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
+
 }
 

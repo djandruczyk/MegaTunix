@@ -16,6 +16,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <fileio.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <listmgmt.h>
 #include <notifications.h>
@@ -350,12 +351,22 @@ void set_title(gchar * text)
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
 	static GtkWidget *info_label = NULL;
+	extern Firmware_Details *firmware;
 
 	if ((!main_window) || (leaving))
 		return;
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
-	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+
+	if (firmware)
+	{
+		if (firmware->actual_signature)
+			tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+		else
+			tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+	}
+	else
+		tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
 	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
 	g_free(tmpbuf);
