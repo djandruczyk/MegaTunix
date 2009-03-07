@@ -91,7 +91,7 @@ gboolean open_serial(gchar * port_name)
 		err_text = (gchar *)g_strerror(errno);
 		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"",port_name,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",port_name,err_text),FALSE,FALSE);
 	}
@@ -300,9 +300,11 @@ void *serial_repair_thread(gpointer data)
 	 */
 	if (serial_is_open == TRUE)
 	{
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
 		while (i <= 5)
 		{
+			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
 				g_thread_exit(0);

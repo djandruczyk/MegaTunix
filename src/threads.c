@@ -147,6 +147,7 @@ void *thread_dispatcher(gpointer data)
 
 		if ((!offline) && (((!connected) && (port_open)) || (!port_open)))
 		{
+			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating serial repair thread!\n"));
 			repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
 			g_thread_join(repair_thread);
 		}
