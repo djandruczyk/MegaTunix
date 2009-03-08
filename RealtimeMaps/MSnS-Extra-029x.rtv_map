@@ -850,8 +850,8 @@ tooltip="Boost DC" is the Duty Cycle of the Bost Controller Ouput signal.
 log_by_default=FALSE
 
 [derived_54]
-keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsDOT
 dlog_gui_name=tpsDOT
 dlog_field_name=tpsDOT
@@ -874,8 +874,8 @@ tooltip="tpsDOT" Is the current TPS rate of change
 log_by_default=FALSE
 
 [derived_55]
-keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapDOT
 dlog_gui_name=mapDOT
 dlog_field_name=mapDOT
