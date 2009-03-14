@@ -23,6 +23,8 @@ void process_rt_vars(void * );
 gboolean lookup_precision(gchar *, gint *);
 gboolean lookup_current_value(gchar *, gfloat *);
 gboolean lookup_previous_value(gchar *, gfloat *);
+gboolean lookup_previous_nth_value(gchar *, gint, gfloat *);
+gboolean lookup_previous_n_values(gchar *, gint, gfloat *);
 gfloat handle_complex_expr(GObject *, void *,ConvType);
 gfloat handle_special(GObject *,gchar *);
 gfloat handle_multi_expression(GObject *, guchar *, GHashTable *);

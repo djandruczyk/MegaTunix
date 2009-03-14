@@ -520,6 +520,82 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	return TRUE;
 }
 
+
+/*!
+ \brief lookup_previous_nth_value() gets the nth previosu value of the derived
+ variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ 5 samples "back in time"
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+
+	if (!internal_name)
+	{
+		*value = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	g_static_mutex_lock(&rtv_mutex);
+	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (index > n)
+		index -= n;  /* get PREVIOUS nth one */
+	*value = g_array_index(history,gfloat,index);
+	g_static_mutex_unlock(&rtv_mutex);
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_previous_n_values() gets the n previous values of the derived
+ variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ 5 samples "back in time"
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+	gint i = 0;
+
+	if (!internal_name)
+	{
+		for (i=0;i<n;i++)
+			values[i] = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	g_static_mutex_lock(&rtv_mutex);
+	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (index > n)
+	{
+		for (i=0;i<n;i++)
+		{
+			index--;  /* get PREVIOUS nth one */
+			values[i] = g_array_index(history,gfloat,index);
+		}
+	}
+	g_static_mutex_unlock(&rtv_mutex);
+	return TRUE;
+}
+
+
 /*!
  \brief lookup_precision() gets the current precision of the derived
  variable requested by name.

@@ -1101,6 +1101,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	/* Render a red dot at the active VE map position */
 	glPointSize(MIN(w,h)/55.0);
+	glLineWidth(MIN(w,h)/300.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
@@ -1217,11 +1218,11 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	drawOrthoText("Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
 
 	bottom = 0.0;
-	/* Render a green dot at the active VE map position */
-	glPointSize(MIN(w,h)/65.0);
+	/* Render a Blue dot at the active VE map position */
+	glPointSize(MIN(w,h)/45.0);
 	glLineWidth(MIN(w,h)/300.0);
 
-	glColor3f(0.0,1.0,0.0);
+	glColor3f(0.0,0.0,1.0);
 	if (ve_view->fixed_scale)
 	{
 		tmpf1 = get_fixed_pos(ve_view,cur_val->x_val,_X_);
@@ -1246,7 +1247,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
 
 	glBegin(GL_POINTS);
-	glVertex3f( tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glEnd();
 
 	glBegin(GL_LINE_STRIP);
@@ -1269,19 +1270,20 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glEnd();
 
 
-	/* Tail to last value. */
-	glColor3f(0.0,0.85,0.0);
+	glLineWidth(MIN(w,h)/100.0);
+	/* Tail to second value. */
+	glColor3f(0.0,0.0,0.90);
 	if (ve_view->fixed_scale)
 	{
-		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_val,_X_);
-		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_val,_Y_);
+		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[0],_X_);
+		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[0],_Y_);
 	}
 	else
 	{
-		tmpf4 = (cur_val->p_x_val-ve_view->x_trans)*ve_view->x_scale;
-		tmpf5 = (cur_val->p_y_val-ve_view->y_trans)*ve_view->y_scale;
+		tmpf4 = (cur_val->p_x_vals[0]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf5 = (cur_val->p_y_vals[0]-ve_view->y_trans)*ve_view->y_scale;
 	}
-	tmpf6 = (cur_val->p_z_val-ve_view->z_trans)*ve_view->z_scale;
+	tmpf6 = (cur_val->p_z_vals[0]-ve_view->z_trans)*ve_view->z_scale;
 	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
 		out_of_bounds = TRUE;
 	else
@@ -1294,20 +1296,103 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
+	glPointSize(MIN(w,h)/60.0);
 	glBegin(GL_POINTS);
-	glVertex3f( tmpf4,tmpf5,tmpf6);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
 
 	glBegin(GL_LINE_STRIP);
-	/* If anythign  out of bounds change color and clamp! */
+	/* If anything out of bounds change color and clamp! */
 	if (out_of_bounds)
-		glColor3f(0.85,0.0,0.0);
+		glColor3f(0.90,0.0,0.0);
 	else
-		glColor3f(0.0,0.85,0.0);
+		glColor3f(0.0,0.0,0.90);
 
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 
+
+	/* Tail to second value. */
+	glColor3f(0.0,0.0,0.75);
+	if (ve_view->fixed_scale)
+	{
+		tmpf1 = get_fixed_pos(ve_view,cur_val->p_x_vals[1],_X_);
+		tmpf2 = get_fixed_pos(ve_view,cur_val->p_y_vals[1],_Y_);
+	}
+	else
+	{
+		tmpf1 = (cur_val->p_x_vals[1]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf2 = (cur_val->p_y_vals[1]-ve_view->y_trans)*ve_view->y_scale;
+	}
+	tmpf3 = (cur_val->p_z_vals[1]-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf1 = tmpf1 > 1.0 ? 1.0:tmpf1;
+	tmpf1 = tmpf1 < 0.0 ? 0.0:tmpf1;
+	tmpf2 = tmpf2 > 1.0 ? 1.0:tmpf2;
+	tmpf2 = tmpf2 < 0.0 ? 0.0:tmpf2;
+	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
+	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
+
+	glPointSize(MIN(w,h)/70.0);
+	glBegin(GL_POINTS);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	/* If anything out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(0.75,0.0,0.0);
+	else
+		glColor3f(0.0,0.0,0.75);
+
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	glEnd();
+
+	/* Tail to last value. */
+	glColor3f(0.0,0.0,0.65);
+	if (ve_view->fixed_scale)
+	{
+		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[2],_X_);
+		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[2],_Y_);
+	}
+	else
+	{
+		tmpf4 = (cur_val->p_x_vals[2]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf5 = (cur_val->p_y_vals[2]-ve_view->y_trans)*ve_view->y_scale;
+	}
+	tmpf6 = (cur_val->p_z_vals[2]-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf4 = tmpf4 > 1.0 ? 1.0:tmpf4;
+	tmpf4 = tmpf4 < 0.0 ? 0.0:tmpf4;
+	tmpf5 = tmpf5 > 1.0 ? 1.0:tmpf5;
+	tmpf5 = tmpf5 < 0.0 ? 0.0:tmpf5;
+	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
+	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
+
+	glPointSize(MIN(w,h)/80.0);
+	glBegin(GL_POINTS);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	/* If anything out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(0.65,0.0,0.0);
+	else
+		glColor3f(0.0,0.0,0.65);
+
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
 
 	/* Live X axis marker */
@@ -1325,9 +1410,9 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	/* draw time - Frames Per Second */
 	//label = g_strdup_printf("%i",(gint)cur_val->x_val);
-//	
-//	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
-//	g_free(label);
+	//	
+	//	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
+	//	g_free(label);
 
 }
 
@@ -2255,8 +2340,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 
 		lookup_current_value(multi->source,&x_val);
 		cur_val->x_val = x_val;
-		lookup_previous_value(multi->source,&x_val);
-		cur_val->p_x_val = x_val;
+		lookup_previous_n_values(multi->source,3,cur_val->p_x_vals);
 		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,multi->precision,multi->suffix);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 	}
@@ -2265,8 +2349,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* Runtime value */
 		lookup_current_value(ve_view->x_source,&x_val);
 		cur_val->x_val = x_val;
-		lookup_previous_value(ve_view->x_source,&x_val);
-		cur_val->p_x_val = x_val;
+		lookup_previous_n_values(ve_view->x_source,3,cur_val->p_x_vals);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
 		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
 	}
@@ -2304,8 +2387,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(multi->source,&y_val);
 		cur_val->y_val = y_val;
-		lookup_previous_value(multi->source,&y_val);
-		cur_val->p_y_val = y_val;
+		lookup_previous_n_values(multi->source,3,cur_val->p_y_vals);
 		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,multi->precision,multi->suffix);
 	}
 	else
@@ -2313,8 +2395,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* Runtime value */
 		lookup_current_value(ve_view->y_source,&y_val);
 		cur_val->y_val = y_val;
-		lookup_previous_value(ve_view->y_source,&y_val);
-		cur_val->p_y_val = y_val;
+		lookup_previous_n_values(ve_view->y_source,3,cur_val->p_y_vals);
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
 		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
 	}
@@ -2355,8 +2436,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(multi->source,&z_val);
 		cur_val->z_val = z_val;
-		lookup_previous_value(multi->source,&z_val);
-		cur_val->p_z_val = z_val;
+		lookup_previous_n_values(multi->source,3,cur_val->p_z_vals);
 		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,multi->precision,multi->suffix);
 	}
 	else
@@ -2364,8 +2444,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(ve_view->z_source,&z_val);
 		cur_val->z_val = z_val;
-		lookup_previous_value(ve_view->z_source,&z_val);
-		cur_val->p_z_val = z_val;
+		lookup_previous_n_values(ve_view->z_source,3,cur_val->p_z_vals);
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
 		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
 	}

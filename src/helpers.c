@@ -523,7 +523,6 @@ EXPORT void open_tcpip_socket_pf()
 	extern gboolean interrogated;
 	extern volatile gboolean offline;
 	gint socket = 0;
-	return 0 ;
 
 	if ((interrogated) || (offline))
 	{
