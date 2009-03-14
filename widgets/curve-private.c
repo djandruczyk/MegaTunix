@@ -306,26 +306,29 @@ void update_curve_position (MtxCurve *curve)
 
 	cairo_set_font_size (cr, 15);
 
-	message = g_strdup_printf("%s", priv->title);
+	if (priv->title)
+	{
+		message = g_strdup_printf("%s", priv->title);
 
-	cairo_text_extents (cr, message, &extents);
+		cairo_text_extents (cr, message, &extents);
 
-	cairo_set_source_rgba (cr,0.0,0,0,0.75);
-	cairo_rectangle(cr,priv->w/2 - (extents.width/2)-priv->border,
-                               	extents.height-priv->border,
+		cairo_set_source_rgba (cr,0.0,0,0,0.75);
+		cairo_rectangle(cr,priv->w/2 - (extents.width/2)-priv->border,
+				extents.height-priv->border,
 				extents.width+(2*priv->border),
 				extents.height+(2*priv->border));
-	cairo_fill (cr);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_TEXT].red/65535.0,
-			priv->colors[COL_TEXT].green/65535.0,
-			priv->colors[COL_TEXT].blue/65535.0);
-	cairo_move_to (cr, 
-			priv->w/2-(extents.width/2),
-			(extents.height*2));
+		cairo_fill (cr);
+		cairo_set_source_rgb (cr, 
+				priv->colors[COL_TEXT].red/65535.0,
+				priv->colors[COL_TEXT].green/65535.0,
+				priv->colors[COL_TEXT].blue/65535.0);
+		cairo_move_to (cr, 
+				priv->w/2-(extents.width/2),
+				(extents.height*2));
 
-	cairo_show_text (cr, message);
-	g_free(message);
+		cairo_show_text (cr, message);
+		g_free(message);
+	}
 
 	cairo_stroke (cr);
 	if (priv->vertex_selected)

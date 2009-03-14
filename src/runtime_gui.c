@@ -283,8 +283,9 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	previous = g_array_index(history, gfloat, current_index);
 	g_static_mutex_unlock(&rtv_mutex);
 
-	if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
-		return;
+	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
+		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
+			return;
 
 	if ((current != previous) || (forced_update))
 	{
