@@ -306,7 +306,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	gchar *tmpbuf = NULL;
 	gint page = -1;
 	gint canID = -1;
-	static gint lastcount = 0;
+	guint16 curcount = 0;
+	static guint16 lastcount = 0;
 	extern Firmware_Details *firmware;
 	extern gint ms_ve_goodread_count;
 	extern gint ms_reset_count;
@@ -339,7 +340,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case NUM_REV:
 			if (offline)
 				break;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			ptr8 = (guchar *)message->recv_buf;
 			if (count > 0)
 				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
@@ -349,7 +350,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case TEXT_REV:
 			if (offline)
 				break;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
 			else
@@ -358,7 +359,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case SIGNATURE:
 			if (offline)
 				break;
-			 count = read_data(-1,&message->recv_buf);
+			 count = read_data(-1,&message->recv_buf,FALSE);
                          if (count > 0)
 			 {
 				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
@@ -369,7 +370,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS2_VECONST:
 			page = (gint)OBJ_GET(output->object,"page");
 			canID = (gint)OBJ_GET(output->object,"canID");
-			count = read_data(firmware->page_params[page]->length,&message->recv_buf);
+			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
 			store_new_block(canID,page,0,
@@ -379,7 +380,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			ms_ve_goodread_count++;
 			break;
 		case MS1_RT_VARS:
-			count = read_data(firmware->rtvars_size,&message->recv_buf);
+			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
 			ptr8 = (guchar *)message->recv_buf;
@@ -393,7 +394,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - ptr8[0] > 1) && \
+			if ((lastcount - ptr8[0] > 1) || \
 					(lastcount - ptr8[0] > 255))
 			{
 				ms_reset_count++;
@@ -409,31 +410,33 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
-			count = read_data(firmware->rtvars_size,&message->recv_buf);
+			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
 			ptr16 = (guint16 *)message->recv_buf;
 			/* Test for MS reset */
 			if (just_starting)
 			{
-				lastcount = ptr16[0];
+				lastcount = GUINT16_TO_BE(ptr16[0]);
 				just_starting = FALSE;
 			}
+			else
+				curcount = GUINT16_TO_BE(ptr16[0]);
 			/* Check for clock jump from the MS, a 
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - ptr16[0] > 1) && \
-					(lastcount - ptr16[0] > 65535))
+			if ((lastcount - curcount > 1) || \
+					(lastcount - curcount > 65535))
 			{
 				ms_reset_count++;
-			/*	printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,ptr16[0]);
-			 */
+			/*	printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);*/
+			 
 				gdk_beep();
 			}
 			else
 				ms_goodread_count++;
-			lastcount = ptr16[0];
+			lastcount = curcount;
 			/* Feed raw buffer over to post_process()
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
@@ -446,7 +449,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS1_GETERROR:
 			forced_update = TRUE;
 			force_page_change = TRUE;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
 				thread_update_logbar("error_status_view",NULL,g_strdup("No ECU Errors were reported....\n"),FALSE,FALSE);

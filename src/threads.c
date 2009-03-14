@@ -47,7 +47,6 @@ extern gboolean interrogated;			/* valid connection with MS */
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 volatile gint last_page = -1;
-extern GStaticMutex serio_mutex;
 
 
 /*!
@@ -374,7 +373,6 @@ void handle_page_change(gint page, gint last)
 	 * to see if previous and last match,  if so return, otherwise burn
 	 * then change page
 	 */
-	g_static_mutex_lock(&serio_mutex);
 	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
 	{
 		/*printf("page and last don't match AND there's a ram difference, burning, before changing\n");
@@ -389,7 +387,6 @@ void handle_page_change(gint page, gint last)
 		 */
 		queue_ms1_page_change(page);
 	}
-	g_static_mutex_unlock(&serio_mutex);
 }
 
 

@@ -74,12 +74,9 @@ void win32_setup_serial_params(gint fd, gint baud)
 
 	timeouts.ReadIntervalTimeout         = 0;
 	timeouts.ReadTotalTimeoutMultiplier  = 0;
-	timeouts.WriteTotalTimeoutConstant   = 25;
-	timeouts.WriteTotalTimeoutMultiplier = 2;
-	if (baud == 112500)
-		timeouts.ReadTotalTimeoutConstant    = 250;
-	else
-		timeouts.ReadTotalTimeoutConstant    = 25;
+	timeouts.WriteTotalTimeoutConstant   = 0;
+	timeouts.WriteTotalTimeoutMultiplier = 0;
+	timeouts.ReadTotalTimeoutConstant    = 100;
 
 	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 

@@ -84,7 +84,7 @@ gint comms_test()
 		connected = FALSE;
 		return connected;
 	}
-	result = read_data(1,NULL);
+	result = read_data(1,NULL,FALSE);
 	if (!result) /* Failure,  Attempt MS-II method */
 	{
 		if (write(serial_params->fd,"c",1) != 1)
@@ -95,7 +95,7 @@ gint comms_test()
 			connected = FALSE;
 			return connected;
 		}
-		result = read_data(2,NULL);
+		result = read_data(2,NULL,FALSE);
 	}
 	if (result)	/* Success */
 	{

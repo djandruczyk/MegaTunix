@@ -44,7 +44,7 @@ extern GObject *global_data;
  \param buffer, pointer to buffer to stick the data.
  \returns TRUE on success, FALSE on failure 
  */
-gint read_data(gint total_wanted, void **buffer)
+gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
 	gint res = 0;
 	gint total_read = 0;
@@ -56,8 +56,11 @@ gint read_data(gint total_wanted, void **buffer)
 	extern gboolean connected;
 	extern Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static gint failcount = 0;
+	static gboolean reset = FALSE;
 
 	g_static_mutex_lock(&mutex);
+
 	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
 	total_read = 0;
@@ -67,42 +70,59 @@ gint read_data(gint total_wanted, void **buffer)
 		ignore_errors = TRUE;
 		total_wanted = 1024;
 	}
+	/* Werid windows issue.  Occasional "short" reads,  but nothing else
+	 * comes in for some reason. So if that happens, double what's read
+	 * next time and throw it away to get things back in sync. 
+	 * Ugly hack,  but couldn't find out why it did it.  might be due to
+	 * excess latency in my test VM
+	 */
+	if (reset)
+		total_wanted *= 2;
 
 	g_static_mutex_lock(&serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
-		total_read += res = read(serial_params->fd,
-				ptr+total_read,
-				total_wanted-total_read);
+			total_read += res = read(serial_params->fd,
+					ptr+total_read,
+					total_wanted-total_read);
 
 		/* Increment bad read counter.... */
-		if (res < 0) /* I/O Error */
+		if (res < 0) /* I/O Error Device disappearance or other */
 		{
 			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
+			connected = FALSE;
 			break;
 		}
-		if (res == 0)
-			zerocount++;
-
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
-		if (zerocount > 1)  /* 2 bad reads, abort */
+		if (res == 0)  /* Short read! */
 		{
 			bad_read = TRUE;
 			break;
 		}
+
+		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 	}
 	g_static_mutex_unlock(&serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
 		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
-		dbg_func(SERIAL_WR|SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",(gchar *)g_strerror(errno)));
 
-		flush_serial(serial_params->fd, BOTH);
 		serial_params->errcount++;
-		connected = FALSE;
+		if ((reset_on_fail) && (!reset))
+			reset = TRUE;
+		else
+			reset = FALSE;
+		failcount++;
+		/* Excessive failures triggers port recheck */
+		if (failcount > 10)
+			connected = FALSE;
+	}
+	else
+	{
+		failcount = 0;
+		reset = FALSE;
 	}
 
 	if (buffer)

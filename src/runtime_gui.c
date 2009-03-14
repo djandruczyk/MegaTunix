@@ -395,6 +395,8 @@ gboolean update_ve3ds(gpointer data)
 	MultiSource *multi = NULL;
 	extern gint * algorithm;
 
+	if (!firmware)
+		return TRUE;
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
