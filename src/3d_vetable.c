@@ -1218,9 +1218,123 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	drawOrthoText("Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
 
 	bottom = 0.0;
+
+	/* Tail, last val. */
+	glLineWidth(MIN(w,h)/100.0);
+	glColor3f(0.0,0.0,0.50);
+	if (ve_view->fixed_scale)
+	{
+		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[2],_X_);
+		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[2],_Y_);
+	}
+	else
+	{
+		tmpf4 = (cur_val->p_x_vals[2]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf5 = (cur_val->p_y_vals[2]-ve_view->y_trans)*ve_view->y_scale;
+	}
+	tmpf6 = (cur_val->p_z_vals[2]-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf4 = tmpf4 > 1.0 ? 1.0:tmpf4;
+	tmpf4 = tmpf4 < 0.0 ? 0.0:tmpf4;
+	tmpf5 = tmpf5 > 1.0 ? 1.0:tmpf5;
+	tmpf5 = tmpf5 < 0.0 ? 0.0:tmpf5;
+	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
+	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
+
+	glPointSize(MIN(w,h)/100.0);
+	glBegin(GL_POINTS);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glEnd();
+
+	/* Tail, second last val. */
+	glColor3f(0.0,0.0,0.65);
+	if (ve_view->fixed_scale)
+	{
+		tmpf1 = get_fixed_pos(ve_view,cur_val->p_x_vals[1],_X_);
+		tmpf2 = get_fixed_pos(ve_view,cur_val->p_y_vals[1],_Y_);
+	}
+	else
+	{
+		tmpf1 = (cur_val->p_x_vals[1]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf2 = (cur_val->p_y_vals[1]-ve_view->y_trans)*ve_view->y_scale;
+	}
+	tmpf3 = (cur_val->p_z_vals[1]-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf1 = tmpf1 > 1.0 ? 1.0:tmpf1;
+	tmpf1 = tmpf1 < 0.0 ? 0.0:tmpf1;
+	tmpf2 = tmpf2 > 1.0 ? 1.0:tmpf2;
+	tmpf2 = tmpf2 < 0.0 ? 0.0:tmpf2;
+	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
+	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
+
+	glPointSize(MIN(w,h)/80.0);
+	glBegin(GL_POINTS);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	/* If anything out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(0.65,0.0,0.0);
+	else
+		glColor3f(0.0,0.0,0.65);
+
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glEnd();
+
+	/* Tail, third from last val. */
+	glColor3f(0.0,0.0,0.80);
+	if (ve_view->fixed_scale)
+	{
+		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[0],_X_);
+		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[0],_Y_);
+	}
+	else
+	{
+		tmpf4 = (cur_val->p_x_vals[0]-ve_view->x_trans)*ve_view->x_scale;
+		tmpf5 = (cur_val->p_y_vals[0]-ve_view->y_trans)*ve_view->y_scale;
+	}
+	tmpf6 = (cur_val->p_z_vals[0]-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf4 = tmpf4 > 1.0 ? 1.0:tmpf4;
+	tmpf4 = tmpf4 < 0.0 ? 0.0:tmpf4;
+	tmpf5 = tmpf5 > 1.0 ? 1.0:tmpf5;
+	tmpf5 = tmpf5 < 0.0 ? 0.0:tmpf5;
+	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
+	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
+
+	glPointSize(MIN(w,h)/70.0);
+	glBegin(GL_POINTS);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	/* If anything out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(0.80,0.0,0.0);
+	else
+		glColor3f(0.0,0.0,0.80);
+
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	glEnd();
+
 	/* Render a Blue dot at the active VE map position */
-	glPointSize(MIN(w,h)/45.0);
-	glLineWidth(MIN(w,h)/300.0);
+	glPointSize(MIN(w,h)/55.0);
 
 	glColor3f(0.0,0.0,1.0);
 	if (ve_view->fixed_scale)
@@ -1251,11 +1365,23 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glEnd();
 
 	glBegin(GL_LINE_STRIP);
-	/* If anythign  out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(1.0,0.0,0.0);
+	else
+		glColor3f(0.0,0.0,1.0);
+
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glEnd();
+
+	glLineWidth(MIN(w,h)/300.0);
+	glBegin(GL_LINE_STRIP);
+	/* If anything out of bounds change color and clamp! */
 	if (out_of_bounds)
 		glColor3f(1.0,0.0,0.0);
 	else
 		glColor3f(0.0,1.0,0.0);
+
 
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glVertex3f(tmpf1,tmpf2,bottom);
@@ -1269,131 +1395,6 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glVertex3f(tmpf1,0.0,bottom);
 	glEnd();
 
-
-	glLineWidth(MIN(w,h)/100.0);
-	/* Tail to second value. */
-	glColor3f(0.0,0.0,0.90);
-	if (ve_view->fixed_scale)
-	{
-		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[0],_X_);
-		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[0],_Y_);
-	}
-	else
-	{
-		tmpf4 = (cur_val->p_x_vals[0]-ve_view->x_trans)*ve_view->x_scale;
-		tmpf5 = (cur_val->p_y_vals[0]-ve_view->y_trans)*ve_view->y_scale;
-	}
-	tmpf6 = (cur_val->p_z_vals[0]-ve_view->z_trans)*ve_view->z_scale;
-	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
-		out_of_bounds = TRUE;
-	else
-		out_of_bounds = FALSE;
-
-	tmpf4 = tmpf4 > 1.0 ? 1.0:tmpf4;
-	tmpf4 = tmpf4 < 0.0 ? 0.0:tmpf4;
-	tmpf5 = tmpf5 > 1.0 ? 1.0:tmpf5;
-	tmpf5 = tmpf5 < 0.0 ? 0.0:tmpf5;
-	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
-	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
-
-	glPointSize(MIN(w,h)/60.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glEnd();
-
-	glBegin(GL_LINE_STRIP);
-	/* If anything out of bounds change color and clamp! */
-	if (out_of_bounds)
-		glColor3f(0.90,0.0,0.0);
-	else
-		glColor3f(0.0,0.0,0.90);
-
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-
-
-	/* Tail to second value. */
-	glColor3f(0.0,0.0,0.75);
-	if (ve_view->fixed_scale)
-	{
-		tmpf1 = get_fixed_pos(ve_view,cur_val->p_x_vals[1],_X_);
-		tmpf2 = get_fixed_pos(ve_view,cur_val->p_y_vals[1],_Y_);
-	}
-	else
-	{
-		tmpf1 = (cur_val->p_x_vals[1]-ve_view->x_trans)*ve_view->x_scale;
-		tmpf2 = (cur_val->p_y_vals[1]-ve_view->y_trans)*ve_view->y_scale;
-	}
-	tmpf3 = (cur_val->p_z_vals[1]-ve_view->z_trans)*ve_view->z_scale;
-	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
-		out_of_bounds = TRUE;
-	else
-		out_of_bounds = FALSE;
-
-	tmpf1 = tmpf1 > 1.0 ? 1.0:tmpf1;
-	tmpf1 = tmpf1 < 0.0 ? 0.0:tmpf1;
-	tmpf2 = tmpf2 > 1.0 ? 1.0:tmpf2;
-	tmpf2 = tmpf2 < 0.0 ? 0.0:tmpf2;
-	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
-	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
-
-	glPointSize(MIN(w,h)/70.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-	glEnd();
-
-	glBegin(GL_LINE_STRIP);
-	/* If anything out of bounds change color and clamp! */
-	if (out_of_bounds)
-		glColor3f(0.75,0.0,0.0);
-	else
-		glColor3f(0.0,0.0,0.75);
-
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-
-	glEnd();
-
-	/* Tail to last value. */
-	glColor3f(0.0,0.0,0.65);
-	if (ve_view->fixed_scale)
-	{
-		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[2],_X_);
-		tmpf5 = get_fixed_pos(ve_view,cur_val->p_y_vals[2],_Y_);
-	}
-	else
-	{
-		tmpf4 = (cur_val->p_x_vals[2]-ve_view->x_trans)*ve_view->x_scale;
-		tmpf5 = (cur_val->p_y_vals[2]-ve_view->y_trans)*ve_view->y_scale;
-	}
-	tmpf6 = (cur_val->p_z_vals[2]-ve_view->z_trans)*ve_view->z_scale;
-	if ((tmpf4 > 1.0 ) || (tmpf4 < 0.0) ||(tmpf5 > 1.0 ) || (tmpf5 < 0.0))
-		out_of_bounds = TRUE;
-	else
-		out_of_bounds = FALSE;
-
-	tmpf4 = tmpf4 > 1.0 ? 1.0:tmpf4;
-	tmpf4 = tmpf4 < 0.0 ? 0.0:tmpf4;
-	tmpf5 = tmpf5 > 1.0 ? 1.0:tmpf5;
-	tmpf5 = tmpf5 < 0.0 ? 0.0:tmpf5;
-	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
-	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
-
-	glPointSize(MIN(w,h)/80.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glEnd();
-
-	glBegin(GL_LINE_STRIP);
-	/* If anything out of bounds change color and clamp! */
-	if (out_of_bounds)
-		glColor3f(0.65,0.0,0.0);
-	else
-		glColor3f(0.0,0.0,0.65);
-
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glEnd();
 
 	/* Live X axis marker */
 	label = g_strdup_printf("%i",(gint)cur_val->x_val);
@@ -1535,9 +1536,9 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
-	PangoFontMetrics *font_metrics;
+//	PangoFontMetrics *font_metrics;
 
-	gint font_height;
+//	gint font_height;
 	font_desc = pango_font_description_copy(widget->style->font_desc);
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
@@ -1551,12 +1552,12 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 
 		exit (-1);
 	}
-	font_metrics = pango_font_get_metrics (font, NULL);
-	font_height = pango_font_metrics_get_ascent (font_metrics) +
-		pango_font_metrics_get_descent (font_metrics);
-	font_height = PANGO_PIXELS (font_height);
+//	font_metrics = pango_font_get_metrics (font, NULL);
+//	font_height = pango_font_metrics_get_ascent (font_metrics) +
+//		pango_font_metrics_get_descent (font_metrics);
+//	font_height = PANGO_PIXELS (font_height);
 	pango_font_description_free (font_desc);
-	pango_font_metrics_unref (font_metrics);
+//	pango_font_metrics_unref (font_metrics);
 }
 
 
