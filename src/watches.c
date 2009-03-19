@@ -35,13 +35,11 @@ EXPORT void fire_off_rtv_watches_pf()
 {
 	if (watch_hash)
 	{
-//		g_static_mutex_lock(&watch_mutex);
 		g_hash_table_foreach(watch_hash,process_watches,NULL);
-//		g_static_mutex_unlock(&watch_mutex);
 	}
 }
 
-guint32 create_single_bit_watch(gchar * varname, gint bit, gboolean state, gchar *fname, gpointer user_data)
+guint32 create_single_bit_watch(gchar * varname, gint bit, gboolean state, gboolean only_once,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 	watch = g_new0(DataWatch,1);
@@ -52,12 +50,26 @@ guint32 create_single_bit_watch(gchar * varname, gint bit, gboolean state, gchar
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
-//	g_static_mutex_lock(&watch_mutex);
+	watch->only_once = only_once;
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	//printf("Create watch %ui\n",watch->id);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
-//	g_static_mutex_unlock(&watch_mutex);
+	return watch->id;
+}
+
+guint32 create_value_changed_watch(gchar * varname, gboolean only_once,gchar *fname, gpointer user_data)
+{
+	DataWatch *watch = NULL;
+	watch = g_new0(DataWatch,1);
+	watch->style = VALUE_CHANGED;
+	watch->varname = g_strdup(varname);
+	watch->function = g_strdup(fname);
+	watch->user_data = user_data;
+	watch->id = g_random_int();
+	watch->only_once = only_once;
+	if (!watch_hash)
+		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
+	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -76,11 +88,7 @@ void watch_destroy(gpointer data)
 
 void remove_watch(guint32 watch_id)
 {
-//	g_static_mutex_lock(&watch_mutex);
-	//printf("remove watch %ui\n",watch_id);
 	g_hash_table_remove(watch_hash,GINT_TO_POINTER(watch_id));
-	//printf("watch removed %ui\n",watch_id);
-//	g_static_mutex_unlock(&watch_mutex);
 }
 
 
@@ -88,10 +96,10 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
 	guint8 tmpi = 0;
 	GModule *module = NULL;
 	void (*func) (gpointer);
-	//printf("key id %ui\n",GPOINTER_TO_UINT(key));
 	switch (watch->style)
 	{
 		case SINGLE_BIT:
@@ -103,10 +111,23 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 				if (module)
 					g_module_symbol(module,watch->function, (void *)&func);
 				g_module_close(module);
-				//printf("Fire watch handler %ui\n",watch->id);
 				func(watch->user_data);
-
-				remove_watch(watch->id);
+				if (watch->only_once)
+					remove_watch(watch->id);
+			}
+			break;
+		case VALUE_CHANGED:
+			lookup_current_value(watch->varname, &tmpf);
+			lookup_previous_value(watch->varname, &tmpf2);
+			if (tmpf != tmpf2)
+			{
+				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+				if (module)
+					g_module_symbol(module,watch->function, (void *)&func);
+				g_module_close(module);
+				func(watch->user_data);
+				if (watch->only_once)
+					remove_watch(watch->id);
 			}
 			break;
 		default:

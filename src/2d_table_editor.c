@@ -22,13 +22,21 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
+#include <rtv_processor.h>
 #include <stdlib.h>
 #include <tabloader.h>
+#include <watches.h>
 #include <widgetmgmt.h>
 
 
 extern GObject *global_data;
 extern Firmware_Details *firmware;
+typedef struct
+{
+	GtkWidget *curve;
+	Axis axis;
+	gchar * source;
+}CurveData;
 
 EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 {
@@ -45,6 +53,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
@@ -59,6 +68,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gint offset = 0;
 	gint i = 0;
 	gint j = 0;
+	guint32 id = 0;
 	gint rows = 0;
 	gint table_num = 0;
 
@@ -109,6 +119,14 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_container_add(GTK_CONTAINER(parent),curve);
 		gtk_widget_realize(curve);
 		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+		cdata = g_new0(CurveData, 1);
+		cdata->curve = curve;
+		cdata->axis = _X_;
+		cdata->source = firmware->te_params[table_num]->x_source;
+		id = create_value_changed_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+		mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
+		OBJ_SET(curve,"cdata",(gpointer)cdata);
+		OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 		mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
 		g_signal_connect(G_OBJECT(curve),"coords-changed",
 				G_CALLBACK(coords_changed), NULL);
@@ -258,9 +276,11 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
+	GList *curve_list = NULL;
 	gchar * tmpbuf = NULL;
 	extern GList ***ve_widgets;
 	gint x_mult = 0;
@@ -268,6 +288,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	gint page = 0;
 	gint offset = 0;
 	gint i = 0;
+	guint32 id = 0;
 	gint rows = 0;
 
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
@@ -278,7 +299,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	window = glade_xml_get_widget(xml,"table_editor_window");
 
 	glade_xml_signal_autoconnect(xml);
-	
+
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(close_2d_editor),window);
 	g_signal_connect(G_OBJECT(window),"delete_event",
@@ -296,8 +317,17 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 
 	parent = glade_xml_get_widget(xml,"te_right_frame");
 	curve = mtx_curve_new();
+	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	gtk_container_add(GTK_CONTAINER(parent),curve);
 	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+	cdata = g_new0(CurveData, 1);
+	cdata->curve = curve;
+	cdata->axis = _X_;
+	cdata->source = firmware->te_params[table_num]->x_source;
+	id = create_value_changed_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
+	OBJ_SET(curve,"cdata",(gpointer)cdata);
+	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
 	g_signal_connect(G_OBJECT(curve),"coords-changed",
 			G_CALLBACK(coords_changed), NULL);
@@ -423,6 +453,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 	OBJ_SET(window,"widget_list",widget_list);
+	OBJ_SET(window,"curve_list",curve_list);
 	OBJ_SET(curve,"x_entries",x_entries);
 	OBJ_SET(curve,"y_entries",y_entries);
 	OBJ_SET(window,"x_entries",x_entries);
@@ -435,7 +466,6 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 
 gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
-	GArray *array = NULL;
 	GList *list = NULL;
 	
 	list = OBJ_GET(widget, "widget_list");
@@ -450,12 +480,6 @@ gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 		g_list_foreach(list,clean_curve,NULL);
 		g_list_free(list);
 	}
-	array = OBJ_GET(widget, "x_entries");
-	if (array)
-		g_array_free(array,TRUE);
-	array = OBJ_GET(widget, "y_entries");
-	if (array)
-		g_array_free(array,TRUE);
 	gtk_widget_destroy(widget);
 	return FALSE;
 }
@@ -476,6 +500,8 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 void clean_curve(gpointer curve_ptr, gpointer data)
 {
 	GArray *array = NULL;
+	guint32 id = 0;
+	CurveData *cdata = NULL;
 	GtkWidget *widget = (GtkWidget *)curve_ptr;
 
 	array = OBJ_GET(widget, "x_entries");
@@ -484,6 +510,12 @@ void clean_curve(gpointer curve_ptr, gpointer data)
 	array = OBJ_GET(widget, "y_entries");
 	if (array)
 		g_array_free(array,TRUE);
+	cdata = OBJ_GET(widget, "cdata");
+	if (cdata)
+		g_free(cdata);
+	id = (guint32)OBJ_GET(widget, "marker_id");
+	if (id > 0)
+		remove_watch(id);
 }
 
 gboolean update_2d_curve(GtkWidget *widget, gpointer data)
@@ -547,4 +579,15 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 {
 	close_2d_editor(OBJ_GET(widget,"window"),NULL);
 	return TRUE;
+}
+
+EXPORT void update_curve_marker(gpointer user_data)
+{
+	CurveData *cdata = (CurveData *)user_data;
+	gfloat tmpf = 0.0;
+	lookup_current_value(cdata->source,&tmpf);
+	if (cdata->axis == _X_)
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	if (cdata->axis == _Y_)
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 }

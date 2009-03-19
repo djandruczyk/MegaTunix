@@ -121,6 +121,8 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->vertex_selected = FALSE;
 	priv->show_vertexes = FALSE;
 	priv->show_grat = TRUE;
+	priv->show_x_marker = FALSE;
+	priv->show_y_marker = FALSE;
 	priv->coord_changed = FALSE;
 	priv->auto_hide = TRUE;
 	priv->vertex_id = 0;
@@ -156,6 +158,10 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[COL_TEXT].red=1.0*65535;
 	priv->colors[COL_TEXT].green=1.0*65535;
 	priv->colors[COL_TEXT].blue=1.0*65535;
+	/*! Marker Lines Color */
+	priv->colors[COL_MARKER].red=1.0*65535;
+	priv->colors[COL_MARKER].green=0.2*65535;
+	priv->colors[COL_MARKER].blue=0.2*65535;
 }
 
 
@@ -287,6 +293,23 @@ void update_curve_position (MtxCurve *curve)
 			cairo_stroke(cr);
 		}
 
+	}
+	/* Vertical and Horizontal Markers */
+	cairo_set_source_rgb (cr, priv->colors[COL_MARKER].red/65535.0,
+			priv->colors[COL_MARKER].green/65535.0,
+			priv->colors[COL_MARKER].blue/65535.0);
+	cairo_set_line_width (cr, 2.0);
+	if (priv->show_x_marker)
+	{
+		cairo_move_to (cr, (priv->x_marker*priv->x_scale) + priv->border,0);
+		cairo_line_to (cr, (priv->x_marker*priv->x_scale) + priv->border,priv->h);
+		cairo_stroke(cr);
+	}
+	if (priv->show_y_marker)
+	{
+		cairo_move_to (cr, 0,(priv->y_marker*priv->x_scale) + priv->border);
+		cairo_line_to (cr, priv->w,(priv->y_marker*priv->x_scale) + priv->border);
+		cairo_stroke(cr);
 	}
 
 	/* Update the Title text */
@@ -480,50 +503,6 @@ void generate_curve_background(MtxCurve *curve)
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
-	/* first one big yellow, with the green and red on top
-	 * This prevents seeing BG pixels due to antialiasing errors */
-/*
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_MID].red/65535.0,
-			priv->colors[COL_MID].green/65535.0,
-			priv->colors[COL_MID].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
-	cairo_fill(cr);
-	// Low green Arc 
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_LOW].red/65535.0,
-			priv->colors[COL_LOW].green/65535.0,
-			priv->colors[COL_LOW].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+45)*(M_PI/180.0));
-	cairo_fill(cr);
-	// High red Arc 
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_HIGH].red/65535.0,
-			priv->colors[COL_HIGH].green/65535.0,
-			priv->colors[COL_HIGH].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			(priv->start_angle+135)*(M_PI/180.0), 
-			(priv->start_angle+180)*(M_PI/180.0));
-	cairo_fill(cr);
-	// Pie Gauge Arcs 
-	cairo_set_line_width (cr, 1.0);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_NEEDLE].red/65535.0,
-			priv->colors[COL_NEEDLE].green/65535.0,
-			priv->colors[COL_NEEDLE].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
-	cairo_stroke(cr);
-	cairo_destroy (cr);
-*/
 }
 
 

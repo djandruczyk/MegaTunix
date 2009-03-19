@@ -21,11 +21,12 @@
 
 typedef enum
 {
-	SINGLE_BIT,
-	MULTI_BIT,
-	EXACT,
-	THRESHOLD,
-	RANGE,
+	SINGLE_BIT,		/*! Single bit watch */
+	MULTI_BIT,		/*! Multi-bit watch (not implemented yet) */
+	EXACT,			/*! Exact val watch (not implemented yet) */
+	THRESHOLD,		/*! Threshold val watch (not implemented yet) */
+	RANGE,			/*! Range val watch (not implemented yet) */
+	VALUE_CHANGED,		/*! Watch that triggers only on valud changes */
 	WATCH_COUNT
 }WatchStyle;
 
@@ -33,21 +34,23 @@ typedef struct _DataWatch DataWatch;
 
 struct _DataWatch
 {
-	guint32 id;
-	gint bit;
-	gint low;
-	gint high;
-	gint exact;
-	gint threshold;
-	gpointer user_data;
-	WatchStyle style;
-	gboolean state;
-	gchar * function;
-	gchar * varname;
+	guint32 id;		/*! Watch ID */
+	gint bit;		/*! Bit to watch */
+	gfloat low;		/*! Low point (range watch) */
+	gfloat high;		/*! Highpoint (range watch) */
+	gfloat exact;		/*! Exact value watch */
+	gint threshold;		/*! threshold watch */
+	gpointer user_data;	/*! user data to pass to user function */
+	WatchStyle style;	/*! type of watch */
+	gboolean state;		/*! state for bit watches */
+	gboolean only_once;	/*! Run only once then evaporate */
+	gchar * function;	/*! function to call when watch strikes */
+	gchar * varname;	/*! Variable name (rtv internal name) to check */
 };
 /* Prototypes */
 EXPORT void fire_off_rtv_watches_pf();
-guint32 create_single_bit_watch(gchar *, gint, gint, gchar *, gpointer);
+guint32 create_single_bit_watch(gchar *, gint, gboolean, gboolean, gchar *, gpointer);
+guint32 create_value_changed_watch(gchar *, gboolean,gchar *, gpointer);
 void watch_destroy(gpointer);
 void remove_watch(guint32);
 void process_watches(gpointer, gpointer, gpointer);

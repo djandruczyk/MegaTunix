@@ -20,6 +20,7 @@
 
 
 void coords_changed(MtxCurve *, gpointer);
+void update_curve_marker(gpointer );
 
 int main (int argc, char **argv)
 {
@@ -44,10 +45,13 @@ int main (int argc, char **argv)
 	mtx_curve_set_coords(MTX_CURVE(curve),10,points);
 	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),FALSE);
+	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),1);
 	g_signal_connect(G_OBJECT(curve), "coords-changed",
 			G_CALLBACK(coords_changed),NULL);
+
+	gtk_timeout_add(20,(GtkFunction)update_curve_marker,(gpointer)curve);
 
 	gtk_widget_show_all (window);
 
@@ -66,4 +70,26 @@ void coords_changed(MtxCurve *curve, gpointer data)
 	mtx_curve_get_coords_at_index(curve,index,&point);
 	printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);
 	
+}
+
+void update_curve_marker(gpointer data)
+{
+	GtkWidget *curve = data;
+	gint min = 0;
+	gint max = 10000;
+	static gint step = 100;
+	static gboolean rising = TRUE;
+	static gint value = 0;
+
+	if (value >= max)
+		rising = FALSE;
+	if (value <= min)
+		rising = TRUE;
+
+	if (rising)
+		value+=step;
+	else
+		value-=step;
+	printf("Setting x marker to %i\n",value);
+	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 }

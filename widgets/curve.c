@@ -288,7 +288,71 @@ gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 
 
 /*!
- \brief gets the show_vertexes param
+ \brief sets the show_x_marker param
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->show_x_marker = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief sets the show_y_marker param
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->show_y_marker = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief displays a live marker for the X axis (vertical Line)
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->x_marker = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief displays a live marker for the Y axis (horizontal Line)
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	priv->y_marker = value;
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the show_graticule param
  \param curve (MtxCurve *) pointer to curve
  \returns true or false
  */
@@ -297,6 +361,32 @@ gboolean mtx_curve_get_show_graticule (MtxCurve *curve)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->show_grat;
+}
+
+
+/*!
+ \brief gets the show_x_marker param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gboolean mtx_curve_get_show_x_marker (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->show_x_marker;
+}
+
+
+/*!
+ \brief gets the show_y_marker param
+ \param curve (MtxCurve *) pointer to curve
+ \returns true or false
+ */
+gboolean mtx_curve_get_show_y_marker (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->show_y_marker;
 }
 
 

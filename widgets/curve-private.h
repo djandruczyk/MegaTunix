@@ -28,28 +28,32 @@ struct _MtxCurvePrivate
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
         MtxCurveCoord *coords;       /* Points array */
-        GdkPoint *points;       /* Onscreen coords array (for mouse) */
-        gint num_points;        /* Total Points*/
-        gint w;                 /* Width of full widget */
-        gint h;                 /* Height of full widget */
-        gint lowest_x;          /* Lowest X value in points[] */
-        gint highest_x;         /* Highest X value in points[] */
-        gint lowest_y;          /* Lowest Y value in points[] */
-        gint highest_y;         /* Highest Y value in points[] */
-        gint border;            /* Border in pixels */
-        gint active_coord;      /* Active Coordinate */
-	gint x_precision;	/* Precision for X axis */
-	gint y_precision;	/* Precision for X axis */
-	gint vertex_id;		/* timeout ID */
-        gfloat locked_scale;    /* minimum fixed scale for both axis' */
-        gfloat x_scale;         /* X coord points->coords scaler */
-        gfloat y_scale;         /* Y coord points->coords scaler */
-        gboolean vertex_selected;/* Do we have one selected? */
-        gboolean auto_hide;	/* Auto hide vertex on focus out */
-        gboolean show_vertexes; /* Show vertex rectangles */
-        gboolean show_grat;	/* Draw graticule? */
-        gboolean coord_changed;	/* Flag */
-        GdkGC *gc;              /* Graphics Context */
+        GdkPoint *points;       /*! Onscreen coords array (for mouse) */
+        gint num_points;        /*! Total Points*/
+        gint w;                 /*! Width of full widget */
+        gint h;                 /*! Height of full widget */
+        gint lowest_x;          /*! Lowest X value in points[] */
+        gint highest_x;         /*! Highest X value in points[] */
+        gint lowest_y;          /*! Lowest Y value in points[] */
+        gint highest_y;         /*! Highest Y value in points[] */
+        gint border;            /*! Border in pixels */
+        gint active_coord;      /*! Active Coordinate */
+	gint x_precision;	/*! Precision for X axis */
+	gint y_precision;	/*! Precision for X axis */
+	gint vertex_id;		/*! timeout ID */
+        gfloat locked_scale;    /*! minimum fixed scale for both axis' */
+        gfloat x_scale;         /*! X coord points->coords scaler */
+        gfloat y_scale;         /*! Y coord points->coords scaler */
+	gfloat x_marker;	/*! X marker (vertical line) */
+	gfloat y_marker;	/*! X marker (horizontal line) */
+        gboolean vertex_selected;/*! Do we have one selected? */
+        gboolean auto_hide;	/*! Auto hide vertex on focus out */
+        gboolean show_x_marker; /*! Show x_marker rectangles */
+        gboolean show_y_marker; /*! Show y_marker rectangles */
+        gboolean show_vertexes; /*! Show vertex rectangles */
+        gboolean show_grat;	/*! Draw graticule? */
+        gboolean coord_changed;	/*! Flag */
+        GdkGC *gc;              /*! Graphics Context */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;

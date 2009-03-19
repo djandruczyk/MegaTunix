@@ -439,7 +439,7 @@ void ms2_ttm_update(gpointer data)
 
 EXPORT void ms2_ttm_watch(void)
 {
-	create_single_bit_watch("status3",1,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
+	create_single_bit_watch("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
 }
 
 

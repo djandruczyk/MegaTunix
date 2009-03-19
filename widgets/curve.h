@@ -39,6 +39,7 @@ typedef enum
 	COL_SEL,
 	COL_GRAT,
 	COL_TEXT,
+	COL_MARKER,
 	NUM_COLORS
 }ColorIndex;
 
@@ -100,7 +101,12 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
 gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
 gboolean mtx_curve_set_show_graticule (MtxCurve *, gboolean );
 gboolean mtx_curve_get_show_graticule (MtxCurve *);
-
+gboolean mtx_curve_get_show_x_marker (MtxCurve *);
+gboolean mtx_curve_get_show_y_marker (MtxCurve *);
+gboolean mtx_curve_set_show_x_marker (MtxCurve *, gboolean );
+gboolean mtx_curve_set_show_y_marker (MtxCurve *, gboolean );
+gboolean mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
+gboolean mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
 
 G_END_DECLS
 
