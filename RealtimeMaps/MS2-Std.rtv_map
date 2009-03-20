@@ -1053,8 +1053,8 @@ tooltip="Fuel Comp." is composition factor based on how much ethanol is in the f
 log_by_default=TRUE
 
 [derived_66]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,complex_expr,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,complex_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=accdecenrich,accDecEnrich
 dlog_gui_name=AccDecEnrich
 dlog_field_name=AccelEnrich
