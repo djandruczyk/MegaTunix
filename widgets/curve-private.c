@@ -176,12 +176,9 @@ void update_curve_position (MtxCurve *curve)
 	cairo_font_weight_t weight;
 	cairo_font_slant_t slant;
 	gchar * tmpbuf = NULL;
-	gchar * message = NULL;
-	gfloat tmpf = 0.0;
-	gint max_lines;
-	gint spread = 0;
 	gint i = 0;
 	cairo_t *cr = NULL;
+	gchar * message = NULL;
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 
@@ -201,25 +198,6 @@ void update_curve_position (MtxCurve *curve)
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 
 	/* curve  */
-	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
-	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
-	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
-
-	if(priv->points)
-		g_free(priv->points);
-	priv->points = g_new0(GdkPoint, priv->num_points);
-
-	/* Convert from user provided floating point coords to integer X,Y 
- 	 * coords so things display nicely.  NOTE: motion event will do a 
- 	 * reverse conversion to take screen coords to original values, and
- 	 * take into account specified precision so that signals feed useful
- 	 * data back to connected handlers
- 	 */
-	for (i=0;i<priv->num_points;i++)
-	{
-		priv->points[i].x = (gint)(((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border);
-		priv->points[i].y = (gint)(priv->h - (((priv->coords[i].y - priv->lowest_y)*priv->y_scale) + priv->border));
-	}
 
 	cairo_set_source_rgb (cr, priv->colors[COL_FG].red/65535.0,
 			priv->colors[COL_FG].green/65535.0,
@@ -234,11 +212,9 @@ void update_curve_position (MtxCurve *curve)
 	}
 	cairo_stroke(cr);
 	/* The circles for each vertex itself */
-	cairo_set_source_rgb (cr, 0.0,
-			0.7,
-			1.0);
 	if (priv->show_vertexes)
 	{
+		cairo_set_source_rgb (cr, 0.0,0.7,1.0);
 		for (i=0;i<priv->num_points;i++)
 		{
 			cairo_arc(cr,priv->points[i].x,priv->points[i].y,3,0,2*M_PI);
@@ -259,41 +235,6 @@ void update_curve_position (MtxCurve *curve)
 	}
 	cairo_stroke(cr);
 
-	if (priv->show_grat)
-	{
-		cairo_set_source_rgba (cr, 
-				priv->colors[COL_GRAT].red/65535.0,
-				priv->colors[COL_GRAT].green/65535.0,
-				priv->colors[COL_GRAT].blue/65535.0,
-				0.5);
-		max_lines = (priv->w - 2*priv->border)/50;
-		tmpf = ((priv->w - 2*priv->border)%50)/50.0;
-		if (tmpf > 0.5)
-			max_lines++;
-		if (max_lines == 0)
-			max_lines = 1;
-		spread = (priv->w - 2*priv->border)/max_lines;
-		for(i = 0;i<max_lines;i++)
-		{
-			cairo_move_to (cr,priv->border+i*spread,0);
-			cairo_line_to (cr,priv->border+i*spread,priv->h);
-			cairo_stroke(cr);
-		}
-		max_lines = (priv->h - 2*priv->border)/50;
-		tmpf = ((priv->h - 2*priv->border)%50)/50.0;
-		if (tmpf > 0.5)
-			max_lines++;
-		if (max_lines == 0)
-			max_lines = 1;
-		spread = (priv->h - 2*priv->border)/max_lines;
-		for(i = 0;i<max_lines;i++)
-		{
-			cairo_move_to (cr,0,priv->border+i*spread);
-			cairo_line_to (cr,priv->w,priv->border+i*spread);
-			cairo_stroke(cr);
-		}
-
-	}
 	/* Vertical and Horizontal Markers */
 	cairo_set_source_rgb (cr, priv->colors[COL_MARKER].red/65535.0,
 			priv->colors[COL_MARKER].green/65535.0,
@@ -327,33 +268,6 @@ void update_curve_position (MtxCurve *curve)
 	g_free(tmpbuf);
 	cairo_select_font_face (cr, priv->font,  slant, weight);
 
-	cairo_set_font_size (cr, 15);
-
-	if (priv->title)
-	{
-		message = g_strdup_printf("%s", priv->title);
-
-		cairo_text_extents (cr, message, &extents);
-
-		cairo_set_source_rgba (cr,0.0,0,0,0.75);
-		cairo_rectangle(cr,priv->w/2 - (extents.width/2)-priv->border,
-				extents.height-priv->border,
-				extents.width+(2*priv->border),
-				extents.height+(2*priv->border));
-		cairo_fill (cr);
-		cairo_set_source_rgb (cr, 
-				priv->colors[COL_TEXT].red/65535.0,
-				priv->colors[COL_TEXT].green/65535.0,
-				priv->colors[COL_TEXT].blue/65535.0);
-		cairo_move_to (cr, 
-				priv->w/2-(extents.width/2),
-				(extents.height*2));
-
-		cairo_show_text (cr, message);
-		g_free(message);
-	}
-
-	cairo_stroke (cr);
 	if (priv->vertex_selected)
 	{
 		cairo_set_font_size (cr, 9);
@@ -444,6 +358,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_font_options_set_antialias(priv->font_options,
 			CAIRO_ANTIALIAS_GRAY);
 
+	recalc_extremes(priv);
 	generate_curve_background(curve);
 	update_curve_position(curve);
 
@@ -485,6 +400,12 @@ void generate_curve_background(MtxCurve *curve)
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
+	gfloat tmpf = 0.0;
+	gint max_lines;
+	gint spread = 0;
+	gint i = 0;
+	gchar * message = NULL;
+	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 
 	w = GTK_WIDGET(curve)->allocation.width;
@@ -503,6 +424,67 @@ void generate_curve_background(MtxCurve *curve)
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
+	if (priv->show_grat)
+	{
+		cairo_set_source_rgba (cr, 
+				priv->colors[COL_GRAT].red/65535.0,
+				priv->colors[COL_GRAT].green/65535.0,
+				priv->colors[COL_GRAT].blue/65535.0,
+				0.5);
+		max_lines = (priv->w - 2*priv->border)/50;
+		tmpf = ((priv->w - 2*priv->border)%50)/50.0;
+		if (tmpf > 0.5)
+			max_lines++;
+		if (max_lines == 0)
+			max_lines = 1;
+		spread = (priv->w - 2*priv->border)/max_lines;
+		for(i = 0;i<max_lines;i++)
+		{
+			cairo_move_to (cr,priv->border+i*spread,0);
+			cairo_line_to (cr,priv->border+i*spread,priv->h);
+			cairo_stroke(cr);
+		}
+		max_lines = (priv->h - 2*priv->border)/50;
+		tmpf = ((priv->h - 2*priv->border)%50)/50.0;
+		if (tmpf > 0.5)
+			max_lines++;
+		if (max_lines == 0)
+			max_lines = 1;
+		spread = (priv->h - 2*priv->border)/max_lines;
+		for(i = 0;i<max_lines;i++)
+		{
+			cairo_move_to (cr,0,priv->border+i*spread);
+			cairo_line_to (cr,priv->w,priv->border+i*spread);
+			cairo_stroke(cr);
+		}
+
+	}
+	cairo_set_font_size (cr, 15);
+	if (priv->title)
+	{
+		message = g_strdup_printf("%s", priv->title);
+
+		cairo_text_extents (cr, message, &extents);
+
+		cairo_set_source_rgba (cr,0.0,0,0,0.75);
+		cairo_rectangle(cr,priv->w/2 - (extents.width/2)-priv->border,
+				extents.height-priv->border,
+				extents.width+(2*priv->border),
+				extents.height+(2*priv->border));
+		cairo_fill (cr);
+		cairo_set_source_rgb (cr, 
+				priv->colors[COL_TEXT].red/65535.0,
+				priv->colors[COL_TEXT].green/65535.0,
+				priv->colors[COL_TEXT].blue/65535.0);
+		cairo_move_to (cr, 
+				priv->w/2-(extents.width/2),
+				(extents.height*2));
+
+		cairo_show_text (cr, message);
+		g_free(message);
+	}
+	cairo_stroke (cr);
+
 }
 
 
@@ -615,6 +597,26 @@ void recalc_extremes(MtxCurvePrivate *priv)
                 if (priv->coords[i].y > priv->highest_y)
                         priv->highest_y = priv->coords[i].y;
         }
+	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
+	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
+	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
+
+	if(priv->points)
+		g_free(priv->points);
+	priv->points = g_new0(GdkPoint, priv->num_points);
+
+	/* Convert from user provided floating point coords to integer X,Y 
+ 	 * coords so things display nicely.  NOTE: motion event will do a 
+ 	 * reverse conversion to take screen coords to original values, and
+ 	 * take into account specified precision so that signals feed useful
+ 	 * data back to connected handlers
+ 	 */
+	for (i=0;i<priv->num_points;i++)
+	{
+		priv->points[i].x = (gint)(((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->border);
+		priv->points[i].y = (gint)(priv->h - (((priv->coords[i].y - priv->lowest_y)*priv->y_scale) + priv->border));
+	}
+
         /*printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
  	*/
 }

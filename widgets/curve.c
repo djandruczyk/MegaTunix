@@ -93,6 +93,7 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 		priv->coords[i].x = 0;
 		priv->coords[i].y = 0;
 	}
+	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 	return TRUE;

@@ -146,13 +146,6 @@ EXPORT void load_rt_text_pf()
 							g_strdup(ctrl_name),
 							(gpointer)rt_text);
 			}
-			/*
-			if (i < (count-1))
-			{
-				sep = gtk_hseparator_new();
-				gtk_box_pack_start(GTK_BOX(vbox),sep,FALSE,FALSE,1);
-			}
-			*/
 			g_free(section);
 			g_free(ctrl_name);
 			g_free(source);

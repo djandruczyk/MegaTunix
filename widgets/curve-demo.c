@@ -76,7 +76,7 @@ void update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = data;
 	gint min = 0;
-	gint max = 10000;
+	gint max = 9000;
 	static gint step = 100;
 	static gboolean rising = TRUE;
 	static gint value = 0;

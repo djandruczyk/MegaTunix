@@ -68,6 +68,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gint offset = 0;
 	gint i = 0;
 	gint j = 0;
+	gfloat tmpf = 0.0;
 	guint32 id = 0;
 	gint rows = 0;
 	gint table_num = 0;
@@ -123,8 +124,13 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		cdata->curve = curve;
 		cdata->axis = _X_;
 		cdata->source = firmware->te_params[table_num]->x_source;
-		id = create_value_changed_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+		id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 		mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
+		lookup_current_value(cdata->source,&tmpf);
+		if (cdata->axis == _X_)
+			mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+		if (cdata->axis == _Y_)
+			mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 		OBJ_SET(curve,"cdata",(gpointer)cdata);
 		OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 		mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
@@ -289,6 +295,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	gint offset = 0;
 	gint i = 0;
 	guint32 id = 0;
+	gfloat tmpf = 0.0;
 	gint rows = 0;
 
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
@@ -324,8 +331,13 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	cdata->curve = curve;
 	cdata->axis = _X_;
 	cdata->source = firmware->te_params[table_num]->x_source;
-	id = create_value_changed_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+	id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
+	lookup_current_value(cdata->source,&tmpf);
+	if (cdata->axis == _X_)
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	if (cdata->axis == _Y_)
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 	OBJ_SET(curve,"cdata",(gpointer)cdata);
 	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
@@ -581,13 +593,13 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT void update_curve_marker(gpointer user_data)
+EXPORT void update_curve_marker(gpointer user_data, gint i_val, gfloat f_val)
 {
 	CurveData *cdata = (CurveData *)user_data;
-	gfloat tmpf = 0.0;
-	lookup_current_value(cdata->source,&tmpf);
+//	gfloat tmpf = 0.0;
+//	lookup_current_value(cdata->source,&tmpf);
 	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),f_val);
 	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),f_val);
 }

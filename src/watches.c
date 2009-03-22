@@ -39,11 +39,13 @@ EXPORT void fire_off_rtv_watches_pf()
 	}
 }
 
-guint32 create_single_bit_watch(gchar * varname, gint bit, gboolean state, gboolean only_once,gchar *fname, gpointer user_data)
+guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean only_once,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
+	GModule *module = NULL;
+
 	watch = g_new0(DataWatch,1);
-	watch->style = SINGLE_BIT;
+	watch->style = SINGLE_BIT_STATE;
 	watch->varname = g_strdup(varname);
 	watch->bit= bit;
 	watch->state = state;
@@ -51,22 +53,55 @@ guint32 create_single_bit_watch(gchar * varname, gint bit, gboolean state, gbool
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->only_once = only_once;
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (module)
+		g_module_symbol(module,watch->function, (void *)&watch->func);
+	g_module_close(module);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
-guint32 create_value_changed_watch(gchar * varname, gboolean only_once,gchar *fname, gpointer user_data)
+guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean only_once,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
+	GModule *module = NULL;
+
 	watch = g_new0(DataWatch,1);
-	watch->style = VALUE_CHANGED;
+	watch->style = SINGLE_BIT_CHANGE;
+	watch->varname = g_strdup(varname);
+	watch->bit= bit;
+	watch->function = g_strdup(fname);
+	watch->user_data = user_data;
+	watch->id = g_random_int();
+	watch->only_once = only_once;
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (module)
+		g_module_symbol(module,watch->function, (void *)&watch->func);
+	g_module_close(module);
+	if (!watch_hash)
+		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
+	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	return watch->id;
+}
+
+guint32 create_value_change_watch(gchar * varname, gboolean only_once,gchar *fname, gpointer user_data)
+{
+	DataWatch *watch = NULL;
+	GModule *module = NULL;
+
+	watch = g_new0(DataWatch,1);
+	watch->style = VALUE_CHANGE;
 	watch->varname = g_strdup(varname);
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->only_once = only_once;
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (module)
+		g_module_symbol(module,watch->function, (void *)&watch->func);
+	g_module_close(module);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -98,41 +133,54 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 	gfloat tmpf = 0.0;
 	gfloat tmpf2 = 0.0;
 	guint8 tmpi = 0;
-	GModule *module = NULL;
-	void (*func) (gpointer);
+	guint8 tmpi2 = 0;
 	switch (watch->style)
 	{
-		case SINGLE_BIT:
+		/* When bit becomes this state, fire watch function. This will
+		 * fire each time new vars come in unless watch is set to
+		 * run only once, thus it will evaporate after 1 run */
+		case SINGLE_BIT_STATE:
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
 			{
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,watch->function, (void *)&func);
-				g_module_close(module);
-				func(watch->user_data);
+				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
+				watch->func(watch->user_data,(gint)tmpi,(gfloat)tmpi);
 				if (watch->only_once)
 					remove_watch(watch->id);
 			}
 			break;
-		case VALUE_CHANGED:
+		/* When bit CHANGES from previous state, i.e.  only fire when
+		 * it changes, but if it's stable, don't fire repeatedly 
+		 */
+		case SINGLE_BIT_CHANGE:
+			lookup_current_value(watch->varname, &tmpf);
+			tmpi = (guint8)tmpf;
+			lookup_previous_value(watch->varname, &tmpf);
+			tmpi2 = (guint8)tmpf;
+			if (((tmpi & (1 << watch->bit)) >> watch->bit) != ((tmpi2 & (1 << watch->bit)) >> watch->bit))
+			{
+				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
+				watch->func(watch->user_data,(gint)tmpi,(gfloat)tmpi);
+				if (watch->only_once)
+					remove_watch(watch->id);
+			}
+			break;
+			/* If value changes at ALL from previous value, then
+			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
+			 */
+		case VALUE_CHANGE:
 			lookup_current_value(watch->varname, &tmpf);
 			lookup_previous_value(watch->varname, &tmpf2);
 			if (tmpf != tmpf2)
 			{
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,watch->function, (void *)&func);
-				g_module_close(module);
-				func(watch->user_data);
+				watch->func(watch->user_data,(gint)tmpf,tmpf);
 				if (watch->only_once)
 					remove_watch(watch->id);
 			}
 			break;
 		default:
 			break;
-
 	}
 }
 
