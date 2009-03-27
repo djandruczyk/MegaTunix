@@ -39,6 +39,8 @@ struct _Rt_Text
 /* Prototypes */
 void load_rt_text_pf(void );
 Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *);
+void rtt_update_values(gpointer,gpointer,gpointer);
+void rtt_update_start_watches(gpointer,gpointer,gpointer);
 /* Prototypes */
 
 #endif

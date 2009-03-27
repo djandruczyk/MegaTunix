@@ -26,6 +26,7 @@
 #include <mtxsocket.h>
 #include <notifications.h>
 #include <runtime_gui.h>
+#include <runtime_text.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>

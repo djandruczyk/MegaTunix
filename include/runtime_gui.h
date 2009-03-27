@@ -22,7 +22,6 @@
 gboolean update_runtime_vars_pf(void);
 void reset_runtime_status(void);
 void rt_update_values(gpointer,gpointer,gpointer);
-void rtt_update_values(gpointer,gpointer,gpointer);
 void rt_update_status(gpointer, gpointer);
 gboolean update_rttext(gpointer);
 gboolean update_rtsliders(gpointer);
