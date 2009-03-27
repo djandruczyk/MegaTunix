@@ -424,7 +424,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
  is fired off to take care of updating the MS2 TTM display
  \param data (gpointer) arbritary data passed.
  */
-EXPORT void ms2_ttm_update(gpointer data, gint i_val, gfloat f_val)
+EXPORT void ms2_ttm_update(gpointer data, gfloat f_val)
 {
 	gint page = 0;
 

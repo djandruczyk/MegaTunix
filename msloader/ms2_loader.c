@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.1.2.4 2009/02/23 03:59:08 extace Exp $
+ * $Id: ms2_loader.c,v 1.1.2.5 2009/03/27 02:35:57 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -207,7 +207,7 @@ gboolean wakeup_S12(gint port_fd)
 	fcntl(port_fd, F_SETFL, O_NDELAY);
 #endif
 
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < 6; i++) {
 		prompt = 0;
 		output("Attempting Wakeup...\n",FALSE);
 		res = write(port_fd, &c, 1);
@@ -227,7 +227,7 @@ gboolean wakeup_S12(gint port_fd)
 	fcntl(port_fd, F_SETFL, 0);
 #endif
 
-	if (i == 10) {
+	if (i > 5) {
 		output("Could not wake up processor, try jumpering\nthe boot jumper and power cycling the ECU...\n",FALSE);
 		return FALSE;
 	}
@@ -239,23 +239,21 @@ gboolean check_status(gint port_fd)
 	unsigned char errorCode = 0;
 	unsigned char statusCode = 0;
 	unsigned char prompt = 0;
-	unsigned char c[3] = {-1, -1, -1};
 	gint res = 0;
 	gboolean retval = TRUE;
 
-	res = read(port_fd, &c, 3);
-	if (res != 3 )
-	{
-		output(g_strdup_printf("check_status(), SHORT READ! wanted 3, got %i\n",res),TRUE);
-		res = read(port_fd, &c, 3);
-		if (res != 3 )
-			output(g_strdup_printf("check_status(), SHORT READ! (2nd try) wanted 3, got %i\n",res),TRUE);
-	}
-	errorCode = c[0];
-	statusCode = c[1];
-	prompt = c[2];
+	res = read(port_fd, &errorCode, 1);
+	if (res != 1)
+		output("error reading errorCode\n",FALSE);
+	res = read(port_fd, &statusCode, 1);
+	if (res != 1)
+		output("error reading statusCode\n",FALSE);
+	res = read(port_fd, &prompt, 1);
+	if (res != 1)
+		output("error reading prompt\n",FALSE);
+
 	if (debug >= 4) {
-		output(g_strdup_printf("RX: %02x %02x %02xn", c[0], c[1], c[2]),TRUE);
+		output(g_strdup_printf("RX: %02x %02x %02xn", errorCode,statusCode, prompt),TRUE);
 	}
 
 	switch(errorCode) 
@@ -293,7 +291,7 @@ gboolean check_status(gint port_fd)
 			break;
 		default:
 			retval = FALSE;
-			output(g_strdup_printf("Error code 02x%x\n", errorCode),TRUE);
+			output(g_strdup_printf("Error code 0x%02x\n", errorCode),TRUE);
 			break;
 	}
 
@@ -329,8 +327,10 @@ gboolean check_status(gint port_fd)
 
 	}
 
-	if (prompt != '>') {
-		output(g_strdup_printf("Prompt was expected to be \">\" but returned as %c\n", prompt),TRUE);
+	if (prompt != '>') 
+	{
+		output(g_strdup_printf("Prompt was expected to be \">\" but returned as \"%c\" \n\n",prompt),TRUE);
+		retval = FALSE;
 	} 
 	else
 		retval = TRUE;
@@ -517,12 +517,21 @@ void send_S12(gint port_fd, gint count)
 
 void enter_boot_mode(gint port_fd)
 {
+	/* The target cpu is VERY prone to timing issues, this is flakey and I 
+	 * do NOT like this design.
+	 */
 	gint res = 0;
-	res = write(port_fd, "!!!SafetyFirst", 14);
-	if (res != 14)
-		output(g_strdup_printf("enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
-	flush_serial(port_fd, BOTH);
+	res = write(port_fd, "!", 1);
 	g_usleep(LONG_DELAY);
+	res = write(port_fd, "!", 1);
+	g_usleep(LONG_DELAY);
+	res = write(port_fd, "!", 1);
+	g_usleep(LONG_DELAY);
+	res = write(port_fd, "SafetyFirst", 11);
+	if (res != 11)
+		output(g_strdup_printf("enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
+	g_usleep(LONG_DELAY);
+	flush_serial(port_fd, BOTH);
 }
 
 void reset_proc(gint port_fd)

@@ -43,14 +43,13 @@ struct _DataWatch
 	gfloat high;		/*! Highpoint (range watch) */
 	gfloat exact;		/*! Exact value watch */
 	gint threshold;		/*! threshold watch */
-	gint i_val;		/*! Integer value */
 	gfloat f_val;		/*! Integer value */
 	gpointer user_data;	/*! user data to pass to user function */
 	WatchStyle style;	/*! type of watch */
 	gboolean state;		/*! state for bit watches */
-	gboolean only_once;	/*! Run only once then evaporate */
+	gboolean one_shot;	/*! Run only once then evaporate */
 	gchar * function;	/*! function to call when watch strikes */
-	void (*func) (gpointer,gint,gfloat);/*! Function pointer */
+	void (*func) (gpointer,gfloat);/*! Function pointer */
 	gchar * varname;	/*! Variable name (rtv internal name) to check */
 };
 /* Prototypes */

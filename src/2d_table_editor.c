@@ -593,11 +593,9 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT void update_curve_marker(gpointer user_data, gint i_val, gfloat f_val)
+EXPORT void update_curve_marker(gpointer user_data, gfloat f_val)
 {
 	CurveData *cdata = (CurveData *)user_data;
-//	gfloat tmpf = 0.0;
-//	lookup_current_value(cdata->source,&tmpf);
 	if (cdata->axis == _X_)
 		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),f_val);
 	if (cdata->axis == _Y_)

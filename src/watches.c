@@ -39,7 +39,7 @@ EXPORT void fire_off_rtv_watches_pf()
 	}
 }
 
-guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean only_once,gchar *fname, gpointer user_data)
+guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean one_shot,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 	GModule *module = NULL;
@@ -52,7 +52,7 @@ guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state,
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
-	watch->only_once = only_once;
+	watch->one_shot = one_shot;
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (module)
 		g_module_symbol(module,watch->function, (void *)&watch->func);
@@ -63,7 +63,7 @@ guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state,
 	return watch->id;
 }
 
-guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean only_once,gchar *fname, gpointer user_data)
+guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_shot,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 	GModule *module = NULL;
@@ -75,7 +75,7 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean only_o
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
-	watch->only_once = only_once;
+	watch->one_shot = one_shot;
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (module)
 		g_module_symbol(module,watch->function, (void *)&watch->func);
@@ -86,7 +86,7 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean only_o
 	return watch->id;
 }
 
-guint32 create_value_change_watch(gchar * varname, gboolean only_once,gchar *fname, gpointer user_data)
+guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 	GModule *module = NULL;
@@ -97,7 +97,7 @@ guint32 create_value_change_watch(gchar * varname, gboolean only_once,gchar *fna
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
-	watch->only_once = only_once;
+	watch->one_shot = one_shot;
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (module)
 		g_module_symbol(module,watch->function, (void *)&watch->func);
@@ -145,8 +145,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch->user_data,(gint)tmpi,(gfloat)tmpi);
-				if (watch->only_once)
+				watch->func(watch->user_data,(gfloat)tmpi);
+				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
 			break;
@@ -161,8 +161,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) != ((tmpi2 & (1 << watch->bit)) >> watch->bit))
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch->user_data,(gint)tmpi,(gfloat)tmpi);
-				if (watch->only_once)
+				watch->func(watch->user_data,(gfloat)tmpi);
+				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
 			break;
@@ -174,8 +174,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			lookup_previous_value(watch->varname, &tmpf2);
 			if (tmpf != tmpf2)
 			{
-				watch->func(watch->user_data,(gint)tmpf,tmpf);
-				if (watch->only_once)
+				watch->func(watch->user_data,tmpf);
+				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
 			break;
