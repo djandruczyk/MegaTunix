@@ -139,7 +139,7 @@ EXPORT void load_rt_text_pf()
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
 
-			rt_text = add_rtt(vbox,ctrl_name,source);
+			rt_text = add_rtt(vbox,ctrl_name,source,TRUE);
 			if (rt_text)
 			{
 				if (!g_hash_table_lookup(rtt_hash,ctrl_name))
@@ -172,7 +172,7 @@ EXPORT void load_rt_text_pf()
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
+Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
@@ -195,6 +195,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 		return NULL;
 	}
 
+	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 	rtt->history = (GArray *) OBJ_GET(object,"history");
@@ -202,16 +203,22 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 
 	hbox = gtk_hbox_new(FALSE,5);
 
-	label = gtk_label_new(NULL);
-	rtt->name_label = label;
-	gtk_label_set_markup(GTK_LABEL(label),rtt->friendly_name);
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+	if (show_prefix)
+	{
+		label = gtk_label_new(NULL);
+		rtt->name_label = label;
+		gtk_label_set_markup(GTK_LABEL(label),rtt->friendly_name);
+		gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+	}
 
 	label = gtk_label_new(NULL);
 	set_fixed_size(label,6);
 	rtt->textval = label;
-	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
+	if (show_prefix)
+		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
+	else
+		gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
 	gtk_box_pack_start(GTK_BOX(parent),hbox,TRUE,TRUE,0);
@@ -223,6 +230,35 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 }
 
 
+/*!
+ \brief add_additional_rtt() is called as a post function for Tab loading
+ to add an RTT on a normal widget tab. (AE wizard currently)
+ \param widget, pointer to widget containing the data needed
+ */
+EXPORT void add_additional_rtt(GtkWidget *widget)
+{
+	gchar * ctrl_name = NULL;
+	gchar * source = NULL;
+	GHashTable *rtt_hash = NULL;
+	Rt_Text *rt_text = NULL;
+	gboolean show_prefix = FALSE;
+
+	rtt_hash = OBJ_GET(global_data,"rtt_hash");
+	ctrl_name = OBJ_GET(widget,"ctrl_name");
+	source = OBJ_GET(widget,"source");
+	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
+
+	if ((rtt_hash) && (ctrl_name) && (source))
+		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
+	if (rt_text)
+	{
+		if (!g_hash_table_lookup(rtt_hash,ctrl_name))
+			g_hash_table_insert(rtt_hash,
+					g_strdup(ctrl_name),
+					(gpointer)rt_text);
+	}
+	return;
+}
 /*!
  \brief rtt_update_values() is called for each runtime text to update
  it's label (label is periodic and not every time due to pango

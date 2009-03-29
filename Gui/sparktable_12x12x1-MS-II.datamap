@@ -65,6 +65,14 @@ tooltip=The Spark Advance Entries control the engine igntion timing.  The values
 
 #----- Widgets ---------------------------------------------------------------
 
+[topframe]
+keys=page,tab_ident,sub-notebook,bind_to_list
+key_types=_INT_,_ENUM_,_STRING_,_STRING_
+page=0
+tab_ident=_SPARKTABLES_TAB_
+sub-notebook=SP_spark_notebook
+bind_to_list=valid_ecu_ctrls
+
 [spark_notebook]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -123,13 +131,6 @@ gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
 #----- Labels ----------------------------------------------------------------
-
-[topframe]
-keys=page,tab_ident,sub-notebook
-key_types=_INT_,_ENUM_,_STRING_
-page=0
-tab_ident=_SPARKTABLES_TAB_
-sub-notebook=SP_spark_notebook
 
 [topframe_title]
 keys=page,set_label

@@ -21,6 +21,7 @@
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
+#include <listmgmt.h>
 #include <notifications.h>
 #include <progress.h>
 #include <rtv_map_loader.h>
@@ -423,6 +424,18 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;
+	slider->history = (GArray *) OBJ_GET(object,"history");
+	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	if (OBJ_GET(widget,"lower_limit"))
+		slider->lower = (gint)OBJ_GET(widget,"lower_limit");
+	else
+		slider->lower = (gint)OBJ_GET(object,"lower_limit");
+	if (OBJ_GET(widget,"upper_limit"))
+		slider->upper = (gint)OBJ_GET(widget,"upper_limit");
+	else
+		slider->upper = (gint)OBJ_GET(object,"upper_limit");
+	slider->object = object;
+	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))
 		slider->class = MTX_RANGE;
 	else if (GTK_IS_PROGRESS(widget))
@@ -442,13 +455,6 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		gtk_container_add(GTK_CONTAINER(parent),widget);
 		slider->class = MTX_PROGRESS;
 	}
-	slider->history = (GArray *) OBJ_GET(object,"history");
-	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	slider->lower = (gint)OBJ_GET(object,"lower_limit");
-
-	slider->upper = (gint)OBJ_GET(object,"upper_limit");
-	slider->object = object;
-	slider->textval = NULL;
 	slider->pbar = widget;
 
 	switch (ident)
@@ -516,3 +522,28 @@ EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event
 	return TRUE;
 }
 
+
+EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
+{
+	gboolean mapae_ctrl_state = FALSE;
+	gboolean tpsae_ctrl_state = FALSE;
+	extern GHashTable *widget_group_states;
+	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
+
+	if (value == 0)
+		tpsae_ctrl_state = FALSE;
+	else
+		tpsae_ctrl_state = TRUE;
+
+	if (value == 100)
+		mapae_ctrl_state = FALSE;
+	else
+		mapae_ctrl_state = TRUE;
+
+	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),(gpointer)tpsae_ctrl_state);
+	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),(gpointer)mapae_ctrl_state);
+	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);
+	g_list_foreach(get_list("map_ae_ctrls"),alter_widget_state,NULL);
+	return FALSE;
+
+}

@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.1.2.5 2009/03/27 02:35:57 extace Exp $
+ * $Id: ms2_loader.c,v 1.1.2.6 2009/03/29 23:26:54 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -101,6 +101,8 @@ void do_ms2_load(int port_fd, int file_fd)
 	free_s19(count);
 	reset_proc(port_fd);
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
+	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+	output("All Done!\n",FALSE);
 	return;
 }
 
@@ -314,11 +316,11 @@ gboolean check_status(gint port_fd)
 			break;
 		case S_COLD_RESET:
 			retval = FALSE;
-			output(g_strdup_printf("Cold reset detected, something grossly wrong, s=0x%02x\n",statusCode),TRUE);
+			output(g_strdup_printf("Cold reset detected, s=0x%02x\n",statusCode),TRUE);
 			break;
 		case S_WARM_RESET:
 			retval = FALSE;
-			output(g_strdup_printf("Warm reset detected, something grossly wrong, s=0x%02x\n",statusCode),TRUE);
+			output(g_strdup_printf("Warm reset detected, s=0x%02x\n",statusCode),TRUE);
 			break;
 		default:
 			retval = FALSE;

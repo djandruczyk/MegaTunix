@@ -135,6 +135,12 @@ tooltip=The Cold Advance Table adds This amount of ignition advance (-10<->10 is
 
 #----- Widgets ---------------------------------------------------------------
 
+
+[topframe]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
 [baro_twopoint_frame]
 keys=bind_to_list
 key_types=_STRING_

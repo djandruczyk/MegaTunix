@@ -26,6 +26,8 @@ gui_files = 	README \
 		logviewer.datamap \
 		memviewer.glade \
 		memviewer.datamap \
+		ms2-accel.glade \
+		ms2-accel.datamap \
 		ms2-globals.glade \
 		ms2-globals.datamap \
 		ms2-idle_ego_rev.glade \

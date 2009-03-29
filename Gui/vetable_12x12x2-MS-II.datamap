@@ -97,12 +97,6 @@ tooltip=The VE Entries control how much fuel is injected into the engine. They r
 
 #----- Labels ----------------------------------------------------------------
 
-[topframe]
-keys=tab_ident,sub-notebook
-key_types=_ENUM_,_STRING_
-tab_ident=_VETABLES_TAB_
-sub-notebook=VE_vetable_notebook
-
 [VE2_notebook_tab_label]
 keys=bind_to_list
 key_types=_STRING_
@@ -293,6 +287,13 @@ divider_page=5
 divider_offset=149
 
 #----- Widgets --------------------------------------------------------------
+
+[topframe]
+keys=tab_ident,sub-notebook,bind_to_list
+key_types=_ENUM_,_STRING_,_STRING_
+tab_ident=_VETABLES_TAB_
+sub-notebook=VE_vetable_notebook
+bind_to_list=valid_ecu_ctrls
 
 [VE1_vbox1]
 keys=table_num

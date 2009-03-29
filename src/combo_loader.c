@@ -50,9 +50,12 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	cfg_read_string(cfgfile,section,"choices",&tmpbuf);
 
 	choices = parse_keys(tmpbuf,&num_choices,",");
-	tmpstr = g_strdelimit(tmpbuf,",",'|');
-	regexp = g_strdup_printf("%s",tmpstr);
+	//tmpstr = g_strdelimit(tmpbuf,",",'|');
+	//regexp = g_strdup_printf("%s",tmpstr);
+	tmpstr = g_utf8_normalize(tmpbuf,-1,G_NORMALIZE_DEFAULT);
+	regexp = g_utf8_casefold(tmpstr,-1);
 	g_free(tmpbuf);
+	g_free(tmpstr);
 
 	if (!cfg_read_string(cfgfile,section,"bitvals",&tmpbuf))
 	{

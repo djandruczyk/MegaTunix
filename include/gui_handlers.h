@@ -33,6 +33,7 @@ EXPORT gboolean set_algorithm(GtkWidget *, gpointer );
 EXPORT void notebook_page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
+EXPORT gboolean slider_value_changed(GtkWidget *, gpointer );
 void update_ve_const_pf(void);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );

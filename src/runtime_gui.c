@@ -267,9 +267,7 @@ gboolean update_rtsliders(gpointer data)
 	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
 		g_hash_table_foreach(OBJ_GET(global_data,"enr_sliders"),rt_update_values,NULL);
 	if (active_page == ACCEL_WIZ_TAB)	/* Enrichments display is up */
-	{
 		g_hash_table_foreach(OBJ_GET(global_data,"aw_sliders"),rt_update_values,NULL);
-	}
 	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
 	{
 		g_hash_table_foreach(OBJ_GET(global_data,"ww_sliders"),rt_update_values,NULL);

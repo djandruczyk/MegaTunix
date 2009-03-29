@@ -34,13 +34,15 @@ struct _Rt_Text
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */
 	gint last_upd;		/*! used to making sure things update */
+	gboolean show_prefix;	/*! show prefix (friendly name) or not */
 };
 
 /* Prototypes */
 void load_rt_text_pf(void );
-Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *);
+Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *, gboolean);
 void rtt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_start_watches(gpointer,gpointer,gpointer);
+void add_additional_rtt(GtkWidget *);
 /* Prototypes */
 
 #endif

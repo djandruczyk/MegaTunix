@@ -12,6 +12,13 @@ key_types=_INT_,_ENUM_
 page=0
 size=_U08_
 
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]

@@ -564,6 +564,44 @@ EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpoin
 	return FALSE;
 }
 
+
+/*!
+ * \brief slider_value_changed() handles controls based upon a slider
+ * sort of like spinbutton controls
+ */
+EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
+{
+	gint page = 0;
+	gint offset = 0;
+	DataSize size = 0;
+	gint canID = 0;
+	MtxButton handler = -1;
+	gint dl_type = -1;
+	gfloat value = 0.0;
+	gint dload_val = 0;
+
+	handler = (MtxButton)OBJ_GET(widget,"handler");
+	dl_type = (gint) OBJ_GET(widget,"dl_type");
+	page = (gint)OBJ_GET(widget,"page");
+	offset = (gint)OBJ_GET(widget,"offset");
+	size = (DataSize)OBJ_GET(widget,"size");
+	canID = (gint)OBJ_GET(widget,"canID");
+	
+	value = gtk_range_get_value(GTK_RANGE(widget));
+	dload_val = convert_before_download(widget,value);
+
+	if (dl_type == IMMEDIATE)
+	{
+		/* If data has NOT changed,  don't bother updating 
+		 * and wasting time.
+		 */
+		if (dload_val != get_ecu_data(canID,page,offset,size))
+			send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+	}
+	return FALSE; /* Let other handlers run! */
+}
+
+
 /*!
  \brief std_entry_handler() gets called when a text entries is "activated"
  i.e. when the user hits enter. This function extracts the data, converts it
@@ -789,8 +827,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (dl_type == IMMEDIATE)
 	{
 		/* If data has NOT changed,  don't bother updating 
-		 *                  * and wasting time.
-		 *                                   */
+		 * and wasting time.
+		 */
 		if (dload_val != get_ecu_data(canID,page,offset,size))
 			send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
@@ -2203,6 +2241,10 @@ noalgo:
 		if (toggle_groups)
 			toggle_groups_linked(widget,new_state);
 
+	}
+	else if (GTK_IS_RANGE(widget))
+	{
+		gtk_range_set_value(GTK_RANGE(widget),value);
 	}
 	else if (GTK_IS_SCROLLED_WINDOW(widget))
 	{
