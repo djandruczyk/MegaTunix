@@ -733,6 +733,7 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
 
+	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	return TRUE;
@@ -917,8 +918,6 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	ve3d_load_font_metrics(widget);
 
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
@@ -1536,14 +1535,22 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
-//	PangoFontMetrics *font_metrics;
-
-//	gint font_height;
-	font_desc = pango_font_description_copy(widget->style->font_desc);
+	gint def_font_size;
+	const gchar * family;
+	gint min = 0;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
+	font_desc = pango_font_description_copy(widget->style->font_desc);
+	def_font_size = pango_font_description_get_size(font_desc);
+	family =  pango_font_description_get_family(font_desc);
 
+	min = MIN(widget->allocation.width,widget->allocation.height);
+	pango_font_description_set_size(font_desc,((min+300)/80)*PANGO_SCALE);
+
+	if (font_list_base)
+		glDeleteLists(font_list_base,128);
 	font_list_base = (GLuint) glGenLists (128);
+
 	font = gdk_gl_font_use_pango_font (font_desc, 0, 128,
 			(int)font_list_base);
 	if (font == NULL)
@@ -1552,12 +1559,7 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 
 		exit (-1);
 	}
-//	font_metrics = pango_font_get_metrics (font, NULL);
-//	font_height = pango_font_metrics_get_ascent (font_metrics) +
-//		pango_font_metrics_get_descent (font_metrics);
-//	font_height = PANGO_PIXELS (font_height);
 	pango_font_description_free (font_desc);
-//	pango_font_metrics_unref (font_metrics);
 }
 
 
