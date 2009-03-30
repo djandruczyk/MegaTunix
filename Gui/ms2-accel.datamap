@@ -360,3 +360,25 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Cold Accel multiplier (in percent).  100 means no change,  less than 100 means to REDUCE AE,  more than 100 adds additional AE.
 
+[low_rpm_ae_entry]
+keys=page,offset,raw_upper,size,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=974
+size=_U16_
+raw_upper=10000
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the low rpm threshold where AE scaling becomes enabled.  Below this RPM the AE value is the full amount.  Between the two RPM values, the accel enrichment is linearly scaled from full to zero. For example, if you have values of 2000 and 6000, then ½ the accel pulse width would be added at 4000 RPM (½ way between 2000 and 6000).
+
+[high_rpm_ae_entry]
+keys=page,offset,raw_upper,size,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=976
+size=_U16_
+raw_upper=10000
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the high rpm threshold where AE scaling becomes enabled.  Above this RPM the AE value is zero. (i.e. no AE above this RPM).  Between the two RPM values, the accel enrichment is linearly scaled from full to zero. For example, if you have values of 2000 and 6000, then ½ the accel pulse width would be added at 4000 RPM (½ way between 2000 and 6000).
+
