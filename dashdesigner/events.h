@@ -26,14 +26,6 @@ typedef enum
 	GAUGE_REMOVE
 }Choice;
 
-typedef struct _ListElement ListElement;
-
-struct _ListElement 
-{
-	gchar *filename;        /* Filename  of interrogation profile */
-	gchar *name;            /* Shortname in choice box */
-};
-
 /* Prototypes */
 
 EXPORT gboolean dashdesigner_about(GtkWidget *, gpointer );
