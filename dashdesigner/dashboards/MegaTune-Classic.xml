@@ -2,8 +2,8 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>724</width>
-    <height>362</height>
+    <width>723</width>
+    <height>353</height>
   </dash_geometry>
   <gauge>
     <width>179</width>
@@ -35,7 +35,7 @@
     <x_offset>543</x_offset>
     <y_offset>1</y_offset>
     <gauge_xml_name>MegaTune/EGO-Gauge.xml</gauge_xml_name>
-    <datasource>egovolt1</datasource>
+    <datasource>o2volt</datasource>
   </gauge>
   <gauge>
     <width>178</width>

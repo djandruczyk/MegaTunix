@@ -2,7 +2,7 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>560</width>
+    <width>701</width>
     <height>586</height>
   </dash_geometry>
   <gauge>
@@ -43,7 +43,7 @@
     <x_offset>0</x_offset>
     <y_offset>121</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_PW.xml</gauge_xml_name>
-    <datasource>pw1</datasource>
+    <datasource>pw</datasource>
   </gauge>
   <gauge>
     <width>141</width>

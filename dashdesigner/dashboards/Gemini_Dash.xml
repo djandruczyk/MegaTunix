@@ -2,7 +2,7 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>742</width>
+    <width>744</width>
     <height>636</height>
   </dash_geometry>
   <gauge>
@@ -67,7 +67,7 @@
     <x_offset>501</x_offset>
     <y_offset>133</y_offset>
     <gauge_xml_name>Speco/Gemini_IdleDC.xml</gauge_xml_name>
-    <datasource>iacstep</datasource>
+    <datasource>idledc</datasource>
   </gauge>
   <gauge>
     <width>168</width>
