@@ -574,6 +574,8 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 	mtx_gauge_face_set_attribute(g,handler,tmpf);
+	if ((handler == UBOUND) || (handler == LBOUND))
+		update_attributes();
 	return TRUE;
 }
 
