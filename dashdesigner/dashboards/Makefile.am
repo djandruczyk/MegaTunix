@@ -17,7 +17,8 @@ dashes_files = 	\
 		Ghost-Dash.xml \
 		Honda_Dash.xml \
 		Honda_Dash_degC.xml \
-		MegaTune-Classic.xml
+		MegaTune-MS1-Classic.xml \
+		MegaTune-MS2-Classic.xml
 
 dashes_DATA = $(dashes_files)
 
