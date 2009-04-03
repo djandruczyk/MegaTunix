@@ -321,8 +321,8 @@ log_by_default=TRUE
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
-internal_names=o2volt
-dlog_gui_name=O<sub>2</sub> Volts
+internal_names=o2volt1
+dlog_gui_name=O<sub>2</sub> Volts 1
 dlog_field_name=O2
 offset=9
 lower_limit=0
@@ -350,7 +350,7 @@ log_by_default=FALSE
 [derived_23]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
-internal_names=afr
+internal_names=afr1
 dlog_gui_name=AFR
 dlog_field_name=AFR
 offset=9

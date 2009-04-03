@@ -64,11 +64,11 @@ source=dcycle2
 
 [rt_text_14]
 int_name=o2_volts
-source=o2volt
+source=o2volt1
 
 [rt_text_15]
 int_name=AFR
-source=afr
+source=afr1
 
 [rt_text_16]
 int_name=aircorr
@@ -103,6 +103,6 @@ int_name=sparkangle
 source=sparkangle
 
 [rt_text_24]
-int_name=tpsDOT
-source=tpsDOT
+int_name=tpsdot
+source=tpsdot
 

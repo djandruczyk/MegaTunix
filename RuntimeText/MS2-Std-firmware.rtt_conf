@@ -44,7 +44,7 @@ source=dcycle2
 
 [rt_text_9]
 int_name=AFR
-source=afr
+source=afr1
 
 [rt_text_10]
 int_name=aircorr
@@ -79,9 +79,9 @@ int_name=accdecenrich
 source=accdecenrich
 
 [rt_text_18]
-int_name=tpsDOT
+int_name=tpsdot
 source=tpsdot
 
 [rt_text_19]
-int_name=mapDOT
+int_name=mapdot
 source=mapdot

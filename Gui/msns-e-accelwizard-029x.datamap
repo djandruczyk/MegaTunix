@@ -64,7 +64,7 @@ keys=page,post_functions_with_arg,source,tab_ident
 key_types=_INT_,_STRING_,_STRING_,_ENUM_
 page=0
 post_functions_with_arg=register_rt_range
-source=tpsDOT
+source=tpsdot
 tab_ident=_ACCEL_WIZ_TAB_
 
 [mapdot_pbar]
@@ -72,7 +72,7 @@ keys=page,post_functions_with_arg,source,tab_ident
 key_types=_INT_,_STRING_,_STRING_,_ENUM_
 page=0
 post_functions_with_arg=register_rt_range
-source=mapDOT
+source=mapdot
 tab_ident=_ACCEL_WIZ_TAB_
 
 [accel_map_layout_table]

@@ -39,10 +39,10 @@ row=4
 source=dcycle1
 
 [rt_slider_5]
-slider_name=o2_volts
+slider_name=o2_volt1
 table=1
 row=0
-source=o2volt
+source=o2volt1
 
 [rt_slider_6]
 slider_name=tps_adc
@@ -123,16 +123,16 @@ row=1
 source=warmcorr
 
 [ww_slider_2]
-slider_name=ww_afr
+slider_name=ww_afr1
 table=0
 row=2
-source=afr
+source=afr1
 
 [ww_slider_3]
-slider_name=ww_o2volt
+slider_name=ww_o2volt1
 table=0
 row=3
-source=o2volt
+source=o2volt1
 
 [ww_slider_4]
 slider_name=ww_map
@@ -147,10 +147,10 @@ row=0
 source=rpm
 
 [ve3d_slider_1]
-slider_name=ve3d_afr
+slider_name=ve3d_afr1
 table=0
 row=1
-source=afr
+source=afr1
 
 [ve3d_slider_2]
 slider_name=ve3d_map

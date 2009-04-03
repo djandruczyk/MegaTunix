@@ -60,11 +60,11 @@ source=dcycle2
 
 [rt_text_13]
 int_name=o2_volts
-source=o2volt
+source=o2volt1
 
 [rt_text_14]
 int_name=AFR
-source=afr
+source=afr1
 
 [rt_text_15]
 int_name=aircorr
