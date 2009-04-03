@@ -145,7 +145,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch->user_data,(gfloat)tmpi);
+				watch->func(watch,(gfloat)tmpi);
 				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
@@ -161,7 +161,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) != ((tmpi2 & (1 << watch->bit)) >> watch->bit))
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch->user_data,(gfloat)tmpi);
+				watch->func(watch,(gfloat)tmpi);
 				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
@@ -174,7 +174,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			lookup_previous_value(watch->varname, &tmpf2);
 			if (tmpf != tmpf2)
 			{
-				watch->func(watch->user_data,tmpf);
+				watch->func(watch,tmpf);
 				if (watch->one_shot)
 					remove_watch(watch->id);
 			}

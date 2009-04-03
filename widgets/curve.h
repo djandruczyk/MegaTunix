@@ -31,17 +31,17 @@ typedef struct _MtxCurve		MtxCurve;
 typedef struct _MtxCurveClass	MtxCurveClass;
 typedef struct _MtxCurveCoord	MtxCurveCoord;
 
-/*! ColorIndex enum,  for indexing into the color arrays */
+/*! CurveColorIndex enum,  for indexing into the color arrays */
 typedef enum  
 {
-	COL_BG = 0,
-	COL_FG,
-	COL_SEL,
-	COL_GRAT,
-	COL_TEXT,
-	COL_MARKER,
-	NUM_COLORS
-}ColorIndex;
+	CURVE_COL_BG = 0,
+	CURVE_COL_FG,
+	CURVE_COL_SEL,
+	CURVE_COL_GRAT,
+	CURVE_COL_TEXT,
+	CURVE_COL_MARKER,
+	CURVE_NUM_COLORS
+}CurveColorIndex;
 
 enum
 {	
@@ -91,8 +91,8 @@ gboolean mtx_curve_set_title (MtxCurve *,gchar *);
 const gchar * mtx_curve_get_title (MtxCurve *);
 
 /* Colors */
-gboolean mtx_curve_set_color (MtxCurve *, ColorIndex , GdkColor );
-gboolean mtx_curve_get_color (MtxCurve *, ColorIndex , GdkColor *);
+gboolean mtx_curve_set_color (MtxCurve *, CurveColorIndex , GdkColor );
+gboolean mtx_curve_get_color (MtxCurve *, CurveColorIndex , GdkColor *);
 
 /* Rendering */
 gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *, gboolean);

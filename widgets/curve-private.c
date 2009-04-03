@@ -139,29 +139,29 @@ void mtx_curve_init_colors(MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	/*! Main Background */
-	priv->colors[COL_BG].red=0.0*65535;
-	priv->colors[COL_BG].green=0.0*65535;
-	priv->colors[COL_BG].blue=0.0*65535;
+	priv->colors[CURVE_COL_BG].red=0.0*65535;
+	priv->colors[CURVE_COL_BG].green=0.0*65535;
+	priv->colors[CURVE_COL_BG].blue=0.0*65535;
 	/*! Trace */
-	priv->colors[COL_FG].red=0.8*65535;
-	priv->colors[COL_FG].green=0.8*65535;
-	priv->colors[COL_FG].blue=0.8*65535;
+	priv->colors[CURVE_COL_FG].red=0.8*65535;
+	priv->colors[CURVE_COL_FG].green=0.8*65535;
+	priv->colors[CURVE_COL_FG].blue=0.8*65535;
 	/*! Selected Trace */
-	priv->colors[COL_SEL].red=0.9*65535;
-	priv->colors[COL_SEL].green=0.0*65535;
-	priv->colors[COL_SEL].blue=0.0*65535;
+	priv->colors[CURVE_COL_SEL].red=0.9*65535;
+	priv->colors[CURVE_COL_SEL].green=0.0*65535;
+	priv->colors[CURVE_COL_SEL].blue=0.0*65535;
 	/*! Graticule Color*/
-	priv->colors[COL_GRAT].red=0.50*65535;
-	priv->colors[COL_GRAT].green=0.50*65535;
-	priv->colors[COL_GRAT].blue=0.50*65535;
+	priv->colors[CURVE_COL_GRAT].red=0.50*65535;
+	priv->colors[CURVE_COL_GRAT].green=0.50*65535;
+	priv->colors[CURVE_COL_GRAT].blue=0.50*65535;
 	/*! Text/Title Color */
-	priv->colors[COL_TEXT].red=1.0*65535;
-	priv->colors[COL_TEXT].green=1.0*65535;
-	priv->colors[COL_TEXT].blue=1.0*65535;
+	priv->colors[CURVE_COL_TEXT].red=1.0*65535;
+	priv->colors[CURVE_COL_TEXT].green=1.0*65535;
+	priv->colors[CURVE_COL_TEXT].blue=1.0*65535;
 	/*! Marker Lines Color */
-	priv->colors[COL_MARKER].red=1.0*65535;
-	priv->colors[COL_MARKER].green=0.2*65535;
-	priv->colors[COL_MARKER].blue=0.2*65535;
+	priv->colors[CURVE_COL_MARKER].red=1.0*65535;
+	priv->colors[CURVE_COL_MARKER].green=0.2*65535;
+	priv->colors[CURVE_COL_MARKER].blue=0.2*65535;
 }
 
 
@@ -199,9 +199,9 @@ void update_curve_position (MtxCurve *curve)
 
 	/* curve  */
 
-	cairo_set_source_rgb (cr, priv->colors[COL_FG].red/65535.0,
-			priv->colors[COL_FG].green/65535.0,
-			priv->colors[COL_FG].blue/65535.0);
+	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
+			priv->colors[CURVE_COL_FG].green/65535.0,
+			priv->colors[CURVE_COL_FG].blue/65535.0);
 	cairo_set_line_width (cr, 1.5);
 
 	/* The "curve" itself */
@@ -226,9 +226,9 @@ void update_curve_position (MtxCurve *curve)
 	if (priv->vertex_selected)
 	{
 		cairo_set_source_rgb (cr, 
-				priv->colors[COL_SEL].red/65535.0,
-				priv->colors[COL_SEL].green/65535.0,
-				priv->colors[COL_SEL].blue/65535.0);
+				priv->colors[CURVE_COL_SEL].red/65535.0,
+				priv->colors[CURVE_COL_SEL].green/65535.0,
+				priv->colors[CURVE_COL_SEL].blue/65535.0);
 		cairo_move_to (cr, priv->points[priv->active_coord].x,priv->points[priv->active_coord].y);
 		cairo_new_sub_path(cr);
 		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*M_PI);
@@ -236,20 +236,20 @@ void update_curve_position (MtxCurve *curve)
 	cairo_stroke(cr);
 
 	/* Vertical and Horizontal Markers */
-	cairo_set_source_rgb (cr, priv->colors[COL_MARKER].red/65535.0,
-			priv->colors[COL_MARKER].green/65535.0,
-			priv->colors[COL_MARKER].blue/65535.0);
+	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_MARKER].red/65535.0,
+			priv->colors[CURVE_COL_MARKER].green/65535.0,
+			priv->colors[CURVE_COL_MARKER].blue/65535.0);
 	cairo_set_line_width (cr, 2.0);
 	if (priv->show_x_marker)
 	{
-		cairo_move_to (cr, (priv->x_marker*priv->x_scale) + priv->border,0);
-		cairo_line_to (cr, (priv->x_marker*priv->x_scale) + priv->border,priv->h);
+		cairo_move_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->border,0);
+		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->border,priv->h);
 		cairo_stroke(cr);
 	}
 	if (priv->show_y_marker)
 	{
-		cairo_move_to (cr, 0,(priv->y_marker*priv->x_scale) + priv->border);
-		cairo_line_to (cr, priv->w,(priv->y_marker*priv->x_scale) + priv->border);
+		cairo_move_to (cr, 0,((priv->y_marker-priv->lowest_y)*priv->x_scale) + priv->border);
+		cairo_line_to (cr, priv->w,((priv->y_marker-priv->lowest_y)*priv->x_scale) + priv->border);
 		cairo_stroke(cr);
 	}
 
@@ -291,9 +291,9 @@ void update_curve_position (MtxCurve *curve)
 				-(extents.height + (2*priv->border)));
 		cairo_fill (cr);
 		cairo_set_source_rgb (cr, 
-				priv->colors[COL_TEXT].red/65535.0,
-				priv->colors[COL_TEXT].green/65535.0,
-				priv->colors[COL_TEXT].blue/65535.0);
+				priv->colors[CURVE_COL_TEXT].red/65535.0,
+				priv->colors[CURVE_COL_TEXT].green/65535.0,
+				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		cairo_move_to (cr, 
 				priv->w - extents.width - (3*priv->border),
 				extents.height*7);
@@ -417,9 +417,9 @@ void generate_curve_background(MtxCurve *curve)
 	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	cairo_set_source_rgb (cr, 
-			priv->colors[COL_BG].red/65535.0,
-			priv->colors[COL_BG].green/65535.0,
-			priv->colors[COL_BG].blue/65535.0);
+			priv->colors[CURVE_COL_BG].red/65535.0,
+			priv->colors[CURVE_COL_BG].green/65535.0,
+			priv->colors[CURVE_COL_BG].blue/65535.0);
 	/* Background Rectangle */
 	cairo_rectangle (cr,
 			0,0,w,h);
@@ -427,9 +427,9 @@ void generate_curve_background(MtxCurve *curve)
 	if (priv->show_grat)
 	{
 		cairo_set_source_rgba (cr, 
-				priv->colors[COL_GRAT].red/65535.0,
-				priv->colors[COL_GRAT].green/65535.0,
-				priv->colors[COL_GRAT].blue/65535.0,
+				priv->colors[CURVE_COL_GRAT].red/65535.0,
+				priv->colors[CURVE_COL_GRAT].green/65535.0,
+				priv->colors[CURVE_COL_GRAT].blue/65535.0,
 				0.5);
 		max_lines = (priv->w - 2*priv->border)/50;
 		tmpf = ((priv->w - 2*priv->border)%50)/50.0;
@@ -473,9 +473,9 @@ void generate_curve_background(MtxCurve *curve)
 				extents.height+(2*priv->border));
 		cairo_fill (cr);
 		cairo_set_source_rgb (cr, 
-				priv->colors[COL_TEXT].red/65535.0,
-				priv->colors[COL_TEXT].green/65535.0,
-				priv->colors[COL_TEXT].blue/65535.0);
+				priv->colors[CURVE_COL_TEXT].red/65535.0,
+				priv->colors[CURVE_COL_TEXT].green/65535.0,
+				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		cairo_move_to (cr, 
 				priv->w/2-(extents.width/2),
 				(extents.height*2));

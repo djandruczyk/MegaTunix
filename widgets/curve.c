@@ -147,11 +147,11 @@ gboolean mtx_curve_get_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
  \param curve (MtxCurve *) pointer to curve
  \param value (gfloat) new value
  */
-gboolean mtx_curve_set_color (MtxCurve *curve, ColorIndex index, GdkColor color)
+gboolean mtx_curve_set_color (MtxCurve *curve, CurveColorIndex index, GdkColor color)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
-	g_return_val_if_fail (index < NUM_COLORS,FALSE);
+	g_return_val_if_fail (index < CURVE_NUM_COLORS,FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->colors[index].red = color.red;
         priv->colors[index].green = color.green;
@@ -171,11 +171,11 @@ gboolean mtx_curve_set_color (MtxCurve *curve, ColorIndex index, GdkColor color)
  \param color (gfloat) pointer to color struct being filled in.
  \returns a point to the internal GdkColor struct which should NOT be freed
  */
-gboolean mtx_curve_get_color (MtxCurve *curve, ColorIndex index, GdkColor *color)
+gboolean mtx_curve_get_color (MtxCurve *curve, CurveColorIndex index, GdkColor *color)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
-	g_return_val_if_fail (index < NUM_COLORS,FALSE);
+	g_return_val_if_fail (index < CURVE_NUM_COLORS,FALSE);
 	color->red = priv->colors[index].red;
         color->green = priv->colors[index].green;
         color->blue = priv->colors[index].blue;

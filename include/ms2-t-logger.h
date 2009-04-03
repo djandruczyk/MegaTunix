@@ -14,8 +14,9 @@
 #ifndef __MS2_T_LOGGER_H__
 #define __MS2_T_LOGGER_H__
 
-#include <gtk/gtk.h>
 #include <defines.h>
+#include <gtk/gtk.h>
+#include <watches.h>
 
 
 typedef struct _MS2_TTMon_Data MS2_TTMon_Data;
@@ -60,7 +61,7 @@ EXPORT void ms2_setup_ms2_logger_display(GtkWidget *);
 EXPORT gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 EXPORT gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
-EXPORT void ms2_ttm_update(gpointer, gfloat);
+EXPORT void ms2_ttm_update(DataWatch *, gfloat);
 void _ms2_crunch_trigtooth_data(gint);
 void ms2_update_trigtooth_display(gint);
 /* Prototypes */

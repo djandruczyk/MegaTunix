@@ -19,6 +19,8 @@
 #include <enums.h>
 #include <fileio.h>
 #include <firmware.h>
+#include "../widgets/gauge.h"
+#include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
@@ -45,7 +47,6 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	GtkWidget *widget = NULL;
 	GtkWidget *window = NULL;
 	GtkWidget *notebook = NULL;
-	GtkWidget *parent = NULL;
 	GtkWidget *curve = NULL;
 	GtkWidget *x_parent = NULL;
 	GtkWidget *y_parent = NULL;
@@ -53,12 +54,15 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *gauge = NULL;
+	GtkWidget *parent = NULL;
 	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
 	GList *curve_list = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * filename = NULL;
 	gchar **vector = NULL;
 	extern GList ***ve_widgets;
 	gint num_tabs = 0;
@@ -87,7 +91,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(close_2d_editor),window);
 	tmpbuf = g_strdup_printf("2D Table Group Editor");
-	gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
 	g_free(tmpbuf);
 	gtk_window_resize(GTK_WINDOW(window),640,400);
 
@@ -113,6 +117,19 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		widget = glade_xml_get_widget(xml,"te_layout_hbox1");
 		table_num = (gint)strtod(vector[j],NULL);
 		label = gtk_label_new(firmware->te_params[table_num]->title);
+		if (firmware->te_params[table_num]->gauge)
+		{
+			parent = glade_xml_get_widget(xml,"te_gaugeframe");
+			gauge = mtx_gauge_face_new();
+			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
+			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
+			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+			lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
+	                mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+			g_free(filename);
+			create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+			gtk_container_add(GTK_CONTAINER(parent),gauge);
+		}
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),widget,label);
 		parent = glade_xml_get_widget(xml,"te_right_frame");
 		curve = mtx_curve_new();
@@ -282,12 +299,14 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *gauge = NULL;
 	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
 	GList *curve_list = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * filename = NULL;
 	extern GList ***ve_widgets;
 	gint x_mult = 0;
 	gint y_mult = 0;
@@ -327,6 +346,20 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	gtk_container_add(GTK_CONTAINER(parent),curve);
 	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+	if (firmware->te_params[table_num]->gauge)
+	{
+		parent = glade_xml_get_widget(xml,"te_gaugeframe");
+		gauge = mtx_gauge_face_new();
+		tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
+		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+		lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
+                mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+
+		g_free(filename);
+		create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+		gtk_container_add(GTK_CONTAINER(parent),gauge);
+	}
 	cdata = g_new0(CurveData, 1);
 	cdata->curve = curve;
 	cdata->axis = _X_;
@@ -593,9 +626,9 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT void update_curve_marker(gpointer user_data, gfloat f_val)
+EXPORT void update_curve_marker(DataWatch *watch, gfloat f_val)
 {
-	CurveData *cdata = (CurveData *)user_data;
+	CurveData *cdata = (CurveData *)watch->user_data;
 	if (cdata->axis == _X_)
 		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),f_val);
 	if (cdata->axis == _Y_)

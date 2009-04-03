@@ -227,7 +227,7 @@ struct _Page_Params
 struct _TE_Params
 {
 	gchar *title;		/*! Title used on TE window */
-	gchar *gauge_name;	/*! Gauge to stick in lower left */
+	gchar *gauge;		/*! Gauge to stick in lower left */
 	gchar *gauge_datasource;/*! Gauge datasource */
 	gchar *bg_color;	/*! BG Color (string) */
 	gchar *grat_color;	/*! Graticule Color (string) */

@@ -24,6 +24,7 @@
 #include <enums.h>
 #include <fileio.h>
 #include <firmware.h>
+#include "../widgets/gauge.h"
 #include <gdk/gdkkeysyms.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
@@ -2981,4 +2982,12 @@ guint get_bitshift(guint mask)
 		if (mask & (1 << i))
 			return i;
 	return 0;
+}
+
+EXPORT void update_misc_gauge(DataWatch *watch, gfloat value)
+{
+	if (MTX_IS_GAUGE_FACE(watch->user_data))
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),value);
+	else
+		remove_watch(watch->id);
 }

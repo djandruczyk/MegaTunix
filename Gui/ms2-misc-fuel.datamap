@@ -1,7 +1,7 @@
 [global]
-description=Object data map for the template tab
-tab_name=_Template
-id_prefix=TMP_
+description=Object data map for MS2-Misc Fuel Settings
+tab_name=_Misc Fuel
+id_prefix=MISC_
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
@@ -27,4 +27,7 @@ key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
 

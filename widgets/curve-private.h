@@ -24,7 +24,7 @@
 typedef struct _MtxCurvePrivate MtxCurvePrivate;
 struct _MtxCurvePrivate
 {
-        GdkColor colors[NUM_COLORS];    /* Colors Array */
+        GdkColor colors[CURVE_NUM_COLORS];    /* Colors Array */
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
         MtxCurveCoord *coords;       /* Points array */

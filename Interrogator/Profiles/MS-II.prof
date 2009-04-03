@@ -231,6 +231,8 @@ z_precision=1
 [te_table_0]
 title=Cranking Pulse vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -259,6 +261,8 @@ y_precision=1
 [te_table_1]
 title=Priming Pulse vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -287,6 +291,8 @@ y_precision=1
 [te_table_2]
 title=ASE % vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -315,6 +321,8 @@ y_precision=0
 [te_table_3]
 title=ASE Taper Cycles vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -343,6 +351,8 @@ y_precision=0
 [te_table_4]
 title=Idle Steps vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -371,6 +381,8 @@ y_precision=0
 [te_table_5]
 title=Idle PWM % vs. Temp
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0
@@ -399,6 +411,8 @@ y_precision=0
 [te_table_6]
 title=Cold Ignition Advance Offset
 is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
 bincount=10
 x_temp_dep=TRUE
 x_page=0

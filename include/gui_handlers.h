@@ -16,6 +16,7 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
+#include <watches.h>
 
 /* Prototypes */
 EXPORT gboolean prevent_close(GtkWidget *, gpointer );
@@ -46,6 +47,7 @@ gboolean prompt_r_u_sure(void);
 void combo_toggle_groups_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
+EXPORT void update_misc_gauge(DataWatch *, gfloat);
 /* Prototypes */
 
 #endif
