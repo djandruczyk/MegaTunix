@@ -3,7 +3,7 @@ major=1
 minor=4
 
 [interrogation_profile]
-name=MS-II V2.88
+name=MS-II V2.8x
 
 [parameters]
 InterCharDelay=1
@@ -476,7 +476,7 @@ length=112
 [interrogation]
 match_on=MS-II_Clock,MS_Signature
 MS-II_Clock=_COUNT_,2
-MS_Signature=_SUBMATCH_,V2.88
+MS_Signature=_SUBMATCH_,V2.8
 
 [gui]
 RealtimeMapFile=MS2-Std
