@@ -91,7 +91,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="inj_mode_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Injector Firing Pattern</property>
+					      <property name="label" translatable="yes">Inj. Firing Pattern</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -318,7 +318,7 @@ Injection Strategy</property>
 					  <child>
 					    <widget class="GtkLabel" id="barocorr_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Barometer Correction</property>
+					      <property name="label" translatable="yes">Baro. Correction</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -345,7 +345,7 @@ Injection Strategy</property>
 					  <child>
 					    <widget class="GtkLabel" id="o2_sensor_1_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Bank 1 O&lt;sub&gt;2&lt;/sub&gt; Sensor Type</property>
+					      <property name="label" translatable="yes">Bank 1 O&lt;sub&gt;2&lt;/sub&gt; Sensor</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">True</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -372,7 +372,7 @@ Injection Strategy</property>
 					  <child>
 					    <widget class="GtkLabel" id="o2_sensor_2_label">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Bank 2 O&lt;sub&gt;2&lt;/sub&gt; Sensor Type</property>
+					      <property name="label" translatable="yes">Bank 2 O&lt;sub&gt;2&lt;/sub&gt; Sensor</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">True</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1015,7 +1015,7 @@ Injection Strategy</property>
 						  <child>
 						    <widget class="GtkLabel" id="batt_corr_1_abel">
 						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Battery Voltage
+						      <property name="label" translatable="yes">Batt. Voltage
 Correction (ms/Volt)</property>
 						      <property name="use_underline">False</property>
 						      <property name="use_markup">False</property>
@@ -1552,29 +1552,6 @@ Threshold (ms.)</property>
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="req_fuel_per_squirt_1_spin">
-						  <property name="visible">True</property>
-						  <property name="sensitive">False</property>
-						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">1</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">0 0 25.5 0.10000000149 1 0</property>
-						</widget>
-						<packing>
-						  <property name="left_attach">2</property>
-						  <property name="right_attach">3</property>
-						  <property name="top_attach">4</property>
-						  <property name="bottom_attach">5</property>
-						  <property name="x_options">expand</property>
-						  <property name="y_options"></property>
-						</packing>
-					      </child>
-
-					      <child>
 						<widget class="GtkButton" id="calc_req_fuel_2_button">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
@@ -1617,6 +1594,29 @@ Threshold (ms.)</property>
 						  <property name="right_attach">3</property>
 						  <property name="top_attach">3</property>
 						  <property name="bottom_attach">4</property>
+						  <property name="x_options">expand</property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkSpinButton" id="req_fuel_per_squirt_1_spin">
+						  <property name="visible">True</property>
+						  <property name="sensitive">False</property>
+						  <property name="can_focus">True</property>
+						  <property name="climb_rate">1</property>
+						  <property name="digits">1</property>
+						  <property name="numeric">True</property>
+						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+						  <property name="snap_to_ticks">False</property>
+						  <property name="wrap">False</property>
+						  <property name="adjustment">0 0 25.5 0.10000000149 1 0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">2</property>
+						  <property name="right_attach">3</property>
+						  <property name="top_attach">4</property>
+						  <property name="bottom_attach">5</property>
 						  <property name="x_options">expand</property>
 						  <property name="y_options"></property>
 						</packing>
@@ -1709,7 +1709,7 @@ Time (ms)</property>
 						  <child>
 						    <widget class="GtkLabel" id="batt_corr_2_label">
 						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Battery Voltage
+						      <property name="label" translatable="yes">Batt. Voltage
 Correction (ms/Volt)</property>
 						      <property name="use_underline">False</property>
 						      <property name="use_markup">False</property>
