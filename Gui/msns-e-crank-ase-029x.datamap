@@ -624,23 +624,29 @@ handler=_GENERIC_
 tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
 
 [iat_ign_adv_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=48
 dl_conv_expr=x*1
 ul_conv_expr=x*1
+raw_upper=120
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+temp_dep=TRUE
+bind_to_list=temperature
 tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 degree for each amount below this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 60 deg, the timing will be advanced by 4 degrees.
 
 [iat_ret_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=50
 dl_conv_expr=x*1
 ul_conv_expr=x*1
+raw_upper=120
+temp_dep=TRUE
+bind_to_list=temperature
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When above the Intake Air Temp (IAT) setpoint the ignition timing will be retarded 1 degree for each amount above this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 160 deg, the timing will be retarded by 6 degrees.

@@ -3,7 +3,7 @@ major=1
 minor=2
 
 [realtime_map]
-applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010a,MegaSquirtnSpark-Extra Highres 011x
+applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010x,MegaSquirtnSpark-Extra Highres 011x
 applicable_signatures=MS/Extra format hr_10 **********,MS/Extra format hr_09 **********,MS/Extra format hr_08 **********,MS/Extra format hr_11 **********
 derived_total=57
 raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt1,afr1,egocorr,aircorr,warmcorr,raw_rpm,pw1,pw2,tpsaccel,barocorr,gammae,vecurr,sparkangle

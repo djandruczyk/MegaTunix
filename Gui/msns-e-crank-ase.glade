@@ -2949,7 +2949,7 @@ source</property>
 						      <child>
 							<widget class="GtkLabel" id="iat_ret_map_label">
 							  <property name="visible">True</property>
-							  <property name="label" translatable="yes">&amp; MAP above (KPa)</property>
+							  <property name="label" translatable="yes">&amp; MAP Above (KPa)</property>
 							  <property name="use_underline">False</property>
 							  <property name="use_markup">False</property>
 							  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2977,7 +2977,7 @@ source</property>
 						      <child>
 							<widget class="GtkLabel" id="iat_ret_temp_label">
 							  <property name="visible">True</property>
-							  <property name="label" translatable="yes">&amp; IIAT above</property>
+							  <property name="label" translatable="yes">&amp; IAT &gt;</property>
 							  <property name="use_underline">False</property>
 							  <property name="use_markup">False</property>
 							  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3253,7 +3253,7 @@ Related Advance</property>
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
 				    <widget class="GtkTable" id="table5">
