@@ -158,7 +158,6 @@ MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$DATA_DIR\\\" -DSNAPSHOTS_DATA_DIR=\\\
 AC_SUBST(MEGATUNIX_DEFINES)
 
 AC_OUTPUT([
-megatunix.spec
 Makefile 
 include/Makefile
 mtxcommon/Makefile
