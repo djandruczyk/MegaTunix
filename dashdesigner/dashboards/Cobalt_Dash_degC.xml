@@ -19,7 +19,7 @@
     <x_offset>344</x_offset>
     <y_offset>413</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_AFR.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
   <gauge>
     <width>154</width>
@@ -43,7 +43,7 @@
     <x_offset>0</x_offset>
     <y_offset>121</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_PW.xml</gauge_xml_name>
-    <datasource>pw</datasource>
+    <datasource>pw1</datasource>
   </gauge>
   <gauge>
     <width>141</width>

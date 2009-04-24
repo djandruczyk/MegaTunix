@@ -104,7 +104,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkTable" id="fuel_fuel_params_table">
+				    <widget class="GtkTable" id="flexl_fuel_params_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">6</property>
 				      <property name="n_columns">2</property>
@@ -801,7 +801,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="amc_vertex_kpa_entry">
+					<widget class="GtkEntry" id="amc_vertex_map_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -1391,7 +1391,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="spark_retard_entry">
+				    <widget class="GtkEntry" id="nos_spark_retard_entry">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
@@ -1660,7 +1660,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="mafe_sensor_combo">
+					<widget class="GtkComboBoxEntry" id="maf_use_combo">
 					  <property name="visible">True</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
@@ -1724,7 +1724,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="comboboxentry6">
+					<widget class="GtkComboBoxEntry" id="maf_pin_combo">
 					  <property name="visible">True</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
@@ -1754,7 +1754,8 @@
 				  <child>
 				    <widget class="GtkLabel" id="label34">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; MAF must &lt;b&gt;NOT&lt;/b&gt; on MAP pin for MAF/MAP blend.</property>
+				      <property name="label" translatable="yes">&lt;b&gt;NOTE:&lt;/b&gt; MAF must &lt;b&gt;NOT&lt;/b&gt; on MAP
+pin for MAF/MAP blend.</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1828,7 +1829,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="label36">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Invert above MAP/MAF settings</property>
+					      <property name="label" translatable="yes">Invert above settings</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1963,7 +1964,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="maf_above_rpm_entry">
+					<widget class="GtkEntry" id="maf_below_rpm_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>

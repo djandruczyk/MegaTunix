@@ -75,6 +75,6 @@
     <x_offset>15</x_offset>
     <y_offset>16</y_offset>
     <gauge_xml_name>Honda/Honda_AFR_Gauge.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
 </dashboard>
