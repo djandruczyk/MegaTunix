@@ -186,9 +186,9 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 
 		if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
 				orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-			space = widget->allocation.width - 2 * widget->style->xthickness;
+			space = widget->allocation.width - 2;
 		else
-			space = widget->allocation.height - 2 * widget->style->ythickness;
+			space = widget->allocation.height - 2;
 
 		current = space *
 			gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
@@ -229,14 +229,14 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 		case GTK_PROGRESS_LEFT_TO_RIGHT:
 		case GTK_PROGRESS_RIGHT_TO_LEFT:
 			b_area.width = current;
-			b_area.height = widget->allocation.height - widget->style->ythickness * 4;
-			b_area.y = widget->style->ythickness*2;
-			b_area.x = widget->style->xthickness*2;
+			b_area.height = widget->allocation.height - 2;
+			b_area.y = 1;
+			b_area.x = 1;
 
 			p_area.width = peak;
-			p_area.height = widget->allocation.height - widget->style->ythickness * 4;
-			p_area.y = widget->style->ythickness*2;
-			p_area.x = widget->style->xthickness*2;
+			p_area.height = widget->allocation.height - 2;
+			p_area.y = 1;
+			p_area.x = 1;
 			if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
 			{
 				b_area.x = widget->allocation.width - current - b_area.x;
@@ -246,15 +246,15 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 
 		case GTK_PROGRESS_TOP_TO_BOTTOM:
 		case GTK_PROGRESS_BOTTOM_TO_TOP:
-			b_area.width = widget->allocation.width - widget->style->xthickness * 4;
+			b_area.width = widget->allocation.width - 2;
 			b_area.height = current;
-			b_area.x = widget->style->xthickness*2;
-			b_area.y = widget->style->ythickness*2;
+			b_area.x = 1;
+			b_area.y = 1;
 
-			p_area.width = widget->allocation.width - widget->style->xthickness * 4;
+			p_area.width = widget->allocation.width - 2;
 			p_area.height = peak;
-			p_area.x = widget->style->xthickness*2;
-			p_area.y = widget->style->ythickness*2;
+			p_area.x = 1;
+			p_area.y = 1;
 			if (orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
 			{
 				b_area.y = widget->allocation.height - current - b_area.y;
