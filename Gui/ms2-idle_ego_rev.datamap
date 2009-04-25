@@ -304,12 +304,10 @@ handler=_GENERIC_
 tooltip=This sets the maximum spark retard used for the revlimiter when the ECU is controlling spark
 
 [lower_revlimit_entry]
-keys=offset,size,dl_type,handler,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,dl_type,handler,raw_lower,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 offset=44
 size=_S16_
-dl_conv_expr=x*1
-ul_conv_expr=x/1
 raw_lower=0
 raw_upper=15000
 bind_to_list=revlimit_controls
@@ -318,12 +316,10 @@ handler=_GENERIC_
 tooltip=This is the RPM at which fuel is re-enabled in Fuel cut mode, and the RPM at which timing is fully restored in spark retard mode
 
 [upper_revlimit_entry]
-keys=offset,size,dl_type,handler,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,dl_type,handler,raw_lower,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 offset=46
 size=_S16_
-dl_conv_expr=x*1
-ul_conv_expr=x/1
 raw_lower=0
 raw_upper=15000
 bind_to_list=revlimit_controls
