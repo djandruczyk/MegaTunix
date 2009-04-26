@@ -89,7 +89,7 @@ log_by_default=TRUE
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=sparkangle
-dlog_gui_name=Spark Adv.
+dlog_gui_name=Advance (deg)
 dlog_field_name=SparkAdv
 offset=8
 size=_S16_
@@ -98,7 +98,7 @@ upper_limit=90
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Spark Adv." is the Current spark advance being run.
+tooltip="Advance is the Current spark advance being run.
 log_by_default=TRUE
 
 [derived_6]

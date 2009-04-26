@@ -510,7 +510,10 @@ void socket_get_rtv_list(gint fd)
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *, i);
-		tmpbuf = g_strdup_printf("%s\r\n",(gchar *)OBJ_GET(object,"internal_names"));
+		if (i < rtv_map->rtv_list->len-1)
+			tmpbuf = g_strdup_printf("%s ",(gchar *)OBJ_GET(object,"internal_names"));
+		else
+			tmpbuf = g_strdup_printf("%s",(gchar *)OBJ_GET(object,"internal_names"));
 		if (tmpbuf)
 		{
 			len = strlen(tmpbuf);
@@ -520,6 +523,12 @@ void socket_get_rtv_list(gint fd)
 			g_free(tmpbuf);
 		}
 	}
+	tmpbuf = g_strdup("\r\n");
+	len = strlen(tmpbuf);
+	res = send(fd,tmpbuf,len,0);
+	if (len != res)
+		printf("SHORT WRITE!\n");
+	g_free(tmpbuf);
 }
 
 
