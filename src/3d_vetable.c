@@ -1219,7 +1219,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	bottom = 0.0;
 
 	/* Tail, last val. */
-	glLineWidth(MIN(w,h)/100.0);
+	glLineWidth(MIN(w,h)/90.0);
 	glColor3f(0.0,0.0,0.50);
 	if (ve_view->fixed_scale)
 	{
@@ -1244,7 +1244,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
-	glPointSize(MIN(w,h)/100.0);
+	glPointSize(MIN(w,h)/90.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
@@ -1274,7 +1274,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
 	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
 
-	glPointSize(MIN(w,h)/80.0);
+	glPointSize(MIN(w,h)/75.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
@@ -1315,7 +1315,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
-	glPointSize(MIN(w,h)/70.0);
+	glPointSize(MIN(w,h)/65.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glEnd();
@@ -1333,7 +1333,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glEnd();
 
 	/* Render a Blue dot at the active VE map position */
-	glPointSize(MIN(w,h)/55.0);
+	glPointSize(MIN(w,h)/50.0);
 
 	glColor3f(0.0,0.0,1.0);
 	if (ve_view->fixed_scale)

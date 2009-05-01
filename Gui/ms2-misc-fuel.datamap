@@ -126,7 +126,6 @@ bitmask=1
 bind_to_list=maf_ctrls
 tooltip=If yes, then use MAF above the first RPM, and MAP below the second RPM. Normally this should be set to 'use above'.
 
-
 #----- Entries ---------------------------------------------------------------
 
 [ff_freq_low_entry]
@@ -345,4 +344,41 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 bind_to_list=maf_ctrls
 tooltip=Use MAF exclusively below the specified RPM.
+
+[an_to_blend_entry]
+keys=offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+offset=634
+size=_S16_
+raw_lower=0
+raw_upper=15000
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+bind_to_list=an_controls
+tooltip=The RPM threshold to change between Pure Alpha N to Blend mode.
+
+[blend_to_sd_entry]
+keys=offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+offset=636
+size=_S16_
+raw_lower=0
+raw_upper=15000
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+bind_to_list=an_controls
+tooltip=The RPM threshold to change between Blended mode and pure SD mode
+
+[baro_spark_adv_entry]
+keys=precision,offset,size,dl_type,dl_conv_expr,ul_conv_expr,handler,tooltip,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_ENUM_,_STRING_,_STRING_
+offset=631
+size=_U08_
+precision=2
+dl_conv_expr=x*100
+ul_conv_expr=x/100
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+bind_to_list=an_controls
+tooltip=This factor is to allow spark advance with baro (when less than 100 kPa) for alpha-N mode. This isn't allowed in speed density since map in the spark table accounts for it. The rate of advance versus baro under 100 kPa is a user input. 
 
