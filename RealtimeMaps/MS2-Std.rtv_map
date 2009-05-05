@@ -619,8 +619,8 @@ offset=66
 size=_S16_
 lower_limit=0
 upper_limit=100
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
 tooltip="calcMAP" is a blend of TPS and MAP, depending upon active algorithm.
 log_by_default=FALSE
 

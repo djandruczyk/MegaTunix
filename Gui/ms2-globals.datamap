@@ -114,7 +114,7 @@ choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
 bitvals=0,1,2
 offset=630
 bitmask=3
-toggle_groups=sd_ctrls,blend_ctrls,an_ctrls
+toggle_groups=sd_ctrls,an_ctrls,an_ctrls
 tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
 
 [barocorr_combo]
@@ -246,7 +246,7 @@ choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
 bitvals=0,1,2
 offset=630
 bitmask=3
-toggle_groups=sd_ctrls,blend_ctrls,an_ctrls
+toggle_groups=sd_ctrls,an_ctrls,an_ctrls
 tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
 
 [alternate_combo]

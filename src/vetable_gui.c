@@ -328,11 +328,8 @@ void draw_ve_marker()
 	static gint **last = NULL;
 	static GdkColor ** old_colors = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
-	GdkColor newcolor;
-	gfloat value = 0.0;
 	GtkRcStyle *style = NULL;
 	gint i = 0;
-	gint j = 0;
 	gint table = 0;
 	gint page = 0;
 	gint base = 0;
@@ -341,7 +338,6 @@ void draw_ve_marker()
 	gint bin[4] = {0,0,0,0};
 	gint mult = 0;
 	gint z_mult = 0;
-	gint raw_upper = 0;
 	gfloat left_w = 0.0;
 	gfloat right_w = 0.0;
 	gfloat top_w = 0.0;
@@ -590,29 +586,24 @@ redraw:
 		z_bin[3] = -1;
 	else
 		z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
+	/* Take the PREVIOUS ones and reset them back to their DEFAULT color
+	 */
 	for (i=0;i<4;i++)
 	{
-		for (j=0;j<4;j++)
+		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
-			if ((last[table][i] != z_bin[j] ) && (last_widgets[table][last[table][i]]))
+			if ((gboolean)OBJ_GET(last_widgets[table][last[table][i]],"use_color"))
+				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+			else
 			{
-				if (color_changed)
-				{
-					size = firmware->table_params[table]->z_size;
-					raw_upper = (gint)OBJ_GET(last_widgets[table][last[table][i]],"raw_upper");
-					value = get_ecu_data(canID,page,base+(z_bin[i]*z_mult),size);
-					newcolor = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
-					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&newcolor);
-				}
-				else
-				{
-					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
-				}
-
-				last_widgets[table][last[table][i]] = NULL;
+				// HACK ALERT! thsi doesn't honor themes! 
+				gdk_color_parse("white",&old_colors[table][z_bin[i]]);
+				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][z_bin[i]]);
 			}
 		}
 	}
+
+	last_widgets[table][last[table][i]] = NULL;
 	color_changed = FALSE;
 
 	max=0;
@@ -627,6 +618,9 @@ redraw:
 	//for (i=0;i<4;i++)
 	//	last_z_weight[i] = z_weight[i];
 
+	/* Color the 4 vertexes according to their weight 
+	 * Save the old colors as well
+	 */
 	for (i=0;i<4;i++)
 	{
 		if (z_bin[i] == -1)
@@ -641,7 +635,7 @@ redraw:
 		last[table][i] = z_bin[i];
 
 		style = gtk_widget_get_modifier_style(widget);
-
+		/* Save color of original widget */
 		old_colors[table][z_bin[i]] = style->base[GTK_STATE_NORMAL];
 		/*printf("table %i, zbin[%i] %i\n",table,i,z_bin[i]);*/
 		color.red = z_weight[i]*32768 +32767;

@@ -257,6 +257,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(SPARKTABLES_TAB));
 	g_hash_table_insert(str_2_enum,"_AFRTABLES_TAB_",
 			GINT_TO_POINTER(AFRTABLES_TAB));
+	g_hash_table_insert(str_2_enum,"_ALPHA_N_TAB_",
+			GINT_TO_POINTER(ALPHA_N_TAB));
 	g_hash_table_insert(str_2_enum,"_BOOSTTABLES_TAB_",
 			GINT_TO_POINTER(BOOSTTABLES_TAB));
 	g_hash_table_insert(str_2_enum,"_ROTARYTABLES_TAB_",

@@ -40,6 +40,11 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=ego_controls
 
+[alpha-n-frame]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=an_ctrls
+
 #----- Combo Boxes -----------------------------------------------------------
 
 [flex_fuel_combo]
