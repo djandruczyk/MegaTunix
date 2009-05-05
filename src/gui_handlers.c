@@ -417,7 +417,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	switch ((MtxButton)handler)
 	{
-		case MAP_SENSOR_TYPE:
+		case MULTI_EXPRESSION:
 			/*printf("MAP SENSOR CHANGE\n");*/
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
 			{
@@ -1087,7 +1087,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
 	switch ((MtxButton)handler)
 	{
-		case MAP_SENSOR_TYPE:
+		case MULTI_EXPRESSION:
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
 			{
 				tmpbuf = OBJ_GET(widget,"source_values");
@@ -1099,7 +1099,6 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
 			}
-			/* FAll Through */
 		case GENERIC:
 			tmp = get_ecu_data(canID,page,offset,size);
 			tmp = tmp & ~bitmask;	/*clears bits */

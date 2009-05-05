@@ -131,8 +131,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(TE_TABLE));
 	g_hash_table_insert(str_2_enum,"_TE_TABLE_GROUP_",
 			GINT_TO_POINTER(TE_TABLE_GROUP));
-	g_hash_table_insert(str_2_enum,"_MAP_SENSOR_TYPE_",
-			GINT_TO_POINTER(MAP_SENSOR_TYPE));
+	g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
+			GINT_TO_POINTER(MULTI_EXPRESSION));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",

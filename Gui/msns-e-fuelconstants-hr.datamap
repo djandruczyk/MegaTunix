@@ -263,7 +263,7 @@ group_2_update=multi_expression
 source_key=map_sensor
 source_values=MPX4250,MPX6300,MPX6400
 dl_type=_IMMEDIATE_
-handler=_MAP_SENSOR_TYPE_
+handler=_MULTI_EXPRESSION_
 tooltip=Sets the Type of MAP Sensor in use.
 
 #----- SpinButtons -----------------------------------------------------------

@@ -68,11 +68,14 @@ tooltip=Sets the automatic Mixture control method,  RAM update only, or periodic
 flash updates.  RAM only settings are lost after each shutdown,  flash settings are not.
 
 [map_baro_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-handler=_GENERIC_
+keys=handler,dl_type,offset,choices,bitvals,bitmask,group_2_update,source_key,source_values,tooltip
+key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+handler=_MULTI_EXPRESSION_
 dl_type=_IMMEDIATE_
 choices=Use MAP Only,Adjust MAP for Baro
+group_2_update=multi_expression
+source_key=map_source
+source_values=STD_MAP,MAP_OVER_BARO
 offset=941
 bitvals=0,1
 bitmask=1

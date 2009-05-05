@@ -750,7 +750,7 @@ lower_limit=0
 upper_limit=400
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="kpaix" is undefined! FIXME
+tooltip="kpaix" is MAP/baro
 log_by_default=FALSE
 
 [derived_48]
