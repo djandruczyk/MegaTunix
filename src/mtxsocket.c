@@ -187,7 +187,7 @@ void *socket_client(gpointer data)
 	send(fd,tmpbuf,strlen(tmpbuf),0);
 	g_free(tmpbuf);
 	res = recv(fd,&buf,1024,0);
-	/*printf("received\"%s\"\n",g_strescape(g_strndup(buf,res),NULL));*/
+	printf("received\"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
 	/* A simple CR/LF is enough to trigger ASCII mode*/
 	if (g_strncasecmp(buf,"\r\n",res) == 0)
 	{
@@ -195,7 +195,20 @@ void *socket_client(gpointer data)
 		client->mode = MTX_ASCII;
 	}
 	else
+	{
 		client->mode = MTX_BINARY;
+		res = validate_remote_binary_cmd(client,buf,res);
+		if (res < 0) /* Error, socket closed, abort */
+		{
+#ifdef __WIN32__
+			closesocket(fd);
+#else
+			close(fd);
+#endif
+			dealloc_client_data(client);
+			g_thread_exit(0);
+		}
+	}
 	
 	
 	while (TRUE)
@@ -383,7 +396,6 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			io_cmd(firmware->burn_all_command,NULL);
 
 			break;
-
 		case GET_SIGNATURE:
 			if (!firmware)
 				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
@@ -394,13 +406,27 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 				else
 					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
 			}
-
+			res = send(fd,"\n\r",strlen("\n\r"),0);
+			break;
+		case GET_REVISION:
+			if (!firmware)
+				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+			else
+			{
+				if (firmware->text_revision)
+					send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+				else
+					send(fd,"Offline mode, no revision",strlen("Offline mode, no revision"),0);
+			}
 			res = send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\
-Supported Calls:\n\rhelp\n\r\
-quit\n\rget_signature <-- Returns ECU Signature\n\r\
+Supported Calls:\n\r\
+help\n\r\
+quit\n\r\
+get_signature <-- Returns ECU Signature\n\r\
+get_revision <-- Returns ECU Textual Revision\n\r\
 get_rtv_list <-- returns runtime variable listing\n\r\
 get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
 get_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
@@ -408,7 +434,7 @@ set_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r
 burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 			send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
-			send_rescode = FALSE;
+			send_rescode = TRUE;
 			break;
 		case QUIT:
 			tmpbuf = g_strdup("\rBuh Bye...\n\r");
@@ -429,7 +455,7 @@ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 		if (check_for_changes(client))
 			send(fd,"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
 		send(fd,"OK",strlen("OK"),0);
-		
+
 		send(fd,"\n\r",strlen("\n\r"),0);
 	}
 	g_free(arg2);
@@ -439,9 +465,80 @@ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 
 gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
-	//gint fd = client->fd;
-	printf("not written yet\n");
-	return FALSE;
+	gint fd = client->fd;
+	extern Firmware_Details *firmware;
+	extern gboolean connected;
+	gchar ** vector = NULL;
+	guint16 tmpi = 0;
+	gfloat tmpf = 0.0;
+	gchar * arg2 = NULL;
+	gint canID = 0;
+	gint tableID = 0;
+	gchar tmpc;
+	gchar basecmd;
+	gboolean retval = TRUE;
+	gboolean send_rescode = TRUE;
+	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
+	gint length = strlen(tmpbuf);
+	/* If nothing passed, return */
+	if (!tmpbuf)
+		return TRUE;
+
+	printf("command send is \"%s\"\n",tmpbuf);
+	basecmd = tmpbuf[0];
+	printf("Basecmd is %c, cmd length is %i\n",basecmd,length);
+
+	switch (basecmd)
+	{
+		case 'B':
+			io_cmd(firmware->burn_all_command,NULL);
+			break;
+		case 'S':
+			if (!firmware)
+				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+			else
+			{
+				if (firmware->actual_signature)
+					send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+				else
+					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+			}
+			break;
+		case 'Q':
+			if (!firmware)
+				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+			else
+			{
+				if (firmware->text_revision)
+					send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+				else
+					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+			}
+			break;
+		case 'c': /* MS2 Clock */
+			lookup_current_value("raw_secl",&tmpf);
+			tmpi = (guint16)tmpf;
+			send(fd,&tmpi,2,0);
+			break;
+		case 'a':
+			tmpc = tmpbuf[1];
+			canID = (gint)g_ascii_strtod(&tmpc,NULL);
+			tmpc = tmpbuf[2];
+			tableID = (gint)g_ascii_strtod(&tmpc,NULL);
+			if (length != 3)
+				printf("'a' param requires canID and table\n");
+			else
+				printf("Can ID is %i, table %i\n",canID,tableID);
+			if ((canID == 0) && (tableID == 6))
+			{
+				if (firmware->rt_data)
+					send(fd,firmware->rt_data,firmware->rtvars_size,0);
+			}
+			break;
+
+	}
+	g_free(tmpbuf);
+	return TRUE;
 }
 
 

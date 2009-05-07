@@ -517,6 +517,10 @@ void mem_alloc()
 	gint j=0;
 	extern Firmware_Details *firmware;
 
+	if (!firmware->rt_data)
+		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
+	if (!firmware->rt_data_last)
+		firmware->rt_data_last = g_new0(guint8, firmware->rtvars_size);
 	if (!firmware->ecu_data)
 		firmware->ecu_data = g_new0(guint8 *, firmware->total_pages);
 	if (!firmware->ecu_data_last)
@@ -604,6 +608,10 @@ void mem_dealloc()
 			if (firmware->page_params[i])
 				g_free(firmware->page_params[i]);
 		}
+		if (firmware->rt_data)
+			g_free(firmware->rt_data);
+		if (firmware->rt_data_last)
+			g_free(firmware->rt_data_last);
 		g_free(firmware->page_params);
 
 		if (firmware->name)

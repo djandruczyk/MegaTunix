@@ -353,9 +353,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				break;
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
+			{
 				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
-			else
-				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
+				firmware->text_revision = g_strndup(message->recv_buf,count);
+			}
 			break;
 		case SIGNATURE:
 			if (offline)

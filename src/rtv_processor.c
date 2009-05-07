@@ -32,6 +32,7 @@
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
+#include <string.h>
 #include <threads.h>
 
 
@@ -45,6 +46,7 @@ extern GObject *global_data;
 void process_rt_vars(void *incoming)
 {
 	extern Rtv_Map *rtv_map;
+	extern Firmware_Details *firmware;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
@@ -74,6 +76,9 @@ void process_rt_vars(void *incoming)
 		printf("ERROR  INOPUT IS NULL!!!!\n");
 	/* Store timestamps in ringbuffer */
 
+	/* Backup current rtv copy */
+	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
+	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
 	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);

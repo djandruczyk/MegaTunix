@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <mtxsocket.h>
 #include <stringmatch.h>
 
 
@@ -343,6 +344,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(HELP));
 	g_hash_table_insert(str_2_enum,"QUIT",
 			GINT_TO_POINTER(QUIT));
+	g_hash_table_insert(str_2_enum,"GET_REVISION",
+			GINT_TO_POINTER(GET_REVISION));
 	g_hash_table_insert(str_2_enum,"GET_SIGNATURE",
 			GINT_TO_POINTER(GET_SIGNATURE));
 	g_hash_table_insert(str_2_enum,"GET_RT_VARS",

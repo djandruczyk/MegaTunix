@@ -53,6 +53,7 @@ struct _Firmware_Details
 	gchar *name;		/*! textual name */
 	gchar *profile_filename;/*! Interrogation profile filename */
 	gchar *actual_signature;/*! the raw signature from the ECU */
+	gchar *text_revision;	/*! Textual revision string */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
@@ -91,6 +92,8 @@ struct _Firmware_Details
 	Table_Params **table_params;/*! details each table */
 	Req_Fuel_Params **rf_params;/*! req_fuel params */
 	TE_Params **te_params;	/*! Table Editor Tables */
+	guint8 *rt_data;	/*! RT data */
+	guint8 *rt_data_last;	/*! RT data */
 	guint8 **ecu_data;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_last;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_backup;	/* ECU data arrays, 2 levels */

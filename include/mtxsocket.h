@@ -17,6 +17,40 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
+
+typedef enum
+{
+	MTX_ASCII = 0x410,
+	MTX_BINARY
+}SocketMode;
+
+
+typedef enum
+{
+	HELP = 0x3F0,
+	QUIT,
+	GET_SIGNATURE,
+	GET_REVISION,
+	GET_RT_VARS,
+	GET_RTV_LIST,
+	GET_ECU_VARS,
+	GET_ECU_VAR_U08,
+	GET_ECU_VAR_S08,
+	GET_ECU_VAR_U16,
+	GET_ECU_VAR_S16,
+	GET_ECU_VAR_U32,
+	GET_ECU_VAR_S32,
+	SET_ECU_VAR_U08,
+	SET_ECU_VAR_S08,
+	SET_ECU_VAR_U16,
+	SET_ECU_VAR_S16,
+	SET_ECU_VAR_U32,
+	SET_ECU_VAR_S32,
+	BURN_FLASH,
+	GET_RAW_ECU,
+	SET_RAW_ECU
+}TcpCommand;
+
 typedef struct _MtxSocketClient MtxSocketClient;
 
 struct _MtxSocketClient 
