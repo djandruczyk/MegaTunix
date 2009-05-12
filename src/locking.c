@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <locking.h>
@@ -34,7 +35,9 @@ extern GObject *global_data;
 
 void create_mtx_lock()
 {
-
+	CmdLineArgs * args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
 #ifdef __WIN32__
 	win32_create_mtx_lock();
 #else
@@ -70,8 +73,8 @@ void unix_create_mtx_lock()
 		else
 		*/
 		{
-			printf ("ERROR!! Multiple MegaTunix instances are not allowed!\n");
-			dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed!\n");
+			printf ("ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network socket mode (see -n option)!\n");
+			dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed unless running\nin network socket mode, see the -n option!\n");
 		}
 		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
 		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);

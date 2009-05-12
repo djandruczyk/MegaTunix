@@ -35,6 +35,9 @@ struct _CmdLineArgs
 	gint autolog_minutes;	/* How many minutes to log per file */
 	gchar *autolog_dump_dir;/* What dir to put logs into */
 	gchar *autolog_basename;/* Autolog base filename */
+	gchar * network_host;	/* Network host */
+	gint network_port;	/* Network port */
+	gboolean network_mode;	/* Network mode */
 };
 
 /* Prototypes */

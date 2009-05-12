@@ -468,16 +468,15 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 	gint fd = client->fd;
 	extern Firmware_Details *firmware;
 	extern gboolean connected;
-	gchar ** vector = NULL;
 	guint16 tmpi = 0;
 	gfloat tmpf = 0.0;
-	gchar * arg2 = NULL;
 	gint canID = 0;
 	gint tableID = 0;
-	gchar tmpc;
+	gint offset = 0;
+	gint count = 0;
+	gint *data = NULL;
 	gchar basecmd;
-	gboolean retval = TRUE;
-	gboolean send_rescode = TRUE;
+	OutputData *output = NULL;
 	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
 	gint length = strlen(tmpbuf);
 	/* If nothing passed, return */
@@ -490,8 +489,29 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 
 	switch (basecmd)
 	{
-		case 'B':
-			io_cmd(firmware->burn_all_command,NULL);
+		case 'B': /* MS-1 Burn, no args */
+			io_cmd(firmware->burn_command,NULL);
+			break;
+		case 'b': /* MS-2 Burn, CanID/TableID(page) args required */
+			if (firmware->capabilities & MS2)
+			{
+				if (length != 3)
+					printf("'b' param requires canID and tableID(page)\n");
+				else
+				{
+					data = convert_socket_data(tmpbuf,length);
+					canID = data[1];
+					tableID = data[2];
+					printf("Can ID is %i, table %i\n",canID,tableID);
+					g_free(data);
+					output = initialize_outputdata();
+					OBJ_SET(output->object,"page",GINT_TO_POINTER(tableID));
+					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[tableID]->phys_ecu_page));
+					OBJ_SET(output->object,"canID",GINT_TO_POINTER(canID));
+					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+					io_cmd(firmware->burn_command,output);
+				}
+			}
 			break;
 		case 'S':
 			if (!firmware)
@@ -516,26 +536,60 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 			}
 			break;
 		case 'c': /* MS2 Clock */
-			lookup_current_value("raw_secl",&tmpf);
-			tmpi = (guint16)tmpf;
-			send(fd,&tmpi,2,0);
-			break;
-		case 'a':
-			tmpc = tmpbuf[1];
-			canID = (gint)g_ascii_strtod(&tmpc,NULL);
-			tmpc = tmpbuf[2];
-			tableID = (gint)g_ascii_strtod(&tmpc,NULL);
-			if (length != 3)
-				printf("'a' param requires canID and table\n");
-			else
-				printf("Can ID is %i, table %i\n",canID,tableID);
-			if ((canID == 0) && (tableID == 6))
+			if (firmware->capabilities & MS2)
 			{
-				if (firmware->rt_data)
-					send(fd,firmware->rt_data,firmware->rtvars_size,0);
+				lookup_current_value("raw_secl",&tmpf);
+				tmpi = (guint16)tmpf;
+				send(fd,&tmpi,2,0);
 			}
 			break;
-
+		case 'C': /* MS1 Clock */
+			lookup_current_value("raw_secl",&tmpf);
+			tmpi = (guint8)tmpf;
+			send(fd,&tmpi,1,0);
+			break;
+		case 'a':
+			if (firmware->capabilities & MS2)
+			{
+				if (length != 3)
+					printf("'a' param requires canID and table\n");
+				else
+				{
+					data = convert_socket_data(tmpbuf,length);
+					canID = data[1];
+					tableID = data[2];
+					g_free(data);
+					printf("Can ID is %i, table %i\n",canID,tableID);
+				}
+				if ((canID == 0) && (tableID == 6))
+				{
+					if (firmware->rt_data)
+						send(fd,firmware->rt_data,firmware->rtvars_size,0);
+				}
+			}
+			break;
+		case 'r':
+			if (firmware->capabilities & MS2)
+			{
+				if (length != 7)
+					printf("'r' param requires canID and tableID, table offset (16 bit) and num_bytes (16 bit)\n");
+				else
+				{
+					data = convert_socket_data(tmpbuf,length);
+					canID = data[1];
+					tableID = data[2];
+					offset = (data[3] << 8) + data[4];
+					count = (data[5] << 8) + data[6];
+					g_free(data);
+					printf("Can ID is %i, table %i offset %i, count %i \n",canID,tableID,offset,count);
+				}
+//				send(fd,firmware->rt_data,firmware->rtvars_size,0);
+			}
+			break;
+		default:
+			printf("Basecmd is %c, cmd length is %i\n",basecmd,length);
+			printf("Not implemented YET....\n");
+			break;
 	}
 	g_free(tmpbuf);
 	return TRUE;
@@ -763,4 +817,29 @@ gboolean check_for_changes(MtxSocketClient *client)
         }
 	return FALSE;
 
+}
+
+gint * convert_socket_data(gchar *buf, gint len)
+{
+	gchar * tmpbuf;
+	gint i = 0;
+	gint *res = g_new0(gint,len);
+
+	for (i=0;i<len;i++)
+	{
+		tmpbuf = g_strdup_printf("%c",buf[i]);
+		res[i] = atoi(tmpbuf);
+		g_free(tmpbuf);
+	}
+	return res;
+}
+
+
+void *network_repair_thread(gpointer data)
+{
+	/* - DEV code for setting up connection to a network socket
+	 * in place of a serial port,  useful for chaining instances of
+	 * megatunix to a master, allows "group mind" tuning, or a complete
+	 * disaster...
+	 */
 }

@@ -104,7 +104,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkTable" id="flexl_fuel_params_table">
+				    <widget class="GtkTable" id="flex_fuel_params_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">6</property>
 				      <property name="n_columns">2</property>

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <3d_vetable.h>
 #include <comms.h>
 #include <comms_gui.h>
@@ -29,6 +30,7 @@
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
+#include <mtxsocket.h>
 #include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
@@ -122,10 +124,12 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern gboolean port_open;
 	extern volatile gboolean leaving;
+	CmdLineArgs *args = NULL;
 	gboolean result;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 
+	args = OBJ_GET(global_data,"args");
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
@@ -146,8 +150,16 @@ void *thread_dispatcher(gpointer data)
 
 		if ((!offline) && (((!connected) && (port_open)) || (!port_open)))
 		{
-			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating serial repair thread!\n"));
-			repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+			if (args->network_mode)
+			{
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
+				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
+			}
+			else
+			{
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating serial repair thread!\n"));
+				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+			}
 			g_thread_join(repair_thread);
 		}
 		if ((!port_open) && (!offline))

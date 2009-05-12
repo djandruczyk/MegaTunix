@@ -75,6 +75,8 @@ void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void socket_get_ecu_vars(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
 gboolean check_for_changes(MtxSocketClient *);
+gint * convert_socket_data(gchar *, gint);
+void *network_repair_thread(gpointer);
 /* Prototypes */
 
 #endif

@@ -30,6 +30,11 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 
 #----- Widgets ---------------------------------------------------------------
 
+[topframe]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
 [flex_fuel_params_table]
 keys=bind_to_list
 key_types=_STRING_
