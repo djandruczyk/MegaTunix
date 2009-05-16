@@ -12,6 +12,8 @@
  */
 
 #include <api-versions.h>
+#include <args.h>
+#include <arpa/inet.h>
 #include <config.h>
 #include <configfile.h>
 #include <comms.h>
@@ -19,13 +21,17 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <firmware.h>
 #include <glib.h>
 #include <init.h>
 #include <mtxsocket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
+#include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -43,7 +49,7 @@
 #define ERR_MSG "Bad Request: "
 
 
-int setup_socket(void)
+gboolean setup_socket(void)
 {
 	int sock = 0;
 	struct sockaddr_in server_address;
@@ -55,7 +61,7 @@ int setup_socket(void)
 	if (res != 0)
 	{
 		printf("WSAStartup failed: %d\n",res);
-		return (-1);
+		return FALSE;
 	}
 #endif
 
@@ -66,7 +72,7 @@ int setup_socket(void)
 #ifdef __WIN32__
 		WSACleanup();
 #endif
-		return(-1);
+		return FALSE;
 
 	}
 	/* So that we can re-bind to it without TIME_WAIT problems */
@@ -94,7 +100,7 @@ int setup_socket(void)
 #else
 		close(sock);
 #endif
-		return(-1);
+		return FALSE;
 	}
 
 	/* Set up queue for incoming connections. */
@@ -107,7 +113,7 @@ int setup_socket(void)
 #else
 		close(sock);
 #endif
-		return(-1);
+		return FALSE;
 	}
 
 	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));
@@ -173,7 +179,7 @@ void *socket_client(gpointer data)
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
 	char buf[1024];
-	gchar * tmpbuf = NULL;
+	//gchar * tmpbuf = NULL;
 	fd_set rd;
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
@@ -183,11 +189,18 @@ void *socket_client(gpointer data)
  * to ASCII, otherwise check passed data for valid API, if valid set mode to
  * binary, otherwise drop the connection
  */
-	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, hit enter for ASCII mode\n",VERSION);
-	send(fd,tmpbuf,strlen(tmpbuf),0);
-	g_free(tmpbuf);
+//	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, hit enter for ASCII mode\n",VERSION);
+//	send(fd,tmpbuf,strlen(tmpbuf),0);
+//	g_free(tmpbuf);
 	res = recv(fd,&buf,1024,0);
-	printf("received\"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
+	if (res > 0)
+		printf("received\"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
+	else
+	{
+		perror("ERROR receiving, got nothing, error! \n");
+		return NULL;
+
+	}
 	/* A simple CR/LF is enough to trigger ASCII mode*/
 	if (g_strncasecmp(buf,"\r\n",res) == 0)
 	{
@@ -483,7 +496,7 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 	if (!tmpbuf)
 		return TRUE;
 
-	printf("command send is \"%s\"\n",tmpbuf);
+	printf("command received is \"%s\"\n",tmpbuf);
 	basecmd = tmpbuf[0];
 	printf("Basecmd is %c, cmd length is %i\n",basecmd,length);
 
@@ -542,11 +555,22 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 				tmpi = (guint16)tmpf;
 				send(fd,&tmpi,2,0);
 			}
+			else
+				printf("\"c\" Not supported on this firmware\n");
 			break;
 		case 'C': /* MS1 Clock */
 			lookup_current_value("raw_secl",&tmpf);
 			tmpi = (guint8)tmpf;
 			send(fd,&tmpi,1,0);
+			break;
+		case 'A': /* MS-1 RTvars */
+			if (firmware->capabilities & MS1)
+			{
+				printf("MS1 RTVars\n");
+				send (fd,firmware->rt_data,firmware->rtvars_size,0);
+			}
+			else
+				printf("\"A\" Not supported on this firmware\n");
 			break;
 		case 'a':
 			if (firmware->capabilities & MS2)
@@ -567,6 +591,8 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 						send(fd,firmware->rt_data,firmware->rtvars_size,0);
 				}
 			}
+			else
+				printf("\"a\" Not supported on this firmware\n");
 			break;
 		case 'r':
 			if (firmware->capabilities & MS2)
@@ -582,16 +608,18 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 					count = (data[5] << 8) + data[6];
 					g_free(data);
 					printf("Can ID is %i, table %i offset %i, count %i \n",canID,tableID,offset,count);
+//					send(fd,firmware->rt_data,firmware->rtvars_size,0);
 				}
-//				send(fd,firmware->rt_data,firmware->rtvars_size,0);
 			}
+			else
+				printf("\"r\" Not supported on this firmware\n");
 			break;
 		default:
-			printf("Basecmd is %c, cmd length is %i\n",basecmd,length);
-			printf("Not implemented YET....\n");
+			printf("Not Implemented Basecmd is %c, cmd length is %i\n",basecmd,length);
 			break;
 	}
-	g_free(tmpbuf);
+	if (tmpbuf)
+		g_free(tmpbuf);
 	return TRUE;
 }
 
@@ -842,4 +870,135 @@ void *network_repair_thread(gpointer data)
 	 * megatunix to a master, allows "group mind" tuning, or a complete
 	 * disaster...
 	 */
+	static gboolean network_is_open = FALSE; /* Assume never opened */
+	extern volatile gboolean offline;
+	extern GAsyncQueue *io_repair_queue;
+	extern GObject *global_data;
+	CmdLineArgs *args = NULL;
+	args = OBJ_GET(global_data,"args");
+	gint i = 0;
+
+	if (offline)
+	{
+		g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));
+		g_thread_exit(0);
+	}
+
+	if (!io_repair_queue)
+		io_repair_queue = g_async_queue_new();
+	/* IF network_is_open is true, then the port was ALREADY opened 
+	 * previously but some error occurred that sent us down here. Thus
+	 * first do a simple comms test, if that succeeds, then just cleanup 
+	 * and return,  if not, close the port and essentially start over.
+	 */
+	if (network_is_open == TRUE)
+	{
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Port considered open, but throwing errors\n"));
+		i = 0;
+		while (i <= 5)
+		{
+			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
+			if (comms_test())
+			{
+				g_thread_exit(0);
+			}
+			i++;
+		}
+		close_network();
+		network_is_open = FALSE;
+		/* Fall through */
+	}
+	/* App just started, no connection yet*/
+	while (network_is_open == FALSE)              
+	{
+		/* Message queue used to exit immediately */
+		if (g_async_queue_try_pop(io_repair_queue))
+		{
+			printf ("exiting network repair thread immediately\n");
+			g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));
+			g_thread_exit(0);
+		}
+		if (open_network(args->network_host,args->network_port))
+		{
+			g_usleep(100000); /* Sleep 100ms */
+			if (comms_test())
+			{
+				network_is_open = TRUE;
+				break;
+			}
+			else
+			{
+				close_network();
+				continue;
+			}
+
+		}
+	}
+	if (network_is_open)
+		thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup_printf("%s:%i",args->network_host,args->network_port));
+	g_thread_exit(0);
+	return NULL;
+}
+
+
+gboolean open_network(gchar * host, gint port)
+{
+	extern GObject * global_data;
+	CmdLineArgs *args = NULL;
+	int clientsocket = 0;
+	gint status = 0;
+	struct hostent *hostptr = NULL;
+	struct sockaddr_in servername = { 0 };
+	extern Serial_Params *serial_params;
+
+	args = OBJ_GET(global_data,"args");
+	
+	printf ("Trying to open network port!\n");
+	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+	if (!clientsocket)
+	{
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		return FALSE;
+	}
+	printf("Socket created!\n");
+	hostptr = gethostbyname(args->network_host);
+	if (hostptr == NULL)
+	{
+		hostptr = gethostbyaddr(args->network_host,strlen(args->network_host), AF_INET);
+		if (hostptr == NULL)
+		{
+			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",args->network_host));
+			return FALSE;
+		}
+	}
+	printf("host resolved!\n");
+	servername.sin_family = AF_INET;
+	servername.sin_port = htons(args->network_port);
+	memcpy(&servername.sin_addr,hostptr->h_addr,hostptr->h_length);
+	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
+	if (status == -1)
+	{
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+		return FALSE;
+	}
+	printf("connected!!\n");
+	serial_params->fd = clientsocket;
+	serial_params->net_mode = TRUE;
+	serial_params->open = TRUE;
+
+	return TRUE;
+}
+		
+
+gboolean close_network(void)
+{
+	extern Serial_Params *serial_params;
+	extern gboolean connected;
+	printf("Closing network port!\n");
+	close(serial_params->fd);
+	serial_params->open = FALSE;
+	serial_params->fd = -1;
+	connected = FALSE;
+
+	return TRUE;
 }

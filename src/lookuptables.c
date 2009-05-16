@@ -523,7 +523,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gboolean restart_tickler = FALSE;
 	extern gint realtime_id;
 	extern GHashTable *lookuptables;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 	extern Firmware_Details *firmware;
 	gint count = 0;
 	LookupTable *lookuptable = NULL;
@@ -544,9 +544,9 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);
 		count = 0;
-		while ((g_async_queue_length(io_queue) > 0) && (count < 30))
+		while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
 			while (gtk_events_pending())
 				gtk_main_iteration();
 			count++;

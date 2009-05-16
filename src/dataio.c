@@ -23,6 +23,8 @@
 #include <rtv_processor.h>
 #include <serialio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <threads.h>
 #include <unistd.h>
 
@@ -84,7 +86,7 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
-			total_read += res = read(serial_params->fd,
+			total_read += res = read_wrapper(serial_params->fd,
 					ptr+total_read,
 					total_wanted-total_read);
 
@@ -167,4 +169,47 @@ void dump_output(gint total_read, guchar *buf)
 		dbg_func(SERIAL_RD,g_strdup("\n\n"));
 	}
 
+}
+
+
+gint read_wrapper(gint fd, void * buf, size_t count)
+{
+	extern Serial_Params * serial_params;
+	gint res = 0;
+	fd_set rd;
+	struct timeval timeout = {0,100000};
+	FD_ZERO(&rd);
+	FD_SET(fd,&rd);
+
+	/* Network mode requires select to see ifdata is ready, otherwise
+	 * connection will block.  Seial is configured with timeout if no
+	 * data is avail,  hence we simulate that with select..
+	 */
+	if (serial_params->net_mode)
+	{
+		res = select(fd+1,&rd,NULL,NULL,&timeout);
+		if (res < 0) /* Error, socket close, abort */
+			return 0;
+		if (res > 0) /* Data Arrived! */
+			res = recv(fd,buf,count,0);
+	}
+	else
+		res = read(fd,buf,count);
+	if (res < 0)
+		res = 0;
+	return res;
+}
+
+gint write_wrapper(gint fd, const void *buf, size_t count)
+{
+	extern Serial_Params * serial_params;
+	gint res = 0;
+
+	if (serial_params->net_mode)
+		res = send(fd,buf,count,0);
+	else
+		res = write(fd,buf,count);
+	if (res < 0)
+		res = 0;
+	return res;
 }

@@ -61,11 +61,11 @@ void set_offline_mode(void)
 	PostFunction *pf = NULL;
 	extern Firmware_Details *firmware;
 	extern gboolean interrogated;
-        extern GAsyncQueue *serial_repair_queue;
+        extern GAsyncQueue *io_repair_queue;
 
 
 	/* Cause Serial Searcher thread to abort.... */
-	g_async_queue_push(serial_repair_queue,&tmp);
+	g_async_queue_push(io_repair_queue,&tmp);
 
 	filename = present_firmware_choices();
 	if (!filename)

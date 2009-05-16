@@ -76,7 +76,7 @@ gint comms_test()
 		return FALSE;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	if (write(serial_params->fd,"C",1) != 1)
+	if (write_wrapper(serial_params->fd,"C",1) != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
@@ -87,7 +87,7 @@ gint comms_test()
 	result = read_data(1,NULL,FALSE);
 	if (!result) /* Failure,  Attempt MS-II method */
 	{
-		if (write(serial_params->fd,"c",1) != 1)
+		if (write_wrapper(serial_params->fd,"c",1) != 1)
 		{
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
@@ -317,8 +317,8 @@ gboolean write_data(Io_Message *message)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]));
-//				printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);
-				res = write (serial_params->fd,&(block->data[j]),1);	/* Send write command */
+				printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);
+				res = write_wrapper(serial_params->fd,&(block->data[j]),1);	/* Send write command */
 				if (res != 1)
 				{
 					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
@@ -326,7 +326,6 @@ gboolean write_data(Io_Message *message)
 				}
 				if (firmware->capabilities & MS2)
 					g_usleep(firmware->interchardelay*1000);
-
 			}
 		}
 

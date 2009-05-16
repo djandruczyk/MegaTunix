@@ -33,6 +33,7 @@ struct _CmdLineArgs
 	gboolean hide_status;	/* Hide Status Window */
 	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */
 	gint autolog_minutes;	/* How many minutes to log per file */
+	gchar *dbglog;		/* Global debug log file name */
 	gchar *autolog_dump_dir;/* What dir to put logs into */
 	gchar *autolog_basename;/* Autolog base filename */
 	gchar * network_host;	/* Network host */

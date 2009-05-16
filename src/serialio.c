@@ -41,7 +41,7 @@ Serial_Params *serial_params;
 gboolean connected = FALSE;
 gboolean port_open = FALSE;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
-GAsyncQueue *serial_repair_queue = NULL;
+GAsyncQueue *io_repair_queue = NULL;
 extern GObject *global_data;
 
 /*!
@@ -277,7 +277,6 @@ void *serial_repair_thread(gpointer data)
 	 *
 	 * Thus we need to handle all possible conditions cleanly
 	 */
-	gboolean abort = FALSE;
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	gchar * potential_ports;
 	gboolean autodetect = FALSE;
@@ -291,8 +290,8 @@ void *serial_repair_thread(gpointer data)
 		g_thread_exit(0);
 	}
 
-	if (!serial_repair_queue)
-		serial_repair_queue = g_async_queue_new();
+	if (!io_repair_queue)
+		io_repair_queue = g_async_queue_new();
 	/* IF serial_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -316,7 +315,7 @@ void *serial_repair_thread(gpointer data)
 		/* Fall through */
 	}
 	/* App just started, no connection yet*/
-	while ((!serial_is_open) && (!abort)) 	
+	while (!serial_is_open) 	
 	{
 		autodetect = (gboolean) OBJ_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */
@@ -331,7 +330,7 @@ void *serial_repair_thread(gpointer data)
 		for (i=0;i<g_strv_length(vector);i++)
 		{
 			/* Message queue used to exit immediately */
-			if (g_async_queue_try_pop(serial_repair_queue))
+			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				/*printf ("exiting repair thread immediately\n");*/
 				g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
@@ -52,6 +53,8 @@ static DebugLevel dbglevels[] =
  */
 void open_debug()
 {
+	extern GObject *global_data;
+	CmdLineArgs * args = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	struct tm *tm = NULL;
@@ -60,9 +63,14 @@ void open_debug()
 	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
+	args = OBJ_GET(global_data,"args");
+
 	if(!dbg_channel)
 	{
-		filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
+		if (!args->dbglog)
+			filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
+		else
+			filename = g_build_filename(HOME(),args->dbglog,NULL);
 		dbg_channel = g_io_channel_new_file(filename,"w",&error);
 		g_io_channel_set_encoding(dbg_channel,NULL,&error);
 		if (dbg_channel)

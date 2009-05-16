@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <comms.h>
 #include <conversions.h>
@@ -524,8 +525,13 @@ EXPORT void open_tcpip_socket_pf()
 {
 	extern gboolean interrogated;
 	extern volatile gboolean offline;
+	extern GObject *global_data;
+	CmdLineArgs *args = NULL;
 	gint socket = 0;
 
+	args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
 	if ((interrogated) || (offline))
 	{
 		printf("open socket\n");
@@ -533,13 +539,14 @@ EXPORT void open_tcpip_socket_pf()
 		socket = setup_socket();
 		if (socket)
 		{
+			printf("Starting socket thread\n");
 			socket_thread_id = g_thread_create(socket_thread_manager,
 					GINT_TO_POINTER(socket), /* Thread args */
 					TRUE, /* Joinable */
 					NULL); /*GError Pointer */
 		}
 		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": main()\n\tERROR setting up TCP control socket\n"));
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
 	}
 }
 

@@ -21,6 +21,9 @@
 /* Prototypes */
 void dump_output(gint, guchar *);
 gint read_data(gint , void **, gboolean);
+gint write_wrapper(gint, const void *, size_t);
+gint read_wrapper(gint, void *, size_t);
+
 /* Prototypes */
 
 #endif

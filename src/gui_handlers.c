@@ -103,8 +103,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	extern gboolean interrogated;
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern GAsyncQueue *gui_dispatch_queue;
-	extern GAsyncQueue *io_queue;
-	extern GAsyncQueue *serial_repair_queue;
+	extern GAsyncQueue *io_data_queue;
+	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
 	gboolean tmp = TRUE;
@@ -137,7 +137,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 
 	leaving = TRUE;
 	/* Message to trigger serial repair queue to exit immediately */
-	g_async_queue_push(serial_repair_queue,&tmp);
+	g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
@@ -175,9 +175,9 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	/* This makes us wait until the io queue finishes */
-	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
+	while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
 		while (gtk_events_pending())
 			gtk_main_iteration();
 		count++;

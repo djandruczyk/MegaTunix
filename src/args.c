@@ -48,6 +48,7 @@ void handle_args(gint argc, gchar * argv[])
 	GOptionEntry entries[] =
 	{
 		{"debugargs",'d',0,G_OPTION_ARG_NONE,&args->debug,"Dump argument debugging info to console",NULL},
+		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Netowrk socket instead of serial","host:port"},
@@ -117,6 +118,7 @@ void handle_args(gint argc, gchar * argv[])
 	if (args->debug)
 	{
 		printf("debug option \"%i\"\n",args->debug);
+		printf("Global debug filename\"%s\"\n",args->dbglog);
 		printf("version option \"%i\"\n",args->version);
 		printf("quiet option \"%i\"\n",args->be_quiet);
 		printf("no rttext option \"%i\"\n",args->hide_rttext);
@@ -140,6 +142,7 @@ CmdLineArgs * init_args()
 	CmdLineArgs *args;
 	args = g_new0(CmdLineArgs, 1);
 	args->debug = FALSE;
+	args->dbglog = NULL;
 	args->be_quiet = FALSE;
 	args->autolog_dump = FALSE;
 	args->hide_rttext = FALSE;

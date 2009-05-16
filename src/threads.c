@@ -67,7 +67,7 @@ void io_cmd(gchar *io_cmd_name, void *data)
 	Io_Message *message = NULL;
 	GHashTable *commands_hash = NULL;
 	Command *command = NULL;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 
 	commands_hash = OBJ_GET(global_data,"commands_hash");
 
@@ -103,16 +103,16 @@ void io_cmd(gchar *io_cmd_name, void *data)
 			build_output_string(message,command,data);
 	}
 
-	g_async_queue_ref(io_queue);
-	g_async_queue_push(io_queue,(gpointer)message);
-	g_async_queue_unref(io_queue);
+	g_async_queue_ref(io_data_queue);
+	g_async_queue_push(io_data_queue,(gpointer)message);
+	g_async_queue_unref(io_data_queue);
 
 }
 
 
 /*!
  \brief thread_dispatcher() runs continuously as a thread listening to the 
- io_queue and running handlers as messages come in. After they are done it
+ io_data_queue and running handlers as messages come in. After they are done it
  passes the message back to the gui via the dispatch_queue for further
  gui handling (for things that can't run in a thread context)
  \param data (gpointer) unused
@@ -120,9 +120,9 @@ void io_cmd(gchar *io_cmd_name, void *data)
 void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
-	extern gboolean port_open;
+	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
 	CmdLineArgs *args = NULL;
 	gboolean result;
@@ -133,22 +133,22 @@ void *thread_dispatcher(gpointer data)
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
-		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));*/
+		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_data_queue));*/
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
-		message = g_async_queue_timed_pop(io_queue,&cur);
+		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
 		if (leaving)
 		{
 			/* drain queue and exit thread */
-			while (g_async_queue_try_pop(io_queue) != NULL)
+			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
 			continue;
 
-		if ((!offline) && (((!connected) && (port_open)) || (!port_open)))
+		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
 		{
 			if (args->network_mode)
 			{
@@ -162,7 +162,7 @@ void *thread_dispatcher(gpointer data)
 			}
 			g_thread_join(repair_thread);
 		}
-		if ((!port_open) && (!offline))
+		if ((!serial_params->open) && (!offline))
 		{
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
@@ -599,15 +599,15 @@ void start_restore_monitor(void)
 
 void *restore_update(gpointer data)
 {
-	extern GAsyncQueue *io_queue;
-	gint max_xfers = g_async_queue_length(io_queue);
+	extern GAsyncQueue *io_data_queue;
+	gint max_xfers = g_async_queue_length(io_data_queue);
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
 	thread_update_logbar("tools_view","warning",g_strdup_printf("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n",max_xfers),FALSE,FALSE);
 	while (remaining_xfers > 5)
 	{
-		remaining_xfers = g_async_queue_length(io_queue);
+		remaining_xfers = g_async_queue_length(io_data_queue);
 		g_usleep(10000);
 		if (remaining_xfers <= (last_xferd-50))
 		{

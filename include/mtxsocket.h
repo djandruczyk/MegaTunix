@@ -62,7 +62,7 @@ struct _MtxSocketClient
 	gint fd;
 };
 /* Prototypes */
-int setup_socket(void);
+gboolean setup_socket(void);
 void *socket_thread_manager(gpointer);
 void * socket_client(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
@@ -77,6 +77,8 @@ void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
 gboolean check_for_changes(MtxSocketClient *);
 gint * convert_socket_data(gchar *, gint);
 void *network_repair_thread(gpointer);
+gboolean open_network(gchar *, gint);
+gboolean close_network(void);
 /* Prototypes */
 
 #endif
