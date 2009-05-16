@@ -217,8 +217,7 @@ EXPORT gboolean interrogate_ecu()
 
 		/* copy data from tmp buffer to struct pointer */
 		test->num_bytes = total_read;
-		printf("total read is %i\n",total_read);
-		if (total_read == 0)
+		if (total_read <= 0)
 			test->result_str = g_strdup("");
 		else
 			test->result_str = g_strndup((gchar *)ptr, total_read);
