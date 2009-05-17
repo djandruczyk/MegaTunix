@@ -112,6 +112,9 @@ gboolean open_serial(gchar * port_name)
  */
 void flush_serial(gint fd, FlushDirection type)
 {
+	if (serial_params->net_mode)
+		return;
+
 	g_static_mutex_lock(&serio_mutex);
 #ifdef __WIN32__
 	if (fd)

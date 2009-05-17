@@ -78,8 +78,10 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 	 * Ugly hack,  but couldn't find out why it did it.  might be due to
 	 * excess latency in my test VM
 	 */
+#ifdef __WIN32__
 	if (reset)
 		total_wanted *= 2;
+#endif
 
 	g_static_mutex_lock(&serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
@@ -210,6 +212,9 @@ gint write_wrapper(gint fd, const void *buf, size_t count)
 	else
 		res = write(fd,buf,count);
 	if (res < 0)
+	{
+		printf("Write error!\n");
 		res = 0;
+	}
 	return res;
 }

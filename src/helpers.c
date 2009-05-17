@@ -401,6 +401,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - ptr8[0] > 255))
 			{
 				ms_reset_count++;
+				printf("MS1 Reset detected!\n");
 				gdk_beep();
 			}
 			else
@@ -421,6 +422,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if (just_starting)
 			{
 				lastcount = GUINT16_TO_BE(ptr16[0]);
+				curcount = GUINT16_TO_BE(ptr16[0]);
 				just_starting = FALSE;
 			}
 			else
@@ -433,7 +435,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - curcount > 65535))
 			{
 				ms_reset_count++;
-			/*	printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);*/
+				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);
 			 
 				gdk_beep();
 			}
@@ -534,12 +536,10 @@ EXPORT void open_tcpip_socket_pf()
 		return;
 	if ((interrogated) || (offline))
 	{
-		printf("open socket\n");
 		/* Open TCP socket for remote access */
 		socket = setup_socket();
 		if (socket)
 		{
-			printf("Starting socket thread\n");
 			socket_thread_id = g_thread_create(socket_thread_manager,
 					GINT_TO_POINTER(socket), /* Thread args */
 					TRUE, /* Joinable */

@@ -18,6 +18,9 @@
 #include <gtk/gtk.h>
 
 
+typedef struct _MtxSocketClient MtxSocketClient;
+typedef struct _MtxSocketData MtxSocketData;
+
 typedef enum
 {
 	MTX_ASCII = 0x410,
@@ -51,8 +54,6 @@ typedef enum
 	SET_RAW_ECU
 }TcpCommand;
 
-typedef struct _MtxSocketClient MtxSocketClient;
-
 struct _MtxSocketClient 
 {
 	gchar *ip;
@@ -61,13 +62,22 @@ struct _MtxSocketClient
 	guint8 ** ecu_data;
 	gint fd;
 };
+
+struct _MtxSocketData
+{
+	guchar cmd;
+	guint8 canID;
+	guint8 tableID;
+	guint16 offset;
+	guint16 count;
+};
+
 /* Prototypes */
 gboolean setup_socket(void);
 void *socket_thread_manager(gpointer);
 void * socket_client(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
 gboolean validate_remote_binary_cmd(MtxSocketClient *, gchar *, gint);
-/* Socket handler functions */
 void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);
 void socket_get_rtv_list(gint);
@@ -79,6 +89,7 @@ gint * convert_socket_data(gchar *, gint);
 void *network_repair_thread(gpointer);
 gboolean open_network(gchar *, gint);
 gboolean close_network(void);
+gint socket_get_more_data(gint, void *, gint, gint);
 /* Prototypes */
 
 #endif

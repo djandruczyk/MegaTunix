@@ -194,3 +194,27 @@ void backup_current_data(gint canID, gint page)
 	guint8 ** ecu_data_last = firmware->ecu_data_last;
 	memcpy (ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length);
 }
+
+
+/*!
+ \brief find_mtx_page() is a func to return the data requested.
+ \param tableID, Table Identified (physical ecu page)
+ \param mtx_page, The symbolic page mtx uses to get around the nonlinear
+ nature of the page layout in certain MS firmwares
+ \returns true on success, false on failure
+ */
+gboolean find_mtx_page(gint tableID,gint *mtx_page)
+{
+	extern Firmware_Details *firmware;
+	gint i = 0;
+
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		if (firmware->page_params[i]->phys_ecu_page == tableID)
+		{
+			*mtx_page = i;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}

@@ -30,6 +30,7 @@ void _set_sized_data(guint8 *, gint, DataSize, gint);
 void store_new_block(gint, gint, gint, void *, gint );
 void store_new_block_pending(gint, gint, gint, void *, gint );
 void backup_current_data(gint, gint );
+gboolean find_mtx_page(gint,gint *);
 /* Prototypes */
 
 #endif
