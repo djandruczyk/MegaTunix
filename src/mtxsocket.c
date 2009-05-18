@@ -496,6 +496,7 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 	gint offset = 0;
 	gint count = 0;
 	gint i = 0;
+	guint8 * chunk = NULL;
 	gboolean res = FALSE;
 	gfloat tmpf = 0.0;
 	gchar basecmd;
@@ -682,6 +683,9 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 							g_list_foreach(ve_widgets[mtx_page][offset],update_widget,NULL);
 
 						}
+						chunk = g_new0(guint8, count);
+						memcpy (chunk,buf+7,count);
+						chunk_write(canID,mtx_page,offset,count,chunk);
 					}
 				}
 			}
