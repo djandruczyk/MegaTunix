@@ -38,7 +38,6 @@
 #include <stringmatch.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/socket.h>
 #include <threads.h>
 #include <unistd.h>
 #include <widgetmgmt.h>

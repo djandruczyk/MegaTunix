@@ -24,9 +24,17 @@
 #include <serialio.h>
 #include <string.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/time.h>
 #include <threads.h>
 #include <unistd.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#else
+#include <poll.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
 
 
 gint ms_reset_count;

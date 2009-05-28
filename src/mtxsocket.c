@@ -13,7 +13,6 @@
 
 #include <api-versions.h>
 #include <args.h>
-#include <arpa/inet.h>
 #include <config.h>
 #include <configfile.h>
 #include <comms.h>
@@ -28,8 +27,11 @@
 #include <glib.h>
 #include <init.h>
 #include <mtxsocket.h>
+#ifndef __WIN32__
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#endif
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <serialio.h>
@@ -179,7 +181,7 @@ void *socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
-	gchar buf[4096];
+	char buf[4096];
 	gchar * cbuf = NULL;  /* Client buffer */
 	gchar * tmpbuf = NULL;
 	fd_set rd;
@@ -191,7 +193,7 @@ void *socket_client(gpointer data)
  * to ASCII, otherwise check passed data for valid API, if valid set mode to
  * binary, otherwise drop the connection
  */
-	res = recv(fd,&buf,4096,0);
+	res = recv(fd,(char *)&buf,4096,0);
 //	if (res > 0)
 //		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
 	if (!res)
@@ -248,7 +250,7 @@ void *socket_client(gpointer data)
 		}
 		if (res > 0) /* Data Arrived */
 		{
-			res = recv(fd,&buf,4096,0);
+			res = recv(fd,(char *)&buf,4096,0);
 			if (res <= 0)
 			{
 #ifdef __WIN32__
@@ -568,7 +570,7 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 			{
 				lookup_current_value("raw_secl",&tmpf);
 				tmpi = (guint16)tmpf;
-				send(fd,&tmpi,2,0);
+				send(fd,(char *)&tmpi,2,0);
 			}
 			else
 				printf("\"c\" Not supported on this firmware\n");
@@ -576,11 +578,11 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 		case 'C': /* MS1 Clock */
 			lookup_current_value("raw_secl",&tmpf);
 			tmpi = (guint8)tmpf;
-			send(fd,&tmpi,1,0);
+			send(fd,(char *)&tmpi,1,0);
 			break;
 		case 'A': /* MS-1 RTvars */
 			if (firmware->capabilities & MS1)
-				send (fd,firmware->rt_data,firmware->rtvars_size,0);
+				send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
 			else
 				printf("\"A\" Not supported on this firmware\n");
 			break;
@@ -604,7 +606,7 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 				if ((canID == 0) && (tableID == 6))
 				{
 					if (firmware->rt_data)
-						send(fd,firmware->rt_data,firmware->rtvars_size,0);
+						send(fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
 				}
 			}
 			else
@@ -630,7 +632,7 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 				count = (data[5] << 8) + data[6];
 				if (find_mtx_page(tableID,&mtx_page))
 					if (firmware->ecu_data[mtx_page])
-						res = send(fd,firmware->ecu_data[mtx_page]+offset,count,0);
+						res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
 			}
 			else
 				printf("\"r\" Not supported on this firmware\n");
