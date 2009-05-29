@@ -18,14 +18,20 @@
 #include <gtk/gtk.h>
 
 
+#define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
+#define MTX_SOCKET_BINARY_PORT 12765
+#define MTX_SOCKET_CONTROL_PORT 12766
+
 typedef struct _MtxSocketClient MtxSocketClient;
 typedef struct _MtxSocketData MtxSocketData;
+typedef struct _MtxSocket MtxSocket;
 
 typedef enum
 {
-	MTX_ASCII = 0x410,
-	MTX_BINARY
-}SocketMode;
+	MTX_SOCKET_ASCII = 0x410,
+	MTX_SOCKET_BINARY,
+	MTX_SOCKET_CONTROL
+}SocketType;
 
 
 typedef enum
@@ -58,9 +64,9 @@ struct _MtxSocketClient
 {
 	gchar *ip;
 	guint16 port;
-	SocketMode mode;
 	guint8 ** ecu_data;
 	gint fd;
+	SocketType type;
 };
 
 struct _MtxSocketData
@@ -72,10 +78,19 @@ struct _MtxSocketData
 	guint16 count;
 };
 
+struct _MtxSocket
+{
+	gint fd;
+	SocketType type;
+};
+
+
 /* Prototypes */
-gboolean setup_socket(void);
+gboolean setup_socket(gint);
 void *socket_thread_manager(gpointer);
-void * socket_client(gpointer );
+void * ascii_socket_client(gpointer );
+void * binary_socket_client(gpointer );
+void * control_socket_client(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
 gboolean validate_remote_binary_cmd(MtxSocketClient *, gchar *, gint);
 void return_socket_error(gint);

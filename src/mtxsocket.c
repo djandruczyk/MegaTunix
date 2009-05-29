@@ -52,7 +52,7 @@
 #define ERR_MSG "Bad Request: "
 
 
-gboolean setup_socket(void)
+gboolean setup_socket(gint port)
 {
 	int sock = 0;
 	struct sockaddr_in server_address;
@@ -93,9 +93,8 @@ gboolean setup_socket(void)
 	memset((char *) &server_address, 0, sizeof(server_address));
 	server_address.sin_family = AF_INET;
 	server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-	server_address.sin_port = htons(MTX_PORT);
+	server_address.sin_port = htons(port);
 	if (bind(sock, (struct sockaddr *) &server_address,sizeof(server_address)) < 0 ) {
-		//writelogfile(logfd,LOG_EMERG,"error al hacer bind: %s\n",strerror(errno));
 		perror("bind");
 #ifdef __WIN32__
 		closesocket(sock);
@@ -133,7 +132,7 @@ void *socket_thread_manager(gpointer data)
 {
 	extern Firmware_Details *firmware;
 	gint i = 0;
-	gint socket = (int) data;
+	MtxSocket *socket = (MtxSocket *)data;
 	struct sockaddr_in client;
 #ifdef __WIN32__
 	int length = sizeof(client);
@@ -145,11 +144,14 @@ void *socket_thread_manager(gpointer data)
 
 	while (TRUE)
 	{
-		fd = accept(socket,(struct sockaddr *)&client, &length);
+		printf("checking for connections!\n");
+		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
 		cli_data = g_new0(MtxSocketClient, 1);
 		cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
 		cli_data->port = ntohs(client.sin_port);
 		cli_data->fd = fd;
+		cli_data->type = socket->type;
+
 		if (firmware)
 		{
 			cli_data->ecu_data = g_new0(guint8 *, firmware->total_pages);
@@ -162,10 +164,31 @@ void *socket_thread_manager(gpointer data)
 			}
 		}
 
-		g_thread_create(socket_client,
-				cli_data, /* Thread args */
-				TRUE,   /* Joinable */
-				NULL);  /* GError pointer */
+
+		if (socket->type == MTX_SOCKET_ASCII)
+		{
+			printf("Ascii socket opened, spawning thread\n");
+			g_thread_create(ascii_socket_client,
+					cli_data, /* Thread args */
+					TRUE,   /* Joinable */
+					NULL);  /* GError pointer */
+		}
+		if (socket->type == MTX_SOCKET_BINARY)
+		{
+			printf("binary socket opened, spawning thread\n");
+			g_thread_create(binary_socket_client,
+					cli_data, /* Thread args */
+					TRUE,   /* Joinable */
+					NULL);  /* GError pointer */
+		}
+		if (socket->type == MTX_SOCKET_CONTROL)
+		{
+			printf("Control socket opened, spawning thread\n");
+			g_thread_create(control_socket_client,
+					cli_data, /* Thread args */
+					TRUE,   /* Joinable */
+					NULL);  /* GError pointer */
+		}
 	}
 }
 
@@ -177,11 +200,11 @@ void *socket_thread_manager(gpointer data)
  the thread..
  \param data  gpointer representation of the socket filedescriptor
  */
-void *socket_client(gpointer data)
+void *ascii_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
-	char buf[4096];
+	gchar buf[4096];
 	gchar * cbuf = NULL;  /* Client buffer */
 	gchar * tmpbuf = NULL;
 	fd_set rd;
@@ -189,47 +212,11 @@ void *socket_client(gpointer data)
 	FD_SET(fd,&rd);
 	gint res = 0;
 
-/* Wait for API choice (i.e. if only a CR is received, set mode
- * to ASCII, otherwise check passed data for valid API, if valid set mode to
- * binary, otherwise drop the connection
- */
-	res = recv(fd,(char *)&buf,4096,0);
-//	if (res > 0)
-//		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
-	if (!res)
-	{
-		perror("ERROR receiving, got nothing, error! \n");
-		return NULL;
-	}
-	/* A simple CR/LF is enough to trigger ASCII mode*/
-	if (g_strncasecmp(buf,"\r\n",res) == 0)
-	{
 
-		tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
-		send(fd,tmpbuf,strlen(tmpbuf),0);
-		client->mode = MTX_ASCII;
-		g_free(tmpbuf);
-	}
-	else
-	{
-		client->mode = MTX_BINARY;
-		cbuf = g_new0(gchar, 4096);
-		memcpy (cbuf,buf,res);
-		res = validate_remote_binary_cmd(client,cbuf,res);
-		if (res < 0) /* Error, socket closed, abort */
-		{
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
-			dealloc_client_data(client);
-			g_thread_exit(0);
-		}
-		g_free(cbuf);
-	}
-	
-	
+	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
+	send(fd,tmpbuf,strlen(tmpbuf),0);
+	g_free(tmpbuf);
+
 	while (TRUE)
 	{
 		if (!fd)
@@ -262,16 +249,230 @@ void *socket_client(gpointer data)
 				g_thread_exit(0);
 			}
 			/* If command validator returns false, the connection
- 			 * was quit, thus close and exit nicely
- 			 */
+			 * was quit, thus close and exit nicely
+			 */
 			cbuf = g_new0(gchar, 4096);
 			memcpy (cbuf,buf,res);
-			if (client->mode == MTX_ASCII)
+			if (client->type == MTX_SOCKET_ASCII)
 				res = validate_remote_ascii_cmd(client,cbuf,res);
-			else if (client->mode == MTX_BINARY)
-				res = validate_remote_binary_cmd(client,cbuf,res);
-			else	
-				printf("MTXsocket bug!, client->mode undefined!\n");
+			g_free(cbuf);
+			if (!res)
+			{
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				dealloc_client_data(client);
+				g_thread_exit(0);
+			}
+		}
+	}
+}
+
+
+
+void *binary_socket_client(gpointer data)
+{
+	MtxSocketClient *client = (MtxSocketClient *) data;
+	gint fd = client->fd;
+	gchar buf[4096];
+	gchar * cbuf = NULL;  /* Client buffer */
+	gchar * tmpbuf = NULL;
+	fd_set rd;
+	FD_ZERO(&rd);
+	FD_SET(fd,&rd);
+	gint res = 0;
+
+	res = recv(fd,(char *)&buf,4096,0);
+	//	if (res > 0)
+	//		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
+	if (!res)
+	{
+		perror("ERROR receiving, got nothing, error! \n");
+		return NULL;
+	}
+	/* A simple CR/LF is enough to trigger ASCII mode*/
+	if (g_strncasecmp(buf,"\r\n",res) == 0)
+	{
+
+		tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
+		send(fd,tmpbuf,strlen(tmpbuf),0);
+		g_free(tmpbuf);
+	}
+	else
+	{
+		cbuf = g_new0(gchar, 4096);
+		memcpy (cbuf,buf,res);
+		res = validate_remote_binary_cmd(client,cbuf,res);
+		if (res < 0) /* Error, socket closed, abort */
+		{
+#ifdef __WIN32__
+			closesocket(fd);
+#else
+			close(fd);
+#endif
+			dealloc_client_data(client);
+			g_thread_exit(0);
+		}
+		g_free(cbuf);
+	}
+
+
+	while (TRUE)
+	{
+		if (!fd)
+		{
+			dealloc_client_data(client);
+			return(0);
+		}
+		res = select(fd+1,&rd,NULL,NULL,NULL);
+		if (res < 0) /* Error, socket closed, abort */
+		{
+#ifdef __WIN32__
+			closesocket(fd);
+#else
+			close(fd);
+#endif
+			dealloc_client_data(client);
+			g_thread_exit(0);
+		}
+		if (res > 0) /* Data Arrived */
+		{
+			res = recv(fd,(char *)&buf,4096,0);
+			if (res <= 0)
+			{
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				dealloc_client_data(client);
+				g_thread_exit(0);
+			}
+			/* If command validator returns false, the connection
+			 * was quit, thus close and exit nicely
+			 */
+			cbuf = g_new0(gchar, 4096);
+			memcpy (cbuf,buf,res);
+			/*
+			   if (client->mode == MTX_ASCII)
+			   res = validate_remote_ascii_cmd(client,cbuf,res);
+			   else if (client->mode == MTX_BINARY)
+			   res = validate_remote_binary_cmd(client,cbuf,res);
+			   else	
+			   printf("MTXsocket bug!, client->mode undefined!\n");
+			   */
+			g_free(cbuf);
+			if (!res)
+			{
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				dealloc_client_data(client);
+				g_thread_exit(0);
+			}
+		}
+	}
+}
+
+
+
+void *control_socket_client(gpointer data)
+{
+	MtxSocketClient *client = (MtxSocketClient *) data;
+	gint fd = client->fd;
+	gchar buf[4096];
+	gchar * cbuf = NULL;  /* Client buffer */
+	gchar * tmpbuf = NULL;
+	fd_set rd;
+	FD_ZERO(&rd);
+	FD_SET(fd,&rd);
+	gint res = 0;
+
+	while (TRUE)
+	{}
+	res = recv(fd,(char *)&buf,4096,0);
+	//	if (res > 0)
+	//		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
+	if (!res)
+	{
+		perror("ERROR receiving, got nothing, error! \n");
+		return NULL;
+	}
+	/* A simple CR/LF is enough to trigger ASCII mode*/
+	if (g_strncasecmp(buf,"\r\n",res) == 0)
+	{
+
+		tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
+		send(fd,tmpbuf,strlen(tmpbuf),0);
+		g_free(tmpbuf);
+	}
+	else
+	{
+		cbuf = g_new0(gchar, 4096);
+		memcpy (cbuf,buf,res);
+		res = validate_remote_binary_cmd(client,cbuf,res);
+		if (res < 0) /* Error, socket closed, abort */
+		{
+#ifdef __WIN32__
+			closesocket(fd);
+#else
+			close(fd);
+#endif
+			dealloc_client_data(client);
+			g_thread_exit(0);
+		}
+		g_free(cbuf);
+	}
+
+
+	while (TRUE)
+	{
+		if (!fd)
+		{
+			dealloc_client_data(client);
+			return(0);
+		}
+		res = select(fd+1,&rd,NULL,NULL,NULL);
+		if (res < 0) /* Error, socket closed, abort */
+		{
+#ifdef __WIN32__
+			closesocket(fd);
+#else
+			close(fd);
+#endif
+			dealloc_client_data(client);
+			g_thread_exit(0);
+		}
+		if (res > 0) /* Data Arrived */
+		{
+			res = recv(fd,(char *)&buf,4096,0);
+			if (res <= 0)
+			{
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				dealloc_client_data(client);
+				g_thread_exit(0);
+			}
+			/* If command validator returns false, the connection
+			 * was quit, thus close and exit nicely
+			 */
+			cbuf = g_new0(gchar, 4096);
+			memcpy (cbuf,buf,res);
+			/*
+			   if (client->mode == MTX_ASCII)
+			   res = validate_remote_ascii_cmd(client,cbuf,res);
+			   else if (client->mode == MTX_BINARY)
+			   res = validate_remote_binary_cmd(client,cbuf,res);
+			   else	
+			   printf("MTXsocket bug!, client->mode undefined!\n");
+			   */
 			g_free(cbuf);
 			if (!res)
 			{
