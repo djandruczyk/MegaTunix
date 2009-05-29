@@ -416,9 +416,15 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
+			page = (gint)OBJ_GET(output->object,"page");
+			canID = (gint)OBJ_GET(output->object,"canID");
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
+			store_new_block(canID,page,0,
+					message->recv_buf,
+					firmware->page_params[page]->length);
+			backup_current_data(canID,page);
 			ptr16 = (guint16 *)message->recv_buf;
 			/* Test for MS reset */
 			if (just_starting)

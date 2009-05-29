@@ -33,6 +33,23 @@ typedef enum
 	MTX_SOCKET_CONTROL
 }SocketType;
 
+typedef enum
+{
+	WAITING_FOR_CMD = 0x420,
+	GET_CAN_ID,
+	GET_TABLE_ID,
+}State;
+
+typedef enum
+{
+	UNDEFINED_SUBSTATE = 0x430,
+	SEND_FULL_TABLE,
+	GET_HIGH_OFFSET,
+	GET_LOW_OFFSET,
+	GET_HIGH_COUNT,
+	GET_LOW_COUNT,
+	GET_BULK_DATA
+}SubState;
 
 typedef enum
 {

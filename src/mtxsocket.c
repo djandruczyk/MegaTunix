@@ -144,7 +144,6 @@ void *socket_thread_manager(gpointer data)
 
 	while (TRUE)
 	{
-		printf("checking for connections!\n");
 		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
 		cli_data = g_new0(MtxSocketClient, 1);
 		cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
@@ -167,7 +166,6 @@ void *socket_thread_manager(gpointer data)
 
 		if (socket->type == MTX_SOCKET_ASCII)
 		{
-			printf("Ascii socket opened, spawning thread\n");
 			g_thread_create(ascii_socket_client,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
@@ -175,7 +173,6 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_BINARY)
 		{
-			printf("binary socket opened, spawning thread\n");
 			g_thread_create(binary_socket_client,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
@@ -183,7 +180,6 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
-			printf("Control socket opened, spawning thread\n");
 			g_thread_create(control_socket_client,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
@@ -271,41 +267,27 @@ void *ascii_socket_client(gpointer data)
 }
 
 
-
 void *binary_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
-	gchar buf[4096];
-	gchar * cbuf = NULL;  /* Client buffer */
-	gchar * tmpbuf = NULL;
-	fd_set rd;
-	FD_ZERO(&rd);
-	FD_SET(fd,&rd);
+	gchar buf;
 	gint res = 0;
+	gint canID = 0;
+	gint tableID = 0;
+	gint mtx_page = 0;
+	gfloat tmpf = 0.0;
+	gint tmpi = 0;
+	extern Firmware_Details *firmware;
+	State state = WAITING_FOR_CMD;;
+	State next_state = WAITING_FOR_CMD;
+	SubState substate = UNDEFINED_SUBSTATE;
 
-	res = recv(fd,(char *)&buf,4096,0);
-	//	if (res > 0)
-	//		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
-	if (!res)
+	while(TRUE)
 	{
-		perror("ERROR receiving, got nothing, error! \n");
-		return NULL;
-	}
-	/* A simple CR/LF is enough to trigger ASCII mode*/
-	if (g_strncasecmp(buf,"\r\n",res) == 0)
-	{
-
-		tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
-		send(fd,tmpbuf,strlen(tmpbuf),0);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		cbuf = g_new0(gchar, 4096);
-		memcpy (cbuf,buf,res);
-		res = validate_remote_binary_cmd(client,cbuf,res);
-		if (res < 0) /* Error, socket closed, abort */
+		res = recv(fd,&buf,1,0);
+		printf("recv did something\n");
+		if (res <= 0)
 		{
 #ifdef __WIN32__
 			closesocket(fd);
@@ -315,65 +297,91 @@ void *binary_socket_client(gpointer data)
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		g_free(cbuf);
-	}
+		switch (state)
+		{
+			case WAITING_FOR_CMD:
+				printf("waiting for cmd block\n");
+				switch (buf)
+				{
+					case 'a':
+						printf("'a' received\n");
+						state = GET_CAN_ID;
+						next_state = WAITING_FOR_CMD;
+						substate = SEND_FULL_TABLE;
+						continue;;
+					case 'c':
+						printf("'c' received\n");
+						state = WAITING_FOR_CMD;
+						if (firmware->capabilities & MS2)
+						{
+							lookup_current_value("raw_secl",&tmpf);
+							tmpi = (guint16)tmpf;
+							send(fd,(char *)&tmpi,2,0);
+						}
+						else
+							printf("\"c\" Not supported on this firmware\n");
+						continue;
+					case 'Q':
+						printf("'Q' received\n");
+						state = WAITING_FOR_CMD;
+						if (!firmware)
+							send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+						else
+						{
+							if (firmware->text_revision)
+								send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+							else
+								send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+						}
+						continue;
+					case 'S':
+						printf("'S' received\n");
+						state = WAITING_FOR_CMD;
+						if (!firmware)
+							send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+						else
+						{
+							if (firmware->actual_signature)
+								send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+							else
+								send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+						}
+						continue;
+					default:
+						continue;
+				}
+			case GET_CAN_ID:
+				printf("get_can_id block\n");
+				canID = (guint8)buf;
+				printf("canID received is %i\n",canID);
+				if ((canID < 0) || (canID > 8))
+				{
+					printf( "canID is out of range!\n");
+					state = WAITING_FOR_CMD;
+				}
+				else
+					state = GET_TABLE_ID;
+				continue;
+			case GET_TABLE_ID:
+				printf("get_table_id block\n");
+				tableID = (guint8)buf;
+				printf("tableID received is %i\n",tableID);
+				if (tableID > firmware->total_tables)
+				{
+					state = WAITING_FOR_CMD;
+					break;
+				}
+				state = next_state;
+				if (substate == SEND_FULL_TABLE)
+				{
+					if (find_mtx_page(tableID,&mtx_page))
+					{
+						if (firmware->ecu_data[mtx_page])
+							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
+					}
+				}
+				continue;
 
-
-	while (TRUE)
-	{
-		if (!fd)
-		{
-			dealloc_client_data(client);
-			return(0);
-		}
-		res = select(fd+1,&rd,NULL,NULL,NULL);
-		if (res < 0) /* Error, socket closed, abort */
-		{
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
-			dealloc_client_data(client);
-			g_thread_exit(0);
-		}
-		if (res > 0) /* Data Arrived */
-		{
-			res = recv(fd,(char *)&buf,4096,0);
-			if (res <= 0)
-			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
-				dealloc_client_data(client);
-				g_thread_exit(0);
-			}
-			/* If command validator returns false, the connection
-			 * was quit, thus close and exit nicely
-			 */
-			cbuf = g_new0(gchar, 4096);
-			memcpy (cbuf,buf,res);
-			/*
-			   if (client->mode == MTX_ASCII)
-			   res = validate_remote_ascii_cmd(client,cbuf,res);
-			   else if (client->mode == MTX_BINARY)
-			   res = validate_remote_binary_cmd(client,cbuf,res);
-			   else	
-			   printf("MTXsocket bug!, client->mode undefined!\n");
-			   */
-			g_free(cbuf);
-			if (!res)
-			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
-				dealloc_client_data(client);
-				g_thread_exit(0);
-			}
 		}
 	}
 }
