@@ -276,6 +276,12 @@ void *binary_socket_client(gpointer data)
 	gint canID = 0;
 	gint tableID = 0;
 	gint mtx_page = 0;
+	gint offset = 0;
+	gint offset_h = 0;
+	gint offset_l = 0;
+	gint count = 0;
+	gint count_h = 0;
+	gint count_l = 0;
 	gfloat tmpf = 0.0;
 	gint tmpi = 0;
 	extern Firmware_Details *firmware;
@@ -309,6 +315,12 @@ void *binary_socket_client(gpointer data)
 						next_state = WAITING_FOR_CMD;
 						substate = SEND_FULL_TABLE;
 						continue;;
+					case 'r':
+						printf("'r' received\n");
+						state = GET_CAN_ID;
+						next_state = GET_HIGH_OFFSET;
+						substate = SEND_PARTIAL_TABLE;
+						continue;
 					case 'c':
 						printf("'c' received\n");
 						state = WAITING_FOR_CMD;
@@ -378,6 +390,42 @@ void *binary_socket_client(gpointer data)
 					{
 						if (firmware->ecu_data[mtx_page])
 							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
+					}
+				}
+				else
+					next_state = WAITING_FOR_CMD;
+				continue;
+			case GET_HIGH_OFFSET:
+				printf("get_high_offset block\n");
+				offset_h = (guint8)buf;
+				printf("high offset received is %i\n",offset_h);
+				state = GET_LOW_OFFSET;
+				continue;
+			case GET_LOW_OFFSET:
+				printf("get_low_offset block\n");
+				offset_l = (guint8)buf;
+				printf("low offset received is %i\n",offset_l);
+				offset = offset_l + (offset_h << 8);
+				state = GET_HIGH_COUNT;
+				continue;
+			case GET_HIGH_COUNT:
+				printf("get_high_count block\n");
+				count_h = (guint8)buf;
+				printf("high count received is %i\n",count_h);
+				state = GET_LOW_COUNT;
+				continue;
+			case GET_LOW_COUNT:
+				printf("get_low_count block\n");
+				count_l = (guint8)buf;
+				printf("low offset received is %i\n",offset_l);
+				count = count_l + (count_h << 8);
+				state = next_state;
+				if (substate == SEND_PARTIAL_TABLE)
+				{
+					if (find_mtx_page(tableID,&mtx_page))
+					{
+						if (firmware->ecu_data[mtx_page])
+							res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
 					}
 				}
 				continue;
