@@ -137,6 +137,7 @@ EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_last = firmware->ecu_data_last;
 	gint i = 0;
+	gint z = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
@@ -165,26 +166,29 @@ EXPORT void update_write_status(void *data)
 		sent_data = (guint8 *)OBJ_GET(output->object,"data");
 		if (sent_data)
 			g_free(sent_data);
-		goto red_or_black;
+//		goto red_or_black;
 	}
 	paused_handlers = TRUE;
 
 	/*printf ("page %i, offset %i\n",data->page,data->offset); */
 	/*printf("WRITE STATUS, page %i, offset %i\n",page,offset);*/
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+	for (z=offset;z<offset+length;z++)
 	{
-		if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][offset],i),"dl_type") != DEFERRED)
+		for (i=0;i<g_list_length(ve_widgets[page][z]);i++)
 		{
-			/*printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
-			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+			if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][z],i),"dl_type") != DEFERRED)
+			{
+				/*printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
+				update_widget(g_list_nth_data(ve_widgets[page][z],i),NULL);
+			}
+			/*
+			   else
+			   printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
+			   */
 		}
-		/*
-		else
-			printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
-		*/
-	}
 
-	update_ve3d_if_necessary(page,offset);
+		update_ve3d_if_necessary(page,z);
+	}
 
 	paused_handlers = FALSE;
 	/* We check to see if the last burn copy of the VE/constants matches 

@@ -287,6 +287,7 @@ void *binary_socket_client(gpointer data)
 	gfloat tmpf = 0.0;
 	gint tmpi = 0;
 	extern Firmware_Details *firmware;
+	OutputData *output = NULL;
 	State state = WAITING_FOR_CMD;;
 	State next_state = WAITING_FOR_CMD;
 	SubState substate = UNDEFINED_SUBSTATE;
@@ -312,34 +313,55 @@ void *binary_socket_client(gpointer data)
 				switch (buf)
 				{
 					case 'a':
-						printf("'a' received\n");
-						state = GET_CAN_ID;
-						next_state = WAITING_FOR_CMD;
-						substate = SEND_FULL_TABLE;
-						continue;;
-					case 'r':
-						printf("'r' received\n");
-						state = GET_CAN_ID;
-						next_state = GET_HIGH_OFFSET;
-						substate = SEND_PARTIAL_TABLE;
-						continue;
-					case 'w':
-						printf("'w' received\n");
-						state = GET_CAN_ID;
-						next_state = GET_HIGH_OFFSET;
-						substate = GET_VAR_DATA;
-						continue;
-					case 'c':
-						printf("'c' received\n");
-						state = WAITING_FOR_CMD;
 						if (firmware->capabilities & MS2)
 						{
-							lookup_current_value("raw_secl",&tmpf);
-							tmpi = (guint16)tmpf;
-							send(fd,(char *)&tmpi,2,0);
+							printf("'a' received\n");
+							state = GET_CAN_ID;
+							next_state = WAITING_FOR_CMD;
+							substate = SEND_FULL_TABLE;
 						}
-						else
-							printf("\"c\" Not supported on this firmware\n");
+						continue;;
+					case 'b':
+						if (firmware->capabilities & MS2)
+						{
+							printf("'b' received\n");
+							state = GET_CAN_ID;
+							next_state = WAITING_FOR_CMD;
+							substate = BURN_MS2_FLASH;
+						}
+						continue;
+					case 'r':
+						if (firmware->capabilities & MS2)
+						{
+							printf("'r' received\n");
+							state = GET_CAN_ID;
+							next_state = GET_HIGH_OFFSET;
+							substate = SEND_PARTIAL_TABLE;
+						}
+						continue;
+					case 'w':
+						if (firmware->capabilities & MS2)
+						{
+							printf("'w' received\n");
+							state = GET_CAN_ID;
+							next_state = GET_HIGH_OFFSET;
+							substate = GET_VAR_DATA;
+						}
+						continue;
+					case 'c':
+						if (firmware->capabilities & MS2)
+						{
+							printf("'c' received\n");
+							state = WAITING_FOR_CMD;
+							if (firmware->capabilities & MS2)
+							{
+								lookup_current_value("raw_secl",&tmpf);
+								tmpi = (guint16)tmpf;
+								send(fd,(char *)&tmpi,2,0);
+							}
+							else
+								printf("\"c\" Not supported on this firmware\n");
+						}
 						continue;
 					case 'Q':
 						printf("'Q' received\n");
@@ -400,7 +422,21 @@ void *binary_socket_client(gpointer data)
 							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
 					}
 				}
-				else
+				else if (substate == BURN_MS2_FLASH)
+				{
+					if (find_mtx_page(tableID,&mtx_page))
+					{
+						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);
+						output = initialize_outputdata();
+						OBJ_SET(output->object,"page",GINT_TO_POINTER(mtx_page));
+						OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(tableID));
+						OBJ_SET(output->object,"canID",GINT_TO_POINTER(canID));
+						OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+						io_cmd(firmware->burn_command,output);
+					}
+
+				}
+				else 
 					next_state = WAITING_FOR_CMD;
 				continue;
 			case GET_HIGH_OFFSET:
@@ -450,7 +486,6 @@ void *binary_socket_client(gpointer data)
 				index++;
 				if (index >= count)
 				{
-					printf("All data arrived, DO SOMETHING!!\n");
 					if (find_mtx_page(tableID,&mtx_page))
 						chunk_write(canID,mtx_page,offset,count,buffer);
 					state = WAITING_FOR_CMD;
@@ -827,38 +862,6 @@ gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint l
 				}
 				g_free(data);
 			}
-			break;
-		case 'S':
-			if (!firmware)
-				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
-			else
-			{
-				if (firmware->actual_signature)
-					send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
-				else
-					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
-			}
-			break;
-		case 'Q':
-			if (!firmware)
-				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
-			else
-			{
-				if (firmware->text_revision)
-					send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
-				else
-					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
-			}
-			break;
-		case 'c': /* MS2 Clock */
-			if (firmware->capabilities & MS2)
-			{
-				lookup_current_value("raw_secl",&tmpf);
-				tmpi = (guint16)tmpf;
-				send(fd,(char *)&tmpi,2,0);
-			}
-			else
-				printf("\"c\" Not supported on this firmware\n");
 			break;
 		case 'C': /* MS1 Clock */
 			lookup_current_value("raw_secl",&tmpf);
