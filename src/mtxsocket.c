@@ -282,6 +282,8 @@ void *binary_socket_client(gpointer data)
 	gint count = 0;
 	gint count_h = 0;
 	gint count_l = 0;
+	gint index = 0;
+	guint8 *buffer = NULL;
 	gfloat tmpf = 0.0;
 	gint tmpi = 0;
 	extern Firmware_Details *firmware;
@@ -320,6 +322,12 @@ void *binary_socket_client(gpointer data)
 						state = GET_CAN_ID;
 						next_state = GET_HIGH_OFFSET;
 						substate = SEND_PARTIAL_TABLE;
+						continue;
+					case 'w':
+						printf("'w' received\n");
+						state = GET_CAN_ID;
+						next_state = GET_HIGH_OFFSET;
+						substate = GET_VAR_DATA;
 						continue;
 					case 'c':
 						printf("'c' received\n");
@@ -417,9 +425,16 @@ void *binary_socket_client(gpointer data)
 			case GET_LOW_COUNT:
 				printf("get_low_count block\n");
 				count_l = (guint8)buf;
-				printf("low offset received is %i\n",offset_l);
+				printf("low count received is %i\n",count_l);
 				count = count_l + (count_h << 8);
 				state = next_state;
+				if (substate == GET_VAR_DATA)
+				{
+					state = GET_DATABYTE;
+					buffer = g_new0(guint8, count);
+					index = 0;
+				}
+					
 				if (substate == SEND_PARTIAL_TABLE)
 				{
 					if (find_mtx_page(tableID,&mtx_page))
@@ -429,7 +444,20 @@ void *binary_socket_client(gpointer data)
 					}
 				}
 				continue;
-
+			case GET_DATABYTE:
+				printf("get_datablock\n");
+				buffer[index] = (guint8)buf;
+				index++;
+				if (index >= count)
+				{
+					printf("All data arrived, DO SOMETHING!!\n");
+					if (find_mtx_page(tableID,&mtx_page))
+						chunk_write(canID,mtx_page,offset,count,buffer);
+					state = WAITING_FOR_CMD;
+				}
+				else
+					state = GET_DATABYTE;
+				continue;
 		}
 	}
 }
