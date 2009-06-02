@@ -42,7 +42,11 @@ typedef enum
 	GET_LOW_OFFSET,
 	GET_HIGH_COUNT,
 	GET_LOW_COUNT,
-	GET_DATABYTE
+	GET_DATABYTE,
+	GET_MS1_PAGE,
+	GET_MS1_OFFSET,
+	GET_MS1_BYTE,
+	GET_MS1_COUNT,
 }State;
 
 typedef enum
@@ -112,7 +116,6 @@ void * ascii_socket_client(gpointer );
 void * binary_socket_client(gpointer );
 void * control_socket_client(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
-gboolean validate_remote_binary_cmd(MtxSocketClient *, gchar *, gint);
 void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);
 void socket_get_rtv_list(gint);

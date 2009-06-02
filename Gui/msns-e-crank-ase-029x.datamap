@@ -638,7 +638,7 @@ bind_to_list=temperature
 tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 degree for each amount below this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 60 deg, the timing will be advanced by 4 degrees.
 
 [iat_ret_temp_entry]
-keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
+keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
 key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=50

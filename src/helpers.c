@@ -74,13 +74,16 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	Command *command = NULL;
 	extern volatile gint last_page;
 	gint i = 0;
+	printf("burn all helper\n");
 	if ((type != MS2) && (type != MS1))
 		return FALSE;
 	if (!offline)
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if (((firmware->capabilities & MS2_EXTRA) || firmware->capabilities & MS1) && (outstanding_data))
+		//if (((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)) && (outstanding_data))
+		if (((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
 		{
+			printf("paged burn\n");
 			output = initialize_outputdata();
 			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
 			OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
@@ -88,7 +91,7 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 			OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 			io_cmd(firmware->burn_command,output);
 		}
-		else if (!(firmware->capabilities & MS2_EXTRA))
+		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_EXTRA)))
 		{
 			/* MS2 std allows all pages to be in ram at will*/
 			for (i=0;i<firmware->total_pages;i++)
@@ -346,6 +349,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				break;
 			count = read_data(-1,&message->recv_buf,FALSE);
 			ptr8 = (guchar *)message->recv_buf;
+			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
 				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
 			else
@@ -400,7 +404,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * a reset due to power and/or noise.
 			 */
 			if ((lastcount - ptr8[0] > 1) || \
-					(lastcount - ptr8[0] > 255))
+					(lastcount - ptr8[0] >= 255))
 			{
 				ms_reset_count++;
 				printf("MS1 Reset detected!\n");
@@ -440,7 +444,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * a reset due to power and/or noise.
 			 */
 			if ((lastcount - curcount > 1) || \
-					(lastcount - curcount > 65535))
+					(lastcount - curcount >= 65535))
 			{
 				ms_reset_count++;
 				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);

@@ -284,18 +284,19 @@ void *binary_socket_client(gpointer data)
 	gint count_l = 0;
 	gint index = 0;
 	guint8 *buffer = NULL;
+	guint8 byte = 0;
 	gfloat tmpf = 0.0;
 	gint tmpi = 0;
-	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 	State state = WAITING_FOR_CMD;;
 	State next_state = WAITING_FOR_CMD;
 	SubState substate = UNDEFINED_SUBSTATE;
+	extern Firmware_Details *firmware;
+	extern volatile gint last_page;
 
 	while(TRUE)
 	{
 		res = recv(fd,&buf,1,0);
-		printf("recv did something\n");
 		if (res <= 0)
 		{
 #ifdef __WIN32__
@@ -309,10 +310,9 @@ void *binary_socket_client(gpointer data)
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
-				printf("waiting for cmd block\n");
 				switch (buf)
 				{
-					case 'a':
+					case 'a':	/* MS2 table full table read */
 						if (firmware->capabilities & MS2)
 						{
 							printf("'a' received\n");
@@ -321,7 +321,13 @@ void *binary_socket_client(gpointer data)
 							substate = SEND_FULL_TABLE;
 						}
 						continue;;
-					case 'b':
+					case 'A':	/* MS1 RTvars */
+						if (firmware->capabilities & MSNS_E)
+							send (fd,(char *)firmware->rt_data,22,0);
+						else if (firmware->capabilities & MS1)
+							send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+						continue;
+					case 'b':	/* MS2 burn */
 						if (firmware->capabilities & MS2)
 						{
 							printf("'b' received\n");
@@ -330,7 +336,12 @@ void *binary_socket_client(gpointer data)
 							substate = BURN_MS2_FLASH;
 						}
 						continue;
-					case 'r':
+					case 'B':	/* MS1 burn */
+						printf("'B' received\n");
+						if (firmware->capabilities & MS1)
+							io_cmd(firmware->burn_all_command,NULL);
+						continue;
+					case 'r':	/* MS2 partial table read */
 						if (firmware->capabilities & MS2)
 						{
 							printf("'r' received\n");
@@ -339,7 +350,7 @@ void *binary_socket_client(gpointer data)
 							substate = SEND_PARTIAL_TABLE;
 						}
 						continue;
-					case 'w':
+					case 'w':	/* MS2 chunk write */
 						if (firmware->capabilities & MS2)
 						{
 							printf("'w' received\n");
@@ -348,7 +359,7 @@ void *binary_socket_client(gpointer data)
 							substate = GET_VAR_DATA;
 						}
 						continue;
-					case 'c':
+					case 'c':	/* MS2 Clock read */
 						if (firmware->capabilities & MS2)
 						{
 							printf("'c' received\n");
@@ -363,20 +374,48 @@ void *binary_socket_client(gpointer data)
 								printf("\"c\" Not supported on this firmware\n");
 						}
 						continue;
-					case 'Q':
-						printf("'Q' received\n");
-						state = WAITING_FOR_CMD;
+					case 'C': 	/* MS1 Clock read */
+						if (firmware->capabilities & MS1)
+						{
+							lookup_current_value("raw_secl",&tmpf);
+							tmpi = (guint8)tmpf;
+							send(fd,(char *)&tmpi,1,0);
+						}
+						continue;
+					case 'P':	/* MS1 Page change */
+						printf ("'P' (MS1 Page change)\n");
+						if (firmware->capabilities & MS1)
+						{
+							state = GET_MS1_PAGE;
+							next_state = WAITING_FOR_CMD;
+						}
+						continue;
+					case 'Q':	/* MS1 Numeric Revision read 
+							 * MS2 Text revision, API clash!
+							 */ 
 						if (!firmware)
-							send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+							continue;
 						else
+						{
+							if (firmware->capabilities & MS1)
+								send(fd,&firmware->ecu_revision,1,0);
+							else
+								if (firmware->text_revision)
+									send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+						}
+						continue;
+					case 'R':	/* MSnS Extra (MS1) RTvars */
+						if (firmware->capabilities & MSNS_E)
+							send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+						continue;
+					case 'T':	/* MS1 Text Revision */
+						if (firmware->capabilities & MS1)
 						{
 							if (firmware->text_revision)
 								send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
-							else
-								send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
 						}
 						continue;
-					case 'S':
+					case 'S':	/* MS1/2 Signature Read */
 						printf("'S' received\n");
 						state = WAITING_FOR_CMD;
 						if (!firmware)
@@ -389,6 +428,25 @@ void *binary_socket_client(gpointer data)
 								send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
 						}
 						continue;
+					case 'V':	/* MS1 VE/data read */
+						if (firmware->capabilities & MS1)
+							send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+						continue;
+					case 'W':	/* MS1 Simple write */
+						if (firmware->capabilities & MS1)
+						{
+							state = GET_MS1_OFFSET;
+							next_state = GET_MS1_BYTE;
+						}
+						continue;
+					case 'X':	/* MS1 Chunk write */
+						if (firmware->capabilities & MS1)
+						{
+							state = GET_MS1_OFFSET;
+							next_state = GET_MS1_COUNT;
+						}
+						continue;
+
 					default:
 						continue;
 				}
@@ -484,15 +542,50 @@ void *binary_socket_client(gpointer data)
 				printf("get_datablock\n");
 				buffer[index] = (guint8)buf;
 				index++;
+				printf ("Databyte index %i of %i\n",index,count);
 				if (index >= count)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
-						chunk_write(canID,mtx_page,offset,count,buffer);
+					if (firmware->capabilities & MS2)
+					{
+						if (find_mtx_page(tableID,&mtx_page))
+							chunk_write(canID,mtx_page,offset,count,buffer);
+					}
+					else
+						chunk_write(0,last_page,offset,count,buffer);
 					state = WAITING_FOR_CMD;
 				}
 				else
 					state = GET_DATABYTE;
 				continue;
+			case GET_MS1_PAGE:
+				printf("get_ms1_page\n");
+				tableID = (guint8)buf;
+				printf ("Passed page %i\n",tableID);
+				queue_ms1_page_change(tableID);
+				state = WAITING_FOR_CMD;
+				continue;
+			case GET_MS1_OFFSET:
+				printf("get_ms1_offset\n");
+				offset = (guint8)buf;
+				printf ("Passed offset %i\n",offset);
+				state = next_state;
+				continue;
+			case GET_MS1_COUNT:
+				printf("get_ms1_count\n");
+				count = (guint8)buf;
+				index = 0;
+				buffer = g_new0(guint8, count);
+				printf ("Passed count %i\n",count);
+				state = GET_DATABYTE;
+				continue;
+			case GET_MS1_BYTE:
+				printf("get_ms1_byte\n");
+				byte = (guint8)buf;
+				printf ("Passed byte %i\n",byte);
+				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
+				state = WAITING_FOR_CMD;
+				continue;
+
 		}
 	}
 }
@@ -501,110 +594,12 @@ void *binary_socket_client(gpointer data)
 
 void *control_socket_client(gpointer data)
 {
+	/*
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
-	gchar buf[4096];
-	gchar * cbuf = NULL;  /* Client buffer */
-	gchar * tmpbuf = NULL;
-	fd_set rd;
-	FD_ZERO(&rd);
-	FD_SET(fd,&rd);
-	gint res = 0;
+	*/
+	return NULL;
 
-	while (TRUE)
-	{}
-	res = recv(fd,(char *)&buf,4096,0);
-	//	if (res > 0)
-	//		printf("received \"%s\"\n",g_strescape(g_strndup(buf,res),NULL));
-	if (!res)
-	{
-		perror("ERROR receiving, got nothing, error! \n");
-		return NULL;
-	}
-	/* A simple CR/LF is enough to trigger ASCII mode*/
-	if (g_strncasecmp(buf,"\r\n",res) == 0)
-	{
-
-		tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
-		send(fd,tmpbuf,strlen(tmpbuf),0);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		cbuf = g_new0(gchar, 4096);
-		memcpy (cbuf,buf,res);
-		res = validate_remote_binary_cmd(client,cbuf,res);
-		if (res < 0) /* Error, socket closed, abort */
-		{
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
-			dealloc_client_data(client);
-			g_thread_exit(0);
-		}
-		g_free(cbuf);
-	}
-
-
-	while (TRUE)
-	{
-		if (!fd)
-		{
-			dealloc_client_data(client);
-			return(0);
-		}
-		res = select(fd+1,&rd,NULL,NULL,NULL);
-		if (res < 0) /* Error, socket closed, abort */
-		{
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
-			dealloc_client_data(client);
-			g_thread_exit(0);
-		}
-		if (res > 0) /* Data Arrived */
-		{
-			res = recv(fd,(char *)&buf,4096,0);
-			if (res <= 0)
-			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
-				dealloc_client_data(client);
-				g_thread_exit(0);
-			}
-			/* If command validator returns false, the connection
-			 * was quit, thus close and exit nicely
-			 */
-			cbuf = g_new0(gchar, 4096);
-			memcpy (cbuf,buf,res);
-			/*
-			   if (client->mode == MTX_ASCII)
-			   res = validate_remote_ascii_cmd(client,cbuf,res);
-			   else if (client->mode == MTX_BINARY)
-			   res = validate_remote_binary_cmd(client,cbuf,res);
-			   else	
-			   printf("MTXsocket bug!, client->mode undefined!\n");
-			   */
-			g_free(cbuf);
-			if (!res)
-			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
-				dealloc_client_data(client);
-				g_thread_exit(0);
-			}
-		}
-	}
 }
 
 
@@ -802,191 +797,6 @@ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 	}
 	g_free(arg2);
 	return retval;
-}
-
-
-gboolean validate_remote_binary_cmd(MtxSocketClient *client, gchar * buf, gint len)
-{
-	gint fd = client->fd;
-	extern Firmware_Details *firmware;
-	extern gboolean connected;
-	gint *data = NULL;
-	gint tmpi = 0;
-	gint mtx_page = 0;
-	gint canID = 0;
-	gint tableID = 0;
-	gint offset = 0;
-	gint count = 0;
-	gint i = 0;
-	guint8 * chunk = NULL;
-	gboolean res = FALSE;
-	gfloat tmpf = 0.0;
-	gchar basecmd;
-	OutputData *output = NULL;
-	extern GList ***ve_widgets;
-	/* If nothing passed, return */
-	if (len == 0)
-		return TRUE;
-
-	basecmd = buf[0];
-
-	switch (basecmd)
-	{
-		case 'B': /* MS-1 Burn, no args */
-			io_cmd(firmware->burn_command,NULL);
-			break;
-		case 'b': /* MS-2 Burn, CanID/TableID(page) args required */
-			if (firmware->capabilities & MS2)
-			{
-				if (len != 3)
-				{
-					res = socket_get_more_data(fd,&buf,len,3);
-					if (!res)
-					{
-						printf("'b' param requires canID and tableID(page)\n");
-						return TRUE;
-					}
-				}
-				data = convert_socket_data(buf,3);
-				canID = data[1];
-				tableID = data[2];
-				if (find_mtx_page(tableID,&mtx_page))
-				{
-					printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);
-					output = initialize_outputdata();
-					OBJ_SET(output->object,"page",GINT_TO_POINTER(mtx_page));
-					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(tableID));
-					OBJ_SET(output->object,"canID",GINT_TO_POINTER(canID));
-					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd(firmware->burn_command,output);
-				}
-				g_free(data);
-			}
-			break;
-		case 'C': /* MS1 Clock */
-			lookup_current_value("raw_secl",&tmpf);
-			tmpi = (guint8)tmpf;
-			send(fd,(char *)&tmpi,1,0);
-			break;
-		case 'A': /* MS-1 RTvars */
-			if (firmware->capabilities & MS1)
-				send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
-			else
-				printf("\"A\" Not supported on this firmware\n");
-			break;
-		case 'a':
-			printf("\n'a' command section\n");
-			if (firmware->capabilities & MS2)
-			{
-				if (len < 3)
-				{
-					res = socket_get_more_data(fd,buf+len,len,3);
-					if (!res)
-					{
-						printf("'a' param requires canID and table\n");
-						return TRUE;
-					}
-				}
-				data = convert_socket_data(buf,3);
-				canID = data[1];
-				tableID = data[2];
-				printf("A cmd, cmd '%c', canID %i, tableID %i\n",(gchar)buf[0],canID,tableID);
-				if ((canID == 0) && (tableID == 6))
-				{
-					if (firmware->rt_data)
-						send(fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
-				}
-			}
-			else
-				printf("\"a\" Not supported on this firmware\n");
-			break;
-		case 'r':
-			if (firmware->capabilities & MS2)
-			{
-				printf("'r' command\n");
-				if (len != 7)
-				{
-					res = socket_get_more_data(fd,buf+len,len,7);
-					if (!res)
-					{
-						printf("'r' param requires canID,table,offset(16bit) and count(16bit)\n");
-						return TRUE;
-					}
-				}
-				data = convert_socket_data(buf,7);
-				canID = data[1];
-				tableID = data[2];
-				offset = (data[3] << 8) + data[4];
-				count = (data[5] << 8) + data[6];
-				if (find_mtx_page(tableID,&mtx_page))
-					if (firmware->ecu_data[mtx_page])
-						res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
-			}
-			else
-				printf("\"r\" Not supported on this firmware\n");
-			break;
-		case 'w':  
-			/* This is special as the number of bytes is variable */
-			if (firmware->capabilities & MS2)
-			{
-				printf("'w' command\n");
-				if (len < 7 )
-				{
-					res = socket_get_more_data(fd,buf+len,len,7);
-					if (!res)
-					{
-						printf("BEFORE DATA 'w' param requires canID,table,offset(16bit), count(16bit) and DATA\n");
-						return TRUE;
-					}
-				}
-				data = convert_socket_data(buf,7);
-				canID = data[1];
-				tableID = data[2];
-				offset = (data[3] << 8) + data[4];
-				count = (data[5] << 8) + data[6];
-				printf("canID is %i\n",canID);
-				printf("tableID is %i\n",tableID);
-				printf("offset is %i\n",offset);
-				printf("count is %i\n",count);
-				if (len != count+7)
-				{
-					res = socket_get_more_data(fd,buf+7,7,count+7);
-					if (!res)
-					{
-						printf("AFTER 'w' params requires canID,table,offset(16bit), count(16bit) and DATA\n");
-						return TRUE;
-					}
-				}
-				printf("Value[0] is %i\n",(guint8)buf[7]);
-				printf("Value[1] is %i\n",(guint8)buf[8]);
-				printf("Value[2] is %i\n",(guint8)buf[9]);
-				printf("Value[3] is %i\n",(guint8)buf[10]);
-				if (find_mtx_page(tableID,&mtx_page))
-				{
-					if (firmware->ecu_data[mtx_page])
-					{
-						memcpy (firmware->ecu_data[mtx_page]+offset,buf+7,count);
-						for (i=offset;i<count;i++)
-						{
-							if (ve_widgets[mtx_page][offset] != NULL)
-								printf("Updating widgets on page %i, offset %i\n",mtx_page,offset);
-							g_list_foreach(ve_widgets[mtx_page][offset],update_widget,NULL);
-
-						}
-						chunk = g_new0(guint8, count);
-						memcpy (chunk,buf+7,count);
-						chunk_write(canID,mtx_page,offset,count,chunk);
-					}
-				}
-			}
-			else
-				printf("\"w\" Not supported on this firmware\n");
-			break;
-		default:
-			printf("Not Implemented Basecmd is %c, cmd length is %i\n",buf[0],len);
-			break;
-	}
-	return TRUE;
 }
 
 
@@ -1367,56 +1177,4 @@ gboolean close_network(void)
 	connected = FALSE;
 
 	return TRUE;
-}
-
-
-gboolean socket_get_more_data(gint fd, void *buf, gint have, gint want)
-{
-	fd_set rd;
-	FD_ZERO(&rd);
-	FD_SET(fd,&rd);
-	gint res = 0;
-	gint failcount = 0;
-	gint need = 0;
-	gint count = 0;
-	gchar tmp[4096];
-	struct timeval timeout = {0,100000}; /* 100ms */
-
-//	printf("Have %i Must have %i bytes total from socket\n",have,want);
-	need = want - have;
-//	printf("Thus need %i bytes\n",need);
-
-	while ((need > 0) && (failcount < 10))
-	{
-		res = select(fd+1,&rd,NULL,NULL,&timeout);
-		if (res > 0) /* Data Available */
-		{
-//			printf("Data available to be read!\n");
-			res = recv(fd,tmp+count,need,0);
-//			printf("read %i bytes in get_more_data() function\n",res);
-			count += res;
-			if (res > 0)
-				need -=res;
-//			else
-//				printf("read error!\n");
-		}
-		else
-		{
-//			printf("NO data available from socket!!!\n");
-			failcount++;
-		}
-	}
-//	printf("Need is now at %i\n",need);
-	if (need == 0)
-	{
-//		printf("Copy data from temp buffer to final buffer+offset %i\n",have);
-		memcpy(buf,tmp,count);
-//		printf("SUCCESS get_more_data() func\n");
-		return TRUE;
-	}
-	else
-	{
-//		printf("Failing get_more_data() func\n");
-		return FALSE;
-	}
 }

@@ -79,6 +79,7 @@ struct _Firmware_Details
 	gint ms2_rt_page;	/*! Page where the MS2 RT vars reside */
 	gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gint capabilities;	/*! Enum list of capabilities*/
+	gint ecu_revision;	/*! Numeric ECU revision */
 	gboolean multi_page;	/*! Multi-page firmware */
 	gboolean chunk_support;	/*! Supports Chunk Write */
 	gboolean can_capable;	/*! Supports CAnbus and sub modules */
