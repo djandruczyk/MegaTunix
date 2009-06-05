@@ -69,7 +69,9 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 	static gint failcount = 0;
 	static gboolean reset = FALSE;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after lock reentrant mutex\n"));
 
 	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
@@ -91,14 +93,16 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 		total_wanted *= 2;
 #endif
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after lock serio_mutex\n"));
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
-			total_read += res = read_wrapper(serial_params->fd,
-					ptr+total_read,
-					total_wanted-total_read);
+		total_read += res = read_wrapper(serial_params->fd,
+				ptr+total_read,
+				total_wanted-total_read);
 
 		/* Increment bad read counter.... */
 		if (res < 0) /* I/O Error Device disappearance or other */
@@ -116,7 +120,9 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after UNlock serio_mutex\n"));
 	if ((bad_read) && (!ignore_errors))
 	{
 		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
@@ -141,7 +147,9 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
 	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after UNlock reentrant mutex\n"));
 	return total_read;
 }
 

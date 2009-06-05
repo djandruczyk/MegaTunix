@@ -44,6 +44,7 @@ static DebugLevel dbglevels[] =
 	{ "KeyParser", DEBUG_LEVEL, KEYPARSER, FALSE},
 	{ "RealTime Maps", DEBUG_LEVEL, RTMLOADER, FALSE},
 	{ "Complex Math", DEBUG_LEVEL, COMPLEX_EXPR, FALSE},
+	{ "Mutexes", DEBUG_LEVEL, MUTEX, FALSE},
 	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, FALSE},
 };
 

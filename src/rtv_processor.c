@@ -182,12 +182,16 @@ store_it:
 			history = (GArray *)OBJ_GET(object,"history");
 			current_index = (gint)OBJ_GET(object,"current_index");
 			/* Store data in history buffer */
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before lock rtv_mutex\n"));
 			g_static_mutex_lock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after lock rtv_mutex\n"));
 			g_array_append_val(history,result);
 			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,current_index,result,g_array_index(history, gfloat, current_index+1),g_array_index(history, gfloat, current_index));*/
 			current_index++;
 			OBJ_SET(object,"current_index",GINT_TO_POINTER(current_index));
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after UNlock rtv_mutex\n"));
 
 			/*printf("Result of %s is %f\n",(gchar *)OBJ_GET(object,"internal_names"),result);*/
 
@@ -485,10 +489,14 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 		return FALSE;
 	}
 	history = (GArray *)OBJ_GET(object,"history");
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after lock rtv_mutex\n"));
 	index = (gint)OBJ_GET(object,"current_index");
 	*value = g_array_index(history,gfloat,index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after UNlock rtv_mutex\n"));
 	return TRUE;
 }
 
@@ -515,13 +523,17 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after lock rtv_mutex\n"));
 	history = (GArray *)OBJ_GET(object,"history");
 	index = (gint)OBJ_GET(object,"current_index");
 	if (index > 0)
 		index -= 1;  /* get PREVIOUS one */
 	*value = g_array_index(history,gfloat,index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after UNlock rtv_mutex\n"));
 	return TRUE;
 }
 
@@ -549,13 +561,19 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() after lock rtv_mutex\n"));
 	history = (GArray *)OBJ_GET(object,"history");
 	index = (gint)OBJ_GET(object,"current_index");
 	if (index > n)
 		index -= n;  /* get PREVIOUS nth one */
 	*value = g_array_index(history,gfloat,index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() after UNlock rtv_mutex\n"));
+	history = (GArray *)OBJ_GET(object,"history");
 	return TRUE;
 }
 
@@ -585,7 +603,9 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
 	history = (GArray *)OBJ_GET(object,"history");
 	index = (gint)OBJ_GET(object,"current_index");
 	if (index > n)
@@ -596,7 +616,9 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 			values[i] = g_array_index(history,gfloat,index);
 		}
 	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after UNlock rtv_mutex\n"));
 	return TRUE;
 }
 
@@ -659,7 +681,9 @@ void flush_rt_arrays()
 			object=(GObject *)g_list_nth_data(list,j);
 			if (!GTK_IS_OBJECT(object))
 				continue;
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() before lock rtv_mutex\n"));
 			g_static_mutex_lock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after lock rtv_mutex\n"));
 			history = (GArray *)OBJ_GET(object,"history");
 			current_index = (gint)OBJ_GET(object,"current_index");
 			/* TRuncate array,  but don't free/recreate as it
@@ -669,7 +693,9 @@ void flush_rt_arrays()
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			OBJ_SET(object,"history",(gpointer)history);
 			OBJ_SET(object,"current_index",GINT_TO_POINTER(-1));
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after UNlock rtv_mutex\n"));
 	                /* bind history array to object for future retrieval */
 		}
 

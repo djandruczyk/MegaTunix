@@ -34,6 +34,7 @@ typedef enum
 	KEYPARSER	= 1<<10,
 	RTMLOADER	= 1<<11,
 	COMPLEX_EXPR	= 1<<12,
+	MUTEX		= 1<<13,
 	CRITICAL	= 1<<30
 }Dbg_Class;
 

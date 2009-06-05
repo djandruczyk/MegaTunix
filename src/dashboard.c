@@ -398,12 +398,16 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 
 	history = (GArray *)OBJ_GET(d_gauge->object,"history");
 	current_index = (gint)OBJ_GET(d_gauge->object,"current_index");
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
 	previous = g_array_index(history, gfloat, current_index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after UNlock rtv_mutex\n"));
 
 	if ((current != previous) || (forced_update))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
@@ -436,8 +440,10 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 		return;
 	if(!GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 		return;
-
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": dash_shape_combine() before lock dash_mutex\n"));
 	g_static_mutex_lock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": dash_shape_combine() after lock dash_mutex\n"));
+
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 	if (!colormap)
 	{
@@ -518,7 +524,9 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	g_object_unref(colormap);
 	g_object_unref(gc1);
 	g_object_unref(bitmap);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": dash_shape_combine() before UNlock dash_mutex\n"));
 	g_static_mutex_unlock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": dash_shape_combine() after UNlock dash_mutex\n"));
 	return;
 }
 
@@ -782,7 +790,9 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	if(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		return FALSE;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": remove_dashboard() before lock dash_mutex\n"));
 	g_static_mutex_lock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": remove_dashboard() after lock dash_mutex\n"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),FALSE);
 	label = OBJ_GET(widget,"label");
 	if (GTK_IS_WIDGET(label))
@@ -801,7 +811,9 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	}
 	if (dash_hash)
 		g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": remove_dashboard() before UNlock dash_mutex\n"));
 	g_static_mutex_unlock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": remove_dashboard() after UNlock dash_mutex\n"));
 	return TRUE;
 }
 

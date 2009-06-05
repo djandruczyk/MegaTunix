@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <watches.h>
 
-GStaticMutex watch_mutex = G_STATIC_MUTEX_INIT;
 
 static GHashTable *watch_hash;
 /*!

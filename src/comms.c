@@ -265,9 +265,14 @@ gboolean write_data(Io_Message *message)
 	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	g_static_mutex_lock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock write_data mutex\n"));
 	g_static_mutex_lock(&mutex);
-	
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock write_data mutex\n"));
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock serio_mutex\n"));
+	g_static_mutex_lock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock serio_mutex\n"));
+
+
 	if (output)
 	{
 		canID = (gint)OBJ_GET(output->object,"canID");
@@ -293,14 +298,22 @@ gboolean write_data(Io_Message *message)
 			case MTX_CMD_WRITE:
 				break;
 		}
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!connected)
 	{
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return FALSE;		/* can't write anything if disconnected */
 	}
 
@@ -316,7 +329,7 @@ gboolean write_data(Io_Message *message)
 		{
 			for (j=0;j<block->len;j++)
 			{
-//				printf("comms.c data[%i] is %i\n",j,block->data[j]);
+				//				printf("comms.c data[%i] is %i\n",j,block->data[j]);
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
@@ -346,8 +359,12 @@ gboolean write_data(Io_Message *message)
 			store_new_block(canID,page,offset,data,num_bytes);
 	}
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 	return retval;
 }
 

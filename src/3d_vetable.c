@@ -1603,7 +1603,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
 
+
+	dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() before lock key_mutex\n"));
 	g_static_mutex_lock(&key_mutex);
+	dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() after lock key_mutex\n"));
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -1942,7 +1945,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		default:
 			dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval));
+			dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() before UNlock key_mutex\n"));
 			g_static_mutex_unlock(&key_mutex);
+			dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() after UNlock key_mutex\n"));
 			return FALSE;
 	}
 	if (update_widgets)
@@ -1955,7 +1960,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
 
+	dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() before UNlock key_mutex\n"));
 	g_static_mutex_unlock(&key_mutex);
+	dbg_func(MUTEX,g_strdup(__FILE__": ve3d_key_press_event() after UNlock key_mutex\n"));
 	return TRUE;
 }
 

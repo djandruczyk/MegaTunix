@@ -188,13 +188,17 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	current_index = (gint)OBJ_GET(slider->object,"current_index");
 	precision = (gint)OBJ_GET(slider->object,"precision");
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() after lock rtv_mutex\n"));
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);*/
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
 	previous = g_array_index(history, gfloat, current_index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() after UNlock rtv_mutex\n"));
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
@@ -301,10 +305,15 @@ gboolean update_rttext(gpointer data)
 gboolean update_dashboards(gpointer data)
 {
 	extern GStaticMutex dash_mutex;
+
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dashboards() before lock dash_mutex\n"));
 	g_static_mutex_lock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dashboards() after lock dash_mutex\n"));
 	if (OBJ_GET(global_data,"dash_hash"))
 		g_hash_table_foreach(OBJ_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dashboards() before UNlock dash_mutex\n"));
 	g_static_mutex_unlock(&dash_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dashboards() after UNlock dash_mutex\n"));
 	return TRUE;
 }
 

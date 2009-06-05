@@ -284,12 +284,16 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	current_index = (gint)OBJ_GET(rtt->object,"current_index");
 	precision = (gint)OBJ_GET(rtt->object,"precision");
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
 	previous = g_array_index(history, gfloat, current_index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after UNlock rtv_mutex\n"));
 
 	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
 		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
