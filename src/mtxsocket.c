@@ -322,10 +322,12 @@ void *binary_socket_client(gpointer data)
 						}
 						continue;;
 					case 'A':	/* MS1 RTvars */
+						printf("'A' received\n");
 						if (firmware->capabilities & MSNS_E)
-							send (fd,(char *)firmware->rt_data,22,0);
+							res = send (fd,(char *)firmware->rt_data,22,0);
 						else if (firmware->capabilities & MS1)
-							send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+						printf("MS1 rtvars sent, %i bytes delivered\n",res);
 						continue;
 					case 'b':	/* MS2 burn */
 						if (firmware->capabilities & MS2)
@@ -364,22 +366,20 @@ void *binary_socket_client(gpointer data)
 						{
 							printf("'c' received\n");
 							state = WAITING_FOR_CMD;
-							if (firmware->capabilities & MS2)
-							{
-								lookup_current_value("raw_secl",&tmpf);
-								tmpi = (guint16)tmpf;
-								send(fd,(char *)&tmpi,2,0);
-							}
-							else
-								printf("\"c\" Not supported on this firmware\n");
+							lookup_current_value("raw_secl",&tmpf);
+							tmpi = (guint16)tmpf;
+							res = send(fd,(char *)&tmpi,2,0);
+							printf("MS2 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'C': 	/* MS1 Clock read */
 						if (firmware->capabilities & MS1)
 						{
+							printf("'C' received\n");
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
-							send(fd,(char *)&tmpi,1,0);
+							res = send(fd,(char *)&tmpi,1,0);
+							printf("MS1 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'P':	/* MS1 Page change */
@@ -397,44 +397,56 @@ void *binary_socket_client(gpointer data)
 							continue;
 						else
 						{
+							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");
 							if (firmware->capabilities & MS1)
-								send(fd,&firmware->ecu_revision,1,0);
+								res = send(fd,(const void *)&(firmware->ecu_revision),1,0);
 							else
 								if (firmware->text_revision)
-									send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+									res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
 						}
+							printf("numeric/text revision sent, %i bytes delivered\n",res);
 						continue;
 					case 'R':	/* MSnS Extra (MS1) RTvars */
 						if (firmware->capabilities & MSNS_E)
-							send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+						{
+							printf ("'R' (MS1 extra RTvars)\n");
+							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+							printf("MSnS-E rtvars, %i bytes delivered\n",res);
+						}
 						continue;
 					case 'T':	/* MS1 Text Revision */
 						if (firmware->capabilities & MS1)
 						{
+							printf ("'T' (MS1 text revision)\n");
 							if (firmware->text_revision)
-								send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+							{
+								res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+								printf("MS1 textrev, %i bytes delivered\n",res);
+							}
 						}
 						continue;
 					case 'S':	/* MS1/2 Signature Read */
 						printf("'S' received\n");
 						state = WAITING_FOR_CMD;
-						if (!firmware)
-							send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
-						else
+						if (firmware)
 						{
 							if (firmware->actual_signature)
-								send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
-							else
-								send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+								res = send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+							printf("MS signature, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'V':	/* MS1 VE/data read */
 						if (firmware->capabilities & MS1)
-							send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+						{
+							printf("'V' received (MS1 VEtable)\n");
+							res = send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+							printf("MS1 VEtable, %i bytes delivered\n",res);
+						}
 						continue;
 					case 'W':	/* MS1 Simple write */
 						if (firmware->capabilities & MS1)
 						{
+							printf("'W' received (MS1 Write)\n");
 							state = GET_MS1_OFFSET;
 							next_state = GET_MS1_BYTE;
 						}
@@ -442,6 +454,7 @@ void *binary_socket_client(gpointer data)
 					case 'X':	/* MS1 Chunk write */
 						if (firmware->capabilities & MS1)
 						{
+							printf("'X' received (MS1 Chunk Write)\n");
 							state = GET_MS1_OFFSET;
 							next_state = GET_MS1_COUNT;
 						}
@@ -477,7 +490,10 @@ void *binary_socket_client(gpointer data)
 					if (find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
+						{
 							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
+							printf("Full table sent, %i bytes\n",res);
+						}
 					}
 				}
 				else if (substate == BURN_MS2_FLASH)
@@ -535,11 +551,12 @@ void *binary_socket_client(gpointer data)
 					{
 						if (firmware->ecu_data[mtx_page])
 							res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
+							printf("MS2 partial table, %i bytes delivered\n",res);
 					}
 				}
 				continue;
 			case GET_DATABYTE:
-				printf("get_datablock\n");
+				printf("get_databyte\n");
 				buffer[index] = (guint8)buf;
 				index++;
 				printf ("Databyte index %i of %i\n",index,count);
@@ -583,6 +600,7 @@ void *binary_socket_client(gpointer data)
 				byte = (guint8)buf;
 				printf ("Passed byte %i\n",byte);
 				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
+				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);
 				state = WAITING_FOR_CMD;
 				continue;
 
@@ -1126,14 +1144,27 @@ gboolean open_network(gchar * host, gint port)
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername = { 0 };
 	extern Serial_Params *serial_params;
-
+#ifdef __WIN32__
+	struct WSAData wsadata;
+	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
+	if (status != 0)
+	{
+		/* Tell the user that we could not find a usable */
+		/* Winsock DLL.                                  */
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
+		return FALSE;
+	}
+#endif
 	args = OBJ_GET(global_data,"args");
 
 //	printf ("Trying to open network port!\n");
 	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 	if (!clientsocket)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+#ifdef __WIN32__
+		WSACleanup();
+#endif
 		return FALSE;
 	}
 //	printf("Socket created!\n");
@@ -1143,7 +1174,10 @@ gboolean open_network(gchar * host, gint port)
 		hostptr = gethostbyaddr(args->network_host,strlen(args->network_host), AF_INET);
 		if (hostptr == NULL)
 		{
-			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",args->network_host));
+			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",args->network_host));
+#ifdef __WIN32__
+			WSACleanup();
+#endif
 			return FALSE;
 		}
 	}
@@ -1155,6 +1189,9 @@ gboolean open_network(gchar * host, gint port)
 	if (status == -1)
 	{
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+#ifdef __WIN32__
+		WSACleanup();
+#endif
 		return FALSE;
 	}
 //	printf("connected!!\n");
@@ -1176,5 +1213,8 @@ gboolean close_network(void)
 	serial_params->fd = -1;
 	connected = FALSE;
 
+#ifdef __WIN32__
+		WSACleanup();
+#endif
 	return TRUE;
 }

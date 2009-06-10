@@ -229,6 +229,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -243,6 +244,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
