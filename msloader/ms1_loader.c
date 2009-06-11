@@ -42,6 +42,7 @@ struct termios oldtio;
 struct termios newtio;
 #endif
 
+void boot_jumper_prompt(void);
 
 void do_ms1_load(gint port_fd, gint file_fd)
 {
