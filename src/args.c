@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <errno.h>
 #include <glib.h>
+#include <mtxsocket.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -51,7 +52,7 @@ void handle_args(gint argc, gchar * argv[])
 		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
-		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Netowrk socket instead of serial","host:port"},
+		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Netowrk socket instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
 		{"no-maingui",'m',0,G_OPTION_ARG_NONE,&args->hide_maingui,"Hide Main Gui window (i.e, dash only)",NULL},
@@ -76,7 +77,7 @@ void handle_args(gint argc, gchar * argv[])
 	{
 		vector = g_strsplit(netinfo,":",2);
 		g_free(netinfo);
-		if (g_strv_length(vector) != 2)
+		if (g_strv_length(vector) > 2)
 		{
 			printf("Network info provided is invalid!\n");
 			args->network_mode = FALSE;
@@ -84,7 +85,10 @@ void handle_args(gint argc, gchar * argv[])
 		else
 		{
 			args->network_host = g_strdup(vector[0]);
-			args->network_port = atoi(vector[1]);
+			if (g_strv_length(vector) == 1)
+				args->network_port = MTX_SOCKET_BINARY_PORT;
+			else
+				args->network_port = atoi(vector[1]);
 			args->network_mode = TRUE;
 		}
 		g_strfreev(vector);
