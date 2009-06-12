@@ -115,5 +115,6 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(object,"arrow-size",GINT_TO_POINTER(1));
 	}
+	g_free(regexp);
 			
 }

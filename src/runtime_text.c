@@ -284,6 +284,11 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	current_index = (gint)OBJ_GET(rtt->object,"current_index");
 	precision = (gint)OBJ_GET(rtt->object,"precision");
+
+	if (!history)
+		return;
+	if (current_index < 0)
+		return;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after lock rtv_mutex\n"));

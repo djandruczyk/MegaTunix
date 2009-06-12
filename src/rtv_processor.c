@@ -489,10 +489,14 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 		return FALSE;
 	}
 	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (!history)
+		return FALSE;
+	if (index < 0)
+		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after lock rtv_mutex\n"));
-	index = (gint)OBJ_GET(object,"current_index");
 	*value = g_array_index(history,gfloat,index);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
@@ -523,11 +527,15 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (!history)
+		return FALSE;
+	if (index < 0)
+		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after lock rtv_mutex\n"));
-	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (index > 0)
 		index -= 1;  /* get PREVIOUS one */
 	*value = g_array_index(history,gfloat,index);
@@ -562,11 +570,14 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 	if (!object)
 		return FALSE;
 	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (!history)
+		return FALSE;
+	if (index < 0)
+		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() after lock rtv_mutex\n"));
-	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (index > n)
 		index -= n;  /* get PREVIOUS nth one */
 	*value = g_array_index(history,gfloat,index);
@@ -603,11 +614,15 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (!history)
+		return FALSE;
+	if (index < 0)
+		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
-	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (index > n)
 	{
 		for (i=0;i<n;i++)

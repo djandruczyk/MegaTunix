@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/main.c)
+AC_INIT
+AC_CONFIG_SRCDIR([src/main.c])
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
@@ -12,7 +13,7 @@ AC_SUBST(MTX_MICRO_VERSION)
 AC_CONFIG_SUBDIRS(src/main.c)
 AM_INIT_AUTOMAKE(megatunix, 0.9.19)
 #AC_CONFIG_HEADERS(config.h)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AM_MAINTAINER_MODE
 
@@ -21,7 +22,7 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_AWK
-AM_PROG_LIBTOOL
+LT_INIT
 AM_PROG_LEX
 if test "$LEX" != "flex"; 
 then
@@ -34,7 +35,7 @@ then
 	echo "You need the 'bison' package"
 	exit 1
 fi
-AC_PROG_LIBTOOL
+LT_INIT
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 #AM_BINRELOC
@@ -157,7 +158,7 @@ MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$DATA_DIR\\\" -DSNAPSHOTS_DATA_DIR=\\\
 
 AC_SUBST(MEGATUNIX_DEFINES)
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile 
 include/Makefile
 mtxcommon/Makefile
@@ -197,6 +198,7 @@ icons/Makefile
 MegaTunix.iss
 WIN_NOTES.txt
 ])
+AC_OUTPUT
 
 echo "
 Configuration:
