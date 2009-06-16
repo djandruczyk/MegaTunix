@@ -384,19 +384,20 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 
 	if (!GTK_IS_OBJECT(object))
 	{
-		printf("FATAL ERROR: multi_expression object is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression object is NULL!\n"));
 		return 0.0;
 	}
 	key = (gchar *)OBJ_GET(object,"source_key");
 	if (!key)
 	{
-		printf("FATAL ERROR: multi_expression source key is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression source key is NULL!\n"));
 		return 0.0;
 	}
 	hash_key  = (gchar *)g_hash_table_lookup(sources_hash,key);
 	if (!hash_key)
 	{
-		printf("FATAL ERROR: multi_expression hash key is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": ERROR: multi_expression hash key is NULL!\n"));
+		printf(__FILE__": ERROR: multi_expression hash key is NULL!\n");
 		return 0.0;
 	}
 	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);

@@ -578,7 +578,8 @@ void *binary_socket_client(gpointer data)
 				printf("get_ms1_page\n");
 				tableID = (guint8)buf;
 				printf ("Passed page %i\n",tableID);
-				queue_ms1_page_change(tableID);
+				handle_page_change(tableID,last_page);
+//				queue_ms1_page_change(tableID);
 				state = WAITING_FOR_CMD;
 				continue;
 			case GET_MS1_OFFSET:
