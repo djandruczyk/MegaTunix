@@ -121,6 +121,45 @@ gint comms_test()
 	return connected;
 }
 
+/*!
+ \brief send_to_slaves() sends messages to a thread talking to the slave
+ clients to trigger them to update their GUI with appropriate changes
+ \param data (OutputData *) pointer to data sent to ECU used to
+ update other widgets that refer to that Page/Offset
+ */
+
+EXPORT void send_to_slaves(void *data)
+{
+	Io_Message *message = (Io_Message *)data;
+	OutputData *output = (OutputData *)message->payload;
+	extern GAsyncQueue *slave_msg_queue;
+	SlaveMessage *msg = NULL;
+
+	if (!output) /* If no data, don't bother the slaves */
+		return;
+
+	msg = g_new0(SlaveMessage, 1);
+	msg->page = (gint)OBJ_GET(output->object,"page");
+	msg->offset = (gint)OBJ_GET(output->object,"offset");
+	msg->length = (gint)OBJ_GET(output->object,"num_bytes");
+	msg->mode = (WriteMode)OBJ_GET(output->object,"mode");
+	if (msg->mode == MTX_CHUNK_WRITE)
+		msg->data = g_memdup(OBJ_GET(output->object,"data"), msg->length);
+	else if (msg->mode == MTX_SIMPLE_WRITE)
+		msg->value = (gint)OBJ_GET(output->object,"value");
+	else
+	{
+		printf("Non simple/chunk write command, not notifying slaves\n");
+		g_free(msg);
+		return;
+	}
+
+	printf("Sending message to slave(s)\n");
+	g_async_queue_ref(slave_msg_queue);
+        g_async_queue_push(slave_msg_queue,(gpointer)msg);
+        g_async_queue_unref(slave_msg_queue);
+	return;
+}
 
 /*!
  \brief update_write_status() checks the differences between the current ECU

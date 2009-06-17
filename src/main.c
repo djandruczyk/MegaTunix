@@ -42,6 +42,7 @@ gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
 Serial_Params *serial_params = NULL;
 GAsyncQueue *io_data_queue = NULL;
+GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
 GAsyncQueue *gui_dispatch_queue = NULL;
 GObject *global_data = NULL;
@@ -91,6 +92,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Create Queue to listen for commands */
 	io_data_queue = g_async_queue_new();
+	slave_msg_queue = g_async_queue_new();
 	pf_dispatch_queue = g_async_queue_new();
 	gui_dispatch_queue = g_async_queue_new();
 

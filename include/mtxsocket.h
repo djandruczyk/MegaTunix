@@ -25,6 +25,7 @@
 typedef struct _MtxSocketClient MtxSocketClient;
 typedef struct _MtxSocketData MtxSocketData;
 typedef struct _MtxSocket MtxSocket;
+typedef struct _SlaveMessage SlaveMessage;
 
 typedef enum
 {
@@ -108,6 +109,15 @@ struct _MtxSocket
 	SocketType type;
 };
 
+struct _SlaveMessage
+{
+	gint page;
+	gint offset;
+	gint length;
+	gint value;
+	WriteMode mode;
+	guint8 * data;
+};
 
 /* Prototypes */
 gboolean setup_socket(gint);

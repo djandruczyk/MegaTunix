@@ -191,6 +191,7 @@
 			</args>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
 				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
@@ -206,6 +207,7 @@
 			</args>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
 				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
@@ -223,6 +225,7 @@
 			</args>
 			<post_functions>
 			<defer_post_functions>FALSE</defer_post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
 				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
@@ -242,6 +245,7 @@
 			<helper_func_arg>_WRITE_VERIFY_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
 				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
 		</cmd>
