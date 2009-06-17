@@ -405,8 +405,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - ptr8[0] > 1) || \
-					(lastcount - ptr8[0] >= 255))
+			if ((lastcount - ptr8[0] > 1) && \
+					(lastcount - ptr8[0] != 255))
 			{
 				ms_reset_count++;
 				printf("MS1 Reset detected!\n");
@@ -445,8 +445,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - curcount > 1) || \
-					(lastcount - curcount >= 65535))
+			if ((lastcount - curcount > 1) && \
+					(lastcount - curcount != 65535))
 			{
 				ms_reset_count++;
 				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);
