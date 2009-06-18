@@ -51,7 +51,12 @@
 
 #define ERR_MSG "Bad Request: "
 
+GSList *slave_list = NULL;
 
+
+/*!
+ * \brief Sets up incoming sockets (master mode only)
+ */
 gboolean setup_socket(gint port)
 {
 	int sock = 0;
@@ -86,9 +91,6 @@ gboolean setup_socket(gint port)
 #endif
 	if (res == -1)
 		perror("setsockopt(...,SO_REUSEADDR,...)");
-
-	/* Set socket to non-blocking with our setnonblocking routine */
-//	setnonblocking(sock);
 
 	memset((char *) &server_address, 0, sizeof(server_address));
 	server_address.sin_family = AF_INET;
@@ -151,7 +153,7 @@ void *socket_thread_manager(gpointer data)
 		cli_data->fd = fd;
 		cli_data->type = socket->type;
 
-		if (firmware)
+		if (((socket->type == MTX_SOCKET_ASCII) || (socket->type == MTX_SOCKET_BINARY)) && (firmware))
 		{
 			cli_data->ecu_data = g_new0(guint8 *, firmware->total_pages);
 			for (i=0;i<firmware->total_pages;i++)
@@ -180,10 +182,8 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
-			g_thread_create(control_socket_client,
-					cli_data, /* Thread args */
-					TRUE,   /* Joinable */
-					NULL);  /* GError pointer */
+			printf("cli_data pointer is %p\n",cli_data);
+			slave_list = g_slist_prepend(slave_list,cli_data);
 		}
 	}
 }
@@ -618,7 +618,6 @@ void *control_socket_client(gpointer data)
 	gint fd = client->fd;
 	*/
 	return NULL;
-
 }
 
 
@@ -1218,4 +1217,109 @@ gboolean close_network(void)
 		WSACleanup();
 #endif
 	return TRUE;
+}
+
+
+/*!
+ \brief notify_slaves_thread()'s sole purpose in life is to listen for 
+ messages on the async queue from the IO core for messages to send to slaves
+ and dispatch them out.  It should check if a slave disconected and in that 
+ case delete their entry from the slave list.
+ \param data (gpointer) unused.
+ **/
+void *notify_slaves_thread(gpointer data)
+{
+	GTimeVal cur;
+	gint i = 0;
+	gint j = 0;
+	SlaveMessage *msg = NULL;
+	MtxSocketClient * cli_data = NULL;
+	gchar buf[10];
+	fd_set wr;
+	FD_ZERO(&wr);
+	gint fd = 0;
+	gint res = 0;
+	extern GSList *slave_list;
+	extern GAsyncQueue *slave_msg_queue;
+	extern volatile gboolean leaving;
+
+	while(TRUE) /* endless loop */
+	{
+		g_get_current_time(&cur);
+		g_time_val_add(&cur,1000000); /* 1000 ms timeout */
+		msg = g_async_queue_timed_pop(slave_msg_queue,&cur);
+
+		if (!slave_list) /* List not created yet.. */
+			continue;
+
+		if (leaving)
+		{
+			/* drain queue and exit thread */
+			while (g_async_queue_try_pop(slave_msg_queue) != NULL)
+			{}
+			g_thread_exit(0);
+		}
+		if (!msg) /* Null message)*/
+			continue;
+
+		for (i=0;i<g_slist_length(slave_list);i++)
+		{
+			printf("extracting client index %i of %i from array\n",i,g_slist_length(slave_list));
+			cli_data = g_slist_nth_data(slave_list,i);
+			printf("cli_data pointer after extraction  is %p\n",cli_data);
+			fd = cli_data->fd;
+			FD_SET(fd,&wr);
+			res = select(fd+1,NULL,&wr,NULL,NULL); /* Check if we can write ? */
+			if (res <= 0)
+				goto close_socket;
+			if (msg->mode == MTX_SIMPLE_WRITE)
+			{
+				printf("sending simple update\n");
+				j = SLAVE_SIMPLE_UPDATE;
+				res = send(fd,(char *)&j,1,MSG_NOSIGNAL);
+				printf("result %i, errno %s\n",res,g_strerror(errno));
+				res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
+				printf("result %i, errno %s\n",res,g_strerror(errno));
+				res = send(fd,(char *)&(msg->offset),2,MSG_NOSIGNAL);
+				printf("result %i, errno %s\n",res,g_strerror(errno));
+				res = send(fd,(char *)&(msg->length),2,MSG_NOSIGNAL);
+				printf("result %i, errno %s\n",res,g_strerror(errno));
+				res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
+				printf("result %i, errno %s\n",res,g_strerror(errno));
+			}
+			else if (msg->mode == MTX_CHUNK_WRITE)
+			{
+				printf("sending chunk update\n");
+				j = SLAVE_CHUNK_UPDATE;
+				res = send(fd,(char *)&j,1,0);
+				res = send(fd,(char *)&(msg->page),1,0);
+				res = send(fd,(char *)&(msg->offset),2,0);
+				res = send(fd,(char *)&(msg->length),2,0);
+				res = send(fd,(char *)&(msg->data),msg->length,0);
+			}
+			else
+				printf("not doing anything, mesg but wrong type\n");
+
+			if (res == -1)
+			{
+close_socket:
+				printf("socket dropped, closing client %i\n",i);
+#ifdef __WIN32__
+				closesocket(fd);
+#else
+				close(fd);
+#endif
+				printf("REMOVING ENTRY %i from array\n",i);
+				slave_list = g_slist_remove(slave_list,cli_data);
+				dealloc_client_data(cli_data);
+			}
+		}
+
+
+		if (msg->data)
+			g_free(msg->data);
+		g_free(msg);
+		msg = NULL;
+	}
+	return NULL;
 }

@@ -139,9 +139,9 @@ EXPORT void send_to_slaves(void *data)
 		return;
 
 	msg = g_new0(SlaveMessage, 1);
-	msg->page = (gint)OBJ_GET(output->object,"page");
-	msg->offset = (gint)OBJ_GET(output->object,"offset");
-	msg->length = (gint)OBJ_GET(output->object,"num_bytes");
+	msg->page = (guint8)(gint)OBJ_GET(output->object,"page");
+	msg->offset = (guint16)(gint)OBJ_GET(output->object,"offset");
+	msg->length = (guint16)(gint)OBJ_GET(output->object,"num_bytes");
 	msg->mode = (WriteMode)OBJ_GET(output->object,"mode");
 	if (msg->mode == MTX_CHUNK_WRITE)
 		msg->data = g_memdup(OBJ_GET(output->object,"data"), msg->length);

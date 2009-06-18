@@ -21,6 +21,8 @@
 #define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
 #define MTX_SOCKET_BINARY_PORT 12765
 #define MTX_SOCKET_CONTROL_PORT 12766
+#define SLAVE_SIMPLE_UPDATE 0x02
+#define	SLAVE_CHUNK_UPDATE 0x03
 
 typedef struct _MtxSocketClient MtxSocketClient;
 typedef struct _MtxSocketData MtxSocketData;
@@ -111,12 +113,12 @@ struct _MtxSocket
 
 struct _SlaveMessage
 {
-	gint page;
-	gint offset;
-	gint length;
+	guint8 page;
+	guint16 offset;
+	guint16 length;
 	gint value;
-	WriteMode mode;
 	guint8 * data;
+	WriteMode mode;
 };
 
 /* Prototypes */
@@ -125,6 +127,7 @@ void *socket_thread_manager(gpointer);
 void * ascii_socket_client(gpointer );
 void * binary_socket_client(gpointer );
 void * control_socket_client(gpointer );
+void * notify_slaves_thread(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
 void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);

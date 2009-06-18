@@ -42,6 +42,7 @@ extern GObject *global_data;
 GThread *ascii_socket_id = NULL;
 GThread *binary_socket_id = NULL;
 GThread *control_socket_id = NULL;
+GThread *notify_slaves_id = NULL;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -592,6 +593,11 @@ EXPORT void open_tcpip_socket_pf()
 		}
 		else
 			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
+
+		notify_slaves_id = g_thread_create(notify_slaves_thread,
+				NULL,/* Thread args */
+				TRUE, /* Joinable */
+				NULL); /*GError Pointer */
 	}
 }
 
