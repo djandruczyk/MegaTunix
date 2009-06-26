@@ -53,8 +53,7 @@
 
 static GSList *slave_list = NULL;
 static gint controlsocket = 0;
-static const guint8 SLAVE_SIMPLE_UPDATE=0xAE;
-static const guint8 SLAVE_CHUNK_UPDATE=0xBE;
+static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
 
 
 /*!
@@ -1347,40 +1346,31 @@ void *notify_slaves_thread(gpointer data)
 			res = select(fd+1,NULL,&wr,NULL,NULL); /* Check if we can write ? */
 			if (res <= 0)
 				goto close_socket;
-			if (msg->mode == MTX_SIMPLE_WRITE)
-			{
-				printf("sending simple update\n");
-				byte = SLAVE_SIMPLE_UPDATE;
-			}
-			else if (msg->mode == MTX_CHUNK_WRITE)
-			{
-				printf("sending chunk update\n");
-				byte = SLAVE_CHUNK_UPDATE;
-			}
-				/* Message type */
-				res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
-				/* CanID */
-				res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
-				/* Page (MTX internal page) */
-				res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
-				/* highbyte of offset */
-				byte = (msg->offset & 0xff) >> 8;
-				res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-				/* lowbyte of offset */
-				byte = (msg->offset & 0xff);
-				res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-				/* highbyte of length */
-				byte = (msg->length & 0xff) >> 8;
-				res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-				/* lowbyte of length */
-				byte = (msg->length & 0xff);
-				res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			printf("sending chunk update\n");
+			byte = SLAVE_MEMORY_UPDATE;
+
+			/* Message type */
+			res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
+			/* CanID */
+			res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
+			/* Page (MTX internal page) */
+			res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
+			/* highbyte of offset */
+			byte = (msg->offset & 0xff) >> 8;
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* lowbyte of offset */
+			byte = (msg->offset & 0xff);
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* highbyte of length */
+			byte = (msg->length & 0xff) >> 8;
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* lowbyte of length */
+			byte = (msg->length & 0xff);
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
 			if (msg->mode == MTX_SIMPLE_WRITE)
 				res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
 			else if (msg->mode == MTX_CHUNK_WRITE)
-			{
 				res = send(fd,(char *)msg->data,msg->length,0);
-			}
 
 			if (res == -1)
 			{
@@ -1413,6 +1403,7 @@ void *control_socket_client(gpointer data)
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
 	guint8 buf;
+	gint i = 0;
 	gint res = 0;
 	gint canID = 0;
 	gint page = 0;
@@ -1424,7 +1415,6 @@ void *control_socket_client(gpointer data)
 	gint count_l = 0;
 	gint index = 0;
 	guint8 *buffer = NULL;
-	guint8 byte = 0;
 	State state = WAITING_FOR_CMD;;
 	SubState substate = UNDEFINED_SUBSTATE;
 	extern Firmware_Details *firmware;
@@ -1449,14 +1439,7 @@ void *control_socket_client(gpointer data)
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
-				if (buf == SLAVE_SIMPLE_UPDATE)
-				{
-					printf("Slave simple update received\n");
-					state = GET_CAN_ID;
-					substate = GET_SINGLE_BYTE;
-					continue;;
-				}
-				else if (buf == SLAVE_CHUNK_UPDATE)
+				if (buf == SLAVE_MEMORY_UPDATE)
 				{
 					printf("Slave chunk update received\n");
 					state = GET_CAN_ID;
@@ -1507,8 +1490,6 @@ void *control_socket_client(gpointer data)
 					buffer = g_new0(guint8, count);
 					index = 0;
 				}
-				if (substate == GET_SINGLE_BYTE)
-					state = substate;
 				continue;
 			case GET_DATABYTE:
 				printf("get_databyte\n");
@@ -1517,22 +1498,15 @@ void *control_socket_client(gpointer data)
 				printf ("Databyte index %i of %i\n",index,count);
 				if (index >= count)
 				{
-					//	chunk_write(canID,mtx_page,offset,count,buffer);
 					state = WAITING_FOR_CMD;
+					store_new_block(canID,page,offset,buffer,count);
+					/* Update gui with changes */
+					for (i=offset;i<(offset+count);i++)
+						refresh_widgets_at_offset(page,i);
 					g_free(buffer);
 				}
 				else
 					state = GET_DATABYTE;
-				continue;
-			case GET_SINGLE_BYTE:
-				printf("get_ms1_byte\n");
-				byte = (guint8)buf;
-				printf ("Passed byte %i\n",byte);
-				//send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
-				set_ecu_data(0,page,offset,MTX_U08,byte);
-				refresh_widgets_at_offset(page,offset);
-				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,page,offset);
-				state = WAITING_FOR_CMD;
 				continue;
 			default:
 				printf("Case not handled, bug in state machine!\n");
