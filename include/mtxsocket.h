@@ -139,8 +139,11 @@ gboolean check_for_changes(MtxSocketClient *);
 gint * convert_socket_data(gchar *, gint);
 void *network_repair_thread(gpointer);
 gboolean open_network(gchar *, gint);
+gboolean open_notification_link(gchar *, gint);
 gboolean close_network(void);
+gboolean close_control_socket(void);
 gint socket_get_more_data(gint, void *, gint, gint);
+gboolean open_control_socket(gchar *, gint);
 /* Prototypes */
 
 #endif
