@@ -48,6 +48,7 @@ void combo_toggle_groups_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
 EXPORT void update_misc_gauge(DataWatch *, gfloat);
+void refresh_widgets_at_offset(gint, gint);
 /* Prototypes */
 
 #endif

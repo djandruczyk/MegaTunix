@@ -2990,3 +2990,23 @@ EXPORT void update_misc_gauge(DataWatch *watch, gfloat value)
 	else
 		remove_watch(watch->id);
 }
+
+void refresh_widgets_at_offset(gint page, gint offset)
+{
+	gint i = 0;
+        extern GList ***ve_widgets;
+
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+	{
+		if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][offset],i),"dl_type") != DEFERRED)
+		{
+			/*printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
+			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+		}
+		/*
+		 else
+		 printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
+		 */
+	}
+	update_ve3d_if_necessary(page,offset);
+}

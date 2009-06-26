@@ -21,8 +21,7 @@
 #define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
 #define MTX_SOCKET_BINARY_PORT 12765
 #define MTX_SOCKET_CONTROL_PORT 12766
-#define SLAVE_SIMPLE_UPDATE 0x02
-#define	SLAVE_CHUNK_UPDATE 0x03
+
 
 typedef struct _MtxSocketClient MtxSocketClient;
 typedef struct _MtxSocketData MtxSocketData;
@@ -46,6 +45,8 @@ typedef enum
 	GET_HIGH_COUNT,
 	GET_LOW_COUNT,
 	GET_DATABYTE,
+	GET_SINGLE_BYTE,
+	GET_MTX_PAGE,
 	GET_MS1_PAGE,
 	GET_MS1_OFFSET,
 	GET_MS1_BYTE,
@@ -113,6 +114,7 @@ struct _MtxSocket
 
 struct _SlaveMessage
 {
+	guint8 canID;
 	guint8 page;
 	guint16 offset;
 	guint16 length;

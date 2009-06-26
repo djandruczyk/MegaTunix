@@ -182,7 +182,6 @@ EXPORT void update_write_status(void *data)
 	gint length = 0;
 	guint8 *sent_data = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
-	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
 	if (!output)
@@ -212,22 +211,7 @@ EXPORT void update_write_status(void *data)
 	/*printf ("page %i, offset %i\n",data->page,data->offset); */
 	/*printf("WRITE STATUS, page %i, offset %i\n",page,offset);*/
 	for (z=offset;z<offset+length;z++)
-	{
-		for (i=0;i<g_list_length(ve_widgets[page][z]);i++)
-		{
-			if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][z],i),"dl_type") != DEFERRED)
-			{
-				/*printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
-				update_widget(g_list_nth_data(ve_widgets[page][z],i),NULL);
-			}
-			/*
-			   else
-			   printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
-			   */
-		}
-
-		update_ve3d_if_necessary(page,z);
-	}
+		refresh_widgets_at_offset(page,z);
 
 	paused_handlers = FALSE;
 	/* We check to see if the last burn copy of the VE/constants matches 
