@@ -95,6 +95,7 @@ struct _MtxSocketClient
 	guint8 ** ecu_data;
 	gint fd;
 	SocketType type;
+	gpointer container;
 };
 
 struct _MtxSocketData
@@ -146,6 +147,7 @@ gboolean close_network(void);
 gboolean close_control_socket(void);
 gint socket_get_more_data(gint, void *, gint, gint);
 gboolean open_control_socket(gchar *, gint);
+void notify_slave(gpointer, gpointer);
 /* Prototypes */
 
 #endif

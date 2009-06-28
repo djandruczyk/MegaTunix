@@ -85,7 +85,10 @@ EXPORT void populate_dlog_choices_pf()
 
 	vbox = lookup_widget("dlog_logable_vars_vbox1");
 	if (!GTK_IS_WIDGET(vbox))
+	{
+		printf("datalogger not present,  returning\n");
 		return;
+	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);

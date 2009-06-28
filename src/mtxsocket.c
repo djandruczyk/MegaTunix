@@ -51,7 +51,7 @@
 
 #define ERR_MSG "Bad Request: "
 
-static GSList *slave_list = NULL;
+static GPtrArray *slave_list = NULL;
 static gint controlsocket = 0;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
 
@@ -185,7 +185,12 @@ void *socket_thread_manager(gpointer data)
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
 			printf("cli_data pointer is %p\n",cli_data);
-			slave_list = g_slist_prepend(slave_list,cli_data);
+			if (!slave_list)
+				slave_list = g_ptr_array_new();
+			cli_data->container = (gpointer)slave_list;
+			g_ptr_array_add(slave_list,cli_data);
+
+
 		}
 	}
 }
@@ -317,38 +322,38 @@ void *binary_socket_client(gpointer data)
 					case 'a':	/* MS2 table full table read */
 						if (firmware->capabilities & MS2)
 						{
-							printf("'a' received\n");
+//							printf("'a' received\n");
 							state = GET_CAN_ID;
 							next_state = WAITING_FOR_CMD;
 							substate = SEND_FULL_TABLE;
 						}
 						continue;;
 					case 'A':	/* MS1 RTvars */
-						printf("'A' received\n");
+//						printf("'A' received\n");
 						if (firmware->capabilities & MSNS_E)
 							res = send (fd,(char *)firmware->rt_data,22,0);
 						else if (firmware->capabilities & MS1)
 							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
-						printf("MS1 rtvars sent, %i bytes delivered\n",res);
+//						printf("MS1 rtvars sent, %i bytes delivered\n",res);
 						continue;
 					case 'b':	/* MS2 burn */
 						if (firmware->capabilities & MS2)
 						{
-							printf("'b' received\n");
+//							printf("'b' received\n");
 							state = GET_CAN_ID;
 							next_state = WAITING_FOR_CMD;
 							substate = BURN_MS2_FLASH;
 						}
 						continue;
 					case 'B':	/* MS1 burn */
-						printf("'B' received\n");
+//						printf("'B' received\n");
 						if (firmware->capabilities & MS1)
 							io_cmd(firmware->burn_all_command,NULL);
 						continue;
 					case 'r':	/* MS2 partial table read */
 						if (firmware->capabilities & MS2)
 						{
-							printf("'r' received\n");
+//							printf("'r' received\n");
 							state = GET_CAN_ID;
 							next_state = GET_HIGH_OFFSET;
 							substate = SEND_PARTIAL_TABLE;
@@ -357,7 +362,7 @@ void *binary_socket_client(gpointer data)
 					case 'w':	/* MS2 chunk write */
 						if (firmware->capabilities & MS2)
 						{
-							printf("'w' received\n");
+//							printf("'w' received\n");
 							state = GET_CAN_ID;
 							next_state = GET_HIGH_OFFSET;
 							substate = GET_VAR_DATA;
@@ -366,26 +371,26 @@ void *binary_socket_client(gpointer data)
 					case 'c':	/* MS2 Clock read */
 						if (firmware->capabilities & MS2)
 						{
-							printf("'c' received\n");
+//							printf("'c' received\n");
 							state = WAITING_FOR_CMD;
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint16)tmpf;
 							res = send(fd,(char *)&tmpi,2,0);
-							printf("MS2 clock sent, %i bytes delivered\n",res);
+//							printf("MS2 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'C': 	/* MS1 Clock read */
 						if (firmware->capabilities & MS1)
 						{
-							printf("'C' received\n");
+//							printf("'C' received\n");
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
 							res = send(fd,(char *)&tmpi,1,0);
-							printf("MS1 clock sent, %i bytes delivered\n",res);
+//							printf("MS1 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'P':	/* MS1 Page change */
-						printf ("'P' (MS1 Page change)\n");
+//						printf ("'P' (MS1 Page change)\n");
 						if (firmware->capabilities & MS1)
 						{
 							state = GET_MS1_PAGE;
@@ -399,56 +404,56 @@ void *binary_socket_client(gpointer data)
 							continue;
 						else
 						{
-							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");
+//							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");
 							if (firmware->capabilities & MS1)
 								res = send(fd,(const void *)&(firmware->ecu_revision),1,0);
 							else
 								if (firmware->text_revision)
 									res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
 						}
-						printf("numeric/text revision sent, %i bytes delivered\n",res);
+//						printf("numeric/text revision sent, %i bytes delivered\n",res);
 						continue;
 					case 'R':	/* MSnS Extra (MS1) RTvars */
 						if (firmware->capabilities & MSNS_E)
 						{
-							printf ("'R' (MS1 extra RTvars)\n");
+//							printf ("'R' (MS1 extra RTvars)\n");
 							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
-							printf("MSnS-E rtvars, %i bytes delivered\n",res);
+//							printf("MSnS-E rtvars, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'T':	/* MS1 Text Revision */
 						if (firmware->capabilities & MS1)
 						{
-							printf ("'T' (MS1 text revision)\n");
+//							printf ("'T' (MS1 text revision)\n");
 							if (firmware->text_revision)
 							{
 								res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
-								printf("MS1 textrev, %i bytes delivered\n",res);
+//								printf("MS1 textrev, %i bytes delivered\n",res);
 							}
 						}
 						continue;
 					case 'S':	/* MS1/2 Signature Read */
-						printf("'S' received\n");
+//						printf("'S' received\n");
 						state = WAITING_FOR_CMD;
 						if (firmware)
 						{
 							if (firmware->actual_signature)
 								res = send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
-							printf("MS signature, %i bytes delivered\n",res);
+//							printf("MS signature, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'V':	/* MS1 VE/data read */
 						if (firmware->capabilities & MS1)
 						{
-							printf("'V' received (MS1 VEtable)\n");
+//							printf("'V' received (MS1 VEtable)\n");
 							res = send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
-							printf("MS1 VEtable, %i bytes delivered\n",res);
+//							printf("MS1 VEtable, %i bytes delivered\n",res);
 						}
 						continue;
 					case 'W':	/* MS1 Simple write */
 						if (firmware->capabilities & MS1)
 						{
-							printf("'W' received (MS1 Write)\n");
+//							printf("'W' received (MS1 Write)\n");
 							state = GET_MS1_OFFSET;
 							next_state = GET_MS1_BYTE;
 						}
@@ -456,7 +461,7 @@ void *binary_socket_client(gpointer data)
 					case 'X':	/* MS1 Chunk write */
 						if (firmware->capabilities & MS1)
 						{
-							printf("'X' received (MS1 Chunk Write)\n");
+//							printf("'X' received (MS1 Chunk Write)\n");
 							state = GET_MS1_OFFSET;
 							next_state = GET_MS1_COUNT;
 						}
@@ -466,21 +471,21 @@ void *binary_socket_client(gpointer data)
 						continue;
 				}
 			case GET_CAN_ID:
-				printf("get_can_id block\n");
+//				printf("get_can_id block\n");
 				canID = (guint8)buf;
-				printf("canID received is %i\n",canID);
+//				printf("canID received is %i\n",canID);
 				if ((canID < 0) || (canID > 8))
 				{
-					printf( "canID is out of range!\n");
+//					printf( "canID is out of range!\n");
 					state = WAITING_FOR_CMD;
 				}
 				else
 					state = GET_TABLE_ID;
 				continue;
 			case GET_TABLE_ID:
-				printf("get_table_id block\n");
+//				printf("get_table_id block\n");
 				tableID = (guint8)buf;
-				printf("tableID received is %i\n",tableID);
+//				printf("tableID received is %i\n",tableID);
 				if (tableID > firmware->total_tables)
 				{
 					state = WAITING_FOR_CMD;
@@ -494,7 +499,7 @@ void *binary_socket_client(gpointer data)
 						if (firmware->ecu_data[mtx_page])
 						{
 							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
-							printf("Full table sent, %i bytes\n",res);
+//							printf("Full table sent, %i bytes\n",res);
 						}
 					}
 				}
@@ -502,7 +507,7 @@ void *binary_socket_client(gpointer data)
 				{
 					if (find_mtx_page(tableID,&mtx_page))
 					{
-						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);
+//						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);
 						output = initialize_outputdata();
 						OBJ_SET(output->object,"page",GINT_TO_POINTER(mtx_page));
 						OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(tableID));
@@ -516,28 +521,28 @@ void *binary_socket_client(gpointer data)
 					next_state = WAITING_FOR_CMD;
 				continue;
 			case GET_HIGH_OFFSET:
-				printf("get_high_offset block\n");
+//				printf("get_high_offset block\n");
 				offset_h = (guint8)buf;
-				printf("high offset received is %i\n",offset_h);
+//				printf("high offset received is %i\n",offset_h);
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				printf("get_low_offset block\n");
+//				printf("get_low_offset block\n");
 				offset_l = (guint8)buf;
-				printf("low offset received is %i\n",offset_l);
+//				printf("low offset received is %i\n",offset_l);
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				printf("get_high_count block\n");
+//				printf("get_high_count block\n");
 				count_h = (guint8)buf;
-				printf("high count received is %i\n",count_h);
+//				printf("high count received is %i\n",count_h);
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				printf("get_low_count block\n");
+//				printf("get_low_count block\n");
 				count_l = (guint8)buf;
-				printf("low count received is %i\n",count_l);
+//				printf("low count received is %i\n",count_l);
 				count = count_l + (count_h << 8);
 				state = next_state;
 				if (substate == GET_VAR_DATA)
@@ -553,15 +558,15 @@ void *binary_socket_client(gpointer data)
 					{
 						if (firmware->ecu_data[mtx_page])
 							res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
-						printf("MS2 partial table, %i bytes delivered\n",res);
+//						printf("MS2 partial table, %i bytes delivered\n",res);
 					}
 				}
 				continue;
 			case GET_DATABYTE:
-				printf("get_databyte\n");
+//				printf("get_databyte\n");
 				buffer[index] = (guint8)buf;
 				index++;
-				printf ("Databyte index %i of %i\n",index,count);
+//				printf ("Databyte index %i of %i\n",index,count);
 				if (index >= count)
 				{
 					if (firmware->capabilities & MS2)
@@ -577,33 +582,33 @@ void *binary_socket_client(gpointer data)
 					state = GET_DATABYTE;
 				continue;
 			case GET_MS1_PAGE:
-				printf("get_ms1_page\n");
+//				printf("get_ms1_page\n");
 				tableID = (guint8)buf;
-				printf ("Passed page %i\n",tableID);
+//				printf ("Passed page %i\n",tableID);
 				handle_page_change(tableID,last_page);
 				//				queue_ms1_page_change(tableID);
 				state = WAITING_FOR_CMD;
 				continue;
 			case GET_MS1_OFFSET:
-				printf("get_ms1_offset\n");
+//				printf("get_ms1_offset\n");
 				offset = (guint8)buf;
-				printf ("Passed offset %i\n",offset);
+//				printf ("Passed offset %i\n",offset);
 				state = next_state;
 				continue;
 			case GET_MS1_COUNT:
-				printf("get_ms1_count\n");
+//				printf("get_ms1_count\n");
 				count = (guint8)buf;
 				index = 0;
 				buffer = g_new0(guint8, count);
-				printf ("Passed count %i\n",count);
+//				printf ("Passed count %i\n",count);
 				state = GET_DATABYTE;
 				continue;
 			case GET_MS1_BYTE:
-				printf("get_ms1_byte\n");
+//				printf("get_ms1_byte\n");
 				byte = (guint8)buf;
-				printf ("Passed byte %i\n",byte);
+//				printf ("Passed byte %i\n",byte);
 				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
-				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);
+//				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);
 				state = WAITING_FOR_CMD;
 				continue;
 			default:
@@ -1305,15 +1310,7 @@ gboolean close_control_socket(void)
 void *notify_slaves_thread(gpointer data)
 {
 	GTimeVal cur;
-	gint i = 0;
-	guint8 byte = 0;
 	SlaveMessage *msg = NULL;
-	MtxSocketClient * cli_data = NULL;
-	fd_set wr;
-	FD_ZERO(&wr);
-	gint fd = 0;
-	gint res = 0;
-	extern GSList *slave_list;
 	extern GAsyncQueue *slave_msg_queue;
 	extern volatile gboolean leaving;
 
@@ -1336,59 +1333,8 @@ void *notify_slaves_thread(gpointer data)
 		if (!msg) /* Null message)*/
 			continue;
 
-		for (i=0;i<g_slist_length(slave_list);i++)
-		{
-			printf("extracting client index %i of %i from array\n",i,g_slist_length(slave_list));
-			cli_data = g_slist_nth_data(slave_list,i);
-			printf("cli_data pointer after extraction  is %p\n",cli_data);
-			fd = cli_data->fd;
-			FD_SET(fd,&wr);
-			res = select(fd+1,NULL,&wr,NULL,NULL); /* Check if we can write ? */
-			if (res <= 0)
-				goto close_socket;
-			printf("sending chunk update\n");
-			byte = SLAVE_MEMORY_UPDATE;
-
-			/* Message type */
-			res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
-			/* CanID */
-			res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
-			/* Page (MTX internal page) */
-			res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
-			/* highbyte of offset */
-			byte = (msg->offset & 0xff) >> 8;
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-			/* lowbyte of offset */
-			byte = (msg->offset & 0xff);
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-			/* highbyte of length */
-			byte = (msg->length & 0xff) >> 8;
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-			/* lowbyte of length */
-			byte = (msg->length & 0xff);
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-			if (msg->mode == MTX_SIMPLE_WRITE)
-				res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
-			else if (msg->mode == MTX_CHUNK_WRITE)
-				res = send(fd,(char *)msg->data,msg->length,0);
-
-			if (res == -1)
-			{
-close_socket:
-				printf("socket dropped, closing client %i\n",i);
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
-				printf("REMOVING ENTRY %i from array\n",i);
-				slave_list = g_slist_remove(slave_list,cli_data);
-				dealloc_client_data(cli_data);
-				res = 0;
-			}
-		}
-
-
+		printf("There are %i clients in the slave pointer array\n",slave_list->len);
+		g_ptr_array_foreach(slave_list,notify_slave,msg);
 		if (msg->data)
 			g_free(msg->data);
 		g_free(msg);
@@ -1396,6 +1342,68 @@ close_socket:
 	}
 	return NULL;
 }
+
+void  notify_slave(gpointer data, gpointer user_data)
+{
+	MtxSocketClient * cli_data = (MtxSocketClient *)data;
+	SlaveMessage *msg = (SlaveMessage *)user_data;
+	guint8 byte = 0;
+	fd_set wr;
+	FD_ZERO(&wr);
+	gint fd = 0;
+	gint res = 0;
+
+	fd = cli_data->fd;
+	FD_SET(fd,&wr);
+	res = select(fd+1,NULL,&wr,NULL,NULL); 
+	if (res <= 0)
+	{
+		printf("Select error!, closing this socket\n");
+		goto close_socket;
+	}
+	printf("sending chunk update\n");
+	byte = SLAVE_MEMORY_UPDATE;
+
+	/* Message type */
+	res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
+	/* CanID */
+	res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
+	/* Page (MTX internal page) */
+	res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
+	/* highbyte of offset */
+	byte = (msg->offset & 0xff) >> 8;
+	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+	/* lowbyte of offset */
+	byte = (msg->offset & 0xff);
+	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+	/* highbyte of length */
+	byte = (msg->length & 0xff) >> 8;
+	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+	/* lowbyte of length */
+	byte = (msg->length & 0xff);
+	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+	if (msg->mode == MTX_SIMPLE_WRITE)
+		res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
+	else if (msg->mode == MTX_CHUNK_WRITE)
+		res = send(fd,(char *)msg->data,msg->length,0);
+
+	if (res == -1)
+	{
+close_socket:
+		printf("socket dropped, closing client pointer %p\n",cli_data);
+#ifdef __WIN32__
+		closesocket(fd);
+#else
+		close(fd);
+#endif
+		printf("REMOVING ENTRY from ptr array\n");
+		g_ptr_array_remove(slave_list,cli_data);
+		dealloc_client_data(cli_data);
+		res = 0;
+	}
+}
+
+
 
 
 void *control_socket_client(gpointer data)
