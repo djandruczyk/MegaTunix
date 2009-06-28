@@ -1311,6 +1311,15 @@ void *notify_slaves_thread(gpointer data)
 {
 	GTimeVal cur;
 	SlaveMessage *msg = NULL;
+	MtxSocketClient * cli_data = NULL;
+	guint8 byte = 0;
+	fd_set wr;
+	FD_ZERO(&wr);
+	gboolean *to_be_closed = NULL;
+	gint i = 0;
+	gint len = 0;
+	gint fd = 0;
+	gint res = 0;
 	extern GAsyncQueue *slave_msg_queue;
 	extern volatile gboolean leaving;
 
@@ -1334,73 +1343,75 @@ void *notify_slaves_thread(gpointer data)
 			continue;
 
 		printf("There are %i clients in the slave pointer array\n",slave_list->len);
-		g_ptr_array_foreach(slave_list,notify_slave,msg);
+		to_be_closed = g_new0(gboolean, slave_list->len);
+		for (i=0;i<slave_list->len;i++)
+		{
+			cli_data = g_ptr_array_index(slave_list,i);
+			fd = cli_data->fd;
+			FD_SET(fd,&wr);
+			res = select(fd+1,NULL,&wr,NULL,NULL); 
+			if (res <= 0)
+			{
+				printf("Select error!, closing this socket\n");
+				to_be_closed[i] = TRUE;
+				continue;
+			}
+			printf("sending chunk update\n");
+			byte = SLAVE_MEMORY_UPDATE;
+
+			/* Message type */
+			res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
+			/* CanID */
+			res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
+			/* Page (MTX internal page) */
+			res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
+			/* highbyte of offset */
+			byte = (msg->offset & 0xff) >> 8;
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* lowbyte of offset */
+			byte = (msg->offset & 0xff);
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* highbyte of length */
+			byte = (msg->length & 0xff) >> 8;
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			/* lowbyte of length */
+			byte = (msg->length & 0xff);
+			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			if (msg->mode == MTX_SIMPLE_WRITE)
+				res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
+			else if (msg->mode == MTX_CHUNK_WRITE)
+				res = send(fd,(char *)msg->data,msg->length,0);
+
+			if (res == -1)
+				to_be_closed[i] = TRUE;
+		}
+		len = slave_list->len;
+		for (i=0;i<len;i++)
+		{
+			if (to_be_closed[i])
+			{
+				cli_data = g_ptr_array_index(slave_list,i);
+				
+				printf("socket dropped, closing client pointer %p\n",cli_data);
+#ifdef __WIN32__
+				closesocket(cli_data->fd);
+#else
+				close(cli_data->fd);
+#endif
+				printf("REMOVING ENTRY from ptr array\n");
+				g_ptr_array_remove(slave_list,cli_data);
+				dealloc_client_data(cli_data);
+				res = 0;
+			}
+		}
+		g_free(to_be_closed);
+		to_be_closed = NULL;
 		if (msg->data)
 			g_free(msg->data);
 		g_free(msg);
 		msg = NULL;
 	}
 	return NULL;
-}
-
-void  notify_slave(gpointer data, gpointer user_data)
-{
-	MtxSocketClient * cli_data = (MtxSocketClient *)data;
-	SlaveMessage *msg = (SlaveMessage *)user_data;
-	guint8 byte = 0;
-	fd_set wr;
-	FD_ZERO(&wr);
-	gint fd = 0;
-	gint res = 0;
-
-	fd = cli_data->fd;
-	FD_SET(fd,&wr);
-	res = select(fd+1,NULL,&wr,NULL,NULL); 
-	if (res <= 0)
-	{
-		printf("Select error!, closing this socket\n");
-		goto close_socket;
-	}
-	printf("sending chunk update\n");
-	byte = SLAVE_MEMORY_UPDATE;
-
-	/* Message type */
-	res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
-	/* CanID */
-	res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
-	/* Page (MTX internal page) */
-	res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
-	/* highbyte of offset */
-	byte = (msg->offset & 0xff) >> 8;
-	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-	/* lowbyte of offset */
-	byte = (msg->offset & 0xff);
-	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-	/* highbyte of length */
-	byte = (msg->length & 0xff) >> 8;
-	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-	/* lowbyte of length */
-	byte = (msg->length & 0xff);
-	res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
-	if (msg->mode == MTX_SIMPLE_WRITE)
-		res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
-	else if (msg->mode == MTX_CHUNK_WRITE)
-		res = send(fd,(char *)msg->data,msg->length,0);
-
-	if (res == -1)
-	{
-close_socket:
-		printf("socket dropped, closing client pointer %p\n",cli_data);
-#ifdef __WIN32__
-		closesocket(fd);
-#else
-		close(fd);
-#endif
-		printf("REMOVING ENTRY from ptr array\n");
-		g_ptr_array_remove(slave_list,cli_data);
-		dealloc_client_data(cli_data);
-		res = 0;
-	}
 }
 
 
