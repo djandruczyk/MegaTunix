@@ -100,7 +100,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GdkColor white = { 0, 65535, 65535, 65535};
 	GdkColor home_color = {0, 62000, 59000, 65535};
 	GList *p_list = NULL;
-        GList *s_list = NULL;
+	GList *s_list = NULL;
 	gint i = 0;
 
 	if (created)
@@ -143,21 +143,21 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 #endif
 	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"),&classes);
 	i = 0;
-	while (files[i])
-	{
-		if (g_array_index(classes,FileClass,i) == PERSONAL)
-			p_list = g_list_append(p_list,g_strdup(files[i]));
-		if (g_array_index(classes,FileClass,i) == SYSTEM)
-			s_list = g_list_append(s_list,g_strdup(files[i]));
-		i++;
-	}
-	p_list = g_list_sort(p_list,list_sort);
-        s_list = g_list_sort(s_list,list_sort);
-	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
-	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
-	gtk_widget_show_all(notebook);
 	if (files)
 	{
+		while (files[i])
+		{
+			if (g_array_index(classes,FileClass,i) == PERSONAL)
+				p_list = g_list_append(p_list,g_strdup(files[i]));
+			if (g_array_index(classes,FileClass,i) == SYSTEM)
+				s_list = g_list_append(s_list,g_strdup(files[i]));
+			i++;
+		}
+		p_list = g_list_sort(p_list,list_sort);
+		s_list = g_list_sort(s_list,list_sort);
+		gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
+		gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
+		gtk_widget_show_all(notebook);
 
 		ebox = gtk_event_box_new();
 		g_signal_connect(G_OBJECT(ebox),
@@ -337,7 +337,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 					i++;
 				}
 				p_list = g_list_sort(p_list,list_sort);
-			        s_list = g_list_sort(s_list,list_sort);
+				s_list = g_list_sort(s_list,list_sort);
 				ebox = gtk_event_box_new();
 				g_signal_connect(G_OBJECT(ebox),
 						"button_press_event",
@@ -414,7 +414,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	created = TRUE;
 	prop_created = TRUE;
 	return TRUE;
-
 }
 
 EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
