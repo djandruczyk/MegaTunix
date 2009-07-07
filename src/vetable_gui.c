@@ -596,14 +596,14 @@ redraw:
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 			else
 			{
-				// HACK ALERT! thsi doesn't honor themes! 
+				// HACK ALERT! this doesn't honor themes! 
 				gdk_color_parse("white",&old_colors[table][z_bin[i]]);
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][z_bin[i]]);
 			}
 		}
 	}
 
-	last_widgets[table][last[table][i]] = NULL;
+	//last_widgets[table][last[table][i]] = NULL;
 	color_changed = FALSE;
 
 	max=0;

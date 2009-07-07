@@ -1360,25 +1360,29 @@ void *notify_slaves_thread(gpointer data)
 			byte = SLAVE_MEMORY_UPDATE;
 
 			/* Message type */
-			res = send(fd,(char *)&byte,1,MSG_NOSIGNAL);
+			res = send(fd,(char *)&byte,1,0);
 			/* CanID */
-			res = send(fd,(char *)&(msg->canID),1,MSG_NOSIGNAL);
+			res = send(fd,(char *)&(msg->canID),1,0);
 			/* Page (MTX internal page) */
-			res = send(fd,(char *)&(msg->page),1,MSG_NOSIGNAL);
+			res = send(fd,(char *)&(msg->page),1,0);
 			/* highbyte of offset */
-			byte = (msg->offset & 0xff) >> 8;
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			//printf("Offset is %i\n",msg->offset);
+			byte = (msg->offset >> 8) & 0xff;
+			//printf("high byte of offset is %i\n",byte);
+			res = send(fd,(char *)&(byte),1,0);
 			/* lowbyte of offset */
 			byte = (msg->offset & 0xff);
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			//printf("low byte of offset is %i\n",byte);
+			res = send(fd,(char *)&(byte),1,0);
 			/* highbyte of length */
-			byte = (msg->length & 0xff) >> 8;
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			byte = (msg->length >> 8) & 0xff;
+			//printf("high byte of offset is %i\n",byte);
+			res = send(fd,(char *)&(byte),1,0);
 			/* lowbyte of length */
 			byte = (msg->length & 0xff);
-			res = send(fd,(char *)&(byte),1,MSG_NOSIGNAL);
+			res = send(fd,(char *)&(byte),1,0);
 			if (msg->mode == MTX_SIMPLE_WRITE)
-				res = send(fd,(char *)&(msg->value),msg->length,MSG_NOSIGNAL);
+				res = send(fd,(char *)&(msg->value),msg->length,0);
 			else if (msg->mode == MTX_CHUNK_WRITE)
 				res = send(fd,(char *)msg->data,msg->length,0);
 
@@ -1441,7 +1445,7 @@ void *control_socket_client(gpointer data)
 
 	while(TRUE)
 	{
-		res = recv(fd,&buf,1,0);
+		res = recv(fd,(char *)&buf,1,0);
 		if (res <= 0)
 		{
 #ifdef __WIN32__
@@ -1517,6 +1521,7 @@ void *control_socket_client(gpointer data)
 				printf ("Databyte index %i of %i\n",index,count);
 				if (index >= count)
 				{
+					printf("Got all needed data, updating gui\n");
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
@@ -1608,4 +1613,3 @@ gboolean open_control_socket(gchar * host, gint port)
 
 	return TRUE;
 }
-
