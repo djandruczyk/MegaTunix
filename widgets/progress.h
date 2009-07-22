@@ -33,14 +33,14 @@ G_BEGIN_DECLS
 typedef struct _MtxProgressBar		MtxProgressBar;
 typedef struct _MtxProgressBarClass	MtxProgressBarClass;
 
-/*! ColorIndex enum,  for indexing into the color arrays */
+/*! ProgressColorIndex enum,  for indexing into the color arrays */
 typedef enum  
 {
-	COL_BG = 0,
-	COL_BAR,
-	COL_PEAK,
-	NUM_COLORS
-}ColorIndex;
+	PROGRESS_COL_BG = 0,
+	PROGRESS_COL_BAR,
+	PROGRESS_COL_PEAK,
+	PROGRESS_NUM_COLORS
+}ProgressColorIndex;
 
 
 struct _MtxProgressBar

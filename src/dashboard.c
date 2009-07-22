@@ -599,7 +599,11 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			return TRUE;
 		case GDK_T:
 		case GDK_t:
-			dash_toggle_tattletales(widget);
+			dash_toggle_attribute(widget,TATTLETALE);
+			return TRUE;
+		case GDK_A:
+		case GDK_a:
+			dash_toggle_attribute(widget,ANTIALIAS);
 			return TRUE;
 			break;
 	}
@@ -607,7 +611,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-void dash_toggle_tattletales(GtkWidget *widget)
+void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
 	GList *children = NULL;
 	gint i = 0;
@@ -615,19 +619,22 @@ void dash_toggle_tattletales(GtkWidget *widget)
 	GtkFixedChild *child = NULL;
 	GtkWidget * dash  = NULL;
 	GtkWidget * gauge  = NULL;
+	gchar * text_attr = NULL;
 
+	text_attr = g_strdup_printf("%i",attr);
 	dash = OBJ_GET(widget,"dash");
 	children = GTK_FIXED(dash)->children;
-	if ((gboolean)OBJ_GET(dash,"show_tattletales"))
+	if ((gboolean)OBJ_GET(dash,text_attr))
 		state = FALSE;
 	else
 		state = TRUE;
-	OBJ_SET(dash,"show_tattletales",GINT_TO_POINTER(state));
+	OBJ_SET(dash,text_attr,GINT_TO_POINTER(state));
+	g_free(text_attr);
 	for (i=0;i<g_list_length(children);i++)
 	{
 		child = g_list_nth_data(children,i);
 		gauge = child->widget;
-		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),TATTLETALE,(gfloat)state);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),attr,(gfloat)state);
 	}
 
 }

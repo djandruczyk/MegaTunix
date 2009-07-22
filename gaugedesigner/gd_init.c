@@ -18,7 +18,7 @@ EXPORT gboolean init_text_attributes(GladeXML *xml)
 	OBJ_SET((glade_xml_get_widget(xml,"value_xpos_spin")),"handler",GINT_TO_POINTER(VALUE_XPOS));
 	OBJ_SET((glade_xml_get_widget(xml,"value_ypos_spin")),"handler",GINT_TO_POINTER(VALUE_YPOS));
 	OBJ_SET((glade_xml_get_widget(xml,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_FONTSCALE));
-	OBJ_SET((glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(COL_VALUE_FONT));
+	OBJ_SET((glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(GAUGE_COL_VALUE_FONT));
 	OBJ_SET((glade_xml_get_widget(xml,"show_value_check")),"handler",GINT_TO_POINTER(SHOW_VALUE));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"value_color_button")),&white);
 
@@ -45,10 +45,10 @@ EXPORT gboolean init_general_attributes(GladeXML *xml)
 	OBJ_SET((glade_xml_get_widget(xml,"sweep_angle_spin")),"handler",GINT_TO_POINTER(SWEEP_ANGLE));
 	OBJ_SET((glade_xml_get_widget(xml,"lbound_spin")),"handler",GINT_TO_POINTER(LBOUND));
 	OBJ_SET((glade_xml_get_widget(xml,"ubound_spin")),"handler",GINT_TO_POINTER(UBOUND));
-	OBJ_SET((glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(COL_BG));
-	OBJ_SET((glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
-	OBJ_SET((glade_xml_get_widget(xml,"gradient_begin_color_button")),"handler",GINT_TO_POINTER(COL_GRADIENT_BEGIN));
-	OBJ_SET((glade_xml_get_widget(xml,"gradient_end_color_button")),"handler",GINT_TO_POINTER(COL_GRADIENT_END));
+	OBJ_SET((glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(GAUGE_COL_BG));
+	OBJ_SET((glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(GAUGE_COL_NEEDLE));
+	OBJ_SET((glade_xml_get_widget(xml,"gradient_begin_color_button")),"handler",GINT_TO_POINTER(GAUGE_COL_GRADIENT_BEGIN));
+	OBJ_SET((glade_xml_get_widget(xml,"gradient_end_color_button")),"handler",GINT_TO_POINTER(GAUGE_COL_GRADIENT_END));
 	update_general_controls();
 	return TRUE;
 }

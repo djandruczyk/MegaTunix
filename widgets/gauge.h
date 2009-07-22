@@ -69,16 +69,16 @@ typedef enum
 }MtxPolyType;
 
 
-/*! ColorIndex enum,  for indexing into the color arrays */
+/*! GaugeColorIndex enum,  for indexing into the color arrays */
 typedef enum  
 {
-	COL_BG = 0,
-	COL_NEEDLE,
-	COL_VALUE_FONT,
-	COL_GRADIENT_BEGIN,
-	COL_GRADIENT_END,
-	NUM_COLORS
-}ColorIndex;
+	GAUGE_COL_BG = 0,
+	GAUGE_COL_NEEDLE,
+	GAUGE_COL_VALUE_FONT,
+	GAUGE_COL_GRADIENT_BEGIN,
+	GAUGE_COL_GRADIENT_END,
+	GAUGE_NUM_COLORS
+}GaugeColorIndex;
 
 
 /* Text Block enumeration for the individual fields */
@@ -458,8 +458,8 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
 /* Colors */
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
-GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color);
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index);
 
 /* XML */
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);

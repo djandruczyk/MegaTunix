@@ -110,17 +110,17 @@ void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	/*! Main Background */
-	priv->colors[COL_BG].red=0.95;
-	priv->colors[COL_BG].green=0.95;
-	priv->colors[COL_BG].blue=0.95;
+	priv->colors[PROGRESS_COL_BG].red=0.95;
+	priv->colors[PROGRESS_COL_BG].green=0.95;
+	priv->colors[PROGRESS_COL_BG].blue=0.95;
 	/*! Bar */
-	priv->colors[COL_BAR].red=0.2;
-	priv->colors[COL_BAR].green=0.2;
-	priv->colors[COL_BAR].blue=1.0;
+	priv->colors[PROGRESS_COL_BAR].red=0.2;
+	priv->colors[PROGRESS_COL_BAR].green=0.2;
+	priv->colors[PROGRESS_COL_BAR].blue=1.0;
 	/*! Peak */
-	priv->colors[COL_PEAK].red=1.0;
-	priv->colors[COL_PEAK].green=0.0;
-	priv->colors[COL_PEAK].blue=0.0;
+	priv->colors[PROGRESS_COL_PEAK].red=1.0;
+	priv->colors[PROGRESS_COL_PEAK].green=0.0;
+	priv->colors[PROGRESS_COL_PEAK].blue=0.0;
 }
 
 
@@ -170,9 +170,9 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 	if (progress->offscreen_pixmap)
 	{
 		cr = gdk_cairo_create (GTK_PROGRESS (pbar)->offscreen_pixmap);
-		cairo_set_source_rgb(cr,priv->colors[COL_BG].red,
-				priv->colors[COL_BG].green,
-				priv->colors[COL_BG].blue);
+		cairo_set_source_rgb(cr,priv->colors[PROGRESS_COL_BG].red,
+				priv->colors[PROGRESS_COL_BG].green,
+				priv->colors[PROGRESS_COL_BG].blue);
 		cairo_rectangle (cr,1,1,
 				widget->allocation.width-2,
 				widget->allocation.height-2);
@@ -269,17 +269,17 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 	cr = gdk_cairo_create (GTK_PROGRESS (pbar)->offscreen_pixmap);
 	if (peak > current)
 	{
-		cairo_set_source_rgb(cr,priv->colors[COL_PEAK].red,
-				priv->colors[COL_PEAK].green,
-				priv->colors[COL_PEAK].blue);
+		cairo_set_source_rgb(cr,priv->colors[PROGRESS_COL_PEAK].red,
+				priv->colors[PROGRESS_COL_PEAK].green,
+				priv->colors[PROGRESS_COL_PEAK].blue);
 		cairo_rectangle (cr,p_area.x,p_area.y,p_area.width,p_area.height);
 		cairo_fill(cr);
 	}
 
 	/* Show the immediate value */
-	cairo_set_source_rgb(cr,priv->colors[COL_BAR].red,
-			priv->colors[COL_BAR].green,
-			priv->colors[COL_BAR].blue);
+	cairo_set_source_rgb(cr,priv->colors[PROGRESS_COL_BAR].red,
+			priv->colors[PROGRESS_COL_BAR].green,
+			priv->colors[PROGRESS_COL_BAR].blue);
 	cairo_rectangle (cr,b_area.x,b_area.y,b_area.width,b_area.height);
 	cairo_fill(cr);
 	cairo_destroy(cr);

@@ -60,11 +60,10 @@ struct _MtxGaugeFacePrivate
         gboolean show_drag_border;      /*! Show drag border flag */
         MtxClampType clamped;   /*! Isthe display clamped? */
         gint last_alert_index;  /*! index of last active alert struct */
-        GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
+        GdkColor colors[GAUGE_NUM_COLORS]; /*! Array of colors for specific
                                              parts of a gauge object */
 	MtxDirection direction; /*! Direction of motion on the gauge */
-	gboolean redraw_tattle;	/*! Show a Tattletale? */
-	gboolean reenable_tattletale;	/*! Show a Tattletale? */
+	gboolean reenable_tattletale;	/*! Special tattle flag */
 	gboolean show_tattletale;	/*! Show a Tattletale? */
 	gfloat tattletale_alpha;/*! TattleTale transparency */
         gfloat value_font_scale;/*! Array of font scales */

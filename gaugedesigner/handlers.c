@@ -91,7 +91,7 @@ void update_text_controls()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	widget = glade_xml_get_widget(topxml,"value_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT));
 
 	hold_handlers = FALSE;
 }
@@ -216,15 +216,15 @@ void update_general_controls()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	widget = glade_xml_get_widget(topxml,"background_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_BG));
 
 	widget = glade_xml_get_widget(topxml,"needle_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NEEDLE));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE));
 
 	widget = glade_xml_get_widget(topxml,"gradient_begin_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_BEGIN));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN));
 	widget = glade_xml_get_widget(topxml,"gradient_end_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_END));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END));
 
 	hold_handlers = FALSE;
 }

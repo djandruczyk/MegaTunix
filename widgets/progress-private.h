@@ -39,7 +39,7 @@ struct _MtxProgressBarPrivate
 	gfloat peak;
 	gint hold_id;
 	gint hold_time;
-        MtxColor colors[NUM_COLORS];
+        MtxColor colors[PROGRESS_NUM_COLORS];
 };
 
 void mtx_progress_bar_init_colors(MtxProgressBar *);
