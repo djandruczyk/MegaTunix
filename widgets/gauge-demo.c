@@ -19,6 +19,7 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
+//gboolean key_event_handler(GtkWidget *, GdkEventKey *, gpointer);
 
 int main (int argc, char **argv)
 {
@@ -29,6 +30,8 @@ int main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_widget_add_events(GTK_WIDGET(window),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK);
+//	g_signal_connect(window,"key_press_event",G_CALLBACK(key_event_handler),NULL);
 
 	gauge = mtx_gauge_face_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);
@@ -84,6 +87,7 @@ gboolean update_gauge(gpointer data)
 	interval = (upper-lower)/100.0;
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
+	upper *=0.9;
 	cur_val = mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge));
 	if (cur_val >= upper)
 		rising = FALSE;
@@ -98,4 +102,10 @@ gboolean update_gauge(gpointer data)
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),cur_val);
 	return TRUE;
 
+}
+
+gboolean key_event_handler(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	printf("Key event\n");
+	return FALSE;
 }

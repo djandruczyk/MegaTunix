@@ -104,12 +104,25 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 		priv->clamped = CLAMP_LOWER;
 	else
 		priv->clamped = CLAMP_NONE;
-	if (value > priv->peak)
+	if (value > priv->value)
+		priv->direction = ASCENDING;
+	else
+		priv->direction = DESCENDING;
+	if ((value > priv->peak) && (priv->show_tattletale))
 	{
-		priv->peak=value;
+		priv->show_tattletale = FALSE;
+		priv->reenable_tattletale = TRUE;
 		generate_gauge_background(gauge);
 	}
 	priv->value = value;
+	if (value > priv->peak)
+		priv->peak = value;
+	if ((priv->reenable_tattletale) && (priv->direction == DESCENDING))
+	{
+		priv->reenable_tattletale = FALSE;
+		priv->show_tattletale = TRUE;
+		generate_gauge_background(gauge);
+	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }

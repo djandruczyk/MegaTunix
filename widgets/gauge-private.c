@@ -32,6 +32,7 @@
 #include <gauge-private.h>
 #include <gauge-xml.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include <glib/gprintf.h>
 #include <glib-object.h>
 #include <math.h>
@@ -84,6 +85,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
+	widget_class->key_press_event = mtx_gauge_face_key_event;
 	/* Motion event not needed, as unused currently */
 	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
 	widget_class->size_request = mtx_gauge_face_size_request;
@@ -104,8 +106,13 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	* dash designer to do drag and move placement 
 	*/ 
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
-			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
+	gtk_widget_add_events (GTK_WIDGET (gauge),
+			GDK_KEY_PRESS_MASK |
+			GDK_BUTTON_PRESS_MASK |
+			GDK_BUTTON_RELEASE_MASK |
+			GDK_POINTER_MOTION_MASK);
+
+	g_object_set(G_OBJECT(gauge),"can_focus",GINT_TO_POINTER(TRUE),NULL);
 
 	priv->w = 0;
 	priv->h = 0;
@@ -1214,7 +1221,36 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	/*printf("motion in gauge, returning false\n");*/
+	printf("motion in gauge, returning false\n");
+	return FALSE;
+}
+					       
+
+
+gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	/* We don't care, but return FALSE to propogate properly */
+	printf("key_event in gauge, returning false\n");
+	switch (event->keyval)
+	{
+		case GDK_t:
+			printf("t received, toggling tattletales\n");
+			if (priv->show_tattletale)
+				priv->show_tattletale = FALSE;
+			else
+				priv->show_tattletale = TRUE;
+			generate_gauge_background(MTX_GAUGE_FACE(gauge));
+			mtx_gauge_face_redraw_canvas (MTX_GAUGE_FACE(gauge));
+			break;
+		case GDK_r:
+			printf("r received, resetting tattletale peak\n");
+			priv->peak = priv->lbound;
+			break;
+		default:
+			break;
+			
+	}
 	return FALSE;
 }
 					       

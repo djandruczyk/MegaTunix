@@ -62,6 +62,9 @@ struct _MtxGaugeFacePrivate
         gint last_alert_index;  /*! index of last active alert struct */
         GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
                                              parts of a gauge object */
+	MtxDirection direction; /*! Direction of motion on the gauge */
+	gboolean redraw_tattle;	/*! Show a Tattletale? */
+	gboolean reenable_tattletale;	/*! Show a Tattletale? */
 	gboolean show_tattletale;	/*! Show a Tattletale? */
 	gfloat tattletale_alpha;/*! TattleTale transparency */
         gfloat value_font_scale;/*! Array of font scales */
@@ -92,19 +95,17 @@ struct _MtxGaugeFacePrivate
 gboolean mtx_gauge_face_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_gauge_face_expose (GtkWidget *, GdkEventExpose *);
 gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);
-/* Not needed yet
-* gboolean mtx_gauge_face_motion_event (GtkWidget *,GdkEventMotion *);
-*/
+gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
+gboolean mtx_gauge_face_key_event (GtkWidget *,GdkEventKey *);
+gboolean mtx_gauge_face_motion_event (GtkWidget *,GdkEventMotion *);
 void mtx_gauge_face_size_request (GtkWidget *, GtkRequisition *);
 void mtx_gauge_face_init (MtxGaugeFace *gauge);
 void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name);
-gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
 void generate_gauge_background(MtxGaugeFace *);
 void update_gauge_position (MtxGaugeFace *);
 void mtx_gauge_face_init_colors(MtxGaugeFace *);
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);
 void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *);
-
 
 #endif

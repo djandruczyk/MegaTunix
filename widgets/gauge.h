@@ -41,6 +41,15 @@ typedef enum
 	CLAMP_NONE
 }MtxClampType;
 
+
+/* MtxDirection enum,  display clamping */
+typedef enum
+{
+	ASCENDING = 0xbb,
+	DESCENDING
+}MtxDirection;
+
+
 /* MtxRotType enum,  needle sweep rotation */
 typedef enum
 {
