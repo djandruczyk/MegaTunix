@@ -184,7 +184,7 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
-			printf("cli_data pointer is %p\n",cli_data);
+			printf("Connected slave pointer is %p\n",cli_data);
 			if (!slave_list)
 				slave_list = g_ptr_array_new();
 			cli_data->container = (gpointer)slave_list;
@@ -217,7 +217,7 @@ void *ascii_socket_client(gpointer data)
 
 
 	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
-	send(fd,tmpbuf,strlen(tmpbuf),0);
+	net_send(fd,tmpbuf,strlen(tmpbuf),0);
 	g_free(tmpbuf);
 
 	while (TRUE)
@@ -331,9 +331,9 @@ void *binary_socket_client(gpointer data)
 					case 'A':	/* MS1 RTvars */
 //						printf("'A' received\n");
 						if (firmware->capabilities & MSNS_E)
-							res = send (fd,(char *)firmware->rt_data,22,0);
+							res = net_send (fd,(char *)firmware->rt_data,22,0);
 						else if (firmware->capabilities & MS1)
-							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+							res = net_send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
 //						printf("MS1 rtvars sent, %i bytes delivered\n",res);
 						continue;
 					case 'b':	/* MS2 burn */
@@ -375,7 +375,7 @@ void *binary_socket_client(gpointer data)
 							state = WAITING_FOR_CMD;
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint16)tmpf;
-							res = send(fd,(char *)&tmpi,2,0);
+							res = net_send(fd,(char *)&tmpi,2,0);
 //							printf("MS2 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
@@ -385,7 +385,7 @@ void *binary_socket_client(gpointer data)
 //							printf("'C' received\n");
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
-							res = send(fd,(char *)&tmpi,1,0);
+							res = net_send(fd,(char *)&tmpi,1,0);
 //							printf("MS1 clock sent, %i bytes delivered\n",res);
 						}
 						continue;
@@ -406,10 +406,10 @@ void *binary_socket_client(gpointer data)
 						{
 //							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");
 							if (firmware->capabilities & MS1)
-								res = send(fd,(const void *)&(firmware->ecu_revision),1,0);
+								res = net_send(fd,(char *)&(firmware->ecu_revision),1,0);
 							else
 								if (firmware->text_revision)
-									res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+									res = net_send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
 						}
 //						printf("numeric/text revision sent, %i bytes delivered\n",res);
 						continue;
@@ -417,7 +417,7 @@ void *binary_socket_client(gpointer data)
 						if (firmware->capabilities & MSNS_E)
 						{
 //							printf ("'R' (MS1 extra RTvars)\n");
-							res = send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
+							res = net_send (fd,(char *)firmware->rt_data,firmware->rtvars_size,0);
 //							printf("MSnS-E rtvars, %i bytes delivered\n",res);
 						}
 						continue;
@@ -427,7 +427,7 @@ void *binary_socket_client(gpointer data)
 //							printf ("'T' (MS1 text revision)\n");
 							if (firmware->text_revision)
 							{
-								res = send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+								res = net_send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
 //								printf("MS1 textrev, %i bytes delivered\n",res);
 							}
 						}
@@ -438,7 +438,7 @@ void *binary_socket_client(gpointer data)
 						if (firmware)
 						{
 							if (firmware->actual_signature)
-								res = send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+								res = net_send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
 //							printf("MS signature, %i bytes delivered\n",res);
 						}
 						continue;
@@ -446,7 +446,7 @@ void *binary_socket_client(gpointer data)
 						if (firmware->capabilities & MS1)
 						{
 //							printf("'V' received (MS1 VEtable)\n");
-							res = send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+							res = net_send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
 //							printf("MS1 VEtable, %i bytes delivered\n",res);
 						}
 						continue;
@@ -498,7 +498,7 @@ void *binary_socket_client(gpointer data)
 					{
 						if (firmware->ecu_data[mtx_page])
 						{
-							res = send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
+							res = net_send(fd,(char *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
 //							printf("Full table sent, %i bytes\n",res);
 						}
 					}
@@ -557,7 +557,7 @@ void *binary_socket_client(gpointer data)
 					if (find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
-							res = send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
+							res = net_send(fd,(char *)firmware->ecu_data[mtx_page]+offset,count,0);
 //						printf("MS2 partial table, %i bytes delivered\n",res);
 					}
 				}
@@ -753,27 +753,27 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			break;
 		case GET_SIGNATURE:
 			if (!firmware)
-				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+				net_send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
 			else
 			{
 				if (firmware->actual_signature)
-					send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
+					net_send(fd,firmware->actual_signature,strlen(firmware->actual_signature),0);
 				else
-					send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+					net_send(fd,"Offline mode, no signature",strlen("Offline mode, no signature"),0);
 			}
-			res = send(fd,"\n\r",strlen("\n\r"),0);
+			res = net_send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case GET_REVISION:
 			if (!firmware)
-				send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
+				net_send(fd,"Not Connected yet",strlen(" Not Connected yet"),0);
 			else
 			{
 				if (firmware->text_revision)
-					send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
+					net_send(fd,firmware->text_revision,strlen(firmware->text_revision),0);
 				else
-					send(fd,"Offline mode, no revision",strlen("Offline mode, no revision"),0);
+					net_send(fd,"Offline mode, no revision",strlen("Offline mode, no revision"),0);
 			}
-			res = send(fd,"\n\r",strlen("\n\r"),0);
+			res = net_send(fd,"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\
@@ -787,13 +787,13 @@ get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\
 get_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
 set_ecu_var[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
 burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
-			send(fd,tmpbuf,strlen(tmpbuf),0);
+			net_send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			send_rescode = TRUE;
 			break;
 		case QUIT:
 			tmpbuf = g_strdup("\rBuh Bye...\n\r");
-			send(fd,tmpbuf,strlen(tmpbuf),0);
+			net_send(fd,tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			retval = FALSE;
 			send_rescode = FALSE;
@@ -806,12 +806,12 @@ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 	if (send_rescode)
 	{
 		if (!connected)
-			send(fd,"NOT CONNECTED,",strlen("NOT CONNECTED,"),0);
+			net_send(fd,"NOT CONNECTED,",strlen("NOT CONNECTED,"),0);
 		if (check_for_changes(client))
-			send(fd,"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
-		send(fd,"OK",strlen("OK"),0);
+			net_send(fd,"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
+		net_send(fd,"OK",strlen("OK"),0);
 
-		send(fd,"\n\r",strlen("\n\r"),0);
+		net_send(fd,"\n\r",strlen("\n\r"),0);
 	}
 	g_free(arg2);
 	return retval;
@@ -820,8 +820,8 @@ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 
 void return_socket_error(gint fd)
 {
-	send(fd,ERR_MSG,strlen(ERR_MSG),0);
-	send(fd,"\n\r",strlen("\n\r"),0);
+	net_send(fd,ERR_MSG,strlen(ERR_MSG),0);
+	net_send(fd,"\n\r",strlen("\n\r"),0);
 }
 
 
@@ -865,7 +865,7 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 				g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
 		}
 	}
-	res = send(fd,output->str,output->len,0);
+	res = net_send(fd,output->str,output->len,0);
 	g_string_free(output,TRUE);
 	g_strfreev(vars);
 }
@@ -890,7 +890,7 @@ void socket_get_rtv_list(gint fd)
 		if (tmpbuf)
 		{
 			len = strlen(tmpbuf);
-			res = send(fd,tmpbuf,len,0);
+			res = net_send(fd,tmpbuf,len,0);
 			if (res != len)
 				printf("SHORT WRITE!\n");
 			g_free(tmpbuf);
@@ -898,7 +898,7 @@ void socket_get_rtv_list(gint fd)
 	}
 	tmpbuf = g_strdup("\r\n");
 	len = strlen(tmpbuf);
-	res = send(fd,tmpbuf,len,0);
+	res = net_send(fd,tmpbuf,len,0);
 	if (len != res)
 		printf("SHORT WRITE!\n");
 	g_free(tmpbuf);
@@ -936,7 +936,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		_set_sized_data(client->ecu_data[page],offset,size,tmpi);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
-		res = send(fd,tmpbuf,len,0);
+		res = net_send(fd,tmpbuf,len,0);
 		if (len != res)
 			printf("SHORT WRITE!\n");
 		g_free(tmpbuf);
@@ -983,7 +983,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 				g_string_append_printf(output,"%i\n\r",tmpi);
 		}
 		g_strfreev(vars); 
-		send(fd,output->str,output->len,0);
+		net_send(fd,output->str,output->len,0);
 		g_string_free(output,TRUE);
 	}
 }
@@ -1360,31 +1360,31 @@ void *notify_slaves_thread(gpointer data)
 			byte = SLAVE_MEMORY_UPDATE;
 
 			/* Message type */
-			res = send(fd,(char *)&byte,1,0);
+			res = net_send(fd,(char *)&byte,1,0);
 			/* CanID */
-			res = send(fd,(char *)&(msg->canID),1,0);
+			res = net_send(fd,(char *)&(msg->canID),1,0);
 			/* Page (MTX internal page) */
-			res = send(fd,(char *)&(msg->page),1,0);
+			res = net_send(fd,(char *)&(msg->page),1,0);
 			/* highbyte of offset */
 			//printf("Offset is %i\n",msg->offset);
 			byte = (msg->offset >> 8) & 0xff;
 			//printf("high byte of offset is %i\n",byte);
-			res = send(fd,(char *)&(byte),1,0);
+			res = net_send(fd,(char *)&(byte),1,0);
 			/* lowbyte of offset */
 			byte = (msg->offset & 0xff);
 			//printf("low byte of offset is %i\n",byte);
-			res = send(fd,(char *)&(byte),1,0);
+			res = net_send(fd,(char *)&(byte),1,0);
 			/* highbyte of length */
 			byte = (msg->length >> 8) & 0xff;
 			//printf("high byte of offset is %i\n",byte);
-			res = send(fd,(char *)&(byte),1,0);
+			res = net_send(fd,(char *)&(byte),1,0);
 			/* lowbyte of length */
 			byte = (msg->length & 0xff);
-			res = send(fd,(char *)&(byte),1,0);
+			res = net_send(fd,(char *)&(byte),1,0);
 			if (msg->mode == MTX_SIMPLE_WRITE)
-				res = send(fd,(char *)&(msg->value),msg->length,0);
+				res = net_send(fd,(char *)&(msg->value),msg->length,0);
 			else if (msg->mode == MTX_CHUNK_WRITE)
-				res = send(fd,(char *)msg->data,msg->length,0);
+				res = net_send(fd,(char *)msg->data,msg->length,0);
 
 			if (res == -1)
 				to_be_closed[i] = TRUE;
@@ -1612,4 +1612,23 @@ gboolean open_control_socket(gchar * host, gint port)
 			NULL);  /* GError pointer */
 
 	return TRUE;
+}
+
+
+gboolean net_send(gint fd, char *buf, gint len, gint flags)
+{
+	int total = 0;        // how many bytes we've sent
+	int bytesleft = len; // how many we have left to send
+	int n;
+
+	while(total < len) {
+		n = send(fd, buf+total, bytesleft, flags);
+		if (n == -1) { break; }
+		total += n;
+		bytesleft -= n;
+	}
+
+	len = total; // return number actually sent here
+
+	return n==-1?-1:0; // return -1 on failure, 0 on success
 }

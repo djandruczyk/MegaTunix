@@ -1231,11 +1231,10 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	/* We don't care, but return FALSE to propogate properly */
-	printf("key_event in gauge, returning false\n");
 	switch (event->keyval)
 	{
+		case GDK_T:
 		case GDK_t:
-			printf("t received, toggling tattletales\n");
 			if (priv->show_tattletale)
 				priv->show_tattletale = FALSE;
 			else
@@ -1243,9 +1242,13 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 			generate_gauge_background(MTX_GAUGE_FACE(gauge));
 			mtx_gauge_face_redraw_canvas (MTX_GAUGE_FACE(gauge));
 			break;
+		case GDK_R:
 		case GDK_r:
-			printf("r received, resetting tattletale peak\n");
 			priv->peak = priv->lbound;
+			break;
+		case GDK_Q:
+		case GDK_q:
+			gtk_main_quit();
 			break;
 		default:
 			break;

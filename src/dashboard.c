@@ -84,7 +84,6 @@ void load_dashboard(gchar *filename, gpointer data)
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(main_window));
 
-
 	g_signal_connect(G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
 	g_signal_connect (G_OBJECT (window), "delete_event",
@@ -555,6 +554,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_q:
 		case GDK_Q:
 			leave(NULL,NULL);
+			return TRUE;
 			break;
 		case GDK_M:
 		case GDK_m:
@@ -562,6 +562,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				gtk_widget_hide_all (main_window);
 			else
 				gtk_widget_show_all(main_window);
+			return TRUE;
 			break;
 		case GDK_R:
 		case GDK_r:
@@ -571,6 +572,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				gtk_widget_hide_all (rtt_window);
 			else
 				gtk_widget_show_all(rtt_window);
+			return TRUE;
 			break;
 		case GDK_S:
 		case GDK_s:
@@ -579,6 +581,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (GTK_WIDGET_VISIBLE(status_window))
 				gtk_widget_hide_all (status_window);
 			else
+			return TRUE;
 				gtk_widget_show_all(status_window);
 			break;
 		case GDK_f:
@@ -593,9 +596,40 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				fullscreen = TRUE;
 				gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 			}
+			return TRUE;
+		case GDK_T:
+		case GDK_t:
+			dash_toggle_tattletales(widget);
+			return TRUE;
 			break;
 	}
-	return TRUE;
+	return FALSE;
+}
+
+
+void dash_toggle_tattletales(GtkWidget *widget)
+{
+	GList *children = NULL;
+	gint i = 0;
+	gboolean state = FALSE;
+	GtkFixedChild *child = NULL;
+	GtkWidget * dash  = NULL;
+	GtkWidget * gauge  = NULL;
+
+	dash = OBJ_GET(widget,"dash");
+	children = GTK_FIXED(dash)->children;
+	if ((gboolean)OBJ_GET(dash,"show_tattletales"))
+		state = FALSE;
+	else
+		state = TRUE;
+	OBJ_SET(dash,"show_tattletales",GINT_TO_POINTER(state));
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = g_list_nth_data(children,i);
+		gauge = child->widget;
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),TATTLETALE,(gfloat)state);
+	}
+
 }
 
 
