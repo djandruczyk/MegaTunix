@@ -836,7 +836,6 @@ EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() before lock update_mutex\n"));
 		g_static_mutex_lock(&update_mutex);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() after lock update_mutex\n"));
-		g_static_mutex_lock(&update_mutex);
 		trace_update(force_redraw);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() before UNlock update_mutex\n"));
 		g_static_mutex_unlock(&update_mutex);
