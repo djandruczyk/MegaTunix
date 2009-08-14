@@ -3,7 +3,7 @@ major=1
 minor=2
 
 [realtime_map]
-applicable_firmwares=MS-II-Extra V2.1.0i
+applicable_firmwares=MS-II-Extra V2.1.0p
 applicable_signatures=MS2/Extra 2.1
 derived_total=108
 raw_list=raw_secl
@@ -1625,10 +1625,23 @@ log_by_default=FALSE
 [derived_108]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
+internal_names=user0
+dlog_gui_name=user0
+dlog_field_name=user0
+offset=143
+size=_U08_
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+tooltip="user0" is an undefined
+log_by_default=FALSE
+
+[derived_109]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=checksum
 dlog_gui_name=checksum
 dlog_field_name=checksum
-offset=143
+offset=145
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1

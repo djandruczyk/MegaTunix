@@ -7,8 +7,7 @@ rtmap_files = 	README \
 		MSnS-Extra-029x.rtv_map \
 		MS2-Std.rtv_map \
 		MS2-Extra-2.0.x.rtv_map \
-		MS2-Extra-2.1.0i.rtv_map \
-		MS2-Extra-2.1.0j.rtv_map
+		MS2-Extra-2.1.0p.rtv_map
 
 rtmap_DATA = $(rtmap_files)
 

@@ -19,6 +19,12 @@
 #include <firmware.h>
 
 
+typedef enum
+{
+	RESULT_DATA=0x440,
+	RESULT_TEXT
+}Test_Result;
+
 typedef struct _Detection_Test Detection_Test;
 /*!
  \brief The _Detection_Test struct holds the basics for each ECU test.
@@ -35,6 +41,7 @@ struct _Detection_Test
 	gchar **test_vector;	/* Vector split of test (csv split) */
 	GArray *test_arg_types;	/* Array of enums describing test arguments */
 	gint test_arg_count;	/* number of args in the test */
+	guint32 result_type;	/* DATA or TEXT */
 	gchar *result_str;	/* Result of test stored for matching */
 	gint num_bytes;		/* Number of bytes returned for this test */
 

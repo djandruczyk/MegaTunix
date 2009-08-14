@@ -5,8 +5,7 @@ profiles = README \
 	B_and_G_2.0-3.01.prof \
 	Dualtable-1.02.prof \
 	MS-II-Extra_2.0.x.prof \
-	MS-II-Extra_2.1.0i.prof \
-	MS-II-Extra_2.1.0j.prof \
+	MS-II-Extra_2.1.0p.prof \
 	MS-II.prof \
 	SquirtnSpark-Extra-HR-029x.prof \
 	SquirtnSpark-Extra-HR-010a.prof \

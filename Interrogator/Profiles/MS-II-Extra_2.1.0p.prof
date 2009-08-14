@@ -3,14 +3,14 @@ major=1
 minor=4
 
 [interrogation_profile]
-name=MS-II-Extra V2.1.0i
+name=MS-II-Extra V2.1.0p
 
 [parameters]
 InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev
 RT_Command=ms1_std_rtvars
-RT_total_bytes=144
+RT_total_bytes=145
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
 VE_Command=ms2_veconst
@@ -22,6 +22,7 @@ Capabilities=_MS2_,_MS2_EXTRA_,_MS2_E_COMPOSITEMON_
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 TotalTables=11
+TotalTETables=0
 TotalPages=8
 ToothmonPage=5
 TrigmonPage=6
@@ -68,9 +69,9 @@ z_precision=0
 [table_1]
 table_name=VE-Table 2, MS-II-Extra 12x12
 is_fuel=TRUE
-reqfuel_page=1
+reqfuel_page=0
 reqfuel_offset=608
-divider_page=1
+divider_page=0
 divider_offset=610
 x_page=4
 x_base_offset=792
@@ -182,9 +183,9 @@ z_precision=0
 [table_4]
 table_name=VE-Table 2, MS-II-Extra 16x16
 is_fuel=TRUE
-reqfuel_page=1
+reqfuel_page=0
 reqfuel_offset=608
-divider_page=1
+divider_page=0
 divider_offset=610
 x_page=4
 x_base_offset=800
@@ -468,10 +469,10 @@ length=1024
 [interrogation]
 match_on=MS-II_Clock,MS_VerNum
 MS-II_Clock=_COUNT_,1
-MS_VerNum=_SUBMATCH_,MS2Extra Rel 2.1.0i
+MS_VerNum=_SUBMATCH_,MS2Extra Rel 2.1.0p
 
 [gui]
-RealtimeMapFile=MS2-Extra-2.1.0i
+RealtimeMapFile=MS2-Extra-2.1.0p
 SliderMapFile=MS2-Extra-firmware
 RuntimeTextMapFile=MS2-Extra-firmware
 StatusMapFile=MS2-Extra-firmware

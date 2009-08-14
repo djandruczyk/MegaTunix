@@ -192,11 +192,26 @@ EXPORT gboolean interrogate_ecu()
 			if (zerocount > 1)
 				break;
 		}
+		dbg_func(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));
+		ptr = buf;
 
+		/* copy data from tmp buffer to struct pointer */
+		test->num_bytes = total_read;
+		if (total_read <= 0)
+			test->result_str = g_strdup("");
+		else
+			test->result_str = g_strndup((gchar *)ptr, total_read);
 
 		if (total_read > 0)
 		{
-			thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
+			if (test->result_type == RESULT_TEXT)
+			{
+				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
+				thread_update_logbar("interr_view","info",g_strdup_printf("%s",test->result_str),FALSE,FALSE);
+				thread_update_logbar("interr_view",NULL,g_strdup(")\n"),FALSE,FALSE);
+			}
+			else if (test->result_type == RESULT_DATA)
+				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
 			ptr = buf;
 			if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
 			{
@@ -216,16 +231,6 @@ EXPORT gboolean interrogate_ecu()
 			}
 			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("\n\n"));
 		}
-
-		dbg_func(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));
-		ptr = buf;
-
-		/* copy data from tmp buffer to struct pointer */
-		test->num_bytes = total_read;
-		if (total_read <= 0)
-			test->result_str = g_strdup("");
-		else
-			test->result_str = g_strndup((gchar *)ptr, total_read);
 	}
 
 	interrogated = determine_ecu(tests,tests_hash);	
@@ -299,11 +304,17 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	for (i=0;i<num_tests;i++)
 	{
 		test = g_array_index(tests,Detection_Test *,i);
-		dbg_func(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
-					test->actual_test,
-					test->test_desc,
-					test->num_bytes));
-
+		if (test->result_type == RESULT_TEXT)
+			dbg_func(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes (%s)\n",
+						test->actual_test,
+						test->test_desc,
+						test->num_bytes,
+						test->result_str));
+		else if (test->result_type == RESULT_DATA)
+			dbg_func(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
+						test->actual_test,
+						test->test_desc,
+						test->num_bytes));
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
@@ -995,6 +1006,17 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_name for %s is NULL\n",section));
 			g_free(section);
 			break;
+		}
+		if (!cfg_read_string(cfgfile,section,"test_result_type",&tmpbuf))
+		{
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_result_type for %s is NULL\n",section));
+			g_free(section);
+			break;
+		}
+		else
+		{
+			test->result_type=translate_string(tmpbuf);
+			g_free(tmpbuf);
 		}
 		if (!cfg_read_string(cfgfile,section,"actual_test",&test->actual_test))
 		{

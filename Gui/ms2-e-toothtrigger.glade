@@ -103,7 +103,7 @@
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkLabel" id="label1">
+				<widget class="GtkLabel" id="zoom_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Zoom</property>
 				  <property name="use_underline">False</property>
@@ -149,7 +149,6 @@
 			      <child>
 				<widget class="GtkLabel" id="tooth_logger_info_label">
 				  <property name="visible">True</property>
-				  <property name="sensitive">False</property>
 				  <property name="label" translatable="yes">The above display shows a graphical representaiton of the crank or crank/cam wheels</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>

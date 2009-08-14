@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <interrogate.h>
 #include <mtxsocket.h>
 #include <stringmatch.h>
 
@@ -331,14 +332,6 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
 
-	/*ArgType's */
-	g_hash_table_insert(str_2_enum,"_DATA_",
-			GINT_TO_POINTER(DATA));
-	g_hash_table_insert(str_2_enum,"_ACTION_",
-			GINT_TO_POINTER(ACTION));
-	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
-			GINT_TO_POINTER(STATIC_STRING));
-
 	/* TCP Socket Commands */
 	g_hash_table_insert(str_2_enum,"HELP",
 			GINT_TO_POINTER(HELP));
@@ -384,6 +377,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(GET_RAW_ECU));
 	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
 			GINT_TO_POINTER(SET_RAW_ECU));
+
+	/* Interrogation Test Results */
+	g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
+			GINT_TO_POINTER(RESULT_DATA));
+	g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
+			GINT_TO_POINTER(RESULT_TEXT));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
