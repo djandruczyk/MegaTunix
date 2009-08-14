@@ -271,7 +271,7 @@ void update_curve_position (MtxCurve *curve)
 	if (priv->vertex_selected)
 	{
 		cairo_set_font_size (cr, 9);
-		message = g_strdup_printf("(%1$.*2$f,%3$.*4$f)",
+		message = g_strdup_printf("(%1$.*2$f , %3$.*4$f)",
 				priv->coords[priv->active_coord].x,
 				priv->x_precision,
 				priv->coords[priv->active_coord].y,
