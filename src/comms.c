@@ -154,7 +154,7 @@ EXPORT void send_to_slaves(void *data)
 		return;
 	}
 
-	printf("Sending message to slave(s)\n");
+	//	printf("Sending message to slave(s)\n");
 	g_async_queue_ref(slave_msg_queue);
         g_async_queue_push(slave_msg_queue,(gpointer)msg);
         g_async_queue_unref(slave_msg_queue);
@@ -295,7 +295,6 @@ gboolean write_data(Io_Message *message)
 	g_static_mutex_lock(&serio_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock serio_mutex\n"));
 
-
 	if (output)
 	{
 		canID = (gint)OBJ_GET(output->object,"canID");
@@ -343,16 +342,22 @@ gboolean write_data(Io_Message *message)
 	for (i=0;i<message->sequence->len;i++)
 	{
 		block = g_array_index(message->sequence,DBlock *,i);
+	//	printf("Block pulled\n");
 		if (block->type == ACTION)
 		{
+	//		printf("Block type of ACTION!\n");
 			if (block->action == SLEEP)
+			{
+	//			printf("Sleeping for %i usec\n", block->arg);
 				g_usleep(block->arg);
+			}
 		}
 		else if (block->type == DATA)
 		{
+	//		printf("Block type of DATA!\n");
 			for (j=0;j<block->len;j++)
 			{
-				//				printf("comms.c data[%i] is %i\n",j,block->data[j]);
+				//printf("comms.c data[%i] is %i\n",j,block->data[j]);
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else

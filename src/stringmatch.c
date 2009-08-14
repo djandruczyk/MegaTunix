@@ -384,6 +384,16 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
 			GINT_TO_POINTER(RESULT_TEXT));
 
+	/* XMLcomm processing */
+	g_hash_table_insert(str_2_enum,"_DATA_",
+			GINT_TO_POINTER(DATA));
+	g_hash_table_insert(str_2_enum,"_ACTION_",
+			GINT_TO_POINTER(ACTION));
+	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
+			GINT_TO_POINTER(STATIC_STRING));
+	g_hash_table_insert(str_2_enum,"_SLEEP_",
+			GINT_TO_POINTER(SLEEP));
+
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
 }
