@@ -150,7 +150,7 @@ void *thread_dispatcher(gpointer data)
 
 		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
 		{
-			printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);
+			//printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));

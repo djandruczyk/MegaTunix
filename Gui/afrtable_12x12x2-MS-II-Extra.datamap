@@ -7,17 +7,16 @@ groups=defaults,load_1,rpm_1,afr_1,load_2,rpm_2,afr_2
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size
-key_types=_INT_,_ENUM_
+keys=page,size,dl_type,handler
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
-
-[load_1]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,table_num,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_STRING_
-page=0
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+
+[load_1]
+keys=raw_lower,raw_upper,size,table_num,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
+key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_STRING_
 size=_S16_
 raw_lower=0
 raw_upper=4000
@@ -29,14 +28,11 @@ precision=1
 tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_BOOL_,_STRING_
-page=0
+keys=dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,size,use_color,tooltip
+key_types=_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_BOOL_,_STRING_
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 size=_U16_
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 raw_lower=0
 raw_upper=15000
 use_color=TRUE
@@ -44,11 +40,8 @@ tooltip=The RPM bins in combination with the LOAD bins on the left side of the A
 
 
 [afr_1]
-keys=page,dl_type,handler,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
-page=0
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+keys=raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 raw_lower=0
 raw_upper=255
 use_color=TRUE
@@ -58,11 +51,8 @@ precision=1
 tooltip=The AFR Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% AFR at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_BOOL_,_INT_,_STRING_
-page=0
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+keys=raw_lower,raw_upper,size,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
+key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_BOOL_,_INT_,_STRING_
 size=_S16_
 raw_lower=0
 raw_upper=4000
@@ -73,25 +63,19 @@ precision=1
 tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_2]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_BOOL_,_STRING_
-page=0
+keys=dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,size,use_color,tooltip
+key_types=_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_BOOL_,_STRING_
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 size=_U16_
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 raw_lower=0
 raw_upper=15000
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFRmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afr_2]
-keys=page,dl_type,handler,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
-page=0
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+keys=raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 raw_lower=0
 raw_upper=255
 use_color=TRUE

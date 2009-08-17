@@ -7,10 +7,12 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size
-key_types=_INT_,_ENUM_
+keys=page,size,dl_type,handler
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -53,10 +55,8 @@ bind_to_list=an_ctrls
 #----- Combo Boxes -----------------------------------------------------------
 
 [flex_fuel_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 offset=908
 bitvals=0,1
@@ -65,10 +65,8 @@ toggle_groups=,flex_fuel_ctrls
 tooltip=Disables or enabled the flex fuel sensor. (requires external sensor and connection to an appropriate input,  see http://www.megamanual.com/mt28.htm#sf
 
 [amc_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,RAM Update,Flash Update
 offset=628
 bitvals=0,1,2
@@ -78,10 +76,9 @@ tooltip=Sets the automatic Mixture control method,  RAM update only, or periodic
 flash updates.  RAM only settings are lost after each shutdown,  flash settings are not.
 
 [map_baro_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,group_2_update,source_key,source_values,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=handler,offset,choices,bitvals,bitmask,group_2_update,source_key,source_values,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 handler=_MULTI_EXPRESSION_
-dl_type=_IMMEDIATE_
 choices=Use MAP Only,Adjust MAP for Baro
 group_2_update=multi_expression
 source_key=map_source
@@ -92,10 +89,8 @@ bitmask=1
 tooltip=The normal option is to make the VE table a function of MAP and RPM, the other is to make VE a function of MAP/baro and RPM. To keep everything compatible, the code uses (MAP/ BARO) * 100 kPa, so if you are at standard barometric pressure, there is no difference. This is meant to be used with an independent baro sensor and with no other barometric correction, although you have to set the baro correction parameters so that the correction comes out that way. The idea is that volumetric efficiency is not only a function of the pressure on the intake, but also of the exhaust back pressure. The thermodynamic engine efficiency equations come out as a function of MAP/baro, so this is offered as an option. When you are not at standard pressure, it will shift your VE table so it may appear that it is screwing everything up, but if you are willing to re-tune your VEs with this option, doing it at sea level, then you should be able to climb a mountain with no baro correction. It won't result in a big improvement over what we used before, which is a 10 point correction table that you can tune to give you a very precise correction, but it is the thermodynamically correct way to do it. This is an advanced option for people who want to experiment and have some understanding of engine thermodynamics. Someone just starting to use MegaSquirt® doesn't need to use this.
 
 [afr_table_calc_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Use Combined VE/AFR table,Separate VE & AFR table w/ NB EGO,Separate VE & AFR table w/ WB EGO
 offset=897
 bitvals=0,1,2
@@ -104,10 +99,8 @@ toggle_groups=,afr_nb,afr_wb
 tooltip=The default (Use Combined AFR/VE table) calculates the fueling based on the VE table (and MAP, IAT, etc.). The AFR table in that case is used ONLY for EGO feedback control. However, by selecting the 'Separate AFR/VE table', you can have the fuel equation multiplied by the AFR table entry divided by the stoichiometric AFR, meaning the AFR is always in the calculations. In the default case, AFR and VE are really combined into the VE table, while in the other cases they are separate. Either will allow you to control a wideband EGO sensor, but the difference is that while the first relies on EGO feedback to reach the target AFR in the AFR table, the 'Separate' options do not relay on the wideband feedback, instead the target AFR are fed directly into the fuelling equation. With the separate tables, IF the VE table is correct, then changing the AFR table to another target should result in that AFR, even without EGO feedback control.  see http://www.megamanual.com/mt28.htm#so
 
 [maf_use_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=No MAF,MAF Only,MAF/MAP Blend
 bitvals=0,1,2
 offset=600
@@ -115,10 +108,8 @@ bitmask=3
 tooltip=Enables or Disables use of a MAF (Mass Air Flow) sensor, and sets whether it's to be the primary input, or used in a blend with the MAP Sensor.
 
 [maf_pin_combo]
-keys=handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=MAF on MAP pin,MAF on BARO pin,MAF on Knock Pin
 bitvals=0,1,2
 offset=600
@@ -127,11 +118,9 @@ bind_to_list=maf_ctrls
 tooltip=Sets what pin the MAF sensor is connected to
 
 [invert_map_maf_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=1
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
 choices=Use Above,Invert Above
 bitvals=0,1
 offset=940
@@ -142,24 +131,20 @@ tooltip=If yes, then use MAF above the first RPM, and MAP below the second RPM. 
 #----- Entries ---------------------------------------------------------------
 
 [ff_freq_low_entry]
-keys=offset,dl_type,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=910
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the sensor output frequency for 100% gasoline (50 hz for the GM sensor)
 
 [ff_fuel_corr_low_entry]
-keys=offset,dl_type,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=912
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the fuel correction at the low frequency, with GM sensors  this is for pure gasoline, (typically 100%)
 
 [ff_timing_corr_low_entry]
-keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=978
 precision=1
 size=_S16_
@@ -167,29 +152,23 @@ raw_lower=-450
 raw_upper=450
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the ignition timing correction at the low frequency, with GM sensors this is for pure gasoline, (typically 0.0 degrees)
 
 [ff_freq_high_entry]
-keys=offset,dl_type,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=911
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the sensor output frequency for 100% ethanol (150 hz for the GM sensor)
 
 [ff_fuel_corr_high_entry]
-keys=offset,dl_type,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=913
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the fuel correction at the high frequency, with GM sensors  this is for pure ethanol (typically 163%)
 
 [ff_timing_corr_high_entry]
-keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=980
 precision=1
 size=_S16_
@@ -197,201 +176,165 @@ raw_lower=-450
 raw_upper=450
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the ignition timing correction at the high frequency, with GM sensors  this is for pure ethanol, (typically -13 deg, i.e. subtract 13 deg from timing advnace)
 
 [amc_step_entry]
-keys=offset,dl_type,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=offset,tooltip,bind_to_list
+key_types=_INT_,_STRING_,_STRING_
 offset=914
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_ram
 tooltip=This is the % of AMC correction to be applied when RAM VE is updated. A typical value is 10%, which limits how far autocorrection can deviate from the basic table.
 
 [amc_min_ve_entry]
-keys=offset,dl_type,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=offset,tooltip,bind_to_list
+key_types=_INT_,_STRING_,_STRING_
 offset=915
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_ram
 tooltip=This is the smallest AMC VE change that will be applied to the table in RAM, if the change is less than this, it will be ignored (until it reaches the threshold). 
 
 [amc_vertex_rpm_entry]
-keys=offset,size,dl_type,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_STRING_,_STRING_
 offset=916
 size=_U16_
 raw_upper=15000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_ram
 tooltip=The furthest that the nearest rpm bin can be away and still have the AMC change applied to that entry. 
 
 [amc_vertex_map_entry]
-keys=offset,precision,size,dl_type,raw_upper,dl_conv_expr,ul_conv_expr,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_ENUM_,_STRING_,_STRING_
+keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=918
 size=_U16_
 precision=1
 raw_upper=3000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_ram
 tooltip=The furthest that the nearest kPa bin can be away and still have the AMC change applied to that entry. 
 
 [amc_table_change_entry]
-keys=offset,size,dl_type,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_STRING_,_STRING_
 offset=920
 size=_U16_
 raw_upper=1800
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_ram
 tooltip=This is the minimum time (in seconds) between updates of RAM VE table. 
 
 [amc_flash_update_entry]
-keys=offset,size,dl_type,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_STRING_,_STRING_
 offset=922
 size=_U16_
 raw_upper=1800
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_flash
 tooltip=This is the minimum time (in seconds) between burns of the Flash VE table. 
 
 [amc_update_after_entry]
-keys=offset,size,dl_type,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_STRING_,_STRING_
 offset=924
 size=_U16_
 raw_upper=30000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=amc_flash
 tooltip=This is the minimum number of AMC RAM VE updates that have to be made before the program will burn the table to FLASH (only used when FLASH Update is selected).
 
 [cranking_speed_entry]
-keys=offset,size,dl_type,raw_lower,raw_upper,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_
+keys=offset,size,raw_lower,raw_upper,tooltip
+key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_
 offset=20
 size=_S16_
 raw_lower=0
 raw_upper=3000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the cranking RPM threshold.  this should be set slightly higher than your maximum engine cranking speed,  but below idle speed.,  typical value is around 300.
 
 [nb_afr_stoich_entry]
-keys=offset,precision,dl_type,dl_conv_expr,ul_conv_expr,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_ENUM_,_STRING_,_STRING_
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=633
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=afr_nb
 tooltip=This is the narrowband O<sub>2</sub> stoich voltage
 
 [wb_afr_stoich_entry]
-keys=offset,precision,dl_type,dl_conv_expr,ul_conv_expr,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_ENUM_,_STRING_,_STRING_
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=633
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=afr_wb
 tooltip=This is the wideband O<sub>2</sub> stoich AFR
 
 [nos_enrich_entry]
-keys=offset,dl_type,handler,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=746
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The N2O enrichment input is a percentage which multiplies the Δtime between tach pulses. This provides a fixed fuel flow rate for the constant N2O flow rather than a fixed pulse width. Since the same variable is also used for the fuel response test impulse, which is in milliseconds, a change in the settings.ini file is required if you want to use N2O enrichment.
 
 [nos_spark_retard_entry]
-keys=page,offset,precision,dl_type,dl_conv_expr,ul_conv_expr,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=1
 offset=677
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Amount of spark retard when NOS active via the E0 input being low.
 
 [map_above_rpm_entry]
-keys=page,offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 page=1
 offset=936
 size=_U16_
 raw_lower=0
 raw_upper=10000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=maf_ctrls
 tooltip=Use MAP exclusively above the specified RPM.
 
 [maf_below_rpm_entry]
-keys=page,offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 page=1
 offset=938
 size=_U16_
 raw_lower=0
 raw_upper=10000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=maf_ctrls
 tooltip=Use MAF exclusively below the specified RPM.
 
 [an_to_blend_entry]
-keys=offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 offset=634
 size=_S16_
 raw_lower=0
 raw_upper=15000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=an_controls
 tooltip=The RPM threshold to change between Pure Alpha N to Blend mode.
 
 [blend_to_sd_entry]
-keys=offset,size,dl_type,raw_lower,raw_upper,handler,tooltip,bind_to_list
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_
+keys=offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
 offset=636
 size=_S16_
 raw_lower=0
 raw_upper=15000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=an_controls
 tooltip=The RPM threshold to change between Blended mode and pure SD mode
 
 [baro_spark_adv_entry]
-keys=precision,offset,size,dl_type,dl_conv_expr,ul_conv_expr,handler,tooltip,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_ENUM_,_STRING_,_STRING_
+keys=precision,offset,size,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=631
 size=_U08_
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=an_controls
 tooltip=This factor is to allow spark advance with baro (when less than 100 kPa) for alpha-N mode. This isn't allowed in speed density since map in the spark table accounts for it. The rate of advance versus baro under 100 kPa is a user input. 
 

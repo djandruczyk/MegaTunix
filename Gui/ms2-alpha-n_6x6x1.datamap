@@ -9,45 +9,39 @@ groups=defaults,load,rpm,table_1
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 [load]
-keys=size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,dl_type,handler,use_color,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 size=_S16_
 raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 use_color=TRUE
 tooltip=The LOAD (TPS) bins in combination with the RPM bins on the bottom of the MAP Lookup Table define the vertexes (points on the map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=size,raw_lower,raw_upper,dl_type,handler,use_color,tooltip
-key_types=_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=size,raw_lower,raw_upper,use_color,tooltip
+key_types=_ENUM_,_INT_,_INT_,_BOOL_,_STRING_
 size=_U16_
 raw_lower=0
 raw_upper=15000
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the -Table define the vertexes (points on the map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table_1]
-keys=size,precision,dl_type,handler,raw_lower,raw_upper,table_num,tooltip,dl_conv_expr,ul_conv_expr
-key_types=_ENUM_,_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-#keys=size,precision,dl_type,handler,use_color,raw_lower,raw_upper,table_num,tooltip,dl_conv_expr,ul_conv_expr
-#key_types=_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=size,precision,raw_lower,raw_upper,table_num,tooltip,dl_conv_expr,ul_conv_expr
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 size=_S16_
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 #use_color=FALSE
 table_num=5
 raw_lower=0
