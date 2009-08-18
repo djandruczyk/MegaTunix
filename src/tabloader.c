@@ -295,8 +295,6 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			continue;;
 
 		}
-		if (cfg_read_int(cfgfile,section,"page",&tmpi))
-			group->page = tmpi;
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref(group->object);
@@ -314,9 +312,10 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 		/* Adds on "default" options to any other groups */
 		if (g_strcasecmp(section,"defaults") != 0)
-		{
 			group->page = bind_group_data(cfgfile, (GtkWidget *)group->object, groups, "defaults");
-		}
+
+		if (cfg_read_int(cfgfile,section,"page",&tmpi))
+			group->page = tmpi;
 
 		/* Binds the rest of the settings, overriding any defaults */
 		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
@@ -643,6 +642,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
+				//printf("adding widget %s to ve_widgets[%i][%i]\n",glade_get_widget_name(widget),page,offset);
 				ve_widgets[page][offset] = g_list_prepend(
 						ve_widgets[page][offset],
 						(gpointer)widget);
