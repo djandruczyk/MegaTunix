@@ -7,19 +7,21 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=9
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
 [toothlogger_enable_radio_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
-page=9
 bind_to_list=ttm_buttons
 tooltip=Enables Tooth Logger display
 
@@ -32,10 +34,9 @@ bind_to_list=ttm_buttons
 tooltip=Enables Trigger Logger display
 
 [toothlogger_disable_radio_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_STOP_TOOTHMON_LOGGER_
-page=9
 bind_to_list=ttm_buttons
 tooltip=Disables Tooth Logger display
 
@@ -50,9 +51,8 @@ tooltip=Disables Trigger Logger display
 #----- Widgets ---------------------------------------------------------------
 
 [ttm_logger_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=9
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=spark_controls
 
 #----- DrawingAreas ----------------------------------------------------------

@@ -1916,8 +1916,14 @@ void update_widget(gpointer object, gpointer user_data)
 	offset = (gint)OBJ_GET(widget,"offset");
 	canID = (gint)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
-	raw_lower = (gint)OBJ_GET(widget,"raw_lower");
-	raw_upper = (gint)OBJ_GET(widget,"raw_upper");
+	if (!OBJ_GET(widget,"raw_lower"))
+		raw_lower = 0;
+	else
+		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
+	if (!OBJ_GET(widget,"raw_upper"))
+		raw_upper = (gint)pow(256,size);
+	else
+		raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	bitval = (gint)OBJ_GET(widget,"bitval");
 	bitmask = (gint)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);

@@ -7,43 +7,33 @@ groups=defaults,triggers,trig_ret,oddfire
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
-raw_upper=255
-
-[triggers]
-keys=page,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
 raw_lower=0
 raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+
+[triggers]
+keys=tooltip
+key_types=_STRING_
 tooltip=The Trigger points are the points on the crank wheel for triggering each ignition event.  You should set the trigger points at least 20 deg before your MAXIMUM timing advance. (i.e if you set max advance to 40 deg, then the tooth you trigger on should be crossing the sensor at about 60deg BTDC).  See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
 
 [trig_ret]
-keys=page,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-raw_lower=0
-raw_upper=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+keys=bind_to_list,tooltip
+key_types=_STRING_,_STRING_
 bind_to_list=trigger_return
 tooltip=The trigger return points are ONLY used for cranking if you select "Trigger Return" based cranking below. These points (depending on your wheel used) should end up at around 10deg BTDC for easy starting. See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
 
 [oddfire]
-keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,dl_type,bind_to_list,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_ENUM_,_STRING_
+keys=page,handler,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=6
-raw_lower=0
-raw_upper=255
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 precision=2
-dl_type=_IMMEDIATE_
 handler=_ODDFIRE_ANGLE_
 bind_to_list=oddfire_controls
 tooltip=The Oddfire bins are HIGHLY EXPERIMENTAL and likely to be buggy. These are degree offsets for each corresponding trigger point to handle oddfire engines. See http://megasquirt.sourceforge.net/extra/setup-oddwheel.html for more information.
@@ -89,9 +79,8 @@ bind_to_list=2nd_trigger
 #----- Widgets ---------------------------------------------------------------
 
 [s4w_eventbox]
-keys=page,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_
-page=0
+keys=tooltip,bind_to_list
+key_types=_STRING_,_STRING_
 bind_to_list=wheel_decode
 tooltip=Stim for wheel is ONLY FOR USE on the stimulator. DO NOT USE THIS MODE on the car.  This option is for toothed wheel users to test their Megasquirt on the bench using the stimulator where the correct input signal is unavailable. DO NOT use on the real engine or you will flood the engine with fuel.
 
@@ -147,11 +136,8 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #----- Radio Buttons ----------------------------------------------------------
 
 [decoder_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=025 Style,024s9 Style
 toggle_groups=,025_spark
 bitvals=0,1
@@ -160,11 +146,8 @@ bitmask=8
 tooltip=Sets the wheel decode algorithm to either 025 style or 024s9 style.
 
 [style_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=-1,-2
 bitvals=0,1
 offset=0
@@ -172,11 +155,8 @@ bitmask=8
 tooltip=Sets the wheel to be of the "-1" variety, (i.e. 36-1, 12-1, 4-1, etc) or of the "-2" variety, (i.e. 60-2)
 
 [2nd_trig_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 toggle_groups=,2nd_trigger
 bitvals=0,1
@@ -185,11 +165,8 @@ bitmask=1
 tooltip=Sets the second trigger input
 
 [2nd_trig_edge_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Rising Edge,Falling Edge
 bind_to_list=2nd_trigger
 bitvals=0,1
@@ -198,11 +175,8 @@ bitmask=1
 tooltip=Sets the second trigger input to trigger on the Rising or Falling Edge.
 
 [2nd_trig_missing_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=No Missing,Missing
 bind_to_list=2nd_trigger
 bitvals=0,1
@@ -211,11 +185,9 @@ bitmask=1
 tooltip=I have no idea what the hell this one is for. See http://megasquirt.sf.net/extra for more information.
 
 [oddfire_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=3
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
 choices=Disabled,Enabled
 toggle_groups=,oddfire_controls
 bitvals=0,1
@@ -224,11 +196,8 @@ bitmask=16
 tooltip=Enables/Disables Oddfire controls
 
 [dwell_style_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Fixed Dwell,Dwell Control
 toggle_groups=fixed_dwell,dwell_control
 bitvals=0,1
@@ -237,11 +206,8 @@ bitmask=2
 tooltip=Selects Fixed dwell or dwell control
 
 [fixed_dwell_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=50%,75%,HEI4 minimum
 bitvals=0,1,2
 offset=12
@@ -249,11 +215,8 @@ bitmask=96
 tooltip=Selects the amount fo dwell when in fixed mode
 
 [dual_dist_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Disabled,Enabled
 bitvals=0,1
 offset=92
@@ -261,11 +224,9 @@ bitmask=16
 tooltip=Use dual distributor mode or not
 
 [invert_ign_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 page=3
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
 choices=Normal,Inverted
 bitvals=0,1
 offset=173
@@ -273,11 +234,9 @@ bitmask=8
 tooltip=Sets ignition output polarity
 
 [crank_trig_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
 key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
 choices=Trigger Return,Time Based
 toggle_groups=trigger_return,time_based
 bind_to_list=nonedis_controls,spark_controls
@@ -287,11 +246,8 @@ bitmask=4
 tooltip=Sets the cranking timing control to use Trigger Return (second column of Trigger points table above) or time based timing (which can be error prone if the engine doesn't have a stable and consistent cranking RPM)
 
 [s4w_combo]
-keys=page,handler,dl_type,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 toggle_groups=,s4w_controls
 bitvals=0,1
@@ -417,124 +373,97 @@ group=oddfire
 oddfire_bit_offset=176
 
 [trig_wheel_teeth_entry]
-keys=page,offset,handler,dl_type,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=90
-handler=_GENERIC_
-dl_type=_IMMEDIATE_
 tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
 
 [trigger_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,spconfig_offset,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,handler,spconfig_offset,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 page=3
 offset=168
 precision=2
 dl_conv_expr=x*(284/100)
 ul_conv_expr=x/(284/100)
-dl_type=_IMMEDIATE_
 handler=_TRIGGER_ANGLE_
 spconfig_offset=173
 tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
 
 [crank_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
 offset=171
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
-dl_type=_IMMEDIATE_
-ign_parm=TRUE
-handler=_GENERIC_
 tooltip=This is the Crank Timing (when not using trigger return)
 
 [fixed_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
 offset=169
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
-dl_type=_IMMEDIATE_
-ign_parm=TRUE
-handler=_GENERIC_
 tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
 
 [trim_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
 offset=170
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
-dl_type=_IMMEDIATE_
-ign_parm=TRUE
-handler=_GENERIC_
 tooltip=This is global offset for the crank table, to shift all values one way or another.
 
 [ign_hold_entry]
-keys=page,offset,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,raw_upper,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_
 page=3
 offset=172
 raw_lower=0
 raw_upper=100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
 
 [crankdwell_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=110
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the ignition dwell during cranking. 
 
 [rundwell_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=111
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 raw_upper=80
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the ignition dwell during normal engine running. 
 
 [min_discharge_entry]
-keys=page,offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=143
 precision=1
 raw_lower=0
 raw_upper=15
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the time allowed between ignition events for the plug to fire before the coil is allowed to recharge. This can limit dwell at high RPM's.
 
 [s4w_num_steps_entry]
-keys=page,offset,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,raw_lower,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=13
 raw_upper=6
 raw_lower=1
 bind_to_list=s4w_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Number of steps/outputs. (Not too sure on this one....)

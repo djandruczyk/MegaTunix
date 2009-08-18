@@ -7,40 +7,39 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
-page=1
 bind_to_list=get_data_buttons
 
 [burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
-page=1
 bind_to_list=burners
 
 #----- Dynamic Widgets -------------------------------------------------------
 
 [ego2_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=1
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=dt_controls
 
 [ve2_target_afr_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=1
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=dt_controls
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
@@ -61,27 +60,24 @@ key_types=_STRING_
 bind_to_list=kpa_oloop
 
 [ego1_active_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=1
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Active Temp \302\260C.
 f_label=Active Temp \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ego2_active_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=1
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Active Temp \302\260C.
 f_label=Active Temp \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ego1_ign_events_label]
-keys=page,label,alt_label,depend_on,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=label,alt_label,depend_on,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 alt_label=mSec Btwn Steps
 label=Ign Pulses Btwn Steps
 depend_on=step_ctr
@@ -89,9 +85,8 @@ step_ctr=_VE_EMB_BIT_,_U08_,1,188,1,0,0
 bind_to_list=ego_ign_events
 
 [ego2_ign_events_label]
-keys=page,label,alt_label,depend_on,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=label,alt_label,depend_on,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 alt_label=mSec Btwn Steps
 label=Ign Pulses Btwn Steps
 depend_on=step_ctr
@@ -101,22 +96,19 @@ bind_to_list=ego_ign_events
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [sensor1_combo]
-keys=page,offset,choices,bitvals,bitmask,swap_labels,dl_type,handler,table_2_update,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
-page=1
+keys=offset,choices,bitvals,bitmask,swap_labels,table_2_update,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=2
 choices=Narrow-Band,Wide-Band
 table_2_update=5
 swap_labels=AFR_AFR1_afrtable_filler_label
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the O2 sensor type.
 
 [sensor2_combo]
-keys=page,offset,choices,bitvals,bitmask,bind_to_list,swap_labels,dl_type,handler,table_2_update,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,swap_labels,table_2_update,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=2
 offset=184
 bitvals=0,1
@@ -125,13 +117,11 @@ choices=Narrow-Band,Wide-Band
 bind_to_list=dt_controls
 table_2_update=6
 swap_labels=AFR_AFR2_afrtable_filler_label
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the Second O2 sensor type. This is only applicable to Dual Table mode.
 
 [ego_sensors_combo]
-keys=page,offset,choices,bitvals,bitmask,dl_type,handler,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=2
 offset=188
 bitvals=0,1
@@ -139,59 +129,48 @@ bitmask=1
 choices=Only 1,Two (DT Only)
 bind_to_list=dt_controls
 toggle_groups=,dual_sensors
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the number of O<sub>2</sub> sensors.
 
 [ego_step_combo]
-keys=page,offset,choices,bitvals,bitmask,swap_labels,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,choices,bitvals,bitmask,swap_labels,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=188
 bitvals=0,1
 bitmask=1
 choices=milliseconds,Ignition Pulses
 swap_labels=ego_igno_events
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the O<sub>2</sub> signal convergence time units to be in milliseconds or engine cycles. (after X milliseconds or Engine cycles the ecu will try to trim in the fuel)
 
 [ego_tafr1_combo]
-keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 offset=46
 bitvals=0,1
 bitmask=128
 choices=Disabled,Enabled
 toggle_groups=,afr1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Enables or Disables Target AFR functionality for VETable(s) 1/3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [ego_tafr2_combo]
-keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 offset=92
 bitvals=0,1
 bitmask=128
 choices=Disabled,Enabled
 toggle_groups=,afr2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Enables or Disables Target AFR functionality for VETable(s) 2 only (DT).  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [tafr_strat_combo]
-keys=page,offset,choices,bitvals,bitmask,dl_type,handler,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=109
 bitvals=0,1
 bitmask=16
 choices=Speed Density,Alpha-N
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=5,6
 group_2_update=multi_expression
@@ -199,167 +178,133 @@ swap_labels=AFR_AFR1_load_tbl_lab,AFR_AFR1_load_tbl_units,AFR_AFR2_load_tbl_lab,
 tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N).
 
 [ego_target_combo]
-keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 offset=109
 bitvals=0,1
 bitmask=32
 choices=Always,> TPS Thresh.
 toggle_groups=,tafr_thresh
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Target AFR when turned on will be used ALWAYS or only above a certain TPS threshold
 
 [ego_oloop_combo]
-keys=page,offset,choices,bitvals,bitmask,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 offset=46
 bitvals=0,1
 bitmask=1
 choices=TPS,MAP
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 toggle_groups=tps_oloop,kpa_oloop
 tooltip=Jump to Open Loop mode when TPS or MAP threshold below is exceeded. (set the control below to 255 to disable jumping to open loop control)
 
 #----- Spin Buttons ----------------------------------------------------------
 
 [ego1_active_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_
-page=1
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=144
 dl_conv_expr=x+40
 ul_conv_expr=x-40
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 temp_dep=TRUE
 bind_to_list=temperature
 tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego2_active_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=2
 offset=144
 dl_conv_expr=x+40
 ul_conv_expr=x-40
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 temp_dep=TRUE
 bind_to_list=temperature,dual_sensors
 tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego1_active_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=185
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego2_active_rpm_entry]
-keys=page,offset,bind_to_list,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=2
 offset=185
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=dual_sensors
 tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego1_switching_voltage_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=187
 precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
 [ego2_switching_voltage_entry]
-keys=page,offset,precision,bind_to_list,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=2
 offset=187
 precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=dual_sensors
 tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
 [ego1_step_percent_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=146
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is how much of an adjustment the controller makes to the fuel output on each adjustment interval. Setting this too high can cause oscilliation from rich to lean, setting it too low can cause it to take far to long to converge to the target.
 
 [ego2_step_percent_entry]
-keys=page,offset,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_
 page=2
 offset=146
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=dual_sensors
 tooltip=This is how much of an adjustment the controller makes to the fuel output on each adjustment interval. Setting this too high can cause oscilliation from rich to lean, setting it too low can cause it to take far to long to converge to the target.
 
 [ego1_delay_events_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=145
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the delay that the control waits in milliseconds OR Ignition pulses before applying the next mixture adjustment.  This allows soem time for the O2 signal to stabilize before continuing. Setting this too low can also lead to mixture oscillating between rich and lean and engine instability. Setting it too high slows convergence time to the target.
 
 [ego2_delay_events_entry]
-keys=page,offset,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_
 page=2
 offset=145
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=dual_sensors
 tooltip=This is the delay that the control waits in milliseconds OR Ignition pulses before applying the next mixture adjustment.  This allows soem time for the O2 signal to stabilize before continuing. Setting this too low can also lead to mixture oscillating between rich and lean and engine instability. Setting it too high slows convergence time to the target.
 
 [ego1_limit_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=1
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=147
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This limits how far the controller can alter the mix from what the VEtable says. Setting this high is used for rough-in tuning, Setting it lower prevents the controller for over-richening or over-leaning the mixture.
 
 [ego2_limit_entry]
-keys=page,offset,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_
 page=2
 offset=147
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=dual_sensors
 tooltip=This limits how far the controller can alter the mix from what the VEtable says. Setting this high is used for rough-in tuning, Setting it lower prevents the controller for over-richening or over-leaning the mixture.
 
 [alt_ego_kpa_entry]
-keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=39
 source_key=map_sensor
@@ -367,43 +312,35 @@ multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When the Manifold pressure exceeds this value change the EGO +/- Limit to what the following control is set to. 
 
 [alt_ego_lim_entry]
-keys=page,offset,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_upper,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_
 page=0
 offset=40
 raw_upper=100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the override EGO +/- Limit when the manifold pressure exceeds the above setpoint.
 
 [tps_tafr_thresh_entry]
-keys=page,offset,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=121
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=tafr_thresh
 tooltip=When this TPS point is reached we switch from the B&G EGO settings to the Target AFR table(s).
 
 [tps_oloop_thresh_entry]
-keys=page,offset,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=65
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 bind_to_list=tps_oloop
 tooltip=When this TPS point is reached we jump to OpenLoop. This value is in ADC counts. Set to 255 to disable going to OpenLoop
 
 [kpa_oloop_thresh_entry]
-keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=64
 source_key=map_sensor
@@ -411,7 +348,5 @@ multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,kpa_oloop
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When this MAP point is reached we jump to OpenLoop. This value is in kPa. Set to MAX (use 1024 and it'll pick the max) to disable going to OpenLoop.
 

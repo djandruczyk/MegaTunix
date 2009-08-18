@@ -312,6 +312,13 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			g_free(tmpbuf);
 		}
 
+		/* Adds on "default" options to any other groups */
+		if (g_strcasecmp(section,"defaults") != 0)
+		{
+			group->page = bind_group_data(cfgfile, (GtkWidget *)group->object, groups, "defaults");
+		}
+
+		/* Binds the rest of the settings, overriding any defaults */
 		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
@@ -327,7 +334,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 /*!
  \brief bind_group_data() is called to bind data widget that is defined in
- a group. (saves from having to duplicate a large number of keys.values for 
+ a group. (saves from having to duplicate a large number of keys/values for 
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
  \param cfgfile

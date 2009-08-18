@@ -7,11 +7,14 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -19,332 +22,266 @@ raw_upper=255
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_READ_VE_CONST_
-page=0
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
-page=0
 bind_to_list=burners
 
 #----- Widgets ----------------------------------------------------------------
 
 [boost_control_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=boost_controller
 
 [knock_control_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controller
 
 [boost_buttons_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=boost_controls
 
 [boost_entries_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=boost_controls
 
 [knock_params_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls
 
 #----- Labels ----------------------------------------------------------------
 
 [knock_boost_params_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,boost_controls
 
 [first_knock_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [subsequent_knock_retard_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [knock_max_retard_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [advance_when_no_knock_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [knock_wait_time_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [knock_ignition_retard_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,spark_controls
 
 [bc_to_remove_when_knocking_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,boost_controls
 
 [bc_max_to_remove_when_knocking_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=knock_controls,boost_controls
 
 [iat_start_reduce_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=IAT to start reducing\nboost at (\302\260C.)
 f_label=IAT to start reducing\nboost at (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [iat_temp_per_psi_label]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=0
+keys=set_label
+key_types=_STRING_
 set_label=Reduce boost by 1 PSI\nfor every X \302\260F. over.
 
 [obp_spark_base_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=obp_spark_ctrls,spark_controls,nonedis_controls,boost_controls
 
 [obp_cut_sparks_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=obp_spark_ctrls,spark_controls,nonedis_controls,boost_controls
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [boost_combo]
-keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=12
 bitvals=0,1
 bitmask=1
 choices=Disabled,Enabled
 toggle_groups=x4_tach_pin,boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
 
 [knock_combo]
-keys=page,offset,choices,bitvals,bitmask,toggle_groups,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=46
 bitvals=0,1
 bitmask=64
 choices=Disabled,Enabled
 toggle_groups=,knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The knock controller feature will attempt to alter ignition timing and/or boost in order to limit detonation.
 
 [boost_pwm_combo]
-keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=14
 bitvals=1,2,3,4,5,6,7
 bitmask=7
 choices=39Hz,19.5Hz,13Hz,9.8Hz,7.8Hz,6.5Hz,5.6Hz
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the Boost Actuator PWM rate to the specified value.  Higher rates are better for fast acting valves,  slower rates are more suitable for valves that have higher damping or that respond slower.
 
 [more_boost_combo]
-keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=92
 bitvals=0,1
 bitmask=64
 choices=More Boost,Less Boost
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When "More Boost" is selected a higher Duty Cycle means MORE boost will be generated, otherwise higher duty cycle means LESS boost wil be generated..
 
 [boost_input_combo]
-keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=116
 bitvals=0,1
 bitmask=64
 choices=No,Yes
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When set to Yes, Boost Table 3 will be used based on the state of pin6 of JP1. (table 3 USED when input is LOW)
 
 [obp_combo]
-keys=page,offset,choices,bitvals,bitmask,bind_to_list,dl_type,handler,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
-page=0
+keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 offset=76
 bitvals=1,2,3
 bitmask=48
 choices=Spark,Fuel,Fuel & Spark
 bind_to_list=boost_controls
 toggle_groups=obp_spark_ctrls,,obp_spark_ctrls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Sets the overboost protection revlimiter style to be either fuel drop, spark drop, or both.
 
 #----- Spinbuttons ----------------------------------------------------------
 
 [bc_update_rate_entry]
-keys=page,offset,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,raw_lower,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=15
 raw_lower=10
 raw_upper=255
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=How often the boost algorithm calculations are run. 
 
 [bc_pgain_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=16
 precision=1
 dl_conv_expr=x/(3922/10000)
 ul_conv_expr=x*(3922/10000)
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the Proportional Gain used in the PD controller algorithm
 
 [bc_dgain_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=17
 precision=1
 dl_conv_expr=x/(3922/10000)
 ul_conv_expr=x*(3922/10000)
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the Differential Gain used in the PD controller algorithm
 
 [bc_closed_loop_limit_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=125
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=If boost deviates more than this limit from the target as defined by the boost kpa target tables (1 or 3) we wll switch to open loop mode and use the dutycycle table 2.
 
 [bc_ambient_pressure_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=185
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Typical ambient pressure for your location.  Used by boost control to accurate calculate boost levels.
 
 [bc_overboost_cutoff_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=44
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=OverBoost cutoff at which point fuel is shutdown completely to avoid engine destruction.
 
 [bc_iat_start_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=135
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=boost_controls,temperature
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=If intake air temp exceeds this temperature AND the Throtle position exceeds the TPS setpoint below the ECU will start reducing boost based on the value of the next control. 
 
 [bc_temp_per_1psi_entry]
-keys=page,offset,bind_to_list,temp_dep,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,bind_to_list,temp_dep,tooltip
+key_types=_INT_,_STRING_,_BOOL_,_STRING_
 offset=136
 temp_dep=TRUE
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=For every number of degrees this control is set to, that the intake air temp rises over, we reduce the boost by 1 psi.  So If you have the start reducing boost control set to 150 deg, and the reduce boost by 1psi control set to 10deg, then when the air temp is at 190deg, the ECU will attempt to reduce boost by 4 psi. e.g. 190-150/10 equals 4psi.
 
 [bc_tps_to_reduce_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_
 offset=137
 bind_to_list=boost_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=If the throttle position is higher than this value (measured in RAW ADC counts) then the boost_iat controls take effect.  If TPS is below this threshold those controls have NO EFFECT.
 
 [bc_remove_when_knock_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=107
 precision=2
 raw_upper=136
@@ -356,14 +293,11 @@ raw_upper=136
 dl_conv_expr=x/(147/1000)
 ul_conv_expr=x*(147/1000)
 bind_to_list=boost_controls,knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When the knock controller is enabled and knock is detected, boost will be reduced by this amount in psi
 
 [bc_max_remove_when_knock_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=108
 precision=2
 # MT INI is wrong,  these controls are PSI
@@ -375,141 +309,109 @@ dl_conv_expr=x/(147/1000)
 ul_conv_expr=x*(147/1000)
 raw_upper=136
 bind_to_list=boost_controls,knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When knock is sustained, the controller will pull out this much boost at most in PSI.
 
 [ignore_knocks_above_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=53
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_upper=120
 bind_to_list=knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When RPM is ABOVE this threshold Knock detection is disabled
 
 [ignore_knocks_below_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=54
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_upper=120
 bind_to_list=knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When RPM is BELOW this threshold Knock detection is disabled
 
 [ignore_knocks_above_map_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=55
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,knock_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When MAP is ABOVE this threshold Knock detection is disabled
 
 [first_knock_retard_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=56
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 raw_upper=28
 bind_to_list=knock_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When knock is first detected, retard timnig by this many degrees.
 
 [subsequent_knock_retard_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=57
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 raw_upper=28
 bind_to_list=knock_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When knock is sustained, retard timing by this many degrees for each knock input.
 
 [max_retard_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=59
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=knock_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The maximum amount of timing to pull out when knocking is detected.
 
 [advance_when_no_knock_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=58
 precision=2
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 raw_upper=56
 bind_to_list=knock_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The Amount of timing to try and put back in when knocking has ceased.  The controller will wait a small interval between trying to re-add timing back in. Having this set to high can lead to oscillation, too low can cause timing to be pulled out and take a LONG time for it to return to normal.
 
 [knock_wait_time_entry]
-keys=page,offset,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,raw_lower,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=60
 raw_lower=1
 raw_upper=10
 bind_to_list=knock_controls,spark_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This wait time ties to the above control.  After knocking has ceased thecontrol will attempt to advance timing backby the amount above in steps separated by this time interval in seconds.
 
 [obp_base_sparks_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=78
 dl_conv_expr=x-1
 ul_conv_expr=x+1
 raw_upper=20
 bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When overboost protection is triggered, this and the next value are used to determine how much sparkdrop to do.
 
 [obp_cut_sparks_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=84
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_upper=20
 bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=When overboost protction is triggered, this and the previous value control how many sparks to drop.  See the Staging/Revlimiter/MISC tab for more info.
 
