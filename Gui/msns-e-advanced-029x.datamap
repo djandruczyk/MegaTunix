@@ -21,14 +21,14 @@ handler=_GENERIC_
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 

@@ -255,7 +255,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 
 /*!
- \brief convert_after_upload() converts the ms-units dat to the real world
+ \brief convert_after_upload() converts the ms-units data to the real world
  units for display on the GUI
  \param widget (GtkWidget *) to extract the conversion info from to perform
  the necessary math
@@ -296,6 +296,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
+		printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
 

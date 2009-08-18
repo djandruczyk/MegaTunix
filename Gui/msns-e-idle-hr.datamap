@@ -331,7 +331,7 @@ bind_to_list=cloop_idle_controls,pwm_idle_controls
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [closure_speed_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,handler,tooltip
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=8
 offset=10

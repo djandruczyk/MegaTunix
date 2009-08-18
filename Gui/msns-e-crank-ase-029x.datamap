@@ -589,7 +589,7 @@ tooltip=This is the Maximum allowed additional timing advance to be added on by 
 
 [iat_ret_map_setpoint_entry]
 keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=51
 source_key=map_sensor

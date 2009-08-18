@@ -228,16 +228,22 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	gchar **names = NULL;
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
-	gint lower_limit = 0;
-	gint upper_limit = 0;
+	gdouble lower_limit = 0;
+	gdouble upper_limit = 0;
 	gdouble result = 0.0;
 
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
 	total_symbols = (gint)OBJ_GET(object,"total_symbols");
-	lower_limit = (gint)OBJ_GET(object,"lower_limit");
-	upper_limit = (gint)OBJ_GET(object,"upper_limit");
+	if (OBJ_GET(object,"lower_limit"))
+		lower_limit = (gdouble)(gint)OBJ_GET(object,"lower_limit");
+	else
+		lower_limit = -G_MAXDOUBLE;
+	if (OBJ_GET(object,"upper_limit"))
+		upper_limit = (gdouble)(gint)OBJ_GET(object,"upper_limit");
+	else
+		upper_limit = G_MAXDOUBLE;
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);

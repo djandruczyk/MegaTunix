@@ -103,7 +103,7 @@ bind_to_list=multispark
 
 [persona_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=0
 bitvals=0,1,2,4,12,16,48,64,128
 bitmask=255

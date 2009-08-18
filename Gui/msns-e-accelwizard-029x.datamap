@@ -169,36 +169,36 @@ tooltip=Sets whether we disable decel enrich or not
 #----- Spinbuttons ----------------------------------------------------------
 
 [map_ae_rate_4_entry]
-keys=offset,raw_lower,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_STRING_,_STRING_
 offset=168
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_3_entry]
-keys=offset,raw_lower,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_STRING_,_STRING_
 offset=167
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_2_entry]
-keys=offset,raw_lower,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_STRING_,_STRING_
 offset=166
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_1_entry]
-keys=offset,raw_lower,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_STRING_,_STRING_
 offset=165
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_pw_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT__STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=172
 precision=1
 dl_conv_expr=x*10
@@ -229,7 +229,7 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 
 [tps_ae_rate_4_entry]
-keys=offset,precision,raw_lower,dl_conv_expr,ul_conv_expr
+keys=offset,precision,dl_conv_expr,ul_conv_expr
 key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=164
 precision=1

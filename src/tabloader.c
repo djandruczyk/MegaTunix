@@ -118,7 +118,9 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			groups = load_groups(cfgfile);
 			bindgroup->cfgfile = cfgfile;
 			bindgroup->groups = groups;
+			bindgroup->map_file = g_strdup(map_file);
 			bind_data(topframe,(gpointer)bindgroup);
+			g_free(bindgroup->map_file);
 			if (groups)
 				g_hash_table_destroy(groups);
 			groups = NULL;
@@ -287,7 +289,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 		if (group->num_keytypes != group->num_keys)
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
 			g_free(group);
@@ -509,7 +511,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (num_keytypes != num_keys)
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",num_keys,num_keytypes,section,bindgroup->map_file));
 		g_strfreev(keys);
 		g_free(keytypes);
 		return;
