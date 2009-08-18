@@ -239,7 +239,6 @@ tooltip=Sets the Type of MAP Sensor in use.
 [250kpa_rbutton]
 keys=offset,bitval,bitmask,handler,source_key,source_value,group_2_update
 key_types=_INT_,_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=1
 offset=182
 bitval=1
 bitmask=3
@@ -276,7 +275,6 @@ source_value=MPX6400
 [req_fuel_per_cycle_0_spin]
 keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
 offset=148
 table_num=0
 dl_type=_DEFERRED_

@@ -7,10 +7,11 @@ groups=defaults,warmup,crank,ase,IATCTemp,IATCorS
 #----- Groups -----------------------------------------------------------------
 
 [defaults]
-keys=size,raw_lower,raw_upper,dl_type,handler
-key_types=_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
+page=8
 size=_U08_
-raw_lower=255
+raw_lower=0
 raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

@@ -3,7 +3,6 @@ description=Object data map for the combined VEtables tab
 tab_name=_VE Tables
 id_prefix=VE16_
 size=_U08_
-page=4
 groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2,load_3,rpm_3,ve_3
 
 #----- Groups ----------------------------------------------------------------

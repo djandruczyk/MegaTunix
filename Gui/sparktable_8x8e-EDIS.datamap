@@ -25,7 +25,6 @@ tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM b
 [rpm]
 keys=dl_conv_expr,ul_conv_expr,use_color,tooltip
 key_types=_STRING_,_STRING_,_BOOL_,_STRING_
-page=1
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 use_color=TRUE
@@ -43,45 +42,40 @@ tooltip=The Spark Advance Entries control the engine igntion timing.  The values
 #----- Gauges ----------------------------------------------------------------
 
 [gaugeframe1]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [gaugeframe3]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [gaugeframe4]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [gaugeframe5]
-keys=page,post_functions_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
@@ -90,76 +84,66 @@ datasource=afr
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident,table_num
-key_types=_INT_,_ENUM_,_STRING_
-page=1
+keys=tab_ident,table_num
+key_types=_ENUM_,_STRING_
 tab_ident=_SPARKTABLES_TAB_
 table_num=1
 
 [topframe_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=1
+keys=set_label
+key_types=_STRING_
 set_label=MegaSquirtnEDIS 3.x Spark Table
 
 [title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=1
+keys=set_label
+key_types=_STRING_
 set_label=Spark Advance Table (EDIS)
 
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
-page=1
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
-page=1
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [export_button]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_EXPORT_SINGLE_TABLE_
-page=1
 table_num=1
 
 [import_button]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_IMPORT_SINGLE_TABLE_
-page=1
 table_num=1
 
 [3d_view_button]
-keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=1
+keys=table_num,tooltip,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_
 table_num=1
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate.  A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [rescale_button]
-keys=page,handler,data
-key_types=_INT_,_ENUM_,_STRING_
-page=1
+keys=handler,data
+key_types=_ENUM_,_STRING_
 handler=_RESCALE_TABLE_
 data=SP1_rescale_entry,SP1_rescale_entry
 
 [tracking_checkbutton]
-keys=handler,page,table_num
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,table_num
+key_types=_ENUM_,_STRING_
 handler=_TRACKING_FOCUS_
-page=1
 table_num=1
 
 #----- Rescale Entry ------------------------------------------------------
@@ -180,9 +164,8 @@ post_functions_with_arg=lock_entry
 #----- MAIN SparkTable Container ---------------------------------------------
 
 [main_sparktable]
-keys=page,rescaler_frame
-key_types=_INT_,_STRING_
-page=1
+keys=rescaler_frame
+key_types=_STRING_
 rescaler_frame=SP1_rescale_frame
 
 #----- Temp Timing Controls --------------------------------------------------

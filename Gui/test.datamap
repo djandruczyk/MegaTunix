@@ -57,27 +57,24 @@ offset=744
 bitmask=255
 
 [ms2_radiobutton]
-keys=page,offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_
-page=0
+keys=offset,bitval,bitmask,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=1
 bitmask=255
 tooltip=Sets the ECU type to MS-II. (NOT the same as a microsquirt).
 
 [usquirt_radiobutton]
-keys=page,offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_
-page=0
+keys=offset,bitval,bitmask,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=2
 bitmask=255
 tooltip=Sets the ECU type to Microsquirt
 
 [undefined_radiobutton]
-keys=page,offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_
-page=0
+keys=offset,bitval,bitmask,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=255
 bitmask=255

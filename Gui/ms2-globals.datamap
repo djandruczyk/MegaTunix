@@ -280,9 +280,8 @@ alternate_offset=611
 alternate_bitmask=1
 
 [req_fuel_per_squirt_0_spin]
-keys=page,offset,size,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=0
+keys=offset,size,table_num,ul_conv_expr,bind_to_list
+key_types=_INT_,_ENUM_,_STRING_,_STRING_,_STRING_
 offset=608
 size=_U16_
 table_num=0

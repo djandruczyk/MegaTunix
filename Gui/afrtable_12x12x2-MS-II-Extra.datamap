@@ -225,9 +225,8 @@ data=AFR_AFR2_rescale_entry,AFR_AFR2_rescale_combo
 #----- Spinners -------------------------------------------------------------
 
 [_AFR1_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
-page=0
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+key_types=_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
 offset=148
 precision=1
 table_num=9
@@ -253,9 +252,8 @@ dtmode_offset=33
 dtmode_bitmask=16
 
 [_AFR2_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
-page=0
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+key_types=_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
 offset=148
 table_num=10
 dl_type=_IGNORED_

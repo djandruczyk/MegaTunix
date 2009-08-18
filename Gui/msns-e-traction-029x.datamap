@@ -419,7 +419,6 @@ tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% sl
 [vss_sensor_diff_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
-page=0
 offset=119
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -429,7 +428,6 @@ tooltip=Sets the differential (%) in VSS inputs (from drive to undriven wheels) 
 [vss_low_slip_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
-page=0
 offset=120
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -439,7 +437,6 @@ tooltip=Sets the low slip threshold
 [vss_half_slip_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
-page=0
 offset=123
 precision=2
 dl_conv_expr=x/(39216/100000)

@@ -170,34 +170,29 @@ datasource=afr
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident,sub-notebook
-key_types=_INT_,_ENUM_,_STRING_
-page=6
+keys=tab_ident,sub-notebook
+key_types=_ENUM_,_STRING_
 tab_ident=_AFRTABLES_TAB_
 sub-notebook=AFR_AFR_notebook
 
 [topframe_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=6
+keys=set_label
+key_types=_STRING_
 set_label=MegaSquirtnSpark-Extra AFR-Table 1
 
 [AFR1_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=6
+keys=set_label
+key_types=_STRING_
 set_label=Air Fuel Ratio Table for VE-Tables 1/3
 
 [AFR2_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=6
+keys=set_label
+key_types=_STRING_
 set_label=Air Fuel Ratio Table for VE-Table 2 (DT)
 
 [topframe_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=6
+keys=set_label
+key_types=_STRING_
 set_label=MegaSquirtnSpark-Extra AFR-Table 1
 
 [AFR1_load_tbl_lab]
@@ -257,16 +252,14 @@ ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,0
 #----- widgets ---------------------------------------------------------------
 
 [AFR1_vbox1]
-keys=page,bind_to_list,table_num
-key_types=_INT_,_STRING_,_STRING_
-page=6
+keys=bind_to_list,table_num
+key_types=_STRING_,_STRING_
 bind_to_list=afr1
 table_num=5
 
 [AFR2_vbox1]
-keys=page,bind_to_list,table_num
-key_types=_INT_,_STRING_,_STRING_
-page=6
+keys=bind_to_list,table_num
+key_types=_STRING_,_STRING_
 bind_to_list=afr2,dt_controls
 table_num=6
 
@@ -274,18 +267,16 @@ table_num=6
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
-page=6
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
-page=6
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
@@ -332,24 +323,21 @@ page=1
 table_num=6
 
 [AFR1_3d_view_button]
-keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=6
+keys=table_num,tooltip,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_
 table_num=5
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current AFR-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [AFR1_rescale_button]
-keys=page,handler,data
-key_types=_INT_,_ENUM_,_STRING_
-page=6
+keys=handler,data
+key_types=_ENUM_,_STRING_
 handler=_RESCALE_TABLE_
 data=AFR_AFR1_rescale_entry,AFR_AFR1_rescale_combo
 
 [AFR2_3d_view_button]
-keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-page=6
+keys=table_num,x_source,y_source,z_source,tooltip,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 table_num=6
 x_source=raw_rpm
 y_source=mapkpa
@@ -358,9 +346,8 @@ bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current AFR-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [AFR2_rescale_button]
-keys=page,handler,data
-key_types=_INT_,_ENUM_,_STRING_
-page=6
+keys=handler,data
+key_types=_ENUM_,_STRING_
 handler=_RESCALE_TABLE_
 data=AFR_AFR2_rescale_entry,AFR_AFR2_rescale_combo
 
@@ -393,15 +380,13 @@ post_functions_with_arg=lock_entry
 #----- MAIN VETable Container ------------------------------------------------
 
 [AFR1_main_afrtable]
-keys=page,rescaler_frame
-key_types=_INT_,_STRING_
-page=6
+keys=rescaler_frame
+key_types=_STRING_
 rescaler_frame=AFR_AFR1_rescale_frame
 
 [AFR2_main_afrtable]
-keys=page,rescaler_frame
-key_types=_INT_,_STRING_
-page=6
+keys=rescaler_frame
+key_types=_STRING_
 rescaler_frame=AFR_AFR2_rescale_frame
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------

@@ -14,10 +14,9 @@ page=5
 #----- Buttons ---------------------------------------------------------------
 
 [toothlogger_enable_radio_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
-page=5
 bind_to_list=ttm_buttons
 tooltip=Enables Tooth Logger display
 
@@ -38,10 +37,9 @@ bind_to_list=ttm_buttons
 tooltip=Enables Composite Logger display
 
 [toothlogger_disable_radio_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_STOP_TOOTHMON_LOGGER_
-page=5
 bind_to_list=ttm_buttons
 tooltip=Disables Tooth Logger display
 

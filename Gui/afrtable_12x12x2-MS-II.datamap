@@ -207,7 +207,6 @@ data=AFR_AFR2_new_reqfuel_entry
 [AFR2_3d_view_button]
 keys=table_num,tooltip,bind_to_list
 key_types=_STRING_,_STRING_,_STRING_
-page=0
 table_num=4
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current AFR-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
@@ -221,9 +220,8 @@ data=AFR_AFR2_rescale_entry,AFR_AFR2_rescale_combo
 #----- Spinners -------------------------------------------------------------
 
 [_AFR1_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
-page=0
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+key_types=_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
 offset=148
 precision=1
 table_num=3
@@ -249,9 +247,8 @@ dtmode_offset=33
 dtmode_bitmask=16
 
 [_AFR2_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
-page=0
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+key_types=_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_,_INT_
 offset=148
 table_num=4
 dl_type=_IGNORED_

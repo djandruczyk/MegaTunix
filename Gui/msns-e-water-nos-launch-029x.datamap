@@ -280,7 +280,6 @@ tooltip=The engine temp MUST be above this point for the NOS system to even func
 [nos_min_rpm_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
 offset=23
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -321,7 +320,6 @@ tooltip=The pulsewidth to add on top of the existing PW at the NOS max RPM. Puls
 [nos_min_tps_entry]
 keys=offset,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_
-page=0
 offset=67
 bind_to_list=nos_params
 tooltip=The minimum TPS value in RAW ADC counts to be reached before Nitrous enrichment can be activated...
@@ -382,7 +380,6 @@ tooltip=This control and the previous one up determine the range of manifold pre
 [launch_hard_rpm_limit_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
 offset=20
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -401,7 +398,6 @@ tooltip=This control Sets the base number of sparks used by the round robin spar
 [lc_sparkdrop_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
 offset=77
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -428,7 +424,6 @@ tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the l
 [launch_soft_rpm_limit_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
-page=0
 offset=43
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -439,7 +434,6 @@ tooltip=This control Sets the soft revlimit RPM (where ignition is cut back) for
 [flat_shift_arming_rpm_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=0
 offset=124
 dl_conv_expr=x/100
 ul_conv_expr=x*100

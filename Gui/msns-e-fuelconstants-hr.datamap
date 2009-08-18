@@ -350,7 +350,6 @@ offset=153
 [pwm_time_thresh_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
 key_types=_INT_,_INT_,_STRING_,_STRING_
-page=1
 offset=154
 precision=1
 dl_conv_expr=x*10
