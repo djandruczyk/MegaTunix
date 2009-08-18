@@ -876,7 +876,7 @@ log_by_default=FALSE
 [derived_55]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
-internal_names=mapDOT
+internal_names=mapdot
 dlog_gui_name=mapDOT
 dlog_field_name=mapDOT
 offset=4

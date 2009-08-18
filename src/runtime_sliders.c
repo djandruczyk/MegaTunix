@@ -288,7 +288,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
 		return NULL;
 	}
 
@@ -417,7 +417,7 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	
 	if  (!G_IS_OBJECT(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,glade_get_widget_name(widget)));
 		return;
 	}
 	slider->ctrl_name = g_strdup(glade_get_widget_name(widget));

@@ -296,7 +296,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
-		printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));
+		//printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
 

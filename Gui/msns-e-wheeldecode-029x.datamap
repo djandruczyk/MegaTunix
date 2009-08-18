@@ -235,7 +235,7 @@ tooltip=Sets ignition output polarity
 
 [crank_trig_combo]
 keys=page,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=3
 choices=Trigger Return,Time Based
 toggle_groups=trigger_return,time_based

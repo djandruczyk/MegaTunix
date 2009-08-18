@@ -192,7 +192,7 @@ bind_to_list=temperature,warmup_idle_controls,pwm_idle_controls
 tooltip=This is the temp at which the fast idle RPM is set to.  If engine temp is below this temp the fast idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [w_slow_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltop
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=8
 offset=18

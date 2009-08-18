@@ -8,7 +8,7 @@ groups=defaults,load,rpm,vetable
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
 size=_U08_
 raw_lower=0

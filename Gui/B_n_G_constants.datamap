@@ -197,7 +197,7 @@ ul_conv_expr=x/60
 
 [pwm_limit_entry]
 keys=offset
-key_types=_INT_,_ENUM_,_ENUM_
+key_types=_INT_
 offset=95
 
 [pwm_time_thresh_entry]

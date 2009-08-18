@@ -1663,7 +1663,7 @@ EXPORT void update_ve_const_pf()
 		shift = get_bitshift(firmware->table_params[i]->num_cyl_mask);
 		firmware->rf_params[i]->num_cyls = ((tmpi & mask) >> shift)+addon;
 		firmware->rf_params[i]->last_num_cyls = ((tmpi & mask) >> shift)+addon;
-		printf("num_cyls for table %i in the firmware is %i\n",i,firmware->rf_params[i]->num_cyls);
+		//printf("num_cyls for table %i in the firmware is %i\n",i,firmware->rf_params[i]->num_cyls);
 
 		tmpi = get_ecu_data(canID,firmware->table_params[i]->num_inj_page,firmware->table_params[i]->num_inj_offset,size);	
 		mask = firmware->table_params[i]->num_cyl_mask;
@@ -1671,21 +1671,23 @@ EXPORT void update_ve_const_pf()
 
 		firmware->rf_params[i]->num_inj = ((tmpi & mask) >> shift)+addon;
 		firmware->rf_params[i]->last_num_inj = ((tmpi & mask) >> shift)+addon;
-		printf("num_inj for table %i in the firmware is %i\n",i,firmware->rf_params[i]->num_inj);
+		//printf("num_inj for table %i in the firmware is %i\n",i,firmware->rf_params[i]->num_inj);
 
 		firmware->rf_params[i]->divider = get_ecu_data(canID,firmware->table_params[i]->divider_page,firmware->table_params[i]->divider_offset,size);
 		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
 		firmware->rf_params[i]->alternate = get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
-		printf("alternate for table %i in the firmware is %i\n",i,firmware->rf_params[i]->alternate);
+		//printf("alternate for table %i in the firmware is %i\n",i,firmware->rf_params[i]->alternate);
 		reqfuel = get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,firmware->table_params[i]->reqfuel_size);
-		printf("reqfuel for table %i in the firmware is %i\n",i,reqfuel);
+		//printf("reqfuel for table %i in the firmware is %i\n",i,reqfuel);
 
+		/*
 		printf("reqfuel_page %i, reqfuel_offset %i\n",firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset);
 	
 		printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
 		printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
 		printf("req_fuel_per_1_squirt is %i\n",reqfuel);
+		*/
 		 
 		/* Calcs vary based on firmware. 
 		 * DT uses num_inj/divider
@@ -1946,7 +1948,7 @@ void update_widget(gpointer object, gpointer user_data)
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
 
 	value = convert_after_upload(widget);  
-	printf("value is %f for widget %s at page %i, offset %i\n",value,glade_get_widget_name(widget),page,offset);
+	//printf("value is %f for widget %s at page %i, offset %i\n",value,glade_get_widget_name(widget),page,offset);
 
 	if (temp_dep)
 	{
