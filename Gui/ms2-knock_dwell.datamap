@@ -50,6 +50,11 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=knock_controls
 
+[topframe]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=valid_ecu_ctrls
+
 #------- Combo Boxes ------------------------------------------------------
 
 [knock_combo]
