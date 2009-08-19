@@ -2290,24 +2290,33 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint offset = 0;
 	DataSize size = 0;
 	gint value = 0;
-	gint lower = 0;
-	gint upper = 255;
+	glong lower = 0;
+	glong upper = 0;
+	glong hardlower = 0;
+	glong hardupper = 0;
 	gint dload_val = 0;
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 
-	if (OBJ_GET(widget,"raw_lower") != NULL)
-		lower = (gint) OBJ_GET(widget,"raw_lower");
-	if (OBJ_GET(widget,"raw_upper") != NULL)
-		upper = (gint) OBJ_GET(widget,"raw_upper");
 	canID = (gint) OBJ_GET(widget,"canID");
 	page = (gint) OBJ_GET(widget,"page");
 	offset = (gint) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (gboolean) OBJ_GET(widget,"reverse_keys");
+	if (OBJ_GET(widget,"raw_lower"))
+		lower = (gint) OBJ_GET(widget,"raw_lower");
+	hardlower = get_extreme_from_size(size,LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		upper = (gint) OBJ_GET(widget,"raw_upper");
+	hardupper = get_extreme_from_size(size,UPPER);
 
+	//printf("lower %li, upper %li\n",lower,upper);
+	upper = upper > hardupper ? hardupper:upper;
+	lower = lower < hardlower ? hardlower:lower;
+	//printf("hardlower %li, hardupper %li\n",hardlower,hardupper);
+	//printf("clamped: lower %li, upper %li\n",lower,upper);
 	value = get_ecu_data(canID,page,offset,size);
 //	if (event->keyval == GDK_KP_Space)
 //	{
@@ -3024,4 +3033,52 @@ void refresh_widgets_at_offset(gint page, gint offset)
 
 	}
 	update_ve3d_if_necessary(page,offset);
+}
+
+
+glong get_extreme_from_size(DataSize size,Extreme limit)
+{
+	glong lower_limit = 0;
+	glong upper_limit = 0;
+
+	switch (size)
+	{
+		case MTX_CHAR:
+		case MTX_S08:
+			lower_limit = G_MININT8;
+			upper_limit = G_MAXINT8;
+			break;
+		case MTX_U08:
+			lower_limit = 0;
+			upper_limit = G_MAXUINT8;
+			break;
+		case MTX_S16:
+			lower_limit = G_MININT16;
+			upper_limit = G_MAXINT16;
+			break;
+		case MTX_U16:
+			lower_limit = 0;
+			upper_limit = G_MAXUINT16;
+			break;
+		case MTX_S32:
+			lower_limit = G_MININT32;
+			upper_limit = G_MAXINT32;
+			break;
+		case MTX_U32:
+			lower_limit = 0;
+			upper_limit = G_MAXUINT32;
+			break;
+		case MTX_UNDEF:
+			break;
+	}
+	switch (limit)
+	{
+		case LOWER:
+			return lower_limit;
+			break;
+		case UPPER:
+			return upper_limit;
+			break;
+	}
+	return 0;
 }

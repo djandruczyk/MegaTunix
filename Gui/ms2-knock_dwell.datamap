@@ -32,9 +32,20 @@ handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[knock_thresh_edit_button]
+keys=te_table_num,handler
+key_types=_STRING_,_ENUM_
+te_table_num=7
+handler=_TE_TABLE_
+
 #------- Widgets ----------------------------------------------------------
 
 [safe_knock_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=knock_controls
+
+[knock_thresh_frame]
 keys=bind_to_list
 key_types=_STRING_
 bind_to_list=knock_controls
@@ -202,102 +213,236 @@ ul_conv_expr=x*0.1
 tooltip=Acceleration Compensation is the amount of time added to the duration when the accel enrichment is activated. 
 
 [dwell_v1_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=7
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwell_v2_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=8
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwell_v3_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=9
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwell_v4_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=10
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwell_v5_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=11
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwellcomp_v1_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=12
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwellcomp_v2_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=13
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwellcomp_v3_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=14
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwellcomp_v4_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=15
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
 
 [dwellcomp_v5_entry]
-keys=size,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=16
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
 tooltip=Battery Voltage Compensation is the time added to the dwell to compensate for low battery voltage. You can select both the trigger bin levels (V) as well as the duration added to the dwell (ms). You set the Voltages as 'offsets' from twelve volts. For example, a Voltage setting of 0.0 means the durations compensation applied at 12 volts. 
+
+[knock_thresh_rpm_1_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=942
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_rpm_2_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=944
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_rpm_3_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=946
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_rpm_4_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=948
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_rpm_5_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=950
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_rpm_6_entry]
+keys=size,offset,raw_upper,tooltip
+key_types=_ENUM_,_INT_,_INT_,_STRING_
+size=_U16_
+offset=952
+raw_upper=6000
+tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_1_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=954
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_2_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=956
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_3_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=958
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_4_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=960
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_5_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=962
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
+
+[knock_thresh_v_6_entry]
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+size=_U16_
+offset=964
+precision=2
+raw_upper=500
+dl_conv_expr=x/0.01
+ul_conv_expr=x*0.01
+tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs RPM
 

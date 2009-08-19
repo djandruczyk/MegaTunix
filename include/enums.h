@@ -410,4 +410,10 @@ typedef enum
 }SensorType;
 
 
+typedef enum
+{
+	LOWER=0x440,
+	UPPER
+}Extreme;
+
 #endif

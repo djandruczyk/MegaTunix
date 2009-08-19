@@ -49,6 +49,7 @@ gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
 EXPORT void update_misc_gauge(DataWatch *, gfloat);
 void refresh_widgets_at_offset(gint, gint);
+glong get_extreme_from_size(DataSize, Extreme);
 /* Prototypes */
 
 #endif
