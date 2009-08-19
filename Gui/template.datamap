@@ -14,7 +14,7 @@ size=_U08_
 raw_lower=0
 raw_upper=255
 dl_type=_IMMEDIATE_
-handler=_GENERIC
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 

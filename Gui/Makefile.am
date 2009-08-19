@@ -36,6 +36,8 @@ gui_files = 	README \
 		ms2-idle_ego_rev.datamap \
 		ms2-ignition.glade \
 		ms2-ignition.datamap \
+		ms2-knock_dwell.glade \
+		ms2-knock_dwell.datamap \
 		ms2-misc-fuel.glade \
 		ms2-misc-fuel.datamap \
 		ms2-warmup.glade \
