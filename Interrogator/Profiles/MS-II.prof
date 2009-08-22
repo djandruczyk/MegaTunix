@@ -22,7 +22,7 @@ Capabilities=_MS2_,_MS2_STD_
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 TotalTables=6
-TotalTETables=8
+TotalTETables=10
 TotalPages=7
 
 [table_0]
@@ -474,6 +474,68 @@ y_ul_conv_expr=x*0.01
 y_raw_lower=0
 y_raw_upper=500
 y_precision=2
+
+[te_table_8]
+title= X (Puddling) Factor Correction
+is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
+bincount=10
+x_temp_dep=TRUE
+x_page=0
+x_base_offset=470
+x_size=_S16_
+x_source=cltdeg
+x_units=deg
+x_name=Coolant
+x_dl_conv_expr=x*10
+x_ul_conv_expr=x/10
+x_raw_lower=-400
+x_raw_upper=2000
+x_fixed_scale=TRUE
+x_precision=1
+y_page=1
+y_base_offset=728
+y_size=_U16_
+y_source=
+y_name=X<small>(Puddling)</small>
+y_units=corr %
+y_dl_conv_expr=x/1
+y_ul_conv_expr=x*1
+y_raw_lower=0
+y_raw_upper=600
+y_fixed_scale=TRUE
+y_precision=0
+
+[te_table_9]
+title= Tau (Time) Factor Correction
+is_fuel=FALSE
+gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
+gauge_datasource=cltdeg
+bincount=10
+x_temp_dep=TRUE
+x_page=0
+x_base_offset=470
+x_size=_S16_
+x_source=cltdeg
+x_units=deg
+x_name=Coolant
+x_dl_conv_expr=x*10
+x_ul_conv_expr=x/10
+x_raw_lower=-400
+x_raw_upper=2000
+x_precision=1
+y_page=1
+y_base_offset=748
+y_size=_U16_
+y_source=
+y_units=%
+y_name=Tau (time)
+y_dl_conv_expr=x/1
+y_ul_conv_expr=x*1
+y_raw_lower=0
+y_raw_upper=600
+y_precision=0
 
 [page_0]
 dl_by_default=TRUE

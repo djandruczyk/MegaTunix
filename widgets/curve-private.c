@@ -117,6 +117,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->y_scale = 1.0;
 	priv->locked_scale = 1.0;
 	priv->font = g_strdup("Sans 10");
+	priv->axis_font = g_strdup("Sans 6");
 	priv->active_coord = -1;
 	priv->vertex_selected = FALSE;
 	priv->show_vertexes = FALSE;
@@ -302,7 +303,29 @@ void update_curve_position (MtxCurve *curve)
 
 		cairo_stroke (cr);
 	}
-
+	/* Update current position marker in lower right corner */
+	if (priv->pos_str)
+	{
+		cairo_set_font_size (cr, 9);
+		cairo_text_extents (cr, priv->pos_str, &extents);
+		cairo_move_to (cr, 
+				priv->w - (extents.width/2.0) - (3*priv->border),
+				priv->h - ((extents.height) + priv->border));
+		cairo_set_source_rgba (cr,0,0,0,0.75);
+		cairo_rectangle(cr,priv->w - extents.width - (4*priv->border),
+				priv->h - (extents.height*2) + priv->border,
+				extents.width + (2*priv->border),
+				-((extents.height + (2*priv->border))));
+		cairo_fill (cr);
+		cairo_set_source_rgb (cr, 
+				priv->colors[CURVE_COL_TEXT].red/65535.0,
+				priv->colors[CURVE_COL_TEXT].green/65535.0,
+				priv->colors[CURVE_COL_TEXT].blue/65535.0);
+		cairo_move_to (cr, 
+				priv->w - extents.width - (3*priv->border),
+				priv->h - extents.height*2);
+		cairo_show_text (cr, priv->pos_str);
+	}
 	cairo_destroy(cr);
 }
 
@@ -494,7 +517,13 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	gint i = 0;
 	gchar * tmpbuf = 0;
 	if (!priv->vertex_selected)
-		return FALSE;
+	{
+		if (priv->pos_str)
+			g_free(priv->pos_str);
+		priv->pos_str = g_strdup_printf("%1$.*2$f, %3$.*4$f",(gfloat)((event->x- priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision, (gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
+		mtx_curve_redraw(MTX_CURVE(curve));
+		return TRUE;
+	}
 	i = priv->active_coord;
 	priv->points[i].x = event->x;
 	priv->points[i].y = event->y;

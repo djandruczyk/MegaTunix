@@ -68,7 +68,7 @@ void coords_changed(MtxCurve *curve, gpointer data)
 	gint index = mtx_curve_get_active_coord_index(curve);
 	MtxCurveCoord point;
 	mtx_curve_get_coords_at_index(curve,index,&point);
-	printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);
+	//printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);
 	
 }
 
@@ -90,6 +90,6 @@ void update_curve_marker(gpointer data)
 		value+=step;
 	else
 		value-=step;
-	printf("Setting x marker to %i\n",value);
+//printf("Setting x marker to %i\n",value);
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 }

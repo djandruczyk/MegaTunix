@@ -57,7 +57,9 @@ struct _MtxCurvePrivate
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;
+        gchar * pos_str;	/*! Position String */
         gchar * font;           /*! Font to use */
+        gchar * axis_font;	/*! Axis Font to use */
         gchar * title;          /*! Title to use */
 
         GdkColormap *colormap;  /*! Colormap for GC's */

@@ -2,7 +2,7 @@
 description=Object data map for MS-II Warmup tables
 tab_name=_Warmup Tables
 id_prefix=WARM_
-groups=defaults,temp,cp,pp,ase,aset,isteps,ipwm,coldadv
+groups=defaults,temp,cp,pp,ase,aset,isteps,ipwm,coldadv,puddling,tau
 
 #----- Groups ----------------------------------------------------------------
 
@@ -112,6 +112,24 @@ precision=1
 use_color=FALSE
 tooltip=The Cold Advance Table adds This amount of ignition advance (-10<->10 is the valid range) based on the temp (See far left column)
 
+[puddling]
+keys=page,size,raw_upper,use_color,tooltip
+key_types=_INT_,_ENUM_,_INT_,_BOOL_,_STRING_
+page=1
+size=_U16_
+raw_upper=600
+use_color=FALSE
+tooltip=The X (Puddling) Factor table allows a temperature based correction factor to compensate for different rates fo fuel evaporation because of the engine temperature.
+
+[tau]
+keys=page,size,raw_upper,use_color,tooltip
+key_types=_INT_,_ENUM_,_INT_,_BOOL_,_STRING_
+page=1
+size=_U16_
+raw_upper=600
+use_color=FALSE
+tooltip=The Tau (Time) Factor table allows a temperature based correction factor to compensate for different rates fo fuel evaporation because of the engine temperature.
+
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -136,7 +154,27 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=twopoint_controls
 
-[warmup_tables_frame]
+[crank_pulse_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=table_controls
+
+[priming_pulse_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=table_controls
+
+[ase_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=table_controls
+
+[ase_taper_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=table_controls
+
+[cold_advance_table]
 keys=bind_to_list
 key_types=_STRING_
 bind_to_list=table_controls
@@ -150,6 +188,16 @@ bind_to_list=pwm_specific
 keys=bind_to_list
 key_types=_STRING_
 bind_to_list=iac_specific
+
+[puddling_correction_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=xtau_warmup
+
+[tau_correction_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=xtau_warmup
 
 #----- Labels ----------------------------------------------------------------
 
@@ -224,18 +272,31 @@ key_types=_STRING_,_ENUM_
 te_table_num=6
 handler=_TE_TABLE_
 
+[puddling_edit_button]
+keys=te_table_num,handler
+key_types=_STRING_,_ENUM_
+te_table_num=8
+handler=_TE_TABLE_
+
+[tau_edit_button]
+keys=te_table_num,handler
+key_types=_STRING_,_ENUM_
+te_table_num=9
+handler=_TE_TABLE_
+
 [all_warmup_button]
 keys=te_tables,handler
 key_types=_STRING_,_ENUM_
-te_tables=0,1,2,3,4,5,6
+te_tables=0,1,2,3,4,5,6,8,9
 handler=_TE_TABLE_GROUP_
 
 #----- Combo Boxes -----------------------------------------------------------
 
 [source_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=offset,max_chars,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=926
+max_chars=12
 bitvals=0,1
 bitmask=1
 choices=Use 2 Points,Use Tables
@@ -733,6 +794,126 @@ keys=offset
 key_types=_INT_
 offset=40
 group=coldadv
+
+[puddling_table_entry0]
+keys=offset
+key_types=_INT_
+offset=728
+group=puddling
+
+[puddling_table_entry1]
+keys=offset
+key_types=_INT_
+offset=730
+group=puddling
+
+[puddling_table_entry2]
+keys=offset
+key_types=_INT_
+offset=732
+group=puddling
+
+[puddling_table_entry3]
+keys=offset
+key_types=_INT_
+offset=734
+group=puddling
+
+[puddling_table_entry4]
+keys=offset
+key_types=_INT_
+offset=736
+group=puddling
+
+[puddling_table_entry5]
+keys=offset
+key_types=_INT_
+offset=738
+group=puddling
+
+[puddling_table_entry6]
+keys=offset
+key_types=_INT_
+offset=740
+group=puddling
+
+[puddling_table_entry7]
+keys=offset
+key_types=_INT_
+offset=742
+group=puddling
+
+[puddling_table_entry8]
+keys=offset
+key_types=_INT_
+offset=744
+group=puddling
+
+[puddling_table_entry9]
+keys=offset
+key_types=_INT_
+offset=746
+group=puddling
+
+[tau_table_entry0]
+keys=offset
+key_types=_INT_
+offset=748
+group=puddling
+
+[tau_table_entry1]
+keys=offset
+key_types=_INT_
+offset=750
+group=puddling
+
+[tau_table_entry2]
+keys=offset
+key_types=_INT_
+offset=752
+group=puddling
+
+[tau_table_entry3]
+keys=offset
+key_types=_INT_
+offset=754
+group=puddling
+
+[tau_table_entry4]
+keys=offset
+key_types=_INT_
+offset=756
+group=puddling
+
+[tau_table_entry5]
+keys=offset
+key_types=_INT_
+offset=758
+group=puddling
+
+[tau_table_entry6]
+keys=offset
+key_types=_INT_
+offset=760
+group=puddling
+
+[tau_table_entry7]
+keys=offset
+key_types=_INT_
+offset=762
+group=puddling
+
+[tau_table_entry8]
+keys=offset
+key_types=_INT_
+offset=764
+group=puddling
+
+[tau_table_entry9]
+keys=offset
+key_types=_INT_
+offset=766
+group=puddling
 
 [ase_cold_percent_entry]
 keys=offset,size

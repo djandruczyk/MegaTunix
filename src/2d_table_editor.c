@@ -155,13 +155,13 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				G_CALLBACK(coords_changed), NULL);
 
 		label = glade_xml_get_widget(xml,"x_units");
-		gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
 		label = glade_xml_get_widget(xml,"y_units");
-		gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
 		label = glade_xml_get_widget(xml,"x_title");
-		gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
 		label = glade_xml_get_widget(xml,"y_title");
-		gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
 		rows = firmware->te_params[table_num]->bincount;
 		mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
 		x_table = gtk_table_new(rows,1,TRUE);
@@ -378,13 +378,13 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 			G_CALLBACK(coords_changed), NULL);
 
 	label = glade_xml_get_widget(xml,"x_units");
-	gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
+	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
 	label = glade_xml_get_widget(xml,"y_units");
-	gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
+	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
 	label = glade_xml_get_widget(xml,"x_title");
-	gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
+	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
 	label = glade_xml_get_widget(xml,"y_title");
-	gtk_label_set_text(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
+	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
 	rows = firmware->te_params[table_num]->bincount;
 	mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
 	x_table = gtk_table_new(rows,1,TRUE);
