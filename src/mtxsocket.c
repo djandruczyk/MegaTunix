@@ -136,21 +136,23 @@ void *socket_thread_manager(gpointer data)
 {
 	extern Firmware_Details *firmware;
 	gint i = 0;
-	MtxSocket *socket = (MtxSocket *)data;
-	static MtxSocketClient *last_bin_client = NULL;
 	struct sockaddr_in client;
 #ifdef __WIN32__
 	int length = sizeof(client);
 #else
 	socklen_t length = sizeof(client);
 #endif
+	MtxSocket *socket = (MtxSocket *)data;
 	MtxSocketClient * cli_data = NULL;
-	gint fd = 0;
+	static MtxSocketClient *last_bin_client = NULL;
+	gint fd = -1;
+	extern volatile gboolean leaving;
 
 	while (TRUE)
 	{
+		if (leaving)
+			g_thread_exit(0);
 		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
-
 		if (((socket->type == MTX_SOCKET_ASCII) || (socket->type == MTX_SOCKET_BINARY)) && (firmware))
 		{
 			cli_data = g_new0(MtxSocketClient, 1);
@@ -187,7 +189,7 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
-			printf("Connected slave pointer is %p\n",last_bin_client);
+//			printf("Connected slave pointer is %p\n",last_bin_client);
 			if (!slave_list)
 				slave_list = g_ptr_array_new();
 			last_bin_client->control_fd = fd;
@@ -219,6 +221,7 @@ void *ascii_socket_client(gpointer data)
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 	gint res = 0;
+	extern volatile gboolean leaving;
 
 
 	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
@@ -230,8 +233,11 @@ void *ascii_socket_client(gpointer data)
 		if (!fd)
 		{
 			dealloc_client_data(client);
-			return(0);
+			g_thread_exit(0);
 		}
+		if (leaving)
+			g_thread_exit(0);
+
 		res = select(fd+1,&rd,NULL,NULL,NULL);
 		if (res < 0) /* Error, socket closed, abort */
 		{
@@ -305,9 +311,12 @@ void *binary_socket_client(gpointer data)
 	SubState substate = UNDEFINED_SUBSTATE;
 	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
+	extern volatile gboolean leaving;
 
 	while(TRUE)
 	{
+		if (leaving)
+			g_thread_exit(0);
 		res = recv(fd,&buf,1,0);
 		if (res <= 0)
 		{
@@ -1608,7 +1617,7 @@ gboolean open_control_socket(gchar * host, gint port)
 	gint status = 0;
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername = { 0 };
-	printf("Open control socket!\n");
+//	printf("Open control socket!\n");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -1658,7 +1667,7 @@ gboolean open_control_socket(gchar * host, gint port)
 #endif
 		return FALSE;
 	}
-	printf("connected!!\n");
+//	printf("connected!!\n");
 	MtxSocketClient * cli_data = NULL;
 	controlsocket = clientsocket;
 	cli_data = g_new0(MtxSocketClient, 1);

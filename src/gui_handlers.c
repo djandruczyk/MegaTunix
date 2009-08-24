@@ -97,6 +97,9 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
 	extern gint statuscounts_id;
+	extern GThread * ascii_socket_id;
+	extern GThread * binary_socket_id;
+	extern GThread * control_socket_id;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
@@ -109,7 +112,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	extern volatile gboolean offline;
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	gint count = 0;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 
@@ -146,13 +149,29 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before mutex\n"));
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before leave_mutex\n"));
 
-	g_static_mutex_lock(&mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after mutex\n"));
+	g_static_mutex_lock(&leave_mutex);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after leave_mutex\n"));
 
 	save_config();
 
+	/*
+	 * Can';t do these until I can get nonblocking socket to behave. 
+	 * not sure what I'm doing wrong,  but select loop doesn't detect the 
+	 * connection for some reason, so had to go back to blocking mode, thus
+	 * the threads sit permanently blocked and can't catch the notify.
+	 *
+	if (ascii_socket_id)
+		g_thread_join(ascii_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
+	if (binary_socket_id)
+		g_thread_join(binary_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
+	if (control_socket_id)
+		g_thread_join(control_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
+	*/
 	if (statuscounts_id)
 		g_source_remove(statuscounts_id);
 	statuscounts_id = 0;

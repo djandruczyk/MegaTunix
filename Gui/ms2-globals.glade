@@ -702,7 +702,7 @@
 				      <child>
 					<widget class="GtkLabel" id="label33">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt;Injector PWM &lt;b&gt;Frequency&lt;/b&gt; (Khz)&lt;/span&gt;</property>
+					  <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt; Injector PWM &lt;b&gt;Frequency&lt;/b&gt; (Khz) &lt;/span&gt;</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">True</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>

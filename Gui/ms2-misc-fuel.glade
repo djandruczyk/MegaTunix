@@ -923,7 +923,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label12">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt;Must have EGO correction enabled for AMC to operate!&lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt; Must have EGO correction enabled for AMC to operate! &lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1273,7 +1273,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label21">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                      Engine Startup                      &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;				Engine Startup			&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -1301,7 +1301,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label23">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                VE Table Adjustments                &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;			VE Table Adjustments			&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -1494,7 +1494,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label28">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;Additional Fuel (switched by E0 or cyclic&lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;	Additional Fuel (switched by E0 or cyclic	&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -1790,7 +1790,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label31">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;       See Tables for MAF flow setting      &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;		See Tables for MAF flow setting		&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -1964,7 +1964,7 @@ pin for MAF/MAP blend.</property>
 				      <child>
 					<widget class="GtkLabel" id="label35">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;       MAP/MAF Blend Settings      &lt;/span&gt;</property>
+					  <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;			MAP/MAF Blend Settings		&lt;/span&gt;</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">True</property>
 					  <property name="justify">GTK_JUSTIFY_FILL</property>
