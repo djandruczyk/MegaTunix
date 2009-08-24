@@ -122,7 +122,7 @@ gboolean setup_socket(gint port)
 		return FALSE;
 	}
 
-	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));
+//	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));
 	return sock;
 }
 
@@ -137,6 +137,7 @@ void *socket_thread_manager(gpointer data)
 	extern Firmware_Details *firmware;
 	gint i = 0;
 	MtxSocket *socket = (MtxSocket *)data;
+	static MtxSocketClient *last_bin_client = NULL;
 	struct sockaddr_in client;
 #ifdef __WIN32__
 	int length = sizeof(client);
@@ -149,24 +150,25 @@ void *socket_thread_manager(gpointer data)
 	while (TRUE)
 	{
 		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
-		cli_data = g_new0(MtxSocketClient, 1);
-		cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
-		cli_data->port = ntohs(client.sin_port);
-		cli_data->fd = fd;
-		cli_data->type = socket->type;
 
 		if (((socket->type == MTX_SOCKET_ASCII) || (socket->type == MTX_SOCKET_BINARY)) && (firmware))
 		{
+			cli_data = g_new0(MtxSocketClient, 1);
+			cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
+			cli_data->port = ntohs(client.sin_port);
+			cli_data->fd = fd;
+			cli_data->type = socket->type;
 			cli_data->ecu_data = g_new0(guint8 *, firmware->total_pages);
+//			printf ("created slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				cli_data->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
+//				printf ("created slave %p, ecu_data[%i] %p\n",cli_data,i,cli_data->ecu_data[i]);
 				if (firmware->ecu_data[i])
 					memcpy (cli_data->ecu_data[i],firmware->ecu_data[i],firmware->page_params[i]->length);
 
 			}
 		}
-
 
 		if (socket->type == MTX_SOCKET_ASCII)
 		{
@@ -177,6 +179,7 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_BINARY)
 		{
+			last_bin_client = cli_data;
 			g_thread_create(binary_socket_client,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
@@ -184,11 +187,13 @@ void *socket_thread_manager(gpointer data)
 		}
 		if (socket->type == MTX_SOCKET_CONTROL)
 		{
-			printf("Connected slave pointer is %p\n",cli_data);
+			printf("Connected slave pointer is %p\n",last_bin_client);
 			if (!slave_list)
 				slave_list = g_ptr_array_new();
-			cli_data->container = (gpointer)slave_list;
-			g_ptr_array_add(slave_list,cli_data);
+			last_bin_client->control_fd = fd;
+			last_bin_client->container = (gpointer)slave_list;
+			g_ptr_array_add(slave_list,last_bin_client);
+			last_bin_client = NULL; /* to prevent adding it to multiple clients by mistake. The next binary client will regenerated it */
 
 
 		}
@@ -311,7 +316,9 @@ void *binary_socket_client(gpointer data)
 #else
 			close(fd);
 #endif
+			g_ptr_array_remove(slave_list,client);
 			dealloc_client_data(client);
+			client = NULL;
 			g_thread_exit(0);
 		}
 		switch (state)
@@ -572,10 +579,18 @@ void *binary_socket_client(gpointer data)
 					if (firmware->capabilities & MS2)
 					{
 						if (find_mtx_page(tableID,&mtx_page))
+						{
+							printf("updating local ms2 chunk buffer\n");
+							memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
 							chunk_write(canID,mtx_page,offset,count,buffer);
+						}
 					}
 					else
+					{
+							printf("updating local ms1 chunk buffer\n");
+						memcpy (client->ecu_data[last_page]+offset,buffer,count);
 						chunk_write(0,last_page,offset,count,buffer);
+					}
 					state = WAITING_FOR_CMD;
 				}
 				else
@@ -607,6 +622,7 @@ void *binary_socket_client(gpointer data)
 //				printf("get_ms1_byte\n");
 				byte = (guint8)buf;
 //				printf ("Passed byte %i\n",byte);
+				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte);
 				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
 //				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);
 				state = WAITING_FOR_CMD;
@@ -1014,8 +1030,8 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
-		send_to_ecu(canID,page,offset,size,data,TRUE);
 		_set_sized_data(client->ecu_data[page],offset,size,data);
+		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
 }
@@ -1115,7 +1131,7 @@ void *network_repair_thread(gpointer data)
 		}
 		if (open_network(args->network_host,args->network_port))
 		{
-			g_usleep(100000); /* Sleep 100ms */
+			g_usleep(200000); /* Sleep 200ms */
 			if (comms_test())
 			{
 				network_is_open = TRUE;
@@ -1128,6 +1144,11 @@ void *network_repair_thread(gpointer data)
 				continue;
 			}
 
+		}
+		else
+		{
+			printf ("Unable to open network port, sleeping 500 ms to see if it resolves\n");
+			g_usleep(500000); /* Sleep 500ms */
 		}
 	}
 	if (network_is_open)
@@ -1163,7 +1184,7 @@ gboolean open_network(gchar * host, gint port)
 	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -1176,7 +1197,7 @@ gboolean open_network(gchar * host, gint port)
 		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
 		if (hostptr == NULL)
 		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
+			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tError resolving server address: \"%s\"\n",host));
 #ifdef __WIN32__
 			WSACleanup();
 #endif
@@ -1190,7 +1211,7 @@ gboolean open_network(gchar * host, gint port)
 	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -1321,6 +1342,7 @@ void *notify_slaves_thread(gpointer data)
 	gint fd = 0;
 	gint res = 0;
 	extern GAsyncQueue *slave_msg_queue;
+	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
 
 	while(TRUE) /* endless loop */
@@ -1342,21 +1364,51 @@ void *notify_slaves_thread(gpointer data)
 		if (!msg) /* Null message)*/
 			continue;
 
-		printf("There are %i clients in the slave pointer array\n",slave_list->len);
+//		printf("There are %i clients in the slave pointer array\n",slave_list->len);
 		to_be_closed = g_new0(gboolean, slave_list->len);
 		for (i=0;i<slave_list->len;i++)
 		{
 			cli_data = g_ptr_array_index(slave_list,i);
-			fd = cli_data->fd;
+			if ((!cli_data) || (!cli_data->ecu_data[0]))
+			{
+				to_be_closed[i] = TRUE;
+				continue;
+			}
+			fd = cli_data->control_fd;
+
 			FD_SET(fd,&wr);
 			res = select(fd+1,NULL,&wr,NULL,NULL); 
 			if (res <= 0)
 			{
-				printf("Select error!, closing this socket\n");
+//				printf("Select error!, closing this socket\n");
 				to_be_closed[i] = TRUE;
 				continue;
 			}
-			printf("sending chunk update\n");
+//			printf("sending chunk update\n");
+//			printf("notify slaves, slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);
+			/* We need to check if this slave sent the update,  
+			 * if so, DO NOT send the same thing back to that 
+			 * slave as he already knows....
+			 */
+			if (msg->mode == MTX_SIMPLE_WRITE)
+			{
+				if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+				{
+//					printf("Slave %p already set this, not updating him.. \n",cli_data);
+					continue;
+				}
+			}
+			if (msg->mode == MTX_CHUNK_WRITE)
+			{
+//				printf("Pointers\n, cli_data->ecu_data: %p\ncli_data->ecu_data[%i]: %p\n",cli_data->ecu_data, msg->page, cli_data->ecu_data[msg->page]);
+//				printf("Pointers\n, firmware->ecu_data: %p\nfirmware->ecu_data[%i]: %p\n",firmware->ecu_data, msg->page, firmware->ecu_data[msg->page]);
+				if (memcmp (cli_data->ecu_data[msg->page]+msg->offset,firmware->ecu_data[msg->page]+msg->offset,msg->length) == 0)
+				{
+//					printf("Slave %p already set this chunk , not updating him...\n",cli_data);
+					continue;
+				}
+			}
+
 			byte = SLAVE_MEMORY_UPDATE;
 
 			/* Message type */
@@ -1382,9 +1434,16 @@ void *notify_slaves_thread(gpointer data)
 			byte = (msg->length & 0xff);
 			res = net_send(fd,(char *)&(byte),1,0);
 			if (msg->mode == MTX_SIMPLE_WRITE)
+			{
 				res = net_send(fd,(char *)&(msg->value),msg->length,0);
+				_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value);
+			}
 			else if (msg->mode == MTX_CHUNK_WRITE)
+			{
 				res = net_send(fd,(char *)msg->data,msg->length,0);
+				memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
+			}
+
 
 			if (res == -1)
 				to_be_closed[i] = TRUE;
@@ -1396,15 +1455,16 @@ void *notify_slaves_thread(gpointer data)
 			{
 				cli_data = g_ptr_array_index(slave_list,i);
 				
-				printf("socket dropped, closing client pointer %p\n",cli_data);
+//				printf("socket dropped, closing client pointer %p\n",cli_data);
 #ifdef __WIN32__
 				closesocket(cli_data->fd);
 #else
 				close(cli_data->fd);
 #endif
-				printf("REMOVING ENTRY from ptr array\n");
+//				printf("REMOVING ENTRY from ptr array\n");
 				g_ptr_array_remove(slave_list,cli_data);
 				dealloc_client_data(cli_data);
+				cli_data = NULL;
 				res = 0;
 			}
 		}
@@ -1464,7 +1524,7 @@ void *control_socket_client(gpointer data)
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					printf("Slave chunk update received\n");
+//					printf("Slave chunk update received\n");
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 					continue;
@@ -1472,40 +1532,40 @@ void *control_socket_client(gpointer data)
 				else
 					continue;
 			case GET_CAN_ID:
-				printf("get_canid block\n");
+//				printf("get_canid block\n");
 				canID = (guint8)buf;
-				printf("canID received is %i\n",canID);
+//				printf("canID received is %i\n",canID);
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				printf("get_mtx_page block\n");
+//				printf("get_mtx_page block\n");
 				page = (guint8)buf;
-				printf("page received is %i\n",page);
+//				printf("page received is %i\n",page);
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				printf("get_high_offset block\n");
+//				printf("get_high_offset block\n");
 				offset_h = (guint8)buf;
-				printf("high offset received is %i\n",offset_h);
+//				printf("high offset received is %i\n",offset_h);
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				printf("get_low_offset block\n");
+//				printf("get_low_offset block\n");
 				offset_l = (guint8)buf;
-				printf("low offset received is %i\n",offset_l);
+//				printf("low offset received is %i\n",offset_l);
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				printf("get_high_count block\n");
+//				printf("get_high_count block\n");
 				count_h = (guint8)buf;
-				printf("high count received is %i\n",count_h);
+//				printf("high count received is %i\n",count_h);
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				printf("get_low_count block\n");
+//				printf("get_low_count block\n");
 				count_l = (guint8)buf;
-				printf("low count received is %i\n",count_l);
+//				printf("low count received is %i\n",count_l);
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -1515,13 +1575,13 @@ void *control_socket_client(gpointer data)
 				}
 				continue;
 			case GET_DATABYTE:
-				printf("get_databyte\n");
+//				printf("get_databyte\n");
 				buffer[index] = (guint8)buf;
 				index++;
-				printf ("Databyte index %i of %i\n",index,count);
+//				printf ("Databyte index %i of %i\n",index,count);
 				if (index >= count)
 				{
-					printf("Got all needed data, updating gui\n");
+//					printf("Got all needed data, updating gui\n");
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */

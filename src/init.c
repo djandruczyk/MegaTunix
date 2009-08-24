@@ -73,6 +73,7 @@ void init(void)
 
 	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
+	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(100));/* 100 ms */
 	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
 	OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(125));
@@ -181,6 +182,8 @@ gboolean read_config(void)
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
+		if (cfg_read_int(cfgfile, "Global", "read_timeout", &tmpi))
+			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
 			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
@@ -312,6 +315,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (gint)OBJ_GET(global_data,"dashboard_fps"));
 	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (gint)OBJ_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	cfg_write_int(cfgfile, "Global", "read_timeout", (gint)OBJ_GET(global_data,"read_timeout"));
 	tmpbuf = OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
@@ -824,6 +828,7 @@ void dealloc_client_data(MtxSocketClient *client)
 
 		if (client->ecu_data)
 		{
+//			printf("deallocing client ecu data params\n");
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				if (client->ecu_data[i])

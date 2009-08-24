@@ -384,7 +384,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			canID = (gint)OBJ_GET(output->object,"canID");
 			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
+			{
+				g_free(message->recv_buf);
 				break;
+			}
 			store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
@@ -394,7 +397,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS1_RT_VARS:
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
+			{
+				g_free(message->recv_buf);
 				break;
+			}
 			ptr8 = (guchar *)message->recv_buf;
 			/* Test for MS reset */
 			if (just_starting)
@@ -427,7 +433,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			canID = (gint)OBJ_GET(output->object,"canID");
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
+			{
+				g_free (message->recv_buf);
 				break;
+			}
 			store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);

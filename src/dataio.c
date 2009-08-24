@@ -195,7 +195,8 @@ gint read_wrapper(gint fd, void * buf, size_t count)
 	extern Serial_Params * serial_params;
 	gint res = 0;
 	fd_set rd;
-	struct timeval timeout = {0,500000};
+	extern GObject *global_data;
+	struct timeval timeout = {0,OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(gint)OBJ_GET(global_data, "read_timeout")*1000};
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 

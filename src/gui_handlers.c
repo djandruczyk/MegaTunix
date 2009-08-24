@@ -1278,6 +1278,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				forced_update=TRUE;
 			}
 			break;
+		case SER_READ_TIMEOUT:
+			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER((gint)value));
+			break;
 		case RTSLIDER_FPS:
 			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 			source = (gint)OBJ_GET(global_data,"rtslider_id");

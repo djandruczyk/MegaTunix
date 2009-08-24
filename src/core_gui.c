@@ -305,8 +305,13 @@ void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"Sets the comm port to use. Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
 
+	/* Read Timeout threshold spinner */
+	widget = glade_xml_get_widget(xml,"read_timeout_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"read_timeout"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_READ_TIMEOUT));
+	
 	/* Active COMM Port entry */
 	widget = glade_xml_get_widget(xml,"active_port_entry");
 	register_widget("active_port_entry",widget);
@@ -324,6 +329,7 @@ void finalize_core_gui(GladeXML * xml)
 	/* COMMS Tab Read delay subtable */
 	ebox = glade_xml_get_widget(xml,"rates_ebox");
 	gtk_tooltips_set_tip(tip,ebox,"These controls set the polling rate of the serial port (i.e. every 30 ms), as well as the update rates for the runtime text, runtime sliders, and dashboards.  The Datalogging always happens at the raw serial polling rate.  This allows you to reduce the update rate of other things that are less relevant and conserver CPU resources for slower systems.",NULL);
+
 	widget = glade_xml_get_widget(xml,"read_delay_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),serial_params->read_wait);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));

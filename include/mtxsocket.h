@@ -94,6 +94,7 @@ struct _MtxSocketClient
 	guint16 port;
 	guint8 ** ecu_data;
 	gint fd;
+	gint control_fd;
 	SocketType type;
 	gpointer container;
 };
@@ -119,6 +120,7 @@ struct _SlaveMessage
 	guint8 page;
 	guint16 offset;
 	guint16 length;
+	DataSize size;
 	gint value;
 	guint8 * data;
 	WriteMode mode;

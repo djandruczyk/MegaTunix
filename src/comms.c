@@ -141,6 +141,7 @@ EXPORT void send_to_slaves(void *data)
 	msg = g_new0(SlaveMessage, 1);
 	msg->page = (guint8)(gint)OBJ_GET(output->object,"page");
 	msg->offset = (guint16)(gint)OBJ_GET(output->object,"offset");
+	msg->size = (DataSize)(gint)OBJ_GET(output->object,"size");
 	msg->length = (guint16)(gint)OBJ_GET(output->object,"num_bytes");
 	msg->mode = (WriteMode)OBJ_GET(output->object,"mode");
 	if (msg->mode == MTX_CHUNK_WRITE)
