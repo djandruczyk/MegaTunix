@@ -44,6 +44,8 @@ gui_files = 	README \
 		ms2-warmup.datamap \
 		ms2-e-toothtrigger.glade \
 		ms2-e-toothtrigger-2.1.x.datamap \
+		ms2-xtau.glade \
+		ms2-xtau.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \

@@ -26,7 +26,7 @@ use_color=TRUE
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
-tooltip=The temp table is common to the cranking pulse, priming pulse, ase, ase tapre, idle step, idle pwm and cold advance tables.
+tooltip=The temp table is common to the cranking pulse, priming pulse, ase, ase tapre, idle step, idle pwm, cold advance and X-Tau compensation tables.
 
 [cp]
 keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,use_color,tooltip
