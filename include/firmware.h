@@ -238,6 +238,7 @@ struct _TE_Params
 	gchar *trace_color;	/*! Trace Color (string) */
 	gchar *cross_color;	/*! Cross Color (string) */
 	gchar *marker_color;	/*! Marker Color (string) */
+	gchar *bind_to_list;	/*! Bind to list for sensitivity */
 	GList *entries;		/*! Entry widget pointers */
 	gint bincount;		/* Number of bins for x and 1 */
 

@@ -237,6 +237,7 @@ z_precision=1
 
 [te_table_0]
 title=Cranking Pulse vs. Temp
+bind_to_list=table_controls
 is_fuel=FALSE
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg

@@ -125,7 +125,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label5">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                   General Ignition                &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;				General Ignition				&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -153,7 +153,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label8">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                 Predictor Settings               &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;				Predictor Settings				&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -181,7 +181,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label15">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;              Tach Signal Masking              &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;				Tach Signal Masking			&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -209,7 +209,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label18">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;              Next-Pulse Tolerance            &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;				Next-Pulse Tolerance			&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
@@ -1176,7 +1176,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label30">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;         Trigger Wheel (set to 0 for no wheel)      &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;	Trigger Wheel (set to 0 for no wheel)		&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1471,7 +1471,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label36">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                Dual Spark Ignition Options                &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;		Dual Spark Ignition Options			&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1619,7 +1619,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label39">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;     IAT-based Spark Retard Limiting Options     &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;	IAT-based Spark Retard Limiting Options	&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1776,7 +1776,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="label42">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;                   Signal Delay Parameters                 &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;dark blue&quot; foreground=&quot;white&quot;&gt;			Signal Delay Parameters			 &lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1933,7 +1933,9 @@
 				  <child>
 				    <widget class="GtkLabel" id="label45">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt; Red Settings require an MS-II Reboot &lt;/span&gt;</property>
+				      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt;										
+		Red Settings require an MS-II Reboot	
+										&lt;/span&gt;</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_FILL</property>
