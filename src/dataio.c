@@ -199,9 +199,11 @@ gint read_wrapper(gint fd, void * buf, size_t count)
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 
-	/* Network mode requires select to see ifdata is ready, otherwise
-	 * connection will block.  Seial is configured with timeout if no
-	 * data is avail,  hence we simulate that with select..
+	/* Network mode requires select to see if data is ready, otherwise
+	 * connection will block.  Serial is configured with timeout if no
+	 * data is avail,  hence we simulate that with select.. Setting this
+	 * timeout around 500ms seems to give us ok function to new zealand,
+	 * but may require tweaking for slow wireless links.
 	 */
 	if (serial_params->net_mode)
 	{
