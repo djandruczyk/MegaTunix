@@ -61,7 +61,8 @@ typedef enum
 	EXPORT_SINGLE_TABLE,
 	IMPORT_SINGLE_TABLE,
 	TE_TABLE,
-	TE_TABLE_GROUP
+	TE_TABLE_GROUP,
+	GET_CURR_TPS
 }StdButton;
 
 /* Toggle/Radio buttons */

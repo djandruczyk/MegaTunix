@@ -5,9 +5,9 @@ minor=2
 [realtime_map]
 applicable_firmwares=MS-II V2.8x
 applicable_signatures=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
-derived_total=69
+derived_total=70
 raw_list=raw_secl
-#raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
+#raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsADC,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
 
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,lower_limit,upper_limit,log_by_default
@@ -1119,3 +1119,18 @@ precision=1
 tooltip="AFR Error Right" is the difference between target AFR and actual AFR for the second O2 channel.
 log_by_default=TRUE
 
+[derived_69]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
+internal_names=tpsADC
+dlog_gui_name=TPS ADC
+dlog_field_name=TPS ADC
+offset=24
+size=_S16_
+lower_limit=0
+upper_limit=2048
+dl_conv_expr=x/1.23
+ul_conv_expr=x*1.23
+precision=1
+tooltip="TPS ADC" is the throttle position reading in ADC counts (0-1023)
+log_by_default=FALSE

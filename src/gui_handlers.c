@@ -42,6 +42,7 @@
 #include <notifications.h>
 #include <post_process.h>
 #include <req_fuel.h>
+#include <rtv_processor.h>
 #include <runtime_gui.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -97,9 +98,11 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
 	extern gint statuscounts_id;
+	/*
 	extern GThread * ascii_socket_id;
 	extern GThread * binary_socket_id;
 	extern GThread * control_socket_id;
+	*/
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
@@ -670,21 +673,30 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
-	dl_type = (gint) OBJ_GET(widget,"dl_type");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
-	size = (DataSize)OBJ_GET(widget,"size");
-	canID = (gint)OBJ_GET(widget,"canID");
 	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	handler = (MtxButton)OBJ_GET(widget,"handler");
+	dl_type = (gint) OBJ_GET(widget,"dl_type");
+	canID = (gint)OBJ_GET(widget,"canID");
+	page = (gint)OBJ_GET(widget,"page");
+	offset = (gint)OBJ_GET(widget,"offset");
+	if (!OBJ_GET(widget,"size"))
+		size = MTX_U08 ; 	/* default! */
+	else
+		size = (DataSize)OBJ_GET(widget,"size");
+	if (!OBJ_GET(widget,"raw_lower"))
+		raw_lower = get_extreme_from_size(size,LOWER);
+	else
+		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
+	if (!OBJ_GET(widget,"raw_upper"))
+		raw_upper = get_extreme_from_size(size,UPPER);
+	else
+		raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
 		base = (gint)OBJ_GET(widget,"base");
 	precision = (gint)OBJ_GET(widget,"precision");
-	raw_lower = (gint)OBJ_GET(widget,"raw_lower");
-	raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
@@ -879,7 +891,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	gint tmpi = 0;
+	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
+	gchar * dest = NULL;
 	gboolean restart = FALSE;
 	extern gint realtime_id;
 	extern volatile gboolean offline;
@@ -900,6 +914,17 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case GET_CURR_TPS:
+			tmpbuf = OBJ_GET(widget,"source");
+			lookup_current_value(tmpbuf,&tmpf);
+			dest = OBJ_GET(widget,"dest_widget");
+			tmpbuf = g_strdup_printf("%.0f",tmpf);
+			gtk_entry_set_text(GTK_ENTRY(lookup_widget(dest)),tmpbuf);
+			g_signal_emit_by_name(lookup_widget(dest),"activate",NULL);
+
+			g_free(tmpbuf);
+			break;
+
 		case EXPORT_SINGLE_TABLE:
 			tmpbuf = OBJ_GET(widget,"table_num");
 			if (tmpbuf)
@@ -1942,15 +1967,15 @@ void update_widget(gpointer object, gpointer user_data)
 	offset = (gint)OBJ_GET(widget,"offset");
 	canID = (gint)OBJ_GET(widget,"canID");
 	if (!OBJ_GET(widget,"size"))
-		size = 1 ; 	/* default! */
+		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
 	if (!OBJ_GET(widget,"raw_lower"))
-		raw_lower = 0;
+		raw_lower = get_extreme_from_size(size,LOWER);
 	else
 		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	if (!OBJ_GET(widget,"raw_upper"))
-		raw_upper = (gint)pow(256,size);
+		raw_upper = get_extreme_from_size(size,UPPER);
 	else
 		raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	bitval = (gint)OBJ_GET(widget,"bitval");
