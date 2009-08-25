@@ -3,6 +3,7 @@ headers = \
 	2d_table_editor.h \
 	3d_vetable.h \
 	about_gui.h \
+	afr_calibrate.h \
 	api-versions.h \
 	apicheck.h \
 	args.h \

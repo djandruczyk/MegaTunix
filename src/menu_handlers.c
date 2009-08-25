@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <afr_calibrate.h>
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
@@ -71,10 +72,10 @@ EXPORT void setup_menu_handlers_pf()
 		item = glade_xml_get_widget(xml,"show_table_generator_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 
-		item = glade_xml_get_widget(xml,"show_tps_calibrate_menuitem");
+		item = glade_xml_get_widget(xml,"show_tps_calibrator_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 
-		item = glade_xml_get_widget(xml,"show_ms2_afr_calibrator_menuitme");
+		item = glade_xml_get_widget(xml,"show_ms2_afr_calibrator_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 	}
 	
@@ -196,7 +197,7 @@ gboolean check_tab_existance(TabIdent target)
 /*!
  \brief General purpose handler to hide/show tps calibrate window
  */
-EXPORT gboolean show_tps_calibrate_window(GtkWidget *widget, gpointer data)
+EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -344,6 +345,68 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		register_widget("thermister_celsius_radiobutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),FALSE);
 		g_signal_emit_by_name(item,"toggled",NULL);
+		gtk_widget_show_all(GTK_WIDGET(window));
+		return TRUE;
+	}
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}
+/*!
+ \brief General purpose handler to hide/show Sensor calibrate window
+ */
+EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GtkWidget *item2 = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	extern volatile gboolean leaving;
+	extern GList ***ve_widgets;
+
+	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	if ((!main_xml) || (leaving))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"ms2_afr_calibrator_window",NULL);
+		window = glade_xml_get_widget(xml,"ms2_afr_calibrator_window");
+		glade_xml_signal_autoconnect(xml);
+
+		item = glade_xml_get_widget(xml,"ego_sensor_combo");
+		register_widget("afr_calibrate_ego_sensor_combo",item);
+		populate_afr_calibrator_combo(item);
+		item2 = glade_xml_get_widget(xml,"generic_wideband_frame");
+		OBJ_SET(item,"generic_controls",item2);
+
+		item = glade_xml_get_widget(xml,"voltage1_entry");
+		register_widget("voltage1_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(5));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+
+		item = glade_xml_get_widget(xml,"voltage2_entry");
+		register_widget("voltage2_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(5));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+
+		item = glade_xml_get_widget(xml,"afr1_entry");
+		register_widget("afr1_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(99));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+
+		item = glade_xml_get_widget(xml,"afr2_entry");
+		register_widget("afr2_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(99));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}

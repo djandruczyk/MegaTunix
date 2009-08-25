@@ -105,7 +105,7 @@ gint main(gint argc, gchar ** argv)
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(33,(GtkFunction)pf_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(100,(GtkFunction)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */

@@ -55,7 +55,7 @@ extern GObject *global_data;
 
 
 /*!
- \brief dispatcher() is a GTK+ timeout that runs 30 tiems per second checking
+ \brief dispatcher() is a GTK+ timeout that runs 10 times per second checking
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
  queue has multiple message queued up.

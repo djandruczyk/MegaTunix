@@ -19,7 +19,6 @@
 #include <glade/glade.h>
 
 /* Prototypes */
-EXPORT gboolean clamp_value(GtkWidget *, gpointer);
 EXPORT gboolean flip_table_gen_temp_label(GtkWidget *, gpointer);
 EXPORT gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
 

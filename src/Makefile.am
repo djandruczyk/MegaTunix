@@ -14,6 +14,7 @@ megatunix_SOURCES = \
 	2d_table_editor.c \
 	3d_vetable.c \
 	about_gui.c \
+	afr_calibrate.c \
 	apicheck.c \
 	args.c \
 	comms.c \

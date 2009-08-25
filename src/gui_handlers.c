@@ -3129,3 +3129,35 @@ glong get_extreme_from_size(DataSize size,Extreme limit)
 	}
 	return 0;
 }
+
+
+/* Clamps a value to it's limits and updates if needed */
+EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
+{
+	gint lower = 0;
+	gint upper = 0;
+	gint precision = 0;
+	gfloat val = 0.0;
+	gboolean clamped = FALSE;
+
+	lower = (gint)OBJ_GET(widget,"raw_lower");
+	upper = (gint)OBJ_GET(widget,"raw_upper");
+	precision = (gint)OBJ_GET(widget,"precision");
+
+	val = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(widget)),NULL);
+
+	if (val > upper)
+	{
+		val = upper;
+		clamped = TRUE;
+	}
+	if (val < lower)
+	{
+		val = lower;
+		clamped = TRUE;
+	}
+	if (clamped)
+		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",val,precision));
+	return TRUE;
+}
+
