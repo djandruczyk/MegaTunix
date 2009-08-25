@@ -87,7 +87,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image574">
+			    <widget class="GtkImage" id="image605">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -110,7 +110,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:46:30 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image575">
+			    <widget class="GtkImage" id="image606">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -133,7 +133,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image576">
+			    <widget class="GtkImage" id="image607">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -156,7 +156,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image577">
+			    <widget class="GtkImage" id="image608">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -179,7 +179,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Sun, 21 Jan 2007 14:47:42 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image578">
+			    <widget class="GtkImage" id="image609">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -215,7 +215,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image579">
+			    <widget class="GtkImage" id="image610">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-jump-to</property>
 			      <property name="icon_size">1</property>
@@ -238,7 +238,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:54:39 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image580">
+			    <widget class="GtkImage" id="image611">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-dialog-error</property>
 			      <property name="icon_size">1</property>
@@ -265,23 +265,37 @@
 		    <widget class="GtkMenu" id="tools_menu_menu">
 
 		      <child>
-			<widget class="GtkMenuItem" id="show_sensor_calibrator_menuitem">
+			<widget class="GtkImageMenuItem" id="show_sensor_calibrator_menuitem">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">Sensor Calibrator (MAP/Baro)</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="show_sensor_calibrator_window" last_modification_time="Tue, 25 Aug 2009 22:31:33 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image612">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-edit</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 
 		      <child>
 			<widget class="GtkImageMenuItem" id="show_table_generator_menuitem">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">_Calibrate Thermister Tables</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="show_table_generator_window" last_modification_time="Tue, 25 Aug 2009 13:19:24 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image581">
+			    <widget class="GtkImage" id="image613">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -303,7 +317,7 @@
 			  <signal name="activate" handler="show_ms2_afr_calibrator_window" last_modification_time="Tue, 25 Aug 2009 17:17:55 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image582">
+			    <widget class="GtkImage" id="image614">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -325,7 +339,7 @@
 			  <signal name="activate" handler="show_tps_calibrator_window" last_modification_time="Tue, 25 Aug 2009 17:18:46 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image583">
+			    <widget class="GtkImage" id="image615">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -347,7 +361,7 @@
 			  <signal name="activate" handler="show_tab_visibility_window" last_modification_time="Fri, 01 Feb 2008 02:09:03 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image584">
+			    <widget class="GtkImage" id="image616">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-remove</property>
 			      <property name="icon_size">1</property>
@@ -369,7 +383,7 @@
 			  <signal name="activate" handler="lookuptables_configurator" last_modification_time="Fri, 27 Jul 2007 19:00:52 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image585">
+			    <widget class="GtkImage" id="image617">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-left</property>
 			      <property name="icon_size">1</property>
@@ -392,7 +406,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image586">
+			    <widget class="GtkImage" id="image618">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -415,7 +429,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image587">
+			    <widget class="GtkImage" id="image619">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -438,7 +452,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image588">
+			    <widget class="GtkImage" id="image620">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -461,7 +475,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image589">
+			    <widget class="GtkImage" id="image621">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
