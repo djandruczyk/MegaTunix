@@ -20,6 +20,7 @@
 #include <gui_handlers.h>
 #include <math.h>
 #include <menu_handlers.h>
+#include <tabloader.h>
 #include <threads.h>
 #include <vex_support.h>
 #include <widgetmgmt.h>
@@ -76,6 +77,8 @@ EXPORT void setup_menu_handlers_pf()
 		gtk_widget_set_sensitive(item,TRUE);
 
 		item = glade_xml_get_widget(xml,"show_ms2_afr_calibrator_menuitem");
+		gtk_widget_set_sensitive(item,TRUE);
+		item = glade_xml_get_widget(xml,"show_sensor_calibrator_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 	}
 	
@@ -354,6 +357,8 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		gtk_widget_show_all(GTK_WIDGET(window));
 	return TRUE;
 }
+
+
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
  */
@@ -416,3 +421,137 @@ EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 		gtk_widget_show_all(GTK_WIDGET(window));
 	return TRUE;
 }
+
+
+/*!
+ \brief General purpose handler to hide/show Sensor calibrate window
+ */
+EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	extern volatile gboolean leaving;
+	extern GList ***ve_widgets;
+
+	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	if ((!main_xml) || (leaving))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"sensor_calibration_window",NULL);
+		window = glade_xml_get_widget(xml,"sensor_calibration_window");
+		glade_xml_signal_autoconnect(xml);
+
+		item = glade_xml_get_widget(xml,"map0_entry");
+		register_widget("map0_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(506));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ve_widgets[0][506] = g_list_prepend(
+				ve_widgets[0][506],
+				(gpointer)item);
+
+		item = glade_xml_get_widget(xml,"map5_entry");
+		register_widget("map5_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(508));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ve_widgets[0][508] = g_list_prepend(
+				ve_widgets[0][508],
+				(gpointer)item);
+
+		item = glade_xml_get_widget(xml,"baro0_entry");
+		register_widget("baro0_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(530));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ve_widgets[0][530] = g_list_prepend(
+				ve_widgets[0][530],
+				(gpointer)item);
+
+		item = glade_xml_get_widget(xml,"baro5_entry");
+		register_widget("baro5_entry",item);
+		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
+		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(532));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ve_widgets[0][532] = g_list_prepend(
+				ve_widgets[0][532],
+				(gpointer)item);
+
+		/* Force them to update */
+		g_list_foreach(ve_widgets[0][506],update_widget,NULL);
+		g_list_foreach(ve_widgets[0][508],update_widget,NULL);
+		g_list_foreach(ve_widgets[0][530],update_widget,NULL);
+		g_list_foreach(ve_widgets[0][532],update_widget,NULL);
+
+		item = glade_xml_get_widget(xml,"get_data_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(READ_VE_CONST));
+		OBJ_SET(item,"bind_to_list",g_strdup("get_data_buttons"));
+
+		item = glade_xml_get_widget(xml,"burn_data_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		bind_to_lists(item,"burners");
+		gtk_widget_show_all(GTK_WIDGET(window));
+
+		return TRUE;
+	}
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}
+
+
+EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
+{
+	GtkWidget *window;
+	GtkWidget *view;
+	gchar * text = NULL;
+	GtkTextBuffer *buffer;
+
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	view = gtk_text_view_new ();
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(view),FALSE);
+	gtk_container_set_border_width(GTK_CONTAINER(view),5);
+
+	gtk_container_add(GTK_CONTAINER(window),view);
+
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+	text = g_strdup("MAP Sensor Calibration\n\nFor the	MPX4115   use	10.6 and 	121.7\nMPX4250		10.0	260.0\nMPXH6300	1.1	315.5\nGM 3-BAR	1.1	315.5\nMPXH6400	3.5	416.5\n\n(GM 3-bar data from Dave Hartnell, http://www.not2fast.com/electronics/component_docs/MAP_12223861.pdf)\n\n	Sensor type	vLo	pLo	vHi	pHi	vRef\n	MPX4115 	0.204 v	15 kPa	4.794 v	115 kPa	5.100 v\n	MPX4250 	0.204 v	20 kPa	4.896 v	250 kPa	5.100 v\n	MPXH6300	0.306 v	20 kPa	4.913 v	304 kPa	5.100 v\n	GM 3-BAR	0.631 v	40 kPa	4.914 v	304 kPa	5.100 v\n	MPXH6400	0.200 v	20 kPa	4.800 v	400 kPa	5.000 v\n\nIn general, use values derived from these equations:\n\n	m = (pHi-pLo)/(vHi-vLo)\n	pv1 = pLo - m * vLo\n	pv2 = pv1 + m * vRef\n\nReferences:\n	http://www.freescale.com/files/sensors/doc/data_sheet/MPX4115A.pdf\n	http://www.freescale.com/files/sensors/doc/data_sheet/MPX4250A.pdf\n	http://www.freescale.com/files/sensors/doc/data_sheet/MPXH6300A.pdf\n	http://www.freescale.com/files/sensors/doc/data_sheet/MPXH6400A.pdf\n\nBarometer Sensor Calibration\n\nIf your system has an external barometer sensor, separate from the MAP sensor,\nthen use these values to calibrate it properly.  If you have a standard MS installation, then copy your MAP sensor values here.\n\nBarometric Correction Calibration\n\nCorrection for barometric effects is performed using the linear function below.\n\n	correction = correction_0 + (rate * barometer) / 100\n'At total vacuum' contains the total correction at a barometer reading of 0 kPa (you are on the moon).\nThe 'Rate' contains the percentage per 100 kPa to scale the barometer value.\nUsing the default values of 147 and -47, we see that for a barometer of 100 kPa,\nwe have 100\% correction.\ncorrection = 147 + (-47*100) / 100 = 100\%\n ");
+	gtk_text_buffer_set_text (buffer, text, -1);
+
+
+	g_free(text);
+	gtk_widget_show_all(window);
+
+
+	return TRUE;
+}
+
