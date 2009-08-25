@@ -17,7 +17,9 @@
 #include <firmware.h>
 #include <fileio.h>
 #include <gui_handlers.h>
+#include <math.h>
 #include <menu_handlers.h>
+#include <threads.h>
 #include <vex_support.h>
 #include <widgetmgmt.h>
 
@@ -289,6 +291,9 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		window = glade_xml_get_widget(xml,"table_generator_window");
 		glade_xml_signal_autoconnect(xml);
 
+		item = glade_xml_get_widget(xml,"sensor_combo");
+		gtk_combo_box_set_active(GTK_COMBO_BOX(item),0);
+		register_widget("thermister_sensor_combo",item);
 		item = glade_xml_get_widget(xml,"temp_label");
 		OBJ_SET(item,"c_label",g_strdup("Temperature(\302\260 C)"));
 		OBJ_SET(item,"f_label",g_strdup("Temperature(\302\260 F)"));
@@ -336,6 +341,7 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"celsius_radiobutton");
+		register_widget("thermister_celsius_radiobutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),FALSE);
 		g_signal_emit_by_name(item,"toggled",NULL);
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -345,49 +351,5 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
-	return TRUE;
-}
-
-
-/* Clamps a value to it's limits and updates if needed */
-EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
-{
-	gint lower = 0;
-	gint upper = 0;
-	gint precision = 0;
-	gfloat val = 0.0;
-	gboolean clamped = FALSE;
-
-	lower = (gint)OBJ_GET(widget,"raw_lower");
-	upper = (gint)OBJ_GET(widget,"raw_upper");
-	precision = (gint)OBJ_GET(widget,"precision");
-
-	val = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(widget)),NULL);
-	
-	if (val > upper)
-	{
-		val = upper;
-		clamped = TRUE;
-	}
-	if (val < lower)
-	{
-		val = lower;
-		clamped = TRUE;
-	}
-	if (clamped)
-		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",val,precision));
-	return TRUE;
-}
-
-
-EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
-{
-	GtkWidget *temp_label = lookup_widget("temp_label");
-
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) /* Deg C */
-		gtk_label_set_text(GTK_LABEL(temp_label),OBJ_GET(temp_label,"c_label"));
-	else
-		gtk_label_set_text(GTK_LABEL(temp_label),OBJ_GET(temp_label,"f_label"));
-
 	return TRUE;
 }

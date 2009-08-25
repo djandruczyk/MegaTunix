@@ -318,7 +318,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	}
 
 	/* Set it here otherwise there's a risk of a missed burn due to 
- 	 * a potential race conditin in the burn checker
+ 	 * a potential race condition in the burn checker
  	 */
 	set_ecu_data(canID,page,offset,size,value);
 	/* If the ecu is multi-page, run the handler to take care of queing
@@ -458,6 +458,40 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 		handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
+	return;
+}
+
+
+/*!
+ \brief table_write() gets called to send a block of lookuptable values to the ECU
+ \param page (tableID) (gint) page in which the value refers to.
+ \param len (gint) length of block to sent
+ \param data (guint8) the block of data to be sent which better damn well be
+ int ECU byte order if there is an endianness thing..
+ a horrible stall when doing an ECU restore or batch load...
+ */
+void table_write(gint page, gint num_bytes, guint8 * data)
+{
+	extern Firmware_Details *firmware;
+	OutputData *output = NULL;
+
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
+	output = initialize_outputdata();
+	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
+	OBJ_SET(output->object,"data", (gpointer)data);
+	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+
+	/* save it otherwise the burn checker can miss it due to a potential
+ 	 * race condition
+ 	 */
+	store_new_block(0,page,0,data,num_bytes);
+
+	if (firmware->multi_page)
+		handle_page_change(page,last_page);
+	output->queue_update = TRUE;
+	io_cmd(firmware->table_write_command,output);
 	return;
 }
 

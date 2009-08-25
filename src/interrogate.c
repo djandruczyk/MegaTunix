@@ -434,6 +434,12 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 					&firmware->chunk_write_command))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"Chunk_Write_Command\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 	}
+	if (firmware->capabilities & MS2)
+	{
+		if(!cfg_read_string(cfgfile,"parameters","Table_Write_Command",
+					&firmware->table_write_command))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"Table_Write_Command\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+	}
 	if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 				&firmware->total_pages))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n"));

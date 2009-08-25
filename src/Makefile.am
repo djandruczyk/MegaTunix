@@ -67,6 +67,7 @@ megatunix_SOURCES = \
 	stringmatch.c \
 	tabloader.c \
 	tag_loader.c \
+	therm.c \
 	threads.c \
 	timeout_handlers.c \
 	tuning_gui.c \

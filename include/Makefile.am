@@ -66,7 +66,7 @@ headers = \
 	stringmatch.h \
         tabloader.h \
         tag_loader.h \
-        thermistor.h \
+        therm.h \
         threads.h \
         timeout_handlers.h \
         tuning_gui.h \

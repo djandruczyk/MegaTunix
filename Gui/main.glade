@@ -3795,7 +3795,7 @@ Air Temperature</property>
 		      <property name="editable">True</property>
 		      <property name="visibility">True</property>
 		      <property name="max_length">0</property>
-		      <property name="text" translatable="yes">90</property>
+		      <property name="text" translatable="yes">99</property>
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char">●</property>
 		      <property name="activates_default">False</property>
@@ -3991,6 +3991,7 @@ Air Temperature</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="table_gen_process_and_dl" last_modification_time="Tue, 25 Aug 2009 14:06:40 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>

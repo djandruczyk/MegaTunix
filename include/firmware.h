@@ -64,6 +64,7 @@ struct _Firmware_Details
 	gchar *get_all_command;	/*! New Get All Command string */
 	gchar *ve_command;	/*! New VE Command string */
 	gchar *write_command;	/*! New Write Command string */
+	gchar *table_write_command;	/*! Table Write Command string */
 	gchar *chunk_write_command;	/*! New Chunk Write Command string */
 	gchar *burn_all_command;/*! New burn all command string */
 	gchar *burn_command;	/*! New burn command string */
