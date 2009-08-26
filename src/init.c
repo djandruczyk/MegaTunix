@@ -860,6 +860,7 @@ void dealloc_message(Io_Message * message)
 	if (message->command)
 		if (message->command->type == NULL_CMD)
 			g_free(message->command);
+	message->command = NULL;
         if (message->payload)
 	{
 		data = (OutputData *)message->payload;
