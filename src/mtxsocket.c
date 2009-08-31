@@ -1526,8 +1526,8 @@ void *control_socket_client(gpointer data)
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		printf("controlsocket Data arrived!\n");
-		printf("data %i, %c\n",(gint)buf,(gchar)buf);
+//		printf("controlsocket Data arrived!\n");
+//		printf("data %i, %c\n",(gint)buf,(gchar)buf);
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
