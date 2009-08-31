@@ -24,6 +24,7 @@
 typedef struct _MtxCurvePrivate MtxCurvePrivate;
 struct _MtxCurvePrivate
 {
+	MtxCurve *self;		/* Pointer to public opbject */
         GdkColor colors[CURVE_NUM_COLORS];    /* Colors Array */
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
@@ -36,6 +37,10 @@ struct _MtxCurvePrivate
         gint highest_x;         /*! Highest X value in points[] */
         gint lowest_y;          /*! Lowest Y value in points[] */
         gint highest_y;         /*! Highest Y value in points[] */
+	gint last_hi_x;		/*! Previous extremes */
+	gint last_hi_y;		/*! Previous extremes */
+	gint last_lo_x;		/*! Previous extremes */
+	gint last_lo_y;		/*! Previous extremes */
         gint border;            /*! Border in pixels */
         gint active_coord;      /*! Active Coordinate */
 	gint x_precision;	/*! Precision for X axis */
@@ -82,6 +87,7 @@ void mtx_curve_redraw (MtxCurve *gauge);
 void generate_curve_background(MtxCurve *);
 void update_curve_position (MtxCurve *);
 void recalc_extremes (MtxCurvePrivate *);
+gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
 
 

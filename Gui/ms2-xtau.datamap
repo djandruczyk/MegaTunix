@@ -175,7 +175,7 @@ handler=_TE_TABLE_GROUP_
 [topframe]
 keys=bind_to_list
 key_types=_STRING_
-bind_to_list=xtau_accel
+bind_to_list=valid_ecu_ctrls,xtau_accel
 
 [xtau_warmup_frame]
 keys=bind_to_list

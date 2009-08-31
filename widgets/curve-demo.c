@@ -39,7 +39,8 @@ int main (int argc, char **argv)
 	for (i=0;i<10;i++)
 	{
 		points[i].x=i*1000;
-		points[i].y=exp(i/2.0);
+		points[i].y=(i*1000)-5000;
+		//points[i].y=exp(i/2.0);
 	}
 	gtk_widget_realize(curve);
 	mtx_curve_set_coords(MTX_CURVE(curve),10,points);

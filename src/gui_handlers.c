@@ -127,6 +127,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	}
 	if (leaving)
 		return;
+
+	leaving = TRUE;
 	/* Stop timeout functions */
 
 	stop_tickler(RTV_TICKLER);
@@ -141,7 +143,6 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	stop_datalogging();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
-	leaving = TRUE;
 	/* Message to trigger serial repair queue to exit immediately */
 	g_async_queue_push(io_repair_queue,&tmp);
 
