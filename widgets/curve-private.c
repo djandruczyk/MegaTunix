@@ -249,8 +249,8 @@ void update_curve_position (MtxCurve *curve)
 	}
 	if (priv->show_y_marker)
 	{
-		cairo_move_to (cr, 0,((priv->y_marker-priv->lowest_y)*priv->x_scale) + priv->border);
-		cairo_line_to (cr, priv->w,((priv->y_marker-priv->lowest_y)*priv->x_scale) + priv->border);
+		cairo_move_to (cr, 0,((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->border);
+		cairo_line_to (cr, priv->w,((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->border);
 		cairo_stroke(cr);
 	}
 
@@ -520,7 +520,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	{
 		if (priv->pos_str)
 			g_free(priv->pos_str);
-		priv->pos_str = g_strdup_printf("%1$.*2$f, %3$.*4$f",(gfloat)((event->x- priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision, (gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
+		priv->pos_str = g_strdup_printf("%1$.*2$f, %3$.*4$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision, (gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
 		mtx_curve_redraw(MTX_CURVE(curve));
 		return TRUE;
 	}
@@ -528,7 +528,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	priv->points[i].x = event->x;
 	priv->points[i].y = event->y;
 
-	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x- priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
+	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
 	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
 
@@ -611,10 +611,10 @@ void mtx_curve_redraw (MtxCurve *curve)
 void recalc_extremes(MtxCurvePrivate *priv)
 {
         gint i = 0;
-        priv->highest_x = -10000;
-        priv->highest_y = -10000;
-        priv->lowest_x = 10000;
-        priv->lowest_y = 10000;
+        priv->highest_x = -100000;
+        priv->highest_y = -100000;
+        priv->lowest_x = 100000;
+        priv->lowest_y = 100000;
         for (i=0;i<priv->num_points;i++)
         {
                 if (priv->coords[i].x < priv->lowest_x)
@@ -626,8 +626,10 @@ void recalc_extremes(MtxCurvePrivate *priv)
                 if (priv->coords[i].y > priv->highest_y)
                         priv->highest_y = priv->coords[i].y;
         }
-	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
-	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
+	//priv->x_scale = (gfloat)(priv->w-(2*priv->border))/(priv->highest_x - priv->lowest_x + 0.000001);
+	//priv->y_scale = (gfloat)(priv->h-(2*priv->border))/(priv->highest_y - priv->lowest_y + 0.000001);
+	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/((priv->highest_x - priv->lowest_x + 0.000001));
+	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/((priv->highest_y - priv->lowest_y + 0.000001));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
 
 	if(priv->points)
