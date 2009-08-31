@@ -24,6 +24,7 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
+#include <listmgmt.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
 #include <tabloader.h>
@@ -85,7 +86,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	window = glade_xml_get_widget(xml,"table_editor_window");
 
 	glade_xml_signal_autoconnect(xml);
-	
+
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(close_2d_editor),window);
 	g_signal_connect(G_OBJECT(window),"delete_event",
@@ -117,6 +118,12 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		widget = glade_xml_get_widget(xml,"te_layout_hbox1");
 		table_num = (gint)strtod(vector[j],NULL);
 		label = gtk_label_new(firmware->te_params[table_num]->title);
+		if (firmware->te_params[table_num]->bind_to_list)
+		{
+			OBJ_SET(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			bind_to_lists(widget,firmware->te_params[table_num]->bind_to_list);
+			widget_list = g_list_prepend(widget_list,(gpointer)widget);
+		}
 		if (firmware->te_params[table_num]->gauge)
 		{
 			parent = glade_xml_get_widget(xml,"te_gaugeframe");
@@ -125,7 +132,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 			lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-	                mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 			g_free(filename);
 			create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 			gtk_container_add(GTK_CONTAINER(parent),gauge);
@@ -199,6 +206,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			if(firmware->te_params[table_num]->x_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
+				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
 				bind_to_lists(entry,"temperature");
 			}
 
@@ -246,6 +254,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			if(firmware->te_params[table_num]->y_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
+				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
 				bind_to_lists(entry,"temperature");
 			}
 			offset = (i*y_mult) + firmware->te_params[table_num]->y_base;
@@ -276,6 +285,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 		OBJ_SET(curve,"x_entries",x_entries);
 		OBJ_SET(curve,"y_entries",y_entries);
+		if (firmware->te_params[table_num]->bind_to_list)
+			g_list_foreach(get_list(firmware->te_params[table_num]->bind_to_list),alter_widget_state,NULL);
 	}
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
@@ -323,7 +334,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 
 	xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
 	window = glade_xml_get_widget(xml,"table_editor_window");
-
+	if (firmware->te_params[table_num]->bind_to_list)
+	{
+		OBJ_SET(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+		bind_to_lists(window,firmware->te_params[table_num]->bind_to_list);
+		widget_list = g_list_prepend(widget_list,(gpointer)window);
+	}
 	glade_xml_signal_autoconnect(xml);
 
 	g_signal_connect(G_OBJECT(window),"destroy_event",
@@ -422,6 +438,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		if(firmware->te_params[table_num]->x_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
+			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
 			bind_to_lists(entry,"temperature");
 		}
 
@@ -469,6 +486,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		if(firmware->te_params[table_num]->y_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
+			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
 			bind_to_lists(entry,"temperature");
 		}
 		offset = (i*y_mult) + firmware->te_params[table_num]->y_base;
@@ -533,12 +551,19 @@ gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 void remove_widget(gpointer widget_ptr, gpointer data)
 {
 	extern GList ***ve_widgets;
-	gint page = 0;
-	gint offset = 0;
-	remove_from_list("temperature",widget_ptr);
-	page = (gint)OBJ_GET(widget_ptr,"page");
-	offset = (gint)OBJ_GET(widget_ptr,"offset");
-	ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
+	gint page = -1;
+	gint offset = -1;
+	remove_from_lists(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
+	if (OBJ_GET(widget_ptr,"page"))
+		page = (gint)OBJ_GET(widget_ptr,"page");
+	else
+		page = -1;
+	if (OBJ_GET(widget_ptr,"offset"))
+		offset = (gint)OBJ_GET(widget_ptr,"offset");
+	else
+		offset = -1;
+	if (( page >= 0 ) && (offset >= 0))
+		ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
 }
 
 

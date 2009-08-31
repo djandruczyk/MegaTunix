@@ -270,6 +270,7 @@ y_precision=1
 [te_table_1]
 title=Priming Pulse vs. Temp
 is_fuel=FALSE
+bind_to_list=table_controls
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -300,6 +301,7 @@ y_precision=1
 [te_table_2]
 title=ASE % vs. Temp
 is_fuel=FALSE
+bind_to_list=table_controls
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -330,6 +332,7 @@ y_precision=0
 [te_table_3]
 title=ASE Taper Cycles vs. Temp
 is_fuel=FALSE
+bind_to_list=table_controls
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -360,6 +363,7 @@ y_precision=0
 [te_table_4]
 title=Idle Steps vs. Temp
 is_fuel=FALSE
+bind_to_list=iac_specific
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -390,6 +394,7 @@ y_precision=0
 [te_table_5]
 title=Idle PWM % vs. Temp
 is_fuel=FALSE
+bind_to_list=pwm_specific
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -420,6 +425,7 @@ y_precision=0
 [te_table_6]
 title=Cold Ignition Advance Offset
 is_fuel=FALSE
+bind_to_list=table_controls
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -480,6 +486,7 @@ y_precision=2
 [te_table_8]
 title= X (Puddling) Factor Correction
 is_fuel=FALSE
+bind_to_list=xtau_warmup
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -512,6 +519,7 @@ y_precision=0
 [te_table_9]
 title= Tau (Time) Factor Correction
 is_fuel=FALSE
+bind_to_list=xtau_warmup
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
@@ -542,6 +550,7 @@ y_precision=0
 [te_table_10]
 title= X(Puddling) Factor (Accel)
 is_fuel=FALSE
+bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
 gauge_datasource=xtaucorr1
 bincount=5
@@ -572,6 +581,7 @@ y_precision=1
 [te_table_11]
 title= X(Puddling) Factor (Decel)
 is_fuel=FALSE
+bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
 gauge_datasource=xtaucorr1
 bincount=5
@@ -602,6 +612,7 @@ y_precision=1
 [te_table_12]
 title= Tau(time) Factor (Accel)
 is_fuel=FALSE
+bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
 gauge_datasource=xtaucorr1
 bincount=5
@@ -632,6 +643,7 @@ y_precision=0
 [te_table_13]
 title= Tau(time) Factor (Decel)
 is_fuel=FALSE
+bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
 gauge_datasource=xtaucorr1
 bincount=5

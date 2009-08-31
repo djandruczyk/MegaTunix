@@ -434,20 +434,29 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	g_strfreev(tmpvector);
 }
 
-void remove_from_list(gchar * listname, gpointer data)
+
+void remove_from_lists(gchar * lists, gpointer data)
 {
+	gint i = 0;
+	gint bind_num_keys = 0;
+	gchar **tmpvector = NULL;
 	GList *list = NULL;
 
-	if (!listname)
+	if (!lists)
 	{
-		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");
+//		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");
 		return;
 	}
+	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
-	list = get_list(listname);
-	list = g_list_remove(list,(gpointer)data);
+	for (i=0;i<bind_num_keys;i++)
+	{
+		list = get_list(tmpvector[i]);
+		list = g_list_remove(list,(gpointer)data);
+		store_list(tmpvector[i],list);
+	}
+	g_strfreev(tmpvector);
 
-	store_list(listname,list);
 }
 
 /*!

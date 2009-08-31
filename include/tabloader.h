@@ -59,7 +59,7 @@ gint bind_group_data(ConfigFile *,GtkWidget *, GHashTable *, gchar *);
 void bind_to_lists(GtkWidget * , gchar * );
 void run_post_functions_with_arg(gchar *, GtkWidget *);
 void run_post_functions(gchar * );
-void remove_from_list(gchar *, gpointer);
+void remove_from_lists(gchar *, gpointer);
 /* Prototypes */
 
 #endif
