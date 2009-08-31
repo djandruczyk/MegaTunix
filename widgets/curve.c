@@ -460,3 +460,43 @@ gint mtx_curve_get_active_coord_index (MtxCurve *curve)
 }
 
 
+
+
+/*!
+ \brief sets the hard limits for autoscroll
+ \param curve (MtxCurve *) pointer to curve
+ \returns active vertex
+ */
+gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper, gint y_lower, gint y_upper)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	priv->x_lower_limit = x_lower;
+	priv->x_upper_limit = x_upper;
+	priv->y_lower_limit = y_lower;
+	priv->y_upper_limit = y_upper;
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the hard limits for autoscroll
+ \param curve (MtxCurve *) pointer to curve
+ \returns active vertex
+ */
+gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_upper, gint *y_lower, gint *y_upper)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	if (x_lower)
+		*x_lower = priv->x_lower_limit;
+	if (y_lower)
+		*y_lower = priv->y_lower_limit;
+	if (x_upper)
+		*x_lower = priv->x_upper_limit;
+	if (y_upper)
+		*y_lower = priv->y_upper_limit;
+	return TRUE;
+}
+
+

@@ -33,6 +33,10 @@ struct _MtxCurvePrivate
         gint num_points;        /*! Total Points*/
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
+	gint x_lower_limit;	/*! hard limit to gauge */
+	gint y_lower_limit;	/*! hard limit to gauge */
+	gint x_upper_limit;	/*! hard limit to gauge */
+	gint y_upper_limit;	/*! hard limit to gauge */
         gint lowest_x;          /*! Lowest X value in points[] */
         gint highest_x;         /*! Highest X value in points[] */
         gint lowest_y;          /*! Lowest Y value in points[] */
@@ -87,6 +91,7 @@ void mtx_curve_redraw (MtxCurve *gauge);
 void generate_curve_background(MtxCurve *);
 void update_curve_position (MtxCurve *);
 void recalc_extremes (MtxCurvePrivate *);
+void recalc_points (MtxCurvePrivate *);
 gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
 

@@ -129,6 +129,10 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->coord_changed = FALSE;
 	priv->auto_hide = TRUE;
 	priv->vertex_id = 0;
+	priv->x_lower_limit=-65536;
+	priv->y_lower_limit=-65536;
+	priv->x_upper_limit=65536;
+	priv->y_upper_limit=65536;
 	mtx_curve_init_colors(curve);
 }
 
@@ -207,6 +211,7 @@ void update_curve_position (MtxCurve *curve)
 			priv->colors[CURVE_COL_FG].blue/65535.0);
 	cairo_set_line_width (cr, 1.5);
 
+	recalc_points(priv);
 	/* The "curve" itself */
 	for (i=0;i<priv->num_points-1;i++)
 	{
@@ -558,8 +563,10 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 		return TRUE;
 	}
 	i = priv->active_coord;
-	priv->points[i].x = event->x;
-	priv->points[i].y = event->y;
+	priv->coords[i].x = event->x;
+	priv->coords[i].y = event->y;
+
+	/* Limit clamps */
 
 	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
 	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
@@ -568,6 +575,16 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
 	priv->coords[i].y = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
+
+	if ((gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x < priv->x_lower_limit)
+		priv->coords[i].x = priv->x_lower_limit;
+	if ((gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x > priv->x_upper_limit)
+		priv->coords[i].x = priv->x_upper_limit;
+
+	if ((gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) < priv->y_lower_limit)
+		priv->coords[i].y = priv->y_lower_limit;
+	if ((gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) > priv->y_upper_limit)
+		priv->coords[i].y = priv->y_upper_limit;
 
 	
 	if (( (gint)priv->coords[i].x > priv->highest_x) ||
@@ -676,6 +693,16 @@ void recalc_extremes(MtxCurvePrivate *priv)
 	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/((priv->highest_x - priv->lowest_x + 0.000001));
 	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/((priv->highest_y - priv->lowest_y + 0.000001));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
+}
+
+
+/*!
+ \brief Recalculates the points of all coords in the graph
+ \param priv (MtxCurvePrivate *) pointer to private data
+ */
+void recalc_points(MtxCurvePrivate *priv)
+{
+	gint i = 0;
 
 	if(priv->points)
 		g_free(priv->points);

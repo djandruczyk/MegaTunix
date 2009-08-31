@@ -14,7 +14,7 @@
 #include <2d_table_editor.h>
 #include <3d_vetable.h>
 #include <config.h>
-#include <curve.h>
+#include "../widgets/curve.h"
 #include <defines.h>
 #include <enums.h>
 #include <fileio.h>
@@ -283,6 +283,11 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		}
 		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
+		mtx_curve_set_hard_limits(MTX_CURVE(curve),
+				firmware->te_params[table_num]->x_raw_lower,
+				firmware->te_params[table_num]->x_raw_upper,
+				firmware->te_params[table_num]->y_raw_lower,
+				firmware->te_params[table_num]->y_raw_upper);
 		OBJ_SET(curve,"x_entries",x_entries);
 		OBJ_SET(curve,"y_entries",y_entries);
 		if (firmware->te_params[table_num]->bind_to_list)
@@ -370,7 +375,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-                mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 
 		g_free(filename);
 		create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
@@ -515,6 +520,11 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	}
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
+	mtx_curve_set_hard_limits(MTX_CURVE(curve),
+			firmware->te_params[table_num]->x_raw_lower,
+			firmware->te_params[table_num]->x_raw_upper,
+			firmware->te_params[table_num]->y_raw_lower,
+			firmware->te_params[table_num]->y_raw_upper);
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
 	OBJ_SET(curve,"x_entries",x_entries);
