@@ -46,6 +46,7 @@ typedef enum
 enum
 {	
 	CHANGED_SIGNAL,
+	VERTEX_PROXIMITY_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -57,7 +58,10 @@ struct _MtxCurve
 struct _MtxCurveClass
 {
 	GtkDrawingAreaClass parent_class;
-	void (*coords_changed) (MtxCurve *curve);
+	/* Signal for coordinate change via drag/drop edit */
+	void (*coords_changed) (MtxCurve *);
+	/* Signal for vertex proximity notify */
+	void (*vertex_proximity) (MtxCurve *);
 };
 
 struct _MtxCurveCoord
@@ -109,6 +113,9 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
 gboolean mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
 gboolean mtx_curve_set_hard_limits (MtxCurve *, gint, gint, gint, gint);
 gboolean mtx_curve_get_hard_limits (MtxCurve *, gint *, gint *, gint *, gint *);
+
+/* Retrieval of current proximity vertex index */
+gint mtx_curve_get_vertex_proximity_index (MtxCurve *);
 
 G_END_DECLS
 

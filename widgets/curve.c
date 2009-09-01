@@ -481,7 +481,11 @@ gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper,
 /*!
  \brief gets the hard limits for autoscroll
  \param curve (MtxCurve *) pointer to curve
- \returns active vertex
+ \param x_lower (gint *) pointer to be filled in with value
+ \param x_upper (gint *) pointer to be filled in with value
+ \param y_lower (gint *) pointer to be filled in with value
+ \param x_upper (gint *) pointer to be filled in with value
+ \returns TRUE
  */
 gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_upper, gint *y_lower, gint *y_upper)
 {
@@ -498,4 +502,16 @@ gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_uppe
 	return TRUE;
 }
 
+
+/*!
+ \brief gets the current proximity vertex
+ \param curve (MtxCurve *) pointer to curve
+ \returns active vertex
+ */
+gint mtx_curve_get_vertex_proximity_index (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
+	return priv->proximity_vertex;
+}
 

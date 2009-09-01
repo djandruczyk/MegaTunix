@@ -82,6 +82,11 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		G_STRUCT_OFFSET (MtxCurveClass, coords_changed),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+	mtx_curve_signals[VERTEX_PROXIMITY_SIGNAL] = 
+		g_signal_new("vertex-proximity", G_TYPE_FROM_CLASS(klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		G_STRUCT_OFFSET (MtxCurveClass, vertex_proximity),
+		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 
@@ -112,6 +117,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->points = NULL;
 	priv->coords = NULL;
 	priv->num_points = 0;
+	priv->proximity_threshold = 10;
 	priv->border = 30;
 	priv->x_precision = 0;
 	priv->y_precision = 0;
@@ -311,7 +317,8 @@ void update_curve_position (MtxCurve *curve)
 		cairo_stroke (cr);
 	}
 	/* Update current position marker in lower right corner */
-	if (priv->pos_str)
+	//if (priv->pos_str)
+	if (FALSE)
 	{
 		cairo_set_font_size (cr, 9);
 		cairo_text_extents (cr, priv->pos_str, &extents);
@@ -553,13 +560,16 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gint i = 0;
+	guint index = 0;
 	gchar * tmpbuf = 0;
 	if (!priv->vertex_selected)
 	{
 		if (priv->pos_str)
 			g_free(priv->pos_str);
 		priv->pos_str = g_strdup_printf("%1$.*2$f, %3$.*4$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision, (gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
-		mtx_curve_redraw(MTX_CURVE(curve));
+		if (proximity_test(curve,event))
+			g_signal_emit_by_name((gpointer)curve, "vertex-proximity");
+		//mtx_curve_redraw(MTX_CURVE(curve));
 		return TRUE;
 	}
 	i = priv->active_coord;
@@ -753,4 +763,30 @@ gboolean delay_turnoff_vertexes(gpointer data)
 	priv->show_vertexes = FALSE;
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return FALSE;
+}
+
+
+gboolean proximity_test (GtkWidget *curve, GdkEventMotion *event)
+{
+	MtxCurvePrivate *priv = NULL;
+	guint i = 0;
+	gint thresh = 0;
+
+	priv = MTX_CURVE_GET_PRIVATE(curve);
+	thresh = priv->proximity_threshold;
+
+	for(i=0;i<priv->num_points;i++)
+	{
+		if ((abs((gint)event->x - priv->points[i].x) < thresh) && (abs((gint)event->y - priv->points[i].y) < thresh))
+		{
+			if (priv->proximity_vertex == i)
+				return FALSE;
+			priv->proximity_vertex = i;
+			return TRUE;
+		}
+	}
+	if (priv->proximity_vertex == -1)
+		return FALSE;
+	priv->proximity_vertex = -1;
+	return TRUE;
 }

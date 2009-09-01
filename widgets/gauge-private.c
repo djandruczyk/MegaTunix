@@ -1187,10 +1187,10 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		switch (event->button)
 		{
 			case 1: /* left button */
-				if (((edge != GDK_WINDOW_EDGE_NORTH_WEST) ||
-							(edge != GDK_WINDOW_EDGE_NORTH_EAST) ||
-							(edge != GDK_WINDOW_EDGE_SOUTH_WEST) ||
-							(edge != GDK_WINDOW_EDGE_SOUTH_EAST)) && (GTK_IS_WINDOW(widget->parent)))
+				if ((edge != GDK_WINDOW_EDGE_NORTH_WEST) && 
+							(edge != GDK_WINDOW_EDGE_NORTH_EAST) && 
+							(edge != GDK_WINDOW_EDGE_SOUTH_WEST) && 
+							(edge != GDK_WINDOW_EDGE_SOUTH_EAST) && (GTK_IS_WINDOW(widget->parent)))
 				{
 					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							event->button,

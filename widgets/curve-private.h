@@ -30,6 +30,8 @@ struct _MtxCurvePrivate
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
         MtxCurveCoord *coords;       /* Points array */
         GdkPoint *points;       /*! Onscreen coords array (for mouse) */
+	gint proximity_threshold;	/*! Proximity threshold */
+	gint proximity_vertex;	/*! Closest one to mouse.. */
         gint num_points;        /*! Total Points*/
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
@@ -90,6 +92,8 @@ void recalc_extremes (MtxCurvePrivate *);
 void recalc_points (MtxCurvePrivate *);
 gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
+gboolean proximity_test (GtkWidget *, GdkEventMotion *);
+
 
 
 #endif
