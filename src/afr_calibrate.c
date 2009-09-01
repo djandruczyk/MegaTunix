@@ -310,11 +310,11 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 				afr = Fv(adcCount);
 			else 
 			{
-				// Use curve data from tabular expression of transfer function.
+				/* Use curve data from tabular expression of transfer function.*/
 				while (voltage > Bv[iV]) 
 					iV++;
 				deltaVoltage = Bv[iV] - Bv[iV-1];
-				if (fabs(deltaVoltage) < 1e-10) // Curve data is crap.
+				if (fabs(deltaVoltage) < 1e-10) /* Curve data is crap.*/
 					afr = 999.0;
 				else 
 				{

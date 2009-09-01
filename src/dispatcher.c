@@ -75,7 +75,7 @@ gboolean pf_dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-	//	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));
+	/*	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
 	/*	if (g_async_queue_length(pf_dispatch_queue) >40)
@@ -105,7 +105,7 @@ trypop:
 				printf("ERROR postfunction was null, continuing\n");
 				continue;
 			}
-			//printf ("Should run function %s, %p\n",pf->name,pf->function);
+			/*printf ("Should run function %s, %p\n",pf->name,pf->function);*/
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
@@ -141,10 +141,10 @@ dealloc:
 	 * */
 	if(count < 15)
 	{
-		//printf("trying to handle another message\n");
+		/*printf("trying to handle another message\n");*/
 		goto trypop;
 	}
-	//printf("returning\n");
+	/*printf("returning\n");*/
 	return TRUE;
 }
 
@@ -169,13 +169,13 @@ gboolean gui_dispatcher(gpointer data)
 	Widget_Update *w_update = NULL;
 	QFunction *qfunc = NULL;
 	extern volatile gboolean leaving;
-	//extern gint mem_view_style[];
+	/*extern gint mem_view_style[];*/
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-	//printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));
+	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);

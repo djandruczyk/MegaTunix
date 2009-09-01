@@ -296,7 +296,7 @@ void *serial_repair_thread(gpointer data)
 	gboolean autodetect = FALSE;
 	extern volatile gboolean offline;
 	gchar ** vector = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	if (offline)
 	{
@@ -386,7 +386,7 @@ void *serial_repair_thread(gpointer data)
 					else
 					{  
 						close_serial();
-						//g_usleep(100000);
+						/*g_usleep(100000);*/
 						continue;
 					}
 				}

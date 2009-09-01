@@ -375,7 +375,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	GArray *classes = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** tmpvector = NULL;

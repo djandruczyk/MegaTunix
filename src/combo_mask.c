@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 
-G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init));
+G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init))
 
 /*!
  \brief gets called when a user wants a new mask entry
@@ -51,7 +51,7 @@ void mask_entry_set_background (MaskEntry *entry)
 
 	if (entry->mask)
 	{
-		//if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), G_REGEX_CASELESS, 0))
+		/*if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), G_REGEX_CASELESS, 0))*/
 		tmpstr = g_utf8_normalize(gtk_entry_get_text (GTK_ENTRY (entry)),-1,G_NORMALIZE_DEFAULT);
 		tmpbuf = g_utf8_casefold(tmpstr,-1);
 		g_free(tmpstr);

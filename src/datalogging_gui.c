@@ -55,7 +55,7 @@ static gboolean header_needed = FALSE;
  */
 EXPORT void populate_dlog_choices_pf()
 {
-	gint i,j,k;
+	guint i,j,k;
 	GtkWidget *vbox = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
@@ -257,7 +257,7 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
  */
 void write_log_header(GIOChannel *iochannel, gboolean override)
 {
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	gint total_logables = 0;
 	gsize count = 0;
@@ -309,7 +309,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
  */
 EXPORT void run_datalog_pf(void)
 {
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	gsize count = 0;
 	gint total_logables = 0;
@@ -386,7 +386,7 @@ EXPORT void run_datalog_pf(void)
  */
 void dlog_select_all()
 {
-	gint i = 0;
+	guint i = 0;
 	GObject * object = NULL;
 	GtkWidget *button = NULL;
 
@@ -407,7 +407,7 @@ void dlog_select_all()
  */
 void dlog_deselect_all(void)
 {
-	gint i = 0;
+	guint i = 0;
 	GtkWidget * button = NULL;
 	GObject * object = NULL;
 
@@ -428,7 +428,7 @@ void dlog_deselect_all(void)
  */
 void dlog_select_defaults(void)
 {
-	gint i = 0;
+	guint i = 0;
 	GtkWidget * button = NULL;
 	GObject * object = NULL;
 	gboolean state=FALSE;
@@ -570,9 +570,9 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
  */
 void dump_log_to_disk(GIOChannel *iochannel)
 {
-	gint i = 0;
-	gint x = 0;
-	gint j = 0;
+	guint i = 0;
+	guint x = 0;
+	guint j = 0;
 	gsize count = 0;
 	GString *output;
 	GObject * object = NULL;
@@ -609,7 +609,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 		for(i=0;i<rtv_map->derived_total;i++)
 		{
 			value = g_array_index(histories[i], gfloat, x);
-			//tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%1$.*2$f",value,precisions[i]);
+			/*tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%1$.*2$f",value,precisions[i]);*/
 			tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precisions[i]),",",'.');
 			g_string_append(output,tmpbuf);
 			j++;

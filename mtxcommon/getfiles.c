@@ -225,7 +225,7 @@ gchar * choose_file(MtxFileIO *data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	/*
 	   printf("choose_file\n");

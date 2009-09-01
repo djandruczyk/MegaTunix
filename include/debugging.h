@@ -53,6 +53,7 @@ typedef enum guint
 	KEYPARSER_SHIFT		= 10,
 	RTMLOADER_SHIFT		= 11,
 	COMPLEX_EXPR_SHIFT	= 12,
+	MUTEXT_SHIFT		= 13,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 

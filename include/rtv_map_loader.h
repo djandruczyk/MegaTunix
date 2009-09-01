@@ -28,8 +28,8 @@ typedef struct _Rtv_Map Rtv_Map;
 
 struct _Rtv_Map
 {
-	gint derived_total;	/*! Number of derived variables */
-	gint rtvars_size;	/*! total size of rtvars block */
+	guint derived_total;	/*! Number of derived variables */
+	guint rtvars_size;	/*! total size of rtvars block */
 	gchar **raw_list;	/*! Char List of raw variables by name */
 	gchar *applicable_signatures;/*! Firmware signatures that use this map*/
 	GHashTable *offset_hash;/*! Hashtable of rtv dervied values indexed by

@@ -111,7 +111,7 @@ guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fnam
 void watch_destroy(gpointer data)
 {
 	DataWatch *watch = (DataWatch *)data;
-	//printf("destroying watch %ui\n",watch->id);
+	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
 		g_free(watch->varname);
 	if (watch->function)
@@ -186,7 +186,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 
 gboolean watch_active(guint32 id)
 {
-	//printf("watch_active call for watch %ui\n",id);
+	/*printf("watch_active call for watch %ui\n",id);*/
 	if (g_hash_table_lookup(watch_hash,GINT_TO_POINTER(id)))
 		return TRUE;
 	else

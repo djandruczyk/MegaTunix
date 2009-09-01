@@ -186,7 +186,7 @@ gchar * present_firmware_choices()
 	ConfigFile *cfgfile = NULL;
 	gint major = 0;
 	gint minor = 0;
-	gint i = 0;
+	guint i = 0;
 	gint result = 0;
 
 	extern gchar * offline_firmware_choice;

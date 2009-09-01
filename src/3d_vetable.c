@@ -63,7 +63,7 @@
 #include <time.h>
 #include <widgetmgmt.h>
 
-#define ONE_SECOND 	 1	// one second
+#define ONE_SECOND 	 1	/* one second */
 
 static GLuint font_list_base;
 extern GObject *global_data;
@@ -81,29 +81,29 @@ void CalculateFrameRate()
 {
 
 
-	static float framesPerSecond    = 0.0f;        // This will store our fps
-	static long lastTime            = 0;           // This will hold the time from the last frame
-	static char strFrameRate[50]    = {0};         // We will store the string here for the window title
+	static float framesPerSecond    = 0.0f;        /* This will store our fps*/
+	static long lastTime            = 0;           /* This will hold the time from the last frame*/
+	static char strFrameRate[50]    = {0};         /* We will store the string here for the window title*/
 
-	// struct for the time value
+	/* struct for the time value*/
 	GTimeVal  currentTime;
 	currentTime.tv_sec  = 0;
 	currentTime.tv_usec = 0;
 
-	// gets the microseconds passed since app started
+	/* gets the microseconds passed since app started*/
 	g_get_current_time(&currentTime);
 
-	// Increase the frame counter
+	/* Increase the frame counter*/
 	++framesPerSecond;
 
 	if( currentTime.tv_sec - lastTime >= ONE_SECOND )
 	{
 		lastTime = currentTime.tv_sec;
 
-		// Copy the frames per second into a string to display in the window
+		/* Copy the frames per second into a string to display in the window*/
 		sprintf(strFrameRate, "Current Frames Per Second: %d", (int)framesPerSecond);
 
-		// Reset the frames per second
+		/* Reset the frames per second*/
 		framesPerSecond = 0;
 
 	}
@@ -459,11 +459,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	gtk_widget_add_events (drawing_area,
 			GDK_BUTTON_MOTION_MASK	|
-//			GDK_SCROLL_MASK		|
 			GDK_BUTTON_PRESS_MASK   |
 			GDK_KEY_PRESS_MASK      |
 			GDK_KEY_RELEASE_MASK    |
-//			GDK_FOCUS_CHANGE_MASK   |
 			GDK_VISIBILITY_NOTIFY_MASK);
 
 	/* Connect signal handlers to the drawing area */
@@ -758,7 +756,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-	//printf("expose event \n");
+	/*printf("expose event \n");*/
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
@@ -820,7 +818,7 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
-	//printf("motion notify event\n");
+	/*printf("motion notify event\n");*/
 
 	/* Left Button */
 	if (event->state & GDK_BUTTON1_MASK)
@@ -863,7 +861,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_button_press_event()\n"));
-	//printf("button press event\n");
+	/*printf("button press event\n");*/
 
 	gtk_widget_grab_focus (widget);
 
@@ -891,7 +889,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLProc proc = NULL;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
-	//printf("realize\n");
+	/*printf("realize\n");*/
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -913,7 +911,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
 	glEnable (GL_LINE_SMOOTH);
-	//glEnable (GL_POLYGON_SMOOTH);
+	/*glEnable (GL_POLYGON_SMOOTH);*/
 	glEnable (GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -939,7 +937,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf = 0.0;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
-	//printf("CALC Scaling\n");
+	/*printf("CALC Scaling\n");*/
 
 	min = 65535;
 	max = 0;
@@ -1002,7 +1000,7 @@ void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
-	//printf("draw grid\n");
+	/*printf("draw grid\n");*/
 
 	glLineWidth(1.25);
 
@@ -1090,7 +1088,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
-	//printf("draw edit indicator\n");
+	/*printf("draw edit indicator\n");*/
 	
 
 	drawOrthoText(cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
@@ -1203,7 +1201,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
-	//printf("draw runtime indicator\n");
+	/*printf("draw runtime indicator\n");*/
 
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
@@ -1408,12 +1406,6 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
 	g_free(label);
 
-	/* draw time - Frames Per Second */
-	//label = g_strdup_printf("%i",(gint)cur_val->x_val);
-	//	
-	//	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
-	//	g_free(label);
-
 }
 
 
@@ -1431,7 +1423,7 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gchar *label;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_axis()\n"));
-	//printf("draw axis \n");
+	/*printf("draw axis \n");*/
 
 	/* Set line thickness and color */
 	glLineWidth(1.0);
@@ -1732,7 +1724,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			max = (gint)pow(2,z_mult*8) -10;
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-PgUp, big increase ROW!\n");
+				/*printf("Ctrl-PgUp, big increase ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1749,7 +1741,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Alt-PgUp, big increase COL!\n");
+				/*printf("Alt-PgUp, big increase COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1787,7 +1779,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			max = (gint)pow(2,z_mult*8)-1;
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-q/+/=, increase ROW!\n");
+				/*printf("Ctrl-q/+/=, increase ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1804,7 +1796,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Alt-q/+/=, increase COL!\n");
+				/*printf("Alt-q/+/=, increase COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1836,7 +1828,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-PgDn, big decrease ROW!\n");
+				/*printf("Ctrl-PgDn, big decrease ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1853,7 +1845,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("Alt-PgDn, big decrease COL!\n");
+				/*printf("Alt-PgDn, big decrease COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1888,7 +1880,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				//printf("Ctrl-w/-, decrease ROW!\n");
+				/*printf("Ctrl-w/-, decrease ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1905,7 +1897,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{
-				//printf("ALT-w/-, decrease COL!\n");
+				/*printf("ALT-w/-, decrease COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -2133,7 +2125,7 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	//printf("draw active vertexes marker \n");
+	/*printf("draw active vertexes marker \n");*/
 	glPointSize(MIN(w,h)/100.0);
 
 	for (i=0;i<ve_view->x_bincount-1;i++)
@@ -2442,7 +2434,6 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* Edit value */
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
-//		printf("z_edit_val (multi) is %f\n",cur_val->z_edit_value);
 		/* runtime value */
 		lookup_current_value(multi->source,&z_val);
 		cur_val->z_val = z_val;
@@ -2569,8 +2560,6 @@ gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 	}
 	for (i=0;i<count-1;i++)
 	{
-		//tmp1 = evaluator_evaluate_x(eval,get_ecu_data(canID,page,base+(i*mult),size));
-		//tmp2 = evaluator_evaluate_x(eval,get_ecu_data(canID,page,base+((i+1)*mult),size));
 		tmp1 = convert_after_upload((GtkWidget *)widgets[i]);
 		tmp2 = convert_after_upload((GtkWidget *)widgets[i+1]);
 		if ((tmp1 <= value) && (tmp2 >= value))

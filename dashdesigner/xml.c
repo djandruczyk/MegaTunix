@@ -197,7 +197,7 @@ void export_dash_xml(gchar * filename)
 	GList *children = NULL;
 	GtkFixedChild *child = NULL;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
+	guint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlNodePtr node = NULL;/* node pointers */

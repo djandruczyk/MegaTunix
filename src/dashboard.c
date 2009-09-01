@@ -58,7 +58,6 @@ void load_dashboard(gchar *filename, gpointer data)
 	gint y = 0;
 	gfloat * ratio = NULL;
 	extern GdkColor black;
-	//extern GdkColor white;
 	extern GtkWidget * main_window;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
@@ -167,7 +166,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	GtkFixedChild *child = NULL;
 	GtkWidget *gauge = NULL;
 	GList *children = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint child_w = 0;
 	gint child_h = 0;
 	gint child_x = 0;
@@ -189,8 +188,8 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	ratio = x_ratio > y_ratio ? y_ratio:x_ratio;
 	w_constricted = x_ratio > y_ratio ? FALSE:TRUE;
 	
-	//printf("dash_config_event\n");
-	g_signal_handlers_block_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
+	/*printf("dash_config_event\n");*/
+	g_signal_handlers_block_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
 	{
@@ -213,7 +212,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 		timer_active = TRUE;
 	}
 
-	g_signal_handlers_unblock_by_func(G_OBJECT(widget),G_CALLBACK(dash_configure_event),NULL);
+	g_signal_handlers_unblock_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
 	return FALSE;
 }
 
@@ -265,10 +264,7 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 	
 	hints.min_width = 100;
 	hints.min_height = 100;
-//	hints.min_aspect = (gfloat)width/(gfloat)height;
-//	hints.max_aspect = hints.min_aspect;
 
-	//gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_ASPECT|GDK_HINT_MIN_SIZE);
 	gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(dash)),NULL,&hints,GDK_HINT_MIN_SIZE);
 
 }
@@ -424,7 +420,7 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	gint xc = 0;
 	gint yc = 0;
 	gint radius = 0;
-	gint i = 0;
+	guint i = 0;
 	GList *children = NULL;
 	GdkGC *gc1 = NULL;
 	GdkBitmap *bitmap = NULL;
@@ -614,7 +610,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
 	GList *children = NULL;
-	gint i = 0;
+	guint i = 0;
 	gboolean state = FALSE;
 	GtkFixedChild *child = NULL;
 	GtkWidget * dash  = NULL;
@@ -688,7 +684,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 		{
 			/*printf("MOVE drag\n"); */
 			moving = TRUE;
-			g_signal_handlers_block_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),G_CALLBACK(dash_configure_event),NULL);
+			g_signal_handlers_block_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
 					event->x_root,
@@ -921,7 +917,7 @@ void update_tab_gauges()
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	extern gboolean forced_update;
-	gint i = 0;
+	guint i = 0;
 	GList *list = NULL;
 	
 	if ((!tab_gauges) || (active_table < 0))
@@ -952,7 +948,7 @@ gboolean focus_event(GtkWidget *widget, gpointer data)
 {
 	if (moving)
 	{
-		g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),G_CALLBACK(dash_configure_event),NULL);
+		g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 		moving = FALSE;
 	}
 	if (resizing)

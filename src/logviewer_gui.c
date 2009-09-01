@@ -377,7 +377,7 @@ void populate_viewer()
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&update_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() after UNlock reentrant mutex\n"));
-	if ((lv_data->traces) && (g_list_length(lv_data->tlist) >= 0))
+	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 
 	return; 
@@ -393,7 +393,7 @@ void reset_logviewer_state()
 {
 	extern Rtv_Map *rtv_map;
 	extern Log_Info *log_info;
-	gint i = 0 ;
+	guint i = 0 ;
 	GObject * object = NULL;
 
 	if (playback_mode)
@@ -894,8 +894,8 @@ void trace_update(gboolean redraw_all)
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
-	gint last_index = 0;
-	gint i = 0;
+	guint last_index = 0;
+	guint i = 0;
 	gint j = 0;
 	gint x = 0;
 	gfloat log_pos = 0.0;
@@ -1329,7 +1329,6 @@ void set_logviewer_mode(Lv_Mode mode)
  */
 EXPORT void finish_logviewer(void)
 {
-	return;
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
 

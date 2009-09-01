@@ -52,6 +52,8 @@ Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 
 
+#define BUFSIZE 4096
+
 /*!
  \brief interrogate_ecu() interrogates the target ECU to determine what
  firmware it is running.  It does this by reading a list of tests, sending
@@ -67,7 +69,6 @@ EXPORT gboolean interrogate_ecu()
 	gchar sint8 = 0;
 	guint16 uint16 = 0;
 	gint16 sint16 = 0;
-	gint size = 4096;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
@@ -77,7 +78,7 @@ EXPORT gboolean interrogate_ecu()
 	gint total_wanted = 0;
 	gint zerocount = 0;
 	gchar *string = NULL;
-	guchar buf[size];
+	guchar buf[BUFSIZE];
 	guchar *ptr = NULL;
 	gchar * message = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -121,7 +122,7 @@ EXPORT gboolean interrogate_ecu()
 		test = g_array_index(tests,Detection_Test *, i);
 
 		/* flush buffer to known state.. */
-		memset (buf,0,size);
+		memset (buf,0,BUFSIZE);
 
 		ptr = buf;
 
@@ -171,7 +172,7 @@ EXPORT gboolean interrogate_ecu()
 		}
 
 		total_read = 0;
-		total_wanted = size;
+		total_wanted = BUFSIZE;
 		zerocount = 0;
 		while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
 		{
@@ -1111,7 +1112,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 
 	ConfigFile *cfgfile = NULL;
 	Detection_Test *test = NULL;
-	gint i = 0;
+	guint i = 0;
 	gboolean pass = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
@@ -1211,7 +1212,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
  */
 void free_tests_array(GArray *tests)
 {
-	gint i = 0;
+	guint i = 0;
 	Detection_Test *test = NULL;
 
 	for (i=0;i<tests->len;i++)

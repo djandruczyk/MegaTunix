@@ -51,7 +51,7 @@ void load_comm_xml(gchar *filename)
 	load_xmlcomm_elements(root_element);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-//	g_hash_table_foreach((GHashTable *)OBJ_GET(global_data,"commands_hash"),xmlcomm_dump_commands,NULL);
+	/*g_hash_table_foreach((GHashTable *)OBJ_GET(global_data,"commands_hash"),xmlcomm_dump_commands,NULL);*/
 
 }
 
@@ -351,7 +351,7 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	Command *cmd = NULL;
 	PostFunction *pf = NULL;
 	PotentialArg *arg = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	cmd = (Command *)value;
 	printf("Command key \"%s\"\n",(gchar *)key);
@@ -360,7 +360,7 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	if (cmd->base)
 		printf("Command base \"%s\"\n",cmd->base);
 	if (cmd->helper_function)
-		printf("Helper function \"%s\()\"\n",cmd->helper_func_name);
+		printf("Helper function \"%s\"\n",cmd->helper_func_name);
 	if (cmd->args->len > 0 )
 	{
 		printf("Command args (%i): \n",cmd->args->len);
@@ -386,7 +386,7 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	if (cmd->type == FUNC_CALL)
 	{
 
-		printf("Function call %s \(%p)\n",cmd->func_call_name,cmd->function);
+		printf("Function call %s (%p)\n",cmd->func_call_name,cmd->function);
 	}
 	printf("\n\n");
 }

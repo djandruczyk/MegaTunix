@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.1.2.6 2009/03/29 23:26:54 extace Exp $
+ * $Id: ms2_loader.c,v 1.1.2.7 2009/09/01 14:58:14 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -32,7 +32,7 @@
 #define C_WRITE_NEXT     0xA6
 #define C_READ_BLOCK     0xA7
 #define C_WRITE_BLOCK    0xA8
-#define MAX_BLOCK        256 // For both writes and reads.
+#define MAX_BLOCK        256 /* For both writes and reads.*/
 #define C_READ_REGS      0xA9
 #define C_WRITE_SP       0xAA
 #define C_WRITE_PC       0xAB
@@ -50,7 +50,7 @@
 #define C_ERASE_PAGE     0xB8
 #define C_ERASE_EEPROM   0xB9
 
-//--  Error codes  -------------------------------------------------------------
+/*--  Error codes  ----------------------------------------------------------*/
 
 #define E_NONE           0xE0
 #define E_COMMAND        0xE1
@@ -61,7 +61,7 @@
 #define E_FACCERR        0xE6
 #define E_ACCERR         0xE9
 
-//--  Status codes  ------------------------------------------------------------
+/*--  Status codes  ---------------------------------------------------------*/
 
 #define S_ACTIVE         0x00
 #define S_RUNNING        0x01
@@ -72,10 +72,10 @@
 
 #define LONG_DELAY 500000  /* 500 ms */
 
-unsigned int total_bytes = 0;
+guint total_bytes = 0;
 
 char **fileBuf;
-unsigned int count = 0;
+guint count = 0;
 int debug = 3;
 /* debug levels
 0 = Quiet
@@ -87,7 +87,7 @@ int debug = 3;
 */
 gboolean check_status(gint );
 
-void do_ms2_load(int port_fd, int file_fd)
+void do_ms2_load(gint port_fd, gint file_fd)
 {
 	total_bytes = 0;
 	count = read_s19(file_fd);
@@ -106,9 +106,9 @@ void do_ms2_load(int port_fd, int file_fd)
 	return;
 }
 
-void ms2_chomp(char *inBuf)
+void ms2_chomp(gchar *inBuf)
 {
-	char *s;
+	gchar *s;
 
 	s = strrchr(inBuf, '\n');
 	if (s)
@@ -120,8 +120,8 @@ void ms2_chomp(char *inBuf)
 
 gint read_s19 (gint file_fd)
 {
-	unsigned int lines = 0;
-	char *buf = NULL;
+	guint lines = 0;
+	gchar *buf = NULL;
 	gsize len = 0;
 	GIOChannel *chan = NULL;
 	GError *err = NULL;
@@ -140,9 +140,9 @@ gint read_s19 (gint file_fd)
 			g_free(buf);
 		lines++;
 	}
-	fileBuf = (char **)malloc(lines * sizeof(char *));
+	fileBuf = (gchar **)malloc(lines * sizeof(gchar *));
 
-	// Go to beginning of file
+	/* Go to beginning of file */
 	g_io_channel_seek_position(chan,0,G_SEEK_SET,&err);
 	while(G_IO_STATUS_NORMAL == g_io_channel_read_line(chan,&buf,&len,NULL,&err)) {
 		if (debug > 4) {
@@ -157,9 +157,9 @@ gint read_s19 (gint file_fd)
 	return count;
 }
 
-void free_s19(count)
+void free_s19(guint count)
 {
-	unsigned int i;
+	guint i;
 
 	for (i = 0; i < count; i++) {
 		free(fileBuf[i]);
@@ -168,9 +168,9 @@ void free_s19(count)
 	free(fileBuf);
 }
 
-unsigned int extract_number(char *data, unsigned int nBytes)
+guint extract_number(gchar *data, guint nBytes)
 {
-	char number[128];
+	gchar number[128];
 
 	strncpy(number, data, nBytes);
 	number[nBytes] = 0;
@@ -178,18 +178,18 @@ unsigned int extract_number(char *data, unsigned int nBytes)
 	return strtol(number, NULL, 16);
 }
 
-unsigned char cs(unsigned int l)
+guchar cs(guint l)
 {
 	return ((l >> 24) & 0xff) + ((l >> 16) & 0xff) + ((l >> 8) & 0xff) + ((l >> 0) & 0xff);
 }
 
-unsigned char extract_data(char *data, unsigned int nBytes, unsigned char checksum, unsigned char *binary)
+guchar extract_data(gchar *data, guint nBytes, guchar checksum, guchar *binary)
 {
-	unsigned int i;
+	guint i;
 
 	for (i = 0; i < nBytes; i++) {
-		unsigned int n = extract_number(data +i*2, 2);
-		binary[i] = (char)n;
+		guint n = extract_number(data +i*2, 2);
+		binary[i] = (gchar)n;
 		checksum += n;
 	}
 
@@ -198,8 +198,8 @@ unsigned char extract_data(char *data, unsigned int nBytes, unsigned char checks
 
 gboolean wakeup_S12(gint port_fd)
 {
-	unsigned char c;
-	unsigned char prompt;
+	guchar c;
+	guchar prompt;
 	gint res = 0;
 	int i;
 
@@ -238,9 +238,9 @@ gboolean wakeup_S12(gint port_fd)
    
 gboolean check_status(gint port_fd)
 {
-	unsigned char errorCode = 0;
-	unsigned char statusCode = 0;
-	unsigned char prompt = 0;
+	guchar errorCode = 0;
+	guchar statusCode = 0;
+	guchar prompt = 0;
 	gint res = 0;
 	gboolean retval = TRUE;
 
@@ -339,11 +339,11 @@ gboolean check_status(gint port_fd)
 	return retval;
 }
 
-void sendPPAGE(gint port_fd, unsigned int a, unsigned char erasing)
+void sendPPAGE(gint port_fd, guint a, guchar erasing)
 {
-	unsigned char c;
-	static unsigned char page = 0;
-	unsigned char command [4];
+	guchar c;
+	static guchar page = 0;
+	guchar command [4];
 	gint res = 0;
 
 	a = 0xFFFF & (a >> 16);
@@ -378,11 +378,11 @@ void sendPPAGE(gint port_fd, unsigned int a, unsigned char erasing)
 	}
 }
 
-void send_block(gint port_fd, unsigned int a, unsigned char *b, unsigned int n)
+void send_block(gint port_fd, guint a, guchar *b, guint n)
 {
-	unsigned char command[4];
-	unsigned char i;
-	gint res = 0;
+	guchar command[4];
+	guchar i;
+	guint res = 0;
 
 	if ((a < 0x400)) {
 		if (debug) {
@@ -425,7 +425,7 @@ void send_block(gint port_fd, unsigned int a, unsigned char *b, unsigned int n)
 
 void erase_S12(gint port_fd)
 {
-	unsigned char c;
+	guchar c;
 	gint res = 0;
 
 	if (debug) {
@@ -439,19 +439,19 @@ void erase_S12(gint port_fd)
 	g_usleep(5*LONG_DELAY);
 	check_status(port_fd);
 }
-void send_S12(gint port_fd, gint count)
+void send_S12(gint port_fd, guint count)
 {
-	unsigned int i = 0;
-	unsigned int j = 0;
-	unsigned char checksum = 0;
-	unsigned char *thisRec = NULL;
-	unsigned char recsum = 0;
-	unsigned char difsum = 0;
-	unsigned int size = 0;
-	unsigned int dataSize = 0;
-	unsigned int addr = 0;
-	unsigned int addrSize = 0;
-	unsigned int nBlocks = 0;
+	guint i = 0;
+	guint j = 0;
+	guchar checksum = 0;
+	guchar *thisRec = NULL;
+	guchar recsum = 0;
+	guchar difsum = 0;
+	guint size = 0;
+	guint dataSize = 0;
+	guint addr = 0;
+	guint addrSize = 0;
+	guint nBlocks = 0;
 
 	for (i = 0; i < count; i++) {
 		switch (fileBuf[i][1]) {
@@ -482,14 +482,14 @@ void send_S12(gint port_fd, gint count)
 		addr = extract_number(fileBuf[i]+4, addrSize);
 		checksum = cs(addr) + size;
 
-		thisRec = (unsigned char *)malloc(dataSize + 1);
+		thisRec = (guchar *)malloc(dataSize + 1);
 		checksum = extract_data(fileBuf[i]+4+addrSize, dataSize, checksum, thisRec);
 
 		recsum = extract_number(fileBuf[i]+4+addrSize+dataSize*2, 2);
 		difsum = ~(recsum + checksum);
 
 		if (difsum != 0) {
-			output(g_strdup_printf("Invalid checksum, found 0x%02x, expected %#04x\n", recsum,(unsigned char)~checksum),TRUE);
+			output(g_strdup_printf("Invalid checksum, found 0x%02x, expected %#04x\n", recsum,(guchar)~checksum),TRUE);
 
 		}
 
@@ -500,8 +500,8 @@ void send_S12(gint port_fd, gint count)
 
 		nBlocks = (dataSize - 1) / MAX_BLOCK + 1;
 		for (j = 0; dataSize > 0; j++) {
-			unsigned int nn = dataSize > MAX_BLOCK ? MAX_BLOCK : dataSize;
-			unsigned char *thisRecPtr = thisRec;
+			guint nn = dataSize > MAX_BLOCK ? MAX_BLOCK : dataSize;
+			guchar *thisRecPtr = thisRec;
 			if (addr < 0x8000 && addr+nn > 0x8000) {
 				nn = 0x8000 - addr;
 			}
@@ -539,7 +539,7 @@ void enter_boot_mode(gint port_fd)
 void reset_proc(gint port_fd)
 {
 	gint res = 0;
-	unsigned char command = C_RESET;
+	guchar command = C_RESET;
 
 	res = write(port_fd, &command, 1);
 	if (res != 1)

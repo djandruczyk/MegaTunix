@@ -133,7 +133,7 @@ void init(void)
 gboolean read_config(void)
 {
 	gint tmpi = 0;
-	gint i = 0;
+	guint i = 0;
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar **vector = NULL;
@@ -230,8 +230,8 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"override_port",g_strdup(tmpbuf));
 			g_free(tmpbuf);
 		}
-		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi));
-		OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
+		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
+			OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
 
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
@@ -828,7 +828,7 @@ void dealloc_client_data(MtxSocketClient *client)
 
 		if (client->ecu_data)
 		{
-//			printf("deallocing client ecu data params\n");
+/*			printf("deallocing client ecu data params\n");*/
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				if (client->ecu_data[i])
@@ -881,7 +881,7 @@ void dealloc_array(GArray *array, ArrayType type)
 {
 	DBlock *db = NULL;
 	PotentialArg *arg = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	switch (type)
 	{

@@ -114,7 +114,7 @@ EXPORT void load_rt_text_pf()
 		w = (gint)OBJ_GET(global_data,"rtt_width");
 		h = (gint)OBJ_GET(global_data,"rtt_height");
 		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
-//		gtk_window_resize(GTK_WINDOW(window),w,h);
+/*		gtk_window_resize(GTK_WINDOW(window),w,h); */
 
 		register_widget("rtt_window",window);
 		g_signal_connect(G_OBJECT(window),"destroy_event",

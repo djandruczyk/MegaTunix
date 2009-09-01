@@ -128,7 +128,7 @@ EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, 
 {
 	gint x = 0;
 	gint y = 0;
-	gint tnum = 0;
+	guint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
@@ -146,11 +146,11 @@ EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, 
 		return FALSE;
 	}
 
-	tnum = ceil(y/lv_data->spread);
+	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return FALSE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
-	if (lv_data->tselect !=tnum)
+	if (lv_data->tselect != tnum)
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
 		lv_data->tselect = tnum;
@@ -242,7 +242,7 @@ EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, 
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
-	gint tnum = 0;
+	guint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
@@ -263,7 +263,7 @@ EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, 
 
 	if (lv_data->active_traces == 0)
 		return TRUE;
-	tnum = ceil(y/lv_data->spread);
+	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);

@@ -150,7 +150,7 @@ void *thread_dispatcher(gpointer data)
 
 		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
 		{
-			//printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);
+			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);*/
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
@@ -183,8 +183,10 @@ void *thread_dispatcher(gpointer data)
 							message->command,
 							message->command->func_call_arg);
 
-				//if (!result)
-			//		message->command->defer_post_functions=TRUE;
+					/*
+				if (!result)
+					message->command->defer_post_functions=TRUE;
+					*/
 				}
 				break;
 			case WRITE_CMD:
@@ -193,7 +195,7 @@ void *thread_dispatcher(gpointer data)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				break;
 			case NULL_CMD:
-				//printf("null_cmd, just passing thru\n");
+				/*printf("null_cmd, just passing thru\n");*/
 				break;
 
 			default:
@@ -248,15 +250,15 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 		case MTX_CHAR:
 		case MTX_S08:
 		case MTX_U08:
-	//		printf("8 bit var %i at offset %i\n",value,offset);
+	/*		printf("8 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S16:
 		case MTX_U16:
-	//		printf("16 bit var %i at offset %i\n",value,offset);
+	/*		printf("16 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S32:
 		case MTX_U32:
-	//		printf("32 bit var %i at offset %i\n",value,offset);
+	/*		printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
 			printf("ERROR!!! Size undefined for var at canID %i, page %i, offset %i\n",canID,page,offset);
@@ -664,7 +666,7 @@ void *restore_update(gpointer data)
  */
 void build_output_string(Io_Message *message, Command *command, gpointer data)
 {
-	gint i = 0;
+	guint i = 0;
 	gint v = 0;
 	gint len = 0;
 	OutputData *output = NULL;
@@ -691,7 +693,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 		block = g_new0(DBlock, 1);
 		if (arg->type == ACTION)
 		{
-			//printf("build_output_string(): ACTION being created!\n");
+			/*printf("build_output_string(): ACTION being created!\n");*/
 			block->type = ACTION;
 			block->action = arg->action;
 			block->arg = arg->action_arg;

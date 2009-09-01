@@ -41,7 +41,7 @@ static struct T
 	gint child_height;
 	gint rel_grab_x;
 	gint rel_grab_y;
-}tt = {0,0,0,0};
+}tt = {0,0,0,0,0,0};
 
 typedef enum 
 {
@@ -101,7 +101,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GdkColor home_color = {0, 62000, 59000, 65535};
 	GList *p_list = NULL;
 	GList *s_list = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	if (created)
 	{

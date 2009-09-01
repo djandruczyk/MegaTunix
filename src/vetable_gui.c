@@ -60,7 +60,7 @@ void rescale_table(GtkWidget *widget)
 	gchar * tmpbuf = NULL;
 	GList *list = NULL;
 	gint i = 0;
-	gint j = 0;
+	guint j = 0;
 	gint precision = 0;
 	gfloat value = 0.0;
 	gfloat factor = 0.0;
@@ -174,8 +174,8 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	gfloat percentage = 0.0;
 	gint mult = 0;
 	gint i = 0;
-	gint j = 0;
-	gint x = 0;
+	guint j = 0;
+	guint x = 0;
 	gchar **vector = NULL;
 	guint8 *data = NULL;
 	gint raw_lower = 0;
@@ -273,11 +273,11 @@ void reqfuel_rescale_table(GtkWidget *widget)
 
 						tmpbuf = g_strdup_printf("%i",(gint)real_value);
 						g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-								G_CALLBACK (entry_changed_handler),
+								(gpointer)entry_changed_handler,
 								NULL);
 						gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
 						g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-								G_CALLBACK (entry_changed_handler),
+								(gpointer)entry_changed_handler,
 								NULL);
 						g_free(tmpbuf);
 
@@ -560,8 +560,10 @@ void draw_ve_marker()
 			goto redraw;
 		}
 	}
-//	for (i=0;i<4;i++)
-//		last_z_weight[i] = z_weight[i];
+	/*
+	for (i=0;i<4;i++)
+		last_z_weight[i] = z_weight[i];
+		*/
 	return;
 
 redraw:
@@ -596,14 +598,14 @@ redraw:
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 			else
 			{
-				// HACK ALERT! this doesn't honor themes! 
+				/* HACK ALERT! this doesn't honor themes! */
 				gdk_color_parse("white",&old_colors[table][z_bin[i]]);
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][z_bin[i]]);
 			}
 		}
 	}
 
-	//last_widgets[table][last[table][i]] = NULL;
+	/*last_widgets[table][last[table][i]] = NULL; */
 	color_changed = FALSE;
 
 	max=0;
@@ -615,8 +617,9 @@ redraw:
 			heaviest = i;
 		}
 	}
-	//for (i=0;i<4;i++)
-	//	last_z_weight[i] = z_weight[i];
+	/*for (i=0;i<4;i++)
+		last_z_weight[i] = z_weight[i];
+	*/
 
 	/* Color the 4 vertexes according to their weight 
 	 * Save the old colors as well

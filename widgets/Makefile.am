@@ -34,7 +34,8 @@ apifix_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxco
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
+#AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wno-unused -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 

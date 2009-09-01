@@ -210,7 +210,7 @@ read_again:
  */
 void populate_limits(Log_Info *log_info)
 {
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	GObject * object = NULL;
 	GArray *array = NULL;
@@ -259,7 +259,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint x = 0;
 	gint precision = 0;
 	gchar ** vector = NULL;
@@ -324,7 +324,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 void free_log_info()
 {
 	extern Log_Info *log_info;
-	gint i = 0;
+	guint i = 0;
 	GObject *object = NULL;
 	GArray *array = NULL;
 	

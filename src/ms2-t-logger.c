@@ -120,8 +120,8 @@ void _ms2_crunch_trigtooth_data(gint page)
 	guint8 mid = 0;
 	guint8 low = 0;
 	gint tmp = 0;
-	gint min = -1;
-	gint max = -1;
+	gulong min = 0;
+	gulong max = 0;
 	gint cap_idx = 0;
 	gfloat ratio = 0.0;
 	gint lower = 0;
@@ -153,7 +153,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value("rpm",&ttm_data->rpm);
-//printf("Current RPM %f\n",ttm_data->rpm);
+/*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (page == 5) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire

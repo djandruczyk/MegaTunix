@@ -52,7 +52,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	DataSize size = MTX_U08;
 	float lower = 0.0;
 	float upper = 0.0;
-	gint i = 0;
+	guint i = 0;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
 	gchar *expr_list = NULL;
@@ -272,7 +272,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gint canID = 0;
 	DataSize size = 0;
 	gboolean ul_complex = FALSE;
-	gint i = 0;
+	guint i = 0;
 	gint table_num = -1;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
@@ -296,7 +296,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
-		//printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));
+		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
@@ -386,9 +386,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = lookup_data(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
 	else
 	{
-		//printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);
+		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
 		tmpi = get_ecu_data(canID,page,offset,size);
-		//printf("value is %i\n",tmpi);
+		/*printf("value is %i\n",tmpi);*/
 	}
 
 
@@ -445,7 +445,7 @@ void convert_temps(gpointer widget, gpointer units)
 
 	if ((int)units == FAHRENHEIT) 
 	{
-		//printf("fahr %s\n",glade_get_widget_name(widget));
+		/*printf("fahr %s\n",glade_get_widget_name(widget));*/
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	
@@ -501,7 +501,7 @@ void convert_temps(gpointer widget, gpointer units)
 	}
 	else
 	{
-		//printf("cels %s\n",glade_get_widget_name(widget));
+		/*printf("cels %s\n",glade_get_widget_name(widget));*/
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	

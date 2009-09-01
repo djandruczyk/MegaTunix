@@ -70,21 +70,20 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
-	//extern volatile gboolean outstanding_data;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	extern volatile gint last_page;
 	gint i = 0;
-	//printf("burn all helper\n");
+
+	/*printf("burn all helper\n");*/
 	if ((type != MS2) && (type != MS1))
 		return FALSE;
 	if (!offline)
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		//if (((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)) && (outstanding_data))
 		if (((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
 		{
-	//		printf("paged burn\n");
+	/*		printf("paged burn\n");*/
 			output = initialize_outputdata();
 			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
 			OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));

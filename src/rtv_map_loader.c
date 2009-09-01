@@ -57,7 +57,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	gint *keytypes = NULL;
 	gint i = 0;
 	gint j = 0;
-	gint k = 0;
+	guint k = 0;
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;

@@ -92,7 +92,7 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 	{
 		case MTX_CHAR:
 		case MTX_U08:
-//			printf("8 bit, returning %i\n",(guint8)data[offset]);
+/*			printf("8 bit, returning %i\n",(guint8)data[offset]);*/
 			return (guint8)data[offset];
 			break;
 		case MTX_S08:
@@ -101,14 +101,14 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 		case MTX_U16:
 			u16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
 			result = GUINT16_FROM_BE(u16);
-//			printf("U16 bit, returning %i\n",result);
+/*			printf("U16 bit, returning %i\n",result);*/
 			return (guint16)result;
 			break;
 		case MTX_S16:
 			s16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
 			result = GINT16_FROM_BE(s16);
 			return (gint16)result;
-//			printf("S16 bit, returning %i\n",result);
+/*			printf("S16 bit, returning %i\n",result);*/
 			break;
 		case MTX_U32:
 			u32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));

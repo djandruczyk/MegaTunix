@@ -75,7 +75,7 @@ symbol_table_create(int length)
 																																				 * calculate 
 																																				 * them. 
 																																				 */
-	int             i;	/* Loop counter.  */
+	unsigned int             i;	/* Loop counter.  */
 
 	/* Allocate memory for symbol table data structure as well as for
 	 * corresponding hash table. */

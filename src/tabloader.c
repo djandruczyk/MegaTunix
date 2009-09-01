@@ -444,7 +444,7 @@ void remove_from_lists(gchar * lists, gpointer data)
 
 	if (!lists)
 	{
-//		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");
+/*		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");*/
 		return;
 	}
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
@@ -653,7 +653,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
-				//printf("adding widget %s to ve_widgets[%i][%i]\n",glade_get_widget_name(widget),page,offset);
+				/*printf("adding widget %s to ve_widgets[%i][%i]\n",glade_get_widget_name(widget),page,offset);*/
 				ve_widgets[page][offset] = g_list_prepend(
 						ve_widgets[page][offset],
 						(gpointer)widget);
@@ -706,7 +706,7 @@ void run_post_functions(gchar * functions)
 {
 	void (*function)(void);
 	gchar ** vector = NULL;
-	gint i = 0;
+	guint i = 0;
 	GModule *module = NULL;
 
 	vector = g_strsplit(functions,",",-1);
@@ -741,8 +741,8 @@ void run_post_functions(gchar * functions)
 void run_post_functions_with_arg(gchar * functions, GtkWidget *widget)
 {
 	void (*function)(GtkWidget *);
-	gchar ** vector = NULL;;
-	gint i = 0;
+	gchar ** vector = NULL;
+	guint i = 0;
 	GModule *module = NULL;
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);

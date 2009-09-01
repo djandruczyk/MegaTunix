@@ -967,13 +967,15 @@ GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string
 			update_logbar("tools_view","warning",g_strdup("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 			break;
 		}
-//		if ((value < 0) || (value > 255))
-//		{
-//			status = G_IO_STATUS_ERROR;
-//			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
-//			break;
-//		}
-//		else
+		/*
+		if ((value < 0) || (value > 255))
+		{
+			status = G_IO_STATUS_ERROR;
+			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
+			break;
+		}
+		else
+		*/
 			switch (arg)
 			{
 				case VEX_RPM_RANGE:
@@ -1072,18 +1074,20 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-//			if ((value < 0) || (value > 255))
-//			{
-//				status = G_IO_STATUS_ERROR;
-//				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
-//				goto breakout;
-//			}
-//			else
+			/*
+			if ((value < 0) || (value > 255))
+			{
+				status = G_IO_STATUS_ERROR;
+				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
+				goto breakout;
+			}
+			else
+			*/
 				vex->tbl_bins[j+(i*x_bins)] = value;
 		}		
 		g_string_free(a_line, TRUE);
 	}
-//breakout:
+/*breakout:*/
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		vex->got_ve = TRUE;

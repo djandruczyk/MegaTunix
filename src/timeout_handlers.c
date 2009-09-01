@@ -221,8 +221,10 @@ gboolean signal_read_rtvars()
 	OutputData *output = NULL;
 	extern Firmware_Details *firmware;
 	extern GAsyncQueue *io_data_queue;
-	//extern GAsyncQueue *pf_dispatch_queue;
-	//extern GAsyncQueue *gui_dispatch_queue;
+	/*
+	extern GAsyncQueue *pf_dispatch_queue;
+	extern GAsyncQueue *gui_dispatch_queue;
+	*/
 	extern gboolean rtvars_loaded;
 
 	if (!rtvars_loaded)
@@ -234,9 +236,11 @@ gboolean signal_read_rtvars()
 	 * so we skip a call as we're probably trying to go faster than the 
 	 * MS and/or serial port can go....
 	 */
-	//printf("Queue length is %i requests long\n",length);
-	//printf("PF Dispatch queue length is %i requests long\n", g_async_queue_length(pf_dispatch_queue));
-	//printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
+	/*
+	printf("Queue length is %i requests long\n",length);
+	printf("PF Dispatch queue length is %i requests long\n", g_async_queue_length(pf_dispatch_queue));
+	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
+	*/
 
 	if (length > 2)
 		return TRUE;

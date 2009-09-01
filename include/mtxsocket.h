@@ -50,7 +50,7 @@ typedef enum
 	GET_MS1_PAGE,
 	GET_MS1_OFFSET,
 	GET_MS1_BYTE,
-	GET_MS1_COUNT,
+	GET_MS1_COUNT
 }State;
 
 typedef enum

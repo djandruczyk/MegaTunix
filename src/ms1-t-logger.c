@@ -221,7 +221,7 @@ void _crunch_trigtooth_data(gint page)
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value("rpm",&ttm_data->rpm);
-//printf("Current RPM %f\n",ttm_data->rpm);
+/*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (page == 9) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire

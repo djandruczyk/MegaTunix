@@ -47,7 +47,7 @@ extern GObject *global_data;
 
 gboolean force_view_recompute()
 {
-	gint i = 0;
+	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)
 		update_model_from_view(g_list_nth_data(views,i));
 	return FALSE;

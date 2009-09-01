@@ -52,8 +52,8 @@ void process_rt_vars(void *incoming)
 	GObject * object = NULL;
 	gchar * expr = NULL;
 	GList * list= NULL;
-	gint i = 0;
-	gint j = 0;
+	guint i = 0;
+	guint j = 0;
 	gfloat x = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
@@ -274,8 +274,10 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
-				//printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
-				//printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				/*
+				  printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
+				 printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case VE_VAR:
@@ -681,8 +683,8 @@ void flush_rt_arrays()
 {
 	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;
-	gint i = 0;
-	gint j = 0;
+	guint i = 0;
+	guint j = 0;
 	GObject * object = NULL;
 	gint current_index = 0;
 	GList *list = NULL;

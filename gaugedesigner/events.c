@@ -788,7 +788,7 @@ void update_onscreen_c_ranges()
 	GtkWidget *dummy = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint y = 1;
 	gfloat low = 0.0;
 	gfloat high = 0.0;
@@ -877,7 +877,7 @@ void update_onscreen_a_ranges()
 	GtkWidget *dummy = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint y = 1;
 	gfloat low = 0.0;
 	gfloat high = 0.0;
@@ -1124,7 +1124,7 @@ void update_onscreen_tblocks()
 	GtkWidget *label = NULL;
 	GtkWidget *spin = NULL;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint y = 1;
 	MtxTextBlock *tblock = NULL;
 	GArray * array = NULL;
@@ -1226,7 +1226,7 @@ void update_onscreen_tgroups()
 	GtkWidget *tg_main_table = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
+	guint i = 0;
 	MtxTickGroup *tgroup = NULL;
 	GArray * array = NULL;
 	extern GladeXML *topxml;
@@ -1413,7 +1413,7 @@ void update_onscreen_polygons()
 	GHashTable *hash = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	MtxPolygon *poly = NULL;
 	GArray * array = NULL;

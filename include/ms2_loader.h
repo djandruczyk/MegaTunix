@@ -23,8 +23,8 @@ gint read_s19(gint);
 void enter_boot_mode(gint);
 gboolean wakeup_S12(gint);
 void erase_S12(gint);
-void send_S12(gint, gint);
-void free_s19(gint);
+void send_S12(gint, guint);
+void free_s19(guint);
 void reset_proc(gint);
 void output(gchar *, gboolean);
 
