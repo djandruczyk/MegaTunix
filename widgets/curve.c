@@ -50,7 +50,7 @@ gboolean mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord 
  */
 gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
 {
-	/* gint i = 0; */
+/*	gint i = 0; */
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
@@ -115,8 +115,7 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->coords[index].x = point.x;
 	priv->coords[index].y = point.y;
-	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);
- 	*/
+	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);*/
 	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);

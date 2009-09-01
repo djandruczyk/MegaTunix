@@ -19,7 +19,6 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
-//gboolean key_event_handler(GtkWidget *, GdkEventKey *, gpointer);
 
 int main (int argc, char **argv)
 {
@@ -31,7 +30,6 @@ int main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_widget_add_events(GTK_WIDGET(window),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK);
-//	g_signal_connect(window,"key_press_event",G_CALLBACK(key_event_handler),NULL);
 
 	gauge = mtx_gauge_face_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);

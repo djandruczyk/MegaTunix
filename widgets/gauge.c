@@ -403,7 +403,6 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < NUM_ATTRIBUTES);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
@@ -485,7 +484,6 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
 	g_return_val_if_fail ((field < NUM_ATTRIBUTES),FALSE);
-	g_return_val_if_fail ((field >= 0),FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
@@ -566,7 +564,6 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 	MtxTextBlock *tblock = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < TB_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tblock = g_array_index(priv->t_blocks,MtxTextBlock *,index);
@@ -617,7 +614,6 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 	MtxTickGroup *tgroup = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < TG_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tgroup = g_array_index(priv->tick_groups,MtxTickGroup *,index);
@@ -706,7 +702,6 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < POLY_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 
@@ -815,7 +810,6 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField fi
 	MtxColorRange *c_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < CR_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	c_range = g_array_index(priv->c_ranges,MtxColorRange *,index);
@@ -861,7 +855,6 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 	MtxAlertRange *a_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < ALRT_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	a_range = g_array_index(priv->a_ranges,MtxAlertRange *,index);
@@ -1028,13 +1021,13 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxColorRange *c_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->c_ranges->len) && (index >= 0 ))
+	if (index < priv->c_ranges->len)
 	{
 		c_range = g_array_index(priv->c_ranges,MtxColorRange *, index);
 		priv->c_ranges = g_array_remove_index(priv->c_ranges,index);
@@ -1054,13 +1047,13 @@ void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxAlertRange *a_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->a_ranges->len) && (index >= 0 ))
+	if (index < priv->a_ranges->len)
 	{
 		a_range = g_array_index(priv->a_ranges,MtxAlertRange *, index);
 		priv->a_ranges = g_array_remove_index(priv->a_ranges,index);
@@ -1080,13 +1073,13 @@ void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tblock = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->t_blocks->len) && (index >= 0 ))
+	if (index < priv->t_blocks->len)
 	{
 		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, index);
 		priv->t_blocks = g_array_remove_index(priv->t_blocks,index);
@@ -1110,13 +1103,13 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tgroup = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->tick_groups->len) && (index >= 0 ))
+	if (index < priv->tick_groups->len)
 	{
 		tgroup = g_array_index(priv->tick_groups,MtxTextBlock *, index);
 		priv->tick_groups = g_array_remove_index(priv->tick_groups,index);
@@ -1140,13 +1133,13 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
 {
 	MtxPolygon *poly = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->polygons->len) && (index >= 0 ))
+	if (index < priv->polygons->len)
 	{
 		poly = g_array_index(priv->polygons,MtxPolygon *, index);
 		priv->polygons = g_array_remove_index(priv->polygons,index);

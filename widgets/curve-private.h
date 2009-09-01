@@ -37,14 +37,10 @@ struct _MtxCurvePrivate
 	gint y_lower_limit;	/*! hard limit to gauge */
 	gint x_upper_limit;	/*! hard limit to gauge */
 	gint y_upper_limit;	/*! hard limit to gauge */
-        gint lowest_x;          /*! Lowest X value in points[] */
-        gint highest_x;         /*! Highest X value in points[] */
-        gint lowest_y;          /*! Lowest Y value in points[] */
-        gint highest_y;         /*! Highest Y value in points[] */
-	gint last_hi_x;		/*! Previous extremes */
-	gint last_hi_y;		/*! Previous extremes */
-	gint last_lo_x;		/*! Previous extremes */
-	gint last_lo_y;		/*! Previous extremes */
+        gfloat lowest_x;	/*! Lowest X value in points[] */
+        gfloat highest_x;	/*! Highest X value in points[] */
+        gfloat lowest_y;	/*! Lowest Y value in points[] */
+        gfloat highest_y;	/*! Highest Y value in points[] */
         gint border;            /*! Border in pixels */
         gint active_coord;      /*! Active Coordinate */
 	gint x_precision;	/*! Precision for X axis */

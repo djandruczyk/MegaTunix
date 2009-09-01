@@ -59,7 +59,7 @@ struct _MtxGaugeFacePrivate
         gchar * xml_filename;   /*! Filename of XML for this gauge  */
         gboolean show_drag_border;      /*! Show drag border flag */
         MtxClampType clamped;   /*! Isthe display clamped? */
-        gint last_alert_index;  /*! index of last active alert struct */
+        guint last_alert_index;  /*! index of last active alert struct */
         GdkColor colors[GAUGE_NUM_COLORS]; /*! Array of colors for specific
                                              parts of a gauge object */
 	MtxDirection direction; /*! Direction of motion on the gauge */

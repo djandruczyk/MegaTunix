@@ -574,7 +574,7 @@ y_units=(%)
 y_name=Correction
 y_dl_conv_expr=x/0.1
 y_ul_conv_expr=x*0.1
-y_raw_lower=50
+y_raw_lower=5
 y_raw_upper=900
 y_precision=1
 

@@ -40,7 +40,7 @@ int main (int argc, char **argv)
 	{
 		points[i].x=i*1000;
 		points[i].y=(i*1000)-5000;
-		//points[i].y=exp(i/2.0);
+		/*points[i].y=exp(i/2.0);*/
 	}
 	gtk_widget_realize(curve);
 	mtx_curve_set_coords(MTX_CURVE(curve),10,points);
@@ -69,7 +69,7 @@ void coords_changed(MtxCurve *curve, gpointer data)
 	gint index = mtx_curve_get_active_coord_index(curve);
 	MtxCurveCoord point;
 	mtx_curve_get_coords_at_index(curve,index,&point);
-	//printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);
+	/*printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);*/
 	
 }
 
@@ -91,6 +91,6 @@ void update_curve_marker(gpointer data)
 		value+=step;
 	else
 		value-=step;
-//printf("Setting x marker to %i\n",value);
+/*printf("Setting x marker to %i\n",value);*/
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 }

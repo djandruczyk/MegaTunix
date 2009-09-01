@@ -293,7 +293,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	gchar * tmpbuf = NULL;
 	cairo_font_weight_t weight;
 	cairo_font_slant_t slant;
-	gint i = 0;
+	guint i = 0;
 	gfloat n_width = 0.0;
 	gfloat n_tail = 0.0;
 	gfloat n_tip = 0.0;
@@ -691,7 +691,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	gchar * tmpbuf = NULL;
 	gint w = 0;
 	gint h = 0;
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	gint k = 0;
 	gint num_points = 0;
@@ -1187,7 +1187,10 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		switch (event->button)
 		{
 			case 1: /* left button */
-				if ((edge == -1) && (GTK_IS_WINDOW(widget->parent)))
+				if (((edge != GDK_WINDOW_EDGE_NORTH_WEST) ||
+							(edge != GDK_WINDOW_EDGE_NORTH_EAST) ||
+							(edge != GDK_WINDOW_EDGE_SOUTH_WEST) ||
+							(edge != GDK_WINDOW_EDGE_SOUTH_EAST)) && (GTK_IS_WINDOW(widget->parent)))
 				{
 					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							event->button,
@@ -1198,12 +1201,12 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				else if (GTK_IS_WINDOW(widget->parent))
 				{
 
-						gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-								edge,
-								event->button,
-								event->x_root,
-								event->y_root,
-								event->time);
+					gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+							edge,
+							event->button,
+							event->x_root,
+							event->y_root,
+							event->time);
 				}
 				break;
 			case 3: /* right button */

@@ -136,7 +136,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 
 void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 {
-	gint i = 0;
+	guint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
@@ -542,7 +542,7 @@ void mtx_gauge_poly_arc_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest
 
 void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar *tmpbuf = NULL;
 	gchar **x_vector = NULL;
 	gchar **y_vector = NULL;
@@ -599,7 +599,7 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 
 void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxColorRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
@@ -634,7 +634,7 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 
 void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxAlertRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
@@ -668,7 +668,7 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 
 void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxTextBlock *tblock = NULL;
 	xmlNodePtr node = NULL;
@@ -706,7 +706,7 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 
 void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxTickGroup *tgroup = NULL;
 	xmlNodePtr node = NULL;
@@ -913,7 +913,7 @@ void mtx_gauge_poly_generic_export(xmlNodePtr root_node, MtxPolygon* poly)
 
 void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	MtxPolygon *poly = NULL;
 	xmlNodePtr node = NULL;

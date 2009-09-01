@@ -27,7 +27,7 @@
 
 
 static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
-static auto_rescale_id = 0;
+static guint auto_rescale_id = 0;
 
 GType mtx_curve_get_type(void)
 {
@@ -481,7 +481,7 @@ void generate_curve_background(MtxCurve *curve)
 				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		for(i = 0;i <= max_lines;i++)
 		{
-			message = g_strdup_printf("%i",(gint)(ceil)(((i*spread)/priv->x_scale)+priv->lowest_x));
+			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->x_scale)+priv->lowest_x,priv->x_precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,priv->border+i*spread-(extents.width/2.0),priv->h-extents.height);
 			cairo_show_text (cr, message);
@@ -512,7 +512,7 @@ void generate_curve_background(MtxCurve *curve)
 				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		for(i = 0;i <= max_lines;i++)
 		{
-			message = g_strdup_printf("%i",(gint)(ceil)(((i*spread)/priv->y_scale)+priv->lowest_y));
+			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,extents.height,priv->h -(priv->border+i*spread-(extents.height/2.0)));
 			cairo_show_text (cr, message);
@@ -675,10 +675,10 @@ void mtx_curve_redraw (MtxCurve *curve)
 void recalc_extremes(MtxCurvePrivate *priv)
 {
         gint i = 0;
-        priv->highest_x = -100000;
-        priv->highest_y = -100000;
-        priv->lowest_x = 100000;
-        priv->lowest_y = 100000;
+        priv->highest_x = -100000.0;
+        priv->highest_y = -100000.0;
+        priv->lowest_x = 100000.0;
+        priv->lowest_y = 100000.0;
         for (i=0;i<priv->num_points;i++)
         {
                 if (priv->coords[i].x < priv->lowest_x)
@@ -690,9 +690,10 @@ void recalc_extremes(MtxCurvePrivate *priv)
                 if (priv->coords[i].y > priv->highest_y)
                         priv->highest_y = priv->coords[i].y;
         }
-	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/((priv->highest_x - priv->lowest_x + 0.000001));
-	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/((priv->highest_y - priv->lowest_y + 0.000001));
+	priv->x_scale = (gfloat)(priv->w-(2*priv->border))/((priv->highest_x - (priv->lowest_x + 0.000001)));
+	priv->y_scale = (gfloat)(priv->h-(2*priv->border))/((priv->highest_y - (priv->lowest_y + 0.000001)));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
+	generate_curve_background(priv->self);
 }
 
 
@@ -722,7 +723,6 @@ void recalc_points(MtxCurvePrivate *priv)
 
         /*printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
  	*/
-	generate_curve_background(priv->self);
 }
 
 
@@ -745,10 +745,11 @@ gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
 gboolean delay_turnoff_vertexes(gpointer data)
 {
 	MtxCurve *curve = (MtxCurve*) data;
+	MtxCurvePrivate *priv = NULL;
 	if (!GTK_IS_WIDGET(curve))
 		return FALSE;
 
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	priv = MTX_CURVE_GET_PRIVATE(curve);
 	priv->show_vertexes = FALSE;
 	mtx_curve_redraw(MTX_CURVE(curve));
 	return FALSE;
