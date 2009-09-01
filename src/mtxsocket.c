@@ -589,14 +589,14 @@ void *binary_socket_client(gpointer data)
 					{
 						if (find_mtx_page(tableID,&mtx_page))
 						{
-							printf("updating local ms2 chunk buffer\n");
+							//printf("updating local ms2 chunk buffer\n");
 							memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
 							chunk_write(canID,mtx_page,offset,count,buffer);
 						}
 					}
 					else
 					{
-							printf("updating local ms1 chunk buffer\n");
+							//printf("updating local ms1 chunk buffer\n");
 						memcpy (client->ecu_data[last_page]+offset,buffer,count);
 						chunk_write(0,last_page,offset,count,buffer);
 					}
