@@ -34,6 +34,7 @@
 
 extern GObject *global_data;
 extern Firmware_Details *firmware;
+extern GdkColor green;
 typedef struct
 {
 	GtkWidget *curve;
@@ -163,6 +164,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
 		g_signal_connect(G_OBJECT(curve),"coords-changed",
 				G_CALLBACK(coords_changed), NULL);
+		g_signal_connect(G_OBJECT(curve),"vertex-proximity",
+				G_CALLBACK(vertex_proximity), NULL);
 
 		label = glade_xml_get_widget(xml,"x_units");
 		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
@@ -400,6 +403,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
 	g_signal_connect(G_OBJECT(curve),"coords-changed",
 			G_CALLBACK(coords_changed), NULL);
+	g_signal_connect(G_OBJECT(curve),"vertex-proximity",
+			G_CALLBACK(vertex_proximity), NULL);
 
 	label = glade_xml_get_widget(xml,"x_units");
 	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
@@ -429,6 +434,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	{
 		/* X Column */
 		entry = gtk_entry_new();
+		OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 		gtk_entry_set_width_chars(GTK_ENTRY(entry),6);
 		OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 		g_array_insert_val(x_entries,i,entry);
@@ -635,7 +641,7 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gint precision = 0;
 	GtkWidget *entry = NULL;
 	gchar * tmpbuf = NULL;
-	
+
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	/* X Coord */
@@ -655,6 +661,79 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
 	g_free(tmpbuf);
+}
+
+
+void vertex_proximity(GtkWidget *curve, gpointer data)
+{
+	gint index = 0;
+	gint last = 0;
+	GArray *x_array;
+	GArray *y_array;
+	GtkWidget *entry = NULL;
+
+	index = mtx_curve_get_vertex_proximity_index(MTX_CURVE(curve));
+	x_array = (GArray *)OBJ_GET(curve,"x_entries");
+	y_array = (GArray *)OBJ_GET(curve,"y_entries");
+	if (index >= 0)	/* we are on a vertex for sure */
+	{
+		/* Turn the current one green */
+		entry = g_array_index(x_array,GtkWidget *,index);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		entry = g_array_index(y_array,GtkWidget *,index);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		if (!OBJ_GET(curve,"last_proximity_vertex"))
+		{
+			/* Last undefined, must be first run, 
+			 * nothing to reset, thus store last 
+			 * and break out
+			 */
+			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			return;
+		}
+		else	/* Last IS defined, thus check for polarity */
+			last = (gint)OBJ_GET(curve,"last_proximity_vertex");
+		if (last < 0)
+		{
+			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			return;	/* No vertex to undo */
+		}
+		else
+		{	/* Need to reset previous vertex back to defaults */
+			entry = g_array_index(x_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			entry = g_array_index(y_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+		}
+	}
+	else
+	{	/* we are NOT on a vertex, so check last status */
+		if (!OBJ_GET(curve,"last_proximity_vertex"))
+		{
+			/* Last undefined, must be first run, 
+			 * nothing to reset, thus store last 
+			 * and break out
+			 */
+			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			return;
+		}
+		else	/* Last IS defined, thus check for polarity */
+			last = (gint)OBJ_GET(curve,"last_proximity_vertex");
+		if (last < 0)
+		{
+			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			return;	/* No vertex to undo */
+		}
+		else
+		{	/* Need to reset previous vertex back to defaults */
+			entry = g_array_index(x_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			entry = g_array_index(y_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+		}
+	}
+	OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+
 }
 
 
