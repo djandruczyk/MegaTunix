@@ -211,33 +211,17 @@ keys=rescaler_frame
 key_types=_STRING_
 rescaler_frame=SP_SP1_rescale_frame
 
-#----- Temp Timing Controls --------------------------------------------------
-
-[SP1_trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
-offset=170
-group=spark_1
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
-precision=2
-use_color=FALSE
-
-[SP1_fixedangle_entry]
-keys=offset,precision,use_color
-key_types=_INT_,_INT_,_BOOL_
-offset=169
-group=spark_1
-precision=2
-use_color=FALSE
+#----- Timing Controls -------------------------------------------------------
 
 [SP1_triggerangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
-offset=168
-group=spark_1
-dl_conv_expr=x*(284/100)
-ul_conv_expr=x/(284/100)
+keys=size,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,use_color
+key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_
+size=_S16_
+offset=42
+raw_lower=-3590
+raw_upper=3590
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
 precision=2
 use_color=FALSE
 

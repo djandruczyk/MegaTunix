@@ -44,6 +44,7 @@ typedef enum
 	fjo,
 	innovate05,
 	innovate12,
+	innovateLC1,
 	lambdaBoy,
 	techEdgeNonLinear,
 	techEdgeLinear,
@@ -57,20 +58,21 @@ static struct
 	const gchar *name;
 	gint symbol;
 }AFR_Tables[] = {
-	{"Narrow Band",	narrowBand},
+	{"Narrow Band",			narrowBand},
 	{"AEM Linear AEM-30-42xx",	aemLinear},
 	{"AEM Non-linear AEM-30-230x",	aemNonLinear},
-	{"Daytona TwinTec",	twintec},
-	{"DIY-WB",	diyWB},
+	{"Daytona TwinTec",		twintec},
+	{"DIY-WB",			diyWB},
 	{"DynoJet Wideband Commander",	dynojetLinear},
-	{"FJO WB",	fjo},
-	{"Innovate 0.0-5.0 v",	innovate05},
-	{"Innovate 1.0-2.0 v",	innovate12},
-	{"LambdaBoy",	lambdaBoy},
-	{"TechEdge SVout",	techEdgeNonLinear},
-	{"TechEdge WBlin",	techEdgeLinear},
-	{"Zeitronix",	zeitronix},
-	{"Generic Linear WB",	genericWB},
+	{"FJO WB",			fjo},
+	{"Innovate 0.0-5.0 v",		innovate05},
+	{"Innovate 1.0-2.0 v",		innovate12},
+	{"Innovate LC-1 0.5-1.5 L",	innovateLC1},
+	{"LambdaBoy",			lambdaBoy},
+	{"TechEdge SVout",		techEdgeNonLinear},
+	{"TechEdge WBlin",		techEdgeLinear},
+	{"Zeitronix",			zeitronix},
+	{"Generic Linear WB",		genericWB},
 };
 
 
@@ -221,6 +223,8 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 
 	inline gdouble inno12Fv (gint adc) { return  adc * 50.0 / (nADC-1.0); }
 	inline gdouble inno05Fv (gint adc) { return  10.0 + adc * 10.0 / (nADC-1.0); }
+	inline gdouble innoLC1Fv (gint adc) { return  7.35 + adc * 14.7 / (nADC-1.0); }
+
 	inline gdouble teWBlinFv (gint adc) { return   9.0 + adc * 10.0 / (nADC-1.0); }
 	inline gdouble djWBlinFv (gint adc) { return  10.0 + adc *  8.0 / (nADC-1.0); }
 
@@ -262,6 +266,9 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 			break;
 		case innovate05:
 			USE_FUNC (inno05);
+			break;
+		case innovateLC1:
+			USE_FUNC (innoLC1);
 			break;
 		case lambdaBoy:
 			USE_TABLE(lbwb);
