@@ -118,6 +118,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->coords = NULL;
 	priv->num_points = 0;
 	priv->proximity_threshold = 10;
+	priv->proximity_vertex = -1;
 	priv->border = 30;
 	priv->x_precision = 0;
 	priv->y_precision = 0;
@@ -163,6 +164,10 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[CURVE_COL_SEL].red=0.9*65535;
 	priv->colors[CURVE_COL_SEL].green=0.0*65535;
 	priv->colors[CURVE_COL_SEL].blue=0.0*65535;
+	/*! Proximity */
+	priv->colors[CURVE_COL_PROX].red=0.9*65535;
+	priv->colors[CURVE_COL_PROX].green=0.0*65535;
+	priv->colors[CURVE_COL_PROX].blue=0.9*65535;
 	/*! Graticule Color*/
 	priv->colors[CURVE_COL_GRAT].red=0.50*65535;
 	priv->colors[CURVE_COL_GRAT].green=0.50*65535;
@@ -246,6 +251,18 @@ void update_curve_position (MtxCurve *curve)
 		cairo_move_to (cr, priv->points[priv->active_coord].x,priv->points[priv->active_coord].y);
 		cairo_new_sub_path(cr);
 		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*M_PI);
+	}
+	cairo_stroke(cr);
+
+	if (priv->proximity_vertex >= 0)
+	{
+		cairo_set_source_rgb (cr, 
+				priv->colors[CURVE_COL_PROX].red/65535.0,
+				priv->colors[CURVE_COL_PROX].green/65535.0,
+				priv->colors[CURVE_COL_PROX].blue/65535.0);
+		cairo_move_to (cr, priv->points[priv->proximity_vertex].x,priv->points[priv->proximity_vertex].y);
+		cairo_new_sub_path(cr);
+		cairo_arc(cr,priv->points[priv->proximity_vertex].x,priv->points[priv->proximity_vertex].y,4.5,0,2*M_PI);
 	}
 	cairo_stroke(cr);
 
@@ -568,8 +585,10 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 			g_free(priv->pos_str);
 		priv->pos_str = g_strdup_printf("%1$.*2$f, %3$.*4$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision, (gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
 		if (proximity_test(curve,event))
+		{
 			g_signal_emit_by_name((gpointer)curve, "vertex-proximity");
-		//mtx_curve_redraw(MTX_CURVE(curve));
+			mtx_curve_redraw(MTX_CURVE(curve));
+		}
 		return TRUE;
 	}
 	i = priv->active_coord;
