@@ -35,6 +35,8 @@
 extern GObject *global_data;
 extern Firmware_Details *firmware;
 extern GdkColor green;
+extern GdkColor red;
+extern GdkColor blue;
 typedef struct
 {
 	GtkWidget *curve;
@@ -148,6 +150,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_container_add(GTK_CONTAINER(parent),curve);
 		gtk_widget_realize(curve);
 		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+		mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
 		cdata = g_new0(CurveData, 1);
 		cdata->curve = curve;
 		cdata->axis = _X_;
@@ -166,6 +169,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				G_CALLBACK(coords_changed), NULL);
 		g_signal_connect(G_OBJECT(curve),"vertex-proximity",
 				G_CALLBACK(vertex_proximity), NULL);
+		g_signal_connect(G_OBJECT(curve),"marker-proximity",
+				G_CALLBACK(marker_proximity), NULL);
 
 		label = glade_xml_get_widget(xml,"x_units");
 		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
@@ -373,6 +378,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	gtk_container_add(GTK_CONTAINER(parent),curve);
 	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+	mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
 	if (firmware->te_params[table_num]->gauge)
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
@@ -405,6 +411,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 			G_CALLBACK(coords_changed), NULL);
 	g_signal_connect(G_OBJECT(curve),"vertex-proximity",
 			G_CALLBACK(vertex_proximity), NULL);
+	g_signal_connect(G_OBJECT(curve),"marker-proximity",
+			G_CALLBACK(marker_proximity), NULL);
 
 	label = glade_xml_get_widget(xml,"x_units");
 	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
@@ -679,9 +687,9 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one green */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
 		if (!OBJ_GET(curve,"last_proximity_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -733,6 +741,79 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 		}
 	}
 	OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+
+}
+
+
+void marker_proximity(GtkWidget *curve, gpointer data)
+{
+	gint index = 0;
+	gint last = 0;
+	GArray *x_array;
+	GArray *y_array;
+	GtkWidget *entry = NULL;
+
+	index = mtx_curve_get_marker_proximity_index(MTX_CURVE(curve));
+	x_array = (GArray *)OBJ_GET(curve,"x_entries");
+	y_array = (GArray *)OBJ_GET(curve,"y_entries");
+	if (index >= 0)	/* we are on a vertex for sure */
+	{
+		/* Turn the current one green */
+		entry = g_array_index(x_array,GtkWidget *,index);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		entry = g_array_index(y_array,GtkWidget *,index);
+		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		if (!OBJ_GET(curve,"last_marker_vertex"))
+		{
+			/* Last undefined, must be first run, 
+			 * nothing to reset, thus store last 
+			 * and break out
+			 */
+			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			return;
+		}
+		else	/* Last IS defined, thus check for polarity */
+			last = (gint)OBJ_GET(curve,"last_marker_vertex");
+		if (last < 0)
+		{
+			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			return;	/* No vertex to undo */
+		}
+		else
+		{	/* Need to reset previous vertex back to defaults */
+			entry = g_array_index(x_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			entry = g_array_index(y_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+		}
+	}
+	else
+	{	/* we are NOT on a vertex, so check last status */
+		if (!OBJ_GET(curve,"last_marker_vertex"))
+		{
+			/* Last undefined, must be first run, 
+			 * nothing to reset, thus store last 
+			 * and break out
+			 */
+			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			return;
+		}
+		else	/* Last IS defined, thus check for polarity */
+			last = (gint)OBJ_GET(curve,"last_marker_vertex");
+		if (last < 0)
+		{
+			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			return;	/* No vertex to undo */
+		}
+		else
+		{	/* Need to reset previous vertex back to defaults */
+			entry = g_array_index(x_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			entry = g_array_index(y_array,GtkWidget *,last-1);
+			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+		}
+	}
+	OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
 
 }
 

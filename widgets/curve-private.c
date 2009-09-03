@@ -87,6 +87,11 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		G_STRUCT_OFFSET (MtxCurveClass, vertex_proximity),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+	mtx_curve_signals[MARKER_PROXIMITY_SIGNAL] = 
+		g_signal_new("marker-proximity", G_TYPE_FROM_CLASS(klass),
+		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		G_STRUCT_OFFSET (MtxCurveClass, marker_proximity),
+		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 
@@ -119,6 +124,7 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->num_points = 0;
 	priv->proximity_threshold = 10;
 	priv->proximity_vertex = -1;
+	priv->marker_proximity_vertex = -1;
 	priv->border = 30;
 	priv->x_precision = 0;
 	priv->y_precision = 0;
@@ -131,9 +137,12 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->vertex_selected = FALSE;
 	priv->show_vertexes = FALSE;
 	priv->show_grat = TRUE;
+	priv->show_edit_marker = TRUE;
 	priv->show_x_marker = FALSE;
 	priv->show_y_marker = FALSE;
 	priv->coord_changed = FALSE;
+	priv->x_blocked_from_edit = FALSE;
+	priv->y_blocked_from_edit = FALSE;
 	priv->auto_hide = TRUE;
 	priv->vertex_id = 0;
 	priv->x_lower_limit=-65536;
@@ -177,9 +186,13 @@ void mtx_curve_init_colors(MtxCurve *curve)
 	priv->colors[CURVE_COL_TEXT].green=1.0*65535;
 	priv->colors[CURVE_COL_TEXT].blue=1.0*65535;
 	/*! Marker Lines Color */
-	priv->colors[CURVE_COL_MARKER].red=1.0*65535;
-	priv->colors[CURVE_COL_MARKER].green=0.2*65535;
+	priv->colors[CURVE_COL_MARKER].red=0.2*65535;
+	priv->colors[CURVE_COL_MARKER].green=1.0*65535;
 	priv->colors[CURVE_COL_MARKER].blue=0.2*65535;
+	/*! Marker Lines Color */
+	priv->colors[CURVE_COL_EDIT].red=1.0*65535;
+	priv->colors[CURVE_COL_EDIT].green=0.2*65535;
+	priv->colors[CURVE_COL_EDIT].blue=0.2*65535;
 }
 
 
@@ -266,14 +279,28 @@ void update_curve_position (MtxCurve *curve)
 	}
 	cairo_stroke(cr);
 
+	/* Edit Markers */
+	/*
+	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_EDIT].red/65535.0,
+			priv->colors[CURVE_COL_EDIT].green/65535.0,
+			priv->colors[CURVE_COL_EDIT].blue/65535.0);
+	cairo_set_line_width (cr, 1.0);
+	if (priv->show_edit_marker)
+	{
+		cairo_move_to (cr,0 ,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->border);
+		cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->border,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->border);
+		cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->border,0);
+		cairo_stroke(cr);
+	}
+	*/
 	/* Vertical and Horizontal Markers */
 	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_MARKER].red/65535.0,
 			priv->colors[CURVE_COL_MARKER].green/65535.0,
 			priv->colors[CURVE_COL_MARKER].blue/65535.0);
-	cairo_set_line_width (cr, 2.0);
 	if (priv->show_x_marker)
 	{
-		cairo_move_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->border,0);
+		cairo_move_to (cr,0 ,priv->h-(((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->border));
+		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->border,priv->h - (((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->border));
 		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->border,priv->h);
 		cairo_stroke(cr);
 	}
@@ -578,6 +605,8 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gint i = 0;
 	guint index = 0;
+	gfloat tmp_x = 0.0;
+	gfloat tmp_y = 0.0;
 	gchar * tmpbuf = 0;
 	if (!priv->vertex_selected)
 	{
@@ -592,27 +621,36 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 		return TRUE;
 	}
 	i = priv->active_coord;
-	priv->coords[i].x = event->x;
-	priv->coords[i].y = event->y;
+
+	printf("motion, active vertex is %i, coords %f,%f\n",i,priv->coords[i].x,priv->coords[i].y);
+	if (!priv->x_blocked_from_edit)
+		tmp_x = event->x;
+	else
+		tmp_x = priv->points[i].x;
+	if (!priv->y_blocked_from_edit)
+		tmp_y = event->y;
+	else
+		tmp_y = priv->points[i].y;
+		
 
 	/* Limit clamps */
 
-	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
+	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((tmp_x - priv->border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
 	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
 
-	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
+	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)(-((tmp_y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y),priv->y_precision);
 	priv->coords[i].y = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
 
-	if ((gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x < priv->x_lower_limit)
+	if ((gfloat)((tmp_x - priv->border)/priv->x_scale) + priv ->lowest_x < priv->x_lower_limit)
 		priv->coords[i].x = priv->x_lower_limit;
-	if ((gfloat)((event->x - priv->border)/priv->x_scale) + priv ->lowest_x > priv->x_upper_limit)
+	if ((gfloat)((tmp_x - priv->border)/priv->x_scale) + priv ->lowest_x > priv->x_upper_limit)
 		priv->coords[i].x = priv->x_upper_limit;
 
-	if ((gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) < priv->y_lower_limit)
+	if ((gfloat)(-((tmp_y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) < priv->y_lower_limit)
 		priv->coords[i].y = priv->y_lower_limit;
-	if ((gfloat)(-((event->y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) > priv->y_upper_limit)
+	if ((gfloat)(-((tmp_y - priv->h + priv->border)/priv->y_scale) + priv ->lowest_y) > priv->y_upper_limit)
 		priv->coords[i].y = priv->y_upper_limit;
 
 	
@@ -809,3 +847,48 @@ gboolean proximity_test (GtkWidget *curve, GdkEventMotion *event)
 	priv->proximity_vertex = -1;
 	return TRUE;
 }
+
+
+gboolean get_intersection(
+	gfloat Ax, gfloat Ay,
+	gfloat Bx, gfloat By,
+	gfloat Cx, gfloat Cy,
+	gfloat Dx, gfloat Dy,
+	gfloat *X, gfloat *Y) 
+{
+	gdouble  distAB, theCos, theSin, newX, ABpos ;
+
+	/*  Fail if either line segment is zero-length. */
+	if (Ax==Bx && Ay==By || Cx==Dx && Cy==Dy) 
+		return FALSE;
+
+	/*  (1) Translate the system so that point A is on the origin. */
+	Bx-=Ax; By-=Ay;
+	Cx-=Ax; Cy-=Ay;
+	Dx-=Ax; Dy-=Ay;
+
+	/*  Discover the length of segment A-B.*/
+	distAB=sqrt(Bx*Bx+By*By);
+
+	/*  (2) Rotate the system so that point B is on the positive X axis.*/
+	theCos=Bx/distAB;
+	theSin=By/distAB;
+	newX=Cx*theCos+Cy*theSin;
+	Cy  =Cy*theCos-Cx*theSin; Cx=newX;
+	newX=Dx*theCos+Dy*theSin;
+	Dy  =Dy*theCos-Dx*theSin; Dx=newX;
+
+	/*  Fail if lines are parallel */
+	if (Cy == Dy) 
+		return FALSE;
+
+	/*  (3) Discover the position of the intersection point along line A-B.*/
+	ABpos=Dx+(Cx-Dx)*Dy/(Dy-Cy);
+
+	/*  (4) Apply the discovered position to line A-B in the original coordinate system. */
+	*X=Ax+ABpos*theCos;
+	*Y=Ay+ABpos*theSin;
+
+	/*  Success. */
+	return TRUE; 
+} 

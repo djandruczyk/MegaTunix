@@ -41,6 +41,7 @@ typedef enum
 	CURVE_COL_GRAT,
 	CURVE_COL_TEXT,
 	CURVE_COL_MARKER,
+	CURVE_COL_EDIT,
 	CURVE_NUM_COLORS
 }CurveColorIndex;
 
@@ -48,6 +49,7 @@ enum
 {	
 	CHANGED_SIGNAL,
 	VERTEX_PROXIMITY_SIGNAL,
+	MARKER_PROXIMITY_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -63,6 +65,8 @@ struct _MtxCurveClass
 	void (*coords_changed) (MtxCurve *);
 	/* Signal for vertex proximity notify */
 	void (*vertex_proximity) (MtxCurve *);
+	/* Signal for marker proximity notify */
+	void (*marker_proximity) (MtxCurve *);
 };
 
 struct _MtxCurveCoord
@@ -77,6 +81,7 @@ GtkWidget* mtx_curve_new (void);
 
 /* Point manipulation */
 gboolean mtx_curve_get_coords (MtxCurve *, gint *, MtxCurveCoord *);
+
 /* Do NOT free array of returned points! */
 gboolean mtx_curve_set_coords (MtxCurve *, gint , MtxCurveCoord *);
 gboolean mtx_curve_get_coords_at_index (MtxCurve *, gint , MtxCurveCoord * );
@@ -90,6 +95,11 @@ gboolean mtx_curve_set_y_precision(MtxCurve *, gint);
 gint mtx_curve_get_x_precision(MtxCurve *);
 gint mtx_curve_get_y_precision(MtxCurve *);
 
+/* Axis locking */
+gboolean mtx_curve_set_x_axis_lock_state(MtxCurve *, gboolean);
+gboolean mtx_curve_get_x_axis_lock_state(MtxCurve *);
+gboolean mtx_curve_set_y_axis_lock_state(MtxCurve *, gboolean);
+gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *);
 
 /* Title */
 gboolean mtx_curve_set_title (MtxCurve *,gchar *);
@@ -106,8 +116,10 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *, gboolean);
 gboolean mtx_curve_get_get_show_vertexes (MtxCurve *);
 gboolean mtx_curve_set_show_graticule (MtxCurve *, gboolean );
 gboolean mtx_curve_get_show_graticule (MtxCurve *);
+gboolean mtx_curve_get_show_edit_marker (MtxCurve *);
 gboolean mtx_curve_get_show_x_marker (MtxCurve *);
 gboolean mtx_curve_get_show_y_marker (MtxCurve *);
+gboolean mtx_curve_set_show_edit_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_x_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_y_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
@@ -115,8 +127,10 @@ gboolean mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
 gboolean mtx_curve_set_hard_limits (MtxCurve *, gint, gint, gint, gint);
 gboolean mtx_curve_get_hard_limits (MtxCurve *, gint *, gint *, gint *, gint *);
 
-/* Retrieval of current proximity vertex index */
+/* Retrieval of current mouse proximity vertex index */
 gint mtx_curve_get_vertex_proximity_index (MtxCurve *);
+/* Retrieval of current marker proximity vertex index */
+gint mtx_curve_get_marker_proximity_index (MtxCurve *);
 
 G_END_DECLS
 

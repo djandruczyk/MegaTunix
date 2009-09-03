@@ -16,19 +16,28 @@ apifix_SOURCES = apifix.c gauge.h
 
 noinst_PROGRAMS = gaugedemo piedemo apifix curvedemo progressdemo
 
-noinst_LTLIBRARIES = libmtxgauge.la
+noinst_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la
 
-libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h piegauge.c piegauge.h piegauge-private.c piegauge-private.h curve.c curve.h curve-private.c curve-private.h progress.c progress.h progress-private.c progress-private.h
+libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h
+
+libmtxcurve_la_SOURCES = curve.c curve.h curve-private.c curve-private.h
+
+libmtxpie_la_SOURCES = piegauge.c piegauge.h piegauge-private.c piegauge-private.h
+
+libmtxprogress_la_SOURCES = progress.c progress.h progress-private.c progress-private.h
 
 libmtxgauge_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxcurve_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxpie_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxprogress_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 
 gaugedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-piedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+piedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxpie.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-progressdemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+progressdemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxprogress.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-curvedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+curvedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxcurve.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
 apifix_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 

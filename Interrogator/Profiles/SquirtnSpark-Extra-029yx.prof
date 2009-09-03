@@ -467,7 +467,7 @@ MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,39
 MS-I_VEconst=_COUNT_,189
-MS_Signature=_SUBMATCH_,Extra format 029y3
+MS_Signature=_SUBMATCH_,Extra format 029y
 
 
 [gui]

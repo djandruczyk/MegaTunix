@@ -30,6 +30,7 @@ gboolean close_menu_handler(GtkWidget *, gpointer);
 void clean_curve(gpointer, gpointer);
 void update_curve_marker(DataWatch *, gfloat);
 void vertex_proximity(GtkWidget *, gpointer);
+void marker_proximity(GtkWidget *, gpointer);
 
 
 /* Prototypes */

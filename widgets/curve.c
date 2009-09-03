@@ -15,6 +15,7 @@
 #include <cairo/cairo.h>
 #include <curve.h>
 #include <curve-private.h>
+#include <math.h>
 #include <gtk/gtk.h>
 
 
@@ -325,10 +326,65 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
  */
 gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
+	gint i = 0;
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gfloat d1 = 0.0;
+	gfloat d2 = 0.0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->x_marker = value;
+	for (i = 0;i<priv->num_points - 1;i++)
+	{
+		if (value < priv->coords[0].x)
+		{
+			priv->y_at_x_marker = priv->coords[0].y;
+			if (0 != priv->marker_proximity_vertex)
+			{
+				priv->marker_proximity_vertex = 0;
+				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+			}
+		}
+		if (value > priv->coords[priv->num_points-1].x)
+		{
+			priv->y_at_x_marker = priv->coords[priv->num_points-1].y;
+			if (priv->num_points-1 != priv->marker_proximity_vertex)
+			{
+				priv->marker_proximity_vertex = priv->num_points-1;
+				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+			}
+		}
+		if ((value > priv->coords[i].x) && (value < priv->coords[i+1].x))
+		{
+			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
+			{
+				priv->y_at_x_marker = y;
+				d1 = sqrt(pow((priv->coords[i].x-value),2)+ pow((priv->coords[i].y-y),2));
+				d2 = sqrt(pow((priv->coords[i+1].x-value),2)+ pow((priv->coords[i+1].y-y),2));
+				if (d1 < d2)
+				{
+					if (i != priv->marker_proximity_vertex)
+					{
+						priv->marker_proximity_vertex = i;
+						g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+					}
+				}
+				else
+				{
+					if (i+1 != priv->marker_proximity_vertex)
+					{
+						priv->marker_proximity_vertex = i+1;
+						g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+					}
+				}
+
+			}
+			else
+				printf("couldn't find intersection\n");
+			break;
+		}
+	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 	return TRUE;
@@ -341,10 +397,65 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
  */
 gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
+	gint i = 0;
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gfloat d1 = 0.0;
+	gfloat d2 = 0.0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->y_marker = value;
+	for (i = 0;i<priv->num_points - 1;i++)
+	{
+		if (value < priv->coords[0].x)
+		{
+			priv->x_at_y_marker = priv->coords[0].x;
+			if (0 != priv->marker_proximity_vertex)
+			{
+				priv->marker_proximity_vertex = 0;
+				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+			}
+		}
+		if (value > priv->coords[priv->num_points-1].y)
+		{
+			priv->x_at_y_marker = priv->coords[priv->num_points-1].x;
+			if (priv->num_points-1 != priv->marker_proximity_vertex)
+			{
+				priv->marker_proximity_vertex = priv->num_points-1;
+				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+			}
+		}
+		if ((value > priv->coords[i].y) && (value < priv->coords[i+1].y))
+		{
+			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
+			{
+				priv->x_at_y_marker = x;
+				d1 = sqrt(pow((priv->coords[i].x-x),2)+ pow((priv->coords[i].y-value),2));
+				d2 = sqrt(pow((priv->coords[i+1].x-x),2)+ pow((priv->coords[i+1].y-value),2));
+				if (d1 < d2)
+				{
+					if (i != priv->marker_proximity_vertex)
+					{
+						priv->marker_proximity_vertex = i;
+						g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+					}
+				}
+				else
+				{
+					if (i+1 != priv->marker_proximity_vertex)
+					{
+						priv->marker_proximity_vertex = i+1;
+						g_signal_emit_by_name((gpointer)curve, "marker-proximity");
+					}
+				}
+
+			}
+			else
+				printf("couldn't find intersection\n");
+			break;
+		}
+	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
 	return TRUE;
@@ -504,7 +615,7 @@ gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_uppe
 
 
 /*!
- \brief gets the current proximity vertex
+ \brief gets the current mouse proximity vertex
  \param curve (MtxCurve *) pointer to curve
  \returns active vertex
  */
@@ -513,5 +624,75 @@ gint mtx_curve_get_vertex_proximity_index (MtxCurve *curve)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
 	return priv->proximity_vertex;
+}
+
+
+/*!
+ \brief gets the current marker proximity vertex
+ \param curve (MtxCurve *) pointer to curve
+ \returns active vertex
+ */
+gint mtx_curve_get_marker_proximity_index (MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),-1);
+	return priv->marker_proximity_vertex;
+}
+
+
+/*!
+ \brief sets the axis lock state for the X axis
+ \param curve (MtxCurve *) pointer to curve
+ \param state (gboolean) state of axis lock
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_x_axis_lock_state(MtxCurve *curve, gboolean state)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	priv->x_blocked_from_edit = state;
+	return TRUE;
+}
+
+
+/*!
+ \brief sets the axis lock state for the Y axis
+ \param curve (MtxCurve *) pointer to curve
+ \param state (gboolean) state of axis lock
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_y_axis_lock_state(MtxCurve *curve, gboolean state)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	priv->y_blocked_from_edit = state;
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the axis lock state for the X axis
+ \param curve (MtxCurve *) pointer to curve
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_get_x_axis_lock_state(MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->x_blocked_from_edit;
+}
+
+
+
+/*!
+ \brief gets the axis lock state for the Y axis
+ \param curve (MtxCurve *) pointer to curve
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	return priv->y_blocked_from_edit;
 }
 

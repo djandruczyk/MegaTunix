@@ -32,6 +32,7 @@ struct _MtxCurvePrivate
         GdkPoint *points;       /*! Onscreen coords array (for mouse) */
 	gint proximity_threshold;	/*! Proximity threshold */
 	gint proximity_vertex;	/*! Closest one to mouse.. */
+	gint marker_proximity_vertex;	/*! Closest one to marker.. */
         gint num_points;        /*! Total Points*/
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
@@ -52,14 +53,19 @@ struct _MtxCurvePrivate
         gfloat x_scale;         /*! X coord points->coords scaler */
         gfloat y_scale;         /*! Y coord points->coords scaler */
 	gfloat x_marker;	/*! X marker (vertical line) */
+	gfloat y_at_x_marker;	/*! X marker (vertical line) */
 	gfloat y_marker;	/*! X marker (horizontal line) */
+	gfloat x_at_y_marker;	/*! X marker (horizontal line) */
         gboolean vertex_selected;/*! Do we have one selected? */
         gboolean auto_hide;	/*! Auto hide vertex on focus out */
         gboolean show_x_marker; /*! Show x_marker rectangles */
         gboolean show_y_marker; /*! Show y_marker rectangles */
+	gboolean show_edit_marker;	/*! Show edit marker */
         gboolean show_vertexes; /*! Show vertex rectangles */
         gboolean show_grat;	/*! Draw graticule? */
         gboolean coord_changed;	/*! Flag */
+	gboolean x_blocked_from_edit;	/* Prevent mouse edit of an axis */
+	gboolean y_blocked_from_edit;	/* Prevent mouse edit of an axis */
         GdkGC *gc;              /*! Graphics Context */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
@@ -93,6 +99,13 @@ void recalc_points (MtxCurvePrivate *);
 gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
 gboolean proximity_test (GtkWidget *, GdkEventMotion *);
+gboolean get_intersection(gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat *, gfloat *);
+
+
+
+
+
+
 
 
 

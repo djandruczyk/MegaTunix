@@ -21,6 +21,7 @@
 
 void coords_changed(MtxCurve *, gpointer);
 void vertex_proximity(MtxCurve *, gpointer);
+void marker_proximity(MtxCurve *, gpointer);
 void update_curve_marker(gpointer );
 
 int main (int argc, char **argv)
@@ -34,6 +35,7 @@ int main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
+	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
 	curve = mtx_curve_new ();
 	
 	gtk_container_add (GTK_CONTAINER (window), curve);
@@ -54,6 +56,8 @@ int main (int argc, char **argv)
 			G_CALLBACK(coords_changed),NULL);
 	g_signal_connect(G_OBJECT(curve), "vertex-proximity",
 			G_CALLBACK(vertex_proximity),NULL);
+	g_signal_connect(G_OBJECT(curve), "marker-proximity",
+			G_CALLBACK(marker_proximity),NULL);
 
 	gtk_timeout_add(40,(GtkFunction)update_curve_marker,(gpointer)curve);
 
@@ -81,14 +85,19 @@ void vertex_proximity(MtxCurve *curve, gpointer data)
 {
 	gint index = mtx_curve_get_vertex_proximity_index(curve);
 	printf("changed proximity to coordinate %i,\n",index);
-	
+}
+
+void marker_proximity(MtxCurve *curve, gpointer data)
+{
+	gint index = mtx_curve_get_marker_proximity_index(curve);
+	printf("marker proximity to coordinate %i,\n",index);
 }
 
 void update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = data;
-	gint min = 0;
-	gint max = 10000;
+	gint min = -1000;
+	gint max = 11000;
 	static gint step = 125;
 	static gboolean rising = TRUE;
 	static gint value = 0;
