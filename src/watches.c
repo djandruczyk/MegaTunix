@@ -170,7 +170,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			 */
 		case VALUE_CHANGE:
 			lookup_current_value(watch->varname, &tmpf);
-			lookup_previous_value(watch->varname, &tmpf2);
+			/* compare to 5 samples back */
+			lookup_previous_nth_value(watch->varname, 5, &tmpf2);
 			if (tmpf != tmpf2)
 			{
 				watch->func(watch,tmpf);

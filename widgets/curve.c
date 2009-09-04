@@ -324,7 +324,7 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
  \brief displays a live marker for the X axis (vertical Line)
  \param curve (MtxCurve *) pointer to curve
  */
-gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
+void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
 	gint i = 0;
 	gfloat x = 0.0;
@@ -332,7 +332,11 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_return_if_fail (MTX_IS_CURVE (curve));
+
+	if (priv->x_marker == value)
+		return;
+
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->x_marker = value;
 	for (i = 0;i<priv->num_points - 1;i++)
@@ -346,7 +350,7 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
 			}
 		}
-		if (value > priv->coords[priv->num_points-1].x)
+		else if (value > priv->coords[priv->num_points-1].x)
 		{
 			priv->y_at_x_marker = priv->coords[priv->num_points-1].y;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
@@ -355,7 +359,7 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
 			}
 		}
-		if ((value > priv->coords[i].x) && (value < priv->coords[i+1].x))
+		else if ((value > priv->coords[i].x) && (value < priv->coords[i+1].x))
 		{
 			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
 			{
@@ -387,7 +391,7 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
-	return TRUE;
+	return;
 }
 
 
@@ -395,7 +399,7 @@ gboolean mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
  \brief displays a live marker for the Y axis (horizontal Line)
  \param curve (MtxCurve *) pointer to curve
  */
-gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
+void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
 	gint i = 0;
 	gfloat x = 0.0;
@@ -403,7 +407,11 @@ gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_return_if_fail (MTX_IS_CURVE (curve));
+
+	if (priv->y_marker == value)
+		return;
+
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->y_marker = value;
 	for (i = 0;i<priv->num_points - 1;i++)
@@ -417,7 +425,7 @@ gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
 			}
 		}
-		if (value > priv->coords[priv->num_points-1].y)
+		else if (value > priv->coords[priv->num_points-1].y)
 		{
 			priv->x_at_y_marker = priv->coords[priv->num_points-1].x;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
@@ -426,7 +434,7 @@ gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 				g_signal_emit_by_name((gpointer)curve, "marker-proximity");
 			}
 		}
-		if ((value > priv->coords[i].y) && (value < priv->coords[i+1].y))
+		else if ((value > priv->coords[i].y) && (value < priv->coords[i+1].y))
 		{
 			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
 			{
@@ -458,7 +466,7 @@ gboolean mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
 	mtx_curve_redraw(curve);
-	return TRUE;
+	return;
 }
 
 

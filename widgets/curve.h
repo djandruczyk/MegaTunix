@@ -122,8 +122,8 @@ gboolean mtx_curve_get_show_y_marker (MtxCurve *);
 gboolean mtx_curve_set_show_edit_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_x_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_y_marker (MtxCurve *, gboolean );
-gboolean mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
-gboolean mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
+void mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
+void mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
 gboolean mtx_curve_set_hard_limits (MtxCurve *, gint, gint, gint, gint);
 gboolean mtx_curve_get_hard_limits (MtxCurve *, gint *, gint *, gint *, gint *);
 

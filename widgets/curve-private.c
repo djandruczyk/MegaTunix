@@ -440,7 +440,6 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 			CAIRO_ANTIALIAS_GRAY);
 
 	recalc_extremes(priv);
-	generate_curve_background(curve);
 	update_curve_position(curve);
 
 	return TRUE;
@@ -622,16 +621,18 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	}
 	i = priv->active_coord;
 
-	printf("motion, active vertex is %i, coords %f,%f\n",i,priv->coords[i].x,priv->coords[i].y);
+/*	printf("motion, active vertex is %i, coords %f,%f\n",i,priv->coords[i].x,priv->coords[i].y);*/
+
+	/* Honor Axis locks */
 	if (!priv->x_blocked_from_edit)
 		tmp_x = event->x;
 	else
 		tmp_x = priv->points[i].x;
+
 	if (!priv->y_blocked_from_edit)
 		tmp_y = event->y;
 	else
 		tmp_y = priv->points[i].y;
-		
 
 	/* Limit clamps */
 
@@ -730,6 +731,8 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_curve_redraw (MtxCurve *curve)
 {
+	if (!GTK_WIDGET(curve)->window) return;
+
 	update_curve_position (curve);
 	gdk_window_clear(GTK_WIDGET(curve)->window);
 }
@@ -859,7 +862,7 @@ gboolean get_intersection(
 	gdouble  distAB, theCos, theSin, newX, ABpos ;
 
 	/*  Fail if either line segment is zero-length. */
-	if (Ax==Bx && Ay==By || Cx==Dx && Cy==Dy) 
+	if (((Ax==Bx) && (Ay==By)) || ((Cx==Dx) && (Cy==Dy)))
 		return FALSE;
 
 	/*  (1) Translate the system so that point A is on the origin. */
