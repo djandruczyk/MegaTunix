@@ -97,6 +97,9 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	/* If no change,  no point updating */
+	if (value == priv->value)
+		return;
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if (value > priv->ubound)
 		priv->clamped = CLAMP_UPPER;

@@ -29,6 +29,7 @@ int main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_widget_set_size_request(GTK_WIDGET(window),240,240);
 	gtk_widget_add_events(GTK_WIDGET(window),GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK);
 
 	gauge = mtx_gauge_face_new ();

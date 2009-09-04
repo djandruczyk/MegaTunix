@@ -389,7 +389,6 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	GtkWidget *gauge = NULL;
 	
 	gauge = d_gauge->gauge;
-	/*printf("updating gauge %s\n",(gchar *)key);*/
 
 	history = (GArray *)OBJ_GET(d_gauge->object,"history");
 	current_index = (gint)OBJ_GET(d_gauge->object,"current_index");
@@ -405,7 +404,11 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after UNlock rtv_mutex\n"));
 
 	if ((current != previous) || (forced_update))
+	{
+		/*printf("updating gauge %s\n",(gchar *)key);*/
+		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
+	}
 
 }
 
