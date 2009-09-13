@@ -4,7 +4,7 @@ minor=0
 
 [global]
 description=Runtime Text definitions for MS-II Std.
-rtt_total=21
+rtt_total=23
 
 [rt_text_0]
 int_name=rpm
@@ -89,3 +89,11 @@ source=tpsdot
 [rt_text_20]
 int_name=mapdot
 source=mapdot
+
+[rt_text_21]
+int_name=kpaix
+source=kpaix
+
+[rt_text_22]
+int_name=calcMAP
+source=calcMAP

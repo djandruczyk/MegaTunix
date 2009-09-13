@@ -146,6 +146,7 @@ void populate_debugging(GtkWidget *parent)
 	GtkWidget *vbox2 = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
+	static gint columns = 5;
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
@@ -156,7 +157,7 @@ void populate_debugging(GtkWidget *parent)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent),vbox2);
 
-	table = gtk_table_new(ceil(num_levels/4),4,FALSE);
+	table = gtk_table_new(ceil(num_levels/columns),columns,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -185,7 +186,7 @@ void populate_debugging(GtkWidget *parent)
 		if (dbglevels[i].enabled)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;
-		if (j == 4)
+		if (j == columns)
 		{
 			k++;
 			j = 0;

@@ -745,7 +745,7 @@ upper_limit=400
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 tooltip="kpaix" is MAP/baro
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_48]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
