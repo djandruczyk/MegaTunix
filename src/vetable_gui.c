@@ -321,6 +321,8 @@ void reqfuel_rescale_table(GtkWidget *widget)
 
 void draw_ve_marker()
 {
+	static gfloat prev_x_source = 0.0;
+	static gfloat prev_y_source = 0.0;
 	gfloat x_source = 0.0;
 	gfloat y_source = 0.0;
 	GtkWidget *widget = NULL;
@@ -370,12 +372,11 @@ void draw_ve_marker()
 		_Y_
 	};
 
-	if ((active_table < 0 )||(active_table > (firmware->total_tables-1)))
+	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
 		return;
 
 	if (!eval)
 		eval = g_new0(void **, firmware->total_tables);
-
 
 	if (!last)
 	{
@@ -467,6 +468,17 @@ void draw_ve_marker()
 	{
 		eval[table][_Y_] = firmware->table_params[table]->y_eval;
 		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
+	}
+	if ((x_source == prev_x_source) && (y_source == prev_y_source))
+	{
+		/*printf("table marker,  values haven't changed\n"); */
+		return;
+	}
+	else
+	{
+		/*printf("values have changed, continuing\n"); */
+		prev_x_source = x_source;
+		prev_y_source = y_source;
 	}
 	/* Find bin corresponding to current rpm  */
 	page = firmware->table_params[table]->x_page;
@@ -595,7 +607,9 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			if ((gboolean)OBJ_GET(last_widgets[table][last[table][i]],"use_color"))
+			{
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+			}
 			else
 			{
 				/* HACK ALERT! this doesn't honor themes! */
@@ -628,6 +642,10 @@ redraw:
 	{
 		if (z_bin[i] == -1)
 			continue;
+		/* HACK ALERT,  this assumes the list at 
+		 * ve_widgets[page][offset], contains the VEtable widget at
+		 * offset 0 of that list.  (assumptions are bad practice!)
+		 */
 		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
 		widget = g_list_nth_data(list,0);
 

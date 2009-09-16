@@ -97,7 +97,19 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	tmpbuf = g_strdup_printf("2D Table Group Editor");
 	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
 	g_free(tmpbuf);
-	gtk_window_resize(GTK_WINDOW(window),640,400);
+	gtk_window_resize(GTK_WINDOW(window),640,480);
+
+	widget = glade_xml_get_widget(xml,"get_data_button");
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
+	OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
+	bind_to_lists(widget,"get_data_buttons");
+	widget_list = g_list_prepend(widget_list,(gpointer)widget);
+
+	widget = glade_xml_get_widget(xml,"burn_data_button");
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+	OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
+	bind_to_lists(widget,"burners");
+	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 	widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
@@ -157,11 +169,6 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		cdata->source = firmware->te_params[table_num]->x_source;
 		id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 		mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
-		lookup_current_value(cdata->source,&tmpf);
-		if (cdata->axis == _X_)
-			mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-		if (cdata->axis == _Y_)
-			mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 		OBJ_SET(curve,"cdata",(gpointer)cdata);
 		OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 		mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
@@ -306,6 +313,11 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	}
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
+	lookup_current_value(cdata->source,&tmpf);
+	if (cdata->axis == _X_)
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	if (cdata->axis == _Y_)
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 	gtk_widget_show_all(window);
 	return TRUE;
 
@@ -365,7 +377,19 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
 	gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 	g_free(tmpbuf);
-	gtk_window_set_default_size(GTK_WINDOW(window),500,400);
+	gtk_window_set_default_size(GTK_WINDOW(window),640,480);
+
+	widget = glade_xml_get_widget(xml,"get_data_button");
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
+	OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
+	bind_to_lists(widget,"get_data_buttons");
+	widget_list = g_list_prepend(widget_list,(gpointer)widget);
+
+	widget = glade_xml_get_widget(xml,"burn_data_button");
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+	OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
+	bind_to_lists(widget,"burners");
+	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 	widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
@@ -399,11 +423,6 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	cdata->source = firmware->te_params[table_num]->x_source;
 	id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
-	lookup_current_value(cdata->source,&tmpf);
-	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 	OBJ_SET(curve,"cdata",(gpointer)cdata);
 	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
@@ -549,6 +568,11 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	OBJ_SET(window,"x_entries",x_entries);
 	OBJ_SET(window,"y_entries",y_entries);
 
+	lookup_current_value(cdata->source,&tmpf);
+	if (cdata->axis == _X_)
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	if (cdata->axis == _Y_)
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 	gtk_widget_show_all(window);
 	return TRUE;
 }
@@ -676,6 +700,7 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
 	gint last = 0;
+	gint last_marker = 0;
 	GArray *x_array;
 	GArray *y_array;
 	GtkWidget *entry = NULL;
@@ -683,9 +708,11 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 	index = mtx_curve_get_vertex_proximity_index(MTX_CURVE(curve));
 	x_array = (GArray *)OBJ_GET(curve,"x_entries");
 	y_array = (GArray *)OBJ_GET(curve,"y_entries");
+	if ((!x_array) || (!y_array))
+		return;
 	if (index >= 0)	/* we are on a vertex for sure */
 	{
-		/* Turn the current one green */
+		/* Turn the current one red */
 		entry = g_array_index(x_array,GtkWidget *,index);
 		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
 		entry = g_array_index(y_array,GtkWidget *,index);
@@ -708,10 +735,21 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
-			entry = g_array_index(x_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
-			entry = g_array_index(y_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			last_marker = (gint)OBJ_GET(curve,"last_marker_vertex");
+			if (last_marker != last) /* Set to marker color instead */
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			}
+			else
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+			}
 		}
 	}
 	else
@@ -734,10 +772,21 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
-			entry = g_array_index(x_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
-			entry = g_array_index(y_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			last_marker = (gint)OBJ_GET(curve,"last_marker_vertex");
+			if (last_marker != last) /* Set to marker color instead */
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			}
+			else
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+			}
 		}
 	}
 	OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
@@ -748,15 +797,20 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 void marker_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
+	gint m_index = 0;
 	gint last = 0;
+	gint last_vertex = 0;
 	GArray *x_array;
 	GArray *y_array;
 	GtkWidget *entry = NULL;
 
 	index = mtx_curve_get_marker_proximity_index(MTX_CURVE(curve));
+	m_index = mtx_curve_get_vertex_proximity_index(MTX_CURVE(curve));
 	x_array = (GArray *)OBJ_GET(curve,"x_entries");
 	y_array = (GArray *)OBJ_GET(curve,"y_entries");
-	if (index >= 0)	/* we are on a vertex for sure */
+	if ((!x_array) || (!y_array))
+		return;
+	if ((index >= 0) && (m_index != index))	/* we are on a vertex for sure */
 	{
 		/* Turn the current one green */
 		entry = g_array_index(x_array,GtkWidget *,index);
@@ -781,10 +835,21 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
-			entry = g_array_index(x_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
-			entry = g_array_index(y_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			last_vertex = (gint)OBJ_GET(curve,"last_proximity_vertex");
+			if (last != last_vertex)
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			}
+			else
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+			}
 		}
 	}
 	else
@@ -807,10 +872,21 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
-			entry = g_array_index(x_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
-			entry = g_array_index(y_array,GtkWidget *,last-1);
-			gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			last_vertex = (gint)OBJ_GET(curve,"last_proximity_vertex");
+			if (last != last_vertex)
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+			}
+			else
+			{
+				entry = g_array_index(x_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				entry = g_array_index(y_array,GtkWidget *,last-1);
+				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+			}
 		}
 	}
 	OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
