@@ -14,7 +14,7 @@
 #ifndef __POST_PROCESS_H__
 #define __POST_PROCESS_H__
 
-#include <enums.h>
+#include <gui_handlers.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */

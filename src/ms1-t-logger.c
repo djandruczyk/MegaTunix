@@ -18,6 +18,7 @@
 #include <firmware.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <gui_handlers.h>
 #include <math.h>
 #include <ms2-t-logger.h>
 #include <ms1-t-logger.h>

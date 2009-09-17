@@ -231,6 +231,60 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 
 
 /*!
+ \brief add_custom_rtt() creates the rt_text from the passed data, and attaches
+ it the the gui.
+ \param label (GtkWidget *) parent widget
+ \param ctrl_name (gchar *) name of the rt_text as defined in the config file
+ \param source (gchar *) data source for this rt_text 
+ \returns a Struct Rt_Text *
+ */
+Rt_Text * add_custom_rtt(GtkWidget *label, gchar *ctrl_name, gchar *source, gboolean show_prefix)
+{
+	Rt_Text *rtt = NULL;
+	extern Rtv_Map *rtv_map;
+	GObject *object = NULL;
+
+	rtt = g_malloc0(sizeof(Rt_Text));
+
+	if (!rtv_map)
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		return NULL;
+	}
+
+	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	if (!G_IS_OBJECT(object))
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		return NULL;
+	}
+
+	rtt->show_prefix = show_prefix;
+	rtt->ctrl_name = g_strdup(ctrl_name);
+	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->history = (GArray *) OBJ_GET(object,"history");
+	rtt->object = object;
+	if (OBJ_GET(label,"markup"))
+	{
+		rtt->markup = TRUE;
+		OBJ_SET(object,"label_prefix",OBJ_GET(label,"label_prefix"));
+		OBJ_SET(object,"label_suffix",OBJ_GET(label,"label_suffix"));
+	}
+	else
+		rtt->markup = FALSE;
+
+	rtt->textval = label;
+	if (show_prefix)
+		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
+	else
+		gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
+	gtk_widget_show_all(rtt->textval);
+
+	return rtt;
+}
+
+
+/*!
  \brief add_additional_rtt() is called as a post function for Tab loading
  to add an RTT on a normal widget tab. (AE wizard currently)
  \param widget, pointer to widget containing the data needed
@@ -239,6 +293,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 {
 	gchar * ctrl_name = NULL;
 	gchar * source = NULL;
+	gboolean markup = FALSE;
 	GHashTable *rtt_hash = NULL;
 	Rt_Text *rt_text = NULL;
 	gboolean show_prefix = FALSE;
@@ -247,9 +302,12 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
 	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
+	markup = (gboolean)OBJ_GET(widget,"markup");
 
-	if ((rtt_hash) && (ctrl_name) && (source))
+	if ((rtt_hash) && (ctrl_name) && (source) && (!markup))
 		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
+	if ((rtt_hash) && (ctrl_name) && (source) && (markup))
+		rt_text = add_custom_rtt(widget,ctrl_name,source,show_prefix);
 	if (rt_text)
 	{
 		if (!g_hash_table_lookup(rtt_hash,ctrl_name))
@@ -278,6 +336,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * tmpbuf2 = NULL;
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
@@ -312,17 +371,37 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		/*if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))*/
 		{
 			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-			g_free(tmpbuf);
+			if (rtt->markup)
+			{
+				tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
+				gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
+				g_free(tmpbuf2);
+				g_free(tmpbuf);
+			}
+			else
+			{
+				gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+				g_free(tmpbuf);
+			}
 			last_upd = count;
 		}
 	}
 	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		if (rtt->markup)
+		{
+			tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
+			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
+			g_free(tmpbuf2);
+			g_free(tmpbuf);
+		}
+		else
+		{
+			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+			g_free(tmpbuf);
+		}
 
-		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-		g_free(tmpbuf);
 		last_upd = count;
 	}
 

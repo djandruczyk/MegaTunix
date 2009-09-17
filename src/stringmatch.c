@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <gui_handlers.h>
 #include <interrogate.h>
 #include <mtxsocket.h>
 #include <stringmatch.h>

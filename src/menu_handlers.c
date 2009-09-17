@@ -20,6 +20,7 @@
 #include <gui_handlers.h>
 #include <math.h>
 #include <menu_handlers.h>
+#include <runtime_text.h>
 #include <tabloader.h>
 #include <threads.h>
 #include <vex_support.h>
@@ -79,6 +80,8 @@ EXPORT void setup_menu_handlers_pf()
 		item = glade_xml_get_widget(xml,"show_ms2_afr_calibrator_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 		item = glade_xml_get_widget(xml,"show_sensor_calibrator_menuitem");
+		gtk_widget_set_sensitive(item,TRUE);
+		item = glade_xml_get_widget(xml,"show_trigger_offset_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
 	}
 	
@@ -218,10 +221,6 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 		xml = glade_xml_new(main_xml->filename,"calibrate_tps_window",NULL);
 		window = glade_xml_get_widget(xml,"calibrate_tps_window");
 		glade_xml_signal_autoconnect(xml);
-		g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
-				G_CALLBACK(gtk_widget_hide),window);
-		g_signal_connect_swapped(G_OBJECT(window),"delete_event",
-				G_CALLBACK(gtk_widget_hide),window);
 
 		item = glade_xml_get_widget(xml,"tpsMin_entry");
 		register_widget("tpsMin_entry",item);
@@ -555,3 +554,78 @@ EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief General purpose handler to hide/show trigger offset window
+ */
+EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GtkWidget *partner = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	extern volatile gboolean leaving;
+	extern GList ***ve_widgets;
+
+	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	if ((!main_xml) || (leaving))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"trigger_offset_window",NULL);
+		window = glade_xml_get_widget(xml,"trigger_offset_window");
+		glade_xml_signal_autoconnect(xml);
+
+		item = glade_xml_get_widget(xml,"plus_button");
+		register_widget("plus_button",item);
+		OBJ_SET(item,"partner_widget",lookup_widget("IGN_trigger_offset_entry"));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(INCREMENT_VALUE));
+		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
+
+		item = glade_xml_get_widget(xml,"minus_button");
+		register_widget("minus_button",item);
+		OBJ_SET(item,"partner_widget",lookup_widget("IGN_trigger_offset_entry"));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(DECREMENT_VALUE));
+		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
+
+		item = glade_xml_get_widget(xml,"advance_label");
+		OBJ_SET(item,"ctrl_name",g_strdup("trigger_offset_tool_advance_rtt"));
+		OBJ_SET(item,"source",g_strdup("sparkangle"));
+		OBJ_SET(item,"label_prefix",g_strdup("<span font_desc=\"Sans 64\">"));
+		OBJ_SET(item,"label_suffix",g_strdup("</span>"));
+		OBJ_SET(item,"markup",GINT_TO_POINTER(TRUE));
+		add_additional_rtt(item);
+
+		item = glade_xml_get_widget(xml,"offset_entry");
+		register_widget("offset_entry",item);
+		partner = lookup_widget("IGN_trigger_offset_entry");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
+		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"page",OBJ_GET(partner,"page"));
+		OBJ_SET(item,"offset",OBJ_GET(partner,"offset"));
+		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
+		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
+		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
+		OBJ_SET(item,"dl_conv_expr",OBJ_GET(partner,"dl_conv_expr"));
+		OBJ_SET(item,"ul_conv_expr",OBJ_GET(partner,"ul_conv_expr"));
+		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
+		ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")],(gpointer)item);
+
+		g_list_foreach(ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")],update_widget,NULL);
+
+		item = glade_xml_get_widget(xml,"burn_data_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		bind_to_lists(item,"burners");
+		/* Force them to update */
+		gtk_widget_show_all(GTK_WIDGET(window));
+		return TRUE;
+	}
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}

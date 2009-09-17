@@ -322,7 +322,7 @@ key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr2
+datasource=afr1
 
 [VE2_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -362,7 +362,7 @@ key_types=_STRING_,_STRING_,_STRING_,_STRING_
 table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr1
+datasource=afr2
 
 #----- Rescale Entries ------------------------------------------------------
 

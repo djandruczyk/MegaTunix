@@ -892,6 +892,13 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	gint tmpi = 0;
+	gint tmp2 = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint canID = 0;
+	gint raw_lower = 0;
+	gint raw_upper = 0;
+	DataSize size = 0;
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
@@ -915,6 +922,23 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case INCREMENT_VALUE:
+		case DECREMENT_VALUE:
+			dest = OBJ_GET(widget,"partner_widget");
+			tmp2 = (gint)OBJ_GET(widget,"amount");
+			raw_lower = (gint)OBJ_GET(dest,"raw_lower");
+			raw_upper = (gint)OBJ_GET(dest,"raw_upper");
+			canID = (gint)OBJ_GET(dest,"canID");
+			page = (gint)OBJ_GET(dest,"page");
+			size = (DataSize)OBJ_GET(dest,"size");
+			offset = (gint)OBJ_GET(dest,"offset");
+			tmpi = get_ecu_data(canID,page,offset,size);
+			if (handler == INCREMENT_VALUE)
+				tmpi = tmpi+tmp2 > raw_upper? raw_upper:tmpi+tmp2;
+			else 
+				tmpi = tmpi-tmp2 < raw_lower? raw_lower:tmpi-tmp2;
+			send_to_ecu(canID, page, offset, size, tmpi, TRUE);
+			break;
 		case GET_CURR_TPS:
 			tmpbuf = OBJ_GET(widget,"source");
 			lookup_current_value(tmpbuf,&tmpf);

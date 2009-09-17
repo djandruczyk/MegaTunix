@@ -115,7 +115,7 @@ page=1
 table_num=2
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr
+datasource=afr1
 
 #----- Labels ----------------------------------------------------------------
 

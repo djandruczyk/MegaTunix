@@ -19,6 +19,7 @@
 #include <debugging.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
 #include "../mtxmatheval/mtxmatheval.h"

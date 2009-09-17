@@ -87,7 +87,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image605">
+			    <widget class="GtkImage" id="image689">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -110,7 +110,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:46:30 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image606">
+			    <widget class="GtkImage" id="image690">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -133,7 +133,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image607">
+			    <widget class="GtkImage" id="image691">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -156,7 +156,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image608">
+			    <widget class="GtkImage" id="image692">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -179,7 +179,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Sun, 21 Jan 2007 14:47:42 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image609">
+			    <widget class="GtkImage" id="image693">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -215,7 +215,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image610">
+			    <widget class="GtkImage" id="image694">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-jump-to</property>
 			      <property name="icon_size">1</property>
@@ -238,7 +238,7 @@
 			  <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:54:39 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image611">
+			    <widget class="GtkImage" id="image695">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-dialog-error</property>
 			      <property name="icon_size">1</property>
@@ -265,6 +265,28 @@
 		    <widget class="GtkMenu" id="tools_menu_menu">
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="show_trigger_offset_menuitem">
+			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
+			  <property name="label" translatable="yes">Trigger Offset Tool</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="show_trigger_offset_window" last_modification_time="Wed, 16 Sep 2009 22:00:37 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image696">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-zoom-fit</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="show_sensor_calibrator_menuitem">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
@@ -273,7 +295,7 @@
 			  <signal name="activate" handler="show_sensor_calibrator_window" last_modification_time="Tue, 25 Aug 2009 22:31:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image612">
+			    <widget class="GtkImage" id="image697">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -295,7 +317,7 @@
 			  <signal name="activate" handler="show_table_generator_window" last_modification_time="Tue, 25 Aug 2009 13:19:24 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image613">
+			    <widget class="GtkImage" id="image698">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -317,7 +339,7 @@
 			  <signal name="activate" handler="show_ms2_afr_calibrator_window" last_modification_time="Tue, 25 Aug 2009 17:17:55 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image614">
+			    <widget class="GtkImage" id="image699">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -339,7 +361,7 @@
 			  <signal name="activate" handler="show_tps_calibrator_window" last_modification_time="Tue, 25 Aug 2009 17:18:46 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image615">
+			    <widget class="GtkImage" id="image700">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-edit</property>
 			      <property name="icon_size">1</property>
@@ -361,7 +383,7 @@
 			  <signal name="activate" handler="show_tab_visibility_window" last_modification_time="Fri, 01 Feb 2008 02:09:03 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image616">
+			    <widget class="GtkImage" id="image701">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-remove</property>
 			      <property name="icon_size">1</property>
@@ -383,7 +405,7 @@
 			  <signal name="activate" handler="lookuptables_configurator" last_modification_time="Fri, 27 Jul 2007 19:00:52 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image617">
+			    <widget class="GtkImage" id="image702">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-left</property>
 			      <property name="icon_size">1</property>
@@ -406,7 +428,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image618">
+			    <widget class="GtkImage" id="image703">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -429,7 +451,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image619">
+			    <widget class="GtkImage" id="image704">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -452,7 +474,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image620">
+			    <widget class="GtkImage" id="image705">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -475,7 +497,7 @@
 			  <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image621">
+			    <widget class="GtkImage" id="image706">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
@@ -3263,6 +3285,8 @@
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="gtk_widget_hide" object="calibrate_tps_window" last_modification_time="Wed, 16 Sep 2009 23:08:22 GMT"/>
+  <signal name="destroy_event" handler="gtk_widget_hide" object="calibrate_tps_window" last_modification_time="Wed, 16 Sep 2009 23:08:39 GMT"/>
 
   <child>
     <widget class="GtkFrame" id="frame8">
@@ -5055,12 +5079,14 @@ Air Temperature</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="gtk_widget_hide" object="trigger_offset_window" last_modification_time="Wed, 16 Sep 2009 23:07:12 GMT"/>
+  <signal name="destroy_event" handler="gtk_widget_hide" object="trigger_offset_window" last_modification_time="Wed, 16 Sep 2009 23:07:26 GMT"/>
 
   <child>
     <widget class="GtkTable" id="table23">
       <property name="border_width">5</property>
       <property name="visible">True</property>
-      <property name="n_rows">3</property>
+      <property name="n_rows">4</property>
       <property name="n_columns">2</property>
       <property name="homogeneous">False</property>
       <property name="row_spacing">5</property>
@@ -5074,9 +5100,9 @@ Air Temperature</property>
 	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="cur_advance_label">
+	    <widget class="GtkLabel" id="advance_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;span font=&quot;Sans 80&quot;&gt;Test&lt;/span&gt;</property>
+	      <property name="label" translatable="yes">&lt;span font_desc=&quot;Sans 64&quot;&gt;00.0&lt;/span&gt;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5098,34 +5124,6 @@ Air Temperature</property>
 	  <property name="right_attach">1</property>
 	  <property name="top_attach">0</property>
 	  <property name="bottom_attach">1</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="label66">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">&lt;b&gt;Match above value with timing light reading.&lt;/b&gt;</property>
-	  <property name="use_underline">False</property>
-	  <property name="use_markup">True</property>
-	  <property name="justify">GTK_JUSTIFY_CENTER</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	  <property name="width_chars">-1</property>
-	  <property name="single_line_mode">False</property>
-	  <property name="angle">0</property>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">1</property>
-	  <property name="top_attach">1</property>
-	  <property name="bottom_attach">2</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
 	</packing>
       </child>
 
@@ -5199,23 +5197,30 @@ Air Temperature</property>
       </child>
 
       <child>
-	<widget class="GtkEntry" id="offset_entry">
+	<widget class="GtkLabel" id="label66">
 	  <property name="visible">True</property>
-	  <property name="can_focus">True</property>
-	  <property name="editable">True</property>
-	  <property name="visibility">True</property>
-	  <property name="max_length">0</property>
-	  <property name="text" translatable="yes"></property>
-	  <property name="has_frame">True</property>
-	  <property name="invisible_char">●</property>
-	  <property name="activates_default">False</property>
-	  <property name="width_chars">7</property>
+	  <property name="label" translatable="yes">&lt;b&gt;Match the above value with 
+timing light reading. (BTDC)&lt;/b&gt;</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">True</property>
+	  <property name="justify">GTK_JUSTIFY_CENTER</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	  <property name="width_chars">-1</property>
+	  <property name="single_line_mode">False</property>
+	  <property name="angle">0</property>
 	</widget>
 	<packing>
-	  <property name="left_attach">1</property>
-	  <property name="right_attach">2</property>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
 	  <property name="top_attach">1</property>
-	  <property name="bottom_attach">2</property>
+	  <property name="bottom_attach">3</property>
+	  <property name="x_options">fill</property>
 	  <property name="y_options"></property>
 	</packing>
       </child>
@@ -5230,26 +5235,6 @@ Air Temperature</property>
 	  <property name="column_spacing">5</property>
 
 	  <child>
-	    <widget class="GtkButton" id="burn_data_button">
-	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Burn to ECU</property>
-	      <property name="use_underline">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="std_button_handler" last_modification_time="Wed, 16 Sep 2009 19:22:30 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="left_attach">2</property>
-	      <property name="right_attach">3</property>
-	      <property name="top_attach">0</property>
-	      <property name="bottom_attach">1</property>
-	      <property name="x_options">fill</property>
-	      <property name="y_options"></property>
-	    </packing>
-	  </child>
-
-	  <child>
 	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
@@ -5257,7 +5242,7 @@ Air Temperature</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="std_button_handler" last_modification_time="Wed, 16 Sep 2009 19:22:30 GMT"/>
+	      <signal name="clicked" handler="gtk_widget_hide" object="trigger_offset_window" last_modification_time="Wed, 16 Sep 2009 23:06:42 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">3</property>
@@ -5268,14 +5253,87 @@ Air Temperature</property>
 	      <property name="y_options"></property>
 	    </packing>
 	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="burn_data_button">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Burn to ECU</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="std_button_handler" last_modification_time="Wed, 16 Sep 2009 19:22:30 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">0</property>
+	      <property name="right_attach">3</property>
+	      <property name="top_attach">0</property>
+	      <property name="bottom_attach">1</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
 	</widget>
 	<packing>
 	  <property name="left_attach">0</property>
 	  <property name="right_attach">2</property>
+	  <property name="top_attach">3</property>
+	  <property name="bottom_attach">4</property>
+	  <property name="y_options">fill</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="label67">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">&lt;small&gt;Offset in deg.&lt;/small&gt;</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">True</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	  <property name="width_chars">-1</property>
+	  <property name="single_line_mode">False</property>
+	  <property name="angle">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">1</property>
+	  <property name="bottom_attach">2</property>
+	  <property name="x_options"></property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkEntry" id="offset_entry">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="editable">True</property>
+	  <property name="visibility">True</property>
+	  <property name="max_length">0</property>
+	  <property name="text" translatable="yes"></property>
+	  <property name="has_frame">True</property>
+	  <property name="invisible_char">●</property>
+	  <property name="activates_default">False</property>
+	  <property name="width_chars">7</property>
+	  <signal name="activate" handler="std_entry_handler" last_modification_time="Tue, 25 Aug 2009 00:16:50 GMT"/>
+	  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Tue, 25 Aug 2009 00:17:09 GMT"/>
+	  <signal name="changed" handler="entry_changed_handler" last_modification_time="Tue, 25 Aug 2009 00:17:21 GMT"/>
+	  <signal name="key_press_event" handler="key_event" last_modification_time="Tue, 25 Aug 2009 00:17:35 GMT"/>
+	  <signal name="key_release_event" handler="key_event" last_modification_time="Tue, 25 Aug 2009 00:17:42 GMT"/>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
 	  <property name="top_attach">2</property>
 	  <property name="bottom_attach">3</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options">fill</property>
+	  <property name="y_options"></property>
 	</packing>
       </child>
     </widget>

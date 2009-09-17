@@ -21,6 +21,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <keyparser.h>
+#include <gui_handlers.h>
 #include <lookuptables.h>
 #include <multi_expr_loader.h>
 #include "../mtxmatheval/mtxmatheval.h"

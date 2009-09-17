@@ -74,7 +74,6 @@ struct _Io_Message
 {
 	GArray *functions;	/*! for gui_dispatch_queue */
 	GArray *sequence;	/*! for sending data to ECU */
-	InputHandler handler;	/*! Command handler for inbound data */
 	void *payload;		/*! data passed along, arbritrary size.. */
 	void *recv_buf;		/* data that comes from ECU */
 	Command *command;	/* Command struct */
