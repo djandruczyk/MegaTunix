@@ -1691,7 +1691,7 @@ gboolean net_send(gint fd, char *buf, gint len, gint flags)
 {
 	int total = 0;        /* how many bytes we've sent*/
 	int bytesleft = len; /* how many we have left to senda*/
-	int n;
+	int n = 0;
 
 	while(total < len) {
 		n = send(fd, buf+total, bytesleft, flags);

@@ -18,6 +18,7 @@ Burn_Command=ms2_burn
 Burn_All_Command=ms2_burn_all
 Write_Command=ms2_generic_write
 Chunk_Write_Command=ms2_generic_write
+Table_Write_Command=ms2_table_reflash
 Capabilities=_MS2_,_MS2_EXTRA_
 MultiPage=TRUE
 ChunkWriteSupport=TRUE

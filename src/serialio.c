@@ -55,7 +55,6 @@ gboolean open_serial(gchar * port_name)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
-	guchar buf [1024];
 	gint fd = -1;
 	gchar * err_text = NULL;
 
@@ -78,8 +77,6 @@ gboolean open_serial(gchar * port_name)
 		serial_params->fd = fd;
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",port_name));
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",port_name),FALSE,FALSE);
-		/* read out any junk in buffer and toss it */
-		read_wrapper(serial_params->fd,&buf,1024);
 
 	}
 	else
@@ -298,6 +295,7 @@ void *serial_repair_thread(gpointer data)
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	gchar * potential_ports;
 	gboolean autodetect = FALSE;
+	guchar buf [1024];
 	extern volatile gboolean offline;
 	gchar ** vector = NULL;
 	guint i = 0;
@@ -370,6 +368,8 @@ void *serial_repair_thread(gpointer data)
 				if (autodetect)
 					thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
 				setup_serial_params(9600);
+				/* read out any junk in buffer and toss it */
+				read_wrapper(serial_params->fd,&buf,1024);
 				thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
 
 				if (comms_test())
@@ -380,6 +380,8 @@ void *serial_repair_thread(gpointer data)
 				else
 				{
 					setup_serial_params(115200);
+					/* read out any junk in buffer and toss it */
+					read_wrapper(serial_params->fd,&buf,1024);
 					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 115200 Baud for ECU link\n"),FALSE,FALSE);
 					if (comms_test())
 					{	/* We have a winner !!  
