@@ -419,27 +419,27 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 				&firmware->multi_page))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	if ((firmware->multi_page) && (!(firmware->capabilities & MS2)))
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Page_Command",
 					&firmware->page_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"Page_Command\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Page_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
 				&firmware->chunk_support))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"ChunkWriteSupport\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	if (firmware->chunk_support)
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Chunk_Write_Command",
 					&firmware->chunk_write_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"Chunk_Write_Command\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if (firmware->capabilities & MS2)
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Table_Write_Command",
 					&firmware->table_write_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"Table_Write_Command\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Table_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 				&firmware->total_pages))
