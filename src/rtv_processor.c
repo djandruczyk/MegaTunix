@@ -648,6 +648,55 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 
 
 /*!
+ \brief lookup_previous_n_x_m_values() gets previous data
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param n (gint) number of campels we want
+ \param skip (gint) number to SKIP between samples
+ \param value (gfloat *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip, gfloat *values)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+	gint i = 0;
+
+	if (!internal_name)
+	{
+		for (i=0;i<n;i++)
+			values[i] = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	index = (gint)OBJ_GET(object,"current_index");
+	if (!history)
+		return FALSE;
+	if (index < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
+	if (index > (n*skip))
+	{
+		for (i=0;i<n;i++)
+		{
+			index-=skip;  /* get PREVIOUS nth one */
+			values[i] = g_array_index(history,gfloat,index);
+		}
+	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before UNlock rtv_mutex\n"));
+	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after UNlock rtv_mutex\n"));
+	return TRUE;
+}
+
+
+/*!
  \brief lookup_precision() gets the current precision of the derived
  variable requested by name.
  \param internal_name (gchar *) name of the variable to get the data for.

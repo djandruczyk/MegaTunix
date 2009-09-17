@@ -132,6 +132,7 @@ int setup_gui()
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)
 	{
+		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i),TRUE);
 		if(hidden_list[i] == TRUE)
 		{
 			/* Get tab and child label and hide it.. */

@@ -139,6 +139,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			else
 			{
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
+				gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),topframe,TRUE);
 				glade_xml_signal_autoconnect(xml);
 				gtk_widget_show_all(topframe);
 			}

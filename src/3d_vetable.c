@@ -1284,8 +1284,8 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	else
 		glColor3f(0.0,0.0,0.65);
 
-	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
 
 	/* Tail, third from last val. */
@@ -1325,8 +1325,8 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	else
 		glColor3f(0.0,0.0,0.80);
 
-	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf4,tmpf5,tmpf6);
 
 	glEnd();
 
@@ -1367,8 +1367,8 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	else
 		glColor3f(0.0,0.0,1.0);
 
-	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glEnd();
 
 	glLineWidth(MIN(w,h)/300.0);
@@ -2342,7 +2342,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 
 		lookup_current_value(multi->source,&x_val);
 		cur_val->x_val = x_val;
-		lookup_previous_n_values(multi->source,3,cur_val->p_x_vals);
+		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_x_vals);
 		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,multi->precision,multi->suffix);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 	}
@@ -2351,7 +2351,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* Runtime value */
 		lookup_current_value(ve_view->x_source,&x_val);
 		cur_val->x_val = x_val;
-		lookup_previous_n_values(ve_view->x_source,3,cur_val->p_x_vals);
+		lookup_previous_n_skip_x_values(ve_view->x_source,3,2,cur_val->p_x_vals);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
 		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
 	}
@@ -2389,7 +2389,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(multi->source,&y_val);
 		cur_val->y_val = y_val;
-		lookup_previous_n_values(multi->source,3,cur_val->p_y_vals);
+		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_y_vals);
 		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,multi->precision,multi->suffix);
 	}
 	else
@@ -2397,7 +2397,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* Runtime value */
 		lookup_current_value(ve_view->y_source,&y_val);
 		cur_val->y_val = y_val;
-		lookup_previous_n_values(ve_view->y_source,3,cur_val->p_y_vals);
+		lookup_previous_n_skip_x_values(ve_view->y_source,3,2,cur_val->p_y_vals);
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
 		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
 	}
@@ -2437,7 +2437,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(multi->source,&z_val);
 		cur_val->z_val = z_val;
-		lookup_previous_n_values(multi->source,3,cur_val->p_z_vals);
+		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_z_vals);
 		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,multi->precision,multi->suffix);
 	}
 	else
@@ -2445,7 +2445,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		/* runtime value */
 		lookup_current_value(ve_view->z_source,&z_val);
 		cur_val->z_val = z_val;
-		lookup_previous_n_values(ve_view->z_source,3,cur_val->p_z_vals);
+		lookup_previous_n_skip_x_values(ve_view->z_source,3,2,cur_val->p_z_vals);
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
 		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
 	}
