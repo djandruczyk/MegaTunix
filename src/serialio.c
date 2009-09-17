@@ -333,6 +333,7 @@ void *serial_repair_thread(gpointer data)
 	/* App just started, no connection yet*/
 	while (!serial_is_open) 	
 	{
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
 		autodetect = (gboolean) OBJ_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */
 		{
@@ -354,6 +355,7 @@ void *serial_repair_thread(gpointer data)
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
 			{
+				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
 				/*printf("File %s, doesn't exist\n",vector[i]);*/
 
 				/* Wait 100 ms to avoid deadlocking */
@@ -361,17 +363,20 @@ void *serial_repair_thread(gpointer data)
 				continue;
 			}
 			g_usleep(100000);
+			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
 			thread_update_logbar("comms_view",NULL,g_strdup_printf("Attempting to open port %s\n",vector[i]),FALSE,FALSE);
 			if (open_serial(vector[i]))
 			{
-				thread_update_logbar("comms_view",NULL,g_strdup_printf("Searching for ECU\n"),FALSE,FALSE);
 				if (autodetect)
 					thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+				thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
+				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 9600 for comms test\n",vector[i]));
 				setup_serial_params(9600);
 				/* read out any junk in buffer and toss it */
 				read_wrapper(serial_params->fd,&buf,1024);
-				thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
 
+				thread_update_logbar("comms_view",NULL,g_strdup_printf("Searching for ECU\n"),FALSE,FALSE);
+				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
 				if (comms_test())
 				{	/* We have a winner !!  Abort loop */
 					serial_is_open = TRUE;
@@ -379,9 +384,11 @@ void *serial_repair_thread(gpointer data)
 				}
 				else
 				{
+					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 115200 for comms test\n",vector[i]));
 					setup_serial_params(115200);
 					/* read out any junk in buffer and toss it */
 					read_wrapper(serial_params->fd,&buf,1024);
+					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
 					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 115200 Baud for ECU link\n"),FALSE,FALSE);
 					if (comms_test())
 					{	/* We have a winner !!  
@@ -391,6 +398,7 @@ void *serial_repair_thread(gpointer data)
 					}
 					else
 					{  
+						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed for both baud rates,  not ECU found, closing port %s.\n",vector[i]));
 						close_serial();
 						/*g_usleep(100000);*/
 						continue;
