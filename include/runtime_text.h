@@ -16,6 +16,8 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 typedef struct _Rt_Text Rt_Text;
 /*! 
@@ -45,6 +47,10 @@ Rt_Text * add_custom_rtt(GtkWidget *, gchar *, gchar *, gboolean);
 void rtt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_start_watches(gpointer,gpointer,gpointer);
 void add_additional_rtt(GtkWidget *);
+gboolean load_rtt_xml_elements(xmlNode *, GHashTable *, GtkWidget *);
+void load_rtt(xmlNode *, GHashTable *, GtkWidget *);
+
+
 /* Prototypes */
 
 #endif

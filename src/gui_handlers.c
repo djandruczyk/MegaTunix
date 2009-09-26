@@ -2802,7 +2802,6 @@ void prompt_to_save(void)
 	gint result = 0;
 	extern volatile gboolean offline;
 	GtkWidget *dialog = NULL;
-	extern GtkWidget *main_window;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	GdkPixbuf *pixbuf = NULL;
@@ -2811,7 +2810,7 @@ void prompt_to_save(void)
 	if (!offline)
 	{
 		dialog = gtk_dialog_new_with_buttons("Save internal log, yes/no ?",
-				GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_YES,GTK_RESPONSE_YES,
 				GTK_STOCK_NO,GTK_RESPONSE_NO,
 				NULL);
@@ -2825,7 +2824,7 @@ void prompt_to_save(void)
 		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
 		gtk_widget_show_all(hbox);
 
-		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
+		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 
 		result = gtk_dialog_run(GTK_DIALOG(dialog));
 		g_object_unref(pixbuf);
@@ -2836,7 +2835,7 @@ void prompt_to_save(void)
 	}
 
 	dialog = gtk_dialog_new_with_buttons("Save ECU settings to file?",
-			GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_YES,GTK_RESPONSE_YES,
 			GTK_STOCK_NO,GTK_RESPONSE_NO,
 			NULL);
@@ -2850,7 +2849,7 @@ void prompt_to_save(void)
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
 	gtk_widget_show_all(hbox);
 
-	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
+	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
 		select_file_for_ecu_backup(NULL,NULL);
@@ -2867,14 +2866,13 @@ gboolean prompt_r_u_sure(void)
 	gint result = 0;
 	extern volatile gboolean offline;
 	GtkWidget *dialog = NULL;
-	extern GtkWidget *main_window;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	GtkWidget *image = NULL;
 
 	dialog = gtk_dialog_new_with_buttons("Quit MegaTunix, yes/no ?",
-			GTK_WINDOW(main_window),GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_YES,GTK_RESPONSE_YES,
 			GTK_STOCK_NO,GTK_RESPONSE_NO,
 			NULL);
@@ -2888,7 +2886,7 @@ gboolean prompt_r_u_sure(void)
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,10);
 	gtk_widget_show_all(hbox);
 
-	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(main_window));
+	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	g_object_unref(pixbuf);

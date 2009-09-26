@@ -492,9 +492,10 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 
-		renderer = gtk_cell_renderer_toggle_new();
+/*		renderer = gtk_cell_renderer_toggle_new();
 		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+		*/
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
 		return TRUE;
@@ -528,6 +529,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gint count = 0;
 	LookupTable *lookuptable = NULL;
 
+	printf("lookuptable changed\n");
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
 	gtk_tree_model_get_iter_from_string(model,&iter,path);

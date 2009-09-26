@@ -36,4 +36,7 @@ void generic_xml_gfloat_export(xmlNode *, gchar *, gfloat *);
 void generic_xml_gboolean_export(xmlNode *, gchar *, gboolean *);
 void generic_xml_color_export(xmlNode *, gchar *, GdkColor *);
 
+/* Oddball funcs */
+gboolean xml_api_check(xmlNode *,gint , gint);
+
 #endif

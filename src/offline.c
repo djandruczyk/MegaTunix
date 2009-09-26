@@ -345,14 +345,13 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;

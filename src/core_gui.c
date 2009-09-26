@@ -40,7 +40,6 @@ static gint def_width=640;
 static gint def_height=480;
 gint width = 0;
 gint height = 0;
-GtkWidget *main_window = NULL;
 GtkTooltips *tip = NULL;
 extern GObject *global_data;
 
@@ -93,12 +92,12 @@ int setup_gui()
 	g_free(filename);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	register_widget("main_window",window);
 	OBJ_SET(global_data,"font_size",GINT_TO_POINTER(PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc))));
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(leave),NULL);
-	main_window = window;
 	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_box = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_box);
@@ -111,10 +110,10 @@ int setup_gui()
 	y = (gint)OBJ_GET(global_data,"main_y_origin");
 	w = (gint)OBJ_GET(global_data,"width");
 	h = (gint)OBJ_GET(global_data,"height");
-	gtk_window_move((GtkWindow *)main_window, x, y);
-	gtk_widget_set_size_request(main_window,def_width,def_height);
-	gtk_window_resize(GTK_WINDOW(main_window),w,h);
-	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
+	gtk_window_move((GtkWindow *)window, x, y);
+	gtk_widget_set_size_request(window,def_width,def_height);
+	gtk_window_resize(GTK_WINDOW(window),w,h);
+	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "VERSION);
 	finalize_core_gui(xml);
 
 	tips_in_use = (gboolean)OBJ_GET(global_data,"tips_in_use");
@@ -124,7 +123,7 @@ int setup_gui()
 		gtk_tooltips_disable(tip);
 
 	if (!args->hide_maingui)
-		gtk_widget_show_all(main_window);
+		gtk_widget_show_all(window);
 
 	/* Tabs that should be hidden.... */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");

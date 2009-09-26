@@ -452,7 +452,6 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -465,7 +464,7 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for datalog export");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top =TRUE;
 	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.log",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("log");
@@ -523,7 +522,6 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -538,7 +536,7 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top =TRUE;
 	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.log",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("log");

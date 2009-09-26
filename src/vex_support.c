@@ -68,7 +68,6 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -85,7 +84,7 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.vex");
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
@@ -121,10 +120,8 @@ void select_table_for_export(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
-	extern GtkWidget *main_window;
 	struct tm *tm = NULL;
         time_t *t = NULL;
 
@@ -143,7 +140,7 @@ void select_table_for_export(gint table_num)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("vex");
@@ -179,7 +176,6 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern gboolean interrogated;
 
 	if (!interrogated)
@@ -188,7 +184,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
@@ -221,7 +217,6 @@ void select_table_for_import(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 
@@ -235,7 +230,7 @@ void select_table_for_import(gint table_num)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;

@@ -30,7 +30,6 @@
 
 
 
-GtkWidget *status_window = NULL;
 extern GObject *global_data;
 
 /*!
@@ -205,7 +204,6 @@ EXPORT void load_status_pf(void)
 			}
 			g_free(section);
 		}
-		status_window = window;
 		if (!args->hide_status)
 			gtk_widget_show_all(window);
 		cfg_free(cfgfile);

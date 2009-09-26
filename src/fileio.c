@@ -35,6 +35,7 @@
 #include <timeout_handlers.h>
 #include <unistd.h>
 #include <vex_support.h>
+#include <widgetmgmt.h>
 #ifdef __WIN32__
  #include <windows.h>
 #else
@@ -49,7 +50,6 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -66,7 +66,7 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Save your ECU Settings to file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.ecu",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension = g_strdup("ecu");
@@ -94,14 +94,13 @@ EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Restore your ECU Settings from which file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;

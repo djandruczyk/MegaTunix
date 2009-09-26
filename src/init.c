@@ -40,7 +40,6 @@ extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
-extern GtkWidget *main_window;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
@@ -277,6 +276,7 @@ void save_config(void)
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
+	GtkWidget *main_window = NULL;
 	int x = 0;
 	int y = 0;
 	int i = 0;
@@ -379,6 +379,7 @@ void save_config(void)
 
 	if (ready)
 	{
+		main_window = lookup_widget("main_window");
 		if (GTK_WIDGET_VISIBLE(main_window))
 		{
 			gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);

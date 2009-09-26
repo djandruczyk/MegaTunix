@@ -347,13 +347,12 @@ gboolean close_dialog(GtkWidget *widget, gpointer data)
  */
 void set_title(gchar * text)
 {
-	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
 	static GtkWidget *info_label = NULL;
 	extern Firmware_Details *firmware;
 
-	if ((!main_window) || (leaving))
+	if ((!lookup_widget("main_window")) || (leaving))
 		return;
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
@@ -368,7 +367,7 @@ void set_title(gchar * text)
 	else
 		tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
-	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(lookup_widget("main_window")),tmpbuf);
 	g_free(tmpbuf);
 	if (info_label)
 	{
