@@ -200,3 +200,36 @@ void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *co
 	xmlNewChild(child, NULL, BAD_CAST "blue",BAD_CAST tmpbuf);
 	g_free(tmpbuf);
 }
+
+
+gboolean xml_api_check(xmlNode *node, gint major, gint minor)
+{
+	gint maj = -1;
+	gint min = -1;
+	xmlNode *cur_node = NULL;
+
+	if (!node->children)
+	{
+		printf("ERROR, get_potential_arg_name, xml node is empty!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"major") == 0)
+				generic_xml_gint_import(cur_node,&maj);
+			if (g_strcasecmp((gchar *)cur_node->name,"minor") == 0)
+				generic_xml_gint_import(cur_node,&min);
+
+		}
+		cur_node = cur_node->next;
+	}
+	
+	if ((major != maj) || (minor != min))
+		return FALSE;
+	else
+		return TRUE;
+}
+
