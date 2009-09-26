@@ -1,12 +1,11 @@
 rttextdir = $(datadir)/MegaTunix/$(RTTEXT_DATA_DIR)
 
 rttext_files = 	README \
-			MS1-Std-firmware.rtt_conf \
+			MS1-Std-firmware.xml \
 			MS2-Std-firmware.xml \
-			MS2-Std-firmware.rtt_conf \
-			MS2-Extra-firmware.rtt_conf \
-			DT-firmware.rtt_conf \
-			MSnS-Extra-firmware.rtt_conf 
+			MS2-Extra-firmware.xml \
+			DT-firmware.xml \
+			MSnS-Extra-firmware.xml 
 
 rttext_DATA = $(rttext_files)
 
