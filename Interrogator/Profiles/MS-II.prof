@@ -23,7 +23,7 @@ Capabilities=_MS2_,_MS2_STD_
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 TotalTables=6
-TotalTETables=14
+TotalTETables=15
 TotalPages=7
 
 [table_0]
@@ -669,6 +669,37 @@ y_dl_conv_expr=x/1
 y_ul_conv_expr=x*1
 y_raw_lower=2
 y_raw_upper=20000
+y_precision=0
+
+[te_table_14]
+title=MAF Correction Table
+is_fuel=FALSE
+bind_to_list=maf_ctrls
+gauge=MegaTune/MAF-Gauge.xml
+gauge_datasource=maf
+bincount=12
+x_temp_dep=FALSE
+x_page=1
+x_base_offset=900
+x_size=_U16_
+x_source=maf
+x_units=(g./sec)
+x_name=MAF Flow
+x_dl_conv_expr=x/0.01
+x_ul_conv_expr=x*0.01
+x_raw_lower=0
+x_raw_upper=65000
+x_precision=2
+y_page=1
+y_base_offset=924
+y_size=_U08_
+y_source=
+y_units=(%)
+y_name=Correction
+y_dl_conv_expr=x/1
+y_ul_conv_expr=x*1
+y_raw_lower=0
+y_raw_upper=255
 y_precision=0
 
 [page_0]

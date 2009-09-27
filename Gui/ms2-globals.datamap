@@ -199,7 +199,7 @@ choices=Disabled,MAF Only,MAF/MAP Blend
 bitvals=0,1,2
 offset=600
 bitmask=3
-toggle_groups=,maf_ctrls,maf_ctrls
+toggle_groups=,maf_ctrls,maf_ctrls:maf_blend_ctrls
 tooltip=Enables or Disables use of a MAF (Mass Air Flow) sensor, and sets whether it's to be the primary input, or used in a blend wiht the MAP Sensor.
 
 [maf_pin_combo]

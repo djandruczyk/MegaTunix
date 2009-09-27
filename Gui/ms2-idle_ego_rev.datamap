@@ -21,6 +21,31 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=valid_ecu_ctrls
 
+[nbo2_controls_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=nb_ego
+
+[common_ego_controls_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=ego_controls
+
+[wbo2_controls_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_ego
+
+[spark_revlimit_controls_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=spark_retard
+
+[fuel_revlimit_controls_table]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=revlimit_controls
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
@@ -43,7 +68,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 keys=temp_dep,c_label,f_label,bind_to_list
 key_types=_BOOL_,_STRING_,_STRING_,_STRING_
 temp_dep=TRUE
-bind_to_list=temperature
+bind_to_list=temperature,solenoid_common
 c_label=Fast Idle Temp (\302\260C.)
 f_label=Fast Idle Temp (\302\260F.)
 
@@ -61,7 +86,7 @@ key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Hysteresis (\302\260C.)
 f_label=Hysteresis (\302\260F.)
 temp_dep=TRUE
-bind_to_list=temperature
+bind_to_list=temperature,iac_common
 
 [cold_temp_label]
 keys=c_label,f_label,temp_dep,bind_to_list
@@ -69,7 +94,82 @@ key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Cold Temperature (\302\260C.)
 f_label=Cold Temperature (\302\260F.)
 temp_dep=TRUE
-bind_to_list=temperature
+bind_to_list=temperature,iac_common
+
+[cold_position_steps_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[cold_taper_time_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[crank2run_taper_time_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[cranking_pos_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[start_pos_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[pwm_freq_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=pwm_specific
+
+[min_steps_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_specific
+
+[accel_step_size_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_specific
+
+[time_step_size_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_specific
+
+[time_based_ase_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=iac_common
+
+[events_per_step_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_simple
+
+[transport_delay_1_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_transport
+
+[transport_delay_2_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_transport
+
+[pid_integral_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_pid
+
+[pid_derivative_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=wb_pid
 
 #----- Comboboxes -----------------------------------------------------------
 
@@ -78,7 +178,7 @@ keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC
 bitvals=0,1,2,3,4,5
-toggle_groups=,solenoid_common,iac_common:iac_specific,iac_common:iac_specific,pwm_specific:pwm_common:iac_common,iac_common:iac_specific
+toggle_groups=,solenoid_common,iac_common:iac_specific,iac_common:iac_specific,iac_common:pwm_specific,iac_common:iac_specific
 offset=547
 bitmask=7
 tooltip=Sets the Idle control algorithm
@@ -169,7 +269,7 @@ ul_conv_expr=x*80
 raw_lower=1
 raw_upper=10
 precision=1
-bind_to_list=pwm_common
+bind_to_list=pwm_specific
 tooltip=This is the PWM Drive frequency from 80-800 hertz in 80Hz steps.
 
 [start_val_entry]
@@ -262,68 +362,61 @@ bind_to_list=iac_common
 tooltip=This defines the number of second the megasquirt takes to move from the cold position to the position indicated in the IAC step table for the current coolant temp. See http://www.megamanual.com/mt28.htm#sg
 
 [max_retard_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=18
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-bind_to_list=revlimit_controls,spark_retard
 tooltip=This sets the maximum spark retard used for the revlimiter when the ECU is controlling spark
 
 [lower_revlimit_entry]
-keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,raw_lower,raw_upper,tooltip
+key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_
 offset=44
 size=_S16_
 raw_lower=0
 raw_upper=15000
-bind_to_list=revlimit_controls
 tooltip=This is the RPM at which fuel is re-enabled in Fuel cut mode, and the RPM at which timing is fully restored in spark retard mode
 
 [upper_revlimit_entry]
-keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,size,raw_lower,raw_upper,tooltip
+key_types=_INT_,_ENUM_,_INT_,_INT_,_STRING_
 offset=46
 size=_S16_
 raw_lower=0
 raw_upper=15000
-bind_to_list=revlimit_controls
 tooltip=This is the RPM at which the revlimit is initially applied
 
 [nb_switching_voltage_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 precision=3
 offset=598
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 raw_lower=0
 raw_upper=200
-bind_to_list=nb_ego,ego_controls
 tooltip=This is the Voltage that the Narrow-Band O<sub>2</sub> sensor(s) toggle between rich and lean,  typically 0.450 volts.
 
 [ign_events_entry]
-keys=offset,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=595
-bind_to_list=nb_ego,ego_controls
 tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 
 [ego_step_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=596
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-bind_to_list=nb_ego,ego_controls
 tooltip=This is the percentage max percentage change in fueling the EGO control algorithm can make per "step".  This controls how fast the algorithm can alter fueling.   beware of setting this too high as it can cause oscillation. Too low and it takes a long time to reach the "goal.
 
 [ego_auth_entry]
-keys=offset,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_
+keys=offset,tooltip
+key_types=_INT_,_STRING_
 offset=597
-bind_to_list=nb_ego,ego_controls
 tooltip=This is the max correction allowed in percentage of change, So even if the target isn't reached, it won't exceed this value.
 
 [ego_clt_entry]
@@ -383,7 +476,7 @@ offset=901
 dl_conv_expr=x*1
 ul_conv_expr=x/1
 raw_upper=100
-bind_to_list=ego_controls,wb_ego
+bind_to_list=wb_ego
 tooltip=This is the Proportional gain for the EGO feedback loop. The constant that defines the proportional relationship between the EGO set-point and the range of values seen from the sensor. 100% is a typical value. It defines the response to the immediate difference between the set-point AFR and that measured from the sensor.
 
 [wb_integ_entry]
@@ -393,7 +486,7 @@ offset=902
 dl_conv_expr=x*1
 ul_conv_expr=x/1
 raw_upper=100
-bind_to_list=ego_controls,wb_ego,wb_pid
+bind_to_list=wb_pid
 tooltip=This is the Integral gain for the EGO feedback loop. This corrects for a portion of the on-going average correction over time (the integral), allowing the loop to set into a stable value, rather than oscillating. A typical value is 20%.
 
 [wb_deriv_entry]
@@ -404,7 +497,7 @@ dl_conv_expr=x*1
 ul_conv_expr=x/1
 raw_lower=0
 raw_upper=100
-bind_to_list=ego_controls,wb_ego,wb_pid
+bind_to_list=wb_pid
 tooltip=This is the Derivative gain for the EGO feedback loop. This predicts the future difference between the AFR target and the set-point, based on the rate of change of the error at present. The larger the derivative term, the more rapidly the controller responds to changes in the process's output. However, for relatively slow processes,lower numbers mean more stable output, and a value of 0 is typical for MegaSquirt® (i.e., don't use the derivative term at all).
 
 [wb_transport1_entry]
@@ -414,7 +507,7 @@ offset=904
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-bind_to_list=ego_controls,wb_ego,wb_transport
+bind_to_list=wb_transport
 tooltip=This is primarily the response time of the sensor plus the fastest time between injector and exhaust valve. 
 
 [wb_transport2_entry]
@@ -424,13 +517,13 @@ offset=906
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-bind_to_list=ego_controls,wb_ego,wb_transport
+bind_to_list=wb_transport
 tooltip=This is the effect of rpm and map and as well as the exhaust geometry. 
 
 [wb_events_entry]
 keys=offset,bind_to_list,tooltip
 key_types=_INT_,_STRING_,_STRING_
 offset=595
-bind_to_list=ego_controls,wb_ego,wb_simple
+bind_to_list=wb_simple
 tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 

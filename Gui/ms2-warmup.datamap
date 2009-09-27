@@ -182,7 +182,7 @@ bind_to_list=table_controls
 [idle_pwm_table]
 keys=bind_to_list
 key_types=_STRING_
-bind_to_list=pwm_specific
+bind_to_list=pwm_common
 
 [idle_steps_table]
 keys=bind_to_list
