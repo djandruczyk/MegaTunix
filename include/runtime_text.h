@@ -19,6 +19,14 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+
+typedef enum
+{
+	RTT_INT_NAME,
+	RTT_DATA,
+	RTT_NUM_COLS
+}RttTVCols;
+
 typedef struct _Rt_Text Rt_Text;
 /*! 
  \brief The _Rt_Text struct contains info on the floating runtime var text 
@@ -49,8 +57,7 @@ void rtt_update_start_watches(gpointer,gpointer,gpointer);
 void add_additional_rtt(GtkWidget *);
 gboolean load_rtt_xml_elements(xmlNode *, GHashTable *, GtkWidget *);
 void load_rtt(xmlNode *, GHashTable *, GtkWidget *);
-
-
+void setup_rtt_treeview(GtkWidget *);
 /* Prototypes */
 
 #endif

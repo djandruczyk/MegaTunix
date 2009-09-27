@@ -529,7 +529,6 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gint count = 0;
 	LookupTable *lookuptable = NULL;
 
-	printf("lookuptable changed\n");
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
 	gtk_tree_model_get_iter_from_string(model,&iter,path);

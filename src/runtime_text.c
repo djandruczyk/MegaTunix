@@ -44,6 +44,7 @@ extern GObject *global_data;
 EXPORT void load_rt_text_pf()
 {
 	GHashTable *rtt_hash = NULL;
+/*	GtkWidget *treeview = NULL; */
 	GtkWidget *window = NULL;
 	GtkWidget *parent = NULL;
 	gchar *filename = NULL;
@@ -102,6 +103,9 @@ EXPORT void load_rt_text_pf()
 	}
 
 	/*Get the root element node */
+/*	treeview = gtk_tree_view_new();
+	setup_rtt_treeview(treeview);
+	*/
 	root_element = xmlDocGetRootElement(doc);
 	xml_result = load_rtt_xml_elements(root_element,rtt_hash,parent);
 	xmlFreeDoc(doc);
@@ -383,26 +387,17 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 
 	if ((current != previous) || (forced_update))
 	{
-		/* If changed by more than 5% or has been at least 5 
-		 * times withot an update or forced_update is set
-		 * */
-		/*if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))*/
+		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		if (rtt->markup)
 		{
-			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-			if (rtt->markup)
-			{
-				tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
-				gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
-				g_free(tmpbuf2);
-				g_free(tmpbuf);
-			}
-			else
-			{
-				gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-				g_free(tmpbuf);
-			}
-			last_upd = count;
+			tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
+			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
+			g_free(tmpbuf2);
 		}
+		else
+			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		g_free(tmpbuf);
+		last_upd = count;
 	}
 	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
 	{
@@ -412,14 +407,10 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 			tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
 			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
 			g_free(tmpbuf2);
-			g_free(tmpbuf);
 		}
 		else
-		{
 			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-			g_free(tmpbuf);
-		}
-
+		g_free(tmpbuf);
 		last_upd = count;
 	}
 
@@ -432,3 +423,24 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	rtt->last_upd = last_upd;
 	return;
 }
+
+
+/*
+void setup_rtt_treeview(GtkWidget *treeview)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", RTT_INT_NAME, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", RTT_DATA, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
+
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview), FALSE);
+	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(treeview), TRUE);
+
+}
+*/
