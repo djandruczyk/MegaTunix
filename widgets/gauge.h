@@ -415,8 +415,8 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat 
 gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat * value);
 
 /* Get/Set value */
-void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
-float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
+gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 
 /* Value Font */
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);

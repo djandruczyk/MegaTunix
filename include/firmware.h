@@ -215,6 +215,8 @@ struct _Table_Params
 	gint z_precision;	/*! how many decimal places */
 	gchar * z_depend_on;	/*! Z axis dependancy string name */
 	GObject *z_object;	/*! Container for lookuptable deps */
+	gint z_minval;		/*! Minimum value for color scaling */
+	gint z_maxval;		/*! MAximum value for color scaling */
 };
 
 

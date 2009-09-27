@@ -61,6 +61,7 @@
 
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
+static gboolean force_color_update = FALSE;
 static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
@@ -643,6 +644,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf = NULL;
 	gfloat tmpf = -1;
 	gfloat value = -1;
+	gint table_num = -1;
 	gint tmpi = -1;
 	gint tmp = -1;
 	gint page = -1;
@@ -656,6 +658,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint spconfig_offset = -1;
 	gint oddfire_bit_offset = -1;
 	gint temp_units = 0;
+	gfloat scaler = 0.0;
 	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
 	gboolean use_color = FALSE;
@@ -685,9 +688,11 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
+	/*
 	if (!OBJ_GET(widget,"raw_lower"))
 		raw_lower = get_extreme_from_size(size,LOWER);
 	else
+	*/
 		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	if (!OBJ_GET(widget,"raw_upper"))
 		raw_upper = get_extreme_from_size(size,UPPER);
@@ -699,6 +704,12 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		base = (gint)OBJ_GET(widget,"base");
 	precision = (gint)OBJ_GET(widget,"precision");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
+	if (use_color)
+	{
+		tmpbuf = OBJ_GET(widget,"table_num");
+		if (tmpbuf)
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+	}
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
@@ -870,7 +881,18 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	if (use_color)
 	{
-		color = get_colors_from_hue(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
+		if (table_num >= 0)
+		{
+			recalc_table_limits(canID,table_num);
+			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
+			color = get_colors_from_hue(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+			printf("TABLE NUM >= 0, dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180);
+		}
+		else
+		{
+			color = get_colors_from_hue(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+			printf("dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180);
+		}
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 	}
 
@@ -1661,6 +1683,8 @@ EXPORT void update_ve_const_pf()
 	gfloat tmpf = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
+	gint prev_max = 0;
+	gint prev_min = 0;
 	guint mask = 0;
 	guint shift = 0;
 	guint tmpi = 0;
@@ -1726,6 +1750,11 @@ EXPORT void update_ve_const_pf()
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
+		prev_max = firmware->table_params[i]->z_maxval;
+		prev_min = firmware->table_params[i]->z_minval;
+		recalc_table_limits(0,i);
+		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
+			force_color_update = TRUE;
 		/*printf("\n");*/
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
@@ -1846,6 +1875,7 @@ EXPORT void update_ve_const_pf()
 		}
 	}
 
+	force_color_update = FALSE;
 	paused_handlers = FALSE;
 	set_title(g_strdup("Ready..."));
 	return;
@@ -1935,12 +1965,14 @@ void update_widget(gpointer object, gpointer user_data)
 	guchar bitval = -1;
 	guchar bitshift = -1;
 	guchar bitmask = -1;
+	gint table_num = -1;
 	gint base = -1;
 	gint precision = -1;
 	gint spconfig_offset = 0;
 	gint oddfire_bit_offset = 0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
+	gfloat scaler = 0.0;
 	gboolean cur_state = FALSE;
 	gboolean new_state = FALSE;
 	gint algo = 0;
@@ -1995,9 +2027,10 @@ void update_widget(gpointer object, gpointer user_data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
-	if (!OBJ_GET(widget,"raw_lower"))
+/*	if (!OBJ_GET(widget,"raw_lower"))
 		raw_lower = get_extreme_from_size(size,LOWER);
 	else
+	*/
 		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
 	if (!OBJ_GET(widget,"raw_upper"))
 		raw_upper = get_extreme_from_size(size,UPPER);
@@ -2015,6 +2048,12 @@ void update_widget(gpointer object, gpointer user_data)
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
+	if (use_color)
+	{
+		tmpbuf = OBJ_GET(widget,"table_num");
+		if (tmpbuf)
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+	}
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
@@ -2087,7 +2126,7 @@ void update_widget(gpointer object, gpointer user_data)
 				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else
+				else if (!force_color_update)
 					update_color = FALSE;
 				g_free(tmpbuf);
 			}
@@ -2096,7 +2135,7 @@ void update_widget(gpointer object, gpointer user_data)
 				tmpbuf = g_strdup_printf("%.2X",(gint)value);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else
+				else if (!force_color_update)
 					update_color = FALSE;
 				g_free(tmpbuf);
 			}
@@ -2105,7 +2144,17 @@ void update_widget(gpointer object, gpointer user_data)
 
 			if ((use_color) && (update_color))
 			{
-				color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
+				if (table_num >= 0)
+				{
+					scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
+					color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+					
+				}
+				else
+				{
+					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+					//color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-raw_lower)*(256.0/((raw_upper-raw_lower)*1.05)), 0.50, 1.0);
+				}
 
 				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 			}
@@ -2165,7 +2214,13 @@ void update_widget(gpointer object, gpointer user_data)
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 				if (use_color)
 				{
-					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.33, 1.0);
+					if (table_num >= 0)
+					{
+						scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
+						color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+					}
+					else
+						color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
 					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 				}
 			}
@@ -3176,3 +3231,46 @@ EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief recalc_table_limits() Finds the minimum and maximum values for a 
+ 2D table (this will be deprecated when thevetables are a custom widget)
+ */
+void recalc_table_limits(gint canID, gint table_num)
+{
+	extern Firmware_Details *firmware;
+	gint i = 0;
+	gint x_count = 0;
+	gint y_count = 0;
+	gint z_base = 0;
+	gint z_page = 0;
+	gint z_size = 0;
+	gint z_mult = 0;
+	gint tmpi = 0;
+	gint max = 0;
+	gint min = 0;
+
+	/* Limit check */
+	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
+		return;
+	x_count = firmware->table_params[table_num]->x_bincount;
+	y_count = firmware->table_params[table_num]->y_bincount;
+	z_base = firmware->table_params[table_num]->z_base;
+	z_page = firmware->table_params[table_num]->z_page;
+	z_size = firmware->table_params[table_num]->z_size;
+	z_mult = get_multiplier(z_size);
+	min = get_extreme_from_size(z_size,UPPER);
+	max = get_extreme_from_size(z_size,LOWER);
+
+	for (i=0;i<x_count*y_count;i++)
+	{
+		tmpi = get_ecu_data(canID,z_page,z_base+(i*z_mult),z_size);
+		if (tmpi > max)
+			max = tmpi;
+		if (tmpi < min)
+			min = tmpi;
+	}
+	firmware->table_params[table_num]->z_maxval = max;
+	firmware->table_params[table_num]->z_minval = min;
+	return;
+}

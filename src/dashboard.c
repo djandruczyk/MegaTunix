@@ -929,7 +929,7 @@ void update_tab_gauges()
 		gauge = g_list_nth_data(list,i);
 		source = OBJ_GET(gauge,"datasource");
 		lookup_current_value(source,&current);
-		lookup_previous_value(source,&previous);
+		mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
 		if ((current != previous) || (forced_update))
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}

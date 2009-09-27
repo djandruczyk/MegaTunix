@@ -677,6 +677,7 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	/* X Coord */
+	/*
 	array = OBJ_GET(curve,"x_entries");
 	entry = g_array_index(array,GtkWidget *,index);
 	precision = (gint)OBJ_GET(entry, "precision");
@@ -684,6 +685,7 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
 	g_free(tmpbuf);
+	*/
 
 	/* Y Coord */
 	array = OBJ_GET(curve,"y_entries");

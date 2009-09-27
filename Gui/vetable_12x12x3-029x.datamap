@@ -18,9 +18,8 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_1]
-keys=table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
-table_num=0
+keys=source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
@@ -37,19 +36,18 @@ ul_conv_expr=x*100
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-
 [ve_1]
-keys=use_color,tooltip
-key_types=_BOOL_,_STRING_
+keys=use_color,table_num,tooltip
+key_types=_BOOL_,_STRING_,_STRING_
 use_color=TRUE
+table_num=0
 tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=page,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
+keys=page,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=2
 use_color=TRUE
-table_num=1
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
@@ -67,18 +65,18 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_2]
-keys=page,use_color,tooltip
-key_types=_INT_,_BOOL_,_STRING_
+keys=page,use_color,table_num,tooltip
+key_types=_INT_,_BOOL_,_STRING_,_STRING_
 page=2
+table_num=1
 use_color=TRUE
 tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_3]
-keys=page,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
+keys=page,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=5
-use_color=true
-table_num=2
+use_color=TRUE
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
@@ -96,9 +94,10 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_3]
-keys=page,use_color,tooltip
-key_types=_INT_,_BOOL_,_STRING_
+keys=page,use_color,table_num,tooltip
+key_types=_INT_,_BOOL_,_STRING_,_STRING_
 page=5
+table_num=2
 use_color=TRUE
 tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 

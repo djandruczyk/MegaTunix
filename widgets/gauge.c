@@ -80,11 +80,12 @@ GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index)
  \brief gets the current value 
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
-gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
+gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),0.0);
-	return	priv->value;
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
+	*value = priv->value;
+	return TRUE;
 }
 
 
@@ -93,13 +94,13 @@ gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value (gfloat) new value
  */
-void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
+gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	/* If no change,  no point updating */
 	if (value == priv->value)
-		return;
+		return TRUE;
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if (value > priv->ubound)
 		priv->clamped = CLAMP_UPPER;
@@ -128,6 +129,7 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
+	return TRUE;
 }
 
 

@@ -149,6 +149,8 @@ EXPORT void update_misc_gauge(DataWatch *, gfloat);
 void refresh_widgets_at_offset(gint, gint);
 glong get_extreme_from_size(DataSize, Extreme);
 EXPORT gboolean clamp_value(GtkWidget *, gpointer);
+void recalc_table_limits(gint, gint);
+
 /* Prototypes */
 
 #endif

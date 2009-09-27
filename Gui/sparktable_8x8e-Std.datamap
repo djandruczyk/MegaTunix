@@ -31,8 +31,9 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [sparktable]
-keys=dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
-key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
+keys=table_num,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
+table_num=1
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
 precision=1

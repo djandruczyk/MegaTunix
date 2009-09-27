@@ -1084,7 +1084,7 @@ gboolean sweep_gauge(gpointer data)
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
 	interval = (upper-lower)/75.0;
-	cur_val = mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge));
+	mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge), &cur_val);
 	if (cur_val >= upper)
 		rising = FALSE;
 	if (cur_val <= lower)
