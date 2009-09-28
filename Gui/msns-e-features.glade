@@ -471,7 +471,7 @@ during cranking?</property>
 					      </child>
 
 					      <child>
-						<widget class="GtkLabel" id="label4">
+						<widget class="GtkLabel" id="gammae2_label">
 						  <property name="visible">True</property>
 						  <property name="label" translatable="yes">GammaE for 
 Table 2</property>

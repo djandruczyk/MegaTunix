@@ -79,6 +79,11 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=pwm_idle_controls
 
+[dashport_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=cloop_idle_controls,pwm_idle_controls
+
 [bng_idle_cutoff_temp_label]
 keys=c_label,f_label,temp_dep,bind_to_list
 key_types=_STRING_,_STRING_,_BOOL_,_STRING_
