@@ -3134,9 +3134,20 @@ void refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
+	extern Firmware_Details *firmware;
+	gint prev_min = 0;
+	gint prev_max = 0;
 
 	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
 
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		prev_max = firmware->table_params[i]->z_maxval;
+		prev_min = firmware->table_params[i]->z_minval;
+		recalc_table_limits(0,i);
+		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
+			force_color_update = TRUE;
+	}
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
 	{
 		if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][offset],i),"dl_type") != DEFERRED)
