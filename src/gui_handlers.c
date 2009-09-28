@@ -1189,6 +1189,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				}
 				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
+				g_timeout_add(2000,update_multi_expression,NULL);
 			}
 		case GENERIC:
 			tmp = get_ecu_data(canID,page,offset,size);
@@ -2254,6 +2255,7 @@ void update_widget(gpointer object, gpointer user_data)
 						}
 						/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
 						g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
+						g_list_foreach(get_list("multi_expression"),update_widget,NULL);
 						g_strfreev(vector);
 					}
 				}
@@ -3284,4 +3286,11 @@ void recalc_table_limits(gint canID, gint table_num)
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
 	return;
+}
+
+
+gboolean update_multi_expression(gpointer data)
+{
+	g_list_foreach(get_list("multi_expression"),update_widget,NULL);	
+	return FALSE;
 }
