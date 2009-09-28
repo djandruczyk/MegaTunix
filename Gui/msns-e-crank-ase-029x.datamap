@@ -107,6 +107,37 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=IAT_controls
 
+[ase_fixed_hold_time_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=fixed_decay,fixed_map
+
+[clt_fixed_ase_label]
+keys=bind_to_list,c_label,f_label,temp_dep
+key_types=_STRING_,_STRING_,_STRING_,_BOOL_
+c_label=Use Fixed ASE/MAP when CLT below (\302\260C.)
+f_label=Use Fixed ASE/MAP when CLT below (\302\260F.)
+temp_dep=TRUE
+bind_to_list=fixed_decay,fixed_map,temperature
+
+[fixed_map_ase_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=fixed_map
+
+[ase_delay_label]
+keys=bind_to_list
+key_types=_STRING_
+bind_to_list=fixed_map
+
+[ase_total_time_label]
+keys=label,alt_label,depend_on
+key_types=_STRING_,_STRING_,_STRING_
+label=ASE Total Decay Time (Seconds)
+alt_label=ASE Total Decay Time (engine cycles)
+depend_on=ase_time_combo
+ase_time_combo=_VE_EMB_BIT_,_U08_,5,179,1,0,1
+
 [IATCorr_table]
 keys=bind_to_list
 key_types=_STRING_
@@ -179,18 +210,19 @@ bitmask=48
 tooltip=Uses either the Coolant Temp (CLT), Manifold Air Temp (MAT) or an Average of the two as the axis for the cranking table to determine the cranking pulsewidths.
 
 [ase_time_combo]
-keys=page,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
+keys=page,offset,choices,bitvals,bitmask,swap_labels,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=5
 choices=Seconds,Cycles
 offset=179
 bitvals=0,1
 bitmask=1
+swap_labels=CR_WU_ase_total_time_label
 tooltip=The ASE Counter uses the units of seconds or Engine cycles.
 
 [ase_decay_combo]
-keys=page,width,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=page,width,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=5
 choices=Decay Immediately,Hold then Decay
 width=15
@@ -198,6 +230,7 @@ toggle_groups=,fixed_decay
 offset=179
 bitvals=0,1
 bitmask=2
+bind_to_list=fixed_map
 tooltip=Once the engine has started, We ether immediately begin decaying the ASE value from the inital amount as set in the ASE table towards zero in the amount of time defined below by the ASE Total Decay Time Control or we hold for X amount of time before decaying.
 
 [ase_mapmode_combo]
