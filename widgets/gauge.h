@@ -33,6 +33,14 @@ G_BEGIN_DECLS
 
 
 #define DRAG_BORDER 7
+
+/* MtxDayNite enum, lamping */
+typedef enum
+{
+	MTX_DAY = 0,
+	MTX_NITE
+}MtxDayNite;
+
 /* MtxClampType enum,  display clamping */
 typedef enum
 {
@@ -72,11 +80,16 @@ typedef enum
 /*! GaugeColorIndex enum,  for indexing into the color arrays */
 typedef enum  
 {
-	GAUGE_COL_BG = 0,
-	GAUGE_COL_NEEDLE,
-	GAUGE_COL_VALUE_FONT,
-	GAUGE_COL_GRADIENT_BEGIN,
-	GAUGE_COL_GRADIENT_END,
+	GAUGE_COL_BG_DAY = 0,
+	GAUGE_COL_BG_NITE,
+	GAUGE_COL_NEEDLE_DAY,
+	GAUGE_COL_NEEDLE_NITE,
+	GAUGE_COL_VALUE_FONT_DAY,
+	GAUGE_COL_VALUE_FONT_NITE,
+	GAUGE_COL_GRADIENT_BEGIN_DAY,
+	GAUGE_COL_GRADIENT_BEGIN_NITE,
+	GAUGE_COL_GRADIENT_END_DAY,
+	GAUGE_COL_GRADIENT_END_NITE,
 	GAUGE_NUM_COLORS
 }GaugeColorIndex;
 
@@ -87,7 +100,8 @@ typedef enum
 	TB_FONT_SCALE = 0,
 	TB_X_POS,
 	TB_Y_POS,
-	TB_COLOR,
+	TB_COLOR_DAY,
+	TB_COLOR_NITE,
 	TB_FONT,
 	TB_TEXT,
 	TB_NUM_FIELDS
@@ -97,7 +111,8 @@ typedef enum
 /* Polygon enumeration for the individual fields */
 typedef enum
 {
-	POLY_COLOR = 0,
+	POLY_COLOR_DAY = 0,
+	POLY_COLOR_NITE,
 	POLY_LINEWIDTH,
 	POLY_LINESTYLE,
 	POLY_JOINSTYLE,
@@ -120,16 +135,19 @@ typedef enum
 {
 	TG_FONT = 0,
 	TG_TEXT,
-	TG_TEXT_COLOR,
+	TG_TEXT_COLOR_DAY,
+	TG_TEXT_COLOR_NITE,
 	TG_FONT_SCALE,
 	TG_TEXT_INSET,
 	TG_NUM_MAJ_TICKS,
-	TG_MAJ_TICK_COLOR,
+	TG_MAJ_TICK_COLOR_DAY,
+	TG_MAJ_TICK_COLOR_NITE,
 	TG_MAJ_TICK_INSET,
 	TG_MAJ_TICK_LENGTH,
 	TG_MAJ_TICK_WIDTH,
 	TG_NUM_MIN_TICKS,
-	TG_MIN_TICK_COLOR,
+	TG_MIN_TICK_COLOR_DAY,
+	TG_MIN_TICK_COLOR_NITE,
 	TG_MIN_TICK_INSET,
 	TG_MIN_TICK_LENGTH,
 	TG_MIN_TICK_WIDTH,
@@ -144,7 +162,8 @@ typedef enum
 {
 	CR_LOWPOINT = 0,
 	CR_HIGHPOINT,
-	CR_COLOR,
+	CR_COLOR_DAY,
+	CR_COLOR_NITE,
 	CR_LWIDTH,
 	CR_INSET,
 	CR_NUM_FIELDS
@@ -155,7 +174,8 @@ typedef enum
 {
 	ALRT_LOWPOINT = 0,
 	ALRT_HIGHPOINT,
-	ALRT_COLOR,
+	ALRT_COLOR_DAY,
+	ALRT_COLOR_NITE,
 	ALRT_LWIDTH,
 	ALRT_INSET,
 	ALRT_NUM_FIELDS
@@ -224,7 +244,7 @@ struct _MtxColorRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color;		/* The color to use */
+	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
 };
@@ -241,7 +261,7 @@ struct _MtxAlertRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color;		/* The color to use */
+	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
 };
@@ -257,7 +277,7 @@ struct _MtxTextBlock
 {
 	gchar * font;
 	gchar * text;
-	GdkColor color;
+	GdkColor color[2];
 	gfloat font_scale;
 	gfloat x_pos;
 	gfloat y_pos;
@@ -275,16 +295,16 @@ struct _MtxTickGroup
 {
 	gchar *font;
 	gchar *text;
-	GdkColor text_color;
+	GdkColor text_color[2];
 	gfloat font_scale;
 	gfloat text_inset;
 	gint num_maj_ticks;
-	GdkColor maj_tick_color;
+	GdkColor maj_tick_color[2];
 	gfloat maj_tick_inset;
 	gfloat maj_tick_width;
 	gfloat maj_tick_length;
 	gint num_min_ticks;
-	GdkColor min_tick_color;
+	GdkColor min_tick_color[2];
 	gfloat min_tick_inset;
 	gfloat min_tick_width;
 	gfloat min_tick_length;
@@ -314,7 +334,7 @@ struct _MtxPolygon
 {
 	MtxPolyType type;		/* Enum type */
 	gboolean filled;		/* Filled or not? */
-	GdkColor color;			/* Color */
+	GdkColor color[2];		/* Color */
 	gfloat line_width;		/* % of radius, clamped at 1 pixel */
 	GdkLineStyle line_style;	/* Line Style */
 	GdkJoinStyle join_style;	/* Join Style */
@@ -472,8 +492,12 @@ gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
 
 /* Tattletale */
-float mtx_gauge_face_get_peak (MtxGaugeFace *gauge);
-gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *gauge);
+float mtx_gauge_face_get_peak (MtxGaugeFace *);
+gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *);
+
+/* Daytime or nitetime (flips colors) */
+gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
+MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
 
 G_END_DECLS
 

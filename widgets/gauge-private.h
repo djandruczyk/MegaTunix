@@ -88,6 +88,7 @@ struct _MtxGaugeFacePrivate
         gint needle_polygon_points;
         MtxPoint needle_coords[6];      /*! 6 point needle for now */
         MtxPoint tattle_coords[6];      /*! 6 point needle for now */
+	MtxDayNite daytime_mode;	/*! Color enum */
 };
 
 

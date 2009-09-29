@@ -96,6 +96,7 @@ gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value)
  */
 gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
+	gboolean new_bg = FALSE;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	/* If no change,  no point updating */
@@ -116,7 +117,7 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 	{
 		priv->show_tattletale = FALSE;
 		priv->reenable_tattletale = TRUE;
-		generate_gauge_background(gauge);
+		new_bg = TRUE;
 	}
 	priv->value = value;
 	if (value > priv->peak)
@@ -125,9 +126,11 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 	{
 		priv->reenable_tattletale = FALSE;
 		priv->show_tattletale = TRUE;
-		generate_gauge_background(gauge);
+		new_bg = TRUE;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (new_bg)
+		generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return TRUE;
 }
@@ -225,7 +228,9 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 	new_tblock = g_new0(MtxTextBlock, 1);
 	new_tblock->font = g_strdup(tblock->font);
 	new_tblock->text = g_strdup(tblock->text);
-	new_tblock->color = tblock->color;
+	new_tblock->color[MTX_DAY] = tblock->color[MTX_DAY];
+	new_tblock->color[MTX_NITE] = tblock->color[MTX_NITE];
+	new_tblock->font_scale = tblock->font_scale;
 	new_tblock->font_scale = tblock->font_scale;
 	new_tblock->x_pos = tblock->x_pos;
 	new_tblock->y_pos = tblock->y_pos;
@@ -252,17 +257,20 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 	g_object_freeze_notify (G_OBJECT (gauge));
 	new_tgroup = g_new0(MtxTickGroup, 1);
 	new_tgroup->text = g_strdup(tgroup->text);
-	new_tgroup->text_color = tgroup->text_color;
+	new_tgroup->text_color[MTX_DAY] = tgroup->text_color[MTX_DAY];
+	new_tgroup->text_color[MTX_NITE] = tgroup->text_color[MTX_NITE];
 	new_tgroup->text_inset = tgroup->text_inset;
 	new_tgroup->font = g_strdup(tgroup->font);
 	new_tgroup->font_scale = tgroup->font_scale;
 	new_tgroup->num_maj_ticks = tgroup->num_maj_ticks;
-	new_tgroup->maj_tick_color = tgroup->maj_tick_color;
+	new_tgroup->maj_tick_color[MTX_DAY] = tgroup->maj_tick_color[MTX_DAY];
+	new_tgroup->maj_tick_color[MTX_NITE] = tgroup->maj_tick_color[MTX_NITE];
 	new_tgroup->maj_tick_inset = tgroup->maj_tick_inset;
 	new_tgroup->maj_tick_length = tgroup->maj_tick_length;
 	new_tgroup->maj_tick_width = tgroup->maj_tick_width;
 	new_tgroup->num_min_ticks = tgroup->num_min_ticks;
-	new_tgroup->min_tick_color = tgroup->min_tick_color;
+	new_tgroup->min_tick_color[MTX_DAY] = tgroup->min_tick_color[MTX_DAY];
+	new_tgroup->min_tick_color[MTX_NITE] = tgroup->min_tick_color[MTX_NITE];
 	new_tgroup->min_tick_inset = tgroup->min_tick_inset;
 	new_tgroup->min_tick_length = tgroup->min_tick_length;
 	new_tgroup->min_tick_width = tgroup->min_tick_width;
@@ -295,7 +303,8 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	new_poly = g_new0(MtxPolygon, 1);
 	new_poly->type = poly->type;
-	new_poly->color = poly->color;
+	new_poly->color[MTX_DAY] = poly->color[MTX_DAY];
+	new_poly->color[MTX_NITE] = poly->color[MTX_NITE];
 	new_poly->filled = poly->filled;
 	/* Get size of struct to copy */
 	switch(poly->type)
@@ -489,7 +498,6 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
 	g_return_val_if_fail ((field < NUM_ATTRIBUTES),FALSE);
-	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
 	{
@@ -584,8 +592,11 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 		case TB_Y_POS:
 			tblock->y_pos = *(gfloat *)value;
 			break;
-		case TB_COLOR:
-			tblock->color = *(GdkColor *)value;
+		case TB_COLOR_DAY:
+			tblock->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TB_COLOR_NITE:
+			tblock->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TB_FONT:
 			g_free(tblock->font);
@@ -633,8 +644,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 			g_free(tgroup->text);
 			tgroup->text = g_strdup(value);
 			break;
-		case TG_TEXT_COLOR:
-			tgroup->text_color = *(GdkColor *)value;
+		case TG_TEXT_COLOR_DAY:
+			tgroup->text_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_TEXT_COLOR_NITE:
+			tgroup->text_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_TEXT_INSET:
 			tgroup->text_inset = *(gfloat *)value;
@@ -645,8 +659,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_NUM_MAJ_TICKS:
 			tgroup->num_maj_ticks = (gint)(*(gfloat *)value);
 			break;
-		case TG_MAJ_TICK_COLOR:
-			tgroup->maj_tick_color = *(GdkColor *)value;
+		case TG_MAJ_TICK_COLOR_DAY:
+			tgroup->maj_tick_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_MAJ_TICK_COLOR_NITE:
+			tgroup->maj_tick_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_MAJ_TICK_INSET:
 			tgroup->maj_tick_inset = *(gfloat *)value;
@@ -660,8 +677,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_NUM_MIN_TICKS:
 			tgroup->num_min_ticks = (gint)(*(gfloat *)value);
 			break;
-		case TG_MIN_TICK_COLOR:
-			tgroup->min_tick_color = *(GdkColor *)value;
+		case TG_MIN_TICK_COLOR_DAY:
+			tgroup->min_tick_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_MIN_TICK_COLOR_NITE:
+			tgroup->min_tick_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_MIN_TICK_INSET:
 			tgroup->min_tick_inset = *(gfloat *)value;
@@ -715,8 +735,11 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 	data = poly->data;
 	switch (field)
 	{
-		case POLY_COLOR:
-			poly->color = *(GdkColor *)value;
+		case POLY_COLOR_DAY:
+			poly->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case POLY_COLOR_NITE:
+			poly->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case POLY_FILLED:
 			poly->filled = (gint)(*(gfloat *)value);
@@ -833,8 +856,11 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField fi
 		case CR_LWIDTH:
 			c_range->lwidth = *(gfloat *)value;
 			break;
-		case CR_COLOR:
-			c_range->color = *(GdkColor *)value;
+		case CR_COLOR_DAY:
+			c_range->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case CR_COLOR_NITE:
+			c_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		default:
 			break;
@@ -878,8 +904,11 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 		case ALRT_LWIDTH:
 			a_range->lwidth = *(gfloat *)value;
 			break;
-		case ALRT_COLOR:
-			a_range->color = *(GdkColor *)value;
+		case ALRT_COLOR_DAY:
+			a_range->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case ALRT_COLOR_NITE:
+			a_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		default:
 			break;
@@ -1306,3 +1335,35 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief gets the state of the daytime_mode flag
+ \param gauge, pointer to gauge
+ \returns the state of whether the gauge is in daytime or nitetime mode
+ */
+MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), MTX_DAY);
+	return priv->daytime_mode;
+}
+
+
+/*!
+ \brief sets the state of the daytime_mode flag
+ \param gauge, pointer to gauge
+ \returns true on sucess
+ */
+gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	if (priv->daytime_mode == mode)
+		return TRUE;
+	else
+	{
+		priv->daytime_mode = mode;
+		generate_gauge_background(gauge);
+		mtx_gauge_face_redraw_canvas (gauge);
+	}
+	return TRUE;
+}

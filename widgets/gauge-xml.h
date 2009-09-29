@@ -84,11 +84,23 @@ static const struct
 	void (*export_func) (MtxDispatchHelper *);
 	gchar * varname;
 } xml_functions[] = {
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_end_color"},
+	/* Compat functions for API break, note import ONLY */
+	{ mtx_gauge_color_import, NULL,"bg_color"},
+	{ mtx_gauge_color_import, NULL,"needle_color"},
+	{ mtx_gauge_color_import, NULL,"value_font_color"},
+	{ mtx_gauge_color_import, NULL,"gradient_begin_color"},
+	{ mtx_gauge_color_import, NULL,"gradient_end_color"},
+	/* End compat functions */
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color_day"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color_nite"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color_day"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color_nite"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color_day"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color_nite"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color_day"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color_nite"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_end_color_day"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_end_color_nite"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_length"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tip_width"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tail_width"},

@@ -165,7 +165,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	helper->gauge = gauge;
 	helper->root_node = root_node;
 	/** For each element,  get the varname, the pointer to the memory 
-	 * where hte data is stored in the current gauge structure, and call
+	 * where the data is stored in the current gauge structure, and call
 	 * the export function defined in the xml_funcs struct passing in the
 	 * helper struct so that the generic export functions can get the 
 	 * key names right and the memory addresses right.  It looks confusing
@@ -174,9 +174,12 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	for (i=0;i<priv->xmlfunc_array->len;i++)
 	{
 		xml_funcs = g_array_index(priv->xmlfunc_array,MtxXMLFuncs *, i);
+		if (!xml_funcs)
+			continue;
 		helper->element_name = xml_funcs->varname;
 		helper->src = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_funcs->varname);
-		xml_funcs->export_func(helper);
+		if (xml_funcs->export_func)
+			xml_funcs->export_func(helper);
 	}
 	
 	g_free(helper);
@@ -253,8 +256,17 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lwidth);
 			if (g_strcasecmp((gchar *)cur_node->name,"inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_NITE]);
+			/* API compat */
 			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&range->color);
+			{
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY]);
+				range->color[MTX_NITE] = range->color[MTX_DAY];
+			}
+
 		}
 		cur_node = cur_node->next;
 	}
@@ -287,8 +299,16 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lwidth);
 			if (g_strcasecmp((gchar *)cur_node->name,"inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_NITE]);
+			/* API compat */
 			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&range->color);
+			{
+				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY]);
+				range->color[MTX_NITE] = range->color[MTX_DAY];
+			}
 		}
 		cur_node = cur_node->next;
 	}
@@ -317,14 +337,22 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 				mtx_gauge_gchar_import(gauge, cur_node,&tblock->font);
 			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tblock->text);
-			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tblock->color);
 			if (g_strcasecmp((gchar *)cur_node->name,"font_scale") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->font_scale);
 			if (g_strcasecmp((gchar *)cur_node->name,"x_pos") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->x_pos);
 			if (g_strcasecmp((gchar *)cur_node->name,"y_pos") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->y_pos);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tblock->color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tblock->color[MTX_NITE]);
+			/* API compat */
+			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
+			{
+				mtx_gauge_color_import(gauge, cur_node,&tblock->color[MTX_DAY]);
+				tblock->color[MTX_NITE] = tblock->color[MTX_DAY];
+			}
 		}
 		cur_node = cur_node->next;
 	}
@@ -355,14 +383,8 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->font_scale);
 			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->text);
-			if (g_strcasecmp((gchar *)cur_node->name,"text_color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color);
 			if (g_strcasecmp((gchar *)cur_node->name,"text_inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->text_inset);
-			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tgroup->maj_tick_color);
-			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tgroup->min_tick_color);
 			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->maj_tick_inset);
 			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_inset") == 0)
@@ -383,6 +405,33 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_maj_ticks);
 			if (g_strcasecmp((gchar *)cur_node->name,"num_min_ticks") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_min_ticks);
+			if (g_strcasecmp((gchar *)cur_node->name,"text_color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"text_color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color[MTX_NITE]);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->maj_tick_color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->maj_tick_color[MTX_NITE]);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->min_tick_color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->min_tick_color[MTX_NITE]);
+			if (g_strcasecmp((gchar *)cur_node->name,"text_color") == 0)
+			{
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color[MTX_DAY]);
+				tgroup->text_color[MTX_NITE] = tgroup->text_color[MTX_DAY];
+			}
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_color") == 0)
+			{
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->maj_tick_color[MTX_DAY]);
+				tgroup->maj_tick_color[MTX_NITE] = tgroup->maj_tick_color[MTX_DAY];
+			}
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_color") == 0)
+			{
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->min_tick_color[MTX_DAY]);
+				tgroup->min_tick_color[MTX_NITE] = tgroup->min_tick_color[MTX_DAY];
+			}
 		}
 		cur_node = cur_node->next;
 	}
@@ -407,8 +456,6 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&poly->color);
 			if (g_strcasecmp((gchar *)cur_node->name,"filled") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->filled);
 			if (g_strcasecmp((gchar *)cur_node->name,"line_width") == 0)
@@ -417,6 +464,16 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->line_style);
 			if (g_strcasecmp((gchar *)cur_node->name,"join_style") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->join_style);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&poly->color[MTX_DAY]);
+			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&poly->color[MTX_NITE]);
+			/* API compat */
+			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
+			{
+				mtx_gauge_color_import(gauge, cur_node,&poly->color[MTX_DAY]);
+				poly->color[MTX_NITE] = poly->color[MTX_DAY];
+			}
 			if (g_strcasecmp((gchar *)cur_node->name,"Circle") == 0)
 			{
 				poly->data = g_new0(MtxCircle,1);
@@ -626,7 +683,8 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "inset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"color",&range->color);
+		generic_xml_color_export(node,"color_day",&range->color[MTX_DAY]);
+		generic_xml_color_export(node,"color_nite",&range->color[MTX_NITE]);
 
 	}
 }
@@ -661,7 +719,8 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "inset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"color",&range->color);
+		generic_xml_color_export(node,"color_day",&range->color[MTX_DAY]);
+		generic_xml_color_export(node,"color_nite",&range->color[MTX_NITE]);
 	}
 }
 
@@ -699,7 +758,8 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "y_pos",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"color",&tblock->color);
+		generic_xml_color_export(node,"color_day",&tblock->color[MTX_DAY]);
+		generic_xml_color_export(node,"color_nite",&tblock->color[MTX_NITE]);
 	}
 }
 
@@ -733,13 +793,15 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "text_inset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"text_color",&tgroup->text_color);
+		generic_xml_color_export(node,"text_color_day",&tgroup->text_color[MTX_DAY]);
+		generic_xml_color_export(node,"text_color_nite",&tgroup->text_color[MTX_NITE]);
 
 		tmpbuf = g_strdup_printf("%i",tgroup->num_maj_ticks);
 		xmlNewChild(node, NULL, BAD_CAST "num_maj_ticks",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"maj_tick_color",&tgroup->maj_tick_color);
+		generic_xml_color_export(node,"maj_tick_color_day",&tgroup->maj_tick_color[MTX_DAY]);
+		generic_xml_color_export(node,"maj_tick_color_nite",&tgroup->maj_tick_color[MTX_NITE]);
 
 		tmpbuf = g_strdup_printf("%f",tgroup->maj_tick_inset);
 		xmlNewChild(node, NULL, BAD_CAST "maj_tick_inset",
@@ -757,7 +819,8 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "num_min_ticks",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		generic_xml_color_export(node,"min_tick_color",&tgroup->min_tick_color);
+		generic_xml_color_export(node,"min_tick_color_day",&tgroup->min_tick_color[MTX_DAY]);
+		generic_xml_color_export(node,"min_tick_color_nite",&tgroup->min_tick_color[MTX_NITE]);
 
 		tmpbuf = g_strdup_printf("%f",tgroup->min_tick_inset);
 		xmlNewChild(node, NULL, BAD_CAST "min_tick_inset",
@@ -923,7 +986,8 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 	{
 		poly = g_array_index(priv->polygons,MtxPolygon *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "polygon",NULL );
-		generic_xml_color_export(node,"color",&poly->color);
+		generic_xml_color_export(node,"color_day",&poly->color[MTX_DAY]);
+		generic_xml_color_export(node,"color_nite",&poly->color[MTX_NITE]);
 
 		tmpbuf = g_strdup_printf("%i",poly->filled);
 		xmlNewChild(node, NULL, BAD_CAST "filled",
@@ -990,4 +1054,5 @@ gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge)
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return g_strdup(priv->xml_filename);
 }
+
 #endif

@@ -149,6 +149,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	priv->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
 	priv->polygons = g_array_new(FALSE,TRUE,sizeof(MtxPolygon *));
+	priv->daytime_mode = MTX_DAY;
 	mtx_gauge_face_init_default_tick_group(gauge);
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
@@ -161,11 +162,23 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
-	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG]);
-	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE]);
-	g_object_set_data(G_OBJECT(gauge),"value_font_color", &priv->colors[GAUGE_COL_VALUE_FONT]);
-	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &priv->colors[GAUGE_COL_GRADIENT_BEGIN]);
-	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &priv->colors[GAUGE_COL_GRADIENT_END]);
+	/* Compat with older gauges */
+	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color", &priv->colors[GAUGE_COL_VALUE_FONT_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &priv->colors[GAUGE_COL_GRADIENT_END_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"needle_length", &priv->needle_length);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_day", &priv->colors[GAUGE_COL_BG_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_nite", &priv->colors[GAUGE_COL_BG_NITE]);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_day", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_nite", &priv->colors[GAUGE_COL_NEEDLE_NITE]);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_day", &priv->colors[GAUGE_COL_VALUE_FONT_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_nite", &priv->colors[GAUGE_COL_VALUE_FONT_NITE]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_day", &priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_nite", &priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_day", &priv->colors[GAUGE_COL_GRADIENT_END_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_nite", &priv->colors[GAUGE_COL_GRADIENT_END_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_length", &priv->needle_length);
 	g_object_set_data(G_OBJECT(gauge),"needle_tip_width", &priv->needle_tip_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_tail_width", &priv->needle_tail_width);
@@ -225,26 +238,40 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	/* Defaults for the gauges,  user over-ridable */
 
 	/*! Background */
-	priv->colors[GAUGE_COL_BG].red=0*65535;
-	priv->colors[GAUGE_COL_BG].green=0*65535;
-	priv->colors[GAUGE_COL_BG].blue=0*65535;
+	priv->colors[GAUGE_COL_BG_DAY].red=0*65535;
+	priv->colors[GAUGE_COL_BG_DAY].green=0*65535;
+	priv->colors[GAUGE_COL_BG_DAY].blue=0*65535;
+	priv->colors[GAUGE_COL_BG_NITE].red=1*65535;
+	priv->colors[GAUGE_COL_BG_NITE].green=1*65535;
+	priv->colors[GAUGE_COL_BG_NITE].blue=1*65535;
 	/*! Needle */
-	priv->colors[GAUGE_COL_NEEDLE].red=1.0*65535;
-	priv->colors[GAUGE_COL_NEEDLE].green=1.0*65535;
-	priv->colors[GAUGE_COL_NEEDLE].blue=1.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_DAY].red=1.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_DAY].green=1.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_DAY].blue=1.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_NITE].red=0.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_NITE].green=0.0*65535;
+	priv->colors[GAUGE_COL_NEEDLE_NITE].blue=0.0*65535;
 	/*! Units Font*/
-	priv->colors[GAUGE_COL_VALUE_FONT].red=0.8*65535;
-	priv->colors[GAUGE_COL_VALUE_FONT].green=0.8*65535;
-	priv->colors[GAUGE_COL_VALUE_FONT].blue=0.8*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_DAY].red=0.8*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_DAY].green=0.8*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_DAY].blue=0.8*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_NITE].red=0.2*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_NITE].green=0.2*65535;
+	priv->colors[GAUGE_COL_VALUE_FONT_NITE].blue=0.2*65535;
 	/*! Gradient Color Begin */
-	priv->colors[GAUGE_COL_GRADIENT_BEGIN].red=0.85*65535;
-	priv->colors[GAUGE_COL_GRADIENT_BEGIN].green=0.85*65535;
-	priv->colors[GAUGE_COL_GRADIENT_BEGIN].blue=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].red=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].green=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].blue=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].red=0.15*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].green=0.15*65535;
+	priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].blue=0.15*65535;
 	/*! Gradient Color End */
-	priv->colors[GAUGE_COL_GRADIENT_END].red=0.15*65535;
-	priv->colors[GAUGE_COL_GRADIENT_END].green=0.15*65535;
-	priv->colors[GAUGE_COL_GRADIENT_END].blue=0.15*65535;
-
+	priv->colors[GAUGE_COL_GRADIENT_END_DAY].red=0.15*65535;
+	priv->colors[GAUGE_COL_GRADIENT_END_DAY].green=0.15*65535;
+	priv->colors[GAUGE_COL_GRADIENT_END_DAY].blue=0.15*65535;
+	priv->colors[GAUGE_COL_GRADIENT_END_NITE].red=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_END_NITE].green=0.85*65535;
+	priv->colors[GAUGE_COL_GRADIENT_END_NITE].blue=0.85*65535;
 }
 
 
@@ -257,6 +284,7 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxTickGroup *tgroup = NULL;
 	GdkColor white = { 0, 65535, 65535, 65535};
+	GdkColor black = { 0, 0, 0, 0};
 
 	tgroup = g_new0(MtxTickGroup, 1);
 	tgroup->num_maj_ticks = 9;
@@ -269,13 +297,16 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 	tgroup->min_tick_inset = 0.175;
 	tgroup->min_tick_length = 0.05;
 	tgroup->min_tick_width = 0.10;
-	tgroup->maj_tick_color = white;
-	tgroup->min_tick_color = white;
+	tgroup->maj_tick_color[MTX_DAY]	= white;
+	tgroup->maj_tick_color[MTX_NITE] = black;
+	tgroup->min_tick_color[MTX_DAY]	= white;
+	tgroup->min_tick_color[MTX_NITE] = black;
 	tgroup->font = g_strdup("Arial");
 	tgroup->font_scale = 0.135;
 	tgroup->text_inset = 0.255;
 	tgroup->text = g_strdup("");
-	tgroup->text_color = white;
+	tgroup->text_color[MTX_DAY] = white;
+	tgroup->text_color[MTX_NITE] = black;
 	g_array_append_val(priv->tick_groups,tgroup);
 
 }
@@ -339,9 +370,10 @@ void update_gauge_position (MtxGaugeFace *gauge)
 					0,0,
 					widget->allocation.width,widget->allocation.height);
 			cr = gdk_cairo_create (priv->tmp_pixmap);
-			cairo_set_source_rgb(cr,range->color.red/65535.0,
-					range->color.green/65535.0,
-					range->color.blue/65535.0);
+
+			cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
+					range->color[priv->daytime_mode].green/65535.0,
+					range->color[priv->daytime_mode].blue/65535.0);
 			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 			cairo_set_line_width (cr, lwidth);
 			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),0, 2*M_PI);
@@ -378,9 +410,14 @@ cairo_jump_out_of_alerts:
 	/* Update the VALUE text */
 	if (priv->show_value)
 	{
-		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_VALUE_FONT].red/65535.0,
-				priv->colors[GAUGE_COL_VALUE_FONT].green/65535.0,
-				priv->colors[GAUGE_COL_VALUE_FONT].blue/65535.0);
+		if (priv->daytime_mode == MTX_DAY)
+			cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_VALUE_FONT_DAY].red/65535.0,
+					priv->colors[GAUGE_COL_VALUE_FONT_DAY].green/65535.0,
+					priv->colors[GAUGE_COL_VALUE_FONT_DAY].blue/65535.0);
+		else
+			cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_VALUE_FONT_NITE].red/65535.0,
+					priv->colors[GAUGE_COL_VALUE_FONT_NITE].green/65535.0,
+					priv->colors[GAUGE_COL_VALUE_FONT_NITE].blue/65535.0);
 		tmpbuf = g_utf8_strup(priv->value_font,-1);
 		if (g_strrstr(tmpbuf,"BOLD"))
 			weight = CAIRO_FONT_WEIGHT_BOLD;
@@ -423,9 +460,18 @@ cairo_jump_out_of_alerts:
 		needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
 	else
 		needle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
-	cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_NEEDLE].red/65535.0,
-			priv->colors[GAUGE_COL_NEEDLE].green/65535.0,
-			priv->colors[GAUGE_COL_NEEDLE].blue/65535.0);
+	if (priv->daytime_mode == MTX_DAY)
+	{
+		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_NEEDLE_DAY].red/65535.0,
+				priv->colors[GAUGE_COL_NEEDLE_DAY].green/65535.0,
+				priv->colors[GAUGE_COL_NEEDLE_DAY].blue/65535.0);
+	}
+	else
+	{
+		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_NEEDLE_NITE].red/65535.0,
+				priv->colors[GAUGE_COL_NEEDLE_NITE].green/65535.0,
+				priv->colors[GAUGE_COL_NEEDLE_NITE].blue/65535.0);
+	}
 	cairo_set_line_width (cr, 1);
 
 	n_width = priv->needle_width * priv->radius;
@@ -733,6 +779,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_set_font_options(cr,priv->font_options);
 	/* Background set to black */
 	cairo_set_source_rgb (cr, 0,0,0);
+	/* The little corner resizer boxes... */
 	if (priv->show_drag_border)
 	{
 		cairo_rectangle (cr,
@@ -766,6 +813,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 				DRAG_BORDER, DRAG_BORDER);
 	}
 	cairo_stroke(cr);
+	/* Black out the rest of the gauge */
 	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
 
@@ -782,14 +830,30 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			priv->yc-(0.707*priv->yc),
 			priv->xc-(0.707*priv->xc),
 			priv->yc+(0.707*priv->yc));
-	cairo_pattern_add_color_stop_rgb(gradient, 0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].red/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].green/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].blue/65535.0);
-	cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
-			priv->colors[GAUGE_COL_GRADIENT_END].red/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_END].green/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_END].blue/65535.0);
+	if (priv->daytime_mode == MTX_DAY)
+	{
+		cairo_pattern_add_color_stop_rgb(gradient, 0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].blue/65535.0);
+		cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].blue/65535.0);
+
+	}
+	else
+	{
+		cairo_pattern_add_color_stop_rgb(gradient, 0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].blue/65535.0);
+		cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].blue/65535.0);
+
+	}
 	cairo_set_source(cr, gradient);
 	cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
 	cairo_fill(cr);
@@ -800,23 +864,48 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			priv->yc+(0.707*priv->yc),
 			priv->xc+(0.707*priv->xc),
 			priv->yc-(0.707*priv->yc));
-	cairo_pattern_add_color_stop_rgb(gradient, 0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].red/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].green/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_BEGIN].blue/65535.0);
-	cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
-			priv->colors[GAUGE_COL_GRADIENT_END].red/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_END].green/65535.0, 
-			priv->colors[GAUGE_COL_GRADIENT_END].blue/65535.0);
+	if (priv->daytime_mode == MTX_DAY)
+	{
+		cairo_pattern_add_color_stop_rgb(gradient, 0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].blue/65535.0);
+		cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_DAY].blue/65535.0);
+
+	}
+	else
+	{
+		cairo_pattern_add_color_stop_rgb(gradient, 0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].blue/65535.0);
+		cairo_pattern_add_color_stop_rgb(gradient, 2*priv->radius, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].red/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].green/65535.0, 
+				priv->colors[GAUGE_COL_GRADIENT_END_NITE].blue/65535.0);
+	}
 	cairo_set_source(cr, gradient);
 	cairo_arc(cr, priv->xc, priv->yc, (0.950 * priv->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
 	cairo_pattern_destroy(gradient);
 
 	/* Gauge background inside the bezel */
-	cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_BG].red/65535.0,
-			priv->colors[GAUGE_COL_BG].green/65535.0,
-			priv->colors[GAUGE_COL_BG].blue/65535.0);
+	if (priv->daytime_mode == MTX_DAY)
+	{
+		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_BG_DAY].red/65535.0,
+				priv->colors[GAUGE_COL_BG_DAY].green/65535.0,
+				priv->colors[GAUGE_COL_BG_DAY].blue/65535.0);
+	}
+	else
+	{
+		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_BG_NITE].red/65535.0,
+				priv->colors[GAUGE_COL_BG_NITE].green/65535.0,
+				priv->colors[GAUGE_COL_BG_NITE].blue/65535.0);
+	}
+	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, (0.900 * priv->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
 
@@ -824,22 +913,20 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	for (i=0;i<priv->c_ranges->len;i++)
 	{
 		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
-		cairo_set_source_rgb(cr,range->color.red/65535.0,
-				range->color.green/65535.0,
-				range->color.blue/65535.0);
+		cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
+				range->color[priv->daytime_mode].green/65535.0,
+				range->color[priv->daytime_mode].blue/65535.0);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 		angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
 		angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
 		/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
 		lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
-	if (priv->rotation == MTX_ROT_CW)
-		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
-	else
-		cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
-
+		if (priv->rotation == MTX_ROT_CW)
+			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
+		else
+			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
 		cairo_stroke(cr);
-
 	}
 
 	/* NEW STYLE Gauge tick groups */
@@ -847,9 +934,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	{
 		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
 		cairo_set_source_rgb (cr, 
-				tgroup->maj_tick_color.red/65535.0,
-				tgroup->maj_tick_color.green/65535.0,
-				tgroup->maj_tick_color.blue/65535.0);
+				tgroup->maj_tick_color[priv->daytime_mode].red/65535.0,
+				tgroup->maj_tick_color[priv->daytime_mode].green/65535.0,
+				tgroup->maj_tick_color[priv->daytime_mode].blue/65535.0);
 
 		deg_per_major_tick = (tgroup->sweep_angle)/(float)(tgroup->num_maj_ticks-1);
 		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
@@ -895,9 +982,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			{
 				cairo_save(cr);
 				cairo_set_source_rgb (cr, 
-						tgroup->text_color.red/65535.0,
-						tgroup->text_color.green/65535.0,
-						tgroup->text_color.blue/65535.0);
+						tgroup->text_color[priv->daytime_mode].red/65535.0,
+						tgroup->text_color[priv->daytime_mode].green/65535.0,
+						tgroup->text_color[priv->daytime_mode].blue/65535.0);
 				cairo_text_extents (cr, vector[j], &extents);
 				/* Gets the radius of a circle that encompasses the 
 				 * rectangle of text on screen */
@@ -913,9 +1000,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			{
 				cairo_save (cr); /* stack-pen-size */
 				cairo_set_source_rgb (cr,
-						tgroup->min_tick_color.red/65535.0,
-						tgroup->min_tick_color.green/65535.0,
-						tgroup->min_tick_color.blue/65535.0);
+						tgroup->min_tick_color[priv->daytime_mode].red/65535.0,
+						tgroup->min_tick_color[priv->daytime_mode].green/65535.0,
+						tgroup->min_tick_color[priv->daytime_mode].blue/65535.0);
 				inset = tgroup->min_tick_length * priv->radius;
 				mintick_inset = priv->radius * tgroup->min_tick_inset;
 				lwidth = (priv->radius/10)*tgroup->min_tick_width < 1 ? 1: (priv->radius/10)*tgroup->min_tick_width;
@@ -949,9 +1036,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	{
 		poly = g_array_index(priv->polygons,MtxPolygon *, i);
 		cairo_set_source_rgb(cr,
-				poly->color.red/65535.0,
-				poly->color.green/65535.0,
-				poly->color.blue/65535.0);
+				poly->color[priv->daytime_mode].red/65535.0,
+				poly->color[priv->daytime_mode].green/65535.0,
+				poly->color[priv->daytime_mode].blue/65535.0);
 		lwidth = priv->radius*poly->line_width < 1 ? 1: priv->radius*poly->line_width;
 		cairo_set_line_width (cr, lwidth);
 		cairo_set_line_join(cr,poly->join_style);
@@ -1030,9 +1117,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	{
 		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
 		cairo_set_source_rgb (cr, 
-				tblock->color.red/65535.0,
-				tblock->color.green/65535.0,
-				tblock->color.blue/65535.0);
+				tblock->color[priv->daytime_mode].red/65535.0,
+				tblock->color[priv->daytime_mode].green/65535.0,
+				tblock->color[priv->daytime_mode].blue/65535.0);
 
 		tmpbuf = g_utf8_strup(tblock->font,-1);
 		if (g_strrstr(tmpbuf,"BOLD"))
@@ -1072,10 +1159,20 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			tattle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
 		else
 			tattle_pos = ((priv->start_angle+priv->sweep_angle)-(tmpf*priv->sweep_angle))*(M_PI/180);
-		cairo_set_source_rgba (cr, priv->colors[GAUGE_COL_NEEDLE].red/65535.0,
-				priv->colors[GAUGE_COL_NEEDLE].green/65535.0,
-				priv->colors[GAUGE_COL_NEEDLE].blue/65535.0,
-				priv->tattletale_alpha);
+		if (priv->daytime_mode == MTX_DAY)
+		{
+			cairo_set_source_rgba (cr, priv->colors[GAUGE_COL_NEEDLE_DAY].red/65535.0,
+					priv->colors[GAUGE_COL_NEEDLE_DAY].green/65535.0,
+					priv->colors[GAUGE_COL_NEEDLE_DAY].blue/65535.0,
+					priv->tattletale_alpha);
+		}
+		else
+		{
+			cairo_set_source_rgba (cr, priv->colors[GAUGE_COL_NEEDLE_NITE].red/65535.0,
+					priv->colors[GAUGE_COL_NEEDLE_NITE].green/65535.0,
+					priv->colors[GAUGE_COL_NEEDLE_NITE].blue/65535.0,
+					priv->tattletale_alpha);
+		}
 		cairo_set_line_width (cr, 1);
 
 		t_width = priv->needle_width * priv->radius;
@@ -1091,31 +1188,31 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		priv->tattle_coords[1].x = xc + ((t_tip) * cos (tattle_pos))+((tip_width) * sin(tattle_pos));
 		priv->tattle_coords[1].y = yc + ((t_tip) * sin (tattle_pos))+((tip_width) * -cos(tattle_pos));
 
-	if (t_tail < 0)
-	{
-		priv->tattle_coords[2].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * sin(tattle_pos));
-		priv->tattle_coords[2].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * -cos(tattle_pos));
-	}
-	else
-	{
-		priv->tattle_coords[2].x = xc + (t_width) * sin(tattle_pos);
-		priv->tattle_coords[2].y = yc + (t_width) * -cos(tattle_pos);
-	}
+		if (t_tail < 0)
+		{
+			priv->tattle_coords[2].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * sin(tattle_pos));
+			priv->tattle_coords[2].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * -cos(tattle_pos));
+		}
+		else
+		{
+			priv->tattle_coords[2].x = xc + (t_width) * sin(tattle_pos);
+			priv->tattle_coords[2].y = yc + (t_width) * -cos(tattle_pos);
+		}
 
 		priv->tattle_coords[3].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * sin (tattle_pos));
 		priv->tattle_coords[3].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * -cos (tattle_pos));
 		priv->tattle_coords[4].x = xc + ((t_tail) * -cos (tattle_pos))+((tail_width) * -sin (tattle_pos));
 		priv->tattle_coords[4].y = yc + ((t_tail) * -sin (tattle_pos))+((tail_width) * cos (tattle_pos));
-	if (t_tail < 0)
-	{
-		priv->tattle_coords[5].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * -sin(tattle_pos));
-		priv->tattle_coords[5].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * cos(tattle_pos));
-	}
-	else
-	{
-		priv->tattle_coords[5].x = xc + (t_width) * -sin (tattle_pos);
-		priv->tattle_coords[5].y = yc + (t_width) * cos (tattle_pos);
-	}
+		if (t_tail < 0)
+		{
+			priv->tattle_coords[5].x = xc + ((t_tail) * -cos (tattle_pos))+((t_width) * -sin(tattle_pos));
+			priv->tattle_coords[5].y = yc + ((t_tail) * -sin (tattle_pos))+((t_width) * cos(tattle_pos));
+		}
+		else
+		{
+			priv->tattle_coords[5].x = xc + (t_width) * -sin (tattle_pos);
+			priv->tattle_coords[5].y = yc + (t_width) * cos (tattle_pos);
+		}
 		priv->needle_polygon_points = 6;
 
 		cairo_move_to (cr, priv->tattle_coords[0].x,priv->tattle_coords[0].y);
@@ -1188,9 +1285,9 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		{
 			case 1: /* left button */
 				if ((edge != GDK_WINDOW_EDGE_NORTH_WEST) && 
-							(edge != GDK_WINDOW_EDGE_NORTH_EAST) && 
-							(edge != GDK_WINDOW_EDGE_SOUTH_WEST) && 
-							(edge != GDK_WINDOW_EDGE_SOUTH_EAST) && (GTK_IS_WINDOW(widget->parent)))
+						(edge != GDK_WINDOW_EDGE_NORTH_EAST) && 
+						(edge != GDK_WINDOW_EDGE_SOUTH_WEST) && 
+						(edge != GDK_WINDOW_EDGE_SOUTH_EAST) && (GTK_IS_WINDOW(widget->parent)))
 				{
 					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							event->button,
@@ -1283,7 +1380,7 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 			break;
 		default:
 			break;
-			
+
 	}
 	return FALSE;
 }
