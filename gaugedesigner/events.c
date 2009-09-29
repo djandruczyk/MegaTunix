@@ -121,8 +121,10 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"c_range_dialog");
-	cbutton = glade_xml_get_widget(xml,"range_colorbutton");
+	cbutton = glade_xml_get_widget(xml,"range_day_colorbutton");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
+	cbutton = glade_xml_get_widget(xml,"range_nite_colorbutton");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&black);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -147,7 +149,8 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
 			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
 			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_colorbutton")),&range->color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
 			mtx_gauge_face_set_color_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
 			update_onscreen_c_ranges();
@@ -192,8 +195,10 @@ EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"a_range_dialog");
-	cbutton = glade_xml_get_widget(xml,"range_colorbutton");
+	cbutton = glade_xml_get_widget(xml,"range_day_colorbutton");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
+	cbutton = glade_xml_get_widget(xml,"range_nite_colorbutton");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&black);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -218,7 +223,8 @@ EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
 			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
 			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_colorbutton")),&range->color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
 			mtx_gauge_face_set_alert_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
 			update_onscreen_a_ranges();
@@ -266,7 +272,8 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"polygon_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_nite_colorbutton")),&black);
 	OBJ_SET((glade_xml_get_widget(xml,"poly_combobox")),"container",glade_xml_get_widget(xml,"polygon_details_ebox"));
 	OBJ_SET((glade_xml_get_widget(xml,"generic_num_points_spin")),"points_table",glade_xml_get_widget(xml,"generic_points_table"));
 	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -282,7 +289,8 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 	{
 		case GTK_RESPONSE_APPLY:
 			poly = g_new0(MtxPolygon, 1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&poly->color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_day_colorbutton")),&poly->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_nite_colorbutton")),&poly->color[MTX_NITE]);
 			poly->filled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(xml,"poly_filled_cbutton")));
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"line_style_combobox")));
 			if (!tmpbuf)
@@ -415,7 +423,8 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"tblock_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&black);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -430,7 +439,8 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 			tblock->x_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_xpos_spin")));
 			tblock->y_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_ypos_spin")));
 			tblock->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tblock_text_entry")),0,-1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_colorbutton")),&tblock->color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_day_colorbutton")),&tblock->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&tblock->color[MTX_NITE]);
 			tblock->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tblock_fontbutton")));
 			tblock->font = g_strchomp(g_strdelimit(tblock->font,"0123456789",' '));
 			mtx_gauge_face_set_text_block_struct(MTX_GAUGE_FACE(gauge),tblock);
@@ -481,9 +491,12 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"tgroup_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_nite_colorbutton")),&black);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_nite_colorbutton")),&black);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_nite_colorbutton")),&black);
 	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
 	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
 	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"high_angle",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
@@ -520,11 +533,14 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 			tgroup->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tg_tick_fontbutton")));
 			tgroup->font = g_strchomp(g_strdelimit(tgroup->font,"0123456789",' '));
 			tgroup->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tg_tick_textentry")),0,-1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&tgroup->text_color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_day_colorbutton")),&tgroup->text_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_nite_colorbutton")),&tgroup->text_color[MTX_NITE]);
 			tgroup->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_font_scale_spin")));
 			tgroup->text_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_text_inset_spin")));
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_colorbutton")),&tgroup->maj_tick_color);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_colorbutton")),&tgroup->min_tick_color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_day_colorbutton")),&tgroup->maj_tick_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_nite_colorbutton")),&tgroup->maj_tick_color[MTX_NITE]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_day_colorbutton")),&tgroup->min_tick_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_nite_colorbutton")),&tgroup->min_tick_color[MTX_NITE]);
 			tgroup->maj_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_inset_spin")));
 			tgroup->min_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_inset_spin")));
 			tgroup->maj_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_width_spin")));
@@ -809,7 +825,7 @@ void update_onscreen_c_ranges()
 	if (GTK_IS_WIDGET(table))
 		gtk_widget_destroy(table);
 
-	table = gtk_table_new(2,6,FALSE);
+	table = gtk_table_new(2,7,FALSE);
 	gtk_container_add(GTK_CONTAINER(container),table);
 	if (array->len > 0)
 	{
@@ -822,8 +838,10 @@ void update_onscreen_c_ranges()
 		gtk_table_attach(GTK_TABLE(table),label,3,4,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 		label = gtk_label_new("LWidth");
 		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Color");
+		label = gtk_label_new("Day Color");
 		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Nite Color");
+		gtk_table_attach(GTK_TABLE(table),label,6,7,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 	}
 	/* Repopulate the table with the current ranges... */
 	for (i=0;i<array->len; i++)
@@ -859,11 +877,17 @@ void update_onscreen_c_ranges()
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_LWIDTH));
 		gtk_table_attach(GTK_TABLE(table),dummy,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
-		dummy = gtk_color_button_new_with_color(&range->color);
+		dummy = gtk_color_button_new_with_color(&range->color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_COLOR_DAY));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		dummy = gtk_color_button_new_with_color(&range->color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_c_range_data),GINT_TO_POINTER(CR_COLOR_NITE));
+
+		gtk_table_attach(GTK_TABLE(table),dummy,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
 	}
 	gtk_widget_show_all(container);
@@ -898,7 +922,7 @@ void update_onscreen_a_ranges()
 	if (GTK_IS_WIDGET(table))
 		gtk_widget_destroy(table);
 
-	table = gtk_table_new(2,6,FALSE);
+	table = gtk_table_new(2,7,FALSE);
 	gtk_container_add(GTK_CONTAINER(container),table);
 	if (array->len > 0)
 	{
@@ -911,8 +935,10 @@ void update_onscreen_a_ranges()
 		gtk_table_attach(GTK_TABLE(table),label,3,4,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 		label = gtk_label_new("LWidth");
 		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Color");
+		label = gtk_label_new("Day Color");
 		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Nite Color");
+		gtk_table_attach(GTK_TABLE(table),label,6,7,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 	}
 	/* Repopulate the table with the current ranges... */
 	for (i=0;i<array->len; i++)
@@ -948,11 +974,17 @@ void update_onscreen_a_ranges()
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_LWIDTH));
 		gtk_table_attach(GTK_TABLE(table),dummy,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 
-		dummy = gtk_color_button_new_with_color(&range->color);
+		dummy = gtk_color_button_new_with_color(&range->color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_COLOR_DAY));
 
 		gtk_table_attach(GTK_TABLE(table),dummy,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		dummy = gtk_color_button_new_with_color(&range->color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_a_range_data),GINT_TO_POINTER(ALRT_COLOR_NITE));
+
+		gtk_table_attach(GTK_TABLE(table),dummy,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
 	}
 	gtk_widget_show_all(container);
@@ -1152,7 +1184,7 @@ void update_onscreen_tblocks()
 	for (i=0;i<array->len; i++)
 	{
 		tblock = g_array_index(array,MtxTextBlock *, i);
-		subtable = gtk_table_new(3,4,FALSE);
+		subtable = gtk_table_new(3,5,FALSE);
 		gtk_table_set_row_spacings(GTK_TABLE(subtable),1);
 		gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
 		gtk_table_attach(GTK_TABLE(table),subtable,0,1,y,y+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
@@ -1170,10 +1202,15 @@ void update_onscreen_tblocks()
 		g_signal_connect(G_OBJECT(dummy),"changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_TEXT));
 		gtk_table_attach(GTK_TABLE(subtable),dummy,2,3,0,1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
 
-		dummy = gtk_color_button_new_with_color(&tblock->color);
+		dummy = gtk_color_button_new_with_color(&tblock->color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_COLOR_DAY));
 		gtk_table_attach(GTK_TABLE(subtable),dummy,3,4,0,1,GTK_FILL,GTK_SHRINK,0,0);
+
+		dummy = gtk_color_button_new_with_color(&tblock->color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_COLOR_NITE));
+		gtk_table_attach(GTK_TABLE(subtable),dummy,4,5,0,1,GTK_FILL,GTK_SHRINK,0,0);
 		tmpbuf = g_strdup_printf("%s 12",tblock->font);
 		dummy = gtk_font_button_new_with_font(tmpbuf);
 		g_free(tmpbuf);
@@ -1310,11 +1347,15 @@ void update_onscreen_tgroups()
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT));
 
-		/* Text Color*/
-		dummy = glade_xml_get_widget(xml,"tg_text_colorbutton");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->text_color);
+		/* Text Colors (day,nite) */
+		dummy = glade_xml_get_widget(xml,"tg_text_day_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->text_color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_COLOR_DAY));
+		dummy = glade_xml_get_widget(xml,"tg_text_nite_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->text_color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_COLOR_NITE));
 
 		/* Text Inset*/
 		dummy = glade_xml_get_widget(xml,"tg_text_inset_spin");
@@ -1323,16 +1364,24 @@ void update_onscreen_tgroups()
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_INSET));
 
 		/* Major Tick Color*/
-		dummy = glade_xml_get_widget(xml,"tg_maj_tick_colorbutton");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->maj_tick_color);
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_day_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->maj_tick_color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_COLOR_DAY));
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_nite_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->maj_tick_color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_COLOR_NITE));
 
 		/* Minor Tick Color*/
-		dummy = glade_xml_get_widget(xml,"tg_min_tick_colorbutton");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->min_tick_color);
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_day_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->min_tick_color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_COLOR_DAY));
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_nite_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->min_tick_color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_COLOR_NITE));
 
 		/* Major Tick Inset*/
 		dummy = glade_xml_get_widget(xml,"tg_maj_tick_inset_spin");
@@ -1492,10 +1541,14 @@ void update_onscreen_polygons()
 		glade_xml_signal_autoconnect(xml);
 
 		/* Colorbutton*/
-		dummy = glade_xml_get_widget(xml,"polygon_colorbutton");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&poly->color);
+		dummy = glade_xml_get_widget(xml,"polygon_day_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&poly->color[MTX_DAY]);
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_COLOR));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_COLOR_DAY));
+		dummy = glade_xml_get_widget(xml,"polygon_nite_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&poly->color[MTX_NITE]);
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_COLOR_NITE));
 
 		/* Filled Checkbutton*/
 		dummy = glade_xml_get_widget(xml,"poly_filled_cbutton");
@@ -1777,7 +1830,8 @@ gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_text_block(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case TB_COLOR:
+		case TB_COLOR_DAY:
+		case TB_COLOR_NITE:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_text_block(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
@@ -1826,9 +1880,12 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_tick_group(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case TG_MAJ_TICK_COLOR:
-		case TG_MIN_TICK_COLOR:
-		case TG_TEXT_COLOR:
+		case TG_MAJ_TICK_COLOR_DAY:
+		case TG_MAJ_TICK_COLOR_NITE:
+		case TG_MIN_TICK_COLOR_DAY:
+		case TG_MIN_TICK_COLOR_NITE:
+		case TG_TEXT_COLOR_DAY:
+		case TG_TEXT_COLOR_NITE:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_tick_group(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
@@ -1891,7 +1948,8 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 			value = (float)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case POLY_COLOR:
+		case POLY_COLOR_DAY:
+		case POLY_COLOR_NITE:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
@@ -1946,7 +2004,8 @@ gboolean alter_c_range_data(GtkWidget *widget, gpointer data)
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_color_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case CR_COLOR:
+		case CR_COLOR_DAY:
+		case CR_COLOR_NITE:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_color_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
@@ -1976,7 +2035,8 @@ gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_alert_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case ALRT_COLOR:
+		case ALRT_COLOR_DAY:
+		case ALRT_COLOR_NITE:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_alert_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
 			break;
