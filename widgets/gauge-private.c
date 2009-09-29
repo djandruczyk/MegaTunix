@@ -164,10 +164,15 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 
 	/* Compat with older gauges */
 	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", &priv->colors[GAUGE_COL_BG_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_alt", &priv->colors[GAUGE_COL_NEEDLE_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"value_font_color", &priv->colors[GAUGE_COL_VALUE_FONT_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_alt", &priv->colors[GAUGE_COL_VALUE_FONT_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_alt", &priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &priv->colors[GAUGE_COL_GRADIENT_END_DAY]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_alt", &priv->colors[GAUGE_COL_GRADIENT_END_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_length", &priv->needle_length);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_day", &priv->colors[GAUGE_COL_BG_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_nite", &priv->colors[GAUGE_COL_BG_NITE]);
@@ -222,6 +227,7 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 		funcs->export_func = xml_functions[i].export_func;;
 		funcs->varname = xml_functions[i].varname;
 		funcs->dest_var = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_functions[i].varname);
+		funcs->api_compat = xml_functions[i].api_compat;
 		g_hash_table_insert (priv->xmlfunc_hash,g_strdup(xml_functions[i].varname),funcs);
 		g_array_append_val(priv->xmlfunc_array,funcs);
 	}
@@ -905,7 +911,6 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 				priv->colors[GAUGE_COL_BG_NITE].green/65535.0,
 				priv->colors[GAUGE_COL_BG_NITE].blue/65535.0);
 	}
-	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, (0.900 * priv->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
 
