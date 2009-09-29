@@ -739,6 +739,25 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 }
 
 
+
+EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
+{
+	MtxGaugeFace *g = NULL;
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+	if (state)
+		mtx_gauge_face_set_daytime_mode(g,FALSE);
+	else
+		mtx_gauge_face_set_daytime_mode(g,TRUE);
+
+	return TRUE;
+}
+
+
+
 EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1219,11 +1238,13 @@ void update_onscreen_tblocks()
 		gtk_font_button_set_show_size(GTK_FONT_BUTTON(dummy),FALSE);
 
 		gtk_table_attach(GTK_TABLE(subtable),dummy,1,3,1,2,GTK_FILL,GTK_SHRINK,0,0);
+		label = gtk_label_new("Font Scale");
+		gtk_table_attach(GTK_TABLE(subtable),label,3,4,1,2,GTK_EXPAND,GTK_SHRINK,0,0);
 		spin = gtk_spin_button_new_with_range(0,1,0.001);
 		OBJ_SET((spin),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->font_scale);
 		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_FONT_SCALE));
-		gtk_table_attach(GTK_TABLE(subtable),spin,3,4,1,2,GTK_FILL,GTK_SHRINK,0,0);
+		gtk_table_attach(GTK_TABLE(subtable),spin,4,5,1,2,GTK_FILL,GTK_SHRINK,0,0);
 
 		subtable2 = gtk_table_new(1,4,FALSE);
 		gtk_table_attach(GTK_TABLE(subtable),subtable2,1,4,2,3,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
