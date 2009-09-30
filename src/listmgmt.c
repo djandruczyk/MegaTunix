@@ -53,6 +53,15 @@ gint list_sort(gconstpointer a, gconstpointer b)
 }
 
 
+gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
+{
+	GObject *a1 = (GObject *)a;
+	GObject *b1 = (GObject *)b;
+	const gchar *key = (const gchar *)data;
+	return g_ascii_strcasecmp((gchar *)OBJ_GET(a1,key),(gchar *)OBJ_GET(b1,key));
+}
+
+
 void free_element(gpointer data, gpointer user_data)
 {
 	ListElement *a = (ListElement *)data;

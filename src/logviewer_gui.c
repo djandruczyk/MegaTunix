@@ -50,15 +50,17 @@ extern GObject *global_data;
  */
 void present_viewer_choices(void)
 {
-	GtkWidget *window;
-	GtkWidget *table;
-	GtkWidget *frame;
-	GtkWidget *vbox;
-	GtkWidget *hbox;
-	GtkWidget *button;
-	GtkWidget *label;
-	GtkWidget *sep;
-	GObject * object;
+	GtkWidget *window = NULL;
+	GtkWidget *table = NULL;
+	GtkWidget *frame = NULL;
+	GtkWidget *vbox = NULL;
+	GtkWidget *hbox = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *sep = NULL;
+	GtkWidget *darea = NULL;
+	GList *list = NULL;
+	GObject * object = NULL;
 	extern GtkTooltips *tip;
 	gint i = 0;
 	gint j = 0;
@@ -67,7 +69,6 @@ void present_viewer_choices(void)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
-	GtkWidget *darea = NULL;
 	extern Rtv_Map *rtv_map;
 
 	darea = lookup_widget("logviewer_trace_darea");
@@ -135,17 +136,32 @@ void present_viewer_choices(void)
 
 	for (i=0;i<max_viewables;i++)
 	{
+		if (playback_mode)
+			list = g_list_prepend(list,(gpointer)g_array_index(log_info->log_list,GObject *,i));
+		else
+			list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GObject *,i));
+	}
+	if (playback_mode)
+		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
+	else
+		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
+
+	for (i=0;i<max_viewables;i++)
+	{
 		object = NULL;
 		name = NULL;
 		tooltip = NULL;
+
+		object = g_list_nth_data(list,i);
+
 		if (playback_mode)
 		{
-			object =  g_array_index(log_info->log_list,GObject *,i);
+			//object =  g_array_index(log_info->log_list,GObject *,i);
 			name = g_strdup(OBJ_GET(object,"lview_name"));
 		}
 		else
 		{
-			object =  g_array_index(rtv_map->rtv_list,GObject *,i);
+			//object =  g_array_index(rtv_map->rtv_list,GObject *,i);
 			name = g_strdup(OBJ_GET(object,"dlog_gui_name"));
 			tooltip = g_strdup(OBJ_GET(object,"tooltip"));
 		}
@@ -156,7 +172,6 @@ void present_viewer_choices(void)
 		gtk_container_add(GTK_CONTAINER(button),label);
 		store_list("viewables",g_list_prepend(
 					get_list("viewables"),(gpointer)button));
-
 		if (tooltip)
 			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
 
@@ -183,6 +198,7 @@ void present_viewer_choices(void)
 		}
 		g_free(name);
 	}
+	g_list_free(list);
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox),sep,FALSE,TRUE,20);

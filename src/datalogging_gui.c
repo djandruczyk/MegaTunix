@@ -23,6 +23,7 @@
 #include <getfiles.h>
 #include <glib.h>
 #include <gui_handlers.h>
+#include <listmgmt.h>
 #include <math.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
@@ -50,12 +51,13 @@ static gboolean header_needed = FALSE;
 /*!
  \brief populate_dlog_choices_pf() is called when the datalogging tab is loaded
  by glade AFTER the realtime variable definitions have been loaded and 
- processed.  All of the logable variables are then placed here to user 
+ processed.  All of the logable variables are then placed here for user 
  selecting during datalogging.
  */
 EXPORT void populate_dlog_choices_pf()
 {
 	guint i,j,k;
+	GList *list = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
@@ -116,11 +118,17 @@ EXPORT void populate_dlog_choices_pf()
 	}
 	j = 0;	
 	k = 0;
+	/* Put into GList and sort it */
+	for (i=0;i<rtv_map->derived_total;i++)
+		list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GObject *,i));
+	list = g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
+	
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		tooltip = NULL;
 		dlog_name = NULL;
-		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		//object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		object = g_list_nth_data(list,i);
 		dlog_name = OBJ_GET(object,"dlog_gui_name");
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
@@ -156,6 +164,7 @@ EXPORT void populate_dlog_choices_pf()
 			j = 0;
 		} 
 	}
+	g_list_free(list);
 	gtk_widget_show_all(vbox);
 	return;
 }

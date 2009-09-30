@@ -13,4 +13,5 @@ As for the automake/autoconf warnings,  in 99.995% of the cases it's safe
 to ignore those warnings.  You can thank the autofoo tool maintainers for
 those..
 
-
+ To use a tag, use "cvs update -r <TAGNAME> -dP"
+ i.e. cvs update -R PRE_0_9_19-branch -dP
