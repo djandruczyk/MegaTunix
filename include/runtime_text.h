@@ -18,6 +18,7 @@
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <watches.h>
 
 
 typedef enum
@@ -58,6 +59,7 @@ void add_additional_rtt(GtkWidget *);
 gboolean load_rtt_xml_elements(xmlNode *, GHashTable *, GtkWidget *);
 void load_rtt(xmlNode *, GHashTable *, GtkWidget *);
 void setup_rtt_treeview(GtkWidget *);
+EXPORT void update_rtt_wrapper(DataWatch *, gfloat);
 /* Prototypes */
 
 #endif

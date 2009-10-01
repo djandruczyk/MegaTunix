@@ -316,29 +316,34 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	gchar * ctrl_name = NULL;
 	gchar * source = NULL;
 	gboolean markup = FALSE;
-	GHashTable *rtt_hash = NULL;
 	Rt_Text *rt_text = NULL;
 	gboolean show_prefix = FALSE;
 
-	rtt_hash = OBJ_GET(global_data,"rtt_hash");
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
 	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
 	markup = (gboolean)OBJ_GET(widget,"markup");
 
-	if ((rtt_hash) && (ctrl_name) && (source) && (!markup))
+	if ((ctrl_name) && (source) && (!markup))
 		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
-	if ((rtt_hash) && (ctrl_name) && (source) && (markup))
+	if ((ctrl_name) && (source) && (markup))
 		rt_text = add_custom_rtt(widget,ctrl_name,source,show_prefix);
 	if (rt_text)
 	{
-		if (!g_hash_table_lookup(rtt_hash,ctrl_name))
-			g_hash_table_insert(rtt_hash,
-					g_strdup(ctrl_name),
-					(gpointer)rt_text);
+		create_value_change_watch(source,FALSE,"update_rtt_wrapper",(gpointer)rt_text);
 	}
 	return;
 }
+
+
+EXPORT void update_rtt_wrapper(DataWatch *watch, gfloat value)
+{
+	Rt_Text *rt_text = (Rt_Text *) watch->user_data;
+	printf("Firing watch on misc rtt %s\n",rt_text->ctrl_name);
+	rtt_update_values(NULL,watch->user_data,NULL);
+}
+
+
 /*!
  \brief rtt_update_values() is called for each runtime text to update
  it's label (label is periodic and not every time due to pango

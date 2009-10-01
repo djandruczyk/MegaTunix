@@ -499,6 +499,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	}
 	history = (GArray *)OBJ_GET(object,"history");
 	index = (gint)OBJ_GET(object,"current_index");
+	printf("Array length is %i, index is %i\n",history->len,index);
 	if (!history)
 		return FALSE;
 	if (index < 0)

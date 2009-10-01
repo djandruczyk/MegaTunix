@@ -135,10 +135,10 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 	guint8 tmpi2 = 0;
 	switch (watch->style)
 	{
+		case SINGLE_BIT_STATE:
 		/* When bit becomes this state, fire watch function. This will
 		 * fire each time new vars come in unless watch is set to
 		 * run only once, thus it will evaporate after 1 run */
-		case SINGLE_BIT_STATE:
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
@@ -149,10 +149,10 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 					remove_watch(watch->id);
 			}
 			break;
+		case SINGLE_BIT_CHANGE:
 		/* When bit CHANGES from previous state, i.e.  only fire when
 		 * it changes, but if it's stable, don't fire repeatedly 
 		 */
-		case SINGLE_BIT_CHANGE:
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			lookup_previous_value(watch->varname, &tmpf);
@@ -165,10 +165,10 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 					remove_watch(watch->id);
 			}
 			break;
+		case VALUE_CHANGE:
 			/* If value changes at ALL from previous value, then
 			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
-		case VALUE_CHANGE:
 			lookup_current_value(watch->varname, &tmpf);
 			/* compare to 5 samples back */
 			lookup_previous_nth_value(watch->varname, 5, &tmpf2);
