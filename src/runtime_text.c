@@ -313,24 +313,31 @@ Rt_Text * add_custom_rtt(GtkWidget *label, gchar *ctrl_name, gchar *source, gboo
  */
 EXPORT void add_additional_rtt(GtkWidget *widget)
 {
+	GHashTable *rtt_hash = NULL;
 	gchar * ctrl_name = NULL;
 	gchar * source = NULL;
 	gboolean markup = FALSE;
 	Rt_Text *rt_text = NULL;
 	gboolean show_prefix = FALSE;
 
+	rtt_hash = OBJ_GET(global_data,"rtt_hash");
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
 	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
 	markup = (gboolean)OBJ_GET(widget,"markup");
 
-	if ((ctrl_name) && (source) && (!markup))
+	if ((rtt_hash) && (ctrl_name) && (source) && (!markup))
 		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
-	if ((ctrl_name) && (source) && (markup))
+	if ((rtt_hash) && (ctrl_name) && (source) && (markup))
 		rt_text = add_custom_rtt(widget,ctrl_name,source,show_prefix);
+
 	if (rt_text)
 	{
-		create_value_change_watch(source,FALSE,"update_rtt_wrapper",(gpointer)rt_text);
+	//	create_value_change_watch(source,FALSE,"update_rtt_wrapper",(gpointer)rt_text);
+		if (!g_hash_table_lookup(rtt_hash,ctrl_name))
+			g_hash_table_insert(rtt_hash,
+					g_strdup(ctrl_name),
+					(gpointer)rt_text);
 	}
 	return;
 }
@@ -357,7 +364,6 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	Rt_Text *rtt = (Rt_Text *)value;
 	gint count = rtt->count;
 	gint last_upd = rtt->last_upd;
-	gint current_index = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -368,20 +374,17 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	extern GStaticMutex rtv_mutex;
 
 	history = (GArray *)OBJ_GET(rtt->object,"history");
-	current_index = (gint)OBJ_GET(rtt->object,"current_index");
 	precision = (gint)OBJ_GET(rtt->object,"precision");
 
 	if (!history)
 		return;
-	if (current_index < 0)
+	if (history->len-1 < 0)
 		return;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after lock rtv_mutex\n"));
-	current = g_array_index(history, gfloat, current_index);
-	if (current_index > 0)
-		current_index-=1;
-	previous = g_array_index(history, gfloat, current_index);
+	current = g_array_index(history, gfloat, history->len-1);
+	previous = g_array_index(history, gfloat, history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after UNlock rtv_mutex\n"));

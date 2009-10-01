@@ -906,7 +906,6 @@ void trace_update(gboolean redraw_all)
 	gfloat last_val = 0.0;
 	gfloat percent = 0.0;
 	gfloat last_percent = 0.0;
-	gint current_index = 0;
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
@@ -1061,8 +1060,7 @@ void trace_update(gboolean redraw_all)
 	{
 		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 		array = OBJ_GET(v_value->object,v_value->data_source);
-		current_index = (gint)OBJ_GET(v_value->object,"current_index");
-		val = g_array_index(array,gfloat, current_index);
+		val = g_array_index(array,gfloat, array->len-1);
 
 		if (val > (v_value->max))
 			v_value->max = val;

@@ -177,7 +177,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat tmpf = 0.0;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
-	gint current_index = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -186,16 +185,13 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gchar * tmpbuf = NULL;
 
 	history = (GArray *)OBJ_GET(slider->object,"history");
-	current_index = (gint)OBJ_GET(slider->object,"current_index");
 	precision = (gint)OBJ_GET(slider->object,"precision");
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() after lock rtv_mutex\n"));
-	/*printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);*/
-	current = g_array_index(history, gfloat, current_index);
-	if (current_index > 0)
-		current_index-=1;
-	previous = g_array_index(history, gfloat, current_index);
+	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
+	current = g_array_index(history, gfloat, history->len-1);
+	previous = g_array_index(history, gfloat, history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() after UNlock rtv_mutex\n"));

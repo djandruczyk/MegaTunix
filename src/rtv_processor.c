@@ -62,7 +62,6 @@ void process_rt_vars(void *incoming)
 	gboolean temp_dep = FALSE;
 	void *evaluator = NULL;
 	GTimeVal timeval;
-	gint current_index;
 	GArray *history = NULL;
 	gchar *special = NULL;
 	GHashTable *hash = NULL;
@@ -180,15 +179,12 @@ store_it:
 				result = tmpf;
 			/* Get history array and current index point */
 			history = (GArray *)OBJ_GET(object,"history");
-			current_index = (gint)OBJ_GET(object,"current_index");
 			/* Store data in history buffer */
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before lock rtv_mutex\n"));
 			g_static_mutex_lock(&rtv_mutex);
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after lock rtv_mutex\n"));
 			g_array_append_val(history,result);
-			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,current_index,result,g_array_index(history, gfloat, current_index+1),g_array_index(history, gfloat, current_index));*/
-			current_index++;
-			OBJ_SET(object,"current_index",GINT_TO_POINTER(current_index));
+			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,history->len-1,result,g_array_index(history, gfloat, history->len-1),g_array_index(history, gfloat, history->len-2));*/
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after UNlock rtv_mutex\n"));
@@ -484,7 +480,6 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
-	gint index = 0;
 	
 	if (!internal_name)
 	{
@@ -498,16 +493,14 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 		return FALSE;
 	}
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
-	printf("Array length is %i, index is %i\n",history->len,index);
 	if (!history)
 		return FALSE;
-	if (index < 0)
+	if (history->len-1 < 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after lock rtv_mutex\n"));
-	*value = g_array_index(history,gfloat,index);
+	*value = g_array_index(history,gfloat,history->len-1);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after UNlock rtv_mutex\n"));
@@ -527,7 +520,6 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
-	gint index = 0;
 
 	if (!internal_name)
 	{
@@ -538,17 +530,14 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	if (!object)
 		return FALSE;
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (!history)
 		return FALSE;
-	if (index < 0)
+	if (history->len-2 < 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after lock rtv_mutex\n"));
-	if (index > 0)
-		index -= 1;  /* get PREVIOUS one */
-	*value = g_array_index(history,gfloat,index);
+	*value = g_array_index(history,gfloat,history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after UNlock rtv_mutex\n"));
@@ -580,10 +569,9 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 	if (!object)
 		return FALSE;
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (!history)
 		return FALSE;
-	if (index < 0)
+	if (history->len-1 == 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
@@ -625,14 +613,14 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 	if (!object)
 		return FALSE;
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (!history)
 		return FALSE;
-	if (index < 0)
+	if (history->len-n < 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
+	index = history->len-1;
 	if (index > n)
 	{
 		for (i=0;i<n;i++)
@@ -674,14 +662,14 @@ gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip
 	if (!object)
 		return FALSE;
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
 	if (!history)
 		return FALSE;
-	if (index < 0)
+	if (history->len-(n*skip) < 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
+	index = history->len-1;
 	if (index > (n*skip))
 	{
 		for (i=0;i<n;i++)
@@ -736,7 +724,6 @@ void flush_rt_arrays()
 	guint i = 0;
 	guint j = 0;
 	GObject * object = NULL;
-	gint current_index = 0;
 	GList *list = NULL;
 
 	/* Flush and recreate the timestamp array */
@@ -759,14 +746,12 @@ void flush_rt_arrays()
 			g_static_mutex_lock(&rtv_mutex);
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after lock rtv_mutex\n"));
 			history = (GArray *)OBJ_GET(object,"history");
-			current_index = (gint)OBJ_GET(object,"current_index");
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			OBJ_SET(object,"history",(gpointer)history);
-			OBJ_SET(object,"current_index",GINT_TO_POINTER(-1));
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
 			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after UNlock rtv_mutex\n"));

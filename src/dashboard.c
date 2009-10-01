@@ -380,7 +380,6 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
 	extern GStaticMutex rtv_mutex;
 	GArray *history;
-	gint current_index = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	extern gboolean forced_update;
@@ -390,14 +389,11 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)OBJ_GET(d_gauge->object,"history");
-	current_index = (gint)OBJ_GET(d_gauge->object,"current_index");
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after lock rtv_mutex\n"));
-	current = g_array_index(history, gfloat, current_index);
-	if (current_index > 0)
-		current_index-=1;
-	previous = g_array_index(history, gfloat, current_index);
+	current = g_array_index(history, gfloat, history->len-1);
+	previous = g_array_index(history, gfloat, history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after UNlock rtv_mutex\n"));

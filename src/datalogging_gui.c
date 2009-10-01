@@ -327,7 +327,6 @@ EXPORT void run_datalog_pf(void)
 	GObject *object = NULL;
 	gfloat value = 0.0;
 	GArray *history = NULL;
-	gint current_index = 0;
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
 	extern gboolean interrogated;
@@ -369,9 +368,8 @@ EXPORT void run_datalog_pf(void)
 			continue;
 
 		history = (GArray *)OBJ_GET(object,"history");
-		current_index = (gint)OBJ_GET(object,"current_index");
 		precision = (gint)OBJ_GET(object,"precision");
-		value = g_array_index(history, gfloat, current_index);
+		value = g_array_index(history, gfloat, history->len-1);
 
 		tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precision),",",'.');
 		g_string_append(output,tmpbuf);

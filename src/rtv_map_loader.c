@@ -199,7 +199,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 		gtk_object_sink(GTK_OBJECT(object));
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-		OBJ_SET(object,"current_index",GINT_TO_POINTER(-1));
 		/* Assume default size of 8 bit unsigned */
 		OBJ_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* bind hostory array to object for future retrieval */
