@@ -44,9 +44,10 @@ extern GObject *global_data;
 EXPORT void load_rt_text_pf()
 {
 	GHashTable *rtt_hash = NULL;
-/*	GtkWidget *treeview = NULL; */
+	GtkWidget *treeview = NULL; 
 	GtkWidget *window = NULL;
 	GtkWidget *parent = NULL;
+	GtkListStore *store = NULL;
 	gchar *filename = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
@@ -103,11 +104,14 @@ EXPORT void load_rt_text_pf()
 	}
 
 	/*Get the root element node */
-/*	treeview = gtk_tree_view_new();
+	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING);
+	OBJ_SET(global_data,"rtt_model",store);
+	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
 	setup_rtt_treeview(treeview);
-	*/
+
 	root_element = xmlDocGetRootElement(doc);
-	xml_result = load_rtt_xml_elements(root_element,rtt_hash,parent);
+	xml_result = load_rtt_xml_elements(root_element,store,parent);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -121,7 +125,7 @@ EXPORT void load_rt_text_pf()
 }
 
 
-gboolean load_rtt_xml_elements(xmlNode *a_node, GHashTable *hash, GtkWidget *parent)
+gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
@@ -137,20 +141,21 @@ gboolean load_rtt_xml_elements(xmlNode *a_node, GHashTable *hash, GtkWidget *par
 					return FALSE;
 				}
 			if (g_strcasecmp((gchar *)cur_node->name,"rtt") == 0)
-				load_rtt(cur_node,hash,parent);
+				load_rtt(cur_node,store,parent);
 		}
-		if (!load_rtt_xml_elements(cur_node->children,hash,parent))
+		if (!load_rtt_xml_elements(cur_node->children,store,parent))
 			return FALSE;
 	}
 	return TRUE;
 }
 
 
-void load_rtt(xmlNode *node,GHashTable *hash,GtkWidget *parent)
+void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
 	gchar *int_name = NULL;
 	gchar *source = NULL;
 	Rt_Text *rt_text = NULL;
+	GtkTreeIter iter;
 	xmlNode *cur_node = NULL;
 
 	if (!node->children)
@@ -171,18 +176,62 @@ void load_rtt(xmlNode *node,GHashTable *hash,GtkWidget *parent)
 		cur_node = cur_node->next;
 	}
 	if ((int_name) && (source))
-		rt_text = add_rtt(parent,int_name,source,TRUE);
+		rt_text = create_rtt(int_name,source,TRUE);
 	if (rt_text)
 	{
-		if (!g_hash_table_lookup(hash,int_name))
-			g_hash_table_insert(hash,
-					g_strdup(int_name),
-					(gpointer)rt_text);
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter,
+				COL_RTT_OBJECT,(gpointer)rt_text,
+				COL_RTT_INT_NAME,rt_text->ctrl_name,
+				COL_RTT_DATA,"",-1);	
+		//		if (!g_hash_table_lookup(hash,int_name))
+		//			g_hash_table_insert(hash,
+		//					g_strdup(int_name),
+		//					(gpointer)rt_text);
 	}
 	if (int_name)
 		g_free(int_name);
 	if (source)
 		g_free(source);
+}
+
+
+/*!
+ \brief add_rtt() creates the rt_text from the passed data, and attaches
+ it the the gui.
+ \param parent (GtkWidget *) parent widget
+ \param ctrl_name (gchar *) name of the rt_text as defined in the config file
+ \param source (gchar *) data source for this rt_text 
+ \returns a Struct Rt_Text *
+ */
+Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
+{
+	Rt_Text *rtt = NULL;
+	extern Rtv_Map *rtv_map;
+	GObject *object = NULL;
+
+	rtt = g_malloc0(sizeof(Rt_Text));
+
+	if (!rtv_map)
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		return NULL;
+	}
+
+	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	if (!G_IS_OBJECT(object))
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		return NULL;
+	}
+
+	rtt->show_prefix = show_prefix;
+	rtt->ctrl_name = g_strdup(ctrl_name);
+	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->history = (GArray *) OBJ_GET(object,"history");
+	rtt->object = object;
+
+	return rtt;
 }
 
 
@@ -253,60 +302,6 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 
 
 /*!
- \brief add_custom_rtt() creates the rt_text from the passed data, and attaches
- it the the gui.
- \param label (GtkWidget *) parent widget
- \param ctrl_name (gchar *) name of the rt_text as defined in the config file
- \param source (gchar *) data source for this rt_text 
- \returns a Struct Rt_Text *
- */
-Rt_Text * add_custom_rtt(GtkWidget *label, gchar *ctrl_name, gchar *source, gboolean show_prefix)
-{
-	Rt_Text *rtt = NULL;
-	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
-
-	rtt = g_malloc0(sizeof(Rt_Text));
-
-	if (!rtv_map)
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
-		return NULL;
-	}
-
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-	if (!G_IS_OBJECT(object))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
-		return NULL;
-	}
-
-	rtt->show_prefix = show_prefix;
-	rtt->ctrl_name = g_strdup(ctrl_name);
-	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	rtt->history = (GArray *) OBJ_GET(object,"history");
-	rtt->object = object;
-	if (OBJ_GET(label,"markup"))
-	{
-		rtt->markup = TRUE;
-		OBJ_SET(object,"label_prefix",OBJ_GET(label,"label_prefix"));
-		OBJ_SET(object,"label_suffix",OBJ_GET(label,"label_suffix"));
-	}
-	else
-		rtt->markup = FALSE;
-
-	rtt->textval = label;
-	if (show_prefix)
-		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
-	else
-		gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
-	gtk_widget_show_all(rtt->textval);
-
-	return rtt;
-}
-
-
-/*!
  \brief add_additional_rtt() is called as a post function for Tab loading
  to add an RTT on a normal widget tab. (AE wizard currently)
  \param widget, pointer to widget containing the data needed
@@ -316,7 +311,6 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	GHashTable *rtt_hash = NULL;
 	gchar * ctrl_name = NULL;
 	gchar * source = NULL;
-	gboolean markup = FALSE;
 	Rt_Text *rt_text = NULL;
 	gboolean show_prefix = FALSE;
 
@@ -324,16 +318,16 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
 	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
-	markup = (gboolean)OBJ_GET(widget,"markup");
 
-	if ((rtt_hash) && (ctrl_name) && (source) && (!markup))
+	if (!rtt_hash)
+		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
+
+	if ((rtt_hash) && (ctrl_name) && (source))
 		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
-	if ((rtt_hash) && (ctrl_name) && (source) && (markup))
-		rt_text = add_custom_rtt(widget,ctrl_name,source,show_prefix);
 
 	if (rt_text)
 	{
-	//	create_value_change_watch(source,FALSE,"update_rtt_wrapper",(gpointer)rt_text);
 		if (!g_hash_table_lookup(rtt_hash,ctrl_name))
 			g_hash_table_insert(rtt_hash,
 					g_strdup(ctrl_name),
@@ -342,13 +336,6 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	return;
 }
 
-
-EXPORT void update_rtt_wrapper(DataWatch *watch, gfloat value)
-{
-	Rt_Text *rt_text = (Rt_Text *) watch->user_data;
-	printf("Firing watch on misc rtt %s\n",rt_text->ctrl_name);
-	rtt_update_values(NULL,watch->user_data,NULL);
-}
 
 
 /*!
@@ -369,7 +356,6 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	gchar * tmpbuf2 = NULL;
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
@@ -396,28 +382,14 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	if ((current != previous) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		if (rtt->markup)
-		{
-			tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
-			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
-			g_free(tmpbuf2);
-		}
-		else
-			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}
 	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		if (rtt->markup)
-		{
-			tmpbuf2 = g_strconcat(OBJ_GET(rtt->object,"label_prefix"),tmpbuf,OBJ_GET(rtt->object,"label_suffix"),NULL);
-			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
-			g_free(tmpbuf2);
-		}
-		else
-			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}
@@ -433,22 +405,99 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 }
 
 
-/*
 void setup_rtt_treeview(GtkWidget *treeview)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
+	GtkWidget *parent = gtk_widget_get_parent(treeview);
+	GtkStyle * style = NULL;
+
+	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", RTT_INT_NAME, NULL);
+	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
+	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", RTT_DATA, NULL);
+	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
+	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_DATA,  NULL);
+	g_object_set(column, "alignment", 1.0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview), FALSE);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(treeview), TRUE);
+	
+}
+
+
+gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
+{
+	Rt_Text *rtt = NULL;
+	gint count = 0;
+	gint last_upd = 0;
+	gint precision = 0;
+	gfloat current = 0.0;
+	gfloat previous = 0.0;
+	GArray *history = NULL;
+	gchar * tmpbuf = NULL;
+	extern gboolean forced_update;
+	extern GStaticMutex rtv_mutex;
+
+	gtk_tree_model_get (model, iter,
+			COL_RTT_OBJECT, &rtt,
+			-1);
+
+	count = rtt->count;
+	last_upd = rtt->last_upd;
+
+	history = (GArray *)OBJ_GET(rtt->object,"history");
+	precision = (gint)OBJ_GET(rtt->object,"precision");
+
+	if (!history)
+		return FALSE;
+	if (history->len-2 < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after lock rtv_mutex\n"));
+	current = g_array_index(history, gfloat, history->len-1);
+	previous = g_array_index(history, gfloat, history->len-2);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before UNlock rtv_mutex\n"));
+	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after UNlock rtv_mutex\n"));
+
+	/*
+	if (GTK_IS_WIDGET(GTK_WIDGET(gtk_widget_get_toplevel(GTK_WIDGET(rtt))->window)))
+		if (!gdk_window_is_viewable(gtk_widget_get_toplevel(GTK_WIDGET(rtt))->window))
+			return TRUE;
+			*/
+
+	if ((current != previous) || (forced_update))
+	{
+		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		gtk_list_store_set(GTK_LIST_STORE(model), iter,
+				COL_RTT_DATA, tmpbuf, -1);
+		g_free(tmpbuf);
+		last_upd = count;
+	}
+	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
+	{
+		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		gtk_list_store_set(GTK_LIST_STORE(model), iter,
+				COL_RTT_DATA, tmpbuf, -1);
+		g_free(tmpbuf);
+		last_upd = count;
+	}
+
+	if (last_upd > 5000)
+		last_upd = 0;
+	count++;
+	if (count > 5000)
+		count = 0;
+	rtt->count = count;
+	rtt->last_upd = last_upd;
+	return FALSE;
 
 }
-*/
+

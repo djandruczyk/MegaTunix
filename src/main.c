@@ -99,6 +99,7 @@ gint main(gint argc, gchar ** argv)
 	read_config();
 	setup_gui();		
 
+	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 	/* Startup the serial General I/O handler.... */
 	thread_dispatcher_id = g_thread_create(thread_dispatcher,
 			NULL, /* Thread args */

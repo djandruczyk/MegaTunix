@@ -292,6 +292,8 @@ gboolean update_rtsliders(gpointer data)
 
 gboolean update_rttext(gpointer data)
 {
+	if (OBJ_GET(global_data,"rtt_model"))
+		gtk_tree_model_foreach(GTK_TREE_MODEL(OBJ_GET(global_data,"rtt_model")),rtt_foreach,NULL);
 	if (OBJ_GET(global_data,"rtt_hash"))
 		g_hash_table_foreach(OBJ_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
 	return TRUE;
