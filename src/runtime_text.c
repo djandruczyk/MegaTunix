@@ -184,10 +184,6 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 				COL_RTT_OBJECT,(gpointer)rt_text,
 				COL_RTT_INT_NAME,rt_text->ctrl_name,
 				COL_RTT_DATA,"",-1);	
-		//		if (!g_hash_table_lookup(hash,int_name))
-		//			g_hash_table_insert(hash,
-		//					g_strdup(int_name),
-		//					(gpointer)rt_text);
 	}
 	if (int_name)
 		g_free(int_name);
@@ -415,15 +411,15 @@ void setup_rtt_treeview(GtkWidget *treeview)
 	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
-	g_object_set(GTK_CELL_RENDERER(renderer), "height", 1, NULL);
+	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
-	g_object_set(GTK_CELL_RENDERER(renderer), "height", 1, NULL);
-	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], "width-chars", 6, NULL);
-	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_DATA,  NULL);
+	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
+	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
+	column = gtk_tree_view_column_new_with_attributes("",renderer, "markup", COL_RTT_DATA,  NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
