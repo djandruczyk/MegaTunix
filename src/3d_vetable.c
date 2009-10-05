@@ -1536,7 +1536,7 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 	pango_font_description_set_family(font_desc,"Sans");
 
 	min = MIN(widget->allocation.width,widget->allocation.height);
-	pango_font_description_set_size(font_desc,((min+300)/60)*PANGO_SCALE);
+	pango_font_description_set_size(font_desc,((min+300)/80)*PANGO_SCALE);
 
 	if (font_list_base)
 		glDeleteLists(font_list_base,128);
