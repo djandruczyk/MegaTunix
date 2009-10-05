@@ -415,12 +415,14 @@ void setup_rtt_treeview(GtkWidget *treeview)
 	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set(GTK_CELL_RENDERER(renderer), "height", 1, NULL);
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
-	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
+	g_object_set(GTK_CELL_RENDERER(renderer), "height", 1, NULL);
+	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], "width-chars", 6, NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_DATA,  NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
