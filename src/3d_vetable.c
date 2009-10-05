@@ -1529,17 +1529,14 @@ void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
-	gint def_font_size;
-	const gchar * family;
 	gint min = 0;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
-	font_desc = pango_font_description_copy(widget->style->font_desc);
-	def_font_size = pango_font_description_get_size(font_desc);
-	family =  pango_font_description_get_family(font_desc);
+	font_desc = pango_font_description_copy_static(widget->style->font_desc);
+	pango_font_description_set_family(font_desc,"Sans");
 
 	min = MIN(widget->allocation.width,widget->allocation.height);
-	pango_font_description_set_size(font_desc,((min+300)/80)*PANGO_SCALE);
+	pango_font_description_set_size(font_desc,((min+300)/60)*PANGO_SCALE);
 
 	if (font_list_base)
 		glDeleteLists(font_list_base,128);
