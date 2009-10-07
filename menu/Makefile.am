@@ -3,7 +3,8 @@ menudir = $(datadir)/applications/$(MENU_DATA_DIR)
 menu_files = 	\
 		       	megatunix.desktop \
 		       	dashdesigner.desktop \
-		       	gaugedesigner.desktop
+		       	gaugedesigner.desktop \
+		       	mtxloader.desktop
 
 menu_DATA = $(menu_files)
 

@@ -50,7 +50,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gint tmpi = 0;
 	gint i = 0;
 	gint j = 0;
-	gint k = 0;
+	guint k = 0;
 
 	while (files[i])
 	{
@@ -91,7 +91,6 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 			}
 		}
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		i++;
 	}
 

@@ -24,7 +24,7 @@ source=battvolt
 slider_name=o2_volts
 table=0
 row=2
-source=o2volt
+source=o2volt1
 
 [rt_slider_3]
 slider_name=rpm
@@ -147,10 +147,10 @@ row=1
 source=warmcorr
 
 [ww_slider_2]
-slider_name=ww_afr
+slider_name=ww_afr1
 table=0
 row=2
-source=afr
+source=afr1
 
 [ww_slider_3]
 slider_name=ww_map
@@ -165,10 +165,10 @@ row=0
 source=rpm
 
 [ve3d_slider_1]
-slider_name=ve3d_afr
+slider_name=ve3d_afr1
 table=0
 row=1
-source=afr
+source=afr1
 
 [ve3d_slider_2]
 slider_name=ve3d_map

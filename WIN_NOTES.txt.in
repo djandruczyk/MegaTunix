@@ -3,7 +3,7 @@
 
  Win9x is no longer supported
 
- Windows 2000, XP, 203 and Vista require the GTK+ runtime, preferrably
+ Windows XP, 2000, 2003 and Vista require the GTK+ runtime, preferrably
  2.12.9 or newer in order to function!
 
  http://downloads.sourceforge.net/gladewin32/gtk-2.12.9-win32-2.exe

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
@@ -30,11 +31,12 @@ GIOChannel * dbg_channel = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
-	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT, FALSE},
+	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT,FALSE},
 	{ "OpenGL", DEBUG_LEVEL, OPENGL, OPENGL_SHIFT, FALSE},
-	{ "Conversions", DEBUG_LEVEL, CONVERSIONS, CONVERSIONS_SHIFT, FALSE},
+	{ "Conversions", DEBUG_LEVEL, CONVERSIONS, CONVERSIONS_SHIFT,FALSE},
 	{ "Serial Reads", DEBUG_LEVEL, SERIAL_RD, SERIAL_RD_SHIFT, FALSE},
 	{ "Serial Writes", DEBUG_LEVEL, SERIAL_WR, SERIAL_WR_SHIFT, FALSE},
+	{ "I/O Messages", DEBUG_LEVEL, IO_MSG, IO_MSG_SHIFT, FALSE},
 	{ "I/O Processing", DEBUG_LEVEL, IO_PROCESS, IO_PROCESS_SHIFT, FALSE},
 	{ "Threads", DEBUG_LEVEL, THREADS, THREADS_SHIFT, FALSE},
 	{ "Req Fuel", DEBUG_LEVEL, REQ_FUEL, REQ_FUEL_SHIFT, FALSE},
@@ -42,6 +44,7 @@ static DebugLevel dbglevels[] =
 	{ "KeyParser", DEBUG_LEVEL, KEYPARSER, KEYPARSER_SHIFT, FALSE},
 	{ "RealTime Maps", DEBUG_LEVEL, RTMLOADER, RTMLOADER_SHIFT, FALSE},
 	{ "Complex Math", DEBUG_LEVEL, COMPLEX_EXPR, COMPLEX_EXPR_SHIFT, FALSE},
+	{ "Mutexes", DEBUG_LEVEL, MUTEX, MUTEXT_SHIFT, FALSE},
 	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, FALSE},
 };
 
@@ -51,6 +54,8 @@ static DebugLevel dbglevels[] =
  */
 void open_debug()
 {
+	extern GObject *global_data;
+	CmdLineArgs * args = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	struct tm *tm = NULL;
@@ -59,9 +64,14 @@ void open_debug()
 	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
+	args = OBJ_GET(global_data,"args");
+
 	if(!dbg_channel)
 	{
-		filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
+		if (!args->dbglog)
+			filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
+		else
+			filename = g_build_filename(HOME(),args->dbglog,NULL);
 		dbg_channel = g_io_channel_new_file(filename,"w",&error);
 		g_io_channel_set_encoding(dbg_channel,NULL,&error);
 		if (dbg_channel)
@@ -136,10 +146,10 @@ void populate_debugging(GtkWidget *parent)
 	GtkWidget *vbox2 = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
+	static gint columns = 5;
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
-	gint shift = 0;
 	gint mask = 0;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
 
@@ -147,7 +157,7 @@ void populate_debugging(GtkWidget *parent)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent),vbox2);
 
-	table = gtk_table_new(ceil(num_levels/4),4,FALSE);
+	table = gtk_table_new(ceil(num_levels/columns),columns,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -158,11 +168,9 @@ void populate_debugging(GtkWidget *parent)
 	for (i=0;i<num_levels;i++)
 	{
 		mask = dbglevels[i].dclass;
-		shift = dbglevels[i].dshift;
 
 		button = gtk_check_button_new_with_label(dbglevels[i].name);
 		OBJ_SET(button,"handler",GINT_TO_POINTER(dbglevels[i].handler));
-		OBJ_SET(button,"bitshift",GINT_TO_POINTER(shift));
 		OBJ_SET(button,"bitmask",GINT_TO_POINTER(mask));
 		OBJ_SET(button,"bitval",GINT_TO_POINTER(1));
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -172,13 +180,13 @@ void populate_debugging(GtkWidget *parent)
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
 		/* If user set on turn on as well */
-		if ((dbg_lvl & mask) >> shift)
+		if ((dbg_lvl & mask) == mask)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		/* if hardcoded on, turn on.. */
 		if (dbglevels[i].enabled)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;
-		if (j == 4)
+		if (j == columns)
 		{
 			k++;
 			j = 0;

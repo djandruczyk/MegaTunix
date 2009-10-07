@@ -16,11 +16,13 @@
 #include <defines.h>
 #include <debugging.h>
 #include <fileio.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
 #include <tabloader.h>
+#include <widgetmgmt.h>
 
 extern GdkColor red;
 extern GdkColor black;
@@ -55,7 +57,7 @@ void set_group_color(GuiColor color, gchar *group)
 void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
-	name = g_strdup_printf("reqfuel_%i_ctrl",table_num);
+	name = g_strdup_printf("interdep_%i_ctrl",table_num);
 	g_list_foreach(get_list(name), set_widget_color,(gpointer)color);
 	g_free(name);
 }
@@ -171,7 +173,6 @@ void  update_logbar(
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern volatile gboolean leaving;
 
 	if (leaving)
@@ -180,7 +181,7 @@ void  update_logbar(
 		return;
 	}
 
-	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,view_name);
+	widget = (GtkWidget *)lookup_widget(view_name);
 
 	if (!widget)
 	{
@@ -289,8 +290,8 @@ void warn_user(gchar *message)
 	if ((args->be_quiet))
 		return;
 
-	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,
-			GTK_BUTTONS_NONE,message);
+	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+			
 	if (!interrogated)
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);
 	else
@@ -346,25 +347,36 @@ gboolean close_dialog(GtkWidget *widget, gpointer data)
  */
 void set_title(gchar * text)
 {
-	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
-	extern GHashTable *dynamic_widgets;
 	static GtkWidget *info_label = NULL;
+	extern Firmware_Details *firmware;
 
-	if ((!main_window) || (leaving))
+	if ((!lookup_widget("main_window")) || (leaving))
 		return;
 	if (!info_label)
-		info_label = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,"info_label");
-	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+		info_label = (GtkWidget *)lookup_widget("info_label");
 
-	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
-	g_free(tmpbuf);
-	if (GTK_IS_WIDGET(info_label))
+	if (firmware)
 	{
-		tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
-		gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
-		g_free(tmpbuf);
+		if (firmware->actual_signature)
+			tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+		else
+			tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+	}
+	else
+		tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+
+	gtk_window_set_title(GTK_WINDOW(lookup_widget("main_window")),tmpbuf);
+	g_free(tmpbuf);
+	if (info_label)
+	{
+		if (GTK_IS_WIDGET(info_label))
+		{
+			tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
+			gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
+			g_free(tmpbuf);
+		}
 	}
 	g_free(text);
 }

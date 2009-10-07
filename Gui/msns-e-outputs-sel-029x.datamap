@@ -7,201 +7,133 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
-page=0
 bind_to_list=get_data_buttons
 
 [burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
-page=0
 bind_to_list=burners
 
 #----- Widgets --------------------------------------------------------------
 
 [output1_invert_choice_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=output_1
 
 [output2_invert_chocie_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=output_2
 
 [output3_source_choice_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=output_3
 
 [output4_source_choice_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=output_4
 
 #----- RadioButtons ----------------------------------------------------------
-[out1_normal_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+
+[output1_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
+choices=Normal,Inverted
+bitvals=0,1
 offset=66
-bitval=0
-bitshift=1
 bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 1 to be SET when the parameters in the table above are met
+tooltip=Sets output to be set or inverted when the params in the table t othe left are met.
 
-[out1_inverted_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[output2_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
+choices=Normal,Inverted
+bitvals=0,1
 offset=66
-bitval=1
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 1 to be CLEARED (i.e. inverted behavior) when the parameters in the table above are met
-
-[out2_normal_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=0
-bitshift=2
 bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 2 to be SET when the parameters in the table above are met
+tooltip=Sets output to be set or inverted when the params in the table t othe left are met.
 
-[out2_inverted_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=1
-bitshift=2
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 2 to be CLEARED (i.e. inverted behavior) when the parameters in the table above are met
-
-[out3_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[output3_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
+choices=Source Only,Output1+Source
+bitvals=0,1
 offset=116
-bitval=0
-bitshift=7
 bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets User Output 3 to only take it's cues from the table above.
+tooltip=Sets User Output 3 to only take it's cues from the table to the left,  or when set to source+output1,  the output is only set if BOTH conditions are met.
 
-[out3_combined_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=116
-bitval=1
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip= Sets Output 3 to ONLY be active when the above conditions are met AND when output 1 is ON.
-
-[out4_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[output4_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+choices=Source,Fan Control
+toggle_groups=output4_table,
+bitvals=0,1
 offset=1
-bitval=0
-bitshift=6
 bitmask=64
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output 4 to be control by the parameters in the above table
-
-[out4_fan_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=1
-bitval=1
-bitshift=6
-bitmask=64
-toggle_groups=output4_table
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Sets Output4 to be controlled by the fan Control Parameters 
-
+tooltip=Sets Output 4 to be controlled either by the table to the left, or via the Fan Control params (see output pins tab).
 
 #----- TreeViews -------------------------------------------------------------
 
 [output1_swin]
-keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_function_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
-page=0
+keys=offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=8
 src_offset=8
 lim_offset=7
 hys_offset=126
 ulimit_offset=88
 bind_to_list=output_1
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=1
 
 [output2_swin]
-keys=page,offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_function_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
-page=0
+keys=offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=10
 src_offset=10
 lim_offset=9
 hys_offset=127
 ulimit_offset=89
 bind_to_list=output_2
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=2
 
 [output3_swin]
-keys=page,offset,src_offset,lim_offset,bind_to_list,post_function_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
-page=0
+keys=offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=132
 src_offset=132
 lim_offset=133
 bind_to_list=output_3
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=3
 
 [output4_swin]
-keys=page,offset,src_offset,lim_offset,bind_to_list,post_function_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
-page=0
+keys=offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=138
 src_offset=138
 lim_offset=139
 bind_to_list=output_4,output4_table
-post_function_with_arg=build_model_and_view
+post_functions_with_arg=build_model_and_view
 output_num=4
 

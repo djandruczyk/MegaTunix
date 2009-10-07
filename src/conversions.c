@@ -19,6 +19,8 @@
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <glade/glade.h>
+#include <gui_handlers.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <notifications.h>
@@ -50,7 +52,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	DataSize size = MTX_U08;
 	float lower = 0.0;
 	float upper = 0.0;
-	gint i = 0;
+	guint i = 0;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
 	gchar *expr_list = NULL;
@@ -65,7 +67,9 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() after lock reentrant mutex\n"));
 
 	page = (gint)OBJ_GET(widget,"page");
 	offset = (gint)OBJ_GET(widget,"offset");
@@ -74,8 +78,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		printf(__FILE__": convert_before_download, FATAL ERROR, size undefined for widget at page %i, offset %i!! \n",page,offset);
 
 	size = (DataSize)OBJ_GET(widget,"size");
-
-	lower = (gfloat)(gint)OBJ_GET(widget,"raw_lower");
 
 	if (NULL == OBJ_GET(widget,"raw_upper"))
 	{
@@ -106,6 +108,32 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else
 		upper = (gfloat)(gint)OBJ_GET(widget,"raw_upper");
+
+	if (NULL == OBJ_GET(widget,"raw_lower"))
+	{
+		switch (size)
+		{
+			case MTX_U08:
+			case MTX_U16:
+			case MTX_U32:
+				lower = 0;
+				break;
+			case MTX_CHAR:
+			case MTX_S08:
+				lower = -128;
+				break;
+			case MTX_S16:
+				lower = -32768;
+				break;
+			case MTX_S32:
+				lower = -2147483648;
+				break;
+			default:
+				break;
+		}
+	}
+	else
+		lower = (gfloat)(gint)OBJ_GET(widget,"raw_lower");
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -187,30 +215,30 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value));
 		if(value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (no eval)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",upper));
 			value = upper;
 		}
 		if (value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",lower));
 			value = lower;
 		}
 		return_value = (gint)value;
 	}
 	else
 	{
-		return_value = evaluator_evaluate_x(evaluator,value)+0.00001; 
+		return_value = evaluator_evaluate_x(evaluator,value); 
 
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value));
 
 		if (return_value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",upper));
 			return_value = upper;
 		}
 		if (return_value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n"));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",lower));
 			return_value = lower;
 		}
 	}
@@ -219,13 +247,15 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	 if (OBJ_GET(widget,"lookuptable"))
 		return_value = (gint)reverse_lookup(G_OBJECT(widget),tmpi);
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() after UNlock reentrant mutex\n"));
 	return (return_value);
 }
 
 
 /*!
- \brief convert_after_upload() converts the ms-units dat to the real world
+ \brief convert_after_upload() converts the ms-units data to the real world
  units for display on the GUI
  \param widget (GtkWidget *) to extract the conversion info from to perform
  the necessary math
@@ -242,7 +272,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gint canID = 0;
 	DataSize size = 0;
 	gboolean ul_complex = FALSE;
-	gint i = 0;
+	guint i = 0;
 	gint table_num = -1;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
@@ -256,12 +286,17 @@ gfloat convert_after_upload(GtkWidget * widget)
 	extern gint *algorithm;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after lock reentrant mutex\n"));
 
 	ul_complex = (gboolean)OBJ_GET(widget,"ul_complex");
 	if (ul_complex)
 	{
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
+		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
@@ -270,7 +305,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	size = (DataSize)OBJ_GET(widget,"size");
 	canID = (gint)OBJ_GET(widget,"canID");
 	if (size == 0)
-		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i\n",page,offset);
+		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i, widget %s\n",page,offset,(char *)glade_get_widget_name(widget));
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -351,9 +386,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = lookup_data(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
 	else
 	{
-		//printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);
+		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
 		tmpi = get_ecu_data(canID,page,offset,size);
-		//printf("value is %i\n",tmpi);
+		/*printf("value is %i\n",tmpi);*/
 	}
 
 
@@ -361,14 +396,18 @@ gfloat convert_after_upload(GtkWidget * widget)
 	{
 		return_value = tmpi;
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value));
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
+		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
 		return (return_value);		
 	}
 	/*return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001; */
 	return_value = evaluator_evaluate_x(evaluator,tmpi);
 
 	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
 	return (return_value);
 }
 
@@ -386,8 +425,8 @@ void convert_temps(gpointer widget, gpointer units)
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
+	gchar * text = NULL;
 	GtkAdjustment * adj = NULL;
-	gchar *text = NULL;
 	gboolean state = FALSE;
 	gint widget_temp = -1;
 	extern GdkColor black;
@@ -404,9 +443,9 @@ void convert_temps(gpointer widget, gpointer units)
 	if (dep_obj)
 		state = check_dependancies(G_OBJECT(dep_obj));
 
-
 	if ((int)units == FAHRENHEIT) 
 	{
+		/*printf("fahr %s\n",glade_get_widget_name(widget));*/
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	
@@ -418,7 +457,6 @@ void convert_temps(gpointer widget, gpointer units)
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 		}
-
 		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == CELSIUS))
 		{
 
@@ -427,16 +465,24 @@ void convert_temps(gpointer widget, gpointer units)
 			upper = adj->upper;
 			value = adj->value;
 			lower = adj->lower;
-			adj->value = (value *(9.0/5.0))+32;
-			adj->upper = (upper *(9.0/5.0))+32;
-			adj->lower = (lower *(9.0/5.0))+32;
+			adj->value = ((value *(9.0/5.0))+32)+0.001;
+			adj->upper = ((upper *(9.0/5.0))+32)+0.001;
+			adj->lower = ((lower *(9.0/5.0))+32)+0.001;
 
 			gtk_adjustment_changed(adj);
+			/*
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
+		}
+		if ((GTK_IS_ENTRY(widget)) && (widget_temp == CELSIUS))
+		{
+			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
 		{
@@ -445,9 +491,9 @@ void convert_temps(gpointer widget, gpointer units)
 			upper = adj->upper;
 			lower = adj->lower;
 			value = adj->value;
-			adj->value = (value *(9.0/5.0))+32;
-			adj->lower = (lower *(9.0/5.0))+32;
-			adj->upper = (upper *(9.0/5.0))+32;
+			adj->value = ((value *(9.0/5.0))+32)+0.001;
+			adj->lower = ((lower *(9.0/5.0))+32)+0.001;
+			adj->upper = ((upper *(9.0/5.0))+32)+0.001;
 
 			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
@@ -455,6 +501,7 @@ void convert_temps(gpointer widget, gpointer units)
 	}
 	else
 	{
+		/*printf("cels %s\n",glade_get_widget_name(widget));*/
 		if (GTK_IS_LABEL(widget))
 		{
 			if ((dep_obj) && (state))	
@@ -473,15 +520,23 @@ void convert_temps(gpointer widget, gpointer units)
 			upper = adj->upper;
 			lower = adj->lower;
 			value = adj->value;
-			adj->value = (value-32)*(5.0/9.0);
-			adj->lower = (lower-32)*(5.0/9.0);
-			adj->upper = (upper-32)*(5.0/9.0);
+			adj->value = ((value-32)*(5.0/9.0))+0.001;
+			adj->lower = ((lower-32)*(5.0/9.0))+0.001;
+			adj->upper = ((upper-32)*(5.0/9.0))+0.001;
 			gtk_adjustment_changed(adj);
+			/*
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
+		}
+		if ((GTK_IS_ENTRY(widget)) && (widget_temp == FAHRENHEIT))
+		{
+			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			update_widget(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
 		{
@@ -490,9 +545,9 @@ void convert_temps(gpointer widget, gpointer units)
 			upper = adj->upper;
 			lower = adj->lower;
 			value = adj->value;
-			adj->value = (value-32)*(5.0/9.0);
-			adj->lower = (lower-32)*(5.0/9.0);
-			adj->upper = (upper-32)*(5.0/9.0);
+			adj->value = ((value-32)*(5.0/9.0))+0.001;
+			adj->lower = ((lower-32)*(5.0/9.0))+0.001;
+			adj->upper = ((upper-32)*(5.0/9.0))+0.001;
 
 			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));

@@ -19,7 +19,7 @@
     <x_offset>114</x_offset>
     <y_offset>4</y_offset>
     <gauge_xml_name>Impact/Impact_AFR_Gauge.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
   <gauge>
     <width>185</width>

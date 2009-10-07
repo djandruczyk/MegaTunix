@@ -1,4 +1,4 @@
-# Datalogging datamap speccific to lal firmware variants
+# Datalogging datamap speccific to all firmware variants
 [global]
 description=Object data map for Datalogging for all firmwares
 tab_name=_DataLogging
@@ -8,74 +8,66 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size
-key_types=_INT_,_ENUM_
+keys=page,size,dl_type,handler
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident
-key_types=_INT_,_ENUM_
-page=0
+keys=tab_ident
+key_types=_ENUM_
 tab_ident=_DATALOGGING_TAB_
 #----- Buttons ---------------------------------------------------------------
 	
 [select_all_but]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_DLOG_SELECT_ALL_
-page=0
 
 [deselect_all_but]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_DLOG_DESELECT_ALL_
-page=0
 
 [select_defaults_but]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_DLOG_SELECT_DEFAULTS_
-page=0
 
 [comma_delimit_radio_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_COMMA_
-page=0
 
 [tab_delimit_radio_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_TAB_
-page=0
 
 [start_logging_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_START_DATALOGGING_
-page=0
 
 [stop_logging_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_STOP_DATALOGGING_
-page=0
 
 [dump_internal_but]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
+keys=tooltip
+key_types=_STRING_
 tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while the Runtime reader is running, even if you do NOT have datalogging enabled.  This button dumps that to disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
 
 #----- Textview ----------------------------------------------------
 
 [view]
-keys=page,create_tags
-key_types=_INT_,_STRING_
-page=0
+keys=create_tags
+key_types=_STRING_
 create_tags=warning,info
 warning=foreground,red
 info=foreground,dark green

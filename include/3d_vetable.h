@@ -34,14 +34,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-/* Private structures */
-typedef enum
-{
-	_X_,
-	_Y_,
-	_Z_
-}Axis;
-
 typedef struct _RGB3f RGB3f;
 typedef struct _Quad Quad;
 typedef struct _Cur_Vals Cur_Vals;
@@ -169,16 +161,19 @@ struct _Ve_View_3D
 struct _Cur_Vals
 {
 	gfloat x_val;
+	gfloat p_x_vals[3];
 	gfloat x_edit_value;
 	gchar *x_edit_text;
 	gchar *x_runtime_text;
 	void *x_eval;
 	gfloat y_val;
+	gfloat p_y_vals[3];
 	gfloat y_edit_value;
 	gchar *y_edit_text;
 	gchar *y_runtime_text;
 	void *y_eval;
 	gfloat z_val;
+	gfloat p_z_vals[3];
 	gfloat z_edit_value;
 	gchar *z_edit_text;
 	gchar *z_runtime_text;

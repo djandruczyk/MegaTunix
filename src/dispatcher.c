@@ -44,8 +44,9 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <threads.h>
-#include <t-logger.h>
+#include <ms1-t-logger.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 
 extern GAsyncQueue *pf_dispatch_queue;
@@ -54,7 +55,7 @@ extern GObject *global_data;
 
 
 /*!
- \brief dispatcher() is a GTK+ timeout that runs 30 tiems per second checking
+ \brief dispatcher() is a GTK+ timeout that runs 10 times per second checking
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
  queue has multiple message queued up.
@@ -72,15 +73,19 @@ gboolean pf_dispatcher(gpointer data)
 
 	if (!pf_dispatch_queue) /*queue not built yet... */
 		return TRUE;
-	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-//	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));
+	/*	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
+	/*
+	if (g_async_queue_length(pf_dispatch_queue) >40)
+		printf("WARNING: Postfunction dispatch queue is over 40\n");
+	*/
+		
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
-	/*	printf("no messages waiting, returning\n");*/
+		/*	printf("no messages waiting, returning\n");*/
 		return TRUE;
 	}
 
@@ -101,7 +106,7 @@ trypop:
 				printf("ERROR postfunction was null, continuing\n");
 				continue;
 			}
-			//printf ("Should run function %s, %p\n",pf->name,pf->function);
+			/*printf ("Should run function %s, %p\n",pf->name,pf->function);*/
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
@@ -131,16 +136,16 @@ dealloc:
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 	count++;
-	/* try to handle up to 10 messages at a time.  If this is 
+	/* try to handle up to 15 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if(count < 10)
+	if(count < 15)
 	{
-		//printf("trying to handle another message\n");
+		/*printf("trying to handle another message\n");*/
 		goto trypop;
 	}
-	//printf("returning\n");
+	/*printf("returning\n");*/
 	return TRUE;
 }
 
@@ -165,14 +170,13 @@ gboolean gui_dispatcher(gpointer data)
 	Widget_Update *w_update = NULL;
 	QFunction *qfunc = NULL;
 	extern volatile gboolean leaving;
-	//extern gint mem_view_style[];
-	extern GHashTable *dynamic_widgets;
+	/*extern gint mem_view_style[];*/
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
 		return TRUE;
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
-	//printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));
+	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);
@@ -205,7 +209,7 @@ trypop:
 					break;
 				case UPD_RUN_FUNCTION:
 					qfunc = (QFunction *)message->payload;
-					run_post_function(qfunc->func_name);
+					run_post_functions(qfunc->func_name);
 					dealloc_qfunction(qfunc);
 					message->payload = NULL;
 					break;
@@ -216,12 +220,12 @@ trypop:
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
-							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
 							break;
 						case MTX_LABEL:
-							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
 							break;

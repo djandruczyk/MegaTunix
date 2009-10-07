@@ -15,8 +15,47 @@
 #define __DEBUG_GUI_H__
 
 #include <gtk/gtk.h>
-#include <enums.h>
 
+
+/* Debugging Enumerations */
+typedef enum
+{
+	NO_DEBUG 	= 0,
+	INTERROGATOR 	= 1<<0,
+	OPENGL		= 1<<1,
+	CONVERSIONS	= 1<<2,
+	SERIAL_RD	= 1<<3,
+	SERIAL_WR	= 1<<4,
+	IO_MSG		= 1<<5,
+	IO_PROCESS	= 1<<6,
+	THREADS		= 1<<7,
+	REQ_FUEL	= 1<<8,
+	TABLOADER	= 1<<9,
+	KEYPARSER	= 1<<10,
+	RTMLOADER	= 1<<11,
+	COMPLEX_EXPR	= 1<<12,
+	MUTEX		= 1<<13,
+	CRITICAL	= 1<<30
+}Dbg_Class;
+
+typedef enum guint
+{
+	INTERROGATOR_SHIFT	= 0,
+	OPENGL_SHIFT		= 1,
+	CONVERSIONS_SHIFT	= 2,
+	SERIAL_RD_SHIFT		= 3,
+	SERIAL_WR_SHIFT		= 4,
+	IO_MSG_SHIFT		= 5,
+	IO_PROCESS_SHIFT	= 6,
+	THREADS_SHIFT		= 7,
+	REQ_FUEL_SHIFT		= 8,
+	TABLOADER_SHIFT		= 9,
+	KEYPARSER_SHIFT		= 10,
+	RTMLOADER_SHIFT		= 11,
+	COMPLEX_EXPR_SHIFT	= 12,
+	MUTEXT_SHIFT		= 13,
+	CRITICAL_SHIFT		= 30
+}Dbg_Shift;
 
 typedef struct _DebugLevel DebugLevel;
 /*! 

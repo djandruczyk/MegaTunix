@@ -40,7 +40,6 @@ static gint def_width=640;
 static gint def_height=480;
 gint width = 0;
 gint height = 0;
-GtkWidget *main_window = NULL;
 GtkTooltips *tip = NULL;
 extern GObject *global_data;
 
@@ -93,11 +92,12 @@ int setup_gui()
 	g_free(filename);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	register_widget("main_window",window);
+	OBJ_SET(global_data,"font_size",GINT_TO_POINTER(PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc))));
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(leave),NULL);
-	main_window = window;
 	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_box = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_box);
@@ -110,10 +110,10 @@ int setup_gui()
 	y = (gint)OBJ_GET(global_data,"main_y_origin");
 	w = (gint)OBJ_GET(global_data,"width");
 	h = (gint)OBJ_GET(global_data,"height");
-	gtk_window_move((GtkWindow *)main_window, x, y);
-	gtk_widget_set_size_request(main_window,def_width,def_height);
-	gtk_window_resize(GTK_WINDOW(main_window),w,h);
-	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
+	gtk_window_move((GtkWindow *)window, x, y);
+	gtk_widget_set_size_request(window,def_width,def_height);
+	gtk_window_resize(GTK_WINDOW(window),w,h);
+	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "VERSION);
 	finalize_core_gui(xml);
 
 	tips_in_use = (gboolean)OBJ_GET(global_data,"tips_in_use");
@@ -123,7 +123,7 @@ int setup_gui()
 		gtk_tooltips_disable(tip);
 
 	if (!args->hide_maingui)
-		gtk_widget_show_all(main_window);
+		gtk_widget_show_all(window);
 
 	/* Tabs that should be hidden.... */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");
@@ -131,6 +131,7 @@ int setup_gui()
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)
 	{
+		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i),TRUE);
 		if(hidden_list[i] == TRUE)
 		{
 			/* Get tab and child label and hide it.. */
@@ -266,7 +267,7 @@ void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Interrogation button */
 	ebox = glade_xml_get_widget(xml,"interrogate_button_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, but it works about 99.5\% of the time.  If it MIS-detects your ECU contact the developer with your firmware details.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100% foolproof, but it works about 99.5% of the time.  If it MIS-detects your ECU contact the developer with your firmware details.",NULL);
 	button = glade_xml_get_widget(xml,"interrogate_button");
 	register_widget("interrogate_button",button);
 	OBJ_SET(button,"handler",GINT_TO_POINTER(INTERROGATE_ECU));
@@ -288,7 +289,7 @@ void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Textview */
 	ebox = glade_xml_get_widget(xml,"interrogation_status_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).",NULL);
 
 	widget = glade_xml_get_widget(xml,"interr_view");
 	register_widget("interr_view",widget);
@@ -304,8 +305,13 @@ void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"Sets the comm port to use. Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
 
+	/* Read Timeout threshold spinner */
+	widget = glade_xml_get_widget(xml,"read_timeout_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"read_timeout"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_READ_TIMEOUT));
+	
 	/* Active COMM Port entry */
 	widget = glade_xml_get_widget(xml,"active_port_entry");
 	register_widget("active_port_entry",widget);
@@ -321,11 +327,28 @@ void finalize_core_gui(GladeXML * xml)
 		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),OBJ_GET(global_data,"override_port"));
 
 	/* COMMS Tab Read delay subtable */
-	ebox = glade_xml_get_widget(xml,"read_delay_ebox");
-	gtk_tooltips_set_tip(tip,ebox,"Sets the time delay between read attempts for getting the RealTime variables from the ECU, typically should be set around 50 for about 12-18 reads per second from the ECU. Lower values will update things faster but wll use more CPU resources.  This will control the rate at which the Runtime Display page updates.",NULL);
+	ebox = glade_xml_get_widget(xml,"rates_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"These controls set the polling rate of the serial port (i.e. every 30 ms), as well as the update rates for the runtime text, runtime sliders, and dashboards.  The Datalogging always happens at the raw serial polling rate.  This allows you to reduce the update rate of other things that are less relevant and conserver CPU resources for slower systems.",NULL);
+
 	widget = glade_xml_get_widget(xml,"read_delay_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),serial_params->read_wait);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
+
+	widget = glade_xml_get_widget(xml,"rtslider_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"rtslider_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTSLIDER_FPS));
+
+	widget = glade_xml_get_widget(xml,"rttext_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"rttext_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTTEXT_FPS));
+
+	widget = glade_xml_get_widget(xml,"dashboard_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"dashboard_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(DASHBOARD_FPS));
+
+	widget = glade_xml_get_widget(xml,"ve3d_fps_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"ve3d_fps"));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(VE3D_FPS));
 
 	/* COMMS Tab Start/Stop RT buttons */
 	button = glade_xml_get_widget(xml,"start_rt_button");

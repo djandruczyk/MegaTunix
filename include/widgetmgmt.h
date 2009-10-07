@@ -20,6 +20,7 @@
 /* Prototypes */
 void populate_master(GtkWidget *, gpointer );
 void store_widget_data(gpointer , gpointer );
+GtkWidget * lookup_widget(const gchar *);
 void register_widget(gchar *, GtkWidget *);
 gboolean deregister_widget(gchar *);
 gboolean get_state(gchar *, gint );

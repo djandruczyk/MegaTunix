@@ -3,7 +3,7 @@
 <dashboard>
   <dash_geometry>
     <width>712</width>
-    <height>510</height>
+    <height>515</height>
   </dash_geometry>
   <gauge>
     <width>310</width>
@@ -11,7 +11,7 @@
     <x_offset>402</x_offset>
     <y_offset>210</y_offset>
     <gauge_xml_name>Ghost/Ghost_AFR_Gauge.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
   <gauge>
     <width>307</width>

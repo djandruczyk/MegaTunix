@@ -40,7 +40,7 @@ struct _Logview_Data
 	GList *used_colors;	/*! List of colors in use.... */
 	gint active_traces;	/*! how many are active */
 	gint spread;		/*! Pixel spread between trace info blocks */
-	gint tselect;		/*! Trace that is currently selected */
+	guint tselect;		/*! Trace that is currently selected */
 	PangoFontDescription *font_desc; /*! Font used for text... */
 	gint info_width;	/*! Width of left info area */
 };
@@ -52,7 +52,7 @@ struct _Logview_Data
  */
 struct _Log_Info
 {
-	gint field_count;	/*! How many fields in the logfile */
+	guint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
 	gchar *signature;	/*! ECU signature of log */
 	GArray *log_list;	/*! List of objects */

@@ -22,6 +22,7 @@
 #include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stringmatch.h>
 
 
@@ -121,7 +122,10 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 		multi = g_new0(MultiExpr, 1);
 		multi->lower_limit = (gint)strtol(l_limits[i],NULL,10);
 		multi->upper_limit = (gint)strtol(u_limits[i],NULL,10);
-		multi->lookuptable = g_strdup(ltables[i]);
+		if (strlen(ltables[i]) == 0)
+			multi->lookuptable = NULL;
+		else
+			multi->lookuptable = g_strdup(ltables[i]);
 		multi->dl_conv_expr = g_strdup(dl_exprs[i]);
 		multi->ul_conv_expr = g_strdup(ul_exprs[i]);
 		multi->dl_eval = evaluator_create(multi->dl_conv_expr);

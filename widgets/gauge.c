@@ -46,7 +46,7 @@
  \param index (gint) index of color to set.
  \param color (GdkColor) new color to use for the specified index
  */
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color)
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -68,7 +68,7 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor c
  \param index (gint) index of color to set.
  \returns a pointer to the internal GdkColor struct WHICH MUST NOT be FREED!!
  */
-GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index)
+GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
@@ -80,11 +80,12 @@ GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index)
  \brief gets the current value 
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
-gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
+gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),0.0);
-	return	priv->value;
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
+	*value = priv->value;
+	return TRUE;
 }
 
 
@@ -93,10 +94,14 @@ gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value (gfloat) new value
  */
-void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
+gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
+	gboolean new_bg = FALSE;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	/* If no change,  no point updating */
+	if (value == priv->value)
+		return TRUE;
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if (value > priv->ubound)
 		priv->clamped = CLAMP_UPPER;
@@ -104,9 +109,30 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 		priv->clamped = CLAMP_LOWER;
 	else
 		priv->clamped = CLAMP_NONE;
+	if (value > priv->value)
+		priv->direction = ASCENDING;
+	else
+		priv->direction = DESCENDING;
+	if ((value > priv->peak) && (priv->show_tattletale))
+	{
+		priv->show_tattletale = FALSE;
+		priv->reenable_tattletale = TRUE;
+		new_bg = TRUE;
+	}
 	priv->value = value;
+	if (value > priv->peak)
+		priv->peak = value;
+	if ((priv->reenable_tattletale) && (priv->direction == DESCENDING))
+	{
+		priv->reenable_tattletale = FALSE;
+		priv->show_tattletale = TRUE;
+		new_bg = TRUE;
+	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (new_bg)
+		generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
+	return TRUE;
 }
 
 
@@ -202,7 +228,9 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 	new_tblock = g_new0(MtxTextBlock, 1);
 	new_tblock->font = g_strdup(tblock->font);
 	new_tblock->text = g_strdup(tblock->text);
-	new_tblock->color = tblock->color;
+	new_tblock->color[MTX_DAY] = tblock->color[MTX_DAY];
+	new_tblock->color[MTX_NITE] = tblock->color[MTX_NITE];
+	new_tblock->font_scale = tblock->font_scale;
 	new_tblock->font_scale = tblock->font_scale;
 	new_tblock->x_pos = tblock->x_pos;
 	new_tblock->y_pos = tblock->y_pos;
@@ -229,17 +257,20 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 	g_object_freeze_notify (G_OBJECT (gauge));
 	new_tgroup = g_new0(MtxTickGroup, 1);
 	new_tgroup->text = g_strdup(tgroup->text);
-	new_tgroup->text_color = tgroup->text_color;
+	new_tgroup->text_color[MTX_DAY] = tgroup->text_color[MTX_DAY];
+	new_tgroup->text_color[MTX_NITE] = tgroup->text_color[MTX_NITE];
 	new_tgroup->text_inset = tgroup->text_inset;
 	new_tgroup->font = g_strdup(tgroup->font);
 	new_tgroup->font_scale = tgroup->font_scale;
 	new_tgroup->num_maj_ticks = tgroup->num_maj_ticks;
-	new_tgroup->maj_tick_color = tgroup->maj_tick_color;
+	new_tgroup->maj_tick_color[MTX_DAY] = tgroup->maj_tick_color[MTX_DAY];
+	new_tgroup->maj_tick_color[MTX_NITE] = tgroup->maj_tick_color[MTX_NITE];
 	new_tgroup->maj_tick_inset = tgroup->maj_tick_inset;
 	new_tgroup->maj_tick_length = tgroup->maj_tick_length;
 	new_tgroup->maj_tick_width = tgroup->maj_tick_width;
 	new_tgroup->num_min_ticks = tgroup->num_min_ticks;
-	new_tgroup->min_tick_color = tgroup->min_tick_color;
+	new_tgroup->min_tick_color[MTX_DAY] = tgroup->min_tick_color[MTX_DAY];
+	new_tgroup->min_tick_color[MTX_NITE] = tgroup->min_tick_color[MTX_NITE];
 	new_tgroup->min_tick_inset = tgroup->min_tick_inset;
 	new_tgroup->min_tick_length = tgroup->min_tick_length;
 	new_tgroup->min_tick_width = tgroup->min_tick_width;
@@ -272,7 +303,8 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	new_poly = g_new0(MtxPolygon, 1);
 	new_poly->type = poly->type;
-	new_poly->color = poly->color;
+	new_poly->color[MTX_DAY] = poly->color[MTX_DAY];
+	new_poly->color[MTX_NITE] = poly->color[MTX_NITE];
 	new_poly->filled = poly->filled;
 	/* Get size of struct to copy */
 	switch(poly->type)
@@ -385,7 +417,6 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < NUM_ATTRIBUTES);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
@@ -404,6 +435,8 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 			break;
 		case UBOUND:
 			priv->ubound = value;
+			if (priv->peak > priv->ubound)
+				priv->peak = priv->ubound;
 			break;
 		case NEEDLE_TAIL:
 			priv->needle_tail = value;
@@ -429,11 +462,17 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 		case VALUE_YPOS:
 			priv->value_ypos = value;
 			break;
+		case TATTLETALE_ALPHA:
+			priv->tattletale_alpha = value;
+			break;
 		case PRECISION:
 			priv->precision = (gint)value;
 			break;
 		case ANTIALIAS:
 			priv->antialias = (gint)value;
+			break;
+		case TATTLETALE:
+			priv->show_tattletale = (gint)value;
 			break;
 		case SHOW_VALUE:
 			priv->show_value = (gint)value;
@@ -459,8 +498,6 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
 	g_return_val_if_fail ((field < NUM_ATTRIBUTES),FALSE);
-	g_return_val_if_fail ((field >= 0),FALSE);
-	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
 	{
@@ -503,11 +540,17 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 		case VALUE_YPOS:
 			*value = priv->value_ypos;
 			break;
+		case TATTLETALE_ALPHA:
+			*value = priv->tattletale_alpha;
+			break;
 		case PRECISION:
 			*value = (gfloat)priv->precision;
 			break;
 		case ANTIALIAS:
 			*value = (gfloat)priv->antialias;
+			break;
+		case TATTLETALE:
+			*value = (gfloat)priv->show_tattletale;
 			break;
 		case SHOW_VALUE:
 			*value = (gfloat)priv->show_value;
@@ -534,7 +577,6 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 	MtxTextBlock *tblock = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < TB_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tblock = g_array_index(priv->t_blocks,MtxTextBlock *,index);
@@ -550,8 +592,11 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 		case TB_Y_POS:
 			tblock->y_pos = *(gfloat *)value;
 			break;
-		case TB_COLOR:
-			tblock->color = *(GdkColor *)value;
+		case TB_COLOR_DAY:
+			tblock->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TB_COLOR_NITE:
+			tblock->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TB_FONT:
 			g_free(tblock->font);
@@ -585,7 +630,6 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 	MtxTickGroup *tgroup = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < TG_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tgroup = g_array_index(priv->tick_groups,MtxTickGroup *,index);
@@ -600,8 +644,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 			g_free(tgroup->text);
 			tgroup->text = g_strdup(value);
 			break;
-		case TG_TEXT_COLOR:
-			tgroup->text_color = *(GdkColor *)value;
+		case TG_TEXT_COLOR_DAY:
+			tgroup->text_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_TEXT_COLOR_NITE:
+			tgroup->text_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_TEXT_INSET:
 			tgroup->text_inset = *(gfloat *)value;
@@ -612,8 +659,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_NUM_MAJ_TICKS:
 			tgroup->num_maj_ticks = (gint)(*(gfloat *)value);
 			break;
-		case TG_MAJ_TICK_COLOR:
-			tgroup->maj_tick_color = *(GdkColor *)value;
+		case TG_MAJ_TICK_COLOR_DAY:
+			tgroup->maj_tick_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_MAJ_TICK_COLOR_NITE:
+			tgroup->maj_tick_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_MAJ_TICK_INSET:
 			tgroup->maj_tick_inset = *(gfloat *)value;
@@ -627,8 +677,11 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_NUM_MIN_TICKS:
 			tgroup->num_min_ticks = (gint)(*(gfloat *)value);
 			break;
-		case TG_MIN_TICK_COLOR:
-			tgroup->min_tick_color = *(GdkColor *)value;
+		case TG_MIN_TICK_COLOR_DAY:
+			tgroup->min_tick_color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case TG_MIN_TICK_COLOR_NITE:
+			tgroup->min_tick_color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case TG_MIN_TICK_INSET:
 			tgroup->min_tick_inset = *(gfloat *)value;
@@ -674,7 +727,6 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < POLY_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 
@@ -683,8 +735,11 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 	data = poly->data;
 	switch (field)
 	{
-		case POLY_COLOR:
-			poly->color = *(GdkColor *)value;
+		case POLY_COLOR_DAY:
+			poly->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case POLY_COLOR_NITE:
+			poly->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case POLY_FILLED:
 			poly->filled = (gint)(*(gfloat *)value);
@@ -783,7 +838,6 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField fi
 	MtxColorRange *c_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < CR_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	c_range = g_array_index(priv->c_ranges,MtxColorRange *,index);
@@ -802,8 +856,11 @@ void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField fi
 		case CR_LWIDTH:
 			c_range->lwidth = *(gfloat *)value;
 			break;
-		case CR_COLOR:
-			c_range->color = *(GdkColor *)value;
+		case CR_COLOR_DAY:
+			c_range->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case CR_COLOR_NITE:
+			c_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		default:
 			break;
@@ -829,7 +886,6 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 	MtxAlertRange *a_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_return_if_fail (field < ALRT_NUM_FIELDS);
-	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	a_range = g_array_index(priv->a_ranges,MtxAlertRange *,index);
@@ -848,8 +904,11 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 		case ALRT_LWIDTH:
 			a_range->lwidth = *(gfloat *)value;
 			break;
-		case ALRT_COLOR:
-			a_range->color = *(GdkColor *)value;
+		case ALRT_COLOR_DAY:
+			a_range->color[MTX_DAY] = *(GdkColor *)value;
+			break;
+		case ALRT_COLOR_NITE:
+			a_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		default:
 			break;
@@ -996,13 +1055,13 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxColorRange *c_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->c_ranges->len) && (index >= 0 ))
+	if (index < priv->c_ranges->len)
 	{
 		c_range = g_array_index(priv->c_ranges,MtxColorRange *, index);
 		priv->c_ranges = g_array_remove_index(priv->c_ranges,index);
@@ -1022,13 +1081,13 @@ void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxAlertRange *a_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->a_ranges->len) && (index >= 0 ))
+	if (index < priv->a_ranges->len)
 	{
 		a_range = g_array_index(priv->a_ranges,MtxAlertRange *, index);
 		priv->a_ranges = g_array_remove_index(priv->a_ranges,index);
@@ -1048,13 +1107,13 @@ void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tblock = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->t_blocks->len) && (index >= 0 ))
+	if (index < priv->t_blocks->len)
 	{
 		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, index);
 		priv->t_blocks = g_array_remove_index(priv->t_blocks,index);
@@ -1078,13 +1137,13 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tgroup = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->tick_groups->len) && (index >= 0 ))
+	if (index < priv->tick_groups->len)
 	{
 		tgroup = g_array_index(priv->tick_groups,MtxTextBlock *, index);
 		priv->tick_groups = g_array_remove_index(priv->tick_groups,index);
@@ -1108,13 +1167,13 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
+void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
 {
 	MtxPolygon *poly = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= priv->polygons->len) && (index >= 0 ))
+	if (index < priv->polygons->len)
 	{
 		poly = g_array_index(priv->polygons,MtxPolygon *, index);
 		priv->polygons = g_array_remove_index(priv->polygons,index);
@@ -1133,29 +1192,6 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
 
-}
-
-
-/*!
- \brief updates the gauge position,  This is a wrapper function conditionally
- compiled to call a corresponsing GDK or cairo function.
- \param widget (MtxGaugeFace *) pointer to the gauge object
- */
-void update_gauge_position(MtxGaugeFace *gauge)
-{
-	cairo_update_gauge_position (gauge);
-}
-
-
-
-/*!
- \brief generates the gauge background, This is a wrapper function 
- conditionally compiled to call a corresponsing GDK or cairo function.
- \param widget (GtkWidget *) pointer to the gauge object
- */
-void generate_gauge_background(MtxGaugeFace *gauge)
-{
-	cairo_generate_gauge_background(gauge);
 }
 
 
@@ -1189,6 +1225,91 @@ void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 
 
 /*!
+ \brief enables showing of gauge tattletale
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	priv->show_tattletale = state;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief gets whether tattletale is enabled or not
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	return priv->show_tattletale;
+}
+
+
+/*!
+ \brief sets alpha for tattletale
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	priv->tattletale_alpha = alpha;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief gets tattletale alpha value
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+gfloat mtx_gauge_face_get_tattletale_alpha(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),0.0);
+	return priv->tattletale_alpha;
+}
+
+
+/*!
+ \brief gets the peak value 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ */
+gfloat mtx_gauge_face_get_peak (MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),0.0);
+	return	priv->peak;
+}
+
+
+/*!
+ \brief clears the peak value 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ */
+gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
+	priv->peak = priv->lbound;
+	return TRUE;
+}
+
+
+/*!
  \brief gets the state of the drag border
  \param gauge, pointer to gauge
  \returns the state of whether the gauge shows the drag border
@@ -1214,3 +1335,35 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief gets the state of the daytime_mode flag
+ \param gauge, pointer to gauge
+ \returns the state of whether the gauge is in daytime or nitetime mode
+ */
+MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), MTX_DAY);
+	return priv->daytime_mode;
+}
+
+
+/*!
+ \brief sets the state of the daytime_mode flag
+ \param gauge, pointer to gauge
+ \returns true on sucess
+ */
+gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	if (priv->daytime_mode == mode)
+		return TRUE;
+	else
+	{
+		priv->daytime_mode = mode;
+		generate_gauge_background(gauge);
+		mtx_gauge_face_redraw_canvas (gauge);
+	}
+	return TRUE;
+}

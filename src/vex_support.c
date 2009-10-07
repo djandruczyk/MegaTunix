@@ -50,15 +50,15 @@ static struct
 
 } import_handlers[] = 
 {
-	{ "EVEME", HEADER, VEX_EVEME},
-	{ "UserRev:", HEADER, VEX_USER_REV}, 
-	{ "UserComment:", HEADER, VEX_USER_COMMENT},
-	{ "Date:", HEADER, VEX_DATE},
-	{ "Time:", HEADER, VEX_TIME},
-	{ "Page", PAGE, VEX_NONE},
-	{ "VE Table RPM Range\0", RANGE, VEX_RPM_RANGE},
-	{ "VE Table Load Range\0", RANGE, VEX_LOAD_RANGE},
-	{ "VE Table\0", TABLE, VEX_NONE}
+	{ "EVEME", VEX_HEADER, VEX_EVEME},
+	{ "UserRev:", VEX_HEADER, VEX_USER_REV}, 
+	{ "UserComment:", VEX_HEADER, VEX_USER_COMMENT},
+	{ "Date:", VEX_HEADER, VEX_DATE},
+	{ "Time:", VEX_HEADER, VEX_TIME},
+	{ "Page", VEX_PAGE, VEX_NONE},
+	{ "VE Table RPM Range\0", VEX_RANGE, VEX_RPM_RANGE},
+	{ "VE Table Load Range\0", VEX_RANGE, VEX_LOAD_RANGE},
+	{ "VE Table\0", VEX_TABLE, VEX_NONE}
 };
 
 
@@ -68,7 +68,6 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -85,7 +84,7 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.vex");
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
@@ -121,10 +120,8 @@ void select_table_for_export(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
-	extern GtkWidget *main_window;
 	struct tm *tm = NULL;
         time_t *t = NULL;
 
@@ -143,7 +140,7 @@ void select_table_for_export(gint table_num)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("vex");
@@ -179,8 +176,6 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 
 	if (!interrogated)
@@ -189,7 +184,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
@@ -207,7 +202,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
 
 	all_table_import(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -222,8 +217,6 @@ void select_table_for_import(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 
@@ -237,7 +230,7 @@ void select_table_for_import(gint table_num)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -256,7 +249,7 @@ void select_table_for_import(gint table_num)
 		return;
 	}
 	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
 
 	single_table_import(iochannel,table_num);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -525,7 +518,6 @@ gboolean all_table_import(GIOChannel *iochannel)
 	GModule *module = NULL;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
 	{
@@ -565,7 +557,7 @@ gboolean all_table_import(GIOChannel *iochannel)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -604,7 +596,6 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	GModule *module = NULL;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	if (!iochannel)
 	{
@@ -642,7 +633,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -725,16 +716,16 @@ GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportPar
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
 	{
-		case HEADER:
+		case VEX_HEADER:
 			status = process_header(vex, arg, string);
 			break;
-		case PAGE:
+		case VEX_PAGE:
 			status = process_page(vex, string);
 			break;
-		case RANGE:
+		case VEX_RANGE:
 			status = process_vex_range(vex, arg, string, iochannel);
 			break;
-		case TABLE:
+		case VEX_TABLE:
 			status = process_vex_table(vex, string, iochannel);
 			break;
 	}
@@ -971,13 +962,15 @@ GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string
 			update_logbar("tools_view","warning",g_strdup("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 			break;
 		}
-//		if ((value < 0) || (value > 255))
-//		{
-//			status = G_IO_STATUS_ERROR;
-//			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
-//			break;
-//		}
-//		else
+		/*
+		if ((value < 0) || (value > 255))
+		{
+			status = G_IO_STATUS_ERROR;
+			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE);
+			break;
+		}
+		else
+		*/
 			switch (arg)
 			{
 				case VEX_RPM_RANGE:
@@ -1076,18 +1069,20 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-//			if ((value < 0) || (value > 255))
-//			{
-//				status = G_IO_STATUS_ERROR;
-//				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
-//				goto breakout;
-//			}
-//			else
+			/*
+			if ((value < 0) || (value > 255))
+			{
+				status = G_IO_STATUS_ERROR;
+				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE);
+				goto breakout;
+			}
+			else
+			*/
 				vex->tbl_bins[j+(i*x_bins)] = value;
 		}		
 		g_string_free(a_line, TRUE);
 	}
-//breakout:
+/*breakout:*/
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		vex->got_ve = TRUE;
@@ -1341,9 +1336,7 @@ void revert_to_previous_data()
 	GArray *pfuncs = NULL;
 	/* Called to back out a load of a VEtable from VEX import */
 	extern Firmware_Details *firmware;
-	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_backup = firmware->ecu_data_backup;
-	extern GHashTable *dynamic_widgets;
 
 	for (page=0;page<firmware->total_pages;page++)
 	{
@@ -1364,12 +1357,10 @@ void revert_to_previous_data()
 			{
 				if (get_ecu_data_backup(canID,page,offset,MTX_U08) != get_ecu_data(canID,page,offset,MTX_U08))
 				{
-					set_ecu_data(canID,page,offset,MTX_U08,get_ecu_data_backup(canID,page,offset,MTX_U08));
 					send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
 				}
 			}
 		}
-		memcpy(ecu_data[page], ecu_data_backup[page],firmware->page_params[page]->length);
 	}
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
@@ -1383,7 +1374,7 @@ void revert_to_previous_data()
 	g_module_close(module);
 	io_cmd(NULL,pfuncs);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),FALSE);
 	update_logbar("tools_view","warning",g_strdup("Reverting to previous settings....\n"),FALSE,FALSE);
 	io_cmd(firmware->burn_all_command,NULL);
 }

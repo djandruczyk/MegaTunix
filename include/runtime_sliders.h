@@ -53,6 +53,8 @@ void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
 Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
 gboolean free_ve3d_sliders(gint);
+EXPORT gboolean rtslider_button_handler(GtkWidget *,GdkEventButton *, gpointer);
+EXPORT gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
 /* Prototypes */
 
 #endif

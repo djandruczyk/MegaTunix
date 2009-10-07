@@ -74,10 +74,10 @@ struct _Io_Message
 {
 	GArray *functions;	/*! for gui_dispatch_queue */
 	GArray *sequence;	/*! for sending data to ECU */
-	InputHandler handler;	/*! Command handler for inbound data */
 	void *payload;		/*! data passed along, arbritrary size.. */
 	void *recv_buf;		/* data that comes from ECU */
 	Command *command;	/* Command struct */
+	gboolean status;	/* True == success, false == failure */
 };
 
 
@@ -110,6 +110,8 @@ void chunk_write(gint, gint, gint, gint, guint8 *);
 void build_output_string(Io_Message *, Command *, gpointer);
 void handle_page_change(gint , gint );
 void queue_ms1_page_change(gint );
+void table_write(gint, gint, guint8 *);
+
 /* Prototypes */
 
 #endif

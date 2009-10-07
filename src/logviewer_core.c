@@ -27,6 +27,7 @@
 #include <string.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 Log_Info *log_info = NULL;
 extern GObject *global_data;
@@ -44,8 +45,6 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern GtkWidget *main_window;
-	extern GHashTable *dynamic_widgets;
 
 	reset_logviewer_state();
 	free_log_info();
@@ -53,7 +52,7 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Choose a datalog to view");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -78,7 +77,7 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 	g_io_channel_unref(iochannel);
 
 	update_logbar("dlog_view",NULL,g_strdup("LogView File Closed\n"),FALSE,FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_controls_hbox"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("logviewer_controls_hbox"),TRUE);
 	free_mtxfileio(fileio);
 	return TRUE;
 }
@@ -135,7 +134,6 @@ void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	GArray *array = NULL;
 	GObject *object = NULL;
 	gint i = 0;
-	extern GHashTable *dynamic_widgets;
 	extern gboolean offline;
 	extern Rtv_Map *rtv_map;
 
@@ -195,8 +193,8 @@ read_again:
 			g_array_append_val(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
-		OBJ_SET(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),"log_info",(gpointer)log_info);
+		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), TRUE);
+		OBJ_SET(lookup_widget("logviewer_trace_darea"),"log_info",(gpointer)log_info);
 
 	}
 	g_free(delimiter);
@@ -211,7 +209,7 @@ read_again:
  */
 void populate_limits(Log_Info *log_info)
 {
-	gint i = 0;
+	guint i = 0;
 	gint j = 0;
 	GObject * object = NULL;
 	GArray *array = NULL;
@@ -260,8 +258,10 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint x = 0;
+	gint precision = 0;
+	gchar ** vector = NULL;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
 	GObject *object = NULL;
@@ -273,6 +273,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			/* Should insert some sort of marker at this index
 			 * in the data arrays... 
 			 */
+			printf("MARK found in logfile. MTX doesn't do anything with these yet...!\n");
 			continue;
 		}
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
@@ -294,15 +295,18 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 		{
 			object = g_array_index(log_info->log_list,GObject *, i);
 			tmp_array = (GArray *)OBJ_GET(object,"data_array");
-			val = (gfloat)g_ascii_strtod(data[i],NULL);
+			val = (gfloat)g_ascii_strtod(g_strdelimit(data[i],",.",'.'),NULL);
 			g_array_append_val(tmp_array,val);
 
 			/*printf("data[%i]=%s\n",i,data[i]);*/
-			if (x == 0) /* only check fir first line */
+			if (x == 0) /* only check first line */
 			{
 				if (g_strrstr(data[i], ".") != NULL)
 				{
-					printf("!! ERROR, bug detected,  code to detect precision in logfiles isn't written yet!!!!\n Please slap the author\n");
+					vector = g_strsplit(data[i],".",-1);
+					precision = strlen(vector[1]);
+					g_strfreev(vector);
+					OBJ_SET(object,"precision",GINT_TO_POINTER(precision));
 				}
 			}
 
@@ -319,7 +323,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 void free_log_info()
 {
 	extern Log_Info *log_info;
-	gint i = 0;
+	guint i = 0;
 	GObject *object = NULL;
 	GArray *array = NULL;
 	

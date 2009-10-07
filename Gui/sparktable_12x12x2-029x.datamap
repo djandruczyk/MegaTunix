@@ -7,21 +7,19 @@ groups=defaults,load_1,load_2,rpm_1,rpm_2,spark_1,spark_2
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size
-key_types=_INT_,_ENUM_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=3
 size=_U08_
-
-[load_1]
-keys=page,dl_type,handler,raw_lower,raw_upper,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
-page=3
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[load_1]
+keys=source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 use_color=TRUE
-table_num=3
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
@@ -30,42 +28,28 @@ bind_to_list=multi_expression
 tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_BOOL_,_STRING_
-page=3
+keys=dl_conv_expr,ul_conv_expr,use_color,tooltip
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-raw_lower=0
-raw_upper=255
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,precision,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_INT_,_BOOL_,_STRING_
-page=3
+keys=table_num,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
+table_num=3
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-raw_lower=0
-raw_upper=255
 precision=1
 use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=page,dl_type,handler,raw_lower,raw_upper,table_num,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
+keys=page,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-raw_lower=0
-raw_upper=255
 use_color=TRUE
-table_num=4
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
@@ -74,28 +58,21 @@ bind_to_list=multi_expression
 tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_2]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_BOOL_,_STRING_
+keys=page,dl_conv_expr,ul_conv_expr,use_color,tooltip
+key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-raw_lower=0
-raw_upper=255
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_2]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,precision,use_color,tooltip
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_INT_,_INT_,_BOOL_,_STRING_
+keys=page,table_num,dl_conv_expr,ul_conv_expr,precision,use_color,tooltip
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 page=4
+table_num=4
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-raw_lower=0
-raw_upper=255
 precision=1
 use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -103,15 +80,13 @@ tooltip=The Spark Advance Entries control the engine igntion timing.  The values
 #----- Widgets ---------------------------------------------------------------
 
 [spark_notebook]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=3
+keys=bind_to_list
+key_types=_STRING_
 bind_to_list=spark_controls
 
 [SP1_vbox1]
-keys=page,table_num
-key_types=_INT_,_STRING_
-page=3
+keys=table_num
+key_types=_STRING_
 table_num=3
 
 [SP2_vbox1]
@@ -121,92 +96,92 @@ page=4
 table_num=4
 
 [SP1_gaugeframe1]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=3
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [SP1_gaugeframe2]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=3
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [SP1_gaugeframe3]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=3
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [SP1_gaugeframe4]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=3
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [SP1_gaugeframe5]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=3
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
 [SP2_gaugeframe1]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=4
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [SP2_gaugeframe2]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=4
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [SP2_gaugeframe3]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=4
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
 
 [SP2_gaugeframe4]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=4
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle
 
 [SP2_gaugeframe5]
-keys=page,post_function_with_arg,gaugexml,datasource,table_num
+keys=page,post_functions_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=4
-post_function_with_arg=create_gauge
+post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
 
@@ -214,16 +189,14 @@ datasource=afr
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident,sub-notebook
-key_types=_INT_,_ENUM_,_STRING_
-page=3
+keys=tab_ident,sub-notebook
+key_types=_ENUM_,_STRING_
 tab_ident=_SPARKTABLES_TAB_
 sub-notebook=SP_spark_notebook
 
 [topframe_title]
-keys=page,set_label
-key_types=_INT_,_STRING_
-page=3
+keys=set_label
+key_types=_STRING_
 set_label=MegaSquirtnSpark Extra Spark Tables
 
 [SP1_load_tbl_lab]
@@ -266,18 +239,16 @@ alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
-page=3
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
-keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
+keys=handler,bind_to_list,tooltip
+key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
-page=3
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
@@ -324,17 +295,15 @@ page=1
 table_num=4
 
 [SP1_3d_view_button]
-keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=3
+keys=table_num,tooltip,bind_to_list
+key_types=_STRING_,_STRING_,_STRING_
 table_num=3
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate.  A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [SP1_rescale_button]
-keys=page,handler,data
-key_types=_INT_,_ENUM_,_STRING_
-page=3
+keys=handler,data
+key_types=_ENUM_,_STRING_
 handler=_RESCALE_TABLE_
 data=SP_SP1_rescale_entry,SP_SP1_rescale_combo
 
@@ -368,23 +337,22 @@ table_num=4
 #----- Rescale Combos ------------------------------------------------------
 
 [SP1_rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=3
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 [SP2_rescale_combo]
-keys=table_num,post_function_with_arg
+keys=table_num,post_functions_with_arg
 key_types=_STRING_,_STRING_
 table_num=4
-post_function_with_arg=lock_entry
+post_functions_with_arg=lock_entry
 
 #----- MAIN SparkTable Container ---------------------------------------------
 
 [SP1_main_sparktable]
-keys=page,rescaler_frame
-key_types=_INT_,_STRING_
-page=3
+keys=rescaler_frame
+key_types=_STRING_
 rescaler_frame=SP_SP1_rescale_frame
 
 [SP2_main_sparktable]
@@ -396,12 +364,15 @@ rescaler_frame=SP_SP2_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [SP1_trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
+keys=size,offset,dl_conv_expr,ul_conv_expr,precision,use_color
+key_types=_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=170
 group=spark_1
+size=_S08_
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
+raw_lower=-127
+raw_upper=128
 precision=2
 use_color=FALSE
 
@@ -418,18 +389,21 @@ keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
 key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=168
 group=spark_1
-dl_conv_expr=x*(284/100)
-ul_conv_expr=x/(284/100)
+dl_conv_expr=x/(352/1000)
+ul_conv_expr=x*(352/1000)
 precision=2
 use_color=FALSE
 
 [SP2_trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
+keys=size,offset,dl_conv_expr,ul_conv_expr,precision,use_color
+key_types=_ENUM_,_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=170
-group=spark_1
+group=spark_2
+size=_S08_
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
+raw_lower=-127
+raw_upper=128
 precision=2
 use_color=FALSE
 
@@ -437,7 +411,7 @@ use_color=FALSE
 keys=offset,precision,use_color
 key_types=_INT_,_INT_,_BOOL_
 offset=169
-group=spark_1
+group=spark_2
 precision=2
 use_color=FALSE
 
@@ -445,7 +419,7 @@ use_color=FALSE
 keys=offset,dl_conv_expr,ul_conv_expr,precision,use_color
 key_types=_INT_,_STRING_,_STRING_,_INT_,_BOOL_
 offset=168
-group=spark_1
+group=spark_2
 dl_conv_expr=x*(284/100)
 ul_conv_expr=x/(284/100)
 precision=2

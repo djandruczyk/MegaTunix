@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <memory_gui.h>
+#include <widgetmgmt.h>
 
 GArray *raw_memory_widgets = NULL;
 gint num_mem_pages = 4;
@@ -49,7 +50,6 @@ EXPORT void finish_memviewer(void)
 	gchar * tmpbuf = NULL;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
-	extern GHashTable *dynamic_widgets;
 
 	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
@@ -57,7 +57,7 @@ EXPORT void finish_memviewer(void)
 	for (z=0;z<num_mem_pages;z++)
 	{
 		tblname = g_strdup_printf("memviewer_tab%i_row_lbl_table",z);
-		table = g_hash_table_lookup(dynamic_widgets,tblname);
+		table = lookup_widget(tblname);
 		g_free(tblname);
 
 		for (y=0;y<rows;y++)
@@ -72,7 +72,7 @@ EXPORT void finish_memviewer(void)
 		gtk_widget_show_all(table);
 
 		tblname = g_strdup_printf("memviewer_tab%i_data_table",z);
-		table = g_hash_table_lookup(dynamic_widgets,tblname);
+		table = lookup_widget(tblname);
 		g_free(tblname);
 
 		row = 0;
@@ -103,7 +103,7 @@ EXPORT void finish_memviewer(void)
 		if (mem_view_style[z] == HEX_VIEW)
 		{
 			name = g_strdup_printf("memviewer_tab%i_hex_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
+			button = lookup_widget(name);
 			if (!button)
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else
@@ -113,7 +113,7 @@ EXPORT void finish_memviewer(void)
 		if (mem_view_style[z] == BINARY_VIEW)
 		{
 			name = g_strdup_printf("memviewer_tab%i_binary_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
+			button = lookup_widget(name);
 			if (!button)
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else
@@ -123,7 +123,7 @@ EXPORT void finish_memviewer(void)
 		if (mem_view_style[z] == DECIMAL_VIEW)
 		{
 			name = g_strdup_printf("memviewer_tab%i_decimal_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
+			button = lookup_widget(name);
 			if (!button)
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name));
 			else

@@ -13,6 +13,7 @@
 
 #include <api-versions.h>
 #include <apicheck.h>
+#include <comms.h>
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
@@ -31,8 +32,10 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <threads.h>
+#include <timeout_handlers.h>
 #include <unistd.h>
 #include <vex_support.h>
+#include <widgetmgmt.h>
 #ifdef __WIN32__
  #include <windows.h>
 #else
@@ -47,7 +50,6 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -64,7 +66,7 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Save your ECU Settings to file");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename = g_strdup_printf("%s-%.4i_%.2i_%.2i-%.2i%.2i.ecu",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension = g_strdup("ecu");
@@ -92,14 +94,13 @@ EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
-	fileio->parent = main_window;
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Restore your ECU Settings from which file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -162,8 +163,6 @@ void backup_all_ecu_settings(gchar *filename)
 	update_logbar("tools_view",NULL,g_strdup_printf("Full Backup Complete...\n"),FALSE,FALSE);
 	cfg_write_file(cfgfile,filename);
 	cfg_free(cfgfile);
-	g_free(cfgfile);
-
 }
 
 
@@ -191,8 +190,10 @@ void restore_all_ecu_settings(gchar *filename)
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
+	gboolean restart = FALSE;
+	extern gint realtime_id;
 	gchar *tmpbuf = NULL;
-	guchar *data = NULL;
+	guint8 *data = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
@@ -217,10 +218,14 @@ void restore_all_ecu_settings(gchar *filename)
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 			return;
 		}
 		set_title(g_strdup("Restoring ECU settings from File"));
+		if (realtime_id)
+		{
+			stop_tickler(RTV_TICKLER);
+			restart = TRUE;
+		}
 		for (page=0;page<firmware->total_pages;page++)
 		{
 			if (!(firmware->page_params[page]->dl_by_default))
@@ -243,9 +248,9 @@ void restore_all_ecu_settings(gchar *filename)
 				}
 				if (firmware->chunk_support)
 				{
-					data = g_new0(guchar, firmware->page_params[page]->length);
+					data = g_new0(guint8, firmware->page_params[page]->length);
 					for (offset=0;offset<num_keys;offset++)
-						data[offset]=(guchar)atoi(keys[offset]);
+						data[offset]=(guint8)atoi(keys[offset]);
 					chunk_write(canID,page,0,num_keys,data);
 
 				}
@@ -261,6 +266,7 @@ void restore_all_ecu_settings(gchar *filename)
 						}
 					}
 				}
+				queue_burn_ecu_flash(page);
 
 				g_strfreev(keys);
 				g_free(tmpbuf);
@@ -278,14 +284,16 @@ void restore_all_ecu_settings(gchar *filename)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
-	pf = g_new0(PostFunction,1);
+/*	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("set_store_black_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
+	*/
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
-
+	if (restart)
+		start_tickler(RTV_TICKLER);
 }

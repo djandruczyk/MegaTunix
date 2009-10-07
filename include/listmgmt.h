@@ -27,6 +27,7 @@ struct _ListElement
 GList * get_list(gchar * );
 void store_list(gchar * , GList * );
 gint list_sort(gconstpointer, gconstpointer);
+gint list_object_sort(gconstpointer, gconstpointer, gpointer);
 void free_element(gpointer, gpointer);
 void simple_free_element(gpointer, gpointer);
 /* Prototypes */

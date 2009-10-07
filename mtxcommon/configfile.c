@@ -225,7 +225,7 @@ gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat *
 	if (!cfg_read_string(cfg, section, key, &str))
 		return FALSE;
 
-	*value = (gfloat) g_ascii_strtod(str, NULL);
+	*value = (gfloat) g_ascii_strtod(g_strdelimit(str,",.",'.'), NULL);
 	g_free(str);
 
 	return TRUE;
@@ -375,7 +375,7 @@ void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key)
 
 
 /*!
- \brief cfg_free() freesthe memory for a cfg
+ \brief cfg_free() frees the memory for a cfg
  \param cfg (ConfigFile*) source of the data
  */
 void cfg_free(ConfigFile * cfg)
@@ -406,6 +406,7 @@ void cfg_free(ConfigFile * cfg)
 	}
 	g_list_free(cfg->sections);
 	g_free(cfg->filename);
+	g_free(cfg);
 }
 
 

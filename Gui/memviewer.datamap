@@ -4,7 +4,7 @@
 description=Object data map for Raw Memory viewer (ECUS that support "F" cmd)
 tab_name=_Memory Viewer
 groups=defaults
-post_function=finish_memviewer
+post_functions=finish_memviewer
 
 #----- Groups ----------------------------------------------------------------
 
@@ -17,115 +17,99 @@ size=_U08_
 #----- Buttons ---------------------------------------------------------------
 
 [memviewer_tab0_read_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_READ_RAW_MEMORY_
-page=0
 data=0
 
 [memviewer_tab1_read_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_READ_RAW_MEMORY_
-page=0
 data=1
 
 [memviewer_tab2_read_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_READ_RAW_MEMORY_
-page=0
 data=2
 
 [memviewer_tab3_read_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_READ_RAW_MEMORY_
-page=0
 data=3
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [memviewer_tab0_hex_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_HEX_VIEW_
-page=0
 data=0
 
 [memviewer_tab1_hex_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_HEX_VIEW_
-page=0
 data=1
 
 [memviewer_tab2_hex_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_HEX_VIEW_
-page=0
 data=2
 
 [memviewer_tab3_hex_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_HEX_VIEW_
-page=0
 data=3
 
 [memviewer_tab0_binary_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_BINARY_VIEW_
-page=0
 data=0
 
 [memviewer_tab1_binary_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_BINARY_VIEW_
-page=0
 data=1
 
 [memviewer_tab2_binary_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_BINARY_VIEW_
-page=0
 data=2
 
 [memviewer_tab3_binary_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_BINARY_VIEW_
-page=0
 data=3
 
 [memviewer_tab0_decimal_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_DECIMAL_VIEW_
-page=0
 data=0
 
 [memviewer_tab1_decimal_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_DECIMAL_VIEW_
-page=0
 data=1
 
 [memviewer_tab2_decimal_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_DECIMAL_VIEW_
-page=0
 data=2
 
 [memviewer_tab3_decimal_radio_button]
-keys=handler,page,data
-key_types=_ENUM_,_INT_,_INT_
+keys=handler,data
+key_types=_ENUM_,_INT_
 handler=_DECIMAL_VIEW_
-page=0
 data=3

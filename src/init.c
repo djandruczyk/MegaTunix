@@ -19,6 +19,7 @@
 #include <debugging.h>
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -39,7 +40,6 @@ extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
-extern GtkWidget *main_window;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
@@ -73,6 +73,7 @@ void init(void)
 
 	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
+	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
 	OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(125));
@@ -81,6 +82,10 @@ void init(void)
 	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
+	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(20));
+	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
+	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(25));
+	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(15));
 	OBJ_SET(global_data,"hidden_list",hidden_list);
 	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);
@@ -128,7 +133,7 @@ void init(void)
 gboolean read_config(void)
 {
 	gint tmpi = 0;
-	gint i = 0;
+	guint i = 0;
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar **vector = NULL;
@@ -143,6 +148,14 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
 			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
+			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "RTText_FPS", &tmpi))
+			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "Dashboard_FPS", &tmpi))
+			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
+			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
@@ -169,6 +182,8 @@ gboolean read_config(void)
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
+		if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
+			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
 			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
@@ -215,8 +230,8 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"override_port",g_strdup(tmpbuf));
 			g_free(tmpbuf);
 		}
-		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi));
-		OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
+		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
+			OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
 
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
@@ -224,14 +239,17 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
+		if ((gint)OBJ_GET(global_data,"lv_zoom") < 1)
+			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
 			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
+		if ((gint)OBJ_GET(global_data,"lv_scroll_delay") < 40)
+			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
 		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		g_free(filename);
 		return TRUE;
 	}
@@ -258,6 +276,7 @@ void save_config(void)
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
+	GtkWidget *main_window = NULL;
 	int x = 0;
 	int y = 0;
 	int i = 0;
@@ -274,9 +293,10 @@ void save_config(void)
 	gboolean * hidden_list;
 	GString *string = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	extern GHashTable *dynamic_widgets;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() after lock reentrant mutex\n"));
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
@@ -291,12 +311,17 @@ void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(gboolean)OBJ_GET(global_data,"tips_in_use"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (gint)OBJ_GET(global_data,"temp_units"));
+	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (gint)OBJ_GET(global_data,"rtslider_fps"));
+	cfg_write_int(cfgfile, "Global", "RTText_FPS", (gint)OBJ_GET(global_data,"rttext_fps"));
+	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (gint)OBJ_GET(global_data,"dashboard_fps"));
+	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (gint)OBJ_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	cfg_write_int(cfgfile, "Serial", "read_timeout", (gint)OBJ_GET(global_data,"read_timeout"));
 	tmpbuf = OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
-		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
+		widget =  lookup_widget(tmpbuf);
 		if (GTK_IS_WIDGET(widget))
 		{
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
@@ -325,7 +350,7 @@ void save_config(void)
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
-		widget =  g_hash_table_lookup(dynamic_widgets,tmpbuf);
+		widget =  lookup_widget(tmpbuf);
 		if (GTK_IS_WIDGET(widget))
 		{
 			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
@@ -354,6 +379,7 @@ void save_config(void)
 
 	if (ready)
 	{
+		main_window = lookup_widget("main_window");
 		if (GTK_WIDGET_VISIBLE(main_window))
 		{
 			gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
@@ -365,7 +391,7 @@ void save_config(void)
 			if (y > 0)
 				cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"status_window");
+		widget = lookup_widget("status_window");
 		if (widget)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
@@ -381,7 +407,7 @@ void save_config(void)
 					cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 			}
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"rtt_window");
+		widget = lookup_widget("rtt_window");
 		if (widget)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
@@ -397,7 +423,7 @@ void save_config(void)
 					cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 			}
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+		widget = lookup_widget("toplevel_notebook");
 		total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
 		hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 		string = g_string_new(NULL);
@@ -438,9 +464,10 @@ void save_config(void)
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 	g_free(filename);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() after UNlock reentrant mutex\n"));
 }
 
 
@@ -500,6 +527,10 @@ void mem_alloc()
 	gint j=0;
 	extern Firmware_Details *firmware;
 
+	if (!firmware->rt_data)
+		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
+	if (!firmware->rt_data_last)
+		firmware->rt_data_last = g_new0(guint8, firmware->rtvars_size);
 	if (!firmware->ecu_data)
 		firmware->ecu_data = g_new0(guint8 *, firmware->total_pages);
 	if (!firmware->ecu_data_last)
@@ -519,7 +550,7 @@ void mem_alloc()
 	 * download...
 	 */
 	if (!interdep_vars)
-		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
+		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
 	if (!algorithm)
 		algorithm = g_new0(gint, firmware->total_tables);
 	if (!tracking_focus)
@@ -529,12 +560,11 @@ void mem_alloc()
 	{
 		tab_gauges[i] = NULL;
 		algorithm[i] = SPEED_DENSITY;
+		interdep_vars[i] = g_hash_table_new(NULL,NULL);
 	}
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		interdep_vars[i] = g_hash_table_new(NULL,NULL);
-
 		if (!firmware->ecu_data[i])
 			firmware->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
 		if (!firmware->ecu_data_last[i])
@@ -565,14 +595,19 @@ void mem_dealloc()
 	extern Firmware_Details *firmware;
 	extern GStaticMutex serio_mutex;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
+
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
 	if (serial_params)
 		g_free(serial_params);
 	serial_params = NULL;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
 	/* Firmware datastructure.... */
 	if (firmware)
@@ -585,14 +620,13 @@ void mem_dealloc()
 				g_free(firmware->ecu_data_last[i]);
 			if (firmware->ecu_data_backup[i])
 				g_free(firmware->ecu_data_backup[i]);
-			if (interdep_vars[i])
-			{
-				g_hash_table_destroy(interdep_vars[i]);
-				interdep_vars[i] = NULL;
-			}
 			if (firmware->page_params[i])
 				g_free(firmware->page_params[i]);
 		}
+		if (firmware->rt_data)
+			g_free(firmware->rt_data);
+		if (firmware->rt_data_last)
+			g_free(firmware->rt_data_last);
 		g_free(firmware->page_params);
 
 		if (firmware->name)
@@ -635,6 +669,11 @@ void mem_dealloc()
 				dealloc_table_params(firmware->table_params[i]);
 			if (firmware->rf_params[i])
 				g_free(firmware->rf_params[i]);
+			if (interdep_vars[i])
+			{
+				g_hash_table_destroy(interdep_vars[i]);
+				interdep_vars[i] = NULL;
+			}
 		}
 		g_free(firmware->table_params);
 		firmware->table_params = NULL;
@@ -708,9 +747,6 @@ Table_Params * initialize_table_params(void)
 	Table_Params *table_params = NULL;
 	table_params = g_malloc0(sizeof(Table_Params));
 	table_params->is_fuel = FALSE;
-	table_params->cfg11_offset = -1;
-	table_params->cfg12_offset = -1;
-	table_params->cfg13_offset = -1;
 	table_params->alternate_offset = -1;
 	table_params->divider_offset = -1;
 	table_params->rpmk_offset = -1;
@@ -779,6 +815,32 @@ TE_Params * initialize_te_params(void)
 }
 
 
+/*!
+ \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
+sockets
+*/
+void dealloc_client_data(MtxSocketClient *client)
+{
+	extern Firmware_Details *firmware;
+	gint i = 0;
+	if (client)
+	{
+		if (client->ip)
+			g_free(client->ip);
+
+		if (client->ecu_data)
+		{
+/*			printf("deallocing client ecu data params\n");*/
+			for (i=0;i<firmware->total_pages;i++)
+			{
+				if (client->ecu_data[i])
+					g_free(client->ecu_data[i]);
+			}
+			g_free(client->ecu_data);
+		}
+		g_free(client);
+	}
+}
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O
@@ -800,11 +862,15 @@ void dealloc_message(Io_Message * message)
 	if (message->command)
 		if (message->command->type == NULL_CMD)
 			g_free(message->command);
+	message->command = NULL;
         if (message->payload)
 	{
 		data = (OutputData *)message->payload;
 		if (GTK_IS_OBJECT(data->object))
+		{
 			gtk_object_destroy(GTK_OBJECT(data->object));
+			g_object_unref(data->object);
+		}
                 g_free(message->payload);
 		message->payload = NULL;
 	}
@@ -817,7 +883,7 @@ void dealloc_array(GArray *array, ArrayType type)
 {
 	DBlock *db = NULL;
 	PotentialArg *arg = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	switch (type)
 	{

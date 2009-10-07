@@ -228,7 +228,7 @@
 					      <property name="visible">True</property>
 					      <property name="n_rows">1</property>
 					      <property name="n_columns">3</property>
-					      <property name="homogeneous">False</property>
+					      <property name="homogeneous">True</property>
 					      <property name="row_spacing">0</property>
 					      <property name="column_spacing">5</property>
 
@@ -287,7 +287,7 @@
 						  <property name="right_attach">3</property>
 						  <property name="top_attach">0</property>
 						  <property name="bottom_attach">1</property>
-						  <property name="x_options">fill</property>
+						  <property name="x_options">expand|shrink|fill</property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
@@ -541,7 +541,7 @@
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">Start Custom DataLogging</property>
+				      <property name="label" translatable="yes">Start Custom Logging</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -576,7 +576,7 @@
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">Stop Custom Logging and Save</property>
+				      <property name="label" translatable="yes">Stop Logging and Save</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>

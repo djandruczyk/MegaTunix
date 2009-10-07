@@ -2,7 +2,7 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>464</width>
+    <width>463</width>
     <height>492</height>
   </dash_geometry>
   <gauge>
@@ -11,7 +11,7 @@
     <x_offset>306</x_offset>
     <y_offset>327</y_offset>
     <gauge_xml_name>SportComp/AM_SportComp_AFR_Gauge.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
   <gauge>
     <width>312</width>

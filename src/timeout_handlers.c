@@ -104,7 +104,7 @@ void start_tickler(TicklerType type)
 				break;
 			if (realtime_id != 0)
 			{
-				/* TTM and Realtime are mutulally exclusive,
+				/* TTM and Realtime are mutually exclusive,
 				 * and TTM takes precedence,  so disabled 
 				 * realtime, and manually fire it once per
 				 * TTM read so the gauges will still update
@@ -130,6 +130,8 @@ void start_tickler(TicklerType type)
 				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
+			break;
+		default:
 			break;
 
 	}
@@ -198,7 +200,8 @@ void stop_tickler(TicklerType type)
 				g_source_remove(statuscounts_id);
 				statuscounts_id = 0;
 			break;
-
+		default:
+			break;
 	}
 }
 
@@ -217,35 +220,39 @@ gboolean signal_read_rtvars()
 	gint length = 0;
 	OutputData *output = NULL;
 	extern Firmware_Details *firmware;
-	extern GAsyncQueue *io_queue;
-	//extern GAsyncQueue *pf_dispatch_queue;
-	//extern GAsyncQueue *gui_dispatch_queue;
+	extern GAsyncQueue *io_data_queue;
+	/*
+	extern GAsyncQueue *pf_dispatch_queue;
+	extern GAsyncQueue *gui_dispatch_queue;
+	*/
 	extern gboolean rtvars_loaded;
 
 	if (!rtvars_loaded)
 		return TRUE;
 
-	length = g_async_queue_length(io_queue);
+	length = g_async_queue_length(io_data_queue);
 
 	/* If queue depth is too great we should not make the problem worse
 	 * so we skip a call as we're probably trying to go faster than the 
 	 * MS and/or serial port can go....
 	 */
-	//printf("Queue length is %i requests long\n",length);
-	//printf("PF Dispatch queue length is %i requests long\n", g_async_queue_length(pf_dispatch_queue));
-	//printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
+	/*
+	printf("Queue length is %i requests long\n",length);
+	printf("PF Dispatch queue length is %i requests long\n", g_async_queue_length(pf_dispatch_queue));
+	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
+	*/
 
 	if (length > 2)
 		return TRUE;
 
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
+	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
 
 	if (firmware->capabilities & MS2)
 	{
 		output = initialize_outputdata();
 		OBJ_SET(output->object,"canID", GINT_TO_POINTER(firmware->canID));
 		OBJ_SET(output->object,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
-		OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->ms2_rt_page));
+		OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
 		OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 		io_cmd(firmware->rt_command,output);			
 	}
@@ -263,7 +270,8 @@ gboolean signal_read_rtvars()
  */
 gboolean signal_toothtrig_read(TicklerType type)
 {
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+	extern Firmware_Details *firmware;
+	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
 	 * Also gets us access to current RPM and other vars for calculating 
@@ -273,10 +281,12 @@ gboolean signal_toothtrig_read(TicklerType type)
 	switch (type)
 	{
 		case TOOTHMON_TICKLER:
-			io_cmd("ms1_e_read_toothmon",NULL);
+			if (firmware->capabilities & MSNS_E)
+				io_cmd("ms1_e_read_toothmon",NULL);
 			break;
 		case TRIGMON_TICKLER:
-			io_cmd("ms1_e_read_trigmon",NULL);
+			if (firmware->capabilities & MSNS_E)
+				io_cmd("ms1_e_read_trigmon",NULL);
 			break;
 		default:
 			break;

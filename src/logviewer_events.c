@@ -19,6 +19,7 @@
 #include <logviewer_gui.h>
 #include <math.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 
 extern Logview_Data *lv_data;
@@ -127,7 +128,7 @@ EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, 
 {
 	gint x = 0;
 	gint y = 0;
-	gint tnum = 0;
+	guint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
@@ -145,11 +146,11 @@ EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, 
 		return FALSE;
 	}
 
-	tnum = ceil(y/lv_data->spread);
+	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return FALSE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
-	if (lv_data->tselect !=tnum)
+	if (lv_data->tselect != tnum)
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
 		lv_data->tselect = tnum;
@@ -202,18 +203,17 @@ void highlight_tinfo(gint tnum, gboolean state)
 EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
 	Lv_Handler handler;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *tmpwidget = NULL;
 	handler = (Lv_Handler)OBJ_GET(widget,"handler");
 	switch(handler)
 	{
 		case LV_GOTO_START:
-			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			tmpwidget = lookup_widget("logviewer_log_position_hscale");
 			if (GTK_IS_RANGE(tmpwidget))
 				gtk_range_set_value(GTK_RANGE(tmpwidget),0.0);
 			break;
 		case LV_GOTO_END:
-			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+			tmpwidget = lookup_widget("logviewer_log_position_hscale");
 			if (GTK_IS_RANGE(tmpwidget))
 				gtk_range_set_value(GTK_RANGE(tmpwidget),100.0);
 			break;
@@ -242,7 +242,7 @@ EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, 
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
-	gint tnum = 0;
+	guint tnum = 0;
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
@@ -263,7 +263,7 @@ EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, 
 
 	if (lv_data->active_traces == 0)
 		return TRUE;
-	tnum = ceil(y/lv_data->spread);
+	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);

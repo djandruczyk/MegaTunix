@@ -23,6 +23,11 @@ void setup_menu_handlers_pf();
 EXPORT gboolean jump_to_tab(GtkWidget *, gpointer );
 EXPORT gboolean settings_transfer(GtkWidget *, gpointer );
 gboolean check_tab_existance(TabIdent );
+EXPORT gboolean show_tps_calibrator_window(GtkWidget *, gpointer);
+EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *, gpointer);
+EXPORT gboolean show_table_generator_window(GtkWidget *, gpointer);
+EXPORT gboolean show_sensor_calibration_help(GtkWidget *, gpointer);
+
 /* Prototypes */
 
 #endif

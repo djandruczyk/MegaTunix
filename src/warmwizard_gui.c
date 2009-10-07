@@ -16,6 +16,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <warmwizard_gui.h>
+#include <widgetmgmt.h>
 
 extern GdkColor red;
 extern GObject *global_data;
@@ -39,7 +40,6 @@ void warmwizard_update_status(gfloat temp)
 	gfloat C_temps[10] = 
 	{-40,-28.8,-17.7,-6.6,4.4,15.5,26.6,37.7,54.4,71.1};
 	gfloat *range;
-	extern GHashTable *dynamic_widgets;
 
 	if ((gint)OBJ_GET(global_data,"temp_units") == FAHRENHEIT)	
 		range = F_temps;
@@ -51,7 +51,7 @@ void warmwizard_update_status(gfloat temp)
 		if (skipnext == FALSE)
 		{
 			name = g_strdup_printf("ww_warmup_label_%i",i+1);
-			gtk_widget_modify_fg(g_hash_table_lookup(dynamic_widgets,name),GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(lookup_widget(name),GTK_STATE_NORMAL,&black);
 			g_free(name);
 					
 		}
@@ -61,11 +61,11 @@ void warmwizard_update_status(gfloat temp)
 		{
 			skipnext = TRUE;
 			name = g_strdup_printf("ww_warmup_label_%i",i+1);
-			gtk_widget_modify_fg(g_hash_table_lookup(dynamic_widgets,name),GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(lookup_widget(name),GTK_STATE_NORMAL,&red);
 
 			g_free(name);
 			name = g_strdup_printf("ww_warmup_label_%i",i+2);
-			gtk_widget_modify_fg(g_hash_table_lookup(dynamic_widgets,name),GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(lookup_widget(name),GTK_STATE_NORMAL,&red);
 					
 			g_free(name);
 		}

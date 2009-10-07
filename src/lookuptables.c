@@ -296,12 +296,14 @@ gfloat lookup_data(GObject *object, gint offset)
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
 	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
+	
 	/*
 	   if (GTK_IS_OBJECT(dep_obj))
-	   printf("checking dependancy\n");
+	   printf("checking dependancy %s\n",OBJ_GET(object,"internal_names"));
 	   else
 	   printf("no dependancy\n");
 	   */
+
 	if (dep_obj)
 	{
 		state = check_dependancies(dep_obj);
@@ -373,7 +375,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	GArray *classes = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
-	gint i = 0;
+	guint i = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** tmpvector = NULL;
@@ -490,9 +492,10 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 
-		renderer = gtk_cell_renderer_toggle_new();
+/*		renderer = gtk_cell_renderer_toggle_new();
 		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+		*/
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
 		return TRUE;
@@ -521,7 +524,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gboolean restart_tickler = FALSE;
 	extern gint realtime_id;
 	extern GHashTable *lookuptables;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 	extern Firmware_Details *firmware;
 	gint count = 0;
 	LookupTable *lookuptable = NULL;
@@ -542,9 +545,9 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);
 		count = 0;
-		while ((g_async_queue_length(io_queue) > 0) && (count < 30))
+		while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
 			while (gtk_events_pending())
 				gtk_main_iteration();
 			count++;
@@ -579,7 +582,6 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		g_free(new_name);
 	}
 	cfg_free(cfgfile);
-	g_free(cfgfile);
 		
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
 	return TRUE;

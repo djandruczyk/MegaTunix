@@ -23,8 +23,18 @@
 #include <rtv_processor.h>
 #include <serialio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #include <threads.h>
 #include <unistd.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#else
+#include <poll.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
 
 
 gint ms_reset_count;
@@ -44,7 +54,7 @@ extern GObject *global_data;
  \param buffer, pointer to buffer to stick the data.
  \returns TRUE on success, FALSE on failure 
  */
-gint read_data(gint total_wanted, void **buffer)
+gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
 	gint res = 0;
 	gint total_read = 0;
@@ -56,8 +66,13 @@ gint read_data(gint total_wanted, void **buffer)
 	extern gboolean connected;
 	extern Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static gint failcount = 0;
+	static gboolean reset = FALSE;
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after lock reentrant mutex\n"));
+
 	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
 	total_read = 0;
@@ -67,49 +82,74 @@ gint read_data(gint total_wanted, void **buffer)
 		ignore_errors = TRUE;
 		total_wanted = 1024;
 	}
+	/* Werid windows issue.  Occasional "short" reads,  but nothing else
+	 * comes in for some reason. So if that happens, double what's read
+	 * next time and throw it away to get things back in sync. 
+	 * Ugly hack,  but couldn't find out why it did it.  might be due to
+	 * excess latency in my test VM
+	 */
+#ifdef __WIN32__
+	if (reset)
+		total_wanted *= 2;
+#endif
 
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after lock serio_mutex\n"));
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
-		total_read += res = read(serial_params->fd,
+		total_read += res = read_wrapper(serial_params->fd,
 				ptr+total_read,
 				total_wanted-total_read);
 
 		/* Increment bad read counter.... */
-		if (res < 0) /* I/O Error */
+		if (res < 0) /* I/O Error Device disappearance or other */
 		{
 			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
+			connected = FALSE;
 			break;
 		}
-		if (res == 0)
-			zerocount++;
-
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
-		if (zerocount > 1)  /* 2 bad reads, abort */
+		if (res == 0)  /* Short read! */
 		{
 			bad_read = TRUE;
 			break;
 		}
+
+		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after UNlock serio_mutex\n"));
 	if ((bad_read) && (!ignore_errors))
 	{
 		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
-		dbg_func(SERIAL_WR|SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": read_data()\n\tError reading data: %s\n",(gchar *)g_strerror(errno)));
 
-		flush_serial(serial_params->fd, BOTH);
 		serial_params->errcount++;
-		connected = FALSE;
+		if ((reset_on_fail) && (!reset))
+			reset = TRUE;
+		else
+			reset = FALSE;
+		failcount++;
+		/* Excessive failures triggers port recheck */
+		if (failcount > 10)
+			connected = FALSE;
+	}
+	else
+	{
+		failcount = 0;
+		reset = FALSE;
 	}
 
 	if (buffer)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
 	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": read_data() after UNlock reentrant mutex\n"));
 	return total_read;
 }
 
@@ -147,4 +187,56 @@ void dump_output(gint total_read, guchar *buf)
 		dbg_func(SERIAL_RD,g_strdup("\n\n"));
 	}
 
+}
+
+
+gint read_wrapper(gint fd, void * buf, size_t count)
+{
+	extern Serial_Params * serial_params;
+	gint res = 0;
+	fd_set rd;
+	extern GObject *global_data;
+	struct timeval timeout;
+
+	FD_ZERO(&rd);
+	FD_SET(fd,&rd);
+
+	timeout.tv_sec = 0;
+	timeout.tv_usec = OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(gint)OBJ_GET(global_data, "read_timeout")*1000;
+	/* Network mode requires select to see if data is ready, otherwise
+	 * connection will block.  Serial is configured with timeout if no
+	 * data is avail,  hence we simulate that with select.. Setting this
+	 * timeout around 500ms seems to give us ok function to new zealand,
+	 * but may require tweaking for slow wireless links.
+	 */
+	if (serial_params->net_mode)
+	{
+		res = select(fd+1,&rd,NULL,NULL,&timeout);
+		if (res < 0) /* Error, socket close, abort */
+			return 0;
+		if (res > 0) /* Data Arrived! */
+			res = recv(fd,buf,count,0);
+	}
+	else
+		res = read(fd,buf,count);
+	if (res < 0)
+		res = 0;
+	return res;
+}
+
+gint write_wrapper(gint fd, const void *buf, size_t count)
+{
+	extern Serial_Params * serial_params;
+	gint res = 0;
+
+	if (serial_params->net_mode)
+		res = send(fd,buf,count,0);
+	else
+		res = write(fd,buf,count);
+	if (res < 0)
+	{
+		printf("Write error!\n");
+		res = 0;
+	}
+	return res;
 }

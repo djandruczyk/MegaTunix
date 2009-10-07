@@ -42,7 +42,7 @@ void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 	gboolean * val = (gboolean *)dest;
 	if (!node->children)
 	{
-		printf("ERROR, generic_xml_gint_import, xml node is empty!!\n");
+		printf("ERROR, generic_xml_gboolean_import, xml node is empty!!\n");
 		return;
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
@@ -85,17 +85,18 @@ void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
 		return;
-	*val = g_ascii_strtod((gchar*)node->children->content,NULL);
+	*val = g_ascii_strtod((gchar*)g_strdelimit((gchar *)node->children->content,",.",'.'),NULL);
 }
 
 
 void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val)
 {
-	gchar * tmpbuf = NULL;
-	tmpbuf = g_strdup_printf("%f",*val);
+	gchar tmpbuf[10];
+	gchar * buf = NULL;
+	buf = g_ascii_dtostr(tmpbuf,10,*val);
+	/*tmpbuf = g_strdup_printf("%f",*val); */
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
-			BAD_CAST tmpbuf);
-	g_free(tmpbuf);
+			BAD_CAST buf);
 }
 
 
@@ -163,17 +164,17 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 				if (g_strcasecmp((gchar *)cur_node->name,"red") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->red=tmp;
+					color->red=(guint16)tmp;
 				}
 				if (g_strcasecmp((gchar *)cur_node->name,"green") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->green=tmp;
+					color->green=(guint16)tmp;
 				}
 				if (g_strcasecmp((gchar *)cur_node->name,"blue") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
-					color->blue=tmp;
+					color->blue=(guint16)tmp;
 				}
 			}
 			cur_node = cur_node->next;
@@ -199,3 +200,36 @@ void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *co
 	xmlNewChild(child, NULL, BAD_CAST "blue",BAD_CAST tmpbuf);
 	g_free(tmpbuf);
 }
+
+
+gboolean xml_api_check(xmlNode *node, gint major, gint minor)
+{
+	gint maj = -1;
+	gint min = -1;
+	xmlNode *cur_node = NULL;
+
+	if (!node->children)
+	{
+		printf("ERROR, get_potential_arg_name, xml node is empty!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"major") == 0)
+				generic_xml_gint_import(cur_node,&maj);
+			if (g_strcasecmp((gchar *)cur_node->name,"minor") == 0)
+				generic_xml_gint_import(cur_node,&min);
+
+		}
+		cur_node = cur_node->next;
+	}
+	
+	if ((major != maj) || (minor != min))
+		return FALSE;
+	else
+		return TRUE;
+}
+

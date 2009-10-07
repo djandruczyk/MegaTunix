@@ -55,6 +55,7 @@ EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
 EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
 EXPORT gboolean toggle_skip_params(GtkWidget *, gpointer );
 EXPORT gboolean link_range_spinners(GtkWidget *, gpointer );
+EXPORT gboolean day_nite_handler(GtkWidget *, gpointer);
 void update_attributes(void);
 void reset_onscreen_controls(void);
 void reset_onscreen_c_ranges(void);

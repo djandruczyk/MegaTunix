@@ -21,6 +21,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <keyparser.h>
+#include <gui_handlers.h>
 #include <lookuptables.h>
 #include <multi_expr_loader.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -47,7 +48,7 @@ extern GObject *global_data;
 
 gboolean force_view_recompute()
 {
-	gint i = 0;
+	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)
 		update_model_from_view(g_list_nth_data(views,i));
 	return FALSE;
@@ -298,8 +299,8 @@ void cell_edited(GtkCellRendererText *cell,
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
 	rt_offset = (gint) OBJ_GET(object,"offset");
-	precision = (gint)OBJ_GET(object,"precision");
-	new = (gfloat)strtod(new_text,NULL);
+	precision = (gint) OBJ_GET(object,"precision");
+	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
 	if (OBJ_GET(object,"multi_expr_hash"))
 	{
 		hash = OBJ_GET(object,"multi_expr_hash");

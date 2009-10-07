@@ -90,8 +90,11 @@ void update_text_controls()
 	mtx_gauge_face_get_attribute(g, SHOW_VALUE, &tmp1);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
-	widget = glade_xml_get_widget(topxml,"value_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
+	widget = glade_xml_get_widget(topxml,"value_color_day_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_DAY));
+
+	widget = glade_xml_get_widget(topxml,"value_color_nite_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_NITE));
 
 	hold_handlers = FALSE;
 }
@@ -145,7 +148,6 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 void update_general_controls()
 {
 	gfloat tmp1 = 0.0;
-	gfloat tmp2 = 0.0;
 	GtkWidget * widget = NULL;
 	MtxGaugeFace *g = NULL;
 
@@ -162,13 +164,23 @@ void update_general_controls()
 	mtx_gauge_face_get_attribute(g,ROTATION,&tmp1);
 	if (tmp1 == MTX_ROT_CW)
 		widget = glade_xml_get_widget(topxml,"cw_rbutton");
-	else
+	else if (tmp1 == MTX_ROT_CCW)
 		widget = glade_xml_get_widget(topxml,"ccw_rbutton");
+	else
+		widget = glade_xml_get_widget(topxml,"cw_rbutton");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
 
 	mtx_gauge_face_get_attribute(g,ANTIALIAS,&tmp1);
 	widget = glade_xml_get_widget(topxml,"antialiased_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
+
+	mtx_gauge_face_get_attribute(g,TATTLETALE,&tmp1);
+	widget = glade_xml_get_widget(topxml,"tattletale_check");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
+
+	widget = glade_xml_get_widget(topxml,"tattletale_alpha_spin");
+	mtx_gauge_face_get_attribute(g,TATTLETALE_ALPHA,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	widget = glade_xml_get_widget(topxml,"needle_length_spin");
 	mtx_gauge_face_get_attribute(g,NEEDLE_LENGTH,&tmp1);
@@ -190,32 +202,45 @@ void update_general_controls()
 	mtx_gauge_face_get_attribute(g,NEEDLE_TAIL,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	mtx_gauge_face_get_attribute(g,START_ANGLE,&tmp1);
-	mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&tmp2);
 	widget = glade_xml_get_widget(topxml,"start_angle_spin");
+	mtx_gauge_face_get_attribute(g,START_ANGLE,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	widget = glade_xml_get_widget(topxml,"sweep_angle_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
-
-	mtx_gauge_face_get_attribute(g,LBOUND,&tmp1);
-	mtx_gauge_face_get_attribute(g,UBOUND,&tmp2);
-	widget = glade_xml_get_widget(topxml,"lbound_spin");
+	mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+
+	widget = glade_xml_get_widget(topxml,"lbound_spin");
+	mtx_gauge_face_get_attribute(g,LBOUND,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+
 	widget = glade_xml_get_widget(topxml,"ubound_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
+	mtx_gauge_face_get_attribute(g,UBOUND,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"background_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
+	widget = glade_xml_get_widget(topxml,"background_color_day_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_BG_DAY));
 
-	widget = glade_xml_get_widget(topxml,"needle_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NEEDLE));
+	widget = glade_xml_get_widget(topxml,"background_color_nite_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_BG_NITE));
 
-	widget = glade_xml_get_widget(topxml,"gradient_begin_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_BEGIN));
-	widget = glade_xml_get_widget(topxml,"gradient_end_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_END));
+	widget = glade_xml_get_widget(topxml,"needle_color_day_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_DAY));
 
+	widget = glade_xml_get_widget(topxml,"needle_color_nite_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_NITE));
+
+	widget = glade_xml_get_widget(topxml,"gradient_begin_color_day_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_DAY));
+	
+	widget = glade_xml_get_widget(topxml,"gradient_begin_color_nite_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_NITE));
+	
+	widget = glade_xml_get_widget(topxml,"gradient_end_color_day_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_DAY));
+
+	widget = glade_xml_get_widget(topxml,"gradient_end_color_nite_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE));
 
 	hold_handlers = FALSE;
 }
@@ -238,6 +263,12 @@ void reset_general_controls()
 
 	widget = glade_xml_get_widget(topxml,"antialiased_check");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(topxml,"tattletale_check");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(topxml,"tattletale_alpha_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
 	widget = glade_xml_get_widget(topxml,"needle_width_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);

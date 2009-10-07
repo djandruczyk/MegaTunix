@@ -36,7 +36,7 @@
   <height>380</height>
   <main_start_angle>135.000000</main_start_angle>
   <main_sweep_angle>270.000000</main_sweep_angle>
-  <rotation>188</rotation>
+  <rotation>1</rotation>
   <lbound>0.000000</lbound>
   <ubound>30.000000</ubound>
   <value_font>arial Bold</value_font>

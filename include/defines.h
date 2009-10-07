@@ -16,7 +16,7 @@
 
 /* Definitions */
 #define BAUDRATE B9600
-/*#define BAUDRATE B115200 */
+
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
 /* Windows specific for exporting symbols for glade... */
@@ -42,11 +42,8 @@
 #define DEFERRED		0x11
 #define IGNORED			0x12
 
-
 /* For datalogging and Logviewer */
 #define TABLE_COLS 6
-
-#define ASCII_LOWER_CAPS_DIFF 32
 
 #define DEFAULT_BIAS 2490
 
@@ -54,7 +51,5 @@
 #define TEMP_K_100_DENSITY 294.2611
 
 #define C_TO_K 273
-
-
 
 #endif

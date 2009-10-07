@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 #include <config.h>
 #include <defines.h>
-#include <enums.h>
+#include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
 #endif
@@ -35,6 +35,7 @@ struct _Serial_Params
 	gboolean open;		/*! flag, TRUE for open FALSE for closed */
 	gint read_wait;		/*! time delay between each read */
 	gint errcount;		/*! Serial I/O errors read error count */
+	gboolean net_mode;	/*! When using TCP/IP socket mode */
 };
 #else
 struct _Serial_Params
@@ -46,6 +47,7 @@ struct _Serial_Params
 	gint errcount;		/*! Serial I/O errors read error count */
 	struct termios oldtio;	/*! serial port settings before we touch it */
 	struct termios newtio;	/*! serial port settings we use when running */
+	gboolean net_mode;	/*! When using TCP/IP socket mode */
 };
 #endif
 

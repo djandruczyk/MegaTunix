@@ -14,8 +14,8 @@ Packager: Eduardo Kaftanski <e@nn.cl>
 MegaTunix is the ONLY cross platform tuning software for the MegaSquirt
 family of DIY Fuel Injection (and ignition) ECU's.  It currently supports
 All Stock B&G Firmwares (1.0-3.01), All F&H DualTable Firmwares (0.90-1.02),
-All MegaSquirtnEDIS Firmwares (0.1-3.008), MegaSquirtnSpark (3.x) and partial
-support is in place for MegaSquirtnSpark-Extra 021x and newer.  ECU detection
+All MegaSquirtnEDIS Firmwares (0.1-3.008), MegaSquirtnSpark (3.x) and full
+support is in place for MegaSquirtnSpark-Extra 029x and newer.  ECU detection
 is completely automatic, and the gui will self adapt to the detected firmware.
 
 All firmware features are supported, including very extensive datalogging 
@@ -24,7 +24,7 @@ capabilities, ecu backup and restore, and Table export/import.
 MegaTunix is extensible for user modified firmware, by utilizing the Glade
 Gui designer, and a simple text editor.
 
-MegaTunix is writtenand maintained by David J. Andruczyk, copyright 2003.
+MegaTunix is writtenand maintained by David J. Andruczyk, copyright 2009.
 %prep
 %setup -q
 #%patch -p1 -b .buildroot

@@ -14,7 +14,13 @@
 #ifndef __WINSERIALIO_H__
 #define __WINSERIALIO_H__
 
-#include <enums.h>
+typedef enum
+{
+	INBOUND=0x2E0,
+	OUTBOUND,
+	BOTH
+}FlushDirection;
+
 
 /* Prototypes */
 void win32_setup_serial_params(int, int);

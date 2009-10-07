@@ -90,19 +90,18 @@ expr_types an contain one of three choices.
  1. _VE_VAR_, meaning VE variable, which requires a page/offset 
  to resolve it. 
  2. _VE_EMB_BIT_, meaning VE_embedded bit, which requires page,offset,
- bitmask, and bitshift to resolve completely
+  and bitmask to resolve completely
  3. _RAW_VAR_ meaning a raw variable, which only requires an offset to
  resolve.
 The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  If expr_symbols contains "cyls,reqfuel"
 and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
-be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
+be searched for. "cyls_page","cyls_offset","cyls_bitmask",
 "reqfuel_page" and "reqfuel_offset". 
 	
 	*_page		(integer) page in ecu that this control refers to
 	*_offset	(integer) offset from the beginning of said page that
 			this control refers to. 
-	*_bitshift	(integer) the starting point in a bitfield for bitval
 	*_bitmask	(integer) the bitmask of bitval..
 
 	lookuptable	(string) String name of the lookuptable to use to
@@ -132,7 +131,6 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_vars
 	*_bitmask	(integer) bitmask to mask value at page,offset
-	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
 
 NOTE on "depend_on":

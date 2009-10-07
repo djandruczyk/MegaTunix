@@ -29,7 +29,7 @@ extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
 extern Serial_Params *serial_params;
-GdkColor white = { 0, 65535, 65535, 65535 };
+extern GdkColor white;
 extern GObject *global_data;
 
 
@@ -56,7 +56,6 @@ EXPORT gboolean reset_errcounts(GtkWidget *widget)
 gboolean update_errcounts()
 {
 	gchar *tmpbuf = NULL;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 	extern volatile gboolean leaving;
 	
@@ -64,37 +63,37 @@ gboolean update_errcounts()
 		return TRUE;
 
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
-	widget = g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry");
+	widget = lookup_widget("runtime_good_ve_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	widget = g_hash_table_lookup(dynamic_widgets,"comms_vecount_entry");
+	widget = lookup_widget("comms_vecount_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
-	widget = g_hash_table_lookup(dynamic_widgets,"comms_rtcount_entry");
+	widget = lookup_widget("comms_rtcount_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	widget = g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry");
+	widget = lookup_widget("runtime_good_rt_read_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_reset_count);
-	widget = g_hash_table_lookup(dynamic_widgets,"comms_reset_entry");
+	widget = lookup_widget("comms_reset_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	widget = g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry");
+	widget = lookup_widget("runtime_hardreset_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",serial_params->errcount);
-	widget = g_hash_table_lookup(dynamic_widgets,"comms_sioerr_entry");
+	widget = lookup_widget("comms_sioerr_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	widget = g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry");
+	widget = lookup_widget("runtime_sioerr_entry");
 	if (widget)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);

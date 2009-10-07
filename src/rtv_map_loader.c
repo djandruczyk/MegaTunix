@@ -57,7 +57,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	gint *keytypes = NULL;
 	gint i = 0;
 	gint j = 0;
-	gint k = 0;
+	guint k = 0;
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
@@ -108,7 +108,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		set_title(g_strdup("ERROR RT Map missing data!!!"));
 		return FALSE;
 	}
@@ -116,7 +115,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 		g_free(tmpbuf);
 		set_title(g_strdup("ERROR RT Map signature MISMATCH!!!"));
 		return FALSE;
@@ -201,7 +199,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 		gtk_object_sink(GTK_OBJECT(object));
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-		OBJ_SET(object,"current_index",GINT_TO_POINTER(-1));
 		/* Assume default size of 8 bit unsigned */
 		OBJ_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* bind hostory array to object for future retrieval */
@@ -292,8 +289,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		g_strfreev(keys);
 	}
 	cfg_free(cfgfile);
-	g_free(cfgfile);
-		dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
+	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
 	rtvars_loaded = TRUE;
 	set_title(g_strdup("RT Map loaded..."));
 	return TRUE;
@@ -383,12 +379,6 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
-				name=g_strdup_printf("%s_bitshift",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
 				break;
 			case VE_VAR:
 				/* VE table std variable,  page/offset only */
@@ -447,6 +437,23 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				break;
+			case RAW_EMB_BIT:
+				/* RAW data embedded bitfield 2 params */
+				name=NULL;
+				name=g_strdup_printf("%s_offset",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
+				name=NULL;
+				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
+				name=NULL;
+				break;
+
 			default:
 				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"));
 

@@ -1,21 +1,22 @@
-/*!
- * Copyright (C) 1999, 2002, 2003, 2004  Free Software Foundation, Inc.
+/* 
+ * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free
+ * Software Foundation, Inc.
  * 
  * This file is part of GNU libmatheval
  * 
- * GNU libmatheval is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2, or (at your option) any later
- * version.
- * 
- * GNU libmatheval is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * program; see the file COPYING. If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * GNU libmatheval is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * GNU libmatheval is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GNU libmatheval.  If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 
 #ifndef XMATH_H
@@ -47,95 +48,59 @@
 #define MATH_NAN (0.0/0.0)
 #endif
 
-/*! 
- \brief Calculate cotangent of value x.  
- */
+/* Calculate cotangent of value x.  */
 double          math_cot(double x);
 
-/*! 
- \brief Calculate secant of value x.  
- */
+/* Calculate secant of value x.  */
 double          math_sec(double x);
 
-/*! 
- \brief Calculate cosecant of value x.  
- */
+/* Calculate cosecant of value x.  */
 double          math_csc(double x);
 
-/*! 
- \brief Calculate inverse cotangent of value x.  
- */
+/* Calculate inverse cotangent of value x.  */
 double          math_acot(double x);
 
-/*! 
- \brief Calculate inverse secant of value x.  
- */
+/* Calculate inverse secant of value x.  */
 double          math_asec(double x);
 
-/*! 
- \brief Calculate inverse cosecant of value x.  
- */
+/* Calculate inverse cosecant of value x.  */
 double          math_acsc(double x);
 
-/*! 
- \brief Calculate hyperbolical cotangent of value x.  
- */
+/* Calculate hyperbolical cotangent of value x.  */
 double          math_coth(double x);
 
-/*! 
- \brief Calculate hyperbolical secant of value x.  
- */
+/* Calculate hyperbolical secant of value x.  */
 double          math_sech(double x);
 
-/*! 
- \brief Calculate hyperbolical cosecant of value x.  
- */
+/* Calculate hyperbolical cosecant of value x.  */
 double          math_csch(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical sine of value x.  
- */
+/* Calculate inverse hyperbolical sine of value x.  */
 double          math_asinh(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical cosine of value x.  
- */
+/* Calculate inverse hyperbolical cosine of value x.  */
 double          math_acosh(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical tangent of value x.  
- */
+/* Calculate inverse hyperbolical tangent of value x.  */
 double          math_atanh(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical cotangent of value x.  
- */
+/* Calculate inverse hyperbolical cotangent of value x.  */
 double          math_acoth(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical secant of value x.  
- */
+/* Calculate inverse hyperbolical secant of value x.  */
 double          math_asech(double x);
 
-/*! 
- \brief Calculate inverse hyperbolical cosecant of value x.  
- */
+/* Calculate inverse hyperbolical cosecant of value x.  */
 double          math_acsch(double x);
 
-/*! 
- \brief Calculate Heaviside step function value for given value x.  
- */
+/* Calculate Heaviside step function value for given value x.  */
 double          math_step(double x);
 
-/*! 
- \brief Calculate Dirac delta function value for given value x.  
- */
+/* Calculate Dirac delta function value for given value x.  */
 double          math_delta(double x);
 
-/*! 
- \brief Calculate variation of Dirac delta function (with not-a-number
- instead of infinity value for x= 0) value for given value x.
- */
+/* Calculate variation of Dirac delta function (with not-a-number instead
+ * of infinity value for x= 0) value for given value x. */
 double          math_nandelta(double x);
 
 #endif

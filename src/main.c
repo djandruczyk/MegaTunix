@@ -13,7 +13,6 @@
 
 
 #include <args.h>
-#include <binreloc.h>
 #include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
@@ -42,7 +41,8 @@ gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
 Serial_Params *serial_params = NULL;
-GAsyncQueue *io_queue = NULL;
+GAsyncQueue *io_data_queue = NULL;
+GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
 GAsyncQueue *gui_dispatch_queue = NULL;
 GObject *global_data = NULL;
@@ -64,7 +64,6 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_init(&argc, &argv);
 	glade_init();
-	gbr_init(NULL);
 
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 
@@ -92,24 +91,26 @@ gint main(gint argc, gchar ** argv)
 	g_free(filename);
 
 	/* Create Queue to listen for commands */
-	io_queue = g_async_queue_new();
+	io_data_queue = g_async_queue_new();
+	slave_msg_queue = g_async_queue_new();
 	pf_dispatch_queue = g_async_queue_new();
 	gui_dispatch_queue = g_async_queue_new();
 
 	read_config();
 	setup_gui();		
 
+	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 	/* Startup the serial General I/O handler.... */
 	thread_dispatcher_id = g_thread_create(thread_dispatcher,
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(50,(GtkFunction)pf_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(100,(GtkFunction)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	g_timeout_add(250,(GtkFunction)early_interrogation,NULL);
+	g_timeout_add(500,(GtkFunction)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();

@@ -95,7 +95,7 @@ void setup_file_filters(GtkFileChooser *chooser)
 
 gboolean check_datasources_set(GtkWidget *dash)
 {
-	gint i = 0;
+	guint i = 0;
 	gboolean state = FALSE;
 	GtkTreeIter iter;
 	GtkFixedChild *child = NULL;

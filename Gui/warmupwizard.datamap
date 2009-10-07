@@ -7,152 +7,137 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size
-key_types=_INT_,_ENUM_
+keys=page,size,dl_type,handler
+key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
-keys=page,tab_ident
-key_types=_INT_,_ENUM_
-page=0
+keys=tab_ident
+key_types=_ENUM_
 tab_ident=_WARMUP_WIZ_TAB_
 
 #----- Buttons ---------------------------------------------------------------
 
 [ww_get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
-page=0
 bind_to_list=get_data_buttons
 
 [ww_start_realtime_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_START_REALTIME_
-page=0
 
 [ww_stop_realtime_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
+key_types=_ENUM_
 handler=_STOP_REALTIME_
-page=0
 
 [ww_burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
+key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
-page=0
 bind_to_list=burners
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [ww_cpulse_neg40_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Pulsewidth at -40 \302\260C.
 f_label=Pulsewidth at -40 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_cpulse_pos170_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Pulsewidth at 77 \302\260C.
 f_label=Pulsewidth at 170 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_1]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-40 \302\260C.
 f_label=-40 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_2]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-28.8 \302\260C.
 f_label=-20 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_3]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-17.7 \302\260C.
 f_label=0 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_4]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-6.6 \302\260C.
 f_label=20 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_5]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=4.4 \302\260C.
 f_label=40 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_6]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=15.5 \302\260C.
 f_label=60 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_7]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=26.6 \302\260C.
 f_label=80 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_8]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=37.7 \302\260C.
 f_label=100 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_9]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=54.4 \302\260C.
 f_label=130 \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ww_warmup_label_10]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
+key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=71.1 \302\260C.
 f_label=160 \302\260F.
 temp_dep=TRUE
@@ -161,199 +146,155 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [ww_cpulse_neg40_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=64
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_cpulse_pos170_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=65
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_prime_pulse_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
+keys=offset,precision,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=119
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_ase_%_entry]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=66
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_ase_numcycles_entry]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=67
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_1]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=68
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_2]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=69
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_3]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=70
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_4]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=71
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_5]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=72
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_6]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=73
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_7]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=74
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_8]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=75
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_9]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=76
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 [ww_warmup_entry_10]
-keys=page,offset,dl_type,handler
-key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
+keys=offset
+key_types=_INT_
 offset=77
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 #------- WarmupWiard Status Indicators ---------------------------------------
 
 [ww_connected_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list,active_fg,inactive_fg
+key_types=_STRING_,_STRING_,_STRING_
 bind_to_list=connected_widgets
+active_fg=red
+inactive_fg=dim grey
 
 [ww_cranking_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=1
 bitmask=2
 
 [ww_running_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=0
 bitmask=1
 
 [ww_warmup_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=3
 bitmask=8
 
 [ww_ase_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=2
 bitmask=4
 
 [ww_accel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=4
 bitmask=16
 
 [ww_decel_label]
-keys=page,bind_to_list,source,bitval,bitshift,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_
-page=0
+keys=bind_to_list,active_fg,inactive_fg,source,bitval,bitmask
+key_types=_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_INT_
 bind_to_list=ww_status
+active_fg=red
+inactive_fg=dim grey
 source=enginebit
 bitval=1
-bitshift=5
 bitmask=32
 

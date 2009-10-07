@@ -21,6 +21,39 @@
 #include <gtk/gtk.h>
 #include <piegauge.h>
 
+#define MTX_PIE_GAUGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_PIE_GAUGE, MtxPieGaugePrivate))
+
+typedef struct _MtxPieGaugePrivate      MtxPieGaugePrivate;
+
+struct _MtxPieGaugePrivate
+{
+        GdkPixmap *pixmap;      /*! Update/backing pixmap */
+        GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
+        gfloat min;             /*! Minimum Value */
+        gfloat max;             /* MAximum Value */
+        gfloat value;           /* Current value */
+        gint w;                 /* Width of full widget */
+        gint h;                 /* Height of full widget */
+        gint pie_xc;            /* Pie arc x center */
+        gint pie_yc;            /* Pie arc y center */
+        gint pie_radius;        /*! Pie Radius */
+        gint precision;         /* Text precision */
+        gint start_angle;       /* Start angle */
+        gint sweep_angle;       /* Sweep angle */
+        gint value_xpos;        /* Text X position offset */
+        gint value_ypos;        /* Text X position offset */
+        gchar *value_font;      /* Font string for value */
+        gfloat value_font_scale;/* Font scale */
+        gchar *valname;         /* Value text to the let of the number */
+        cairo_t *cr;            /*! Cairo context,  not sure if this is good
+                                   too hold onto or not */
+        cairo_font_options_t * font_options;
+        GdkGC * gc;             /*! Graphics Context for drawing */
+        GdkColormap *colormap;  /*! Colormap for GC's */
+        GdkColor colors[NUM_COLORS];
+
+};
+
 
 gboolean mtx_pie_gauge_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_pie_gauge_expose (GtkWidget *, GdkEventExpose *);
@@ -32,14 +65,10 @@ void mtx_pie_gauge_size_request (GtkWidget *, GtkRequisition *);
 void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name);
 void mtx_pie_gauge_init (MtxPieGauge *gauge);
 gboolean mtx_pie_gauge_button_release (GtkWidget *,GdkEventButton *);
-void cairo_generate_pie_gauge_background(MtxPieGauge *);
-void cairo_update_pie_gauge_position (MtxPieGauge *);
-void gdk_generate_pie_gauge_background(MtxPieGauge *);
-void gdk_update_pie_gauge_position (MtxPieGauge *);
-void mtx_pie_gauge_init_colors(MtxPieGauge *);
-void mtx_pie_gauge_redraw (MtxPieGauge *gauge);
 void generate_pie_gauge_background(MtxPieGauge *);
 void update_pie_gauge_position (MtxPieGauge *);
+void mtx_pie_gauge_init_colors(MtxPieGauge *);
+void mtx_pie_gauge_redraw (MtxPieGauge *gauge);
 
 
 #endif

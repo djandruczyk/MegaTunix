@@ -30,7 +30,6 @@
 
 
 
-GtkWidget *status_window = NULL;
 extern GObject *global_data;
 
 /*!
@@ -82,7 +81,7 @@ EXPORT void load_status_pf(void)
 	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
 	if (!filename)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtmie_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
 		set_title(g_strdup("ERROR RT Statusfile DOES NOT EXIST!!!"));
 		return;
 	}
@@ -204,15 +203,10 @@ EXPORT void load_status_pf(void)
 				g_strfreev(tmpvector);
 			}
 			g_free(section);
-
-
 		}
-		status_window = window;
 		if (!args->hide_status)
 			gtk_widget_show_all(window);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
-
 	}
 	else
 	{
