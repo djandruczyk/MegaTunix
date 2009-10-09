@@ -396,11 +396,11 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, history->len-1);
-	previous = g_array_index(history, gfloat, history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after UNlock rtv_mutex\n"));
 
+	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
 	if ((current != previous) || (forced_update))
 	{
 		/*printf("updating gauge %s\n",(gchar *)key);*/
@@ -541,6 +541,8 @@ gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer da
 gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GtkWidget *tmpwidget;
+	gint x = 0;
+	gint y = 0;
 	if (event->type == GDK_KEY_RELEASE)
 		return FALSE;
 
@@ -557,7 +559,12 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (GTK_WIDGET_VISIBLE(tmpwidget))
 				gtk_widget_hide_all (tmpwidget);
 			else
+			{
+				x = (gint)OBJ_GET(global_data,"main_x_origin");
+				y = (gint)OBJ_GET(global_data,"main_y_origin");
 				gtk_widget_show_all(tmpwidget);
+				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+			}
 			return TRUE;
 			break;
 		case GDK_R:
@@ -568,7 +575,12 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (GTK_WIDGET_VISIBLE(tmpwidget))
 				gtk_widget_hide_all (tmpwidget);
 			else
+			{
+				x = (gint)OBJ_GET(global_data,"rtt_x_origin");
+				y = (gint)OBJ_GET(global_data,"rtt_y_origin");
 				gtk_widget_show_all(tmpwidget);
+				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+			}
 			return TRUE;
 			break;
 		case GDK_S:
@@ -579,7 +591,12 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (GTK_WIDGET_VISIBLE(tmpwidget))
 				gtk_widget_hide_all (tmpwidget);
 			else
+			{
+				x = (gint)OBJ_GET(global_data,"status_x_origin");
+				y = (gint)OBJ_GET(global_data,"status_y_origin");
 				gtk_widget_show_all(tmpwidget);
+				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+			}
 			return TRUE;
 			break;
 		case GDK_f:
