@@ -695,12 +695,23 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 {
 	GtkWidget *menu = NULL;
 	GtkWidget *item = NULL;
+	GtkWidget *d_item = NULL;
+	GtkWidget *n_item = NULL;
 	gint button = 0;
 	gint event_time = 0;
 
 	menu = gtk_menu_new();
 
 	/* Create Menu here */
+	d_item = gtk_radio_menu_item_new_with_label(NULL,"Daytime Mode");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(d_item),get_dash_daytime_mode(gtk_widget_get_toplevel(widget)));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),d_item);
+	n_item = gtk_radio_menu_item_new_with_label_from_widget(GTK_RADIO_MENU_ITEM(d_item),"Nitetime Mode");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(n_item),!get_dash_daytime_mode(gtk_widget_get_toplevel(widget)));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),n_item);
+	g_signal_connect(G_OBJECT(d_item),"toggled",
+		       	G_CALLBACK(set_dash_time_mode),(gpointer)gtk_widget_get_toplevel(widget));
+	
 	item = gtk_check_menu_item_new_with_label("Show Tattletales");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),dash_lookup_attribute(gtk_widget_get_toplevel(widget),TATTLETALE));
 	g_signal_connect(G_OBJECT(item),"toggled",
@@ -708,6 +719,7 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_menu_item_new_with_label("Reset Tattletales");
+	gtk_widget_set_sensitive(item,dash_lookup_attribute(gtk_widget_get_toplevel(widget),TATTLETALE));
 	g_signal_connect(G_OBJECT(item),"activate",
 		       	G_CALLBACK(reset_dash_tattletales),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
@@ -747,6 +759,63 @@ gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
 	GtkWidget *widget = (GtkWidget *)data;
 	dash_toggle_attribute(gtk_widget_get_toplevel(widget),TATTLETALE);
 	return TRUE;
+}
+
+
+gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
+{
+	gboolean value;
+	GtkWidget *widget = (GtkWidget *)data;
+	g_object_get(menuitem,"active",&value, NULL);
+	set_dash_daytime_mode(widget,value);
+	return TRUE;
+}
+
+
+gboolean get_dash_daytime_mode(GtkWidget *widget)
+{
+	GtkWidget * dash  = NULL;
+	GList *children = NULL;
+	GtkFixedChild *child = NULL;
+	GtkWidget * gauge  = NULL;
+	gint i = 0;
+	gint t_count = 0;
+	gint f_count = 0;
+
+	dash = OBJ_GET(widget,"dash");
+	children = GTK_FIXED(dash)->children;
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = g_list_nth_data(children,i);
+		gauge = child->widget;
+		if(mtx_gauge_face_get_daytime_mode(MTX_GAUGE_FACE(gauge)))
+			t_count++;
+		else
+			f_count++;
+	}
+	if (t_count > f_count)
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
+{
+	GtkWidget * dash  = NULL;
+	GList *children = NULL;
+	GtkFixedChild *child = NULL;
+	GtkWidget * gauge  = NULL;
+	gint i = 0;
+
+	dash = OBJ_GET(widget,"dash");
+	children = GTK_FIXED(dash)->children;
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = g_list_nth_data(children,i);
+		gauge = child->widget;
+		mtx_gauge_face_set_daytime_mode(MTX_GAUGE_FACE(gauge),state);
+	}
 }
 
 

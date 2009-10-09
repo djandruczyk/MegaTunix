@@ -116,7 +116,7 @@ EXPORT void load_rt_text_pf()
 	}
 
 	/*Get the root element node */
-	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING);
+	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
 	OBJ_SET(global_data,"rtt_model",store);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
@@ -195,7 +195,8 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 		gtk_list_store_set(store, &iter,
 				COL_RTT_OBJECT,(gpointer)rt_text,
 				COL_RTT_INT_NAME,rt_text->ctrl_name,
-				COL_RTT_DATA,"",-1);	
+				COL_RTT_DATA,"",
+				COL_RTT_LAST,-0.1,-1);	
 	}
 	if (int_name)
 		g_free(int_name);
@@ -235,7 +236,6 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	rtt->history = (GArray *) OBJ_GET(object,"history");
 	rtt->object = object;
 
 	return rtt;
@@ -276,7 +276,6 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	rtt->history = (GArray *) OBJ_GET(object,"history");
 	rtt->object = object;
 
 	hbox = gtk_hbox_new(FALSE,5);
@@ -455,58 +454,31 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
+			COL_RTT_LAST, &previous,
 			-1);
-
-	count = rtt->count;
-	last_upd = rtt->last_upd;
 
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	precision = (gint)OBJ_GET(rtt->object,"precision");
 
 	if (!history)
 		return FALSE;
-	if (history->len-2 < 0)
-		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, history->len-1);
-	previous = g_array_index(history, gfloat, history->len-2);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after UNlock rtv_mutex\n"));
-
-	/*
-	if (GTK_IS_WIDGET(GTK_WIDGET(gtk_widget_get_toplevel(GTK_WIDGET(rtt))->window)))
-		if (!gdk_window_is_viewable(gtk_widget_get_toplevel(GTK_WIDGET(rtt))->window))
-			return TRUE;
-			*/
 
 	if ((current != previous) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 		gtk_list_store_set(GTK_LIST_STORE(model), iter,
-				COL_RTT_DATA, tmpbuf, -1);
+				COL_RTT_DATA, tmpbuf,
+			        COL_RTT_LAST, current,	-1);
 		g_free(tmpbuf);
 		last_upd = count;
 	}
-	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
-	{
-		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		gtk_list_store_set(GTK_LIST_STORE(model), iter,
-				COL_RTT_DATA, tmpbuf, -1);
-		g_free(tmpbuf);
-		last_upd = count;
-	}
-
-	if (last_upd > 5000)
-		last_upd = 0;
-	count++;
-	if (count > 5000)
-		count = 0;
-	rtt->count = count;
-	rtt->last_upd = last_upd;
 	return FALSE;
-
 }
 

@@ -30,10 +30,17 @@ G_BEGIN_DECLS
 #define MTX_IS_GAUGE_FACE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_IS_GAUGE_FACE_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_GAUGE_FACE_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFaceClass))
-#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
 
 #define DRAG_BORDER 7
+
+/* MtxDayNite enum, determines which colorscheme is used */
+typedef enum
+{
+	MTX_NITE = FALSE,
+	MTX_DAY = TRUE
+}MtxDayNite;
+
 /* MtxClampType enum,  display clamping */
 typedef enum
 {
@@ -42,10 +49,19 @@ typedef enum
 	CLAMP_NONE
 }MtxClampType;
 
+
+/* MtxDirection enum,  display clamping */
+typedef enum
+{
+	ASCENDING = 0xbb,
+	DESCENDING
+}MtxDirection;
+
+
 /* MtxRotType enum,  needle sweep rotation */
 typedef enum
 {
-	MTX_ROT_CCW = 0xbb,
+	MTX_ROT_CCW = 0,
 	MTX_ROT_CW
 }MtxRotType;
 
@@ -53,7 +69,7 @@ typedef enum
 /* MtxPolyType enumeration,  for polygon support */
 typedef enum
 {
-	MTX_CIRCLE = 0xbb,
+	MTX_CIRCLE = 0xcc,
 	MTX_ARC,
 	MTX_RECTANGLE,
 	MTX_GENPOLY,
@@ -61,16 +77,21 @@ typedef enum
 }MtxPolyType;
 
 
-/*! ColorIndex enum,  for indexing into the color arrays */
+/*! GaugeColorIndex enum,  for indexing into the color arrays */
 typedef enum  
 {
-	COL_BG = 0,
-	COL_NEEDLE,
-	COL_VALUE_FONT,
-	COL_GRADIENT_BEGIN,
-	COL_GRADIENT_END,
-	NUM_COLORS
-}ColorIndex;
+	GAUGE_COL_BG_DAY = 0,
+	GAUGE_COL_BG_NITE,
+	GAUGE_COL_NEEDLE_DAY,
+	GAUGE_COL_NEEDLE_NITE,
+	GAUGE_COL_VALUE_FONT_DAY,
+	GAUGE_COL_VALUE_FONT_NITE,
+	GAUGE_COL_GRADIENT_BEGIN_DAY,
+	GAUGE_COL_GRADIENT_BEGIN_NITE,
+	GAUGE_COL_GRADIENT_END_DAY,
+	GAUGE_COL_GRADIENT_END_NITE,
+	GAUGE_NUM_COLORS
+}GaugeColorIndex;
 
 
 /* Text Block enumeration for the individual fields */
@@ -79,7 +100,8 @@ typedef enum
 	TB_FONT_SCALE = 0,
 	TB_X_POS,
 	TB_Y_POS,
-	TB_COLOR,
+	TB_COLOR_DAY,
+	TB_COLOR_NITE,
 	TB_FONT,
 	TB_TEXT,
 	TB_NUM_FIELDS
@@ -89,7 +111,8 @@ typedef enum
 /* Polygon enumeration for the individual fields */
 typedef enum
 {
-	POLY_COLOR = 0,
+	POLY_COLOR_DAY = 0,
+	POLY_COLOR_NITE,
 	POLY_LINEWIDTH,
 	POLY_LINESTYLE,
 	POLY_JOINSTYLE,
@@ -112,16 +135,19 @@ typedef enum
 {
 	TG_FONT = 0,
 	TG_TEXT,
-	TG_TEXT_COLOR,
+	TG_TEXT_COLOR_DAY,
+	TG_TEXT_COLOR_NITE,
 	TG_FONT_SCALE,
 	TG_TEXT_INSET,
 	TG_NUM_MAJ_TICKS,
-	TG_MAJ_TICK_COLOR,
+	TG_MAJ_TICK_COLOR_DAY,
+	TG_MAJ_TICK_COLOR_NITE,
 	TG_MAJ_TICK_INSET,
 	TG_MAJ_TICK_LENGTH,
 	TG_MAJ_TICK_WIDTH,
 	TG_NUM_MIN_TICKS,
-	TG_MIN_TICK_COLOR,
+	TG_MIN_TICK_COLOR_DAY,
+	TG_MIN_TICK_COLOR_NITE,
 	TG_MIN_TICK_INSET,
 	TG_MIN_TICK_LENGTH,
 	TG_MIN_TICK_WIDTH,
@@ -136,7 +162,8 @@ typedef enum
 {
 	CR_LOWPOINT = 0,
 	CR_HIGHPOINT,
-	CR_COLOR,
+	CR_COLOR_DAY,
+	CR_COLOR_NITE,
 	CR_LWIDTH,
 	CR_INSET,
 	CR_NUM_FIELDS
@@ -147,7 +174,8 @@ typedef enum
 {
 	ALRT_LOWPOINT = 0,
 	ALRT_HIGHPOINT,
-	ALRT_COLOR,
+	ALRT_COLOR_DAY,
+	ALRT_COLOR_NITE,
 	ALRT_LWIDTH,
 	ALRT_INSET,
 	ALRT_NUM_FIELDS
@@ -173,19 +201,19 @@ typedef enum
 	NEEDLE_TAIL_WIDTH,
 	PRECISION,
 	ANTIALIAS,
+	TATTLETALE,
+	TATTLETALE_ALPHA,
 	SHOW_VALUE,
 	NUM_ATTRIBUTES
 }MtxGenAttr;
 
 
-typedef struct _MtxGaugeFacePrivate	MtxGaugeFacePrivate;
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
 typedef struct _MtxAlertRange		MtxAlertRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
-typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 typedef struct _MtxDispatchHelper	MtxDispatchHelper;
 typedef struct _MtxPoint		MtxPoint;
 typedef struct _MtxPolygon		MtxPolygon;
@@ -216,7 +244,7 @@ struct _MtxColorRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color;		/* The color to use */
+	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
 };
@@ -233,7 +261,7 @@ struct _MtxAlertRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color;		/* The color to use */
+	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
 };
@@ -249,7 +277,7 @@ struct _MtxTextBlock
 {
 	gchar * font;
 	gchar * text;
-	GdkColor color;
+	GdkColor color[2];
 	gfloat font_scale;
 	gfloat x_pos;
 	gfloat y_pos;
@@ -267,16 +295,16 @@ struct _MtxTickGroup
 {
 	gchar *font;
 	gchar *text;
-	GdkColor text_color;
+	GdkColor text_color[2];
 	gfloat font_scale;
 	gfloat text_inset;
 	gint num_maj_ticks;
-	GdkColor maj_tick_color;
+	GdkColor maj_tick_color[2];
 	gfloat maj_tick_inset;
 	gfloat maj_tick_width;
 	gfloat maj_tick_length;
 	gint num_min_ticks;
-	GdkColor min_tick_color;
+	GdkColor min_tick_color[2];
 	gfloat min_tick_inset;
 	gfloat min_tick_width;
 	gfloat min_tick_length;
@@ -306,7 +334,7 @@ struct _MtxPolygon
 {
 	MtxPolyType type;		/* Enum type */
 	gboolean filled;		/* Filled or not? */
-	GdkColor color;			/* Color */
+	GdkColor color[2];		/* Color */
 	gfloat line_width;		/* % of radius, clamped at 1 pixel */
 	GdkLineStyle line_style;	/* Line Style */
 	GdkJoinStyle join_style;	/* Join Style */
@@ -387,80 +415,6 @@ struct _MtxGenPoly
 	MtxPoint *points;	/* Dynamic array of points */
 };
 
-/*! \struct _MtxXMLFuncs
- * \brief This small container struct is used to store a set of import and 
- * export functions use by the XML code to export or import gauge settings
- * The import function takes two args,  one is the text string from the XML
- * to be parsed, the other is the pointer to the destination pointer that
- * the import function should put the parsed data. The export function takes 
- * a pointer to the source dispatch helper struct and returns an 
- * xmlChar * valid to stick directly into the XML file.
- */
-struct _MtxXMLFuncs
-{
-	void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer);
-	void (*export_func) (MtxDispatchHelper *);
-	gchar * varname;
-	gpointer dest_var;
-};
-
-struct _MtxGaugeFacePrivate
-{
-	/* Private data */
-	GdkBitmap *bitmap;	/*! for shape_combine stuff */
-	GdkPixmap *pixmap;	/*! Update/backing pixmap */
-	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
-	GdkPixmap *tmp_pixmap;	/*! Tmp pixmap for alerts for speed boost */
-	gint w;			/*! width */
-	gint h;			/*! height */
-	gdouble xc;		/*! X Center */
-	gdouble yc;		/*! Y Center */
-	gdouble radius;		/*! Radius of display */
-	cairo_t *cr;		/*! Cairo context,  not sure if this is good
-				   too hold onto or not */
-	cairo_font_options_t * font_options;
-	PangoLayout *layout;	/*! Pango TextLayout object */
-	PangoFontDescription *font_desc;/*! Pango Font description */
-	GdkGC * bm_gc;		/*! Graphics Context for bitmap */
-	GdkGC * gc;		/*! Graphics Context for drawing */
-	GdkColormap *colormap;	/*! Colormap for GC's */
-	gchar *value_font;	/* Array of Font name strings */
-	GArray *xmlfunc_array; /*! Array list mapping varnames to xml */
-	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
-				   *  parsing functions */
-	GArray *t_blocks;	/* Array of MtxTextBlock structs */
-	GArray *c_ranges;	/* Array of MtxColorRange structs */
-	GArray *a_ranges;	/* Array of MtxAlertRange structs */
-	GArray *tick_groups;	/*! Array to contain the tick groups */
-	GArray *polygons;	/*! Array to contain polygon defs */
-	gchar * xml_filename;	/*! Filename of XML for this gauge  */
-	gboolean show_drag_border;	/*! Show drag border flag */
-	MtxClampType clamped;	/*! Isthe display clamped? */
-	gint last_alert_index;	/*! index of last active alert struct */
-	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
-					     parts of a gauge object */
-	gfloat value_font_scale;/* Array of font scales */
-	gfloat value_xpos;	/* Array of X offsets for strings */
-	gfloat value_ypos;	/* Array of X offsets for strings */
-	gint precision;		/*! number of decimal places for val */
-	gfloat start_angle; 	/*! Start point, (Cairo, CW rotation) */
-	gfloat sweep_angle;	/*! Sweep of gauge (cairo, CW increasing) */
-	gfloat value;		/*! Value represneting needle position */
-	gfloat lbound;		/*! Lower Bound to clamp at */
-	gfloat ubound;		/*! Upper Bound to Clamp at */
-	MtxRotType rotation;	/*! Rotation enumeration */
-	gfloat span;		/*! Span from lbound to ubound */
-	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
-	gboolean show_value;	/*! Show the Valueon screen or not */
-	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
-	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
-	gfloat needle_length;	/*! % of rad length of main needle */
-	gfloat needle_tip_width;/*! % of rad width of needle tip */
-	gfloat needle_tail_width;/*! % of rad width of needle tip */
-	gint needle_polygon_points;
-	MtxPoint needle_coords[6];	/*! 6 point needle for now */
-};
-
 struct _MtxGaugeFace
 {	/* public data */
 	GtkDrawingArea parent;
@@ -476,12 +430,15 @@ void generate_gauge_background(MtxGaugeFace *);
 void update_gauge_position (MtxGaugeFace *);
 GtkWidget* mtx_gauge_face_new ();
 
+/* Gauge General Attributes */
 void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat value);
 gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat * value);
 
-void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
-float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+/* Get/Set value */
+gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
+gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 
+/* Value Font */
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
@@ -489,45 +446,58 @@ gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
 
 /* Alert Ranges */
 GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index, AlertField field, void * value);
 gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *);
-void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge);
 
 /* Text Blocks */
 GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
-void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
 
 /* Tick Groups */
 GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *);
-void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge);
 
 /* Polygons */
 GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index, PolyField field, void * value);
 gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
-void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
-GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
+/* Colors */
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color);
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index);
+
+/* XML */
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);
 void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
+
+/* Misc */
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
+
+/* Tattletale */
+float mtx_gauge_face_get_peak (MtxGaugeFace *);
+gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *);
+
+/* Daytime or nitetime (flips colors) */
+void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
+gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
 
 G_END_DECLS
 

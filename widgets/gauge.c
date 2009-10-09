@@ -1344,10 +1344,10 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns the state of whether the gauge is in daytime or nitetime mode
  */
-MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
+gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), MTX_DAY);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
 	return priv->daytime_mode;
 }
 
@@ -1357,17 +1357,17 @@ MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns true on sucess
  */
-gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
+void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	if (priv->daytime_mode == mode)
-		return TRUE;
+		return;
 	else
 	{
 		priv->daytime_mode = mode;
 		generate_gauge_background(gauge);
 		mtx_gauge_face_redraw_canvas (gauge);
 	}
-	return TRUE;
+	return;
 }
