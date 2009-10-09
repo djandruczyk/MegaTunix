@@ -412,7 +412,10 @@ void *serial_repair_thread(gpointer data)
 	}
 
 	if (serial_is_open)
+	{
+		queue_function(g_strdup("kill_conn_warning"));
 		thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+	}
 	if (vector)
 		g_strfreev(vector);
 	g_thread_exit(0);

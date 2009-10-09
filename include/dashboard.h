@@ -15,6 +15,7 @@
 #define __DASHBOARD_H__
 
 #include <defines.h>
+#include <gauge.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -54,6 +55,14 @@ gboolean hide_dash_resizers(gpointer );
 void update_tab_gauges(void);
 gboolean dash_configure_event(GtkWidget * , GdkEventConfigure * );
 gboolean focus_event(GtkWidget * , gpointer);
+void dash_toggle_attribute(GtkWidget *, MtxGenAttr);
+gboolean dash_popup_menu_handler(GtkWidget *, gpointer);
+void dash_context_popup(GtkWidget *, GdkEventButton *);
+gboolean dash_lookup_attribute(GtkWidget *, MtxGenAttr);
+gboolean toggle_dash_tattletales(GtkWidget *, gpointer);
+gboolean toggle_dash_antialias(GtkWidget *, gpointer);
+void toggle_dash_fullscreen(GtkWidget *, gpointer);
+gboolean reset_dash_tattletales(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif
