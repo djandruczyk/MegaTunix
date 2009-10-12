@@ -74,7 +74,8 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	fullname = g_strdup_printf("%s%s",prefix,name);
-	if (!g_hash_table_lookup(dynamic_widgets,fullname))
+	OBJ_SET(widget,"fullname",g_strdup(fullname));
+	if (!lookup_widget(fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
@@ -95,7 +96,7 @@ void register_widget(gchar *name, GtkWidget * widget)
 {
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-	if (g_hash_table_lookup(dynamic_widgets,name))
+	if (lookup_widget(name))
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
@@ -118,6 +119,11 @@ gboolean deregister_widget(gchar *name)
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
+
+GtkWidget * lookup_widget(const gchar * name)
+{
+	return (g_hash_table_lookup(dynamic_widgets,name));
+}
 
 /*!
  \brief get_State() returns either TRUE or false based on the encoded value 
@@ -157,6 +163,9 @@ void alter_widget_state(gpointer key, gpointer data)
 	extern GHashTable *widget_group_states;
 
 	tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
+	
+	if (!tmpbuf)
+		printf("Error with widget %s, bind_to_list is null\n",glade_get_widget_name(widget));
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/
@@ -199,7 +208,7 @@ void set_widget_labels(gchar *input)
 	}
 	for(i=0;i<count;i+=2)
 	{
-		widget = g_hash_table_lookup(dynamic_widgets,vector[i]);
+		widget = lookup_widget(vector[i]);
 		if ((widget) && (GTK_IS_LABEL(widget)))
 			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
 		else
@@ -250,6 +259,10 @@ EXPORT void lock_entry(GtkWidget *widget)
 
 }
 
+
+/*
+ \brief,  returns number of bytes for passed DataSize enumeration
+ */
 gint get_multiplier(DataSize size)
 {
 	gint mult = 0;
@@ -267,7 +280,7 @@ gint get_multiplier(DataSize size)
 			break;
 		case MTX_U32:
 		case MTX_S32:
-			mult = 2;
+			mult = 4;
 			break;
 		default:
 			break;

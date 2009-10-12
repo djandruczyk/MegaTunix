@@ -21,17 +21,15 @@
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
+#include <listmgmt.h>
 #include <notifications.h>
+#include <progress.h>
 #include <rtv_map_loader.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <widgetmgmt.h>
 
-GHashTable *rt_sliders = NULL;
-GHashTable *enr_sliders = NULL;
-GHashTable *ww_sliders = NULL;
-GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 extern GObject *global_data;
@@ -48,6 +46,8 @@ EXPORT void load_sliders_pf()
 	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
+	GHashTable *rt_sliders = NULL;
+	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -76,19 +76,18 @@ EXPORT void load_sliders_pf()
 	}
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
-		if (ww_sliders)
-			ww_sliders = NULL;
-		if (rt_sliders)
-			rt_sliders = NULL;
-
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup("Loading RT Sliders..."));
+	rt_sliders = OBJ_GET(global_data,"rt_sliders");
+	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rt_sliders",rt_sliders);
+	OBJ_SET(global_data,"ww_sliders",ww_sliders);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
@@ -168,7 +167,6 @@ do_ww_sliders:
 		}
 finish_off:
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	else
 	{
@@ -190,6 +188,7 @@ void load_ve3d_sliders(gint table_num)
 	ConfigFile *cfgfile = NULL;
 	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
+	GHashTable **ve3d_sliders = NULL;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -203,14 +202,14 @@ void load_ve3d_sliders(gint table_num)
 
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
-		if (ve3d_sliders)
-			ve3d_sliders[table_num]=NULL;
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
+	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
+	OBJ_SET(global_data,"ve3d_sliders",ve3d_sliders);
 
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
@@ -255,7 +254,6 @@ void load_ve3d_sliders(gint table_num)
 		}
 finish_off:
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 	}
 	if (filename)
 		g_free(filename);
@@ -282,7 +280,6 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	GtkWidget *table = NULL;
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
-	extern GHashTable *dynamic_widgets;
 	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
@@ -291,7 +288,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
 		return NULL;
 	}
 
@@ -299,6 +296,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->tbl = tbl;
 	slider->table_num = table_num;
 	slider->row = row;
+	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 	slider->lower = (gint)OBJ_GET(object,"lower_limit");
@@ -318,7 +316,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"));
 		return NULL;
 	}
-	table = g_hash_table_lookup(dynamic_widgets,name);
+	table = lookup_widget(name);
 	if (!table)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
@@ -357,7 +355,9 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	pbar = gtk_progress_bar_new();
+	pbar = mtx_progress_bar_new();
+	/* 1.1 Seconds peak hold time */
+	mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(pbar),1100);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 
@@ -375,7 +375,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 
 
 /*!
- \brief register_rt_Range() creates the slider from the passed data, 
+ \brief register_rt_range() creates the slider from the passed data, 
  and attaches it the the gui. This is called during gui tab loading to embed
  sliders into regular tabs.
  \param widget (GtkWidget *) name of widget defined in Gui datamap file. Used
@@ -385,6 +385,12 @@ EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;
 	extern Rtv_Map *rtv_map;
+	GtkWidget *parent = NULL;
+	GtkProgressBarOrientation orient;
+	GHashTable *rt_sliders = NULL;
+	GHashTable *aw_sliders = NULL;
+	GHashTable *ww_sliders = NULL;
+	GHashTable *enr_sliders = NULL;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
 	gchar * source = (gchar *)OBJ_GET(widget,"source");
 	TabIdent ident = (TabIdent)OBJ_GET(widget,"tab_ident");
@@ -393,26 +399,63 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		return;
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
+	rt_sliders = OBJ_GET(global_data,"rt_sliders");
+	aw_sliders = OBJ_GET(global_data,"aw_sliders");
+	ww_sliders = OBJ_GET(global_data,"ww_sliders");
+	enr_sliders = OBJ_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	if (!aw_sliders)
+		aw_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!enr_sliders)
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	OBJ_SET(global_data,"rt_sliders",rt_sliders);
+	OBJ_SET(global_data,"aw_sliders",aw_sliders);
+	OBJ_SET(global_data,"ww_sliders",ww_sliders);
+	OBJ_SET(global_data,"enr_sliders",enr_sliders);
 	
 	if  (!G_IS_OBJECT(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,glade_get_widget_name(widget)));
 		return;
 	}
 	slider->ctrl_name = g_strdup(glade_get_widget_name(widget));
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;
-	slider->class = MTX_RANGE;
 	slider->history = (GArray *) OBJ_GET(object,"history");
+	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	if (OBJ_GET(widget,"lower_limit"))
+		slider->lower = (gint)OBJ_GET(widget,"lower_limit");
+	else
+		slider->lower = (gint)OBJ_GET(object,"lower_limit");
+	if (OBJ_GET(widget,"upper_limit"))
+		slider->upper = (gint)OBJ_GET(widget,"upper_limit");
+	else
+		slider->upper = (gint)OBJ_GET(object,"upper_limit");
 	slider->object = object;
 	slider->textval = NULL;
+	if (GTK_IS_SCALE(widget))
+		slider->class = MTX_RANGE;
+	else if (GTK_IS_PROGRESS(widget))
+	{
+		/* We don't like GTK+'s progress bar, so rip it out and 
+		 * stick in my custom version instead.  Get the orientation
+		 * first...
+		 */
+		orient = gtk_progress_bar_get_orientation(GTK_PROGRESS_BAR(widget));
+		parent = gtk_widget_get_parent(widget);
+		gtk_widget_destroy(widget);
+		widget = mtx_progress_bar_new();
+		/* 1.1 Seconds peak hold time */
+		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(widget),1100);
+		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(widget),
+				orient);
+		gtk_container_add(GTK_CONTAINER(parent),widget);
+		slider->class = MTX_PROGRESS;
+	}
 	slider->pbar = widget;
 
 	switch (ident)
@@ -425,6 +468,9 @@ EXPORT void register_rt_range(GtkWidget * widget)
 			break;
 		case WARMUP_WIZ_TAB:
 			g_hash_table_insert(ww_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
+			break;
+		case ACCEL_WIZ_TAB:
+			g_hash_table_insert(aw_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
 			break;
 		default:
 			break;
@@ -442,8 +488,10 @@ EXPORT void register_rt_range(GtkWidget * widget)
  */
 gboolean free_ve3d_sliders(gint table_num)
 {
-	extern GHashTable **ve3d_sliders;
+	GHashTable **ve3d_sliders;
 	gchar * widget = NULL;
+
+	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
 	if (ve3d_sliders)
 	{
 		if (ve3d_sliders[table_num])
@@ -461,4 +509,42 @@ gboolean free_ve3d_sliders(gint table_num)
 	deregister_widget(widget);
 	g_free(widget);
 	return FALSE;
+}
+
+
+EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	return TRUE;
+}
+
+
+EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+{
+	return TRUE;
+}
+
+
+EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
+{
+	gboolean mapae_ctrl_state = FALSE;
+	gboolean tpsae_ctrl_state = FALSE;
+	extern GHashTable *widget_group_states;
+	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
+
+	if (value == 0)
+		tpsae_ctrl_state = FALSE;
+	else
+		tpsae_ctrl_state = TRUE;
+
+	if (value == 100)
+		mapae_ctrl_state = FALSE;
+	else
+		mapae_ctrl_state = TRUE;
+
+	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),(gpointer)tpsae_ctrl_state);
+	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),(gpointer)mapae_ctrl_state);
+	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);
+	g_list_foreach(get_list("map_ae_ctrls"),alter_widget_state,NULL);
+	return FALSE;
+
 }

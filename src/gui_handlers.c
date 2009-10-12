@@ -2001,6 +2001,7 @@ void update_widget(gpointer object, gpointer user_data)
 	upd_count++;
 	if ((upd_count%64) == 0)
 	{
+		/*
 		while (gtk_events_pending())
 		{
 			if (leaving)
@@ -2009,6 +2010,7 @@ void update_widget(gpointer object, gpointer user_data)
 			}
 			gtk_main_iteration();
 		}
+		*/
 
 	}
 	if (!GTK_IS_OBJECT(widget))
@@ -2419,11 +2421,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint offset = 0;
 	DataSize size = 0;
 	gint value = 0;
+	gchar * tmpbuf = NULL;
+	gint active_table = -1;
 	glong lower = 0;
 	glong upper = 0;
 	glong hardlower = 0;
 	glong hardupper = 0;
 	gint dload_val = 0;
+	gboolean send = FALSE;
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	extern Firmware_Details *firmware;
@@ -2434,6 +2439,9 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	offset = (gint) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (gboolean) OBJ_GET(widget,"reverse_keys");
+	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
+	if (tmpbuf)
+		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
 	if (OBJ_GET(widget,"raw_lower"))
 		lower = (gint) OBJ_GET(widget,"raw_lower");
 	hardlower = get_extreme_from_size(size,LOWER);
@@ -2476,6 +2484,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_Page_Down:
@@ -2493,6 +2502,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_plus:
@@ -2515,6 +2525,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_W:
@@ -2533,6 +2544,31 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
+			retval = TRUE;
+			break;
+		case GDK_H:
+		case GDK_h:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_LEFT);
+			retval = TRUE;
+			break;
+		case GDK_L:
+		case GDK_l:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_RIGHT);
+			retval = TRUE;
+			break;
+		case GDK_K:
+		case GDK_k:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_UP);
+			retval = TRUE;
+			break;
+		case GDK_J:
+		case GDK_j:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_DOWN);
 			retval = TRUE;
 			break;
 		case GDK_Escape:
@@ -2543,7 +2579,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		default:	
 			retval = FALSE;
 	}
-	if (retval)
+	if (send)
 		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 
 	return retval;
@@ -3294,3 +3330,75 @@ gboolean update_multi_expression(gpointer data)
 	g_list_foreach(get_list("multi_expression"),update_widget,NULL);	
 	return FALSE;
 }
+
+
+void refocus_cell(GtkWidget *widget, Direction dir)
+{
+	gchar *widget_name = NULL;
+	GtkWidget *widget_2_focus = NULL;
+	gchar *tmpbuf = NULL;
+	gchar *prefix = NULL;
+	gchar **vector = NULL;
+	gchar **row_col = NULL;
+	gboolean return_now = FALSE;
+	gint table_num = -1;
+	gint row = -1;
+	gint col = -1;
+	extern Firmware_Details *firmware;
+
+
+	widget_name = OBJ_GET(widget,"fullname");
+	if (!widget_name)
+		return;
+	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
+	if (tmpbuf)
+		table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+	else
+		return;
+	
+	vector = g_strsplit(widget_name,"(",2);
+	prefix = g_strdup(vector[0]);
+	row_col = g_strsplit(g_strdelimit(vector[1],")",' '),",",2);
+	g_strfreev(vector);
+	col = (gint)g_ascii_strtod(row_col[0],NULL);
+	row = (gint)g_ascii_strtod(row_col[1],NULL);
+	g_strfreev(row_col);
+
+	switch (dir)
+	{
+		case GO_LEFT:
+			if (col == 0)
+				return_now = TRUE;
+			else
+				col--;
+			break;
+		case GO_RIGHT:
+			if (col > firmware->table_params[table_num]->x_bincount-2)
+				return_now = TRUE;
+			else
+				col++;
+			break;
+		case GO_UP:
+			if (row > firmware->table_params[table_num]->y_bincount-2)
+				return_now = TRUE;
+			else
+				row++;
+			break;
+		case GO_DOWN:
+			if (row == 0)
+				return_now = TRUE;
+			else
+				row--;
+			break;
+	}
+	if (return_now)
+		return;
+	tmpbuf = g_strdup_printf("%s(%i,%i)",prefix,col,row);
+
+	widget_2_focus = lookup_widget(tmpbuf);
+	if (GTK_IS_WIDGET(widget_2_focus))
+		gtk_widget_grab_focus(widget_2_focus);
+
+	g_free(tmpbuf);
+}
+

@@ -23,6 +23,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <glade/glade.h>
+#include <gui_handlers.h>
 #include <lookuptables.h>
 #include <math.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -31,6 +32,7 @@
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
+#include <string.h>
 #include <threads.h>
 
 
@@ -44,13 +46,14 @@ extern GObject *global_data;
 void process_rt_vars(void *incoming)
 {
 	extern Rtv_Map *rtv_map;
+	extern Firmware_Details *firmware;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
 	gchar * expr = NULL;
 	GList * list= NULL;
-	gint i = 0;
-	gint j = 0;
+	guint i = 0;
+	guint j = 0;
 	gfloat x = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
@@ -59,7 +62,6 @@ void process_rt_vars(void *incoming)
 	gboolean temp_dep = FALSE;
 	void *evaluator = NULL;
 	GTimeVal timeval;
-	gint current_index;
 	GArray *history = NULL;
 	gchar *special = NULL;
 	GHashTable *hash = NULL;
@@ -73,6 +75,9 @@ void process_rt_vars(void *incoming)
 		printf("ERROR  INOPUT IS NULL!!!!\n");
 	/* Store timestamps in ringbuffer */
 
+	/* Backup current rtv copy */
+	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
+	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
 	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
@@ -150,21 +155,21 @@ void process_rt_vars(void *incoming)
 
 			if (OBJ_GET(object,"lookuptable"))
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));*/
 				x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
 				x = _get_sized_data((guint8 *)incoming,0,offset,size);
 			}
 
-			dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)));
+			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
 			tmpf = evaluator_evaluate_x(evaluator,x);
 store_it:
 			if (temp_dep)
 			{
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));
+				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));*/
 				if (temp_units == CELSIUS)
 					result = (tmpf-32.0)*(5.0/9.0);
 				else
@@ -174,14 +179,15 @@ store_it:
 				result = tmpf;
 			/* Get history array and current index point */
 			history = (GArray *)OBJ_GET(object,"history");
-			current_index = (gint)OBJ_GET(object,"current_index");
 			/* Store data in history buffer */
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before lock rtv_mutex\n"));
 			g_static_mutex_lock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after lock rtv_mutex\n"));
 			g_array_append_val(history,result);
-			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,current_index,result,g_array_index(history, gfloat, current_index+1),g_array_index(history, gfloat, current_index));*/
-			current_index++;
-			OBJ_SET(object,"current_index",GINT_TO_POINTER(current_index));
+			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,history->len-1,result,g_array_index(history, gfloat, history->len-1),g_array_index(history, gfloat, history->len-2));*/
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": process_rt_vars() after UNlock rtv_mutex\n"));
 
 			/*printf("Result of %s is %f\n",(gchar *)OBJ_GET(object,"internal_names"),result);*/
 
@@ -197,7 +203,7 @@ store_it:
  \param object (GObject *) pointer to the object containing the conversion 
  expression and other relevant data
  \param incoming (void *) pointer to the raw data
- \param type (ConvType) enumeration stating if this is an upload or 
+ \param type (ConvType) enumeration stating if this is an upload or
  download conversion
  \returns a float of the result of the mathematical expression
  */
@@ -211,19 +217,29 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	gint page = 0;
 	DataSize size = MTX_U08;
 	gint offset = 0;
-	gint bitmask = 0;
-	gint bitshift = 0;
+	guint bitmask = 0;
+	guint bitshift = 0;
 	gint canID = 0;
 	void * evaluator = NULL;
 	gchar **names = NULL;
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
+	gdouble lower_limit = 0;
+	gdouble upper_limit = 0;
 	gdouble result = 0.0;
 
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
 	total_symbols = (gint)OBJ_GET(object,"total_symbols");
+	if (OBJ_GET(object,"lower_limit"))
+		lower_limit = (gdouble)(gint)OBJ_GET(object,"lower_limit");
+	else
+		lower_limit = -G_MAXDOUBLE;
+	if (OBJ_GET(object,"upper_limit"))
+		upper_limit = (gdouble)(gint)OBJ_GET(object,"upper_limit");
+	else
+		upper_limit = G_MAXDOUBLE;
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
@@ -237,6 +253,8 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case VE_EMB_BIT:
+				size = MTX_U08;
+
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
 				page = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
@@ -249,11 +267,13 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
 				bitmask = (gint) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_bitshift",symbols[i]);
-				bitshift = (gint) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
+				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size))&bitmask) >> bitshift);
+				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
+				/*
+				  printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
+				 printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case VE_VAR:
@@ -283,6 +303,19 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
+				break;
+			case RAW_EMB_BIT:
+				size = MTX_U08;
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (gint) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
+				bitmask = (gint) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				bitshift = get_bitshift(bitmask);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size)) & bitmask) >> bitshift);
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));
@@ -322,6 +355,10 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	assert(evaluator);
 
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
+	if (result < lower_limit)
+		result = lower_limit;
+	if (result > upper_limit)
+		result = upper_limit;
 	for (i=0;i<total_symbols;i++)
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));
@@ -351,19 +388,20 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 
 	if (!GTK_IS_OBJECT(object))
 	{
-		printf("FATAL ERROR: multi_expression object is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression object is NULL!\n"));
 		return 0.0;
 	}
 	key = (gchar *)OBJ_GET(object,"source_key");
 	if (!key)
 	{
-		printf("FATAL ERROR: multi_expression source key is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression source key is NULL!\n"));
 		return 0.0;
 	}
 	hash_key  = (gchar *)g_hash_table_lookup(sources_hash,key);
 	if (!hash_key)
 	{
-		printf("FATAL ERROR: multi_expression hash key is NULL!\n");
+		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": ERROR: multi_expression hash key is NULL!\n"));
+		printf(__FILE__": ERROR: multi_expression hash key is NULL!\n");
 		return 0.0;
 	}
 	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
@@ -442,7 +480,6 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
-	gint index = 0;
 	
 	if (!internal_name)
 	{
@@ -451,12 +488,22 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		*value = -1;
 		return FALSE;
+	}
 	history = (GArray *)OBJ_GET(object,"history");
+	if (!history)
+		return FALSE;
+	if (history->len-1 < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
-	index = (gint)OBJ_GET(object,"current_index");
-	*value = g_array_index(history,gfloat,index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after lock rtv_mutex\n"));
+	*value = g_array_index(history,gfloat,history->len-1);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() after UNlock rtv_mutex\n"));
 	return TRUE;
 }
 
@@ -473,8 +520,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	extern Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	GArray * history = NULL;
-	gint index = 0;
-	
+
 	if (!internal_name)
 	{
 		*value = 0.0;
@@ -483,13 +529,186 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
-	g_static_mutex_lock(&rtv_mutex);
 	history = (GArray *)OBJ_GET(object,"history");
-	index = (gint)OBJ_GET(object,"current_index");
-	if (index > 0)
-		index -= 1;  /* get PREVIOUS one */
-	*value = g_array_index(history,gfloat,index);
+	if (!history)
+		return FALSE;
+	if (history->len-2 < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after lock rtv_mutex\n"));
+	*value = g_array_index(history,gfloat,history->len-2);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() after UNlock rtv_mutex\n"));
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_previous_nth_value() gets the nth previosu value of the derived
+ variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ 5 samples "back in time"
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+
+	if (!internal_name)
+	{
+		*value = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	if (!history)
+		return FALSE;
+	if (history->len-n < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() after lock rtv_mutex\n"));
+	if (index > n)
+		index -= n;  /* get PREVIOUS nth one */
+	*value = g_array_index(history,gfloat,index);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before UNlock rtv_mutex\n"));
+	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() after UNlock rtv_mutex\n"));
+	history = (GArray *)OBJ_GET(object,"history");
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_previous_n_values() gets the n previous values of the derived
+ variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ 5 samples "back in time"
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+	gint i = 0;
+
+	if (!internal_name)
+	{
+		for (i=0;i<n;i++)
+			values[i] = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	if (!history)
+		return FALSE;
+	if (history->len-n < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
+	index = history->len-1;
+	if (index > n)
+	{
+		for (i=0;i<n;i++)
+		{
+			index--;  /* get PREVIOUS nth one */
+			values[i] = g_array_index(history,gfloat,index);
+		}
+	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before UNlock rtv_mutex\n"));
+	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after UNlock rtv_mutex\n"));
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_previous_n_x_m_values() gets previous data
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param n (gint) number of campels we want
+ \param skip (gint) number to SKIP between samples
+ \param value (gfloat *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip, gfloat *values)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	GArray * history = NULL;
+	gint index = 0;
+	gint i = 0;
+
+	if (!internal_name)
+	{
+		for (i=0;i<n;i++)
+			values[i] = 0.0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (GArray *)OBJ_GET(object,"history");
+	if (!history)
+		return FALSE;
+	if (history->len-(n*skip) < 0)
+		return FALSE;
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
+	g_static_mutex_lock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after lock rtv_mutex\n"));
+	index = history->len-1;
+	if (index > (n*skip))
+	{
+		for (i=0;i<n;i++)
+		{
+			index-=skip;  /* get PREVIOUS nth one */
+			values[i] = g_array_index(history,gfloat,index);
+		}
+	}
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before UNlock rtv_mutex\n"));
+	g_static_mutex_unlock(&rtv_mutex);
+	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() after UNlock rtv_mutex\n"));
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_precision() gets the current precision of the derived
+ variable requested by name.
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gint *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_precision(gchar *internal_name, gint *precision)
+{
+	extern Rtv_Map *rtv_map;
+	GObject * object = NULL;
+
+	if (!internal_name)
+	{
+		*precision = 0;
+		return FALSE;
+	}
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+	{
+		*precision = 0;
+		return FALSE;
+	}
+	*precision = (gint )OBJ_GET(object,"precision");
 	return TRUE;
 }
 
@@ -502,10 +721,9 @@ void flush_rt_arrays()
 {
 	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;
-	gint i = 0;
-	gint j = 0;
+	guint i = 0;
+	guint j = 0;
 	GObject * object = NULL;
-	gint current_index = 0;
 	GList *list = NULL;
 
 	/* Flush and recreate the timestamp array */
@@ -524,17 +742,19 @@ void flush_rt_arrays()
 			object=(GObject *)g_list_nth_data(list,j);
 			if (!GTK_IS_OBJECT(object))
 				continue;
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() before lock rtv_mutex\n"));
 			g_static_mutex_lock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after lock rtv_mutex\n"));
 			history = (GArray *)OBJ_GET(object,"history");
-			current_index = (gint)OBJ_GET(object,"current_index");
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			OBJ_SET(object,"history",(gpointer)history);
-			OBJ_SET(object,"current_index",GINT_TO_POINTER(-1));
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() before UNlock rtv_mutex\n"));
 			g_static_mutex_unlock(&rtv_mutex);
+			dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_rt_arrays() after UNlock rtv_mutex\n"));
 	                /* bind history array to object for future retrieval */
 		}
 

@@ -34,6 +34,7 @@ struct _Rt_Slider
 	gint table_num;		/*! Refers to the table number in the profile*/
 	gint tbl;		/*! Table number (0-3) */
 	gint row;		/*! Starting row */
+	gfloat last;		/*! last value */
 	gchar *friendly_name;	/*! text for Label above */
 	gint lower;		/*! Lower limit */
 	gint upper;		/*! Upper limit */
@@ -53,6 +54,8 @@ void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
 Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
 gboolean free_ve3d_sliders(gint);
+EXPORT gboolean rtslider_button_handler(GtkWidget *,GdkEventButton *, gpointer);
+EXPORT gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
 /* Prototypes */
 
 #endif
