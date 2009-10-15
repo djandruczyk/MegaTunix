@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <comms.h>
 #include <conversions.h>
@@ -23,7 +24,10 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <mode_select.h>
+#include <mtxsocket.h>
 #include <notifications.h>
+#include <runtime_gui.h>
+#include <runtime_text.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +39,10 @@
 
 extern gint dbg_lvl;
 extern GObject *global_data;
-
+GThread *ascii_socket_id = NULL;
+GThread *binary_socket_id = NULL;
+GThread *control_socket_id = NULL;
+GThread *notify_slaves_id = NULL;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -45,8 +52,7 @@ EXPORT void start_statuscounts_pf(void)
 
 EXPORT void enable_reboot_button_pf(void)
 {
-	extern GHashTable *dynamic_widgets;
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"error_status_reboot_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
 }
 
 
@@ -60,30 +66,32 @@ EXPORT void spawn_read_ve_const_pf(void)
 }
 
 
-EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
+EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
-	extern volatile gboolean outstanding_data;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	extern volatile gint last_page;
 	gint i = 0;
-	if (type != MS2)
+
+	/*printf("burn all helper\n");*/
+	if ((type != MS2) && (type != MS1))
 		return FALSE;
 	if (!offline)
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
 		{
+	/*		printf("paged burn\n");*/
 			output = initialize_outputdata();
 			OBJ_SET(output->object,"page",GINT_TO_POINTER(last_page));
-			OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[last_page]->truepgnum));
+			OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
 			OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 			OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 			io_cmd(firmware->burn_command,output);
 		}
-		else if (!(firmware->capabilities & MS2_EXTRA))
+		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_E)))
 		{
 			/* MS2 std allows all pages to be in ram at will*/
 			for (i=0;i<firmware->total_pages;i++)
@@ -92,7 +100,7 @@ EXPORT gboolean ms2_burn_all_helper(void *data, XmlCmdType type)
 					continue;
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->burn_command,output);
@@ -130,7 +138,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					queue_ms1_page_change(i);
 					output = initialize_outputdata();
 					OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-					OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					io_cmd(firmware->ve_command,output);
 				}
@@ -142,7 +150,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			if (!offline)
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
@@ -150,13 +158,64 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 						continue;
 					output = initialize_outputdata();
 					OBJ_SET(output->object,"page",GINT_TO_POINTER(i));
-					OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[i]->truepgnum));
+					OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
 					OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
 					OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
 					OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					io_cmd(firmware->ve_command,output);
 				}
+			}
+			command = (Command *)data;
+			io_cmd(NULL,command->post_functions);
+			break;
+		case MS2_E_COMPOSITEMON:
+			if (!offline)
+			{
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+					queue_burn_ecu_flash(last_page);
+				output = initialize_outputdata();
+				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->compositemon_page));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
+				OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
+				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd(firmware->ve_command,output);
+			}
+			command = (Command *)data;
+			io_cmd(NULL,command->post_functions);
+			break;
+		case MS2_E_TRIGMON:
+			if (!offline)
+			{
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+					queue_burn_ecu_flash(last_page);
+				output = initialize_outputdata();
+				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
+				OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
+				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd(firmware->ve_command,output);
+			}
+			command = (Command *)data;
+			io_cmd(NULL,command->post_functions);
+			break;
+		case MS2_E_TOOTHMON:
+			if (!offline)
+			{
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+					queue_burn_ecu_flash(last_page);
+				output = initialize_outputdata();
+				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"canID",GINT_TO_POINTER(firmware->canID));
+				OBJ_SET(output->object,"offset", GINT_TO_POINTER(0));
+				OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->length));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd(firmware->ve_command,output);
 			}
 			command = (Command *)data;
 			io_cmd(NULL,command->post_functions);
@@ -169,7 +228,8 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -183,7 +243,8 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
-				OBJ_SET(output->object,"truepgnum",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->truepgnum));
+				OBJ_SET(output->object,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
+				OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -254,7 +315,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	gchar *tmpbuf = NULL;
 	gint page = -1;
 	gint canID = -1;
-	static gint lastcount = 0;
+	guint16 curcount = 0;
+	static guint16 lastcount = 0;
 	extern Firmware_Details *firmware;
 	extern gint ms_ve_goodread_count;
 	extern gint ms_reset_count;
@@ -287,8 +349,9 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case NUM_REV:
 			if (offline)
 				break;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			ptr8 = (guchar *)message->recv_buf;
+			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
 				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
 			else
@@ -297,34 +360,40 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case TEXT_REV:
 			if (offline)
 				break;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
+			{
 				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
-			else
-				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
+				 firmware->txt_rev_len = count;
+				firmware->text_revision = g_strndup(message->recv_buf,count);
+			}
 			break;
 		case SIGNATURE:
 			if (offline)
 				break;
-			 count = read_data(-1,&message->recv_buf);
+			 count = read_data(-1,&message->recv_buf,FALSE);
                          if (count > 0)
+			 {
 				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 firmware->signature_len = count;
+				 firmware->actual_signature = g_strndup(message->recv_buf,count);
+			 }
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:
 			page = (gint)OBJ_GET(output->object,"page");
 			canID = (gint)OBJ_GET(output->object,"canID");
-			count = read_data(firmware->page_params[page]->length,&message->recv_buf);
+			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
 			store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
-			backup_current_data(0,page);
+			backup_current_data(canID,page);
 			ms_ve_goodread_count++;
 			break;
 		case MS1_RT_VARS:
-			count = read_data(firmware->rtvars_size,&message->recv_buf);
+			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
 			ptr8 = (guchar *)message->recv_buf;
@@ -339,9 +408,10 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 * a reset due to power and/or noise.
 			 */
 			if ((lastcount - ptr8[0] > 1) && \
-					(lastcount - ptr8[0] > 255))
+					(lastcount - ptr8[0] != 255))
 			{
 				ms_reset_count++;
+				printf("MS1 Reset detected!\n");
 				gdk_beep();
 			}
 			else
@@ -354,30 +424,40 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
-			count = read_data(firmware->rtvars_size,&message->recv_buf);
+			page = (gint)OBJ_GET(output->object,"page");
+			canID = (gint)OBJ_GET(output->object,"canID");
+			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
+			store_new_block(canID,page,0,
+					message->recv_buf,
+					firmware->page_params[page]->length);
+			backup_current_data(canID,page);
 			ptr16 = (guint16 *)message->recv_buf;
 			/* Test for MS reset */
 			if (just_starting)
 			{
-				lastcount = ptr16[0];
+				lastcount = GUINT16_TO_BE(ptr16[0]);
+				curcount = GUINT16_TO_BE(ptr16[0]);
 				just_starting = FALSE;
 			}
+			else
+				curcount = GUINT16_TO_BE(ptr16[0]);
 			/* Check for clock jump from the MS, a 
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.
 			 */
-			if ((lastcount - ptr16[0] > 1) && \
-					(lastcount - ptr16[0] > 65535))
+			if ((lastcount - curcount > 1) && \
+					(lastcount - curcount != 65535))
 			{
 				ms_reset_count++;
-				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,ptr16[0]);
+				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);
+			 
 				gdk_beep();
 			}
 			else
 				ms_goodread_count++;
-			lastcount = ptr16[0];
+			lastcount = curcount;
 			/* Feed raw buffer over to post_process()
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
@@ -390,7 +470,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS1_GETERROR:
 			forced_update = TRUE;
 			force_page_change = TRUE;
-			count = read_data(-1,&message->recv_buf);
+			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
 				thread_update_logbar("error_status_view",NULL,g_strdup("No ECU Errors were reported....\n"),FALSE,FALSE);
@@ -416,8 +496,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 }
 
 /*!
- \brief burn_ecu_flash() issues the commands to the ECU to burn the contents
- of RAM to flash.
+ \brief post_burn_pf() handles post burn ecu data mgmt
  */
 EXPORT void post_burn_pf()
 {
@@ -454,3 +533,96 @@ EXPORT void post_single_burn_pf(void *data)
 
 	return;
 }
+
+
+/*!
+ *\brief open_tcpip_socket_pf opens up the TCP control socket once the ecu is
+ interrogated.
+ */
+EXPORT void open_tcpip_socket_pf()
+{
+	extern gboolean interrogated;
+	extern volatile gboolean offline;
+	extern GObject *global_data;
+	CmdLineArgs *args = NULL;
+	MtxSocket *socket = NULL;
+
+	args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+	if ((interrogated) || (offline))
+	{
+		/* Open The three sockets,  ASCII interface, binary interface
+		 * and control socket for telling other instances to update 
+		 * stuff..
+		 */
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
+		socket->type = MTX_SOCKET_ASCII;
+		if (socket->fd)
+		{
+			ascii_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
+
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
+		socket->type = MTX_SOCKET_BINARY;
+		if (socket->fd)
+		{
+			binary_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
+
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
+		socket->type = MTX_SOCKET_CONTROL;
+		if (socket->fd)
+		{
+			control_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
+
+		notify_slaves_id = g_thread_create(notify_slaves_thread,
+				NULL,/* Thread args */
+				TRUE, /* Joinable */
+				NULL); /*GError Pointer */
+	}
+}
+
+
+EXPORT void startup_default_timeouts_pf()
+{
+	gint source = 0;
+	gint rate = 0;
+
+	rate = (gint)OBJ_GET(global_data,"rtslider_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
+	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
+
+	rate = (gint)OBJ_GET(global_data,"rttext_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
+	OBJ_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
+
+	rate = (gint)OBJ_GET(global_data,"dashboard_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_dashboards,NULL);
+	OBJ_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
+
+	rate = (gint)OBJ_GET(global_data,"ve3d_fps");
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_ve3ds,NULL);
+	OBJ_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
+
+}
+

@@ -15,6 +15,9 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <gui_handlers.h>
+#include <interrogate.h>
+#include <mtxsocket.h>
 #include <stringmatch.h>
 
 
@@ -36,16 +39,18 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS1));
 	g_hash_table_insert(str_2_enum,"_MS1_STD_",
 			GINT_TO_POINTER(MS1_STD));
-	g_hash_table_insert(str_2_enum,"_DUALTABLE_",
-			GINT_TO_POINTER(DUALTABLE));
+	g_hash_table_insert(str_2_enum,"_MS1_DT_",
+			GINT_TO_POINTER(MS1_DT));
 	g_hash_table_insert(str_2_enum,"_MSNS_E_",
 			GINT_TO_POINTER(MSNS_E));
 	g_hash_table_insert(str_2_enum,"_MS2_",
 			GINT_TO_POINTER(MS2));
 	g_hash_table_insert(str_2_enum,"_MS2_STD_",
 			GINT_TO_POINTER(MS2_STD));
-	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_",
-			GINT_TO_POINTER(MS2_EXTRA));
+	g_hash_table_insert(str_2_enum,"_MS2_E_",
+			GINT_TO_POINTER(MS2_E));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
+			GINT_TO_POINTER(MS2_E_COMPMON));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -108,6 +113,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(VE_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_VE_VAR_",
 			GINT_TO_POINTER(VE_VAR));
+	g_hash_table_insert(str_2_enum,"_RAW_EMB_BIT_",
+			GINT_TO_POINTER(RAW_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_RAW_VAR_",
 			GINT_TO_POINTER(RAW_VAR));
 
@@ -123,8 +130,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(EXPORT_SINGLE_TABLE));
 	g_hash_table_insert(str_2_enum,"_IMPORT_SINGLE_TABLE_",
 			GINT_TO_POINTER(IMPORT_SINGLE_TABLE));
-	g_hash_table_insert(str_2_enum,"_MAP_SENSOR_TYPE_",
-			GINT_TO_POINTER(MAP_SENSOR_TYPE));
+	g_hash_table_insert(str_2_enum,"_TE_TABLE_",
+			GINT_TO_POINTER(TE_TABLE));
+	g_hash_table_insert(str_2_enum,"_TE_TABLE_GROUP_",
+			GINT_TO_POINTER(TE_TABLE_GROUP));
+	g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
+			GINT_TO_POINTER(MULTI_EXPRESSION));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
@@ -173,8 +184,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_TOOTHMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(START_TRIGMON_LOGGER));
+	g_hash_table_insert(str_2_enum,"_START_COMPOSITEMON_LOGGER_",
+			GINT_TO_POINTER(START_COMPOSITEMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
 			GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
+	g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",
+			GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_DLOG_SELECT_ALL_",
@@ -191,12 +206,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(SELECT_DLOG_IMP));
 	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_EXP_",
 			GINT_TO_POINTER(SELECT_DLOG_EXP));
-	g_hash_table_insert(str_2_enum,"_SELECT_FIRMWARE_LOAD_",
-			GINT_TO_POINTER(SELECT_FIRMWARE_LOAD));
-	g_hash_table_insert(str_2_enum,"_DOWNLOAD_FIRMWARE_",
-			GINT_TO_POINTER(DOWNLOAD_FIRMWARE));
-	g_hash_table_insert(str_2_enum,"_ENTER_SENSOR_INFO_",
-			GINT_TO_POINTER(ENTER_SENSOR_INFO));
 	g_hash_table_insert(str_2_enum,"_CLOSE_LOGFILE_",
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
@@ -221,10 +230,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(BINARY_VIEW));
 	g_hash_table_insert(str_2_enum,"_DECIMAL_VIEW_",
 			GINT_TO_POINTER(DECIMAL_VIEW));
-	g_hash_table_insert(str_2_enum,"_USE_ALT_IAT_",
-			GINT_TO_POINTER(USE_ALT_IAT));
-	g_hash_table_insert(str_2_enum,"_USE_ALT_CLT_",
-			GINT_TO_POINTER(USE_ALT_CLT));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
 
@@ -241,6 +246,8 @@ void build_string_2_enum_table()
 	/* Page Identifiers */
 	g_hash_table_insert(str_2_enum,"_DATALOGGING_TAB_",
 			GINT_TO_POINTER(DATALOGGING_TAB));
+	g_hash_table_insert(str_2_enum,"_ACCEL_WIZ_TAB_",
+			GINT_TO_POINTER(ACCEL_WIZ_TAB));
 	g_hash_table_insert(str_2_enum,"_ENRICHMENTS_TAB_",
 			GINT_TO_POINTER(ENRICHMENTS_TAB));
 	g_hash_table_insert(str_2_enum,"_RUNTIME_TAB_",
@@ -253,6 +260,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(SPARKTABLES_TAB));
 	g_hash_table_insert(str_2_enum,"_AFRTABLES_TAB_",
 			GINT_TO_POINTER(AFRTABLES_TAB));
+	g_hash_table_insert(str_2_enum,"_ALPHA_N_TAB_",
+			GINT_TO_POINTER(ALPHA_N_TAB));
 	g_hash_table_insert(str_2_enum,"_BOOSTTABLES_TAB_",
 			GINT_TO_POINTER(BOOSTTABLES_TAB));
 	g_hash_table_insert(str_2_enum,"_ROTARYTABLES_TAB_",
@@ -313,18 +322,79 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS1_E_TRIGMON));
 	g_hash_table_insert(str_2_enum,"_MS1_E_TOOTHMON_",
 			GINT_TO_POINTER(MS1_E_TOOTHMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_TRIGMON_",
+			GINT_TO_POINTER(MS2_E_TRIGMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_TOOTHMON_",
+			GINT_TO_POINTER(MS2_E_TOOTHMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPOSITEMON_",
+			GINT_TO_POINTER(MS2_E_COMPOSITEMON));
 
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
 
-	/*ArgType's */
+	/* TCP Socket Commands */
+	g_hash_table_insert(str_2_enum,"HELP",
+			GINT_TO_POINTER(HELP));
+	g_hash_table_insert(str_2_enum,"QUIT",
+			GINT_TO_POINTER(QUIT));
+	g_hash_table_insert(str_2_enum,"GET_REVISION",
+			GINT_TO_POINTER(GET_REVISION));
+	g_hash_table_insert(str_2_enum,"GET_SIGNATURE",
+			GINT_TO_POINTER(GET_SIGNATURE));
+	g_hash_table_insert(str_2_enum,"GET_RT_VARS",
+			GINT_TO_POINTER(GET_RT_VARS));
+	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
+			GINT_TO_POINTER(GET_RTV_LIST));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VARS",
+			GINT_TO_POINTER(GET_ECU_VARS));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U08",
+			GINT_TO_POINTER(GET_ECU_VAR_U08));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S08",
+			GINT_TO_POINTER(GET_ECU_VAR_S08));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U16",
+			GINT_TO_POINTER(GET_ECU_VAR_U16));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S16",
+			GINT_TO_POINTER(GET_ECU_VAR_S16));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U32",
+			GINT_TO_POINTER(GET_ECU_VAR_U32));
+	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S32",
+			GINT_TO_POINTER(GET_ECU_VAR_S32));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U08",
+			GINT_TO_POINTER(SET_ECU_VAR_U08));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S08",
+			GINT_TO_POINTER(SET_ECU_VAR_S08));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U16",
+			GINT_TO_POINTER(SET_ECU_VAR_U16));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S16",
+			GINT_TO_POINTER(SET_ECU_VAR_S16));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U32",
+			GINT_TO_POINTER(SET_ECU_VAR_U32));
+	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S32",
+			GINT_TO_POINTER(SET_ECU_VAR_S32));
+	g_hash_table_insert(str_2_enum,"BURN_FLASH",
+			GINT_TO_POINTER(BURN_FLASH));
+	g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
+			GINT_TO_POINTER(GET_RAW_ECU));
+	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
+			GINT_TO_POINTER(SET_RAW_ECU));
+
+	/* Interrogation Test Results */
+	g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
+			GINT_TO_POINTER(RESULT_DATA));
+	g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
+			GINT_TO_POINTER(RESULT_TEXT));
+
+	/* XMLcomm processing */
 	g_hash_table_insert(str_2_enum,"_DATA_",
 			GINT_TO_POINTER(DATA));
 	g_hash_table_insert(str_2_enum,"_ACTION_",
 			GINT_TO_POINTER(ACTION));
 	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
 			GINT_TO_POINTER(STATIC_STRING));
+	g_hash_table_insert(str_2_enum,"_SLEEP_",
+			GINT_TO_POINTER(SLEEP));
+
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
 }

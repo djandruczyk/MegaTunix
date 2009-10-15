@@ -19,6 +19,21 @@
 #include <req_fuel.h>
 
 
+
+typedef enum
+{	/* up to 32 Capability flags.... */
+	/* No capabilities == Standard B&G code with no modifications */
+	MS1		= 1<<0,
+	MS1_STD		= 1<<1,
+	MSNS_E		= 1<<2,
+	MS1_DT		= 1<<3,
+	MS2		= 1<<4,
+	MS2_STD		= 1<<5,
+	MS2_E		= 1<<6,
+	MS2_E_COMPMON	= 1<<7
+}Capability;
+
+
 typedef struct _Io_File Io_File;
 typedef struct _Firmware_Details Firmware_Details;
 typedef struct _Table_Params Table_Params;
@@ -53,6 +68,9 @@ struct _Firmware_Details
 	gchar *name;		/*! textual name */
 	gchar *profile_filename;/*! Interrogation profile filename */
 	gchar *actual_signature;/*! the raw signature from the ECU */
+	gchar *text_revision;	/*! Textual revision string */
+	gint signature_len;	/*! Length of signature in bytes */
+	gint txt_rev_len;	/*! Length of txt_rev in bytes */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
@@ -63,6 +81,7 @@ struct _Firmware_Details
 	gchar *get_all_command;	/*! New Get All Command string */
 	gchar *ve_command;	/*! New VE Command string */
 	gchar *write_command;	/*! New Write Command string */
+	gchar *table_write_command;	/*! Table Write Command string */
 	gchar *chunk_write_command;	/*! New Chunk Write Command string */
 	gchar *burn_all_command;/*! New burn all command string */
 	gchar *burn_command;	/*! New burn command string */
@@ -78,6 +97,7 @@ struct _Firmware_Details
 	gint ms2_rt_page;	/*! Page where the MS2 RT vars reside */
 	gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gint capabilities;	/*! Enum list of capabilities*/
+	gint ecu_revision;	/*! Numeric ECU revision */
 	gboolean multi_page;	/*! Multi-page firmware */
 	gboolean chunk_support;	/*! Supports Chunk Write */
 	gboolean can_capable;	/*! Supports CAnbus and sub modules */
@@ -86,10 +106,13 @@ struct _Firmware_Details
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
+	gint compositemon_page;	/*! Composite Monitor RO Page (ms2-extra only)*/
 	Page_Params **page_params;/*! special vars per page */
 	Table_Params **table_params;/*! details each table */
 	Req_Fuel_Params **rf_params;/*! req_fuel params */
 	TE_Params **te_params;	/*! Table Editor Tables */
+	guint8 *rt_data;	/*! RT data */
+	guint8 *rt_data_last;	/*! RT data */
 	guint8 **ecu_data;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_last;	/* ECU data arrays, 2 levels */
 	guint8 **ecu_data_backup;	/* ECU data arrays, 2 levels */
@@ -110,15 +133,27 @@ struct _Firmware_Details
 struct _Table_Params
 {
 	gboolean is_fuel;	/*! If true next 7 params must exist */
-	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
 	gint dtmode_page;	/*! DT mode page (msns-e ONLY) */
-	gint cfg11_offset;	/*! Where config11 value is located */
-	gint cfg12_offset;	/*! Where config12 value is located */
-	gint cfg13_offset;	/*! Where config13 value is located */
+	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
+	gint dtmode_mask;	/*! DT mode mask (msns-e ONLY) */
+	gint num_cyl_page;	/*! page where num_cylinders value is located */
+	gint num_cyl_offset;	/*! Where num_cylinders value is located */
+	gint num_cyl_mask;	/*! MASK for num_cyliners */
+	gint num_inj_page;	/*! page where num_injectors value is located */
+	gint num_inj_offset;	/*! Where num_injectors value is located */
+	gint num_inj_mask;	/*! MASK for num_injectors */
+	gint stroke_page;	/*! page where stroke value is located */
+	gint stroke_offset;	/*! Where stroke value is located */
+	gint stroke_mask;	/*! MASK for stroke */
+	gint alternate_page;	/*! page Where alternate value is located */
 	gint alternate_offset;	/*! Where alternate value is located */
+	gint divider_page;	/*! page Where divider value is located */
 	gint divider_offset;	/*! Where divider value is located */
+	gint rpmk_page;		/*! page Where rpmk value is located */
 	gint rpmk_offset;	/*! Where rpmk value is located */
+	gint reqfuel_page;	/*! page Where reqfuel value is located */
 	gint reqfuel_offset;	/*! Where reqfuel value is located */
+	DataSize reqfuel_size;	/*! Size of variable, (ms2 uses larger) */
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
 	DataSize x_size;	/*! enumeration size for the var */
@@ -182,6 +217,8 @@ struct _Table_Params
 	gint z_precision;	/*! how many decimal places */
 	gchar * z_depend_on;	/*! Z axis dependancy string name */
 	GObject *z_object;	/*! Container for lookuptable deps */
+	gint z_minval;		/*! Minimum value for color scaling */
+	gint z_maxval;		/*! MAximum value for color scaling */
 };
 
 
@@ -214,16 +251,18 @@ struct _Page_Params
 struct _TE_Params
 {
 	gchar *title;		/*! Title used on TE window */
-	gchar *gauge_name;	/*! Gauge to stick in lower left */
+	gchar *gauge;		/*! Gauge to stick in lower left */
 	gchar *gauge_datasource;/*! Gauge datasource */
 	gchar *bg_color;	/*! BG Color (string) */
 	gchar *grat_color;	/*! Graticule Color (string) */
 	gchar *trace_color;	/*! Trace Color (string) */
 	gchar *cross_color;	/*! Cross Color (string) */
 	gchar *marker_color;	/*! Marker Color (string) */
+	gchar *bind_to_list;	/*! Bind to list for sensitivity */
 	GList *entries;		/*! Entry widget pointers */
 	gint bincount;		/* Number of bins for x and 1 */
 
+	gboolean x_temp_dep;	/*! Temperature dependant? */
 	gint x_page;		/*! what page this column resides in */
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
@@ -236,6 +275,7 @@ struct _TE_Params
 	gchar *x_name;	/*! column name */
 	gchar *x_units;	/*! column units */
 
+	gboolean y_temp_dep;	/*! Temperature dependant? */
 	gint y_page;		/*! what page this column resides in */
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */

@@ -383,8 +383,26 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
+		printf("capability string \"%s\"\n",tmpbuf);
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
+
+		if (firmware->capabilities & MS1)
+			printf("MS1\n");
+		if (firmware->capabilities & MS1_STD)
+			printf("MS1_STD\n");
+		if (firmware->capabilities & MSNS_E)
+			printf("MSNS_E\n");
+		if (firmware->capabilities & MS1_DT)
+			printf("MS1_DT\n");
+		if (firmware->capabilities & MS2)
+			printf("MS2\n");
+		if (firmware->capabilities & MS2_STD)
+			printf("MS2_STD\n");
+		if (firmware->capabilities & MS2_E)
+			printf("MS2_E\n");
+		if (firmware->capabilities & MS2_E_COMPMON)
+			printf("MS2_E_COMPMON\n");
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
@@ -453,13 +471,13 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 					&firmware->total_te_tables))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTETables\" value not found in interrogation profile, ERROR\n"));
 	}
-	if ((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MSNS_E))
+	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&firmware->toothmon_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"));
-		if (firmware->capabilities & MS2_EXTRA_COMPOSITEMON)
+		if (firmware->capabilities & MS2_E_COMPMON)
 		{
 			if(!cfg_read_int(cfgfile,"parameters","CompositemonPage",&firmware->compositemon_page))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompositemonPage\" value not found in interrogation profile, ERROR\n"));
