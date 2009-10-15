@@ -461,7 +461,7 @@ void *binary_socket_client(gpointer data)
 						{
 							if (firmware->actual_signature)
 								res = net_send(fd,firmware->actual_signature,firmware->signature_len,0);
-							printf("MS signature, %i bytes delivered\n",res);
+							/*printf("MS signature, %i bytes delivered\n",res);*/
 						}
 						continue;
 					case 'V':	/* MS1 VE/data read */
