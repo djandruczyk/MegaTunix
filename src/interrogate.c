@@ -83,7 +83,10 @@ EXPORT gboolean interrogate_ecu()
 	guchar *ptr = NULL;
 	gchar * message = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern volatile gboolean offline;
 
+	if (offline)
+		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
@@ -383,10 +386,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
-		printf("capability string \"%s\"\n",tmpbuf);
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 
+		/*
 		if (firmware->capabilities & MS1)
 			printf("MS1\n");
 		if (firmware->capabilities & MS1_STD)
@@ -403,6 +406,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			printf("MS2_E\n");
 		if (firmware->capabilities & MS2_E_COMPMON)
 			printf("MS2_E_COMPMON\n");
+			*/
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))

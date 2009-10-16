@@ -265,19 +265,24 @@ gboolean update_rtsliders(gpointer data)
 	static gfloat last_coolant = 0.0;
 	gint i = 0;
 	GHashTable **ve3d_sliders;
+	GHashTable *hash;
 	extern Firmware_Details *firmware;
 	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
-		g_hash_table_foreach(OBJ_GET(global_data,"rt_sliders"),rt_update_values,NULL);
+		if ((hash = OBJ_GET(global_data,"rt_sliders")))
+			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
-		g_hash_table_foreach(OBJ_GET(global_data,"enr_sliders"),rt_update_values,NULL);
+		if ((hash = OBJ_GET(global_data,"enr_sliders")))
+			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ACCEL_WIZ_TAB)	/* Enrichments display is up */
-		g_hash_table_foreach(OBJ_GET(global_data,"aw_sliders"),rt_update_values,NULL);
+		if ((hash = OBJ_GET(global_data,"aw_sliders")))
+			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
 	{
-		g_hash_table_foreach(OBJ_GET(global_data,"ww_sliders"),rt_update_values,NULL);
+		if ((hash = OBJ_GET(global_data,"ww_sliders")))
+			g_hash_table_foreach(hash,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(CRITICAL,g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));

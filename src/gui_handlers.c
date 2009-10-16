@@ -145,7 +145,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	/* Message to trigger serial repair queue to exit immediately */
-	g_async_queue_push(io_repair_queue,&tmp);
+	if (io_repair_queue)
+		g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));

@@ -35,6 +35,7 @@
 #include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 
 gchar * offline_firmware_choice = NULL;
@@ -48,9 +49,8 @@ extern GObject *global_data;
  choices to select one for loading to work in offline mode (no connection to
  an ECU)
  */
-void set_offline_mode(void)
+gboolean set_offline_mode(void)
 {
-	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
 	GArray *tests = NULL;
@@ -61,24 +61,25 @@ void set_offline_mode(void)
 	PostFunction *pf = NULL;
 	extern Firmware_Details *firmware;
 	extern gboolean interrogated;
-        extern GAsyncQueue *serial_repair_queue;
+        extern GAsyncQueue *io_repair_queue;
 
 
 	/* Cause Serial Searcher thread to abort.... */
-	g_async_queue_push(serial_repair_queue,&tmp);
+	if (io_repair_queue)
+		g_async_queue_push(io_repair_queue,&tmp);
 
 	filename = present_firmware_choices();
 	if (!filename)
 	{
 		offline = FALSE;
 		interrogated = FALSE;
-		widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+		widget = lookup_widget("interrogate_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		widget = g_hash_table_lookup(dynamic_widgets,"offline_button");
+		widget = lookup_widget("offline_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		return;
+		return FALSE;
 
 	}
 
@@ -86,7 +87,7 @@ void set_offline_mode(void)
 	interrogated = TRUE;
 
 	/* Disable interrogation button */
-	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
@@ -123,15 +124,22 @@ void set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("open_tcpip_socket_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
 	io_cmd(firmware->get_all_command,NULL);
 
-	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-	widget = g_hash_table_lookup(dynamic_widgets,"offline_button");
+	widget = lookup_widget("offline_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
@@ -151,6 +159,7 @@ void set_offline_mode(void)
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
+	return FALSE;
 }
 
 
@@ -179,7 +188,7 @@ gchar * present_firmware_choices()
 	ConfigFile *cfgfile = NULL;
 	gint major = 0;
 	gint minor = 0;
-	gint i = 0;
+	guint i = 0;
 	gint result = 0;
 
 	extern gchar * offline_firmware_choice;
@@ -210,7 +219,6 @@ gchar * present_firmware_choices()
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
 		cfg_free(cfgfile);
-		g_free(cfgfile);
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 		{
@@ -339,26 +347,26 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
-	extern GtkWidget *main_window;
 
 	if (!interrogated)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
-	fileio->parent = main_window;
+	fileio->default_path = g_strdup("ecu_snapshots");
+	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
-	fileio->title = g_strdup("Offline mode REQUIRES you to load ECU Settings from a file");
+	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
-	fileio->shortcut_folders = g_strdup("ecu_snapshots,MTX_ecu_snapshots");
+	fileio->shortcut_folders = g_strdup("ecu_snapshots,../MTX_ecu_snapshots");
 
-	while (!filename)
-		filename = choose_file(fileio);
-
-
-	update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
-	restore_all_ecu_settings(filename);
-	g_free(filename);
+	filename = choose_file(fileio);
+	if (filename)
+	{
+		update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
+		restore_all_ecu_settings(filename);
+		g_free(filename);
+	}
 	free_mtxfileio(fileio);
 	return TRUE;
 

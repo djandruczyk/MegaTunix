@@ -550,7 +550,7 @@ EXPORT void open_tcpip_socket_pf()
 	args = OBJ_GET(global_data,"args");
 	if (args->network_mode)
 		return;
-	if ((interrogated) || (offline))
+	if ((interrogated) && (!offline))
 	{
 		/* Open The three sockets,  ASCII interface, binary interface
 		 * and control socket for telling other instances to update 
