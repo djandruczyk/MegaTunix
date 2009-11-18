@@ -363,9 +363,9 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			/* If we alert, in order to save CPU, we copy the 
 			 * background pixmap to a temp pixmap and render on 
 			 * that and STORE the index of this alert.  Next time
-			 * acount we'll detect we ALREADY drew the alert and 
-			 * just copy hte pixmap (saving all the render time)
-			 * as pixmap copies are fast.
+			 * around we'll detect we ALREADY drew the alert and 
+			 * just copy the pixmap (saving all the render time)
+			 * as pixmap copies are reasonably fast.
 			 */
 			priv->last_alert_index = i;
 			widget = GTK_WIDGET(gauge);
@@ -391,12 +391,31 @@ void update_gauge_position (MtxGaugeFace *gauge)
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
 	if (!alert)
+	{
+		if (1)
+		
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->bg_pixmap,
 				0,0,
 				0,0,
 				widget->allocation.width,widget->allocation.height);
+		else
+		{
+		gdk_draw_drawable(priv->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->bg_pixmap,
+				priv->needle_bounding_box.x,priv->needle_bounding_box.y,
+				priv->needle_bounding_box.x,priv->needle_bounding_box.y,
+				priv->needle_bounding_box.width,priv->needle_bounding_box.height);
+		gdk_draw_drawable(priv->pixmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->bg_pixmap,
+				priv->value_bounding_box.x,priv->value_bounding_box.y,
+				priv->value_bounding_box.x,priv->value_bounding_box.y,
+				priv->value_bounding_box.width,priv->value_bounding_box.height);
+		}
+	}
 	else
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -448,6 +467,11 @@ cairo_jump_out_of_alerts:
 				priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius),
 				priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius));
 		cairo_show_text (cr, message);
+		priv->value_bounding_box.x = priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius);
+		priv->value_bounding_box.y = priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius)-extents.height;
+		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
+		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
+		//printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height);
 		g_free(message);
 
 		cairo_stroke (cr);
@@ -519,6 +543,7 @@ cairo_jump_out_of_alerts:
 		priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
 	}
 	priv->needle_polygon_points = 6;
+	calc_bounding_box(priv->needle_coords,priv->needle_polygon_points, &priv->needle_bounding_box);
 
 	cairo_move_to (cr, priv->needle_coords[0].x,priv->needle_coords[0].y);
 	cairo_line_to (cr, priv->needle_coords[1].x,priv->needle_coords[1].y);
@@ -599,6 +624,10 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				priv->w,priv->h);
 		priv->last_alert_index = -1;
 
+		priv->needle_bounding_box.x = 0;
+		priv->needle_bounding_box.y = 0;
+		priv->needle_bounding_box.width = priv->w;
+		priv->needle_bounding_box.height = priv->h;
 		gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
 		priv->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
 		priv->gc = gdk_gc_new(priv->bg_pixmap);
@@ -1404,4 +1433,29 @@ void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 75;
 	requisition->height = 75;
+}
+
+
+void calc_bounding_box(MtxPoint *coords, gint count, GdkRectangle *box)
+{
+	gint x_min = G_MAXINT;
+	gint y_min = G_MAXINT;
+	gint x_max = G_MININT;
+	gint y_max = G_MININT;
+	gint i = 0;
+	for (i=0;i<count;i++)
+	{
+		if (coords[i].x < x_min)
+			x_min = coords[i].x - 2;
+		if (coords[i].x > x_max)
+			x_max = coords[i].x + 2;
+		if (coords[i].y < y_min)
+			y_min = coords[i].y - 2;
+		if (coords[i].y > y_max)
+			y_max = coords[i].y + 2;
+	}
+	box->x = x_min;
+	box->y = y_min;
+	box->width = x_max-x_min;
+	box->height = y_max-y_min;
 }

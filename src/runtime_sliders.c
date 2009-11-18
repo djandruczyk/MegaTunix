@@ -60,10 +60,9 @@ EXPORT void load_sliders_pf()
 	gint i = 0;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern gboolean connected;
 	extern gboolean interrogated;
 
-	if (!((connected) && (interrogated)))
+	if (!interrogated)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
 		return;

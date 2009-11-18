@@ -265,6 +265,11 @@ gboolean comm_port_override(GtkEditable *editable)
 	g_free(OBJ_GET(global_data,"override_port"));
 	OBJ_SET(global_data,"override_port",g_strdup(port));
 	g_free(port);
+	close_serial();
+	/* I/O thread should detect the closure and spawn the serial
+	 * repair thread which should take care of flipping to the 
+	 * overridden port
+	 */
 	return TRUE;
 }
 

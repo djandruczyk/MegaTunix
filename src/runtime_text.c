@@ -62,12 +62,11 @@ EXPORT void load_rt_text_pf()
 	extern volatile gboolean leaving;
 	extern gboolean rtvars_loaded;
 	extern Firmware_Details *firmware;
-	extern gboolean connected;
 	extern gboolean interrogated;
 
 	if (leaving)
 		return;
-	if (!((connected) && (interrogated)))
+	if (!(interrogated))
 		return;
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
