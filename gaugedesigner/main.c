@@ -47,6 +47,7 @@ int main (int argc, char ** argv )
 	init_text_attributes(topxml);
 	init_general_attributes(topxml);
 	
+	gtk_widget_show_all(window);
 	if (argc == 2)
 	{
 		tmpbuf = g_get_current_dir();
@@ -58,12 +59,12 @@ int main (int argc, char ** argv )
 		if (g_file_test(argv[1],G_FILE_TEST_IS_REGULAR))
 		{
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
+			update_attributes();
 			direct_path = TRUE;
 		}
 	}
 
 	g_free(filename);
-	gtk_widget_show_all(window);
 	gtk_main();
 	return (0);
 }
