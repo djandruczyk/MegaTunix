@@ -149,7 +149,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	priv->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
 	priv->polygons = g_array_new(FALSE,TRUE,sizeof(MtxPolygon *));
-	priv->daytime_mode = TRUE;
+	priv->daytime_mode = MTX_DAY;
 	mtx_gauge_face_init_default_tick_group(gauge);
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
