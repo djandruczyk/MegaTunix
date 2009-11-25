@@ -1,6 +1,7 @@
 #include "../include/defines.h"
 #include <events.h>
 #include <handlers.h>
+#include <loadsave.h>
 #include "../widgets/gauge.h"
 #include <getfiles.h>
 #include <glib/gprintf.h>
@@ -12,6 +13,8 @@ extern GdkColor black;
 extern GdkColor white;
 extern GtkWidget *gauge;
 extern gboolean hold_handlers;
+extern gboolean changed;
+extern gboolean gauge_loaded;
 
 
 EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
@@ -349,3 +352,11 @@ EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
+{
+	if ((gauge_loaded) && (changed))
+		prompt_to_save();
+	gtk_main_quit();
+	return TRUE;
+}

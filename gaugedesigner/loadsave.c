@@ -16,7 +16,31 @@
 extern gboolean hold_handlers;
 extern GtkWidget *gauge;
 extern gboolean direct_path;
+gboolean changed = FALSE;
+gboolean gauge_loaded = FALSE;
 
+
+void prompt_to_save()
+{
+	GtkWidget *dialog = NULL;
+	extern GtkWidget *main_window;
+	gint result = 0;
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),GTK_DIALOG_MODAL,GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,"This gauge has been modified, Save it or discard the changes?");
+	gtk_dialog_add_button(GTK_DIALOG(dialog),"Save Gauge", GTK_RESPONSE_OK);
+	gtk_dialog_add_button(GTK_DIALOG(dialog),"Discard Changes", GTK_RESPONSE_CANCEL);
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+	switch (result)
+	{
+		case GTK_RESPONSE_NONE:
+		case GTK_RESPONSE_CANCEL:
+			break;
+		case GTK_RESPONSE_OK:
+			save_handler(NULL,GINT_TO_POINTER(TRUE));
+			break;
+	}
+	return;
+}
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -45,6 +69,7 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		/*printf("loading gauge file %s\n",filename);*/
 		update_attributes();
 		g_free (filename);
+		gauge_loaded = TRUE;
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -65,6 +90,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	gchar **vector = NULL;
 	gint len = 0;
 	MtxFileIO *fileio = NULL;
+	extern GtkWidget *main_window;
 
 	if (!MTX_IS_GAUGE_FACE(gauge))
 		return FALSE;
@@ -76,6 +102,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 
 	fileio = g_new0(MtxFileIO ,1);
+	fileio->parent = main_window;
 	fileio->title = g_strdup("Save Dashboard to File");
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 	fileio->default_filename = g_strdup("Untitled-Gauge.xml");
@@ -124,6 +151,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 		g_free (filename);
 	}
 	free_mtxfileio(fileio);
+	changed = FALSE;
 	return TRUE;
 
 }

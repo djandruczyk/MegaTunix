@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <binreloc.h>
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
@@ -102,7 +101,7 @@ syspath:
 #ifdef __WIN32__
 	parent = g_build_path(PSEP,HOME(),"dist",NULL);
 #else
-	parent = gbr_find_data_dir(DATA_DIR);
+	parent = g_strdup(DATA_DIR);
 #endif
 	path = g_build_filename(parent,pathstub,NULL);
 	g_free(parent);
@@ -195,7 +194,7 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 #ifdef __WIN32__
 		dir = g_build_path(PSEP,HOME(),"dist",NULL);
 #else
-		dir = gbr_find_data_dir(DATA_DIR);
+		dir = g_strdup(DATA_DIR);
 #endif
 		filename = g_build_filename(dir,file,NULL);
 
@@ -226,8 +225,10 @@ gchar * choose_file(MtxFileIO *data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	gint i = 0;
+	guint i = 0;
 
+	if (!GTK_IS_WINDOW(data->parent))
+		data->parent = NULL;
 	/*
 	   printf("choose_file\n");
 	   printf("filter %s\n",data->filter);
@@ -241,7 +242,7 @@ gchar * choose_file(MtxFileIO *data)
 	if (data->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		dialog = gtk_file_chooser_dialog_new(data->title,
-				NULL,
+				GTK_WINDOW(data->parent),
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -270,7 +271,7 @@ gchar * choose_file(MtxFileIO *data)
 	{
 
 		dialog = gtk_file_chooser_dialog_new(data->title,
-				NULL,
+				GTK_WINDOW(data->parent),
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,

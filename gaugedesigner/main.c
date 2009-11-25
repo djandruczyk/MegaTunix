@@ -13,10 +13,10 @@ extern GtkWidget *gauge;
 gchar * cwd = NULL;
 gboolean direct_path = FALSE;
 GladeXML *topxml = NULL;
+GtkWidget *main_window = NULL;
 
 int main (int argc, char ** argv )
 {
-	GtkWidget *window;
 	GtkWidget *tmp;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
@@ -33,7 +33,7 @@ int main (int argc, char ** argv )
 		exit(-1);
 	}
 	glade_xml_signal_autoconnect(topxml);
-	window = glade_xml_get_widget(topxml,"main_window");
+	main_window = glade_xml_get_widget(topxml,"main_window");
 
 	tmp = glade_xml_get_widget(topxml,"save_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
@@ -47,7 +47,7 @@ int main (int argc, char ** argv )
 	init_text_attributes(topxml);
 	init_general_attributes(topxml);
 	
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(main_window);
 	if (argc == 2)
 	{
 		tmpbuf = g_get_current_dir();

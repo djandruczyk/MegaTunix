@@ -26,6 +26,7 @@ EXPORT gboolean alert_ranges_menu_handler(GtkWidget *, gpointer );
 EXPORT gboolean warning_ranges_menu_handler(GtkWidget *, gpointer );
 EXPORT gboolean polygon_menu_handler(GtkWidget *, gpointer );
 EXPORT gboolean about_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean quit_gaugedesigner(GtkWidget *, gpointer );
 void update_text_controls();
 void update_general_controls();
 void reset_text_controls();

@@ -1,5 +1,6 @@
 #include "../include/defines.h"
 #include <events.h>
+#include <loadsave.h>
 #include <handlers.h>
 #include "../widgets/gauge.h"
 #include <getfiles.h>
@@ -17,6 +18,8 @@ GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
 extern gboolean direct_path;
+extern gboolean changed;
+extern gboolean gauge_loaded;
 
 
 
@@ -29,6 +32,7 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	gtk_container_add(GTK_CONTAINER(parent),gauge);
 	gtk_widget_show_all(parent);
 	mtx_gauge_face_redraw_canvas(MTX_GAUGE_FACE(gauge));
+	gauge_loaded = TRUE;
 
 	tmp = glade_xml_get_widget(xml,"animate_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
@@ -61,7 +65,13 @@ EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 	GtkWidget *parent = glade_xml_get_widget(xml,"gauge_frame");
 
 	if (GTK_IS_WIDGET(gauge))
+	{
+		if (changed)
+			prompt_to_save();
 		gtk_widget_destroy(gauge);
+		gauge_loaded = FALSE;
+		changed = FALSE;
+	}
 	gauge = NULL;
 
 	tmp = glade_xml_get_widget(xml,"animate_frame");
@@ -151,6 +161,7 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
+			changed = TRUE;
 			mtx_gauge_face_set_color_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
 			update_onscreen_c_ranges();
@@ -225,6 +236,7 @@ EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
+			changed = TRUE;
 			mtx_gauge_face_set_alert_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
 			update_onscreen_a_ranges();
@@ -379,6 +391,7 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 			if (hash)
 				g_hash_table_destroy(hash);
 
+			changed = TRUE;
 			mtx_gauge_face_set_polygon_struct(MTX_GAUGE_FACE(gauge),poly);
 			if ((poly->type == MTX_GENPOLY) && (((MtxGenPoly *)(poly->data))->num_points > 0))
 				g_free(((MtxGenPoly *)(poly->data))->points);
@@ -443,6 +456,7 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&tblock->color[MTX_NITE]);
 			tblock->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tblock_fontbutton")));
 			tblock->font = g_strchomp(g_strdelimit(tblock->font,"0123456789",' '));
+			changed = TRUE;
 			mtx_gauge_face_set_text_block_struct(MTX_GAUGE_FACE(gauge),tblock);
 			g_free(tblock->text);
 			g_free(tblock);
@@ -552,6 +566,7 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 			tgroup->num_maj_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_maj_ticks_spin")));
 			tgroup->num_min_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_min_ticks_spin")));
 
+			changed = TRUE;
 			mtx_gauge_face_set_tick_group_struct(MTX_GAUGE_FACE(gauge),tgroup);
 			g_free(tgroup->text);
 			g_free(tgroup);
@@ -589,6 +604,7 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 
 	if (hold_handlers)
 		return TRUE;
+	changed = TRUE;
 	mtx_gauge_face_set_attribute(g,handler,tmpf);
 	if ((handler == UBOUND) || (handler == LBOUND))
 		update_attributes();
@@ -734,6 +750,7 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
+	changed = TRUE;
 	mtx_gauge_face_set_value_font(g, tmpbuf);
 	return TRUE;
 }
@@ -773,6 +790,7 @@ EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
+	changed = TRUE;
 	if (state)
 		mtx_gauge_face_set_attribute(g,handler, value);
 
@@ -793,6 +811,7 @@ EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
+	changed = TRUE;
 	mtx_gauge_face_set_attribute(g,handler, state);
 
 	return TRUE;
@@ -810,6 +829,7 @@ EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 		return TRUE;
 
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
+	changed = TRUE;
 	mtx_gauge_face_set_color(MTX_GAUGE_FACE(gauge),handler,color);
 
 	return TRUE;
