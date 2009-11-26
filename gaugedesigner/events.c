@@ -438,6 +438,8 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 	dialog = glade_xml_get_widget(xml,"tblock_dialog");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_day_colorbutton")),&white);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&black);
+	OBJ_SET(glade_xml_get_widget(xml,"tblock_grab_button"),"x_spin",glade_xml_get_widget(xml,"tblock_xpos_spin"));
+	OBJ_SET(glade_xml_get_widget(xml,"tblock_grab_button"),"y_spin",glade_xml_get_widget(xml,"tblock_ypos_spin"));
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -1192,6 +1194,7 @@ void update_onscreen_tblocks()
 	GtkWidget *subtable2 = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *dummy = NULL;
+	GtkWidget *img = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *spin = NULL;
 	gchar * tmpbuf = NULL;
@@ -1266,24 +1269,33 @@ void update_onscreen_tblocks()
 		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_FONT_SCALE));
 		gtk_table_attach(GTK_TABLE(subtable),spin,4,5,1,2,GTK_FILL,GTK_SHRINK,0,0);
 
-		subtable2 = gtk_table_new(1,4,FALSE);
+		subtable2 = gtk_table_new(1,5,FALSE);
 		gtk_table_attach(GTK_TABLE(subtable),subtable2,1,4,2,3,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
 		label = gtk_label_new("X Position");
-		gtk_table_attach_defaults(GTK_TABLE(subtable2),label,0,1,0,1);
+		gtk_table_attach(GTK_TABLE(subtable2),label,0,1,0,1,0,0,0,0);
 
-		label = gtk_label_new("Y Position");
-		gtk_table_attach_defaults(GTK_TABLE(subtable2),label,2,3,0,1);
 		spin = gtk_spin_button_new_with_range(-1,1,0.001);
 		OBJ_SET((spin),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->x_pos);
 		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_X_POS));
-		gtk_table_attach(GTK_TABLE(subtable2),spin,1,2,0,1,GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(GTK_TABLE(subtable2),spin,1,2,0,1,GTK_EXPAND,GTK_FILL,0,0);
+
+		button = gtk_button_new();
+		OBJ_SET((button),"x_spin",spin);
+		img = gtk_image_new_from_stock("gtk-media-record",GTK_ICON_SIZE_MENU);
+		gtk_container_add(GTK_CONTAINER(button),img);
+		g_signal_connect(G_OBJECT(button),"clicked", G_CALLBACK(grab_coords_event),NULL);
+		gtk_table_attach(GTK_TABLE(subtable2),button,2,3,0,1,GTK_EXPAND,0,0,0);
+
+		label = gtk_label_new("Y Position");
+		gtk_table_attach_defaults(GTK_TABLE(subtable2),label,3,4,0,1);
 
 		spin = gtk_spin_button_new_with_range(-1,1,0.001);
 		OBJ_SET((spin),"index",GINT_TO_POINTER(i));
+		OBJ_SET((button),"y_spin",spin);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->y_pos);
 		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_Y_POS));
-		gtk_table_attach(GTK_TABLE(subtable2),spin,3,4,0,1,GTK_FILL,GTK_FILL,0,0);
+		gtk_table_attach(GTK_TABLE(subtable2),spin,4,5,0,1,GTK_FILL,GTK_FILL,0,0);
 		dummy = gtk_hseparator_new();
 		gtk_table_attach(GTK_TABLE(table),dummy,0,1,y+1,y+2,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,2);
 
