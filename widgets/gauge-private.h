@@ -39,6 +39,8 @@ struct _MtxGaugeFacePrivate
         gdouble xc;             /*! X Center */
         gdouble yc;             /*! Y Center */
         gdouble radius;         /*! Radius of display */
+	gdouble last_click_x;	/*! Last mouse click X in -1 <-> +1 scaling */
+	gdouble last_click_y;	/*! Last mouse click Y in -1 <-> +1 scaling */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;

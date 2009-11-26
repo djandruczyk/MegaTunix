@@ -2344,3 +2344,19 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 
 	return TRUE;
 }
+
+
+EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *x_spin = NULL;
+	GtkWidget *y_spin = NULL;
+	gdouble x = 0.0;
+	gdouble y = 0.0;
+	x_spin = (GtkWidget *)OBJ_GET(widget,"x_spin");
+	y_spin = (GtkWidget *)OBJ_GET(widget,"y_spin");
+	mtx_gauge_face_get_last_click_coords(MTX_GAUGE_FACE(gauge),&x,&y);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_spin),x);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_spin),y);
+	return TRUE;
+
+}

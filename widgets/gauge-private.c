@@ -1339,6 +1339,15 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 							event->y_root,
 							event->time);
 				}
+				else
+				{
+					/* Grab click coords, used by 
+					 * gaugedesigner to ease development
+					 */
+					priv->last_click_x = (event->x-priv->xc)/priv->xc;
+					priv->last_click_y = (event->y-priv->yc)/priv->yc;
+				}
+					
 				break;
 			case 3: /* right button */
 				if (GTK_IS_WINDOW(widget->parent))

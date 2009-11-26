@@ -1371,3 +1371,21 @@ void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 	}
 	return;
 }
+
+
+/*!
+ \brief gets the last click coords in normalized -1 <-> +1 scales
+ \param gauge, pointer to gauge
+ \param x, gdouble pointer 
+ \param y, gdouble pointer 
+ \returns nothing, all resutls passed via pointer dereference
+ */
+void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *gauge, gdouble *x, gdouble *y)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	*x = priv->last_click_x;
+	*y = priv->last_click_y;
+	return;
+}
+
