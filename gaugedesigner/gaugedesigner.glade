@@ -3949,7 +3949,7 @@ Scale</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkTable" id="polygons_layout_table">
+				<widget class="GtkTable" id="polygons_main_layout_table">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">1</property>
