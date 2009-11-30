@@ -849,6 +849,7 @@ void update_onscreen_c_ranges()
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *img = NULL;
+	GtkAdjustment *adj = NULL;
 	guint i = 0;
 	gint y = 1;
 	gfloat low = 0.0;
@@ -937,6 +938,10 @@ void update_onscreen_c_ranges()
 		gtk_table_attach(GTK_TABLE(table),dummy,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
 	}
+	/* Scroll to end */
+	dummy = glade_xml_get_widget(topxml,"crange_swin");
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
+	adj->value = adj->upper;
 	gtk_widget_show_all(container);
 }
 
@@ -949,6 +954,7 @@ void update_onscreen_a_ranges()
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *img = NULL;
+	GtkAdjustment *adj = NULL;
 	guint i = 0;
 	gint y = 1;
 	gfloat low = 0.0;
@@ -1039,6 +1045,10 @@ void update_onscreen_a_ranges()
 		gtk_table_attach(GTK_TABLE(table),dummy,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
 	}
+	/* Scroll to end */
+	dummy = glade_xml_get_widget(topxml,"arange_swin");
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
+	adj->value = adj->upper;
 	gtk_widget_show_all(container);
 }
 
@@ -1210,6 +1220,7 @@ void update_onscreen_tblocks()
 	GtkWidget *dummy = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *spin = NULL;
+	GtkAdjustment *adj = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	guint i = 0;
@@ -1303,6 +1314,11 @@ void update_onscreen_tblocks()
 
 		y+=2;
 	}
+	/* Scroll to end */
+	dummy = glade_xml_get_widget(topxml,"tblock_swin");
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
+	adj->value = adj->upper;
+
 	gtk_widget_show_all(toptable);
 }
 
@@ -1317,6 +1333,7 @@ void update_onscreen_tgroups()
 	GtkWidget *frame = NULL;
 	GtkWidget *dummy = NULL;
 	GtkWidget *tg_main_table = NULL;
+	GtkAdjustment *adj = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	guint i = 0;
@@ -1503,6 +1520,10 @@ void update_onscreen_tgroups()
 
 	}
 	g_free(filename);
+	/* Scroll to end */
+	dummy = glade_xml_get_widget(topxml,"tgroup_swin");
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
+	adj->value = adj->upper;
 	gtk_widget_show_all(toptable);
 }
 
@@ -1520,6 +1541,7 @@ void update_onscreen_polygons()
 	GtkWidget *dummy = NULL;
 	GtkWidget *notebook = NULL;
 	GtkWidget *tmpwidget = NULL;
+	GtkAdjustment *adj = NULL;
 	GHashTable *hash = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
@@ -1837,6 +1859,10 @@ void update_onscreen_polygons()
 
 	}
 	g_free(filename);
+	/* Scroll to end */
+	dummy = glade_xml_get_widget(topxml,"poly_swin");
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
+	adj->value = adj->upper;
 }
 
 
