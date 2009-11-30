@@ -135,11 +135,16 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 			fileio->filename = filename;
 			tmpbuf = g_strrstr(filename,"Gauges");
+			if (!tmpbuf)
+				goto not_themed;
 			vector = g_strsplit(tmpbuf,PSEP,-1);
 			if (g_strv_length(vector) == 3) /* Themed gauge */
 				fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
 			else if (g_strv_length(vector) == 2)
+			{
+not_themed:
 				fileio->default_path = g_strdup(GAUGES_DATA_DIR);
+			}
 			g_strfreev(vector);
 		}
 	}

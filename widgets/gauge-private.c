@@ -42,7 +42,6 @@
 
 
 
-
 GType mtx_gauge_face_get_type(void)
 {
 	static GType mtx_gauge_face_type = 0;
@@ -1385,7 +1384,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	printf("motion in gauge, returning false\n");
+	//printf("motion in gauge, returning false\n");
 	return FALSE;
 }
 					       

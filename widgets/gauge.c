@@ -325,7 +325,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 			break;
 	}
 	new_poly->data = g_memdup(poly->data,size);
-	/* Generic polygons have a dynmically allocated part,  copy it */
+	/* Generic polygons have a dynmically allocated part, copy it */
 	if (poly->type == MTX_GENPOLY)
 	{
 		new = (MtxGenPoly *)new_poly->data;
