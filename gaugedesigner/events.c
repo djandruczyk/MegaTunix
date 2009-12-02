@@ -238,6 +238,8 @@ EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 			range->lowpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lowpoint_spin")));
 			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
 			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
+			range->x_offset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_xoffset_spin")));
+			range->y_offset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_yoffset_spin")));
 			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
@@ -950,6 +952,7 @@ void update_onscreen_a_ranges()
 {
 	GtkWidget *container = NULL;
 	static GtkWidget *table = NULL;
+	GtkWidget *subtable = NULL;
 	GtkWidget *dummy = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
@@ -959,14 +962,17 @@ void update_onscreen_a_ranges()
 	gint y = 1;
 	gfloat low = 0.0;
 	gfloat high = 0.0;
+	gchar * filename = NULL;
 	MtxAlertRange *range = NULL;
 	GArray * array = NULL;
 	extern GladeXML *topxml;
+	GladeXML *xml;
 
 	if ((!topxml) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_alert_ranges(MTX_GAUGE_FACE(gauge));
 	container = glade_xml_get_widget(topxml,"alert_range_viewport");
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("alert range viewport invalid!!\n");
@@ -978,25 +984,71 @@ void update_onscreen_a_ranges()
 
 	table = gtk_table_new(2,7,FALSE);
 	gtk_container_add(GTK_CONTAINER(container),table);
-	if (array->len > 0)
-	{
-		/* Create headers */
-		label = gtk_label_new("Low");
-		gtk_table_attach(GTK_TABLE(table),label,1,2,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("High");
-		gtk_table_attach(GTK_TABLE(table),label,2,3,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Inset");
-		gtk_table_attach(GTK_TABLE(table),label,3,4,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("LWidth");
-		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Day Color");
-		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Nite Color");
-		gtk_table_attach(GTK_TABLE(table),label,6,7,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-	}
 	/* Repopulate the table with the current ranges... */
 	for (i=0;i<array->len; i++)
 	{
+		range = g_array_index(array,MtxAlertRange *, i);
+		xml = glade_xml_new(filename, "dynamic_a_range", NULL);
+		subtable = glade_xml_get_widget(xml,"dynamic_a_range");
+		glade_xml_signal_autoconnect(xml);
+
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
+		/* Setup custom attrs/data */
+		dummy = glade_xml_get_widget(xml,"ar_close_button");
+		OBJ_SET(dummy,"range_index",GINT_TO_POINTER(i));
+
+		/* Daytime color */
+		dummy = glade_xml_get_widget(xml,"ar_day_cbutton");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_COLOR_DAY));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&range->color[MTX_DAY]);
+
+		/* Nitetime color */
+		dummy = glade_xml_get_widget(xml,"ar_nite_cbutton");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_COLOR_NITE));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&range->color[MTX_NITE]);
+
+		/* Inset */
+		dummy = glade_xml_get_widget(xml,"ar_inset_spin");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_INSET));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->inset);
+		
+		/* Lwidth */
+		dummy = glade_xml_get_widget(xml,"ar_lwidth_spin");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_LWIDTH));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lwidth);
+		
+		/* Low thresh */
+		dummy = glade_xml_get_widget(xml,"ar_low_spin");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_LOWPOINT));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lowpoint);
+		
+		/* high thresh */
+		dummy = glade_xml_get_widget(xml,"ar_high_spin");
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_HIGHPOINT));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->highpoint);
+		
+		button = glade_xml_get_widget(xml,"ar_edit_button");
+		/* X position */
+		dummy = glade_xml_get_widget(xml,"ar_x_spin");
+		OBJ_SET(button,"x_spin",dummy);
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_X_OFFSET));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->x_offset);
+		
+		/* Y position */
+		dummy = glade_xml_get_widget(xml,"ar_y_spin");
+		OBJ_SET(button,"y_spin",dummy);
+		OBJ_SET(dummy,"handler",GINT_TO_POINTER(ALRT_Y_OFFSET));
+		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->y_offset);
+
+		/*
 		range = g_array_index(array,MtxAlertRange *, i);
 		button = gtk_button_new();
 		img = gtk_image_new_from_stock("gtk-close",GTK_ICON_SIZE_MENU);
@@ -1044,6 +1096,7 @@ void update_onscreen_a_ranges()
 
 		gtk_table_attach(GTK_TABLE(table),dummy,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
+		*/
 	}
 	/* Scroll to end */
 	dummy = glade_xml_get_widget(topxml,"arange_swin");
@@ -1308,11 +1361,7 @@ void update_onscreen_tblocks()
 		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tblock->y_pos);
 		
-		/* Horizontal spacer... */
-		dummy = gtk_hseparator_new();
-		gtk_table_attach(GTK_TABLE(table),dummy,0,1,y+1,y+2,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,2);
-
-		y+=2;
+		y+=1;
 	}
 	/* Scroll to end */
 	dummy = glade_xml_get_widget(topxml,"tblock_swin");
@@ -2145,7 +2194,7 @@ gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
 	gint index = (gint)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	GdkColor color;
-	AlertField field = (AlertField)data;
+	AlertField field = (AlertField)OBJ_GET(widget,"handler");
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
@@ -2155,6 +2204,8 @@ gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
 		case ALRT_HIGHPOINT:
 		case ALRT_INSET:
 		case ALRT_LWIDTH:
+		case ALRT_X_OFFSET:
+		case ALRT_Y_OFFSET:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_alert_range(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
