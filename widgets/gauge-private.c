@@ -1351,13 +1351,12 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 			case 3: /* right button */
 				if (GTK_IS_WINDOW(widget->parent))
 					gtk_main_quit();
-				/* Added api call to do this
+				/* Added api call to do this*/
 				else if (priv->show_tattletale)
 				{
 					priv->peak = priv->lbound;
 					generate_gauge_background(MTX_GAUGE_FACE(widget));
 				}
-				*/
 				break;
 		}
 	}
