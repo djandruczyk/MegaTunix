@@ -308,6 +308,10 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lwidth,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->inset,api_compat);
+			if (g_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->x_offset,api_compat);
+			if (g_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->y_offset,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY],api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
@@ -726,6 +730,14 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->inset);
 		xmlNewChild(node, NULL, BAD_CAST "inset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->x_offset);
+		xmlNewChild(node, NULL, BAD_CAST "x_offset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->y_offset);
+		xmlNewChild(node, NULL, BAD_CAST "y_offset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 		generic_xml_color_export(node,"color_day",&range->color[MTX_DAY]);

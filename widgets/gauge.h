@@ -178,6 +178,8 @@ typedef enum
 	ALRT_COLOR_NITE,
 	ALRT_LWIDTH,
 	ALRT_INSET,
+	ALRT_X_OFFSET,
+	ALRT_Y_OFFSET,
 	ALRT_NUM_FIELDS
 }AlertField;
 
@@ -264,6 +266,8 @@ struct _MtxAlertRange
 	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
+	gfloat x_offset;	/* % of radius to offset the X origin */
+	gfloat y_offset;	/* % of radius to offset the Y origin */
 };
 
 

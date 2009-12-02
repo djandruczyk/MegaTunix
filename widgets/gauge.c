@@ -898,6 +898,12 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 		case ALRT_HIGHPOINT:
 			a_range->highpoint = *(gfloat *)value;
 			break;
+		case ALRT_X_OFFSET:
+			a_range->x_offset = *(gfloat *)value;
+			break;
+		case ALRT_Y_OFFSET:
+			a_range->y_offset = *(gfloat *)value;
+			break;
 		case ALRT_INSET:
 			a_range->inset = *(gfloat *)value;
 			break;

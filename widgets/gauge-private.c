@@ -381,7 +381,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 					range->color[priv->daytime_mode].blue/65535.0);
 			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 			cairo_set_line_width (cr, lwidth);
-			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),0, 2*M_PI);
+			cairo_arc(cr, priv->xc + (range->x_offset*priv->radius), priv->yc + (range->y_offset*priv->radius), (range->inset * priv->radius),0, 2*M_PI);
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 			break;
