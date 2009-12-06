@@ -37,7 +37,11 @@ EXPORT gboolean close_current_dash(GtkWidget *, gchar * );
 void raise_fixed_child (GtkWidget * );
 void update_properties(GtkWidget *,Choice);
 void set_combo_to_source(GtkWidget *, gchar * );
+void free_element(gpointer ,gpointer );
+gint list_sort(gconstpointer , gconstpointer );
+
 gboolean dummy(GtkWidget *, gpointer );
+EXPORT gboolean optimize_dash_size(GtkWidget *, gpointer );
 			 
 /* Prototypes */
 

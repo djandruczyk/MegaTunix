@@ -2,54 +2,54 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>641</width>
-    <height>821</height>
+    <width>609</width>
+    <height>817</height>
   </dash_geometry>
   <gauge>
     <width>385</width>
     <height>398</height>
-    <x_offset>32</x_offset>
-    <y_offset>246</y_offset>
+    <x_offset>0</x_offset>
+    <y_offset>242</y_offset>
     <gauge_xml_name>Impact/Impact_rpm_Gauge.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>
   <gauge>
     <width>228</width>
     <height>193</height>
-    <x_offset>312</x_offset>
-    <y_offset>570</y_offset>
+    <x_offset>280</x_offset>
+    <y_offset>566</y_offset>
     <gauge_xml_name>Impact/Impact_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
   <gauge>
     <width>215</width>
     <height>216</height>
-    <x_offset>426</x_offset>
-    <y_offset>360</y_offset>
+    <x_offset>394</x_offset>
+    <y_offset>356</y_offset>
     <gauge_xml_name>Impact/Impact_CLT_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
     <width>262</width>
     <height>243</height>
-    <x_offset>114</x_offset>
-    <y_offset>4</y_offset>
+    <x_offset>82</x_offset>
+    <y_offset>0</y_offset>
     <gauge_xml_name>Impact/Impact_AFR_Gauge.xml</gauge_xml_name>
-    <datasource>afr</datasource>
+    <datasource>afr1</datasource>
   </gauge>
   <gauge>
     <width>185</width>
     <height>172</height>
-    <x_offset>139</x_offset>
-    <y_offset>649</y_offset>
+    <x_offset>107</x_offset>
+    <y_offset>645</y_offset>
     <gauge_xml_name>Impact/Impact_Advance_Gauge.xml</gauge_xml_name>
     <datasource>sparkangle</datasource>
   </gauge>
   <gauge>
     <width>283</width>
     <height>231</height>
-    <x_offset>332</x_offset>
-    <y_offset>120</y_offset>
+    <x_offset>300</x_offset>
+    <y_offset>116</y_offset>
     <gauge_xml_name>Impact/Impact_MAP_Gauge.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
   </gauge>

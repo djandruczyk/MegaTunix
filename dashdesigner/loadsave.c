@@ -8,6 +8,31 @@
 #include <glade/glade.h>
 #include <xml.h>
 
+extern GtkWidget *main_window;
+extern gboolean changed;
+
+void prompt_to_save()
+{
+	GtkWidget *dialog = NULL;
+	extern GtkWidget *main_window;
+	gint result = 0;
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),GTK_DIALOG_MODAL,GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,"This dashboard has been modified, Save it or discard the changes?");
+	gtk_dialog_add_button(GTK_DIALOG(dialog),"Save Dashboard", GTK_RESPONSE_OK);
+	gtk_dialog_add_button(GTK_DIALOG(dialog),"Discard Changes", GTK_RESPONSE_CANCEL);
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+	switch (result)
+	{
+		case GTK_RESPONSE_NONE:
+		case GTK_RESPONSE_CANCEL:
+			break;
+		case GTK_RESPONSE_OK:
+			save_handler(NULL,GINT_TO_POINTER(TRUE));
+			break;
+	}
+	return;
+}
+
 
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
@@ -27,6 +52,7 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 	{
 		import_dash_xml(filename);
 		g_free (filename);
+		changed = FALSE;
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -71,6 +97,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	{
 		export_dash_xml(filename);
 		g_free (filename);
+		changed = FALSE;
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -95,7 +122,7 @@ void setup_file_filters(GtkFileChooser *chooser)
 
 gboolean check_datasources_set(GtkWidget *dash)
 {
-	gint i = 0;
+	guint i = 0;
 	gboolean state = FALSE;
 	GtkTreeIter iter;
 	GtkFixedChild *child = NULL;

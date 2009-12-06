@@ -9,6 +9,7 @@
 #include <xml.h>
 
 GladeXML *main_xml = NULL;
+GtkWidget *main_window = NULL;
 gchar *cwd = NULL;
 
 int main (int argc, char ** argv )
@@ -17,7 +18,6 @@ int main (int argc, char ** argv )
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar *dirname = NULL;
-	GtkWidget *main_window = NULL;
 
 	gtk_init (&argc, &argv);
 
