@@ -1063,6 +1063,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		}
 		g_strfreev(vector);
 	}
+	cairo_stroke (cr);
 
 	/* Polygons */
 	for (i=0;i<priv->polygons->len;i++)

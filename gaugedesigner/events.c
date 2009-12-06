@@ -1379,7 +1379,6 @@ void update_onscreen_tgroups()
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *img = NULL;
-	GtkWidget *frame = NULL;
 	GtkWidget *dummy = NULL;
 	GtkWidget *tg_main_table = NULL;
 	GtkAdjustment *adj = NULL;
@@ -1421,11 +1420,9 @@ void update_onscreen_tgroups()
 	/* Repopulate the table with the current tgroups... */
 	for (i=0;i<array->len; i++)
 	{
-		frame = gtk_frame_new(NULL);
-		gtk_table_attach(GTK_TABLE(table),frame,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
 		tgroup = g_array_index(array,MtxTickGroup *, i);
 		subtable = gtk_table_new(1,2,FALSE);
-		gtk_container_add(GTK_CONTAINER(frame),subtable);
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
 
 		button = gtk_button_new();
 		img = gtk_image_new_from_stock("gtk-close",GTK_ICON_SIZE_MENU);
@@ -1584,7 +1581,6 @@ void update_onscreen_polygons()
 	GtkWidget *subtable = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *img = NULL;
-	GtkWidget *frame = NULL;
 	GtkWidget *x_origin = NULL;
 	GtkWidget *y_origin = NULL;
 	GtkWidget *dummy = NULL;
@@ -1632,12 +1628,9 @@ void update_onscreen_polygons()
 	/* Repopulate the table with the current polygons... */
 	for (i=0;i<array->len; i++)
 	{
-		frame = gtk_frame_new(NULL);
-		gtk_widget_show(frame);
-		gtk_table_attach(GTK_TABLE(table),frame,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
 		poly = g_array_index(array,MtxPolygon *, i);
 		subtable = gtk_table_new(1,2,FALSE);
-		gtk_container_add(GTK_CONTAINER(frame),subtable);
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
 		gtk_widget_show(subtable);
 
 		button = gtk_button_new();

@@ -24,8 +24,8 @@
   <gauge>
     <width>201</width>
     <height>200</height>
-    <x_offset>577</x_offset>
-    <y_offset>391</y_offset>
+    <x_offset>578</x_offset>
+    <y_offset>394</y_offset>
     <gauge_xml_name>Honda/Honda_Oil_Temp_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>

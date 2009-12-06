@@ -368,7 +368,7 @@ gboolean write_data(Io_Message *message)
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
 				if (!res)
 				{
-					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
 					retval = FALSE;
 				}
 				if (firmware->capabilities & MS2)

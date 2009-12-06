@@ -42,6 +42,8 @@ struct _Rt_Text
 	GtkWidget *name_label;	/*! Label in runtime display */
 	GtkWidget *textval;	/*! Label in runtime display */
 	gchar *friendly_name;	/*! text for Label above */
+	gchar *label_prefix;	/*! markup strings */
+	gchar *label_suffix;	/*! markup strings */
 	GObject *object;	/*! object of obsession.... */
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */

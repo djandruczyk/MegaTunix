@@ -275,10 +275,15 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->markup = (gboolean)OBJ_GET(parent,"markup");
+	rtt->label_prefix = OBJ_GET(parent,"label_prefix");
+	rtt->label_suffix = OBJ_GET(parent,"label_suffix");
 	rtt->object = object;
+	
 
 	hbox = gtk_hbox_new(FALSE,5);
 
+	/* Static prefix label.... */
 	if (show_prefix)
 	{
 		label = gtk_label_new(NULL);
@@ -288,7 +293,9 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 	}
 
+	/* Value label */
 	label = gtk_label_new(NULL);
+
 	set_fixed_size(label,6);
 	rtt->textval = label;
 	if (show_prefix)
@@ -361,6 +368,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * tmpbuf2 = NULL;
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
@@ -384,17 +392,19 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
 			return;
 
-	if ((current != previous) || (forced_update))
+	if ((current != previous) 
+			|| (forced_update) 
+			|| (rtt->textval && ((abs(count-last_upd)%30) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-		g_free(tmpbuf);
-		last_upd = count;
-	}
-	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
-	{
-		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		if (rtt->markup)
+		{
+			tmpbuf2 = g_strconcat(rtt->label_prefix,tmpbuf,rtt->label_suffix,NULL);
+			gtk_label_set_markup(GTK_LABEL(rtt->textval),tmpbuf2);
+			g_free(tmpbuf2);
+		}
+		else
+			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}

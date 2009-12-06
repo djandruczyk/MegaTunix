@@ -845,6 +845,7 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 {
 	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
+	GtkWidget *topwidget = NULL;
 	GList *children = NULL;
 	GtkWidget * dialog = NULL;
 	gint result = 0;
@@ -854,6 +855,8 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 	if ((changed) && (g_list_length(children) > 0))
 		prompt_to_save();
 	clear_dashboard(dash);
+	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
+	gtk_window_resize(GTK_WINDOW(topwidget),320,200);
 	changed = FALSE;
 	return TRUE;
 }
