@@ -127,6 +127,8 @@ struct _SlaveMessage
 };
 
 /* Prototypes */
+void open_tcpip_sockets(void);
+void close_tcpip_sockets(void);
 gboolean setup_socket(gint);
 void *socket_thread_manager(gpointer);
 void * ascii_socket_client(gpointer );

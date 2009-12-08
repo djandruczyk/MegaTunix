@@ -30,9 +30,11 @@ void disable_burner_buttons_pf(void);
 void reset_temps_pf(void);
 void simple_read_pf(void *, XmlCmdType);
 gboolean read_ve_const(void *, XmlCmdType);
-gboolean ms2_burn_all_helper(void *, XmlCmdType);
+gboolean burn_all_helper(void *, XmlCmdType);
 void post_single_burn_pf(void *data);
 void post_burn_pf(void);
+void startup_default_timeouts_pf(void);
+
 /* Prototypes */
 
 #endif

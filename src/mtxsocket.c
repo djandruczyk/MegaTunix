@@ -39,6 +39,7 @@
 #include <string.h>
 #include <stringmatch.h>
 #include <threads.h>
+#include <widgetmgmt.h>
 #ifdef __WIN32__
 #include <winsock2.h>
 #else
@@ -54,7 +55,84 @@
 static GPtrArray *slave_list = NULL;
 static gint controlsocket = 0;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
+GThread *ascii_socket_id = NULL;
+GThread *binary_socket_id = NULL;
+GThread *control_socket_id = NULL;
+GThread *notify_slaves_id = NULL;
 
+
+/*!
+ *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
+ interrogated.
+ */
+void open_tcpip_sockets()
+{
+	extern gboolean interrogated;
+	extern volatile gboolean offline;
+	extern GObject *global_data;
+	CmdLineArgs *args = NULL;
+	MtxSocket *socket = NULL;
+
+	args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+	if ((interrogated) && (!offline))
+	{
+		/* Open The three sockets,  ASCII interface, binary interface
+		 * and control socket for telling other instances to update 
+		 * stuff..
+		 */
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
+		socket->type = MTX_SOCKET_ASCII;
+		if (socket->fd)
+		{
+			ascii_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
+
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
+		socket->type = MTX_SOCKET_BINARY;
+		if (socket->fd)
+		{
+			binary_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
+
+		socket = g_new0(MtxSocket,1);
+		socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
+		socket->type = MTX_SOCKET_CONTROL;
+		if (socket->fd)
+		{
+			control_socket_id = g_thread_create(socket_thread_manager,
+					(gpointer)socket, /* Thread args */
+					TRUE, /* Joinable */
+					NULL); /*GError Pointer */
+		}
+		else
+			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
+
+		notify_slaves_id = g_thread_create(notify_slaves_thread,
+				NULL,/* Thread args */
+				TRUE, /* Joinable */
+				NULL); /*GError Pointer */
+	}
+}
+
+
+void close_tcpip_sockets(void)
+{
+	printf("close sockets not written yet...\n");
+}
 
 /*!
  * \brief Sets up incoming sockets (master mode only)
@@ -134,7 +212,9 @@ gboolean setup_socket(gint port)
  **/
 void *socket_thread_manager(gpointer data)
 {
+	GtkWidget *widget = NULL;
 	extern Firmware_Details *firmware;
+	gchar * tmpbuf = NULL;
 	gint i = 0;
 	struct sockaddr_in client;
 #ifdef __WIN32__
@@ -196,7 +276,10 @@ void *socket_thread_manager(gpointer data)
 			last_bin_client->container = (gpointer)slave_list;
 			g_ptr_array_add(slave_list,last_bin_client);
 			last_bin_client = NULL; /* to prevent adding it to multiple clients by mistake. The next binary client will regenerated it */
-
+			widget = lookup_widget("connected_clients_entry");
+			tmpbuf = g_strdup_printf("%i",slave_list->len);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
 
 		}
 	}
@@ -287,9 +370,11 @@ void *ascii_socket_client(gpointer data)
 
 void *binary_socket_client(gpointer data)
 {
+	GtkWidget *widget = NULL;
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
 	gchar buf;
+	gchar *tmpbuf = NULL;
 	gint res = 0;
 	gint canID = 0;
 	gint tableID = 0;
@@ -332,6 +417,10 @@ void *binary_socket_client(gpointer data)
 			g_ptr_array_remove(slave_list,client);
 			dealloc_client_data(client);
 			client = NULL;
+			widget = lookup_widget("connected_clients_entry");
+			tmpbuf = g_strdup_printf("%i",slave_list->len);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
 			g_thread_exit(0);
 		}
 		switch (state)
@@ -1344,6 +1433,8 @@ gboolean close_control_socket(void)
  **/
 void *notify_slaves_thread(gpointer data)
 {
+	GtkWidget *widget = NULL;
+	gchar * tmpbuf = NULL;
 	GTimeVal cur;
 	SlaveMessage *msg = NULL;
 	MtxSocketClient * cli_data = NULL;
@@ -1466,18 +1557,22 @@ void *notify_slaves_thread(gpointer data)
 			if (to_be_closed[i])
 			{
 				cli_data = g_ptr_array_index(slave_list,i);
-				
-/*				printf("socket dropped, closing client pointer %p\n",cli_data); */
+
+				/*				printf("socket dropped, closing client pointer %p\n",cli_data); */
 #ifdef __WIN32__
 				closesocket(cli_data->fd);
 #else
 				close(cli_data->fd);
 #endif
-/*				printf("REMOVING ENTRY from ptr array\n");*/
+				/*				printf("REMOVING ENTRY from ptr array\n");*/
 				g_ptr_array_remove(slave_list,cli_data);
 				dealloc_client_data(cli_data);
 				cli_data = NULL;
 				res = 0;
+				widget = lookup_widget("connected_clients_entry");
+				tmpbuf = g_strdup_printf("%i",slave_list->len);
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+				g_free(tmpbuf);
 			}
 		}
 		g_free(to_be_closed);

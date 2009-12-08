@@ -303,6 +303,11 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
 		{
+			case TOGGLE_NETMODE:
+				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
+				open_tcpip_sockets();
+				printf("enable network mode threads\n");
+				break;
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
@@ -363,6 +368,11 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* not pressed */
 		switch ((ToggleButton)handler)
 		{
+			case TOGGLE_NETMODE:
+				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
+				close_tcpip_sockets();
+				printf("DISable network mode threads\n");
+				break;
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
@@ -950,6 +960,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case PHONE_HOME:
+			printf("Phone home (callback TCP) is not yet implemented, ask nicely\n");
+			break;
 		case INCREMENT_VALUE:
 		case DECREMENT_VALUE:
 			dest = OBJ_GET(widget,"partner_widget");

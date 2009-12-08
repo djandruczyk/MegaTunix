@@ -39,10 +39,6 @@
 
 extern gint dbg_lvl;
 extern GObject *global_data;
-GThread *ascii_socket_id = NULL;
-GThread *binary_socket_id = NULL;
-GThread *control_socket_id = NULL;
-GThread *notify_slaves_id = NULL;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -532,74 +528,6 @@ EXPORT void post_single_burn_pf(void *data)
 	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
-}
-
-
-/*!
- *\brief open_tcpip_socket_pf opens up the TCP control socket once the ecu is
- interrogated.
- */
-EXPORT void open_tcpip_socket_pf()
-{
-	extern gboolean interrogated;
-	extern volatile gboolean offline;
-	extern GObject *global_data;
-	CmdLineArgs *args = NULL;
-	MtxSocket *socket = NULL;
-
-	args = OBJ_GET(global_data,"args");
-	if (args->network_mode)
-		return;
-	if ((interrogated) && (!offline))
-	{
-		/* Open The three sockets,  ASCII interface, binary interface
-		 * and control socket for telling other instances to update 
-		 * stuff..
-		 */
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
-		socket->type = MTX_SOCKET_ASCII;
-		if (socket->fd)
-		{
-			ascii_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
-		socket->type = MTX_SOCKET_BINARY;
-		if (socket->fd)
-		{
-			binary_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
-		socket->type = MTX_SOCKET_CONTROL;
-		if (socket->fd)
-		{
-			control_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
-
-		notify_slaves_id = g_thread_create(notify_slaves_thread,
-				NULL,/* Thread args */
-				TRUE, /* Joinable */
-				NULL); /*GError Pointer */
-	}
 }
 
 
