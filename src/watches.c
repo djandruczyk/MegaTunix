@@ -32,6 +32,7 @@ static GHashTable *watch_hash;
  */
 EXPORT void fire_off_rtv_watches_pf()
 {
+	return;
 	if (watch_hash)
 	{
 		g_hash_table_foreach(watch_hash,process_watches,NULL);

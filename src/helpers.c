@@ -51,6 +51,18 @@ EXPORT void enable_reboot_button_pf(void)
 	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
 }
 
+EXPORT void startup_tcpip_sockets_pf(void)
+{
+	extern gboolean interrogated;
+        extern volatile gboolean offline;
+	CmdLineArgs *args = NULL;
+
+	args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+	if ((interrogated) && (!offline))
+		open_tcpip_sockets();
+}
 
 EXPORT void spawn_read_ve_const_pf(void)
 {

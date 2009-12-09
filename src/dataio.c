@@ -236,7 +236,7 @@ gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 	gint res = 0;
 
 	if (serial_params->net_mode)
-		res = send(fd,buf,count,0);
+		res = send(fd,buf,count,MSG_NOSIGNAL);
 	else
 		res = write(fd,buf,count);
 	*len = res;

@@ -67,72 +67,70 @@ GThread *notify_slaves_id = NULL;
  */
 void open_tcpip_sockets()
 {
-	extern gboolean interrogated;
-	extern volatile gboolean offline;
 	extern GObject *global_data;
-	CmdLineArgs *args = NULL;
 	MtxSocket *socket = NULL;
 
-	args = OBJ_GET(global_data,"args");
-	if (args->network_mode)
-		return;
-	if ((interrogated) && (!offline))
+	/* Open The three sockets,  ASCII interface, binary interface
+	 * and control socket for telling other instances to update 
+	 * stuff..
+	 */
+	socket = g_new0(MtxSocket,1);
+	socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
+	socket->type = MTX_SOCKET_ASCII;
+	if (socket->fd)
 	{
-		/* Open The three sockets,  ASCII interface, binary interface
-		 * and control socket for telling other instances to update 
-		 * stuff..
-		 */
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
-		socket->type = MTX_SOCKET_ASCII;
-		if (socket->fd)
-		{
-			ascii_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
-		socket->type = MTX_SOCKET_BINARY;
-		if (socket->fd)
-		{
-			binary_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
-		socket->type = MTX_SOCKET_CONTROL;
-		if (socket->fd)
-		{
-			control_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
-
-		notify_slaves_id = g_thread_create(notify_slaves_thread,
-				NULL,/* Thread args */
+		ascii_socket_id = g_thread_create(socket_thread_manager,
+				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+		OBJ_SET(global_data,"ascii_socket",socket);
 	}
+	else
+	{
+		g_free(socket);
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
+	}
+
+	socket = g_new0(MtxSocket,1);
+	socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
+	socket->type = MTX_SOCKET_BINARY;
+	if (socket->fd)
+	{
+		binary_socket_id = g_thread_create(socket_thread_manager,
+				(gpointer)socket, /* Thread args */
+				TRUE, /* Joinable */
+				NULL); /*GError Pointer */
+		OBJ_SET(global_data,"binary_socket",socket);
+	}
+	else
+	{
+		g_free(socket);
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
+	}
+
+	socket = g_new0(MtxSocket,1);
+	socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
+	socket->type = MTX_SOCKET_CONTROL;
+	if (socket->fd)
+	{
+		control_socket_id = g_thread_create(socket_thread_manager,
+				(gpointer)socket, /* Thread args */
+				TRUE, /* Joinable */
+				NULL); /*GError Pointer */
+		OBJ_SET(global_data,"control_socket",socket);
+	}
+	else
+	{
+		g_free(socket);
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
+	}
+
+	notify_slaves_id = g_thread_create(notify_slaves_thread,
+			NULL,/* Thread args */
+			TRUE, /* Joinable */
+			NULL); /*GError Pointer */
 }
 
-
-void close_tcpip_sockets(void)
-{
-	printf("close sockets not written yet...\n");
-}
 
 /*!
  * \brief Sets up incoming sockets (master mode only)
@@ -215,6 +213,8 @@ void *socket_thread_manager(gpointer data)
 	GtkWidget *widget = NULL;
 	extern Firmware_Details *firmware;
 	gchar * tmpbuf = NULL;
+	fd_set rd;
+	gint res = 0;
 	gint i = 0;
 	struct sockaddr_in client;
 #ifdef __WIN32__
@@ -224,14 +224,42 @@ void *socket_thread_manager(gpointer data)
 #endif
 	MtxSocket *socket = (MtxSocket *)data;
 	MtxSocketClient * cli_data = NULL;
+	GTimeVal cur;
 	static MtxSocketClient *last_bin_client = NULL;
 	gint fd = -1;
+	extern GObject *global_data;
 	extern volatile gboolean leaving;
 
 	while (TRUE)
 	{
-		if (leaving)
+		if (leaving) /* MTX shutting down */
+		{
+			close(socket->fd);
+			g_free(socket);
 			g_thread_exit(0);
+		}
+		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+		{
+			close(socket->fd);
+			g_free(socket);
+			g_thread_exit(0);
+		}
+
+		cur.tv_sec = 1;
+		cur.tv_usec = 0;
+		FD_ZERO(&rd);
+		FD_SET(socket->fd,&rd);
+		res = select(socket->fd+1,&rd,NULL,NULL,(struct timeval *)&cur);
+		if (res < 0) /* Error, FD closed, abort */
+		{
+			close(socket->fd);
+			g_free(socket);
+			g_thread_exit(0);
+		}
+		if (res == 0) /* Timeout, loop around */
+		{
+			continue;
+		}
 		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
 		if (((socket->type == MTX_SOCKET_ASCII) || (socket->type == MTX_SOCKET_BINARY)) && (firmware))
 		{
@@ -296,12 +324,14 @@ void *socket_thread_manager(gpointer data)
 void *ascii_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
+	GTimeVal cur;
 	gint fd = client->fd;
 	gchar buf[4096];
 	gchar * cbuf = NULL;  /* Client buffer */
 	gchar * tmpbuf = NULL;
 	fd_set rd;
 	gint res = 0;
+	extern GObject *global_data;
 	extern volatile gboolean leaving;
 
 
@@ -311,19 +341,19 @@ void *ascii_socket_client(gpointer data)
 
 	while (TRUE)
 	{
-		if (!fd)
-		{
-			dealloc_client_data(client);
-			g_thread_exit(0);
-		}
 		if (leaving)
-			g_thread_exit(0);
+			goto close_ascii;
+		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+			goto close_ascii;
 
 		FD_ZERO(&rd);
 		FD_SET(fd,&rd);
-		res = select(fd+1,&rd,NULL,NULL,NULL);
+		cur.tv_sec = 1;
+		cur.tv_usec = 0;
+		res = select(fd+1,&rd,NULL,NULL,(struct timeval *)&cur);
 		if (res < 0) /* Error, socket closed, abort */
 		{
+close_ascii:
 #ifdef __WIN32__
 			closesocket(fd);
 #else
@@ -394,6 +424,7 @@ void *binary_socket_client(gpointer data)
 	State state;
 	State next_state;
 	SubState substate;
+	extern GObject *global_data;
 	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 	extern volatile gboolean leaving;
@@ -404,11 +435,15 @@ void *binary_socket_client(gpointer data)
 
 	while(TRUE)
 	{
+		/* Condition handling */
 		if (leaving)
-			g_thread_exit(0);
+			goto close_binary;
+		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+			goto close_binary;
 		res = recv(fd,&buf,1,0);
 		if (res <= 0)
 		{
+close_binary:
 #ifdef __WIN32__
 			closesocket(fd);
 #else
@@ -423,6 +458,7 @@ void *binary_socket_client(gpointer data)
 			g_free(tmpbuf);
 			g_thread_exit(0);
 		}
+		/* State machine... */
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
@@ -1228,7 +1264,6 @@ void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			printf ("exiting network repair thread immediately\n");
 			g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));
 			g_thread_exit(0);
 		}
@@ -1414,7 +1449,6 @@ gboolean close_network(void)
 gboolean close_control_socket(void)
 {
 	extern gboolean connected;
-	printf("Closing control socket (there is a bug here!) port!\n");
 	close(controlsocket);
 
 #ifdef __WIN32__
@@ -1609,16 +1643,22 @@ void *control_socket_client(gpointer data)
 	SubState substate;
 	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
+	extern volatile gint leaving;
+	extern GObject *global_data;
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 	while(TRUE)
 	{
+		if (leaving)
+			goto close_control;
+		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+			goto close_control;
 		res = recv(fd,(char *)&buf,1,0);
 		if (res <= 0)
 		{
+close_control:
 #ifdef __WIN32__
-			printf("READ ERROR, controlsocket\n");
 			closesocket(fd);
 #else
 			close(fd);

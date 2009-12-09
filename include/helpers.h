@@ -34,6 +34,8 @@ gboolean burn_all_helper(void *, XmlCmdType);
 void post_single_burn_pf(void *data);
 void post_burn_pf(void);
 void startup_default_timeouts_pf(void);
+void startup_tcpip_sockets_pf(void);
+
 
 /* Prototypes */
 

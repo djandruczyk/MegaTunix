@@ -108,7 +108,7 @@ void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 10;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 20;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */
@@ -854,6 +854,7 @@ void dealloc_client_data(MtxSocketClient *client)
 void dealloc_message(Io_Message * message)
 {
 	OutputData *data;
+	static gint count = 0;
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
 	message->functions = NULL;

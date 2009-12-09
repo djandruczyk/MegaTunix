@@ -369,8 +369,8 @@ void finalize_core_gui(GladeXML * xml)
 
 	button = glade_xml_get_widget(xml,"allow_net_checkbutton");
 	register_widget("allow_net_checkbutton",button);
-	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),(gboolean)OBJ_GET(global_data,"network_access"));
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 
 	widget = glade_xml_get_widget(xml,"netaccess_table");
 	if (args->network_mode)
