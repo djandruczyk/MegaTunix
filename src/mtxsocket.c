@@ -88,7 +88,7 @@ void open_tcpip_sockets()
 	else
 	{
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
 	}
 
 	socket = g_new0(MtxSocket,1);
@@ -105,7 +105,7 @@ void open_tcpip_sockets()
 	else
 	{
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
 	}
 
 	socket = g_new0(MtxSocket,1);
@@ -122,7 +122,7 @@ void open_tcpip_sockets()
 	else
 	{
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
 	}
 
 	notify_slaves_id = g_thread_create(notify_slaves_thread,
@@ -593,6 +593,8 @@ close_binary:
 						if (firmware->capabilities & MS1)
 						{
 /*							printf("'V' received (MS1 VEtable)\n");*/
+							if (last_page < 0)
+								last_page = 0;
 							res = net_send (fd,(char *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
 /*							printf("MS1 VEtable, %i bytes delivered\n",res);*/
 						}
