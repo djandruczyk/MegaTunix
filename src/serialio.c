@@ -14,6 +14,9 @@
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
+#ifndef B115200
+#define B115200 115200
+#endif
 
 #include <comms_gui.h>
 #include <config.h>
@@ -295,7 +298,6 @@ void *serial_repair_thread(gpointer data)
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	gchar * potential_ports;
 	gint len = 0;
-	gint errcount = 0;
 	gboolean autodetect = FALSE;
 	guchar buf [1024];
 	extern volatile gboolean offline;
