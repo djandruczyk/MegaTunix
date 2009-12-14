@@ -15,6 +15,7 @@
 #define __EVENTS_H__
 
 #include <defines.h>
+#include <gauge.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 
@@ -82,6 +83,8 @@ gboolean remove_tgroup(GtkWidget *, gpointer );
 gboolean remove_polygon(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
 gboolean grab_coords_event(GtkWidget *, gpointer);
+GtkWidget * build_tblock(MtxTextBlock *, gint );
+
 /* Prototypes */
 
 #endif

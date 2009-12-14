@@ -1306,61 +1306,9 @@ void update_onscreen_tblocks()
 	for (i=0;i<array->len; i++)
 	{
 		tblock = g_array_index(array,MtxTextBlock *, i);
-		xml = glade_xml_new(filename, "dynamic_tblock", NULL);
-		subtable = glade_xml_get_widget(xml,"dynamic_tblock");
-		glade_xml_signal_autoconnect(xml);
-
+		subtable = build_tblock(tblock,i);
 		gtk_table_attach(GTK_TABLE(table),subtable,0,1,y,y+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
-		/* Setup custom attrs/data */
-		dummy = glade_xml_get_widget(xml,"tb_close_button");
-		OBJ_SET(dummy,"tblock_index",GINT_TO_POINTER(i));
-		/* Text string */
-		dummy = glade_xml_get_widget(xml,"tb_text_entry");
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_TEXT));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_entry_set_text(GTK_ENTRY(dummy),tblock->text);
-
-		/* Daytime text color */
-		dummy = glade_xml_get_widget(xml,"tb_day_color");
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_COLOR_DAY));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tblock->color[MTX_DAY]);
-
-		/* Nitetime text color */
-		dummy = glade_xml_get_widget(xml,"tb_nite_color");
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_COLOR_NITE));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tblock->color[MTX_NITE]);
-
-		/* Font button */
-		dummy = glade_xml_get_widget(xml,"tb_fontbutton");
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_FONT));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		tmpbuf = g_strdup_printf("%s 12",tblock->font);
-		gtk_font_button_set_font_name(GTK_FONT_BUTTON(dummy),tmpbuf);
-		g_free(tmpbuf);
-
-		/* Font scale */
-		dummy = glade_xml_get_widget(xml,"tb_fontscale");
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_FONT_SCALE));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tblock->font_scale);
-		
-		button = glade_xml_get_widget(xml,"tb_edit_button");
-		/* X position */
-		dummy = glade_xml_get_widget(xml,"tb_x_spin");
-		OBJ_SET(button,"x_spin",dummy);
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_X_POS));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tblock->x_pos);
-		
-		/* Y position */
-		dummy = glade_xml_get_widget(xml,"tb_y_spin");
-		OBJ_SET(button,"y_spin",dummy);
-		OBJ_SET(dummy,"handler",GINT_TO_POINTER(TB_Y_POS));
-		OBJ_SET(dummy,"index",GINT_TO_POINTER(i));
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tblock->y_pos);
-		
+		gtk_widget_show_all(subtable);
 		y+=1;
 	}
 	/* Scroll to end */
@@ -2603,4 +2551,132 @@ gboolean gauge_button(GtkWidget *widget, GdkEventButton *event, gpointer data)
 	OBJ_SET(gauge,"y_spin",NULL);
 	OBJ_SET(gauge,"edit_but",NULL);
 	return FALSE;
+}
+
+GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
+{
+	/* MUCH faster that the glade way unfortunately */
+	GtkWidget *table = NULL;
+	GtkWidget *subtable = NULL;
+	GtkWidget *widget = NULL;
+	GtkWidget *x_spin = NULL;
+	GtkWidget *y_spin = NULL;
+	GtkWidget *hbox = NULL;
+	GtkWidget *img = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *minitable = NULL;
+	gchar * tmpbuf = NULL;
+
+	table = gtk_table_new(4,2,FALSE);
+
+	/* Close button */
+	widget = gtk_button_new();
+	img = gtk_image_new_from_stock("gtk-close",GTK_ICON_SIZE_MENU);
+	gtk_container_add(GTK_CONTAINER(widget),img);
+	OBJ_SET((widget),"tblock_index",GINT_TO_POINTER(index));
+	g_signal_connect(G_OBJECT(widget),"clicked", G_CALLBACK(remove_tblock),NULL);
+	gtk_table_attach(GTK_TABLE(table),widget,0,1,0,4,0,0,0,0);
+	/* Top row: text, color buttons */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	gtk_table_attach(GTK_TABLE(table),subtable,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+	widget = gtk_label_new("Text:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+
+	widget = gtk_entry_new();
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_TEXT));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	gtk_entry_set_width_chars(GTK_ENTRY(widget),12);
+	gtk_entry_set_text(GTK_ENTRY(widget),tblock->text);
+	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+	widget = gtk_color_button_new_with_color(&tblock->color[MTX_DAY]);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_COLOR_DAY));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,GTK_FILL,0,0,0);
+
+	widget = gtk_color_button_new_with_color(&tblock->color[MTX_NITE]);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_COLOR_NITE));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_FILL,0,0,0);
+
+	/* Middle row: font, font scale spinner */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	gtk_table_attach(GTK_TABLE(table),subtable,1,2,1,2,GTK_FILL,GTK_FILL,0,0);
+	widget = gtk_label_new("Font:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+
+	widget = gtk_font_button_new();
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_FONT));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	tmpbuf = g_strdup_printf("%s 12",tblock->font);
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
+	gtk_font_button_set_show_size(GTK_FONT_BUTTON(widget),FALSE);
+	gtk_font_button_set_use_size(GTK_FONT_BUTTON(widget),FALSE);
+	gtk_font_button_set_use_font(GTK_FONT_BUTTON(widget),FALSE);
+	g_free(tmpbuf);
+	g_signal_connect(G_OBJECT(widget),"font_set",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+
+	widget = gtk_label_new("Font\nScale");
+	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,0,0,0,0);
+
+	widget = gtk_spin_button_new_with_range(0.001,1.0,0.001);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_FONT_SCALE));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->font_scale, NULL);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,0,0,0,0);
+
+	/* Bottom row: Edit button, X/Y position spinners */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	gtk_table_attach(GTK_TABLE(table),subtable,1,2,2,3,GTK_FILL,GTK_FILL,0,0);
+	widget = gtk_label_new("Position:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+
+	/* X position minilayout table */
+	minitable = gtk_table_new(1,2,FALSE);
+	gtk_table_attach(GTK_TABLE(subtable),minitable,2,3,0,1,GTK_EXPAND,0,0,0);
+	widget = gtk_label_new("X:");
+	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_X_POS));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->x_pos, NULL);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,0,0,0);
+	x_spin = widget;
+
+	/* Y position minilayout table */
+	minitable = gtk_table_new(1,2,FALSE);
+	gtk_table_attach(GTK_TABLE(subtable),minitable,3,4,0,1,GTK_FILL|GTK_EXPAND,0,0,0);
+	widget = gtk_label_new("Y:");
+	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_Y_POS));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->y_pos, NULL);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,0,0,0);
+	y_spin = widget;
+
+	widget = gtk_button_new();
+	OBJ_SET(widget,"x_spin",x_spin);
+	OBJ_SET(widget,"y_spin",y_spin);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(widget),hbox);
+	img = gtk_image_new_from_stock("gtk-edit",GTK_ICON_SIZE_MENU);
+	gtk_box_pack_start(GTK_BOX(hbox),img,FALSE,FALSE,0);
+	label = gtk_label_new("Edit");
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(grab_coords_event),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+
+	widget = gtk_hseparator_new();
+	gtk_table_attach(GTK_TABLE(table),widget,0,2,3,4,GTK_FILL,0,0,0);
+	return table;
 }
