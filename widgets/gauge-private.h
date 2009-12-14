@@ -36,6 +36,7 @@ struct _MtxGaugeFacePrivate
         GdkPixmap *tmp_pixmap;  /*! Tmp pixmap for alerts for speed boost */
         gint w;                 /*! width */
         gint h;                 /*! height */
+	gint max_layers;	/*! maximum layers */
         gdouble xc;             /*! X Center */
         gdouble yc;             /*! Y Center */
         gdouble radius;         /*! Radius of display */

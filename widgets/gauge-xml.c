@@ -257,6 +257,8 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&range->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"lowpoint") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lowpoint,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"highpoint") == 0)
@@ -300,6 +302,8 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&range->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"lowpoint") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lowpoint,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"highpoint") == 0)
@@ -346,6 +350,8 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tblock->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tblock->font,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
@@ -390,6 +396,8 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tgroup->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->font,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font_scale") == 0)
@@ -469,6 +477,8 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&poly->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"filled") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->filled,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"line_width") == 0)
@@ -680,6 +690,10 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
 
+		tmpbuf = g_strdup_printf("%i",range->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
 				BAD_CAST tmpbuf);
@@ -716,6 +730,10 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 		range = g_array_index(priv->a_ranges,MtxAlertRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "alert_range",NULL );
 
+		tmpbuf = g_strdup_printf("%i",range->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
 				BAD_CAST tmpbuf);
@@ -759,6 +777,10 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "text_block",NULL );
 
+		tmpbuf = g_strdup_printf("%i",tblock->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%s",tblock->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
@@ -798,6 +820,10 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
 
+		tmpbuf = g_strdup_printf("%i",tgroup->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%s",tgroup->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
@@ -1010,6 +1036,10 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 		generic_xml_color_export(node,"color_day",&poly->color[MTX_DAY]);
 		generic_xml_color_export(node,"color_nite",&poly->color[MTX_NITE]);
 
+		tmpbuf = g_strdup_printf("%i",poly->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%i",poly->filled);
 		xmlNewChild(node, NULL, BAD_CAST "filled",
 				BAD_CAST tmpbuf);

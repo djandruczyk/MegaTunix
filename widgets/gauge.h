@@ -77,7 +77,7 @@ typedef enum
 }MtxPolyType;
 
 
-/*! GaugeColorIndex enum,  for indexing into the color arrays */
+/*! GaugeColorIndex enum, for indexing into the color arrays */
 typedef enum  
 {
 	GAUGE_COL_BG_DAY = 0,
@@ -104,6 +104,7 @@ typedef enum
 	TB_COLOR_NITE,
 	TB_FONT,
 	TB_TEXT,
+	TB_LAYER,
 	TB_NUM_FIELDS
 }TbField;
 
@@ -126,6 +127,7 @@ typedef enum
 	POLY_START_ANGLE,
 	POLY_SWEEP_ANGLE,
 	POLY_NUM_POINTS,
+	POLY_LAYER,
 	POLY_NUM_FIELDS
 }PolyField;
 
@@ -153,6 +155,7 @@ typedef enum
 	TG_MIN_TICK_WIDTH,
 	TG_START_ANGLE,
 	TG_SWEEP_ANGLE,
+	TG_LAYER,
 	TG_NUM_FIELDS
 }TgField;
 
@@ -166,6 +169,7 @@ typedef enum
 	CR_COLOR_NITE,
 	CR_LWIDTH,
 	CR_INSET,
+	CR_LAYER,
 	CR_NUM_FIELDS
 }CrField;
 
@@ -180,6 +184,7 @@ typedef enum
 	ALRT_INSET,
 	ALRT_X_OFFSET,
 	ALRT_Y_OFFSET,
+	ALRT_LAYER,
 	ALRT_NUM_FIELDS
 }AlertField;
 
@@ -249,6 +254,7 @@ struct _MtxColorRange
 	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
+	gint layer;		/* Layer number */
 };
 
 
@@ -268,6 +274,7 @@ struct _MtxAlertRange
 	gfloat inset;		/* % of radius to inset the line */
 	gfloat x_offset;	/* % of radius to offset the X origin */
 	gfloat y_offset;	/* % of radius to offset the Y origin */
+	gint layer;		/* Layer number */
 };
 
 
@@ -285,6 +292,7 @@ struct _MtxTextBlock
 	gfloat font_scale;
 	gfloat x_pos;
 	gfloat y_pos;
+	gint layer;		/* Layer number */
 };
 
 /*! \struct _MtxTickGroup
@@ -314,6 +322,7 @@ struct _MtxTickGroup
 	gfloat min_tick_length;
 	gfloat start_angle;
 	gfloat sweep_angle;
+	gint layer;		/* Layer number */
 };
 
 
@@ -331,7 +340,7 @@ struct _MtxPoint
 /*! \struct _MtxPolygon
  * \brief
  * _MtxPolygon is a container struct that holds an identifier (enum) and a 
- * void * for the the actualy polygon data (the struct will be casted in the
+ * void * for the the actual polygon data (the struct will be casted in the
  * code to the right type to get to the correct data...
  */
 struct _MtxPolygon
@@ -342,7 +351,8 @@ struct _MtxPolygon
 	gfloat line_width;		/* % of radius, clamped at 1 pixel */
 	GdkLineStyle line_style;	/* Line Style */
 	GdkJoinStyle join_style;	/* Join Style */
-	void *data;			/* point to datastruct */
+	void *data;			/* pointer to datastruct */
+	gint layer;			/* Layer number */
 };
 
 
