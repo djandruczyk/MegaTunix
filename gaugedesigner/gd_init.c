@@ -14,7 +14,16 @@ EXPORT gboolean init_text_attributes(GladeXML *xml)
 {
         extern GdkColor white;
         extern GdkColor black;
+	GtkWidget *notebook = NULL;
+	GtkWidget *child = NULL;
 
+	notebook = glade_xml_get_widget(xml,"value_notebook");
+	child = glade_xml_get_widget(xml,"value_text_table");
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),child,TRUE,TRUE,GTK_PACK_START);
+	child = glade_xml_get_widget(xml,"value_font_table");
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),child,TRUE,TRUE,GTK_PACK_START);
+	child = glade_xml_get_widget(xml,"value_location_table");
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),child,TRUE,TRUE,GTK_PACK_START);
 	OBJ_SET((glade_xml_get_widget(xml,"precision_spin")),"handler",GINT_TO_POINTER(PRECISION));
 	OBJ_SET((glade_xml_get_widget(xml,"value_xpos_spin")),"handler",GINT_TO_POINTER(VALUE_XPOS));
 	OBJ_SET((glade_xml_get_widget(xml,"value_ypos_spin")),"handler",GINT_TO_POINTER(VALUE_YPOS));

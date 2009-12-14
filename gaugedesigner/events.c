@@ -2556,6 +2556,7 @@ gboolean gauge_button(GtkWidget *widget, GdkEventButton *event, gpointer data)
 GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 {
 	/* MUCH faster that the glade way unfortunately */
+	GtkWidget *notebook = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *subtable = NULL;
 	GtkWidget *widget = NULL;
@@ -2567,7 +2568,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	GtkWidget *minitable = NULL;
 	gchar * tmpbuf = NULL;
 
-	table = gtk_table_new(4,2,FALSE);
+	table = gtk_table_new(2,2,FALSE);
 
 	/* Close button */
 	widget = gtk_button_new();
@@ -2576,10 +2577,15 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	OBJ_SET((widget),"tblock_index",GINT_TO_POINTER(index));
 	g_signal_connect(G_OBJECT(widget),"clicked", G_CALLBACK(remove_tblock),NULL);
 	gtk_table_attach(GTK_TABLE(table),widget,0,1,0,4,0,0,0,0);
+
+	notebook = gtk_notebook_new();
+	gtk_table_attach(GTK_TABLE(table),notebook,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
 	/* Top row: text, color buttons */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
-	gtk_table_attach(GTK_TABLE(table),subtable,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_FILL,0,0);
+	label = gtk_label_new("Text & Color");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
 	widget = gtk_label_new("Text:");
 	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
 
@@ -2605,7 +2611,10 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	/* Middle row: font, font scale spinner */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
-	gtk_table_attach(GTK_TABLE(table),subtable,1,2,1,2,GTK_FILL,GTK_FILL,0,0);
+	label = gtk_label_new("Font");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
+
 	widget = gtk_label_new("Font:");
 	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
 
@@ -2634,7 +2643,10 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	/* Bottom row: Edit button, X/Y position spinners */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
-	gtk_table_attach(GTK_TABLE(table),subtable,1,2,2,3,GTK_FILL,GTK_FILL,0,0);
+	label = gtk_label_new("Location");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
+
 	widget = gtk_label_new("Position:");
 	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
 
@@ -2677,6 +2689,6 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
 
 	widget = gtk_hseparator_new();
-	gtk_table_attach(GTK_TABLE(table),widget,0,2,3,4,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_FILL,0,0,0);
 	return table;
 }
