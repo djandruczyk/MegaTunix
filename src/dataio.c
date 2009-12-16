@@ -45,6 +45,10 @@ extern gint dbg_lvl;
 extern GStaticMutex serio_mutex;
 extern GObject *global_data;
 
+/* Cause OS-X sucks.... */
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
+#endif
 
 /*!
  \brief read_data() reads in the data from the ECU, checks to make sure
