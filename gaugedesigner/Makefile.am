@@ -13,11 +13,11 @@ gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mt
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall -pedantic
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-gaugedesigner_SOURCES = gd_init.h gd_init.c main.c events.c loadsave.c events.h loadsave.h handlers.c handlers.h
+gaugedesigner_SOURCES = alerts.c gd_init.h gd_init.c main.c events.c loadsave.c polygons.c tblocks.c tgroups.c warnings.c alerts.h vents.h loadsave.h handlers.c handlers.h polygons.h tblocks.h tgroups.h warnings.h 
 
 gaugedesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 
