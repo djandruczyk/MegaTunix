@@ -145,7 +145,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->tattletale_alpha = 0.5;
 	priv->peak = priv->lbound;
 	priv->a_ranges = g_array_new(FALSE,TRUE,sizeof(MtxAlertRange *));
-	priv->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
+	priv->w_ranges = g_array_new(FALSE,TRUE,sizeof(MtxWarningRange *));
 	priv->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	priv->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
 	priv->polygons = g_array_new(FALSE,TRUE,sizeof(MtxPolygon *));
@@ -800,7 +800,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 	MtxPolygon *poly = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -947,9 +947,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	for (layer=0;layer<priv->max_layers;layer++)
 	{
 		/* The warning color ranges */
-		for (i=0;i<priv->c_ranges->len;i++)
+		for (i=0;i<priv->w_ranges->len;i++)
 		{
-			range = g_array_index(priv->c_ranges,MtxColorRange *, i);
+			range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
 			if (range->layer != layer) /* Draw layers in order, 0 being "lowest" */
 				continue;
 			cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,

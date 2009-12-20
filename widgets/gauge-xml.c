@@ -102,7 +102,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		g_object_freeze_notify(G_OBJECT(gauge));
 		mtx_gauge_face_remove_all_text_blocks(gauge);
 		mtx_gauge_face_remove_all_alert_ranges(gauge);
-		mtx_gauge_face_remove_all_color_ranges(gauge);
+		mtx_gauge_face_remove_all_warning_ranges(gauge);
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
 		load_elements(gauge, root_element);
@@ -240,18 +240,18 @@ void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gb
 }
 
 
-void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gboolean api_compat)
+void mtx_gauge_warning_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gboolean api_compat)
 {
 	xmlNode *cur_node = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
-		printf("ERROR, mtx_gauge_color_range_import, xml node is empty!!\n");
+		printf("ERROR, mtx_gauge_warning_range_import, xml node is empty!!\n");
 		return;
 	}
 
-	range = g_new0(MtxColorRange, 1);
+	range = g_new0(MtxWarningRange, 1);
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -281,7 +281,7 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(priv->c_ranges,range);
+	g_array_append_val(priv->w_ranges,range);
 }
 
 
@@ -677,17 +677,17 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 }
 
 
-void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
+void mtx_gauge_warning_range_export(MtxDispatchHelper * helper)
 {
 	guint i = 0;
 	gchar * tmpbuf = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
 
-	for (i=0;i<priv->c_ranges->len;i++)
+	for (i=0;i<priv->w_ranges->len;i++)
 	{
-		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
+		range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
 
 		tmpbuf = g_strdup_printf("%i",range->layer);

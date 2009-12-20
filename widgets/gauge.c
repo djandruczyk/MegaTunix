@@ -169,23 +169,23 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 /*!
  \brief adds a new color range between the limits specified in the struct passed
  \param gauge (MtxGaugeFace *) pointer to gauge
- \param range (MtxColorRange*) pointer to color range struct to copy
+ \param range (MtxWarningRange*) pointer to color range struct to copy
  \returns index of where this range is stored...
  */
-gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *range)
+gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *range)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	MtxColorRange * newrange = NULL;
+	MtxWarningRange * newrange = NULL;
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
 
 	g_object_freeze_notify (G_OBJECT (gauge));
-	newrange = g_new0(MtxColorRange, 1);
-	newrange = g_memdup(range,sizeof(MtxColorRange)); 
-	g_array_append_val(priv->c_ranges,newrange);
+	newrange = g_new0(MtxWarningRange, 1);
+	newrange = g_memdup(range,sizeof(MtxWarningRange)); 
+	g_array_append_val(priv->w_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return priv->c_ranges->len-1;
+	return priv->w_ranges->len-1;
 }
 
 
@@ -346,11 +346,11 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
-GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
+GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
-	return priv->c_ranges;
+	return priv->w_ranges;
 }
 
 
@@ -837,42 +837,42 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
  \brief changes a color range field by passing in an index 
  to the color range array and the field name to change
  \param gauge  pointer to gauge object
- \param index, index of the ColorRange
+ \param index, index of the WarningRange
  \param field,  enumeration of the field to change
  \param value, new value
  */
-void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField field, void * value)
+void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < CR_NUM_FIELDS);
+	g_return_if_fail (field < WR_NUM_FIELDS);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
-	c_range = g_array_index(priv->c_ranges,MtxColorRange *,index);
-	g_return_if_fail (c_range != NULL);
+	w_range = g_array_index(priv->w_ranges,MtxWarningRange *,index);
+	g_return_if_fail (w_range != NULL);
 	switch (field)
 	{
-		case CR_LOWPOINT:
-			c_range->lowpoint = *(gfloat *)value;
+		case WR_LOWPOINT:
+			w_range->lowpoint = *(gfloat *)value;
 			break;
-		case CR_HIGHPOINT:
-			c_range->highpoint = *(gfloat *)value;
+		case WR_HIGHPOINT:
+			w_range->highpoint = *(gfloat *)value;
 			break;
-		case CR_INSET:
-			c_range->inset = *(gfloat *)value;
+		case WR_INSET:
+			w_range->inset = *(gfloat *)value;
 			break;
-		case CR_LWIDTH:
-			c_range->lwidth = *(gfloat *)value;
+		case WR_LWIDTH:
+			w_range->lwidth = *(gfloat *)value;
 			break;
-		case CR_COLOR_DAY:
-			c_range->color[MTX_DAY] = *(GdkColor *)value;
+		case WR_COLOR_DAY:
+			w_range->color[MTX_DAY] = *(GdkColor *)value;
 			break;
-		case CR_COLOR_NITE:
-			c_range->color[MTX_NITE] = *(GdkColor *)value;
+		case WR_COLOR_NITE:
+			w_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
-		case CR_LAYER:
-			c_range->layer = *(gint *)value;
+		case WR_LAYER:
+			w_range->layer = *(gint *)value;
 			break;
 		default:
 			break;
@@ -945,18 +945,18 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
  \brief clears all color ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
-void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
+void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge)
 {
 	gint i = 0;
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	for (i=priv->c_ranges->len-1;i>=0;i--)
+	for (i=priv->w_ranges->len-1;i>=0;i--)
 	{
-		c_range = g_array_index(priv->c_ranges,MtxColorRange *, i);
-		priv->c_ranges = g_array_remove_index(priv->c_ranges,i);
-		g_free(c_range);
+		w_range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
+		priv->w_ranges = g_array_remove_index(priv->w_ranges,i);
+		g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(gauge);
@@ -1076,18 +1076,18 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index)
+void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index)
 {
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if (index < priv->c_ranges->len)
+	if (index < priv->w_ranges->len)
 	{
-		c_range = g_array_index(priv->c_ranges,MtxColorRange *, index);
-		priv->c_ranges = g_array_remove_index(priv->c_ranges,index);
-		if (c_range)
-			g_free(c_range);
+		w_range = g_array_index(priv->w_ranges,MtxWarningRange *, index);
+		priv->w_ranges = g_array_remove_index(priv->w_ranges,index);
+		if (w_range)
+			g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(gauge);

@@ -55,7 +55,7 @@ struct _MtxGaugeFacePrivate
         GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml
                                    *  parsing functions */
         GArray *t_blocks;       /*! Array of MtxTextBlock structs */
-        GArray *c_ranges;       /*! Array of MtxColorRange structs */
+        GArray *w_ranges;       /*! Array of MtxWarningRange structs */
         GArray *a_ranges;       /*! Array of MtxAlertRange structs */
         GArray *tick_groups;    /*! Array to contain the tick groups */
         GArray *polygons;       /*! Array to contain polygon defs */

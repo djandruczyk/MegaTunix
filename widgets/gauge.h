@@ -160,18 +160,18 @@ typedef enum
 }TgField;
 
 
-/* Color Range enumeration for the individual fields */
+/* Warning Range enumeration for the individual fields */
 typedef enum
 {
-	CR_LOWPOINT = 0,
-	CR_HIGHPOINT,
-	CR_COLOR_DAY,
-	CR_COLOR_NITE,
-	CR_LWIDTH,
-	CR_INSET,
-	CR_LAYER,
-	CR_NUM_FIELDS
-}CrField;
+	WR_LOWPOINT = 0,
+	WR_HIGHPOINT,
+	WR_COLOR_DAY,
+	WR_COLOR_NITE,
+	WR_LWIDTH,
+	WR_INSET,
+	WR_LAYER,
+	WR_NUM_FIELDS
+}WrField;
 
 /* Alert Range enumeration for the individual fields */
 typedef enum
@@ -217,7 +217,7 @@ typedef enum
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
-typedef struct _MtxColorRange		MtxColorRange;
+typedef struct _MtxWarningRange		MtxWarningRange;
 typedef struct _MtxAlertRange		MtxAlertRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
@@ -240,14 +240,14 @@ struct _MtxDispatchHelper
 };
 
 
-/*! \struct _MtxColorRange
+/*! \struct _MtxWarningRange
  * \brief
- * _MtxColorRange is a container struct that holds all the information needed
+ * _MtxWarningRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
  * of these structs as they are stored in a dynamic array and redrawn on
  * gauge background generation
  */
-struct _MtxColorRange
+struct _MtxWarningRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
@@ -456,12 +456,12 @@ gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
-/* Color Ranges */
-GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
-gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index);
-void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
+/* Warning Ranges */
+GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index, WrField field, void * value);
+gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *);
+void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index);
+void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge);
 
 /* Alert Ranges */
 GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
