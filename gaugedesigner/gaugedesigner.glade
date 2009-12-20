@@ -3,7 +3,7 @@
 
 <glade-interface>
 
-<widget class="GtkDialog" id="c_range_dialog">
+<widget class="GtkDialog" id="w_range_dialog">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Warning Range Creator</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -3804,7 +3804,7 @@ Scale</property>
 				      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				      <child>
-					<widget class="GtkViewport" id="color_range_viewport">
+					<widget class="GtkViewport" id="warning_range_viewport">
 					  <property name="visible">True</property>
 					  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
@@ -3830,7 +3830,7 @@ Scale</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <signal name="clicked" handler="create_color_span_event" last_modification_time="Wed, 14 Feb 2007 01:26:42 GMT"/>
+				      <signal name="clicked" handler="create_warning_span_event" last_modification_time="Wed, 14 Feb 2007 01:26:42 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">0</property>

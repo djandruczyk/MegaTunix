@@ -110,7 +110,7 @@ void reset_onscreen_controls(void)
 {
 	reset_text_controls();
 	reset_general_controls();
-	reset_onscreen_c_ranges();
+	reset_onscreen_w_ranges();
 	reset_onscreen_a_ranges();
 	reset_onscreen_tblocks();
 	reset_onscreen_tgroups();
@@ -122,7 +122,7 @@ void update_attributes(void)
 {
 	update_text_controls();
 	update_general_controls();
-	update_onscreen_c_ranges();
+	update_onscreen_w_ranges();
 	update_onscreen_a_ranges();
 	update_onscreen_tblocks();
 	update_onscreen_tgroups();

@@ -1,8 +1,8 @@
-#include "../include/defines.h"
+#include <defines.h>
 #include <events.h>
 #include <handlers.h>
 #include <loadsave.h>
-#include "../widgets/gauge.h"
+#include <gauge.h>
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
