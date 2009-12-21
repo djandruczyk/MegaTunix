@@ -1188,7 +1188,6 @@ gboolean focus_event(GtkWidget *widget, gpointer data)
 
 void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
-	printf("Fullscreen toggle\n");
 	if (fullscreen)
 	{
 		fullscreen = FALSE;
