@@ -1027,7 +1027,7 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 
 		minitable = gtk_table_new(1,4,FALSE);
 		points_table = minitable;
-		gtk_table_set_col_spacings(GTK_TABLE(minitable),0);
+		gtk_table_set_row_spacings(GTK_TABLE(minitable),0);
 		widget = gtk_scrolled_window_new(NULL,NULL);
 		gtk_widget_set_usize(widget,-1,120);
 		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(widget),minitable);
