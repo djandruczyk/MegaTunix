@@ -25,6 +25,7 @@ void reset_onscreen_polygons(void);
 void update_onscreen_polygons(void);
 gboolean alter_polygon_data(GtkWidget *, gpointer );
 gboolean remove_polygon(GtkWidget *, gpointer );
+GtkWidget *build_polygon(MtxPolygon *, gint );
 /* Prototypes */
 
 #endif
