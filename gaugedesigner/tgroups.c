@@ -162,7 +162,7 @@ void update_onscreen_tgroups()
 	{
 		tgroup = g_array_index(array,MtxTickGroup *, i);
 		subtable = build_tgroup(tgroup,i);
-		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
 
 	}
 	/* Scroll to end */

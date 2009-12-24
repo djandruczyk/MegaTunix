@@ -233,7 +233,7 @@ void update_onscreen_polygons()
 	{
 		poly = g_array_index(array,MtxPolygon *, i);
 		subtable = build_polygon(poly,i);
-		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
 	}
 	gtk_widget_show_all(table);
 	g_free(filename);
@@ -900,26 +900,24 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 	if (poly->type == MTX_ARC)
 	{
 		/* Arc Tab */
-		subtable = gtk_table_new(5,4,FALSE);
-		gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+		subtable = gtk_table_new(2,2,FALSE);
+		gtk_table_set_col_spacings(GTK_TABLE(subtable),10);
+		gtk_table_set_row_spacings(GTK_TABLE(subtable),3);
 		label = gtk_label_new("Arc Attributes.");
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
 		gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
-		widget = gtk_label_new("X Origin");
-		gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_EXPAND,0,0,0);
-		widget = gtk_label_new("Y Origin");
-		gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND,0,0,0);
-		widget = gtk_label_new("Width");
-		gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,GTK_EXPAND,0,0,0);
-		widget = gtk_label_new("Height");
-		gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_EXPAND,0,0,0);
 
+		minitable = gtk_table_new(2,3,FALSE);
+		gtk_table_set_col_spacings(GTK_TABLE(minitable),5);
+		gtk_table_attach(GTK_TABLE(subtable),minitable,0,1,0,1,0,0,0,0);
+		widget = gtk_label_new("Origin");
+		gtk_table_attach(GTK_TABLE(minitable),widget,1,3,0,1,GTK_EXPAND,0,0,0);
 		widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_X));
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", ((MtxArc *)poly->data)->x, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,0,1,1,2,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,1,2,1,2,0,0,0,0);
 		x_spin = widget;	
 		x_origin = widget;	
 
@@ -928,25 +926,22 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", ((MtxArc *)poly->data)->y, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,1,2,1,2,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,2,3,1,2,0,0,0,0);
 		y_spin = widget;	
 		y_origin = widget;	
 
-		widget = gtk_button_new();
+		widget = gtk_button_new_with_label("Edit");
 		OBJ_SET(widget,"x_spin",x_spin);
 		OBJ_SET(widget,"y_spin",y_spin);
-		hbox = gtk_hbox_new(FALSE,0);
-		gtk_container_add(GTK_CONTAINER(widget),hbox);
-		img = gtk_image_new_from_stock("gtk-edit",GTK_ICON_SIZE_MENU);
-		gtk_box_pack_start(GTK_BOX(hbox),img,FALSE,FALSE,0);
-		label = gtk_label_new("Edit");
-		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(grab_coords_event),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,0,2,2,3,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,2,0,GTK_EXPAND|GTK_FILL,0,0);
 
-
-		widget = gtk_spin_button_new_with_range(0.0,2.0,0.001);
-		x_spin = widget;	
+		minitable = gtk_table_new(2,3,FALSE);
+		gtk_table_set_col_spacings(GTK_TABLE(minitable),5);
+		gtk_table_attach(GTK_TABLE(subtable),minitable,1,2,0,1,0,0,0,0);
+		widget = gtk_label_new("Width    and    Height");
+		gtk_table_attach(GTK_TABLE(minitable),widget,1,3,0,1,GTK_EXPAND,0,0,0);
+		widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
 		OBJ_SET(widget,"x_o_spin",x_origin);
 		OBJ_SET(widget,"y_o_spin",y_origin);
 		OBJ_SET(widget,"relative", GINT_TO_POINTER(TRUE));
@@ -954,53 +949,50 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", ((MtxArc *)poly->data)->width, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,2,3,1,2,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,1,2,1,2,0,0,0,0);
+		x_spin = widget;	
 
-		widget = gtk_spin_button_new_with_range(0.0,2.0,0.001);
-		y_spin = widget;	
+		widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
+		OBJ_SET(widget,"relative", GINT_TO_POINTER(TRUE));
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_HEIGHT));
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", ((MtxArc *)poly->data)->height, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,3,4,1,2,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,2,3,1,2,0,0,0,0);
+		y_spin = widget;	
 
-		widget = gtk_button_new();
+		widget = gtk_button_new_with_label("Edit");
 		OBJ_SET(widget,"x_spin",x_spin);
 		OBJ_SET(widget,"y_spin",y_spin);
-		hbox = gtk_hbox_new(FALSE,0);
-		gtk_container_add(GTK_CONTAINER(widget),hbox);
-		img = gtk_image_new_from_stock("gtk-edit",GTK_ICON_SIZE_MENU);
-		gtk_box_pack_start(GTK_BOX(hbox),img,FALSE,FALSE,0);
-		label = gtk_label_new("Edit");
-		gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 		g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(grab_coords_event),NULL);
-		gtk_table_attach(GTK_TABLE(subtable),widget,2,4,2,3,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,2,0,GTK_EXPAND|GTK_FILL,0,0);
 
-		widget = gtk_hseparator_new();
-		gtk_table_attach(GTK_TABLE(subtable),widget,0,4,3,4,0,0,0,2);
-
+		minitable = gtk_table_new(1,5,FALSE);
+		gtk_table_set_col_spacings(GTK_TABLE(minitable),5);
+		gtk_table_attach(GTK_TABLE(subtable),minitable,0,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 		widget = gtk_label_new("Start Angle");
-		gtk_table_attach(GTK_TABLE(subtable),widget,0,1,4,5,0,0,0,0);
-		widget = gtk_label_new("Sweep Angle");
-		gtk_table_attach(GTK_TABLE(subtable),widget,2,3,4,5,0,0,0,0);
+		g_object_set(G_OBJECT(widget),"xalign", 1.0, NULL);
 
-		align = gtk_alignment_new(0.0,0.5,0.0,1.0);
-		gtk_table_attach(GTK_TABLE(subtable),align,1,2,4,5,GTK_EXPAND|GTK_FILL,0,0,0);
+		gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+		widget = gtk_label_new(NULL);
+		gtk_table_attach(GTK_TABLE(minitable),widget,2,3,0,1,GTK_EXPAND,0,0,0);
+		widget = gtk_label_new("Sweep Angle");
+		g_object_set(G_OBJECT(widget),"xalign", 1.0, NULL);
+		gtk_table_attach(GTK_TABLE(minitable),widget,3,4,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+
 		widget = gtk_spin_button_new_with_range(-360.0,360.0,0.1);
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_START_ANGLE));
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.1, "digits", 1, "numeric", TRUE, "value", ((MtxArc *)poly->data)->start_angle, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_container_add(GTK_CONTAINER(align),widget);
+		gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_EXPAND,0,0,0);
 
-		align = gtk_alignment_new(0.0,0.5,0.0,1.0);
-		gtk_table_attach(GTK_TABLE(subtable),align,3,4,4,5,GTK_EXPAND|GTK_FILL,0,0,0);
 		widget = gtk_spin_button_new_with_range(-360.0,360.0,0.1);
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_SWEEP_ANGLE));
 		OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 		g_object_set(G_OBJECT(widget),"climb-rate", 0.1, "digits", 1, "numeric", TRUE, "value", ((MtxArc *)poly->data)->sweep_angle, NULL);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
-		gtk_container_add(GTK_CONTAINER(align),widget);
+		gtk_table_attach(GTK_TABLE(minitable),widget,4,5,0,1,GTK_EXPAND,0,0,0);
 	}
 	if (poly->type == MTX_GENPOLY)
 	{
@@ -1080,5 +1072,7 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 
 		}
 	}
+	widget = gtk_hseparator_new();
+	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 	return table;
 }

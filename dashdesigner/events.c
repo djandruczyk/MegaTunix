@@ -780,6 +780,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 		g_free(tmpbuf);
 	
 		gtk_entry_set_text(GTK_ENTRY(entry),vector[0]);
+		gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
 		g_strfreev(vector);
 		gtk_table_attach(GTK_TABLE(table),entry,0,1,0,1,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 

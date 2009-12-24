@@ -387,7 +387,7 @@
 
 <widget class="GtkWindow" id="property_editor_window">
   <property name="width_request">275</property>
-  <property name="height_request">185</property>
+  <property name="height_request">320</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Gauge DataSources</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
