@@ -391,32 +391,15 @@ void update_gauge_position (MtxGaugeFace *gauge)
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
 	if (!alert)
-	{
-		if (1)
-		
+		/* Not in alert status,  copy from bg_pixmap to current pixmap */
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->bg_pixmap,
 				0,0,
 				0,0,
 				widget->allocation.width,widget->allocation.height);
-		else
-		{
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->bg_pixmap,
-				priv->needle_bounding_box.x,priv->needle_bounding_box.y,
-				priv->needle_bounding_box.x,priv->needle_bounding_box.y,
-				priv->needle_bounding_box.width,priv->needle_bounding_box.height);
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->bg_pixmap,
-				priv->value_bounding_box.x,priv->value_bounding_box.y,
-				priv->value_bounding_box.x,priv->value_bounding_box.y,
-				priv->value_bounding_box.width,priv->value_bounding_box.height);
-		}
-	}
 	else
+		/* In ALERT status, copy from tmp_pixmap to current pixmap instead */
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->tmp_pixmap,
@@ -471,7 +454,7 @@ cairo_jump_out_of_alerts:
 		priv->value_bounding_box.y = priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius)-extents.height;
 		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
 		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
-		//printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height);
+		/*printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height); */
 		g_free(message);
 
 		cairo_stroke (cr);
@@ -502,7 +485,7 @@ cairo_jump_out_of_alerts:
 				priv->colors[GAUGE_COL_NEEDLE_NITE].green/65535.0,
 				priv->colors[GAUGE_COL_NEEDLE_NITE].blue/65535.0);
 	}
-	cairo_set_line_width (cr, 1);
+	cairo_set_line_width (cr, 0);
 
 	n_width = priv->needle_width * priv->radius;
 	n_tail = priv->needle_tail * priv->radius;
@@ -512,35 +495,39 @@ cairo_jump_out_of_alerts:
 	xc = priv->xc;
 	yc = priv->yc;
 
-	priv->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
-	priv->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
-	priv->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
-	priv->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
+	/* Needle background,  points 0 and 1 are each "side" of the needle tip
+	 * Points 2 and 5 are the points on either side of the pivot and
+	 * points 3 and 4 are the points on either side of the needle's tail
+	 */
+	priv->needle_coords[0].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * -sin(needle_pos)));
+	priv->needle_coords[0].y = yc + (((n_tip) * sin (needle_pos)) + ((tip_width) * cos(needle_pos)));
+	priv->needle_coords[1].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * sin(needle_pos)));
+	priv->needle_coords[1].y = yc + (((n_tip) * sin (needle_pos)) + ((tip_width) * -cos(needle_pos)));
 
 	if (n_tail < 0)
 	{
-		priv->needle_coords[2].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * sin(needle_pos));
-		priv->needle_coords[2].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * -cos(needle_pos));
+		/* "Hidden Pivot" needle, where pivot point is invisible */
+		priv->needle_coords[2].x = xc + (((n_tail) * -cos (needle_pos)) + ((n_width) * sin(needle_pos)));
+		priv->needle_coords[2].y = yc + (((n_tail) * -sin (needle_pos)) + ((n_width) * -cos(needle_pos)));
+		priv->needle_coords[3].x = priv->needle_coords[2].x;
+		priv->needle_coords[3].y = priv->needle_coords[2].y;
+		priv->needle_coords[4].x = priv->needle_coords[2].x;
+		priv->needle_coords[4].y = priv->needle_coords[2].y;
+		priv->needle_coords[5].x = xc + (((n_tail) * -cos (needle_pos)) + ((n_width) * -sin(needle_pos)));
+		priv->needle_coords[5].y = yc + (((n_tail) * -sin (needle_pos)) + ((n_width) * cos(needle_pos)));
 	}
 	else
 	{
-		priv->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
-		priv->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
-	}
+		/* Normal Needle */
+		priv->needle_coords[2].x = xc + ((n_width) * sin(needle_pos));
+		priv->needle_coords[2].y = yc + ((n_width) * -cos(needle_pos));
 
-	priv->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
-	priv->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
-	priv->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
-	priv->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
-	if (n_tail < 0)
-	{
-		priv->needle_coords[5].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * -sin(needle_pos));
-		priv->needle_coords[5].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * cos(needle_pos));
-	}
-	else
-	{
-		priv->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
-		priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+		priv->needle_coords[3].x = xc + (((n_tail) * -cos (needle_pos)) + ((tail_width) * sin (needle_pos)));
+		priv->needle_coords[3].y = yc + (((n_tail) * -sin (needle_pos)) + ((tail_width) * -cos (needle_pos)));
+		priv->needle_coords[4].x = xc + (((n_tail) * -cos (needle_pos)) + ((tail_width) * -sin (needle_pos)));
+		priv->needle_coords[4].y = yc + (((n_tail) * -sin (needle_pos)) + ((tail_width) * cos (needle_pos)));
+		priv->needle_coords[5].x = xc + ((n_width) * -sin (needle_pos));
+		priv->needle_coords[5].y = yc + ((n_width) * cos (needle_pos));
 	}
 	priv->needle_polygon_points = 6;
 	calc_bounding_box(priv->needle_coords,priv->needle_polygon_points, &priv->needle_bounding_box);
@@ -559,7 +546,7 @@ cairo_jump_out_of_alerts:
 
 
 /*!
- \brief handles configure events whe nthe gauge gets created or resized.
+ \brief handles configure events when the gauge gets created or resized.
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
@@ -818,6 +805,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	/* The little corner resizer boxes... */
 	if (priv->show_drag_border)
 	{
+		/* Fill 4 rectangles with black */
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -830,11 +818,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_rectangle (cr,
 				priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,
 				DRAG_BORDER, DRAG_BORDER);
-	}
-	cairo_fill(cr);
-	cairo_set_source_rgb (cr, 0.9,0.9,0.9);
-	if (priv->show_drag_border)
-	{
+		cairo_fill(cr);
+		cairo_set_source_rgb (cr, 0.9,0.9,0.9);
+		/* draw light grey border around 4 rectangles */
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -847,8 +833,8 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_rectangle (cr,
 				priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,
 				DRAG_BORDER, DRAG_BORDER);
+		cairo_stroke(cr);
 	}
-	cairo_stroke(cr);
 	/* Black out the rest of the gauge */
 	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
@@ -958,7 +944,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 			angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
 			angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
-			/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
+			/*printf("gauge warning range should be from %f, to %f of full scale\n",angle1, angle2);*/
 			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 			cairo_set_line_width (cr, lwidth);
 			if (priv->rotation == MTX_ROT_CW)
@@ -1397,7 +1383,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	//printf("motion in gauge, returning false\n");
+	/*printf("motion in gauge, returning false\n");*/
 	return FALSE;
 }
 					       

@@ -607,7 +607,7 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 			tblock->text = g_strdup(value);
 			break;
 		case TB_LAYER:
-			tblock->layer = *(gint *)value;
+			tblock->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;
@@ -702,7 +702,7 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 			tgroup->sweep_angle = *(gfloat *)value;
 			break;
 		case TG_LAYER:
-			tgroup->layer = *(gint *)value;
+			tgroup->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;
@@ -821,7 +821,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			}
 			break;
 		case POLY_LAYER:
-			poly->layer = *(gint *)value;
+			poly->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;
@@ -872,7 +872,7 @@ void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField 
 			w_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case WR_LAYER:
-			w_range->layer = *(gint *)value;
+			w_range->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;
@@ -929,7 +929,7 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 			a_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
 		case ALRT_LAYER:
-			a_range->layer = *(gint *)value;
+			a_range->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;

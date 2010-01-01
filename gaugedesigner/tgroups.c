@@ -209,6 +209,7 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 	switch (field)
 	{
 		case TG_FONT_SCALE:
+		case TG_LAYER:
 		case TG_TEXT_INSET:
 		case TG_MAJ_TICK_INSET:
 		case TG_MIN_TICK_INSET:
@@ -569,6 +570,23 @@ GtkWidget * build_tgroup(MtxTickGroup *tgroup, gint index)
 	g_object_set(G_OBJECT(sweep),"climb-rate", 0.1, "digits", 1, "numeric", TRUE, "value", tgroup->sweep_angle, NULL);
 	g_signal_connect(G_OBJECT(start),"value-changed",G_CALLBACK(alter_tgroup_data),NULL);
 	g_signal_connect(G_OBJECT(sweep),"value-changed",G_CALLBACK(alter_tgroup_data),NULL);
+
+	/* Layer Tab: Layer */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	label = gtk_label_new("Layer");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
+
+	widget = gtk_label_new("Layer:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TG_LAYER));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)tgroup->layer);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tgroup_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);
 
 	widget = gtk_hseparator_new();
 	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_FILL,0,0,0);

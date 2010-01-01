@@ -302,6 +302,7 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 		case POLY_SWEEP_ANGLE:
 		case POLY_NUM_POINTS:
 		case POLY_LINEWIDTH:
+		case POLY_LAYER:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
@@ -1072,6 +1073,23 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 
 		}
 	}
+	/* Layer Tab: Layer */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	label = gtk_label_new("Layer");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
+
+	widget = gtk_label_new("Layer:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_LAYER));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)poly->layer);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_polygon_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);
+
 	widget = gtk_hseparator_new();
 	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 	return table;

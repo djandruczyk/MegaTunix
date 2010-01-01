@@ -160,6 +160,7 @@ gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 	switch (field)
 	{
 		case TB_FONT_SCALE:
+		case TB_LAYER:
 		case TB_X_POS:
 		case TB_Y_POS:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
@@ -231,7 +232,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 
 	notebook = gtk_notebook_new();
 	gtk_table_attach(GTK_TABLE(table),notebook,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
-	/* Top row: text, color buttons */
+	/* text, color buttons */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
 	label = gtk_label_new("Text & Color");
@@ -259,7 +260,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tblock_data),NULL);
 	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_FILL,0,0,0);
 
-	/* Middle row: font, font scale spinner */
+	/* font, font scale spinner */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
 	label = gtk_label_new("Font");
@@ -338,6 +339,23 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(grab_coords_event),NULL);
 	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+  
+	/* Layer Tab: Layer */
+	subtable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
+	label = gtk_label_new("Layer");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
+	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
+
+	widget = gtk_label_new("Layer:");
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_LAYER));
+	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
+	g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)tblock->layer);
+	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);
 
 	widget = gtk_hseparator_new();
 	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_FILL,0,0,0);
