@@ -1,6 +1,6 @@
 [global]
-description=Object data map for MS2 Accel Wizard
-tab_name=_Accel Wizard
+description=Object data map for MS2 Accel Enrichments
+tab_name=_Accel Enrich
 id_prefix=ae_
 groups=defaults
 
