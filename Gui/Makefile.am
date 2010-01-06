@@ -26,8 +26,28 @@ gui_files = 	README \
 		logviewer.datamap \
 		memviewer.glade \
 		memviewer.datamap \
+		ms2-accel.glade \
+		ms2-accel.datamap \
+		ms2-e-accel.glade \
+		ms2-e-accel.datamap \
+		ms2-alpha-n_6x6x1.glade \
+		ms2-alpha-n_6x6x1.datamap \
+		ms2-globals.glade \
+		ms2-globals.datamap \
+		ms2-idle_ego_rev.glade \
+		ms2-idle_ego_rev.datamap \
+		ms2-ignition.glade \
+		ms2-ignition.datamap \
+		ms2-knock_dwell.glade \
+		ms2-knock_dwell.datamap \
+		ms2-misc-fuel.glade \
+		ms2-misc-fuel.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
+		ms2-e-toothtrigger.glade \
+		ms2-e-toothtrigger-2.1.x.datamap \
+		ms2-xtau.glade \
+		ms2-xtau.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \
@@ -59,8 +79,8 @@ gui_files = 	README \
 		msns-e-wheeldecode.glade \
 		msns-e-wheeldecode-029yx.glade \
 		msns-e-wheeldecode-029x.datamap \
-		msns-e-wheeldecode-hr_10x.glade \
 		msns-e-wheeldecode-hr_10x.datamap \
+		mtxloader.glade \
 		raweditor.glade \
 		raweditor.datamap \
 		rotary-trail-029x.datamap \
