@@ -18,19 +18,9 @@ NOTES regarding the files:
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
 keys themselves are not, as the string compare functions are case insensitive.
 
-2. There should be the same number of key's and key_types. The key is any text
-The key_type is special text as show below:
-  Valid key_types are:
-	_INT_		Integer value
-	_ENUM_		String represnetation of an enumeration, translated via
-			a call to "translate_string()"
-	_STRING_	A literal string. (used for binding text to a widget
-			that changes (like a temperature label))
-	_BOOL_		A boolean, valid values are "TRUE" and "FALSE"
+2. There is no limit to the number of keys that you can bind to a widget.
 
-3. There is no limit to the number of keys that you can bind to a widget.
-
-4. Most commonly used keys are:
+3. Most commonly used keys are:
 	applicable_firmwares (string) comma sepertated list of firmware names
 			(from interrogation profiles) that this realtime map 
 			is applicable to.  This is a new addition, after
@@ -90,19 +80,18 @@ expr_types an contain one of three choices.
  1. _VE_VAR_, meaning VE variable, which requires a page/offset 
  to resolve it. 
  2. _VE_EMB_BIT_, meaning VE_embedded bit, which requires page,offset,
- bitmask, and bitshift to resolve completely
+  and bitmask to resolve completely
  3. _RAW_VAR_ meaning a raw variable, which only requires an offset to
  resolve.
 The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  If expr_symbols contains "cyls,reqfuel"
 and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
-be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
+be searched for. "cyls_page","cyls_offset","cyls_bitmask",
 "reqfuel_page" and "reqfuel_offset". 
 	
 	*_page		(integer) page in ecu that this control refers to
 	*_offset	(integer) offset from the beginning of said page that
 			this control refers to. 
-	*_bitshift	(integer) the starting point in a bitfield for bitval
 	*_bitmask	(integer) the bitmask of bitval..
 
 	lookuptable	(string) String name of the lookuptable to use to
@@ -132,7 +121,6 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_vars
 	*_bitmask	(integer) bitmask to mask value at page,offset
-	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
 
 NOTE on "depend_on":

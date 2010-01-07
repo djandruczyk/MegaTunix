@@ -7,126 +7,100 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
 page=0
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
 handler=_READ_VE_CONST_
-page=0
 bind_to_list=get_data_buttons
 
 [burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
 handler=_BURN_MS_FLASH_
-page=0
 bind_to_list=burners
 
 #----- Widgets ----------------------------------------------------------------
 
 [idle_timing_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=idle_control,spark_controls
 
 [main_vbox1]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=idle_control
 
 [closed_loop_idle_params_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 
 [warmup_idle_params_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=warmup_idle_controls,pwm_idle_controls
 
 [pwm_idle_params_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=pwm_idle_controls
 
 #----- Labels ----------------------------------------------------------------
 
 [idle_active_when_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=pwm_idle_controls
 
 [warmup_ctrl_frame_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=warmup_idle_controls,pwm_idle_controls
 
 [closed_loop_idle_frame_title]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=cloop_idle_controls
 
 [pwm_idle_controls_frame_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=pwm_idle_controls
 
+[dashport_label]
+keys=bind_to_list
+bind_to_list=cloop_idle_controls,pwm_idle_controls
+
 [bng_idle_cutoff_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
 c_label=Fast Idle Cutoff Temp (\302\260C.)
 f_label=Fast Idle Cutoff Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature,bng_idle_controls
 
 [w_fast_idle_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
 c_label=Fast Idle (cold) Temp (\302\260C.)
 f_label=Fast Idle (cold) Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [w_slow_idle_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
 c_label=Slow Idle (hot) Temp (\302\260C.)
 f_label=Slow Idle (hot) Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [fast_idle_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
 c_label=Fast Idle (cold) Temp (\302\260C.)
 f_label=Fast Idle (cold) Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [slow_idle_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
+keys=c_label,f_label,temp_dep,bind_to_list
 c_label=Slow Idle (hot) Temp (\302\260C.)
 f_label=Slow Idle (hot) Temp (\302\260F.)
 temp_dep=TRUE
@@ -134,148 +108,96 @@ bind_to_list=temperature
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[pwm_idle_mode_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[idle_mode_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
 page=8
 offset=16
-bitval=1
-bitshift=0
+bitvals=0,1
 bitmask=1
-toggle_groups=pwm_idle_controls,bng_idle_controls
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information.
+choices=B&G On/Off,PWM
+toggle_groups=bng_idle_controls,pwm_idle_controls
+tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information. The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, either it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
 
-[bng_idle_mode_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[idle_when_combo]
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
 page=8
 offset=16
-bitval=0
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, either it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
-
-[warmup_idle_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=8
-offset=16
-bitshift=1
-bitval=1
+bitvals=1,2
 bitmask=6
+choices=Warmup Only,Closed Loop Only
 toggle_groups=warmup_idle_controls,cloop_idle_controls
-group_states=ENABLED,DISABLED
 bind_to_list=pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information. The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, either it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
 
-[cloop_idle_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
-page=8
-offset=16
-bitshift=1
-bitval=2
-bitmask=6
-bind_to_list=pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 
 #----- Entries ----------------------------------------------------------
 
 [bng_fast_idle_cutoff_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 offset=186
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,bng_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the temp at which if the engine is below, the fast idle output is active, and if the engine temp is above the fast idle output is shutoff.
 
 [fast_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=17
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,pwm_idle_controls,cloop_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the temp at which the fast idle RPM is set to.  If engine temp is below this temp the fast idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [slow_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=18
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,pwm_idle_controls,cloop_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the temp at which the slow RPM is set to.  If engine temp is above this temp the slow idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [w_fast_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=17
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,warmup_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the temp at which the fast idle RPM is set to.  If engine temp is below this temp the fast idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [w_slow_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=18
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,warmup_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the temp at which the slow RPM is set to.  If engine temp is above this temp the slow idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [idle_lowtemp_dc_entry]
-keys=page,offset,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=0
 bind_to_list=warmup_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the Low (cold) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_hightemp_dc_entry]
-keys=page,offset,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=6
 bind_to_list=warmup_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,raw_lower,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=11
 raw_lower=0
@@ -285,33 +207,24 @@ reverse_keys=TRUE
 dl_conv_expr=10000/x
 ul_conv_expr=10000/x
 bind_to_list=pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the frequency in hertz that the ECU will drive the PWM idle valve. Range of 39hz to 10khz. PgUp/PgDown/+/- can be used to navigate.  Control will jump to nearest point.
 
 [idle_crankdc_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=2
 bind_to_list=pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This is the Dutycycle to pulse the PWM idle valve during engine crankover (i.e. whilst attempting to start the engine)
 
 [idle_tps_thresh_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=21
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The Throttle has to be set at this value OR BELOW for idle control to become active.  This value is in ADC counts for the TPS input.
 
 [idle_restore_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
 page=8
 offset=14
 dl_conv_expr=x/10
@@ -319,217 +232,161 @@ ul_conv_expr=x*10
 raw_lower=1
 raw_upper=60
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Needs work
 
 [dashpot_settle_time_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=3
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The amount of time the dashpot takes to settle to the idle target. Units are in seconds
 
 [dashpot_add_dc_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=4
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The Amount of dutycycle to increase the PWM idle by  when dashpoit is active. (decel anti-stall measure)
 
 [deadband_range_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=9
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The amount of range the idle is allow to fluctuate without PMW idle trying to counteract it. (to minimize overcompensation and/or hunting)
 
 [upper_limit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=8
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+ upper limit, then recovery time is fast recovery below, If current RPM equals target + lower limit, then recovery time is slow receovery time. 
 
 [lower_limit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=7
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [fast_recovery_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=13
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [slow_recovery_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=1
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [closure_speed_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=10
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Controls how fast the PWM Idle valve can close in seconds.
 
 [startup_delay_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=12
 precision=2
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=I have no idea WTF this control does.
 
 [fast_idle_speed_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=19
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Fast IDLE RPM (i.e. the RPM we try to get the engineto run at when it's COLD)
 
 [slow_idle_speed_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=20
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Slow IDLE RPM (i.e. the RPM we try to get the engineto run at when it's HOT)
 
 [idle_min_dc_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=5
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=Minimum dutycycle. Needs more explanation
 
 [idle_closed_dc_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,tooltip
 page=8
 offset=15
 bind_to_list=cloop_idle_controls,pwm_idle_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=DutyCycle at which point the PWM valve can be considered closed. Odds are due to print pressure inside the valve it make take DC values of 20% or more to lift the valve off it's seat.
 
 [idle_advance_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 page=3
 offset=174
 precision=2
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The Timing advance to use at idle if the next 3 conditions match. Set to -10 to disable this function and use the sparkmap entirely. Useful to keep a stable timing at idle to minimize hunting.
 
 [idle_tps_entry]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,tooltip
 page=3
 offset=175
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The TPS threshold that can NOT be exceeded to enable Idle timing advance override. Set to this to a value to slighly higher than the TPS value at idle.
 
 [idle_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
 page=3
 offset=176
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The RPM Value which the engine needs to be BELOW to enable fixed idle timing.
 
 [idle_clt_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=3
 offset=177
 dl_conv_expr=x+40
 ul_conv_expr=x-40
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 temp_dep=true
 bind_to_list=temperature
 tooltip=The CLT Value which the engine needs to be ABOVE to enable fixed idle timing.
 
 [idle_wait_entry]
-keys=page,offset,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_upper,tooltip
 page=3
 offset=178
 raw_upper=5
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The TPS threshold that can NOT be exceeded to enable Idle timing advance override. Set to this to a value to slighly higher than the TPS value at idle.
 

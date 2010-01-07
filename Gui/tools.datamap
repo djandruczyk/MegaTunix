@@ -7,93 +7,37 @@ groups=defaults
 
 [defaults]
 keys=page,size
-key_types=_INT_,_ENUM_
 page=0
 size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 
 [tools_import_vex_button]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
+keys=tooltip
 tooltip=VEX Import is used to load VEtables that were exported with the VEX export.  It can also accept MegaTune vex files and those from mstweek3K.  NOTE: On firmwares that use more that one table per page, like MSnS-Extra and MS-II, the stock VEX format can't handle that as there isn't a field to define the table number.  MegaTunix gets around this by embedding the Table number into the comment field.  The Table numbers come from the interrogation profile for the ECU so they are likely to be different than ones from something like megatune. In this case you may need to edit the file to ensure it is loaded to the write location.  After VEX import and validation, the data is swritten to the ECU, burnt to flash and the Gui updates all pages (which can take a few seconds, see the titlebar for updates..)
 
 [tools_export_vex_button]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
+keys=tooltip
 tooltip=VEX Export is used to export VEtables to disk in a format acceptable by MegaTune and MStweek3K.  NOTE: On firmwares that use more that one table per page, like MSnS-Extra and MS-II, the stock VEX format can't handle that very well as there isn't a field to define the table number.  MegaTunix gets around this by embedding the Table number into the comment field.  The Table numbers come from the interrogation profile for the ECU so they are likely to be different than ones from something like megatune.  In this case you may need to edit the file to ensure it is loaded to the write location.
 
 [tools_undo_vex_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler
 handler=_REVERT_TO_BACKUP_
-page=0
 tooltip=The undo VEX load button does exactly as it says.  If you happened to load an incorrect or corrupt VEX file, this button will revert to the previous settings, send them to the ECU and burn the ECU flash.
 
 [tools_backup_button]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
+keys=tooltip
 tooltip=Backup All ECU settings prompts you for a filename and stores the values of ALL ECU settings in that file in a CLEAN ASCII format, which is human readable and easily parsed by 3rd party programs, unlike closed format binary files from other tuning softwares.
 
 [tools_restore_button]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
+keys=tooltip
 tooltip=Restore All ECU settings prompts you for a filename and reads it, validates it for the currently running firmware and writes all settings to the ECU and burns flash when complete.  NOTE: This will ONLY accept MegaTunix ECU backup files,  MSQ files are NOT SUPPORTED, as they are binary, closed source, and there are not cross platform compatible.
-
-[load_firmware_button]
-keys=page,tooltip
-key_types=_INT_,_STRING_
-page=0
-tooltip=Prompts you for a .s19 file to load to the ECU also providing the option to change thje CLT/IAT lookuptables as needed.
-
-[download_fw_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_DOWNLOAD_FIRMWARE_
-page=0
-tooltip=Sends the newly loaded (and modified if request) firmware to the ECU
-
-[enter_iat_sensor_button]
-keys=handler,page,sensor,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
-handler=_ENTER_SENSOR_INFO_
-page=0
-sensor=IAT
-tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
-
-[enter_clt_sensor_button]
-keys=handler,page,sensor,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
-handler=_ENTER_SENSOR_INFO_
-page=0
-sensor=CLT
-tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
-
-[use_alt_iat_check_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_USE_ALT_IAT_
-page=0
-tooltip=Enables the entering of new parameters for the IAT sensor
-
-[use_alt_clt_check_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_USE_ALT_CLT_
-page=0
-tooltip=Enables the entering of new parameters for the CLT sensor
 
 
 #----- Textview ----------------------------------------------------
 
 [tools_view]
-keys=page,create_tags
-key_types=_INT_,_STRING_
-page=0
+keys=create_tags
 create_tags=warning,info
 warning=foreground,red
 info=foreground,dark green

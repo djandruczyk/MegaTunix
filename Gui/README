@@ -26,9 +26,8 @@ attempt to match what it recorded with the profile,  once an exact match is
 found it will read a list of tab names to load from the interrogation profile 
 and load those tabs followed by calling the "bind_data()" function for each
 widget in the glade definition.  bind_data() looks inside the datamap file 
-for a section named after the widget, and proceeds to read the "keys" and 
-"key_types" fields from that section.  A check is run to make sure there are
-the same number of keys and key_types defined, and then each one of the keys
+for a section named after the widget, and proceeds to read the "keys"
+field from that section.  and then each one of the keys
 are loaded and bound to the widget using the g_object_set_data() call.  This
 is done because all of the signal handlers throughout megatunix extract that
 data to make apprpriate decisions about handling data.
@@ -50,17 +49,9 @@ NOTES regarding the datamap files:
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
 keys themselves are not, as the string compare functions are case insensitive.
 
-2. Valid key_types are:
-	_INT_		Integer value
-	_ENUM_		String represnetation of an enumeration, translated via
-			a call to "translate_string()"
-	_STRING_	A literal string. (used for binding text to a widget
-			that changes (like a temperature label))
-	_BOOL_		A boolean, valid values are "TRUE" and "FALSE"
+2. There is no limit to the number of keys that you can bind to a widget.
 
-3. There is no limit to the number of keys that you can bind to a widget.
-
-4. Most commonly used keys are:
+3. Most commonly used keys are:
 	group		(string) Points to a section to get additional 
 			params from. See notes above regarding groups
 	page		(integer) page in ecu that this control refers to
@@ -78,7 +69,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			config bitfield (linked to the control that uses this
 			parameter)
 	bitval		(integer) the value of part of a bitfield (see below)
-	bitshift	(integer) the starting point in a bitfield for bitval
 	bitmask		(integer) the bitmask of bitval..
 	temp_dep	(boolean) Temperature dependant widget (flag)
 	label		(string)  normal label to use (See "swap_labels")
@@ -97,7 +87,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_Vars)
 	*_bitmask	(integer) bitmask to mask value at page,offset
-	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
 	swap_labels	(comma seperated string list). List of widget names OR
 			GROUPNAMES (created with bind_to_list) to
@@ -172,8 +161,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 			specific. (Specified in the interrogation profile)
 			Used primarily for status indicators using data 
 			from the realtime variables datasources...
-	post_function	(string) This is the textual name of a pre-existing 
-			function within megatunix that will be ran after the
+	post_functions	(string) This is the textual list of pre-existing 
+			functions within megatunix that will be ran after the
 			tab is loaded and the datamap has been processed. The
 			function will take no arguments and return nothing.
 			This is used mainly for hybrid tabs that have their
@@ -189,9 +178,9 @@ NOTE: regaring expr_symbols and expr_types:
 	The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  IF expr_symbols contains "cyls,reqfuel"
 and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
-be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
+be searched for. "cyls_page","cyls_offset","cyls_bitmask".
 "reqfuel_page" and "reqfuel_offset". (Embedded bitfields need, the page,offset
-bitmask and bitshift to be resolved completely), VE_VAR's ony need the page 
+and bitmask to be resolved completely), VE_VAR's ony need the page 
 and offset to be resolved.
 completely.
 
@@ -200,12 +189,11 @@ HOW Bitfields are used:
 which is either a toggle (two choices) or radio (multiple choices) 
 or a spinbutton in which a numerical value is stored into a bitfield 
 (num_cylinders, etc..)  For buttons, in the datamap file we use bitval, 
-bitmask, and bitshift.
+and bitmask.
 
 When clicking a button, what megatunix  does is retrieve the byte at the 
 page/offset set by that control, mask off the other bits in that byte with
-the bitmask. (byte & bitmask)  After this the new value is shifted by
-the "bitshift" value and copied into the byte.
+the bitmask. (byte & bitmask)and set the new bits appropriately
 
 When updating the button after reading the data from the ECU, we mask it and 
 then shift it.  

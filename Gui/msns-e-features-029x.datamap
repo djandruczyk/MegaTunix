@@ -7,694 +7,280 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_upper
-key_types=_INT_,_ENUM_,_INT_
+keys=page,size,raw_lower,raw_upper,dl_type,handler
 page=0
 size=_U08_
+raw_lower=0
 raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
 handler=_READ_VE_CONST_
-page=0
 bind_to_list=get_data_buttons
 
 [burn_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,bind_to_list
 handler=_BURN_MS_FLASH_
-page=0
 bind_to_list=burners
 
 #------ Widgets --------------------------------------------------------------
 
-[edis_multispark_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+[edis_persona_table]
+keys=bind_to_list
 bind_to_list=edis_controls
+
+[edis_multispark_table]
+keys=bind_to_list
+bind_to_list=edis_controls,multispark
 
 #------ Labels --------------------------------------------------------------
 
 [fuel_transition_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=ve_switch
 
 [spark_transition_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=spark_switch
 
 [2nd_o2_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=dt_controls
 
 [inj2_cranking_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=dt_controls
 
 [variable_launch_feature_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=launch_controls
 
 [nos_antilag_feature_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=nos_subfeatures
 
 [nos_which_bank_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=dt_controls,nos_subfeatures,x2_nitrous_control,x3_nitrous_control
 
 [nos_feature_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 
 [water_inj_feature_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=water_features,x2_water_injection,x3_water_injection
 
 [boost_ctrl_feature_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=boost_controller
 
 [edis_multi_rpm_label]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=0
+keys=bind_to_list
 bind_to_list=multispark
+
+[gammae_2_label]
+keys=bind_to_list
+bind_to_list=dt_controls
+
 
 #------ Radio Buttons --------------------------------------------------------
 
-[ms_persona]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[persona_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 offset=0
-bitval=0
-bitshift=0
+bitvals=0,1,2,4,12,16,48,64,128
 bitmask=255
-toggle_groups=spark_controls
-group_states=DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=By Setting Fuel Only mode, all spark controls are disabled and no spark management will be done at all.
+choices=Fuel Only,MSnS Distributor Mode,Neon/420 Wheel,Generic N-1 wheel,Generic N-2 wheel,EDIS,Dual EDIS,Ford TFI,GM 7pin HEI
+toggle_groups=,spark_controls:nonedis_controls,spark_controls:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:edis_controls,spark_controls:edis_controls,spark_controls:nonedis_controls,spark_controls:nonedis_controls
+tooltip=Sets the ECU ignition mode to one of the following: Fuel Only, Simple Distributor mode, Neon/420a wheel, Generic N-1 wheel (i.e. 12-1, 36-1), Generic N-2 wheel (60-2), EDIS, Dual EDIS, Ford TFI, or GM 7 pin HEI
 
-[msns_persona]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=0
-bitmask=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Distributor mode is the same behavior as previous MSnS firmwares, for use with most old fashioned cars with a single coil and distributor
-
-[neon_persona]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=1
-bitmask=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Neon mode is designed to work with the dodge neon trigger wheel and coil packs.  See http://megasquirt.sourceforge.net/extra/setup-neon.html
-
-[wheel_persona]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=2
-bitmask=247
-toggle_groups=wheel_decode
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This mode is for general purpose trigger wheels of the -1 or -2 variety (i.e. 60-2, 12-1, 36-1, and so on).
-
-[wheel-1_persona]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=0
-bitshift=3
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=wheel_decode
-tooltip=This mode is for general trigger wheels following the "x-1" style. Wheels that fall into this class are the ford EDIS 36-1 wheel.  All wheel decoding is done in software. (i.e. no external decoder box needed)
-
-[wheel-2_persona]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=3
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=wheel_decode
-tooltip=This mode is for general trigger wheels following the "x-2" style. Wheels that fall into this class are the bosche 60-2 wheel.  All wheel decoding is done in software. (i.e. no external decoder box needed)
-
-[edis_persona]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=4
-bitmask=223
-toggle_groups=edis_controls,nonedis_controls
-group_states=ENABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This mode is for using an external EDIS4/6/8 unit, coilpack(s), VR sensor and 36-1 trigger wheel.  The EDIS module takes care of signal consitioning and coil driving and feeds a PIP pulse to the ECU (used for tach input) and the ECU sends a SAW (Spark Angle Word) back to the EDIS module to tell it what spark advance to run.  See http://megasquirt.sourceforge.net/extra/setup-edis.html
-
-[single_edis_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=0
-bitshift=5
-bitmask=32
-bind_to_list=edis_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This mode is for using an external EDIS4/6/8 unit, coilpack(s), VR sensor and 36-1 trigger wheel.  The EDIS module takes care of signal consitioning and coil driving and feeds a PIP pulse to the ECU (used for tach input) and the ECU sends a SAW (Spark Angle Word) back to the EDIS module to tell it what spark advance to run.  See http://megasquirt.sourceforge.net/extra/setup-edis.html
-
-[dual_edis_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=5
-bitmask=32
-bind_to_list=edis_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This is an EXPERIMENTAL mode is for using dual external FORD EDIS units (4/6) a singal VR sensor and 36-1 trigger wheel.  The EDIS module takes care of signal conditioning and coil driving.  In this case the VR signal is wired to BOTH EDIS units, but only one of the PIP outputs is wired to the ECU.  The ECU sends TWO SAW (Spark Angle Words), one for each EDIS module. The signals are sent 180deg of crankshaft rotation out of phase to meet EDIS input requirements.  This is used to allow two EDIS 4 units to run a V8, or a pair of EDIS6 units to run a V12 engine.  See http://megasquirt.sourceforge.net/extra/setup-edis.html
-
-[edis_multispark_check_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[edis_multispark_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=66
-bitval=1
-bitshift=3
+bitvals=0,1
 bitmask=8
-bind_to_list=edis_controls
-toggle_groups=multispark
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=This enabled EDIS Multispark mode up to the RPM threshold set to the right of this control.
+choices=Disabled,Enabled
+toggle_groups=,multispark
+tooltip=This enables EDIS Multispark mode up to the RPM threshold set below.
 
-[tfi_persona]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=6
-bitmask=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=TFI mode is used for ford TFI ignition systems.  See http://megasquirt.sourceforge.net/extra/setup-tfi.html for details on how to set up your ECU for using it.
-
-[hei7_persona]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=0
-bitval=1
-bitshift=7
-bitmask=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=HEI7 mode is for users that want to use the HEI7 module and have the EU control dwell for the ignition system. See http://megasquirt.sourceforge.net/extra/setup-hei7.html
-
-[dual_table_mode]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[table_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=33
-bitval=1
-bitshift=4
+bitvals=0,1
 bitmask=16
-toggle_groups=dt_controls,alt_simul,nondt_controls
-group_states=ENABLED,DISABLED,DISABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Dual Table mode is used to have independant fueling tables for each of the two injector outputs.  When enabled, Fuel table 2 drives injector two and fuel tables 1 OR 3 drive injector channel 1.  Table three is switched in based on an external input (nitrous, or other).
+choices=Single Table,Dual Table
+toggle_groups=alt_simul:nondt_controls,dt_controls
+tooltip=Dual Table mode is used to have independant fueling tables for each of the two injector outputs.  When enabled, Fuel table 2 drives injector two and fuel tables 1 OR 3 drive injector channel 1.  Table three is switched in based on an external input (nitrous, or other). Single table mode completely ignores table 2.  Both injector channel outpus are based on table 1 or 3 (table 3 is selected based on an outside input).  In this mode simultaneous injection (both injector tables fire at once) and alternate mode (ping pong effect) are allowed.  in DT mode, alternate mode is not allowed as the other channel is used by table 2.
 
-[single_table_mode]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[gammae_13_combo]
+keys=offset,bitvals,bitmask,tooltip
 offset=33
-bitval=0
-bitshift=4
-bitmask=16
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Single table mode completely ignores table 2.  Both injector channel outpus are based on table 1 or 3 (table 3 is selected based on an outside input).  In this mode simultaneous injection (both injector tables fire at once) and alternate mode (ping pong effect) are allowed.  in DT mode, alternate mode is not allowed as the other channel is used by table 2.
-
-[gammae_1_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=33
-bitval=1
-bitshift=5
+bitvals=0,1
 bitmask=33
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+choices=Disabled,Enabled
 tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector.
 
-[gammae_2_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[gammae_2_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
 offset=33
-bitval=1
-bitshift=6
+bitvals=0,1
 bitmask=64
+choices=Disabled,Enabled
 bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector. NOTE: This only applies if DT mode is set...
 
-[2nd_o2_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[cpulse2_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
+offset=11
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+bind_to_list=dt_controls
+tooltip=Enables or Disables the firing of injector channel two during cranking.
+
+[second_o2_combo]
+keys=page,offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
 page=2
 offset=188
-bitval=1
-bitshift=0
+bitvals=0,1
 bitmask=1
-toggle_groups=second_o2
-group_states=ENABLED
+choices=Disabled,Enabled
 bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enable the use of ADC6 as a secondary EGO input for DT mode ONLY
+toggle_groups=,second_o2
+tooltip=Enable or Disabled the use of ADC6 as a secondary EGO input for DT mode ONLY
 
-[2nd_o2_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=2
-offset=188
-bitval=0
-bitshift=0
-bitmask=1
-bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
-
-[inj2_cr_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitval=0
-bitshift=6
-bitmask=64
-bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disables the firing of injector channel two during cranking.
-
-[inj2_cr_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitval=1
-bitshift=6
-bitmask=64
-bind_to_list=dt_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Enables the firing of injector channel two during cranking.
-
-[switch_ve_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[fuel_switch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=92
-bitval=0
-bitshift=0
+bitvals=0,1
 bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Never switches VEtables even if NOS is active, or pin6 goes low.
+choices=Never,NOS/Pin6 Input
+toggle_groups=,ve_switch
+tooltip=Either sets to Never switches VEtables even if NOS is active, or pin6 goes low, or to switch to table 3 from table 1 when Pin6 goes low OR when NOS is active.
 
-[switch_ve_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=1
-bitshift=0
-bitmask=1
-toggle_groups=ve_switch
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Switching the VEtables to VE3 from VE1 when NOS system is active OR pin 6 input is LOW.
-
-[switch_sp_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[spark_switch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=76
-bitval=0
-bitshift=7
+bitvals=0,1
 bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Never switches Spark Tables even if NOS is active, or pin6 goes low.
+choices=Never,NOS/Pin6 Input
+toggle_groups=,spark_switch
+tooltip=Either sets to Never switches Spark tables even if NOS is active, or pin6 goes low, or to switch to table 2 from table 1 when Pin6 goes low OR when NOS is active.
 
-[switch_sp_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=1
-bitshift=7
-bitmask=128
-toggle_groups=spark_switch
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Switching the Spark tables to SP2 from SP1 when NOS system is active OR pin 6 input is LOW.
-
-[nos_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[nos_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
 offset=11
-bitval=1
-bitshift=7
+bitvals=0,1
 bitmask=128
-toggle_groups=nos_subfeatures,nos_params,water_features,x2_tach_pin,x3_tach_pin
-group_states=ENABLED,ENABLED,DISABLED,DISABLED,DISABLED
+choices=Disabled,Enabled
 bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+toggle_groups=water_features:x2_tach_pin:x3_tach_pin,nos_subfeatures:nos_params
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
-[nos_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=11
-bitval=0
-bitshift=7
-bitmask=128
-bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
-
-[boost_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=1
-bitshift=0
-bitmask=1
-toggle_groups=boost_controls,x4_tach_pin
-group_states=ENABLED,DISABLED
-bind_to_list=boost_controller
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
-
-[boost_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
-bitshift=0
-bitmask=1
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-bind_to_list=boost_controller
-tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
-
-[shift_light_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=1
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
-
-[shift_light_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
-bitshift=1
-bitmask=2
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
-
-[launch_ctrl_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=1
-bitshift=2
-bitmask=4
-toggle_groups=launch_controls
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
-
-[launch_ctrl_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
-bitshift=2
-bitmask=4
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
-
-[variable_launch_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=1
-bitshift=1
-bitmask=2
-bind_to_list=launch_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
-
-
-[variable_launch_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=0
-bitshift=1
-bitmask=2
-bind_to_list=launch_controls
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
-
-[nos_antilag_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[nos_antilag_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
 offset=76
-bitval=1
-bitshift=6
+bitvals=0,1
 bitmask=64
+choices=Disabled,Enabled
 bind_to_list=nos_subfeatures,x2_nitrous_control,x3_nitrous_control
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
-[nos_antilag_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=76
-bitval=0
-bitshift=6
-bitmask=64
-bind_to_list=nos_subfeatures,x2_nitrous_control,x3_nitrous_control
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
+[shift_combo]
+keys=offset,bitvals,bitmask,tooltip
+offset=12
+bitvals=0,1
+bitmask=2
+choices=Disabled,Enabled
+tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
 
-[water_inj_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[launch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=12
+bitvals=0,1
+bitmask=4
+choices=Disabled,Enabled
+toggle_groups=,launch_controls
+tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
+
+[var_launch_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
 offset=46
-bitval=1
-bitshift=3
+bitvals=0,1
+bitmask=2
+choices=Disabled,Enabled
+bind_to_list=launch_controls
+tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
+
+[boost_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+offset=12
+bitvals=0,1
+bitmask=1
+choices=Disabled,Enabled
+bind_to_list=boost_controller
+toggle_groups=x4_tach_pin,boost_controls
+tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
+
+[water_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+offset=46
+bitvals=0,1
 bitmask=8
-toggle_groups=nos_features,water_controls,water_params,x2_tach_pin,x3_tach_pin
-group_states=DISABLED,ENABLED,ENABLED,DISABLED,DISABLED
+choices=Disabled,Enabled
 bind_to_list=water_features,x2_water_injection,x3_water_injection
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+toggle_groups=nos_features:x2_tach_pin:x3_tach_pin,water_controls:water_params
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
 
-[water_inj_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+[knock_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=46
-bitval=0
-bitshift=3
-bitmask=8
-bind_to_list=water_features,x2_water_injection,x3_water_injection
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
-
-[knock_detect_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=1
-bitshift=6
+bitvals=0,1
 bitmask=64
-toggle_groups=knock_controls
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+choices=Disabled,Enabled
+toggle_groups=,knock_controls
 tooltip=Knock detection will require an additional circuit to feed in a signal to the ECU when knock is occurring,  the ECU will retard the spark advance as needed to alleviate the knocking. Thsi feature is ONLY enabled when using a spark personality.
 
-[knock_detect_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=0
-bitshift=6
-bitmask=64
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Knock detection will require an additional circuit to feed in a signal to the ECU when knock is occurring,  the ECU will retard the spark advance as needed to alleviate the knocking. Thsi feature is ONLY enabled when using a spark personality.
-
-[traction_ctrl_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
+[traction_combo]
+keys=offset,bitvals,bitmask,tooltip
 offset=92
-bitval=1
-bitshift=5
+bitvals=0,1
 bitmask=32
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+choices=Disabled,Enabled
 tooltip=Traction control is accomplished by multiple levels of control.  Spark retard, spark cut, and fuel enrichment are able to be used to aid in traction control. See the Traction Tab for the rest of the controls...
 
-[traction_ctrl_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=92
-bitval=0
-bitshift=5
-bitmask=32
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Traction control is accomplished by multiple levels of control.  Spark retard, spark cut, and fuel enrichment are able to be used to aid in traction control. See the Traction Tab for the rest of the controls...
+#----- Entries ----------------------------------------------------------------
 
 [edis_multispark_limit_entry]
-keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=21
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_upper=25
 bind_to_list=edis_controls,multispark
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
 
 [fuel_switch_delay_entry]
-keys=page,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=93
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 raw_upper=250
 bind_to_list=ve_switch
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
 
 [spark_switch_delay_entry]
-keys=page,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=87
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 raw_upper=250
 bind_to_list=spark_switch
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
 tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the spark tables are transitioned from SP1 to SP2.

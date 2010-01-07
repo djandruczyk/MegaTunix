@@ -405,6 +405,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"alt_label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_lookuptable",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"alt_lookuptables",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"applicable_tables",
@@ -421,6 +423,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"c_label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"complex_expr",
+			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"create_tags",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ctrl_name",
@@ -437,6 +441,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"dl_type",
 			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"dlog_field_name",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dlog_gui_name",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"f_label",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"gaugexml",
@@ -451,10 +459,14 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"initializer",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"internal_names",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"label",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"lim_offset",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"log_by_default",
+			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"lookuptable",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"max_chars",
@@ -496,6 +508,8 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"source_key",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"source_value",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"special",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"source_values",
 			GINT_TO_POINTER(MTX_STRING));

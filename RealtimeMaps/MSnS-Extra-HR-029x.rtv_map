@@ -10,7 +10,6 @@ raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,
 
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=hr_clock
 dlog_gui_name=HR Clock
 dlog_field_name=Time
@@ -24,7 +23,6 @@ log_by_default=TRUE
 
 [derived_1]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_secl
 dlog_gui_name=MS Clock
 dlog_field_name=SecL
@@ -38,7 +36,6 @@ log_by_default=TRUE
 
 [derived_2]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_rpm
 dlog_gui_name=RAW RPM
 dlog_field_name=RPM/100
@@ -52,7 +49,6 @@ log_by_default=TRUE
 
 [derived_3]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,ul_conv_expr,complex_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=rpm
 dlog_gui_name=RPM
 dlog_field_name=RPM
@@ -79,7 +75,6 @@ log_by_default=FALSE
 
 [derived_4]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=enginebit
 dlog_gui_name=EngineBits
 dlog_field_name=Engine
@@ -93,7 +88,6 @@ log_by_default=TRUE
 
 [derived_5]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=gammae
 dlog_gui_name=GammaE
 dlog_field_name=Gammae
@@ -107,7 +101,6 @@ log_by_default=TRUE
 
 [derived_6]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsvolt
 dlog_gui_name=TPS Volts
 dlog_field_name=TPSvolts
@@ -122,7 +115,6 @@ log_by_default=FALSE
 
 [derived_7]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapvolt
 dlog_gui_name=MAP Volts
 dlog_field_name=MAPvolts
@@ -137,7 +129,6 @@ log_by_default=FALSE
 
 [derived_8]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barovolt
 dlog_gui_name=BARO Volts
 dlog_field_name=BAROvolts
@@ -152,7 +143,6 @@ log_by_default=FALSE
 
 [derived_9]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=matvolt
 dlog_gui_name=MAT Volts
 dlog_field_name=MATvolts
@@ -167,7 +157,6 @@ log_by_default=FALSE
 
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltvolt
 dlog_gui_name=CLT Volts
 dlog_field_name=CLTvolts
@@ -182,7 +171,6 @@ log_by_default=FALSE
 
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsadc
 dlog_gui_name=TPS ADC
 dlog_field_name=TPScounts
@@ -196,7 +184,6 @@ log_by_default=FALSE
 
 [derived_12]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapadc
 dlog_gui_name=MAP ADC
 dlog_field_name=MAPcounts
@@ -210,7 +197,6 @@ log_by_default=FALSE
 
 [derived_13]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=baroadc
 dlog_gui_name=BARO ADC
 dlog_field_name=BAROcounts
@@ -224,7 +210,6 @@ log_by_default=FALSE
 
 [derived_14]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=matadc
 dlog_gui_name=MAT ADC
 dlog_field_name=MATcounts
@@ -238,7 +223,6 @@ log_by_default=FALSE
 
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltadc
 dlog_gui_name=CLT ADC
 dlog_field_name=CLTcounts
@@ -252,7 +236,6 @@ log_by_default=FALSE
 
 [derived_16]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpspercent
 dlog_gui_name=TPS %
 dlog_field_name=TPSpercent
@@ -267,7 +250,6 @@ log_by_default=TRUE
 
 [derived_17]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,tooltip,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=mapkpa
 dlog_gui_name=MAP (kPa)
 dlog_field_name=MAPkpa
@@ -284,7 +266,6 @@ log_by_default=TRUE
 
 [derived_18]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,tooltip,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=barokpa
 dlog_gui_name=BARO kPa
 dlog_field_name=BAROkpa
@@ -301,7 +282,6 @@ log_by_default=FALSE
 
 [derived_19]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
 internal_names=matdeg
 dlog_gui_name=MAT (\302\260)
 dlog_field_name=MATdeg
@@ -317,7 +297,6 @@ log_by_default=TRUE
 
 [derived_20]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_INT_,_INT_,_BOOL_
 internal_names=cltdeg
 dlog_gui_name=CLT (\302\260)
 dlog_field_name=CLTdeg
@@ -333,7 +312,6 @@ log_by_default=TRUE
 
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2volt1
 dlog_gui_name=O<sub>2</sub> Volts 1
 dlog_field_name=O2
@@ -348,7 +326,6 @@ log_by_default=TRUE
 
 [derived_22]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2adc
 dlog_gui_name=O<sub>2</sub> ADC
 dlog_field_name=O2counts
@@ -362,7 +339,6 @@ log_by_default=FALSE
 
 [derived_23]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr1
 dlog_gui_name=AFR
 dlog_field_name=AFR
@@ -381,7 +357,6 @@ log_by_default=FALSE
 
 [derived_24]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=lambda
 dlog_gui_name=Lambda
 dlog_field_name=Lambda
@@ -400,7 +375,6 @@ log_by_default=FALSE
 
 [derived_25]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=battvolt
 dlog_gui_name=BATT Volts
 dlog_field_name=BATTvolts
@@ -415,7 +389,6 @@ log_by_default=FALSE
 
 [derived_26]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=battadc
 dlog_gui_name=BATT ADC
 dlog_field_name=BATTcounts
@@ -429,7 +402,6 @@ log_by_default=FALSE
 
 [derived_27]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=aircorr
 dlog_gui_name=AIRCorr
 dlog_field_name=Gair
@@ -443,7 +415,6 @@ log_by_default=TRUE
 
 [derived_28]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barocorr
 dlog_gui_name=BAROCorr
 dlog_field_name=Gbaro
@@ -457,7 +428,6 @@ log_by_default=TRUE
 
 [derived_29]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egocorr
 dlog_gui_name=EGOCorr
 dlog_field_name=Gego
@@ -471,7 +441,6 @@ log_by_default=TRUE
 
 [derived_30]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=warmcorr
 dlog_gui_name=WARMCorr
 dlog_field_name=Gwarm
@@ -485,7 +454,6 @@ log_by_default=TRUE
 
 [derived_31]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsaccel
 dlog_gui_name=TPSAccel
 dlog_field_name=TPSacc
@@ -499,7 +467,6 @@ log_by_default=TRUE
 
 [derived_32]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr1
 dlog_gui_name=VE 1
 dlog_field_name=Gve1
@@ -513,7 +480,6 @@ log_by_default=TRUE
 
 [derived_33]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw1
 dlog_gui_name=PW 1
 dlog_field_name=PW1
@@ -528,7 +494,6 @@ log_by_default=TRUE
 
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle1
 dlog_gui_name=Dutycycle 1 
 dlog_field_name=DutyCycle1
@@ -561,7 +526,6 @@ log_by_default=TRUE
 
 [derived_35]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle2
 dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
@@ -594,7 +558,6 @@ log_by_default=TRUE
 
 [derived_36]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw2
 dlog_gui_name=PW 2
 dlog_field_name=PW2
@@ -609,7 +572,6 @@ log_by_default=TRUE
 
 [derived_37]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr2
 dlog_gui_name=VE 2
 dlog_field_name=Gve2
@@ -623,7 +585,6 @@ log_by_default=TRUE
 
 [derived_38]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=idledc
 dlog_gui_name=Idle DC
 dlog_field_name=IdleDC
@@ -637,7 +598,6 @@ log_by_default=FALSE
 
 [derived_39]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_sparkangle
 dlog_gui_name=Raw Spark Adv.
 dlog_field_name=RawSparkAdv
@@ -651,7 +611,6 @@ log_by_default=FALSE
 
 [derived_40]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=sparkangle
 dlog_gui_name=Spark Adv.
 dlog_field_name=Spark Angle
@@ -666,7 +625,6 @@ log_by_default=TRUE
 
 [derived_41]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=iTime
 dlog_gui_name=iTime
 dlog_field_name=iTime
@@ -681,7 +639,6 @@ log_by_default=FALSE
 
 [derived_42]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=fueladc
 dlog_gui_name=Fuel ADC
 dlog_field_name=FuelADC
@@ -695,7 +652,6 @@ log_by_default=TRUE
 
 [derived_43]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egtadc
 dlog_gui_name=EGT ADC
 dlog_field_name=EGT
@@ -709,7 +665,6 @@ log_by_default=TRUE
 
 [derived_44]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltiatangle
 dlog_gui_name=CLT IAT angle
 dlog_field_name=CltIatAngle
@@ -724,7 +679,6 @@ log_by_default=FALSE
 
 [derived_45]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=knockangle
 dlog_gui_name=Knock angle
 dlog_field_name=Knock
@@ -739,7 +693,6 @@ log_by_default=TRUE
 
 [derived_46]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egocorr2
 dlog_gui_name=EGO Corr 2
 dlog_field_name=Gego2
@@ -753,7 +706,6 @@ log_by_default=FALSE
 
 [derived_47]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=porta
 dlog_gui_name=Port A
 dlog_field_name=PortA
@@ -767,7 +719,6 @@ log_by_default=FALSE
 
 [derived_48]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=portb
 dlog_gui_name=Port B
 dlog_field_name=PortB
@@ -781,7 +732,6 @@ log_by_default=FALSE
 
 [derived_49]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=portc
 dlog_gui_name=Port C
 dlog_field_name=PortC
@@ -795,7 +745,6 @@ log_by_default=FALSE
 
 [derived_50]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=portd
 dlog_gui_name=Port D
 dlog_field_name=PortD
@@ -809,7 +758,6 @@ log_by_default=FALSE
 
 [derived_51]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpslast
 dlog_gui_name=TPS Last
 dlog_field_name=TPSLast
@@ -823,7 +771,6 @@ log_by_default=TRUE
 
 [derived_52]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=stackL
 dlog_gui_name=Stack Last
 dlog_field_name=STACKLast
@@ -837,7 +784,6 @@ log_by_default=FALSE
 
 [derived_53]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=bcDC
 dlog_gui_name=Boost DC
 dlog_field_name=bcDC
@@ -851,7 +797,6 @@ log_by_default=FALSE
 
 [derived_54]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=iTimeX
 dlog_gui_name=iTimeX
 dlog_field_name=iTimeX
@@ -865,7 +810,6 @@ log_by_default=FALSE
 
 [derived_55]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsdot
 dlog_gui_name=tpsDOT
 dlog_field_name=tpsDOT
@@ -889,7 +833,6 @@ log_by_default=FALSE
 
 [derived_56]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapdot
 dlog_gui_name=mapDOT
 dlog_field_name=mapDOT

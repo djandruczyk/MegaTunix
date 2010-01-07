@@ -13,7 +13,6 @@ inactive_fg=dim grey
 col=0
 row=0
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=connected_widgets
 
 [status_1]
@@ -22,12 +21,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=1
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=1
 bitmask=2
 
 [status_2]
@@ -36,12 +33,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=2
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=0
 bitmask=1
 
 [status_3]
@@ -50,12 +45,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=3
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=3
 bitmask=8
 
 [status_4]
@@ -64,12 +57,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=4
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=2
 bitmask=4
 
 [status_5]
@@ -78,12 +69,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=5
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=4
 bitmask=16
 
 [status_6]
@@ -92,12 +81,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=6
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=enginebit
 bitval=1
-bitshift=5
 bitmask=32
 
 [status_7]
@@ -106,12 +93,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=7
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=status1
 bitval=1
-bitshift=0
 bitmask=1
 
 [status_8]
@@ -120,12 +105,10 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=8
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=status1
 bitval=1
-bitshift=1
 bitmask=2
 
 [status_9]
@@ -134,11 +117,9 @@ active_fg=red
 inactive_fg=dim grey
 col=0
 row=9
-keys=bind_to_list,bitval,bitshift,bitmask,source
-key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=status1
 bitval=1
-bitshift=2
 bitmask=4
 
