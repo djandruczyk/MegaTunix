@@ -58,7 +58,7 @@
   <needle_tail>0</needle_tail>
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
-  <precision>2</precision>
+  <precision>1</precision>
   <width>222</width>
   <height>222</height>
   <main_start_angle>135</main_start_angle>
@@ -72,13 +72,82 @@
   <value_str_ypos>0.4000000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
+  <color_range>
+    <layer>0</layer>
+    <lowpoint>0.000000</lowpoint>
+    <highpoint>20.000000</highpoint>
+    <lwidth>0.095000</lwidth>
+    <inset>0.930000</inset>
+    <color_day>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_nite>
+  </color_range>
+  <color_range>
+    <layer>0</layer>
+    <lowpoint>200.000000</lowpoint>
+    <highpoint>245.000000</highpoint>
+    <lwidth>0.095000</lwidth>
+    <inset>0.930000</inset>
+    <color_day>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_nite>
+  </color_range>
+  <color_range>
+    <layer>0</layer>
+    <lowpoint>245.000000</lowpoint>
+    <highpoint>255.000000</highpoint>
+    <lwidth>0.095000</lwidth>
+    <inset>0.930000</inset>
+    <color_day>
+      <red>65535</red>
+      <green>16705</green>
+      <blue>16705</blue>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>16705</green>
+      <blue>16705</blue>
+    </color_nite>
+  </color_range>
   <text_block>
     <layer>0</layer>
     <font>Sans</font>
-    <text>Template</text>
+    <text>Fuel Load</text>
     <font_scale>0.150000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.500000</y_pos>
+    <color_day>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color_day>
+    <color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color_nite>
+  </text_block>
+  <text_block>
+    <layer>0</layer>
+    <font>Sans</font>
+    <text>%</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.600000</y_pos>
     <color_day>
       <red>0</red>
       <green>0</green>

@@ -17,6 +17,7 @@ gauges_files = 	\
 	EGO-Correction-Gauge.xml \
 	EGO-Gauge.xml \
 	Ethanol-Percentage-Gauge.xml \
+	Fuel-Load-Gauge.xml \
 	Gamma-Enrichment-Gauge.xml \
 	IAC-Position-Gauge.xml \
 	Idle-PWM-Gauge.xml \
