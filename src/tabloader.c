@@ -63,7 +63,6 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *item = NULL;
 	extern GdkColor red;
 	extern volatile gboolean leaving;
-	extern GHashTable *dynamic_widgets;
 	gboolean * hidden_list = NULL;
 	extern gboolean connected;
 	extern volatile gboolean offline;
@@ -79,7 +78,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 
 	set_title(g_strdup("Loading Gui Tabs..."));
 	bindgroup = g_new0(BindGroup,1);
-	notebook = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
+	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 
 	while (firmware->tab_list[i])
@@ -119,9 +118,12 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			groups = load_groups(cfgfile);
 			bindgroup->cfgfile = cfgfile;
 			bindgroup->groups = groups;
+			bindgroup->map_file = g_strdup(map_file);
 			bind_data(topframe,(gpointer)bindgroup);
+			g_free(bindgroup->map_file);
 			if (groups)
 				g_hash_table_destroy(groups);
+			groups = NULL;
 
 			populate_master(topframe,(gpointer)cfgfile);
 
@@ -137,6 +139,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			else
 			{
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
+				gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),topframe,TRUE);
 				glade_xml_signal_autoconnect(xml);
 				gtk_widget_show_all(topframe);
 			}
@@ -147,17 +150,16 @@ EXPORT gboolean load_gui_tabs_pf(void)
 				label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
 				gtk_widget_hide(child);
 				gtk_widget_hide(label);
-				item = g_hash_table_lookup(dynamic_widgets,"show_tab_visibility_menuitem");
-				 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+				item = lookup_widget("show_tab_visibility_menuitem");
+				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 
 			}
-			if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
+			if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
 			{
-				run_post_function(tmpbuf);
+				run_post_functions(tmpbuf);
 				g_free(tmpbuf);
 			}
 			cfg_free(cfgfile);
-			g_free(cfgfile);
 #ifndef DEBUG
 			g_object_unref(xml);
 #endif
@@ -207,16 +209,18 @@ void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
+	DataType keytype = MTX_INT;
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		if (group->keytypes[i] == MTX_STRING)
+		keytype = translate_string(group->keys[i]);
+		if (keytype == MTX_STRING)
 			g_free(OBJ_GET(group->object,group->keys[i]));
 		OBJ_SET(group->object,group->keys[i],NULL);
 	}
 	g_object_unref(group->object);
 	g_strfreev(group->keys);
-	g_free(group->keytypes);
+//	g_free(group->keytypes);
 	g_free(group);
 }
 
@@ -260,6 +264,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		section = g_strdup(groupnames[x]);
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
+		//	setup_group(group,tmpbuf);
 			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
 			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
 			g_free(tmpbuf);
@@ -271,6 +276,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			g_free(section);
 			continue;
 		}
+		/*
 		if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 		{
 			group->keytypes = parse_keytypes(tmpbuf,&group->num_keytypes,",");
@@ -288,7 +294,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 		if (group->num_keytypes != group->num_keys)
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
 			g_free(group);
@@ -296,8 +302,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			continue;;
 
 		}
-		if (cfg_read_int(cfgfile,section,"page",&tmpi))
-			group->page = tmpi;
+		*/
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref(group->object);
@@ -313,7 +318,16 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			g_free(tmpbuf);
 		}
 
-		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
+		/* Adds on "default" options to any other groups */
+		if (g_strcasecmp(section,"defaults") != 0)
+			group->page = bind_group_data(cfgfile, (GtkWidget *)group->object, groups, "defaults");
+
+		if (cfg_read_int(cfgfile,section,"page",&tmpi))
+			group->page = tmpi;
+
+		/* Binds the rest of the settings, overriding any defaults */
+		//bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
+		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
@@ -328,7 +342,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 /*!
  \brief bind_group_data() is called to bind data widget that is defined in
- a group. (saves from having to duplicate a large number of keys.values for 
+ a group. (saves from having to duplicate a large number of keys/values for 
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
  \param cfgfile
@@ -344,6 +358,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 	gint tmpi = 0;
 	Group *group = NULL;
 	extern GtkTooltips *tip;
+	DataType keytype = MTX_STRING;
 
 	group = g_hash_table_lookup(groups,groupname);
 	if (!group)
@@ -358,13 +373,18 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		switch((DataType)group->keytypes[i])
+		keytype = translate_string(group->keys[i]);
+		switch((DataType)keytype)
 		{
 			case MTX_INT:
 			case MTX_BOOL:
 			case MTX_ENUM:
 				tmpi = (gint)OBJ_GET(group->object,group->keys[i]);
 				OBJ_SET(widget,group->keys[i],GINT_TO_POINTER(tmpi));
+				if (strstr(group->keys[i], "temp_dep"))
+				{
+					OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
+				}
 				break;
 			case MTX_STRING:
 				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
@@ -393,7 +413,6 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
 	GList *dest_list = NULL;
-	GList *tmp_list = NULL;
 	gint i = 0;
 
 	if (!lists)
@@ -401,7 +420,6 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 		printf(__FILE__": Error, bind_to_lists(), lists is NULL\n");
 		return;
 	}
-	/*printf("Widget %s is being bound to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);*/
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	/* This looks convoluted,  but it allows for an arbritrary 
@@ -415,11 +433,39 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	for (i=0;i<bind_num_keys;i++)
 	{
 		dest_list = get_list(tmpvector[i]);
-		tmp_list = g_list_prepend(dest_list,(gpointer)widget);
+		if (!dest_list)
+			dest_list = g_list_prepend(dest_list,(gpointer)widget);
+		else if (!g_list_find(dest_list,(gpointer)widget))
+			dest_list = g_list_prepend(dest_list,(gpointer)widget);
 
-		store_list(tmpvector[i],tmp_list);
+		store_list(tmpvector[i],dest_list);
 	}
 	g_strfreev(tmpvector);
+}
+
+
+void remove_from_lists(gchar * lists, gpointer data)
+{
+	gint i = 0;
+	gint bind_num_keys = 0;
+	gchar **tmpvector = NULL;
+	GList *list = NULL;
+
+	if (!lists)
+	{
+/*		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");*/
+		return;
+	}
+	tmpvector = parse_keys(lists,&bind_num_keys,",");
+
+	for (i=0;i<bind_num_keys;i++)
+	{
+		list = get_list(tmpvector[i]);
+		list = g_list_remove(list,(gpointer)data);
+		store_list(tmpvector[i],list);
+	}
+	g_strfreev(tmpvector);
+
 }
 
 /*!
@@ -439,9 +485,9 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** keys = NULL;
-	gint * keytypes = NULL;
+//	gint * keytypes = NULL;
 	gint num_keys = 0;
-	gint num_keytypes = 0;
+//	gint num_keytypes = 0;
 	gint offset = 0;
 	gint page = 0;
 	gint widget_type = 0;
@@ -454,7 +500,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	section = (char *)glade_get_widget_name(widget);
+	section = (gchar *)glade_get_widget_name(widget);
 	if (section == NULL)
 		return;
 
@@ -469,6 +515,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	else
 		return;
 
+	/*
 	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 	{
 		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
@@ -476,15 +523,19 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 	else
+	{
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t key_types is missing for widget %s, CRITICAL!!!\n",section));
 		return;
+	}
 
 	if (num_keytypes != num_keys)
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",num_keys,num_keytypes,section,bindgroup->map_file));
 		g_strfreev(keys);
 		g_free(keytypes);
 		return;
 	}
+	*/
 	page = -1;
 	/* Bind the data in the "defaults" group per tab to EVERY var in that
 	 * tab
@@ -566,14 +617,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget has the "choices" key (combobox)
-	*/
-	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
-	{
-		combo_setup(G_OBJECT(widget),cfgfile,section);
-		g_free(tmpbuf);
-	}
-
 	/* If this widget has "initializer" there's a global variable 
 	 * with it's name on it 
 	 */
@@ -621,6 +664,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
+				/*printf("adding widget %s to ve_widgets[%i][%i]\n",glade_get_widget_name(widget),page,offset);*/
 				ve_widgets[page][offset] = g_list_prepend(
 						ve_widgets[page][offset],
 						(gpointer)widget);
@@ -636,81 +680,98 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 * redundant keys all throughout the file...
 	 */
 
-	bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
+	//bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
+	bind_keys(G_OBJECT(widget),cfgfile,section,keys,num_keys);
 
-
-	if (cfg_read_string(cfgfile,section,"post_function_with_arg",&tmpbuf))
+	/* If this widget has the "choices" key (combobox)
+	*/
+	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
 	{
-		run_post_function_with_arg(tmpbuf,widget);
+		combo_setup(G_OBJECT(widget),cfgfile,section);
 		g_free(tmpbuf);
 	}
-	if (cfg_read_string(cfgfile,section,"post_function",&tmpbuf))
+
+
+	if (cfg_read_string(cfgfile,section,"post_functions_with_arg",&tmpbuf))
 	{
-		run_post_function(tmpbuf);
+		run_post_functions_with_arg(tmpbuf,widget);
 		g_free(tmpbuf);
 	}
-	g_free(keytypes);
+	if (cfg_read_string(cfgfile,section,"post_functions",&tmpbuf))
+	{
+		run_post_functions(tmpbuf);
+		g_free(tmpbuf);
+	}
+//	g_free(keytypes);
 	g_strfreev(keys);
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }
 
 
 /*!
- \brief run_post_function() is called to run a function AFTER tab loading.
+ \brief run_post_functions() is called to run a function AFTER tab loading.
  It'll search the exported symbols of MegaTunix for the function and if
  found execute it
- \param function_name (gchar *) textual name of the function to run.
+ \param functions (gchar *) CSV list of functions to run
  */
-void run_post_function(gchar * function_name)
+void run_post_functions(gchar * functions)
 {
 	void (*function)(void);
+	gchar ** vector = NULL;
+	guint i = 0;
 	GModule *module = NULL;
 
+	vector = g_strsplit(functions,",",-1);
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
+		return;
 	}
-	else
+	for (i=0;i<g_strv_length(vector);i++)
 	{
-		function();
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		if (!g_module_symbol(module,vector[i],(void *)&function))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		else
+			function();
 	}
+	g_strfreev(vector);
+	if (!g_module_close(module))
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
 }
 
 
 
 /*!
- \brief run_post_function_with_arg() is called to run a function AFTER 
+ \brief run_post_functions_with_arg() is called to run a function AFTER 
  tab loading is complete. It'll search the exported symbols of MegaTunix 
  for the function and if found execute it with the passed widget as an
  argument.
- \param function_name (gchar *) textual name of the function to run.
+ \param functions (gchar *) CSV list of functions to run
  \param widget (GtkWidget *) pointer to widget to be passed to the function
  */
-void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
+void run_post_functions_with_arg(gchar * functions, GtkWidget *widget)
 {
 	void (*function)(GtkWidget *);
+	gchar ** vector = NULL;
+	guint i = 0;
 	GModule *module = NULL;
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
+		return;
 	}
-	else
+	vector = g_strsplit(functions,",",-1);
+	for (i=0;i<g_strv_length(vector);i++)
 	{
-		function(widget);
-		if (!g_module_close(module))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		if (!g_module_symbol(module,vector[i],(void *)&function))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		else
+			function(widget);
 	}
+	g_strfreev(vector);
+	if (!g_module_close(module))
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
 }

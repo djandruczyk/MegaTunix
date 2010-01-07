@@ -21,6 +21,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <keyparser.h>
+#include <gui_handlers.h>
 #include <lookuptables.h>
 #include <multi_expr_loader.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -47,7 +48,7 @@ extern GObject *global_data;
 
 gboolean force_view_recompute()
 {
-	gint i = 0;
+	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)
 		update_model_from_view(g_list_nth_data(views,i));
 	return FALSE;
@@ -126,9 +127,9 @@ GtkTreeModel * create_model(void)
 		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 		if (!name)
 			continue;
-		lower = (gint) OBJ_GET(object,"lower_limit"); 
-		upper = (gint) OBJ_GET(object,"upper_limit"); 
-		if ((!OBJ_GET(object,"lower_limit")) && (!OBJ_GET(object,"upper_limit")))
+		lower = (gint) OBJ_GET(object,"raw_lower"); 
+		upper = (gint) OBJ_GET(object,"raw_upper"); 
+		if ((!OBJ_GET(object,"raw_lower")) && (!OBJ_GET(object,"raw_upper")))
 			range = g_strdup_printf("Varies");
 		else
 			range = g_strdup_printf("%i-%i",lower,upper);
@@ -298,8 +299,8 @@ void cell_edited(GtkCellRendererText *cell,
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
 	rt_offset = (gint) OBJ_GET(object,"offset");
-	precision = (gint)OBJ_GET(object,"precision");
-	new = (gfloat)strtod(new_text,NULL);
+	precision = (gint) OBJ_GET(object,"precision");
+	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
 	if (OBJ_GET(object,"multi_expr_hash"))
 	{
 		hash = OBJ_GET(object,"multi_expr_hash");
@@ -338,8 +339,8 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 	{
 
-		lower = (gint) OBJ_GET(object,"lower_limit");
-		upper = (gint) OBJ_GET(object,"upper_limit");
+		lower = (gint) OBJ_GET(object,"raw_lower");
+		upper = (gint) OBJ_GET(object,"raw_upper");
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
 		temp_dep = (gboolean)OBJ_GET(object,"temp_dep");
 

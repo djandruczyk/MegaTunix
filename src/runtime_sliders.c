@@ -298,9 +298,9 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	slider->lower = (gint)OBJ_GET(object,"lower_limit");
+	slider->lower = (gint)OBJ_GET(object,"raw_lower");
 
-	slider->upper = (gint)OBJ_GET(object,"upper_limit");
+	slider->upper = (gint)OBJ_GET(object,"raw_upper");
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 
@@ -426,14 +426,14 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(widget,"lower_limit"))
-		slider->lower = (gint)OBJ_GET(widget,"lower_limit");
+	if (OBJ_GET(widget,"raw_lower"))
+		slider->lower = (gint)OBJ_GET(widget,"raw_lower");
 	else
-		slider->lower = (gint)OBJ_GET(object,"lower_limit");
-	if (OBJ_GET(widget,"upper_limit"))
-		slider->upper = (gint)OBJ_GET(widget,"upper_limit");
+		slider->lower = (gint)OBJ_GET(object,"raw_lower");
+	if (OBJ_GET(widget,"raw_upper"))
+		slider->upper = (gint)OBJ_GET(widget,"raw_upper");
 	else
-		slider->upper = (gint)OBJ_GET(object,"upper_limit");
+		slider->upper = (gint)OBJ_GET(object,"raw_upper");
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))

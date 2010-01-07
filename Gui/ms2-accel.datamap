@@ -1,6 +1,6 @@
 [global]
-description=Object data map for MS2 Accel Enrichments
-tab_name=_Accel Enrich
+description=Object data map for MS2 Accel Wizard
+tab_name=_Accel Wizard
 id_prefix=ae_
 groups=defaults
 
@@ -87,28 +87,6 @@ keys=bind_to_list
 key_types=_STRING_
 bind_to_list=tps_ae_ctrls
 
-[ae_params_frame]
-keys=bind_to_list
-key_types=_STRING_
-bind_to_list=non_eae
-
-[accel_enrich_tables_frame]
-keys=bind_to_list
-key_types=_STRING_
-bind_to_list=non_eae
-
-#----- Combo Boxes ------------------------------------------------------
-
-[eae_combo]
-keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
-offset=935
-bitvals=0,1,3
-bitmask=3
-choices=Off,On,On with lag compensation
-toggle_groups=non_eae,eae,eae:eae_lag
-tooltip=This enables Enhanced or disables Accel Enrich
-
 #----- Entries ----------------------------------------------------------
 
 [map_ae_rate_4_entry]
@@ -172,44 +150,32 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 
 [tps_ae_rate_4_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=offset,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
 offset=496
 size=_S16_
-precision=1
-raw_upper=20000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+raw_upper=32768
 
 [tps_ae_rate_3_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=offset,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
 offset=494
 size=_S16_
-precision=1
-raw_upper=20000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+raw_upper=32768
 
 [tps_ae_rate_2_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=offset,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
 offset=492
 size=_S16_
-precision=1
-raw_upper=20000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+raw_upper=32768
 
 [tps_ae_rate_1_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_ENUM_,_INT_,_STRING_,_STRING_
-precision=1
+keys=offset,size,raw_upper
+key_types=_INT_,_ENUM_,_INT_
 offset=490
 size=_S16_
-raw_upper=20000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+raw_upper=32768
 
 [tps_ae_pw_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
@@ -244,22 +210,15 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 
 [mapdot_thresh_entry]
-keys=offset,size,raw_upper,tooltip
-key_types=_INT_,_ENUM_,_INT_,_STRING_
-offset=580
-size=_S16_
-raw_upper=1000
+keys=offset,tooltip
+key_types=_INT_,_STRING_
+offset=585
 tooltip=Mapdot threshold in KPA/second for map based accel enrich
 
 [tpsdot_thresh_entry]
-keys=offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_ENUM_,_INT_,_STRING_,_STRING_,_STRING_
-offset=578
-size=_S16_
-precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-raw_upper=10000
+keys=offset,tooltip
+key_types=_INT_,_STRING_
+offset=584
 tooltip=TPSDot threshold in %/second for tps based accel enrich
 
 [accel_time_entry]
