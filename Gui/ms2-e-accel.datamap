@@ -2,7 +2,7 @@
 description=Object data map for MS2 Accel Enrichments
 tab_name=_Accel Enrich
 id_prefix=ae_
-groups=defaults
+groups=defaults,EAEAWCKPA,EAEBAWC,EAESOCKPA,EAEBSOC,EAEAWCRPM,EAEAWN,EAESOCRPM,EAESON,EAEAWWCLT,EAEAWW,EAESOWCLT,EAESOW
 
 #----- Groups ----------------------------------------------------------------
 
@@ -15,6 +15,105 @@ raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
+[EAEAWCKPA]
+keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=1
+size=_U16_
+raw_upper=2550
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
+
+[EAEBAWC]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U08_
+raw_upper=100
+tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
+
+[EAESOCKPA]
+keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=1
+size=_U16_
+raw_upper=2550
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=EAE Sucked-from-Walls Constant. See MS2-Extra manuals for more details
+
+[EAEBSOC]
+keys=page,precision,size,dl_conv_expr,ul_conv_expr,tooltip
+page=1
+precision=1
+size=_U08_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=EAE Sucked-from-Walls Constant. See MS2-Extra manuals for more details
+
+[EAEAWCRPM]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U16_
+raw_upper=25500
+tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAEAWN]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U08_
+raw_upper=200
+tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAESOCRPM]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U16_
+raw_upper=25500
+tooltip=EAE Sucked-from-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAESON]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U08_
+raw_upper=200
+tooltip=EAE Sucked-from-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAEAWWCLT]
+keys=page,size,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+page=1
+size=_S16_
+raw_lower=-400
+raw_upper=4500
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+temp_dep=TRUE
+bind_to_list=temperature
+tooltip=EAE Adhered-to-Walls CLT Correction. See MS2-Extra manuals for more details
+
+[EAEAWW]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U08_
+raw_upper=200
+tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAESOWCLT]
+keys=page,size,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+page=1
+size=_S16_
+raw_lower=-400
+raw_upper=4500
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+temp_dep=TRUE
+bind_to_list=temperature
+tooltip=EAE Sucked-from-Walls CLT Correction. See MS2-Extra manuals for more details
+
+[EAESOW]
+keys=page,size,raw_upper,tooltip
+page=1
+size=_U08_
+raw_upper=200
+tooltip=EAE Sucked-from-Walls CLT Correction. See MS2-Extra manuals for more details
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
@@ -26,6 +125,41 @@ bind_to_list=get_data_buttons
 keys=handler,bind_to_list
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
+
+[EAEAWC_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=0
+
+[EAESOC_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=1
+
+[EAEAWCRPM_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=2
+
+[EAESOCRPM_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=3
+
+[EAEAWWCLT_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=4
+
+[EAESOWCLT_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=5
+
+[edit_all_button]
+keys=handler,te_tables
+handler=_TE_TABLE_GROUP_
+te_tables=0,1,2,3,4,5
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -83,6 +217,30 @@ bind_to_list=non_eae
 [accel_enrich_tables_frame]
 keys=bind_to_list
 bind_to_list=non_eae
+
+[EAEAWWCLT_label]
+keys=bind_to_list,c_label,f_label
+bind_to_list=temperature
+c_label=(\302\260C.)
+f_label=(\302\260F.)
+
+[EAESOWCLT_label]
+keys=bind_to_list,c_label,f_label
+bind_to_list=temperature
+c_label=(\302\260C.)
+f_label=(\302\260F.)
+
+[eae_lag_frame]
+keys=bind_to_list
+bind_to_list=eae_lag,eae
+
+[eae_tables_frame]
+keys=bind_to_list
+bind_to_list=eae
+
+[eae_tab_label]
+keys=bind_to_list
+bind_to_list=eae
 
 #----- Combo Boxes ------------------------------------------------------
 
@@ -290,639 +448,748 @@ tooltip=This is the high rpm threshold where AE scaling becomes enabled.  Above 
 
 #--------- EAE Tab ----------------------------------------------------------
 
-[EAEAWCKPA_entry_0]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+[eae_lag_source_combo]
+keys=page,offset,bitvals,bitmask,tooltip
 page=1
-offset=724
+offset=1015
+bitvals=0,1
+bitmask=1
+choices=TPSdot,MAPdot
+tooltip=This Sets the EAE LAg compensation source
+
+[lag_thresold_entry]
+keys=page,size,offset,raw_lower,raw_upper,tooltip
+page=1
+size=_S16_
+offset=1016
+raw_lower=0
+raw_upper=1000
+tooltip=Threshold in units/sec for lag compensation source
+
+[eae_max_rpm_entry]
+keys=page,size,offset,tooltip
+page=1
 size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
+offset=1018
+tooltip=RPM above which EAE lag compensation is no longer active
+
+[EAEAWCKPA_entry_0]
+group=EAEAWCKPA
+keys=offset
+offset=724
 
 [EAEAWCKPA_entry_1]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=726
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_2]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=728
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_3]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=730
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_4]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=732
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_5]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=734
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_6]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=736
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_7]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=738
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_8]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=740
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_9]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=742
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_10]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=744
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCKPA_entry_11]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEAWCKPA
+keys=offset
 offset=746
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_0]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=772
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_1]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=773
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_2]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=774
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_3]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=775
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_4]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=776
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_5]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=777
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_6]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=778
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_7]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=779
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_8]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=780
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_9]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=781
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_10]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=782
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBAWC_entry_11]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEBAWC
+keys=offset
 offset=783
-size=_U08_
-raw_upper=100
-tooltip=EAE Added-to-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_0]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=748
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_1]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=750
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_2]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=752
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_3]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=754
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_4]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=756
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_5]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=758
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_6]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=760
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_7]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=762
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_8]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=764
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_9]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=766
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_10]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=768
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAESOCKPA_entry_11]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAESOCKPA
+keys=offset
 offset=770
-size=_U16_
-raw_upper=2550
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_0]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=784
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_1]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=785
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_2]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=786
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_3]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=787
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_4]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=788
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_5]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=789
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_6]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=790
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_7]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=791
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_8]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=792
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_9]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=793
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_10]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=794
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEBSOC_entry_11]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,tooltip
-page=1
+group=EAEBSOC
+keys=offset
 offset=795
-size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-tooltip=EAE Sucked-off-Walls Constant. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_0]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=676
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_1]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=678
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_2]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=680
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_3]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=682
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_4]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=684
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_5]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=686
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_6]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=688
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_7]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=690
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_8]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=692
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_9]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=694
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_10]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=696
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWCRPM_entry_11]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWCRPM
+keys=offset
 offset=698
-size=_U16_
-raw_upper=25500
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_0]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=796
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_1]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=797
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_2]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=798
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_3]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=799
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_4]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=800
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_5]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=801
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_6]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=802
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_7]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=803
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_8]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=804
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_9]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=805
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_10]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=806
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWN_entry_11]
-keys=page,offset,size,raw_upper,tooltip
-page=1
+group=EAEAWN
+keys=offset
 offset=807
-size=_U08_
-raw_upper=200
-tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
+
+[EAESOCRPM_entry_0]
+group=EAESOCRPM
+keys=offset
+offset=700
+
+[EAESOCRPM_entry_1]
+group=EAESOCRPM
+keys=offset
+offset=702
+
+[EAESOCRPM_entry_2]
+group=EAESOCRPM
+keys=offset
+offset=704
+
+[EAESOCRPM_entry_3]
+group=EAESOCRPM
+keys=offset
+offset=706
+
+[EAESOCRPM_entry_4]
+group=EAESOCRPM
+keys=offset
+offset=708
+
+[EAESOCRPM_entry_5]
+group=EAESOCRPM
+keys=offset
+offset=710
+
+[EAESOCRPM_entry_6]
+group=EAESOCRPM
+keys=offset
+offset=712
+
+[EAESOCRPM_entry_7]
+group=EAESOCRPM
+keys=offset
+offset=714
+
+[EAESOCRPM_entry_8]
+group=EAESOCRPM
+keys=offset
+offset=716
+
+[EAESOCRPM_entry_9]
+group=EAESOCRPM
+keys=offset
+offset=718
+
+[EAESOCRPM_entry_10]
+group=EAESOCRPM
+keys=offset
+offset=720
+
+[EAESOCRPM_entry_11]
+group=EAESOCRPM
+keys=offset
+offset=722
+
+[EAESON_entry_0]
+group=EAESON
+keys=offset
+offset=808
+
+[EAESON_entry_1]
+group=EAESON
+keys=offset
+offset=809
+
+[EAESON_entry_2]
+group=EAESON
+keys=offset
+offset=810
+
+[EAESON_entry_3]
+group=EAESON
+keys=offset
+offset=811
+
+[EAESON_entry_4]
+group=EAESON
+keys=offset
+offset=812
+
+[EAESON_entry_5]
+group=EAESON
+keys=offset
+offset=813
+
+[EAESON_entry_6]
+group=EAESON
+keys=offset
+offset=814
+
+[EAESON_entry_7]
+group=EAESON
+keys=offset
+offset=815
+
+[EAESON_entry_8]
+group=EAESON
+keys=offset
+offset=816
+
+[EAESON_entry_9]
+group=EAESON
+keys=offset
+offset=817
+
+[EAESON_entry_10]
+group=EAESON
+keys=offset
+offset=818
+
+[EAESON_entry_11]
+group=EAESON
+keys=offset
+offset=819
+
+[EAEAWWCLT_entry_0]
+group=EAEAWWCLT
+keys=offset
+offset=932
+
+[EAEAWWCLT_entry_1]
+group=EAEAWWCLT
+keys=offset
+offset=934
+
+[EAEAWWCLT_entry_2]
+group=EAEAWWCLT
+keys=offset
+offset=936
+
+[EAEAWWCLT_entry_3]
+group=EAEAWWCLT
+keys=offset
+offset=938
+
+[EAEAWWCLT_entry_4]
+group=EAEAWWCLT
+keys=offset
+offset=940
+
+[EAEAWWCLT_entry_5]
+group=EAEAWWCLT
+keys=offset
+offset=942
+
+[EAEAWWCLT_entry_6]
+group=EAEAWWCLT
+keys=offset
+offset=944
+
+[EAEAWWCLT_entry_7]
+group=EAEAWWCLT
+keys=offset
+offset=946
+
+[EAEAWWCLT_entry_8]
+group=EAEAWWCLT
+keys=offset
+offset=948
+
+[EAEAWWCLT_entry_9]
+group=EAEAWWCLT
+keys=offset
+offset=950
+
+[EAEAWWCLT_entry_10]
+group=EAEAWWCLT
+keys=offset
+offset=952
+
+[EAEAWWCLT_entry_11]
+group=EAEAWWCLT
+keys=offset
+offset=954
+
+[EAEAWW_entry_0]
+group=EAEAWW
+keys=offset
+offset=820
+
+[EAEAWW_entry_1]
+group=EAEAWW
+keys=offset
+offset=821
+
+[EAEAWW_entry_2]
+group=EAEAWW
+keys=offset
+offset=822
+
+[EAEAWW_entry_3]
+group=EAEAWW
+keys=offset
+offset=823
+
+[EAEAWW_entry_4]
+group=EAEAWW
+keys=offset
+offset=824
+
+[EAEAWW_entry_5]
+group=EAEAWW
+keys=offset
+offset=825
+
+[EAEAWW_entry_6]
+group=EAEAWW
+keys=offset
+offset=826
+
+[EAEAWW_entry_7]
+group=EAEAWW
+keys=offset
+offset=827
+
+[EAEAWW_entry_8]
+group=EAEAWW
+keys=offset
+offset=828
+
+[EAEAWW_entry_9]
+group=EAEAWW
+keys=offset
+offset=829
+
+[EAEAWW_entry_10]
+group=EAEAWW
+keys=offset
+offset=830
+
+[EAEAWW_entry_11]
+group=EAEAWW
+keys=offset
+offset=831
+
+[EAESOWCLT_entry_0]
+group=EAESOWCLT
+keys=offset
+offset=956
+
+[EAESOWCLT_entry_1]
+group=EAESOWCLT
+keys=offset
+offset=958
+
+[EAESOWCLT_entry_2]
+group=EAESOWCLT
+keys=offset
+offset=960
+
+[EAESOWCLT_entry_3]
+group=EAESOWCLT
+keys=offset
+offset=962
+
+[EAESOWCLT_entry_4]
+group=EAESOWCLT
+keys=offset
+offset=964
+
+[EAESOWCLT_entry_5]
+group=EAESOWCLT
+keys=offset
+offset=966
+
+[EAESOWCLT_entry_6]
+group=EAESOWCLT
+keys=offset
+offset=968
+
+[EAESOWCLT_entry_7]
+group=EAESOWCLT
+keys=offset
+offset=970
+
+[EAESOWCLT_entry_8]
+group=EAESOWCLT
+keys=offset
+offset=972
+
+[EAESOWCLT_entry_9]
+group=EAESOWCLT
+keys=offset
+offset=974
+
+[EAESOWCLT_entry_10]
+group=EAESOWCLT
+keys=offset
+offset=976
+
+[EAESOWCLT_entry_11]
+group=EAESOWCLT
+keys=offset
+offset=978
+
+[EAESOW_entry_0]
+group=EAESOW
+keys=offset
+offset=832
+
+[EAESOW_entry_1]
+group=EAESOW
+keys=offset
+offset=833
+
+[EAESOW_entry_2]
+group=EAESOW
+keys=offset
+offset=834
+
+[EAESOW_entry_3]
+group=EAESOW
+keys=offset
+offset=835
+
+[EAESOW_entry_4]
+group=EAESOW
+keys=offset
+offset=836
+
+[EAESOW_entry_5]
+group=EAESOW
+keys=offset
+offset=837
+
+[EAESOW_entry_6]
+group=EAESOW
+keys=offset
+offset=838
+
+[EAESOW_entry_7]
+group=EAESOW
+keys=offset
+offset=839
+
+[EAESOW_entry_8]
+group=EAESOW
+keys=offset
+offset=840
+
+[EAESOW_entry_9]
+group=EAESOW
+keys=offset
+offset=841
+
+[EAESOW_entry_10]
+group=EAESOW
+keys=offset
+offset=842
+
+[EAESOW_entry_11]
+group=EAESOW
+keys=offset
+offset=843
 
