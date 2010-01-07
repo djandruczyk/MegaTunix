@@ -2016,7 +2016,7 @@
 				      <child>
 					<widget class="GtkTable" id="table6">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -2037,7 +2037,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry31">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2093,7 +2093,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry32">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2121,7 +2121,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry33">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2149,7 +2149,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry34">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2177,7 +2177,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry35">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2205,7 +2205,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry36">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2233,7 +2233,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry37">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2261,7 +2261,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry38">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2289,7 +2289,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry39">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2317,7 +2317,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry40">
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2371,6 +2371,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAESOCKPA_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">4</property>
@@ -2399,14 +2455,14 @@
 				      <child>
 					<widget class="GtkTable" id="table5">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry21">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2434,7 +2490,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry22">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2462,7 +2518,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry23">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2490,7 +2546,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry24">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2518,7 +2574,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry25">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2546,7 +2602,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry26">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2574,7 +2630,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry27">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2602,7 +2658,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry28">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2630,7 +2686,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry29">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2729,7 +2785,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry30">
+					    <widget class="GtkEntry" id="EAEBSOC_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2755,6 +2811,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEBSOC_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEBSOC_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">6</property>
@@ -2769,14 +2881,14 @@
 				      <child>
 					<widget class="GtkTable" id="table4">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry11">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2804,7 +2916,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry12">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2832,7 +2944,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry13">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2860,7 +2972,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry14">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2888,7 +3000,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry15">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2916,7 +3028,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry16">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2944,7 +3056,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry17">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -2972,7 +3084,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry18">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3000,7 +3112,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry19">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3099,7 +3211,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry20">
+					    <widget class="GtkEntry" id="EAEBAWC_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3125,6 +3237,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEBAWC_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEBAWC_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">2</property>
@@ -3139,7 +3307,7 @@
 				      <child>
 					<widget class="GtkTable" id="table3">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -3160,7 +3328,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry1">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3216,7 +3384,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry2">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3244,7 +3412,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry3">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3272,7 +3440,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry4">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3300,7 +3468,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry5">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3328,7 +3496,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry6">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3356,7 +3524,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry7">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3384,7 +3552,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry8">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3412,7 +3580,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry9">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3440,7 +3608,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry10">
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3491,6 +3659,60 @@
 					      <property name="top_attach">1</property>
 					      <property name="bottom_attach">2</property>
 					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWCKPA_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
@@ -3652,7 +3874,7 @@
 				      <child>
 					<widget class="GtkTable" id="table12">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -3673,7 +3895,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry71">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3729,7 +3951,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry72">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3757,7 +3979,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry73">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3785,7 +4007,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry74">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3813,7 +4035,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry75">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3841,7 +4063,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry76">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3869,7 +4091,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry77">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3897,7 +4119,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry78">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3925,7 +4147,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry79">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -3953,7 +4175,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry80">
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4007,6 +4229,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWCRPM_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">8</property>
@@ -4020,14 +4298,14 @@
 				      <child>
 					<widget class="GtkTable" id="table11">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry61">
+					    <widget class="GtkEntry" id="EAEAWN_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4055,7 +4333,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry62">
+					    <widget class="GtkEntry" id="EAEAWN_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4083,7 +4361,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry63">
+					    <widget class="GtkEntry" id="EAEAWN_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4111,7 +4389,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry64">
+					    <widget class="GtkEntry" id="EAEAWN_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4139,7 +4417,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry65">
+					    <widget class="GtkEntry" id="EAEAWN_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4167,7 +4445,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry66">
+					    <widget class="GtkEntry" id="EAEAWN_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4195,7 +4473,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry67">
+					    <widget class="GtkEntry" id="EAEAWN_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4223,7 +4501,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry68">
+					    <widget class="GtkEntry" id="EAEAWN_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4251,7 +4529,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry69">
+					    <widget class="GtkEntry" id="EAEAWN_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4350,7 +4628,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="entry70">
+					    <widget class="GtkEntry" id="EAEAWN_entry_0">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -4373,6 +4651,62 @@
 					      <property name="top_attach">3</property>
 					      <property name="bottom_attach">4</property>
 					      <property name="x_options">expand</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWN_entry_10">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="EAEAWN_entry_11">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
@@ -4468,7 +4802,7 @@
 				      <child>
 					<widget class="GtkTable" id="table9">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -4823,6 +5157,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry133">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry134">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">12</property>
@@ -4837,7 +5227,7 @@
 				      <child>
 					<widget class="GtkTable" id="table10">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -5193,6 +5583,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry136">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry137">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">14</property>
@@ -5286,7 +5732,7 @@
 				      <child>
 					<widget class="GtkTable" id="table13">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -5642,6 +6088,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry141">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry140">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">18</property>
@@ -5670,7 +6172,7 @@
 				      <child>
 					<widget class="GtkTable" id="table14">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -6025,6 +6527,62 @@
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry138">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry139">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">16</property>
@@ -6118,7 +6676,7 @@ RPM Correction</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">8</property>
@@ -6147,7 +6705,7 @@ RPM Correction</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">12</property>
@@ -6176,7 +6734,7 @@ CLT Correction</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">16</property>
@@ -6205,7 +6763,7 @@ CLT Correction</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">20</property>
@@ -6234,7 +6792,7 @@ Constant</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">4</property>
@@ -6263,7 +6821,7 @@ Constant</property>
 					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 					  <property name="width_chars">-1</property>
 					  <property name="single_line_mode">False</property>
-					  <property name="angle">50</property>
+					  <property name="angle">40</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">0</property>
@@ -6278,7 +6836,7 @@ Constant</property>
 				      <child>
 					<widget class="GtkTable" id="table15">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -6633,6 +7191,62 @@ Constant</property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry143">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry142">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
 					</widget>
 					<packing>
 					  <property name="left_attach">20</property>
@@ -6661,7 +7275,7 @@ Constant</property>
 				      <child>
 					<widget class="GtkTable" id="table16">
 					  <property name="visible">True</property>
-					  <property name="n_rows">14</property>
+					  <property name="n_rows">15</property>
 					  <property name="n_columns">1</property>
 					  <property name="homogeneous">False</property>
 					  <property name="row_spacing">0</property>
@@ -7014,6 +7628,62 @@ Constant</property>
 					      <property name="top_attach">3</property>
 					      <property name="bottom_attach">4</property>
 					      <property name="x_options">expand</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry144">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">13</property>
+					      <property name="bottom_attach">14</property>
+					      <property name="x_options"></property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="entry145">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes"></property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">●</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">3</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
+					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">14</property>
+					      <property name="bottom_attach">15</property>
+					      <property name="x_options"></property>
 					      <property name="y_options"></property>
 					    </packing>
 					  </child>

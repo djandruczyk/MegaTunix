@@ -495,7 +495,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	history = (GArray *)OBJ_GET(object,"history");
 	if (!history)
 		return FALSE;
-	if (history->len-1 < 0)
+	if ((gint)history->len-1 <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_current_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
@@ -532,7 +532,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	history = (GArray *)OBJ_GET(object,"history");
 	if (!history)
 		return FALSE;
-	if (history->len-2 < 0)
+	if ((gint)history->len-2 <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
@@ -571,7 +571,7 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 	history = (GArray *)OBJ_GET(object,"history");
 	if (!history)
 		return FALSE;
-	if (history->len-n < 0)
+	if ((gint)history->len-n <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_nth_value() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
@@ -615,7 +615,7 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 	history = (GArray *)OBJ_GET(object,"history");
 	if (!history)
 		return FALSE;
-	if (history->len-n < 0)
+	if ((gint)history->len-n <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
@@ -664,7 +664,7 @@ gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip
 	history = (GArray *)OBJ_GET(object,"history");
 	if (!history)
 		return FALSE;
-	if (history->len-(n*skip) < 0)
+	if ((gint)history->len-(n*skip) <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": lookup_previous_n_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);

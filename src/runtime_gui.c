@@ -189,7 +189,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	if (!history)
 		return;
-	if (history->len-1 < 0)
+	if ((gint)history->len-1 <= 0)
 		return;
 	precision = (gint)OBJ_GET(slider->object,"precision");
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before lock rtv_mutex\n"));

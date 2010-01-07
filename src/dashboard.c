@@ -392,6 +392,8 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)OBJ_GET(d_gauge->object,"history");
+	if ((gint)history->len-1 <= 0)
+		return;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after lock rtv_mutex\n"));
