@@ -471,7 +471,7 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 
 	if (!history)
 		return FALSE;
-	if (history->len-1 < 0)
+	if ((history->len)-1 <= 0)
 		return FALSE;
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
