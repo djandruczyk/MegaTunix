@@ -613,7 +613,7 @@ gint mtx_curve_get_active_coord_index (MtxCurve *curve)
  \param curve (MtxCurve *) pointer to curve
  \returns active vertex
  */
-gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper, gint y_lower, gint y_upper)
+gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gfloat x_lower, gfloat x_upper, gfloat y_lower, gfloat y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
@@ -634,7 +634,7 @@ gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper,
  \param x_upper (gint *) pointer to be filled in with value
  \returns TRUE
  */
-gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_upper, gint *y_lower, gint *y_upper)
+gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gfloat *x_lower, gfloat *x_upper, gfloat *y_lower, gfloat *y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
@@ -731,4 +731,45 @@ gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *curve)
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->y_blocked_from_edit;
 }
+
+
+/*!
+ \brief sets the X axis label
+ \param curve (MtxCurve *) pointer to curve
+ \param text (gchar *) label string
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	if (priv->x_axis_label)
+		g_free(priv->x_axis_label);
+	priv->x_axis_label = g_strdup(text);
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
+
+/*!
+ \brief sets the Y axis label
+ \param curve (MtxCurve *) pointer to curve
+ \param text (gchar *) label string
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_y_axis_label(MtxCurve *curve, const gchar *text)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	if (priv->y_axis_label)
+		g_free(priv->y_axis_label);
+	priv->y_axis_label = g_strdup(text);
+	g_object_thaw_notify (G_OBJECT (curve));
+	mtx_curve_redraw(curve);
+	return TRUE;
+}
+
 

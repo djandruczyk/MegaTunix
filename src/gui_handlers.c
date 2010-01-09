@@ -3003,8 +3003,9 @@ gboolean prompt_r_u_sure(void)
 
 	if (result == GTK_RESPONSE_YES)
 		return TRUE;
-	else return FALSE;
-
+	else 
+		return FALSE;
+	return FALSE;
 }
 
 

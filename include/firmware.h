@@ -259,6 +259,8 @@ struct _TE_Params
 	gchar *cross_color;	/*! Cross Color (string) */
 	gchar *marker_color;	/*! Marker Color (string) */
 	gchar *bind_to_list;	/*! Bind to list for sensitivity */
+	gchar *x_axis_label;	/*! X Axis label string */
+	gchar *y_axis_label;	/*! Y Axis label string */
 	GList *entries;		/*! Entry widget pointers */
 	gint bincount;		/* Number of bins for x and 1 */
 

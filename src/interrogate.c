@@ -796,6 +796,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			firmware->te_params[i]->x_temp_dep = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep))
 			firmware->te_params[i]->y_temp_dep = FALSE;
+		if(!cfg_read_string(cfgfile,section,"x_axis_label",&firmware->te_params[i]->x_axis_label))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		if(!cfg_read_string(cfgfile,section,"y_axis_label",&firmware->te_params[i]->y_axis_label))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->te_params[i]->x_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"y_page",&firmware->te_params[i]->y_page))

@@ -131,6 +131,9 @@ int setup_gui()
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)
 	{
+		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
+		label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i),TRUE);
 		if(hidden_list[i] == TRUE)
 		{

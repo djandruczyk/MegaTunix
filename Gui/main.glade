@@ -3094,7 +3094,7 @@
 		      <property name="n_columns">2</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">2</property>
-		      <property name="column_spacing">10</property>
+		      <property name="column_spacing">2</property>
 
 		      <child>
 			<widget class="GtkLabel" id="x_title">
@@ -3209,27 +3209,6 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkFrame" id="te_y_frame">
-			  <property name="visible">True</property>
-			  <property name="label_xalign">0</property>
-			  <property name="label_yalign">0.5</property>
-			  <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-			  <child>
-			    <placeholder/>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="left_attach">1</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">2</property>
-			  <property name="bottom_attach">3</property>
-			  <property name="x_options"></property>
-			  <property name="y_options">fill</property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkFrame" id="te_x_frame">
 			  <property name="visible">True</property>
 			  <property name="label_xalign">0</property>
@@ -3266,6 +3245,27 @@
 			  <property name="right_attach">2</property>
 			  <property name="top_attach">3</property>
 			  <property name="bottom_attach">4</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkFrame" id="te_y_frame">
+			  <property name="visible">True</property>
+			  <property name="label_xalign">0</property>
+			  <property name="label_yalign">0.5</property>
+			  <property name="shadow_type">GTK_SHADOW_NONE</property>
+
+			  <child>
+			    <placeholder/>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="x_options"></property>
+			  <property name="y_options">fill</property>
 			</packing>
 		      </child>
 		    </widget>

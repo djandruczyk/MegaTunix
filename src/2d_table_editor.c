@@ -58,6 +58,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *dummy = NULL;
 	GtkWidget *gauge = NULL;
 	GtkWidget *parent = NULL;
 	CurveData *cdata = NULL;
@@ -133,6 +134,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		widget = glade_xml_get_widget(xml,"te_layout_hbox1");
 		table_num = (gint)strtod(vector[j],NULL);
 		label = gtk_label_new(firmware->te_params[table_num]->title);
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
 			OBJ_SET(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
@@ -162,7 +164,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_container_add(GTK_CONTAINER(parent),curve);
 		gtk_widget_realize(curve);
 		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
-		mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
+		mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
+		mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 		cdata = g_new0(CurveData, 1);
 		cdata->curve = curve;
 		cdata->axis = _X_;
@@ -189,8 +192,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
 		rows = firmware->te_params[table_num]->bincount;
 		mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
-		x_table = gtk_table_new(rows,1,TRUE);
-		y_table = gtk_table_new(rows,1,TRUE);
+		x_table = gtk_table_new(rows+1,1,FALSE);
+		y_table = gtk_table_new(rows+1,1,FALSE);
 
 		x_parent = glade_xml_get_widget(xml,"te_x_frame");
 		y_parent = glade_xml_get_widget(xml,"te_y_frame");
@@ -296,16 +299,29 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			page = firmware->te_params[table_num]->y_page;
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
-
 			update_widget(G_OBJECT(entry),NULL);
 		}
+		/* Create the "LOCK" buttons */
+		dummy = gtk_toggle_button_new_with_label("Unlocked");
+		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
+		g_signal_connect(G_OBJECT(dummy),"toggled",
+				G_CALLBACK(set_axis_locking),curve);
+		gtk_table_attach(GTK_TABLE(x_table),dummy,
+				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+		dummy = gtk_toggle_button_new_with_label("Unlocked");
+		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
+		g_signal_connect(G_OBJECT(dummy),"toggled",
+				G_CALLBACK(set_axis_locking),curve);
+		gtk_table_attach(GTK_TABLE(y_table),dummy,
+				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+
 		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 		mtx_curve_set_hard_limits(MTX_CURVE(curve),
-				firmware->te_params[table_num]->x_raw_lower,
-				firmware->te_params[table_num]->x_raw_upper,
-				firmware->te_params[table_num]->y_raw_lower,
-				firmware->te_params[table_num]->y_raw_upper);
+				(gfloat)firmware->te_params[table_num]->x_raw_lower,
+				(gfloat)firmware->te_params[table_num]->x_raw_upper,
+				(gfloat)firmware->te_params[table_num]->y_raw_lower,
+				(gfloat)firmware->te_params[table_num]->y_raw_upper);
 		OBJ_SET(curve,"x_entries",x_entries);
 		OBJ_SET(curve,"y_entries",y_entries);
 		if (firmware->te_params[table_num]->bind_to_list)
@@ -338,6 +354,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *dummy = NULL;
 	GtkWidget *gauge = NULL;
 	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
@@ -402,7 +419,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	gtk_container_add(GTK_CONTAINER(parent),curve);
 	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
-	mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
+	mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
+	mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 	if (firmware->te_params[table_num]->gauge)
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
@@ -443,8 +461,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
 	rows = firmware->te_params[table_num]->bincount;
 	mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
-	x_table = gtk_table_new(rows,1,TRUE);
-	y_table = gtk_table_new(rows,1,TRUE);
+	x_table = gtk_table_new(rows,1,FALSE);
+	y_table = gtk_table_new(rows,1,FALSE);
 
 	x_parent = glade_xml_get_widget(xml,"te_x_frame");
 	y_parent = glade_xml_get_widget(xml,"te_y_frame");
@@ -554,13 +572,27 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 
 		update_widget(G_OBJECT(entry),NULL);
 	}
+	/* Create the "LOCK" buttons */
+	dummy = gtk_toggle_button_new_with_label("Unlocked");
+	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
+	g_signal_connect(G_OBJECT(dummy),"toggled",
+			G_CALLBACK(set_axis_locking),curve);
+	gtk_table_attach(GTK_TABLE(x_table),dummy,
+			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+	dummy = gtk_toggle_button_new_with_label("Unlocked");
+	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
+	g_signal_connect(G_OBJECT(dummy),"toggled",
+			G_CALLBACK(set_axis_locking),curve);
+	gtk_table_attach(GTK_TABLE(y_table),dummy,
+			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
-			firmware->te_params[table_num]->x_raw_lower,
-			firmware->te_params[table_num]->x_raw_upper,
-			firmware->te_params[table_num]->y_raw_lower,
-			firmware->te_params[table_num]->y_raw_upper);
+			(gfloat)firmware->te_params[table_num]->x_raw_lower,
+			(gfloat)firmware->te_params[table_num]->x_raw_upper,
+			(gfloat)firmware->te_params[table_num]->y_raw_lower,
+			(gfloat)firmware->te_params[table_num]->y_raw_upper);
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
 	OBJ_SET(curve,"x_entries",x_entries);
@@ -919,4 +951,20 @@ EXPORT void update_curve_marker(DataWatch *watch, gfloat f_val)
 		if (tmpf  != f_val)
 			mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),f_val);
 	}
+}
+
+
+gboolean set_axis_locking(GtkWidget *widget, gpointer data)
+{
+	Axis axis = (Axis)OBJ_GET(widget,"axis");
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	if (state)
+		gtk_button_set_label(GTK_BUTTON(widget)," Locked ");
+	else
+		gtk_button_set_label(GTK_BUTTON(widget),"Unlocked");
+	if (axis == _X_)
+		mtx_curve_set_x_axis_lock_state(MTX_CURVE(data),state);
+	if (axis == _Y_)
+		mtx_curve_set_y_axis_lock_state(MTX_CURVE(data),state);
+	return TRUE;
 }

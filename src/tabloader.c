@@ -111,6 +111,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 			label = gtk_label_new_with_mnemonic(tab_name);
+			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			topframe = glade_xml_get_widget(xml,"topframe");
 			/* bind_data() is recursive and will take 
 			 * care of all children
