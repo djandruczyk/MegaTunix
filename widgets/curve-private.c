@@ -588,7 +588,7 @@ void generate_curve_background(MtxCurve *curve)
 		cairo_show_text (cr, message);
 		g_free(message);
 		priv->x_label_border = 2 * extents.height;
-		priv->y_border = priv->x_label_border*2;
+		priv->y_border = priv->x_label_border + (1.5*extents.height);
 	}
 	if (priv->y_axis_label)
 	{
@@ -602,6 +602,7 @@ void generate_curve_background(MtxCurve *curve)
 		g_free(message);
 		priv->y_label_border = 2 * extents.height;
 	}
+	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
 	if (priv->show_grat)
 	{
 		/* Need to draw text markers FIRST... */
@@ -682,7 +683,7 @@ void generate_curve_background(MtxCurve *curve)
 		for(i = 0;i <= max_lines;i++)
 		{
 			cairo_move_to (cr,priv->x_border+i*spread,0);
-			cairo_line_to (cr,priv->x_border+i*spread,priv->h-priv->y_border);
+			cairo_line_to (cr,priv->x_border+i*spread,priv->h-priv->y_border+(extents.height/2));
 		}
 		cairo_stroke (cr);
 
