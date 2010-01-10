@@ -52,7 +52,7 @@ int main (int argc, char **argv)
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),"X Axis");
-	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"Y Axis");
+	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"This is the Y Axis");
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,20000.0,-10000.0,10000.0);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),1);
 	g_signal_connect(G_OBJECT(curve), "coords-changed",

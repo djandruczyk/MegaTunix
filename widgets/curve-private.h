@@ -71,6 +71,8 @@ struct _MtxCurvePrivate
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;
+	gfloat x_label_border;	/*! Space taken by x axis marker */
+	gfloat y_label_border;	/*! Space taken by x axis marker */
         gchar * pos_str;	/*! Position String */
         gchar * font;           /*! Font to use */
         gchar * axis_font;	/*! Axis Font to use */
