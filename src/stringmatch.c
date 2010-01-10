@@ -470,7 +470,7 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"lookuptable",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"max_chars",
-			GINT_TO_POINTER(MTX_STRING));
+			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"multi_expr_keys",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"oddfire_bit_offset",
