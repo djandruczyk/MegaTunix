@@ -85,6 +85,7 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_sh
 	return watch->id;
 }
 
+
 guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -170,6 +171,14 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
 			lookup_current_value(watch->varname, &tmpf);
+			/* If it's a one-shot, fire it no matter what... */
+			if (watch->one_shot)
+			{
+				watch->func(watch,tmpf);
+				remove_watch(watch->id);
+				break;
+			}
+
 			/* compare to 5 samples back */
 			lookup_previous_nth_value(watch->varname, 4, &tmpf2);
 			if (tmpf != tmpf2)

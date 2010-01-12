@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <configfile.h>
 #include <conversions.h>
@@ -141,7 +142,10 @@ gboolean read_config(void)
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
 	gboolean *hidden_list;
+	CmdLineArgs *args = NULL;
+
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	args = OBJ_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -185,8 +189,13 @@ gboolean read_config(void)
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
-		if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
-			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
+		if (args->network_mode)
+			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
+		else
+		{
+			if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
+				OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
+		}
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
 			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
@@ -854,7 +863,6 @@ void dealloc_client_data(MtxSocketClient *client)
 void dealloc_message(Io_Message * message)
 {
 	OutputData *data;
-	static gint count = 0;
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
 	message->functions = NULL;

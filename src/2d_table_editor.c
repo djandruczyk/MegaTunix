@@ -25,6 +25,7 @@
 #include <gui_handlers.h>
 #include <keyparser.h>
 #include <listmgmt.h>
+#include <notifications.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
 #include <tabloader.h>
@@ -130,9 +131,24 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gtk_box_pack_start(GTK_BOX(widget),notebook,TRUE,TRUE,0);
 	for (j = 0;j < num_tabs;j++)
 	{
+		table_num = (gint)strtod(vector[j],NULL);
+		if (table_num >= firmware->total_te_tables)
+		{
+			warn_user("Requested to create 2D table editor window for an undefined (out of range) table ID");
+			return FALSE;
+		}
+		if (!firmware->te_params)
+		{
+			warn_user("No 2D table Editor tables (te_tables) defined in interrogation profile, yet told to create a graph for a table... BUG detected!");
+			continue;
+		}
+		if (!firmware->te_params[table_num])
+		{
+			warn_user("Requested to create a 2D table editor window for an undefined table!");
+			continue;
+		}
 		xml = glade_xml_new(main_xml->filename,"te_layout_hbox1",NULL);
 		widget = glade_xml_get_widget(xml,"te_layout_hbox1");
-		table_num = (gint)strtod(vector[j],NULL);
 		label = gtk_label_new(firmware->te_params[table_num]->title);
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		if (firmware->te_params[table_num]->bind_to_list)
@@ -218,8 +234,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
 			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
-			OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_dl_conv_expr));
-			OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_ul_conv_expr));
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -266,8 +282,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
 			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
-			OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_dl_conv_expr));
-			OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_ul_conv_expr));
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -326,14 +342,10 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		OBJ_SET(curve,"y_entries",y_entries);
 		if (firmware->te_params[table_num]->bind_to_list)
 			g_list_foreach(get_list(firmware->te_params[table_num]->bind_to_list),alter_widget_state,NULL);
+		create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 	}
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
-	lookup_current_value(cdata->source,&tmpf);
-	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
 	gtk_widget_show_all(window);
 	return TRUE;
 
@@ -373,6 +385,21 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	gfloat tmpf = 0.0;
 	gint rows = 0;
 
+	if (table_num >= firmware->total_te_tables)
+	{
+		warn_user("Requested to create 2D table editor window for an undefined (out of range) table ID");
+		return FALSE;
+	}
+	if (!firmware->te_params)
+	{
+		warn_user("No 2D table Editor tables (te_tables) defined in interrogation profile, yet told to create a graph for a table... BUG detected!");
+		return FALSE;
+	}
+	if (!firmware->te_params[table_num])
+	{
+		warn_user("Requested to create a 2D table editor window for an undefined table!");
+		return FALSE;
+	}
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if (!main_xml)
 		return FALSE;
@@ -488,8 +515,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
 		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
-		OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_dl_conv_expr));
-		OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_ul_conv_expr));
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -536,8 +563,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
 		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
-		OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_dl_conv_expr));
-		OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_ul_conv_expr));
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -600,11 +627,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	OBJ_SET(window,"x_entries",x_entries);
 	OBJ_SET(window,"y_entries",y_entries);
 
-	lookup_current_value(cdata->source,&tmpf);
-	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 	gtk_widget_show_all(window);
 	return TRUE;
 }
@@ -709,7 +732,6 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	/* X Coord */
-	/*
 	array = OBJ_GET(curve,"x_entries");
 	entry = g_array_index(array,GtkWidget *,index);
 	precision = (gint)OBJ_GET(entry, "precision");
@@ -717,7 +739,6 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
 	g_free(tmpbuf);
-	*/
 
 	/* Y Coord */
 	array = OBJ_GET(curve,"y_entries");

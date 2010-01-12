@@ -28,10 +28,12 @@ gui_files = 	README \
 		memviewer.datamap \
 		ms2-accel.glade \
 		ms2-accel.datamap \
-		ms2-e-accel.glade \
-		ms2-e-accel.datamap \
 		ms2-alpha-n_6x6x1.glade \
 		ms2-alpha-n_6x6x1.datamap \
+		ms2-e-accel.glade \
+		ms2-e-accel.datamap \
+		ms2-e-start_warmup.glade \
+		ms2-e-start_warmup.datamap \
 		ms2-globals.glade \
 		ms2-globals.datamap \
 		ms2-idle_ego_rev.glade \
