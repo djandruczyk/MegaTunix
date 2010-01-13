@@ -469,12 +469,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if(!cfg_read_int(cfgfile,"parameters","TotalTables",
 				&firmware->total_tables))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
-	if (firmware->capabilities & MS2)
-	{
-		if(!cfg_read_int(cfgfile,"parameters","TotalTETables",
-					&firmware->total_te_tables))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTETables\" value not found in interrogation profile, ERROR\n"));
-	}
+	cfg_read_int(cfgfile,"parameters","TotalTETables",
+					&firmware->total_te_tables);
 	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))

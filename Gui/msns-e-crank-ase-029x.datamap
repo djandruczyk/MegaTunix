@@ -135,6 +135,11 @@ keys=handler,bind_to_list
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
+[iatcorr_edit_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=0
+
 #----- Radio/CheckCombo Buttons ----------------------------------------------
 
 [prime_when_combo]
