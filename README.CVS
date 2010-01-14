@@ -14,4 +14,4 @@ to ignore those warnings.  You can thank the autofoo tool maintainers for
 those..
 
  To use a tag, use "cvs update -r <TAGNAME> -dP"
- i.e. cvs update -R PRE_0_9_19-beta2-branch -dP
+ i.e. cvs update -r PRE_0_9_19-beta2-branch -dP

@@ -17,7 +17,7 @@ using the Gnome desktop.   MegaTunix uses the GTK+2 libraries which are the
 foundation libraries by which Gnome's gui is based upon.  The fix is to run 
 "gnome-font-properties" and set the "Application Font" size to a smaller 
 point size.  On the authors' system a Application Font of "Sans" at 8pt, 
-looks the best.  The author runs at 1600x1200 on an ancient 21 inch monitor 
+looks the best.  The author runs at 1920x1200 on an 23" flatscreen monitor 
 so your ideal font size may vary.
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
@@ -25,14 +25,14 @@ Send suggestions, bug reports and general feedback to (SPAM not welcome)
 djandruczyk <at> yahoo <dot> com
 
 System requirements:
-	MegaTunix is developed on both Gentoo and Ubuntu Linux  distros, 
-the package names will vary if you don't use Gentoo.  Most RPM and Debian 
+	MegaTunix is developed on Ubuntu Linux, 
+the package names may vary if you don't use Ubuntu.  Most RPM and Debian 
 based distros split packages into a runtime and devel package.  Runtime 
 ones are needed to run the program, and devel packages are needed for 
 programs like megatunix to compile against.
 
 MegaTunix requires the following libraries (and their dependancies);
-* minimum GTK-2.6  (2.10 or newer recommended) and the dev package
+* minimum GTK-2.10  (2.12 or newer recommended) and the dev package
   - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
 * Gtkglext-1.x (and the dev package)
   - gtkglext depends on gtk+ and glib
@@ -44,5 +44,7 @@ Optional:
   The Glade GUI designer can be installed to modify and add new gui tabs to
 megatunix for your own custom firmware needs.  This is ONLY needed if you want
 to modify megatunix or design custom tabs for your firmware.  
-I recommend glade-2.x
+I recommend glade-2.x as 3.x has a lot of issues.  Unfortunately glade-2.x
+doesn't appear to be available with the very latest linux distros (ubuntu 9.10
+does not have it)
 
