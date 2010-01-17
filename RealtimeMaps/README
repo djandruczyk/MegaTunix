@@ -40,8 +40,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			the section are listed on this line.  keys specifc to
 			complex conversions and depend_on are loaded by
 			specialized handlers.
-	key_types	(string) List of keytypes for the respective keys
-			above. 
 	internal_names	(CSV string) list of names for this variable 
 			internally to megatunix
 			used by the datalogger, loogviewer and Dashboard.
