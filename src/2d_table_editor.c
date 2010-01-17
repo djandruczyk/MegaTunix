@@ -322,12 +322,14 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
 		g_signal_connect(G_OBJECT(dummy),"toggled",
 				G_CALLBACK(set_axis_locking),curve);
+		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
 		gtk_table_attach(GTK_TABLE(x_table),dummy,
 				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
 		dummy = gtk_toggle_button_new_with_label("Unlocked");
 		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
 		g_signal_connect(G_OBJECT(dummy),"toggled",
 				G_CALLBACK(set_axis_locking),curve);
+		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
 		gtk_table_attach(GTK_TABLE(y_table),dummy,
 				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
 
@@ -604,12 +606,14 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
 	g_signal_connect(G_OBJECT(dummy),"toggled",
 			G_CALLBACK(set_axis_locking),curve);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
 	gtk_table_attach(GTK_TABLE(x_table),dummy,
 			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
 	dummy = gtk_toggle_button_new_with_label("Unlocked");
 	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
 	g_signal_connect(G_OBJECT(dummy),"toggled",
 			G_CALLBACK(set_axis_locking),curve);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
 	gtk_table_attach(GTK_TABLE(y_table),dummy,
 			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
 

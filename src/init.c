@@ -807,6 +807,8 @@ TE_Params * initialize_te_params(void)
 {
 	TE_Params *te_params = NULL;
 	te_params = g_malloc0(sizeof(TE_Params));
+	te_params->x_lock = FALSE;
+	te_params->y_lock = FALSE;
 	te_params->x_page = -1;
 	te_params->y_page = -1;
 	te_params->x_base = -1;

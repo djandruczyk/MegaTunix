@@ -113,7 +113,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 
 	g_object_set(G_OBJECT(gauge),"can_focus",GINT_TO_POINTER(TRUE),NULL);
 
-	priv->max_layers=10;
+	priv->max_layers = 10;
 	priv->w = 0;
 	priv->h = 0;
 	priv->xc = 0.0;
@@ -542,6 +542,7 @@ cairo_jump_out_of_alerts:
 	cairo_stroke(cr);
 
 	cairo_destroy(cr);
+	return;
 }
 
 
@@ -696,7 +697,6 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		generate_gauge_background(gauge);
 		update_gauge_position(gauge);
 	}
-
 	return TRUE;
 }
 

@@ -265,6 +265,7 @@ struct _TE_Params
 	gint bincount;		/* Number of bins for x and 1 */
 
 	gboolean x_temp_dep;	/*! Temperature dependant? */
+	gboolean x_lock;	/*! Flag for 2d table editor */
 	gint x_page;		/*! what page this column resides in */
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
@@ -278,6 +279,7 @@ struct _TE_Params
 	gchar *x_units;	/*! column units */
 
 	gboolean y_temp_dep;	/*! Temperature dependant? */
+	gboolean y_lock;	/*! Flag for 2d table editor */
 	gint y_page;		/*! what page this column resides in */
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */
