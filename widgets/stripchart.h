@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2010 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
- * 
  *
  * MegaTunix stripchart widget
  * Inspired by Phil Tobin's MegaLogViewer 

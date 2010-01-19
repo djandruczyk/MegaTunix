@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * MegaTunix pie gauge widget
+ * MegaTunix stripchart widget
  * Inspired by Phil Tobins MegaLogViewer
  * 
  * 
@@ -16,8 +16,8 @@
 
 #include <config.h>
 #include <cairo/cairo.h>
-#include <piegauge.h>
-#include <piegauge-private.h>
+#include <stripchart.h>
+#include <stripchart-private.h>
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <glib-object.h>
@@ -26,35 +26,35 @@
 #include <time.h>
 #include <string.h>
 
-GType mtx_pie_gauge_get_type(void)
+GType mtx_stripchart_get_type(void)
 {
-	static GType mtx_pie_gauge_type = 0;
+	static GType mtx_stripchart_type = 0;
 
-	if (!mtx_pie_gauge_type)
+	if (!mtx_stripchart_type)
 	{
-		static const GTypeInfo mtx_pie_gauge_info =
+		static const GTypeInfo mtx_stripchart_info =
 		{
-			sizeof(MtxPieGaugeClass),
+			sizeof(MtxStripChartClass),
 			NULL,
 			NULL,
-			(GClassInitFunc) mtx_pie_gauge_class_init,
+			(GClassInitFunc) mtx_stripchart_class_init,
 			NULL,
 			NULL,
-			sizeof(MtxPieGauge),
+			sizeof(MtxStripChart),
 			0,
-			(GInstanceInitFunc) mtx_pie_gauge_init,
+			(GInstanceInitFunc) mtx_stripchart_init,
 		};
-		mtx_pie_gauge_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxPieGauge", &mtx_pie_gauge_info, 0);
+		mtx_stripchart_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxStripChart", &mtx_stripchart_info, 0);
 	}
-	return mtx_pie_gauge_type;
+	return mtx_stripchart_type;
 }
 
 /*!
- \brief Initializes the mtx pie gauge class and links in the primary
+ \brief Initializes the mtx pie chart class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param class_name (MtxPieGaugeClass *) pointer to the class
+ \param class_name (MtxStripChartClass *) pointer to the class
  */
-void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
+void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 {
 	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
@@ -63,31 +63,31 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 	widget_class = GTK_WIDGET_CLASS (class_name);
 
 	/* GtkWidget signals */
-	widget_class->configure_event = mtx_pie_gauge_configure;
-	widget_class->expose_event = mtx_pie_gauge_expose;
-	/*widget_class->button_press_event = mtx_pie_gauge_button_press; */
-	/*widget_class->button_release_event = mtx_pie_gauge_button_release; */
+	widget_class->configure_event = mtx_stripchart_configure;
+	widget_class->expose_event = mtx_stripchart_expose;
+	/*widget_class->button_press_event = mtx_stripchart_button_press; */
+	/*widget_class->button_release_event = mtx_stripchart_button_release; */
 	/* Motion event not needed, as unused currently */
-	/*widget_class->motion_notify_event = mtx_pie_gauge_motion_event; */
-	widget_class->size_request = mtx_pie_gauge_size_request;
+	/*widget_class->motion_notify_event = mtx_stripchart_motion_event; */
+	widget_class->size_request = mtx_stripchart_size_request;
 
-	g_type_class_add_private (class_name, sizeof (MtxPieGaugePrivate)); 
+	g_type_class_add_private (class_name, sizeof (MtxStripChartPrivate)); 
 }
 
 
 /*!
- \brief Initializes the gauge attributes to sane defaults
- \param gauge (MtxPieGauge *) pointer to the gauge object
+ \brief Initializes the chart attributes to sane defaults
+ \param chart (MtxStripChart *) pointer to the chart object
  */
-void mtx_pie_gauge_init (MtxPieGauge *gauge)
+void mtx_stripchart_init (MtxStripChart *chart)
 {
-	/* The events the gauge receives
+	/* The events the chart receives
 	* Need events for button press/release AND motion EVEN THOUGH
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
 	*/ 
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
-	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	gtk_widget_add_events (GTK_WIDGET (chart),GDK_BUTTON_PRESS_MASK
 			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
 	priv->w = 130;		
 	priv->h = 20;
@@ -107,19 +107,19 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	priv->cr = NULL;
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
-	mtx_pie_gauge_init_colors(gauge);
-	/*mtx_pie_gauge_redraw (gauge);*/
+	mtx_stripchart_init_colors(chart);
+	/*mtx_stripchart_redraw (chart);*/
 }
 
 
 
 /*!
- \brief Allocates the default colors for a gauge with no options 
- \param widget (MegaPieGauge *) pointer to the gauge object
+ \brief Allocates the default colors for a chart with no options 
+ \param widget (MegaStripChart *) pointer to the chart object
  */
-void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
+void mtx_stripchart_init_colors(MtxStripChart *chart)
 {
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	/*! Main Background */
 	priv->colors[COL_BG].red=0.914*65535;
 	priv->colors[COL_BG].green=0.914*65535;
@@ -149,11 +149,11 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 
 
 /*!
- \brief updates the gauge position,  This is the CAIRO implementation that
+ \brief updates the chart position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
- \param widget (MtxPieGauge *) pointer to the gauge object
+ \param widget (MtxStripChart *) pointer to the chart object
  */
-void update_pie_gauge_position (MtxPieGauge *gauge)
+void update_stripchart_position (MtxStripChart *chart)
 {
 	GtkWidget * widget = NULL;
 	cairo_font_weight_t weight;
@@ -165,9 +165,9 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	GdkPoint tip;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
-	widget = GTK_WIDGET(gauge);
+	widget = GTK_WIDGET(chart);
 
 	/* Copy background pixmap to intermediary for final rendering */
 	gdk_draw_drawable(priv->pixmap,
@@ -214,7 +214,7 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 
 	cairo_stroke (cr);
 
-	/* gauge hands */
+	/* chart hands */
 	tmpf = (priv->value-priv->min)/(priv->max-priv->min);
 	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
 
@@ -236,18 +236,18 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 
 
 /*!
- \brief handles configure events whe nthe gauge gets created or resized.
+ \brief handles configure events whe nthe chart gets created or resized.
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
- \param widget (GtkWidget *) pointer to the gauge object
+ \param widget (GtkWidget *) pointer to the chart object
  \param event (GdkEventConfigure *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
-gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
+gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
-	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	MtxStripChart * chart = MTX_STRIPCHART(widget);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	priv->w = widget->allocation.width;
 	priv->h = widget->allocation.height;
@@ -286,8 +286,8 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_font_options_set_antialias(priv->font_options,
 			CAIRO_ANTIALIAS_GRAY);
 
-	generate_pie_gauge_background(gauge);
-	update_pie_gauge_position(gauge);
+	generate_stripchart_background(chart);
+	update_stripchart_position(chart);
 
 	return TRUE;
 }
@@ -296,14 +296,14 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 /*!
  \brief handles exposure events when the screen is covered and then 
  exposed. Works by copying from a backing pixmap to screen,
- \param widget (GtkWidget *) pointer to the gauge object
+ \param widget (GtkWidget *) pointer to the chart object
  \param event (GdkEventExpose *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
-gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
+gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 {
-	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	MtxStripChart * chart = MTX_STRIPCHART(widget);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -317,20 +317,20 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 
 
 /*!
- \brief draws the static elements of the gauge (only on resize), This includes
+ \brief draws the static elements of the chart (only on resize), This includes
  the border, units and name strings,  tick marks and warning regions
  This is the cairo version.
- \param widget (MtxPieGauge *) pointer to the gauge object
+ \param widget (MtxStripChart *) pointer to the chart object
  */
-void generate_pie_gauge_background(MtxPieGauge *gauge)
+void generate_stripchart_background(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
-	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
-	w = GTK_WIDGET(gauge)->allocation.width;
-	h = GTK_WIDGET(gauge)->allocation.height;
+	w = GTK_WIDGET(chart)->allocation.width;
+	h = GTK_WIDGET(chart)->allocation.height;
 
 	if (!priv->bg_pixmap)
 		return;
@@ -390,10 +390,10 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 }
 
 
-gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
+gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	/*	printf("motion in gauge, returning false\n");*/
+	/*	printf("motion in chart, returning false\n");*/
 	return FALSE;
 }
 					       
@@ -401,11 +401,11 @@ gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 
 /*!
  \brief sets the INITIAL sizeof the widget
- \param gauge (GtkWidget *) pointer to the gauge widget
+ \param chart (GtkWidget *) pointer to the chart widget
  \param requisition (GdkRequisition *) struct to set the vars within
  \returns void
  */
-void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
+void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 80;
 	requisition->height = 20;
@@ -414,12 +414,12 @@ void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
 
 /*!
  \brief gets called to redraw the entire display manually
- \param gauge (MtxPieGauge *) pointer to the gauge object
+ \param chart (MtxStripChart *) pointer to the chart object
  */
-void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
+void mtx_stripchart_redraw (MtxStripChart *chart)
 {
-	update_pie_gauge_position(gauge);
-	gdk_window_clear(GTK_WIDGET(gauge)->window);
+	update_stripchart_position(chart);
+	gdk_window_clear(GTK_WIDGET(chart)->window);
 }
 
 

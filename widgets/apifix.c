@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Chris Mire (czb)
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)

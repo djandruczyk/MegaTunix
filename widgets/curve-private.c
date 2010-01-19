@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt curve widget
+ * MegaTunix curve widget
  * 
  * This software comes under the GPL (GNU Public License)
  * You may freely copy,distribute etc. this as long as the source code

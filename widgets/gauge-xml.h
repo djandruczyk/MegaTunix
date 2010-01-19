@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * 
- * Megasquirt gauge widget XML I/O header
+ * MegaTunix gauge widget XML I/O header
  * 
  * 
  * This software comes under the GPL (GNU Public License)
