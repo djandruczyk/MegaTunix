@@ -30,11 +30,12 @@ struct _MtxStripChartPrivate
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
         GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
 	gfloat *current;	/*! Array of current values */
-        gint w;                 /* Width of full widget */
-        gint h;                 /* Height of full widget */
-        gchar *value_font;      /* Font string for value */
-        gfloat value_font_scale;/* Font scale */
-        gchar *valname;         /* Value text to the let of the number */
+        gint w;                 /*! Width of full widget */
+        gint h;                 /*! Height of full widget */
+	gint num_traces;	/*! Number of active traces */
+        gchar *value_font;      /*! Font string for value */
+        gfloat value_font_scale;/*! Font scale */
+        gchar *valname;         /*! Value text to the let of the number */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;

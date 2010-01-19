@@ -89,20 +89,10 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	gtk_widget_add_events (GTK_WIDGET (chart),GDK_BUTTON_PRESS_MASK
 			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
+	priv->num_traces = 0;
 	priv->w = 130;		
 	priv->h = 20;
-	priv->pie_xc = 17;		/* pie x center coord from LL corner */
-	priv->pie_yc = priv->h-3;	/* pie y center coord from LL corner */
-	priv->pie_radius = 14;		/* pie is 180deg swep so 14x28 pixels */
-	priv->value = 0.0;		/* default values */
-	priv->min = 0.0;
-	priv->max = 100.0;
-	priv->precision = 2;
-	priv->start_angle = 180;	/* lower left quadrant */
-	priv->sweep_angle = 180;	/* CW sweep */
 	priv->value_font = g_strdup("Bitstream Vera Sans");
-	priv->value_xpos = 0;
-	priv->value_ypos = 0;
 	priv->value_font_scale = 0.2;
 	priv->cr = NULL;
 	priv->colormap = gdk_colormap_get_system();
@@ -121,29 +111,25 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	/*! Main Background */
-	priv->colors[COL_BG].red=0.914*65535;
-	priv->colors[COL_BG].green=0.914*65535;
-	priv->colors[COL_BG].blue=0.859*65535;
+	priv->colors[COL_BG].red=0.*65535;
+	priv->colors[COL_BG].green=0.*65535;
+	priv->colors[COL_BG].blue=0.*65535;
 	/*! Needle */
-	priv->colors[COL_NEEDLE].red=0.0*65535;
-	priv->colors[COL_NEEDLE].green=0.0*65535;
-	priv->colors[COL_NEEDLE].blue=0.0*65535;
-	/*! Text Color*/
-	priv->colors[COL_VALUE_FONT].red=0.1*65535;
-	priv->colors[COL_VALUE_FONT].green=0.1*65535;
-	priv->colors[COL_VALUE_FONT].blue=0.1*65535;
-	/*! Gauge BG Color Begin */
-	priv->colors[COL_LOW].red=0.0*65535;
-	priv->colors[COL_LOW].green=1.0*65535;
-	priv->colors[COL_LOW].blue=0.0*65535;
-	/*! Gauge BG Color Middle */
-	priv->colors[COL_MID].red=1.0*65535;
-	priv->colors[COL_MID].green=1.0*65535;
-	priv->colors[COL_MID].blue=0.0*65535;
-	/*! Gauge BG Color End */
-	priv->colors[COL_HIGH].red=1.0*65535;
-	priv->colors[COL_HIGH].green=0.0*65535;
-	priv->colors[COL_HIGH].blue=0.0*65535;
+	priv->colors[COL_GRAT].red=0.8*65535;
+	priv->colors[COL_GRAT].green=0.8*65535;
+	priv->colors[COL_GRAT].blue=0.8*65535;
+	/*! Trace 1 */
+	priv->colors[COL_TRACE1].red=0.9*65535;
+	priv->colors[COL_TRACE1].green=0.1*65535;
+	priv->colors[COL_TRACE1].blue=0.1*65535;
+	/*! Trace 2 */
+	priv->colors[COL_TRACE2].red=0.1*65535;
+	priv->colors[COL_TRACE2].green=0.9*65535;
+	priv->colors[COL_TRACE2].blue=0.1*65535;
+	/*! Trace 3 */
+	priv->colors[COL_TRACE3].red=0.1*65535;
+	priv->colors[COL_TRACE3].green=0.1*65535;
+	priv->colors[COL_TRACE3].blue=0.9*65535;
 
 }
 
@@ -182,6 +168,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 	/* Update the VALUE text */
+/*
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_VALUE_FONT].red/65535.0,
 			priv->colors[COL_VALUE_FONT].green/65535.0,
@@ -213,24 +200,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	g_free(message);
 
 	cairo_stroke (cr);
-
-	/* chart hands */
-	tmpf = (priv->value-priv->min)/(priv->max-priv->min);
-	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
-
-
-	cairo_set_source_rgb (cr, priv->colors[COL_NEEDLE].red/65535.0,
-			priv->colors[COL_NEEDLE].green/65535.0,
-			priv->colors[COL_NEEDLE].blue/65535.0);
-	cairo_set_line_width (cr, 1.5);
-
-
-	tip.x = priv->pie_xc + (priv->pie_radius * cos (needle_pos));
-	tip.y = priv->pie_yc + (priv->pie_radius * sin (needle_pos));
-
-	cairo_move_to (cr, priv->pie_xc,priv->pie_yc);
-	cairo_line_to (cr, tip.x,tip.y);
-	cairo_stroke(cr);
+*/
 	cairo_destroy(cr);
 }
 
@@ -345,47 +315,7 @@ void generate_stripchart_background(MtxStripChart *chart)
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
-	/* first one big yellow, with the green and red on top
-	 * This prevents seeing BG pixels due to antialiasing errors */
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_MID].red/65535.0,
-			priv->colors[COL_MID].green/65535.0,
-			priv->colors[COL_MID].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
-	cairo_fill(cr);
-	/* Low green Arc (*/
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_LOW].red/65535.0,
-			priv->colors[COL_LOW].green/65535.0,
-			priv->colors[COL_LOW].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+45)*(M_PI/180.0));
-	cairo_fill(cr);
-	/* High red Arc */
-	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_HIGH].red/65535.0,
-			priv->colors[COL_HIGH].green/65535.0,
-			priv->colors[COL_HIGH].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			(priv->start_angle+135)*(M_PI/180.0), 
-			(priv->start_angle+180)*(M_PI/180.0));
-	cairo_fill(cr);
-	/* Pie Gauge Arcs */
-	cairo_set_line_width (cr, 1.0);
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_NEEDLE].red/65535.0,
-			priv->colors[COL_NEEDLE].green/65535.0,
-			priv->colors[COL_NEEDLE].blue/65535.0);
-	cairo_arc(cr, priv->pie_xc, priv->pie_yc, priv->pie_radius, 
-			priv->start_angle*(M_PI/180.0), 
-			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
-	cairo_stroke(cr);
+
 	cairo_destroy (cr);
 }
 
@@ -407,8 +337,8 @@ gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
  */
 void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 80;
-	requisition->height = 20;
+	requisition->width = 120;
+	requisition->height = 60;
 }
 
 

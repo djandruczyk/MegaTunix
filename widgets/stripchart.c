@@ -41,7 +41,7 @@ gboolean mtx_stripchart_get_values (MtxStripChart *stripchart, gfloat *values)
 	g_return_val_if_fail ((MTX_IS_STRIPCHART (stripchart)),FALSE);
 	for (i=0;i<priv->num_traces;i++)
 		if (values[i])
-			*values[i]=priv->current[i];
+			values[i]=priv->current[i];
 	return TRUE;
 }
 
@@ -59,7 +59,8 @@ void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 	g_object_freeze_notify (G_OBJECT (stripchart));
 	for (i=0;i<priv->num_traces;i++)
 		if (values[i])
-			priv->current[i] = *values[i];
+			if (priv->current[i])
+				priv->current[i] = values[i];
 	g_object_thaw_notify (G_OBJECT (stripchart));
 	mtx_stripchart_redraw(stripchart);
 }
@@ -70,17 +71,19 @@ void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
-gint mtx_stripchart_add_trace(MtxStripChart *, gfloat min, gfloat max, GdkColor color)
+gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, GdkColor color)
 {
 	gint i = 0;
-	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(stripchart);
-	g_return_if_fail (MTX_IS_STRIPCHART (stripchart));
-	g_object_freeze_notify (G_OBJECT (stripchart));
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_val_if_fail (MTX_IS_STRIPCHART (chart),-1);
+	g_object_freeze_notify (G_OBJECT (chart));
 	
 	/* add a trace.. */
 
-	g_object_thaw_notify (G_OBJECT (stripchart));
-	mtx_stripchart_redraw(stripchart);
+	g_object_thaw_notify (G_OBJECT (chart));
+	mtx_stripchart_redraw(chart);
+	/** FIXME!!! **/
+	return 0;
 }
 
 
@@ -91,5 +94,9 @@ gint mtx_stripchart_add_trace(MtxStripChart *, gfloat min, gfloat max, GdkColor 
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
-void mtx_stripchart_delete_trace(MtxStripChart *, gint index)
-{}
+gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
+{
+	printf("Not implemented yet...\n");
+
+	return FALSE;
+}

@@ -62,7 +62,7 @@ GtkWidget* mtx_stripchart_new ();
 
 /* Params tweaking */
 gint mtx_stripchart_add_trace(MtxStripChart *, gfloat min, gfloat max, GdkColor color);
-mtx_Stripchart_delete_trace(MtxStripChart *, gint index);
+gboolean mtx_stripchart_delete_trace(MtxStripChart *, gint index);
 
 /* Set/Get latest values */
 void mtx_stripchart_set_values (MtxStripChart *, gfloat *);
