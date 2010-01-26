@@ -92,11 +92,13 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	priv->num_traces = 0;
 	priv->w = 130;		
 	priv->h = 20;
+	priv->justification = GTK_JUSTIFY_RIGHT;
 	priv->value_font = g_strdup("Bitstream Vera Sans");
 	priv->value_font_scale = 0.2;
 	priv->cr = NULL;
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
+	priv->traces = g_array_new(FALSE,TRUE,sizeof(MtxStripChartTrace *));
 	mtx_stripchart_init_colors(chart);
 	/*mtx_stripchart_redraw (chart);*/
 }
@@ -119,17 +121,29 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
 	priv->colors[COL_GRAT].green=0.8*65535;
 	priv->colors[COL_GRAT].blue=0.8*65535;
 	/*! Trace 1 */
-	priv->colors[COL_TRACE1].red=0.9*65535;
-	priv->colors[COL_TRACE1].green=0.1*65535;
-	priv->colors[COL_TRACE1].blue=0.1*65535;
+	priv->colors[COL_DEF_TRACE1].red=0.0*65535;
+	priv->colors[COL_DEF_TRACE1].green=1.0*65535;
+	priv->colors[COL_DEF_TRACE1].blue=1.0*65535;
 	/*! Trace 2 */
-	priv->colors[COL_TRACE2].red=0.1*65535;
-	priv->colors[COL_TRACE2].green=0.9*65535;
-	priv->colors[COL_TRACE2].blue=0.1*65535;
+	priv->colors[COL_DEF_TRACE2].red=1.0*65535;
+	priv->colors[COL_DEF_TRACE2].green=0.0*65535;
+	priv->colors[COL_DEF_TRACE2].blue=0.0*65535;
 	/*! Trace 3 */
-	priv->colors[COL_TRACE3].red=0.1*65535;
-	priv->colors[COL_TRACE3].green=0.1*65535;
-	priv->colors[COL_TRACE3].blue=0.9*65535;
+	priv->colors[COL_DEF_TRACE3].red=1.0*65535;
+	priv->colors[COL_DEF_TRACE3].green=1.0*65535;
+	priv->colors[COL_DEF_TRACE3].blue=0.0*65535;
+	/*! Trace 4 */
+	priv->colors[COL_DEF_TRACE4].red=0.0*65535;
+	priv->colors[COL_DEF_TRACE4].green=1.0*65535;
+	priv->colors[COL_DEF_TRACE4].blue=0.0*65535;
+	/*! Trace 5 */
+	priv->colors[COL_DEF_TRACE5].red=1.0*65535;
+	priv->colors[COL_DEF_TRACE5].green=0.0*65535;
+	priv->colors[COL_DEF_TRACE5].blue=1.0*65535;
+	/*! Trace 6 */
+	priv->colors[COL_DEF_TRACE6].red=0.0*65535;
+	priv->colors[COL_DEF_TRACE6].green=0.0*65535;
+	priv->colors[COL_DEF_TRACE6].blue=1.0*65535;
 
 }
 

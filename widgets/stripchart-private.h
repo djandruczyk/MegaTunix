@@ -24,6 +24,19 @@
 #define MTX_STRIPCHART_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_STRIPCHART, MtxStripChartPrivate))
 
 typedef struct _MtxStripChartPrivate      MtxStripChartPrivate;
+typedef struct _MtxStripChartTrace      MtxStripChartTrace;
+
+struct _MtxStripChartTrace
+{
+	gfloat min;		/*! minimum clamp valued */
+	gfloat max;		/*! maximum clamped value */
+	gint precision;		/*! numeric precision */
+	gint id;		/*! numeric ID */
+       	gchar * name;		/*! textual name onscreen */
+	GdkColor color;		/*! Trace color */
+	GArray *history;	/*! Previous values */
+	gboolean show_val;	/*! Show the value or not */
+};
 
 struct _MtxStripChartPrivate
 {
@@ -33,6 +46,7 @@ struct _MtxStripChartPrivate
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
 	gint num_traces;	/*! Number of active traces */
+	GArray *traces;		/*! Array of trace specific data */
         gchar *value_font;      /*! Font string for value */
         gfloat value_font_scale;/*! Font scale */
         gchar *valname;         /*! Value text to the let of the number */
@@ -42,6 +56,7 @@ struct _MtxStripChartPrivate
         GdkGC * gc;             /*! Graphics Context for drawing */
         GdkColormap *colormap;  /*! Colormap for GC's */
         GdkColor colors[NUM_COLORS];
+	GtkJustification justification;	/*! Where to put the trace names */
 
 };
 

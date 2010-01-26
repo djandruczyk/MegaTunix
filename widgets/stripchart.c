@@ -71,22 +71,40 @@ void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
-gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, GdkColor color)
+gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint precision, const gchar *name, GdkColor *color)
 {
 	gint i = 0;
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	g_return_val_if_fail (MTX_IS_STRIPCHART (chart),-1);
+	g_return_val_if_fail (min <= max,-1);
+	g_return_val_if_fail (name != NULL ,-1);
 	g_object_freeze_notify (G_OBJECT (chart));
 	
 	/* add a trace.. */
+	trace = g_new0(MtxStripChartTrace, 1);
+	trace->min = min;
+	trace->max = max;
+	trace->precision = precision;
+	if (name)
+		trace->name = g_strdup(name);
+	if (color)
+	{
+		trace->color.red = color->red;
+		trace->color.green = color->green;
+		trace->color.blue = color->blue;
+	}
+	trace->show_val = TRUE;
+	trace->id = g_random_int_range(1000,100000);
+	trace->history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),100);
+	priv->num_traces++;
+	priv->traces = g_array_append_val(priv->traces,trace);
 
 	g_object_thaw_notify (G_OBJECT (chart));
 	mtx_stripchart_redraw(chart);
 	/** FIXME!!! **/
-	return 0;
+	return trace->id;
 }
-
-
 
 
 /*!
@@ -96,7 +114,65 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, GdkC
  */
 gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 {
-	printf("Not implemented yet...\n");
+	gint i = 0;
+	gboolean retval = FALSE;
+	MtxStripChartTrace *trace = NULL;
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_val_if_fail (MTX_IS_STRIPCHART (chart),FALSE);
+	g_object_freeze_notify (G_OBJECT (chart));
 
-	return FALSE;
+
+	for (i=0;i<priv->traces->len;i++)
+	{
+		trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+		if (!trace)
+			continue;
+		if (trace->id == index) /* Found it! */
+		{
+			priv->traces = g_array_remove_index(priv->traces,i);
+			if (trace->name)
+				g_free(trace->name);
+			if (trace->history)
+				g_array_free(trace->history,TRUE);
+			g_free(trace);
+			retval = TRUE;
+			priv->num_traces--;
+		}
+		trace = NULL;
+	}
+	g_object_thaw_notify (G_OBJECT (chart));
+	mtx_stripchart_redraw(chart);
+	return retval;
+}
+
+
+/*!
+ \brief Sets trace name justification
+ \param stripchart (MtxStripChart *) pointer to stripchart
+ \param justification 
+ */
+void mtx_stripchar_set_name_justification(MtxStripChart *chart, GtkJustification justification)
+{
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_if_fail (MTX_IS_STRIPCHART (chart));
+	g_return_if_fail ((justification != GTK_JUSTIFY_LEFT) ||
+			(justification != GTK_JUSTIFY_RIGHT) ||
+			(justification != GTK_JUSTIFY_CENTER) ||
+			(justification != GTK_JUSTIFY_FILL));
+	g_object_freeze_notify (G_OBJECT (chart));
+	priv->justification = justification;
+	g_object_thaw_notify (G_OBJECT (chart));
+	mtx_stripchart_redraw(chart);
+}
+
+
+/*!
+ \brief Gets trace name justification
+ \param stripchart (MtxStripChart *) pointer to stripchart
+ */
+GtkJustification mtx_stripchar_get_name_justification(MtxStripChart *chart)
+{
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_val_if_fail (MTX_IS_STRIPCHART (chart), GTK_JUSTIFY_RIGHT);
+	return priv->justification;
 }

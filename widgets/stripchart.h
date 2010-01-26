@@ -37,10 +37,12 @@ typedef enum
 {
 	COL_BG = 0,
 	COL_GRAT,
-	COL_TRACE1,
-	COL_TRACE2,
-	COL_TRACE3,
-	COL_TRACE4,
+	COL_DEF_TRACE1,
+	COL_DEF_TRACE2,
+	COL_DEF_TRACE3,
+	COL_DEF_TRACE4,
+	COL_DEF_TRACE5,
+	COL_DEF_TRACE6,
 	NUM_COLORS
 }ColorIndex;
 
@@ -61,8 +63,12 @@ GType mtx_stripchart_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_stripchart_new ();
 
 /* Params tweaking */
-gint mtx_stripchart_add_trace(MtxStripChart *, gfloat min, gfloat max, GdkColor color);
+gint mtx_stripchart_add_trace(MtxStripChart *, gfloat min, gfloat max, gint precision, const gchar * name, GdkColor *color);
 gboolean mtx_stripchart_delete_trace(MtxStripChart *, gint index);
+
+/* Rendering */
+void mtx_stripchar_set_name_justification(MtxStripChart *, GtkJustification justify);
+GtkJustification mtx_stripchar_get_name_justification(MtxStripChart *);
 
 /* Set/Get latest values */
 void mtx_stripchart_set_values (MtxStripChart *, gfloat *);
