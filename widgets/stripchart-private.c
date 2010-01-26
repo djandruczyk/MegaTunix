@@ -121,29 +121,29 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
 	priv->colors[COL_GRAT].green=0.8*65535;
 	priv->colors[COL_GRAT].blue=0.8*65535;
 	/*! Trace 1 */
-	priv->colors[COL_DEF_TRACE1].red=0.0*65535;
-	priv->colors[COL_DEF_TRACE1].green=1.0*65535;
-	priv->colors[COL_DEF_TRACE1].blue=1.0*65535;
+	priv->tcolors[0].red=0.0*65535;
+	priv->tcolors[0].green=1.0*65535;
+	priv->tcolors[0].blue=1.0*65535;
 	/*! Trace 2 */
-	priv->colors[COL_DEF_TRACE2].red=1.0*65535;
-	priv->colors[COL_DEF_TRACE2].green=0.0*65535;
-	priv->colors[COL_DEF_TRACE2].blue=0.0*65535;
+	priv->tcolors[1].red=1.0*65535;
+	priv->tcolors[1].green=0.0*65535;
+	priv->tcolors[1].blue=0.0*65535;
 	/*! Trace 3 */
-	priv->colors[COL_DEF_TRACE3].red=1.0*65535;
-	priv->colors[COL_DEF_TRACE3].green=1.0*65535;
-	priv->colors[COL_DEF_TRACE3].blue=0.0*65535;
+	priv->tcolors[2].red=1.0*65535;
+	priv->tcolors[2].green=1.0*65535;
+	priv->tcolors[2].blue=0.0*65535;
 	/*! Trace 4 */
-	priv->colors[COL_DEF_TRACE4].red=0.0*65535;
-	priv->colors[COL_DEF_TRACE4].green=1.0*65535;
-	priv->colors[COL_DEF_TRACE4].blue=0.0*65535;
+	priv->tcolors[3].red=0.0*65535;
+	priv->tcolors[3].green=1.0*65535;
+	priv->tcolors[3].blue=0.0*65535;
 	/*! Trace 5 */
-	priv->colors[COL_DEF_TRACE5].red=1.0*65535;
-	priv->colors[COL_DEF_TRACE5].green=0.0*65535;
-	priv->colors[COL_DEF_TRACE5].blue=1.0*65535;
+	priv->tcolors[4].red=1.0*65535;
+	priv->tcolors[4].green=0.0*65535;
+	priv->tcolors[4].blue=1.0*65535;
 	/*! Trace 6 */
-	priv->colors[COL_DEF_TRACE6].red=0.0*65535;
-	priv->colors[COL_DEF_TRACE6].green=0.0*65535;
-	priv->colors[COL_DEF_TRACE6].blue=1.0*65535;
+	priv->tcolors[5].red=0.0*65535;
+	priv->tcolors[5].green=0.0*65535;
+	priv->tcolors[5].blue=1.0*65535;
 
 }
 

@@ -89,11 +89,10 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
 	if (name)
 		trace->name = g_strdup(name);
 	if (color)
-	{
-		trace->color.red = color->red;
-		trace->color.green = color->green;
-		trace->color.blue = color->blue;
-	}
+		trace->color = *color;
+	else
+		trace->color = priv->tcolors[priv->num_traces];
+
 	trace->show_val = TRUE;
 	trace->id = g_random_int_range(1000,100000);
 	trace->history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),100);

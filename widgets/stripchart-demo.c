@@ -23,6 +23,7 @@ int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *chart = NULL;
+	GdkColor col = { 0,100,200,300};
 	gint i = 0;
 	gint trace1 = 0;
 	gint trace2 = 0;
@@ -36,7 +37,7 @@ int main (int argc, char **argv)
 	chart = mtx_stripchart_new ();
 	gtk_container_add (GTK_CONTAINER (window), chart);
 	gtk_widget_realize(chart);
-	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,255.0,0,"Trace 1", NULL);
+	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,255.0,0,"Trace 1", &col);
 	printf("trace 1's ID %i\n",trace1);
 	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),255.0,1024.0,0,"Trace 2", NULL);
 	printf("trace 2's ID %i\n",trace2);

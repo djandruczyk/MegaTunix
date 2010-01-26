@@ -56,6 +56,7 @@ struct _MtxStripChartPrivate
         GdkGC * gc;             /*! Graphics Context for drawing */
         GdkColormap *colormap;  /*! Colormap for GC's */
         GdkColor colors[NUM_COLORS];
+        GdkColor tcolors[6];	/*! Trace colors */
 	GtkJustification justification;	/*! Where to put the trace names */
 
 };
