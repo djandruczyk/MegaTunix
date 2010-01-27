@@ -66,7 +66,7 @@ GtkJustification mtx_stripchar_get_name_justification(MtxStripChart *);
 
 /* Set/Get latest values */
 void mtx_stripchart_set_values (MtxStripChart *, gfloat *);
-gboolean mtx_stripchart_get_values (MtxStripChart *, gfloat *);
+gboolean mtx_stripchart_get_latest_values (MtxStripChart *, gfloat *);
 
 G_END_DECLS
 

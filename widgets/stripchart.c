@@ -34,14 +34,18 @@ GtkWidget *mtx_stripchart_new ()
  \brief gets the current value 
  \param stripchart (MtxStripChart *) pointer to stripchart
  */
-gboolean mtx_stripchart_get_values (MtxStripChart *stripchart, gfloat *values)
+gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *values)
 {
 	gint i = 0;
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(stripchart);
 	g_return_val_if_fail ((MTX_IS_STRIPCHART (stripchart)),FALSE);
 	for (i=0;i<priv->num_traces;i++)
 		if (values[i])
-			values[i]=priv->current[i];
+		{
+			trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
+			values[i] = g_array_index(trace->history,gfloat, trace->history->len-1);
+		}
 	return TRUE;
 }
 
@@ -54,13 +58,18 @@ gboolean mtx_stripchart_get_values (MtxStripChart *stripchart, gfloat *values)
 void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 {
 	gint i = 0;
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(stripchart);
 	g_return_if_fail (MTX_IS_STRIPCHART (stripchart));
 	g_object_freeze_notify (G_OBJECT (stripchart));
 	for (i=0;i<priv->num_traces;i++)
+	{
 		if (values[i])
-			if (priv->current[i])
-				priv->current[i] = values[i];
+		{
+			trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
+			trace->history = g_array_append_val(trace->history,values[i]);
+		}
+	}
 	g_object_thaw_notify (G_OBJECT (stripchart));
 	mtx_stripchart_redraw(stripchart);
 }

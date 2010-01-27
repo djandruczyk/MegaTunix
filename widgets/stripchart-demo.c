@@ -25,9 +25,11 @@ int main (int argc, char **argv)
 	GtkWidget *chart = NULL;
 	GdkColor col = { 0,100,200,300};
 	gint i = 0;
+	gfloat j = 0.0;
 	gint trace1 = 0;
 	gint trace2 = 0;
 	gint trace3 = 0;
+	gfloat data[3] = {0.1,1.1,2.2};
 
 	gtk_init (&argc, &argv);
 
@@ -43,6 +45,16 @@ int main (int argc, char **argv)
 	printf("trace 2's ID %i\n",trace2);
 	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,65535.0,1,"Trace 3", NULL);
 	printf("trace 3's ID %i\n",trace3);
+	for (j=0.1;j<10;j+=0.1)
+	{
+		for (i=0;i<3;i++)
+			data[i] += j*(i+1);
+		printf("setting values to %f, %f, %f\n",data[0],data[1],data[2]);
+		mtx_stripchart_set_values(MTX_STRIPCHART(chart),data);
+	}
+	mtx_stripchart_get_latest_values(MTX_STRIPCHART(chart),data);
+	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);
+
 	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);
 	
 
