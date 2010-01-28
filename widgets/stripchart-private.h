@@ -47,9 +47,7 @@ struct _MtxStripChartPrivate
         gint h;                 /*! Height of full widget */
 	gint num_traces;	/*! Number of active traces */
 	GArray *traces;		/*! Array of trace specific data */
-        gchar *value_font;      /*! Font string for value */
-        gfloat value_font_scale;/*! Font scale */
-        gchar *valname;         /*! Value text to the let of the number */
+        gchar *font;		/*! Font string for value */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;

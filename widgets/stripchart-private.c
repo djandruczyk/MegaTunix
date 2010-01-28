@@ -26,6 +26,19 @@
 #include <time.h>
 #include <string.h>
 
+
+
+static enum
+{
+	BOTTOM,
+	QUARTER,
+	HALF,
+	THREEQUARTER,
+	TOP,
+	NUM_TXTS
+}TxtPlacement;
+
+
 GType mtx_stripchart_get_type(void)
 {
 	static GType mtx_stripchart_type = 0;
@@ -93,8 +106,7 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	priv->w = 130;		
 	priv->h = 20;
 	priv->justification = GTK_JUSTIFY_RIGHT;
-	priv->value_font = g_strdup("Bitstream Vera Sans");
-	priv->value_font_scale = 0.2;
+	priv->font = g_strdup("Bitstream Vera Sans");
 	priv->cr = NULL;
 	priv->colormap = gdk_colormap_get_system();
 	priv->gc = NULL;
@@ -163,33 +175,68 @@ void update_stripchart_position (MtxStripChart *chart)
 	gfloat needle_pos = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * message = NULL;
+	gfloat start_x = 0.0;
+	gfloat start_y = 0.0;
+	gfloat buffer = 0.0;
+	gint i = 0;
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gfloat text_offset[NUM_TXTS] = {0.0,0.0,0.0,0.0,0.0};
 	GdkPoint tip;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	widget = GTK_WIDGET(chart);
 
-	printf("updating position, copying pixmap over\n");
 	/* Copy background pixmap to intermediary for final rendering */
 	gdk_draw_drawable(priv->pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->trace_pixmap,
-			0,0,
+			1,0,
 			0,0,
 			widget->allocation.width,widget->allocation.height);
-/*
 
 	cr = gdk_cairo_create (priv->pixmap);
-	cairo_set_font_options(cr,priv->font_options);
 
-	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
-	// Update the VALUE text 
-	cairo_set_source_rgb (cr, 
-			priv->colors[COL_VALUE_FONT].red/65535.0,
-			priv->colors[COL_VALUE_FONT].green/65535.0,
-			priv->colors[COL_VALUE_FONT].blue/65535.0);
-	tmpbuf = g_utf8_strup(priv->value_font,-1);
+	/* render the new data */
+	for (i=0;i<priv->num_traces;i++)
+	{
+		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
+
+		cairo_set_line_width(cr,trace->lwidth);
+		cairo_set_source_rgb (cr, 
+				trace->color.red/65535.0,
+				trace->color.green/65535.0,
+				trace->color.blue/65535.0);
+		start_x = priv->w - 1;
+		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
+		cairo_move_to(cr,start_x,start_y);
+		x = priv->w;
+		y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
+		cairo_line_to(cr,x,y);
+		cairo_stroke(cr);
+	}
+
+	/* Render the graticule lines */
+	cairo_set_source_rgba (cr, 
+			priv->colors[COL_GRAT].red/65535.0,
+			priv->colors[COL_GRAT].green/65535.0,
+			priv->colors[COL_GRAT].blue/65535.0,
+			0.5);
+	cairo_move_to(cr,0,priv->h/2);
+	cairo_line_to(cr,priv->w,priv->h/2);
+	cairo_stroke(cr);
+	cairo_move_to(cr,0,priv->h/4);
+	cairo_line_to(cr,priv->w,priv->h/4);
+	cairo_stroke(cr);
+	cairo_move_to(cr,0,priv->h*3/4);
+	cairo_line_to(cr,priv->w,priv->h*3/4);
+	cairo_stroke(cr);
+
+	cairo_set_font_options(cr,priv->font_options);
+	tmpbuf = g_utf8_strup(priv->font,-1);
 	if (g_strrstr(tmpbuf,"BOLD"))
 		weight = CAIRO_FONT_WEIGHT_BOLD;
 	else
@@ -201,23 +248,65 @@ void update_stripchart_position (MtxStripChart *chart)
 	else
 		slant = CAIRO_FONT_SLANT_NORMAL;
 	g_free(tmpbuf);
-	cairo_select_font_face (cr, priv->value_font,  slant, weight);
+	cairo_select_font_face (cr, priv->font,  slant, weight);
 
-	cairo_set_font_size (cr, 11);
+	cairo_set_font_size (cr, 12);
 
-	message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
+	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
+	buffer = 3;
+	text_offset[BOTTOM] = 0.0;
+	for (i=0;i<priv->num_traces;i++)
+	{
+		trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+		cairo_set_source_rgb (cr, 
+			trace->color.red/65535.0,
+			trace->color.green/65535.0,
+			trace->color.blue/65535.0
+			);
+		message = g_strdup_printf("%1$.*2$f", trace->min,trace->precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,2.0+text_offset[BOTTOM],priv->h-2.0);
+		cairo_show_text (cr, message);
+		g_free(message);
+		text_offset[BOTTOM] += extents.width + 7;
 
-	cairo_text_extents (cr, message, &extents);
+		message = g_strdup_printf("%1$.*2$f", trace->max/4,trace->precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,2.0+text_offset[QUARTER],(priv->h*3/4)-2.0);
+		cairo_show_text (cr, message);
+		g_free(message);
+		text_offset[QUARTER] += extents.width + 7;
 
-	cairo_move_to (cr, 
-			priv->pie_radius*2 + 5 +priv->value_xpos,
-			priv->pie_yc - (extents.height/4) + priv->value_ypos);
-	cairo_show_text (cr, message);
-	g_free(message);
+		message = g_strdup_printf("%1$.*2$f", trace->max/2,trace->precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,2.0+text_offset[HALF],(priv->h/2.0)-2.0);
+		cairo_show_text (cr, message);
+		g_free(message);
+		text_offset[HALF] += extents.width + 7;
 
-	cairo_stroke (cr);
+		message = g_strdup_printf("%1$.*2$f", trace->max*3/4,trace->precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,2.0+text_offset[THREEQUARTER],(priv->h/4)-2.0);
+		cairo_show_text (cr, message);
+		g_free(message);
+		text_offset[THREEQUARTER] += extents.width + 7;
+
+		message = g_strdup_printf("%1$.*2$f", trace->max,trace->precision);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,2.0+text_offset[TOP],extents.height+2.0);
+		cairo_show_text (cr, message);
+		g_free(message);
+		text_offset[TOP] += extents.width + 7;
+
+		message = g_strdup_printf("%s", trace->name);
+		cairo_text_extents (cr, message, &extents);
+		cairo_move_to(cr,priv->w-extents.width - 20, buffer + extents.height);
+		cairo_show_text (cr, message);
+		g_free(message);
+		buffer += extents.height + 3;
+
+	}
 	cairo_destroy(cr);
-*/
 }
 
 
@@ -384,8 +473,8 @@ gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
  */
 void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 120;
-	requisition->height = 60;
+	requisition->width = 240;
+	requisition->height = 160;
 }
 
 
