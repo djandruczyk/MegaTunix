@@ -1353,7 +1353,6 @@ gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
  */
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 {
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!GTK_WIDGET(gauge)->window) return;
 
 	update_gauge_position(gauge);

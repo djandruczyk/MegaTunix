@@ -178,6 +178,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	gfloat start_x = 0.0;
 	gfloat start_y = 0.0;
 	gfloat buffer = 0.0;
+	gboolean draw_quarters = TRUE;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
@@ -196,28 +197,9 @@ void update_stripchart_position (MtxStripChart *chart)
 			priv->trace_pixmap,
 			1,0,
 			0,0,
-			widget->allocation.width,widget->allocation.height);
+			widget->allocation.width-1,widget->allocation.height);
 
 	cr = gdk_cairo_create (priv->pixmap);
-
-	/* render the new data */
-	for (i=0;i<priv->num_traces;i++)
-	{
-		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
-
-		cairo_set_line_width(cr,trace->lwidth);
-		cairo_set_source_rgb (cr, 
-				trace->color.red/65535.0,
-				trace->color.green/65535.0,
-				trace->color.blue/65535.0);
-		start_x = priv->w - 1;
-		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
-		cairo_move_to(cr,start_x,start_y);
-		x = priv->w;
-		y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
-		cairo_line_to(cr,x,y);
-		cairo_stroke(cr);
-	}
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -225,11 +207,11 @@ void update_stripchart_position (MtxStripChart *chart)
 			priv->colors[COL_GRAT].green/65535.0,
 			priv->colors[COL_GRAT].blue/65535.0,
 			0.5);
-	cairo_move_to(cr,0,priv->h/2);
-	cairo_line_to(cr,priv->w,priv->h/2);
-	cairo_stroke(cr);
 	cairo_move_to(cr,0,priv->h/4);
 	cairo_line_to(cr,priv->w,priv->h/4);
+	cairo_stroke(cr);
+	cairo_move_to(cr,0,priv->h/2);
+	cairo_line_to(cr,priv->w,priv->h/2);
 	cairo_stroke(cr);
 	cairo_move_to(cr,0,priv->h*3/4);
 	cairo_line_to(cr,priv->w,priv->h*3/4);
@@ -255,14 +237,37 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 	buffer = 3;
 	text_offset[BOTTOM] = 0.0;
+	message = g_strdup_printf("123");
+	cairo_text_extents(cr,message,&extents);
+	if ((extents.height * 4) > (priv->h/4))
+		draw_quarters = FALSE;
+	else
+		draw_quarters = TRUE;
+	g_free(message);
+	/* render the new data */
+
 	for (i=0;i<priv->num_traces;i++)
 	{
-		trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
+
+		cairo_set_line_width(cr,trace->lwidth);
 		cairo_set_source_rgb (cr, 
-			trace->color.red/65535.0,
-			trace->color.green/65535.0,
-			trace->color.blue/65535.0
-			);
+				trace->color.red/65535.0,
+				trace->color.green/65535.0,
+				trace->color.blue/65535.0);
+		start_x = priv->w - 1;
+		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
+		cairo_move_to(cr,start_x,start_y);
+		x = priv->w;
+		y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
+		cairo_line_to(cr,x,y);
+		cairo_stroke(cr);
+
+		cairo_set_source_rgb (cr, 
+				trace->color.red/65535.0,
+				trace->color.green/65535.0,
+				trace->color.blue/65535.0
+				);
 		message = g_strdup_printf("%1$.*2$f", trace->min,trace->precision);
 		cairo_text_extents (cr, message, &extents);
 		cairo_move_to(cr,2.0+text_offset[BOTTOM],priv->h-2.0);
@@ -270,12 +275,15 @@ void update_stripchart_position (MtxStripChart *chart)
 		g_free(message);
 		text_offset[BOTTOM] += extents.width + 7;
 
-		message = g_strdup_printf("%1$.*2$f", trace->max/4,trace->precision);
-		cairo_text_extents (cr, message, &extents);
-		cairo_move_to(cr,2.0+text_offset[QUARTER],(priv->h*3/4)-2.0);
-		cairo_show_text (cr, message);
-		g_free(message);
-		text_offset[QUARTER] += extents.width + 7;
+		if (draw_quarters)
+		{
+			message = g_strdup_printf("%1$.*2$f", trace->max/4,trace->precision);
+			cairo_text_extents (cr, message, &extents);
+			cairo_move_to(cr,2.0+text_offset[QUARTER],(priv->h*3/4)-2.0);
+			cairo_show_text (cr, message);
+			g_free(message);
+			text_offset[QUARTER] += extents.width + 7;
+		}
 
 		message = g_strdup_printf("%1$.*2$f", trace->max/2,trace->precision);
 		cairo_text_extents (cr, message, &extents);
@@ -284,12 +292,15 @@ void update_stripchart_position (MtxStripChart *chart)
 		g_free(message);
 		text_offset[HALF] += extents.width + 7;
 
-		message = g_strdup_printf("%1$.*2$f", trace->max*3/4,trace->precision);
-		cairo_text_extents (cr, message, &extents);
-		cairo_move_to(cr,2.0+text_offset[THREEQUARTER],(priv->h/4)-2.0);
-		cairo_show_text (cr, message);
-		g_free(message);
-		text_offset[THREEQUARTER] += extents.width + 7;
+		if (draw_quarters)
+		{
+			message = g_strdup_printf("%1$.*2$f", trace->max*3/4,trace->precision);
+			cairo_text_extents (cr, message, &extents);
+			cairo_move_to(cr,2.0+text_offset[THREEQUARTER],(priv->h/4)-2.0);
+			cairo_show_text (cr, message);
+			g_free(message);
+			text_offset[THREEQUARTER] += extents.width + 7;
+		}
 
 		message = g_strdup_printf("%1$.*2$f", trace->max,trace->precision);
 		cairo_text_extents (cr, message, &extents);
@@ -311,7 +322,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 
 /*!
- \brief handles configure events whe nthe chart gets created or resized.
+ \brief handles configure events when the chart gets created or resized.
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
@@ -473,8 +484,8 @@ gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
  */
 void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 240;
-	requisition->height = 160;
+	requisition->width = 140;
+	requisition->height = 80;
 }
 
 
@@ -484,6 +495,8 @@ void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_stripchart_redraw (MtxStripChart *chart)
 {
+	if (!GTK_WIDGET(chart)->window) return;
+
 	update_stripchart_position(chart);
 	gdk_window_clear(GTK_WIDGET(chart)->window);
 }
