@@ -58,6 +58,7 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
 void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 {
 	gint i = 0;
+	gfloat val = 0.0;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(stripchart);
 	g_return_if_fail (MTX_IS_STRIPCHART (stripchart));
@@ -67,7 +68,9 @@ void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 		if (values[i])
 		{
 			trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
-			trace->history = g_array_append_val(trace->history,values[i]);
+			val = values[i] > trace->max ? trace->max:values[i];
+			val = val < trace->min ? trace->min:val;
+			trace->history = g_array_append_val(trace->history,val);
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (stripchart));
@@ -95,6 +98,7 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
 	trace->min = min;
 	trace->max = max;
 	trace->precision = precision;
+	trace->lwidth = 2.0;
 	if (name)
 		trace->name = g_strdup(name);
 	if (color)

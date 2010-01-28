@@ -39,23 +39,23 @@ int main (int argc, char **argv)
 	chart = mtx_stripchart_new ();
 	gtk_container_add (GTK_CONTAINER (window), chart);
 	gtk_widget_realize(chart);
-	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,255.0,0,"Trace 1", &col);
+	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,255.0,0,"Trace 1", NULL);
 	printf("trace 1's ID %i\n",trace1);
-	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),255.0,1024.0,0,"Trace 2", NULL);
+	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Trace 2", NULL);
 	printf("trace 2's ID %i\n",trace2);
-	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,65535.0,1,"Trace 3", NULL);
+	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),512.0,1024.0,1,"Trace 3", NULL);
 	printf("trace 3's ID %i\n",trace3);
-	for (j=0.1;j<10;j+=0.1)
+	for (j=0;j<1024;j+=2.5)
 	{
 		for (i=0;i<3;i++)
-			data[i] += j*(i+1);
+			data[i] = j;
 		printf("setting values to %f, %f, %f\n",data[0],data[1],data[2]);
 		mtx_stripchart_set_values(MTX_STRIPCHART(chart),data);
 	}
 	mtx_stripchart_get_latest_values(MTX_STRIPCHART(chart),data);
 	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);
 
-	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);
+	//mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);
 	
 
 	//gtk_timeout_add(40,(GtkFunction)update_stripchart,(gpointer)chart);

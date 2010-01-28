@@ -32,6 +32,7 @@ struct _MtxStripChartTrace
 	gfloat max;		/*! maximum clamped value */
 	gint precision;		/*! numeric precision */
 	gint id;		/*! numeric ID */
+	gfloat lwidth;		/*! linewidth */
        	gchar * name;		/*! textual name onscreen */
 	GdkColor color;		/*! Trace color */
 	GArray *history;	/*! Previous values */
@@ -41,8 +42,7 @@ struct _MtxStripChartTrace
 struct _MtxStripChartPrivate
 {
         GdkPixmap *pixmap;      /*! Update/backing pixmap */
-        GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
-	gfloat *current;	/*! Array of current values */
+        GdkPixmap *trace_pixmap;/*! Static part of traces */
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
 	gint num_traces;	/*! Number of active traces */
@@ -72,7 +72,7 @@ void mtx_stripchart_size_request (GtkWidget *, GtkRequisition *);
 void mtx_stripchart_class_init (MtxStripChartClass *class_name);
 void mtx_stripchart_init (MtxStripChart *gauge);
 gboolean mtx_stripchart_button_release (GtkWidget *,GdkEventButton *);
-void generate_stripchart_background(MtxStripChart *);
+void generate_stripchart_static_traces(MtxStripChart *);
 void update_stripchart_position (MtxStripChart *);
 void mtx_stripchart_init_colors(MtxStripChart *);
 void mtx_stripchart_redraw (MtxStripChart *gauge);

@@ -100,7 +100,8 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	priv->gc = NULL;
 	priv->traces = g_array_new(FALSE,TRUE,sizeof(MtxStripChartTrace *));
 	mtx_stripchart_init_colors(chart);
-	/*mtx_stripchart_redraw (chart);*/
+	if (GTK_WIDGET_REALIZED(chart))
+		mtx_stripchart_redraw (chart);
 }
 
 
@@ -169,20 +170,21 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	widget = GTK_WIDGET(chart);
 
+	printf("updating position, copying pixmap over\n");
 	/* Copy background pixmap to intermediary for final rendering */
 	gdk_draw_drawable(priv->pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->bg_pixmap,
+			priv->trace_pixmap,
 			0,0,
 			0,0,
 			widget->allocation.width,widget->allocation.height);
+/*
 
 	cr = gdk_cairo_create (priv->pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
-	/* Update the VALUE text */
-/*
+	// Update the VALUE text 
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_VALUE_FONT].red/65535.0,
 			priv->colors[COL_VALUE_FONT].green/65535.0,
@@ -214,8 +216,8 @@ void update_stripchart_position (MtxStripChart *chart)
 	g_free(message);
 
 	cairo_stroke (cr);
-*/
 	cairo_destroy(cr);
+*/
 }
 
 
@@ -249,18 +251,18 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 			TRUE, 0,0,
 			priv->w,priv->h);
 	/* Static Background pixmap */
-	if (priv->bg_pixmap)
-		g_object_unref(priv->bg_pixmap);
-	priv->bg_pixmap=gdk_pixmap_new(widget->window,
+	if (priv->trace_pixmap)
+		g_object_unref(priv->trace_pixmap);
+	priv->trace_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->bg_pixmap,
+	gdk_draw_rectangle(priv->trace_pixmap,
 			widget->style->black_gc,
 			TRUE, 0,0,
 			priv->w,priv->h);
 
 	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
-	priv->gc = gdk_gc_new(priv->bg_pixmap);
+	priv->gc = gdk_gc_new(priv->trace_pixmap);
 	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
 
@@ -270,7 +272,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_font_options_set_antialias(priv->font_options,
 			CAIRO_ANTIALIAS_GRAY);
 
-	generate_stripchart_background(chart);
+	generate_stripchart_static_traces(chart);
 	update_stripchart_position(chart);
 
 	return TRUE;
@@ -301,25 +303,35 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 
 
 /*!
- \brief draws the static elements of the chart (only on resize), This includes
- the border, units and name strings,  tick marks and warning regions
- This is the cairo version.
+ \brief draws the static part of the stripchart,  i.e. this is only the 
+ history of the trace, as there's no point to re-renderthe whole fucking thing
+ every damn time when only 1 datapoint is being appended,  This writes to a
+ pixmap, which is shifted and new trace data rendered, before graticaule/text
+ overlay is added on.
  \param widget (MtxStripChart *) pointer to the chart object
  */
-void generate_stripchart_background(MtxStripChart *chart)
+void generate_stripchart_static_traces(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
+	gint i = 0;
+	gint j = 0;
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gfloat start_x = 0.0;
+	gfloat start_y = 0.0;
+	gint points = 0;
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	w = GTK_WIDGET(chart)->allocation.width;
 	h = GTK_WIDGET(chart)->allocation.height;
 
-	if (!priv->bg_pixmap)
+	if (!priv->trace_pixmap)
 		return;
 	/* get a cairo_t */
-	cr = gdk_cairo_create (priv->bg_pixmap);
+	cr = gdk_cairo_create (priv->trace_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_BG].red/65535.0,
@@ -330,6 +342,27 @@ void generate_stripchart_background(MtxStripChart *chart)
 			0,0,w,h);
 	cairo_fill(cr);
 
+	for (i=0;i<priv->num_traces;i++)
+	{
+		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
+
+		cairo_set_line_width(cr,trace->lwidth);
+		cairo_set_source_rgb (cr, 
+				trace->color.red/65535.0,
+				trace->color.green/65535.0,
+				trace->color.blue/65535.0);
+		points = trace->history->len > priv->w ? priv->w:trace->history->len;
+		start_x = priv->w - points;
+		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len - points)-trace->min) / (trace->max - trace->min))*priv->h);
+		cairo_move_to(cr,start_x,start_y);
+		for (j=0;j<points;j++)
+		{
+			x = priv->w - points + j;
+			y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len - points + j)-trace->min) / (trace->max - trace->min))*priv->h);
+			cairo_line_to(cr,x,y);
+		}
+		cairo_stroke(cr);
+	}
 	cairo_destroy (cr);
 }
 
