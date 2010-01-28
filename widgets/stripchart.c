@@ -55,7 +55,7 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
-void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
+gboolean mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 {
 	gint i = 0;
 	gfloat val = 0.0;
@@ -75,6 +75,7 @@ void mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 	}
 	g_object_thaw_notify (G_OBJECT (stripchart));
 	mtx_stripchart_redraw(stripchart);
+	return TRUE;
 }
 
 
@@ -163,7 +164,7 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param justification 
  */
-void mtx_stripchar_set_name_justification(MtxStripChart *chart, GtkJustification justification)
+gboolean mtx_stripchart_set_name_justification(MtxStripChart *chart, GtkJustification justification)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	g_return_if_fail (MTX_IS_STRIPCHART (chart));

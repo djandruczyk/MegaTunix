@@ -192,6 +192,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	widget = GTK_WIDGET(chart);
 
 	/* Copy background pixmap to intermediary for final rendering */
+	cr = gdk_cairo_create (priv->pixmap);
 	gdk_draw_drawable(priv->pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->trace_pixmap,
@@ -199,7 +200,6 @@ void update_stripchart_position (MtxStripChart *chart)
 			0,0,
 			widget->allocation.width-1,widget->allocation.height);
 
-	cr = gdk_cairo_create (priv->pixmap);
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -235,7 +235,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_set_font_size (cr, 12);
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
-	buffer = 3;
+	buffer = 0;
 	text_offset[BOTTOM] = 0.0;
 	message = g_strdup_printf("123");
 	cairo_text_extents(cr,message,&extents);
@@ -256,12 +256,15 @@ void update_stripchart_position (MtxStripChart *chart)
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
 		start_x = priv->w - 1;
-		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
-		cairo_move_to(cr,start_x,start_y);
-		x = priv->w;
-		y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
-		cairo_line_to(cr,x,y);
-		cairo_stroke(cr);
+		if (trace->history->len > 1)
+		{
+			start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
+			cairo_move_to(cr,start_x,start_y);
+			x = priv->w;
+			y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
+			cairo_line_to(cr,x,y);
+			cairo_stroke(cr);
+		}
 
 		cairo_set_source_rgb (cr, 
 				trace->color.red/65535.0,
@@ -309,15 +312,17 @@ void update_stripchart_position (MtxStripChart *chart)
 		g_free(message);
 		text_offset[TOP] += extents.width + 7;
 
+		/* Trace names */
 		message = g_strdup_printf("%s", trace->name);
 		cairo_text_extents (cr, message, &extents);
-		cairo_move_to(cr,priv->w-extents.width - 20, buffer + extents.height);
+		cairo_move_to(cr,priv->w-extents.width - 20, 2.0 + buffer + extents.height);
 		cairo_show_text (cr, message);
 		g_free(message);
-		buffer += extents.height + 3;
+		buffer += (extents.height + 3);
 
 	}
 	cairo_destroy(cr);
+	gdk_window_clear(GTK_WIDGET(chart)->window);
 }
 
 

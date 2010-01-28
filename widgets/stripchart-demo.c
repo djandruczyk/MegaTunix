@@ -41,9 +41,9 @@ int main (int argc, char **argv)
 	gtk_widget_realize(chart);
 	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,1255.0,0,"Trace 1", NULL);
 	printf("trace 1's ID %i\n",trace1);
-	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Stupid Trace 2", NULL);
+	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Trace 1", NULL);
 	printf("trace 2's ID %i\n",trace2);
-	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),512.0,1024.0,1,"Trace 3", NULL);
+	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),512.0,1024.0,1,"Trace 1", NULL);
 	printf("trace 3's ID %i\n",trace3);
 	for (j=0;j<1024;j+=2.5)
 	{
@@ -77,6 +77,6 @@ gboolean update_stripchart(gpointer data)
 	gint max = 11000;
 	gfloat vals[3] = {100.0,300.0,500.0};
 	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
-	printf("This should scroll stripchart \n");
+//	printf("This should scroll stripchart \n");
 	return TRUE;
 }
