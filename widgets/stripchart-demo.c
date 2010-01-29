@@ -35,7 +35,7 @@ int main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
+//	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
 	chart = mtx_stripchart_new ();
 	gtk_container_add (GTK_CONTAINER (window), chart);
 	gtk_widget_realize(chart);
@@ -75,7 +75,10 @@ gboolean update_stripchart(gpointer data)
 	GtkWidget *chart = data;
 	gint min = -1000;
 	gint max = 11000;
-	gfloat vals[3] = {100.0,300.0,500.0};
+	static gfloat vals[3] = {0.0,0.0,0.0};
+	vals[0]++;
+	vals[1]+=1.25;
+	vals[2]+=2.125;
 	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
 //	printf("This should scroll stripchart \n");
 	return TRUE;

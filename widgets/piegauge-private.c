@@ -418,6 +418,8 @@ void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 {
+	if (!GTK_WIDGET(gauge)->window) return;
+
 	update_pie_gauge_position(gauge);
 	gdk_window_clear(GTK_WIDGET(gauge)->window);
 }

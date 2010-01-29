@@ -112,8 +112,8 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	priv->gc = NULL;
 	priv->traces = g_array_new(FALSE,TRUE,sizeof(MtxStripChartTrace *));
 	mtx_stripchart_init_colors(chart);
-	if (GTK_WIDGET_REALIZED(chart))
-		mtx_stripchart_redraw (chart);
+//	if (GTK_WIDGET_REALIZED(chart))
+//		mtx_stripchart_redraw (chart);
 }
 
 
@@ -162,8 +162,7 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
 
 
 /*!
- \brief updates the chart position,  This is the CAIRO implementation that
- looks a bit nicer, though is a little bit slower
+ \brief updates the chart position,  This is the CAIRO implementation
  \param widget (MtxStripChart *) pointer to the chart object
  */
 void update_stripchart_position (MtxStripChart *chart)
@@ -191,15 +190,53 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	widget = GTK_WIDGET(chart);
 
-	/* Copy background pixmap to intermediary for final rendering */
-	cr = gdk_cairo_create (priv->pixmap);
-	gdk_draw_drawable(priv->pixmap,
+	/* Draw new data to trace pixmap */
+	/* Scroll trace pixmap */
+	gdk_draw_drawable(priv->trace_pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->trace_pixmap,
 			1,0,
 			0,0,
-			widget->allocation.width-1,widget->allocation.height);
+			priv->w-1,priv->h);
+	gdk_draw_rectangle(priv->trace_pixmap,
+			widget->style->black_gc,
+			TRUE, priv->w-1,0,
+			1,priv->h);
+			
 
+	/* Render new data */
+	cr = gdk_cairo_create (priv->trace_pixmap);
+	for (i=0;i<priv->num_traces;i++)
+	{
+		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
+
+		cairo_set_line_width(cr,trace->lwidth);
+		cairo_set_source_rgb (cr, 
+				trace->color.red/65535.0,
+				trace->color.green/65535.0,
+				trace->color.blue/65535.0);
+		start_x = priv->w - 1;
+		if (trace->history->len > 1)
+		{
+			start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-2)-trace->min) / (trace->max - trace->min))*priv->h);
+			cairo_move_to(cr,start_x,start_y);
+			x = priv->w;
+			y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
+			cairo_line_to(cr,x,y);
+			cairo_stroke(cr);
+		}
+	}
+	cairo_destroy(cr);
+
+	/* Copy background trace pixmap to background for final rendering */
+	gdk_draw_drawable(priv->pixmap,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			priv->trace_pixmap,
+			0,0,
+			0,0,
+			widget->allocation.width,widget->allocation.height);
+
+	cr = gdk_cairo_create (priv->pixmap);
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -249,23 +286,6 @@ void update_stripchart_position (MtxStripChart *chart)
 	for (i=0;i<priv->num_traces;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
-
-		cairo_set_line_width(cr,trace->lwidth);
-		cairo_set_source_rgb (cr, 
-				trace->color.red/65535.0,
-				trace->color.green/65535.0,
-				trace->color.blue/65535.0);
-		start_x = priv->w - 1;
-		if (trace->history->len > 1)
-		{
-			start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
-			cairo_move_to(cr,start_x,start_y);
-			x = priv->w;
-			y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len)-trace->min) / (trace->max - trace->min))*priv->h);
-			cairo_line_to(cr,x,y);
-			cairo_stroke(cr);
-		}
-
 		cairo_set_source_rgb (cr, 
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
@@ -322,7 +342,6 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	}
 	cairo_destroy(cr);
-	gdk_window_clear(GTK_WIDGET(chart)->window);
 }
 
 
@@ -456,7 +475,7 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
-		points = trace->history->len > priv->w ? priv->w:trace->history->len;
+		points = trace->history->len-1 > priv->w ? priv->w:trace->history->len-1;
 		start_x = priv->w - points;
 		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len - points)-trace->min) / (trace->max - trace->min))*priv->h);
 		cairo_move_to(cr,start_x,start_y);

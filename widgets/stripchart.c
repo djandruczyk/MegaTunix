@@ -55,14 +55,14 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
-gboolean mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
+void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 {
 	gint i = 0;
 	gfloat val = 0.0;
 	MtxStripChartTrace *trace = NULL;
-	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(stripchart);
-	g_return_if_fail (MTX_IS_STRIPCHART (stripchart));
-	g_object_freeze_notify (G_OBJECT (stripchart));
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_if_fail (MTX_IS_STRIPCHART (chart));
+	g_object_freeze_notify (G_OBJECT (chart));
 	for (i=0;i<priv->num_traces;i++)
 	{
 		if (values[i])
@@ -73,9 +73,8 @@ gboolean mtx_stripchart_set_values (MtxStripChart *stripchart, gfloat* values)
 			trace->history = g_array_append_val(trace->history,val);
 		}
 	}
-	g_object_thaw_notify (G_OBJECT (stripchart));
-	mtx_stripchart_redraw(stripchart);
-	return TRUE;
+	g_object_thaw_notify (G_OBJECT (chart));
+	mtx_stripchart_redraw(chart);
 }
 
 
@@ -115,7 +114,6 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
 
 	g_object_thaw_notify (G_OBJECT (chart));
 	mtx_stripchart_redraw(chart);
-	/** FIXME!!! **/
 	return trace->id;
 }
 
