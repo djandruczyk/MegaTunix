@@ -18,11 +18,12 @@
 #include <math.h>
 
 gboolean update_stripchart(gpointer data);
+gboolean remove_trace(gpointer data);
+GtkWidget *chart = NULL;
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
-	GtkWidget *chart = NULL;
 	GdkColor col = { 0,100,200,300};
 	gint i = 0;
 	gfloat j = 0.0;
@@ -35,15 +36,15 @@ int main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-//	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
+	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
 	chart = mtx_stripchart_new ();
 	gtk_container_add (GTK_CONTAINER (window), chart);
 	gtk_widget_realize(chart);
 	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,1255.0,0,"Trace 1", NULL);
 	printf("trace 1's ID %i\n",trace1);
-	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Trace 1", NULL);
+	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Trace 2", NULL);
 	printf("trace 2's ID %i\n",trace2);
-	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),512.0,1024.0,1,"Trace 1", NULL);
+	trace3 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),512.0,1024.0,1,"Trace 3", NULL);
 	printf("trace 3's ID %i\n",trace3);
 	for (j=0;j<1024;j+=2.5)
 	{
@@ -59,6 +60,7 @@ int main (int argc, char **argv)
 	
 
 	gtk_timeout_add(40,(GtkFunction)update_stripchart,(gpointer)chart);
+	gtk_timeout_add(4000,(GtkFunction)remove_trace,GINT_TO_POINTER(trace2));
 
 	gtk_widget_show_all (window);
 
@@ -82,4 +84,10 @@ gboolean update_stripchart(gpointer data)
 	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
 //	printf("This should scroll stripchart \n");
 	return TRUE;
+}
+
+gboolean remove_trace(gpointer data)
+{
+	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint)data);
+	return FALSE;
 }

@@ -132,7 +132,6 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 	g_return_val_if_fail (MTX_IS_STRIPCHART (chart),FALSE);
 	g_object_freeze_notify (G_OBJECT (chart));
 
-
 	for (i=0;i<priv->traces->len;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
@@ -152,6 +151,7 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 		trace = NULL;
 	}
 	g_object_thaw_notify (G_OBJECT (chart));
+	generate_stripchart_static_traces(chart);
 	mtx_stripchart_redraw(chart);
 	return retval;
 }
@@ -165,15 +165,16 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 gboolean mtx_stripchart_set_name_justification(MtxStripChart *chart, GtkJustification justification)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
-	g_return_if_fail (MTX_IS_STRIPCHART (chart));
-	g_return_if_fail ((justification != GTK_JUSTIFY_LEFT) ||
+	g_return_val_if_fail (MTX_IS_STRIPCHART (chart), FALSE);
+	g_return_val_if_fail ((justification != GTK_JUSTIFY_LEFT) ||
 			(justification != GTK_JUSTIFY_RIGHT) ||
 			(justification != GTK_JUSTIFY_CENTER) ||
-			(justification != GTK_JUSTIFY_FILL));
+			(justification != GTK_JUSTIFY_FILL),FALSE);
 	g_object_freeze_notify (G_OBJECT (chart));
 	priv->justification = justification;
 	g_object_thaw_notify (G_OBJECT (chart));
 	mtx_stripchart_redraw(chart);
+	return TRUE;
 }
 
 

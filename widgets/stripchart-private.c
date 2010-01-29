@@ -81,7 +81,9 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 	/*widget_class->button_press_event = mtx_stripchart_button_press; */
 	/*widget_class->button_release_event = mtx_stripchart_button_release; */
 	/* Motion event not needed, as unused currently */
-	/*widget_class->motion_notify_event = mtx_stripchart_motion_event; */
+	widget_class->enter_notify_event = mtx_stripchart_enter_leave_event; 
+	widget_class->leave_notify_event = mtx_stripchart_enter_leave_event; 
+	widget_class->motion_notify_event = mtx_stripchart_motion_event; 
 	widget_class->size_request = mtx_stripchart_size_request;
 
 	g_type_class_add_private (class_name, sizeof (MtxStripChartPrivate)); 
@@ -100,8 +102,11 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	* dash designer to do drag and move placement 
 	*/ 
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
-	gtk_widget_add_events (GTK_WIDGET (chart),GDK_BUTTON_PRESS_MASK
-			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
+	gtk_widget_add_events (GTK_WIDGET (chart),GDK_BUTTON_PRESS_MASK |
+			GDK_BUTTON_RELEASE_MASK |
+			GDK_POINTER_MOTION_MASK |
+			GDK_ENTER_NOTIFY_MASK |
+			GDK_LEAVE_NOTIFY_MASK);
 	priv->num_traces = 0;
 	priv->w = 130;		
 	priv->h = 20;
@@ -229,14 +234,14 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_destroy(cr);
 
 	/* Copy background trace pixmap to background for final rendering */
-	gdk_draw_drawable(priv->pixmap,
+	gdk_draw_drawable(priv->grat_pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->trace_pixmap,
 			0,0,
 			0,0,
 			widget->allocation.width,widget->allocation.height);
 
-	cr = gdk_cairo_create (priv->pixmap);
+	cr = gdk_cairo_create (priv->grat_pixmap);
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -365,16 +370,16 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	if (priv->gc)
 		g_object_unref(priv->gc);
 	/* Backing pixmap (copy of window) */
-	if (priv->pixmap)
-		g_object_unref(priv->pixmap);
-	priv->pixmap=gdk_pixmap_new(widget->window,
+	if (priv->bg_pixmap)
+		g_object_unref(priv->bg_pixmap);
+	priv->bg_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->pixmap,
+	gdk_draw_rectangle(priv->bg_pixmap,
 			widget->style->black_gc,
 			TRUE, 0,0,
 			priv->w,priv->h);
-	/* Static Background pixmap */
+	/* Trace pixmap */
 	if (priv->trace_pixmap)
 		g_object_unref(priv->trace_pixmap);
 	priv->trace_pixmap=gdk_pixmap_new(widget->window,
@@ -384,8 +389,18 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 			widget->style->black_gc,
 			TRUE, 0,0,
 			priv->w,priv->h);
+	/* Grat pixmap */
+	if (priv->grat_pixmap)
+		g_object_unref(priv->grat_pixmap);
+	priv->grat_pixmap=gdk_pixmap_new(widget->window,
+			priv->w,priv->h,
+			gtk_widget_get_visual(widget)->depth);
+	gdk_draw_rectangle(priv->grat_pixmap,
+			widget->style->black_gc,
+			TRUE, 0,0,
+			priv->w,priv->h);
 
-	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
+	gdk_window_set_back_pixmap(widget->window,priv->bg_pixmap,0);
 	priv->gc = gdk_gc_new(priv->trace_pixmap);
 	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
@@ -417,7 +432,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->pixmap,
+			priv->bg_pixmap,
 			event->area.x, event->area.y,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
@@ -494,7 +509,9 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	/*	printf("motion in chart, returning false\n");*/
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(MTX_STRIPCHART(chart));
+	priv->mouse_x = event->x;
+	priv->mouse_y = event->y;
 	return FALSE;
 }
 					       
@@ -522,7 +539,44 @@ void mtx_stripchart_redraw (MtxStripChart *chart)
 	if (!GTK_WIDGET(chart)->window) return;
 
 	update_stripchart_position(chart);
+	render_marker(chart);
 	gdk_window_clear(GTK_WIDGET(chart)->window);
 }
 
 
+gboolean mtx_stripchart_enter_leave_event(GtkWidget *widget, GdkEventCrossing *event)
+{
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(MTX_STRIPCHART(widget));
+	if (event->type == GDK_ENTER_NOTIFY)
+		priv->mouse_tracking = TRUE;
+	else
+		priv->mouse_tracking = FALSE;
+
+	return TRUE;
+}
+
+
+void render_marker(MtxStripChart *chart)
+{
+	cairo_t *cr = NULL;
+	cairo_text_extents_t extents;
+	GtkWidget *widget = GTK_WIDGET(chart);
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+
+	gdk_draw_drawable(priv->bg_pixmap,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			priv->grat_pixmap,
+			0,0,
+			0,0,
+			widget->allocation.width,widget->allocation.height);
+	cr = gdk_cairo_create (priv->bg_pixmap);
+	cairo_set_line_width(cr,2);
+	cairo_set_source_rgb (cr, 1.0,1.0,1.0);
+	if (priv->mouse_tracking)
+	{
+		cairo_move_to(cr,priv->mouse_x,0);
+		cairo_line_to(cr,priv->mouse_x,priv->h);
+		cairo_stroke(cr);
+	}
+	cairo_destroy(cr);
+}

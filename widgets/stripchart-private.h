@@ -41,11 +41,16 @@ struct _MtxStripChartTrace
 
 struct _MtxStripChartPrivate
 {
-        GdkPixmap *pixmap;      /*! Update/backing pixmap */
+        GdkPixmap *bg_pixmap;   /*! Update/backing pixmap */
         GdkPixmap *trace_pixmap;/*! Static part of traces */
+	GdkPixmap *grat_pixmap;	/*! Graticule pixmap */
         gint w;                 /*! Width of full widget */
         gint h;                 /*! Height of full widget */
+	gfloat mouse_x;		/*! motion event X coord */
+	gfloat mouse_y;		/*! motion event X coord */
 	gint num_traces;	/*! Number of active traces */
+	gboolean mouse_tracking;/*! If true, render tracer line at mouse pos */
+	gboolean update_pending;/*! If true, don't schedule another */
 	GArray *traces;		/*! Array of trace specific data */
         gchar *font;		/*! Font string for value */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
@@ -64,16 +69,19 @@ gboolean mtx_stripchart_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_stripchart_expose (GtkWidget *, GdkEventExpose *);
 /* Not needed yet
 * gboolean mtx_stripchart_button_press (GtkWidget *,GdkEventButton *);
-* gboolean mtx_stripchart_motion_event (GtkWidget *,GdkEventMotion *);
 */
+gboolean mtx_stripchart_enter_leave_event(GtkWidget *, GdkEventCrossing *);
+gboolean mtx_stripchart_motion_event (GtkWidget *,GdkEventMotion *);
 void mtx_stripchart_size_request (GtkWidget *, GtkRequisition *);
 void mtx_stripchart_class_init (MtxStripChartClass *class_name);
 void mtx_stripchart_init (MtxStripChart *gauge);
 gboolean mtx_stripchart_button_release (GtkWidget *,GdkEventButton *);
 void generate_stripchart_static_traces(MtxStripChart *);
 void update_stripchart_position (MtxStripChart *);
+void render_marker(MtxStripChart *);
 void mtx_stripchart_init_colors(MtxStripChart *);
 void mtx_stripchart_redraw (MtxStripChart *gauge);
+
 
 
 #endif
