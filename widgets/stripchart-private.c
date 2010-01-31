@@ -305,7 +305,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 		if (draw_quarters)
 		{
-			message = g_strdup_printf("%1$.*2$f", trace->max/4,trace->precision);
+			message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)/4),trace->precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,2.0+text_offset[QUARTER],(priv->h*3/4)-2.0);
 			cairo_show_text (cr, message);
@@ -313,7 +313,7 @@ void update_stripchart_position (MtxStripChart *chart)
 			text_offset[QUARTER] += extents.width + 7;
 		}
 
-		message = g_strdup_printf("%1$.*2$f", trace->max/2,trace->precision);
+		message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)/2),trace->precision);
 		cairo_text_extents (cr, message, &extents);
 		cairo_move_to(cr,2.0+text_offset[HALF],(priv->h/2.0)-2.0);
 		cairo_show_text (cr, message);
@@ -322,7 +322,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 		if (draw_quarters)
 		{
-			message = g_strdup_printf("%1$.*2$f", trace->max*3/4,trace->precision);
+			message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)*3/4),trace->precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,2.0+text_offset[THREEQUARTER],(priv->h/4)-2.0);
 			cairo_show_text (cr, message);

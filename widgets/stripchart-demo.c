@@ -40,7 +40,7 @@ int main (int argc, char **argv)
 	chart = mtx_stripchart_new ();
 	gtk_container_add (GTK_CONTAINER (window), chart);
 	gtk_widget_realize(chart);
-	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),0.0,1255.0,0,"Trace 1", NULL);
+	trace1 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-512.0,1536.0,0,"Trace 1", NULL);
 	printf("trace 1's ID %i\n",trace1);
 	trace2 = mtx_stripchart_add_trace(MTX_STRIPCHART(chart),-100.0,512.0,0,"Trace 2", NULL);
 	printf("trace 2's ID %i\n",trace2);
