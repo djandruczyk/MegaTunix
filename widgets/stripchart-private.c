@@ -207,7 +207,7 @@ void update_stripchart_position (MtxStripChart *chart)
 			widget->style->black_gc,
 			TRUE, priv->w-1,0,
 			1,priv->h);
-			
+
 
 	/* Render new data */
 	cr = gdk_cairo_create (priv->trace_pixmap);
@@ -559,24 +559,71 @@ gboolean mtx_stripchart_enter_leave_event(GtkWidget *widget, GdkEventCrossing *e
 void render_marker(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;
+	gint i = 0;
+	gint buffer = 0;
+	gfloat val = 0.0;
 	cairo_text_extents_t extents;
+	gchar *message = NULL;
 	GtkWidget *widget = GTK_WIDGET(chart);
+	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
+	/* Copy trace+graticule to backing pixmap */
 	gdk_draw_drawable(priv->bg_pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->grat_pixmap,
 			0,0,
 			0,0,
 			widget->allocation.width,widget->allocation.height);
+
+
 	cr = gdk_cairo_create (priv->bg_pixmap);
+	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
+	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+        cairo_set_font_size (cr, 12);
+
 	cairo_set_line_width(cr,2);
 	cairo_set_source_rgb (cr, 1.0,1.0,1.0);
+	message = g_strdup_printf("123");
+	cairo_text_extents(cr,message,&extents);
+	g_free(message);
+	buffer = extents.height + 3;
 	if (priv->mouse_tracking)
 	{
 		cairo_move_to(cr,priv->mouse_x,0);
 		cairo_line_to(cr,priv->mouse_x,priv->h);
 		cairo_stroke(cr);
+		for (i=0; i<priv->num_traces;i++)
+		{
+			trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+			val = g_array_index(trace->history, gfloat, trace->history->len-(priv->w-(gint)priv->mouse_x));
+			message = g_strdup_printf("%1$.*2$f", val,trace->precision);
+			cairo_set_source_rgb (cr, 
+					trace->color.red/65535.0,
+					trace->color.green/65535.0,
+					trace->color.blue/65535.0);
+			cairo_text_extents(cr,message,&extents);
+			cairo_move_to(cr,priv->w-20-extents.width, priv->h-(priv->num_traces-i-1)*buffer - extents.height);
+			cairo_show_text(cr,message);
+			g_free(message);
+		}
+	}
+	else
+	{
+		for (i=0; i<priv->num_traces;i++)
+		{
+			trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+			val = g_array_index(trace->history, gfloat, trace->history->len-1);
+			message = g_strdup_printf("%1$.*2$f", val,trace->precision);
+			cairo_set_source_rgb (cr, 
+					trace->color.red/65535.0,
+					trace->color.green/65535.0,
+					trace->color.blue/65535.0);
+			cairo_text_extents(cr,message,&extents);
+			cairo_move_to(cr,priv->w-20-extents.width, priv->h-(priv->num_traces-i-1)*buffer - extents.height);
+			cairo_show_text(cr,message);
+			g_free(message);
+		}
 	}
 	cairo_destroy(cr);
 }

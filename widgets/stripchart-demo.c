@@ -60,7 +60,7 @@ int main (int argc, char **argv)
 	
 
 	gtk_timeout_add(40,(GtkFunction)update_stripchart,(gpointer)chart);
-	gtk_timeout_add(4000,(GtkFunction)remove_trace,GINT_TO_POINTER(trace2));
+//	gtk_timeout_add(4000,(GtkFunction)remove_trace,GINT_TO_POINTER(trace2));
 
 	gtk_widget_show_all (window);
 
