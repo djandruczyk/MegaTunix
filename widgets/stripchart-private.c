@@ -629,6 +629,8 @@ void render_marker(MtxStripChart *chart)
 		for (i=0; i<priv->num_traces;i++)
 		{
 			trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
+			if (trace->history->len < 1)
+				continue;
 			val = g_array_index(trace->history, gfloat, trace->history->len-1);
 			message = g_strdup_printf("%1$.*2$f", val,trace->precision);
 			cairo_set_source_rgb (cr, 

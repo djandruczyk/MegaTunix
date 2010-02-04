@@ -71,6 +71,8 @@ void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 			val = values[i] > trace->max ? trace->max:values[i];
 			val = val < trace->min ? trace->min:val;
 			trace->history = g_array_append_val(trace->history,val);
+			if (trace->history->len > 2*priv->w)
+				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (chart));
