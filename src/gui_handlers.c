@@ -1107,7 +1107,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TE_TABLE:
 		        tmpi = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
-			create_2d_table_editor(tmpi);
+			create_2d_table_editor(tmpi, NULL);
 			break;
 		case TE_TABLE_GROUP:
 			create_2d_table_editor_group(widget);
@@ -3177,10 +3177,10 @@ guint get_bitshift(guint mask)
 	return 0;
 }
 
-EXPORT void update_misc_gauge(DataWatch *watch, gfloat value)
+EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (MTX_IS_GAUGE_FACE(watch->user_data))
-		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),value);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);
 	else
 		remove_watch(watch->id);
 }

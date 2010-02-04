@@ -188,6 +188,10 @@ tab_ident=_ACCEL_WIZ_TAB_
 keys=offset
 offset=592
 
+[ae_blend_scale2]
+keys=offset
+offset=592
+
 [mapdot_container]
 keys=ctrl_name,source,post_functions_with_arg,show_prefix
 ctrl_name=ae_mapdot_rtt
@@ -201,6 +205,21 @@ ctrl_name=ae_tpsdot_rtt
 source=tpsdot
 post_functions_with_arg=add_additional_rtt
 show_prefix=FALSE
+
+[map_ae_container]
+keys=te_table_num,post_functions_with_arg
+te_table_num=14
+post_functions_with_arg=add_2d_table
+
+[tps_ae_container]
+keys=te_table_num,post_functions_with_arg
+te_table_num=15
+post_functions_with_arg=add_2d_table
+
+[stripchart_container]
+keys=sources,post_functions_with_arg
+sources=mapdot,tpsdot,afr1
+post_functions_with_arg=create_stripchart
 
 [map_ae_params_table]
 keys=bind_to_list

@@ -155,7 +155,7 @@ gboolean prompt_r_u_sure(void);
 void combo_toggle_groups_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
-EXPORT void update_misc_gauge(DataWatch *, gfloat);
+EXPORT void update_misc_gauge(DataWatch *);
 void refresh_widgets_at_offset(gint, gint);
 glong get_extreme_from_size(DataSize, Extreme);
 EXPORT gboolean clamp_value(GtkWidget *, gpointer);

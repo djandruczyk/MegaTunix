@@ -16,6 +16,7 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
+#include <watches.h>
 
 
 /* Type definitions */
@@ -40,7 +41,7 @@ struct _Logview_Data
 	GList *used_colors;	/*! List of colors in use.... */
 	gint active_traces;	/*! how many are active */
 	gint spread;		/*! Pixel spread between trace info blocks */
-	gint tselect;		/*! Trace that is currently selected */
+	guint tselect;		/*! Trace that is currently selected */
 	PangoFontDescription *font_desc; /*! Font used for text... */
 	gint info_width;	/*! Width of left info area */
 };
@@ -52,7 +53,7 @@ struct _Logview_Data
  */
 struct _Log_Info
 {
-	gint field_count;	/*! How many fields in the logfile */
+	guint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
 	gchar *signature;	/*! ECU signature of log */
 	GArray *log_list;	/*! List of objects */
@@ -60,8 +61,10 @@ struct _Log_Info
 
 
 /* Prototypes */
+EXPORT void create_stripchart(GtkWidget *);
 EXPORT gboolean select_datalog_for_import(GtkWidget *, gpointer );
 EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *, gpointer );
+EXPORT void update_stripchart_data(DataWatch *);
 void load_logviewer_file(GIOChannel * );
 void read_log_header(GIOChannel *, Log_Info * );
 void read_log_data(GIOChannel *, Log_Info * );

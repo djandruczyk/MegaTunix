@@ -505,6 +505,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"source",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"sources",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"source_key",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"source_value",

@@ -21,14 +21,14 @@
 
 /* Prototypes */
 gboolean create_2d_table_editor_group(GtkWidget *);
-gboolean create_2d_table_editor(gint );
+gboolean create_2d_table_editor(gint, GtkWidget *);
 gboolean update_2d_curve(GtkWidget *, gpointer);
 gboolean close_2d_editor(GtkWidget *, gpointer);
 void coords_changed(GtkWidget *, gpointer);
 void remove_widget(gpointer, gpointer);
 gboolean close_menu_handler(GtkWidget *, gpointer);
 void clean_curve(gpointer, gpointer);
-void update_curve_marker(DataWatch *, gfloat);
+void update_curve_marker(DataWatch *);
 void vertex_proximity(GtkWidget *, gpointer);
 void marker_proximity(GtkWidget *, gpointer);
 gboolean set_axis_locking(GtkWidget *, gpointer );

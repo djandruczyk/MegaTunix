@@ -885,8 +885,8 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
  */
 void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 240;
-	requisition->height = 240;
+	requisition->width = 100;
+	requisition->height = 100;
 }
 
 
