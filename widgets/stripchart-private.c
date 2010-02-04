@@ -189,6 +189,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	gfloat text_offset[NUM_TXTS] = {0.0,0.0,0.0,0.0,0.0};
 	GdkPoint tip;
 	cairo_t *cr = NULL;
+	cairo_t *cr2 = NULL;
 	cairo_text_extents_t extents;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -241,6 +242,7 @@ void update_stripchart_position (MtxStripChart *chart)
 			widget->allocation.width,widget->allocation.height);
 
 	cr = gdk_cairo_create (priv->grat_pixmap);
+	cr2 = gdk_cairo_create (priv->grat_pixmap);
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -286,6 +288,7 @@ void update_stripchart_position (MtxStripChart *chart)
 		draw_quarters = TRUE;
 	g_free(message);
 	/* render the new data */
+	cairo_set_source_rgba(cr2,0.13,0.13,0.13,0.75);
 
 	for (i=0;i<priv->num_traces;i++)
 	{
@@ -297,7 +300,10 @@ void update_stripchart_position (MtxStripChart *chart)
 				);
 		message = g_strdup_printf("%1$.*2$f", trace->min,trace->precision);
 		cairo_text_extents (cr, message, &extents);
+		cairo_rectangle(cr2,2.0+text_offset[BOTTOM],priv->h-2.0,extents.width,-extents.height);
+		cairo_fill(cr2);
 		cairo_move_to(cr,2.0+text_offset[BOTTOM],priv->h-2.0);
+
 		cairo_show_text (cr, message);
 		g_free(message);
 		text_offset[BOTTOM] += extents.width + 7;
@@ -306,6 +312,8 @@ void update_stripchart_position (MtxStripChart *chart)
 		{
 			message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)/4),trace->precision);
 			cairo_text_extents (cr, message, &extents);
+			cairo_rectangle(cr2,2.0+text_offset[QUARTER],priv->h*3/4-2.0,extents.width,-extents.height);
+			cairo_fill(cr2);
 			cairo_move_to(cr,2.0+text_offset[QUARTER],(priv->h*3/4)-2.0);
 			cairo_show_text (cr, message);
 			g_free(message);
@@ -314,6 +322,8 @@ void update_stripchart_position (MtxStripChart *chart)
 
 		message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)/2),trace->precision);
 		cairo_text_extents (cr, message, &extents);
+		cairo_rectangle(cr2,2.0+text_offset[HALF],(priv->h/2.0)-2.0,extents.width,-extents.height);
+		cairo_fill(cr2);
 		cairo_move_to(cr,2.0+text_offset[HALF],(priv->h/2.0)-2.0);
 		cairo_show_text (cr, message);
 		g_free(message);
@@ -323,6 +333,8 @@ void update_stripchart_position (MtxStripChart *chart)
 		{
 			message = g_strdup_printf("%1$.*2$f", trace->min+((trace->max-trace->min)*3/4),trace->precision);
 			cairo_text_extents (cr, message, &extents);
+			cairo_rectangle(cr2,2.0+text_offset[THREEQUARTER],priv->h/4-2.0,extents.width,-extents.height);
+			cairo_fill(cr2);
 			cairo_move_to(cr,2.0+text_offset[THREEQUARTER],(priv->h/4)-2.0);
 			cairo_show_text (cr, message);
 			g_free(message);
@@ -331,6 +343,8 @@ void update_stripchart_position (MtxStripChart *chart)
 
 		message = g_strdup_printf("%1$.*2$f", trace->max,trace->precision);
 		cairo_text_extents (cr, message, &extents);
+		cairo_rectangle(cr2,2.0+text_offset[TOP],2.0,extents.width,extents.height);
+		cairo_fill(cr2);
 		cairo_move_to(cr,2.0+text_offset[TOP],extents.height+2.0);
 		cairo_show_text (cr, message);
 		g_free(message);
@@ -339,6 +353,8 @@ void update_stripchart_position (MtxStripChart *chart)
 		/* Trace names */
 		message = g_strdup_printf("%s", trace->name);
 		cairo_text_extents (cr, message, &extents);
+		cairo_rectangle(cr2,priv->w-extents.width - 20, 2.0+buffer +extents.height,extents.width,-extents.height);
+		cairo_fill(cr2);
 		cairo_move_to(cr,priv->w-extents.width - 20, 2.0 + buffer + extents.height);
 		cairo_show_text (cr, message);
 		g_free(message);
@@ -346,6 +362,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	}
 	cairo_destroy(cr);
+	cairo_destroy(cr2);
 }
 
 
