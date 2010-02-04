@@ -50,6 +50,7 @@ int main (int argc, char **argv)
 	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),FALSE);
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
+//	mtx_curve_set_show_y_marker(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),"X Axis");
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"This is the Y Axis");
@@ -93,21 +94,21 @@ void vertex_proximity(MtxCurve *curve, gpointer data)
 void marker_proximity(MtxCurve *curve, gpointer data)
 {
 	gint index = mtx_curve_get_marker_proximity_index(curve);
-	printf("marker proximity to coordinate %i,\n",index);
+//	printf("marker proximity to coordinate %i,\n",index);
 }
 
 void update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = data;
-	gint min = -1000;
-	gint max = 11000;
+	gint min = -4000;
+	gint max = 5000;
 	static gint step = 125;
 	static gboolean rising = TRUE;
 	static gint value = 0;
 
-	if (value >= max)
+	if (value > max)
 		rising = FALSE;
-	if (value <= min)
+	if (value < min)
 		rising = TRUE;
 
 	if (rising)
@@ -115,5 +116,6 @@ void update_curve_marker(gpointer data)
 	else
 		value-=step;
 /*printf("Setting x marker to %i\n",value);*/
+//	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value);
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 }

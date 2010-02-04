@@ -44,6 +44,8 @@ struct _MtxCurvePrivate
         gfloat highest_x;	/*! Highest X value in points[] */
         gfloat lowest_y;	/*! Lowest Y value in points[] */
         gfloat highest_y;	/*! Highest Y value in points[] */
+        gint x_peak_timeout;	/*! X Peak/Hold timeout */
+        gint y_peak_timeout;	/*! Y Peak/Hold timeout */
         gint x_border;          /*! X Border in pixels */
         gint y_border;          /*! Y Border in pixels */
         gint active_coord;      /*! Active Coordinate */
@@ -54,9 +56,15 @@ struct _MtxCurvePrivate
         gfloat x_scale;         /*! X coord points->coords scaler */
         gfloat y_scale;         /*! Y coord points->coords scaler */
 	gfloat x_marker;	/*! X marker (vertical line) */
+	gfloat peak_x_marker;	/*! X marker (vertical line) */
+	gfloat peak_y_at_x_marker;	/*! X marker (vertical line) */
 	gfloat y_at_x_marker;	/*! X marker (vertical line) */
-	gfloat y_marker;	/*! X marker (horizontal line) */
-	gfloat x_at_y_marker;	/*! X marker (horizontal line) */
+	gfloat y_marker;	/*! Y marker (horizontal line) */
+	gfloat peak_y_marker;	/*! Y marker (horizontal line) */
+	gfloat peak_x_at_y_marker;	/*! Y marker (horizontal line) */
+	gfloat x_at_y_marker;	/*! Y marker (horizontal line) */
+	gboolean x_draw_peak;	/*! X draw peak */
+	gboolean y_draw_peak;	/*! Y draw peak */
         gboolean vertex_selected;/*! Do we have one selected? */
         gboolean auto_hide;	/*! Auto hide vertex on focus out */
         gboolean show_x_marker; /*! Show x_marker rectangles */
@@ -83,6 +91,11 @@ struct _MtxCurvePrivate
         GdkColormap *colormap;  /*! Colormap for GC's */
 };
 
+enum
+{
+	_X_ = 0x91837,
+	_Y_
+};
 
 gboolean mtx_curve_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_curve_expose (GtkWidget *, GdkEventExpose *);
@@ -102,6 +115,7 @@ void update_curve_position (MtxCurve *);
 void recalc_extremes (MtxCurvePrivate *);
 void recalc_points (MtxCurvePrivate *);
 void draw_selected_msg(cairo_t *, MtxCurvePrivate *);
+gboolean cancel_peak(gpointer);
 gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
 gboolean proximity_test (GtkWidget *, GdkEventMotion *);

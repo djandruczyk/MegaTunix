@@ -208,7 +208,6 @@ void update_stripchart_position (MtxStripChart *chart)
 			TRUE, priv->w-1,0,
 			1,priv->h);
 
-
 	/* Render new data */
 	cr = gdk_cairo_create (priv->trace_pixmap);
 	for (i=0;i<priv->num_traces;i++)
@@ -412,7 +411,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 			CAIRO_ANTIALIAS_GRAY);
 
 	generate_stripchart_static_traces(chart);
-	update_stripchart_position(chart);
+	render_marker (chart);
 
 	return TRUE;
 }

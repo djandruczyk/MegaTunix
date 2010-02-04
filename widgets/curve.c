@@ -19,6 +19,8 @@
 #include <gtk/gtk.h>
 
 
+
+
 /*!
  \brief gets called when  a user wants a new curve
  \returns a pointer to a newly created curve widget
@@ -354,19 +356,45 @@ gboolean mtx_curve_get_y_marker_value (MtxCurve *curve, gfloat *value)
  */
 void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
+	static gfloat last = 0.0;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
+	gboolean get_peak_cross = FALSE;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 
+
 	if (priv->x_marker == value)
 		return;
+	if ((value < priv->lowest_x) || (value >priv->highest_x))
+		return;
+	/* Filter out jitter to within 1% */
+	if (fabs(value-last) < (fabs(priv->highest_x-priv->lowest_x)/100.0))
+		return;
 
+	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->x_marker = value;
+	if (value > priv->peak_x_marker)
+	{
+		priv->peak_x_marker = value;
+		get_peak_cross = TRUE;
+		if (priv->x_peak_timeout)
+		{
+			g_source_remove(priv->x_peak_timeout);
+			priv->x_peak_timeout = -1;
+		}
+	}
+	else
+	{
+		priv->x_draw_peak = TRUE;
+		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_X_));
+		if (priv->x_peak_timeout <= 0)
+			priv->x_peak_timeout = g_timeout_add(2000,(GtkFunction)cancel_peak,(gpointer)curve);
+	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{
 		if (value < priv->coords[0].x)
@@ -381,6 +409,8 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 		else if (value > priv->coords[priv->num_points-1].x)
 		{
 			priv->y_at_x_marker = priv->coords[priv->num_points-1].y;
+			if (get_peak_cross)
+				priv->peak_y_at_x_marker = priv->y_at_x_marker;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
 			{
 				priv->marker_proximity_vertex = priv->num_points-1;
@@ -392,6 +422,8 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
 			{
 				priv->y_at_x_marker = y;
+				if (get_peak_cross)
+					priv->peak_y_at_x_marker = y;
 				d1 = sqrt(pow((priv->coords[i].x-value),2)+ pow((priv->coords[i].y-y),2));
 				d2 = sqrt(pow((priv->coords[i+1].x-value),2)+ pow((priv->coords[i+1].y-y),2));
 				if (d1 < d2)
@@ -429,22 +461,47 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
  */
 void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
+	static gfloat last = 0.0;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
+	gboolean get_peak_cross = FALSE;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 
 	if (priv->y_marker == value)
 		return;
+	if ((value < priv->lowest_y) || (value >priv->highest_y))
+		return;
+	/* Filter out jitter to within 1% */
+	if (fabs(value-last) < (fabs(priv->highest_y-priv->lowest_y)/100.0))
+		return;
 
+	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->y_marker = value;
+	if (value > priv->peak_y_marker)
+	{
+		priv->peak_y_marker = value;
+		get_peak_cross = TRUE;
+		if (priv->y_peak_timeout)
+		{
+			g_source_remove(priv->y_peak_timeout);
+			priv->y_peak_timeout = -1;
+		}
+	}
+	else
+	{
+		priv->y_draw_peak = TRUE;
+		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_Y_));
+		if (priv->y_peak_timeout <= 0)
+			priv->y_peak_timeout = g_timeout_add(2000,(GtkFunction)cancel_peak,(gpointer)curve);
+	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{
-		if (value < priv->coords[0].x)
+		if (value < priv->coords[0].y)
 		{
 			priv->x_at_y_marker = priv->coords[0].x;
 			if (0 != priv->marker_proximity_vertex)
@@ -456,6 +513,8 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		else if (value > priv->coords[priv->num_points-1].y)
 		{
 			priv->x_at_y_marker = priv->coords[priv->num_points-1].x;
+			if (get_peak_cross)
+				priv->peak_x_at_y_marker = priv->x_at_y_marker;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
 			{
 				priv->marker_proximity_vertex = priv->num_points-1;
@@ -464,9 +523,11 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		}
 		else if ((value > priv->coords[i].y) && (value < priv->coords[i+1].y))
 		{
-			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
+			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,0,value,priv->w,value,&x,&y))
 			{
 				priv->x_at_y_marker = x;
+				if (get_peak_cross)
+					priv->peak_x_at_y_marker = x;
 				d1 = sqrt(pow((priv->coords[i].x-x),2)+ pow((priv->coords[i].y-value),2));
 				d2 = sqrt(pow((priv->coords[i+1].x-x),2)+ pow((priv->coords[i+1].y-value),2));
 				if (d1 < d2)

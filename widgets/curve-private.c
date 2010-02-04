@@ -210,6 +210,7 @@ void update_curve_position (MtxCurve *curve)
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	cairo_t *cr = NULL;
+	double dashes[2] = {4.0,4.0};
 	gchar * message = NULL;
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -304,12 +305,34 @@ void update_curve_position (MtxCurve *curve)
 		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
 		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
 		cairo_stroke(cr);
+		if (priv->x_draw_peak)
+		{
+			cairo_save(cr);
+			cairo_set_dash(cr,dashes,2,0);
+			cairo_move_to (cr,0 ,priv->h-(((priv->peak_y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_line_to (cr, ((priv->peak_x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->peak_y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_line_to (cr, ((priv->peak_x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+			cairo_stroke(cr);
+			cairo_restore(cr);
+		}
+
 	}
 	if (priv->show_y_marker)
 	{
-		cairo_move_to (cr, 0,((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border);
-		cairo_line_to (cr, priv->w,((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border);
+		cairo_move_to (cr, 0,priv->h-(((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+		cairo_line_to (cr, ((priv->x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+		cairo_line_to (cr, ((priv->x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
 		cairo_stroke(cr);
+		if (priv->y_draw_peak)
+		{
+			cairo_save(cr);
+			cairo_set_dash(cr,dashes,2,0);
+			cairo_move_to (cr, 0,priv->h-(((priv->peak_y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_line_to (cr, ((priv->peak_x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->peak_y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_line_to (cr, ((priv->peak_x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+			cairo_stroke(cr);
+			cairo_restore(cr);
+		}
 	}
 
 	/* Update the Title text */
@@ -733,6 +756,12 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 		if (proximity_test(curve,event))
 		{
 			g_signal_emit_by_name((gpointer)curve, "vertex-proximity");
+			priv->active_coord = priv->proximity_vertex;
+			mtx_curve_redraw(MTX_CURVE(curve));
+		}
+		else
+		{
+			priv->active_coord = -1;
 			mtx_curve_redraw(MTX_CURVE(curve));
 		}
 		return TRUE;
@@ -1031,3 +1060,29 @@ gboolean get_intersection(
 	/*  Success. */
 	return TRUE; 
 } 
+
+
+gboolean cancel_peak(gpointer data)
+{
+	MtxCurve *curve = MTX_CURVE(data);
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	gint axis = (gint)g_object_get_data(G_OBJECT(curve),"axis");
+
+	switch (axis)
+	{
+		case _X_:
+			priv->x_draw_peak = FALSE;
+			priv->peak_x_marker = priv->x_lower_limit;
+			priv->x_peak_timeout = 0;
+			break;
+		case _Y_:
+			priv->y_draw_peak = FALSE;
+			priv->peak_y_marker = priv->y_lower_limit;
+			priv->y_peak_timeout = 0;
+			break;
+		default:
+			break;
+	}
+	mtx_curve_redraw(MTX_CURVE(curve));
+	return FALSE;
+}
