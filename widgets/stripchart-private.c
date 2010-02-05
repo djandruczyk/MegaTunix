@@ -612,7 +612,11 @@ void render_marker(MtxStripChart *chart)
 		for (i=0; i<priv->num_traces;i++)
 		{
 			trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
-			val = g_array_index(trace->history, gfloat, trace->history->len-(priv->w-(gint)priv->mouse_x));
+			if ((priv->w-(gint)priv->mouse_x) > trace->history->len)
+				val = trace->min;
+			else
+				val = g_array_index(trace->history, gfloat, trace->history->len-(priv->w-(gint)priv->mouse_x));
+
 			message = g_strdup_printf("%1$.*2$f", val,trace->precision);
 			cairo_set_source_rgb (cr, 
 					trace->color.red/65535.0,
