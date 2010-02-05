@@ -22,6 +22,13 @@
 
 #define MTX_CURVE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_CURVE, MtxCurvePrivate))
 typedef struct _MtxCurvePrivate MtxCurvePrivate;
+typedef enum
+{
+	LOW,
+	HIGH,
+	NONE
+}MarkerClamp;
+
 struct _MtxCurvePrivate
 {
 	MtxCurve *self;		/* Pointer to public opbject */
@@ -75,6 +82,8 @@ struct _MtxCurvePrivate
         gboolean coord_changed;	/*! Flag */
 	gboolean x_blocked_from_edit;	/* Prevent mouse edit of an axis */
 	gboolean y_blocked_from_edit;	/* Prevent mouse edit of an axis */
+	MarkerClamp x_marker_clamp;
+	MarkerClamp y_marker_clamp;
         GdkGC *gc;              /*! Graphics Context */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */

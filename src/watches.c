@@ -163,10 +163,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
-	gfloat tmpf2 = 0.0;
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
-	gint num = 0;
 	gint i = 0;
 	switch (watch->style)
 	{
@@ -206,25 +204,22 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			/* If value changes at ALL from previous value, then
 			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
-			lookup_current_value(watch->varname, &tmpf);
+			lookup_current_value(watch->varname, &(watch->val));
 			/* If it's a one-shot, fire it no matter what... */
 			if (watch->one_shot)
 			{
-				watch->val = tmpf;
 				watch->func(watch);
 				remove_watch(watch->id);
 				break;
 			}
 
-			/* compare to 5 samples back */
-			lookup_previous_nth_value(watch->varname, 4, &tmpf2);
-			if (tmpf != tmpf2)
+			if (watch->val != watch->last_val)
 			{
-				watch->val = tmpf;
+				watch->last_val = watch->val;
 				watch->func(watch);
-				if (watch->one_shot)
-					remove_watch(watch->id);
 			}
+			else
+				watch->last_val = watch->val;
 			break;
 		case MULTI_VALUE:
 			for (i=0;i<watch->num_vars;i++)

@@ -53,11 +53,12 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
 /*!
  \brief sets the current value 
  \param stripchart (MtxStripChart *) pointer to stripchart
- \param value (gfloat) new value
+ \param value (gfloat *) new value. This code makes some bad assumptions
  */
 void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 {
 	gint i = 0;
+	static gint count = 0;
 	gfloat val = 0.0;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -65,15 +66,12 @@ void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 	g_object_freeze_notify (G_OBJECT (chart));
 	for (i=0;i<priv->num_traces;i++)
 	{
-		if (values[i])
-		{
-			trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
-			val = values[i] > trace->max ? trace->max:values[i];
-			val = val < trace->min ? trace->min:val;
-			trace->history = g_array_append_val(trace->history,val);
-			if (trace->history->len > 2*priv->w)
-				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
-		}
+		trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
+		val = values[i] > trace->max ? trace->max:values[i];
+		val = val < trace->min ? trace->min:val;
+		trace->history = g_array_append_val(trace->history,val);
+		if (trace->history->len > 2*priv->w)
+			trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 	}
 	g_object_thaw_notify (G_OBJECT (chart));
 	mtx_stripchart_redraw(chart);

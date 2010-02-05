@@ -500,13 +500,19 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 	for (i=0;i<priv->num_traces;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
+		if (!trace)
+			continue;
+
 
 		cairo_set_line_width(cr,trace->lwidth);
 		cairo_set_source_rgb (cr, 
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
-		points = trace->history->len-1 > priv->w ? priv->w:trace->history->len-1;
+		points = trace->history->len < priv->w ? trace->history->len-1:priv->w;
+		printf ("Static trace %i, num points to draw %i\n",i,points);
+		if (points < 1)
+			continue;
 		start_x = priv->w - points;
 		start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len - points)-trace->min) / (trace->max - trace->min))*priv->h);
 		cairo_move_to(cr,start_x,start_y);

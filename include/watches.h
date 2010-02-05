@@ -52,6 +52,7 @@ struct _DataWatch
 	gchar * function;	/*! function to call when watch strikes */
 	gint num_vars;		/*! number of variables */
 	gfloat val;		/*! single value result location */
+	gfloat last_val;	/*! Last value */
 	gfloat *vals;		/*! multi value result location */
 	void (*func) (DataWatch *);/*! Function pointer */
 	gchar * varname;	/*! Variable name (rtv internal name) to check */

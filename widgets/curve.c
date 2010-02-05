@@ -369,7 +369,7 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 
 	if (priv->x_marker == value)
 		return;
-	if ((value < priv->lowest_x) || (value >priv->highest_x))
+	if (((value < priv->lowest_x) && (priv->x_marker_clamp = LOW)) || ((value > priv->highest_x) && (priv->x_marker_clamp = HIGH)))
 		return;
 	/* Filter out jitter to within 1% */
 	if (fabs(value-last) < (fabs(priv->highest_x-priv->lowest_x)/100.0))
@@ -377,7 +377,21 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 
 	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
-	priv->x_marker = value;
+	if (value <priv->lowest_x)
+	{
+		priv->x_marker = priv->lowest_x;
+		priv->x_marker_clamp = LOW;
+	}
+	else if (value > priv->highest_x)
+	{
+		priv->x_marker = priv->highest_x;
+		priv->x_marker_clamp = HIGH;
+	}
+	else
+	{
+		priv->x_marker = value;
+		priv->x_marker_clamp = NONE;
+	}
 	if (value > priv->peak_x_marker)
 	{
 		priv->peak_x_marker = value;
@@ -473,15 +487,31 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 
 	if (priv->y_marker == value)
 		return;
-	if ((value < priv->lowest_y) || (value >priv->highest_y))
+	/* IF marker is clamped beyond ranges, don't bother updating*/
+	if (((value < priv->lowest_y) && (priv->y_marker_clamp = LOW)) || ((value > priv->highest_y) && (priv->y_marker_clamp = HIGH)))
 		return;
+
 	/* Filter out jitter to within 1% */
 	if (fabs(value-last) < (fabs(priv->highest_y-priv->lowest_y)/100.0))
 		return;
 
 	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
-	priv->y_marker = value;
+	if (value <priv->lowest_y)
+	{
+		priv->y_marker = priv->lowest_y;
+		priv->y_marker_clamp = LOW;
+	}
+	else if (value > priv->highest_y)
+	{
+		priv->y_marker = priv->highest_y;
+		priv->y_marker_clamp = HIGH;
+	}
+	else
+	{
+		priv->y_marker = value;
+		priv->y_marker_clamp = NONE;
+	}
 	if (value > priv->peak_y_marker)
 	{
 		priv->peak_y_marker = value;
