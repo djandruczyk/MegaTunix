@@ -146,6 +146,8 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->y_blocked_from_edit = FALSE;
 	priv->auto_hide = TRUE;
 	priv->vertex_id = 0;
+	priv->x_marker = 0.0;
+	priv->y_marker = 0.0;
 	priv->x_lower_limit=-65536;
 	priv->y_lower_limit=-65536;
 	priv->x_upper_limit=65536;
@@ -1096,9 +1098,17 @@ gboolean get_intersection(
 
 gboolean cancel_peak(gpointer data)
 {
-	MtxCurve *curve = MTX_CURVE(data);
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	gint axis = (gint)g_object_get_data(G_OBJECT(curve),"axis");
+	MtxCurve *curve = NULL;
+	MtxCurvePrivate *priv = NULL;
+	gint axis = 0;
+
+	if (!MTX_IS_CURVE(data))
+		return  FALSE;
+
+	curve = MTX_CURVE(data);
+
+	priv = MTX_CURVE_GET_PRIVATE(curve);
+	axis = (gint)g_object_get_data(G_OBJECT(curve),"axis");
 
 	switch (axis)
 	{

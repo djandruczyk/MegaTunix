@@ -22,7 +22,7 @@
 void coords_changed(MtxCurve *, gpointer);
 void vertex_proximity(MtxCurve *, gpointer);
 void marker_proximity(MtxCurve *, gpointer);
-void update_curve_marker(gpointer );
+gboolean update_curve_marker(gpointer );
 
 int main (int argc, char **argv)
 {
@@ -97,11 +97,11 @@ void marker_proximity(MtxCurve *curve, gpointer data)
 //	printf("marker proximity to coordinate %i,\n",index);
 }
 
-void update_curve_marker(gpointer data)
+gboolean update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = data;
 	gint min = -4000;
-	gint max = 5000;
+	gint max = 12000;
 	static gint step = 125;
 	static gboolean rising = TRUE;
 	static gint value = 0;
@@ -115,7 +115,8 @@ void update_curve_marker(gpointer data)
 		value+=step;
 	else
 		value-=step;
-/*printf("Setting x marker to %i\n",value);*/
+//	printf("Setting x marker to %i\n",value);
 //	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value);
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
+	return TRUE;
 }

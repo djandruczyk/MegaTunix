@@ -376,30 +376,29 @@ gboolean mtx_curve_get_y_marker_value (MtxCurve *curve, gfloat *value)
  */
 void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
-	static gfloat last = 0.0;
+	MtxCurvePrivate *priv = NULL;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
 	gboolean get_peak_cross = FALSE;
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
 
+	g_return_if_fail (MTX_IS_CURVE (curve));
+	priv = MTX_CURVE_GET_PRIVATE(curve);
 
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return;
 	if (priv->x_marker == value)
 		return;
-	if (((value < priv->lowest_x) && (priv->x_marker_clamp = LOW)) || ((value > priv->highest_x) && (priv->x_marker_clamp = HIGH)))
+	if (((value < priv->lowest_x) && (priv->x_marker_clamp == LOW)) || ((value > priv->highest_x) && (priv->x_marker_clamp == HIGH)))
 		return;
 	/* Filter out jitter to within 1% */
-	if (fabs(value-last) < (fabs(priv->highest_x-priv->lowest_x)/100.0))
+	if (fabs(value-priv->x_marker) < (fabs(priv->highest_x-priv->lowest_x)/100.0))
 		return;
 
-	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
-	if (value <priv->lowest_x)
+	if (value < priv->lowest_x)
 	{
 		priv->x_marker = priv->lowest_x;
 		priv->x_marker_clamp = LOW;
@@ -497,29 +496,28 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
  */
 void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
-	static gfloat last = 0.0;
+	MtxCurvePrivate *priv = NULL;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
 	gboolean get_peak_cross = FALSE;
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
+	priv = MTX_CURVE_GET_PRIVATE(curve);
 
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return;
 	if (priv->y_marker == value)
 		return;
 	/* IF marker is clamped beyond ranges, don't bother updating*/
-	if (((value < priv->lowest_y) && (priv->y_marker_clamp = LOW)) || ((value > priv->highest_y) && (priv->y_marker_clamp = HIGH)))
+	if (((value < priv->lowest_y) && (priv->y_marker_clamp == LOW)) || ((value > priv->highest_y) && (priv->y_marker_clamp == HIGH)))
 		return;
 
 	/* Filter out jitter to within 1% */
-	if (fabs(value-last) < (fabs(priv->highest_y-priv->lowest_y)/100.0))
+	if (fabs(value-priv->y_marker) < (fabs(priv->highest_y-priv->lowest_y)/100.0))
 		return;
 
-	last = value;
 	g_object_freeze_notify (G_OBJECT (curve));
 	if (value <priv->lowest_y)
 	{
