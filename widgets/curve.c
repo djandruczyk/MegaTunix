@@ -69,7 +69,8 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	if (!priv->auto_rescale_id)
+		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -102,7 +103,8 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	if (!priv->auto_rescale_id)
+		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -127,7 +129,8 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	if (!priv->auto_rescale_id)
+		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -168,7 +171,7 @@ gboolean mtx_curve_set_color (MtxCurve *curve, CurveColorIndex index, GdkColor c
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -221,7 +224,7 @@ gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -239,7 +242,7 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -270,7 +273,7 @@ gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -301,7 +304,7 @@ gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -319,7 +322,7 @@ gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -337,7 +340,7 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -485,7 +488,7 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return;
 }
 
@@ -606,7 +609,7 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return;
 }
 
@@ -863,7 +866,7 @@ gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -885,7 +888,7 @@ gboolean mtx_curve_set_y_axis_label(MtxCurve *curve, const gchar *text)
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 

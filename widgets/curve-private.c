@@ -27,7 +27,6 @@
 
 
 static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
-static guint auto_rescale_id = 0;
 
 GType mtx_curve_get_type(void)
 {
@@ -114,6 +113,7 @@ void mtx_curve_init (MtxCurve *curve)
 				|GDK_ENTER_NOTIFY_MASK
 				|GDK_LEAVE_NOTIFY_MASK);
 	priv->self = curve;
+	priv->auto_rescale_id = 0;
 	priv->w = 100;		
 	priv->h = 100;
 	priv->cr = NULL;
@@ -204,7 +204,7 @@ void mtx_curve_init_colors(MtxCurve *curve)
  looks a bit nicer, though is a little bit slower than a raw GDK version
  \param widget (MtxCurve *) pointer to the curve object
  */
-void update_curve_position (MtxCurve *curve)
+void update_curve (MtxCurve *curve)
 {
 	GtkWidget * widget = NULL;
 	cairo_font_weight_t weight;
@@ -230,23 +230,6 @@ void update_curve_position (MtxCurve *curve)
 	cr = gdk_cairo_create (priv->pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 
-	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
-
-	/* curve  */
-
-	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
-			priv->colors[CURVE_COL_FG].green/65535.0,
-			priv->colors[CURVE_COL_FG].blue/65535.0);
-	cairo_set_line_width (cr, 1.5);
-
-	recalc_points(priv);
-	/* The "curve" itself */
-	for (i=0;i<priv->num_points-1;i++)
-	{
-		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
-		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
-	}
-	cairo_stroke(cr);
 	/* The circles for each vertex itself */
 	if (priv->show_vertexes)
 	{
@@ -534,7 +517,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 			CAIRO_ANTIALIAS_GRAY);
 
 	recalc_extremes(priv);
-	update_curve_position(curve);
+	update_curve(curve);
 
 	return TRUE;
 }
@@ -599,7 +582,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (MtxCurve *) pointer to the curve object
  */
-void generate_curve_background(MtxCurve *curve)
+void generate_static_curve(MtxCurve *curve)
 {
 	cairo_t *cr = NULL;
 	gint w = 0;
@@ -660,6 +643,22 @@ void generate_curve_background(MtxCurve *curve)
 		priv->y_label_border = 2 * extents.height;
 	}
 	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
+
+	/* THE curve */
+	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
+			priv->colors[CURVE_COL_FG].green/65535.0,
+			priv->colors[CURVE_COL_FG].blue/65535.0);
+	cairo_set_line_width (cr, 1.5);
+
+	recalc_points(priv);
+	/* The "curve" itself */
+	for (i=0;i<priv->num_points-1;i++)
+	{
+		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
+		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
+	}
+	cairo_stroke(cr);
 	if (priv->show_grat)
 	{
 		/* Need to draw text markers FIRST... */
@@ -791,12 +790,12 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 		{
 			g_signal_emit_by_name((gpointer)curve, "vertex-proximity");
 			priv->active_coord = priv->proximity_vertex;
-			mtx_curve_redraw(MTX_CURVE(curve));
+			mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 		}
 		else
 		{
 			priv->active_coord = -1;
-			mtx_curve_redraw(MTX_CURVE(curve));
+			mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 		}
 		return TRUE;
 	}
@@ -860,15 +859,17 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 			( (gint) priv->coords[i].y < priv->lowest_y))
 		recalc_extremes(priv);
 	priv->coord_changed = TRUE;
-	mtx_curve_redraw(MTX_CURVE(curve));
+	mtx_curve_redraw(MTX_CURVE(curve), TRUE);
 	return TRUE;
 }
 					       
 
 gboolean auto_rescale(gpointer data)
 {
+	MtxCurvePrivate *priv = (MtxCurvePrivate *)data;
 	recalc_extremes(data);
-	auto_rescale_id = 0;
+	mtx_curve_redraw(MTX_CURVE(priv->self),FALSE);
+	priv->auto_rescale_id = 0;
 	return FALSE;
 }
 
@@ -885,14 +886,14 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 				priv->active_coord = i;
 				priv->vertex_selected = TRUE;
 				priv->coord_changed = FALSE;
-				mtx_curve_redraw(MTX_CURVE(curve));
+				mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 				return TRUE;
 			}
 
 		}
 		priv->active_coord = -1;
 		priv->vertex_selected = FALSE;
-		mtx_curve_redraw(MTX_CURVE(curve));
+		mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	}
 	if ((event->button == 1 ) && 
 			(event->type == GDK_BUTTON_RELEASE) &&
@@ -900,8 +901,8 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 	{
 		priv->vertex_selected = FALSE;
 
-		if (!auto_rescale_id)
-			auto_rescale_id = g_timeout_add(750,(GtkFunction)auto_rescale,priv);
+		if (!priv->auto_rescale_id)
+			priv->auto_rescale_id = g_timeout_add(750,(GtkFunction)auto_rescale,priv);
 		if (priv->coord_changed)
 			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;
@@ -928,11 +929,13 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
  \brief gets called to redraw the entire display manually
  \param curve (MtxCurve *) pointer to the curve object
  */
-void mtx_curve_redraw (MtxCurve *curve)
+void mtx_curve_redraw (MtxCurve *curve, gboolean full)
 {
 	if (!GTK_WIDGET(curve)->window) return;
 
-	update_curve_position (curve);
+	if (full)
+		generate_static_curve(curve);
+	update_curve (curve);
 	gdk_window_clear(GTK_WIDGET(curve)->window);
 }
 
@@ -962,7 +965,7 @@ void recalc_extremes(MtxCurvePrivate *priv)
 	priv->x_scale = (gfloat)(priv->w-(2*priv->x_border))/((priv->highest_x - (priv->lowest_x + 0.000001)));
 	priv->y_scale = (gfloat)(priv->h-(2*priv->y_border))/((priv->highest_y - (priv->lowest_y + 0.000001)));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
-	generate_curve_background(priv->self);
+	generate_static_curve(priv->self);
 }
 
 
@@ -1003,7 +1006,7 @@ gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
 		if (priv->vertex_id > 0)
 			g_source_remove(priv->vertex_id);
 		priv->show_vertexes = TRUE;
-		mtx_curve_redraw(MTX_CURVE(curve));
+		mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	}
 	if ((event->type == GDK_LEAVE_NOTIFY) && (priv->auto_hide))
 		priv->vertex_id = g_timeout_add(2000,delay_turnoff_vertexes,curve);
@@ -1020,7 +1023,7 @@ gboolean delay_turnoff_vertexes(gpointer data)
 
 	priv = MTX_CURVE_GET_PRIVATE(curve);
 	priv->show_vertexes = FALSE;
-	mtx_curve_redraw(MTX_CURVE(curve));
+	mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	return FALSE;
 }
 
@@ -1125,6 +1128,6 @@ gboolean cancel_peak(gpointer data)
 		default:
 			break;
 	}
-	mtx_curve_redraw(MTX_CURVE(curve));
+	mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	return FALSE;
 }

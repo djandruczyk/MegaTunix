@@ -35,7 +35,7 @@ int main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-//	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
+	gtk_widget_set_size_request(GTK_WIDGET(window),320,320);
 	curve = mtx_curve_new ();
 	
 	gtk_container_add (GTK_CONTAINER (window), curve);
