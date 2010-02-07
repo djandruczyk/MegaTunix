@@ -711,14 +711,44 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
+	cairo_t *cr = NULL;
+	GdkPixmap *pmap = NULL;
 
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+	}
+	else
+	{
+		pmap=gdk_pixmap_new(widget->window,
+				priv->w,priv->h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_drawable(pmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		cr = gdk_cairo_create (pmap);
+		cairo_set_source_rgba (cr, 0.5,0.5,0.5,0.5);
+		cairo_rectangle (cr,
+				0,0,priv->w,priv->h);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				pmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		g_object_unref(pmap);
 
+	}
 	if (GTK_IS_WINDOW(widget->parent))
 	{
 #if GTK_MINOR_VERSION >= 10
@@ -735,8 +765,6 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 		gdk_window_shape_combine_mask(widget->window,priv->bitmap,0,0);
 	}
-
-
 	return FALSE;
 }
 

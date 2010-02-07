@@ -549,14 +549,44 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	cairo_t *cr = NULL;
+	GdkPixmap *pmap = NULL;
 
+
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			priv->pixmap,
 			event->area.x, event->area.y,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
-
+	}
+	else
+	{
+		pmap=gdk_pixmap_new(widget->window,
+				priv->w,priv->h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_drawable(pmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		cr = gdk_cairo_create (pmap);
+		cairo_set_source_rgba (cr, 0.5,0.5,0.5,0.5);
+		cairo_rectangle (cr,
+				0,0,priv->w,priv->h);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				pmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		g_object_unref(pmap);
+	}
 	return FALSE;
 }
 
@@ -607,7 +637,8 @@ void generate_curve_background(MtxCurve *curve)
 	{
 		message = g_strdup_printf("%s",priv->x_axis_label);
 		cairo_text_extents (cr, message, &extents);
-		cairo_move_to(cr,(priv->w/2) + priv->x_border - (extents.width/2.0),priv->h - (extents.height/2));
+		//cairo_move_to(cr,(priv->w/2) + priv->x_border - (extents.width/2.0),priv->h - (extents.height/2));
+		cairo_move_to(cr,(priv->w/2) - (extents.width/2.0),priv->h - (extents.height/2));
 		cairo_show_text (cr, message);
 		g_free(message);
 		priv->x_label_border = 2 * extents.height;
@@ -617,7 +648,8 @@ void generate_curve_background(MtxCurve *curve)
 	{
 		message = g_strdup_printf("%s",priv->y_axis_label);
 		cairo_text_extents (cr, message, &extents);
-		cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));
+		//cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));
+		cairo_move_to(cr,1.5*extents.height,(priv->h/2) + (extents.width/2.0));
 		cairo_save(cr);
 		cairo_rotate(cr,-M_PI/2.0);
 		cairo_show_text (cr, message);

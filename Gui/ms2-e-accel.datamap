@@ -168,27 +168,7 @@ keys=bind_to_list,tab_ident
 bind_to_list=valid_ecu_ctrls
 tab_ident=_ACCEL_WIZ_TAB_
 
-[tpsdot_pbar]
-keys=post_functions_with_arg,source,tab_ident,raw_lower,raw_upper
-raw_lower=-1
-raw_upper=1000
-post_functions_with_arg=register_rt_range
-source=tpsdot
-tab_ident=_ACCEL_WIZ_TAB_
-
-[mapdot_pbar]
-keys=post_functions_with_arg,source,tab_ident,raw_lower,raw_upper
-raw_lower=-1
-raw_upper=200
-post_functions_with_arg=register_rt_range
-source=mapdot
-tab_ident=_ACCEL_WIZ_TAB_
-
 [ae_blend_scale]
-keys=offset
-offset=592
-
-[ae_blend_scale_2]
 keys=offset
 offset=592
 
@@ -207,12 +187,14 @@ post_functions_with_arg=add_additional_rtt
 show_prefix=FALSE
 
 [map_ae_container]
-keys=te_table_num,post_functions_with_arg
+keys=bind_to_list,te_table_num,post_functions_with_arg
+bind_to_list=map_ae_ctrls
 te_table_num=14
 post_functions_with_arg=add_2d_table
 
 [tps_ae_container]
-keys=te_table_num,post_functions_with_arg
+keys=bind_to_list,te_table_num,post_functions_with_arg
+bind_to_list=tps_ae_ctrls
 te_table_num=15
 post_functions_with_arg=add_2d_table
 
@@ -221,13 +203,22 @@ keys=sources,post_functions_with_arg
 sources=mapdot,tpsdot,afr1
 post_functions_with_arg=create_stripchart
 
+[eae_stripchart_container]
+keys=sources,post_functions_with_arg
+sources=mapdot,tpsdot,afr1
+post_functions_with_arg=create_stripchart
+
+[non_eae_graphic_controls]
+keys=bind_to_list
+bind_to_list=non_eae
+
 [map_ae_params_table]
 keys=bind_to_list
-bind_to_list=map_ae_ctrls
+bind_to_list=map_ae_ctrls,non_eae
 
 [tps_ae_params_table]
 keys=bind_to_list
-bind_to_list=tps_ae_ctrls
+bind_to_list=tps_ae_ctrls,non_eae
 
 [ae_params_frame]
 keys=bind_to_list

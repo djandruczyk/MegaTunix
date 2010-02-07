@@ -56,6 +56,8 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
 	priv->colors[index].blue = color.blue;
 	priv->colors[index].pixel = color.pixel;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -129,6 +131,8 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 		new_bg = TRUE;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return TRUE;
 	if (new_bg)
 		generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -162,6 +166,8 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 		g_free(priv->value_font);
 	priv->value_font = g_strdup(new);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
@@ -183,6 +189,8 @@ gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRang
 	newrange = g_memdup(range,sizeof(MtxWarningRange)); 
 	g_array_append_val(priv->w_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->w_ranges->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->w_ranges->len-1;
@@ -206,6 +214,8 @@ gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *r
 	newrange = g_memdup(range,sizeof(MtxAlertRange)); 
 	g_array_append_val(priv->a_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->a_ranges->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->a_ranges->len-1;
@@ -236,6 +246,8 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 	new_tblock->y_pos = tblock->y_pos;
 	g_array_append_val(priv->t_blocks,new_tblock);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->t_blocks->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->t_blocks->len-1;
@@ -278,6 +290,8 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 	new_tgroup->sweep_angle = tgroup->sweep_angle;
 	g_array_append_val(priv->tick_groups,new_tgroup);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->tick_groups->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->tick_groups->len-1;
@@ -335,6 +349,8 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	}
 	g_array_append_val(priv->polygons,new_poly);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->polygons->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->polygons->len-1;
@@ -481,6 +497,8 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -613,6 +631,8 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -708,6 +728,8 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -827,6 +849,8 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -878,6 +902,8 @@ void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField 
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -935,6 +961,8 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -959,6 +987,8 @@ void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge)
 		g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -983,6 +1013,8 @@ void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge)
 		g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1009,6 +1041,8 @@ void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
 		g_free(tblock);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1036,6 +1070,8 @@ void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
 		g_free(tgroup);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1065,6 +1101,8 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
 		g_free(poly->data);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1090,6 +1128,8 @@ void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index)
 			g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1116,6 +1156,8 @@ void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
 			g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1146,6 +1188,8 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1176,6 +1220,8 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1209,6 +1255,8 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1238,6 +1286,8 @@ void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->show_drag_border = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
@@ -1257,6 +1307,8 @@ void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->show_tattletale = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -1287,6 +1339,8 @@ void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->tattletale_alpha = alpha;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -1328,6 +1382,8 @@ gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->peak = priv->value;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return TRUE;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return TRUE;
@@ -1387,6 +1443,8 @@ void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 	else
 	{
 		priv->daytime_mode = mode;
+		if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+			return;
 		generate_gauge_background(gauge);
 		mtx_gauge_face_redraw_canvas (gauge);
 	}

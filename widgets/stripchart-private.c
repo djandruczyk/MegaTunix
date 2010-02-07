@@ -445,14 +445,44 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	cairo_t *cr = NULL;
+	GdkPixmap *pmap = NULL;
 
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->bg_pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
 
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->bg_pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+	}
+	else
+	{
+		pmap=gdk_pixmap_new(widget->window,
+				priv->w,priv->h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_drawable(pmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->bg_pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		cr = gdk_cairo_create (pmap);
+		cairo_set_source_rgba (cr, 0.5,0.5,0.5,0.5);
+		cairo_rectangle (cr,
+				0,0,priv->w,priv->h);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				pmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		g_object_unref(pmap);
+	}
 	return FALSE;
 }
 
@@ -510,7 +540,6 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
 		points = trace->history->len < priv->w ? trace->history->len-1:priv->w;
-		printf ("Static trace %i, num points to draw %i\n",i,points);
 		if (points < 1)
 			continue;
 		start_x = priv->w - points;

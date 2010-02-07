@@ -67,6 +67,8 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 		printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
 	*/
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -98,6 +100,8 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 	}
 	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -121,6 +125,8 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);*/
 	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -160,6 +166,8 @@ gboolean mtx_curve_set_color (MtxCurve *curve, CurveColorIndex index, GdkColor c
         priv->colors[index].blue = color.blue;
         priv->colors[index].pixel = color.pixel;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -211,6 +219,8 @@ gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->title = g_strdup(new_title);
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -227,6 +237,8 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_vertexes = value;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -256,6 +268,8 @@ gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->auto_hide = value;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -285,6 +299,8 @@ gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_grat = value;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -301,6 +317,8 @@ gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_x_marker = value;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -317,6 +335,8 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_y_marker = value;
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -367,6 +387,8 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 	g_return_if_fail (MTX_IS_CURVE (curve));
 
 
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return;
 	if (priv->x_marker == value)
 		return;
 	if (((value < priv->lowest_x) && (priv->x_marker_clamp = LOW)) || ((value > priv->highest_x) && (priv->x_marker_clamp = HIGH)))
@@ -485,6 +507,8 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_if_fail (MTX_IS_CURVE (curve));
 
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return;
 	if (priv->y_marker == value)
 		return;
 	/* IF marker is clamped beyond ranges, don't bother updating*/
@@ -839,6 +863,8 @@ gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
 		g_free(priv->x_axis_label);
 	priv->x_axis_label = g_strdup(text);
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
@@ -859,6 +885,8 @@ gboolean mtx_curve_set_y_axis_label(MtxCurve *curve, const gchar *text)
 		g_free(priv->y_axis_label);
 	priv->y_axis_label = g_strdup(text);
 	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
 	mtx_curve_redraw(curve);
 	return TRUE;
 }
