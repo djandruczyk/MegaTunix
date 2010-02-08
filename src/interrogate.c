@@ -1218,8 +1218,8 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		else
 		{
 			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
-			cfg_free(cfgfile);
 			g_strfreev(match_on);
+			cfg_free(cfgfile);
 			return FALSE;
 		}
 

@@ -99,7 +99,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	tmpbuf = g_strdup_printf("2D Table Group Editor");
 	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
 	g_free(tmpbuf);
-	gtk_window_resize(GTK_WINDOW(window),640,480);
+	gtk_window_resize(GTK_WINDOW(window),800,530);
 
 	widget = glade_xml_get_widget(xml,"get_data_button");
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
@@ -988,16 +988,21 @@ EXPORT void update_curve_marker(DataWatch *watch)
 {
 	gfloat tmpf = 0.0;
 	CurveData *cdata = (CurveData *)watch->user_data;
+	if (!MTX_IS_CURVE(cdata->curve))
+	{
+	        remove_watch(watch->id);
+		return;
+	}
 	if (cdata->axis == _X_)
 	{
-		mtx_curve_get_x_marker_value(MTX_CURVE(cdata->curve),&tmpf);
-		if (tmpf  != watch->val)
+//		mtx_curve_get_x_marker_value(MTX_CURVE(cdata->curve),&tmpf);
+//		if (tmpf  != watch->val)
 			mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),watch->val);
 	}
 	if (cdata->axis == _Y_)
 	{
-		mtx_curve_get_y_marker_value(MTX_CURVE(cdata->curve),&tmpf);
-		if (tmpf  != watch->val)
+//		mtx_curve_get_y_marker_value(MTX_CURVE(cdata->curve),&tmpf);
+//		if (tmpf  != watch->val)
 			mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),watch->val);
 	}
 }
