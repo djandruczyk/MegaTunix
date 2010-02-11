@@ -151,8 +151,8 @@ gboolean read_config(void)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
 			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
-		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
-			OBJ_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
+//		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
+//			OBJ_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
 			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))

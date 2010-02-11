@@ -14,9 +14,11 @@
 #include <args.h>
 #include <config.h>
 #include <defines.h>
+#include <errno.h>
 #include <locking.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #ifdef __WIN32__
  #include <io.h>
@@ -26,6 +28,7 @@
  #include <glib/gstdio.h>
  #include <sys/stat.h>
  #include <sys/types.h>
+ #include <sys/wait.h>
  #include <fcntl.h>
 #endif
 
@@ -114,3 +117,82 @@ void win32_create_mtx_lock(void)
 #endif
 }
 
+
+void unlock_serial()
+{
+	extern GObject *global_data;
+	gchar *fname = OBJ_GET(global_data,"serial_lockfile");
+
+//	printf("told to unlock serial,  path \"%s\"\n",fname);
+	if (fname)
+	{
+		if (g_file_test(fname,G_FILE_TEST_IS_REGULAR))
+		{
+			g_remove(fname);
+			g_free(fname);
+			OBJ_SET(global_data,"serial_lockfile", NULL);
+		}
+	}
+}
+
+
+gboolean lock_serial(gchar * name)
+{
+#ifndef __WIN32__
+	extern GObject *global_data;
+	gchar *tmpbuf = NULL;
+	gchar *lock = NULL;
+	gchar **vector = NULL;
+	gchar *contents = NULL;
+	GError *err = NULL;
+	gint i = 0;
+	gint pid = 0;
+
+	/* If no /proc (i.e. os-X), just fake it and return */
+	if (!g_file_test("/proc",G_FILE_TEST_IS_DIR))
+		return TRUE;
+
+	lock = g_strdup_printf("/var/lock/LCK..");
+	vector = g_strsplit(name,PSEP,-1);
+	for (i=0;i<g_strv_length(vector);i++)
+	{
+		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0))
+			continue;
+		lock = g_strconcat(lock,vector[i],NULL);
+	}
+	g_strfreev(vector);
+	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
+	{
+//		printf("found existing lock!\n");
+		if(g_file_get_contents(lock,&contents,NULL,&err))
+		{
+//			printf("read existing lock\n");
+			vector = g_strsplit(g_strchug(contents)," ", -1);
+//			printf("lock had %i fields\n",g_strv_length(vector));
+			pid = (gint)g_ascii_strtoull(vector[0],NULL,10);
+//			printf("pid in lock \"%i\"\n",pid);
+			g_free(contents);
+			g_strfreev(vector);
+			tmpbuf = g_strdup_printf("/proc/%i",pid);
+			if (g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
+			{
+//				printf("process active\n");
+				return FALSE;
+			}
+			else
+				g_remove(lock);
+		}
+		
+	}
+	contents = g_strdup_printf("     %i",getpid());
+	if(g_file_set_contents(lock,contents,-1,&err))
+	{
+		OBJ_SET(global_data,"serial_lockfile",(gpointer)lock);
+		return TRUE;
+	}
+	else
+		printf("Error setting serial lock %s\n",(gchar *)strerror(errno));
+#endif
+	exit(0);
+	return TRUE;
+}

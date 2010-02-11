@@ -33,6 +33,7 @@
 #include <init.h>
 #include <keyparser.h>
 #include <listmgmt.h>
+#include <locking.h>
 #include <logviewer_core.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
@@ -231,6 +232,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (gui_dispatcher_id)
 		g_source_remove(gui_dispatcher_id);
 	gui_dispatcher_id = 0;
+	close_serial();
+	unlock_serial();
 
 
 	/* Grab and release all mutexes to get them to relinquish
@@ -266,6 +269,7 @@ gboolean comm_port_override(GtkEditable *editable)
 	OBJ_SET(global_data,"override_port",g_strdup(port));
 	g_free(port);
 	close_serial();
+	unlock_serial();
 	/* I/O thread should detect the closure and spawn the serial
 	 * repair thread which should take care of flipping to the 
 	 * overridden port
