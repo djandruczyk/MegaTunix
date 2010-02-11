@@ -69,8 +69,8 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	if (!priv->auto_rescale_id)
-		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -99,12 +99,11 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 		priv->coords[i].x = 0;
 		priv->coords[i].y = 0;
 	}
-	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	if (!priv->auto_rescale_id)
-		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -125,12 +124,11 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	priv->coords[index].x = point.x;
 	priv->coords[index].y = point.y;
 	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);*/
-	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 		return TRUE;
-	if (!priv->auto_rescale_id)
-		priv->auto_rescale_id = g_timeout_add(0,(GtkFunction)auto_rescale,priv);
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 

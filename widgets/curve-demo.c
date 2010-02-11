@@ -45,7 +45,7 @@ int main (int argc, char **argv)
 		points[i].y=(i*1000)-5000;
 		/*points[i].y=exp(i/2.0);*/
 	}
-	gtk_widget_realize(curve);
+	gtk_widget_show(curve);
 	mtx_curve_set_coords(MTX_CURVE(curve),11,points);
 	mtx_curve_set_title(MTX_CURVE(curve),"Curve Demo");
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),FALSE);

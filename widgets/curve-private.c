@@ -601,6 +601,7 @@ void generate_static_curve(MtxCurve *curve)
 
 	if (!priv->bg_pixmap)
 		return;
+
 	/* get a cairo_t */
 	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
@@ -645,20 +646,6 @@ void generate_static_curve(MtxCurve *curve)
 	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 
-	/* THE curve */
-	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
-			priv->colors[CURVE_COL_FG].green/65535.0,
-			priv->colors[CURVE_COL_FG].blue/65535.0);
-	cairo_set_line_width (cr, 1.5);
-
-	recalc_points(priv);
-	/* The "curve" itself */
-	for (i=0;i<priv->num_points-1;i++)
-	{
-		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
-		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
-	}
-	cairo_stroke(cr);
 	if (priv->show_grat)
 	{
 		/* Need to draw text markers FIRST... */
@@ -744,6 +731,20 @@ void generate_static_curve(MtxCurve *curve)
 		cairo_stroke (cr);
 
 	}
+	recalc_points(priv);
+	/* THE curve */
+	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
+			priv->colors[CURVE_COL_FG].green/65535.0,
+			priv->colors[CURVE_COL_FG].blue/65535.0);
+	cairo_set_line_width (cr, 1.5);
+
+	/* The "curve" itself */
+	for (i=0;i<priv->num_points-1;i++)
+	{
+		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
+		cairo_line_to (cr, priv->points[i+1].x,priv->points[i+1].y);
+	}
+	cairo_stroke(cr);
 	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size (cr, 15);
 	if (priv->title)
@@ -867,8 +868,8 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 gboolean auto_rescale(gpointer data)
 {
 	MtxCurvePrivate *priv = (MtxCurvePrivate *)data;
-	recalc_extremes(data);
-	mtx_curve_redraw(MTX_CURVE(priv->self),FALSE);
+	recalc_extremes(priv);
+	mtx_curve_redraw(MTX_CURVE(priv->self),TRUE);
 	priv->auto_rescale_id = 0;
 	return FALSE;
 }
@@ -901,8 +902,8 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 	{
 		priv->vertex_selected = FALSE;
 
-		if (!priv->auto_rescale_id)
-			priv->auto_rescale_id = g_timeout_add(750,(GtkFunction)auto_rescale,priv);
+		if (priv->auto_rescale_id == 0)
+			priv->auto_rescale_id = g_timeout_add(500,(GtkFunction)auto_rescale,priv);
 		if (priv->coord_changed)
 			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;
@@ -962,6 +963,26 @@ void recalc_extremes(MtxCurvePrivate *priv)
                 if (priv->coords[i].y > priv->highest_y)
                         priv->highest_y = priv->coords[i].y;
         }
+	if  (priv->lowest_x == priv->highest_x) /* Vertical Line */
+	{
+		priv->lowest_x *= 0.75;
+		priv->highest_x *= 1.25;
+	}
+	else
+	{
+		priv->lowest_x *= 0.95;
+		priv->highest_x *= 1.05;
+	}
+	if  (priv->lowest_y == priv->highest_y) /* Horizontal Line */
+	{
+		priv->lowest_y *= 0.75;
+		priv->highest_y *= 1.25;
+	}
+	else
+	{
+		priv->lowest_y *= 0.95;
+		priv->highest_y *= 1.05;
+	}
 	priv->x_scale = (gfloat)(priv->w-(2*priv->x_border))/((priv->highest_x - (priv->lowest_x + 0.000001)));
 	priv->y_scale = (gfloat)(priv->h-(2*priv->y_border))/((priv->highest_y - (priv->lowest_y + 0.000001)));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
