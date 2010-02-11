@@ -47,6 +47,7 @@
 struct termios oldtio;
 struct termios newtio;
 #endif
+static gchar * serial_lockfile = NULL;
 
 gint open_port(gchar * port_name)
 {
@@ -270,4 +271,87 @@ FirmwareType detect_firmware(gchar * filename)
 	}
 	g_io_channel_shutdown(chan, FALSE,&error);
 	return type;
+}
+
+
+void unlock_port()
+{
+
+//	printf("told to unlock serial,  path \"%s\"\n",fname);
+	if (serial_lockfile)
+	{
+		if (g_file_test(serial_lockfile,G_FILE_TEST_IS_REGULAR))
+		{
+			g_remove(serial_lockfile);
+			g_free(serial_lockfile);
+			serial_lockfile = NULL;
+		}
+	}
+}
+
+
+gboolean lock_port(gchar * name)
+{
+#ifndef __WIN32__
+	gchar *tmpbuf = NULL;
+	gchar *lock = NULL;
+	gchar **vector = NULL;
+	gchar *contents = NULL;
+	GError *err = NULL;
+	guint i = 0;
+	gint pid = 0;
+
+	/* If no /proc (i.e. os-X), just fake it and return */
+	if (!g_file_test("/proc",G_FILE_TEST_IS_DIR))
+		return TRUE;
+
+	lock = g_strdup_printf("/var/lock/LCK..");
+	vector = g_strsplit(name,PSEP,-1);
+	for (i=0;i<g_strv_length(vector);i++)
+	{
+		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0))
+			continue;
+		lock = g_strconcat(lock,vector[i],NULL);
+	}
+	g_strfreev(vector);
+	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
+	{
+//		printf("found existing lock!\n");
+		if(g_file_get_contents(lock,&contents,NULL,&err))
+		{
+//			printf("read existing lock\n");
+			vector = g_strsplit(g_strchug(contents)," ", -1);
+//			printf("lock had %i fields\n",g_strv_length(vector));
+			pid = (gint)g_ascii_strtoull(vector[0],NULL,10);
+//			printf("pid in lock \"%i\"\n",pid);
+			g_free(contents);
+			g_strfreev(vector);
+			tmpbuf = g_strdup_printf("/proc/%i",pid);
+			if (g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
+			{
+//				printf("process active\n");
+				g_free(tmpbuf);
+				g_free(lock);
+				return FALSE;
+			}
+			else
+				g_remove(lock);
+			g_free(tmpbuf);
+		}
+		
+	}
+	contents = g_strdup_printf("     %i",getpid());
+	if(g_file_set_contents(lock,contents,-1,&err))
+	{
+		serial_lockfile = g_strdup(lock);
+		g_free(contents);
+		g_free(lock);
+		return TRUE;
+	}
+	else
+		printf("Error setting serial lock %s\n",(gchar *)strerror(errno));
+	g_free(contents);
+#endif	
+	exit(0);
+	return TRUE;
 }
