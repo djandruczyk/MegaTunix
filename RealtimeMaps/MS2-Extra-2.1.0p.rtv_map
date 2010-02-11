@@ -275,7 +275,7 @@ log_by_default=TRUE
 [derived_18]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,raw_lower,raw_upper,log_by_default
 internal_names=afr1
-dlog_gui_name=AFR 1
+dlog_gui_name=AFR 1 ("afr")
 dlog_field_name=AFR
 offset=28
 size=_S16_
@@ -554,7 +554,7 @@ log_by_default=TRUE
 [derived_37]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
 internal_names=tpsdot
-dlog_gui_name=TPSdot
+dlog_gui_name=tpsDOT (%/s)
 dlog_field_name=tpsDOT
 offset=58
 size=_S16_
@@ -568,7 +568,7 @@ log_by_default=TRUE
 [derived_38]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
 internal_names=mapdot
-dlog_gui_name=MAPdot
+dlog_gui_name=mapDOT (kPa/s)
 dlog_field_name=mapDOT
 offset=60
 size=_S16_

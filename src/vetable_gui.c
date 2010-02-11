@@ -331,6 +331,7 @@ void draw_ve_marker()
 	static GdkColor ** old_colors = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
 	GtkRcStyle *style = NULL;
+	GdkGC *gc = NULL;
 	gint i = 0;
 	gint table = 0;
 	gint page = 0;
@@ -566,7 +567,7 @@ void draw_ve_marker()
 		goto redraw;
 	for (i=0;i<4;i++)
 	{
-		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.05))
+		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.01))
 		{
 			last_z_weight[i] = z_weight[i];
 			goto redraw;
@@ -606,16 +607,17 @@ redraw:
 	{
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
-			if ((gboolean)OBJ_GET(last_widgets[table][last[table][i]],"use_color"))
-			{
-				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
-			}
-			else
-			{
-				/* HACK ALERT! this doesn't honor themes! */
-				gdk_color_parse("white",&old_colors[table][z_bin[i]]);
-				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][z_bin[i]]);
-			}
+			widget = last_widgets[table][last[table][i]];
+			gc = OBJ_GET(widget, "old_gc");
+			gdk_gc_set_rgb_fg_color(gc,&old_colors[table][last[table][i]]);
+			/* Top */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
+			/* Bottom */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
+			/* Left */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
+			/* Right */
+			gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
 		}
 	}
 
@@ -663,9 +665,25 @@ redraw:
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
 
-		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-		//gdk_draw_rectangle(widget->window,widget->style->fg_gc[GTK_STATE_NORMAL],TRUE,1,1,widget->allocation.width-2,widget->allocation.height-2);
+		/* modify_base is REALLY REALLY slow, as it triggers a size recalc all the
+		 * way thru hte widget tree, which is atrociaously expensive!
+		 * gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		 */
+		if (OBJ_GET(widget,"old_gc"))
+			gc = OBJ_GET(widget,"old_gc");
+		else
+			gc = gdk_gc_new(widget->window);
 
+		gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
+		gdk_gc_set_rgb_fg_color(gc,&color);
+		/* Top */
+		gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
+		/* Bottom */
+		gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
+		/* Left */
+		gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
+		/* Right */
+		gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
+		OBJ_SET(widget,"old_gc",(gpointer)gc);
 	}
-
 }
