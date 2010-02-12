@@ -559,7 +559,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 				event->area.x, event->area.y,
 				event->area.width, event->area.height);
 		cr = gdk_cairo_create (pmap);
-		cairo_set_source_rgba (cr, 0.5,0.5,0.5,0.5);
+		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 		cairo_rectangle (cr,
 				0,0,priv->w,priv->h);
 		cairo_fill(cr);

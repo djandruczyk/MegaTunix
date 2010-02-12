@@ -32,7 +32,7 @@ void update_curve_marker(DataWatch *);
 void vertex_proximity(GtkWidget *, gpointer);
 void marker_proximity(GtkWidget *, gpointer);
 gboolean set_axis_locking(GtkWidget *, gpointer );
-
+void highlight_entry(GtkWidget *, GdkColor *);
 
 /* Prototypes */
 

@@ -797,9 +797,9 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one red */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+		highlight_entry(entry,&red);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+		highlight_entry(entry,&red);
 		if (!OBJ_GET(curve,"last_proximity_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -822,16 +822,16 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 			}
 		}
 	}
@@ -859,16 +859,16 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 			}
 		}
 	}
@@ -897,9 +897,9 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one green */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		highlight_entry(entry,&green);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		highlight_entry(entry,&green);
 		if (!OBJ_GET(curve,"last_marker_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -922,16 +922,16 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 			}
 		}
 	}
@@ -959,16 +959,16 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 			}
 		}
 	}
@@ -1035,3 +1035,32 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 	create_2d_table_editor(table_num,widget);
 	return TRUE;
 }
+
+
+void highlight_entry(GtkWidget *widget, GdkColor *color)
+{
+	GtkRcStyle *style = NULL;
+	GdkGC *gc = OBJ_GET(widget,"hl_gc");
+	extern GdkColor white;
+	if (!GDK_IS_DRAWABLE(widget->window))
+		return;
+	if (!gc)
+	{
+		gc = gdk_gc_new(widget->window);
+		gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
+		OBJ_SET(widget,"hl_gc",(gpointer)gc);
+	}
+	if (color)
+		gdk_gc_set_rgb_fg_color(gc,color);
+	else
+		gdk_gc_set_rgb_fg_color(gc,&white);
+	/* Top */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,widget->allocation.width-4,2);
+	/* Bottom */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,widget->allocation.height-5,widget->allocation.width-4,2);
+	/* Left */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,2,widget->allocation.height-6);
+	/* Right */
+	gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-4,2,2,widget->allocation.height-6);
+}
+
