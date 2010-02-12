@@ -1,0 +1,11 @@
+
+LOGVIEWER
+ Current logviewer is a POS and is to be scrapped and rewritten using the 
+ newly designed stripchart widgets (and may the piegauges as well)
+
+3D VE/Spark/AFR/Other tables
+ Users with Intel graphicson linux have reported the GL view appears 
+ distorted, text is missing, or it otherwise renders in a abnormal way.
+ This is an INTEL OpenGL bug in their linux implementation.  The only
+ workaround I'm aware of is to try a different driver version (advanced users
+ only)
