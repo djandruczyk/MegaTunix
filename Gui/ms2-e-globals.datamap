@@ -1,0 +1,472 @@
+[global]
+description=Object data map for the MS-2 Globals tab
+tab_name=_Global Settings
+id_prefix=MS2_GLOB_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,dl_type,handler
+page=0
+size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Labels ---------------------------------------------------------------
+
+[num_injectors_0_label]
+keys=page,bind_to_list
+page=1
+bind_to_list=interdep_0_ctrl
+
+[num_squirts_per_cycle_0_label]
+keys=page,bind_to_list
+page=1
+bind_to_list=interdep_0_ctrl
+
+[num_cylinders_0_label]
+keys=page,bind_to_list
+page=2
+bind_to_list=interdep_0_ctrl
+
+[2nd_fuelload_label]
+keys=bind_to_list
+bind_to_list=single_table
+
+#----- Widgets ---------------------------------------------------------------
+
+[inj2_properties_table]
+keys=bind_to_list
+bind_to_list=bank2
+
+[incorp_afr_param_table]
+keys=bind_to_list
+bind_to_list=incorp_afrtarget
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[calc_reqfuel_button]
+keys=handler,tooltip,table_num
+handler=_REQ_FUEL_POPUP_
+table_num=0
+tooltip=This button Pops up a window to calculate the required fuel
+
+
+#------- Combo Boxes ------------------------------------------------------
+
+[use_bank2_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=0
+bitmask=32
+toggle_groups=,bank2
+tooltip=Enables controls for injector channel 2
+
+[fuel_algo_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Speed Density,Percent Baro,Alpha-N
+bitvals=0,1,2
+offset=630
+bitmask=3
+toggle_groups=speed_density,percent_baro,alpha_n
+tooltip=Sets ECU fuel algorithm to pure Speed Density,Percent Baro or  Alpha-N
+
+[single_dual_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Single Table,Dual Table
+bitvals=0,1
+offset=629
+bitmask=1
+toggle_groups=single_table,dual_table
+tooltip=Sets ECU fuel mode to Single Table or Dual Table
+
+[barocorr_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Initial MAP reading,Two Sensors
+bitvals=0,1,2
+offset=593
+bitmask=3
+toggle_groups=,baro_on_boot,baro_dual
+tooltip=Sets ECU barometer correction to bei either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
+
+[eae_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Off,On, On w/Lag Compensation
+bitvals=0,1,3
+offset=935
+bitmask=3
+tooltip=Sets ECU Enhanced Accel Enrichment scheme to be Off, On, or On with Lag Compensation
+
+[2nd_fuelload_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+choices=Disabled,Speed Density, Percent Baro, Alpha-N
+bitvals=0,1,2,3
+offset=630
+bitmask=48
+bind_to_list=single_table
+toggle_groups=,second_fuel,second_fuel,second_fuel
+tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro or Alpha-N.
+
+[secondary_fuel_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Additive,Multiplicative
+bitvals=0,1
+offset=733
+bitmask=1
+tooltip=Sets the secondary fuel load computation to be additive or multiplicative in nature.
+
+[multiply_map_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Don't Multiply,Multiply
+bitvals=0,1
+offset=733
+bitmask=2
+tooltip=See MS2-Extra Manuals
+
+[incorp_afrtarget_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Don't include AFRTarget,Include AFRTarget
+bitvals=0,1
+offset=733
+bitmask=4
+toggle_groups=,incorp_afrtarget
+tooltip=See MS2-Extra Manuals
+
+[primary_ignition_load_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Speed Density,Percent Baro,Alpha-N
+bitvals=1,2,3
+offset=631
+bitmask=3
+tooltip=See MS2-Extra Manuals
+
+[secondary_ignition_load_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Speed Density,Percent Baro,Alpha-N
+bitvals=0,1,2,3
+offset=631
+bitmask=48
+tooltip=See MS2-Extra Manuals
+
+[ego_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Narrow-Band,Dual NB,Wide-Band,Dual WB
+bitvals=0,1,2,3,4
+offset=594
+bitmask=7
+toggle_groups=,ego_ctrl,ego_ctrl:dual_nb,ego_ctrl:wb_ctrls,ego_ctrl:dual_wb:wb_ctrls
+tooltip=Sets ECU EGO Sensor type and configuration. 
+
+[idle_algo_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=None,On/Off Valve,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,PWM Closed-Loop,IAC Closed-loop Moving Only,IAC Closed-loop Always On
+bitvals=0,1,2,3,4,5,6,7,8
+offset=547
+bitmask=15
+tooltip=Sets the Idle Control Algorithm
+
+[revlimiter_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=None,Spark Retard,Fuel Cut,Spark Retard/Fuel Cut,Spark Retard/Cut,Fuel and Spark Cut
+bitvals=0,1,2,3,5,7
+offset=636
+bitmask=7
+toggle_groups=,spark_retard,fuel_cut,spark_retard:fuel_cut,spark_retard:spark_cut,spark_cut:fuel_cut
+tooltip=Sets the Revlimiter algorithm
+
+[flexfuel_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=908
+bitmask=1
+toggle_groups=,flex_fuel
+tooltip=Enables or Disables use of a FlexFuel Sensor (requires additional hardware)
+
+[knock_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Safe Mode,Aggressive
+bitvals=0,1,2
+offset=927
+bitmask=3
+toggle_groups=,knock_common,knock_common:knock_aggressive
+tooltip=Enables or Disables use of Knock control.  May require additional hardware,  see Ms2-Extra manuals
+
+[alternate_combo]
+keys=handler,dl_type,offset,table_num,choices,bitvals,bitmask,tooltip
+handler=_ALT_SIMUL_
+dl_type=_DEFERRED_
+choices=Simultaneous,Alternating
+table_num=0
+bitvals=0,1
+offset=611
+bitmask=1
+tooltip=Sets the injector firing pattern.
+
+[stroke_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Four-Stroke,Two-Stroke
+bitvals=0,1
+offset=617
+bitmask=1
+tooltip=Sets the engine type, 2 stroke, or 4 stroke
+
+[inj_port_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Port Injection,Throttle Body
+bitvals=0,1
+offset=618
+bitmask=1
+tooltip=Sets the Fuel Injector placement.
+
+[engine_type_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Even Fire,Odd Fire
+bitvals=0,1
+offset=2
+bitmask=8
+tooltip=Sets the Engine firing type.
+
+[spark_mode_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=EDIS,EDIS Multispark,Basic trigger,Trigger return,Toothed wheel,420A/Neon,36-2+2,36-2-2-2,Subaru 6/7,Miata 99-00,6g72,IAW Weber,CAS 4/1,4G63,Twin trigger,Chrysler 2.2/2.5,Renix 44-2-2,Suzuki Swift,Suzuki Vitara 2.0,Daihatsu 3cyl,Daihatsu 4cyl,VTR1000,Rover#1,Rover#2,Rover#3,GM 7X,Honda RC51,Fuel Only
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,29,31
+offset=989
+bitmask=31
+toggle_groups=edis,edis:edis_multispark,basic,trigger_return,wheel,,,,,,,,,,,,,,,,,,,,,,,
+tooltip=Sets the Engine firing type.
+
+[launch_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=2
+choices=Disabled,Enabled,Enabled w/Flat-Shift
+bitvals=0,1,3
+offset=673
+bitmask=192
+toggle_groups=,launch,launch:flat_shift
+tooltip=Sets the Launch Control feature
+
+#----- Spinbuttons -----------------------------------------------------------
+
+[req_fuel_per_cycle_0_spin]
+keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+offset=608
+size=_U16_
+table_num=0
+dl_type=_DEFERRED_
+handler=_REQ_FUEL_1_
+bind_to_list=interdep_0_ctrl
+ul_complex=TRUE
+ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
+alternate_bitmask=1
+
+[req_fuel_per_squirt_0_spin]
+keys=offset,size,table_num,ul_conv_expr,bind_to_list
+offset=608
+size=_U16_
+table_num=0
+ul_conv_expr=x/1000
+bind_to_list=interdep_0_ctrl
+
+[num_injectors_0_spin]
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list
+offset=619
+bitmask=15
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_INJECTORS_1_
+bind_to_list=interdep_0_ctrl
+
+[num_cylinders_0_spin]
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list
+offset=0
+bitmask=15
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_CYLINDERS_1_
+bind_to_list=interdep_0_ctrl
+
+[inj_per_cycle_0_spin]
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+offset=610
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_SQUIRTS_1_
+bind_to_list=interdep_0_ctrl
+ul_complex=TRUE
+ul_conv_expr=cylinders_1/divider_1
+expr_symbols=cylinders_1,divider_1
+expr_types=_VE_EMB_BIT_,_VE_VAR_
+cylinders_1_page=0
+cylinders_1_offset=0
+cylinders_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+
+#----- Entries ---------------------------------------------------------------
+
+[stoich_afr_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=988
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_lower=0
+raw_upper=255
+precision=1
+tooltip=This is the stoich AFR
+
+[inj1_open_time_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=566
+size=_U16_
+dl_conv_expr=x/0.001
+ul_conv_expr=x*0.001
+raw_upper=25000
+precision=3
+tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
+
+[inj1_batt_corr_entry]
+keys=offset,precision,size,dl_conv_expr,ul_conv_expr,tooltip
+offset=568
+precision=3
+size=_U16_
+dl_conv_expr=x/0.000166667
+ul_conv_expr=x*0.000166667
+tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
+
+[inj1_pwm_limit_entry]
+keys=offset,raw_upper,tooltip
+offset=615
+raw_upper=100
+tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
+
+[inj1_pwm_thresh_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=613
+dl_conv_expr=x/0.128
+ul_conv_expr=x*0.128
+precision=1
+tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
+
+[inj1_pwm_period_entry]
+keys=offset,precision,raw_lower,raw_upper,tooltip
+offset=614
+raw_lower=40
+raw_upper=100
+precision=1
+tooltip=This sets the PWM Period in us.
+
+[inj2_open_time_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=641
+size=_U16_
+dl_conv_expr=x/0.001
+ul_conv_expr=x*0.001
+raw_upper=25000
+precision=3
+tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
+
+[inj2_batt_corr_entry]
+keys=offset,precision,size,dl_conv_expr,ul_conv_expr,tooltip
+offset=643
+precision=3
+size=_U16_
+dl_conv_expr=x/0.000166667
+ul_conv_expr=x*0.000166667
+tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
+
+[inj2_pwm_limit_entry]
+keys=offset,raw_upper,tooltip
+offset=640
+raw_upper=100
+tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
+
+[inj2_pwm_thresh_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=638
+dl_conv_expr=x/0.128
+ul_conv_expr=x*0.128
+precision=1
+tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
+
+[inj2_pwm_period_entry]
+keys=offset,precision,raw_lower,raw_upper,tooltip
+offset=639
+raw_lower=40
+raw_upper=100
+precision=1
+tooltip=This sets the PWM Period in us.
+
+[tps_rate_entry]
+keys=offset,tooltip
+offset=750
+tooltip=This sets the TPS Sensor sampling rate in milliseconds
+
+[tps_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=624
+raw_upper=100
+tooltip=This sets the TPS Sensor Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[map_rate_entry]
+keys=offset,tooltip
+offset=749
+tooltip=This sets the TPS Sensor sampling rate in milliseconds
+
+[map_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=623
+raw_upper=100
+tooltip=This sets the MAP/MAF Sensor Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[rpm_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=622
+raw_upper=100
+tooltip=This sets the RPM Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[lambda_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=625
+raw_upper=100
+tooltip=This sets the LAmbda/EGO Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[adc_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=626
+raw_upper=100
+tooltip=This sets the ADC Lag Factor for things like IAT, CLT, Battey Voltage. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[knock_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=627
+raw_upper=100
+tooltip=This sets the Knock Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
