@@ -25,6 +25,7 @@
 #include <math.h>
 #include <mode_select.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
@@ -483,8 +484,8 @@ Viewable_Value * build_v_value(GObject *object)
 	v_value->object = object;
 	/* IS it a floating point value? */
 	v_value->precision = (gint)OBJ_GET(object,"precision");
-	v_value->lower = (gint)OBJ_GET(object,"raw_lower");
-	v_value->upper = (gint)OBJ_GET(object,"raw_upper");
+	v_value->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+	v_value->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 

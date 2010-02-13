@@ -232,8 +232,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
-			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
+			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
+			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
 			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
 			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
@@ -280,8 +280,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
-			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
+			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
+			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
 			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
 			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
@@ -533,8 +533,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
-		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
+		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
+		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
 		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
 		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
@@ -581,8 +581,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
-		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
+		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
+		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
 		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
 		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
@@ -986,7 +986,6 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 
 EXPORT void update_curve_marker(DataWatch *watch)
 {
-	gfloat tmpf = 0.0;
 	CurveData *cdata = (CurveData *)watch->user_data;
 	if (!MTX_IS_CURVE(cdata->curve))
 	{
@@ -994,17 +993,9 @@ EXPORT void update_curve_marker(DataWatch *watch)
 		return;
 	}
 	if (cdata->axis == _X_)
-	{
-//		mtx_curve_get_x_marker_value(MTX_CURVE(cdata->curve),&tmpf);
-//		if (tmpf  != watch->val)
-			mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),watch->val);
-	}
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),watch->val);
 	if (cdata->axis == _Y_)
-	{
-//		mtx_curve_get_y_marker_value(MTX_CURVE(cdata->curve),&tmpf);
-//		if (tmpf  != watch->val)
-			mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),watch->val);
-	}
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),watch->val);
 }
 
 
@@ -1039,7 +1030,6 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
-	GtkRcStyle *style = NULL;
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");
 	extern GdkColor white;
 	if (!GDK_IS_DRAWABLE(widget->window))

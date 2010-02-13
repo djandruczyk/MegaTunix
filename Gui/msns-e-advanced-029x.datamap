@@ -216,7 +216,7 @@ keys=offset,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=2
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-raw_lower=1
+raw_lower=0
 bind_to_list=spark_controls
 tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
 

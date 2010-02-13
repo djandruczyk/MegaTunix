@@ -127,12 +127,15 @@ GtkTreeModel * create_model(void)
 		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 		if (!name)
 			continue;
-		lower = (gint) OBJ_GET(object,"raw_lower"); 
-		upper = (gint) OBJ_GET(object,"raw_upper"); 
-		if ((!OBJ_GET(object,"raw_lower")) && (!OBJ_GET(object,"raw_upper")))
-			range = g_strdup_printf("Varies");
+		if (OBJ_GET(object,"raw_lower"))
+			lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
 		else
-			range = g_strdup_printf("%i-%i",lower,upper);
+			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
+		if (OBJ_GET(object,"raw_upper"))
+			upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		else
+			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
+		range = g_strdup_printf("%i-%i",lower,upper);
 
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
@@ -339,8 +342,14 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 	{
 
-		lower = (gint) OBJ_GET(object,"raw_lower");
-		upper = (gint) OBJ_GET(object,"raw_upper");
+		if (OBJ_GET(object,"raw_lower"))
+			lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+		else
+			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
+		if (OBJ_GET(object,"raw_upper"))
+			upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		else
+			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
 		temp_dep = (gboolean)OBJ_GET(object,"temp_dep");
 

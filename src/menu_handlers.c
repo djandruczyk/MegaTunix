@@ -21,6 +21,7 @@
 #include <math.h>
 #include <menu_handlers.h>
 #include <runtime_text.h>
+#include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
 #include <vex_support.h>
@@ -229,8 +230,8 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(518));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(2047));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("2047"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 		ve_widgets[0][518] = g_list_prepend(
 				ve_widgets[0][518],
@@ -243,8 +244,8 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(520));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(2047));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("2047"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 		ve_widgets[0][520] = g_list_prepend(
 				ve_widgets[0][520],
@@ -303,44 +304,44 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		register_widget("temp_label",item);
 		item = glade_xml_get_widget(xml,"bias_entry");
 		register_widget("bias_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(100000));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("100000"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"temp1_entry");
 		register_widget("temp1_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-40));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(300));
+		OBJ_SET(item,"raw_lower",g_strdup("-40"));
+		OBJ_SET(item,"raw_upper",g_strdup("300"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"temp2_entry");
 		register_widget("temp2_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-40));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(300));
+		OBJ_SET(item,"raw_lower",g_strdup("-40"));
+		OBJ_SET(item,"raw_upper",g_strdup("300"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"temp3_entry");
 		register_widget("temp3_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-40));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(300));
+		OBJ_SET(item,"raw_lower",g_strdup("-40"));
+		OBJ_SET(item,"raw_upper",g_strdup("300"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance1_entry");
 		register_widget("resistance1_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(500000));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("500000"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance2_entry");
 		register_widget("resistance2_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(500000));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("500000"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance3_entry");
 		register_widget("resistance3_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(500000));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("500000"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"celsius_radiobutton");
@@ -389,26 +390,26 @@ EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"voltage1_entry");
 		register_widget("voltage1_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(5));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("5"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"voltage2_entry");
 		register_widget("voltage2_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(5));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("5"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"afr1_entry");
 		register_widget("afr1_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(99));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("99"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"afr2_entry");
 		register_widget("afr2_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(0));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(99));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET(item,"raw_upper",g_strdup("99"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -446,8 +447,8 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"map0_entry");
 		register_widget("map0_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"raw_lower",g_strdup("-1"));
+		OBJ_SET(item,"raw_upper",g_strdup("327"));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(506));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
@@ -460,8 +461,8 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"map5_entry");
 		register_widget("map5_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"raw_lower",g_strdup("-1"));
+		OBJ_SET(item,"raw_upper",g_strdup("327"));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(508));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
@@ -474,8 +475,8 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"baro0_entry");
 		register_widget("baro0_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"raw_lower",g_strdup("-1"));
+		OBJ_SET(item,"raw_upper",g_strdup("327"));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(530));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
@@ -488,8 +489,8 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"baro5_entry");
 		register_widget("baro5_entry",item);
-		OBJ_SET(item,"raw_lower",GINT_TO_POINTER(-1));
-		OBJ_SET(item,"raw_upper",GINT_TO_POINTER(327));
+		OBJ_SET(item,"raw_lower",g_strdup("-1"));
+		OBJ_SET(item,"raw_upper",g_strdup("327"));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(532));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));

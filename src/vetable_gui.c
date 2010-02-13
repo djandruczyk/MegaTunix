@@ -247,10 +247,14 @@ void reqfuel_rescale_table(GtkWidget *widget)
 						offset = (gint)OBJ_GET(tmpwidget,"offset");
 						size = (DataSize)OBJ_GET(tmpwidget,"size");
 						use_color = (gint)OBJ_GET(tmpwidget,"use_color");
-						if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-							raw_upper = (gint)OBJ_GET(tmpwidget,"raw_upper");
 						if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-							raw_lower = (gint)OBJ_GET(tmpwidget,"raw_lower");
+							raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
+						else
+							raw_lower = get_extreme_from_size(size,LOWER);
+						if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
+							raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
+						else
+							raw_upper = get_extreme_from_size(size,UPPER);
 						value = get_ecu_data(canID,page,offset,size);
 						value *= percentage;
 						if (value < raw_lower)

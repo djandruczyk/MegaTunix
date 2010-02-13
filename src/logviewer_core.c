@@ -24,6 +24,7 @@
 #include <math.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stripchart.h>
 #include <tabloader.h>
@@ -32,8 +33,6 @@
 
 Log_Info *log_info = NULL;
 extern GObject *global_data;
-
-
 
 
 EXPORT void create_stripchart(GtkWidget *parent)
@@ -64,11 +63,11 @@ EXPORT void create_stripchart(GtkWidget *parent)
 		if (OBJ_GET(object,"dlog_gui_name"))
 			name = OBJ_GET(object,"dlog_gui_name");
 		if (OBJ_GET(object,"raw_lower"))
-			min = (gint)OBJ_GET(object,"raw_lower");
+			min = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
 		if (OBJ_GET(object,"raw_upper"))
-			max = (gint)OBJ_GET(object,"raw_upper");
+			max = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
 		if (OBJ_GET(object,"precision"))
@@ -294,9 +293,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(object,"raw_lower", GINT_TO_POINTER(tmpi));
+		OBJ_SET(object,"raw_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(object,"raw_upper", GINT_TO_POINTER(tmpi));
+		OBJ_SET(object,"raw_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }
