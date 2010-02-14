@@ -259,7 +259,7 @@ keys=offset,bitvals,bitmask,toggle_groups,tooltip
 offset=935
 bitvals=0,1,3
 bitmask=3
-choices=Off,On,On with lag compensation
+choices=Disabled,Enabled,Enabled w/Lag Compensation
 toggle_groups=non_eae,eae,eae:eae_lag
 tooltip=This enables Enhanced or disables Accel Enrich
 

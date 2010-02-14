@@ -498,7 +498,6 @@ void check_req_fuel_limits(gint table_num)
 	extern Firmware_Details *firmware;
 	canID = firmware->canID;
 
-	printf("check reqfuel limits\n");
 	/* Dualtable required Fuel calc
 	 *
 	 *                                  /    num_inj_x  \

@@ -34,6 +34,10 @@ bind_to_list=interdep_0_ctrl
 keys=bind_to_list
 bind_to_list=single_table
 
+[secondary_fuel_label]
+keys=bind_to_list
+bind_to_list=single_table
+
 #----- Widgets ---------------------------------------------------------------
 
 [inj2_properties_table]
@@ -105,7 +109,7 @@ tooltip=Sets ECU barometer correction to bei either Disabled, based on initial M
 
 [eae_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-choices=Off,On, On w/Lag Compensation
+choices=Disabled,Enabled,Enabled w/Lag Compensation
 bitvals=0,1,3
 offset=935
 bitmask=3
@@ -122,11 +126,12 @@ toggle_groups=,second_fuel,second_fuel,second_fuel
 tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro or Alpha-N.
 
 [secondary_fuel_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
 choices=Additive,Multiplicative
 bitvals=0,1
 offset=733
 bitmask=1
+bind_to_list=single_table
 tooltip=Sets the secondary fuel load computation to be additive or multiplicative in nature.
 
 [multiply_map_combo]
@@ -338,7 +343,7 @@ register_as=inj_per_cycle_0_spin
 
 [stoich_afr_entry]
 keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
-offset=988
+offset=662
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
