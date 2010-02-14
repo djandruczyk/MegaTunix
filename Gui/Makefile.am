@@ -36,6 +36,8 @@ gui_files = 	README \
 		ms2-e-crank_idle_warmup.datamap \
 		ms2-e-globals.glade \
 		ms2-e-globals.datamap \
+		ms2-e-toothtrigger.glade \
+		ms2-e-toothtrigger-2.1.x.datamap \
 		ms2-globals.glade \
 		ms2-globals.datamap \
 		ms2-idle_ego_rev.glade \
@@ -48,10 +50,6 @@ gui_files = 	README \
 		ms2-misc-fuel.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
-		ms2-e-toothtrigger.glade \
-		ms2-e-toothtrigger-2.1.x.datamap \
-		ms2-xtau.glade \
-		ms2-xtau.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \

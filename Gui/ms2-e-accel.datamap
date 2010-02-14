@@ -172,20 +172,6 @@ tab_ident=_ACCEL_WIZ_TAB_
 keys=offset
 offset=592
 
-[mapdot_container]
-keys=ctrl_name,source,post_functions_with_arg,show_prefix
-ctrl_name=ae_mapdot_rtt
-source=mapdot
-post_functions_with_arg=add_additional_rtt
-show_prefix=FALSE
-
-[tpsdot_container]
-keys=ctrl_name,source,post_functions_with_arg,show_prefix
-ctrl_name=ae_tpsdot_rtt
-source=tpsdot
-post_functions_with_arg=add_additional_rtt
-show_prefix=FALSE
-
 [map_ae_container]
 keys=bind_to_list,te_table_num,post_functions_with_arg
 bind_to_list=map_ae_ctrls
