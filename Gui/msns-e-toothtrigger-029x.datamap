@@ -1,6 +1,7 @@
 [global]
 description=Object data map for MSnS-E 029 Tooth/Trigger monitor
 tab_name=Trigger _Monitor
+id_prefix=TMON_
 post_functions=reset_ttm_buttons
 groups=defaults
 

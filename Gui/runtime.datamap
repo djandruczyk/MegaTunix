@@ -1,6 +1,7 @@
 [global]
 description=Object data map for MegaSquirt Runtime Display
 tab_name=_Runtime Display
+id_prefix=RUNTIME_
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
@@ -25,6 +26,22 @@ handler=_STOP_REALTIME_
 [topframe]
 keys=tab_ident
 tab_ident=_RUNTIME_TAB_
+
+[runtime_rt_table0]
+keys=register_as
+register_as=runtime_rt_table0
+
+[runtime_rt_table1]
+keys=register_as
+register_as=runtime_rt_table1
+
+[runtime_rt_table2]
+keys=register_as
+register_as=runtime_rt_table2
+
+[runtime_rt_table3]
+keys=register_as
+register_as=runtime_rt_table3
 
 #------- Runtime Status Indicators ------------------------------------------
 

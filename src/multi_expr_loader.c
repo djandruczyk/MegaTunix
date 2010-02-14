@@ -22,6 +22,7 @@
 #include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stringmatch.h>
 
 
@@ -48,6 +49,8 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	gchar ** ul_exprs = NULL;
 	gint num_keys = 0;
 	gint i = 0;
+	gint lowest = 0;
+	gint highest = 0;
 	GHashTable *hash = NULL;
 	MultiExpr *multi = NULL;
 
@@ -116,18 +119,30 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 	}
 	/* Create hash table to store structures for each one */
 	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_expr);
+	lowest = G_MAXINT32;
+	highest = G_MININT32;
 	for (i=0;i<num_keys;i++)
 	{
 		multi = g_new0(MultiExpr, 1);
 		multi->lower_limit = (gint)strtol(l_limits[i],NULL,10);
 		multi->upper_limit = (gint)strtol(u_limits[i],NULL,10);
-		multi->lookuptable = g_strdup(ltables[i]);
+		if (multi->lower_limit < lowest)
+			lowest = multi->lower_limit;
+		if (multi->upper_limit > highest)
+			highest = multi->upper_limit;
+
+		if (strlen(ltables[i]) == 0)
+			multi->lookuptable = NULL;
+		else
+			multi->lookuptable = g_strdup(ltables[i]);
 		multi->dl_conv_expr = g_strdup(dl_exprs[i]);
 		multi->ul_conv_expr = g_strdup(ul_exprs[i]);
 		multi->dl_eval = evaluator_create(multi->dl_conv_expr);
 		multi->ul_eval = evaluator_create(multi->ul_conv_expr);
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
+	OBJ_SET(object,"raw_lower",g_strdup_printf("%i",lowest));
+	OBJ_SET(object,"raw_upper",g_strdup_printf("%i",highest));
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
 	g_strfreev(ltables);

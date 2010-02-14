@@ -400,6 +400,7 @@ z_precision=1
 [te_table_0]
 title=CLT/IAT Corrected Air Density
 bind_to_list=IAT_controls
+gauge=
 is_fuel=FALSE
 bincount=7
 x_temp_dep=TRUE

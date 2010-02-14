@@ -298,9 +298,14 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	slider->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
-
-	slider->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+	if (OBJ_GET(object,"raw_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+	else
+		printf("No \"raw_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+	if (OBJ_GET(object,"raw_lower"))
+		slider->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+	else
+		printf("No \"raw_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 

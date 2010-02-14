@@ -382,26 +382,34 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	Reqd_Fuel * reqd_fuel = NULL;
 	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
+	GtkWidget *tmpwidget = NULL;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 
-	firmware->rf_params[reqd_fuel->table_num]->req_fuel_total = reqd_fuel->calcd_reqd_fuel;
-	firmware->rf_params[reqd_fuel->table_num]->num_cyls = reqd_fuel->cyls;
-	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",reqd_fuel->table_num);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON
-			(lookup_widget(tmpbuf)),
-			reqd_fuel->calcd_reqd_fuel);
-	g_free(tmpbuf);
-
 	tmpbuf = g_strdup_printf("num_cylinders_%i_spin",reqd_fuel->table_num);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON
-			(lookup_widget(tmpbuf)),
-			reqd_fuel->cyls);
+	tmpwidget = lookup_widget(tmpbuf);
 	g_free(tmpbuf);
+	if (GTK_IS_WIDGET(tmpwidget))
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tmpwidget),
+				reqd_fuel->cyls);
+	else
+		firmware->rf_params[reqd_fuel->table_num]->num_cyls = reqd_fuel->cyls;
 
-	check_req_fuel_limits(reqd_fuel->table_num);
+	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",reqd_fuel->table_num);
+	tmpwidget = lookup_widget(tmpbuf);
+	g_free(tmpbuf);
+	if (GTK_IS_WIDGET(tmpwidget))
+
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tmpwidget),
+				reqd_fuel->calcd_reqd_fuel);
+	else
+	{
+		firmware->rf_params[reqd_fuel->table_num]->req_fuel_total = reqd_fuel->calcd_reqd_fuel;
+		check_req_fuel_limits(reqd_fuel->table_num);
+	}
+
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_for_Table_%i",reqd_fuel->table_num);
@@ -490,6 +498,7 @@ void check_req_fuel_limits(gint table_num)
 	extern Firmware_Details *firmware;
 	canID = firmware->canID;
 
+	printf("check reqfuel limits\n");
 	/* Dualtable required Fuel calc
 	 *
 	 *                                  /    num_inj_x  \
@@ -559,7 +568,10 @@ void check_req_fuel_limits(gint table_num)
 			(num_squirts == last_num_squirts) &&
 			(alternate == last_alternate) &&
 			(divider == last_divider))
+	{
+//		printf("no reqfuel change\n");
 		return;
+	}
 
 	if (firmware->capabilities & MS2)
 	{

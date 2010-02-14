@@ -3,6 +3,7 @@
 [global]
 description=Object data map for Dualtable (0.9-1.02)
 tab_name=_Dualtable Constants
+id_prefix=DTCONST_
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
