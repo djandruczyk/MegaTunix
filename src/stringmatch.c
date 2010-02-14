@@ -491,6 +491,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"raw_upper",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"register_as",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"rescaler_frame",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"reverse_keys",

@@ -566,6 +566,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
+	/* If this widget has "register_as", register it with the supplied name
+	*/
+	if (cfg_read_string(cfgfile,section,"register_as",&tmpbuf))
+	{
+		register_widget(tmpbuf,widget);
+		g_free(tmpbuf);
+	}
+
 	/* If this widget has "initializer" there's a global variable 
 	 * with it's name on it 
 	 */

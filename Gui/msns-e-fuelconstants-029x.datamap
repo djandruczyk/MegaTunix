@@ -240,7 +240,7 @@ source_value=MPX6400
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=148
 table_num=0
 dl_type=_DEFERRED_
@@ -263,9 +263,10 @@ alternate_bitmask=1
 dtmode_page=0
 dtmode_offset=33
 dtmode_bitmask=16
+register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_cycle_1_spin]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 page=2
 offset=148
 table_num=1
@@ -283,21 +284,24 @@ injectors_offset=183
 injectors_bitmask=240
 divider_page=2
 divider_offset=149
+register_as=req_fuel_per_cycle_1_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,ul_conv_expr,bind_to_list
+keys=offset,table_num,ul_conv_expr,bind_to_list,register_as
 offset=148
 table_num=0
 ul_conv_expr=x/10
 bind_to_list=interdep_0_ctrl
+register_as=req_fuel_per_squirt_0_spin
 
 [req_fuel_per_squirt_1_spin]
-keys=page,offset,table_num,ul_conv_expr,bind_to_list
+keys=page,offset,table_num,ul_conv_expr,bind_to_list,register_as
 page=2
 offset=148
 table_num=1
 ul_conv_expr=x/10
 bind_to_list=interdep_1_ctrl
+register_as=req_fuel_per_squirt_1_spin
 
 [inj_open_time_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
@@ -354,7 +358,7 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=149
 table_num=0
 dl_type=_DEFERRED_
@@ -369,9 +373,10 @@ cylinders_offset=182
 cylinders_bitmask=240
 divider_page=1
 divider_offset=149
+register_as=inj_per_cycle_0_spin
 
 [inj_per_cycle_1_spin]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 page=2
 offset=149
 table_num=1
@@ -387,9 +392,10 @@ cylinders_offset=182
 cylinders_bitmask=240
 divider_page=2
 divider_offset=149
+register_as=inj_per_cycle_1_spin
 
 [num_injectors_0_spin]
-keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=183
 table_num=0
 bitmask=240
@@ -403,9 +409,10 @@ expr_types=_VE_EMB_BIT_
 injectors_page=1
 injectors_offset=183
 injectors_bitmask=240
+register_as=num_injectors_0_spin
 
 [num_injectors_1_spin]
-keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 page=2
 offset=183
 table_num=1
@@ -420,9 +427,10 @@ expr_types=_VE_EMB_BIT_
 injectors_page=2
 injectors_offset=183
 injectors_bitmask=240
+register_as=num_injectors_1_spin
 
 [num_cylinders_0_spin]
-keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=182
 table_num=0
 bitmask=240
@@ -436,10 +444,10 @@ expr_types=_VE_EMB_BIT_
 cylinders_page=1
 cylinders_offset=182
 cylinders_bitmask=240
-
+register_as=num_cylinders_0_spin
 
 [num_cylinders_1_spin]
-keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 page=2
 offset=182
 table_num=1
@@ -454,4 +462,5 @@ expr_types=_VE_EMB_BIT_
 cylinders_page=2
 cylinders_offset=182
 cylinders_bitmask=240
+register_as=num_cylinders_1_spin
 

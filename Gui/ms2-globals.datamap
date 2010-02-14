@@ -227,7 +227,7 @@ tooltip=Sets the Fuel Injector placement.
 #----- Spinbuttons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=608
 size=_U16_
 table_num=0
@@ -249,35 +249,39 @@ divider_1_offset=610
 alternate_page=0
 alternate_offset=611
 alternate_bitmask=1
+register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,size,table_num,ul_conv_expr,bind_to_list
+keys=offset,size,table_num,ul_conv_expr,bind_to_list,register_as
 offset=608
 size=_U16_
 table_num=0
 ul_conv_expr=x/1000
 bind_to_list=interdep_0_ctrl
+register_as=req_fuel_per_squirt_0_spin
 
 [num_injectors_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
 offset=619
 bitmask=31
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
 bind_to_list=interdep_0_ctrl
+register_as=num_injectors_0_spin
 
 [num_cylinders_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
 offset=0
 bitmask=15
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
 bind_to_list=interdep_0_ctrl
+register_as=num_cylinders_0_spin
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=610
 table_num=0
 dl_type=_DEFERRED_
@@ -292,6 +296,7 @@ cylinders_1_offset=0
 cylinders_1_bitmask=15
 divider_1_page=0
 divider_1_offset=610
+register_as=inj_per_cycle_0_spin
 
 #----- Entries ---------------------------------------------------------------
 

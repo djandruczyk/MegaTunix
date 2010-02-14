@@ -1039,7 +1039,7 @@ bitmask=2
 tooltip=Sets the cranking pulse to happen on every ignition event or every other,  large number of cyl engines may have better hot start wiht this set to Alternate Events
 
 [idle_algorithm_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,group_states,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 offset=547
 choices=None,On/Off valve,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,PWM Closed-loop,IAC Closed-loop moving only,IAC Closed-loop always-on
 bitvals=0,1,2,3,4,5,6,7,8

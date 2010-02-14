@@ -60,7 +60,6 @@ struct _Reqd_Fuel
 	gfloat actual_pressure;		/*! Actual fuel pressure */
 	gfloat actual_inj_flow;		/*! injector flow rate (lbs/hr) */
 	gfloat target_afr;		/*! Air fuel ratio 10-25.5 */
-	gint page;			/*! Which page is this for */
 	gint table_num;			/*! Which table this refers to */
 	gboolean visible;		/*! Is it visible? */
 };

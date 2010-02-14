@@ -133,7 +133,7 @@ tooltip=Sets the Injector firing pattern
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=90
 table_num=0
 dl_type=_DEFERRED_
@@ -153,13 +153,15 @@ divider_1_offset=91
 alternate_page=0
 alternate_offset=92
 alternate_bitmask=1
+register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,ul_conv_expr,bind_to_list
+keys=offset,table_num,ul_conv_expr,bind_to_list,register_as
 offset=90
 table_num=0
 ul_conv_expr=x/10
 bind_to_list=interdep_1_ctrl
+register_as=req_fuel_per_squirt_0_spin
 
 [inj_open_time_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
@@ -195,7 +197,7 @@ temp_dep=TRUE
 bind_to_list=temperature
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=91
 table_num=0
 dl_type=_DEFERRED_
@@ -210,9 +212,10 @@ cylinders_1_offset=116
 cylinders_1_bitmask=240
 divider_1_page=0
 divider_1_offset=91
+register_as=inj_per_cycle_0_spin
 
 [num_injectors_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=117
 bitmask=240
 table_num=0
@@ -226,9 +229,10 @@ expr_types=_VE_EMB_BIT_
 injectors_1_page=0
 injectors_1_offset=117
 injectors_1_bitmask=240
+register_as=num_injectors_0_spin
 
 [num_cylinders_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=116
 bitmask=240
 table_num=0
@@ -242,4 +246,5 @@ expr_types=_VE_EMB_BIT_
 cylinders_1_page=0
 cylinders_1_offset=116
 cylinders_1_bitmask=240
+register_as=num_cylinders_0_spin
 

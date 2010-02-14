@@ -5062,7 +5062,7 @@
 						      <property name="spacing">2</property>
 
 						      <child>
-							<widget class="GtkLabel" id="label587">
+							<widget class="GtkLabel" id="label1587">
 							  <property name="visible">True</property>
 							  <property name="label" translatable="yes">Edit</property>
 							  <property name="use_underline">True</property>
