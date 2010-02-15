@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <3d_vetable.h>
 #include <comms.h>
 #include <comms_gui.h>
@@ -18,6 +19,7 @@
 #include <conversions.h>
 #include <dataio.h>
 #include <datalogging_gui.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -28,6 +30,7 @@
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
+#include <mtxsocket.h>
 #include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
@@ -45,7 +48,7 @@ extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern GObject *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
-volatile gint last_page = 0;
+volatile gint last_page = -1;
 
 
 /*!
@@ -64,7 +67,7 @@ void io_cmd(gchar *io_cmd_name, void *data)
 	Io_Message *message = NULL;
 	GHashTable *commands_hash = NULL;
 	Command *command = NULL;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 
 	commands_hash = OBJ_GET(global_data,"commands_hash");
 
@@ -93,21 +96,23 @@ void io_cmd(gchar *io_cmd_name, void *data)
 		message = initialize_io_message();
 		message->command = command;
 		if (data)
+		{
 			message->payload = data;
+		}
 		if (command->type != FUNC_CALL)
 			build_output_string(message,command,data);
 	}
 
-	g_async_queue_ref(io_queue);
-	g_async_queue_push(io_queue,(gpointer)message);
-	g_async_queue_unref(io_queue);
+	g_async_queue_ref(io_data_queue);
+	g_async_queue_push(io_data_queue,(gpointer)message);
+	g_async_queue_unref(io_data_queue);
 
 }
 
 
 /*!
  \brief thread_dispatcher() runs continuously as a thread listening to the 
- io_queue and running handlers as messages come in. After they are done it
+ io_data_queue and running handlers as messages come in. After they are done it
  passes the message back to the gui via the dispatch_queue for further
  gui handling (for things that can't run in a thread context)
  \param data (gpointer) unused
@@ -115,38 +120,49 @@ void io_cmd(gchar *io_cmd_name, void *data)
 void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
-	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
-	extern gboolean port_open;
+	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
-	gboolean result;
+	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 
+	args = OBJ_GET(global_data,"args");
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
-		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));*/
+		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_data_queue));*/
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
-		message = g_async_queue_timed_pop(io_queue,&cur);
+		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
 		if (leaving)
 		{
 			/* drain queue and exit thread */
-			while (g_async_queue_try_pop(io_queue) != NULL)
+			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
 			continue;
 
-		if ((!offline) && (((!connected) && (port_open)) || (!port_open)))
+		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
 		{
-			repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);*/
+			if (args->network_mode)
+			{
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
+				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
+			}
+			else
+			{
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating serial repair thread!\n"));
+				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+			}
 			g_thread_join(repair_thread);
 		}
-		if ((!port_open) && (!offline))
+		if ((!serial_params->open) && (!offline))
 		{
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
@@ -162,21 +178,23 @@ void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-					result = message->command->function(
+					message->status = message->command->function(
 							message->command,
 							message->command->func_call_arg);
 
-				//if (!result)
-			//		message->command->defer_post_functions=TRUE;
+					/*
+				if (!result)
+					message->command->defer_post_functions=TRUE;
+					*/
 				}
 				break;
 			case WRITE_CMD:
-				write_data(message);
+				message->status = write_data(message);
 				if (message->command->helper_function)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				break;
 			case NULL_CMD:
-				//printf("null_cmd, just passing thru\n");
+				/*printf("null_cmd, just passing thru\n");*/
 				break;
 
 			default:
@@ -231,15 +249,15 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 		case MTX_CHAR:
 		case MTX_S08:
 		case MTX_U08:
-	//		printf("8 bit var %i at offset %i\n",value,offset);
+	/*		printf("8 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S16:
 		case MTX_U16:
-	//		printf("16 bit var %i at offset %i\n",value,offset);
+	/*		printf("16 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S32:
 		case MTX_U32:
-	//		printf("32 bit var %i at offset %i\n",value,offset);
+	/*		printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
 			printf("ERROR!!! Size undefined for var at canID %i, page %i, offset %i\n",canID,page,offset);
@@ -247,7 +265,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
 	OBJ_SET(output->object,"value", GINT_TO_POINTER(value));
 	OBJ_SET(output->object,"size", GINT_TO_POINTER(size));
@@ -300,13 +318,15 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 		OBJ_SET(output->object,"data", (gpointer)data);
 	}
 
+	/* Set it here otherwise there's a risk of a missed burn due to 
+ 	 * a potential race condition in the burn checker
+ 	 */
+	set_ecu_data(canID,page,offset,size,value);
 	/* If the ecu is multi-page, run the handler to take care of queing
 	 * burns and/or page changing
 	 */
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
-	else
-		printf("firmware is not multi page\n");
 
 	output->queue_update = queue_update;
 	io_cmd(firmware->write_command,output);
@@ -321,11 +341,18 @@ void handle_page_change(gint page, gint last)
 	guint8 ** ecu_data = firmware->ecu_data;
 	guint8 ** ecu_data_last = firmware->ecu_data_last;
 
-	//printf("handle page change \n");
+	/*printf("handle page change!, page %i, last %i\n",page,last);
+	 */
 
+	if (last == -1)  /* First Write of the day, burn not needed... */
+	{
+		queue_ms1_page_change(page);
+		return;
+	}
 	if ((page == last) && (!force_page_change))
 	{
-		//printf("page == last and force_page_change is not set\n");
+		/*printf("page == last and force_page_change is not set\n");
+ 		 */
 		return;
 	}
 	/* If current page is NOT a dl_by_default page, but the last one WAS
@@ -334,7 +361,8 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) && (firmware->page_params[last]->dl_by_default))
 	{
-		//printf("current was not dl by default  but last was,  burning\n");
+		/*printf("current was not dl by default  but last was,  burning\n");
+		*/
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
@@ -345,8 +373,14 @@ void handle_page_change(gint page, gint last)
 	 */
 	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
 	{
+		/*printf("current is not dl by default or last was not as well\n");
+		*/
 		if ((page != last) && (firmware->capabilities & MS1))
+		{
+			/*printf("page diff and MS1, changing page\n");
+			*/
 			queue_ms1_page_change(page);
+		}
 		return;
 	}
 	/* If current and last pages are DIFFERENT,  do a memory buffer scan
@@ -355,18 +389,18 @@ void handle_page_change(gint page, gint last)
 	 */
 	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
 	{
-		//printf("page and last don't match AND there's a ram difference\n");
+		/*printf("page and last don't match AND there's a ram difference, burning, before changing\n");
+		*/
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
 	}
 	else if ((page != last) && (firmware->capabilities & MS1))
 	{
+		/*printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
+		 */
 		queue_ms1_page_change(page);
-		//printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
 	}
-
-
 }
 
 
@@ -381,7 +415,7 @@ void queue_ms1_page_change(gint page)
 
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->page_command,output);
 	last_page = page;
@@ -410,18 +444,55 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"truepgnum", GINT_TO_POINTER(firmware->page_params[page]->truepgnum));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
 	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
 	OBJ_SET(output->object,"data", (gpointer)data);
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
+	/* save it otherwise the burn checker can miss it due to a potential
+ 	 * race condition
+ 	 */
+	store_new_block(canID,page,offset,data,num_bytes);
+
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
-	else
-		printf("firmware is not multi page\n");
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
+	return;
+}
+
+
+/*!
+ \brief table_write() gets called to send a block of lookuptable values to the ECU
+ \param page (tableID) (gint) page in which the value refers to.
+ \param len (gint) length of block to sent
+ \param data (guint8) the block of data to be sent which better damn well be
+ int ECU byte order if there is an endianness thing..
+ a horrible stall when doing an ECU restore or batch load...
+ */
+void table_write(gint page, gint num_bytes, guint8 * data)
+{
+	extern Firmware_Details *firmware;
+	OutputData *output = NULL;
+
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
+	output = initialize_outputdata();
+	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
+	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
+	OBJ_SET(output->object,"data", (gpointer)data);
+	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+
+	/* save it otherwise the burn checker can miss it due to a potential
+ 	 * race condition
+ 	 */
+	store_new_block(0,page,0,data,num_bytes);
+
+	if (firmware->multi_page)
+		handle_page_change(page,last_page);
+	output->queue_update = TRUE;
+	io_cmd(firmware->table_write_command,output);
 	return;
 }
 
@@ -564,16 +635,16 @@ void start_restore_monitor(void)
 
 void *restore_update(gpointer data)
 {
-	extern GAsyncQueue *io_queue;
-	gint max_xfers = g_async_queue_length(io_queue);
+	extern GAsyncQueue *io_data_queue;
+	gint max_xfers = g_async_queue_length(io_data_queue);
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
 	thread_update_logbar("tools_view","warning",g_strdup_printf("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n",max_xfers),FALSE,FALSE);
 	while (remaining_xfers > 5)
 	{
-		remaining_xfers = g_async_queue_length(io_queue);
-		g_usleep(5000);
+		remaining_xfers = g_async_queue_length(io_data_queue);
+		g_usleep(10000);
 		if (remaining_xfers <= (last_xferd-50))
 		{
 			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Transactions remaining, please wait\n",remaining_xfers),FALSE,FALSE);
@@ -594,7 +665,7 @@ void *restore_update(gpointer data)
  */
 void build_output_string(Io_Message *message, Command *command, gpointer data)
 {
-	gint i = 0;
+	guint i = 0;
 	gint v = 0;
 	gint len = 0;
 	OutputData *output = NULL;
@@ -621,6 +692,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 		block = g_new0(DBlock, 1);
 		if (arg->type == ACTION)
 		{
+			/*printf("build_output_string(): ACTION being created!\n");*/
 			block->type = ACTION;
 			block->action = arg->action;
 			block->arg = arg->action_arg;

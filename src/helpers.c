@@ -69,7 +69,9 @@ EXPORT void spawn_read_ve_const_pf(void)
 	extern Firmware_Details *firmware;
 	if (!firmware)
 		return;
-	
+
+	set_title(g_strdup("Queuing read of all ECU data..."));
+
 	io_cmd(firmware->get_all_command,NULL);
 }
 
@@ -312,6 +314,7 @@ EXPORT void disable_burner_buttons_pf(void)
 
 EXPORT void reset_temps_pf(void)
 {
+	set_title(g_strdup("Adjusting for local Temp units..."));
 	reset_temps(OBJ_GET(global_data,"temp_units"));
 }
 
@@ -548,6 +551,7 @@ EXPORT void startup_default_timeouts_pf()
 	gint source = 0;
 	gint rate = 0;
 
+	set_title(g_strdup("Starting up data renderers..."));
 	rate = (gint)OBJ_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));

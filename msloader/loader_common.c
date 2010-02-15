@@ -276,7 +276,7 @@ FirmwareType detect_firmware(gchar * filename)
 
 void unlock_port()
 {
-
+#ifndef __WIN32__
 //	printf("told to unlock serial,  path \"%s\"\n",fname);
 	if (serial_lockfile)
 	{
@@ -287,6 +287,7 @@ void unlock_port()
 			serial_lockfile = NULL;
 		}
 	}
+#endif
 }
 
 
@@ -352,6 +353,5 @@ gboolean lock_port(gchar * name)
 		printf("Error setting serial lock %s\n",(gchar *)strerror(errno));
 	g_free(contents);
 #endif	
-	exit(0);
 	return TRUE;
 }

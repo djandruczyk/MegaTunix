@@ -2689,8 +2689,10 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 	if (active_page == RUNTIME_TAB)
 		rt_forced_update = TRUE;
 
-	if (OBJ_GET(widget,"table_num"))
+	if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+	else
+		active_table = -1;
 
 	if (OBJ_GET(widget,"sub-notebook"))
 	{
@@ -2701,11 +2703,13 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
 			/*printf("subtable found, searching for active page\n");*/
-			if (OBJ_GET(widget,"table_num"))
+			if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 			{
 				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 			/*	printf("found it,  active table %i\n",active_table);*/
 			}
+			else
+				active_table = -1;
 			/*else
 			 *	printf("didn't find table_num key on subtable\n");
 			 */

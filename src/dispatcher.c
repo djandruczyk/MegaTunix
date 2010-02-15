@@ -74,7 +74,7 @@ gboolean pf_dispatcher(gpointer data)
 	if (!pf_dispatch_queue) /*queue not built yet... */
 		return TRUE;
 trypop:
-	/*	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
+	/*printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
 	/*
@@ -86,6 +86,14 @@ trypop:
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
+		return TRUE;
+	}
+	if (!message->status)
+	{
+		/* Message failed at some point, do NOT run post functions
+		 * in this case.
+		 */
+		dealloc_message(message);
 		return TRUE;
 	}
 

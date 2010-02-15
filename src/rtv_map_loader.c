@@ -74,7 +74,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	if (!((interrogated) && ((connected) || (offline))))
 		return FALSE;
 
-	set_title(g_strdup("Loading RT Map..."));
+	set_title(g_strdup("Loading Realtime Map..."));
 	filename = get_file(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{

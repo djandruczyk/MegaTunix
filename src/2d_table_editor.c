@@ -1030,6 +1030,13 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
+#ifdef __WIN32__
+	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
+		gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+	else
+		printf("widget isn't visible or sensitive\n");
+	return;
+#else
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");
 	extern GdkColor white;
 	if (!GDK_IS_DRAWABLE(widget->window))
@@ -1052,5 +1059,6 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,2,widget->allocation.height-6);
 	/* Right */
 	gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-4,2,2,widget->allocation.height-6);
+#endif
 }
 

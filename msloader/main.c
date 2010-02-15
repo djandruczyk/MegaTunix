@@ -62,6 +62,7 @@ gint main(gint argc, gchar ** argv)
 	else
 	{
 		output("Could NOT open Port check permissions\n",FALSE);
+		unlock_port();
 		exit(-1);
 	}
 #ifdef __WIN32__
@@ -74,6 +75,8 @@ gint main(gint argc, gchar ** argv)
 	else
 	{
 		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
+		close_port(port_fd);
+		unlock_port();
 		exit(-1);
 	}
 	type = detect_firmware(argv[2]);

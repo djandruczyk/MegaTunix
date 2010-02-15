@@ -370,6 +370,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		cfg_free(cfgfile);
 		return FALSE;
 	}
 

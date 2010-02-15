@@ -120,6 +120,7 @@ void win32_create_mtx_lock(void)
 
 void unlock_serial()
 {
+#ifndef __WIN32__
 	extern GObject *global_data;
 	gchar *fname = OBJ_GET(global_data,"serial_lockfile");
 
@@ -133,6 +134,7 @@ void unlock_serial()
 			OBJ_SET(global_data,"serial_lockfile", NULL);
 		}
 	}
+#endif
 }
 
 
@@ -193,6 +195,5 @@ gboolean lock_serial(gchar * name)
 	else
 		printf("Error setting serial lock %s\n",(gchar *)strerror(errno));
 #endif
-	exit(0);
 	return TRUE;
 }

@@ -79,6 +79,7 @@ gint comms_test()
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
 	if (!write_wrapper(serial_params->fd,"C",1,&len))
 	{
+		printf("WRITE ERROR\n");
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);

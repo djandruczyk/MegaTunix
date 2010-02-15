@@ -721,6 +721,7 @@ Io_Message * initialize_io_message()
 	message->sequence = NULL;
 	message->payload = NULL;
 	message->recv_buf = NULL;
+	message->status = TRUE;
 
 	return message;
 }
