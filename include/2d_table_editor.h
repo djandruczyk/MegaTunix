@@ -33,6 +33,7 @@ void vertex_proximity(GtkWidget *, gpointer);
 void marker_proximity(GtkWidget *, gpointer);
 gboolean set_axis_locking(GtkWidget *, gpointer );
 void highlight_entry(GtkWidget *, GdkColor *);
+void gauge_cleanup(gpointer , gpointer );
 
 /* Prototypes */
 

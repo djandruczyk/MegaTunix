@@ -202,7 +202,10 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 
 	cairo_set_font_size (cr, 11);
 
-	message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
+	if (priv->valname)
+		message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
+	else
+		message = g_strdup_printf("%.*f", priv->precision,priv->value);
 
 	cairo_text_extents (cr, message, &extents);
 
