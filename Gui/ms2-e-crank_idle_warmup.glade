@@ -6475,33 +6475,6 @@ of this window to get there...</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="label633">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">&lt;span background=&quot;blue&quot; foreground=&quot;white&quot;&gt; PID Lockout Detection &lt;/span&gt;</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">True</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">2</property>
-					      <property name="top_attach">10</property>
-					      <property name="bottom_attach">11</property>
-					      <property name="x_options"></property>
-					    </packing>
-					  </child>
-
-					  <child>
 					    <widget class="GtkLabel" id="lockout_rpmdot_thresh_label">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes">lockout rpmDOT thresh. (rpm/sec)</property>
@@ -6524,6 +6497,64 @@ of this window to get there...</property>
 					      <property name="right_attach">1</property>
 					      <property name="top_attach">11</property>
 					      <property name="bottom_attach">12</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkTable" id="table225">
+					      <property name="visible">True</property>
+					      <property name="n_rows">1</property>
+					      <property name="n_columns">2</property>
+					      <property name="homogeneous">False</property>
+					      <property name="row_spacing">0</property>
+					      <property name="column_spacing">0</property>
+
+					      <child>
+						<widget class="GtkHSeparator" id="hseparator73">
+						  <property name="visible">True</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">1</property>
+						  <property name="right_attach">2</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="label633">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">PID Lockout Detection</property>
+						  <property name="use_underline">False</property>
+						  <property name="use_markup">True</property>
+						  <property name="justify">GTK_JUSTIFY_LEFT</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
+						  <property name="x_options">fill</property>
+						</packing>
+					      </child>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">10</property>
+					      <property name="bottom_attach">11</property>
+					      <property name="y_padding">3</property>
+					      <property name="x_options">fill</property>
 					    </packing>
 					  </child>
 					</widget>
@@ -7437,33 +7468,6 @@ of this window to get there...</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="idle_start_val_label">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt;	Start Value	&lt;/span&gt;</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">True</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">3</property>
-					      <property name="bottom_attach">4</property>
-					      <property name="y_options">expand</property>
-					    </packing>
-					  </child>
-
-					  <child>
 					    <widget class="GtkLabel" id="idle_min_steps_label">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes">Min # of steps to move (steps)</property>
@@ -7597,6 +7601,33 @@ of this window to get there...</property>
 					      <property name="top_attach">5</property>
 					      <property name="bottom_attach">6</property>
 					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkLabel" id="idle_start_val_label">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">&lt;span background=&quot;red&quot; foreground=&quot;white&quot;&gt; Start Value &lt;/span&gt;</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">True</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">3</property>
+					      <property name="bottom_attach">4</property>
+					      <property name="y_options">expand</property>
 					    </packing>
 					  </child>
 					</widget>

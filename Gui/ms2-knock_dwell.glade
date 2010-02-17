@@ -1813,6 +1813,7 @@
 
 			      <child>
 				<widget class="GtkTable" id="table5">
+				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">6</property>
 				  <property name="n_columns">2</property>
