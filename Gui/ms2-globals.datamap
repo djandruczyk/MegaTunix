@@ -341,15 +341,14 @@ ul_conv_expr=x*0.10
 precision=1
 tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
 
-[pwm_freq_entry]
-keys=offset,precision,raw_lower,raw_upper,ul_conv_expr,dl_conv_expr,tooltip
+[pwm_period_entry]
+keys=offset,precision,raw_lower,raw_upper,require_reboot,tooltip
 offset=614
 raw_lower=40
 raw_upper=100
 precision=1
-dl_conv_expr=(1/x)*1000
-ul_conv_expr=1/(x/1000)
-tooltip=This sets the PWM Frequency.  This differs from MegaTune which does this using a period in microseconds (inverse of frequency). I find this tricky to calculate quickly in my head, unlike frequency, so this control uses frequency andthe range is 10000 to 25000 hertz, which corresponds to the 40 to 100 usec that megatune uses. Apologies for any confusion, but this makes more sense I think to your average joe.
+require_reboot=TRUE
+tooltip=This sets the PWM Period in uS. 
 
 [tps_rate_entry]
 keys=offset,tooltip

@@ -27,7 +27,7 @@ bind_to_list=nb_ego
 keys=bind_to_list
 bind_to_list=ego_controls
 
-[wbo2_controls_table]
+[wideband_frame]
 keys=bind_to_list
 bind_to_list=wb_ego
 
@@ -127,6 +127,10 @@ bind_to_list=iac_common
 keys=bind_to_list
 bind_to_list=wb_simple
 
+[prop_gain_label]
+keys=bind_to_list
+bind_to_list=wb_ego
+
 [transport_delay_1_label]
 keys=bind_to_list
 bind_to_list=wb_transport
@@ -225,18 +229,19 @@ bind_to_list=iac_specific
 tooltip=This is the minimum number of steps for the IAC actuator to move, so it isn't jiggling betwen steps and potentially loosing position or count.
 
 [pwm_freq_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,require_reboot,tooltip
 offset=551
 dl_conv_expr=x/80
 ul_conv_expr=x*80
 raw_lower=1
 raw_upper=10
 precision=1
+require_reboot=TRUE
 bind_to_list=pwm_specific
 tooltip=This is the PWM Drive frequency from 80-800 hertz in 80Hz steps.
 
 [start_val_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,require_reboot,tooltip
 offset=552
 size=_S16_
 dl_conv_expr=x*1
@@ -244,6 +249,7 @@ ul_conv_expr=x/1
 raw_lower=0
 raw_upper=4000
 precision=1
+require_reboot=TRUE
 bind_to_list=iac_common
 tooltip=This is the number of steps the pintle is retracted to the "wide-open" position when MegaSquirt is powered up, It it used in all temperatures.
 
@@ -463,6 +469,6 @@ tooltip=This is the effect of rpm and map and as well as the exhaust geometry.
 [wb_events_entry]
 keys=offset,bind_to_list,tooltip
 offset=595
-bind_to_list=wb_simple
+bind_to_list=wb_simple,wb_ego
 tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 

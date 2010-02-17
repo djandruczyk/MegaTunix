@@ -48,6 +48,10 @@ bind_to_list=knock_controls
 keys=bind_to_list
 bind_to_list=valid_ecu_ctrls
 
+[recovery_advance_label]
+keys=bind_to_list
+bind_to_list=aggressive_knock
+
 #------- Combo Boxes ------------------------------------------------------
 
 [knock_combo]

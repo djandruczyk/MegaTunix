@@ -57,46 +57,51 @@ bitmask=3
 tooltip=Sets ECU Input trigger to fire on either the rising or falling edge.
 
 [ign_capture_combo]
-keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip,require_reboot
 choices=Falling Edge,Rising Edge
 bitvals=0,1
 offset=2
 bitmask=1
+require_reboot=TRUE
 bind_to_list=nonedis_controls
 tooltip=Sets ECU Input trigger to fire on either the rising or falling edge.
 
 [crank_trigger_combo]
-keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip,require_reboot
 choices=Calculated,Trigger Return,Trigger Rise
 bitvals=0,1,2
 offset=2
 bitmask=6
+require_reboot=TRUE
 bind_to_list=nonedis_controls
 tooltip=Sets ECU Crank trigger point.
 
 [coil_charge_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip,require_reboot
 choices=Standard Coil Charge,EDIS,EDIS Multispark
 bitvals=0,1,2
 offset=2
 bitmask=48
+require_reboot=TRUE
 toggle_groups=nonedis_controls,nonedis_controls,
 tooltip=Sets ECU Crank trigger point.
 
 [spark_polarity_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip,require_reboot
 choices=Going Low (Normal),Going High (Inverted)
 bitvals=0,1
 offset=3
 bitmask=1
+require_reboot=TRUE
 tooltip=Sets ECU Ignition Output Polarity. Be careful, setting this incorrectly can overheat/fry your ignition module.
 
 [dual_spark_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip,require_reboot
 choices=No Dual Spark,Dual Tach Inputs,Falling Cam Sync with Tach or Wheel,Rising Cam Sync with Tach or Wheel,Single Crank Wheel Input,Single Cam Wheel Input,Dual Inputs with Timing from 1 cam tooth,M-0 Wheel w/ Falling Crank Sync,M-0 Wheel w/ Rising Crank Sync
 bitvals=0,1,2,3,4,5,6,7,8
 offset=601
 bitmask=15
+require_reboot=TRUE
 tooltip=See http://www.megamanual.com/mt28.htm#ia
 
 #----- Entries ----------------------------------------------------------------
@@ -169,25 +174,29 @@ offset=546
 tooltip=Normal Running: This is the next pulse tolerance once afterstart enrichment ends, and it should be the lowest of the three (since the engine speed is more stable in normal running conditions - there's more rotational inertia, and fewer variations in things like air/fuel mixtures. As well, if you have a VR sensor, the signal is stronger, etc.)
 
 [trigger_teeth_entry]
-keys=offset,tooltip,size,raw_upper
+keys=offset,tooltip,size,raw_upper,require_reboot
 offset=966
 size=_U16_
 raw_upper=512
+require_reboot=TRUE
 tooltip=Trigger Wheel Teeth (No_Teeth): is the nominal (include missing) teeth for wheel decoding. ( Set it 0 for no wheel decoding). 
 
 [missing_teeth_entry]
-keys=offset,tooltip
+keys=offset,tooltip,require_reboot
 offset=968
 tooltip=Missing Teeth (No_Miss_Teeth): Number of consecutive missing teeth. 
+require_reboot=TRUE
 
 [skip_teeth_entry]
-keys=offset,tooltip
+keys=offset,tooltip,require_reboot
 offset=969
+require_reboot=TRUE
 tooltip=Skip Teeth (No_Skip_Teeth): Number of teeth (between tach pulses) to be skipped. You must create the same number of 'tach' signals as you want ignition events. On a four cylinder four stroke engine, this is two per revolution. Suppose it has a 60-2 wheel. What you need to have happen is for MegaSquirt-II to 'skip' a certain number of teeth so the only the right number of teeth are counted as 'tach signals' per revolution. Since we have determined the number of tach signals we want is 2, we need to skip 60/2 or 30 teeth. For a eight cylinder 60-2, we need 4 ignition events per revolution, so we set skip teeth to 60/4 or 15. And for an eight cylinder 36-1 wheel, we would set skip teeth 36/4 or 9.
 
 [delay_teeth_entry]
-keys=offset,tooltip
+keys=offset,tooltip,require_reboot
 offset=970
+require_reboot=TRUE
 tooltip=Delay Teeth (Delay_Teeth): Number of teeth to delay after 1st tooth after the missing teeth before 1st tach synch declared. You get synch as soon as you detect "first real tooth after the missing tooth". If that tooth is at TDC when it is detected, then there is 0 delay. If TDC doesn't occur until the next tooth is detected, then there is a delay of one tooth, and so forth.
 
 [offset_advance_entry]
