@@ -36,6 +36,8 @@ gui_files = 	README \
 		ms2-e-crank_idle_warmup.datamap \
 		ms2-e-globals.glade \
 		ms2-e-globals.datamap \
+		ms2-e-ignition.glade \
+		ms2-e-ignition.datamap \
 		ms2-e-toothtrigger.glade \
 		ms2-e-toothtrigger-2.1.x.datamap \
 		ms2-globals.glade \

@@ -95,7 +95,7 @@ volatile gboolean leaving = FALSE;
  \param data (gpointer) quiet or not quiet, leave mode .quiet doesn't prompt 
  to save anything
  */
-EXPORT void leave(GtkWidget *widget, gpointer data)
+EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
@@ -124,11 +124,11 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (!args->be_quiet)
 	{
 		if(!prompt_r_u_sure())
-			return;
+			return TRUE;
 		prompt_to_save();
 	}
 	if (leaving)
-		return;
+		return TRUE;
 
 	leaving = TRUE;
 	/* Stop timeout functions */
@@ -248,7 +248,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
 	gtk_main_quit();
-	return;
+	return TRUE;
 }
 
 

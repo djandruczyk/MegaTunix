@@ -239,11 +239,12 @@ bitmask=1
 tooltip=Sets the Fuel Injector placement.
 
 [engine_type_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Even Fire,Odd Fire
 bitvals=0,1
 offset=2
 bitmask=8
+toggle_groups=evenfire,oddfire
 tooltip=Sets the Engine firing type.
 
 [spark_mode_combo]
@@ -252,7 +253,6 @@ choices=EDIS,EDIS Multispark,Basic trigger,Trigger return,Toothed wheel,420A/Neo
 bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,29,31
 offset=989
 bitmask=31
-toggle_groups=edis,edis:edis_multispark,basic,trigger_return,wheel,,,,,,,,,,,,,,,,,,,,,,,
 tooltip=Sets the Engine firing type.
 
 [launch_combo]

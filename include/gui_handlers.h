@@ -128,7 +128,7 @@ typedef enum
 }MtxButton;
 /* Prototypes */
 EXPORT gboolean prevent_close(GtkWidget *, gpointer );
-EXPORT void leave(GtkWidget *, gpointer);
+EXPORT gboolean leave(GtkWidget *, gpointer);
 EXPORT gboolean comm_port_override(GtkEditable *);
 EXPORT gboolean std_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean std_entry_handler(GtkWidget *, gpointer);

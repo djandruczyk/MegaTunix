@@ -220,9 +220,10 @@ datasource=afr
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook
+keys=tab_ident,sub-notebook,bind_to_list
 tab_ident=_SPARKTABLES_TAB_
 sub-notebook=SP_spark_notebook
+bind_to_list=use_sparktable
 
 [topframe_title]
 keys=set_label
