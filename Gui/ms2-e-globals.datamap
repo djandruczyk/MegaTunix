@@ -38,6 +38,10 @@ bind_to_list=single_table
 keys=bind_to_list
 bind_to_list=single_table
 
+[realtime_baro_port_label]
+keys=bind_to_list
+bind_to_list=baro_dual
+
 #----- Widgets ---------------------------------------------------------------
 
 [inj2_properties_table]
@@ -47,6 +51,18 @@ bind_to_list=bank2
 [incorp_afr_param_table]
 keys=bind_to_list
 bind_to_list=incorp_afrtarget
+
+[def_baro_table]
+keys=bind_to_list
+bind_to_list=def_baro
+
+[low_baro_table]
+keys=bind_to_list
+bind_to_list=low_baro
+
+[high_baro_table]
+keys=bind_to_list
+bind_to_list=high_baro
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -65,7 +81,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 [calc_reqfuel_button]
 keys=handler,tooltip,table_num
 handler=_REQ_FUEL_POPUP_
-table_num=0
+table_num=3
 tooltip=This button Pops up a window to calculate the required fuel
 
 
@@ -104,8 +120,17 @@ choices=Disabled,Initial MAP reading,Two Sensors
 bitvals=0,1,2
 offset=593
 bitmask=3
-toggle_groups=,baro_on_boot,baro_dual
+toggle_groups=def_baro,def_baro:low_baro:high_baro,baro_dual
 tooltip=Sets ECU barometer correction to bei either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
+
+[realtime_baro_port_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+choices=MS2 AD6/JS5,MS2 AD7/JS4,GPIO1 GPI1 AD0,GPIO1 GPI2 AD1,GPIO1 GPI3 AD2,GPIO1 GPI5 AD6,GPIO1 GPI4 AD7
+bitvals=6,7,8,9,10,14,15
+offset=991
+bitmask=15
+bind_to_list=dual_baro
+tooltip=Realtime baro source port
 
 [eae_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
@@ -216,7 +241,7 @@ keys=handler,dl_type,offset,table_num,choices,bitvals,bitmask,tooltip
 handler=_ALT_SIMUL_
 dl_type=_DEFERRED_
 choices=Simultaneous,Alternating
-table_num=0
+table_num=3
 bitvals=0,1
 offset=611
 bitmask=1
@@ -271,7 +296,7 @@ tooltip=Sets the Launch Control feature
 keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=608
 size=_U16_
-table_num=0
+table_num=3
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_0_ctrl
@@ -296,7 +321,7 @@ register_as=req_fuel_per_cycle_0_spin
 keys=offset,size,table_num,ul_conv_expr,bind_to_list,register_as
 offset=608
 size=_U16_
-table_num=0
+table_num=3
 ul_conv_expr=x/1000
 bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
@@ -305,7 +330,7 @@ register_as=req_fuel_per_squirt_0_spin
 keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
 offset=619
 bitmask=15
-table_num=0
+table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
 bind_to_list=interdep_0_ctrl
@@ -315,7 +340,7 @@ register_as=num_injectors_0_spin
 keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
 offset=0
 bitmask=15
-table_num=0
+table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
 bind_to_list=interdep_0_ctrl
@@ -324,7 +349,7 @@ register_as=num_cylinders_0_spin
 [inj_per_cycle_0_spin]
 keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
 offset=610
-table_num=0
+table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
 bind_to_list=interdep_0_ctrl
@@ -479,4 +504,37 @@ keys=offset,raw_upper,tooltip
 offset=627
 raw_upper=100
 tooltip=This sets the Knock Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[low_baro_entry]
+keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+precision=1
+offset=648
+size=_S16_
+raw_lower=0
+raw_upper=4000
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=This sets the Low baro limit in kPa for baro correction (clamp point)
+
+[high_baro_entry]
+keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+precision=1
+offset=646
+size=_S16_
+raw_lower=0
+raw_upper=4000
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=This sets the High baro limit in kPa for baro correction (clamp point)
+
+[def_baro_entry]
+keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+precision=1
+offset=650
+size=_S16_
+raw_lower=0
+raw_upper=4000
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+tooltip=This sets the default baro value used when no baro correction is used
 
