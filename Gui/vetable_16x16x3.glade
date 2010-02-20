@@ -8920,7 +8920,7 @@
 					  <property name="has_frame">True</property>
 					  <property name="invisible_char">*</property>
 					  <property name="activates_default">False</property>
-					  <property name="width_chars">6</property>
+					  <property name="width_chars">4</property>
 					</widget>
 					<packing>
 					  <property name="left_attach">2</property>
@@ -8983,12 +8983,12 @@
 					<widget class="GtkComboBoxEntry" id="VE1_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>
@@ -8996,7 +8996,7 @@
 					  <property name="right_attach">2</property>
 					  <property name="top_attach">0</property>
 					  <property name="bottom_attach">1</property>
-					  <property name="x_options">fill</property>
+					  <property name="x_options">shrink</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -18545,12 +18545,12 @@ maintain same PW</property>
 					<widget class="GtkComboBoxEntry" id="VE2_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>
@@ -28107,12 +28107,12 @@ maintain same PW</property>
 					<widget class="GtkComboBoxEntry" id="VE3_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  </property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>

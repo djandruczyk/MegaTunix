@@ -5508,12 +5508,12 @@
 					<widget class="GtkComboBoxEntry" id="SP1_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>
@@ -11446,12 +11446,12 @@ most &quot;Weight&quot;</property>
 					<widget class="GtkComboBoxEntry" id="SP2_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>
@@ -17384,12 +17384,12 @@ most &quot;Weight&quot;</property>
 					<widget class="GtkComboBoxEntry" id="SP3_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
 					</widget>
 					<packing>
