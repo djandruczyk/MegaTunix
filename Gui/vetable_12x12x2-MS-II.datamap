@@ -155,21 +155,21 @@ tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of t
 [VE1_rescale_button]
 keys=handler,data
 handler=_RESCALE_TABLE_
-data=VE_VE1_rescale_entry,VE_VE1_rescale_combo
+data=VE1_rescale_entry,VE1_rescale_combo
 
 [VE1_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=0
 applicable_tables=0,2
 handler=_REQFUEL_RESCALE_TABLE_
-data=VE_VE1_new_reqfuel_entry
+data=VE1_new_reqfuel_entry
 
 [VE2_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=1
 applicable_tables=1
 handler=_REQFUEL_RESCALE_TABLE_
-data=VE_VE2_new_reqfuel_entry
+data=VE2_new_reqfuel_entry
 
 [VE2_3d_view_button]
 keys=table_num,tooltip,bind_to_list
@@ -181,57 +181,61 @@ tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of t
 [VE2_rescale_button]
 keys=handler,data
 handler=_RESCALE_TABLE_
-data=VE_VE2_rescale_entry,VE_VE2_rescale_combo
+data=VE2_rescale_entry,VE2_rescale_combo
 
 #----- Spinners -------------------------------------------------------------
 
-[_VE1_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-page=1
-offset=148
-precision=1
+[VE1_curr_reqfuel_entry]
+keys=size,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision,register_as
+size=_U16_
+offset=608
+precision=3
 table_num=0
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-ul_conv_expr=(reqfuel*((injectors+1)/(divider*((alternate+1)/((dtmode*alternate)+1)))))/10
-expr_symbols=reqfuel,injectors,divider,alternate,dtmode
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_VE_EMB_BIT_
-reqfuel_page=5
-reqfuel_offset=148
-injectors_page=5
-injectors_offset=183
-injectors_bitmask=240
-divider_page=5
-divider_offset=149
-alternate_page=5
-alternate_offset=150
+ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=31
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
 alternate_bitmask=1
-dtmode_page=4
-dtmode_offset=33
-dtmode_bitmask=16
+register_as=VE1_curr_reqfuel_entry
 
-[_VE2_curr_reqfuel_entry]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-page=1
-offset=148
+[VE2_curr_reqfuel_entry]
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision,register_as
+size=_U16_
+offset=608
 table_num=1
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-precision=1
-ul_conv_expr=(reqfuel*((injectors+1)/divider))/10
-expr_symbols=reqfuel,injectors,divider
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
-reqfuel_page=5
-reqfuel_offset=148
-injectors_page=5
-injectors_offset=183
-injectors_bitmask=240
-divider_page=5
-divider_offset=149
+precision=3
+ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=31
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
+alternate_bitmask=1
+register_as=VE2_curr_reqfuel_entry
 
 #----- Widgets --------------------------------------------------------------
 
@@ -249,6 +253,22 @@ table_num=0
 keys=bind_to_list,table_num
 bind_to_list=dt_controls
 table_num=1
+
+[VE1_rescale_frame]
+keys=register_as
+register_as=VE1_rescale_frame
+
+[VE2_rescale_frame]
+keys=register_as
+register_as=VE2_rescale_frame
+
+[VE1_new_reqfuel_entry]
+keys=register_as
+register_as=VE1_new_reqfuel_entry
+
+[VE2_new_reqfuel_entry]
+keys=register_as
+register_as=VE2_new_reqfuel_entry
 
 #----- Gauges --------------------------------------------------------------
 
@@ -348,11 +368,11 @@ post_functions_with_arg=lock_entry
 
 [VE1_main_vetable]
 keys=rescaler_frame
-rescaler_frame=VE_VE1_rescale_frame
+rescaler_frame=VE1_rescale_frame
 
 [VE2_main_vetable]
 keys=rescaler_frame
-rescaler_frame=VE_VE2_rescale_frame
+rescaler_frame=VE2_rescale_frame
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 

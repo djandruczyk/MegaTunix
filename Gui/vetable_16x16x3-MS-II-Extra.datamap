@@ -204,41 +204,33 @@ table_num=5
 [VE1_3d_view_button]
 keys=table_num,tooltip,bind_to_list
 table_num=3
-#x_source=raw_rpm
-#y_source=mapkpa
-#an_y_source=tpscount
-#z_source=vecurr1
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [VE1_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=3
-applicable_tables=3,5
+applicable_tables=3,4,5
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE16_VE1_new_reqfuel_entry
 
 [VE2_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=4
-applicable_tables=4
+applicable_tables=3,4,5
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE16_VE2_new_reqfuel_entry
 
 [VE3_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=5
-applicable_tables=3,5
+applicable_tables=3,4,5
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE16_VE3_new_reqfuel_entry
 
 [VE2_3d_view_button]
 keys=table_num,tooltip,bind_to_list
 table_num=4
-#x_source=raw_rpm
-#y_source=mapkpa
-#an_y_source=tpscount
-#z_source=vecurr2
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
@@ -264,11 +256,12 @@ handler=_RESCALE_TABLE_
 data=VE16_VE3_rescale_entry,VE16_VE3_rescale_combo
 
 #----- Spinners -------------------------------------------------------------
+
 [VE1_curr_reqfuel_entry]
 keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
 offset=608
 size=_U16_
-precision=1
+precision=3
 table_num=3
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
@@ -296,9 +289,9 @@ size=_U16_
 table_num=4
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-precision=1
+precision=3
 ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
@@ -323,7 +316,7 @@ dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-precision=1
+precision=3
 ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
