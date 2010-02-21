@@ -185,11 +185,12 @@ bitmask=3
 tooltip=See MS2-Extra Manuals
 
 [secondary_ignition_load_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Disabled,Speed Density,Percent Baro,Alpha-N
 bitvals=0,1,2,3
 offset=631
 bitmask=48
+toggle_groups=,secondary_ign,secondary_ign,secondary_ign
 tooltip=See MS2-Extra Manuals
 
 [ego_combo]

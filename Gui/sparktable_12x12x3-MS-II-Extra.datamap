@@ -3,6 +3,7 @@ description=Object data map for the Spark Advance Tables (MS-II-Extra)
 tab_name=_Spark Tables
 id_prefix=SP_
 groups=defaults,load_1n2,load_3,rpm_1n2,rpm_3,spark_1,spark_2,spark_3
+bind_to_list=ign
 
 #----- Groups ----------------------------------------------------------------
 
@@ -23,7 +24,7 @@ use_color=TRUE
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1n2]
 keys=size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
@@ -67,7 +68,7 @@ use_color=TRUE
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
 keys=page,size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
@@ -103,13 +104,15 @@ keys=table_num
 table_num=6
 
 [SP2_vbox1]
-keys=table_num
+keys=table_num,bind_to_list
 table_num=7
+bind_to_list=secondary_ign
 
 [SP3_vbox1]
-keys=page,table_num
+keys=page,table_num,bind_to_list
 page=3
 table_num=8
+bind_to_list=ign_table_switching
 
 [SP1_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -129,8 +132,8 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=6
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_IgnLoad.xml
+datasource=ignload
 
 [SP1_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -164,8 +167,8 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=7
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_IgnLoad2_Gauge.xml
+datasource=ignload2
 
 [SP2_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -199,8 +202,8 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=8
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_IgnLoad_Gauge.xml
+datasource=ignload
 
 [SP3_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -223,40 +226,19 @@ datasource=afr
 keys=tab_ident,sub-notebook,bind_to_list
 tab_ident=_SPARKTABLES_TAB_
 sub-notebook=SP_spark_notebook
-bind_to_list=use_sparktable
+bind_to_list=ign,use_sparktable
 
 [topframe_title]
 keys=set_label
 set_label=MegaSquirtnSpark Extra Spark Tables
 
-[SP1_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
+[SP2_notebook_tab_label]
+keys=bind_to_list
+bind_to_list=secondary_ign
 
-[SP1_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
-
-[SP2_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
-
-[SP2_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,1,184,4,2,1
-
+[SP3_notebook_tab_label]
+keys=bind_to_list
+bind_to_list=ign_table_switching
 
 #----- Buttons ---------------------------------------------------------------
 

@@ -24,7 +24,7 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
 use_color=TRUE
-tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
 keys=size,raw_upper,use_color,tooltip
@@ -47,7 +47,7 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
 use_color=TRUE
-tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_2]
 keys=size,raw_upper,use_color,tooltip
@@ -70,7 +70,7 @@ dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
 use_color=TRUE
-tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
 keys=size,raw_upper,use_color,tooltip
@@ -96,51 +96,13 @@ sub-notebook=VE16_vetable_notebook
 keys=bind_to_list
 bind_to_list=dual_table
 
+[VE3_notebook_tab_label]
+keys=bind_to_list
+bind_to_list=fuel_table_switching
+
 [topframe_title]
 keys=set_label
 set_label=MegaSquirtnSpark-Extra FUEL VE Tables
-
-[VE1_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE1_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE2_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE2_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE3_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE3_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-depend_on=alpha_n_button
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -344,7 +306,8 @@ bind_to_list=dual_table
 table_num=4
 
 [VE3_vbox1]
-keys=table_num
+keys=bind_to_list,table_num
+bind_to_list=fuel_table_switching
 table_num=5
 
 #----- Gauges --------------------------------------------------------------
@@ -367,22 +330,22 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=3
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=fuelload
 
 [VE1_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=3
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
-datasource=egocorr
+datasource=egocorr1
 
 [VE1_gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=3
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr
+datasource=afr1
 
 [VE2_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -402,22 +365,22 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=4
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_FuelLoad2_Gauge.xml
+datasource=fuelload
 
 [VE2_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=4
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
-datasource=egocorr
+datasource=egocorr2
 
 [VE2_gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=4
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr
+datasource=afr2
 
 [VE3_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -437,22 +400,22 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=5
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
-datasource=mapkpa
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=fuelload
 
 [VE3_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=5
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
-datasource=egocorr
+datasource=egocorr1
 
 [VE3_gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=5
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr
+datasource=afr1
 
 #----- Rescale Entries ------------------------------------------------------
 

@@ -5335,7 +5335,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="SP1_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Kpa</property>
+					      <property name="label" translatable="yes">(%)</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5365,7 +5365,7 @@
 				      <child>
 					<widget class="GtkLabel" id="SP1_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">MAP Bins</property>
+					  <property name="label" translatable="yes">Ign. Load</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -10476,7 +10476,7 @@ most &quot;Weight&quot;</property>
 				      <child>
 					<widget class="GtkLabel" id="SP2_sparktable_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Spark Advance Table 2 (Input Selectable) (deg. BTDC)</property>
+					  <property name="label" translatable="yes">Spark Advance Table 2 (secondary ign load) (deg. BTDC)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -10915,7 +10915,7 @@ most &quot;Weight&quot;</property>
 				      <child>
 					<widget class="GtkLabel" id="SP2_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">MAP Bins</property>
+					  <property name="label" translatable="yes">Ign Load2</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -17976,7 +17976,7 @@ most &quot;Weight&quot;</property>
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MegaSquirtnSpark-Extra Spark Tables</property>
+	  <property name="label" translatable="yes">MS2--Extra Spark Tables</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
