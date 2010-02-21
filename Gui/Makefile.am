@@ -52,6 +52,8 @@ gui_files = 	README \
 		ms2-knock_dwell.datamap \
 		ms2-misc-fuel.glade \
 		ms2-misc-fuel.datamap \
+		ms2-e-rotary-split.glade \
+		ms2-e-rotary-split.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
 		msns-e-accelwizard.glade \

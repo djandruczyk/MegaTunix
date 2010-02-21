@@ -94,7 +94,7 @@ sub-notebook=VE16_vetable_notebook
 
 [VE2_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=dt_controls
+bind_to_list=dual_table
 
 [topframe_title]
 keys=set_label
@@ -340,7 +340,7 @@ table_num=3
 
 [VE2_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=dt_controls
+bind_to_list=dual_table
 table_num=4
 
 [VE3_vbox1]

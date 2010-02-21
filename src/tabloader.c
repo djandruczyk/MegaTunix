@@ -110,7 +110,14 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		if (cfgfile)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
+
 			label = gtk_label_new_with_mnemonic(tab_name);
+			if (cfg_read_string(cfgfile,"global","bind_to_list",&tmpbuf))
+			{
+				OBJ_SET(label,"bind_to_list",g_strdup(tmpbuf));
+				bind_to_lists(label,tmpbuf);
+				g_free(tmpbuf);
+			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			topframe = glade_xml_get_widget(xml,"topframe");
 			/* bind_data() is recursive and will take 

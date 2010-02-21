@@ -3,6 +3,7 @@ description=Object data map for the combined AFRtables tab
 tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,rpm_1,afr_1,load_2,rpm_2,afr_2
+bind_to_list=ego_ctrl
 
 #----- Groups ----------------------------------------------------------------
 
@@ -244,7 +245,7 @@ divider_offset=149
 keys=tab_ident,sub-notebook,bind_to_list
 tab_ident=_AFRTABLES_TAB_
 sub-notebook=AFR_afrtable_notebook
-bind_to_list=valid_ecu_ctrls
+bind_to_list=valid_ecu_ctrls,ego_ctrl
 
 [AFR1_vbox1]
 keys=table_num
