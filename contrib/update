@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cvs update -dP && autogen.sh && make clean && make -j2 
+
+sudo make install
