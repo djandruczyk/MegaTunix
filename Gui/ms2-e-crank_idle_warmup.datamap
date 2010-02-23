@@ -3,6 +3,7 @@ description=Object data map for MS-II-Extra Idle/Crank/Warmup
 tab_name=_Idle/Crank/Warmup
 id_prefix=ICW_
 groups=defaults,temp,cp,pp,ase,aset,wue_temp,wue,coldadv,iacstep,ipwm,duty,steps,idletemp,idlerpm
+ellipsize=TRUE
 
 #----- Groups ----------------------------------------------------------------
 

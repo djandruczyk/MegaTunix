@@ -54,6 +54,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
 	gchar * tab_name = NULL;
+	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
 	GtkWidget *topframe = NULL;
 	GHashTable *groups = NULL;
@@ -112,6 +113,11 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 
 			label = gtk_label_new_with_mnemonic(tab_name);
+			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
+			{
+				if (tmpi)
+					gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_END);
+			}
 			if (cfg_read_string(cfgfile,"global","bind_to_list",&tmpbuf))
 			{
 				OBJ_SET(label,"bind_to_list",g_strdup(tmpbuf));

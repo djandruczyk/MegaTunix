@@ -3,6 +3,7 @@ description=Object data map for the MS2-Extra Boost/KnockLaunch Tab
 tab_name=_Boost/Knock/Launch
 id_prefix=BKL_
 groups=defaults
+ellipsize=TRUE
 
 #----- Groups ----------------------------------------------------------------
 
