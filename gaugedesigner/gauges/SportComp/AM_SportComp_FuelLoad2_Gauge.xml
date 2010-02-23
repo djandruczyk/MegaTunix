@@ -65,7 +65,7 @@
   <main_sweep_angle>270</main_sweep_angle>
   <rotation>1</rotation>
   <lbound>0</lbound>
-  <ubound>100</ubound>
+  <ubound>255</ubound>
   <value_font>arial Bold</value_font>
   <value_font_scale>0.2000000</value_font_scale>
   <value_str_xpos>0</value_str_xpos>
@@ -128,9 +128,9 @@
   </text_block>
   <tick_group>
     <layer>0</layer>
-    <font>Arial Bold</font>
-    <font_scale>0.135000</font_scale>
-    <text>0,10,20,30,40,50,60,70,80,90,100</text>
+    <font>Arial</font>
+    <font_scale>0.110000</font_scale>
+    <text>0,20,40,60,80,100,120,140,160,180,200,220,240</text>
     <text_inset>0.280000</text_inset>
     <text_color_day>
       <red>55769</red>
@@ -142,7 +142,7 @@
       <green>8481</green>
       <blue>8481</blue>
     </text_color_nite>
-    <num_maj_ticks>11</num_maj_ticks>
+    <num_maj_ticks>14</num_maj_ticks>
     <maj_tick_color_day>
       <red>52428</red>
       <green>52428</green>
