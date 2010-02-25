@@ -40,6 +40,8 @@ gui_files = 	README \
 		ms2-e-globals.datamap \
 		ms2-e-ignition.glade \
 		ms2-e-ignition.datamap \
+		ms2-e-nitrous_staging_orfc.glade \
+		ms2-e-nitrous_staging_orfc.datamap \
 		ms2-e-noise_lag.glade \
 		ms2-e-noise_lag.datamap \
 		ms2-e-toothtrigger.glade \

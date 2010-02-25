@@ -129,7 +129,7 @@ choices=MS2 AD6/JS5,MS2 AD7/JS4,GPIO1 GPI1 AD0,GPIO1 GPI2 AD1,GPIO1 GPI3 AD2,GPI
 bitvals=6,7,8,9,10,14,15
 offset=991
 bitmask=15
-bind_to_list=dual_baro
+bind_to_list=baro_dual
 tooltip=Realtime baro source port
 
 [eae_combo]

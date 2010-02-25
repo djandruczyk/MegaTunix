@@ -463,6 +463,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"labels",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"lim_offset",
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"log_by_default",
@@ -538,6 +540,8 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"te_table_num",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"te_tables",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"toggle_labels",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"toggle_groups",
 			GINT_TO_POINTER(MTX_STRING));

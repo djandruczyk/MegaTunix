@@ -153,6 +153,7 @@ void toggle_groups_linked(GtkWidget *, gboolean);
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 void combo_toggle_groups_linked(GtkWidget *,gint);
+void combo_toggle_labels_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
 EXPORT void update_misc_gauge(DataWatch *);
@@ -162,6 +163,7 @@ EXPORT gboolean clamp_value(GtkWidget *, gpointer);
 void recalc_table_limits(gint, gint);
 gboolean update_multi_expression(gpointer);
 void refocus_cell(GtkWidget *, Direction);
+void set_widget_label_from_array(gpointer, gpointer);
 
 
 /* Prototypes */

@@ -1274,7 +1274,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 		vector = g_strsplit(set_labels,",",-1);
 		if ((g_strv_length(vector)%(total+1)) != 0)
 		{
-			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem wiht set_widget_labels, counts don't match up\n"));
+			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
 			goto combo_download;
 		}
 		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
@@ -1980,6 +1980,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean new_state = FALSE;
 	gint algo = 0;
 	gint total = 0;
+	gchar * toggle_labels = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
@@ -2050,6 +2051,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 	precision = (gint)OBJ_GET(widget,"precision");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
 	if (use_color)
@@ -2297,6 +2299,8 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_widget_modify_base(GTK_BIN(widget)->child,GTK_STATE_NORMAL,&red);
 		return;
 combo_toggle:
+		if (toggle_labels)
+			combo_toggle_labels_linked(widget,i);
 		if (toggle_groups)
 			combo_toggle_groups_linked(widget,i);
 		if (swap_list)
@@ -3108,6 +3112,63 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	/*printf ("DONE!\n\n\n");*/
 	g_strfreev(choices);
 }
+
+
+
+
+/*!
+ * \brief combo_toggle_labels_linked is used to change the state of controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param widget, combo button
+ * \param active, which entry in list was selected
+ */
+void combo_toggle_labels_linked(GtkWidget *widget,gint active)
+{
+	gint num_groups = 0;
+	gint i = 0;
+	gchar **groups = NULL;
+	gchar * toggle_labels = NULL;
+	extern gboolean ready;
+
+	if (!ready)
+		return;
+	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
+
+	groups = parse_keys(toggle_labels,&num_groups,",");
+	/* toggle_labels is a list of groups of widgets that need to have their 
+	 * label reset to a specific one from an array bound to that widget.
+	 * So we get the names of those groups, and call "set_widget_label_from_array"
+	 * passing in the index of the one in the array we want
+	 */
+	for (i=0;i<num_groups;i++)
+		g_list_foreach(get_list(groups[i]),set_widget_label_from_array,GINT_TO_POINTER(active));
+
+	g_strfreev(groups);
+}
+
+
+void set_widget_label_from_array(gpointer key, gpointer data)
+{
+	gchar *labels = NULL;
+	gchar **vector = NULL;
+	GtkWidget *label = (GtkWidget *)key;
+	gint index = (gint)data;
+
+	if (!GTK_IS_LABEL(label))
+		return;
+	labels = OBJ_GET(label,"labels");
+	if (!labels)
+		return;
+	vector = g_strsplit(labels,",",-1);
+	if (index > g_strv_length(vector))
+		return;
+	gtk_label_set_text(GTK_LABEL(label),vector[index]);
+	g_strfreev(vector);
+	return;
+}
+
 
 
 gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
