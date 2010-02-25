@@ -34,6 +34,8 @@ gui_files = 	README \
 		ms2-e-accel.datamap \
 		ms2-e-boost_knock_launch.glade \
 		ms2-e-boost_knock_launch.datamap \
+		ms2-e-boost_8x8x2.glade \
+		ms2-e-boost_8x8x2.datamap \
 		ms2-e-crank_idle_warmup.glade \
 		ms2-e-crank_idle_warmup.datamap \
 		ms2-e-globals.glade \

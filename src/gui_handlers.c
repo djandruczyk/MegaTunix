@@ -3382,6 +3382,11 @@ void recalc_table_limits(gint canID, gint table_num)
 		if (tmpi < min)
 			min = tmpi;
 	}
+	if (min == max)	/* FLAT table, causes black screen */
+	{
+		min -= 10;
+		max += 10;
+	}
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
 	return;
