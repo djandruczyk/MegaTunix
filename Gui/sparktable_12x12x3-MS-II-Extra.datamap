@@ -112,7 +112,7 @@ bind_to_list=secondary_ign
 keys=page,table_num,bind_to_list
 page=3
 table_num=8
-bind_to_list=ign_table_switching
+bind_to_list=spark_switching
 
 [SP1_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
@@ -238,7 +238,7 @@ bind_to_list=secondary_ign
 
 [SP3_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=ign_table_switching
+bind_to_list=spark_switching
 
 #----- Buttons ---------------------------------------------------------------
 

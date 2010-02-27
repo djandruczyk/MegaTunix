@@ -112,35 +112,38 @@ use_color=FALSE
 tooltip=The IACstep bins determine the IAC actuator position based on temperature. 
 
 [ipwm]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
 page=0
 size=_S16_
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
+precision=1
 use_color=FALSE
 tooltip=The Idle PWM Dutycycle bins determine the IAC actuator position based on temperature. 
 
 [duty]
-keys=page,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,precision,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
 page=1
 size=_U16_
 precision=0
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
-raw_lower=0
-raw_upper=255
+precision=1
+raw_upper=256
 use_color=FALSE
 tooltip=The Duty bins are what the Idle actuator is set to  during cranking.
 to assist with startup.
 
 [steps]
-keys=page,size,raw_lower,raw_upper,use_color,tooltip
+keys=page,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-raw_lower=0
-raw_upper=512
+dl_conv_expr=x/0.39063
+ul_conv_expr=x*0.39063
+precision=1
+raw_upper=256
 use_color=FALSE
 tooltip=The step bins determine the IAC actuator position for cranking based on temperature. 
 
@@ -1207,27 +1210,30 @@ raw_upper=100
 tooltip=Unknown, see MegaManual
 
 [idle_open_duty_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 page=1
 offset=35
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
+precision=1
 tooltip=Unknown, see MegaManual
 
 [idle_closed_duty_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 page=1
 offset=36
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
+precision=1
 tooltip=Unknown, see MegaManual
 
 [dashpot_adder_duty_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 page=1
 offset=43
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
+precision=1
 tooltip=Unknown, see MegaManual
 
 [idle_open_steps_entry]
@@ -1275,11 +1281,12 @@ raw_upper=10
 tooltip=Unknown, see MegaManual
 
 [min_duty_pid_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=1
 offset=38
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
+precision=1
 bind_to_list=pwm_closedloop
 tooltip=Unknown, see MegaManual
 

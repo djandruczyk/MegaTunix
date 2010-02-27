@@ -98,7 +98,7 @@ bind_to_list=dual_table
 
 [VE3_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=fuel_table_switching
+bind_to_list=fuel_switching
 
 [topframe_title]
 keys=set_label
@@ -307,7 +307,7 @@ table_num=4
 
 [VE3_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=fuel_table_switching
+bind_to_list=fuel_switching
 table_num=5
 
 #----- Gauges --------------------------------------------------------------
