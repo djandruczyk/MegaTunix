@@ -3,10 +3,10 @@ headers = \
 	2d_table_editor.h \
 	3d_vetable.h \
 	about_gui.h \
+	afr_calibrate.h \
 	api-versions.h \
 	apicheck.h \
 	args.h \
-	binreloc.h \
 	comms.h \
         comms_gui.h \
         combo_loader.h \
@@ -14,6 +14,7 @@ headers = \
         configfile.h \
         conversions.h \
         core_gui.h \
+	crx.h \
         dashboard.h \
         dataio.h \
 	datamgmt.h \
@@ -34,6 +35,7 @@ headers = \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
+	loader_common.h \
 	locking.h \
         logo.h \
         logviewer_core.h \
@@ -44,6 +46,12 @@ headers = \
 	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
+	ms1_loader.h \
+	ms2_loader.h \
+	ms1-t-logger.h \
+	ms2-t-logger.h \
+	mtxloader.h \
+	mtxsocket.h \
         multi_expr_loader.h \
         notifications.h \
 	offline.h \
@@ -60,17 +68,17 @@ headers = \
 	stringmatch.h \
         tabloader.h \
         tag_loader.h \
-        thermistor.h \
+        therm.h \
         threads.h \
         timeout_handlers.h \
         tuning_gui.h \
-	t-logger.h \
         unions.h \
 	user_outputs.h \
         vetable_gui.h \
 	vex_support.h \
 	visibility.h \
 	warmwizard_gui.h \
+	watches.h \
 	widgetmgmt.h \
 	winserialio.h \
 	xmlbase.h \

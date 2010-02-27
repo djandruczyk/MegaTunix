@@ -77,6 +77,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(NUMMATCH));
 	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
 			GINT_TO_POINTER(FULLMATCH));
+	g_hash_table_insert(str_2_enum,"_REGEX_",
+			GINT_TO_POINTER(REGEX));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",

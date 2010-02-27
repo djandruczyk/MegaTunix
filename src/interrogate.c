@@ -17,6 +17,7 @@
 #include <apicheck.h>
 #include <config.h>
 #include <configfile.h>
+#include <crx.h>
 #include <dataio.h>
 #include <defines.h>
 #include <debugging.h>
@@ -1137,6 +1138,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	ConfigFile *cfgfile = NULL;
 	Detection_Test *test = NULL;
 	guint i = 0;
+	gint len = 0;
 	gboolean pass = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
@@ -1208,6 +1210,10 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 				break;
 			case FULLMATCH:
 				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
+					pass=TRUE;
+				break;
+			case REGEX:
+				if (regex(vector[1],test->result_str,&len))
 					pass=TRUE;
 				break;
 			default:

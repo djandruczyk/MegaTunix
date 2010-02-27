@@ -14,112 +14,6 @@
 #ifndef __ENUMS_H__
 #define __ENUMS_H__
 
-/* Serial data comes in and handled by the following possibilities.
- * dataio.c uses these to determine which course of action to take...
- */
-typedef enum
-{
-	REALTIME_VARS=0,
-	VE_BLOCK,
-	RAW_MEMORY_DUMP,
-	C_TEST,
-	GET_ERROR,
-	NULL_HANDLER
-}InputHandler;
-
-/* Regular Buttons */
-typedef enum
-{
-	START_REALTIME = 0x20,
-	STOP_REALTIME,
-	START_PLAYBACK,
-	STOP_PLAYBACK,
-	READ_VE_CONST,
-	READ_RAW_MEMORY,
-	BURN_MS_FLASH,
-	INTERROGATE_ECU,
-	OFFLINE_MODE,
-	SELECT_DLOG_EXP,
-	SELECT_DLOG_IMP,
-	SELECT_FIRMWARE_LOAD,
-	ENTER_SENSOR_INFO,
-	DOWNLOAD_FIRMWARE,
-	DLOG_SELECT_DEFAULTS,
-	DLOG_SELECT_ALL,
-	DLOG_DESELECT_ALL,
-	DLOG_DUMP_INTERNAL,
-	CLOSE_LOGFILE,
-	START_DATALOGGING,
-	STOP_DATALOGGING,
-	EXPORT_VETABLE,
-	IMPORT_VETABLE,
-	REBOOT_GETERR,
-	REVERT_TO_BACKUP,
-	BACKUP_ALL,
-	RESTORE_ALL,
-	SELECT_PARAMS,
-	REQ_FUEL_POPUP,
-	RESCALE_TABLE,
-	REQFUEL_RESCALE_TABLE,
-	EXPORT_SINGLE_TABLE,
-	IMPORT_SINGLE_TABLE
-}StdButton;
-
-/* Toggle/Radio buttons */
-typedef enum
-{
-	TOOLTIPS_STATE=0x50,
-	TRACKING_FOCUS,
-        FAHRENHEIT,
-        CELSIUS,
-	COMMA,
-	TAB,
-	USE_ALT_IAT,
-	USE_ALT_CLT,
-	REALTIME_VIEW,
-	PLAYBACK_VIEW,
-	HEX_VIEW,
-	BINARY_VIEW,
-	DECIMAL_VIEW,
-	OFFLINE_FIRMWARE_CHOICE,
-	START_TOOTHMON_LOGGER,
-	START_TRIGMON_LOGGER,
-	STOP_TOOTHMON_LOGGER,
-	STOP_TRIGMON_LOGGER,
-	COMM_AUTODETECT
-}ToggleButton;
-
-	
-/* spinbuttons... */
-typedef enum
-{
-	REQ_FUEL_DISP=0x80,
-	REQ_FUEL_CYLS,
-	REQ_FUEL_RATED_INJ_FLOW,
-	REQ_FUEL_RATED_PRESSURE,
-	REQ_FUEL_ACTUAL_PRESSURE,
-	REQ_FUEL_AFR,
-	LOCKED_REQ_FUEL,
-	REQ_FUEL_1,
-	REQ_FUEL_2,
-	SER_INTERVAL_DELAY,
-	SET_SER_PORT,
-	NUM_SQUIRTS_1,
-	NUM_SQUIRTS_2,
-	NUM_CYLINDERS_1,
-	NUM_CYLINDERS_2,
-	NUM_INJECTORS_1,
-	NUM_INJECTORS_2,
-	TRIGGER_ANGLE,
-	ODDFIRE_ANGLE,
-	LOGVIEW_ZOOM,
-	DEBUG_LEVEL,
-	GENERIC,
-	BAUD_CHANGE,
-	MAP_SENSOR_TYPE,
-	ALT_SIMUL
-}SpinButton;
-
 /* Runtime Status flags */
 typedef enum 
 {       
@@ -155,26 +49,6 @@ typedef enum
 
 typedef enum
 {
-	HEADER=0xd0,
-	PAGE,
-	RANGE,
-	TABLE
-}ImportParserFunc;
-
-typedef enum
-{
-	VEX_EVEME=0xe0,
-	VEX_USER_REV,
-	VEX_USER_COMMENT,
-	VEX_DATE,
-	VEX_TIME,
-	VEX_RPM_RANGE,
-	VEX_LOAD_RANGE,
-	VEX_NONE
-}ImportParserArg;
-
-typedef enum
-{
 	FONT=0x100,
 	TRACE,
 	GRATICULE,
@@ -184,59 +58,9 @@ typedef enum
 }GcType;
 
 typedef enum
-{	/* up to 32 Capability flags.... */
-	/* No capabilities == Standard B&G code with no modifications */
-	MS1		= 1<<0,
-	MS1_STD		= 1<<1,
-	MSNS_E		= 1<<2,
-	DUALTABLE	= 1<<3,
-	MS2		= 1<<4,
-	MS2_STD		= 1<<5,
-	MS2_EXTRA	= 1<<6
-}Capability;
-
-typedef enum
 {
-	NO_DEBUG 	= 0,
-	INTERROGATOR 	= 1<<0,
-	OPENGL		= 1<<1,
-	CONVERSIONS	= 1<<2,
-	SERIAL_RD	= 1<<3,
-	SERIAL_WR	= 1<<4,
-	IO_PROCESS	= 1<<5,
-	THREADS		= 1<<6,
-	REQ_FUEL	= 1<<7,
-	TABLOADER	= 1<<8,
-	KEYPARSER	= 1<<9,
-	RTMLOADER	= 1<<10,
-	COMPLEX_EXPR	= 1<<11,
-	CRITICAL	= 1<<30
-}Dbg_Class;
-
-typedef enum guint
-{
-	INTERROGATOR_SHIFT	= 0,
-	OPENGL_SHIFT		= 1,
-	CONVERSIONS_SHIFT	= 2,
-	SERIAL_RD_SHIFT		= 3,
-	SERIAL_WR_SHIFT		= 4,
-	IO_PROCESS_SHIFT	= 5,
-	THREADS_SHIFT		= 6,
-	REQ_FUEL_SHIFT		= 7,
-	TABLOADER_SHIFT		= 8,
-	KEYPARSER_SHIFT		= 9,
-	RTMLOADER_SHIFT		= 10,
-	COMPLEX_EXPR_SHIFT	= 11,
-	CRITICAL_SHIFT		= 30
-}Dbg_Shift;
-
-typedef enum
-{
-	BURN_CMD = 0x130,
-	READ_CMD,
-	WRITE_CMD,
+	WRITE_CMD = 0x130,
 	NULL_CMD,
-	INTERROGATION,
 	FUNC_CALL
 }CmdType;
 
@@ -267,6 +91,7 @@ typedef enum
 	DT_PARAMS_TAB,
 	IGNITON_TAB,
 	RUNTIME_TAB,
+	ACCEL_WIZ_TAB,
 	ENRICHMENTS_TAB,
 	TUNING_TAB,
 	TOOLS_TAB,
@@ -275,6 +100,7 @@ typedef enum
 	VETABLES_TAB,
 	SPARKTABLES_TAB,
 	AFRTABLES_TAB,
+	ALPHA_N_TAB,
 	BOOSTTABLES_TAB,
 	ROTARYTABLES_TAB,
 	DATALOGGING_TAB,
@@ -287,7 +113,8 @@ typedef enum
 {
 	VE_EMB_BIT=0x1c0,
 	VE_VAR,
-	RAW_VAR
+	RAW_VAR,
+	RAW_EMB_BIT
 }ComplexExprType;
 
 typedef enum
@@ -322,6 +149,7 @@ typedef enum
 	LV_PLAYBACK_TICKLER,
 	TOOTHMON_TICKLER,
 	TRIGMON_TICKLER,
+	COMPOSITEMON_TICKLER,
 	SCOUNTS_TICKLER
 }TicklerType;
 
@@ -364,14 +192,6 @@ typedef enum
 
 typedef enum
 {
-	COUNT=0x260,
-	NUMMATCH,
-	SUBMATCH,
-	FULLMATCH
-}MatchClass;
-
-typedef enum
-{
 	LV_PLAYBACK=0x270,
 	LV_REALTIME
 }Lv_Mode;
@@ -402,7 +222,10 @@ typedef enum
 	MS2_RT_VARS,
 	MS1_GETERROR,
 	MS1_E_TRIGMON,
-	MS1_E_TOOTHMON
+	MS1_E_TOOTHMON,
+	MS2_E_TRIGMON,
+	MS2_E_TOOTHMON,
+	MS2_E_COMPOSITEMON
 }XmlCmdType;
 
 typedef enum
@@ -426,13 +249,6 @@ typedef enum
 
 typedef enum
 {
-	INBOUND=0x2E0,
-	OUTBOUND,
-	BOTH
-}FlushDirection;
-
-typedef enum
-{
 	ADD=0,
 	SUBTRACT,
 	MULTIPLY,
@@ -449,5 +265,25 @@ typedef enum
 	DEP_BITSHIFT,
 	DEP_BITVAL
 }DepVector;
+
+typedef enum
+{
+	_X_ = 0x420,
+	_Y_,
+	_Z_
+}Axis;
+
+typedef enum
+{
+        CLT=0x430,
+        IAT
+}SensorType;
+
+
+typedef enum
+{
+	LOWER=0x440,
+	UPPER
+}Extreme;
 
 #endif

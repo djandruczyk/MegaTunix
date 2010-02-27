@@ -965,8 +965,16 @@ void recalc_extremes(MtxCurvePrivate *priv)
         }
 	if  (priv->lowest_x == priv->highest_x) /* Vertical Line */
 	{
-		priv->lowest_x *= 0.75;
-		priv->highest_x *= 1.25;
+		if ( priv->lowest_x == 0.0)	/* Special case */
+		{
+			priv->lowest_x -= 10;
+			priv->highest_x += 10;
+		}
+		else
+		{
+			priv->lowest_x *= 0.75;
+			priv->highest_x *= 1.25;
+		}
 	}
 	else
 	{
@@ -975,8 +983,16 @@ void recalc_extremes(MtxCurvePrivate *priv)
 	}
 	if  (priv->lowest_y == priv->highest_y) /* Horizontal Line */
 	{
-		priv->lowest_y *= 0.75;
-		priv->highest_y *= 1.25;
+		if ( priv->lowest_y == 0.0)	/* Special case */
+		{
+			priv->lowest_y -= 10;
+			priv->highest_y += 10;
+		}
+		else
+		{
+			priv->lowest_y *= 0.75;
+			priv->highest_y *= 1.25;
+		}
 	}
 	else
 	{
