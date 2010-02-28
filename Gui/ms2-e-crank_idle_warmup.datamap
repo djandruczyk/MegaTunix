@@ -8,9 +8,11 @@ ellipsize=TRUE
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,dl_type,handler
+keys=page,size,dl_type,raw_lower,raw_upper,handler
 page=0
 size=_U08_
+raw_lower=0
+raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -29,43 +31,39 @@ bind_to_list=temperature
 tooltip=The temp table is common to the cranking pulse, priming pulse, ase, ase taper, idle step, idle pwm, cold advance and X-Tau compensation tables.
 
 [cp]
-keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,use_color,tooltip
+keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_U16_
 dl_conv_expr=x-1
 ul_conv_expr=x+1
 precision=0
-raw_lower=0
 raw_upper=10000
 use_color=FALSE
 tooltip=The Crank pulse bins are the amount in % of injected fuel per crank pulse at the specified temp (far left column)
 
 [pp]
-keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,use_color,tooltip
+keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-raw_lower=0
 raw_upper=650
 use_color=FALSE
 tooltip=The Prime pulse bins are the amount in MS of injected fuel at power on at the specified temp (far left column)
 
 [ase]
-keys=page,size,raw_lower,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=1
 size=_S16_
-raw_lower=0
 raw_upper=400
 use_color=FALSE
 tooltip=The ASE bins are the amount in % of injected fuel at during afterstart enrichment at the temp specified (far left column).
 
 [aset]
-keys=page,size,raw_lower,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=1
 size=_S16_
-raw_lower=0
 raw_upper=2500
 use_color=FALSE
 tooltip=The ASE count bins are the total number of cycles that ASE will be enabled for right after engine start.
@@ -103,19 +101,17 @@ tooltip=The Cold Advance bins add additional spark advance based on temperature
 to assist with warmup performance.
 
 [iacstep]
-keys=page,size,raw_lower,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=0
 size=_S16_
-raw_lower=0
 raw_upper=500
 use_color=FALSE
 tooltip=The IACstep bins determine the IAC actuator position based on temperature. 
 
 [ipwm]
-keys=page,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
 page=0
 size=_S16_
-raw_lower=0
 raw_upper=255
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
@@ -162,10 +158,9 @@ bind_to_list=temperature
 tooltip=This is the temp for the coolant vs RPM for closed loop idle control
 
 [idlerpm]
-keys=page,size,raw_lower,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-raw_lower=0
 raw_upper=2000
 use_color=FALSE
 tooltip=The RPM bins for closed loop idle control
@@ -1016,20 +1011,18 @@ offset=14
 group=idlerpm
 
 [crank_rpm_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=20
 size=_S16_
-raw_lower=0
 raw_upper=3000
 tooltip=Cranking RPM threshold, above this, engine is considered running, and will use the VEtable, below and it'll use the cranking tables
 
 [flood_clear_tps_entry]
-keys=offset,precision,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
 offset=588
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-raw_lower=0
 raw_upper=1000
 precision=1
 tooltip=Throttle position in percentage, where if above this level during cranking, fuel is shutoff (Flood clear mode)
@@ -1121,26 +1114,23 @@ offset=550
 tooltip=Unknown, see MegaManual
 
 [idle_start_val_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=552
 size=_S16_
-raw_lower=0
 raw_upper=4000
 tooltip=Unknown, see MegaManual
 
 [idle_start_val_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=552
 size=_S16_
-raw_lower=0
 raw_upper=4000
 tooltip=Unknown, see MegaManual
 
 [iac_idle_taper_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=558
 size=_S16_
-raw_lower=0
 raw_upper=32767
 tooltip=Unknown, see MegaManual
 
@@ -1158,26 +1148,23 @@ bind_to_list=temperature
 tooltip=Unknown, see MegaManual
 
 [idle_cold_position_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=562
 size=_S16_
-raw_lower=0
 raw_upper=4000
 tooltip=Unknown, see MegaManual
 
 [idle_cold_taper_time_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=564
 size=_S16_
-raw_lower=0
 raw_upper=32767
 tooltip=Unknown, see MegaManual
 
 [crank_to_run_taper_entry]
-keys=page,offset,raw_lower,raw_upper,tooltip
+keys=page,offset,raw_upper,tooltip
 page=1
 offset=1003
-raw_lower=0
 raw_upper=100
 tooltip=Unknown, see MegaManual
 
@@ -1202,10 +1189,9 @@ bind_to_list=pwm_common
 tooltip=Sets the PWM actuator drive frequency, above 152.5Hz, the valve works in 2% steps
 
 [pwm_crank_to_run_taper_entry]
-keys=page,offset,raw_lower,raw_upper,tooltip
+keys=page,offset,raw_upper,tooltip
 page=1
 offset=1003
-raw_lower=0
 raw_upper=100
 tooltip=Unknown, see MegaManual
 

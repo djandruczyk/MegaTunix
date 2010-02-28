@@ -368,10 +368,9 @@ ul_conv_expr=x*(352/1000)
 tooltip=This is global offset for the crank table, to shift all values one way or another.
 
 [ign_hold_entry]
-keys=page,offset,raw_lower,raw_upper,tooltip
+keys=page,offset,raw_upper,tooltip
 page=3
 offset=172
-raw_lower=0
 raw_upper=100
 tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
 
@@ -393,10 +392,9 @@ raw_upper=80
 tooltip=This is the ignition dwell during normal engine running. 
 
 [min_discharge_entry]
-keys=offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
 offset=143
 precision=1
-raw_lower=0
 raw_upper=15
 dl_conv_expr=x*10
 ul_conv_expr=x/10

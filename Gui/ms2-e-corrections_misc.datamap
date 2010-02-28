@@ -33,10 +33,9 @@ ul_conv_expr=x*2
 tooltip=Dwell correction/compensation value corresponding to voltage at the left
 
 [NLbaro]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=1
 size=_S16_
-raw_lower=0
 raw_upper=4000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -95,10 +94,9 @@ precision=1
 tooltip=MAT-Based Timing retard retard values in degrees
 
 [iafuel]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=3
 size=_S16_
-raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -358,11 +356,10 @@ raw_upper=15000
 tooltip=Fuel Table Switching RPM threshold
 
 [fuel_switch_kpa_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=1
 offset=922
 size=_S16_
-raw_lower=0
 raw_upper=4000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -370,11 +367,10 @@ precision=1
 tooltip=Fuel Table Switching kPa threshold
 
 [fuel_switch_tps_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=1
 offset=924
 size=_S16_
-raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -390,11 +386,10 @@ raw_upper=15000
 tooltip=Fuel Table Switching RPM threshold
 
 [spark_switch_kpa_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=1
 offset=928
 size=_S16_
-raw_lower=0
 raw_upper=4000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -402,11 +397,10 @@ precision=1
 tooltip=Fuel Table Switching kPa threshold
 
 [spark_switch_tps_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=1
 offset=930
 size=_S16_
-raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -414,11 +408,10 @@ precision=1
 tooltip=Fuel Table Switching TPS threshold
 
 [ia_tps_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=3
 offset=388
 size=_S16_
-raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -426,20 +419,18 @@ precision=1
 tooltip=Idle Advance TPS threshold
 
 [ia_rpm_entry]
-keys=page,offset,size,raw_lower,raw_upper,tooltip
+keys=page,offset,size,raw_upper,tooltip
 page=3
 offset=390
 size=_S16_
-raw_lower=0
 raw_upper=3000
 tooltip=Idle Advance TPS threshold
 
 [ia_load_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
 page=3
 offset=392
 size=_S16_
-raw_lower=0
 raw_upper=1000
 dl_conv_expr=x*10
 ul_conv_expr=x/10

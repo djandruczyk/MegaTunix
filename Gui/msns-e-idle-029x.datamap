@@ -197,10 +197,9 @@ bind_to_list=warmup_idle_controls
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,raw_lower,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 page=8
 offset=11
-raw_lower=0
 raw_upper=255
 precision=1
 reverse_keys=TRUE

@@ -7,9 +7,11 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,dl_type,handler
+keys=page,size,raw_lower,raw_upper,dl_type,handler
 page=0
 size=_U08_
+raw_lower=0
+raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -235,10 +237,9 @@ bind_to_list=amc_flash
 tooltip=This is the minimum number of AMC RAM VE updates that have to be made before the program will burn the table to FLASH (only used when FLASH Update is selected).
 
 [cranking_speed_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=20
 size=_S16_
-raw_lower=0
 raw_upper=3000
 tooltip=This is the cranking RPM threshold.  this should be set slightly higher than your maximum engine cranking speed,  but below idle speed.,  typical value is around 300.
 
@@ -275,37 +276,33 @@ ul_conv_expr=x/10
 tooltip=Amount of spark retard when NOS active via the E0 input being low.
 
 [map_above_rpm_entry]
-keys=page,offset,size,raw_lower,raw_upper,tooltip
+keys=page,offset,size,raw_upper,tooltip
 page=1
 offset=936
 size=_U16_
-raw_lower=0
 raw_upper=10000
 tooltip=Use MAP exclusively above the specified RPM.
 
 [maf_below_rpm_entry]
-keys=page,offset,size,raw_lower,raw_upper,tooltip
+keys=page,offset,size,raw_upper,tooltip
 page=1
 offset=938
 size=_U16_
-raw_lower=0
 raw_upper=10000
 tooltip=Use MAF exclusively below the specified RPM.
 
 [an_to_blend_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+keys=offset,size,raw_upper,tooltip,bind_to_list
 offset=634
 size=_S16_
-raw_lower=0
 raw_upper=15000
 bind_to_list=an_controls
 tooltip=The RPM threshold to change between Pure Alpha N to Blend mode.
 
 [blend_to_sd_entry]
-keys=offset,size,raw_lower,raw_upper,tooltip,bind_to_list
+keys=offset,size,raw_upper,tooltip,bind_to_list
 offset=636
 size=_S16_
-raw_lower=0
 raw_upper=15000
 bind_to_list=an_controls
 tooltip=The RPM threshold to change between Blended mode and pure SD mode

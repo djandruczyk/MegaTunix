@@ -130,16 +130,14 @@ raw_upper=150
 tooltip=alpha (α) should be > 50% and < 150%; (default is 90%). The value of alpha will be typically be 90 to 100% or a bit higher. 
 
 [beta_entry]
-keys=offset,raw_lower,raw_upper,tooltip
+keys=offset,raw_upper,tooltip
 offset=991
-raw_lower=0
 raw_upper=100
 tooltip=beta (β) should be < 100%, (default is 80%) The value of beta will be moderately small so that speed estimates are not unduly affected by variations from input data. A typical value is around 5% to 80%.
 
 [gamma_entry]
-keys=offset,raw_lower,raw_upper,tooltip
+keys=offset,raw_upper,tooltip
 offset=992
-raw_lower=0
 raw_upper=50
 tooltip=gamma (γ) should be < 50% (default is 10%). The gamma gain term helps to track changes with less sensitivity to input data and helps to maintain consistency between the velocity and acceleration variables.  A typical value is around 10%. 
 
@@ -152,9 +150,8 @@ ul_conv_expr=x*0.1
 tooltip=Time Mask time (milliseconds) after tach input capture during which further interrupts are inhibited to mask coil ring or VR noise.
 
 [percent_mask_entry]
-keys=offset,raw_lower,raw_upper,tooltip
+keys=offset,raw_upper,tooltip
 offset=972
-raw_lower=0
 raw_upper=200
 tooltip=Percentage Mask is the percentage of the predicted interval before the next tooth (dtpred) after the last tach input capture during which further interrupts are inhibited to mask coil ring or VR sensor noise. 
 

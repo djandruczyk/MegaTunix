@@ -7,9 +7,11 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,dl_type,handler
+keys=page,size,raw_lower,raw_upper,dl_type,handler
 page=0
 size=_U08_
+raw_lower=0
+raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -349,10 +351,9 @@ precision=1
 tooltip=Cranking Timing Advance
 
 [oddfire_small_angle_entry]
-keys=offset,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=620
 size=_U16_
-raw_lower=0
 raw_upper=7200
 dl_conv_expr=x/0.1
 ul_conv_expr=x*0.1
@@ -361,9 +362,8 @@ bind_to_list=oddfire
 tooltip=For oddfire engines, this is the smaller of the two angles between ignition events
 
 [spark_latency_entry]
-keys=offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=732
-raw_lower=0
 raw_upper=170
 dl_conv_expr=x/0.66667
 ul_conv_expr=x*0.66667

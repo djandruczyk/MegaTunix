@@ -107,17 +107,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			choice, uses translate_string() to convert to an integer
 	toggle_groups	(string) List of groups of widgets to enable/disable
 			based on the state of this control.
-	toggle_group	(string) Name of group of widgets to enable/disable
-			based on the state of this control.
-	invert_states	(comma seperated list of booleans) Determines if the 
-			group being toggled needs to be enabled or disabled 
-			depending on button state.
-			Swap from TRUE to FALSE when on-screen behavior is
-			backwards to what you want...
-	invert_state	(boolean) Determines if the group being toggled needs
-			to be enabled or disabled depending on button state.
-			Swap from TRUE to FALSE when on-screen behavior is
-			backwards to what you want...
 	dl_type		(enum) Normal values are IMMEDIATE (means send the 
 			value right away) and DEFERRED, meaning that the
 			control is usually dependant on some calculation or

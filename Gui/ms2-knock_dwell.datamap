@@ -83,11 +83,10 @@ ul_conv_expr=x*0.01
 tooltip=This is the voltage from the knock sensor module which defines whether there is knock occurring or not. Note that you can define a 6-element table of rpm versus voltage instead of a single value. You define this table under 'Settings/Knock Threshold'.
 
 [knock_peak_entry]
-keys=size,offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
 size=_S16_
 offset=540
 precision=2
-raw_lower=0
 raw_upper=500
 dl_conv_expr=x/0.01
 ul_conv_expr=x*0.01

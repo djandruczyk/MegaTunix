@@ -454,11 +454,10 @@ choices=TPSdot,MAPdot
 tooltip=This Sets the EAE LAg compensation source
 
 [lag_thresold_entry]
-keys=page,size,offset,raw_lower,raw_upper,tooltip
+keys=page,size,offset,raw_upper,tooltip
 page=1
 size=_S16_
 offset=1016
-raw_lower=0
 raw_upper=1000
 tooltip=Threshold in units/sec for lag compensation source
 
