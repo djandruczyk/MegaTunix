@@ -810,20 +810,20 @@ dl_by_default=TRUE
 phys_ecu_page=5
 length=946
 
-[page_2]
-dl_by_default=FALSE
-phys_ecu_page=0
-length=2048
-
-[page_3]
-dl_by_default=FALSE
-phys_ecu_page=1
-length=2048
-
-[page_4]
-dl_by_default=FALSE
-phys_ecu_page=2
-length=2048
+#[page_2]
+#dl_by_default=FALSE
+#phys_ecu_page=0
+#length=2048
+#
+#[page_3]
+#dl_by_default=FALSE
+#phys_ecu_page=1
+#length=2048
+#
+#[page_4]
+#dl_by_default=FALSE
+#phys_ecu_page=2
+#length=2048
 
 [page_5]
 dl_by_default=FALSE

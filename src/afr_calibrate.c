@@ -17,8 +17,9 @@
 #include <afr_calibrate.h>
 #include <config.h>
 #include <defines.h>
-#include <gtk/gtk.h>
 #include <enums.h>
+#include <firmware.h>
+#include <gtk/gtk.h>
 #include <math.h>
 #include <threads.h>
 #include <widgetmgmt.h>
@@ -171,6 +172,7 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	gdouble (*Fv)(gint adc) = NULL;
 	gboolean NB = FALSE;
 	guint8 table[nADC];
+	extern Firmware_Details *firmware;
 	time_t tim;
 	FILE *f = NULL;
 
@@ -374,7 +376,10 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	 * page in the firmware (page 2) for the AFR table. See the interrogation profile
 	 * [page_x] sections for more details
 	 */
-	table_write(4,1024,(guint8 *)table);
+	if (firmware->capabilities & MS2_E)
+		table_write(7,1024,(guint8 *)table);
+	else
+		table_write(4,1024,(guint8 *)table);
 
 	return TRUE;
 }

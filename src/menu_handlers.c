@@ -84,6 +84,10 @@ EXPORT void setup_menu_handlers_pf()
 		gtk_widget_set_sensitive(item,TRUE);
 		item = glade_xml_get_widget(xml,"show_trigger_offset_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
+		item = glade_xml_get_widget(xml,"ms2_reinit_menuitem");
+		gtk_widget_set_sensitive(item,TRUE);
+		item = glade_xml_get_widget(xml,"ms2_reboot_menuitem");
+		gtk_widget_set_sensitive(item,TRUE);
 	}
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)
@@ -628,5 +632,21 @@ EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}
+
+
+/*! \brief tell ms2 to reinitialize */
+EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
+{
+	io_cmd("ms2_reinit",NULL);
+	return TRUE;
+}
+
+
+/*! \brief tell ms2 to fully reboot */
+EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
+{
+	io_cmd("ms2_reboot",NULL);
 	return TRUE;
 }

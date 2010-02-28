@@ -65,13 +65,6 @@
 			<size>_UNDEF_</size>
 		</arg>
 		<arg>
-			<name>PAUSE_50MS</name>
-			<desc>Pause for 50ms.</desc>
-			<type>_ACTION_</type>
-			<action>_SLEEP_</action>
-			<action_arg>50000</action_arg>
-		</arg>
-		<arg>
 			<name>PAUSE_100MS</name>
 			<desc>Pause for 100ms.</desc>
 			<type>_ACTION_</type>
@@ -109,7 +102,7 @@
 			<type>_WRITE_CMD_</type>
 			<base>!!</base>
 			<args>
-				<arg>PAUSE_50MS</arg>
+				<arg>PAUSE_100MS</arg>
 				<arg>SEND_X</arg>
 			</args>
 			<helper_func>simple_read_pf</helper_func>
@@ -320,7 +313,7 @@
 			<base>t</base>
 			<args>
 				<arg>MS2_TABLE_INDEX</arg>
-				<arg>PAUSE_50MS</arg>
+				<arg>PAUSE_100MS</arg>
 				<arg>DATACHUNK</arg>
 			</args>
 		</cmd>

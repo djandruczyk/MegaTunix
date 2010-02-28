@@ -124,7 +124,7 @@ void unlock_serial()
 	extern GObject *global_data;
 	gchar *fname = OBJ_GET(global_data,"serial_lockfile");
 
-//	printf("told to unlock serial,  path \"%s\"\n",fname);
+	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (fname)
 	{
 		if (g_file_test(fname,G_FILE_TEST_IS_REGULAR))
@@ -150,6 +150,7 @@ gboolean lock_serial(gchar * name)
 	gint i = 0;
 	gint pid = 0;
 
+	/*printf("told to lock serial port %s\n",name); */
 	/* If no /proc (i.e. os-X), just fake it and return */
 	if (!g_file_test("/proc",G_FILE_TEST_IS_DIR))
 		return TRUE;

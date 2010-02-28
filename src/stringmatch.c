@@ -447,6 +447,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"dlog_gui_name",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dont_backup",
+			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"f_label",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"gaugexml",

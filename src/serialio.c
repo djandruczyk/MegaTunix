@@ -414,6 +414,8 @@ void *serial_repair_thread(gpointer data)
 						}
 					}
 				}
+				else
+					unlock_serial();
 			}
 		}
 		queue_function(g_strdup("conn_warning"));

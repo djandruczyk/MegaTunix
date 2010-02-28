@@ -422,7 +422,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - ptr8[0] != 255))
 			{
 				ms_reset_count++;
-				printf("MS1 Reset detected!\n");
+				printf("MS1 Reset detected!, lastcount %i, current %i\n",lastcount,ptr8[0]);
 				gdk_beep();
 			}
 			else
