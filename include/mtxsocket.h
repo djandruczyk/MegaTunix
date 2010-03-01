@@ -59,7 +59,8 @@ typedef enum
 	SEND_FULL_TABLE,
 	SEND_PARTIAL_TABLE,
 	BURN_MS2_FLASH,
-	GET_VAR_DATA
+	GET_VAR_DATA,
+	RECV_LOOKUPTABLE
 }SubState;
 
 typedef enum
@@ -131,8 +132,8 @@ void open_tcpip_sockets(void);
 void close_tcpip_sockets(void);
 gboolean setup_socket(gint);
 void *socket_thread_manager(gpointer);
-void * ascii_socket_client(gpointer );
-void * binary_socket_client(gpointer );
+void * ascii_socket_server(gpointer );
+void * binary_socket_server(gpointer );
 void * control_socket_client(gpointer );
 void * notify_slaves_thread(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
@@ -152,7 +153,8 @@ gboolean close_control_socket(void);
 gint socket_get_more_data(gint, void *, gint, gint);
 gboolean open_control_socket(gchar *, gint);
 void notify_slave(gpointer, gpointer);
-gint net_send(gint, char *, gint, gint);
+gint net_send(gint, guint8 *, gint, gint);
+guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
 /* Prototypes */
 
 #endif

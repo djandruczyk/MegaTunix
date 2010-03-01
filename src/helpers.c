@@ -85,6 +85,12 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	extern volatile gint last_page;
 	gint i = 0;
 
+	if (last_page == -1)
+	{
+		command = (Command *)data;
+		io_cmd(NULL,command->post_functions);
+		return TRUE;
+	}
 	/*printf("burn all helper\n");*/
 	if ((type != MS2) && (type != MS1))
 		return FALSE;

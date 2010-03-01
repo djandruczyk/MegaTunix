@@ -308,7 +308,7 @@
 		</cmd>
 		<cmd>
 			<name>ms2_table_reflash</name>
-			<desc>This command wipes the flash of the passed table index, then expects 1024 words (2kbytes) to replace it</desc>
+			<desc>This command wipes the flash of the passed table index, then expects 1024 words (16bit) (MAT,MAF,CLT) or 1024 bytes (EGO) to replace it</desc>
 			<type>_WRITE_CMD_</type>
 			<base>t</base>
 			<args>
@@ -426,7 +426,6 @@
 				<function>spawn_read_ve_const_pf</function>
 				<function>reset_temps_pf</function>
 				<function>startup_default_timeouts_pf</function>
-				<function>startup_tcpip_sockets_pf</function>
 
 			</post_functions>
 		</cmd>

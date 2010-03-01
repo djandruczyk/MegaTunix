@@ -474,7 +474,6 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 void table_write(gint page, gint num_bytes, guint8 * data)
 {
 	extern Firmware_Details *firmware;
-	gboolean split_large_blocks = TRUE;
 	OutputData *output = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	g_static_mutex_lock(&mutex);
