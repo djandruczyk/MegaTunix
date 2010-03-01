@@ -470,6 +470,10 @@ close_binary:
 			case WAITING_FOR_CMD:
 				switch (buf)
 				{
+					case '!': /* Potential reinit/reboot */
+						if (firmware->capabilities & MS2)
+							state = GET_REINIT_OR_REBOOT;
+						continue;
 					case 'a':/* MS2 table full table read */
 						if (firmware->capabilities & MS2)
 						{
@@ -635,6 +639,22 @@ close_binary:
 					default:
 						continue;
 				}
+			case GET_REINIT_OR_REBOOT:
+				if (buf == '!')
+					state = GET_MS2_REBOOT;
+				if (buf == 'x')
+				{
+					io_cmd("ms2_reinit",NULL);
+					state = WAITING_FOR_CMD;
+				}
+				continue;
+			case GET_MS2_REBOOT:
+				if (buf == 'x')
+				{
+					io_cmd("ms2_reboot",NULL);
+					state = WAITING_FOR_CMD;
+				}
+				continue;
 			case GET_CAN_ID:
 /*				printf("get_can_id block\n");*/
 				canID = (guint8)buf;
@@ -1488,7 +1508,6 @@ gboolean close_network(void)
 gboolean close_control_socket(void)
 {
 	extern gboolean connected;
-	printf("CLOSE control socket\n");
 	close(controlsocket);
 
 #ifdef __WIN32__
@@ -1522,7 +1541,6 @@ void *notify_slaves_thread(gpointer data)
 	extern GAsyncQueue *slave_msg_queue;
 	extern Firmware_Details *firmware;
 
-	printf("NOTIFY SLAVES THREAD STARTED\n");
 	while(TRUE) /* endless loop */
 	{
 		g_get_current_time(&cur);
@@ -1542,7 +1560,8 @@ void *notify_slaves_thread(gpointer data)
 		if (!msg) /* Null message)*/
 			continue;
 
-		printf("There are %i clients in the slave pointer array\n",slave_list->len);
+		/*printf("There are %i clients in the slave pointer array\n",slave_list->len);
+		 */
 		to_be_closed = g_new0(gboolean, slave_list->len);
 		for (i=0;i<slave_list->len;i++)
 		{
@@ -1559,12 +1578,14 @@ void *notify_slaves_thread(gpointer data)
 			res = select(fd+1,NULL,&wr,NULL,NULL); 
 			if (res <= 0)
 			{
-				printf("Select error!, closing this socket\n");
+/*				printf("Select error!, closing this socket\n");*/
 				to_be_closed[i] = TRUE;
 				continue;
 			}
-/*			printf("sending chunk update\n");*/
+			/*
+			printf("sending chunk update\n");
 			printf("notify slaves, slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);
+			*/
 			/* We need to check if this slave sent the update,  
 			 * if so, DO NOT send the same thing back to that 
 			 * slave as he already knows....
@@ -1572,18 +1593,12 @@ void *notify_slaves_thread(gpointer data)
 			if (msg->mode == MTX_SIMPLE_WRITE)
 			{
 				if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
-				{
-					printf("Slave %p already set this, not updating him.. \n",cli_data);
 					continue;
-				}
 			}
 			if (msg->mode == MTX_CHUNK_WRITE)
 			{
 				if (memcmp (cli_data->ecu_data[msg->page]+msg->offset,firmware->ecu_data[msg->page]+msg->offset,msg->length) == 0)
-				{
-					printf("Slave %p already set this chunk , not updating him...\n",cli_data);
 					continue;
-				}
 			}
 
 			buffer = build_netmsg(SLAVE_MEMORY_UPDATE,msg,&len);
@@ -1600,10 +1615,7 @@ void *notify_slaves_thread(gpointer data)
 			g_free(buffer);
 
 			if (res == -1)
-			{
-				printf("msg send FAILURE\n");
 				to_be_closed[i] = TRUE;
-			}
 		}
 		for (i=0;i<slave_list->len;i++)
 		{
@@ -1611,13 +1623,12 @@ void *notify_slaves_thread(gpointer data)
 			{
 				cli_data = g_ptr_array_index(slave_list,i);
 
-				printf("socket dropped, closing client pointer %p\n",cli_data); 
+/*				printf("socket dropped, closing client pointer %p\n",cli_data); */
 #ifdef __WIN32__
 				closesocket(cli_data->fd);
 #else
 				close(cli_data->fd);
 #endif
-				printf("REMOVING ENTRY from ptr array\n");
 				if (slave_list)
 				{
 					g_ptr_array_remove(slave_list,cli_data);
@@ -1686,15 +1697,15 @@ close_control:
 			g_thread_exit(0);
 		}
 		/*
-		printf("controlsocket Data arrived!\n");
-		printf("data %i, %c\n",(gint)buf,(gchar)buf); 
-		*/
+		   printf("controlsocket Data arrived!\n");
+		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
+		   */
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					printf("Slave chunk update received\n");
+					/*printf("Slave chunk update received\n");*/
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 					continue;
@@ -1702,40 +1713,40 @@ close_control:
 				else
 					continue;
 			case GET_CAN_ID:
-				printf("get_canid block\n");
+				/*				printf("get_canid block\n");*/
 				canID = (guint8)buf;
-				printf("canID received is %i\n",canID);
+				/*				printf("canID received is %i\n",canID);*/
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				printf("get_mtx_page block\n");
+				/*				printf("get_mtx_page block\n");*/
 				page = (guint8)buf;
-				printf("page received is %i\n",page);
+				/*				printf("page received is %i\n",page);*/
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				printf("get_high_offset block\n");
+				/*				printf("get_high_offset block\n");*/
 				offset_h = (guint8)buf;
-				printf("high offset received is %i\n",offset_h);
+				/*				printf("high offset received is %i\n",offset_h);*/
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				printf("get_low_offset block\n");
+				/*				printf("get_low_offset block\n");*/
 				offset_l = (guint8)buf;
-				printf("low offset received is %i\n",offset_l);
+				/*				printf("low offset received is %i\n",offset_l);*/
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				printf("get_high_count block\n");
+				/*				printf("get_high_count block\n");*/
 				count_h = (guint8)buf;
-				printf("high count received is %i\n",count_h);
+				/*				printf("high count received is %i\n",count_h);*/
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				printf("get_low_count block\n");
+				/*				printf("get_low_count block\n");*/
 				count_l = (guint8)buf;
-				printf("low count received is %i\n",count_l);
+				/*				printf("low count received is %i\n",count_l);*/
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -1745,13 +1756,13 @@ close_control:
 				}
 				continue;
 			case GET_DATABYTE:
-				printf("get_databyte\n");
+				/*				printf("get_databyte\n");*/
 				buffer[index] = (guint8)buf;
 				index++;
-				printf ("Databyte index %i of %i\n",index,count);
+				/*				printf ("Databyte index %i of %i\n",index,count);*/
 				if (index >= count)
 				{
-					printf("Got all needed data, updating gui\n");
+					/*					printf("Got all needed data, updating gui\n");*/
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
@@ -1778,7 +1789,6 @@ gboolean open_control_socket(gchar * host, gint port)
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername;
 	MtxSocketClient * cli_data = NULL;
-	printf("Open control socket!\n");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -1828,7 +1838,6 @@ gboolean open_control_socket(gchar * host, gint port)
 #endif
 		return FALSE;
 	}
-	printf("connected!!\n");
 	controlsocket = clientsocket;
 	cli_data = g_new0(MtxSocketClient, 1);
 	cli_data->ip = g_strdup(inet_ntoa(servername.sin_addr));

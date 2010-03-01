@@ -38,6 +38,8 @@ typedef enum
 typedef enum
 {
 	WAITING_FOR_CMD = 0x420,
+	GET_REINIT_OR_REBOOT,
+	GET_MS2_REBOOT,
 	GET_CAN_ID,
 	GET_TABLE_ID,
 	GET_HIGH_OFFSET,
