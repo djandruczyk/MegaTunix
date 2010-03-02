@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define _ISOC99_SOURCE
 #include <2d_table_editor.h>
 #include <3d_vetable.h>
 #include <args.h>
@@ -62,7 +63,7 @@
 
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
-static gboolean force_color_update = FALSE;
+gboolean force_color_update = FALSE;
 static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
@@ -895,12 +896,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			recalc_table_limits(canID,table_num);
 			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
 			color = get_colors_from_hue(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-			/*printf("TABLE NUM >= 0, dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180);*/
 		}
 		else
 		{
 			color = get_colors_from_hue(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-			/*printf("dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180); */
 		}
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 	}
@@ -1757,8 +1756,12 @@ EXPORT void update_ve_const_pf()
 		prev_min = firmware->table_params[i]->z_minval;
 		recalc_table_limits(0,i);
 		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
+		{
 			force_color_update = TRUE;
-		/*printf("\n");*/
+		}
+	}
+	for (i=0;i<firmware->total_tables;i++)
+	{
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
@@ -2150,15 +2153,11 @@ void update_widget(gpointer object, gpointer user_data)
 				if (table_num >= 0)
 				{
 					scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
-					color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+					color = get_colors_from_hue(256.0 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
 					
 				}
 				else
-				{
 					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-					//color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-raw_lower)*(256.0/((raw_upper-raw_lower)*1.05)), 0.50, 1.0);
-				}
-
 				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 			}
 			if (update_color)
@@ -3230,31 +3229,12 @@ void refresh_widgets_at_offset(gint page, gint offset)
 	guint i = 0;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
-	gint prev_min = 0;
-	gint prev_max = 0;
 
 	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
 
-	for (i=0;i<firmware->total_tables;i++)
-	{
-		prev_max = firmware->table_params[i]->z_maxval;
-		prev_min = firmware->table_params[i]->z_minval;
-		recalc_table_limits(0,i);
-		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
-			force_color_update = TRUE;
-	}
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-	{
-//		if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][offset],i),"dl_type") != DEFERRED)
-		{
-	/*		printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
-			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
-		}
-	/*	else
-			printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
-			*/
 
-	}
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
 	update_ve3d_if_necessary(page,offset);
 }
 
