@@ -20,6 +20,10 @@ handler=_GENERIC_
 keys=tab_ident
 tab_ident=_WARMUP_WIZ_TAB_
 
+[ww_rt_table0]
+keys=register_as
+register_as=ww_rt_table0
+
 #----- Buttons ---------------------------------------------------------------
 
 [ww_get_data_button]

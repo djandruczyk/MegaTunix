@@ -45,15 +45,15 @@ bind_to_list=temperature
 
 [num_injectors_1_label]
 keys=bind_to_list
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 
 [num_squirts_per_cycle_1_label]
 keys=bind_to_list
-bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
 
 [num_cylinders_1_label]
 keys=bind_to_list
-bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
@@ -139,7 +139,7 @@ offset=90
 table_num=0
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
 ul_conv_expr=(reqfuel_1*((injectors_1+1)/(divider_1*(alternate+1))))/10
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
@@ -161,7 +161,7 @@ keys=offset,table_num,ul_conv_expr,bind_to_list,register_as
 offset=90
 table_num=0
 ul_conv_expr=x/10
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [inj_open_time_entry]
@@ -203,7 +203,7 @@ offset=91
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
-bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
 ul_complex=TRUE
 ul_conv_expr=(cylinders_1+1)/divider_1
 expr_symbols=cylinders_1,divider_1
@@ -222,7 +222,7 @@ bitmask=240
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
-bind_to_list=interdep_1_ctrl
+bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
 ul_conv_expr=injectors_1+1
 expr_symbols=injectors_1
@@ -239,7 +239,7 @@ bitmask=240
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
-bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
 ul_complex=TRUE
 ul_conv_expr=cylinders_1+1
 expr_symbols=cylinders_1

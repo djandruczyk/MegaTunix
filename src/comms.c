@@ -179,12 +179,12 @@ EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_last = firmware->ecu_data_last;
 	gint i = 0;
-	gint z = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
 	guint8 *sent_data = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
+	gint z = 0;
 	extern gboolean paused_handlers;
 
 	if (!output)
@@ -208,14 +208,16 @@ EXPORT void update_write_status(void *data)
 		if (sent_data)
 			g_free(sent_data);
 	}
-	paused_handlers = TRUE;
+	
+	if (output->queue_update)
+	{
+		paused_handlers = TRUE;
 
-	/*printf ("page %i, offset %i\n",data->page,data->offset); */
-	/*printf("WRITE STATUS, page %i, offset %i\n",page,offset);*/
-	for (z=offset;z<offset+length;z++)
-		refresh_widgets_at_offset(page,z);
+		for (z=offset;z<offset+length;z++)
+			refresh_widgets_at_offset(page,z);
 
-	paused_handlers = FALSE;
+		paused_handlers = FALSE;
+	}
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
