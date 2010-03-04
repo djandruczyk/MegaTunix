@@ -183,12 +183,9 @@ EXPORT void update_write_status(void *data)
 	gint offset = 0;
 	gint length = 0;
 	guint8 *sent_data = NULL;
-	gint prev_min = 0;
-	gint prev_max = 0;
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	extern gboolean paused_handlers;
-	extern gboolean force_color_update;
 
 	if (!output)
 		goto red_or_black;
@@ -218,15 +215,15 @@ EXPORT void update_write_status(void *data)
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			/* This at least only recalcs the limits on one... */
-			if ((firmware->table_params[i]->x_page == page) ||
+			if (((firmware->table_params[i]->x_page == page) ||
 					(firmware->table_params[i]->y_page == page) ||
-					(firmware->table_params[i]->z_page == page))
+					(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
 			{
-				prev_max = firmware->table_params[i]->z_maxval;
-				prev_min = firmware->table_params[i]->z_minval;
 				recalc_table_limits(0,i);
-				if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
-					force_color_update = TRUE;
+				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+					firmware->table_params[i]->color_update = TRUE;
+				else
+					firmware->table_params[i]->color_update = FALSE;
 			}
 		}
 

@@ -42,19 +42,19 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gint bitmask = 0;
 	gint width = 0;
 	gchar *tmpstr = NULL;
-	gchar *regexp = NULL;
+	gchar *regex = NULL;
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 	GtkEntryCompletion *completion = NULL;
-        GtkWidget *entry = NULL;
+	GtkWidget *entry = NULL;
 
 	cfg_read_string(cfgfile,section,"choices",&tmpbuf);
 
 	choices = parse_keys(tmpbuf,&num_choices,",");
-	/*tmpstr = g_strdelimit(tmpbuf,",",'|');*/
-	/*regexp = g_strdup_printf("%s",tmpstr);*/
+	tmpbuf = g_strdelimit(tmpbuf,",",'|');
+//	regex = g_strdup_printf("%s",tmpstr);
 	tmpstr = g_utf8_normalize(tmpbuf,-1,G_NORMALIZE_DEFAULT);
-	regexp = g_utf8_casefold(tmpstr,-1);
+	regex = g_utf8_casefold(tmpbuf,-1);
 	g_free(tmpbuf);
 	g_free(tmpstr);
 
@@ -95,7 +95,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	if (GTK_IS_COMBO_BOX_ENTRY(object))
 	{
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
-		entry = mask_entry_new_with_mask(regexp);
+		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (gint)OBJ_GET((GtkWidget *)object,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
@@ -116,6 +116,6 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(object,"arrow-size",GINT_TO_POINTER(1));
 	}
-	g_free(regexp);
-			
+	g_free(regex);
+
 }

@@ -234,6 +234,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(DECIMAL_VIEW));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
+	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
+			GINT_TO_POINTER(MS2_USER_OUTPUTS));
 
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
@@ -596,7 +598,9 @@ gint translate_string(gchar *string)
 	value = g_hash_table_lookup(str_2_enum,string);
 	if (value == NULL)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));
+		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
+		return (MTX_STRING);
 	}
-	return (gint)value;
+	else
+		return (gint)value;
 }

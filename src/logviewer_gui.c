@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#define _ISOC99_SOURCE
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
@@ -640,28 +639,7 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
 
-	i=fpclassify(hue);
-//	printf("hue is %f, fpclassify of hue is:\n",hue);
-	switch (i)
-	{
-		case FP_NAN:
-			printf("not a number\n");
-			break;
-		case FP_INFINITE:
-			printf("infinite\n");
-			break;
-		case FP_ZERO:
-//			printf("zero\n");
-			break;
-		case FP_SUBNORMAL:
-			printf("too small\n");
-			break;
-		case FP_NORMAL:
-//			printf("normal\n");
-			break;
-	}
-	g_assert (i== FP_NORMAL);
-	printf("get_color_from_hue count %i\n",count);
+	/*printf("get_color_from_hue count %i\n",count); */
 
 	while (hue >= 360.0)
 		hue -= 360.0;

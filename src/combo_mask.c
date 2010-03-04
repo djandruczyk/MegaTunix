@@ -16,10 +16,11 @@
 #include <config.h>
 #include <configfile.h>
 #include <combo_mask.h>
+#include <crx.h>
 #include <gtk/gtk.h>
 
 
-G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init));
+G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init))
 
 /*!
  \brief gets called when a user wants a new mask entry
@@ -45,18 +46,28 @@ GtkWidget *mask_entry_new_with_mask (gchar *mask)
 
 void mask_entry_set_background (MaskEntry *entry)
 {
+	gchar *tmpbuf = NULL;
+	gchar *tmpstr = NULL;
+	gint len = 0;
 	static const GdkColor error_color = { 0, 65535, 60000, 60000 };
 
 	if (entry->mask)
 	{
-		if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
+		tmpstr = g_utf8_normalize(gtk_entry_get_text (GTK_ENTRY (entry)),-1,G_NORMALIZE_DEFAULT);
+		tmpbuf = g_utf8_casefold(tmpstr,-1);
+		g_free(tmpstr);
+		if (regex(tmpbuf,entry->mask,&len))
+//		if (!g_strrstr (entry->mask, tmpbuf))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
+			g_free(tmpbuf);
 			return;
 		}
+		g_free(tmpbuf);
 	}
 
 	gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, NULL);
+	return;
 }
 
 

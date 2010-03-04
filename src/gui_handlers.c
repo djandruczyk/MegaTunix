@@ -63,7 +63,6 @@
 
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
-gboolean force_color_update = FALSE;
 static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
@@ -893,7 +892,15 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	{
 		if (table_num >= 0)
 		{
-			recalc_table_limits(canID,table_num);
+			if (firmware->table_params[table_num]->color_update == FALSE)
+			{
+				recalc_table_limits(canID,table_num);
+				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
+					firmware->table_params[table_num]->color_update = TRUE;
+				else
+					firmware->table_params[table_num]->color_update = FALSE;
+			}
+
 			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
 			color = get_colors_from_hue(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
 		}
@@ -1685,8 +1692,6 @@ EXPORT void update_ve_const_pf()
 	gfloat tmpf = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
-	gint prev_max = 0;
-	gint prev_min = 0;
 	guint mask = 0;
 	guint shift = 0;
 	guint tmpi = 0;
@@ -1752,16 +1757,15 @@ EXPORT void update_ve_const_pf()
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		prev_max = firmware->table_params[i]->z_maxval;
-		prev_min = firmware->table_params[i]->z_minval;
-		recalc_table_limits(0,i);
-		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
+		if (firmware->table_params[i]->color_update == FALSE)
 		{
-			force_color_update = TRUE;
+			recalc_table_limits(0,i);
+			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+				firmware->table_params[i]->color_update = TRUE;
+			else
+				firmware->table_params[i]->color_update = FALSE;
 		}
-	}
-	for (i=0;i<firmware->total_tables;i++)
-	{
+
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
@@ -1880,8 +1884,9 @@ EXPORT void update_ve_const_pf()
 			}
 		}
 	}
+	for (i=0;i<firmware->total_tables;i++)
+		firmware->table_params[i]->color_update = FALSE;
 
-	force_color_update = FALSE;
 	paused_handlers = FALSE;
 	set_title(g_strdup("Ready..."));
 	return;
@@ -1958,6 +1963,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
 	gboolean use_color = FALSE;
+	gboolean changed = FALSE;
 	guint i = 0;
 	gint j = 0;
 	gint tmpi = -1;
@@ -1994,7 +2000,6 @@ void update_widget(gpointer object, gpointer user_data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gdouble spin_value = 0.0; 
-	gboolean update_color = TRUE;
 	GdkColor color;
 	extern Firmware_Details *firmware;
 	extern gint *algorithm;
@@ -2007,7 +2012,6 @@ void update_widget(gpointer object, gpointer user_data)
 	upd_count++;
 	if ((upd_count%64) == 0)
 	{
-		/*
 		while (gtk_events_pending())
 		{
 			if (leaving)
@@ -2016,8 +2020,6 @@ void update_widget(gpointer object, gpointer user_data)
 			}
 			gtk_main_iteration();
 		}
-		*/
-
 	}
 	if (!GTK_IS_OBJECT(widget))
 		return;
@@ -2126,42 +2128,52 @@ void update_widget(gpointer object, gpointer user_data)
 		else
 		{
 			widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-			update_color = TRUE;
 			if (base == 10)
 			{
 				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else if (!force_color_update)
-					update_color = FALSE;
+					changed = TRUE;
+				}
 				g_free(tmpbuf);
 			}
 			else if (base == 16)
 			{
 				tmpbuf = g_strdup_printf("%.2X",(gint)value);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else if (!force_color_update)
-					update_color = FALSE;
+					changed = TRUE;
+				}
 				g_free(tmpbuf);
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"));
 
-			if ((use_color) && (update_color))
+			if (use_color)
 			{
-				if (table_num >= 0)
+				if ((table_num >= 0) && (firmware->table_params[table_num]->color_update))
 				{
 					scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
 					color = get_colors_from_hue(256.0 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 					
 				}
 				else
-					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+				{
+					if (changed)
+					{
+						color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+					}
+				}
+
 			}
+			/*
 			if (update_color)
 				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				*/
 		}
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
@@ -3345,6 +3357,8 @@ void recalc_table_limits(gint canID, gint table_num)
 	/* Limit check */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
 		return;
+	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
+	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
 	x_count = firmware->table_params[table_num]->x_bincount;
 	y_count = firmware->table_params[table_num]->y_bincount;
 	z_base = firmware->table_params[table_num]->z_base;

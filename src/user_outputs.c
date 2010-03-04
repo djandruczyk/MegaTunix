@@ -15,6 +15,7 @@
 
 #include <assert.h>
 #include <config.h>
+#include <combo_mask.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -672,4 +673,92 @@ gboolean deferred_model_update(GtkWidget * widget)
 {
 	update_model_from_view(widget);
 	return FALSE;
+}
+
+
+/*! \brief sets up and populates the MS2-Extra combo for output choice
+ */
+void ms2_output_combo_setup(GtkWidget *widget)
+{
+	gint i = 0;
+	gint lower = 0;
+	gint upper = 0;
+	gint offset = 0;
+	gint width = 0;
+	DataSize size = MTX_U08;
+	gint precision = 0;
+	GObject * object = NULL;
+	gchar * data = NULL;
+	gchar * name = NULL;
+	gchar * range = NULL;
+	gchar *regex = NULL;
+	GtkWidget *entry = NULL;
+	GtkEntryCompletion *completion = NULL;
+	GtkListStore *store = NULL;
+	GtkTreeIter iter;
+
+	extern Rtv_Map *rtv_map;
+
+
+	/* Create the store for the combo, with severla hidden values
+	*/
+	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR,G_TYPE_UCHAR,G_TYPE_UCHAR,G_TYPE_UCHAR);
+	/* Iterate across valid variables */
+	while ((data = rtv_map->raw_list[i])!= NULL)
+	{
+		i++;
+		object = NULL;
+		name = NULL;
+		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
+		if (!object)
+			continue;
+		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+		if (!name)
+			continue;
+		size= (DataSize)OBJ_GET(object,"size");
+		if (OBJ_GET(object,"raw_lower"))
+			lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+		else
+			lower = get_extreme_from_size(size,LOWER);
+		if (OBJ_GET(object,"raw_upper"))
+			upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		else
+			upper = get_extreme_from_size(size,UPPER);
+		precision = (gint) OBJ_GET(object,"precision");
+		offset = (gint) OBJ_GET(object,"offset");
+		range = g_strdup_printf("%i-%i",lower,upper);
+
+		regex = g_strconcat(name,NULL);
+		if (rtv_map->raw_list[i])
+			regex = g_strconcat("|",NULL);
+		gtk_list_store_append(store,&iter);
+		gtk_list_store_set(store,&iter,UO_CHOICE_COL,g_strdup(name),UO_BITVAL_COL,offset,UO_SIZE_COL,size,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_PRECISION_COL,precision,-1);
+	}
+	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
+	if (GTK_IS_COMBO_BOX_ENTRY(widget))
+	{
+		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
+		entry = mask_entry_new_with_mask(regex);
+		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
+		if ((width = (gint)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
+			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
+		else
+			gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
+
+		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(gint)OBJ_GET(global_data,"font_size")));
+
+		gtk_container_remove (GTK_CONTAINER (widget), GTK_BIN (widget)->child);
+		gtk_container_add (GTK_CONTAINER (widget), entry);
+
+		completion = gtk_entry_completion_new();
+		gtk_entry_set_completion(GTK_ENTRY(entry),completion);
+		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
+		gtk_entry_completion_set_text_column(completion,UO_CHOICE_COL);
+		gtk_entry_completion_set_inline_completion(completion,TRUE);
+		gtk_entry_completion_set_inline_selection(completion,TRUE);
+		gtk_entry_completion_set_popup_single_match(completion,FALSE);
+		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
+	}
+	g_free(regex);
+
 }
