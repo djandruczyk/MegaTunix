@@ -124,6 +124,7 @@ typedef enum
 	GENERIC,
 	BAUD_CHANGE,
 	MULTI_EXPRESSION,
+	MS2_USER_OUTPUTS,
 	ALT_SIMUL
 }MtxButton;
 /* Prototypes */
