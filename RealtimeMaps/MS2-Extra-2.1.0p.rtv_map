@@ -6,8 +6,7 @@ minor=2
 applicable_firmwares=MS-II-Extra V2.1.0p
 applicable_signatures=MS2/Extra 2.1
 derived_total=90
-raw_list=raw_secl
-#raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
+raw_list=hr_clock,pw1,pw2,rpm,sparkangle,squirtbit,enginebit,afrtgt1,afrtgt2,wb02_en1,wbo2_en2,barokpa,mapkpa,matdeg,cltdeg.dpspercet,battvolt,afr1,afr1,lamda,lambda2,knock.egocorr1,egocorr2,aircorr,warmcorr,tpsaccel,tpsfuelcut,barocorr,gammae,vecurr1,vecurr2,iacstep,idledc,coldadv,tpsdot,mapdot,dwell,maf,fuelload,,fuelcorr,portstatus,kncokretard,EAEFuelCorr1,o2volt1,o2volt2,status1,status2,state3,status4,looptime,status5,tpsADC,fuelload2,ignload,ignload2,synccnt,timing_err,deltaT,wallfuel1,gpioadc0,gpioadc1,gpioadc2,gpioadc3,gpioadc4,gpioadc5,gpioadc6,gpioadc7,gpiopwmin0,gpiopwmin1,gpiopwmin2,gpiopwmin3,adc6,adc7,wallfuel2,EAEFuelCorr2,boostduty,syncreason,user0,gpioport0,gpioport1,gpioport2
 
 #[defaults]
 #keys=raw_lower,raw_upper
@@ -156,9 +155,9 @@ log_by_default=FALSE
 
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-internal_names=wb02_en1
+internal_names=wbo2_en1
 dlog_gui_name=WbO2en 1
-dlog_field_name=wb02en1
+dlog_field_name=wbo2en1
 offset=14
 raw_lower=0
 raw_upper=255
@@ -169,9 +168,9 @@ log_by_default=FALSE
 
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,raw_lower,raw_upper,log_by_default
-internal_names=wb02_en2
+internal_names=wbo2_en2
 dlog_gui_name=WbO2en 2
-dlog_field_name=wb02en2
+dlog_field_name=wbo2en2
 offset=15
 raw_lower=0
 raw_upper=255

@@ -2,6 +2,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
+	-I$(top_srcdir)/mtxmatheval \
 	@GTK_CFLAGS@ \
 	@GLEXT_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \

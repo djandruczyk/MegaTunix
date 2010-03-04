@@ -48,7 +48,7 @@
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
-#include <../mtxmatheval/mtxmatheval.h>
+#include <mtxmatheval.h>
 #include <math.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>

@@ -30,7 +30,7 @@
 #include <interrogate.h>
 #include <lookuptables.h>
 #include <mode_select.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
 #include <serialio.h>

@@ -18,7 +18,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <multi_expr_loader.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>

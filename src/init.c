@@ -23,7 +23,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>

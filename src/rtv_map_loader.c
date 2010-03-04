@@ -28,7 +28,7 @@
 #include <getfiles.h>
 #include <keyparser.h>
 #include <notifications.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>

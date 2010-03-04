@@ -24,7 +24,7 @@
 #include <interrogate.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <multi_expr_loader.h>

@@ -21,7 +21,7 @@
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <gui_handlers.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <logviewer_gui.h>
 #include <math.h>
 #include <multi_expr_loader.h>

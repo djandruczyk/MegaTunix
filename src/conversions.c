@@ -24,7 +24,7 @@
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <notifications.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>

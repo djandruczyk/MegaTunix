@@ -26,7 +26,7 @@
 #include <gui_handlers.h>
 #include <lookuptables.h>
 #include <math.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>

@@ -1,0 +1,144 @@
+[global]
+description=Object data map for the MS2 User Outpus (Spare ports)
+tab_name=_User Outputs
+id_prefix=UO_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[pm2_second_cond_table]
+keys=bind_to_list
+bind_to_list=pm2_2nd_cond
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+[pm2_enable_toggle_button]
+keys=offset,bitmask,bitvals,width,tooltip
+offset=756
+bitmask=255
+bitvals=0,1
+width=7
+tooltip=Initial value for this pin at power on
+
+[pm2_poweron_combo]
+keys=offset,bitmask,bitvals,choices,width,tooltip
+offset=784
+bitmask=255
+bitvals=0,1
+choices=0,1
+width=7
+tooltip=Initial value for this pin at power on
+
+[pm2_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,width,tooltip
+offset=791
+bitmask=255
+bitvals=0,1
+choices=0,1
+width=7
+tooltip=Initial value for this pin at power on
+
+[pm2_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=763
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[pm2_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=764
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[pm2_output_source1_combo]
+keys=offset,bitmask,post_functions_with_arg,size_offset,thresh_widget,hyst_widget,handler,tooltip
+offset=812
+bitmask=255
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=798
+thresh_widget=UO_pm2_thresh1_entry
+hyst_widget=UO_pm2_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+tooltip=Source to compare against.
+
+[pm2_output_source2_combo]
+keys=offset,bitmask,post_functions_with_arg,size_offset,handler,tooltip
+offset=814
+bitmask=255
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=799
+handler=_MS2_USER_OUTPUTS_
+tooltip=Source to compare against.
+
+[pm2_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=777
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,pm2_2nd_cond,pm2_2nd_cond
+tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+#----- Entries ---------------------------------------------------------------
+
+[pm2_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=840
+size=_U16_
+precision=1
+tooltip= The threshold to set this condition true
+
+[pm2_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=842
+size=_U16_
+precision=1
+bind_to_list=pm2_2nd_cond
+tooltip= The threshold to set this condition true
+
+[pm2_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=868
+size=_U16_
+precision=1
+tooltip= The threshold to set this condition true
+
+[pm2_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=870
+size=_U16_
+precision=1
+bind_to_list=pm2_2nd_cond
+tooltip= The threshold to set this condition true
+

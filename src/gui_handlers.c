@@ -39,6 +39,7 @@
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
+#include <mtxmatheval.h>
 #include <offline.h>
 #include <mode_select.h>
 #include <notifications.h>
@@ -1141,6 +1142,11 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * table_2_update = NULL;
 	gchar * group_2_update = NULL;
+	gchar * lower = NULL;
+	gchar * upper = NULL;
+	gchar * dl_conv = NULL;
+	gchar * ul_conv = NULL;
+	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
 	gint tmpi = 0;
@@ -1153,7 +1159,11 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
 	Deferred_Data *d_data = NULL;
+	GtkWidget *tmpwidget = NULL;
+	void *eval = NULL;
 	extern Firmware_Details *firmware;
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
@@ -1263,6 +1273,69 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 						d_data);
 				check_req_fuel_limits(table_num);
 			}
+			break;
+		case MS2_USER_OUTPUTS:
+			/* Send the offset */
+			tmp = get_ecu_data(canID,page,offset,size);
+			tmp = tmp & ~bitmask;	/*clears bits */
+			tmp = tmp | (bitval << bitshift);
+			send_to_ecu(canID, page, offset, size, tmp, TRUE);
+			/* Get the rest of the data from the combo */
+        		gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+
+			/* Send the "size" of the offset to the ecu */
+			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
+			send_to_ecu(canID, page, offset, MTX_U08,size, TRUE);
+			
+			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(tmpwidget))
+			{
+				eval = OBJ_GET(tmpwidget,"dl_evaluator");
+				if (eval)
+					evaluator_destroy(eval);
+				if ((dl_conv) && (upper))
+				{
+					eval = evaluator_create(dl_conv);
+					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					tmpf2 = g_ascii_strtod(upper,NULL);
+					tmpf = evaluator_evaluate_x(eval,tmpf2);
+					tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+					if (tmpbuf)
+						g_free(tmpbuf);
+					OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+					printf("thresh has dl conv expr and upper limit of %f\n",tmpf);
+				}
+				else
+					OBJ_SET(tmpwidget,"raw_upper",upper);
+
+				eval = OBJ_GET(tmpwidget,"ul_evaluator");
+				if (eval)
+					evaluator_destroy(eval);
+				if ((ul_conv) && (lower))
+				{
+					eval = evaluator_create(ul_conv);
+					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					tmpf2 = g_ascii_strtod(lower,NULL);
+					tmpf = evaluator_evaluate_x(eval,tmpf2);
+					tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+					if (tmpbuf)
+						g_free(tmpbuf);
+					OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+					printf("thresh has ul conv expr and lower limit of %f\n",tmpf);
+				}
+				else
+					OBJ_SET(tmpwidget,"raw_lower",lower);
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+				printf ("setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);
+				update_widget(tmpwidget,NULL);
+			}
+			return TRUE;
 			break;
 		default:
 			printf("std_combo_handler, default case!!!  wrong wrong wrong!!\n");

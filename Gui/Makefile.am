@@ -64,6 +64,8 @@ gui_files = 	README \
 		ms2-misc-fuel.datamap \
 		ms2-e-rotary-split.glade \
 		ms2-e-rotary-split.datamap \
+		ms2-user_outputs.glade \
+		ms2-user_outputs.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
 		msns-e-accelwizard.glade \
