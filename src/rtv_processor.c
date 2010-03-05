@@ -232,12 +232,12 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
 	total_symbols = (gint)OBJ_GET(object,"total_symbols");
-	if (OBJ_GET(object,"raw_lower"))
-		lower_limit = strtod(OBJ_GET(object,"raw_lower"),NULL);
+	if (OBJ_GET(object,"real_lower"))
+		lower_limit = strtod(OBJ_GET(object,"real_lower"),NULL);
 	else
 		lower_limit = -G_MAXDOUBLE;
-	if (OBJ_GET(object,"raw_upper"))
-		upper_limit = strtod(OBJ_GET(object,"raw_upper"),NULL);
+	if (OBJ_GET(object,"real_upper"))
+		upper_limit = strtod(OBJ_GET(object,"real_upper"),NULL);
 	else
 		upper_limit = G_MAXDOUBLE;
 

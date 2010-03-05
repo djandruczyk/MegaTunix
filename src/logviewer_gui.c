@@ -484,8 +484,8 @@ Viewable_Value * build_v_value(GObject *object)
 	v_value->object = object;
 	/* IS it a floating point value? */
 	v_value->precision = (gint)OBJ_GET(object,"precision");
-	v_value->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
-	v_value->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+	v_value->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+	v_value->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 

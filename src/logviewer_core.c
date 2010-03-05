@@ -62,12 +62,12 @@ EXPORT void create_stripchart(GtkWidget *parent)
 			continue;
 		if (OBJ_GET(object,"dlog_gui_name"))
 			name = OBJ_GET(object,"dlog_gui_name");
-		if (OBJ_GET(object,"raw_lower"))
-			min = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+		if (OBJ_GET(object,"real_lower"))
+			min = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
-		if (OBJ_GET(object,"raw_upper"))
-			max = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		if (OBJ_GET(object,"real_upper"))
+			max = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
 		if (OBJ_GET(object,"precision"))
@@ -293,9 +293,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(object,"raw_lower", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(object,"raw_upper", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }

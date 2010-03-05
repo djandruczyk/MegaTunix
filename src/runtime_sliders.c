@@ -298,14 +298,14 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(object,"raw_lower"))
-		slider->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+	if (OBJ_GET(object,"real_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
-		printf("No \"raw_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
-	if (OBJ_GET(object,"raw_lower"))
-		slider->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+	if (OBJ_GET(object,"real_lower"))
+		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
-		printf("No \"raw_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 
@@ -431,14 +431,14 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(widget,"raw_lower"))
-		slider->lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	if (OBJ_GET(widget,"real_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(widget,"real_lower"),NULL,10);
 	else
-		slider->lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
-	if (OBJ_GET(widget,"raw_upper"))
-		slider->upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
+	if (OBJ_GET(widget,"real_upper"))
+		slider->upper = (gint)strtol(OBJ_GET(widget,"real_upper"),NULL,10);
 	else
-		slider->upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))

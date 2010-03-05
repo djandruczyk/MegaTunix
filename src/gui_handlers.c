@@ -453,6 +453,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
 	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
 
+	printf("bitmask button handler\n");
+
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -467,6 +469,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			/* FAll Through */
 		case GENERIC:
+			printf("GENERIC bitmask button handler\n");
 			tmp = get_ecu_data(canID,page,offset,size);
 			tmp = tmp & ~bitmask;	/*clears bits */
 			tmp = tmp | (bitval << bitshift);
@@ -559,6 +562,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 	if (dl_type == IMMEDIATE)
 	{
+		printf("sending...\n");
 		dload_val = convert_before_download(widget,dload_val);
 		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
@@ -1198,7 +1202,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 		if (!search_model(model,widget,&iter))
 			return FALSE;
 	}
-        gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
+	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
 			BITVAL_COL,&bitval,-1);
 
 	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
@@ -1281,58 +1285,132 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			send_to_ecu(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-        		gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
 			send_to_ecu(canID, page, offset, MTX_U08,size, TRUE);
-			
+
 			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
 			if (tmpbuf)
 				tmpwidget = lookup_widget(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
+				eval = NULL;
 				eval = OBJ_GET(tmpwidget,"dl_evaluator");
 				if (eval)
+				{
 					evaluator_destroy(eval);
-				if ((dl_conv) && (upper))
+					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+					eval = NULL;
+				}
+				if (dl_conv)
 				{
 					eval = evaluator_create(dl_conv);
 					OBJ_SET(tmpwidget,"dl_evaluator",eval);
-					tmpf2 = g_ascii_strtod(upper,NULL);
-					tmpf = evaluator_evaluate_x(eval,tmpf2);
-					tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
-					if (tmpbuf)
-						g_free(tmpbuf);
-					OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
-					printf("thresh has dl conv expr and upper limit of %f\n",tmpf);
+					if (upper)
+					{
+						tmpf2 = g_ascii_strtod(upper,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler thresh has dl conv expr and upper limit of %f\n",tmpf);*/
+					}
+					if (lower)
+					{
+						tmpf2 = g_ascii_strtod(lower,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler thresh has dl conv expr and lower limit of %f\n",tmpf);*/
+					}
 				}
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
+				eval = NULL;
 				eval = OBJ_GET(tmpwidget,"ul_evaluator");
 				if (eval)
+				{
 					evaluator_destroy(eval);
-				if ((ul_conv) && (lower))
+					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+					eval = NULL;
+				}
+				if (ul_conv)
 				{
 					eval = evaluator_create(ul_conv);
 					OBJ_SET(tmpwidget,"ul_evaluator",eval);
-					tmpf2 = g_ascii_strtod(lower,NULL);
-					tmpf = evaluator_evaluate_x(eval,tmpf2);
-					tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
-					if (tmpbuf)
-						g_free(tmpbuf);
-					OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
-					printf("thresh has ul conv expr and lower limit of %f\n",tmpf);
 				}
-				else
-					OBJ_SET(tmpwidget,"raw_lower",lower);
-				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
 				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
 				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				printf ("setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);
+				/*printf ("combo_handler thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				update_widget(tmpwidget,NULL);
+			}
+			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(tmpwidget))
+			{
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"dl_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+					eval = NULL;
+				}
+				if (dl_conv)
+				{
+					eval = evaluator_create(dl_conv);
+					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					if (upper)
+					{
+						tmpf2 = g_ascii_strtod(upper,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler hyst has dl conv expr and upper limit of %f\n",tmpf);*/
+					}
+					if (lower)
+					{
+						tmpf2 = g_ascii_strtod(lower,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler hyst has dl conv expr and lower limit of %f\n",tmpf);*/
+					}
+				}
+				else
+					OBJ_SET(tmpwidget,"raw_upper",upper);
+
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"ul_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+					eval = NULL;
+				}
+				if (ul_conv)
+				{
+					eval = evaluator_create(ul_conv);
+					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+				}
+				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+				/*printf ("combo_handler hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
 				update_widget(tmpwidget,NULL);
 			}
 			return TRUE;
@@ -2070,6 +2148,14 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar **vector = NULL;
 	gchar * widget_text = NULL;
 	gchar * group_2_update = NULL;
+	gchar * lower = NULL;
+	gchar * upper = NULL;
+	gchar * dl_conv = NULL;
+	gchar * ul_conv = NULL;
+	GtkWidget *tmpwidget = NULL;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
+	void *eval = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gdouble spin_value = 0.0; 
@@ -2162,13 +2248,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch (get_ecu_data(canID,page,oddfire_bit_offset,size))
 			{
 				case 4:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
 					break;
 				case 2:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
 					break;
 				case 0:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
 					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
@@ -2183,13 +2269,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch ((get_ecu_data(canID,page,spconfig_offset,size) & 0x03))
 			{
 				case 2:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
 					break;
 				case 1:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
 					break;
 				case 0:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
 					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
@@ -2231,7 +2317,7 @@ void update_widget(gpointer object, gpointer user_data)
 					scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
 					color = get_colors_from_hue(256.0 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
 					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
-					
+
 				}
 				else
 				{
@@ -2244,9 +2330,9 @@ void update_widget(gpointer object, gpointer user_data)
 
 			}
 			/*
-			if (update_color)
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				*/
+			   if (update_color)
+			   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			   */
 		}
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
@@ -2328,6 +2414,134 @@ void update_widget(gpointer object, gpointer user_data)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 				gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
+				if ((int)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
+				{
+					/* Get the rest of the data from the combo */
+					gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+
+					tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_WIDGET(tmpwidget))
+					{
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"dl_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+							eval = NULL;
+						}
+						if (dl_conv)
+						{
+							eval = evaluator_create(dl_conv);
+							OBJ_SET(tmpwidget,"dl_evaluator",eval);
+							if (upper)
+							{
+								tmpf2 = g_ascii_strtod(upper,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget thresh has dl conv expr and upper limit of %f\n",tmpf);*/
+							}
+							if (lower)
+							{
+								tmpf2 = g_ascii_strtod(lower,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget thresh has dl conv expr and lower limit of %f\n",tmpf);*/
+							}
+						}
+						else
+							OBJ_SET(tmpwidget,"raw_upper",upper);
+
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"ul_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+							eval = NULL;
+						}
+						if (ul_conv)
+						{
+							eval = evaluator_create(ul_conv);
+							OBJ_SET(tmpwidget,"ul_evaluator",eval);
+						}
+						OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+						OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+						OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+						OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+						/*printf ("update widgets setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+						update_widget(tmpwidget,NULL);
+					}
+					tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_WIDGET(tmpwidget))
+					{
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"dl_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+							eval = NULL;
+						}
+						if (dl_conv)
+						{
+							eval = evaluator_create(dl_conv);
+							OBJ_SET(tmpwidget,"dl_evaluator",eval);
+							if (upper)
+							{
+								tmpf2 = g_ascii_strtod(upper,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget hyst has dl conv expr and upper limit of %f\n",tmpf);*/
+							}
+							if (lower)
+							{
+								tmpf2 = g_ascii_strtod(lower,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget hyst has dl conv expr and lower limit of %f\n",tmpf);*/
+							}
+						}
+						else
+							OBJ_SET(tmpwidget,"raw_upper",upper);
+
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"ul_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+							eval = NULL;
+						}
+						if (ul_conv)
+						{
+							eval = evaluator_create(ul_conv);
+							OBJ_SET(tmpwidget,"ul_evaluator",eval);
+						}
+						OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+						OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+						OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+						OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+						/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+						update_widget(tmpwidget,NULL);
+					}
+				}
 				if (group_2_update)
 				{
 					if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
@@ -2438,7 +2652,7 @@ combo_toggle:
 		{
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
 			{
-			/*	printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
+				/*	printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
 
 			}
@@ -3087,41 +3301,50 @@ gboolean prompt_r_u_sure(void)
  
 void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 {
+	gint num_choices = 0;
 	gint num_groups = 0;
 	gint i = 0;
-	gboolean tmp_state = FALSE;
 	gboolean state = FALSE;
+	gchar **choices = NULL;
 	gchar **groups = NULL;
-	gchar * group_states = NULL;
 	gchar * toggle_groups = NULL;
 	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
 	if (!ready)
 		return;
-	group_states = (gchar *)OBJ_GET(widget,"group_states");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
-	/*printf("groups to toggle %s to state %s\n",toggle_groups,group_states);*/
+/*	printf("groups to toggle %s to state %i\n",toggle_groups,new_state);*/
 
-	/*printf("toggling groups\n");*/
-	groups = parse_keys(toggle_groups,&num_groups,",");
+	choices = parse_keys(toggle_groups,&num_choices,",");
+	if (num_choices != 2)
+		printf("toggle_groups_linked, numeber of choices is out of range,  should be 2, its '%i'\n",num_choices);
+
 	/*printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
 
+	/* Turn off */
+	groups = parse_keys(choices[0],&num_groups,":");
+/*	printf("Choice %i, has %i groups\n",0,num_groups);*/
+	state = FALSE;
 	for (i=0;i<num_groups;i++)
 	{
-		/*printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);*/
-		tmp_state = get_state(group_states,i);
-		/*printf("If this ctrl is active we want state to be %i\n",tmp_state);*/
-		state = tmp_state == TRUE ? new_state:!new_state;
-		/*printf("Current state of button is %i\n",new_state),
-		 *printf("new group state is %i\n",state);
-		 */
+/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
 		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-		/*printf("setting all widgets in that group to state %i\n\n",state);*/
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
-	/*printf ("DONE!\n\n\n");*/
 	g_strfreev(groups);
+	/* Turn on */
+	groups = parse_keys(choices[1],&num_groups,":");
+/*	printf("Choice %i, has %i groups\n",1,num_groups);*/
+	state = new_state;
+	for (i=0;i<num_groups;i++)
+	{
+/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+	g_strfreev(choices);
 }
 
 
@@ -3182,7 +3405,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 		g_strfreev(groups);
 	}
 
-	/* First TURN ON all active groups */
+	/* Then TURN ON all active groups */
 	groups = parse_keys(choices[active],&num_groups,":");
 	state = TRUE;
 	for (j=0;j<num_groups;j++)

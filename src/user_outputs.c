@@ -128,12 +128,12 @@ GtkTreeModel * create_model(void)
 		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 		if (!name)
 			continue;
-		if (OBJ_GET(object,"raw_lower"))
-			lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+		if (OBJ_GET(object,"real_lower"))
+			lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 		else
 			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
-		if (OBJ_GET(object,"raw_upper"))
-			upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		if (OBJ_GET(object,"real_upper"))
+			upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 		else
 			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
 		range = g_strdup_printf("%i-%i",lower,upper);
@@ -343,12 +343,12 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 	{
 
-		if (OBJ_GET(object,"raw_lower"))
-			lower = (gint)strtol(OBJ_GET(object,"raw_lower"),NULL,10);
+		if (OBJ_GET(object,"real_lower"))
+			lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 		else
 			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
-		if (OBJ_GET(object,"raw_upper"))
-			upper = (gint)strtol(OBJ_GET(object,"raw_upper"),NULL,10);
+		if (OBJ_GET(object,"real_upper"))
+			upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 		else
 			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
@@ -712,13 +712,16 @@ void ms2_output_combo_setup(GtkWidget *widget)
 		name = NULL;
 		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
 		if (!object)
+		{
+			printf("couldn't find Raw RTV var with int name %s\n",data);
 			continue;
+		}
 		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
 		if (!name)
 			continue;
 		size = (DataSize)OBJ_GET(object,"size");
-		lower = OBJ_GET(object,"raw_lower");
-		upper = OBJ_GET(object,"raw_upper");
+		lower = OBJ_GET(object,"real_lower");
+		upper = OBJ_GET(object,"real_upper");
 		dl_conv = OBJ_GET(object,"dl_conv_expr");
 		ul_conv = OBJ_GET(object,"ul_conv_expr");
 		precision = (gint) OBJ_GET(object,"precision");
@@ -728,7 +731,7 @@ void ms2_output_combo_setup(GtkWidget *widget)
 		if (rtv_map->raw_list[i])
 			regex = g_strconcat("|",NULL);
 		gtk_list_store_append(store,&iter);
-		gtk_list_store_set(store,&iter,UO_CHOICE_COL,g_strdup(name),UO_BITVAL_COL,offset,UO_DL_CONV_COL,dl_conv,UO_UL_CONV_COL,ul_conv,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_SIZE_COL,size,UO_PRECISION_COL,precision,-1);
+		gtk_list_store_set(store,&iter,UO_CHOICE_COL,name,UO_BITVAL_COL,offset,UO_DL_CONV_COL,dl_conv,UO_UL_CONV_COL,ul_conv,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_SIZE_COL,size,UO_PRECISION_COL,precision,-1);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
