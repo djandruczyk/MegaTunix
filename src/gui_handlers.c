@@ -453,7 +453,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
 	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
 
-	printf("bitmask button handler\n");
 
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -469,7 +468,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			/* FAll Through */
 		case GENERIC:
-			printf("GENERIC bitmask button handler\n");
 			tmp = get_ecu_data(canID,page,offset,size);
 			tmp = tmp & ~bitmask;	/*clears bits */
 			tmp = tmp | (bitval << bitshift);
@@ -562,7 +560,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 	if (dl_type == IMMEDIATE)
 	{
-		printf("sending...\n");
 		dload_val = convert_before_download(widget,dload_val);
 		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
