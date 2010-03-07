@@ -30,6 +30,10 @@ keys=page,bind_to_list
 page=2
 bind_to_list=interdep_0_ctrl
 
+[maf_hw_cfg_label]
+keys=bind_to_list
+bind_to_list=maf_ctrls
+
 #----- Widgets ---------------------------------------------------------------
 
 [global_params_table]

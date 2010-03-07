@@ -3,6 +3,7 @@ description=Object data map for the MS2 Knock/Dwell Tab
 tab_name=_Knock/Dwell
 id_prefix=KN_DW_
 groups=defaults
+bind_to_list=valid_ecu_ctrls
 
 #----- Groups ----------------------------------------------------------------
 

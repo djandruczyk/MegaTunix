@@ -671,7 +671,7 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkLabel" id="label14">
+						<widget class="GtkLabel" id="maf_hw_cfg_label">
 						  <property name="visible">True</property>
 						  <property name="label" translatable="yes">MAF Hardware Config</property>
 						  <property name="use_underline">False</property>

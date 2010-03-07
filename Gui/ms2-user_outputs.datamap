@@ -3,6 +3,7 @@ description=Object data map for the MS2 User Outpus (Spare ports)
 tab_name=_User Outputs
 id_prefix=UO_
 groups=defaults
+bind_to_list=valid_ecu_ctrls
 
 #----- Groups ----------------------------------------------------------------
 
@@ -30,6 +31,10 @@ bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 #----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
 
 [pm2_second_cond_table]
 keys=bind_to_list
