@@ -1,7 +1,7 @@
 [global]
 description=Object data map for MS2-Extra 2.0.x Tooth/Trigger monitor
 tab_name=Trigger _Monitor
-id_prefix=TMON_
+#id_prefix=TMON_
 post_functions=reset_ttm_buttons,ms2_ttm_reset_zoom
 groups=defaults
 
@@ -9,7 +9,7 @@ groups=defaults
 
 [defaults]
 keys=page
-page=5
+page=9
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -22,14 +22,14 @@ tooltip=Enables Tooth Logger display
 [triggerlogger_enable_radio_button]
 keys=handler,page,bind_to_list,tooltip
 handler=_START_TRIGMON_LOGGER_
-page=6
+page=10
 bind_to_list=ttm_buttons
 tooltip=Enables Trigger Logger display
 
 [compositelogger_enable_radio_button]
 keys=handler,page,bind_to_list,tooltip
 handler=_START_COMPOSITEMON_LOGGER_
-page=7
+page=11
 bind_to_list=ttm_buttons
 tooltip=Enables Composite Logger display
 
@@ -42,14 +42,14 @@ tooltip=Disables Tooth Logger display
 [triggerlogger_disable_radio_button]
 keys=handler,page,bind_to_list,tooltip
 handler=_STOP_TRIGMON_LOGGER_
-page=6
+page=10
 bind_to_list=ttm_buttons
 tooltip=Disables Trigger Logger display
 
 [compositelogger_disable_radio_button]
 keys=handler,page,bind_to_list,tooltip
 handler=_STOP_COMPOSITEMON_LOGGER_
-page=7
+page=11
 bind_to_list=ttm_buttons
 tooltip=Disables Trigger Logger display
 

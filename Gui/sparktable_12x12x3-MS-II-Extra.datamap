@@ -132,7 +132,7 @@ datasource=tpspercent
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=6
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_IgnLoad.xml
+gaugexml=SportComp/AM_SportComp_IgnLoad_Gauge.xml
 datasource=ignload
 
 [SP1_gaugeframe4]

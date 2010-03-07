@@ -685,6 +685,7 @@ void ms2_output_combo_setup(GtkWidget *widget)
 	gchar * upper = NULL;
 	gchar * dl_conv = NULL;
 	gchar * ul_conv = NULL;
+	gchar * range = NULL;
 	gint offset = 0;
 	gint width = 0;
 	DataSize size = MTX_U08;
@@ -703,7 +704,7 @@ void ms2_output_combo_setup(GtkWidget *widget)
 
 	/* Create the store for the combo, with severla hidden values
 	*/
-	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
+	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
 	/* Iterate across valid variables */
 	while ((data = rtv_map->raw_list[i])!= NULL)
 	{
@@ -726,12 +727,16 @@ void ms2_output_combo_setup(GtkWidget *widget)
 		ul_conv = OBJ_GET(object,"ul_conv_expr");
 		precision = (gint) OBJ_GET(object,"precision");
 		offset = (gint) OBJ_GET(object,"offset");
+		if ((!lower) && (!upper))
+			range = g_strdup_printf("Valid Range: undefined");
+		else
+			range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
 
 		regex = g_strconcat(name,NULL);
 		if (rtv_map->raw_list[i])
 			regex = g_strconcat("|",NULL);
 		gtk_list_store_append(store,&iter);
-		gtk_list_store_set(store,&iter,UO_CHOICE_COL,name,UO_BITVAL_COL,offset,UO_DL_CONV_COL,dl_conv,UO_UL_CONV_COL,ul_conv,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_SIZE_COL,size,UO_PRECISION_COL,precision,-1);
+		gtk_list_store_set(store,&iter,UO_CHOICE_COL,name,UO_BITVAL_COL,offset,UO_DL_CONV_COL,dl_conv,UO_UL_CONV_COL,ul_conv,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_RANGE_COL,range,UO_SIZE_COL,size,UO_PRECISION_COL,precision,-1);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))

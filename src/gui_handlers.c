@@ -1155,6 +1155,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gint offset = 0;
 	gint canID = 0;
 	gint table_num = 0;
+	gchar * range = NULL;
 	DataSize size = MTX_U08;
 	gchar * choice = NULL;
 	guint8 tmp = 0;
@@ -1282,11 +1283,17 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			send_to_ecu(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
 			send_to_ecu(canID, page, offset, MTX_U08,size, TRUE);
+
+			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_LABEL(tmpwidget))
+				gtk_label_set_text(GTK_LABEL(tmpwidget),range);
 
 			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
 			if (tmpbuf)
@@ -2137,6 +2144,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean new_state = FALSE;
 	gint algo = 0;
 	gint total = 0;
+	gchar * range = NULL;
 	gchar * toggle_labels = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * swap_list = NULL;
@@ -2414,8 +2422,13 @@ void update_widget(gpointer object, gpointer user_data)
 				if ((int)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
 				{
 					/* Get the rest of the data from the combo */
-					gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+					gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
 
+					tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_LABEL(tmpwidget))
+						gtk_label_set_text(GTK_LABEL(tmpwidget),range);
 					tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
 					if (tmpbuf)
 						tmpwidget = lookup_widget(tmpbuf);
