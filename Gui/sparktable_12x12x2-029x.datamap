@@ -3,6 +3,7 @@ description=Object data map for the Spark Advance Tables (MSnS-Extra)
 tab_name=_Spark Tables
 id_prefix=SP_
 groups=defaults,load_1,load_2,rpm_1,rpm_2,spark_1,spark_2
+bind_to_list=spark_controls
 
 #----- Groups ----------------------------------------------------------------
 

@@ -290,25 +290,55 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	GtkProgressBar *pbar;
+	cairo_t *cr = NULL;
+	GdkPixmap *pmap = NULL;
 
 	g_return_val_if_fail (MTX_IS_PROGRESS_BAR (widget), FALSE);
 
 	pbar = GTK_PROGRESS_BAR (widget);
 
-	if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
-		mtx_progress_bar_paint (GTK_PROGRESS (pbar));
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
 
-	g_return_val_if_fail (event != NULL, FALSE);
+		if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+			mtx_progress_bar_paint (GTK_PROGRESS (pbar));
 
-	if (GTK_WIDGET_DRAWABLE (widget))
-		gdk_draw_drawable (widget->window,
-				widget->style->black_gc,
+		g_return_val_if_fail (event != NULL, FALSE);
+
+		if (GTK_WIDGET_DRAWABLE (widget))
+			gdk_draw_drawable (widget->window,
+					widget->style->black_gc,
+					GTK_PROGRESS (widget)->offscreen_pixmap,
+					event->area.x, event->area.y,
+					event->area.x, event->area.y,
+					event->area.width,
+					event->area.height);
+	}
+	else
+	{
+		pmap=gdk_pixmap_new(widget->window,
+				widget->allocation.width,widget->allocation.height,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_drawable(pmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				GTK_PROGRESS (widget)->offscreen_pixmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
-				event->area.width,
-				event->area.height);
-
+				event->area.width, event->area.height);
+		cr = gdk_cairo_create (pmap);
+		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+		cairo_rectangle (cr,
+				0,0,widget->allocation.width,widget->allocation.height);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				pmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		g_object_unref(pmap);
+	}
 	return TRUE;
 }
 

@@ -4044,7 +4044,7 @@ most &quot;Weight&quot;</property>
 					  <property name="visibility">True</property>
 					  <property name="max_length">6</property>
 					  <property name="text" translatable="yes">0</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="invisible_char">*</property>
 					  <property name="activates_default">False</property>
 					  <property name="width_chars">6</property>
@@ -6238,7 +6238,7 @@ most &quot;Weight&quot;</property>
 					  <property name="visibility">True</property>
 					  <property name="max_length">6</property>
 					  <property name="text" translatable="yes">0</property>
-					  <property name="has_frame">False</property>
+					  <property name="has_frame">True</property>
 					  <property name="invisible_char">*</property>
 					  <property name="activates_default">False</property>
 					  <property name="width_chars">6</property>

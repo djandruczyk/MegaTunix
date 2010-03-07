@@ -5016,7 +5016,7 @@
       <child>
 	<widget class="GtkLabel" id="label87">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MS2-Extra User Outputs</property>
+	  <property name="label" translatable="yes">MS2 User Outputs</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">True</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

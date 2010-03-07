@@ -377,6 +377,7 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="ms2_reinit_menuitem">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">MS2  Re-initialize</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="ms2_reinit" last_modification_time="Sun, 28 Feb 2010 20:40:21 GMT"/>
@@ -398,6 +399,7 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="ms2_reboot_menuitem">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">MS2 Full Reboot</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="ms2_reboot" last_modification_time="Sun, 28 Feb 2010 20:37:09 GMT"/>

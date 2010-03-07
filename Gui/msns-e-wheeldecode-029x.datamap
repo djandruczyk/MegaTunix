@@ -3,6 +3,7 @@ description=Object data map for MSnS-Extra Wheel Decoder
 tab_name=Ignition/_Wheel
 id_prefix=WD_
 groups=defaults,triggers,trig_ret,oddfire
+bind_to_list=spark_controls
 
 #----- Groups ----------------------------------------------------------------
 
@@ -93,7 +94,7 @@ keys=page,bind_to_list
 page=7
 bind_to_list=wheel_decode
 
-[wheel_hbox1]
+[wheel_toptable]
 keys=page,bind_to_list
 page=7
 bind_to_list=spark_controls

@@ -302,7 +302,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
 		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
-	if (OBJ_GET(object,"real_lower"))
+	if (OBJ_GET(object,"real_upper"))
 		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
 		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
@@ -431,12 +431,12 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(widget,"real_lower"))
-		slider->lower = (gint)strtol(OBJ_GET(widget,"real_lower"),NULL,10);
+	if (OBJ_GET(object,"real_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
 		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
-	if (OBJ_GET(widget,"real_upper"))
-		slider->upper = (gint)strtol(OBJ_GET(widget,"real_upper"),NULL,10);
+	if (OBJ_GET(object,"real_upper"))
+		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
 		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
 	slider->object = object;

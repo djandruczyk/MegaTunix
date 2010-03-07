@@ -141,8 +141,8 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 		multi->ul_eval = evaluator_create(multi->ul_conv_expr);
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
-	OBJ_SET(object,"raw_lower",g_strdup_printf("%i",lowest));
-	OBJ_SET(object,"raw_upper",g_strdup_printf("%i",highest));
+	OBJ_SET(object,"real_lower",g_strdup_printf("%i",lowest));
+	OBJ_SET(object,"real_upper",g_strdup_printf("%i",highest));
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
 	g_strfreev(ltables);

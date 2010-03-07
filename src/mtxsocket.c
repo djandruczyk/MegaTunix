@@ -471,7 +471,7 @@ close_binary:
 				switch (buf)
 				{
 					case '!': /* Potential reinit/reboot */
-						if (firmware->capabilities & MS2)
+						if ((firmware->capabilities & MS2) || (firmware->capabilities & MSNS_E))
 							state = GET_REINIT_OR_REBOOT;
 						continue;
 					case 'a':/* MS2 table full table read */
@@ -640,11 +640,20 @@ close_binary:
 						continue;
 				}
 			case GET_REINIT_OR_REBOOT:
-				if (buf == '!')
+				if ((buf == '!') && (firmware->capabilities & MS2))
 					state = GET_MS2_REBOOT;
+				else if ((buf == '!') && (firmware->capabilities & MSNS_E))
+					state = GET_MS1_EXTRA_REBOOT;
 				if (buf == 'x')
 				{
 					io_cmd("ms2_reinit",NULL);
+					state = WAITING_FOR_CMD;
+				}
+				continue;
+			case GET_MS1_EXTRA_REBOOT:
+				if (buf == 'X')
+				{
+					io_cmd("ms1_extra_reboot_get_error",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;

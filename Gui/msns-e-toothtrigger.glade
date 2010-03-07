@@ -27,14 +27,14 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkVBox" id="main_vbox1">
+	<widget class="GtkVBox" id="vbox1">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="trigmon_vbox1">
+	    <widget class="GtkVBox" id="vbox2">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">True</property>
 	      <property name="spacing">0</property>
@@ -123,7 +123,7 @@
 				      <property name="active">False</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
-				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:26 GMT"/>
+				      <signal name="toggled" handler="ms1_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:26 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -147,7 +147,7 @@
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <property name="group">toothlogger_disable_radio_button</property>
-				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:21 GMT"/>
+				      <signal name="toggled" handler="ms1_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:21 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">0</property>
@@ -215,7 +215,7 @@
 				      <property name="active">True</property>
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
-				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:32 GMT"/>
+				      <signal name="toggled" handler="ms1_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:32 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">0</property>
@@ -239,7 +239,7 @@
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">False</property>
 				      <property name="group">triggerlogger_enable_radio_button</property>
-				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:41 GMT"/>
+				      <signal name="toggled" handler="ms1_tlogger_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:41 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
