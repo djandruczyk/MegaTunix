@@ -1,7 +1,7 @@
 [global]
 description=Object data map for Warmup Wizard
 tab_name=_Warmup Wizard
-id_prefix=WARMUP_WIZ_
+#id_prefix=WARMUP_WIZ_
 tab_ident=_WARMUP_WIZ_TAB_
 groups=defaults
 
@@ -20,9 +20,9 @@ handler=_GENERIC_
 keys=tab_ident
 tab_ident=_WARMUP_WIZ_TAB_
 
-[ww_rt_table0]
-keys=register_as
-register_as=ww_rt_table0
+#[ww_rt_table0]
+#keys=register_as
+#register_as=ww_rt_table0
 
 #----- Buttons ---------------------------------------------------------------
 
