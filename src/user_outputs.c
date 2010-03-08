@@ -678,7 +678,7 @@ gboolean deferred_model_update(GtkWidget * widget)
 
 /*! \brief sets up and populates the MS2-Extra combo for output choice
  */
-void ms2_output_combo_setup(GtkWidget *widget)
+EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 {
 	gint i = 0;
 	gchar * lower = NULL;
@@ -686,7 +686,7 @@ void ms2_output_combo_setup(GtkWidget *widget)
 	gchar * dl_conv = NULL;
 	gchar * ul_conv = NULL;
 	gchar * range = NULL;
-	gint offset = 0;
+	gint bitval = 0;
 	gint width = 0;
 	DataSize size = MTX_U08;
 	gint precision = 0;
@@ -726,7 +726,7 @@ void ms2_output_combo_setup(GtkWidget *widget)
 		dl_conv = OBJ_GET(object,"dl_conv_expr");
 		ul_conv = OBJ_GET(object,"ul_conv_expr");
 		precision = (gint) OBJ_GET(object,"precision");
-		offset = (gint) OBJ_GET(object,"offset");
+		bitval = (gint) OBJ_GET(object,"offset");
 		if ((!lower) && (!upper))
 			range = g_strdup_printf("Valid Range: undefined");
 		else
@@ -736,7 +736,17 @@ void ms2_output_combo_setup(GtkWidget *widget)
 		if (rtv_map->raw_list[i])
 			regex = g_strconcat("|",NULL);
 		gtk_list_store_append(store,&iter);
-		gtk_list_store_set(store,&iter,UO_CHOICE_COL,name,UO_BITVAL_COL,offset,UO_DL_CONV_COL,dl_conv,UO_UL_CONV_COL,ul_conv,UO_LOWER_COL,lower,UO_UPPER_COL,upper,UO_RANGE_COL,range,UO_SIZE_COL,size,UO_PRECISION_COL,precision,-1);
+		gtk_list_store_set(store,&iter,
+				UO_CHOICE_COL,name,
+				UO_BITVAL_COL,bitval,
+				UO_DL_CONV_COL,dl_conv,
+				UO_UL_CONV_COL,ul_conv,
+				UO_LOWER_COL,lower,
+				UO_UPPER_COL,upper,
+				UO_RANGE_COL,range,
+				UO_SIZE_COL,size,
+				UO_PRECISION_COL,precision,
+				-1);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))

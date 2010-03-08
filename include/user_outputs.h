@@ -31,14 +31,14 @@ enum
 }UOComboCols;
 
 /* Prototypes */
-void build_model_and_view(GtkWidget *);
+EXPORT void build_model_and_view(GtkWidget *);
 GtkTreeModel * create_model(void);
 void add_columns (GtkTreeView *, GtkWidget *);
 void update_model_from_view(GtkWidget * );
 void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
 gboolean force_view_recompute();
 gboolean deferred_model_update(GtkWidget * );
-void ms2_output_combo_setup(GtkWidget *);
+EXPORT void ms2_output_combo_setup(GtkWidget *);
 
 /* Prototypes */
 

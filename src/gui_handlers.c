@@ -2406,10 +2406,12 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 	{
-		/*		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);*/
+		//printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
 
 		tmpi = ((gint)value & bitmask) >> bitshift;
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+		if (!GTK_IS_TREE_MODEL(model))
+			printf("ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
 		valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
 		i = 0;
 		while (valid)
