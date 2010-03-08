@@ -515,9 +515,6 @@ gboolean all_table_import(GIOChannel *iochannel)
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
 	Vex_Import *vex = NULL;
-	GModule *module = NULL;
-	PostFunction *pf = NULL;
-	GArray *pfuncs = NULL;
 
 	if (!iochannel)
 	{
@@ -594,11 +591,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
-	gint i = 0;
 	Vex_Import *vex = NULL;
-	GModule *module = NULL;
-	PostFunction *pf = NULL;
-	GArray *pfuncs = NULL;
 
 	if (!iochannel)
 	{
