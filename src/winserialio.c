@@ -28,7 +28,7 @@ extern GObject *global_data;
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
  by setting things basically for 8N1, no flow, no escapes, etc....
  */
-void win32_setup_serial_params(gint baud)
+void win32_setup_serial_params(gint fd, gint baud)
 {
 #ifdef __WIN32__
 	DCB dcb;
@@ -41,7 +41,7 @@ void win32_setup_serial_params(gint baud)
 	dcb.DCBlength = sizeof(dcb);
 
 	/* Populate struct with defaults from windows */
-	GetCommState((HANDLE) _get_osfhandle(serial_params->fd), &dcb);
+	GetCommState((HANDLE) _get_osfhandle(fd), &dcb);
 
 	if (baud == 9600)
 		dcb.BaudRate = CBR_9600;
@@ -63,19 +63,22 @@ void win32_setup_serial_params(gint baud)
 	dcb.fErrorChar = FALSE;		/* Don't replcae bad chars */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
-	dcb.wReserved = FALSE;		/* as per msdn */
+	dcb.wReserved = 0;		/* as per msdn */
 
 	/* Set the port properties and write the string out the port. */
-	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
+	if(SetCommState((HANDLE) _get_osfhandle (fd) ,&dcb) == 0)
 		dbg_func(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
 
 	/* Set timeout params in a fashion that mimics linux behavior */
+	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
+
 	timeouts.ReadIntervalTimeout         = 0;
-	timeouts.ReadTotalTimeoutConstant    = 100;
 	timeouts.ReadTotalTimeoutMultiplier  = 0;
-	timeouts.WriteTotalTimeoutMultiplier = 0;
 	timeouts.WriteTotalTimeoutConstant   = 0;
-	SetCommTimeouts((HANDLE) _get_osfhandle (serial_params->fd) ,&timeouts);
+	timeouts.WriteTotalTimeoutMultiplier = 0;
+	timeouts.ReadTotalTimeoutConstant    = 100;
+
+	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
 
 	return;

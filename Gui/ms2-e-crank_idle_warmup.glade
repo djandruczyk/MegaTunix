@@ -4565,7 +4565,7 @@
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
 				    <widget class="GtkTable" id="cranking_table">
@@ -4818,7 +4818,7 @@
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
 				    <widget class="GtkTable" id="table183">
@@ -5629,7 +5629,7 @@
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
 				    <widget class="GtkTable" id="table194">
@@ -5839,7 +5839,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="table197">
@@ -6596,7 +6596,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="pwm_idle_layout_table">
@@ -6835,7 +6835,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="idle_control_layout_table">
@@ -7073,7 +7073,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="table216">
@@ -7288,7 +7288,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="iac_idle_layout_table">
@@ -7669,7 +7669,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="pwm_layout_table">
@@ -7880,7 +7880,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="table215">
@@ -8095,7 +8095,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="table224">
@@ -8329,7 +8329,7 @@ of this window to get there...</property>
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_NONE</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
 					<widget class="GtkTable" id="table199">

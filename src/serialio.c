@@ -387,6 +387,7 @@ void *serial_repair_thread(gpointer data)
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
 					if (comms_test())
 					{	/* We have a winner !!  Abort loop */
+						thread_update_logbar("comms_view",NULL,g_strdup_printf("Search successfull\n"),FALSE,FALSE);
 						serial_is_open = TRUE;
 						break;
 					}
@@ -401,6 +402,7 @@ void *serial_repair_thread(gpointer data)
 						if (comms_test())
 						{	/* We have a winner !!  
 							   Abort loop */
+							thread_update_logbar("comms_view",NULL,g_strdup_printf("Search successfull\n"),FALSE,FALSE);
 							serial_is_open = TRUE;
 							break;
 						}

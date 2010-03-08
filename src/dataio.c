@@ -239,10 +239,18 @@ gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 	extern Serial_Params * serial_params;
 	gint res = 0;
 
+/*	printf("write_wrapper\n"); */
 	if (serial_params->net_mode)
+	{
+/*		printf("net mode write\n"); */
 		res = send(fd,buf,count,MSG_NOSIGNAL);
+	}
 	else
+	{
+/*		printf("normal write %i bytes\n",count); */
 		res = write(fd,buf,count);
+/*		printf("result of write is %i\n",res); */
+	}
 	*len = res;
 	if (res < 0)
 	{

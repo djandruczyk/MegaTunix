@@ -724,7 +724,7 @@
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="table19">
@@ -1613,7 +1613,7 @@
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="table1">
@@ -1794,7 +1794,7 @@
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="table2">
@@ -7687,7 +7687,7 @@ CLT Correction&lt;/small&gt;</property>
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="table17">
@@ -8095,7 +8095,7 @@ CLT Correction&lt;/small&gt;</property>
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MS2-Extra Acceleration Enrichments</property>
+	  <property name="label" translatable="yes">MS2/2-Extra Acceleration Enrichments</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -99,7 +99,7 @@
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="noise_filter_table">
@@ -1059,7 +1059,7 @@ method</property>
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
 				<widget class="GtkTable" id="table50">
