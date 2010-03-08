@@ -78,8 +78,6 @@ void init(void)
 	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
-	OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(125));
-	OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"width",GINT_TO_POINTER(640));
 	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
@@ -204,10 +202,6 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_y_origin", &tmpi))
 			OBJ_SET(global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "rtt_width", &tmpi))
-			OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "rtt_height", &tmpi))
-			OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_x_origin", &tmpi))
 			OBJ_SET(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_y_origin", &tmpi))
@@ -425,10 +419,6 @@ void save_config(void)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
 			{
-				gdk_drawable_get_size(widget->window, &tmp_width,&tmp_height);
-
-				cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
-				cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				if (x > 0)
 					cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);

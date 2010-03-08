@@ -87,7 +87,7 @@ bind_to_list=rotary
 keys=bind_to_list
 bind_to_list=rotary
 
-[rotary_gaugebox]
+[gauge_table]
 keys=bind_to_list
 bind_to_list=rotary
 

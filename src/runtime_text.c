@@ -97,10 +97,8 @@ EXPORT void load_rt_text_pf()
 	x = (gint)OBJ_GET(global_data,"rtt_x_origin");
 	y = (gint)OBJ_GET(global_data,"rtt_y_origin");
 	gtk_window_move(GTK_WINDOW(window),x,y);
-	w = (gint)OBJ_GET(global_data,"rtt_width");
-	h = (gint)OBJ_GET(global_data,"rtt_height");
-	gtk_window_set_default_size(GTK_WINDOW(window),w,h);
-	gtk_window_resize(GTK_WINDOW(window),w,h);
+	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
+	g_object_set(window, "resizable", FALSE, NULL);
 	parent = glade_xml_get_widget(xml,"rtt_vbox");
 	glade_xml_signal_autoconnect(xml);
 
