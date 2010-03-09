@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define _ISOC99_SOURCE
 #include <2d_table_editor.h>
 #include <3d_vetable.h>
 #include <args.h>
@@ -33,10 +34,12 @@
 #include <init.h>
 #include <keyparser.h>
 #include <listmgmt.h>
+#include <locking.h>
 #include <logviewer_core.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
+#include <mtxmatheval.h>
 #include <offline.h>
 #include <mode_select.h>
 #include <notifications.h>
@@ -61,7 +64,6 @@
 
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
-static gboolean force_color_update = FALSE;
 static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
@@ -94,7 +96,7 @@ volatile gboolean leaving = FALSE;
  \param data (gpointer) quiet or not quiet, leave mode .quiet doesn't prompt 
  to save anything
  */
-EXPORT void leave(GtkWidget *widget, gpointer data)
+EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
@@ -123,11 +125,11 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (!args->be_quiet)
 	{
 		if(!prompt_r_u_sure())
-			return;
+			return TRUE;
 		prompt_to_save();
 	}
 	if (leaving)
-		return;
+		return TRUE;
 
 	leaving = TRUE;
 	/* Stop timeout functions */
@@ -145,7 +147,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	/* Message to trigger serial repair queue to exit immediately */
-	g_async_queue_push(io_repair_queue,&tmp);
+	if (io_repair_queue)
+		g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
@@ -230,6 +233,8 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	if (gui_dispatcher_id)
 		g_source_remove(gui_dispatcher_id);
 	gui_dispatcher_id = 0;
+	close_serial();
+	unlock_serial();
 
 
 	/* Grab and release all mutexes to get them to relinquish
@@ -244,7 +249,7 @@ EXPORT void leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
 	gtk_main_quit();
-	return;
+	return TRUE;
 }
 
 
@@ -264,6 +269,12 @@ gboolean comm_port_override(GtkEditable *editable)
 	g_free(OBJ_GET(global_data,"override_port"));
 	OBJ_SET(global_data,"override_port",g_strdup(port));
 	g_free(port);
+	close_serial();
+	unlock_serial();
+	/* I/O thread should detect the closure and spawn the serial
+	 * repair thread which should take care of flipping to the 
+	 * overridden port
+	 */
 	return TRUE;
 }
 
@@ -297,6 +308,10 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
 		{
+			case TOGGLE_NETMODE:
+				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
+				open_tcpip_sockets();
+				break;
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
@@ -308,7 +323,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				tracking_focus[(gint)g_ascii_strtod(tmpbuf,NULL)] = TRUE;
+				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = TRUE;
 				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
@@ -357,6 +372,9 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* not pressed */
 		switch ((ToggleButton)handler)
 		{
+			case TOGGLE_NETMODE:
+				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
+				break;
 			case COMM_AUTODETECT:
 				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
@@ -364,7 +382,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				tracking_focus[(gint)g_ascii_strtod(tmpbuf,NULL)] = FALSE;
+				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = FALSE;
 				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_disable(tip);
@@ -407,7 +425,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gchar * set_labels = NULL;
 	gchar * table_2_update = NULL;
 	gchar * group_2_update = NULL;
-	gchar * tmpbuf = NULL;
 	extern gint dbg_lvl;
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
@@ -435,6 +452,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
 	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
+
 
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -469,8 +487,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			/* Alternate or simultaneous */
 			if (firmware->capabilities & MSNS_E)
 			{
-				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 				tmp = get_ecu_data(canID,page,offset,size);
 				tmp = tmp & ~bitmask;/* clears bits */
 				tmp = tmp | (bitval << bitshift);
@@ -495,8 +512,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 				dload_val = bitval;
 				if (dload_val == get_ecu_data(canID,page,offset,size))
 					return FALSE;
@@ -688,16 +704,14 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
-	/*
-	if (!OBJ_GET(widget,"raw_lower"))
+	if (OBJ_GET(widget,"raw_lower"))
+		raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	else
 		raw_lower = get_extreme_from_size(size,LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
-	*/
-		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
-	if (!OBJ_GET(widget,"raw_upper"))
 		raw_upper = get_extreme_from_size(size,UPPER);
-	else
-		raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
@@ -705,11 +719,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	precision = (gint)OBJ_GET(widget,"precision");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
 	if (use_color)
-	{
-		tmpbuf = OBJ_GET(widget,"table_num");
-		if (tmpbuf)
-			table_num = (gint)strtol(tmpbuf,NULL,10);
-	}
+		if (OBJ_GET(widget,"table_num"))
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
@@ -883,15 +894,21 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	{
 		if (table_num >= 0)
 		{
-			recalc_table_limits(canID,table_num);
+			if (firmware->table_params[table_num]->color_update == FALSE)
+			{
+				recalc_table_limits(canID,table_num);
+				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
+					firmware->table_params[table_num]->color_update = TRUE;
+				else
+					firmware->table_params[table_num]->color_update = FALSE;
+			}
+
 			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
 			color = get_colors_from_hue(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-			printf("TABLE NUM >= 0, dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180);
 		}
 		else
 		{
 			color = get_colors_from_hue(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-			printf("dload val %i, raw_lower %i, raw_upper %i, angle %f\n",dload_val,raw_lower,raw_upper,((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180);
 		}
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 	}
@@ -944,12 +961,21 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case PHONE_HOME:
+			printf("Phone home (callback TCP) is not yet implemented, ask nicely\n");
+			break;
 		case INCREMENT_VALUE:
 		case DECREMENT_VALUE:
 			dest = OBJ_GET(widget,"partner_widget");
 			tmp2 = (gint)OBJ_GET(widget,"amount");
-			raw_lower = (gint)OBJ_GET(dest,"raw_lower");
-			raw_upper = (gint)OBJ_GET(dest,"raw_upper");
+			if (OBJ_GET(widget,"raw_lower"))
+				raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+			else
+				raw_lower = get_extreme_from_size(size,LOWER);
+			if (OBJ_GET(widget,"raw_upper"))
+				raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+			else
+				raw_upper = get_extreme_from_size(size,UPPER);
 			canID = (gint)OBJ_GET(dest,"canID");
 			page = (gint)OBJ_GET(dest,"page");
 			size = (DataSize)OBJ_GET(dest,"size");
@@ -973,20 +999,12 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case EXPORT_SINGLE_TABLE:
-			tmpbuf = OBJ_GET(widget,"table_num");
-			if (tmpbuf)
-			{
-				tmpi = (gint)strtol(tmpbuf,NULL,10);
-				select_table_for_export(tmpi);
-			}
+			if (OBJ_GET(widget,"table_num"))
+				select_table_for_export((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case IMPORT_SINGLE_TABLE:
-			tmpbuf = OBJ_GET(widget,"table_num");
-			if (tmpbuf)
-			{
-				tmpi = (gint)strtol(tmpbuf,NULL,10);
-				select_table_for_import(tmpi);
-			}
+			if (OBJ_GET(widget,"table_num"))
+				select_table_for_import((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);
@@ -1090,8 +1108,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			set_offline_mode();
 			break;
 		case TE_TABLE:
-		        tmpi = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
-			create_2d_table_editor(tmpi);
+			if (OBJ_GET(widget,"te_table_num"))
+				create_2d_table_editor((gint)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
 			break;
 		case TE_TABLE_GROUP:
 			create_2d_table_editor_group(widget);
@@ -1125,6 +1143,11 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * table_2_update = NULL;
 	gchar * group_2_update = NULL;
+	gchar * lower = NULL;
+	gchar * upper = NULL;
+	gchar * dl_conv = NULL;
+	gchar * ul_conv = NULL;
+	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
 	gint tmpi = 0;
@@ -1132,12 +1155,17 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gint offset = 0;
 	gint canID = 0;
 	gint table_num = 0;
+	gchar * range = NULL;
 	DataSize size = MTX_U08;
 	gchar * choice = NULL;
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
 	Deferred_Data *d_data = NULL;
+	GtkWidget *tmpwidget = NULL;
+	void *eval = NULL;
 	extern Firmware_Details *firmware;
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
@@ -1172,7 +1200,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 		if (!search_model(model,widget,&iter))
 			return FALSE;
 	}
-        gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
+	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
 			BITVAL_COL,&bitval,-1);
 
 	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
@@ -1203,8 +1231,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			/* Alternate or simultaneous */
 			if (firmware->capabilities & MSNS_E)
 			{
-				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 				tmp = get_ecu_data(canID,page,offset,size);
 				tmp = tmp & ~bitmask;/* clears bits */
 				tmp = tmp | (bitval << bitshift);
@@ -1229,8 +1256,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 				dload_val = bitval;
 				if (dload_val == get_ecu_data(canID,page,offset,size))
 				{
@@ -1250,6 +1276,149 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				check_req_fuel_limits(table_num);
 			}
 			break;
+		case MS2_USER_OUTPUTS:
+			/* Send the offset */
+			tmp = get_ecu_data(canID,page,offset,size);
+			tmp = tmp & ~bitmask;	/*clears bits */
+			tmp = tmp | (bitval << bitshift);
+			send_to_ecu(canID, page, offset, size, tmp, TRUE);
+			/* Get the rest of the data from the combo */
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+
+			/* Send the "size" of the offset to the ecu */
+			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
+			send_to_ecu(canID, page, offset, MTX_U08,size, TRUE);
+
+			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_LABEL(tmpwidget))
+				gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+
+			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(tmpwidget))
+			{
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"dl_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+					eval = NULL;
+				}
+				if (dl_conv)
+				{
+					eval = evaluator_create(dl_conv);
+					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					if (upper)
+					{
+						tmpf2 = g_ascii_strtod(upper,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler thresh has dl conv expr and upper limit of %f\n",tmpf);*/
+					}
+					if (lower)
+					{
+						tmpf2 = g_ascii_strtod(lower,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler thresh has dl conv expr and lower limit of %f\n",tmpf);*/
+					}
+				}
+				else
+					OBJ_SET(tmpwidget,"raw_upper",upper);
+
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"ul_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+					eval = NULL;
+				}
+				if (ul_conv)
+				{
+					eval = evaluator_create(ul_conv);
+					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+				}
+				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+				/*printf ("combo_handler thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				update_widget(tmpwidget,NULL);
+			}
+			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
+			if (tmpbuf)
+				tmpwidget = lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(tmpwidget))
+			{
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"dl_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+					eval = NULL;
+				}
+				if (dl_conv)
+				{
+					eval = evaluator_create(dl_conv);
+					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					if (upper)
+					{
+						tmpf2 = g_ascii_strtod(upper,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler hyst has dl conv expr and upper limit of %f\n",tmpf);*/
+					}
+					if (lower)
+					{
+						tmpf2 = g_ascii_strtod(lower,NULL);
+						tmpf = evaluator_evaluate_x(eval,tmpf2);
+						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+						if (tmpbuf)
+							g_free(tmpbuf);
+						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						/*printf("combo_handler hyst has dl conv expr and lower limit of %f\n",tmpf);*/
+					}
+				}
+				else
+					OBJ_SET(tmpwidget,"raw_upper",upper);
+
+				eval = NULL;
+				eval = OBJ_GET(tmpwidget,"ul_evaluator");
+				if (eval)
+				{
+					evaluator_destroy(eval);
+					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+					eval = NULL;
+				}
+				if (ul_conv)
+				{
+					eval = evaluator_create(ul_conv);
+					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+				}
+				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+				/*printf ("combo_handler hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				update_widget(tmpwidget,NULL);
+			}
+			return TRUE;
+			break;
 		default:
 			printf("std_combo_handler, default case!!!  wrong wrong wrong!!\n");
 			break;
@@ -1266,7 +1435,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 		vector = g_strsplit(set_labels,",",-1);
 		if ((g_strv_length(vector)%(total+1)) != 0)
 		{
-			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem wiht set_widget_labels, counts don't match up\n"));
+			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
 			goto combo_download;
 		}
 		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
@@ -1321,7 +1490,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint source = 0;
 	gboolean temp_dep = FALSE;
 	gfloat value = 0.0;
-	gchar *tmpbuf = NULL;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
 	extern gint realtime_id;
@@ -1431,15 +1599,13 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
-			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
 			firmware->rf_params[table_num]->req_fuel_total = value;
 			check_req_fuel_limits(table_num);
 			break;
 		case LOCKED_REQ_FUEL:
-			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),firmware->rf_params[table_num]->req_fuel_total);
 			break;
 
@@ -1454,8 +1620,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_1:
 		case NUM_SQUIRTS_2:
 			/* This actually affects another variable */
-			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_num_squirts = firmware->rf_params[table_num]->num_squirts;
 			firmware->rf_params[table_num]->last_divider = get_ecu_data(canID,page,divider_offset,size);
@@ -1488,8 +1653,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_1:
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
-			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			/*printf("table num %i\n",table_num);*/
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_divider = get_ecu_data(canID,page,divider_offset,size);
@@ -1542,8 +1706,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_INJECTORS_1:
 		case NUM_INJECTORS_2:
 			/* Updates a shared bitfield */
-			tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			firmware->rf_params[table_num]->last_num_inj = firmware->rf_params[table_num]->num_inj;
 			firmware->rf_params[table_num]->num_inj = tmpi;
 
@@ -1684,8 +1847,6 @@ EXPORT void update_ve_const_pf()
 	gfloat tmpf = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
-	gint prev_max = 0;
-	gint prev_min = 0;
 	guint mask = 0;
 	guint shift = 0;
 	guint tmpi = 0;
@@ -1751,12 +1912,15 @@ EXPORT void update_ve_const_pf()
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		prev_max = firmware->table_params[i]->z_maxval;
-		prev_min = firmware->table_params[i]->z_minval;
-		recalc_table_limits(0,i);
-		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
-			force_color_update = TRUE;
-		/*printf("\n");*/
+		if (firmware->table_params[i]->color_update == FALSE)
+		{
+			recalc_table_limits(0,i);
+			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+				firmware->table_params[i]->color_update = TRUE;
+			else
+				firmware->table_params[i]->color_update = FALSE;
+		}
+
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
@@ -1875,8 +2039,9 @@ EXPORT void update_ve_const_pf()
 			}
 		}
 	}
+	for (i=0;i<firmware->total_tables;i++)
+		firmware->table_params[i]->color_update = FALSE;
 
-	force_color_update = FALSE;
 	paused_handlers = FALSE;
 	set_title(g_strdup("Ready..."));
 	return;
@@ -1920,7 +2085,7 @@ gboolean force_update_table(gpointer data)
 		return FALSE;
 	if (page > firmware->total_pages)
 	       return FALSE;
-	table_num = (gint)g_ascii_strtod((gchar *)data,NULL);
+	table_num = (gint)strtol((gchar *)data,NULL,10);
 	if ((table_num < 0) || (table_num > (firmware->total_tables-1)))
 		return FALSE;
 	base = firmware->table_params[table_num]->z_base;
@@ -1953,6 +2118,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
 	gboolean use_color = FALSE;
+	gboolean changed = FALSE;
 	guint i = 0;
 	gint j = 0;
 	gint tmpi = -1;
@@ -1978,6 +2144,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean new_state = FALSE;
 	gint algo = 0;
 	gint total = 0;
+	gchar * range = NULL;
+	gchar * toggle_labels = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
@@ -1985,10 +2153,17 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar **vector = NULL;
 	gchar * widget_text = NULL;
 	gchar * group_2_update = NULL;
+	gchar * lower = NULL;
+	gchar * upper = NULL;
+	gchar * dl_conv = NULL;
+	gchar * ul_conv = NULL;
+	GtkWidget *tmpwidget = NULL;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
+	void *eval = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gdouble spin_value = 0.0; 
-	gboolean update_color = TRUE;
 	GdkColor color;
 	extern Firmware_Details *firmware;
 	extern gint *algorithm;
@@ -2009,7 +2184,6 @@ void update_widget(gpointer object, gpointer user_data)
 			}
 			gtk_main_iteration();
 		}
-
 	}
 	if (!GTK_IS_OBJECT(widget))
 		return;
@@ -2028,15 +2202,14 @@ void update_widget(gpointer object, gpointer user_data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
-/*	if (!OBJ_GET(widget,"raw_lower"))
+	if (OBJ_GET(widget,"raw_lower"))
+		raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	else
 		raw_lower = get_extreme_from_size(size,LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
-	*/
-		raw_lower = (gint)OBJ_GET(widget,"raw_lower");
-	if (!OBJ_GET(widget,"raw_upper"))
 		raw_upper = get_extreme_from_size(size,UPPER);
-	else
-		raw_upper = (gint)OBJ_GET(widget,"raw_upper");
 	bitval = (gint)OBJ_GET(widget,"bitval");
 	bitmask = (gint)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
@@ -2047,14 +2220,12 @@ void update_widget(gpointer object, gpointer user_data)
 
 	precision = (gint)OBJ_GET(widget,"precision");
 	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	use_color = (gboolean)OBJ_GET(widget,"use_color");
 	if (use_color)
-	{
-		tmpbuf = OBJ_GET(widget,"table_num");
-		if (tmpbuf)
-			table_num = (gint)strtol(tmpbuf,NULL,10);
-	}
+		if (OBJ_GET(widget,"table_num"))
+			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
@@ -2082,13 +2253,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch (get_ecu_data(canID,page,oddfire_bit_offset,size))
 			{
 				case 4:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
 					break;
 				case 2:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
 					break;
 				case 0:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
 					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ecu_data[%i][%i], ERROR\n",page,oddfire_bit_offset));
@@ -2103,13 +2274,13 @@ void update_widget(gpointer object, gpointer user_data)
 			switch ((get_ecu_data(canID,page,spconfig_offset,size) & 0x03))
 			{
 				case 2:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
 					break;
 				case 1:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
 					break;
 				case 0:
-						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 					break;
 				default:
 					dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",page,spconfig_offset));
@@ -2121,46 +2292,52 @@ void update_widget(gpointer object, gpointer user_data)
 		else
 		{
 			widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-			update_color = TRUE;
 			if (base == 10)
 			{
 				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else if (!force_color_update)
-					update_color = FALSE;
+					changed = TRUE;
+				}
 				g_free(tmpbuf);
 			}
 			else if (base == 16)
 			{
 				tmpbuf = g_strdup_printf("%.2X",(gint)value);
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else if (!force_color_update)
-					update_color = FALSE;
+					changed = TRUE;
+				}
 				g_free(tmpbuf);
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"));
 
-			if ((use_color) && (update_color))
+			if (use_color)
 			{
-				if (table_num >= 0)
+				if ((table_num >= 0) && (firmware->table_params[table_num]->color_update))
 				{
 					scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
-					color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-					
+					color = get_colors_from_hue(256.0 - (get_ecu_data(canID,page,offset,size)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+
 				}
 				else
 				{
-					color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-					//color = get_colors_from_hue(256 - (get_ecu_data(canID,page,offset,size)-raw_lower)*(256.0/((raw_upper-raw_lower)*1.05)), 0.50, 1.0);
+					if (changed)
+					{
+						color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+					}
 				}
 
-				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 			}
-			if (update_color)
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			/*
+			   if (update_color)
+			   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			   */
 		}
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
@@ -2229,10 +2406,12 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 	{
-		/*		printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);*/
+		//printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
 
 		tmpi = ((gint)value & bitmask) >> bitshift;
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+		if (!GTK_IS_TREE_MODEL(model))
+			printf("ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
 		valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
 		i = 0;
 		while (valid)
@@ -2242,6 +2421,139 @@ void update_widget(gpointer object, gpointer user_data)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 				gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
+				if ((int)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
+				{
+					/* Get the rest of the data from the combo */
+					gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+
+					tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_LABEL(tmpwidget))
+						gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+					tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_WIDGET(tmpwidget))
+					{
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"dl_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+							eval = NULL;
+						}
+						if (dl_conv)
+						{
+							eval = evaluator_create(dl_conv);
+							OBJ_SET(tmpwidget,"dl_evaluator",eval);
+							if (upper)
+							{
+								tmpf2 = g_ascii_strtod(upper,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget thresh has dl conv expr and upper limit of %f\n",tmpf);*/
+							}
+							if (lower)
+							{
+								tmpf2 = g_ascii_strtod(lower,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget thresh has dl conv expr and lower limit of %f\n",tmpf);*/
+							}
+						}
+						else
+							OBJ_SET(tmpwidget,"raw_upper",upper);
+
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"ul_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+							eval = NULL;
+						}
+						if (ul_conv)
+						{
+							eval = evaluator_create(ul_conv);
+							OBJ_SET(tmpwidget,"ul_evaluator",eval);
+						}
+						OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+						OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+						OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+						OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+						/*printf ("update widgets setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+						update_widget(tmpwidget,NULL);
+					}
+					tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
+					if (tmpbuf)
+						tmpwidget = lookup_widget(tmpbuf);
+					if (GTK_IS_WIDGET(tmpwidget))
+					{
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"dl_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+							eval = NULL;
+						}
+						if (dl_conv)
+						{
+							eval = evaluator_create(dl_conv);
+							OBJ_SET(tmpwidget,"dl_evaluator",eval);
+							if (upper)
+							{
+								tmpf2 = g_ascii_strtod(upper,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget hyst has dl conv expr and upper limit of %f\n",tmpf);*/
+							}
+							if (lower)
+							{
+								tmpf2 = g_ascii_strtod(lower,NULL);
+								tmpf = evaluator_evaluate_x(eval,tmpf2);
+								tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+								if (tmpbuf)
+									g_free(tmpbuf);
+								OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+								/*printf("update_widget hyst has dl conv expr and lower limit of %f\n",tmpf);*/
+							}
+						}
+						else
+							OBJ_SET(tmpwidget,"raw_upper",upper);
+
+						eval = NULL;
+						eval = OBJ_GET(tmpwidget,"ul_evaluator");
+						if (eval)
+						{
+							evaluator_destroy(eval);
+							OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+							eval = NULL;
+						}
+						if (ul_conv)
+						{
+							eval = evaluator_create(ul_conv);
+							OBJ_SET(tmpwidget,"ul_evaluator",eval);
+						}
+						OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+						OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+						OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+						OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+						/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+						update_widget(tmpwidget,NULL);
+					}
+				}
 				if (group_2_update)
 				{
 					if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
@@ -2297,6 +2609,8 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_widget_modify_base(GTK_BIN(widget)->child,GTK_STATE_NORMAL,&red);
 		return;
 combo_toggle:
+		if (toggle_labels)
+			combo_toggle_labels_linked(widget,i);
 		if (toggle_groups)
 			combo_toggle_groups_linked(widget,i);
 		if (swap_list)
@@ -2350,7 +2664,7 @@ combo_toggle:
 		{
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
 			{
-			/*	printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
+				/*	printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
 
 			}
@@ -2419,11 +2733,13 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint offset = 0;
 	DataSize size = 0;
 	gint value = 0;
+	gint active_table = -1;
 	glong lower = 0;
 	glong upper = 0;
 	glong hardlower = 0;
 	glong hardupper = 0;
 	gint dload_val = 0;
+	gboolean send = FALSE;
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	extern Firmware_Details *firmware;
@@ -2434,11 +2750,17 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	offset = (gint) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (gboolean) OBJ_GET(widget,"reverse_keys");
+	if (OBJ_GET(widget,"table_num"))
+		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	if (OBJ_GET(widget,"raw_lower"))
-		lower = (gint) OBJ_GET(widget,"raw_lower");
-	hardlower = get_extreme_from_size(size,LOWER);
+		lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	else
+		lower = get_extreme_from_size(size,LOWER);
 	if (OBJ_GET(widget,"raw_upper"))
-		upper = (gint) OBJ_GET(widget,"raw_upper");
+		upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+	else
+		upper = get_extreme_from_size(size,UPPER);
+	hardlower = get_extreme_from_size(size,LOWER);
 	hardupper = get_extreme_from_size(size,UPPER);
 
 	upper = upper > hardupper ? hardupper:upper;
@@ -2476,6 +2798,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_Page_Down:
@@ -2493,6 +2816,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_plus:
@@ -2515,6 +2839,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_W:
@@ -2533,6 +2858,31 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				else
 					return FALSE;
 			}
+			send = TRUE;
+			retval = TRUE;
+			break;
+		case GDK_H:
+		case GDK_h:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_LEFT);
+			retval = TRUE;
+			break;
+		case GDK_L:
+		case GDK_l:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_RIGHT);
+			retval = TRUE;
+			break;
+		case GDK_K:
+		case GDK_k:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_UP);
+			retval = TRUE;
+			break;
+		case GDK_J:
+		case GDK_j:
+			if (active_table >= 0)
+				refocus_cell(widget,GO_DOWN);
 			retval = TRUE;
 			break;
 		case GDK_Escape:
@@ -2543,7 +2893,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		default:	
 			retval = FALSE;
 	}
-	if (retval)
+	if (send)
 		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 
 	return retval;
@@ -2642,7 +2992,6 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
-	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
 	extern gboolean rt_forced_update;
 	GtkWidget *sub = NULL;
@@ -2654,11 +3003,10 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 	if (active_page == RUNTIME_TAB)
 		rt_forced_update = TRUE;
 
-	if (OBJ_GET(widget,"table_num"))
-	{
-		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
-	}
+	if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
+		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+	else
+		active_table = -1;
 
 	if (OBJ_GET(widget,"sub-notebook"))
 	{
@@ -2669,12 +3017,13 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
 			/*printf("subtable found, searching for active page\n");*/
-			if (OBJ_GET(widget,"table_num"))
+			if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 			{
-				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
+				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 			/*	printf("found it,  active table %i\n",active_table);*/
 			}
+			else
+				active_table = -1;
 			/*else
 			 *	printf("didn't find table_num key on subtable\n");
 			 */
@@ -2700,17 +3049,13 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
  */
 EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
-	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
-	if (!OBJ_GET(widget,"table_num"))
-		return;
+	if (OBJ_GET(widget,"table_num"))
+		active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 	else
-	{
-		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
-	}
+		return;
 /*	printf("active table changed to %i\n",active_table); */
 	forced_update = TRUE;
 
@@ -2951,8 +3296,9 @@ gboolean prompt_r_u_sure(void)
 
 	if (result == GTK_RESPONSE_YES)
 		return TRUE;
-	else return FALSE;
-
+	else 
+		return FALSE;
+	return FALSE;
 }
 
 
@@ -2967,41 +3313,50 @@ gboolean prompt_r_u_sure(void)
  
 void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 {
+	gint num_choices = 0;
 	gint num_groups = 0;
 	gint i = 0;
-	gboolean tmp_state = FALSE;
 	gboolean state = FALSE;
+	gchar **choices = NULL;
 	gchar **groups = NULL;
-	gchar * group_states = NULL;
 	gchar * toggle_groups = NULL;
 	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
 	if (!ready)
 		return;
-	group_states = (gchar *)OBJ_GET(widget,"group_states");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
-	/*printf("groups to toggle %s to state %s\n",toggle_groups,group_states);*/
+/*	printf("groups to toggle %s to state %i\n",toggle_groups,new_state);*/
 
-	/*printf("toggling groups\n");*/
-	groups = parse_keys(toggle_groups,&num_groups,",");
+	choices = parse_keys(toggle_groups,&num_choices,",");
+	if (num_choices != 2)
+		printf("toggle_groups_linked, numeber of choices is out of range,  should be 2, its '%i'\n",num_choices);
+
 	/*printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
 
+	/* Turn off */
+	groups = parse_keys(choices[0],&num_groups,":");
+/*	printf("Choice %i, has %i groups\n",0,num_groups);*/
+	state = FALSE;
 	for (i=0;i<num_groups;i++)
 	{
-		/*printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);*/
-		tmp_state = get_state(group_states,i);
-		/*printf("If this ctrl is active we want state to be %i\n",tmp_state);*/
-		state = tmp_state == TRUE ? new_state:!new_state;
-		/*printf("Current state of button is %i\n",new_state),
-		 *printf("new group state is %i\n",state);
-		 */
+/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
 		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-		/*printf("setting all widgets in that group to state %i\n\n",state);*/
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
-	/*printf ("DONE!\n\n\n");*/
 	g_strfreev(groups);
+	/* Turn on */
+	groups = parse_keys(choices[1],&num_groups,":");
+/*	printf("Choice %i, has %i groups\n",1,num_groups);*/
+	state = new_state;
+	for (i=0;i<num_groups;i++)
+	{
+/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+	g_strfreev(choices);
 }
 
 
@@ -3062,7 +3417,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 		g_strfreev(groups);
 	}
 
-	/* First TURN ON all active groups */
+	/* Then TURN ON all active groups */
 	groups = parse_keys(choices[active],&num_groups,":");
 	state = TRUE;
 	for (j=0;j<num_groups;j++)
@@ -3076,6 +3431,63 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	/*printf ("DONE!\n\n\n");*/
 	g_strfreev(choices);
 }
+
+
+
+
+/*!
+ * \brief combo_toggle_labels_linked is used to change the state of controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param widget, combo button
+ * \param active, which entry in list was selected
+ */
+void combo_toggle_labels_linked(GtkWidget *widget,gint active)
+{
+	gint num_groups = 0;
+	gint i = 0;
+	gchar **groups = NULL;
+	gchar * toggle_labels = NULL;
+	extern gboolean ready;
+
+	if (!ready)
+		return;
+	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
+
+	groups = parse_keys(toggle_labels,&num_groups,",");
+	/* toggle_labels is a list of groups of widgets that need to have their 
+	 * label reset to a specific one from an array bound to that widget.
+	 * So we get the names of those groups, and call "set_widget_label_from_array"
+	 * passing in the index of the one in the array we want
+	 */
+	for (i=0;i<num_groups;i++)
+		g_list_foreach(get_list(groups[i]),set_widget_label_from_array,GINT_TO_POINTER(active));
+
+	g_strfreev(groups);
+}
+
+
+void set_widget_label_from_array(gpointer key, gpointer data)
+{
+	gchar *labels = NULL;
+	gchar **vector = NULL;
+	GtkWidget *label = (GtkWidget *)key;
+	gint index = (gint)data;
+
+	if (!GTK_IS_LABEL(label))
+		return;
+	labels = OBJ_GET(label,"labels");
+	if (!labels)
+		return;
+	vector = g_strsplit(labels,",",-1);
+	if (index > g_strv_length(vector))
+		return;
+	gtk_label_set_text(GTK_LABEL(label),vector[index]);
+	g_strfreev(vector);
+	return;
+}
+
 
 
 gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
@@ -3124,10 +3536,10 @@ guint get_bitshift(guint mask)
 	return 0;
 }
 
-EXPORT void update_misc_gauge(DataWatch *watch, gfloat value)
+EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (MTX_IS_GAUGE_FACE(watch->user_data))
-		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),value);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);
 	else
 		remove_watch(watch->id);
 }
@@ -3137,31 +3549,12 @@ void refresh_widgets_at_offset(gint page, gint offset)
 	guint i = 0;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
-	gint prev_min = 0;
-	gint prev_max = 0;
 
 	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
 
-	for (i=0;i<firmware->total_tables;i++)
-	{
-		prev_max = firmware->table_params[i]->z_maxval;
-		prev_min = firmware->table_params[i]->z_minval;
-		recalc_table_limits(0,i);
-		if ((!force_color_update) || (prev_max != firmware->table_params[i]->z_maxval) || (prev_min != firmware->table_params[i]->z_minval))
-			force_color_update = TRUE;
-	}
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-	{
-		if ((gint)OBJ_GET(g_list_nth_data(ve_widgets[page][offset],i),"dl_type") != DEFERRED)
-		{
-	/*		printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));*/
-			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
-		}
-	/*	else
-			printf("\n\nNOT updating widget %s because it's defered\n\n\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[page][offset],i)));
-			*/
 
-	}
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
 	update_ve3d_if_necessary(page,offset);
 }
 
@@ -3223,8 +3616,14 @@ EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 	gfloat val = 0.0;
 	gboolean clamped = FALSE;
 
-	lower = (gint)OBJ_GET(widget,"raw_lower");
-	upper = (gint)OBJ_GET(widget,"raw_upper");
+	if (OBJ_GET(widget,"raw_lower"))
+		lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	else
+		lower = get_extreme_from_size((DataSize)OBJ_GET(widget,"size"),LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+	else
+		upper = get_extreme_from_size((DataSize)OBJ_GET(widget,"size"),UPPER);
 	precision = (gint)OBJ_GET(widget,"precision");
 
 	val = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(widget)),NULL);
@@ -3266,6 +3665,8 @@ void recalc_table_limits(gint canID, gint table_num)
 	/* Limit check */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
 		return;
+	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
+	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
 	x_count = firmware->table_params[table_num]->x_bincount;
 	y_count = firmware->table_params[table_num]->y_bincount;
 	z_base = firmware->table_params[table_num]->z_base;
@@ -3283,6 +3684,11 @@ void recalc_table_limits(gint canID, gint table_num)
 		if (tmpi < min)
 			min = tmpi;
 	}
+	if (min == max)	/* FLAT table, causes black screen */
+	{
+		min -= 10;
+		max += 10;
+	}
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
 	return;
@@ -3294,3 +3700,74 @@ gboolean update_multi_expression(gpointer data)
 	g_list_foreach(get_list("multi_expression"),update_widget,NULL);	
 	return FALSE;
 }
+
+
+void refocus_cell(GtkWidget *widget, Direction dir)
+{
+	gchar *widget_name = NULL;
+	GtkWidget *widget_2_focus = NULL;
+	gchar *tmpbuf = NULL;
+	gchar *prefix = NULL;
+	gchar **vector = NULL;
+	gchar **row_col = NULL;
+	gboolean return_now = FALSE;
+	gint table_num = -1;
+	gint row = -1;
+	gint col = -1;
+	extern Firmware_Details *firmware;
+
+
+	widget_name = OBJ_GET(widget,"fullname");
+	if (!widget_name)
+		return;
+	if (OBJ_GET(widget,"table_num"))
+		table_num = (gint) strtol(OBJ_GET(widget,"table_num"),NULL,10);
+	else
+		return;
+	
+	vector = g_strsplit(widget_name,"(",2);
+	prefix = g_strdup(vector[0]);
+	row_col = g_strsplit(g_strdelimit(vector[1],")",' '),",",2);
+	g_strfreev(vector);
+	col = (gint)strtol(row_col[0],NULL,10);
+	row = (gint)strtol(row_col[1],NULL,10);
+	g_strfreev(row_col);
+
+	switch (dir)
+	{
+		case GO_LEFT:
+			if (col == 0)
+				return_now = TRUE;
+			else
+				col--;
+			break;
+		case GO_RIGHT:
+			if (col > firmware->table_params[table_num]->x_bincount-2)
+				return_now = TRUE;
+			else
+				col++;
+			break;
+		case GO_UP:
+			if (row > firmware->table_params[table_num]->y_bincount-2)
+				return_now = TRUE;
+			else
+				row++;
+			break;
+		case GO_DOWN:
+			if (row == 0)
+				return_now = TRUE;
+			else
+				row--;
+			break;
+	}
+	if (return_now)
+		return;
+	tmpbuf = g_strdup_printf("%s(%i,%i)",prefix,col,row);
+
+	widget_2_focus = lookup_widget(tmpbuf);
+	if (GTK_IS_WIDGET(widget_2_focus))
+		gtk_widget_grab_focus(widget_2_focus);
+
+	g_free(tmpbuf);
+}
+

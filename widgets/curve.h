@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt curve widget
+ * MegaTunix curve widget
  * 
  * This software comes under the GPL (GNU Public License)
  * You may freely copy,distribute etc. this as long as the source code
@@ -122,10 +122,14 @@ gboolean mtx_curve_get_show_y_marker (MtxCurve *);
 gboolean mtx_curve_set_show_edit_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_x_marker (MtxCurve *, gboolean );
 gboolean mtx_curve_set_show_y_marker (MtxCurve *, gboolean );
+gboolean mtx_curve_set_x_axis_label (MtxCurve *, const gchar * );
+gboolean mtx_curve_set_y_axis_label (MtxCurve *, const gchar * );
+gboolean mtx_curve_get_x_marker_value (MtxCurve *, gfloat *);
+gboolean mtx_curve_get_y_marker_value (MtxCurve *, gfloat *);
 void mtx_curve_set_x_marker_value (MtxCurve *, gfloat );
 void mtx_curve_set_y_marker_value (MtxCurve *, gfloat );
-gboolean mtx_curve_set_hard_limits (MtxCurve *, gint, gint, gint, gint);
-gboolean mtx_curve_get_hard_limits (MtxCurve *, gint *, gint *, gint *, gint *);
+gboolean mtx_curve_set_hard_limits (MtxCurve *, gfloat, gfloat, gfloat, gfloat);
+gboolean mtx_curve_get_hard_limits (MtxCurve *, gfloat *, gfloat *, gfloat *, gfloat *);
 
 /* Retrieval of current mouse proximity vertex index */
 gint mtx_curve_get_vertex_proximity_index (MtxCurve *);

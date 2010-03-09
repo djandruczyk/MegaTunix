@@ -8,7 +8,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,dl_type,handler
-key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 dl_type=_IMMEDIATE_
@@ -18,21 +17,18 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [combobox1]
 keys=offset,choices,bitvals,bitmask,toggle_groups
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC
 bitvals=0,1,2,3,4,5
 toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
@@ -41,7 +37,6 @@ bitmask=7
 
 [combobox3]
 keys=offset,choices,bitvals,bitmask,toggle_groups
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC,INVALID,INVALID
 bitvals=0,1,2,3,4,5,6,7
 toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac,,
@@ -50,7 +45,6 @@ bitmask=7
 
 [combobox2]
 keys=offset,choices,bitvals,bitmask
-key_types=_INT_,_STRING_,_STRING_,_INT_
 choices=MS2,MicroSquirt,Undefined
 bitvals=1,2,255
 offset=744
@@ -58,7 +52,6 @@ bitmask=255
 
 [ms2_radiobutton]
 keys=offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=1
 bitmask=255
@@ -66,7 +59,6 @@ tooltip=Sets the ECU type to MS-II. (NOT the same as a microsquirt).
 
 [usquirt_radiobutton]
 keys=offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=2
 bitmask=255
@@ -74,7 +66,6 @@ tooltip=Sets the ECU type to Microsquirt
 
 [undefined_radiobutton]
 keys=offset,bitval,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=744
 bitval=255
 bitmask=255

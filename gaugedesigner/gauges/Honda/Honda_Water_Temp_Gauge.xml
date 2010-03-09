@@ -1,47 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
 <gauge>
-  <bg_color>
+  <bg_color_day>
     <red>0</red>
     <green>0</green>
     <blue>0</blue>
-  </bg_color>
-  <needle_color>
+  </bg_color_day>
+  <bg_color_nite>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </bg_color_nite>
+  <needle_color_day>
     <red>61019</red>
     <green>15359</green>
     <blue>2737</blue>
-  </needle_color>
-  <needle_length>0.831000</needle_length>
-  <needle_tail>0.195000</needle_tail>
-  <needle_width>0.038000</needle_width>
-  <needle_tip_width>0.010000</needle_tip_width>
-  <needle_tail_width>0.040000</needle_tail_width>
-  <value_font_color>
+  </needle_color_day>
+  <needle_color_nite>
+    <red>61019</red>
+    <green>15359</green>
+    <blue>2737</blue>
+  </needle_color_nite>
+  <value_font_color_day>
     <red>65535</red>
     <green>65535</green>
     <blue>65535</blue>
-  </value_font_color>
-  <gradient_begin_color>
-    <red>65535</red>
-    <green>65535</green>
-    <blue>65535</blue>
-  </gradient_begin_color>
-  <gradient_end_color>
+  </value_font_color_day>
+  <value_font_color_nite>
     <red>0</red>
     <green>0</green>
     <blue>0</blue>
-  </gradient_end_color>
+  </value_font_color_nite>
+  <gradient_begin_color_day>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </gradient_begin_color_day>
+  <gradient_begin_color_nite>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_begin_color_nite>
+  <gradient_end_color_day>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_end_color_day>
+  <gradient_end_color_nite>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </gradient_end_color_nite>
+  <needle_length>0.8309999</needle_length>
+  <needle_tip_width>0.0099999</needle_tip_width>
+  <needle_tail_width>0.0399999</needle_tail_width>
+  <needle_width>0.0379999</needle_width>
+  <needle_tail>0.1949999</needle_tail>
+  <show_tattletale>0</show_tattletale>
+  <tattletale_alpha>0.5</tattletale_alpha>
   <precision>0</precision>
-  <width>696</width>
-  <height>471</height>
-  <main_start_angle>135.000000</main_start_angle>
-  <main_sweep_angle>270.000000</main_sweep_angle>
-  <lbound>100.000000</lbound>
-  <ubound>260.000000</ubound>
+  <width>238</width>
+  <height>238</height>
+  <main_start_angle>135</main_start_angle>
+  <main_sweep_angle>270</main_sweep_angle>
+  <rotation>1</rotation>
+  <lbound>100</lbound>
+  <ubound>260</ubound>
   <value_font>arial Bold</value_font>
-  <value_font_scale>0.200000</value_font_scale>
-  <value_str_xpos>0.000000</value_str_xpos>
-  <value_str_ypos>0.350000</value_str_ypos>
+  <value_font_scale>0.2000000</value_font_scale>
+  <value_str_xpos>0</value_str_xpos>
+  <value_str_ypos>0.3499999</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
   <color_range>
@@ -49,33 +77,48 @@
     <highpoint>210.000000</highpoint>
     <lwidth>0.080000</lwidth>
     <inset>0.800000</inset>
-    <color>
+    <color_day>
       <red>62714</red>
       <green>56539</green>
       <blue>2321</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>62714</red>
+      <green>56539</green>
+      <blue>2321</blue>
+    </color_nite>
   </color_range>
   <color_range>
     <lowpoint>210.000000</lowpoint>
     <highpoint>260.000000</highpoint>
     <lwidth>0.080000</lwidth>
     <inset>0.800000</inset>
-    <color>
+    <color_day>
       <red>61055</red>
       <green>11975</green>
       <blue>3425</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>61055</red>
+      <green>11975</green>
+      <blue>3425</blue>
+    </color_nite>
   </color_range>
   <color_range>
     <lowpoint>160.000000</lowpoint>
     <highpoint>190.000000</highpoint>
     <lwidth>0.080000</lwidth>
     <inset>0.800000</inset>
-    <color>
+    <color_day>
       <red>0</red>
       <green>65535</green>
       <blue>0</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>0</red>
+      <green>65535</green>
+      <blue>0</blue>
+    </color_nite>
   </color_range>
   <text_block>
     <font>arial Bold</font>
@@ -83,11 +126,16 @@
     <font_scale>0.150000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.614000</y_pos>
-    <color>
+    <color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>65535</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color_nite>
   </text_block>
   <text_block>
     <font>arial Bold</font>
@@ -95,37 +143,57 @@
     <font_scale>0.110000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.784000</y_pos>
-    <color>
+    <color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>65535</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </color_nite>
   </text_block>
   <tick_group>
     <font>Sans</font>
     <font_scale>0.135000</font_scale>
     <text>100, ,120, ,140, ,160, ,180, ,200, ,220, ,240, ,260</text>
     <text_inset>0.261000</text_inset>
-    <text_color>
+    <text_color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>65535</blue>
-    </text_color>
+    </text_color_day>
+    <text_color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </text_color_nite>
     <num_maj_ticks>17</num_maj_ticks>
-    <maj_tick_color>
+    <maj_tick_color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>65535</blue>
-    </maj_tick_color>
+    </maj_tick_color_day>
+    <maj_tick_color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </maj_tick_color_nite>
     <maj_tick_inset>0.150000</maj_tick_inset>
     <maj_tick_length>0.120000</maj_tick_length>
     <maj_tick_width>0.200000</maj_tick_width>
     <num_min_ticks>4</num_min_ticks>
-    <min_tick_color>
+    <min_tick_color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>65535</blue>
-    </min_tick_color>
+    </min_tick_color_day>
+    <min_tick_color_nite>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+    </min_tick_color_nite>
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.065000</min_tick_length>
     <min_tick_width>0.120000</min_tick_width>
@@ -133,11 +201,16 @@
     <sweep_angle>270.000000</sweep_angle>
   </tick_group>
   <polygon>
-    <color>
+    <color_day>
       <red>61166</red>
       <green>15163</green>
       <blue>2570</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>61166</red>
+      <green>15163</green>
+      <blue>2570</blue>
+    </color_nite>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>

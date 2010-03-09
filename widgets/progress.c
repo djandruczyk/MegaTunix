@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt progress bar widget
+ * MegaTunix progress bar widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)

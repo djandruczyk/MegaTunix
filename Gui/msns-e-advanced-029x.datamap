@@ -10,7 +10,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -22,13 +21,11 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -36,27 +33,22 @@ bind_to_list=burners
 
 [staging_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=nondt_controls
 
 [staging_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=staging_ctrls
 
 [staging_condition_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=map_second_staging,staging_ctrls
 
 [orfc_params_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=orfc_params
 
 [barocorr_params_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=barocorr_params
 
 
@@ -64,7 +56,6 @@ bind_to_list=barocorr_params
 
 [orfc_clt_label]
 keys=bind_to_list,temp_dep,c_label,f_label
-key_types=_STRING_,_BOOL_,_STRING_,_STRING_
 bind_to_list=temperature
 temp_dep=TRUE
 c_label=and CLT greater than: (\302\260C.)
@@ -72,44 +63,36 @@ f_label=and CLT greater than: (\302\260F.)
 
 [an_barocorr_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=alpha-n_controls
 
 [false_trig_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=025_spark
 
 [hard_spark_base_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=nonedis_controls,spark_controls,limit_spark_ctrls
 
 [hard_spark_cut_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=nonedis_controls,spark_controls,limit_spark_ctrls
 
 [sec_staging_thresh_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
 
 [sec_staging_delta_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
 
 [maf_aircorr_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=maf_controls
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [staging_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,set_widgets_label,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 offset=76
 bitvals=0,1,2,3
 bitmask=12
@@ -120,7 +103,6 @@ tooltip=Sets the staging mode to be based on RPM only, MAP, or TPS.
 
 [adtl_staging_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=109
 bitvals=0,3
 bitmask=192
@@ -130,7 +112,6 @@ tooltip=Sets the staging algorithm to just trigger on one variable or AS WELL as
 
 [orfc_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=66
 bitvals=0,1
 bitmask=64
@@ -140,7 +121,6 @@ tooltip=Disables or Enables Over-Run Fuel cut. (i.e. cutting fuel on decel, i.e.
 
 [limiter_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=46
 bitvals=1,2,3
 bitmask=48
@@ -150,7 +130,6 @@ tooltip=Sets the hard revlimiter type, Spark only, Fuel only, or Both
 
 [hybrid_an_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=11
 bitvals=0,1
 bitmask=32
@@ -159,7 +138,6 @@ tooltip=Enables or Disables Hybrid A/N mode
 
 [maf_x7_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=32
@@ -169,7 +147,6 @@ tooltip=Enables or Disables use of MAF sensor on X7 input pin
 
 [maf_corr_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=64
@@ -179,7 +156,6 @@ tooltip=Uses either Intake air temp for temp correction, or leaves it internal t
 
 [false_trig_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=92
 bitvals=1,0
 bitmask=4
@@ -189,7 +165,6 @@ tooltip=Enables or disables the False Trigger detection code in the firmware. Fi
 
 [barocorr_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=8
@@ -199,7 +174,6 @@ tooltip=Enables or disables the use of constant baro correction. Requires use of
 
 [const_baro_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=128
@@ -208,7 +182,6 @@ tooltip=Enables or Disables constant baro correction in normal modes
 
 [const_an_baro_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=184
 bitvals=0,1
 bitmask=8
@@ -220,7 +193,6 @@ tooltip=Enables or Disables constant baro correction in Alpha-N mode
 
 [barocorr_max_adc_entry]
 keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=82
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
@@ -231,7 +203,6 @@ tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to p
 
 [barocorr_min_adc_entry]
 keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=83
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
@@ -241,18 +212,15 @@ bind_to_list=multi_expression
 tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [soft_revlimit_rpm_entry]
-keys=offset,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=2
 dl_conv_expr=x/100
 ul_conv_expr=x*100
-raw_lower=1
 bind_to_list=spark_controls
 tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
 
 [soft_revlimit_sparkangle_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=3
 precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
@@ -262,7 +230,6 @@ tooltip=The spark advance to run on the soft revlimiter.
 
 [soft_revlimit_max_time_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=157
 precision=1
 dl_conv_expr=x*10
@@ -272,7 +239,6 @@ tooltip=The Amount of time to run on the soft limitera. If this timeout is excee
 
 [hard_revlimit_rpm_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=6
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -280,7 +246,6 @@ tooltip=The Hard revlimiter RPM threshold.  when this is exceeded the hard revli
 
 [hard_spark_base_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=78
 dl_conv_expr=x+1
 ul_conv_expr=x-1
@@ -290,7 +255,6 @@ tooltip=This is the round robin spark drop routine.  Typically you should set th
 
 [hard_spark_cut_entry]
 keys=offset,raw_upper,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=45
 raw_upper=20
 bind_to_list=spark_controls,nonedis_controls,limit_spark_ctrls
@@ -298,32 +262,27 @@ tooltip=This is the number of sparks to drop for ever number of sparks in the Ba
 
 [staging_transition_entry]
 keys=offset,tooltip
-key_types=_INT_,_STRING_
 offset=80
 tooltip=This sets the threshold point at which to enable injector staging. This is a raw units control, and thus is either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
 
 [staging_off_delta_entry]
 keys=offset,tooltip
-key_types=_INT_,_STRING_
 offset=81
 tooltip=This sets the off delta point at which to disable injector staging. This is a raw units control, and thus its units are either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
 
 [staging_scale_entry]
 keys=offset,tooltip
-key_types=_INT_,_STRING_
 offset=79
 tooltip=This is the scaling factor used for injector scaling.  This value is calculated by  dividing the total flow of the Primary injectors (on inj channel 1) by the TOTAL injector flow of both the primaries and secondaries, and then taking that quantitiy and multiplying by 512.  ((prim_flow/(prim_flow+sec_flow))*512)
 
 [staging_delay_entry]
 keys=page,offset,tooltip
-key_types=_INT_,_INT_,_STRING_
 page=3
 offset=179
 tooltip=This control sets the number of engine cycles at which point staging is phased in.
 
 [sec_staging_thresh_entry]
 keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 offset=180
 source_key=map_sensor
@@ -335,7 +294,6 @@ tooltip=This control sets the threshold where the manifold pressure needs to be 
 
 [sec_staging_delta_entry]
 keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 offset=181
 source_key=map_sensor
@@ -347,7 +305,6 @@ tooltip=This control sets the Off delta where the manifold pressure needs to dro
 
 [orfc_rpm_entry]
 keys=offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=71
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -357,7 +314,6 @@ tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
 
 [orfc_map_entry]
 keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=72
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
@@ -368,7 +324,6 @@ tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.  This val
 
 [orfc_tps_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=73
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -376,7 +331,6 @@ tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This val
 
 [orfc_clt_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,temp_dep,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_
 offset=182
 dl_conv_expr=x+40
 ul_conv_expr=x-40
@@ -386,7 +340,6 @@ tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This val
 
 [orfc_time_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=130
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -394,7 +347,6 @@ tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This val
 
 [adv_latency_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=34
 dl_conv_expr=x*1
 ul_conv_expr=x*1

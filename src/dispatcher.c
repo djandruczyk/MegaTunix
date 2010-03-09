@@ -74,7 +74,7 @@ gboolean pf_dispatcher(gpointer data)
 	if (!pf_dispatch_queue) /*queue not built yet... */
 		return TRUE;
 trypop:
-	/*	printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
+	/*printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (leaving)
 		return TRUE;
 	/*
@@ -86,6 +86,14 @@ trypop:
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
+		return TRUE;
+	}
+	if (!message->status)
+	{
+		/* Message failed at some point, do NOT run post functions
+		 * in this case.
+		 */
+		dealloc_message(message);
 		return TRUE;
 	}
 
@@ -106,7 +114,6 @@ trypop:
 				printf("ERROR postfunction was null, continuing\n");
 				continue;
 			}
-			/*printf ("Should run function %s, %p\n",pf->name,pf->function);*/
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
@@ -138,14 +145,10 @@ dealloc:
 	count++;
 	/* try to handle up to 15 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
-	 * too low, things can fall behind. (GL redraw ;( )
+	 * too low, things can fall behind. 
 	 * */
 	if(count < 15)
-	{
-		/*printf("trying to handle another message\n");*/
 		goto trypop;
-	}
-	/*printf("returning\n");*/
 	return TRUE;
 }
 

@@ -7,7 +7,6 @@ groups=defaults
 
 [defaults]
 keys=page,size
-key_types=_INT_,_ENUM_
 page=0
 size=_U08_
 
@@ -15,26 +14,22 @@ size=_U08_
 
 [runtime_start_realtime_button]
 keys=handler
-key_types=_ENUM_
 handler=_START_REALTIME_
 
 [runtime_stop_realtime_button]
 keys=handler
-key_types=_ENUM_
 handler=_STOP_REALTIME_
 
 #------ Gui objects ---------------------------------------------------------
 
 [topframe]
 keys=tab_ident
-key_types=_ENUM_
 tab_ident=_RUNTIME_TAB_
 
 #------- Runtime Status Indicators ------------------------------------------
 
 [runtime_cranking_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
@@ -44,7 +39,6 @@ bitmask=2
 
 [runtime_running_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
@@ -54,7 +48,6 @@ bitmask=1
 
 [runtime_warmup_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
@@ -64,7 +57,6 @@ bitmask=8
 
 [runtime_ase_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
@@ -74,7 +66,6 @@ bitmask=4
 
 [runtime_accel_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
@@ -84,7 +75,6 @@ bitmask=16
 
 [runtime_decel_label]
 keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-key_types=_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status

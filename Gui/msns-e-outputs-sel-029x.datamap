@@ -8,7 +8,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,13 +19,11 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -34,29 +31,24 @@ bind_to_list=burners
 
 [output1_invert_choice_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=output_1
 
 [output2_invert_chocie_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=output_2
 
 [output3_source_choice_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=output_3
 
 [output4_source_choice_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=output_4
 
 #----- RadioButtons ----------------------------------------------------------
 
 [output1_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Normal,Inverted
 bitvals=0,1
 offset=66
@@ -65,7 +57,6 @@ tooltip=Sets output to be set or inverted when the params in the table t othe le
 
 [output2_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Normal,Inverted
 bitvals=0,1
 offset=66
@@ -74,7 +65,6 @@ tooltip=Sets output to be set or inverted when the params in the table t othe le
 
 [output3_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Source Only,Output1+Source
 bitvals=0,1
 offset=116
@@ -83,7 +73,6 @@ tooltip=Sets User Output 3 to only take it's cues from the table to the left,  o
 
 [output4_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Source,Fan Control
 toggle_groups=output4_table,
 bitvals=0,1
@@ -95,7 +84,6 @@ tooltip=Sets Output 4 to be controlled either by the table to the left, or via t
 
 [output1_swin]
 keys=offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=8
 src_offset=8
 lim_offset=7
@@ -107,7 +95,6 @@ output_num=1
 
 [output2_swin]
 keys=offset,src_offset,lim_offset,hys_offset,ulimit_offset,bind_to_list,post_functions_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=10
 src_offset=10
 lim_offset=9
@@ -119,7 +106,6 @@ output_num=2
 
 [output3_swin]
 keys=offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=132
 src_offset=132
 lim_offset=133
@@ -129,7 +115,6 @@ output_num=3
 
 [output4_swin]
 keys=offset,src_offset,lim_offset,bind_to_list,post_functions_with_arg,output_num
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_
 offset=138
 src_offset=138
 lim_offset=139

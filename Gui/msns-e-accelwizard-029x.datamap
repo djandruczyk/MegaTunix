@@ -10,7 +10,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -22,13 +21,11 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -36,70 +33,58 @@ bind_to_list=burners
 
 [ae_trigger_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_normal_controls
 
 [decel_setpoint_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_decel_cutoff
 
 [tpsdot_thresh_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_tpsdot_controls,ae_normal_controls
 
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
 keys=tab_ident
-key_types=_ENUM_
 tab_ident=_ACCEL_WIZ_TAB_
 
 [tpsdot_pbar]
 keys=post_functions_with_arg,source,tab_ident
-key_types=_STRING_,_STRING_,_ENUM_
 post_functions_with_arg=register_rt_range
 source=tpsdot
 tab_ident=_ACCEL_WIZ_TAB_
 
 [mapdot_pbar]
 keys=post_functions_with_arg,source,tab_ident
-key_types=_STRING_,_STRING_,_ENUM_
 post_functions_with_arg=register_rt_range
 source=mapdot
 tab_ident=_ACCEL_WIZ_TAB_
 
 [accel_map_layout_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_mapdot_controls,ae_normal_controls
 
 [accel_tps_layout_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_tpsdot_controls,ae_normal_controls
 
 [accel_rpm_layout_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_rpm_controls
 
 [ae_decay_subtable]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_decay_controls
 
 [mapdot_params_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ae_mapdot_controls,ae_normal_controls
 
 #----- Radio/Check/Combo/buttons ---------------------------------------------
 
 [ae_trigger_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 choices=TPSdot,MAPdot
 toggle_groups=ae_tpsdot_controls,ae_mapdot_controls
 bind_to_list=ae_normal_controls
@@ -110,7 +95,6 @@ tooltip=Sets the Acceleration Enrichment methodology to be based on MAP (manifol
 
 [alt_ae_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Normal AE,RPM Based
 toggle_groups=ae_normal_controls,ae_rpm_controls
 bitvals=0,1
@@ -120,7 +104,6 @@ tooltip=Chooses between normal AE algorithms (TPSdot or Map dot) or an RPM based
 
 [ae_timer_units_combo]
 keys=offset,choices,bitvals,bitmask,set_widgets_label,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Seconds,Cycles
 offset=11
 bitvals=0,1
@@ -130,7 +113,6 @@ tooltip=Sets AE time units to either seconds or engine cycles
 
 [ae_in_boost_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Enabled,Disabled
 offset=66
 bitvals=0,1
@@ -139,7 +121,6 @@ tooltip=Sets whether we disable accel enrich when in boost or not. If set to ena
 
 [ae_during_ase_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Enabled,Disabled
 offset=184
 bitvals=0,1
@@ -148,7 +129,6 @@ tooltip=Sets whether we disable accel enrich when in ASE (AfterStart Enrichment)
 
 [ae_decay_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 offset=116
 bitvals=0,1
@@ -158,7 +138,6 @@ tooltip=Sets whether we decay AE over time or not
 
 [ae_decel_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Never,Above Setpoint
 offset=92
 bitvals=0,1
@@ -170,35 +149,30 @@ tooltip=Sets whether we disable decel enrich or not
 
 [map_ae_rate_4_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=168
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_3_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=167
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_2_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=166
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_rate_1_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=165
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 
 [map_ae_pw_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=172
 precision=1
 dl_conv_expr=x*10
@@ -206,7 +180,6 @@ ul_conv_expr=x/10
 
 [map_ae_pw_3_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=171
 precision=1
 dl_conv_expr=x*10
@@ -214,7 +187,6 @@ ul_conv_expr=x/10
 
 [map_ae_pw_2_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=170
 precision=1
 dl_conv_expr=x*10
@@ -222,7 +194,6 @@ ul_conv_expr=x/10
 
 [map_ae_pw_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=169
 precision=1
 dl_conv_expr=x*10
@@ -230,7 +201,6 @@ ul_conv_expr=x/10
 
 [tps_ae_rate_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=164
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -238,7 +208,6 @@ ul_conv_expr=x*(1953125/10000000)
 
 [tps_ae_rate_3_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=163
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -246,7 +215,6 @@ ul_conv_expr=x*(1953125/10000000)
 
 [tps_ae_rate_2_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=162
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -254,7 +222,6 @@ ul_conv_expr=x*(1953125/10000000)
 
 [tps_ae_rate_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=161
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -262,7 +229,6 @@ ul_conv_expr=x*(1953125/10000000)
 
 [tps_ae_pw_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=176
 precision=1
 dl_conv_expr=x*10
@@ -270,7 +236,6 @@ ul_conv_expr=x/10
 
 [tps_ae_pw_3_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=175
 precision=1
 dl_conv_expr=x*10
@@ -278,7 +243,6 @@ ul_conv_expr=x/10
 
 [tps_ae_pw_2_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=174
 precision=1
 dl_conv_expr=x*10
@@ -286,7 +250,6 @@ ul_conv_expr=x/10
 
 [tps_ae_pw_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=173
 precision=1
 dl_conv_expr=x*10
@@ -294,35 +257,30 @@ ul_conv_expr=x/10
 
 [rpm_ae_rate_4_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=152
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 
 [rpm_ae_rate_3_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=151
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 
 [rpm_ae_rate_2_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=150
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 
 [rpm_ae_rate_1_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=149
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 
 [rpm_ae_pw_4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=156
 precision=1
 dl_conv_expr=x*10
@@ -330,7 +288,6 @@ ul_conv_expr=x/10
 
 [rpm_ae_pw_3_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=155
 precision=1
 dl_conv_expr=x*10
@@ -338,7 +295,6 @@ ul_conv_expr=x/10
 
 [rpm_ae_pw_2_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=154
 precision=1
 dl_conv_expr=x*10
@@ -346,7 +302,6 @@ ul_conv_expr=x/10
 
 [rpm_ae_pw_1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=153
 precision=1
 dl_conv_expr=x*10
@@ -354,7 +309,6 @@ ul_conv_expr=x/10
 
 [ae_end_decay_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=183
 precision=1
 dl_conv_expr=x*10
@@ -363,7 +317,6 @@ tooltip=Accel Value at end of AE pulse decay.
 
 [ae_rpm_mapdot_thresh_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=91
 dl_conv_expr=x/10
 ul_conv_expr=x*10
@@ -371,7 +324,6 @@ tooltip=FIXME
 
 [mapdot_thresh_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=91
 dl_conv_expr=x/10
 ul_conv_expr=x*10
@@ -380,7 +332,6 @@ tooltip=FIXME
 
 [ae_rpm_accel_time_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=179
 precision=1
 dl_conv_expr=x*10
@@ -389,7 +340,6 @@ tooltip=Accel enrichment time.
 
 [accel_time_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=179
 precision=1
 dl_conv_expr=x*10
@@ -398,7 +348,6 @@ tooltip=Accel enrichment time.
 
 [ae_rpm_tps_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=178
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -407,7 +356,6 @@ tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimiz
 
 [tpsdot_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=178
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -417,7 +365,6 @@ tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimiz
 
 [decel_fuel_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=180
 dl_conv_expr=x/1
 ul_conv_expr=x*1
@@ -425,7 +372,6 @@ tooltip=The amount of fuel to cut during decel.  100% means cut NO fuel, 0% mean
 
 [cold_enrich_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=177
 precision=1
 dl_conv_expr=x*10
@@ -434,7 +380,6 @@ tooltip=Amount of enrich to add in MS when cold.
 
 [cold_accel_mult_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=181
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -442,7 +387,6 @@ tooltip=Cold Accel multiplier (percentage), 100 equals NO change, greater than 1
 
 [ae_decel_setpoint_entry]
 keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=129
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400

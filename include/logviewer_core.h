@@ -16,6 +16,7 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
+#include <watches.h>
 
 
 /* Type definitions */
@@ -60,8 +61,10 @@ struct _Log_Info
 
 
 /* Prototypes */
+EXPORT void create_stripchart(GtkWidget *);
 EXPORT gboolean select_datalog_for_import(GtkWidget *, gpointer );
 EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *, gpointer );
+EXPORT void update_stripchart_data(DataWatch *);
 void load_logviewer_file(GIOChannel * );
 void read_log_header(GIOChannel *, Log_Info * );
 void read_log_data(GIOChannel *, Log_Info * );

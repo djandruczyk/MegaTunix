@@ -41,6 +41,7 @@ void free_element(gpointer ,gpointer );
 gint list_sort(gconstpointer , gconstpointer );
 
 gboolean dummy(GtkWidget *, gpointer );
+EXPORT gboolean optimize_dash_size(GtkWidget *, gpointer );
 			 
 /* Prototypes */
 

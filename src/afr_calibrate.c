@@ -17,8 +17,9 @@
 #include <afr_calibrate.h>
 #include <config.h>
 #include <defines.h>
-#include <gtk/gtk.h>
 #include <enums.h>
+#include <firmware.h>
+#include <gtk/gtk.h>
 #include <math.h>
 #include <threads.h>
 #include <widgetmgmt.h>
@@ -75,6 +76,42 @@ static struct
 	{"Generic Linear WB",		genericWB},
 };
 
+#define nADC 1024
+gdouble NBFv (gint adc) 
+{ 
+	return 100.0 * (1.0 - adc * 5.0/nADC); 
+}
+
+
+gdouble inno12Fv (gint adc) 
+{ 
+	return  adc * 50.0 / (nADC-1.0); 
+}
+
+
+gdouble inno05Fv (gint adc) 
+{
+	return  10.0 + adc * 10.0 / (nADC-1.0); 
+}
+
+
+gdouble innoLC1Fv (gint adc)
+{
+	return  7.35 + adc * 14.7 / (nADC-1.0);
+}
+
+
+gdouble teWBlinFv (gint adc) 
+{
+	return   9.0 + adc * 10.0 / (nADC-1.0);
+}
+
+
+gdouble djWBlinFv (gint adc) 
+{
+	return  10.0 + adc *  8.0 / (nADC-1.0);
+}
+
 
 EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 {
@@ -123,7 +160,6 @@ EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 {
-#define nADC 1024
 	gdouble *Bv = NULL;
 	gdouble *Ba = NULL;
 	gdouble voltage = 0.0;
@@ -136,10 +172,10 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	gdouble (*Fv)(gint adc) = NULL;
 	gboolean NB = FALSE;
 	guint8 table[nADC];
+	extern Firmware_Details *firmware;
 	time_t tim;
 	FILE *f = NULL;
 
-	inline gdouble NBFv (gint adc) { return 100.0 * (1.0 - adc * 5.0/nADC); }
 
 	static gdouble diywbBv[] = { 0.00, 1.40, 1.45, 1.50, 1.55, 1.60, 
 		1.65, 1.70, 1.75, 1.80, 1.85, 1.90, 1.95, 2.00, 2.05, 2.10,
@@ -221,12 +257,6 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	Ba = prefix ## Ba; \
 	nB = (sizeof(prefix ## Bv) / sizeof(gdouble));
 
-	inline gdouble inno12Fv (gint adc) { return  adc * 50.0 / (nADC-1.0); }
-	inline gdouble inno05Fv (gint adc) { return  10.0 + adc * 10.0 / (nADC-1.0); }
-	inline gdouble innoLC1Fv (gint adc) { return  7.35 + adc * 14.7 / (nADC-1.0); }
-
-	inline gdouble teWBlinFv (gint adc) { return   9.0 + adc * 10.0 / (nADC-1.0); }
-	inline gdouble djWBlinFv (gint adc) { return  10.0 + adc *  8.0 / (nADC-1.0); }
 
 #define USE_FUNC(prefix) \
 	Fv = prefix ## Fv
@@ -346,7 +376,10 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	 * page in the firmware (page 2) for the AFR table. See the interrogation profile
 	 * [page_x] sections for more details
 	 */
-	table_write(4,1024,(guint8 *)table);
+	if (firmware->capabilities & MS2_E)
+		table_write(7,1024,(guint8 *)table);
+	else
+		table_write(4,1024,(guint8 *)table);
 
 	return TRUE;
 }

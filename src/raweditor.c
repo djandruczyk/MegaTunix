@@ -106,8 +106,8 @@ EXPORT void finish_raweditor(void)
 			OBJ_SET(entry,"page",GINT_TO_POINTER(i));
 			OBJ_SET(entry,"offset",GINT_TO_POINTER(j));
 			OBJ_SET(entry,"base",GINT_TO_POINTER(16));
-			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(0));
-			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(255));
+			OBJ_SET(entry,"raw_lower",g_strdup("0"));
+			OBJ_SET(entry,"raw_upper",g_strdup("255"));
 			ve_widgets[i][j] = g_list_prepend(ve_widgets[i][j],(gpointer)entry);
 			OBJ_SET(entry,"handler",
 					GINT_TO_POINTER(GENERIC));

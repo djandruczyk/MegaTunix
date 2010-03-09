@@ -47,10 +47,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MS2));
 	g_hash_table_insert(str_2_enum,"_MS2_STD_",
 			GINT_TO_POINTER(MS2_STD));
-	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_",
-			GINT_TO_POINTER(MS2_EXTRA));
-	g_hash_table_insert(str_2_enum,"_MS2_EXTRA_COMPOSITEMON_",
-			GINT_TO_POINTER(MS2_EXTRA_COMPOSITEMON));
+	g_hash_table_insert(str_2_enum,"_MS2_E_",
+			GINT_TO_POINTER(MS2_E));
+	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
+			GINT_TO_POINTER(MS2_E_COMPMON));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -77,6 +77,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(NUMMATCH));
 	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
 			GINT_TO_POINTER(FULLMATCH));
+	g_hash_table_insert(str_2_enum,"_REGEX_",
+			GINT_TO_POINTER(REGEX));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",
@@ -232,6 +234,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(DECIMAL_VIEW));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
+	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
+			GINT_TO_POINTER(MS2_USER_OUTPUTS));
 
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
@@ -394,6 +398,175 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(STATIC_STRING));
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
+	/* Tab datamap processing */
+	g_hash_table_insert(str_2_enum,"active_fg",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"algorithms",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_c_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_f_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_lookuptable",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_lookuptables",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"applicable_tables",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"bind_to_list",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"bitmask",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"bitval",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"bitvals",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"choices",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"c_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"complex_expr",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"create_tags",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"ctrl_name",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"data",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"datasource",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"depend_on",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dl_conv_expr",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dl_conv_exprs",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dl_type",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"dlog_field_name",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dlog_gui_name",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"dont_backup",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"f_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"gaugexml",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"group_2_update",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"handler",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"hys_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"inactive_fg",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"initializer",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"internal_names",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"labels",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"lim_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"log_by_default",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"lookuptable",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"max_chars",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"multi_expr_keys",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"oddfire_bit_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"output_num",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"page",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"post_function_with_arg",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"post_functions_with_arg",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"precision",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"raw_lower",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"raw_upper",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"register_as",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"require_reboot",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"rescaler_frame",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"reverse_keys",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"set_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"set_widgets_label",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"show_prefix",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"size",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"source",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"sources",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"source_key",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"source_value",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"special",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"source_values",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"spconfig_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"src_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"sub-notebook",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"swap_labels",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"tab_ident",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"table_2_update",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"table_num",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"temp_dep",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"te_table_num",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"te_tables",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"toggle_labels",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"toggle_groups",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"tooltip",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"ul_complex",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"ul_conv_expr",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"ul_conv_exprs",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"ulimit_offset",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"use_color",
+			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"widget_type",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"width",
+			GINT_TO_POINTER(MTX_INT));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
@@ -425,7 +598,9 @@ gint translate_string(gchar *string)
 	value = g_hash_table_lookup(str_2_enum,string);
 	if (value == NULL)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));
+		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
+		return (MTX_STRING);
 	}
-	return (gint)value;
+	else
+		return (gint)value;
 }

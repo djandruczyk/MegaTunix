@@ -1,7 +1,8 @@
-#include "../include/defines.h"
+#include <defines.h>
 #include <events.h>
 #include <handlers.h>
-#include "../widgets/gauge.h"
+#include <loadsave.h>
+#include <gauge.h>
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
@@ -12,6 +13,8 @@ extern GdkColor black;
 extern GdkColor white;
 extern GtkWidget *gauge;
 extern gboolean hold_handlers;
+extern gboolean changed;
+extern gboolean gauge_loaded;
 
 
 EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
@@ -242,6 +245,8 @@ void update_general_controls()
 	widget = glade_xml_get_widget(topxml,"gradient_end_color_nite_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE));
 
+	widget = glade_xml_get_widget(topxml,"daytime_radiobutton");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_daytime_mode(g));
 	hold_handlers = FALSE;
 }
 
@@ -347,3 +352,190 @@ EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
+{
+	if ((gauge_loaded) && (changed))
+		prompt_to_save();
+	gtk_main_quit();
+	return TRUE;
+}
+
+
+EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
+{
+	gfloat tmpf = 0.0;
+	MtxGaugeFace *g = NULL;
+	gint handler = 0;
+
+	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	if (!OBJ_GET((widget),"handler"))
+	{
+		printf("control %s has no handler\n",(gchar *)glade_get_widget_name(widget));
+		return FALSE;
+	}
+	handler = (gint)OBJ_GET((widget),"handler");
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+	changed = TRUE;
+	mtx_gauge_face_set_attribute(g,handler,tmpf);
+	if ((handler == UBOUND) || (handler == LBOUND))
+		update_attributes();
+	return TRUE;
+}
+
+
+EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
+{
+	gint tmpi = 0;
+	gfloat tmpf = 0.0;
+	gfloat lbound = 0.0;
+	gfloat ubound = 0.0;
+	gfloat angle = 0.0;
+	gfloat sweep = 0.0;
+	gfloat tmp3 = 0.0;
+	gfloat percent = 0.0;
+	gfloat newval = 0.0;
+	GtkWidget *lowpartner = NULL;
+	GtkWidget *highpartner = NULL;
+	MtxGaugeFace *g = NULL;
+	gint handler = (gint)OBJ_GET((widget),"spin_handler");
+	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	tmpi = (gint)(tmpf+0.00001);
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+
+	switch (handler)
+	{
+		case ADJ_LOW_UNIT_PARTNER:
+			lowpartner = OBJ_GET((widget),"lowpartner");
+			highpartner = OBJ_GET((widget),"highpartner");
+			if ((!GTK_IS_WIDGET(lowpartner)) || 
+					(!GTK_IS_WIDGET(highpartner)))
+				break;
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
+			percent = (tmpf-angle)/(sweep);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(OBJ_GET((widget),"high_angle")));
+			percent = tmp3/sweep+((tmpf-angle)/sweep);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
+			break;
+		case ADJ_HIGH_UNIT_PARTNER:
+			highpartner = OBJ_GET((widget),"highpartner");
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(OBJ_GET((widget),"low_angle")));
+			if (!GTK_IS_WIDGET(highpartner))
+				break;
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
+			percent = tmpf/sweep+((tmp3-angle)/sweep);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
+			break;
+		case ADJ_START_ANGLE_PARTNER:
+			lowpartner = OBJ_GET((widget),"lowpartner");
+			if (!GTK_IS_WIDGET(lowpartner))
+				break;
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
+			percent = (tmpf-lbound)/(ubound-lbound);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
+			newval = ((sweep)*percent)+angle;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
+			break;
+		case ADJ_SWEEP_ANGLE_PARTNER:
+			highpartner = OBJ_GET((widget),"highpartner");
+			if (!GTK_IS_WIDGET(highpartner))
+				break;
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(OBJ_GET((widget),"start_angle")));
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
+			percent = (tmpf-lbound)/(ubound-lbound);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
+			newval = ((percent*sweep)+angle)-tmp3;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
+			break;
+	}
+	return (TRUE);
+}
+
+
+EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
+{
+	MtxGaugeFace *g = NULL;
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+	if (state)
+		mtx_gauge_face_set_daytime_mode(g,TRUE);
+	else
+		mtx_gauge_face_set_daytime_mode(g,FALSE);
+
+	return TRUE;
+}
+
+
+
+EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
+{
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	gint value = (gint)OBJ_GET((widget),"special_value");
+	gint handler = (gint)OBJ_GET((widget),"handler");
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+
+	changed = TRUE;
+	if (state)
+		mtx_gauge_face_set_attribute(g,handler, value);
+
+	return TRUE;
+}
+
+EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
+{
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	gint handler = (gint)OBJ_GET((widget),"handler");
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+
+	changed = TRUE;
+	mtx_gauge_face_set_attribute(g,handler, state);
+
+	return TRUE;
+}

@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Chris Mire (czb)
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -84,7 +84,6 @@ gboolean update_gauge(gpointer data)
 	interval = (upper-lower)/100.0;
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
-	upper *=0.9;
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge), &cur_val);
 	if (cur_val >= upper)
 		rising = FALSE;

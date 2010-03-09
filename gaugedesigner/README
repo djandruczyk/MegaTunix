@@ -1,3 +1,8 @@
 
 Gauge designer tool to make gauge config files for megatunix..  
-Currently a work in progress...
+It is mostly feature complete, and supports creating rich gauges.  Some
+creative use of the interface may be required to achieve optimal results
+
+If you create good looking gauge sets, please contact the author for 
+submitting them into megatunix so that all users can benefit.
+

@@ -8,7 +8,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,13 +19,11 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -34,74 +31,60 @@ bind_to_list=burners
 
 [edis_persona_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=edis_controls
 
 [edis_multispark_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=edis_controls,multispark
 
 #------ Labels --------------------------------------------------------------
 
 [fuel_transition_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=ve_switch
 
 [spark_transition_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=spark_switch
 
 [2nd_o2_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=dt_controls
 
 [inj2_cranking_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=dt_controls
 
 [variable_launch_feature_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=launch_controls
 
 [nos_antilag_feature_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=nos_subfeatures
 
 [nos_which_bank_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=dt_controls,nos_subfeatures,x2_nitrous_control,x3_nitrous_control
 
 [nos_feature_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 
 [water_inj_feature_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=water_features,x2_water_injection,x3_water_injection
 
 [boost_ctrl_feature_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=boost_controller
 
 [edis_multi_rpm_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=multispark
 
 [gammae_2_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=dt_controls
 
 
@@ -109,7 +92,6 @@ bind_to_list=dt_controls
 
 [persona_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 offset=0
 bitvals=0,1,2,4,12,16,48,64,128
 bitmask=255
@@ -119,7 +101,6 @@ tooltip=Sets the ECU ignition mode to one of the following: Fuel Only, Simple Di
 
 [edis_multispark_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=66
 bitvals=0,1
 bitmask=8
@@ -129,7 +110,6 @@ tooltip=This enables EDIS Multispark mode up to the RPM threshold set below.
 
 [table_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=33
 bitvals=0,1
 bitmask=16
@@ -139,7 +119,6 @@ tooltip=Dual Table mode is used to have independant fueling tables for each of t
 
 [gammae_13_combo]
 keys=offset,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=33
 bitvals=0,1
 bitmask=33
@@ -148,7 +127,6 @@ tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is 
 
 [gammae_2_combo]
 keys=offset,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=33
 bitvals=0,1
 bitmask=64
@@ -158,7 +136,6 @@ tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is 
 
 [cpulse2_combo]
 keys=offset,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=11
 bitvals=0,1
 bitmask=64
@@ -168,7 +145,6 @@ tooltip=Enables or Disables the firing of injector channel two during cranking.
 
 [second_o2_combo]
 keys=page,offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=2
 offset=188
 bitvals=0,1
@@ -180,7 +156,6 @@ tooltip=Enable or Disabled the use of ADC6 as a secondary EGO input for DT mode 
 
 [fuel_switch_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=92
 bitvals=0,1
 bitmask=1
@@ -190,7 +165,6 @@ tooltip=Either sets to Never switches VEtables even if NOS is active, or pin6 go
 
 [spark_switch_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=76
 bitvals=0,1
 bitmask=128
@@ -200,7 +174,6 @@ tooltip=Either sets to Never switches Spark tables even if NOS is active, or pin
 
 [nos_combo]
 keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=11
 bitvals=0,1
 bitmask=128
@@ -211,7 +184,6 @@ tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of t
 
 [nos_antilag_combo]
 keys=offset,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=76
 bitvals=0,1
 bitmask=64
@@ -221,7 +193,6 @@ tooltip=The NOS Antilag system is used to fire the NOS output between certain ra
 
 [shift_combo]
 keys=offset,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=12
 bitvals=0,1
 bitmask=2
@@ -230,7 +201,6 @@ tooltip=The shift light feature gives the user a level of feedback useful for dr
 
 [launch_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=12
 bitvals=0,1
 bitmask=4
@@ -240,7 +210,6 @@ tooltip=The launch control feature provides features to manipulate the engines t
 
 [var_launch_combo]
 keys=offset,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=46
 bitvals=0,1
 bitmask=2
@@ -250,7 +219,6 @@ tooltip=The variable launch is used to allow the user to set to rpm limit for la
 
 [boost_combo]
 keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=12
 bitvals=0,1
 bitmask=1
@@ -261,7 +229,6 @@ tooltip=The boost controller feature will use one of the three boost tables to a
 
 [water_combo]
 keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=46
 bitvals=0,1
 bitmask=8
@@ -272,7 +239,6 @@ tooltip=Water Injection is used to aid in detonation control under high load or 
 
 [knock_combo]
 keys=offset,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 offset=46
 bitvals=0,1
 bitmask=64
@@ -282,7 +248,6 @@ tooltip=Knock detection will require an additional circuit to feed in a signal t
 
 [traction_combo]
 keys=offset,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_
 offset=92
 bitvals=0,1
 bitmask=32
@@ -293,7 +258,6 @@ tooltip=Traction control is accomplished by multiple levels of control.  Spark r
 
 [edis_multispark_limit_entry]
 keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=21
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -303,7 +267,6 @@ tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multisp
 
 [fuel_switch_delay_entry]
 keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=93
 precision=1
 dl_conv_expr=x*10
@@ -314,7 +277,6 @@ tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that th
 
 [spark_switch_delay_entry]
 keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=87
 precision=1
 dl_conv_expr=x*10

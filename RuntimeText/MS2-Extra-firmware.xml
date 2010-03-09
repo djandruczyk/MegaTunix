@@ -91,12 +91,4 @@
 		<internal_name>mapdot</internal_name>
 		<datasource>mapdot</datasource>
 	</rtt>
-	<rtt>
-		<internal_name>kpaix</internal_name>
-		<datasource>kpaix</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>calcMAP</internal_name>
-		<datasource>calcMAP</datasource>
-	</rtt>
 </runtimetext>

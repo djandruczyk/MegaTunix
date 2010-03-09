@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * 
- * Megasquirt gauge widget XML I/O header
+ * MegaTunix gauge widget XML I/O header
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -53,8 +53,8 @@ void generic_color_export(xmlNode * ,GdkColor *);
 void generic_color_import(xmlNode * ,GdkColor *);
 void mtx_gauge_alert_range_export(MtxDispatchHelper *);
 void mtx_gauge_alert_range_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean);
-void mtx_gauge_color_range_export(MtxDispatchHelper *);
-void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean);
+void mtx_gauge_warning_range_export(MtxDispatchHelper *);
+void mtx_gauge_warning_range_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean);
 void mtx_gauge_color_export(MtxDispatchHelper *);
 void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean);
 void mtx_gauge_text_block_export(MtxDispatchHelper *);
@@ -125,7 +125,7 @@ static const struct
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias",FALSE},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"show_value",FALSE},
 	{ mtx_gauge_alert_range_import, mtx_gauge_alert_range_export,"alert_range",FALSE},
-	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range",FALSE},
+	{ mtx_gauge_warning_range_import, mtx_gauge_warning_range_export,"color_range",FALSE},
 	{ mtx_gauge_text_block_import, mtx_gauge_text_block_export,"text_block",FALSE},
 	{ mtx_gauge_tick_group_import, mtx_gauge_tick_group_export,"tick_group",FALSE},
 	{ mtx_gauge_polygon_import, mtx_gauge_polygon_export,"polygon",FALSE},

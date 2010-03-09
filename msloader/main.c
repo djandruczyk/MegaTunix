@@ -50,12 +50,19 @@ gint main(gint argc, gchar ** argv)
 	output(g_strdup_printf("MegaTunix msloader %s\n",VERSION),TRUE);
 
 	/* If we got this far, all is good argument wise */
+	if (!lock_port(argv[1]))
+	{
+		output("Could NOT LOCK Serial Port\nCheck for already running serial apps using the port\n",FALSE);
+		exit(-1);
+	}
+
 	port_fd = open_port(argv[1]);
 	if (port_fd > 0)
 		output("Port successfully opened\n",FALSE);
 	else
 	{
 		output("Could NOT open Port check permissions\n",FALSE);
+		unlock_port();
 		exit(-1);
 	}
 #ifdef __WIN32__
@@ -68,6 +75,8 @@ gint main(gint argc, gchar ** argv)
 	else
 	{
 		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
+		close_port(port_fd);
+		unlock_port();
 		exit(-1);
 	}
 	type = detect_firmware(argv[2]);
@@ -83,6 +92,7 @@ gint main(gint argc, gchar ** argv)
 	}
 
 	close_port(port_fd);
+	unlock_port();
 	return (0) ;
 }
 

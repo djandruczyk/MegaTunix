@@ -1,6 +1,7 @@
 [global]
 description=Object data map for MSnS-E 029 Tooth/Trigger monitor
 tab_name=Trigger _Monitor
+id_prefix=TMON_
 post_functions=reset_ttm_buttons
 groups=defaults
 
@@ -8,7 +9,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=9
 size=_U08_
 raw_lower=0
@@ -20,14 +20,12 @@ handler=_GENERIC_
 
 [toothlogger_enable_radio_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
 bind_to_list=ttm_buttons
 tooltip=Enables Tooth Logger display
 
 [triggerlogger_enable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_TRIGMON_LOGGER_
 page=10
 bind_to_list=ttm_buttons
@@ -35,14 +33,12 @@ tooltip=Enables Trigger Logger display
 
 [toothlogger_disable_radio_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_STOP_TOOTHMON_LOGGER_
 bind_to_list=ttm_buttons
 tooltip=Disables Tooth Logger display
 
 [triggerlogger_disable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_STOP_TRIGMON_LOGGER_
 page=10
 bind_to_list=ttm_buttons
@@ -52,14 +48,12 @@ tooltip=Disables Trigger Logger display
 
 [ttm_logger_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=spark_controls
 
 #----- DrawingAreas ----------------------------------------------------------
 
 [ttm_darea]
 keys=page,post_functions_with_arg
-key_types=_INT_,_STRING_
 page=0
 post_functions_with_arg=setup_logger_display
 

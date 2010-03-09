@@ -15,6 +15,7 @@
 #define __EVENTS_H__
 
 #include <defines.h>
+#include <gauge.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 
@@ -44,43 +45,24 @@ typedef enum
 
 
 /* Prototypes */
+gboolean gauge_motion(GtkWidget *, GdkEventMotion *, gpointer );
+gboolean gauge_button(GtkWidget *, GdkEventButton *, gpointer );
 EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );
 EXPORT gboolean close_current_gauge(GtkWidget *, gpointer );
 EXPORT gboolean create_polygon_event(GtkWidget *, gpointer );
-EXPORT gboolean create_text_block_event(GtkWidget *, gpointer );
-EXPORT gboolean create_color_span_event(GtkWidget *, gpointer );
 EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
-EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
 EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
 EXPORT gboolean toggle_skip_params(GtkWidget *, gpointer );
 EXPORT gboolean link_range_spinners(GtkWidget *, gpointer );
-EXPORT gboolean day_nite_handler(GtkWidget *, gpointer);
 void update_attributes(void);
 void reset_onscreen_controls(void);
-void reset_onscreen_c_ranges(void);
-void reset_onscreen_a_ranges(void);
-void reset_onscreen_tblocks(void);
-void reset_onscreen_tgroups(void);
 void reset_onscreen_polygons(void);
-void update_onscreen_c_ranges(void);
-void update_onscreen_a_ranges(void);
-void update_onscreen_tblocks(void);
-void update_onscreen_tgroups(void);
 void update_onscreen_polygons(void);
-gboolean tg_spin_button_handler(GtkWidget *, gpointer );
-gboolean generic_spin_button_handler(GtkWidget *, gpointer );
-gboolean alter_tblock_data(GtkWidget *, gpointer );
-gboolean alter_c_range_data(GtkWidget *, gpointer );
-gboolean alter_a_range_data(GtkWidget *, gpointer );
-gboolean alter_tgroup_data(GtkWidget *, gpointer );
 gboolean alter_polygon_data(GtkWidget *, gpointer );
-gboolean remove_c_range(GtkWidget *, gpointer );
-gboolean remove_a_range(GtkWidget *, gpointer );
-gboolean remove_tblock(GtkWidget *, gpointer );
-gboolean remove_tgroup(GtkWidget *, gpointer );
 gboolean remove_polygon(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
+gboolean grab_coords_event(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <glib.h>
 #include <mtxsocket.h>
+#include <offline.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -44,6 +45,7 @@ void handle_args(gint argc, gchar * argv[])
 	gint result = 0;
 	gchar ** vector = NULL;
 	gchar * netinfo = NULL;
+	extern volatile gboolean offline;
 
 	args = init_args();
 	GOptionEntry entries[] =
@@ -52,6 +54,7 @@ void handle_args(gint argc, gchar * argv[])
 		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
+		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Netowrk socket instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
@@ -70,7 +73,7 @@ void handle_args(gint argc, gchar * argv[])
 
 	if (args->version)
 	{
-		printf("%i.%i.%i\n",_MAJOR_,_MINOR_,_MICRO_);
+		printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
 		exit(0);
 	}
 	if (netinfo)
@@ -118,6 +121,11 @@ void handle_args(gint argc, gchar * argv[])
 			args->autolog_basename = g_strdup_printf("datalog_%.2i-%.2i-%i",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
 		}
 		g_timeout_add(args->autolog_minutes*60000,(GtkFunction)autolog_dump,NULL);
+	}
+	if (args->offline)
+	{
+		offline = TRUE;
+		g_timeout_add(1000,(GtkFunction)set_offline_mode,NULL);
 	}
 	if (args->debug)
 	{

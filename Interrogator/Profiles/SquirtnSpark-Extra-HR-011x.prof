@@ -23,6 +23,7 @@ MultiPage=TRUE
 ChunkWriteSupport=TRUE
 ReadOnlyAbove=8
 TotalTables=11
+TotalTETables=1
 # Since the first page is 0, 10 is the "eleventh" page
 ToothmonPage=9
 # Since the first page is 0, 9 is the "tenth" page
@@ -396,6 +397,38 @@ z_source=
 z_suffix=Degrees
 z_conv_expr=(x*(352/1000))-10
 z_precision=1
+
+[te_table_0]
+title=CLT/IAT Corrected Air Density
+bind_to_list=IAT_controls
+gauge=
+is_fuel=FALSE
+bincount=7
+x_temp_dep=TRUE
+x_axis_label=Temperature
+x_page=8
+x_base_offset=56
+x_size=_U08_
+x_source=
+x_units=deg
+x_name=Temp
+x_dl_conv_expr=x+40
+x_ul_conv_expr=x-40
+x_raw_lower=0
+x_raw_upper=255
+x_precision=0
+y_page=8
+y_axis_label=Correction (%)
+y_base_offset=47
+y_size=_U08_
+y_source=
+y_units=%
+y_name=corr.
+y_dl_conv_expr=x*1
+y_ul_conv_expr=x/1
+y_raw_lower=50
+y_raw_upper=150
+y_precision=0
 
 [page_0]
 dl_by_default=TRUE

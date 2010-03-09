@@ -18,6 +18,8 @@
 void create_mtx_lock(void);
 void win32_create_mtx_lock(void);
 void unix_create_mtx_lock(void);
+void unlock_serial();
+gboolean lock_serial(gchar *);
 /* Prototypes */
 
 #endif

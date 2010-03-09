@@ -65,13 +65,6 @@
 			<size>_UNDEF_</size>
 		</arg>
 		<arg>
-			<name>PAUSE_50MS</name>
-			<desc>Pause for 50ms.</desc>
-			<type>_ACTION_</type>
-			<action>_SLEEP_</action>
-			<action_arg>50000</action_arg>
-		</arg>
-		<arg>
 			<name>PAUSE_100MS</name>
 			<desc>Pause for 100ms.</desc>
 			<type>_ACTION_</type>
@@ -109,7 +102,7 @@
 			<type>_WRITE_CMD_</type>
 			<base>!!</base>
 			<args>
-				<arg>PAUSE_50MS</arg>
+				<arg>PAUSE_100MS</arg>
 				<arg>SEND_X</arg>
 			</args>
 			<helper_func>simple_read_pf</helper_func>
@@ -315,12 +308,12 @@
 		</cmd>
 		<cmd>
 			<name>ms2_table_reflash</name>
-			<desc>This command wipes the flash of the passed table index, then expects 1024 words (2kbytes) to replace it</desc>
+			<desc>This command wipes the flash of the passed table index, then expects 1024 words (16bit) (MAT,MAF,CLT) or 1024 bytes (EGO) to replace it</desc>
 			<type>_WRITE_CMD_</type>
 			<base>t</base>
 			<args>
 				<arg>MS2_TABLE_INDEX</arg>
-				<arg>PAUSE_50MS</arg>
+				<arg>PAUSE_100MS</arg>
 				<arg>DATACHUNK</arg>
 			</args>
 		</cmd>
@@ -432,8 +425,8 @@
 				<function>populate_dlog_choices_pf</function>
 				<function>spawn_read_ve_const_pf</function>
 				<function>reset_temps_pf</function>
-				<function>open_tcpip_socket_pf</function>
 				<function>startup_default_timeouts_pf</function>
+
 			</post_functions>
 		</cmd>
 		<cmd>

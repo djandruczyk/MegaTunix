@@ -9,7 +9,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,dl_type,handler
-key_types=_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 dl_type=_IMMEDIATE_
@@ -19,55 +18,45 @@ handler=_GENERIC_
 
 [topframe]
 keys=tab_ident
-key_types=_ENUM_
 tab_ident=_DATALOGGING_TAB_
 #----- Buttons ---------------------------------------------------------------
 	
 [select_all_but]
 keys=handler
-key_types=_ENUM_
 handler=_DLOG_SELECT_ALL_
 
 [deselect_all_but]
 keys=handler
-key_types=_ENUM_
 handler=_DLOG_DESELECT_ALL_
 
 [select_defaults_but]
 keys=handler
-key_types=_ENUM_
 handler=_DLOG_SELECT_DEFAULTS_
 
 [comma_delimit_radio_button]
 keys=handler
-key_types=_ENUM_
 handler=_COMMA_
 
 [tab_delimit_radio_button]
 keys=handler
-key_types=_ENUM_
 handler=_TAB_
 
 [start_logging_button]
 keys=handler
-key_types=_ENUM_
 handler=_START_DATALOGGING_
 
 [stop_logging_button]
 keys=handler
-key_types=_ENUM_
 handler=_STOP_DATALOGGING_
 
 [dump_internal_but]
 keys=tooltip
-key_types=_STRING_
 tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while the Runtime reader is running, even if you do NOT have datalogging enabled.  This button dumps that to disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
 
 #----- Textview ----------------------------------------------------
 
 [view]
 keys=create_tags
-key_types=_STRING_
 create_tags=warning,info
 warning=foreground,red
 info=foreground,dark green

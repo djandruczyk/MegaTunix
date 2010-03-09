@@ -2,14 +2,14 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>701</width>
-    <height>586</height>
+    <width>556</width>
+    <height>465</height>
   </dash_geometry>
   <gauge>
     <width>185</width>
     <height>213</height>
     <x_offset>158</x_offset>
-    <y_offset>373</y_offset>
+    <y_offset>252</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_RPM.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>
@@ -17,7 +17,7 @@
     <width>150</width>
     <height>166</height>
     <x_offset>344</x_offset>
-    <y_offset>413</y_offset>
+    <y_offset>292</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_AFR.xml</gauge_xml_name>
     <datasource>afr1</datasource>
   </gauge>
@@ -25,7 +25,7 @@
     <width>154</width>
     <height>155</height>
     <x_offset>3</x_offset>
-    <y_offset>417</y_offset>
+    <y_offset>296</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_MAP.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
   </gauge>
@@ -33,7 +33,7 @@
     <width>143</width>
     <height>141</height>
     <x_offset>269</x_offset>
-    <y_offset>148</y_offset>
+    <y_offset>27</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_Advance.xml</gauge_xml_name>
     <datasource>sparkangle</datasource>
   </gauge>
@@ -41,7 +41,7 @@
     <width>143</width>
     <height>158</height>
     <x_offset>0</x_offset>
-    <y_offset>121</y_offset>
+    <y_offset>0</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_PW.xml</gauge_xml_name>
     <datasource>pw1</datasource>
   </gauge>
@@ -49,7 +49,7 @@
     <width>141</width>
     <height>156</height>
     <x_offset>149</x_offset>
-    <y_offset>243</y_offset>
+    <y_offset>122</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_DC.xml</gauge_xml_name>
     <datasource>dcycle1</datasource>
   </gauge>
@@ -57,7 +57,7 @@
     <width>146</width>
     <height>124</height>
     <x_offset>394</x_offset>
-    <y_offset>197</y_offset>
+    <y_offset>76</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_VE.xml</gauge_xml_name>
     <datasource>vecurr1</datasource>
   </gauge>
@@ -65,7 +65,7 @@
     <width>126</width>
     <height>139</height>
     <x_offset>430</x_offset>
-    <y_offset>311</y_offset>
+    <y_offset>190</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_Volts.xml</gauge_xml_name>
     <datasource>battvolt</datasource>
   </gauge>
@@ -73,7 +73,7 @@
     <width>132</width>
     <height>127</height>
     <x_offset>141</x_offset>
-    <y_offset>126</y_offset>
+    <y_offset>5</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_Boost.xml</gauge_xml_name>
     <datasource>bcDC</datasource>
   </gauge>
@@ -81,7 +81,7 @@
     <width>141</width>
     <height>158</height>
     <x_offset>7</x_offset>
-    <y_offset>267</y_offset>
+    <y_offset>146</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_CLT.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
@@ -89,7 +89,7 @@
     <width>137</width>
     <height>142</height>
     <x_offset>293</x_offset>
-    <y_offset>287</y_offset>
+    <y_offset>166</y_offset>
     <gauge_xml_name>Cobalt/Cobalt_MAT.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>

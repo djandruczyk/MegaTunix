@@ -27,6 +27,9 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *, gpointer);
 EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *, gpointer);
 EXPORT gboolean show_table_generator_window(GtkWidget *, gpointer);
 EXPORT gboolean show_sensor_calibration_help(GtkWidget *, gpointer);
+EXPORT gboolean ms2_reinit(GtkWidget *, gpointer);
+EXPORT gboolean ms2_reboot(GtkWidget *, gpointer);
+
 
 /* Prototypes */
 

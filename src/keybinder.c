@@ -27,16 +27,18 @@
 extern GObject *global_data;
 
 
-void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint * keytypes, gint num_keys)
+void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {
 	gint i = 0;
 	gint tmpi = 0;
 	gchar * tmpbuf = NULL;
 	gchar * tmpstr = NULL;
+	DataType keytype = MTX_STRING;
 
 	for (i=0;i<num_keys;i++)
 	{
-		switch((DataType)keytypes[i])
+		keytype = translate_string(keys[i]);
+		switch(keytype)
 		{
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))

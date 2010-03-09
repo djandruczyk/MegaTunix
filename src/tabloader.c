@@ -54,6 +54,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
 	gchar * tab_name = NULL;
+	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
 	GtkWidget *topframe = NULL;
 	GHashTable *groups = NULL;
@@ -110,7 +111,21 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		if (cfgfile)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
-			label = gtk_label_new_with_mnemonic(tab_name);
+
+			label = gtk_label_new(NULL);
+			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
+			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
+			{
+				if (tmpi)
+					gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_END);
+			}
+			if (cfg_read_string(cfgfile,"global","bind_to_list",&tmpbuf))
+			{
+				OBJ_SET(label,"bind_to_list",g_strdup(tmpbuf));
+				bind_to_lists(label,tmpbuf);
+				g_free(tmpbuf);
+			}
+			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			topframe = glade_xml_get_widget(xml,"topframe");
 			/* bind_data() is recursive and will take 
 			 * care of all children
@@ -190,7 +205,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			break;
 
 	}
-	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
+	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete!"),FALSE,FALSE);
 	tabs_loaded = TRUE;
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
@@ -209,16 +224,17 @@ void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
+	DataType keytype = MTX_INT;
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		if (group->keytypes[i] == MTX_STRING)
+		keytype = translate_string(group->keys[i]);
+		if (keytype == MTX_STRING)
 			g_free(OBJ_GET(group->object,group->keys[i]));
 		OBJ_SET(group->object,group->keys[i],NULL);
 	}
 	g_object_unref(group->object);
 	g_strfreev(group->keys);
-	g_free(group->keytypes);
 	g_free(group);
 }
 
@@ -262,6 +278,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		section = g_strdup(groupnames[x]);
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
+		//	setup_group(group,tmpbuf);
 			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
 			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
 			g_free(tmpbuf);
@@ -272,31 +289,6 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			g_free(group);
 			g_free(section);
 			continue;
-		}
-		if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
-		{
-			group->keytypes = parse_keytypes(tmpbuf,&group->num_keytypes,",");
-			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keytypes for section %s is %i\n",section,group->num_keytypes));
-			g_free(tmpbuf);
-		}
-		else
-		{
-			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\t\"key_types\" section NOT found, aborting this group %s\n",section));
-			g_free(group->keys);
-			g_free(group);
-			g_free(section);
-			continue;
-		}
-
-		if (group->num_keytypes != group->num_keys)
-		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
-			g_strfreev(group->keys);
-			g_free(group->keytypes);
-			g_free(group);
-			g_free(section);
-			continue;;
-
 		}
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
@@ -321,7 +313,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			group->page = tmpi;
 
 		/* Binds the rest of the settings, overriding any defaults */
-		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
+		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
@@ -352,6 +344,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 	gint tmpi = 0;
 	Group *group = NULL;
 	extern GtkTooltips *tip;
+	DataType keytype = MTX_STRING;
 
 	group = g_hash_table_lookup(groups,groupname);
 	if (!group)
@@ -366,7 +359,8 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		switch((DataType)group->keytypes[i])
+		keytype = translate_string(group->keys[i]);
+		switch((DataType)keytype)
 		{
 			case MTX_INT:
 			case MTX_BOOL:
@@ -477,9 +471,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** keys = NULL;
-	gint * keytypes = NULL;
 	gint num_keys = 0;
-	gint num_keytypes = 0;
 	gint offset = 0;
 	gint page = 0;
 	gint widget_type = 0;
@@ -507,25 +499,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	else
 		return;
 
-	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
-	{
-		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
-		dbg_func(TABLOADER,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keytypes for %s is %i\n",section,num_keys));
-		g_free(tmpbuf);
-	}
-	else
-	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t key_types is missing for widget %s, CRITICAL!!!\n",section));
-		return;
-	}
-
-	if (num_keytypes != num_keys)
-	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does NOT match for widget %s in file %s, CRITICAL!!!\n",num_keys,num_keytypes,section,bindgroup->map_file));
-		g_strfreev(keys);
-		g_free(keytypes);
-		return;
-	}
 	page = -1;
 	/* Bind the data in the "defaults" group per tab to EVERY var in that
 	 * tab
@@ -607,6 +580,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
+	/* If this widget has "register_as", register it with the supplied name
+	*/
+	if (cfg_read_string(cfgfile,section,"register_as",&tmpbuf))
+	{
+		register_widget(tmpbuf,widget);
+		g_free(tmpbuf);
+	}
+
 	/* If this widget has "initializer" there's a global variable 
 	 * with it's name on it 
 	 */
@@ -670,7 +651,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 * redundant keys all throughout the file...
 	 */
 
-	bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
+	bind_keys(G_OBJECT(widget),cfgfile,section,keys,num_keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/
@@ -691,7 +672,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		run_post_functions(tmpbuf);
 		g_free(tmpbuf);
 	}
-	g_free(keytypes);
 	g_strfreev(keys);
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }

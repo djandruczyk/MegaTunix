@@ -5,7 +5,7 @@
  * I can get into situations that require the boot jumper on occasion
  * This program is based on efahl's ms2dl C++ program, but ported to Linux.
  *
- * $Id: ms2_loader.c,v 1.2 2009/10/07 16:28:42 extace Exp $
+ * $Id: ms2_loader.c,v 1.3 2010/03/09 00:47:10 extace Exp $
  */
 
 #ifndef _POSIX_VDISABLE
@@ -494,7 +494,8 @@ void send_S12(gint port_fd, guint count)
 		}
 
 		if (debug >= 3) {
-			output(g_strdup_printf("Sending record %d:%6x\n", i, addr),TRUE);
+			if ((i%10) == 0)
+				output(g_strdup_printf("Sending record %d:%6x\n", i, addr),TRUE);
 		}
 		if (addr >= 0x8000 && addr <= 0xBFFF) addr -= 0x4000;
 

@@ -64,37 +64,37 @@ gboolean update_errcounts()
 
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
 	widget = lookup_widget("runtime_good_ve_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	widget = lookup_widget("comms_vecount_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
 	widget = lookup_widget("comms_rtcount_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	widget = lookup_widget("runtime_good_rt_read_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_reset_count);
 	widget = lookup_widget("comms_reset_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	widget = lookup_widget("runtime_hardreset_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",serial_params->errcount);
 	widget = lookup_widget("comms_sioerr_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	widget = lookup_widget("runtime_sioerr_entry");
-	if (widget)
+	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 

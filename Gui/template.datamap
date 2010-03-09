@@ -1,14 +1,13 @@
 [global]
-description=Object data map for the template tab
+description=Object data map for the Template Tab
 tab_name=_Template
-id_prefix=TMP_
+id_prefix=Temp_
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,15 +19,21 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+#----- Entries ---------------------------------------------------------------
 

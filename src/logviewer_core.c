@@ -24,7 +24,9 @@
 #include <math.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <string.h>
+#include <stripchart.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
@@ -33,6 +35,57 @@ Log_Info *log_info = NULL;
 extern GObject *global_data;
 
 
+EXPORT void create_stripchart(GtkWidget *parent)
+{
+	GtkWidget *chart = NULL;
+	gchar ** sources = NULL;
+	gchar * tmpbuf = NULL;
+	gint i = 0;
+	GObject *object = NULL;
+	gint min = 0;
+	gint max = 0;
+	gint precision = 0;
+	gchar * name = NULL;
+	DataSize size = MTX_U08;
+	extern Rtv_Map *rtv_map;
+
+	tmpbuf = OBJ_GET(parent,"sources");
+	if (tmpbuf);
+		sources = g_strsplit(tmpbuf,",",-1);
+	chart = mtx_stripchart_new();
+	gtk_container_add(GTK_CONTAINER(parent), chart);
+	//gtk_widget_realize(chart);
+	for (i=0;i<g_strv_length(sources);i++)
+	{
+		object = g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
+		if (!G_IS_OBJECT(object))
+			continue;
+		if (OBJ_GET(object,"dlog_gui_name"))
+			name = OBJ_GET(object,"dlog_gui_name");
+		if (OBJ_GET(object,"real_lower"))
+			min = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+		else
+			min = get_extreme_from_size(size,LOWER);
+		if (OBJ_GET(object,"real_upper"))
+			max = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+		else
+			max = get_extreme_from_size(size,UPPER);
+		if (OBJ_GET(object,"precision"))
+			precision = (gint)OBJ_GET(object,"precision");
+		else
+			precision = 0;
+		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);
+	}
+	create_multi_value_watch(sources,FALSE,"update_stripchart_data",chart);
+	g_strfreev(sources);
+	gtk_widget_show_all(parent);
+
+}
+
+void update_stripchart_data(DataWatch* watch)
+{
+	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
+}
 
 /*! 
  \brief select_datalog_for_import() loads a datalog file for playback
@@ -240,9 +293,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(object,"lower_limit", GINT_TO_POINTER(tmpi));
+		OBJ_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(object,"upper_limit", GINT_TO_POINTER(tmpi));
+		OBJ_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }

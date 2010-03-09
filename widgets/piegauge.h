@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * 
  *
- * Megasquirt pie_gauge widget
+ * MegaTunix pie_gauge widget
  * Inspired by Phil Tobin's MegaLogViewer 
  * 
  * 

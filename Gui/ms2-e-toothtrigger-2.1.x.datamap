@@ -1,6 +1,7 @@
 [global]
 description=Object data map for MS2-Extra 2.0.x Tooth/Trigger monitor
 tab_name=Trigger _Monitor
+#id_prefix=TMON_
 post_functions=reset_ttm_buttons,ms2_ttm_reset_zoom
 groups=defaults
 
@@ -8,54 +9,47 @@ groups=defaults
 
 [defaults]
 keys=page
-key_types=_INT_
-page=5
+page=9
 
 #----- Buttons ---------------------------------------------------------------
 
 [toothlogger_enable_radio_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
 bind_to_list=ttm_buttons
 tooltip=Enables Tooth Logger display
 
 [triggerlogger_enable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_TRIGMON_LOGGER_
-page=6
+page=10
 bind_to_list=ttm_buttons
 tooltip=Enables Trigger Logger display
 
 [compositelogger_enable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_START_COMPOSITEMON_LOGGER_
-page=7
+page=11
 bind_to_list=ttm_buttons
 tooltip=Enables Composite Logger display
 
 [toothlogger_disable_radio_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_STOP_TOOTHMON_LOGGER_
 bind_to_list=ttm_buttons
 tooltip=Disables Tooth Logger display
 
 [triggerlogger_disable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_STOP_TRIGMON_LOGGER_
-page=6
+page=10
 bind_to_list=ttm_buttons
 tooltip=Disables Trigger Logger display
 
 [compositelogger_disable_radio_button]
 keys=handler,page,bind_to_list,tooltip
-key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_STOP_COMPOSITEMON_LOGGER_
-page=7
+page=11
 bind_to_list=ttm_buttons
 tooltip=Disables Trigger Logger display
 
@@ -63,29 +57,24 @@ tooltip=Disables Trigger Logger display
 
 [ttm_logger_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=spark_controls
 
 [toothlogger_buttons_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=toothmon_buttons
 
 [triggerlogger_buttons_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=trigmon_buttons
 
 [compositelogger_buttons_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=composite_buttons
 
 #----- Widgets ---------------------------------------------------------------
 
 #[ttm_logger_frame]
 #keys=page,bind_to_list
-#key_types=_INT_,_STRING_
 #page=9
 #bind_to_list=spark_controls
 
@@ -93,5 +82,4 @@ bind_to_list=composite_buttons
 
 [ttm_darea]
 keys=post_functions_with_arg
-key_types=_STRING_
 post_functions_with_arg=ms2_setup_logger_display

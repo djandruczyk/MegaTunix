@@ -8,7 +8,6 @@ groups=defaults,warmup,crank,ase,IATCTemp,IATCorS
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=8
 size=_U08_
 raw_lower=0
@@ -18,12 +17,10 @@ handler=_GENERIC_
 
 [warmup]
 keys=use_color
-key_types=_BOOL_
 use_color=TRUE
 
 [crank]
 keys=precision,dl_conv_expr,ul_conv_expr,use_color
-key_types=_INT_,_STRING_,_STRING_,_BOOL_
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
@@ -31,13 +28,11 @@ use_color=TRUE
 
 [ase]
 keys=page,use_color
-key_types=_INT_,_BOOL_
 page=5
 use_color=TRUE
 
 [IATCTemp]
 keys=temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,use_color
-key_types=_BOOL_,_STRING_,_STRING_,_STRING_,_BOOL_
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
@@ -46,7 +41,6 @@ use_color=TRUE
 
 [IATCorS]
 keys=bind_to_list,raw_lower,raw_upper,use_color
-key_types=_STRING_,_INT_,_INT_,_BOOL_
 temp_dep=TRUE
 bind_to_list=IAT_controls
 raw_lower=50
@@ -58,25 +52,21 @@ use_color=TRUE
 
 [topframe]
 keys=page,tab_ident
-key_types=_INT_,_ENUM_
 page=4
 tab_ident=_ENRICHMENTS_TAB_
 
 [clt_iat_params_hbox]
 keys=page,bind_to_list
-key_types=_INT_,_STRING_
 page=0
 bind_to_list=clt_iat_controls
 
 [iat_clt_ignition_frame]
 keys=page,bind_to_list
-key_types=_INT_,_STRING_
 page=0
 bind_to_list=spark_controls
 
 [clt_vscale]
 keys=bind_to_list,temp_dep,post_functions_with_arg,source,tab_ident
-key_types=_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 bind_to_list=temperature
 temp_dep=TRUE
 post_functions_with_arg=register_rt_range
@@ -85,7 +75,6 @@ tab_ident=_ENRICHMENTS_TAB_
 
 [mat_vscale]
 keys=bind_to_list,temp_dep,post_functions_with_arg,source,tab_ident
-key_types=_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 bind_to_list=temperature
 temp_dep=TRUE
 post_functions_with_arg=register_rt_range
@@ -94,27 +83,22 @@ tab_ident=_ENRICHMENTS_TAB_
 
 [RPMRedLo_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=IAT_controls
 
 [RPMRedHi_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=IAT_controls
 
 [IATCorTy_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=IAT_controls
 
 [ase_fixed_hold_time_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=fixed_decay,fixed_map
 
 [clt_fixed_ase_label]
 keys=bind_to_list,c_label,f_label,temp_dep
-key_types=_STRING_,_STRING_,_STRING_,_BOOL_
 c_label=Use Fixed ASE/MAP when CLT below (\302\260C.)
 f_label=Use Fixed ASE/MAP when CLT below (\302\260F.)
 temp_dep=TRUE
@@ -122,17 +106,14 @@ bind_to_list=fixed_decay,fixed_map,temperature
 
 [fixed_map_ase_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=fixed_map
 
 [ase_delay_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=fixed_map
 
 [ase_total_time_label]
 keys=label,alt_label,depend_on
-key_types=_STRING_,_STRING_,_STRING_
 label=ASE Total Decay Time (Seconds)
 alt_label=ASE Total Decay Time (engine cycles)
 depend_on=ase_time_combo
@@ -140,28 +121,29 @@ ase_time_combo=_VE_EMB_BIT_,_U08_,5,179,1,0,1
 
 [IATCorr_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=IAT_controls
 
 #----- Buttons ----------------------------------------------------------------
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
+
+[iatcorr_edit_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=0
 
 #----- Radio/CheckCombo Buttons ----------------------------------------------
 
 [prime_when_combo]
 keys=width,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=P-Pulse>0,Always
 width=14
 offset=42
@@ -171,7 +153,6 @@ tooltip=Prime the pump when priming pule is above 0, or Always?
 
 [prime_mode_combo]
 keys=width,offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=On Power Up,Twice,After 2 Secs
 width=14
 offset=42
@@ -181,7 +162,6 @@ tooltip=Priming mode, on powerup, double prime pulse, or after 2 second delay
 
 [prime_source_combo]
 keys=width,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Priming Table,Fixed
 width=14
 toggle_groups=,fixed_priming
@@ -192,7 +172,6 @@ tooltip=Use Lookuptable for priming pulse (below left), or used fixed values
 
 [1st_start_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 toggle_groups=,xtra_crank
 offset=42
@@ -202,7 +181,6 @@ tooltip=First Start enrichment is used to give extra cranking enrichment for the
 
 [crank_source_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=CLT only,MAT only,CLT/MAT Avg
 offset=42
 bitvals=1,2,3
@@ -211,7 +189,6 @@ tooltip=Uses either the Coolant Temp (CLT), Manifold Air Temp (MAT) or an Averag
 
 [ase_time_combo]
 keys=page,offset,choices,bitvals,bitmask,swap_labels,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=5
 choices=Seconds,Cycles
 offset=179
@@ -222,7 +199,6 @@ tooltip=The ASE Counter uses the units of seconds or Engine cycles.
 
 [ase_decay_combo]
 keys=page,width,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 page=5
 choices=Decay Immediately,Hold then Decay
 width=15
@@ -235,7 +211,6 @@ tooltip=Once the engine has started, We ether immediately begin decaying the ASE
 
 [ase_mapmode_combo]
 keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=5
 choices=Normal,Fixed
 toggle_groups=,fixed_map
@@ -246,7 +221,6 @@ tooltip=Due to the rapidly changing MAP signal at engine startup (jumping from n
 
 [clt_iat_combo]
 keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 page=0
 choices=Disabled,Enabled
 toggle_groups=,clt_iat_controls
@@ -259,25 +233,21 @@ tooltip=Enables/Disbales the CLT/IAT Ignition Advance/Retard controls.  These al
 
 [main_frame_title]
 keys=page,set_label
-key_types=_INT_,_STRING_
 page=4
 set_label=MSnS-Extra 029 Cranking/Warmup Enrichments
 
 [fixed_prime_label]
 keys=page,bind_to_list
-key_types=_INT_,_STRING_
 page=4
 bind_to_list=fixed_priming
 
 [extra_fuel_mult_label]
 keys=page,bind_to_list
-key_types=_INT_,_STRING_
 page=4
 bind_to_list=xtra_crank
 
 [ase_label_1]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=-40
 f_label=-40
@@ -286,7 +256,6 @@ bind_to_list=temperature
 
 [ase_label_2]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=-28.8
 f_label=-20
@@ -295,7 +264,6 @@ bind_to_list=temperature
 
 [ase_label_3]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=-17.7
 f_label=0
@@ -304,7 +272,6 @@ bind_to_list=temperature
 
 [ase_label_4]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=-6.6
 f_label=20
@@ -313,7 +280,6 @@ bind_to_list=temperature
 
 [ase_label_5]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=4.4
 f_label=40
@@ -322,7 +288,6 @@ bind_to_list=temperature
 
 [ase_label_6]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=15.5
 f_label=60
@@ -331,7 +296,6 @@ bind_to_list=temperature
 
 [ase_label_7]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=26.6
 f_label=80
@@ -340,7 +304,6 @@ bind_to_list=temperature
 
 [ase_label_8]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=37.7
 f_label=100
@@ -349,7 +312,6 @@ bind_to_list=temperature
 
 [ase_label_9]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=54.4
 f_label=130
@@ -358,7 +320,6 @@ bind_to_list=temperature
 
 [ase_label_10]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=71.1
 f_label=160
@@ -367,19 +328,16 @@ bind_to_list=temperature
 
 [iat_adv_per_temp_label]
 keys=page,set_label
-key_types=_INT_,_STRING_
 page=4
 set_label=Adv. 1 deg per (\302\260F.)
 
 [iat_ret_per_temp_label]
 keys=page,set_label
-key_types=_INT_,_STRING_
 page=4
 set_label=Ret 1 deg per (\302\260F.)
 
 [iat_adv_clt_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=& below CLT (\302\260C.)
 f_label=& below CLT (\302\260F.)
@@ -388,7 +346,6 @@ bind_to_list=temperature
 
 [iat_ret_temp_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=& IAT above (\302\260C.)
 f_label=& IAT above (\302\260F.)
@@ -399,7 +356,6 @@ bind_to_list=temperature
 
 [IATCor_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=16
 bitvals=0,1
 bitmask=8
@@ -408,7 +364,6 @@ toggle_groups=,IAT_controls
 
 [IATCorTy_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=16
 bitvals=0,1
 bitmask=16
@@ -417,7 +372,6 @@ choices=Coolant Temp (CLT),Intake Air Temp (IAT)
 
 [CrankTableTemp_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=42
 bitvals=0,1,2,3
 bitmask=48
@@ -427,7 +381,6 @@ choices=INVALID,CLT,MAT,Avg of Both
 
 [RPMRedLo_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=54
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -436,7 +389,6 @@ tooltip=This is the Lower RPM limit of IAT CLT/IAT based correction. (where corr
 
 [RPMRedHi_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=55
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -447,7 +399,6 @@ tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where corr
 
 [IATCor_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=16
 bitvals=0,1
 bitmask=8
@@ -456,7 +407,6 @@ toggle_groups=,IAT_controls
 
 [IATCorTy_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=16
 bitvals=0,1
 bitmask=16
@@ -465,7 +415,6 @@ choices=Coolant Temp (CLT),Intake Air Temp (IAT)
 
 [CrankTableTemp_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=42
 bitvals=0,1,2,3
 bitmask=48
@@ -475,7 +424,6 @@ choices=INVALID,CLT,MAT,Avg of Both
 
 [RPMRedLo_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=54
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -484,7 +432,6 @@ tooltip=This is the Lower RPM limit of IAT CLT/IAT based correction. (where corr
 
 [RPMRedHi_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=55
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -493,7 +440,6 @@ tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where corr
 
 [crank_rpm_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 offset=43
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -503,13 +449,11 @@ tooltip=This is the RPM at which the ECU considers the engine to be Running, bel
 
 [flood_clear_tps_entry]
 keys=offset,tooltip
-key_types=_INT_,_STRING_
 offset=44
 tooltip=The Flood Clear TPS Threshold is the value at which if the throttle is above this point (in ADC counts) during cranking (only!) the ECU will stop all injection events in order to allow the engine to recover from a flooded situation.
 
 [fixed_prime_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=45
 precision=1
 dl_conv_expr=x*10
@@ -519,14 +463,12 @@ tooltip=The amount of fuel injected as a priming pulse before engine is even sta
 
 [ase_total_time_entry]
 keys=page,offset,tooltip
-key_types=_INT_,_INT_,_STRING_
 page=5
 offset=178
 tooltip=The amount of time in either seconds or engine cycles that ASE decay will take to turn off.  Max values are 255 seconds (4 min 15 sec) or 255 engine cycles (depends on RPM). 
 
 [ase_fixed_hold_entry]
 keys=page,offset,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_
 page=5
 offset=180
 bind_to_list=fixed_decay,fixed_map
@@ -534,7 +476,6 @@ tooltip=This is the amount of time to hold ASE FIXED after engien start.  Once t
 
 [clt_setpoint_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_
 page=5
 offset=181
 dl_conv_expr=x+40
@@ -547,7 +488,6 @@ tooltip=The coolant temp must be BELOW this value for MAP hold to be enabled dur
 
 [fixed_map_ase_entry]
 keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=5
 offset=182
 source_key=map_sensor
@@ -559,14 +499,12 @@ tooltip=This is the Fixed MAP Value to use during ASE decay hold.
 
 [extra_fuel_mult_entry]
 keys=offset,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_
 offset=46
 bind_to_list=xtra_crank
 tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
 
 [iat_ign_adv_temp_entry]
 keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=48
 dl_conv_expr=x*1
@@ -578,7 +516,6 @@ tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 
 
 [iat_ret_temp_entry]
 keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=50
 dl_conv_expr=x*1
@@ -590,7 +527,6 @@ tooltip=When above the Intake Air Temp (IAT) setpoint the ignition timing will b
 
 [iat_ign_adv_clt_temp_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=47
 dl_conv_expr=x+40
@@ -601,7 +537,6 @@ tooltip=This is the coolant temp setpoint for CLT Based advanced. CLT Advance wo
 
 [iat_temp_thresh_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=0
 offset=52
 dl_conv_expr=x+40
@@ -612,7 +547,6 @@ tooltip=This is the Intake Air temp setpoint for IAT Based ignition retard. IAT 
 
 [iat_max_adv_entry]
 keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
 offset=49
 precision=2
@@ -622,7 +556,6 @@ tooltip=This is the Maximum allowed additional timing advance to be added on by 
 
 [iat_ret_map_setpoint_entry]
 keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=51
 source_key=map_sensor
@@ -634,264 +567,220 @@ tooltip=This is the MAP setpoint which must be exceeded along with the Intake Ai
 
 [warmup_entry_1]
 keys=offset
-key_types=_INT_
 offset=22
 group=warmup
 
 [warmup_entry_2]
 keys=offset
-key_types=_INT_
 offset=23
 group=warmup
 
 [warmup_entry_3]
 keys=offset
-key_types=_INT_
 offset=24
 group=warmup
 
 [warmup_entry_4]
 keys=offset
-key_types=_INT_
 offset=25
 group=warmup
 
 [warmup_entry_5]
 keys=offset
-key_types=_INT_
 offset=26
 group=warmup
 
 [warmup_entry_6]
 keys=offset
-key_types=_INT_
 offset=27
 group=warmup
 
 [warmup_entry_7]
 keys=offset
-key_types=_INT_
 offset=28
 group=warmup
 
 [warmup_entry_8]
 keys=offset
-key_types=_INT_
 offset=29
 group=warmup
 
 [warmup_entry_9]
 keys=offset
-key_types=_INT_
 offset=30
 group=warmup
 
 [warmup_entry_10]
 keys=offset
-key_types=_INT_
 offset=31
 group=warmup
 
 [crank_entry_1]
 keys=offset
-key_types=_INT_
 offset=32
 group=crank
 
 [crank_entry_2]
 keys=offset
-key_types=_INT_
 offset=33
 group=crank
 
 [crank_entry_3]
 keys=offset
-key_types=_INT_
 offset=34
 group=crank
 
 [crank_entry_4]
 keys=offset
-key_types=_INT_
 offset=35
 group=crank
 
 [crank_entry_5]
 keys=offset
-key_types=_INT_
 offset=36
 group=crank
 
 [crank_entry_6]
 keys=offset
-key_types=_INT_
 offset=37
 group=crank
 
 [crank_entry_7]
 keys=offset
-key_types=_INT_
 offset=38
 group=crank
 
 [crank_entry_8]
 keys=offset
-key_types=_INT_
 offset=39
 group=crank
 
 [crank_entry_9]
 keys=offset
-key_types=_INT_
 offset=40
 group=crank
 
 [crank_entry_10]
 keys=offset
-key_types=_INT_
 offset=41
 group=crank
 
 [ase_entry_1]
 keys=offset
-key_types=_INT_
 offset=168
 group=ase
 
 [ase_entry_2]
 keys=offset
-key_types=_INT_
 offset=169
 group=ase
 
 [ase_entry_3]
 keys=offset
-key_types=_INT_
 offset=170
 group=ase
 
 [ase_entry_4]
 keys=offset
-key_types=_INT_
 offset=171
 group=ase
 
 [ase_entry_5]
 keys=offset
-key_types=_INT_
 offset=172
 group=ase
 
 [ase_entry_6]
 keys=offset
-key_types=_INT_
 offset=173
 group=ase
 
 [ase_entry_7]
 keys=offset
-key_types=_INT_
 offset=174
 group=ase
 
 [ase_entry_8]
 keys=offset
-key_types=_INT_
 offset=175
 group=ase
 
 [ase_entry_9]
 keys=offset
-key_types=_INT_
 offset=176
 group=ase
 
 [ase_entry_10]
 keys=offset
-key_types=_INT_
 offset=177
 group=ase
 
 [IATCTemp_entry_0]
 keys=offset
-key_types=_INT_
 offset=56
 group=IATCTemp
 
 [IATCTemp_entry_1]
 keys=offset
-key_types=_INT_
 offset=57
 group=IATCTemp
 
 [IATCTemp_entry_2]
 keys=offset
-key_types=_INT_
 offset=58
 group=IATCTemp
 
 [IATCTemp_entry_3]
 keys=offset
-key_types=_INT_
 offset=59
 group=IATCTemp
 
 [IATCTemp_entry_4]
 keys=offset
-key_types=_INT_
 offset=60
 group=IATCTemp
 
 [IATCTemp_entry_5]
 keys=offset
-key_types=_INT_
 offset=61
 group=IATCTemp
 
 [IATCTemp_entry_6]
 keys=offset
-key_types=_INT_
 offset=62
 group=IATCTemp
 
 [IATCorS_entry_0]
 keys=offset
-key_types=_INT_
 offset=47
 group=IATCorS
 
 [IATCorS_entry_1]
 keys=offset
-key_types=_INT_
 offset=48
 group=IATCorS
 
 [IATCorS_entry_2]
 keys=offset
-key_types=_INT_
 offset=49
 group=IATCorS
 
 [IATCorS_entry_3]
 keys=offset
-key_types=_INT_
 offset=50
 group=IATCorS
 
 [IATCorS_entry_4]
 keys=offset
-key_types=_INT_
 offset=51
 group=IATCorS
 
 [IATCorS_entry_5]
 keys=offset
-key_types=_INT_
 offset=52
 group=IATCorS
 
 [IATCorS_entry_6]
 keys=offset
-key_types=_INT_
 offset=53
 group=IATCorS

@@ -63,7 +63,7 @@ void win32_setup_serial_params(gint fd, gint baud)
 	dcb.fErrorChar = FALSE;		/* Don't replcae bad chars */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
-	dcb.wReserved = FALSE;		/* as per msdn */
+	dcb.wReserved = 0;		/* as per msdn */
 
 	/* Set the port properties and write the string out the port. */
 	if(SetCommState((HANDLE) _get_osfhandle (fd) ,&dcb) == 0)

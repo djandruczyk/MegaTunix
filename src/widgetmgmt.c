@@ -74,6 +74,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	fullname = g_strdup_printf("%s%s",prefix,name);
+	OBJ_SET(widget,"fullname",g_strdup(fullname));
 	if (!lookup_widget(fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
@@ -153,18 +154,25 @@ gboolean get_state(gchar *string, gint index)
 void alter_widget_state(gpointer key, gpointer data)
 {
 	GtkWidget * widget = key;
-	gchar * tmpbuf;
-	gchar ** groups;
-	gint num_groups;
+	gchar * tmpbuf = NULL;
+	gchar ** groups = NULL;
+	gint num_groups = 0;
 	gint i = 0;
-	gpointer value;
-	gboolean state;
+	gpointer value = 0;
+	gboolean state = FALSE;
 	extern GHashTable *widget_group_states;
 
-	tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
-	
-	if (!tmpbuf)
+	if (!GTK_IS_WIDGET(widget))
+		return;
+
+	if (!OBJ_GET(widget,"bind_to_list"))
+	{
 		printf("Error with widget %s, bind_to_list is null\n",glade_get_widget_name(widget));
+		return;
+	}
+	else
+	        tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
+
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/

@@ -17,6 +17,7 @@
 #include <apicheck.h>
 #include <config.h>
 #include <configfile.h>
+#include <crx.h>
 #include <dataio.h>
 #include <defines.h>
 #include <debugging.h>
@@ -29,7 +30,7 @@
 #include <interrogate.h>
 #include <lookuptables.h>
 #include <mode_select.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
 #include <serialio.h>
@@ -69,10 +70,11 @@ EXPORT gboolean interrogate_ecu()
 	gchar sint8 = 0;
 	guint16 uint16 = 0;
 	gint16 sint16 = 0;
-	gint res = 0;
+	gboolean res = 0;
 	gint count = 0;
 	gint i = 0;
 	gint j = 0;
+	gint len = 0;
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
@@ -82,7 +84,10 @@ EXPORT gboolean interrogate_ecu()
 	guchar *ptr = NULL;
 	gchar * message = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern volatile gboolean offline;
 
+	if (offline)
+		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
@@ -131,8 +136,8 @@ EXPORT gboolean interrogate_ecu()
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_CHAR)
 			{
 				string = g_strdup(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,string,1);
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,string,1,&len);
+				if (!res)
 					interrogate_error("String Write error",j);
 				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%s\"\n",string));
 				g_free(string);
@@ -140,32 +145,32 @@ EXPORT gboolean interrogate_ecu()
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U08)
 			{
 				uint8 = (guint8)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&uint8,1);
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,&uint8,1,&len);
+				if (!res)
 					interrogate_error("U08 Write error",j);
 				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U16)
 			{
 				uint16 = (guint16)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&uint16,2);
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,&uint16,2,&len);
+				if (!res)
 					interrogate_error("U16 Write error",j);
 				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S08)
 			{
 				sint8 = (gint8)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&sint8,1);
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,&sint8,1,&len);
+				if (!res)
 					interrogate_error("S08 Write error",j);
 				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S16)
 			{
 				sint16 = (gint16)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&sint16,2);
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,&sint16,2,&len);
+				if (!res)
 					interrogate_error("S16 Write error",j);
 				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
 			}
@@ -178,17 +183,15 @@ EXPORT gboolean interrogate_ecu()
 		{
 			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",test->test_name,total_wanted-total_read));
 
-			total_read += res = read_wrapper(serial_params->fd,
+			res = read_wrapper(serial_params->fd,
 					ptr+total_read,
-					total_wanted-total_read);
+					total_wanted-total_read,&len);
+			total_read += len;
 
-			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",test->test_name,res,total_read));
+			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",test->test_name,len,total_read));
 			/* If we get nothing back (i.e. timeout, assume done)*/
-			if (res <= 0)
-			{
+			if ((!res) || (len == 0))
 				zerocount++;
-				total_read+=res;
-			}
 
 			if (zerocount > 1)
 				break;
@@ -206,11 +209,7 @@ EXPORT gboolean interrogate_ecu()
 		if (total_read > 0)
 		{
 			if (test->result_type == RESULT_TEXT)
-			{
-				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
-				thread_update_logbar("interr_view","info",g_strdup_printf("%s",test->result_str),FALSE,FALSE);
-				thread_update_logbar("interr_view",NULL,g_strdup(")\n"),FALSE,FALSE);
-			}
+				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (%s)\n",test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
 			else if (test->result_type == RESULT_DATA)
 				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
 			ptr = buf;
@@ -368,6 +367,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		cfg_free(cfgfile);
 		return FALSE;
 	}
 
@@ -386,6 +386,25 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	{
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
+
+		/*
+		if (firmware->capabilities & MS1)
+			printf("MS1\n");
+		if (firmware->capabilities & MS1_STD)
+			printf("MS1_STD\n");
+		if (firmware->capabilities & MSNS_E)
+			printf("MSNS_E\n");
+		if (firmware->capabilities & MS1_DT)
+			printf("MS1_DT\n");
+		if (firmware->capabilities & MS2)
+			printf("MS2\n");
+		if (firmware->capabilities & MS2_STD)
+			printf("MS2_STD\n");
+		if (firmware->capabilities & MS2_E)
+			printf("MS2_E\n");
+		if (firmware->capabilities & MS2_E_COMPMON)
+			printf("MS2_E_COMPMON\n");
+			*/
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
@@ -448,19 +467,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if(!cfg_read_int(cfgfile,"parameters","TotalTables",
 				&firmware->total_tables))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
-	if (firmware->capabilities & MS2)
-	{
-		if(!cfg_read_int(cfgfile,"parameters","TotalTETables",
-					&firmware->total_te_tables))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTETables\" value not found in interrogation profile, ERROR\n"));
-	}
-	if ((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MSNS_E))
+	cfg_read_int(cfgfile,"parameters","TotalTETables",
+					&firmware->total_te_tables);
+	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&firmware->toothmon_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"));
-		if (firmware->capabilities & MS2_EXTRA_COMPOSITEMON)
+		if (firmware->capabilities & MS2_E_COMPMON)
 		{
 			if(!cfg_read_int(cfgfile,"parameters","CompositemonPage",&firmware->compositemon_page))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompositemonPage\" value not found in interrogation profile, ERROR\n"));
@@ -766,6 +781,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		firmware->te_params[i] = initialize_te_params();
 
 		section = g_strdup_printf("te_table_%i",i);
+		cfg_read_boolean(cfgfile,section,"x_lock",&firmware->te_params[i]->x_lock);
+		cfg_read_boolean(cfgfile,section,"y_lock",&firmware->te_params[i]->y_lock);
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"gauge",&firmware->te_params[i]->gauge))
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
@@ -775,6 +792,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			firmware->te_params[i]->x_temp_dep = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep))
 			firmware->te_params[i]->y_temp_dep = FALSE;
+		if(!cfg_read_string(cfgfile,section,"x_axis_label",&firmware->te_params[i]->x_axis_label))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+		if(!cfg_read_string(cfgfile,section,"y_axis_label",&firmware->te_params[i]->y_axis_label))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->te_params[i]->x_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"y_page",&firmware->te_params[i]->y_page))
@@ -1113,6 +1134,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	ConfigFile *cfgfile = NULL;
 	Detection_Test *test = NULL;
 	guint i = 0;
+	gint len = 0;
 	gboolean pass = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
@@ -1186,6 +1208,10 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
 					pass=TRUE;
 				break;
+			case REGEX:
+				if (regex(vector[1],test->result_str,&len))
+					pass=TRUE;
+				break;
 			default:
 				pass=FALSE;
 		}
@@ -1195,8 +1221,8 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		else
 		{
 			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
-			cfg_free(cfgfile);
 			g_strfreev(match_on);
+			cfg_free(cfgfile);
 			return FALSE;
 		}
 

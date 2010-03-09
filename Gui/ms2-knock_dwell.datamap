@@ -3,12 +3,12 @@ description=Object data map for the MS2 Knock/Dwell Tab
 tab_name=_Knock/Dwell
 id_prefix=KN_DW_
 groups=defaults
+bind_to_list=valid_ecu_ctrls
 
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,21 +20,18 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
-key_types=_ENUM_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [knock_thresh_edit_button]
 keys=te_table_num,handler
-key_types=_STRING_,_ENUM_
 te_table_num=7
 handler=_TE_TABLE_
 
@@ -42,24 +39,24 @@ handler=_TE_TABLE_
 
 [safe_knock_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=knock_controls
 
 [knock_thresh_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=knock_controls
 
 [topframe]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=valid_ecu_ctrls
+
+[recovery_advance_label]
+keys=bind_to_list
+bind_to_list=aggressive_knock
 
 #------- Combo Boxes ------------------------------------------------------
 
 [knock_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Safe Mode,Aggressive Mode
 offset=927
 bitvals=0,1,2
@@ -68,7 +65,6 @@ toggle_groups=,knock_controls,knock_controls:aggressive_knock
 tooltip= Disabled: do not use knock feedback for ignition advance control. Safe Mode: use knock retard, but keep the advance below that which caused knock. Aggressive Mode: use knock retard, but keep advance at threshold of knock occurring. 
 [thresh_direction_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Below Threshold,Above Threshold
 offset=927
 bitvals=0,1
@@ -79,7 +75,6 @@ tooltip=This sets whether MegaSquirt® recognizes a voltage above the threshold 
 
 [knock_thresh_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S16_
 offset=538
 precision=2
@@ -89,12 +84,10 @@ ul_conv_expr=x*0.01
 tooltip=This is the voltage from the knock sensor module which defines whether there is knock occurring or not. Note that you can define a 6-element table of rpm versus voltage instead of a single value. You define this table under 'Settings/Knock Threshold'.
 
 [knock_peak_entry]
-keys=size,offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
 size=_S16_
 offset=540
 precision=2
-raw_lower=0
 raw_upper=500
 dl_conv_expr=x/0.01
 ul_conv_expr=x*0.01
@@ -102,13 +95,11 @@ tooltip=The maximum expected voltage value on the knock signal, used in some con
 
 [knock_count_entry]
 keys=offset,tooltip
-key_types=_INT_,_STRING_
 offset=934
 tooltip=Number knock detects required for valid detection.
 
 [knock_highkpa_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=936
 precision=1
@@ -119,7 +110,6 @@ tooltip=No knock retard is implemented above this MAP
 
 [knock_lowrpm_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=938
 raw_upper=10000
@@ -127,7 +117,6 @@ tooltip=No knock retard is implemented below this RPM
 
 [knock_highrpm_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=940
 raw_upper=10000
@@ -135,7 +124,6 @@ tooltip=No knock retard is implemented above this RPM
 
 [knock_max_retard_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=928
 precision=1
 dl_conv_expr=x/0.1
@@ -144,7 +132,6 @@ tooltip=Maximum total retard when knock occurs
 
 [knock_retard_check_time]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=931
 precision=1
 dl_conv_expr=x/0.1
@@ -153,7 +140,6 @@ tooltip=This is the time between knock retard corrections, allows short time ste
 
 [knock_retard_step_size]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=929
 precision=1
 dl_conv_expr=x/0.1
@@ -162,7 +148,6 @@ tooltip=The ignition retard step size when 1st knock or after stopped, make it l
 
 [knock_advance_check_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=932
 precision=1
 dl_conv_expr=x/0.1
@@ -171,7 +156,6 @@ tooltip=This is the time between knock advance correction (I.e., timing return t
 
 [knock_advance_step_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=930
 precision=1
 dl_conv_expr=x/0.1
@@ -180,7 +164,6 @@ tooltip=Ignition advance steps after knock has stopped
 
 [knock_recovery_advance_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 offset=933
 precision=1
 dl_conv_expr=x/0.1
@@ -190,7 +173,6 @@ tooltip=This is the change in table advance required to restart advance until kn
 
 [max_dwell_entry]
 keys=offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=4
 precision=1
 raw_lower=10
@@ -201,7 +183,6 @@ tooltip=Max Dwell Duration is the longest period the coil is allowed to charge -
 
 [max_spark_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=5
 precision=1
 dl_conv_expr=x/0.1
@@ -210,7 +191,6 @@ tooltip=Max Spark Duration is the amount of time MegaSquirt-II tries to wait bef
 
 [accel_comp_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=6
 precision=1
 dl_conv_expr=x/0.1
@@ -219,7 +199,6 @@ tooltip=Acceleration Compensation is the amount of time added to the duration wh
 
 [dwell_v1_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=7
 precision=1
@@ -231,7 +210,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwell_v2_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=8
 precision=1
@@ -243,7 +221,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwell_v3_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=9
 precision=1
@@ -255,7 +232,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwell_v4_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=10
 precision=1
@@ -267,7 +243,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwell_v5_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=11
 precision=1
@@ -279,7 +254,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwellcomp_v1_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=12
 precision=1
@@ -291,7 +265,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwellcomp_v2_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=13
 precision=1
@@ -303,7 +276,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwellcomp_v3_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=14
 precision=1
@@ -315,7 +287,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwellcomp_v4_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=15
 precision=1
@@ -327,7 +298,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [dwellcomp_v5_entry]
 keys=size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_S08_
 offset=16
 precision=1
@@ -339,7 +309,6 @@ tooltip=Battery Voltage Compensation is the time added to the dwell to compensat
 
 [knock_thresh_rpm_1_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=942
 raw_upper=6000
@@ -347,7 +316,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_rpm_2_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=944
 raw_upper=6000
@@ -355,7 +323,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_rpm_3_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=946
 raw_upper=6000
@@ -363,7 +330,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_rpm_4_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=948
 raw_upper=6000
@@ -371,7 +337,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_rpm_5_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=950
 raw_upper=6000
@@ -379,7 +344,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_rpm_6_entry]
 keys=size,offset,raw_upper,tooltip
-key_types=_ENUM_,_INT_,_INT_,_STRING_
 size=_U16_
 offset=952
 raw_upper=6000
@@ -387,7 +351,6 @@ tooltip=Knock threshold RPM, allows setting a curve of knock sensitivity vs RPM
 
 [knock_thresh_v_1_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=954
 precision=2
@@ -398,7 +361,6 @@ tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs 
 
 [knock_thresh_v_2_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=956
 precision=2
@@ -409,7 +371,6 @@ tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs 
 
 [knock_thresh_v_3_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=958
 precision=2
@@ -420,7 +381,6 @@ tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs 
 
 [knock_thresh_v_4_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=960
 precision=2
@@ -431,7 +391,6 @@ tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs 
 
 [knock_thresh_v_5_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=962
 precision=2
@@ -442,7 +401,6 @@ tooltip=Knock Threshold Voltage, allows setting a curve of knock sensitivity vs 
 
 [knock_thresh_v_6_entry]
 keys=size,offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_ENUM_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 size=_U16_
 offset=964
 precision=2

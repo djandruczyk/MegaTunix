@@ -39,10 +39,6 @@
 
 extern gint dbg_lvl;
 extern GObject *global_data;
-GThread *ascii_socket_id = NULL;
-GThread *binary_socket_id = NULL;
-GThread *control_socket_id = NULL;
-GThread *notify_slaves_id = NULL;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -55,13 +51,27 @@ EXPORT void enable_reboot_button_pf(void)
 	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
 }
 
+EXPORT void startup_tcpip_sockets_pf(void)
+{
+	extern gboolean interrogated;
+        extern volatile gboolean offline;
+	CmdLineArgs *args = NULL;
+
+	args = OBJ_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+	if ((interrogated) && (!offline))
+		open_tcpip_sockets();
+}
 
 EXPORT void spawn_read_ve_const_pf(void)
 {
 	extern Firmware_Details *firmware;
 	if (!firmware)
 		return;
-	
+
+	set_title(g_strdup("Queuing read of all ECU data..."));
+
 	io_cmd(firmware->get_all_command,NULL);
 }
 
@@ -75,13 +85,19 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	extern volatile gint last_page;
 	gint i = 0;
 
+	if (last_page == -1)
+	{
+		command = (Command *)data;
+		io_cmd(NULL,command->post_functions);
+		return TRUE;
+	}
 	/*printf("burn all helper\n");*/
 	if ((type != MS2) && (type != MS1))
 		return FALSE;
 	if (!offline)
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if (((firmware->capabilities & MS2_EXTRA) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
+		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
 		{
 	/*		printf("paged burn\n");*/
 			output = initialize_outputdata();
@@ -91,7 +107,7 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 			OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 			io_cmd(firmware->burn_command,output);
 		}
-		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_EXTRA)))
+		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_E)))
 		{
 			/* MS2 std allows all pages to be in ram at will*/
 			for (i=0;i<firmware->total_pages;i++)
@@ -150,7 +166,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			if (!offline)
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
@@ -172,7 +188,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_COMPOSITEMON:
 			if (!offline)
 			{
-				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->compositemon_page));
@@ -189,7 +205,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_TRIGMON:
 			if (!offline)
 			{
-				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->trigmon_page));
@@ -206,7 +222,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_TOOTHMON:
 			if (!offline)
 			{
-				if ((firmware->capabilities & MS2_EXTRA) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				OBJ_SET(output->object,"page",GINT_TO_POINTER(firmware->toothmon_page));
@@ -304,6 +320,7 @@ EXPORT void disable_burner_buttons_pf(void)
 
 EXPORT void reset_temps_pf(void)
 {
+	set_title(g_strdup("Adjusting for local Temp units..."));
 	reset_temps(OBJ_GET(global_data,"temp_units"));
 }
 
@@ -364,6 +381,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if (count > 0)
 			{
 				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
 			}
 			break;
@@ -374,6 +392,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
                          if (count > 0)
 			 {
 				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 firmware->signature_len = count;
 				 firmware->actual_signature = g_strndup(message->recv_buf,count);
 			 }
 			break;
@@ -409,7 +428,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - ptr8[0] != 255))
 			{
 				ms_reset_count++;
-				printf("MS1 Reset detected!\n");
+				printf("MS1 Reset detected!, lastcount %i, current %i\n",lastcount,ptr8[0]);
 				gdk_beep();
 			}
 			else
@@ -533,79 +552,12 @@ EXPORT void post_single_burn_pf(void *data)
 }
 
 
-/*!
- *\brief open_tcpip_socket_pf opens up the TCP control socket once the ecu is
- interrogated.
- */
-EXPORT void open_tcpip_socket_pf()
-{
-	extern gboolean interrogated;
-	extern volatile gboolean offline;
-	extern GObject *global_data;
-	CmdLineArgs *args = NULL;
-	MtxSocket *socket = NULL;
-
-	args = OBJ_GET(global_data,"args");
-	if (args->network_mode)
-		return;
-	if ((interrogated) || (offline))
-	{
-		/* Open The three sockets,  ASCII interface, binary interface
-		 * and control socket for telling other instances to update 
-		 * stuff..
-		 */
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
-		socket->type = MTX_SOCKET_ASCII;
-		if (socket->fd)
-		{
-			ascii_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up ASCII TCP socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
-		socket->type = MTX_SOCKET_BINARY;
-		if (socket->fd)
-		{
-			binary_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up BINARY TCP control socket\n"));
-
-		socket = g_new0(MtxSocket,1);
-		socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
-		socket->type = MTX_SOCKET_CONTROL;
-		if (socket->fd)
-		{
-			control_socket_id = g_thread_create(socket_thread_manager,
-					(gpointer)socket, /* Thread args */
-					TRUE, /* Joinable */
-					NULL); /*GError Pointer */
-		}
-		else
-			dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_socket_pf()\n\tERROR setting up TCP control socket\n"));
-
-		notify_slaves_id = g_thread_create(notify_slaves_thread,
-				NULL,/* Thread args */
-				TRUE, /* Joinable */
-				NULL); /*GError Pointer */
-	}
-}
-
-
 EXPORT void startup_default_timeouts_pf()
 {
 	gint source = 0;
 	gint rate = 0;
 
+	set_title(g_strdup("Starting up data renderers..."));
 	rate = (gint)OBJ_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));

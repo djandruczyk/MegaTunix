@@ -37,8 +37,6 @@ create_label	[string] The on-screen label used to show the status of this
 keys		[string]  list of keys that require BINDING to the control.
 		this is usually the bit* fields and the source and the 
 		bind_to_list key so that the update handlers know it exists.
-key_types	[comma separated enumeration list] used to determine how
-		to read the data correctly..
 bind_to_list	[comma separated list of strings]  List of lists to bind this
 		control to. Used by internal handlers to locate it for updating
 row		[integer] Which row this is on.  DO NOT have multiple lables

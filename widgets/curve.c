@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt curve widget
+ * MegaTunix curve widget
  * 
  * This software comes under the GPL (GNU Public License)
  * You may freely copy,distribute etc. this as long as the source code
@@ -17,6 +17,8 @@
 #include <curve-private.h>
 #include <math.h>
 #include <gtk/gtk.h>
+
+
 
 
 /*!
@@ -65,7 +67,10 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 		printf("new coord %f,%f\n",priv->coords[i].x,priv->coords[i].y);
 	*/
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -94,9 +99,11 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 		priv->coords[i].x = 0;
 		priv->coords[i].y = 0;
 	}
-	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -117,9 +124,11 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 	priv->coords[index].x = point.x;
 	priv->coords[index].y = point.y;
 	/*printf("set_coords_at_index at index %i changed to %.2f,%.2f\n",index,priv->coords[index].x,priv->coords[index].y);*/
-	recalc_extremes(priv);
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	if (priv->auto_rescale_id == 0)
+		priv->auto_rescale_id = g_timeout_add(1000,(GtkFunction)auto_rescale,priv);
 	return TRUE;
 }
 
@@ -158,7 +167,9 @@ gboolean mtx_curve_set_color (MtxCurve *curve, CurveColorIndex index, GdkColor c
         priv->colors[index].blue = color.blue;
         priv->colors[index].pixel = color.pixel;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -209,7 +220,9 @@ gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->title = g_strdup(new_title);
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -225,7 +238,9 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_vertexes = value;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -254,7 +269,9 @@ gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->auto_hide = value;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -283,7 +300,9 @@ gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_grat = value;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,TRUE);
 	return TRUE;
 }
 
@@ -299,7 +318,9 @@ gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_x_marker = value;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,FALSE);
 	return TRUE;
 }
 
@@ -315,7 +336,37 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
 	g_object_freeze_notify (G_OBJECT (curve));
 	priv->show_y_marker = value;
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,FALSE);
+	return TRUE;
+}
+
+
+/*!
+ \brief displays a live marker for the X axis (vertical Line)
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_get_x_marker_value (MtxCurve *curve, gfloat *value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+
+	*value = priv->x_marker;
+	return TRUE;
+}
+
+
+/*!
+ \brief displays a live marker for the Y axis (horizontal Line)
+ \param curve (MtxCurve *) pointer to curve
+ */
+gboolean mtx_curve_get_y_marker_value (MtxCurve *curve, gfloat *value)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+
+	*value = priv->y_marker;
 	return TRUE;
 }
 
@@ -326,19 +377,60 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
  */
 void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
+	MtxCurvePrivate *priv = NULL;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
-	g_return_if_fail (MTX_IS_CURVE (curve));
+	gboolean get_peak_cross = FALSE;
 
+	g_return_if_fail (MTX_IS_CURVE (curve));
+	priv = MTX_CURVE_GET_PRIVATE(curve);
+
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return;
 	if (priv->x_marker == value)
+		return;
+	if (((value < priv->lowest_x) && (priv->x_marker_clamp == LOW)) || ((value > priv->highest_x) && (priv->x_marker_clamp == HIGH)))
+		return;
+	/* Filter out jitter to within 1% */
+	if (fabs(value-priv->x_marker) < (fabs(priv->highest_x-priv->lowest_x)/100.0))
 		return;
 
 	g_object_freeze_notify (G_OBJECT (curve));
-	priv->x_marker = value;
+	if (value < priv->lowest_x)
+	{
+		priv->x_marker = priv->lowest_x;
+		priv->x_marker_clamp = LOW;
+	}
+	else if (value > priv->highest_x)
+	{
+		priv->x_marker = priv->highest_x;
+		priv->x_marker_clamp = HIGH;
+	}
+	else
+	{
+		priv->x_marker = value;
+		priv->x_marker_clamp = NONE;
+	}
+	if (value > priv->peak_x_marker)
+	{
+		priv->peak_x_marker = value;
+		get_peak_cross = TRUE;
+		if (priv->x_peak_timeout)
+		{
+			g_source_remove(priv->x_peak_timeout);
+			priv->x_peak_timeout = -1;
+		}
+	}
+	else
+	{
+		priv->x_draw_peak = TRUE;
+		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_X_));
+		if (priv->x_peak_timeout <= 0)
+			priv->x_peak_timeout = g_timeout_add(5000,(GtkFunction)cancel_peak,(gpointer)curve);
+	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{
 		if (value < priv->coords[0].x)
@@ -353,6 +445,8 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 		else if (value > priv->coords[priv->num_points-1].x)
 		{
 			priv->y_at_x_marker = priv->coords[priv->num_points-1].y;
+			if (get_peak_cross)
+				priv->peak_y_at_x_marker = priv->y_at_x_marker;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
 			{
 				priv->marker_proximity_vertex = priv->num_points-1;
@@ -364,6 +458,8 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
 			{
 				priv->y_at_x_marker = y;
+				if (get_peak_cross)
+					priv->peak_y_at_x_marker = y;
 				d1 = sqrt(pow((priv->coords[i].x-value),2)+ pow((priv->coords[i].y-y),2));
 				d2 = sqrt(pow((priv->coords[i+1].x-value),2)+ pow((priv->coords[i+1].y-y),2));
 				if (d1 < d2)
@@ -390,7 +486,7 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return;
 }
 
@@ -401,22 +497,64 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
  */
 void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
+	MtxCurvePrivate *priv = NULL;
 	gint i = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat d1 = 0.0;
 	gfloat d2 = 0.0;
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	gboolean get_peak_cross = FALSE;
 	g_return_if_fail (MTX_IS_CURVE (curve));
+	priv = MTX_CURVE_GET_PRIVATE(curve);
 
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return;
 	if (priv->y_marker == value)
+		return;
+	/* IF marker is clamped beyond ranges, don't bother updating*/
+	if (((value < priv->lowest_y) && (priv->y_marker_clamp == LOW)) || ((value > priv->highest_y) && (priv->y_marker_clamp == HIGH)))
+		return;
+
+	/* Filter out jitter to within 1% */
+	if (fabs(value-priv->y_marker) < (fabs(priv->highest_y-priv->lowest_y)/100.0))
 		return;
 
 	g_object_freeze_notify (G_OBJECT (curve));
-	priv->y_marker = value;
+	if (value <priv->lowest_y)
+	{
+		priv->y_marker = priv->lowest_y;
+		priv->y_marker_clamp = LOW;
+	}
+	else if (value > priv->highest_y)
+	{
+		priv->y_marker = priv->highest_y;
+		priv->y_marker_clamp = HIGH;
+	}
+	else
+	{
+		priv->y_marker = value;
+		priv->y_marker_clamp = NONE;
+	}
+	if (value > priv->peak_y_marker)
+	{
+		priv->peak_y_marker = value;
+		get_peak_cross = TRUE;
+		if (priv->y_peak_timeout)
+		{
+			g_source_remove(priv->y_peak_timeout);
+			priv->y_peak_timeout = -1;
+		}
+	}
+	else
+	{
+		priv->y_draw_peak = TRUE;
+		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_Y_));
+		if (priv->y_peak_timeout <= 0)
+			priv->y_peak_timeout = g_timeout_add(5000,(GtkFunction)cancel_peak,(gpointer)curve);
+	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{
-		if (value < priv->coords[0].x)
+		if (value < priv->coords[0].y)
 		{
 			priv->x_at_y_marker = priv->coords[0].x;
 			if (0 != priv->marker_proximity_vertex)
@@ -428,6 +566,8 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		else if (value > priv->coords[priv->num_points-1].y)
 		{
 			priv->x_at_y_marker = priv->coords[priv->num_points-1].x;
+			if (get_peak_cross)
+				priv->peak_x_at_y_marker = priv->x_at_y_marker;
 			if (priv->num_points-1 != priv->marker_proximity_vertex)
 			{
 				priv->marker_proximity_vertex = priv->num_points-1;
@@ -436,9 +576,11 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		}
 		else if ((value > priv->coords[i].y) && (value < priv->coords[i+1].y))
 		{
-			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,value,0,value,priv->h,&x,&y))
+			if (get_intersection(priv->coords[i].x,priv->coords[i].y,priv->coords[i+1].x,priv->coords[i+1].y,0,value,priv->w,value,&x,&y))
 			{
 				priv->x_at_y_marker = x;
+				if (get_peak_cross)
+					priv->peak_x_at_y_marker = x;
 				d1 = sqrt(pow((priv->coords[i].x-x),2)+ pow((priv->coords[i].y-value),2));
 				d2 = sqrt(pow((priv->coords[i+1].x-x),2)+ pow((priv->coords[i+1].y-value),2));
 				if (d1 < d2)
@@ -465,7 +607,7 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (curve));
-	mtx_curve_redraw(curve);
+	mtx_curve_redraw(curve,FALSE);
 	return;
 }
 
@@ -585,7 +727,7 @@ gint mtx_curve_get_active_coord_index (MtxCurve *curve)
  \param curve (MtxCurve *) pointer to curve
  \returns active vertex
  */
-gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper, gint y_lower, gint y_upper)
+gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gfloat x_lower, gfloat x_upper, gfloat y_lower, gfloat y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
@@ -606,7 +748,7 @@ gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gint x_lower, gint x_upper,
  \param x_upper (gint *) pointer to be filled in with value
  \returns TRUE
  */
-gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gint *x_lower, gint *x_upper, gint *y_lower, gint *y_upper)
+gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gfloat *x_lower, gfloat *x_upper, gfloat *y_lower, gfloat *y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
@@ -703,4 +845,49 @@ gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *curve)
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	return priv->y_blocked_from_edit;
 }
+
+
+/*!
+ \brief sets the X axis label
+ \param curve (MtxCurve *) pointer to curve
+ \param text (gchar *) label string
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	if (priv->x_axis_label)
+		g_free(priv->x_axis_label);
+	priv->x_axis_label = g_strdup(text);
+	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,TRUE);
+	return TRUE;
+}
+
+
+/*!
+ \brief sets the Y axis label
+ \param curve (MtxCurve *) pointer to curve
+ \param text (gchar *) label string
+ \returns TRUE on succes
+ */
+gboolean mtx_curve_set_y_axis_label(MtxCurve *curve, const gchar *text)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
+	g_object_freeze_notify (G_OBJECT (curve));
+	if (priv->y_axis_label)
+		g_free(priv->y_axis_label);
+	priv->y_axis_label = g_strdup(text);
+	g_object_thaw_notify (G_OBJECT (curve));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		return TRUE;
+	mtx_curve_redraw(curve,TRUE);
+	return TRUE;
+}
+
 

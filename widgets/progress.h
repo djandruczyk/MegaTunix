@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * 
  *
- * Megasquirt progress_bar widget
+ * MegaTunix progress_bar widget
  * Inspired by Phil Tobin's MegaLogViewer 
  * 
  * 

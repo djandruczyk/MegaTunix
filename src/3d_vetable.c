@@ -48,7 +48,7 @@
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
-#include <../mtxmatheval/mtxmatheval.h>
+#include <mtxmatheval.h>
 #include <math.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
@@ -1627,6 +1627,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_b:
 			g_signal_emit_by_name(ve_view->burn_but,"clicked");
 			break;
+		case GDK_J:
+		case GDK_j:
 		case GDK_Up:
 			dbg_func(OPENGL,g_strdup("\t\"UP\"\n"));
 			/* Ctrl+Up moves the Load axis up */
@@ -1650,6 +1652,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			break;
 
+		case GDK_K:
+		case GDK_k:
 		case GDK_Down:
 			dbg_func(OPENGL,g_strdup("\t\"DOWN\"\n"));
 			/* Ctrl+Down moves the Load axis down */
@@ -1672,6 +1676,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			break;
 
+		case GDK_H:
+		case GDK_h:
 		case GDK_Left:
 			dbg_func(OPENGL,g_strdup("\t\"LEFT\"\n"));
 
@@ -1694,6 +1700,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 			}
 			break;
+		case GDK_L:
+		case GDK_l:
 		case GDK_Right:
 			dbg_func(OPENGL,g_strdup("\t\"RIGHT\"\n"));
 			/* Ctrl+Down moves the RPM axis right (up) */

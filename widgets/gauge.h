@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Christopher Mire (czb)
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -34,11 +34,11 @@ G_BEGIN_DECLS
 
 #define DRAG_BORDER 7
 
-/* MtxDayNite enum, lamping */
+/* MtxDayNite enum, determines which colorscheme is used */
 typedef enum
 {
-	MTX_DAY = 0,
-	MTX_NITE
+	MTX_NITE = FALSE,
+	MTX_DAY = TRUE
 }MtxDayNite;
 
 /* MtxClampType enum,  display clamping */
@@ -77,7 +77,7 @@ typedef enum
 }MtxPolyType;
 
 
-/*! GaugeColorIndex enum,  for indexing into the color arrays */
+/*! GaugeColorIndex enum, for indexing into the color arrays */
 typedef enum  
 {
 	GAUGE_COL_BG_DAY = 0,
@@ -104,6 +104,7 @@ typedef enum
 	TB_COLOR_NITE,
 	TB_FONT,
 	TB_TEXT,
+	TB_LAYER,
 	TB_NUM_FIELDS
 }TbField;
 
@@ -126,6 +127,7 @@ typedef enum
 	POLY_START_ANGLE,
 	POLY_SWEEP_ANGLE,
 	POLY_NUM_POINTS,
+	POLY_LAYER,
 	POLY_NUM_FIELDS
 }PolyField;
 
@@ -153,21 +155,23 @@ typedef enum
 	TG_MIN_TICK_WIDTH,
 	TG_START_ANGLE,
 	TG_SWEEP_ANGLE,
+	TG_LAYER,
 	TG_NUM_FIELDS
 }TgField;
 
 
-/* Color Range enumeration for the individual fields */
+/* Warning Range enumeration for the individual fields */
 typedef enum
 {
-	CR_LOWPOINT = 0,
-	CR_HIGHPOINT,
-	CR_COLOR_DAY,
-	CR_COLOR_NITE,
-	CR_LWIDTH,
-	CR_INSET,
-	CR_NUM_FIELDS
-}CrField;
+	WR_LOWPOINT = 0,
+	WR_HIGHPOINT,
+	WR_COLOR_DAY,
+	WR_COLOR_NITE,
+	WR_LWIDTH,
+	WR_INSET,
+	WR_LAYER,
+	WR_NUM_FIELDS
+}WrField;
 
 /* Alert Range enumeration for the individual fields */
 typedef enum
@@ -178,6 +182,9 @@ typedef enum
 	ALRT_COLOR_NITE,
 	ALRT_LWIDTH,
 	ALRT_INSET,
+	ALRT_X_OFFSET,
+	ALRT_Y_OFFSET,
+	ALRT_LAYER,
 	ALRT_NUM_FIELDS
 }AlertField;
 
@@ -210,7 +217,7 @@ typedef enum
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
-typedef struct _MtxColorRange		MtxColorRange;
+typedef struct _MtxWarningRange		MtxWarningRange;
 typedef struct _MtxAlertRange		MtxAlertRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
@@ -233,20 +240,21 @@ struct _MtxDispatchHelper
 };
 
 
-/*! \struct _MtxColorRange
+/*! \struct _MtxWarningRange
  * \brief
- * _MtxColorRange is a container struct that holds all the information needed
+ * _MtxWarningRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
  * of these structs as they are stored in a dynamic array and redrawn on
  * gauge background generation
  */
-struct _MtxColorRange
+struct _MtxWarningRange
 {
 	gfloat lowpoint;	/* where the range starts from */
 	gfloat highpoint; 	/* where the range ends at */
 	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
+	gint layer;		/* Layer number */
 };
 
 
@@ -264,6 +272,9 @@ struct _MtxAlertRange
 	GdkColor color[2];	/* The colors to use */
 	gfloat lwidth;		/* % of radius to determine the line width */
 	gfloat inset;		/* % of radius to inset the line */
+	gfloat x_offset;	/* % of radius to offset the X origin */
+	gfloat y_offset;	/* % of radius to offset the Y origin */
+	gint layer;		/* Layer number */
 };
 
 
@@ -281,6 +292,7 @@ struct _MtxTextBlock
 	gfloat font_scale;
 	gfloat x_pos;
 	gfloat y_pos;
+	gint layer;		/* Layer number */
 };
 
 /*! \struct _MtxTickGroup
@@ -310,6 +322,7 @@ struct _MtxTickGroup
 	gfloat min_tick_length;
 	gfloat start_angle;
 	gfloat sweep_angle;
+	gint layer;		/* Layer number */
 };
 
 
@@ -327,7 +340,7 @@ struct _MtxPoint
 /*! \struct _MtxPolygon
  * \brief
  * _MtxPolygon is a container struct that holds an identifier (enum) and a 
- * void * for the the actualy polygon data (the struct will be casted in the
+ * void * for the the actual polygon data (the struct will be casted in the
  * code to the right type to get to the correct data...
  */
 struct _MtxPolygon
@@ -338,7 +351,8 @@ struct _MtxPolygon
 	gfloat line_width;		/* % of radius, clamped at 1 pixel */
 	GdkLineStyle line_style;	/* Line Style */
 	GdkJoinStyle join_style;	/* Join Style */
-	void *data;			/* point to datastruct */
+	void *data;			/* pointer to datastruct */
+	gint layer;			/* Layer number */
 };
 
 
@@ -442,12 +456,12 @@ gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
-/* Color Ranges */
-GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
-gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index);
-void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
+/* Warning Ranges */
+GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index, WrField field, void * value);
+gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *);
+void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index);
+void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge);
 
 /* Alert Ranges */
 GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
@@ -490,14 +504,15 @@ gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
+void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *, gdouble *, gdouble *);
 
 /* Tattletale */
 float mtx_gauge_face_get_peak (MtxGaugeFace *);
 gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *);
 
 /* Daytime or nitetime (flips colors) */
-gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
-MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
+void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
+gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
 
 G_END_DECLS
 

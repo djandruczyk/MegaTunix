@@ -192,14 +192,6 @@ typedef enum
 
 typedef enum
 {
-	COUNT=0x260,
-	NUMMATCH,
-	SUBMATCH,
-	FULLMATCH
-}MatchClass;
-
-typedef enum
-{
 	LV_PLAYBACK=0x270,
 	LV_REALTIME
 }Lv_Mode;

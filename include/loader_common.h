@@ -30,6 +30,8 @@ gint setup_port(gint, gint);
 void flush_serial(gint, FlushDirection);
 gboolean get_ecu_signature(gint);
 void close_port(gint);
+void unlock_port();
+gboolean lock_port(gchar *);
 FirmwareType detect_firmware(gchar *);
 
 

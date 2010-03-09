@@ -54,9 +54,7 @@ EXPORT void load_status_pf(void)
 	gchar * tmpbuf = NULL;
 	gchar ** tmpvector = NULL;
 	gchar ** keys = NULL;
-	gint * key_types = NULL;
 	gint num_keys = 0;
-	gint num_keytypes = 0;
 	gint major = 0;
 	gint minor = 0;
 	GtkWidget * window;
@@ -65,11 +63,10 @@ EXPORT void load_status_pf(void)
 	GtkWidget * table;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	GdkColor color;
-	extern gboolean connected;
 	extern gboolean interrogated;
 
 
-	if (!((connected) && (interrogated)))
+	if (!(interrogated))
 		return;
 	if (!firmware->status_map_file)
 	{
@@ -173,17 +170,8 @@ EXPORT void load_status_pf(void)
 				g_free(tmpbuf);
 			}
 
-			if (!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
-			else
-			{
-				key_types = parse_keytypes(tmpbuf,&num_keytypes,",");
-				g_free(tmpbuf);
-			}
-
-			bind_keys(G_OBJECT(label),cfgfile,section,keys,key_types,num_keys);
+			bind_keys(G_OBJECT(label),cfgfile,section,keys,num_keys);
 			g_strfreev(keys);
-			g_free(key_types);
 			/* Bind widgets to lists if thy have the bind_to_list flag set...
 			 *         */
 			if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))

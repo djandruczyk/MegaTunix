@@ -8,6 +8,10 @@ gauges_files = 	\
 		AM_SportComp_DC_Gauge.xml \
 		AM_SportComp_EGOcorr_Gauge.xml \
 		AM_SportComp_Fuel_Gauge.xml \
+		AM_SportComp_FuelLoad_Gauge.xml \
+		AM_SportComp_FuelLoad2_Gauge.xml \
+		AM_SportComp_IgnLoad_Gauge.xml \
+		AM_SportComp_IgnLoad2_Gauge.xml \
 		AM_SportComp_MAP_Gauge.xml \
 		AM_SportComp_MAT_Gauge.xml \
 		AM_SportComp_O2Volt_Gauge.xml \

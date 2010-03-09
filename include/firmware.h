@@ -29,8 +29,8 @@ typedef enum
 	MS1_DT		= 1<<3,
 	MS2		= 1<<4,
 	MS2_STD		= 1<<5,
-	MS2_EXTRA	= 1<<6,
-	MS2_EXTRA_COMPOSITEMON	= 1<<7
+	MS2_E		= 1<<6,
+	MS2_E_COMPMON	= 1<<7
 }Capability;
 
 
@@ -69,6 +69,8 @@ struct _Firmware_Details
 	gchar *profile_filename;/*! Interrogation profile filename */
 	gchar *actual_signature;/*! the raw signature from the ECU */
 	gchar *text_revision;	/*! Textual revision string */
+	gint signature_len;	/*! Length of signature in bytes */
+	gint txt_rev_len;	/*! Length of txt_rev in bytes */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
@@ -215,8 +217,11 @@ struct _Table_Params
 	gint z_precision;	/*! how many decimal places */
 	gchar * z_depend_on;	/*! Z axis dependancy string name */
 	GObject *z_object;	/*! Container for lookuptable deps */
+	gint last_z_minval;	/*! Last Minimum value for color scaling */
+	gint last_z_maxval;	/*! Last Maximum value for color scaling */
+	gboolean color_update;	/*! Flag to issue color reset.. */
 	gint z_minval;		/*! Minimum value for color scaling */
-	gint z_maxval;		/*! MAximum value for color scaling */
+	gint z_maxval;		/*! Maximum value for color scaling */
 };
 
 
@@ -257,10 +262,13 @@ struct _TE_Params
 	gchar *cross_color;	/*! Cross Color (string) */
 	gchar *marker_color;	/*! Marker Color (string) */
 	gchar *bind_to_list;	/*! Bind to list for sensitivity */
+	gchar *x_axis_label;	/*! X Axis label string */
+	gchar *y_axis_label;	/*! Y Axis label string */
 	GList *entries;		/*! Entry widget pointers */
 	gint bincount;		/* Number of bins for x and 1 */
 
 	gboolean x_temp_dep;	/*! Temperature dependant? */
+	gboolean x_lock;	/*! Flag for 2d table editor */
 	gint x_page;		/*! what page this column resides in */
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
@@ -274,6 +282,7 @@ struct _TE_Params
 	gchar *x_units;	/*! column units */
 
 	gboolean y_temp_dep;	/*! Temperature dependant? */
+	gboolean y_lock;	/*! Flag for 2d table editor */
 	gint y_page;		/*! what page this column resides in */
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */

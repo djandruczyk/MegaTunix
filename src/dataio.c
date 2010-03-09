@@ -45,6 +45,10 @@ extern gint dbg_lvl;
 extern GStaticMutex serio_mutex;
 extern GObject *global_data;
 
+/* Cause OS-X sucks.... */
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
+#endif
 
 /*!
  \brief read_data() reads in the data from the ECU, checks to make sure
@@ -56,9 +60,10 @@ extern GObject *global_data;
  */
 gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
-	gint res = 0;
+	gboolean res = 0;
 	gint total_read = 0;
 	gint zerocount = 0;
+	gint len = 0;
 	gboolean bad_read = FALSE;
 	guchar buf[4096];
 	guchar *ptr = buf;
@@ -100,19 +105,20 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
-		total_read += res = read_wrapper(serial_params->fd,
+		res = read_wrapper(serial_params->fd,
 				ptr+total_read,
-				total_wanted-total_read);
+				total_wanted-total_read,&len);
+		total_read += len;
 
 		/* Increment bad read counter.... */
-		if (res < 0) /* I/O Error Device disappearance or other */
+		if (!res) /* I/O Error Device disappearance or other */
 		{
 			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
 			connected = FALSE;
 			break;
 		}
-		if (res == 0)  /* Short read! */
+		if (len == 0)  /* Short read! */
 		{
 			bad_read = TRUE;
 			break;
@@ -190,7 +196,7 @@ void dump_output(gint total_read, guchar *buf)
 }
 
 
-gint read_wrapper(gint fd, void * buf, size_t count)
+gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 {
 	extern Serial_Params * serial_params;
 	gint res = 0;
@@ -201,6 +207,7 @@ gint read_wrapper(gint fd, void * buf, size_t count)
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 
+	*len = 0;
 	timeout.tv_sec = 0;
 	timeout.tv_usec = OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(gint)OBJ_GET(global_data, "read_timeout")*1000;
 	/* Network mode requires select to see if data is ready, otherwise
@@ -213,30 +220,42 @@ gint read_wrapper(gint fd, void * buf, size_t count)
 	{
 		res = select(fd+1,&rd,NULL,NULL,&timeout);
 		if (res < 0) /* Error, socket close, abort */
-			return 0;
+			return FALSE;
 		if (res > 0) /* Data Arrived! */
-			res = recv(fd,buf,count,0);
+			*len = recv(fd,buf,count,0);
+		return TRUE;
 	}
 	else
 		res = read(fd,buf,count);
 	if (res < 0)
-		res = 0;
-	return res;
+		return FALSE;
+	else
+		*len = res;
+	return TRUE;
 }
 
-gint write_wrapper(gint fd, const void *buf, size_t count)
+gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
 	extern Serial_Params * serial_params;
 	gint res = 0;
 
+/*	printf("write_wrapper\n"); */
 	if (serial_params->net_mode)
-		res = send(fd,buf,count,0);
+	{
+/*		printf("net mode write\n"); */
+		res = send(fd,buf,count,MSG_NOSIGNAL);
+	}
 	else
+	{
+/*		printf("normal write %i bytes\n",count); */
 		res = write(fd,buf,count);
+/*		printf("result of write is %i\n",res); */
+	}
+	*len = res;
 	if (res < 0)
 	{
-		printf("Write error!\n");
-		res = 0;
+		printf("Write error! \"%s\"\n",strerror(errno));
+		return FALSE;
 	}
-	return res;
+	return TRUE;
 }

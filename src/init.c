@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <configfile.h>
 #include <conversions.h>
@@ -22,7 +23,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,13 +72,12 @@ void init(void)
 	for (i=0;i<100;i++)
 		hidden_list[i]=FALSE;
 
+	OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
 	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
-	OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(125));
-	OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"width",GINT_TO_POINTER(640));
 	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
@@ -107,7 +107,7 @@ void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 10;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 20;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */
@@ -140,12 +140,17 @@ gboolean read_config(void)
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
 	gboolean *hidden_list;
+	CmdLineArgs *args = NULL;
+
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	args = OBJ_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
 			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
+//		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
+//			OBJ_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
 			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
@@ -182,8 +187,13 @@ gboolean read_config(void)
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
-		if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
-			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
+		if (args->network_mode)
+			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
+		else
+		{
+			if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
+				OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
+		}
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
 			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
@@ -192,10 +202,6 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_y_origin", &tmpi))
 			OBJ_SET(global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "rtt_width", &tmpi))
-			OBJ_SET(global_data,"rtt_width",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "rtt_height", &tmpi))
-			OBJ_SET(global_data,"rtt_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_x_origin", &tmpi))
 			OBJ_SET(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_y_origin", &tmpi))
@@ -309,6 +315,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(gboolean)OBJ_GET(global_data,"tips_in_use"));
+	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(gboolean)OBJ_GET(global_data,"network_access"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (gint)OBJ_GET(global_data,"temp_units"));
 	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (gint)OBJ_GET(global_data,"rtslider_fps"));
@@ -412,10 +419,6 @@ void save_config(void)
 		{
 			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
 			{
-				gdk_drawable_get_size(widget->window, &tmp_width,&tmp_height);
-
-				cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
-				cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				if (x > 0)
 					cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
@@ -708,6 +711,7 @@ Io_Message * initialize_io_message()
 	message->sequence = NULL;
 	message->payload = NULL;
 	message->recv_buf = NULL;
+	message->status = TRUE;
 
 	return message;
 }
@@ -794,6 +798,8 @@ TE_Params * initialize_te_params(void)
 {
 	TE_Params *te_params = NULL;
 	te_params = g_malloc0(sizeof(TE_Params));
+	te_params->x_lock = FALSE;
+	te_params->y_lock = FALSE;
 	te_params->x_page = -1;
 	te_params->y_page = -1;
 	te_params->x_base = -1;

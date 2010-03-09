@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Christopher Mire, 2006
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -56,6 +56,8 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
 	priv->colors[index].blue = color.blue;
 	priv->colors[index].pixel = color.pixel;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -129,6 +131,8 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 		new_bg = TRUE;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return TRUE;
 	if (new_bg)
 		generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -162,6 +166,8 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 		g_free(priv->value_font);
 	priv->value_font = g_strdup(new);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
@@ -169,23 +175,25 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 /*!
  \brief adds a new color range between the limits specified in the struct passed
  \param gauge (MtxGaugeFace *) pointer to gauge
- \param range (MtxColorRange*) pointer to color range struct to copy
+ \param range (MtxWarningRange*) pointer to color range struct to copy
  \returns index of where this range is stored...
  */
-gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *range)
+gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *range)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	MtxColorRange * newrange = NULL;
+	MtxWarningRange * newrange = NULL;
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
 
 	g_object_freeze_notify (G_OBJECT (gauge));
-	newrange = g_new0(MtxColorRange, 1);
-	newrange = g_memdup(range,sizeof(MtxColorRange)); 
-	g_array_append_val(priv->c_ranges,newrange);
+	newrange = g_new0(MtxWarningRange, 1);
+	newrange = g_memdup(range,sizeof(MtxWarningRange)); 
+	g_array_append_val(priv->w_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->w_ranges->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return priv->c_ranges->len-1;
+	return priv->w_ranges->len-1;
 }
 
 
@@ -206,6 +214,8 @@ gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *r
 	newrange = g_memdup(range,sizeof(MtxAlertRange)); 
 	g_array_append_val(priv->a_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->a_ranges->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->a_ranges->len-1;
@@ -236,6 +246,8 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 	new_tblock->y_pos = tblock->y_pos;
 	g_array_append_val(priv->t_blocks,new_tblock);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->t_blocks->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->t_blocks->len-1;
@@ -278,6 +290,8 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 	new_tgroup->sweep_angle = tgroup->sweep_angle;
 	g_array_append_val(priv->tick_groups,new_tgroup);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->tick_groups->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->tick_groups->len-1;
@@ -325,7 +339,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 			break;
 	}
 	new_poly->data = g_memdup(poly->data,size);
-	/* Generic polygons have a dynmically allocated part,  copy it */
+	/* Generic polygons have a dynmically allocated part, copy it */
 	if (poly->type == MTX_GENPOLY)
 	{
 		new = (MtxGenPoly *)new_poly->data;
@@ -335,6 +349,8 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	}
 	g_array_append_val(priv->polygons,new_poly);
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return priv->polygons->len-1;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return priv->polygons->len-1;
@@ -346,11 +362,11 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
-GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
+GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
-	return priv->c_ranges;
+	return priv->w_ranges;
 }
 
 
@@ -481,6 +497,8 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -606,10 +624,15 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 			g_free(tblock->text);
 			tblock->text = g_strdup(value);
 			break;
+		case TB_LAYER:
+			tblock->layer = (gint)*(gfloat *)value;
+			break;
 		default:
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -698,10 +721,15 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_SWEEP_ANGLE:
 			tgroup->sweep_angle = *(gfloat *)value;
 			break;
+		case TG_LAYER:
+			tgroup->layer = (gint)*(gfloat *)value;
+			break;
 		default:
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -814,10 +842,15 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 				((MtxGenPoly *)data)->points = g_memdup(value,((MtxGenPoly *)data)->num_points *sizeof(MtxPoint));
 			}
 			break;
+		case POLY_LAYER:
+			poly->layer = (gint)*(gfloat *)value;
+			break;
 		default:
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -828,44 +861,49 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
  \brief changes a color range field by passing in an index 
  to the color range array and the field name to change
  \param gauge  pointer to gauge object
- \param index, index of the ColorRange
+ \param index, index of the WarningRange
  \param field,  enumeration of the field to change
  \param value, new value
  */
-void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField field, void * value)
+void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < CR_NUM_FIELDS);
+	g_return_if_fail (field < WR_NUM_FIELDS);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
-	c_range = g_array_index(priv->c_ranges,MtxColorRange *,index);
-	g_return_if_fail (c_range != NULL);
+	w_range = g_array_index(priv->w_ranges,MtxWarningRange *,index);
+	g_return_if_fail (w_range != NULL);
 	switch (field)
 	{
-		case CR_LOWPOINT:
-			c_range->lowpoint = *(gfloat *)value;
+		case WR_LOWPOINT:
+			w_range->lowpoint = *(gfloat *)value;
 			break;
-		case CR_HIGHPOINT:
-			c_range->highpoint = *(gfloat *)value;
+		case WR_HIGHPOINT:
+			w_range->highpoint = *(gfloat *)value;
 			break;
-		case CR_INSET:
-			c_range->inset = *(gfloat *)value;
+		case WR_INSET:
+			w_range->inset = *(gfloat *)value;
 			break;
-		case CR_LWIDTH:
-			c_range->lwidth = *(gfloat *)value;
+		case WR_LWIDTH:
+			w_range->lwidth = *(gfloat *)value;
 			break;
-		case CR_COLOR_DAY:
-			c_range->color[MTX_DAY] = *(GdkColor *)value;
+		case WR_COLOR_DAY:
+			w_range->color[MTX_DAY] = *(GdkColor *)value;
 			break;
-		case CR_COLOR_NITE:
-			c_range->color[MTX_NITE] = *(GdkColor *)value;
+		case WR_COLOR_NITE:
+			w_range->color[MTX_NITE] = *(GdkColor *)value;
+			break;
+		case WR_LAYER:
+			w_range->layer = (gint)*(gfloat *)value;
 			break;
 		default:
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -898,6 +936,12 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 		case ALRT_HIGHPOINT:
 			a_range->highpoint = *(gfloat *)value;
 			break;
+		case ALRT_X_OFFSET:
+			a_range->x_offset = *(gfloat *)value;
+			break;
+		case ALRT_Y_OFFSET:
+			a_range->y_offset = *(gfloat *)value;
+			break;
 		case ALRT_INSET:
 			a_range->inset = *(gfloat *)value;
 			break;
@@ -910,10 +954,15 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 		case ALRT_COLOR_NITE:
 			a_range->color[MTX_NITE] = *(GdkColor *)value;
 			break;
+		case ALRT_LAYER:
+			a_range->layer = (gint)*(gfloat *)value;
+			break;
 		default:
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -924,20 +973,22 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
  \brief clears all color ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
-void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
+void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge)
 {
 	gint i = 0;
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	for (i=priv->c_ranges->len-1;i>=0;i--)
+	for (i=priv->w_ranges->len-1;i>=0;i--)
 	{
-		c_range = g_array_index(priv->c_ranges,MtxColorRange *, i);
-		priv->c_ranges = g_array_remove_index(priv->c_ranges,i);
-		g_free(c_range);
+		w_range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
+		priv->w_ranges = g_array_remove_index(priv->w_ranges,i);
+		g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -962,6 +1013,8 @@ void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge)
 		g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -988,6 +1041,8 @@ void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
 		g_free(tblock);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1015,6 +1070,8 @@ void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
 		g_free(tgroup);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1044,6 +1101,8 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
 		g_free(poly->data);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1055,20 +1114,22 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, guint index)
+void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index)
 {
-	MtxColorRange *c_range = NULL;
+	MtxWarningRange *w_range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if (index < priv->c_ranges->len)
+	if (index < priv->w_ranges->len)
 	{
-		c_range = g_array_index(priv->c_ranges,MtxColorRange *, index);
-		priv->c_ranges = g_array_remove_index(priv->c_ranges,index);
-		if (c_range)
-			g_free(c_range);
+		w_range = g_array_index(priv->w_ranges,MtxWarningRange *, index);
+		priv->w_ranges = g_array_remove_index(priv->w_ranges,index);
+		if (w_range)
+			g_free(w_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1095,6 +1156,8 @@ void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
 			g_free(a_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1125,6 +1188,8 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1155,6 +1220,8 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1188,6 +1255,8 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	return;
@@ -1217,6 +1286,8 @@ void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->show_drag_border = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
@@ -1236,6 +1307,8 @@ void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->show_tattletale = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -1266,6 +1339,8 @@ void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->tattletale_alpha = alpha;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return;
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -1304,7 +1379,13 @@ gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),FALSE);
-	priv->peak = priv->lbound;
+	g_object_freeze_notify (G_OBJECT (gauge));
+	priv->peak = priv->value;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+		return TRUE;
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
 	return TRUE;
 }
 
@@ -1340,10 +1421,10 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns the state of whether the gauge is in daytime or nitetime mode
  */
-MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
+gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), MTX_DAY);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
 	return priv->daytime_mode;
 }
 
@@ -1353,17 +1434,37 @@ MtxDayNite mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns true on sucess
  */
-gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
+void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	if (priv->daytime_mode == mode)
-		return TRUE;
+		return;
 	else
 	{
 		priv->daytime_mode = mode;
+		if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
+			return;
 		generate_gauge_background(gauge);
 		mtx_gauge_face_redraw_canvas (gauge);
 	}
-	return TRUE;
+	return;
 }
+
+
+/*!
+ \brief gets the last click coords in normalized -1 <-> +1 scales
+ \param gauge, pointer to gauge
+ \param x, gdouble pointer 
+ \param y, gdouble pointer 
+ \returns nothing, all resutls passed via pointer dereference
+ */
+void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *gauge, gdouble *x, gdouble *y)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	*x = priv->last_click_x;
+	*y = priv->last_click_y;
+	return;
+}
+

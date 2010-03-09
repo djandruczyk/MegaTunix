@@ -65,6 +65,7 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 	gshort tt = 0;
 	time_t tim;
 	FILE *f = NULL;
+	extern Firmware_Details *firmware;
 
 	/* OK Button pressed,  we need to validate all input and calculate
 	 * and build the tables and send to the ECU
@@ -145,7 +146,10 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 	fprintf(f, "//------------------------------------------------------------------------------\n");
 	fclose(f);
 
-	table_write(tabletype==CTS?2:3,2048,(guint8 *)table);
+	if (firmware->capabilities & MS2_E)
+		table_write(tabletype==CTS?5:6,2048,(guint8 *)table);
+	else
+		table_write(tabletype==CTS?2:3,2048,(guint8 *)table);
 
 	return TRUE;
 }

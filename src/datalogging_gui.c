@@ -369,7 +369,10 @@ EXPORT void run_datalog_pf(void)
 
 		history = (GArray *)OBJ_GET(object,"history");
 		precision = (gint)OBJ_GET(object,"precision");
-		value = g_array_index(history, gfloat, history->len-1);
+		if ((gint)history->len-1 <= 0)
+			value = 0.0;
+		else
+			value = g_array_index(history, gfloat, history->len-1);
 
 		tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precision),",",'.');
 		g_string_append(output,tmpbuf);

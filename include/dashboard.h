@@ -55,7 +55,21 @@ gboolean hide_dash_resizers(gpointer );
 void update_tab_gauges(void);
 gboolean dash_configure_event(GtkWidget * , GdkEventConfigure * );
 gboolean focus_event(GtkWidget * , gpointer);
-void dash_toggle_attribute(GtkWidget *,MtxGenAttr);
+void dash_toggle_attribute(GtkWidget *, MtxGenAttr);
+gboolean dash_popup_menu_handler(GtkWidget *, gpointer);
+void dash_context_popup(GtkWidget *, GdkEventButton *);
+gboolean dash_lookup_attribute(GtkWidget *, MtxGenAttr);
+gboolean toggle_dash_tattletales(GtkWidget *, gpointer);
+gboolean toggle_dash_antialias(GtkWidget *, gpointer);
+void toggle_dash_fullscreen(GtkWidget *, gpointer);
+gboolean reset_dash_tattletales(GtkWidget *, gpointer);
+gboolean toggle_dash_daytime(GtkWidget *, gpointer);
+gboolean set_dash_time_mode(GtkWidget *, gpointer);
+gboolean get_dash_daytime_mode(GtkWidget *);
+void set_dash_daytime_mode(GtkWidget *, gboolean);
+gboolean close_dash(GtkWidget *, gpointer );
+
+
 /* Prototypes */
 
 #endif

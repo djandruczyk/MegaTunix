@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Christopher Mire, 2006
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -39,7 +39,6 @@
 #include <string.h>
 #include <time.h>
 #include <string.h>
-
 
 
 
@@ -114,6 +113,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 
 	g_object_set(G_OBJECT(gauge),"can_focus",GINT_TO_POINTER(TRUE),NULL);
 
+	priv->max_layers = 10;
 	priv->w = 0;
 	priv->h = 0;
 	priv->xc = 0.0;
@@ -145,7 +145,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->tattletale_alpha = 0.5;
 	priv->peak = priv->lbound;
 	priv->a_ranges = g_array_new(FALSE,TRUE,sizeof(MtxAlertRange *));
-	priv->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
+	priv->w_ranges = g_array_new(FALSE,TRUE,sizeof(MtxWarningRange *));
 	priv->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	priv->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
 	priv->polygons = g_array_new(FALSE,TRUE,sizeof(MtxPolygon *));
@@ -363,9 +363,9 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			/* If we alert, in order to save CPU, we copy the 
 			 * background pixmap to a temp pixmap and render on 
 			 * that and STORE the index of this alert.  Next time
-			 * acount we'll detect we ALREADY drew the alert and 
-			 * just copy hte pixmap (saving all the render time)
-			 * as pixmap copies are fast.
+			 * around we'll detect we ALREADY drew the alert and 
+			 * just copy the pixmap (saving all the render time)
+			 * as pixmap copies are reasonably fast.
 			 */
 			priv->last_alert_index = i;
 			widget = GTK_WIDGET(gauge);
@@ -382,7 +382,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 					range->color[priv->daytime_mode].blue/65535.0);
 			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 			cairo_set_line_width (cr, lwidth);
-			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),0, 2*M_PI);
+			cairo_arc(cr, priv->xc + (range->x_offset*priv->radius), priv->yc + (range->y_offset*priv->radius), (range->inset * priv->radius),0, 2*M_PI);
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 			break;
@@ -391,6 +391,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
 	if (!alert)
+		/* Not in alert status,  copy from bg_pixmap to current pixmap */
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->bg_pixmap,
@@ -398,6 +399,7 @@ cairo_jump_out_of_alerts:
 				0,0,
 				widget->allocation.width,widget->allocation.height);
 	else
+		/* In ALERT status, copy from tmp_pixmap to current pixmap instead */
 		gdk_draw_drawable(priv->pixmap,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->tmp_pixmap,
@@ -448,6 +450,11 @@ cairo_jump_out_of_alerts:
 				priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius),
 				priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius));
 		cairo_show_text (cr, message);
+		priv->value_bounding_box.x = priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius);
+		priv->value_bounding_box.y = priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius)-extents.height;
+		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
+		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
+		/*printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height); */
 		g_free(message);
 
 		cairo_stroke (cr);
@@ -478,7 +485,7 @@ cairo_jump_out_of_alerts:
 				priv->colors[GAUGE_COL_NEEDLE_NITE].green/65535.0,
 				priv->colors[GAUGE_COL_NEEDLE_NITE].blue/65535.0);
 	}
-	cairo_set_line_width (cr, 1);
+	cairo_set_line_width (cr, 0);
 
 	n_width = priv->needle_width * priv->radius;
 	n_tail = priv->needle_tail * priv->radius;
@@ -488,37 +495,42 @@ cairo_jump_out_of_alerts:
 	xc = priv->xc;
 	yc = priv->yc;
 
-	priv->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
-	priv->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
-	priv->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
-	priv->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
+	/* Needle background,  points 0 and 1 are each "side" of the needle tip
+	 * Points 2 and 5 are the points on either side of the pivot and
+	 * points 3 and 4 are the points on either side of the needle's tail
+	 */
+	priv->needle_coords[0].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * -sin(needle_pos)));
+	priv->needle_coords[0].y = yc + (((n_tip) * sin (needle_pos)) + ((tip_width) * cos(needle_pos)));
+	priv->needle_coords[1].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * sin(needle_pos)));
+	priv->needle_coords[1].y = yc + (((n_tip) * sin (needle_pos)) + ((tip_width) * -cos(needle_pos)));
 
 	if (n_tail < 0)
 	{
-		priv->needle_coords[2].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * sin(needle_pos));
-		priv->needle_coords[2].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * -cos(needle_pos));
+		/* "Hidden Pivot" needle, where pivot point is invisible */
+		priv->needle_coords[2].x = xc + (((n_tail) * -cos (needle_pos)) + ((n_width) * sin(needle_pos)));
+		priv->needle_coords[2].y = yc + (((n_tail) * -sin (needle_pos)) + ((n_width) * -cos(needle_pos)));
+		priv->needle_coords[3].x = priv->needle_coords[2].x;
+		priv->needle_coords[3].y = priv->needle_coords[2].y;
+		priv->needle_coords[4].x = priv->needle_coords[2].x;
+		priv->needle_coords[4].y = priv->needle_coords[2].y;
+		priv->needle_coords[5].x = xc + (((n_tail) * -cos (needle_pos)) + ((n_width) * -sin(needle_pos)));
+		priv->needle_coords[5].y = yc + (((n_tail) * -sin (needle_pos)) + ((n_width) * cos(needle_pos)));
 	}
 	else
 	{
-		priv->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
-		priv->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
-	}
+		/* Normal Needle */
+		priv->needle_coords[2].x = xc + ((n_width) * sin(needle_pos));
+		priv->needle_coords[2].y = yc + ((n_width) * -cos(needle_pos));
 
-	priv->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
-	priv->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
-	priv->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
-	priv->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
-	if (n_tail < 0)
-	{
-		priv->needle_coords[5].x = xc + ((n_tail) * -cos (needle_pos))+((n_width) * -sin(needle_pos));
-		priv->needle_coords[5].y = yc + ((n_tail) * -sin (needle_pos))+((n_width) * cos(needle_pos));
-	}
-	else
-	{
-		priv->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
-		priv->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+		priv->needle_coords[3].x = xc + (((n_tail) * -cos (needle_pos)) + ((tail_width) * sin (needle_pos)));
+		priv->needle_coords[3].y = yc + (((n_tail) * -sin (needle_pos)) + ((tail_width) * -cos (needle_pos)));
+		priv->needle_coords[4].x = xc + (((n_tail) * -cos (needle_pos)) + ((tail_width) * -sin (needle_pos)));
+		priv->needle_coords[4].y = yc + (((n_tail) * -sin (needle_pos)) + ((tail_width) * cos (needle_pos)));
+		priv->needle_coords[5].x = xc + ((n_width) * -sin (needle_pos));
+		priv->needle_coords[5].y = yc + ((n_width) * cos (needle_pos));
 	}
 	priv->needle_polygon_points = 6;
+	calc_bounding_box(priv->needle_coords,priv->needle_polygon_points, &priv->needle_bounding_box);
 
 	cairo_move_to (cr, priv->needle_coords[0].x,priv->needle_coords[0].y);
 	cairo_line_to (cr, priv->needle_coords[1].x,priv->needle_coords[1].y);
@@ -530,11 +542,12 @@ cairo_jump_out_of_alerts:
 	cairo_stroke(cr);
 
 	cairo_destroy(cr);
+	return;
 }
 
 
 /*!
- \brief handles configure events whe nthe gauge gets created or resized.
+ \brief handles configure events when the gauge gets created or resized.
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
@@ -599,6 +612,10 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				priv->w,priv->h);
 		priv->last_alert_index = -1;
 
+		priv->needle_bounding_box.x = 0;
+		priv->needle_bounding_box.y = 0;
+		priv->needle_bounding_box.width = priv->w;
+		priv->needle_bounding_box.height = priv->h;
 		gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
 		priv->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
 		priv->gc = gdk_gc_new(priv->bg_pixmap);
@@ -680,7 +697,6 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		generate_gauge_background(gauge);
 		update_gauge_position(gauge);
 	}
-
 	return TRUE;
 }
 
@@ -695,14 +711,44 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
+	cairo_t *cr = NULL;
+	GdkPixmap *pmap = NULL;
 
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+	}
+	else
+	{
+		pmap=gdk_pixmap_new(widget->window,
+				priv->w,priv->h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_drawable(pmap,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		cr = gdk_cairo_create (pmap);
+		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+		cairo_rectangle (cr,
+				0,0,priv->w,priv->h);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				pmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
+		g_object_unref(pmap);
 
+	}
 	if (GTK_IS_WINDOW(widget->parent))
 	{
 #if GTK_MINOR_VERSION >= 10
@@ -719,8 +765,6 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 		gdk_window_shape_combine_mask(widget->window,priv->bitmap,0,0);
 	}
-
-
 	return FALSE;
 }
 
@@ -767,10 +811,11 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	gfloat tail_width = 0.0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
+	gint layer = 0;
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 	MtxPolygon *poly = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -788,6 +833,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	/* The little corner resizer boxes... */
 	if (priv->show_drag_border)
 	{
+		/* Fill 4 rectangles with black */
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -800,11 +846,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_rectangle (cr,
 				priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,
 				DRAG_BORDER, DRAG_BORDER);
-	}
-	cairo_fill(cr);
-	cairo_set_source_rgb (cr, 0.9,0.9,0.9);
-	if (priv->show_drag_border)
-	{
+		cairo_fill(cr);
+		cairo_set_source_rgb (cr, 0.9,0.9,0.9);
+		/* draw light grey border around 4 rectangles */
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -817,8 +861,8 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_rectangle (cr,
 				priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,
 				DRAG_BORDER, DRAG_BORDER);
+		cairo_stroke(cr);
 	}
-	cairo_stroke(cr);
 	/* Black out the rest of the gauge */
 	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
@@ -914,48 +958,230 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_arc(cr, priv->xc, priv->yc, (0.900 * priv->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
 
-	/* The warning color ranges */
-	for (i=0;i<priv->c_ranges->len;i++)
+	for (layer=0;layer<priv->max_layers;layer++)
 	{
-		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
-		cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
-				range->color[priv->daytime_mode].green/65535.0,
-				range->color[priv->daytime_mode].blue/65535.0);
-		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
-		angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
-		angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
-		/*printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);*/
-		lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
-		cairo_set_line_width (cr, lwidth);
-		if (priv->rotation == MTX_ROT_CW)
-			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
-		else
-			cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
-		cairo_stroke(cr);
-	}
-
-	/* NEW STYLE Gauge tick groups */
-	for (i=0;i<priv->tick_groups->len;i++)
-	{
-		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
-		cairo_set_source_rgb (cr, 
-				tgroup->maj_tick_color[priv->daytime_mode].red/65535.0,
-				tgroup->maj_tick_color[priv->daytime_mode].green/65535.0,
-				tgroup->maj_tick_color[priv->daytime_mode].blue/65535.0);
-
-		deg_per_major_tick = (tgroup->sweep_angle)/(float)(tgroup->num_maj_ticks-1);
-		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
-
-		insetfrom = priv->radius * tgroup->maj_tick_inset;
-		if (priv->rotation == MTX_ROT_CW)
-			counter = tgroup->start_angle *(M_PI/180.0);
-		else
-			counter = (tgroup->start_angle+tgroup->sweep_angle) *(M_PI/180.0);
-		if (tgroup->text)
+		/* The warning color ranges */
+		for (i=0;i<priv->w_ranges->len;i++)
 		{
-			vector = g_strsplit(tgroup->text,",",-1);
-			count = g_strv_length(vector);
-			tmpbuf = g_utf8_strup(tgroup->font,-1);
+			range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
+			if (range->layer != layer) /* Draw layers in order, 0 being "lowest" */
+				continue;
+			cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
+					range->color[priv->daytime_mode].green/65535.0,
+					range->color[priv->daytime_mode].blue/65535.0);
+			/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
+			angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
+			angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
+			/*printf("gauge warning range should be from %f, to %f of full scale\n",angle1, angle2);*/
+			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
+			cairo_set_line_width (cr, lwidth);
+			if (priv->rotation == MTX_ROT_CW)
+				cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+(angle1*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+(angle2*(priv->sweep_angle)))*(M_PI/180.0));
+			else
+				cairo_arc(cr, priv->xc, priv->yc, (range->inset * priv->radius),(priv->start_angle+priv->sweep_angle-(angle2*(priv->sweep_angle)))*(M_PI/180.0), (priv->start_angle+priv->sweep_angle-(angle1*(priv->sweep_angle)))*(M_PI/180.0));
+			cairo_stroke(cr);
+		}
+
+		/* NEW STYLE Gauge tick groups */
+		for (i=0;i<priv->tick_groups->len;i++)
+		{
+			tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
+			if (tgroup->layer != layer) /* Draw layers in order, 0 being "lowest" */
+				continue;
+			cairo_set_source_rgb (cr, 
+					tgroup->maj_tick_color[priv->daytime_mode].red/65535.0,
+					tgroup->maj_tick_color[priv->daytime_mode].green/65535.0,
+					tgroup->maj_tick_color[priv->daytime_mode].blue/65535.0);
+
+			deg_per_major_tick = (tgroup->sweep_angle)/(float)(tgroup->num_maj_ticks-1);
+			deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
+
+			insetfrom = priv->radius * tgroup->maj_tick_inset;
+			if (priv->rotation == MTX_ROT_CW)
+				counter = tgroup->start_angle *(M_PI/180.0);
+			else
+				counter = (tgroup->start_angle+tgroup->sweep_angle) *(M_PI/180.0);
+			if (tgroup->text)
+			{
+				vector = g_strsplit(tgroup->text,",",-1);
+				count = g_strv_length(vector);
+				tmpbuf = g_utf8_strup(tgroup->font,-1);
+				if (g_strrstr(tmpbuf,"BOLD"))
+					weight = CAIRO_FONT_WEIGHT_BOLD;
+				else
+					weight = CAIRO_FONT_WEIGHT_NORMAL;
+				if (g_strrstr(tmpbuf,"OBLIQUE"))
+					slant = CAIRO_FONT_SLANT_OBLIQUE;
+				else if (g_strrstr(tmpbuf,"ITALIC"))
+					slant = CAIRO_FONT_SLANT_ITALIC;
+				else
+					slant = CAIRO_FONT_SLANT_NORMAL;
+				g_free(tmpbuf);
+				cairo_select_font_face (cr, tgroup->font, slant, weight);
+				cairo_set_font_size (cr, (priv->radius * tgroup->font_scale));
+			}
+			for (j=0;j<tgroup->num_maj_ticks;j++)
+			{
+				inset = tgroup->maj_tick_length * priv->radius;
+
+				lwidth = (priv->radius/10)*tgroup->maj_tick_width < 1 ? 1: (priv->radius/10)*tgroup->maj_tick_width;
+				cairo_set_line_width (cr, lwidth);
+				cairo_move_to (cr,
+						priv->xc + (priv->radius - insetfrom) * cos (counter),
+						priv->yc + (priv->radius - insetfrom) * sin (counter));
+				cairo_line_to (cr,
+						priv->xc + (priv->radius - insetfrom - inset) * cos (counter),
+						priv->yc + (priv->radius - insetfrom - inset) * sin (counter));
+				cairo_stroke (cr);
+				if ((vector) && (j < count)) /* If not null */
+				{
+					cairo_save(cr);
+					cairo_set_source_rgb (cr, 
+							tgroup->text_color[priv->daytime_mode].red/65535.0,
+							tgroup->text_color[priv->daytime_mode].green/65535.0,
+							tgroup->text_color[priv->daytime_mode].blue/65535.0);
+					cairo_text_extents (cr, vector[j], &extents);
+					/* Gets the radius of a circle that encompasses the 
+					 * rectangle of text on screen */
+					rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
+					cairo_move_to (cr,
+							priv->xc + (priv->radius - tgroup->text_inset*priv->radius - rad) * cos (counter) - extents.width/2.0-extents.x_bearing,
+							priv->yc + (priv->radius - tgroup->text_inset*priv->radius - rad) * sin (counter) + extents.height/2.0);
+					cairo_show_text (cr, vector[j]);
+					cairo_restore(cr);
+				}
+				/* minor ticks */
+				if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
+				{
+					cairo_save (cr); /* stack-pen-size */
+					cairo_set_source_rgb (cr,
+							tgroup->min_tick_color[priv->daytime_mode].red/65535.0,
+							tgroup->min_tick_color[priv->daytime_mode].green/65535.0,
+							tgroup->min_tick_color[priv->daytime_mode].blue/65535.0);
+					inset = tgroup->min_tick_length * priv->radius;
+					mintick_inset = priv->radius * tgroup->min_tick_inset;
+					lwidth = (priv->radius/10)*tgroup->min_tick_width < 1 ? 1: (priv->radius/10)*tgroup->min_tick_width;
+					cairo_set_line_width (cr, lwidth);
+					for (k=1;k<=tgroup->num_min_ticks;k++)
+					{
+						if (priv->rotation == MTX_ROT_CW)
+							subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
+						else
+							subcounter = -(k*deg_per_minor_tick)*(M_PI/180.0);
+						cairo_move_to (cr,
+								priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
+								priv->yc + (priv->radius - mintick_inset) * sin (counter+subcounter));
+						cairo_line_to (cr,
+								priv->xc + (priv->radius - mintick_inset - inset) * cos (counter+subcounter),
+								priv->yc + (priv->radius - mintick_inset - inset) * sin (counter+subcounter));
+						cairo_stroke (cr);
+					}
+					cairo_restore (cr); /* stack-pen-size */
+				}
+				if (priv->rotation == MTX_ROT_CW)
+					counter += (deg_per_major_tick)*(M_PI/180);
+				else
+					counter -= (deg_per_major_tick)*(M_PI/180);
+			}
+			g_strfreev(vector);
+		}
+		cairo_stroke (cr);
+
+		/* Polygons */
+		for (i=0;i<priv->polygons->len;i++)
+		{
+			poly = g_array_index(priv->polygons,MtxPolygon *, i);
+			if (poly->layer != layer)
+				continue;
+			cairo_set_source_rgb(cr,
+					poly->color[priv->daytime_mode].red/65535.0,
+					poly->color[priv->daytime_mode].green/65535.0,
+					poly->color[priv->daytime_mode].blue/65535.0);
+			lwidth = priv->radius*poly->line_width < 1 ? 1: priv->radius*poly->line_width;
+			cairo_set_line_width (cr, lwidth);
+			cairo_set_line_join(cr,poly->join_style);
+			switch (poly->line_style)
+			{
+				case GDK_LINE_SOLID:
+					cairo_set_dash(cr,0,0,0);
+					break;
+				case GDK_LINE_ON_OFF_DASH:
+					cairo_set_dash(cr,dashes,2,0);
+					break;
+				default:
+					break;
+			}
+			switch (poly->type)
+			{
+				case MTX_CIRCLE:
+					cairo_arc(cr,
+							priv->xc+((MtxCircle *)poly->data)->x*priv->radius,
+							priv->yc+((MtxCircle *)poly->data)->y*priv->radius,
+							((MtxCircle *)poly->data)->radius*priv->radius,
+							0,2*M_PI);
+					break;
+				case MTX_RECTANGLE:
+					cairo_rectangle(cr,
+							priv->xc+((MtxRectangle *)poly->data)->x*priv->radius,
+							priv->yc+((MtxRectangle *)poly->data)->y*priv->radius,
+							((MtxRectangle *)poly->data)->width*priv->radius,
+							((MtxRectangle *)poly->data)->height*priv->radius);
+					break;
+				case MTX_ARC:
+					cairo_save(cr);
+					cairo_translate(cr,
+							priv->xc+(((MtxArc *)poly->data)->x*priv->radius),
+							priv->yc+(((MtxArc *)poly->data)->y*priv->radius));
+					cairo_scale(cr,
+							((MtxArc *)poly->data)->width*priv->radius,
+							((MtxArc *)poly->data)->height*priv->radius);
+					cairo_arc(cr,
+							0.0,
+							0.0,
+							1.0,
+							((MtxArc *)poly->data)->start_angle * (M_PI/180.0),(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
+					if (poly->filled)
+					{
+						cairo_line_to(cr,0,0);
+						cairo_close_path(cr);
+					}
+					cairo_restore(cr);
+					break;
+				case MTX_GENPOLY:
+					num_points = ((MtxGenPoly *)poly->data)->num_points;
+					if (num_points < 1)
+						break;
+					cairo_move_to(cr,
+							priv->xc + (((MtxGenPoly *)poly->data)->points[0].x * priv->radius),
+							priv->yc + (((MtxGenPoly *)poly->data)->points[0].y * priv->radius));
+					for (j=1;j<num_points;j++)
+					{
+						cairo_line_to(cr,
+								priv->xc + (((MtxGenPoly *)poly->data)->points[j].x * priv->radius),
+								priv->yc + (((MtxGenPoly *)poly->data)->points[j].y * priv->radius));
+					}
+					cairo_close_path(cr);
+					break;
+				default:
+					break;
+			}
+			if (poly->filled)
+				cairo_fill(cr);
+			else
+				cairo_stroke(cr);
+		}
+		/* Render all the text blocks */
+		for (i=0;i<priv->t_blocks->len;i++)
+		{
+			tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
+			if (tblock->layer != layer)
+				continue;
+			cairo_set_source_rgb (cr, 
+					tblock->color[priv->daytime_mode].red/65535.0,
+					tblock->color[priv->daytime_mode].green/65535.0,
+					tblock->color[priv->daytime_mode].blue/65535.0);
+
+			tmpbuf = g_utf8_strup(tblock->font,-1);
 			if (g_strrstr(tmpbuf,"BOLD"))
 				weight = CAIRO_FONT_WEIGHT_BOLD;
 			else
@@ -967,187 +1193,17 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 			else
 				slant = CAIRO_FONT_SLANT_NORMAL;
 			g_free(tmpbuf);
-			cairo_select_font_face (cr, tgroup->font, slant, weight);
-			cairo_set_font_size (cr, (priv->radius * tgroup->font_scale));
-		}
-		for (j=0;j<tgroup->num_maj_ticks;j++)
-		{
-			inset = tgroup->maj_tick_length * priv->radius;
+			cairo_select_font_face (cr, tblock->font, slant, weight);
 
-			lwidth = (priv->radius/10)*tgroup->maj_tick_width < 1 ? 1: (priv->radius/10)*tgroup->maj_tick_width;
-			cairo_set_line_width (cr, lwidth);
-			cairo_move_to (cr,
-					priv->xc + (priv->radius - insetfrom) * cos (counter),
-					priv->yc + (priv->radius - insetfrom) * sin (counter));
-			cairo_line_to (cr,
-					priv->xc + (priv->radius - insetfrom - inset) * cos (counter),
-					priv->yc + (priv->radius - insetfrom - inset) * sin (counter));
-			cairo_stroke (cr);
-			if ((vector) && (j < count)) /* If not null */
-			{
-				cairo_save(cr);
-				cairo_set_source_rgb (cr, 
-						tgroup->text_color[priv->daytime_mode].red/65535.0,
-						tgroup->text_color[priv->daytime_mode].green/65535.0,
-						tgroup->text_color[priv->daytime_mode].blue/65535.0);
-				cairo_text_extents (cr, vector[j], &extents);
-				/* Gets the radius of a circle that encompasses the 
-				 * rectangle of text on screen */
-				rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
-				cairo_move_to (cr,
-						priv->xc + (priv->radius - tgroup->text_inset*priv->radius - rad) * cos (counter) - extents.width/2.0-extents.x_bearing,
-						priv->yc + (priv->radius - tgroup->text_inset*priv->radius - rad) * sin (counter) + extents.height/2.0);
-				cairo_show_text (cr, vector[j]);
-				cairo_restore(cr);
-			}
-			/* minor ticks */
-			if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
-			{
-				cairo_save (cr); /* stack-pen-size */
-				cairo_set_source_rgb (cr,
-						tgroup->min_tick_color[priv->daytime_mode].red/65535.0,
-						tgroup->min_tick_color[priv->daytime_mode].green/65535.0,
-						tgroup->min_tick_color[priv->daytime_mode].blue/65535.0);
-				inset = tgroup->min_tick_length * priv->radius;
-				mintick_inset = priv->radius * tgroup->min_tick_inset;
-				lwidth = (priv->radius/10)*tgroup->min_tick_width < 1 ? 1: (priv->radius/10)*tgroup->min_tick_width;
-				cairo_set_line_width (cr, lwidth);
-				for (k=1;k<=tgroup->num_min_ticks;k++)
-				{
-					if (priv->rotation == MTX_ROT_CW)
-						subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
-					else
-						subcounter = -(k*deg_per_minor_tick)*(M_PI/180.0);
-					cairo_move_to (cr,
-							priv->xc + (priv->radius - mintick_inset) * cos (counter+subcounter),
-							priv->yc + (priv->radius - mintick_inset) * sin (counter+subcounter));
-					cairo_line_to (cr,
-							priv->xc + (priv->radius - mintick_inset - inset) * cos (counter+subcounter),
-							priv->yc + (priv->radius - mintick_inset - inset) * sin (counter+subcounter));
-					cairo_stroke (cr);
-				}
-				cairo_restore (cr); /* stack-pen-size */
-			}
-			if (priv->rotation == MTX_ROT_CW)
-				counter += (deg_per_major_tick)*(M_PI/180);
-			else
-				counter -= (deg_per_major_tick)*(M_PI/180);
+			cairo_set_font_size (cr, (priv->radius * tblock->font_scale));
+			cairo_text_extents (cr, tblock->text, &extents);
+			cairo_move_to (cr, 
+					priv->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*priv->radius),
+					priv->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*priv->radius));
+			cairo_show_text (cr, tblock->text);
 		}
-		g_strfreev(vector);
+		cairo_stroke(cr);
 	}
-
-	/* Polygons */
-	for (i=0;i<priv->polygons->len;i++)
-	{
-		poly = g_array_index(priv->polygons,MtxPolygon *, i);
-		cairo_set_source_rgb(cr,
-				poly->color[priv->daytime_mode].red/65535.0,
-				poly->color[priv->daytime_mode].green/65535.0,
-				poly->color[priv->daytime_mode].blue/65535.0);
-		lwidth = priv->radius*poly->line_width < 1 ? 1: priv->radius*poly->line_width;
-		cairo_set_line_width (cr, lwidth);
-		cairo_set_line_join(cr,poly->join_style);
-		switch (poly->line_style)
-		{
-			case GDK_LINE_SOLID:
-				cairo_set_dash(cr,0,0,0);
-				break;
-			case GDK_LINE_ON_OFF_DASH:
-				cairo_set_dash(cr,dashes,2,0);
-				break;
-			default:
-				break;
-		}
-		switch (poly->type)
-		{
-			case MTX_CIRCLE:
-				cairo_arc(cr,
-						priv->xc+((MtxCircle *)poly->data)->x*priv->radius,
-						priv->yc+((MtxCircle *)poly->data)->y*priv->radius,
-						((MtxCircle *)poly->data)->radius*priv->radius,
-						0,2*M_PI);
-				break;
-			case MTX_RECTANGLE:
-				cairo_rectangle(cr,
-						priv->xc+((MtxRectangle *)poly->data)->x*priv->radius,
-						priv->yc+((MtxRectangle *)poly->data)->y*priv->radius,
-						((MtxRectangle *)poly->data)->width*priv->radius,
-						((MtxRectangle *)poly->data)->height*priv->radius);
-				break;
-			case MTX_ARC:
-				cairo_save(cr);
-				cairo_translate(cr,
-						priv->xc+(((MtxArc *)poly->data)->x*priv->radius),
-						priv->yc+(((MtxArc *)poly->data)->y*priv->radius));
-				cairo_scale(cr,
-						((MtxArc *)poly->data)->width*priv->radius,
-						((MtxArc *)poly->data)->height*priv->radius);
-				cairo_arc(cr,
-						0.0,
-						0.0,
-						1.0,
-						((MtxArc *)poly->data)->start_angle * (M_PI/180.0),(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
-				if (poly->filled)
-				{
-					cairo_line_to(cr,0,0);
-					cairo_close_path(cr);
-				}
-				cairo_restore(cr);
-				break;
-			case MTX_GENPOLY:
-				num_points = ((MtxGenPoly *)poly->data)->num_points;
-				if (num_points < 1)
-					break;
-				cairo_move_to(cr,
-						priv->xc + (((MtxGenPoly *)poly->data)->points[0].x * priv->radius),
-						priv->yc + (((MtxGenPoly *)poly->data)->points[0].y * priv->radius));
-				for (j=1;j<num_points;j++)
-				{
-					cairo_line_to(cr,
-							priv->xc + (((MtxGenPoly *)poly->data)->points[j].x * priv->radius),
-							priv->yc + (((MtxGenPoly *)poly->data)->points[j].y * priv->radius));
-				}
-				cairo_close_path(cr);
-				break;
-			default:
-				break;
-		}
-		if (poly->filled)
-			cairo_fill(cr);
-		else
-			cairo_stroke(cr);
-	}
-	/* Render all the text blocks */
-	for (i=0;i<priv->t_blocks->len;i++)
-	{
-		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
-		cairo_set_source_rgb (cr, 
-				tblock->color[priv->daytime_mode].red/65535.0,
-				tblock->color[priv->daytime_mode].green/65535.0,
-				tblock->color[priv->daytime_mode].blue/65535.0);
-
-		tmpbuf = g_utf8_strup(tblock->font,-1);
-		if (g_strrstr(tmpbuf,"BOLD"))
-			weight = CAIRO_FONT_WEIGHT_BOLD;
-		else
-			weight = CAIRO_FONT_WEIGHT_NORMAL;
-		if (g_strrstr(tmpbuf,"OBLIQUE"))
-			slant = CAIRO_FONT_SLANT_OBLIQUE;
-		else if (g_strrstr(tmpbuf,"ITALIC"))
-			slant = CAIRO_FONT_SLANT_ITALIC;
-		else
-			slant = CAIRO_FONT_SLANT_NORMAL;
-		g_free(tmpbuf);
-		cairo_select_font_face (cr, tblock->font, slant, weight);
-
-		cairo_set_font_size (cr, (priv->radius * tblock->font_scale));
-		cairo_text_extents (cr, tblock->text, &extents);
-		cairo_move_to (cr, 
-				priv->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*priv->radius),
-				priv->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*priv->radius));
-		cairo_show_text (cr, tblock->text);
-	}
-	cairo_stroke(cr);
 
 	/* Tattletale (ghost needle showing peak value) */
 	if (priv->show_tattletale)
@@ -1310,10 +1366,20 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 							event->y_root,
 							event->time);
 				}
+				else
+				{
+					/* Grab click coords, used by 
+					 * gaugedesigner to ease development
+					 */
+					priv->last_click_x = (event->x-priv->xc)/priv->xc;
+					priv->last_click_y = (event->y-priv->yc)/priv->yc;
+				}
+					
 				break;
 			case 3: /* right button */
 				if (GTK_IS_WINDOW(widget->parent))
 					gtk_main_quit();
+				/* Added api call to do this*/
 				else if (priv->show_tattletale)
 				{
 					priv->peak = priv->lbound;
@@ -1345,7 +1411,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	printf("motion in gauge, returning false\n");
+	/*printf("motion in gauge, returning false\n");*/
 	return FALSE;
 }
 					       
@@ -1402,4 +1468,29 @@ void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 75;
 	requisition->height = 75;
+}
+
+
+void calc_bounding_box(MtxPoint *coords, gint count, GdkRectangle *box)
+{
+	gint x_min = G_MAXINT;
+	gint y_min = G_MAXINT;
+	gint x_max = G_MININT;
+	gint y_max = G_MININT;
+	gint i = 0;
+	for (i=0;i<count;i++)
+	{
+		if (coords[i].x < x_min)
+			x_min = coords[i].x - 2;
+		if (coords[i].x > x_max)
+			x_max = coords[i].x + 2;
+		if (coords[i].y < y_min)
+			y_min = coords[i].y - 2;
+		if (coords[i].y > y_max)
+			y_max = coords[i].y + 2;
+	}
+	box->x = x_min;
+	box->y = y_min;
+	box->width = x_max-x_min;
+	box->height = y_max-y_min;
 }

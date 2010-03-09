@@ -155,7 +155,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 	ratio = (float)max/(float)min;
 	lookup_current_value("rpm",&ttm_data->rpm);
 /*printf("Current RPM %f\n",ttm_data->rpm);*/
-	if (page == 5) /* TOOTH logger, we should search for min/max's */
+	if (page == firmware->toothmon_page) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire
 		 * sample of data organized so the beginning of the array
@@ -247,6 +247,7 @@ void ms2_update_trigtooth_display(gint page)
 	gchar * message = NULL;
 	cairo_t *cr;
 	cairo_text_extents_t extents;
+	extern Firmware_Details *firmware;
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -316,20 +317,12 @@ void ms2_update_trigtooth_display(gint page)
 		cairo_line_to(cr,ttm_data->usable_begin+(i*w/(341.0/ttm_data->zoom)),cur_pos);
 	}
 	cairo_set_font_size(cr,h/20);
-	switch (ttm_data->page)
-	{
-		case 5:
-			message = g_strdup("Tooth times in microseconds.");
-			break;
-		case 6:
-			message = g_strdup("Trigger times in microseconds.");
-			break;
-		case 7:
-			message = g_strdup("Composite, not sure yet..");
-			break;
-		default:
-			break;
-	}
+	if (ttm_data->page == firmware->toothmon_page)
+		message = g_strdup("Tooth times in microseconds.");
+	else if (ttm_data->page == firmware->trigmon_page)
+		message = g_strdup("Trigger times in microseconds.");
+	else
+		message = g_strdup("Composite, not sure yet..");
 
 	cairo_text_extents (cr, message, &extents);
 	cairo_move_to(cr,ttm_data->usable_begin+((w)/2)-(extents.width/2),extents.height*1.125);
@@ -425,7 +418,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
  is fired off to take care of updating the MS2 TTM display
  \param data (gpointer) arbritary data passed.
  */
-EXPORT void ms2_ttm_update(DataWatch *watch, gfloat f_val)
+EXPORT void ms2_ttm_update(DataWatch *watch)
 {
 	gint page = 0;
 

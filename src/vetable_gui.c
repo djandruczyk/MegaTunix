@@ -21,7 +21,7 @@
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <gui_handlers.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <logviewer_gui.h>
 #include <math.h>
 #include <multi_expr_loader.h>
@@ -247,10 +247,14 @@ void reqfuel_rescale_table(GtkWidget *widget)
 						offset = (gint)OBJ_GET(tmpwidget,"offset");
 						size = (DataSize)OBJ_GET(tmpwidget,"size");
 						use_color = (gint)OBJ_GET(tmpwidget,"use_color");
-						if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-							raw_upper = (gint)OBJ_GET(tmpwidget,"raw_upper");
 						if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-							raw_lower = (gint)OBJ_GET(tmpwidget,"raw_lower");
+							raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
+						else
+							raw_lower = get_extreme_from_size(size,LOWER);
+						if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
+							raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
+						else
+							raw_upper = get_extreme_from_size(size,UPPER);
 						value = get_ecu_data(canID,page,offset,size);
 						value *= percentage;
 						if (value < raw_lower)
@@ -331,6 +335,7 @@ void draw_ve_marker()
 	static GdkColor ** old_colors = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
 	GtkRcStyle *style = NULL;
+	GdkGC *gc = NULL;
 	gint i = 0;
 	gint table = 0;
 	gint page = 0;
@@ -566,16 +571,16 @@ void draw_ve_marker()
 		goto redraw;
 	for (i=0;i<4;i++)
 	{
-		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.05))
+		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.01))
 		{
 			last_z_weight[i] = z_weight[i];
 			goto redraw;
 		}
 	}
 	/*
-	for (i=0;i<4;i++)
-		last_z_weight[i] = z_weight[i];
-		*/
+	   for (i=0;i<4;i++)
+	   last_z_weight[i] = z_weight[i];
+	   */
 	return;
 
 redraw:
@@ -601,21 +606,29 @@ redraw:
 	else
 		z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
 	/* Take the PREVIOUS ones and reset them back to their DEFAULT color
-	 */
+	*/
 	for (i=0;i<4;i++)
 	{
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
-			if ((gboolean)OBJ_GET(last_widgets[table][last[table][i]],"use_color"))
+			widget = last_widgets[table][last[table][i]];
+#ifdef __WIN32__
+		  	gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+#else
+			if (GDK_IS_DRAWABLE(widget->window))
 			{
-				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+				gc = OBJ_GET(widget, "old_gc");
+				gdk_gc_set_rgb_fg_color(gc,&old_colors[table][last[table][i]]);
+				/* Top */
+				gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
+				/* Bottom */
+				gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
+				/* Left */
+				gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
+				/* Right */
+				gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
 			}
-			else
-			{
-				/* HACK ALERT! this doesn't honor themes! */
-				gdk_color_parse("white",&old_colors[table][z_bin[i]]);
-				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][z_bin[i]]);
-			}
+#endif
 		}
 	}
 
@@ -632,8 +645,8 @@ redraw:
 		}
 	}
 	/*for (i=0;i<4;i++)
-		last_z_weight[i] = z_weight[i];
-	*/
+	  last_z_weight[i] = z_weight[i];
+	  */
 
 	/* Color the 4 vertexes according to their weight 
 	 * Save the old colors as well
@@ -663,7 +676,34 @@ redraw:
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
 
-		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-	}
+		/* modify_base is REALLY REALLY slow, as it triggers a size recalc all the
+		 * way thru the widget tree, which is atrociously expensive!
+		  gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		 */
+#ifdef __WIN32__
+		  gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+#else
+		if (GDK_IS_DRAWABLE(widget->window))
+		{
+			if (OBJ_GET(widget,"old_gc"))
+				gc = OBJ_GET(widget,"old_gc");
+			else
+			{
+				gc = gdk_gc_new(widget->window);
+				gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
+			}
 
+			gdk_gc_set_rgb_fg_color(gc,&color);
+			/* Top */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
+			/* Bottom */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
+			/* Left */
+			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
+			/* Right */
+			gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
+			OBJ_SET(widget,"old_gc",(gpointer)gc);
+		}
+#endif
+	}
 }

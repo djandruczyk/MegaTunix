@@ -60,10 +60,9 @@ EXPORT void load_sliders_pf()
 	gint i = 0;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern gboolean connected;
 	extern gboolean interrogated;
 
-	if (!((connected) && (interrogated)))
+	if (!interrogated)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
 		return;
@@ -296,11 +295,17 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->tbl = tbl;
 	slider->table_num = table_num;
 	slider->row = row;
+	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	slider->lower = (gint)OBJ_GET(object,"lower_limit");
-
-	slider->upper = (gint)OBJ_GET(object,"upper_limit");
+	if (OBJ_GET(object,"real_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+	else
+		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+	if (OBJ_GET(object,"real_upper"))
+		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+	else
+		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 
@@ -426,14 +431,14 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(widget,"lower_limit"))
-		slider->lower = (gint)OBJ_GET(widget,"lower_limit");
+	if (OBJ_GET(object,"real_lower"))
+		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
-		slider->lower = (gint)OBJ_GET(object,"lower_limit");
-	if (OBJ_GET(widget,"upper_limit"))
-		slider->upper = (gint)OBJ_GET(widget,"upper_limit");
+		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
+	if (OBJ_GET(object,"real_upper"))
+		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
-		slider->upper = (gint)OBJ_GET(object,"upper_limit");
+		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))

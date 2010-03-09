@@ -3,13 +3,13 @@
 [global]
 description=Object data map for Std B&G Enrichments
 tab_name=_Enrichments
+id_prefix=ENRICH_
 groups=defaults,warmup_bins
 
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -19,20 +19,17 @@ handler=_GENERIC_
 
 [warmup_bins]
 keys=use_color
-key_types=_BOOL_
 use_color=TRUE
 
 #----- Buttons ---------------------------------------------------------------
 
 [enrich_get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [enrich_burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -40,7 +37,6 @@ bind_to_list=burners
 
 [cpulse_neg40_label]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-40 \302\260C.
 f_label=-40 \302\260F.
 temp_dep=TRUE
@@ -48,7 +44,6 @@ bind_to_list=temperature
 
 [cpulse_pos170_label]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=77 \302\260C.
 f_label=170 \302\260F.
 temp_dep=TRUE
@@ -56,7 +51,6 @@ bind_to_list=temperature
 
 [warmup_label_1]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-40 \302\260C.
 f_label=-40 \302\260F.
 temp_dep=TRUE
@@ -64,7 +58,6 @@ bind_to_list=temperature
 
 [warmup_label_2]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-28.8 \302\260C.
 f_label=-20 \302\260F.
 temp_dep=TRUE
@@ -72,7 +65,6 @@ bind_to_list=temperature
 
 [warmup_label_3]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-17.7 \302\260C.
 f_label=0 \302\260F.
 temp_dep=TRUE
@@ -80,7 +72,6 @@ bind_to_list=temperature
 
 [warmup_label_4]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=-6.6 \302\260C.
 f_label=20 \302\260F.
 temp_dep=TRUE
@@ -88,7 +79,6 @@ bind_to_list=temperature
 
 [warmup_label_5]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=4.4 \302\260C.
 f_label=40 \302\260F.
 temp_dep=TRUE
@@ -96,7 +86,6 @@ bind_to_list=temperature
 
 [warmup_label_6]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=15.5 \302\260C.
 f_label=60 \302\260F.
 temp_dep=TRUE
@@ -104,7 +93,6 @@ bind_to_list=temperature
 
 [warmup_label_7]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=26.6 \302\260C.
 f_label=80 \302\260F.
 temp_dep=TRUE
@@ -112,7 +100,6 @@ bind_to_list=temperature
 
 [warmup_label_8]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=37.7 \302\260C.
 f_label=100 \302\260F.
 temp_dep=TRUE
@@ -120,7 +107,6 @@ bind_to_list=temperature
 
 [warmup_label_9]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=54.4 \302\260C.
 f_label=130 \302\260F.
 temp_dep=TRUE
@@ -128,7 +114,6 @@ bind_to_list=temperature
 
 [warmup_label_10]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=71.1 \302\260C.
 f_label=160 \302\260F.
 temp_dep=TRUE
@@ -136,7 +121,6 @@ bind_to_list=temperature
 
 [warmup_master_label]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=Engine Temperature in \302\260C.
 f_label=Engine Temperature in \302\260F.
 temp_dep=TRUE
@@ -144,7 +128,6 @@ bind_to_list=temperature
 
 [ego_active_temp_label]
 keys=c_label,f_label,temp_dep,bind_to_list
-key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 c_label=EGO Active Temp\n(\302\260C.)
 f_label=EGO Active Temp\n(\302\260F.)
 temp_dep=TRUE
@@ -154,7 +137,6 @@ bind_to_list=temperature
 
 [cpulse_neg40_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=64
 precision=1
 dl_conv_expr=x*10
@@ -162,7 +144,6 @@ ul_conv_expr=x/10
 
 [cpulse_pos170_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=65
 precision=1
 dl_conv_expr=x*10
@@ -170,7 +151,6 @@ ul_conv_expr=x/10
 
 [prime_pulse_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=119
 precision=1
 dl_conv_expr=x*10
@@ -178,77 +158,64 @@ ul_conv_expr=x/10
 
 [afterstart_enrich_%_entry]
 keys=offset
-key_types=_INT_
 offset=66
 
 [afterstart_enrich_numcycles_entry]
 keys=offset
-key_types=_INT_
 offset=67
 
 [warmup_entry_1]
 keys=offset
-key_types=_INT_
 offset=68
 group=warmup_bins
 
 [warmup_entry_2]
 keys=offset
-key_types=_INT_
 offset=69
 group=warmup_bins
 
 [warmup_entry_3]
 keys=offset
-key_types=_INT_
 offset=70
 group=warmup_bins
 
 [warmup_entry_4]
 keys=offset
-key_types=_INT_
 offset=71
 group=warmup_bins
 
 [warmup_entry_5]
 keys=offset
-key_types=_INT_
 offset=72
 group=warmup_bins
 
 [warmup_entry_6]
 keys=offset
-key_types=_INT_
 offset=73
 group=warmup_bins
 
 [warmup_entry_7]
 keys=offset
-key_types=_INT_
 offset=74
 group=warmup_bins
 
 [warmup_entry_8]
 keys=offset
-key_types=_INT_
 offset=75
 group=warmup_bins
 
 [warmup_entry_9]
 keys=offset
-key_types=_INT_
 offset=76
 group=warmup_bins
 
 [warmup_entry_10]
 keys=offset
-key_types=_INT_
 offset=77
 group=warmup_bins
 
 [accel_tpstrigthresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=83
 precision=1
 dl_conv_expr=x*(512/100)
@@ -256,7 +223,6 @@ ul_conv_expr=x/(512/100)
 
 [accel_enrich_duration_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=84
 precision=1
 dl_conv_expr=x*10
@@ -264,7 +230,6 @@ ul_conv_expr=x/10
 
 [accel_cold_enrich_addon_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=82
 precision=1
 dl_conv_expr=x*10
@@ -272,12 +237,10 @@ ul_conv_expr=x/10
 
 [accel_cold_enrich_multiplier_entry]
 keys=offset
-key_types=_INT_
 offset=123
 
 [accelbins_entry_1]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=78
 precision=1
 dl_conv_expr=x*10
@@ -285,7 +248,6 @@ ul_conv_expr=x/10
 
 [accelbins_entry_2]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=79
 precision=1
 dl_conv_expr=x*10
@@ -293,7 +255,6 @@ ul_conv_expr=x/10
 
 [accelbins_entry_3]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=80
 precision=1
 dl_conv_expr=x*10
@@ -301,7 +262,6 @@ ul_conv_expr=x/10
 
 [accelbins_entry_4]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=81
 precision=1
 dl_conv_expr=x*10
@@ -309,12 +269,10 @@ ul_conv_expr=x/10
 
 [accel_decel_fuel_cut_entry]
 keys=offset
-key_types=_INT_
 offset=85
 
 [ego_active_temp_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 offset=86
 dl_conv_expr=x+40
 ul_conv_expr=x-40
@@ -323,14 +281,12 @@ bind_to_list=temperature
 
 [ego_active_rpm_entry]
 keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
 offset=120
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 
 [ego_switching_voltage_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_INT_,_STRING_,_STRING_
 offset=122
 precision=2
 dl_conv_expr=x*(512/10)
@@ -338,16 +294,13 @@ ul_conv_expr=x/(512/10)
 
 [ego_step_percent_entry]
 keys=offset
-key_types=_INT_
 offset=88
 
 [ego_ign_events_entry]
 keys=offset
-key_types=_INT_
 offset=87
 
 [ego_limit_entry]
 keys=offset
-key_types=_INT_
 offset=89
 

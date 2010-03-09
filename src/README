@@ -1,18 +1,19 @@
-
+ 
 MegaTunix designed and written by David J. Andruczyk
 
 	Inspiration for this code came from Bruce Bowling and Al Grippo, 
 designers of the MegaSquirt DIY Fuel Injection ECU.  This code was initially 
 modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
 for Windows.  Inspiration also came from Eric Fahlgrens and Guy Hill's
-MegaTune, also for Windows.  Since that time it has turning into it's own
-original application with many benefits and differences from MegaTune and
-other tuning softwares.
+MegaTune, also for Windows. Some later inspiration came from Phil Tobin's
+TunerStudio MS (beta) as well. However, since that time it has turning 
+into it's own original application with many benefits and differences 
+from MegaTune and TuneStudio MS.
 
 NOTE about fonts:
 	Some people have complained that MegaTunix comes up with abnormally
 huge fonts.  This is NOT MegaTunix's fault.  It's caused by the default font
-for Gnome being set to large.  This problem is mostly seen by people NOT 
+for GTK+ being set to large.  This problem is mostly seen by people NOT 
 using the Gnome desktop.   MegaTunix uses the GTK+2 libraries which are the 
 foundation libraries by which Gnome's gui is based upon.  The fix is to run 
 "gnome-font-properties" and set the "Application Font" size to a smaller 
@@ -20,7 +21,7 @@ point size.  On the authors' system a Application Font of "Sans" at 8pt,
 looks the best.  
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
-Send suggestions, bug reports and general feedback to (SPAM not welcome) 
+Send suggestions, bug reports and general feedback to: 
 djandruczyk <at> yahoo <dot> com
 
 System requirements:
@@ -30,8 +31,8 @@ ones are needed to run the program, and devel packages are needed for
 programs like megatunix to compile against.
 
 MegaTunix requires the following libraries (and their dependancies);
-* minimum GTK-2.12 and the dev package
-  - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
+* minimum GTK-2.12 or newer and the dev package(s).
+  - GTK+ depends on pango, fontconfig, freetype2, glib and atk
 * Gtkglext-1.x (and the dev package)
   - gtkglext depends on gtk+ and glib
 * Xorg  development libraries (xorg-devel)

@@ -11,10 +11,13 @@ gauges_files = 	\
 	Dutycycle1-Gauge.xml \
 	Dutycycle2-Gauge.xml \
 	Dwell-Gauge.xml \
+	EAE-FuelCorr1-Gauge.xml \
+	EAE-FuelCorr2-Gauge.xml \
 	E85-Fuel-Correction-Gauge.xml \
 	EGO-Correction-Gauge.xml \
 	EGO-Gauge.xml \
 	Ethanol-Percentage-Gauge.xml \
+	Fuel-Load-Gauge.xml \
 	Gamma-Enrichment-Gauge.xml \
 	IAC-Position-Gauge.xml \
 	Idle-PWM-Gauge.xml \

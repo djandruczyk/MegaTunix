@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt pie gauge widget
+ * MegaTunix pie gauge widget
  * Inspired by Phil Tobins MegaLogViewer
  * 
  * 
@@ -202,7 +202,10 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 
 	cairo_set_font_size (cr, 11);
 
-	message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
+	if (priv->valname)
+		message = g_strdup_printf("%s:%.*f", priv->valname,priv->precision,priv->value);
+	else
+		message = g_strdup_printf("%.*f", priv->precision,priv->value);
 
 	cairo_text_extents (cr, message, &extents);
 
@@ -418,6 +421,8 @@ void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 {
+	if (!GTK_WIDGET(gauge)->window) return;
+
 	update_pie_gauge_position(gauge);
 	gdk_window_clear(GTK_WIDGET(gauge)->window);
 }

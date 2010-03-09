@@ -26,6 +26,7 @@ typedef enum
 	COL_RTT_OBJECT,
 	COL_RTT_INT_NAME,
 	COL_RTT_DATA,
+	COL_RTT_LAST,
 	RTT_NUM_COLS
 }RttTVCols;
 
@@ -41,7 +42,8 @@ struct _Rt_Text
 	GtkWidget *name_label;	/*! Label in runtime display */
 	GtkWidget *textval;	/*! Label in runtime display */
 	gchar *friendly_name;	/*! text for Label above */
-	GArray *history;	/*! where the data is from */
+	gchar *label_prefix;	/*! markup strings */
+	gchar *label_suffix;	/*! markup strings */
 	GObject *object;	/*! object of obsession.... */
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */

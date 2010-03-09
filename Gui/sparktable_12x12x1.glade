@@ -194,7 +194,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -222,7 +222,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -250,7 +250,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -278,7 +278,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -306,7 +306,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -334,7 +334,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -362,7 +362,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -390,7 +390,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -418,7 +418,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -446,7 +446,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -474,7 +474,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -502,7 +502,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -611,7 +611,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -641,7 +641,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -671,7 +671,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -701,7 +701,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -731,7 +731,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -761,7 +761,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -791,7 +791,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -821,7 +821,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -851,7 +851,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -881,7 +881,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -911,7 +911,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -941,7 +941,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -971,7 +971,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1001,7 +1001,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1031,7 +1031,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1061,7 +1061,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1091,7 +1091,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1121,7 +1121,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1151,7 +1151,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1181,7 +1181,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1211,7 +1211,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1241,7 +1241,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1271,7 +1271,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1301,7 +1301,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1331,7 +1331,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1361,7 +1361,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1391,7 +1391,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1421,7 +1421,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1451,7 +1451,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1481,7 +1481,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1511,7 +1511,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1541,7 +1541,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1571,7 +1571,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1601,7 +1601,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1631,7 +1631,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1661,7 +1661,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1691,7 +1691,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1721,7 +1721,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1751,7 +1751,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1781,7 +1781,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1811,7 +1811,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1841,7 +1841,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1871,7 +1871,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1901,7 +1901,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1931,7 +1931,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1961,7 +1961,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -1991,7 +1991,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2021,7 +2021,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2051,7 +2051,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2081,7 +2081,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2111,7 +2111,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2141,7 +2141,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2171,7 +2171,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2201,7 +2201,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2231,7 +2231,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2261,7 +2261,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2291,7 +2291,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2321,7 +2321,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2351,7 +2351,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2381,7 +2381,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2411,7 +2411,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2441,7 +2441,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2471,7 +2471,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2501,7 +2501,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2531,7 +2531,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2561,7 +2561,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2591,7 +2591,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2621,7 +2621,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2651,7 +2651,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2681,7 +2681,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2711,7 +2711,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2741,7 +2741,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2771,7 +2771,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2801,7 +2801,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2831,7 +2831,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2861,7 +2861,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2891,7 +2891,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2921,7 +2921,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2951,7 +2951,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -2981,7 +2981,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3011,7 +3011,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3041,7 +3041,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3071,7 +3071,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3101,7 +3101,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3131,7 +3131,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3161,7 +3161,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3191,7 +3191,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3221,7 +3221,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3251,7 +3251,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3281,7 +3281,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3311,7 +3311,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3341,7 +3341,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3371,7 +3371,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3401,7 +3401,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">0</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3431,7 +3431,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3461,7 +3461,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3491,7 +3491,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3521,7 +3521,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3551,7 +3551,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3581,7 +3581,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3611,7 +3611,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3641,7 +3641,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3671,7 +3671,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3701,7 +3701,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3731,7 +3731,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3761,7 +3761,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3791,7 +3791,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3821,7 +3821,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3851,7 +3851,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3881,7 +3881,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3911,7 +3911,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3941,7 +3941,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -3971,7 +3971,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4001,7 +4001,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4031,7 +4031,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4061,7 +4061,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4091,7 +4091,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4121,7 +4121,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4151,7 +4151,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4181,7 +4181,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4211,7 +4211,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4241,7 +4241,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4271,7 +4271,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4301,7 +4301,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4331,7 +4331,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4361,7 +4361,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4391,7 +4391,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4421,7 +4421,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4451,7 +4451,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4481,7 +4481,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4511,7 +4511,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4541,7 +4541,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4571,7 +4571,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4601,7 +4601,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4631,7 +4631,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4661,7 +4661,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4691,7 +4691,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4721,7 +4721,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4751,7 +4751,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4781,7 +4781,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4811,7 +4811,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4841,7 +4841,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4871,7 +4871,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -4901,7 +4901,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0.0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">3</property>
@@ -5004,7 +5004,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5032,7 +5032,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5060,7 +5060,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5088,7 +5088,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5116,7 +5116,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5144,7 +5144,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5172,7 +5172,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5200,7 +5200,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5228,7 +5228,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5256,7 +5256,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5284,7 +5284,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5312,7 +5312,7 @@
 					      <property name="visibility">True</property>
 					      <property name="max_length">5</property>
 					      <property name="text" translatable="yes">0</property>
-					      <property name="has_frame">True</property>
+					      <property name="has_frame">False</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
 					      <property name="width_chars">5</property>
@@ -5489,10 +5489,10 @@
 					<widget class="GtkComboBoxEntry" id="SP1_rescale_combo">
 					  <property name="width_request">65</property>
 					  <property name="visible">True</property>
-					  <property name="items" translatable="yes">+
--
-*
-/</property>
+					  <property name="items" translatable="yes">  +
+  -
+  *
+  /</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>

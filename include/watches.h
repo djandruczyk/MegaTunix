@@ -28,6 +28,7 @@ typedef enum
 	THRESHOLD,		/*! Threshold val watch (not implemented yet) */
 	RANGE,			/*! Range val watch (not implemented yet) */
 	VALUE_CHANGE,		/*! Watch that triggers only on valud changes */
+	MULTI_VALUE,		/*! Calls function with multiple values */
 	WATCH_COUNT
 }WatchStyle;
 
@@ -49,14 +50,20 @@ struct _DataWatch
 	gboolean state;		/*! state for bit watches */
 	gboolean one_shot;	/*! Run only once then evaporate */
 	gchar * function;	/*! function to call when watch strikes */
-	void (*func) (gpointer,gfloat);/*! Function pointer */
+	gint num_vars;		/*! number of variables */
+	gfloat val;		/*! single value result location */
+	gfloat last_val;	/*! Last value */
+	gfloat *vals;		/*! multi value result location */
+	void (*func) (DataWatch *);/*! Function pointer */
 	gchar * varname;	/*! Variable name (rtv internal name) to check */
+	gchar ** varnames;	/*! List of Variable names (rtv internal name) to check */
 };
 /* Prototypes */
 EXPORT void fire_off_rtv_watches_pf();
 guint32 create_single_bit_state_watch(gchar *, gint, gboolean, gboolean, gchar *, gpointer);
 guint32 create_single_bit_change_watch(gchar *, gint, gboolean, gchar *, gpointer);
 guint32 create_value_change_watch(gchar *, gboolean,gchar *, gpointer);
+guint32 create_multi_value_watch(gchar **, gboolean,gchar *, gpointer);
 void watch_destroy(gpointer);
 void remove_watch(guint32);
 void process_watches(gpointer, gpointer, gpointer);

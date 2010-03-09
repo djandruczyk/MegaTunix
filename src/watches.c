@@ -85,6 +85,7 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_sh
 	return watch->id;
 }
 
+
 guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -108,12 +109,44 @@ guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fnam
 }
 
 
+guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,gchar *fname, gpointer user_data)
+{
+	DataWatch *watch = NULL;
+	GModule *module = NULL;
+	gint i = 0;
+
+	watch = g_new0(DataWatch,1);
+	watch->style = MULTI_VALUE;
+	watch->num_vars = g_strv_length(varnames);
+	watch->vals = g_new0(gfloat,watch->num_vars);
+	watch->varnames = g_new0(gchar *, watch->num_vars);
+	for (i=0;i<watch->num_vars;i++)
+		watch->varnames[i] = g_strdup(varnames[i]);
+	watch->function = g_strdup(fname);
+	watch->user_data = user_data;
+	watch->id = g_random_int();
+	watch->one_shot = one_shot;
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (module)
+		g_module_symbol(module,watch->function, (void *)&watch->func);
+	g_module_close(module);
+	if (!watch_hash)
+		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
+	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	return watch->id;
+}
+
+
 void watch_destroy(gpointer data)
 {
 	DataWatch *watch = (DataWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
 		g_free(watch->varname);
+	if (watch->vals)
+		g_free(watch->vals);
+	if (watch->varnames)
+		g_strfreev(watch->varnames);
 	if (watch->function)
 		g_free(watch->function);
 	g_free(watch);
@@ -130,9 +163,9 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
-	gfloat tmpf2 = 0.0;
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
+	gint i = 0;
 	switch (watch->style)
 	{
 		case SINGLE_BIT_STATE:
@@ -144,7 +177,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch,(gfloat)tmpi);
+				watch->val = tmpi;
+				watch->func(watch);
 				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
@@ -160,7 +194,8 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) != ((tmpi2 & (1 << watch->bit)) >> watch->bit))
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
-				watch->func(watch,(gfloat)tmpi);
+				watch->val = (gfloat)tmpi;
+				watch->func(watch);
 				if (watch->one_shot)
 					remove_watch(watch->id);
 			}
@@ -169,14 +204,36 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			/* If value changes at ALL from previous value, then
 			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
-			lookup_current_value(watch->varname, &tmpf);
-			/* compare to 5 samples back */
-			lookup_previous_nth_value(watch->varname, 5, &tmpf2);
-			if (tmpf != tmpf2)
+			lookup_current_value(watch->varname, &(watch->val));
+			/* If it's a one-shot, fire it no matter what... */
+			if (watch->one_shot)
 			{
-				watch->func(watch,tmpf);
-				if (watch->one_shot)
-					remove_watch(watch->id);
+				watch->func(watch);
+				remove_watch(watch->id);
+				break;
+			}
+
+			if (watch->val != watch->last_val)
+			{
+				watch->last_val = watch->val;
+				watch->func(watch);
+			}
+			else
+				watch->last_val = watch->val;
+			break;
+		case MULTI_VALUE:
+			for (i=0;i<watch->num_vars;i++)
+			{
+				if (watch->varnames[i])
+					lookup_current_value(watch->varnames[i], &watch->vals[i]);
+				else
+					watch->vals[i]=0.0;
+			}
+			watch->func(watch);
+			if (watch->one_shot)
+			{
+				remove_watch(watch->id);
+				break;
 			}
 			break;
 		default:

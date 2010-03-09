@@ -2,86 +2,86 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>744</width>
-    <height>636</height>
+    <width>760</width>
+    <height>602</height>
   </dash_geometry>
   <gauge>
     <width>190</width>
     <height>164</height>
-    <x_offset>370</x_offset>
-    <y_offset>34</y_offset>
+    <x_offset>388</x_offset>
+    <y_offset>0</y_offset>
     <gauge_xml_name>Speco/Gemini_Advance_Gauge.xml</gauge_xml_name>
     <datasource>sparkangle</datasource>
   </gauge>
   <gauge>
     <width>216</width>
     <height>164</height>
-    <x_offset>399</x_offset>
-    <y_offset>260</y_offset>
+    <x_offset>417</x_offset>
+    <y_offset>226</y_offset>
     <gauge_xml_name>Speco/Gemini_CLT_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
     <width>237</width>
     <height>194</height>
-    <x_offset>-18</x_offset>
-    <y_offset>80</y_offset>
+    <x_offset>0</x_offset>
+    <y_offset>46</y_offset>
     <gauge_xml_name>Speco/Gemini_MAP_Gauge.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
   </gauge>
   <gauge>
     <width>176</width>
     <height>164</height>
-    <x_offset>185</x_offset>
-    <y_offset>42</y_offset>
+    <x_offset>203</x_offset>
+    <y_offset>8</y_offset>
     <gauge_xml_name>Speco/Gemini_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
   <gauge>
     <width>411</width>
     <height>371</height>
-    <x_offset>-14</x_offset>
-    <y_offset>265</y_offset>
+    <x_offset>4</x_offset>
+    <y_offset>231</y_offset>
     <gauge_xml_name>Speco/Gemini_RPM.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>
   <gauge>
     <width>167</width>
     <height>148</height>
-    <x_offset>290</x_offset>
-    <y_offset>176</y_offset>
+    <x_offset>308</x_offset>
+    <y_offset>142</y_offset>
     <gauge_xml_name>Speco/Gemini_Volts.xml</gauge_xml_name>
     <datasource>battvolt</datasource>
   </gauge>
   <gauge>
     <width>237</width>
     <height>193</height>
-    <x_offset>354</x_offset>
-    <y_offset>425</y_offset>
+    <x_offset>372</x_offset>
+    <y_offset>391</y_offset>
     <gauge_xml_name>Speco/Gemini_AFR_Lambda2.xml</gauge_xml_name>
     <datasource>lambda</datasource>
   </gauge>
   <gauge>
     <width>189</width>
     <height>148</height>
-    <x_offset>501</x_offset>
-    <y_offset>133</y_offset>
+    <x_offset>519</x_offset>
+    <y_offset>99</y_offset>
     <gauge_xml_name>Speco/Gemini_IdleDC.xml</gauge_xml_name>
     <datasource>idledc</datasource>
   </gauge>
   <gauge>
     <width>168</width>
     <height>151</height>
-    <x_offset>553</x_offset>
-    <y_offset>373</y_offset>
+    <x_offset>571</x_offset>
+    <y_offset>339</y_offset>
     <gauge_xml_name>Speco/Gemini_BoostDC.xml</gauge_xml_name>
     <datasource>bcDC</datasource>
   </gauge>
   <gauge>
     <width>123</width>
     <height>130</height>
-    <x_offset>619</x_offset>
-    <y_offset>251</y_offset>
+    <x_offset>637</x_offset>
+    <y_offset>217</y_offset>
     <gauge_xml_name>Speco/Gemini_TPS_percentage.xml</gauge_xml_name>
     <datasource>tpspercent</datasource>
   </gauge>

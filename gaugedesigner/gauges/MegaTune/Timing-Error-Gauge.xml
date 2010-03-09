@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
 <gauge>
-  <bg_color>
+  <bg_color_day>
     <red>65535</red>
     <green>65535</green>
     <blue>65535</blue>
-  </bg_color>
-  <needle_color>
-    <red>45746</red>
-    <green>12079</green>
-    <blue>14135</blue>
-  </needle_color>
-  <value_font_color>
+  </bg_color_day>
+  <bg_color_nite>
     <red>0</red>
     <green>0</green>
     <blue>0</blue>
-  </value_font_color>
-  <gradient_begin_color>
+  </bg_color_nite>
+  <needle_color_day>
+    <red>45746</red>
+    <green>12079</green>
+    <blue>14135</blue>
+  </needle_color_day>
+  <needle_color_nite>
+    <red>45746</red>
+    <green>12079</green>
+    <blue>14135</blue>
+  </needle_color_nite>
+  <value_font_color_day>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </value_font_color_day>
+  <value_font_color_nite>
     <red>65535</red>
     <green>65535</green>
     <blue>65535</blue>
-  </gradient_begin_color>
-  <gradient_end_color>
+  </value_font_color_nite>
+  <gradient_begin_color_day>
     <red>65535</red>
     <green>65535</green>
     <blue>65535</blue>
-  </gradient_end_color>
+  </gradient_begin_color_day>
+  <gradient_begin_color_nite>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_begin_color_nite>
+  <gradient_end_color_day>
+    <red>65535</red>
+    <green>65535</green>
+    <blue>65535</blue>
+  </gradient_end_color_day>
+  <gradient_end_color_nite>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+  </gradient_end_color_nite>
   <needle_length>0.9580000</needle_length>
   <needle_tip_width>0</needle_tip_width>
   <needle_tail_width>0</needle_tail_width>
@@ -34,8 +59,8 @@
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
   <precision>1</precision>
-  <width>258</width>
-  <height>374</height>
+  <width>222</width>
+  <height>222</height>
   <main_start_angle>135</main_start_angle>
   <main_sweep_angle>270</main_sweep_angle>
   <rotation>1</rotation>
@@ -52,22 +77,32 @@
     <highpoint>-5.000000</highpoint>
     <lwidth>0.115000</lwidth>
     <inset>0.932000</inset>
-    <color>
+    <color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>17990</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_nite>
   </color_range>
   <color_range>
     <lowpoint>5.000000</lowpoint>
     <highpoint>10.000000</highpoint>
     <lwidth>0.115000</lwidth>
     <inset>0.932000</inset>
-    <color>
+    <color_day>
       <red>65535</red>
       <green>65535</green>
       <blue>17990</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>17990</blue>
+    </color_nite>
   </color_range>
   <text_block>
     <font>Sans</font>
@@ -75,11 +110,16 @@
     <font_scale>0.150000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.600000</y_pos>
-    <color>
+    <color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color_nite>
   </text_block>
   <text_block>
     <font>Sans</font>
@@ -87,37 +127,57 @@
     <font_scale>0.150000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>-0.500000</y_pos>
-    <color>
+    <color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color_nite>
   </text_block>
   <tick_group>
     <font>Arial</font>
     <font_scale>0.135000</font_scale>
     <text></text>
     <text_inset>0.255000</text_inset>
-    <text_color>
+    <text_color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </text_color>
+    </text_color_day>
+    <text_color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </text_color_nite>
     <num_maj_ticks>11</num_maj_ticks>
-    <maj_tick_color>
+    <maj_tick_color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </maj_tick_color>
+    </maj_tick_color_day>
+    <maj_tick_color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </maj_tick_color_nite>
     <maj_tick_inset>0.016000</maj_tick_inset>
     <maj_tick_length>0.110000</maj_tick_length>
     <maj_tick_width>0.123000</maj_tick_width>
     <num_min_ticks>1</num_min_ticks>
-    <min_tick_color>
+    <min_tick_color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </min_tick_color>
+    </min_tick_color_day>
+    <min_tick_color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </min_tick_color_nite>
     <min_tick_inset>0.014000</min_tick_inset>
     <min_tick_length>0.050000</min_tick_length>
     <min_tick_width>0.100000</min_tick_width>
@@ -125,11 +185,16 @@
     <sweep_angle>270.000000</sweep_angle>
   </tick_group>
   <polygon>
-    <color>
+    <color_day>
       <red>45746</red>
       <green>12079</green>
       <blue>14135</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>45746</red>
+      <green>12079</green>
+      <blue>14135</blue>
+    </color_nite>
     <filled>1</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>
@@ -141,11 +206,16 @@
     </Circle>
   </polygon>
   <polygon>
-    <color>
+    <color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color_nite>
     <filled>0</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>
@@ -157,11 +227,16 @@
     </Circle>
   </polygon>
   <polygon>
-    <color>
+    <color_day>
       <red>0</red>
       <green>0</green>
       <blue>0</blue>
-    </color>
+    </color_day>
+    <color_nite>
+      <red>65535</red>
+      <green>65535</green>
+      <blue>65535</blue>
+    </color_nite>
     <filled>0</filled>
     <line_width>0.000000</line_width>
     <line_style>0</line_style>

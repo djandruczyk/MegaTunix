@@ -25,6 +25,7 @@
 #include <math.h>
 #include <mode_select.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
@@ -483,8 +484,8 @@ Viewable_Value * build_v_value(GObject *object)
 	v_value->object = object;
 	/* IS it a floating point value? */
 	v_value->precision = (gint)OBJ_GET(object,"precision");
-	v_value->lower = (gint)OBJ_GET(object,"lower_limit");
-	v_value->upper = (gint)OBJ_GET(object,"upper_limit");
+	v_value->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+	v_value->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -619,6 +620,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
  */
 GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
+	static gint count = 0;
 	GdkColor color;
 	gint i = 0;
 	gfloat tmp = 0.0;	
@@ -633,8 +635,11 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	gfloat b = 0.0;
 	static GdkColormap *colormap = NULL;
 
+	count++;
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
+
+	/*printf("get_color_from_hue count %i\n",count); */
 
 	while (hue >= 360.0)
 		hue -= 360.0;

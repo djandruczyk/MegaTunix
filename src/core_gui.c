@@ -131,6 +131,9 @@ int setup_gui()
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)
 	{
+		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
+		label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i),TRUE);
 		if(hidden_list[i] == TRUE)
 		{
@@ -163,6 +166,7 @@ void finalize_core_gui(GladeXML * xml)
 	gchar * tmpbuf = NULL;
 	gint temp_units;
 	extern Serial_Params *serial_params;
+	CmdLineArgs *args = OBJ_GET(global_data,"args");
 
 	temp_units = (gint)OBJ_GET(global_data,"temp_units");
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
@@ -213,10 +217,14 @@ void finalize_core_gui(GladeXML * xml)
 	/* General Tab, Dashboard 1 */
 	button = glade_xml_get_widget(xml,"dash1_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
-	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
+	register_widget("dash1_cbutton",cbutton);
+	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
 	tmpbuf = (gchar *)OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0))
+	{
 		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
+		gtk_widget_set_sensitive(GTK_WIDGET(cbutton),TRUE);
+	}
 	else
 		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
 
@@ -236,10 +244,14 @@ void finalize_core_gui(GladeXML * xml)
 	/* General Tab, Dashboard 2 */
 	button = glade_xml_get_widget(xml,"dash2_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
-	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
+	register_widget("dash2_cbutton",cbutton);
+	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
 	tmpbuf = (gchar *)OBJ_GET(global_data,"dash_2_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0))
+	{
 		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
+		gtk_widget_set_sensitive(GTK_WIDGET(cbutton),TRUE);
+	}
 	else
 		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
 	OBJ_SET(button,"label",gtk_bin_get_child(GTK_BIN(button)));
@@ -350,13 +362,25 @@ void finalize_core_gui(GladeXML * xml)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,"ve3d_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(VE3D_FPS));
 
-	/* COMMS Tab Start/Stop RT buttons */
-	button = glade_xml_get_widget(xml,"start_rt_button");
-	register_widget("comms_start_rt_button",button);
-	OBJ_SET(button,"handler",GINT_TO_POINTER(START_REALTIME));
-	button = glade_xml_get_widget(xml,"stop_rt_button");
-	register_widget("comms_stop_rt_button",button);
-	OBJ_SET(button,"handler",GINT_TO_POINTER(STOP_REALTIME));
+	/* COMMS Tab Network ctrls */
+	button = glade_xml_get_widget(xml,"reverse_connect_button");
+	register_widget("reverse_connect_button",button);
+	OBJ_SET(button,"handler",GINT_TO_POINTER(PHONE_HOME));
+
+	widget = glade_xml_get_widget(xml,"reverse_connect_host_entry");
+	register_widget("reverse_connect_host_entry",widget);
+
+	button = glade_xml_get_widget(xml,"allow_net_checkbutton");
+	register_widget("allow_net_checkbutton",button);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),(gboolean)OBJ_GET(global_data,"network_access"));
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
+
+	widget = glade_xml_get_widget(xml,"netaccess_table");
+	if (args->network_mode)
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+
+	widget = glade_xml_get_widget(xml,"connected_clients_entry");
+	register_widget("connected_clients_entry",widget);
 
 	/* COMMS Tab Stats Frame */
 	ebox = glade_xml_get_widget(xml,"ms_stats_ebox");

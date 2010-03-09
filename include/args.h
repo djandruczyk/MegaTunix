@@ -32,6 +32,7 @@ struct _CmdLineArgs
 	gboolean hide_rttext;	/* Hide Runtime Variable Window */
 	gboolean hide_status;	/* Hide Status Window */
 	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */
+	gboolean offline;	/* Force offline mode */
 	gint autolog_minutes;	/* How many minutes to log per file */
 	gchar *dbglog;		/* Global debug log file name */
 	gchar *autolog_dump_dir;/* What dir to put logs into */

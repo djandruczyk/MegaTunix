@@ -21,6 +21,14 @@
 /* Regular Buttons */
 typedef enum
 {
+	GO_LEFT = 0x990,
+	GO_RIGHT,
+	GO_UP,
+	GO_DOWN
+}Direction;
+
+typedef enum
+{
 	START_REALTIME = 0x20,
 	STOP_REALTIME,
 	START_PLAYBACK,
@@ -55,7 +63,8 @@ typedef enum
 	TE_TABLE_GROUP,
 	GET_CURR_TPS,
 	INCREMENT_VALUE,
-	DECREMENT_VALUE
+	DECREMENT_VALUE,
+	PHONE_HOME
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -79,7 +88,8 @@ typedef enum
 	STOP_TRIGMON_LOGGER,
 	START_COMPOSITEMON_LOGGER,
 	STOP_COMPOSITEMON_LOGGER,
-	COMM_AUTODETECT
+	COMM_AUTODETECT,
+	TOGGLE_NETMODE
 }ToggleButton;
 
 /* spinbuttons... */
@@ -114,11 +124,12 @@ typedef enum
 	GENERIC,
 	BAUD_CHANGE,
 	MULTI_EXPRESSION,
+	MS2_USER_OUTPUTS,
 	ALT_SIMUL
 }MtxButton;
 /* Prototypes */
 EXPORT gboolean prevent_close(GtkWidget *, gpointer );
-EXPORT void leave(GtkWidget *, gpointer);
+EXPORT gboolean leave(GtkWidget *, gpointer);
 EXPORT gboolean comm_port_override(GtkEditable *);
 EXPORT gboolean std_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean std_entry_handler(GtkWidget *, gpointer);
@@ -143,14 +154,18 @@ void toggle_groups_linked(GtkWidget *, gboolean);
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 void combo_toggle_groups_linked(GtkWidget *,gint);
+void combo_toggle_labels_linked(GtkWidget *,gint);
 gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
-EXPORT void update_misc_gauge(DataWatch *, gfloat);
+EXPORT void update_misc_gauge(DataWatch *);
 void refresh_widgets_at_offset(gint, gint);
 glong get_extreme_from_size(DataSize, Extreme);
 EXPORT gboolean clamp_value(GtkWidget *, gpointer);
 void recalc_table_limits(gint, gint);
 gboolean update_multi_expression(gpointer);
+void refocus_cell(GtkWidget *, Direction);
+void set_widget_label_from_array(gpointer, gpointer);
+
 
 /* Prototypes */
 

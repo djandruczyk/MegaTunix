@@ -2,78 +2,78 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>803</width>
-    <height>596</height>
+    <width>797</width>
+    <height>597</height>
   </dash_geometry>
   <gauge>
     <width>408</width>
     <height>447</height>
-    <x_offset>200</x_offset>
-    <y_offset>130</y_offset>
+    <x_offset>194</x_offset>
+    <y_offset>131</y_offset>
     <gauge_xml_name>Honda/Honda_RPM_Gauge.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>
   <gauge>
     <width>198</width>
     <height>215</height>
-    <x_offset>605</x_offset>
-    <y_offset>184</y_offset>
+    <x_offset>599</x_offset>
+    <y_offset>185</y_offset>
     <gauge_xml_name>Honda/Honda_Oil_Pressurel_Gauge.xml</gauge_xml_name>
     <datasource>fueladc</datasource>
   </gauge>
   <gauge>
     <width>201</width>
     <height>200</height>
-    <x_offset>583</x_offset>
-    <y_offset>390</y_offset>
+    <x_offset>578</x_offset>
+    <y_offset>394</y_offset>
     <gauge_xml_name>Honda/Honda_Oil_Temp_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
     <width>197</width>
     <height>231</height>
-    <x_offset>6</x_offset>
-    <y_offset>175</y_offset>
+    <x_offset>0</x_offset>
+    <y_offset>176</y_offset>
     <gauge_xml_name>Honda/Honda_Fuel_Gauge.xml</gauge_xml_name>
     <datasource>fueladc</datasource>
   </gauge>
   <gauge>
     <width>203</width>
     <height>168</height>
-    <x_offset>408</x_offset>
-    <y_offset>-1</y_offset>
+    <x_offset>402</x_offset>
+    <y_offset>0</y_offset>
     <gauge_xml_name>Honda/Honda_MAP_Gauge.xml</gauge_xml_name>
     <datasource>mapadc</datasource>
   </gauge>
   <gauge>
     <width>197</width>
     <height>171</height>
-    <x_offset>172</x_offset>
-    <y_offset>3</y_offset>
+    <x_offset>166</x_offset>
+    <y_offset>4</y_offset>
     <gauge_xml_name>Honda/Honda_BatteryVolt_Gauge.xml</gauge_xml_name>
     <datasource>battvolt</datasource>
   </gauge>
   <gauge>
     <width>210</width>
     <height>201</height>
-    <x_offset>19</x_offset>
-    <y_offset>395</y_offset>
+    <x_offset>13</x_offset>
+    <y_offset>396</y_offset>
     <gauge_xml_name>Honda/Honda_Water_Temp_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
     <width>171</width>
     <height>158</height>
-    <x_offset>592</x_offset>
-    <y_offset>25</y_offset>
+    <x_offset>586</x_offset>
+    <y_offset>26</y_offset>
     <gauge_xml_name>Honda/Honda_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
   <gauge>
     <width>165</width>
     <height>172</height>
-    <x_offset>15</x_offset>
-    <y_offset>16</y_offset>
+    <x_offset>9</x_offset>
+    <y_offset>17</y_offset>
     <gauge_xml_name>Honda/Honda_AFR_Gauge.xml</gauge_xml_name>
     <datasource>afr1</datasource>
   </gauge>

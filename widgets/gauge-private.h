@@ -2,7 +2,7 @@
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  * and Christopher Mire (czb)
  *
- * Megasquirt gauge widget
+ * MegaTunix gauge widget
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -36,9 +36,12 @@ struct _MtxGaugeFacePrivate
         GdkPixmap *tmp_pixmap;  /*! Tmp pixmap for alerts for speed boost */
         gint w;                 /*! width */
         gint h;                 /*! height */
+	gint max_layers;	/*! maximum layers */
         gdouble xc;             /*! X Center */
         gdouble yc;             /*! Y Center */
         gdouble radius;         /*! Radius of display */
+	gdouble last_click_x;	/*! Last mouse click X in -1 <-> +1 scaling */
+	gdouble last_click_y;	/*! Last mouse click Y in -1 <-> +1 scaling */
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;
@@ -52,7 +55,7 @@ struct _MtxGaugeFacePrivate
         GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml
                                    *  parsing functions */
         GArray *t_blocks;       /*! Array of MtxTextBlock structs */
-        GArray *c_ranges;       /*! Array of MtxColorRange structs */
+        GArray *w_ranges;       /*! Array of MtxWarningRange structs */
         GArray *a_ranges;       /*! Array of MtxAlertRange structs */
         GArray *tick_groups;    /*! Array to contain the tick groups */
         GArray *polygons;       /*! Array to contain polygon defs */
@@ -86,6 +89,8 @@ struct _MtxGaugeFacePrivate
         gfloat needle_tip_width;/*! % of rad width of needle tip */
         gfloat needle_tail_width;/*! % of rad width of needle tip */
         gint needle_polygon_points;
+	GdkRectangle needle_bounding_box;	/*! needle bounding box */
+	GdkRectangle value_bounding_box;	/*! value text bounding box */
         MtxPoint needle_coords[6];      /*! 6 point needle for now */
         MtxPoint tattle_coords[6];      /*! 6 point needle for now */
 	MtxDayNite daytime_mode;	/*! Color enum */
@@ -107,5 +112,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *);
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);
 void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *);
+void calc_bounding_box(MtxPoint *, gint, GdkRectangle *);
+
 
 #endif

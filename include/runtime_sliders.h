@@ -34,6 +34,7 @@ struct _Rt_Slider
 	gint table_num;		/*! Refers to the table number in the profile*/
 	gint tbl;		/*! Table number (0-3) */
 	gint row;		/*! Starting row */
+	gfloat last;		/*! last value */
 	gchar *friendly_name;	/*! text for Label above */
 	gint lower;		/*! Lower limit */
 	gint upper;		/*! Upper limit */

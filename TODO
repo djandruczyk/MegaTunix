@@ -12,6 +12,6 @@ parser/mapper to link datamap fields to internal datasource names.
 - Still being thought about
 
 Socket API
- - partially completed and functional.  Allows setting/getting ECU data and 
-getting RTV data.  pull based (from client view).  still needs binary api and
-return codes added.
+ - Completed and working, but clunky. Needs re-thinking and a better data-
+model.  May consider incorporating CSimpleSocket, which abstracts away a
+lot of the network-ness.

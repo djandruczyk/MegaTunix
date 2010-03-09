@@ -67,27 +67,34 @@ gint comms_test()
 {
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
+	gint len = 0;
 	static gint errcount = 0;
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 
+/*	printf("comms test\n"); */
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	if (write_wrapper(serial_params->fd,"C",1) != 1)
+	/*printf("sending \"C\"\n"); */
+	if (!write_wrapper(serial_params->fd,"C",1,&len))
 	{
+		printf("WRITE ERROR\n");
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);
 		connected = FALSE;
 		return connected;
 	}
+
+/*	printf("reading \n"); */
 	result = read_data(1,NULL,FALSE);
+/*	printf("read %i bytes \n",result); */
 	if (!result) /* Failure,  Attempt MS-II method */
 	{
-		if (write_wrapper(serial_params->fd,"c",1) != 1)
+		if (!write_wrapper(serial_params->fd,"c",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
@@ -112,7 +119,7 @@ gint comms_test()
 		/* An I/O Error occurred with the MegaSquirt ECU  */
 		connected = FALSE;
 		errcount++;
-		if (errcount > 2 )
+		if (errcount > 5 )
 			queue_function(g_strdup("conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
 		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
@@ -177,12 +184,12 @@ EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_last = firmware->ecu_data_last;
 	gint i = 0;
-	gint z = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
 	guint8 *sent_data = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
+	gint z = 0;
 	extern gboolean paused_handlers;
 
 	if (!output)
@@ -206,14 +213,30 @@ EXPORT void update_write_status(void *data)
 		if (sent_data)
 			g_free(sent_data);
 	}
-	paused_handlers = TRUE;
+	
+	if (output->queue_update)
+	{
+		paused_handlers = TRUE;
+		for (i=0;i<firmware->total_tables;i++)
+		{
+			/* This at least only recalcs the limits on one... */
+			if (((firmware->table_params[i]->x_page == page) ||
+					(firmware->table_params[i]->y_page == page) ||
+					(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
+			{
+				recalc_table_limits(0,i);
+				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+					firmware->table_params[i]->color_update = TRUE;
+				else
+					firmware->table_params[i]->color_update = FALSE;
+			}
+		}
 
-	/*printf ("page %i, offset %i\n",data->page,data->offset); */
-	/*printf("WRITE STATUS, page %i, offset %i\n",page,offset);*/
-	for (z=offset;z<offset+length;z++)
-		refresh_widgets_at_offset(page,z);
+		for (z=offset;z<offset+length;z++)
+			refresh_widgets_at_offset(page,z);
 
-	paused_handlers = FALSE;
+		paused_handlers = FALSE;
+	}
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
@@ -273,6 +296,7 @@ gboolean write_data(Io_Message *message)
 	gchar * err_text = NULL;
 	guint i = 0;
 	gint j = 0;
+	gint len = 0;
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
@@ -363,10 +387,10 @@ gboolean write_data(Io_Message *message)
 				else
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]));
 				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
-				res = write_wrapper(serial_params->fd,&(block->data[j]),1);	/* Send write command */
-				if (res != 1)
+				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
+				if (!res)
 				{
-					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block  offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
 					retval = FALSE;
 				}
 				if (firmware->capabilities & MS2)

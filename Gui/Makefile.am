@@ -30,6 +30,28 @@ gui_files = 	README \
 		ms2-accel.datamap \
 		ms2-alpha-n_6x6x1.glade \
 		ms2-alpha-n_6x6x1.datamap \
+		ms2-e-accel.glade \
+		ms2-e-accel.datamap \
+		ms2-e-boost_knock_launch.glade \
+		ms2-e-boost_knock_launch.datamap \
+		ms2-e-boost_8x8x2.glade \
+		ms2-e-boost_8x8x2.datamap \
+		ms2-e-corrections_misc.glade \
+		ms2-e-corrections_misc.datamap \
+		ms2-e-crank_idle_warmup.glade \
+		ms2-e-crank_idle_warmup.datamap \
+		ms2-e-debugging.glade \
+		ms2-e-debugging.datamap \
+		ms2-e-globals.glade \
+		ms2-e-globals.datamap \
+		ms2-e-ignition.glade \
+		ms2-e-ignition.datamap \
+		ms2-e-nitrous_staging_orfc.glade \
+		ms2-e-nitrous_staging_orfc.datamap \
+		ms2-e-noise_lag.glade \
+		ms2-e-noise_lag.datamap \
+		ms2-e-toothtrigger.glade \
+		ms2-e-toothtrigger-2.1.x.datamap \
 		ms2-globals.glade \
 		ms2-globals.datamap \
 		ms2-idle_ego_rev.glade \
@@ -40,12 +62,12 @@ gui_files = 	README \
 		ms2-knock_dwell.datamap \
 		ms2-misc-fuel.glade \
 		ms2-misc-fuel.datamap \
+		ms2-e-rotary-split.glade \
+		ms2-e-rotary-split.datamap \
+		ms2-user_outputs.glade \
+		ms2-user_outputs.datamap \
 		ms2-warmup.glade \
 		ms2-warmup.datamap \
-		ms2-e-toothtrigger.glade \
-		ms2-e-toothtrigger-2.1.x.datamap \
-		ms2-xtau.glade \
-		ms2-xtau.datamap \
 		msns-e-accelwizard.glade \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \

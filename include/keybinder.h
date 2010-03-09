@@ -18,7 +18,8 @@
 #include <configfile.h>
 
 /* Prototypes */
-void bind_keys(GObject *, ConfigFile *, gchar *, gchar **, gint *, gint); 
+void bind_keys(GObject *, ConfigFile *, gchar *, gchar **, gint); 
+//void bind_keys(GObject *, ConfigFile *, gchar *, gchar **, gint *, gint); 
 
 /* Prototypes */
 

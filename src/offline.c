@@ -24,7 +24,7 @@
 #include <interrogate.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <multi_expr_loader.h>
@@ -49,7 +49,7 @@ extern GObject *global_data;
  choices to select one for loading to work in offline mode (no connection to
  an ECU)
  */
-void set_offline_mode(void)
+gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
@@ -65,7 +65,8 @@ void set_offline_mode(void)
 
 
 	/* Cause Serial Searcher thread to abort.... */
-	g_async_queue_push(io_repair_queue,&tmp);
+	if (io_repair_queue)
+		g_async_queue_push(io_repair_queue,&tmp);
 
 	filename = present_firmware_choices();
 	if (!filename)
@@ -78,7 +79,7 @@ void set_offline_mode(void)
 		widget = lookup_widget("offline_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		return;
+		return FALSE;
 
 	}
 
@@ -123,13 +124,6 @@ void set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	
-	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("open_tcpip_socket_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
-	pf->w_arg = FALSE;
-	pfuncs = g_array_append_val(pfuncs,pf);
-	
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
@@ -158,6 +152,7 @@ void set_offline_mode(void)
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
+	return FALSE;
 }
 
 

@@ -2,6 +2,7 @@
 INCLUDES = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
+	-I$(top_srcdir)/mtxmatheval \
 	@GTK_CFLAGS@ \
 	@GLEXT_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
@@ -82,12 +83,12 @@ megatunix_SOURCES = \
 	winserialio.c \
 	xmlcomm.c 
 
-megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../widgets/libmtxcurve.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la
+megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../widgets/libmtxcurve.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la
 
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxcurve.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxcurve.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 megatunix_LDFLAGS = 
 

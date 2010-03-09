@@ -8,7 +8,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,13 +19,11 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
@@ -34,44 +31,36 @@ bind_to_list=burners
 
 [vss_traction_params_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=vss_traction,global_traction
 
 [rpm_traction_params_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=rpmdot_traction,global_traction
 
 [traction_params_frame]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=global_traction
 
 [traction_nos_table]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=global_traction,nos_params
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [traction_retard_by_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=global_traction,spark_controls
 
 [spark_cut_traction_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=global_traction,spark_controls,nonedis_controls
 
 [traction_mode_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=global_traction
 
 [traction_rpm1s_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
@@ -80,7 +69,6 @@ bind_to_list=traction_labels
 
 [traction_rpm2s_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
@@ -89,7 +77,6 @@ bind_to_list=traction_labels
 
 [traction_rpm3s_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
@@ -98,7 +85,6 @@ bind_to_list=traction_labels
 
 [traction_rpm4s_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
@@ -107,7 +93,6 @@ bind_to_list=traction_labels
 
 [traction_retard1_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
@@ -116,7 +101,6 @@ bind_to_list=traction_labels,spark_controls
 
 [traction_retard2_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
@@ -125,7 +109,6 @@ bind_to_list=traction_labels,spark_controls
 
 [traction_retard3_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
@@ -134,7 +117,6 @@ bind_to_list=traction_labels,spark_controls
 
 [traction_retard4_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
@@ -143,7 +125,6 @@ bind_to_list=traction_labels,spark_controls
 
 [traction_sp_cut1_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
@@ -152,7 +133,6 @@ bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut2_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
@@ -161,7 +141,6 @@ bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut3_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
@@ -170,7 +149,6 @@ bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut4_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
@@ -179,7 +157,6 @@ bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_cyc1_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
@@ -188,7 +165,6 @@ bind_to_list=traction_labels
 
 [traction_cyc2_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
@@ -197,7 +173,6 @@ bind_to_list=traction_labels
 
 [traction_cyc3_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
@@ -206,7 +181,6 @@ bind_to_list=traction_labels
 
 [traction_cyc4_label]
 keys=label,alt_label,depend_on,bind_to_list
-key_types=_STRING_,_STRING_,_STRING_,_STRING_
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
@@ -217,7 +191,6 @@ bind_to_list=traction_labels
 
 [traction_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 toggle_groups=,global_traction:traction_labels
 bitvals=0,1
@@ -227,7 +200,6 @@ tooltip=Enables or Disabled traction control
 
 [traction_mode_combo]
 keys=offset,choices,bitvals,bitmask,swap_labels,toggle_groups,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 choices=RPM,VSS
 swap_labels=traction_labels
 toggle_groups=rpmdot_traction,vss_traction
@@ -239,7 +211,6 @@ tooltip=Sets the traction mode to be dependant on RPM rate of change (RPMdot). T
 
 [nos_traction_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Disabled,Enabled
 bind_to_list=global_traction,nos_params
 bitvals=0,1
@@ -249,7 +220,6 @@ tooltip=Tells the ECU to NOT turn off NOS during traction control (dangerous) or
 
 [traction_stable_combo]
 keys=offset,choices,bitvals,bitmask,width,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_STRING_
 choices=RPM stable for 0.1sec,Cycle Count Only
 bind_to_list=global_traction
 width=19
@@ -262,7 +232,6 @@ tooltip=If set to cycle count only, traction control takes effect only until tha
 
 [traction_rpm1s_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=94
 precision=1
 raw_upper=200
@@ -272,7 +241,6 @@ tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip
 
 [traction_rpm2s_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=95
 precision=1
 dl_conv_expr=x*10
@@ -282,7 +250,6 @@ tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% sli
 
 [traction_rpm3s_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=96
 precision=1
 dl_conv_expr=x*10
@@ -292,7 +259,6 @@ tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% sli
 
 [traction_rpm4s_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_
 offset=97
 precision=1
 dl_conv_expr=x*10
@@ -302,7 +268,6 @@ tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% sl
 
 [traction_retard1_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=99
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -313,7 +278,6 @@ tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip
 
 [traction_retard2_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=100
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -324,7 +288,6 @@ tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% sli
 
 [traction_retard3_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=101
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -335,7 +298,6 @@ tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% sli
 
 [traction_retard4_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=102
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -346,7 +308,6 @@ tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% sl
 
 [traction_sp_cut1_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=103
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -356,7 +317,6 @@ tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip
 
 [traction_sp_cut2_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=104
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -366,7 +326,6 @@ tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% sli
 
 [traction_sp_cut3_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=105
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -376,7 +335,6 @@ tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% sli
 
 [traction_sp_cut4_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 offset=106
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -386,7 +344,6 @@ tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% sl
 
 [traction_cyc1_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=112
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -394,7 +351,6 @@ tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip
 
 [traction_cyc2_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=113
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -402,7 +358,6 @@ tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% sli
 
 [traction_cyc3_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=114
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -410,7 +365,6 @@ tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% sli
 
 [traction_cyc4_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_STRING_,_STRING_,_STRING_
 offset=115
 dl_conv_expr=x*1
 ul_conv_expr=x*1
@@ -418,7 +372,6 @@ tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% sl
 
 [vss_sensor_diff_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=119
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -427,7 +380,6 @@ tooltip=Sets the differential (%) in VSS inputs (from drive to undriven wheels) 
 
 [vss_low_slip_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=120
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -436,7 +388,6 @@ tooltip=Sets the low slip threshold
 
 [vss_half_slip_thresh_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=123
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -445,7 +396,6 @@ tooltip=Sets the half slip threshold (I'm not too sure on this one)
 
 [vss_max_undriven_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=118
 precision=3
 dl_conv_expr=x/(196/10000)
@@ -454,7 +404,6 @@ tooltip=Sets the undriven VSS sensor maximum input voltage.  This is useful to c
 
 [vss_min_undriven_entry]
 keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 offset=117
 precision=3
 dl_conv_expr=x/(196/10000)
@@ -463,7 +412,6 @@ tooltip=Sets the undriven VSS sensor minimum input voltage.  This is useful to c
 
 [rpmdot_threshold_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_
 offset=98
 dl_conv_expr=x/1000
 ul_conv_expr=x*1000

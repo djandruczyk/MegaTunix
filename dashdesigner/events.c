@@ -20,6 +20,7 @@
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <loadsave.h>
 #include <rtv_parser.h>
 #include <xml.h>
 
@@ -27,6 +28,7 @@
 #define M_PI 3.1415926535897932384626433832795 
 #endif
 
+gboolean changed = FALSE;
 static gboolean grabbed = FALSE;
 static gboolean resizing = FALSE;
 static gboolean moving = FALSE;
@@ -136,6 +138,8 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		printf("critical error, notbook not found, EXITING!\n");
 		exit (-1);
 	}
+	/* get rid of default empty page from glade... */
+	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
 #ifdef __WIN32__
 	path = g_build_path(PSEP,HOME(),"dist",GAUGES_DATA_DIR,NULL);
 #else
@@ -156,8 +160,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		p_list = g_list_sort(p_list,list_sort);
 		s_list = g_list_sort(s_list,list_sort);
 		gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
-		gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
-		gtk_widget_show_all(notebook);
 
 		ebox = gtk_event_box_new();
 		g_signal_connect(G_OBJECT(ebox),
@@ -470,6 +472,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		gtk_widget_show_all(dash);
 		g_free(filename);
 		update_properties(gauge,GAUGE_ADD);
+		changed = TRUE;
 	}
 
 	/*printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);*/
@@ -480,6 +483,8 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 
 EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 {
+	if (changed)
+		prompt_to_save();
 	gtk_main_quit();
 	return TRUE;
 }
@@ -513,41 +518,43 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 		{
 			if (corner == LR)
 			{
-				gtk_widget_set_usize(grabbed_widget,event->x,event->y);
+				gtk_widget_set_usize(grabbed_widget,MIN(event->x,event->y),MIN(event->x,event->y));
 			}
 			else if (corner == UR)
 			{
 				gtk_widget_set_usize(grabbed_widget,
-						x_cur-tt.child_x_origin,
-						(tt.child_y_origin+tt.child_height)-y_cur);
+						MIN(x_cur-tt.child_x_origin,(tt.child_y_origin+tt.child_height)-y_cur),
+						MIN(x_cur-tt.child_x_origin,(tt.child_y_origin+tt.child_height)-y_cur));
+						
 
 				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
 						grabbed_widget,
 						tt.child_x_origin,
-						y_cur);
+						tt.child_y_origin+tt.child_height-MIN(x_cur-tt.child_x_origin,(tt.child_y_origin+tt.child_height)-y_cur));
 			}
 			else if (corner == UL)
 			{
 				gtk_widget_set_usize(grabbed_widget,
-						(tt.child_x_origin+tt.child_width)-x_cur,
-						(tt.child_y_origin+tt.child_height)-y_cur);
+						MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur),
+						MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur));
 
 				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
 						grabbed_widget,
-						x_cur,
-						y_cur);
+						tt.child_x_origin+tt.child_width-MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur),
+						tt.child_y_origin+tt.child_height-MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur));
 			}
 			else if (corner == LL)
 			{
 				gtk_widget_set_usize(grabbed_widget,
-						(tt.child_x_origin+tt.child_width)-x_cur,event->y);
+						MIN(abs((tt.child_x_origin+tt.child_width)-x_cur),event->y),MIN(abs((tt.child_x_origin+tt.child_width)-x_cur),event->y));
 
 				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
 						grabbed_widget,
-						x_cur,
+						tt.child_x_origin+tt.child_width-MIN((tt.child_x_origin+tt.child_width)-x_cur,event->y),
 						tt.child_y_origin);
 			}
 		}
+		changed =  TRUE;
 	}
 
 	return TRUE;
@@ -617,6 +624,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 			{
 				update_properties(grabbed_widget,GAUGE_REMOVE);
 				gtk_widget_destroy(grabbed_widget);
+				changed =  TRUE;
 			}
 			if (event->button == 1)
 			{
@@ -755,6 +763,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 
 	if (choice == GAUGE_ADD)
 	{
+		changed =  TRUE;
 		table = gtk_table_new(3,2,FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(table),5);
 		entry = gtk_entry_new();
@@ -771,6 +780,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 		g_free(tmpbuf);
 	
 		gtk_entry_set_text(GTK_ENTRY(entry),vector[0]);
+		gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
 		g_strfreev(vector);
 		gtk_table_attach(GTK_TABLE(table),entry,0,1,0,1,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 
@@ -798,6 +808,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 	else if (choice == GAUGE_REMOVE)
 	{
 		/*printf ("gauge removal\n");*/
+		changed =  TRUE;
 		table = OBJ_GET((widget),"prop_table");
 		gtk_widget_destroy(table);
 	}
@@ -827,6 +838,7 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 		valid = gtk_tree_model_iter_next (model, &iter);
 
 	}
+	changed =  TRUE;
 }
 
 
@@ -834,28 +846,22 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 {
 	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
+	GtkWidget *topwidget = NULL;
 	GList *children = NULL;
 	GtkWidget * dialog = NULL;
 	gint result = 0;
 	dash = glade_xml_get_widget(main_xml,"dashboard");
 
 	children = GTK_FIXED(dash)->children;
-	if (g_list_length(children) > 0)
-	{
-		dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_MODAL,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_YES_NO,
-				"Dashboard already contains %i gauges, destroy it?",g_list_length(children));
-		result = gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy(dialog);
-		if (result == GTK_RESPONSE_YES)
-			clear_dashboard(dash);
-		else
-			return TRUE;
-
-	}
+	if ((changed) && (g_list_length(children) > 0))
+		prompt_to_save();
+	clear_dashboard(dash);
+	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
+	gtk_window_resize(GTK_WINDOW(topwidget),320,200);
+	changed = FALSE;
 	return TRUE;
 }
+
 
 gboolean dummy(GtkWidget *widget, gpointer data)
 {
@@ -876,3 +882,57 @@ void free_element(gpointer data, gpointer user_data)
 		g_free(a);
 }
 
+
+EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
+{
+	extern GladeXML *main_xml;
+	GtkWidget *dash = NULL;
+	GtkWidget *g = NULL;
+	GtkWidget *topwidget = NULL;
+	GList *children = NULL;
+	gint w = 0;
+	gint h = 0;
+	guint i = 0;
+	gint left = 0;
+	gint right = 0;
+	gint top = 0;
+	gint bottom = 0;
+	gint x_shrink = 0;
+	gint y_shrink = 0;
+	GtkFixedChild *child = NULL;
+	dash = glade_xml_get_widget(main_xml,"dashboard");
+
+	w = dash->allocation.width;
+	h = dash->allocation.height;
+	left = w;
+	right = 0;
+	top = h;
+	bottom = 0;
+	children = GTK_FIXED(dash)->children;
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = (GtkFixedChild *)g_list_nth_data(children,i);
+		g = child->widget;
+		left = MIN(left,g->allocation.x);
+		right = MAX(right,g->allocation.x+g->allocation.width);
+		top = MIN(top,g->allocation.y);
+		bottom = MAX(bottom,g->allocation.y+g->allocation.height);
+	}
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = (GtkFixedChild *)g_list_nth_data(children,i);
+		g = child->widget;
+		gtk_fixed_move(GTK_FIXED(g->parent),g,
+				g->allocation.x-left,
+				g->allocation.y-top);
+	}
+	x_shrink = w-(right-left);
+	y_shrink = h-(bottom-top);
+	
+	gtk_widget_set_size_request(GTK_WIDGET(dash),right-left,bottom-top);
+	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
+	gtk_window_resize(GTK_WINDOW(topwidget),topwidget->allocation.width-x_shrink,topwidget->allocation.height-y_shrink);
+	changed = TRUE;
+
+	return TRUE;
+}

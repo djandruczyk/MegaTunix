@@ -133,12 +133,18 @@ EXPORT gboolean load_firmware (GtkButton *button)
 		return FALSE;
 
 	/* If we got this far, all is good argument wise */
+	if (!lock_port(port))
+	{
+		output("Could NOT LOCK Serial Port,\nYou should check for other programs using the serial port\n",FALSE);
+		return FALSE;
+	}
 	port_fd = open_port(port);
 	if (port_fd > 0)
 		output("Port successfully opened\n",FALSE);
 	else
 	{
 		output("Could NOT open Port, You should check perms\n",FALSE);
+		unlock_port();
 		return FALSE;
 	}
 #ifdef __WIN32__
@@ -151,6 +157,8 @@ EXPORT gboolean load_firmware (GtkButton *button)
 	else
 	{
 		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
+		close_port(port_fd);
+		unlock_port();
 		return FALSE;
 	}
 	type = detect_firmware(filename);
@@ -166,6 +174,7 @@ EXPORT gboolean load_firmware (GtkButton *button)
 	}
 
 	close_port(port_fd);
+	unlock_port();
 	return TRUE;
 }
 

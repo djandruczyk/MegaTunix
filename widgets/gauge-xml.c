@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Megasquirt gauge widget XML I/O
+ * MegaTunix gauge widget XML I/O
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -102,11 +102,11 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		g_object_freeze_notify(G_OBJECT(gauge));
 		mtx_gauge_face_remove_all_text_blocks(gauge);
 		mtx_gauge_face_remove_all_alert_ranges(gauge);
-		mtx_gauge_face_remove_all_color_ranges(gauge);
+		mtx_gauge_face_remove_all_warning_ranges(gauge);
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
 		load_elements(gauge, root_element);
-		/* Fix for api change, default to CW gauges */
+		/* Fix for api break, default to CW gauges */
 		if (priv->rotation == 187) 
 			priv->rotation = MTX_ROT_CCW;
 		if (priv->rotation == 188) 
@@ -115,7 +115,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
-		if (GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent))
+		if ((GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent)) && (priv->w > 0) && (priv->h > 0))
 			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),priv->w,priv->h);
 		generate_gauge_background(gauge);
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),priv->lbound);
@@ -240,23 +240,25 @@ void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gb
 }
 
 
-void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gboolean api_compat)
+void mtx_gauge_warning_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,gboolean api_compat)
 {
 	xmlNode *cur_node = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	if (!node->children)
 	{
-		printf("ERROR, mtx_gauge_color_range_import, xml node is empty!!\n");
+		printf("ERROR, mtx_gauge_warning_range_import, xml node is empty!!\n");
 		return;
 	}
 
-	range = g_new0(MtxColorRange, 1);
+	range = g_new0(MtxWarningRange, 1);
 	cur_node = node->children;
 	while (cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&range->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"lowpoint") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lowpoint,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"highpoint") == 0)
@@ -279,7 +281,7 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(priv->c_ranges,range);
+	g_array_append_val(priv->w_ranges,range);
 }
 
 
@@ -300,6 +302,8 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&range->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"lowpoint") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lowpoint,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"highpoint") == 0)
@@ -308,6 +312,10 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->lwidth,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&range->inset,api_compat);
+			if (g_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->x_offset,api_compat);
+			if (g_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&range->y_offset,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"color_day") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY],api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
@@ -342,6 +350,8 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tblock->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tblock->font,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
@@ -386,6 +396,8 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tgroup->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->font,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"font_scale") == 0)
@@ -465,6 +477,8 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
+			if (g_strcasecmp((gchar *)cur_node->name,"layer") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&poly->layer,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"filled") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->filled,api_compat);
 			if (g_strcasecmp((gchar *)cur_node->name,"line_width") == 0)
@@ -663,19 +677,23 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 }
 
 
-void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
+void mtx_gauge_warning_range_export(MtxDispatchHelper * helper)
 {
 	guint i = 0;
 	gchar * tmpbuf = NULL;
-	MtxColorRange *range = NULL;
+	MtxWarningRange *range = NULL;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
 
-	for (i=0;i<priv->c_ranges->len;i++)
+	for (i=0;i<priv->w_ranges->len;i++)
 	{
-		range = g_array_index(priv->c_ranges,MtxColorRange *, i);
+		range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
 
+		tmpbuf = g_strdup_printf("%i",range->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
 				BAD_CAST tmpbuf);
@@ -712,6 +730,10 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 		range = g_array_index(priv->a_ranges,MtxAlertRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "alert_range",NULL );
 
+		tmpbuf = g_strdup_printf("%i",range->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
 				BAD_CAST tmpbuf);
@@ -726,6 +748,14 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",range->inset);
 		xmlNewChild(node, NULL, BAD_CAST "inset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->x_offset);
+		xmlNewChild(node, NULL, BAD_CAST "x_offset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",range->y_offset);
+		xmlNewChild(node, NULL, BAD_CAST "y_offset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 		generic_xml_color_export(node,"color_day",&range->color[MTX_DAY]);
@@ -747,6 +777,10 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 		tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "text_block",NULL );
 
+		tmpbuf = g_strdup_printf("%i",tblock->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%s",tblock->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
@@ -786,6 +820,10 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
 
+		tmpbuf = g_strdup_printf("%i",tgroup->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%s",tgroup->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
@@ -998,6 +1036,10 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 		generic_xml_color_export(node,"color_day",&poly->color[MTX_DAY]);
 		generic_xml_color_export(node,"color_nite",&poly->color[MTX_NITE]);
 
+		tmpbuf = g_strdup_printf("%i",poly->layer);
+		xmlNewChild(node, NULL, BAD_CAST "layer",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%i",poly->filled);
 		xmlNewChild(node, NULL, BAD_CAST "filled",
 				BAD_CAST tmpbuf);

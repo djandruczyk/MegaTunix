@@ -8,7 +8,6 @@ groups=defaults
 
 [defaults]
 keys=page,size,raw_lower,raw_upper,dl_type,handler
-key_types=_INT_,_ENUM_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 size=_U08_
 raw_lower=0
@@ -20,45 +19,37 @@ handler=_GENERIC_
 
 [get_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-key_types=_ENUM_,_STRING_
 handler=_BURN_MS_FLASH_
 bind_to_list=burners
 
 #------ Labels --------------------------------------------------------------
 [shiftlight_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=shiftlight_controller
 
 [x4_output_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=x4_output_controls
 
 [shift_low_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=shiftlight_controller,shift_controls
 
 [shift_high_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=shiftlight_controller,shift_controls
 
 [tach_output_rate_label]
 keys=bind_to_list
-key_types=_STRING_
 bind_to_list=tachout_params
 
 [efan_on_temp_label]
 keys=bind_to_list,temp_dep,c_label,f_label
-key_types=_STRING_,_BOOL_,_STRING_,_STRING_
 temp_dep=TRUE
 c_label=Fan On Temp \302\260C.
 f_label=Fan On Temp \302\260F.
@@ -66,7 +57,6 @@ bind_to_list=fan_controls,temperature
 
 [efan_off_temp_label]
 keys=bind_to_list,temp_dep,c_label,f_label
-key_types=_STRING_,_BOOL_,_STRING_,_STRING_
 temp_dep=TRUE
 c_label=Fan Off Temp \302\260C.
 f_label=Fan Off Temp \302\260F.
@@ -76,7 +66,6 @@ bind_to_list=fan_controls,temperature
 
 [fidle_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Idle Control,Spark A
 toggle_groups=idle_control,
 offset=1
@@ -86,7 +75,6 @@ tooltip=By Setting this control you have Idle control (either PWM or BnG) style.
 
 [led17_pin_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Squirt Ind.,Spark A
 offset=1
 bitvals=0,1
@@ -95,7 +83,6 @@ tooltip=Sets the LED17 pin to be the "Squirt" Indicator (it flashes when the inj
 
 [led18_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Warmup Ind.,IRQ Trigger,Output 4,Spark C
 toggle_groups=,,output_4,
 offset=1
@@ -105,7 +92,6 @@ tooltip=Sets the LED18 pin to be used for either the Warmup indicator,  IRQ Trig
 
 [led19_pin_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_
 choices=Accel Ind.,Spark B
 offset=1
 bitvals=0,1
@@ -114,7 +100,6 @@ tooltip=Sets the LED19 pin to be either the Accel Indicator, or the Spark B outp
 
 [tachout_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Off,X2 (JS0),X3 (JS1),X4 (JS2),X5 (JS3),Output 3,Pin 10
 toggle_groups=x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control
 offset=144
@@ -124,7 +109,6 @@ tooltip=Picks a pin for tachometer output
 
 [tachout_rate_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Normal,Half Speed
 bind_to_list=tachout_params
 offset=144
@@ -134,7 +118,6 @@ tooltip=Sets the Tach output to be the same as engine firing speed or 1/2 engine
 
 [x2_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Water Injection,Fan Control
 toggle_groups=x2_water_injection:x2_nitrous_control,x2_tacho_pin:fan_controls
 offset=1
@@ -144,7 +127,6 @@ tooltip=This sets the X2 port for Water Injection/Nitrous Oxide functionality OR
 
 [x4_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Output 1,Boost Ctrl.
 toggle_groups=output_1,x4_tach_pin
 offset=12
@@ -154,7 +136,6 @@ tooltip=This sets the X4 port for Output 1 (see user outputs tab), or sets this 
 
 [output3_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Output 3,Spark D
 toggle_groups=output_3,spark_d
 offset=12
@@ -164,7 +145,6 @@ tooltip=Sets the Output 3 Port (U1, pin15) to be used for User Controlled Output
 
 [pin10_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Shiftlight,Spark E
 toggle_groups=shiftlight_controller,spark_e
 offset=116
@@ -174,7 +154,6 @@ tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark 
 
 [knock_pin_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Knock Input,Spark F
 toggle_groups=knock_controller,spark_f
 offset=116
@@ -184,7 +163,6 @@ tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark 
 
 [multiplex_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
 choices=Normal,Toyota DLI
 toggle_groups=knock_controller,spark_f
 offset=1
@@ -194,7 +172,6 @@ tooltip=Sets the ignition mode to either Normal or Toyota DLI multiplex (see msn
 
 [shiftlight_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-key_types=_INT_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
 choices=Disabled,Enabled
 bind_to_list=shiftlight_controller
 toggle_groups=spark_e:spark_f:knock_controller:js10_ctrl,shift_controls
@@ -208,7 +185,6 @@ tooltip=Enables or Disables the shiftlight function
 
 [shift_lower_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=18
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -218,7 +194,6 @@ tooltip=The lower threshold for the Shiftlight.
 
 [shift_high_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=19
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -228,7 +203,6 @@ tooltip=The lower threshold for the Shiftlight.
 
 [efan_ontemp_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=74
 dl_conv_expr=x+40
 ul_conv_expr=x-40
@@ -238,7 +212,6 @@ tooltip=The temp at which the cooling fan turns ON at.
 
 [efan_offtemp_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 offset=75
 dl_conv_expr=x+40
 ul_conv_expr=x-40

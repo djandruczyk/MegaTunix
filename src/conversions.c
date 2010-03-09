@@ -24,7 +24,7 @@
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <notifications.h>
-#include "../mtxmatheval/mtxmatheval.h"
+#include <mtxmatheval.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,61 +79,14 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	size = (DataSize)OBJ_GET(widget,"size");
 
-	if (NULL == OBJ_GET(widget,"raw_upper"))
-	{
-		switch (size)
-		{
-			case MTX_U08:
-				upper = 255;
-				break;
-			case MTX_CHAR:
-			case MTX_S08:
-				upper = 127;
-				break;
-			case MTX_U16:
-				upper = 65535;
-				break;
-			case MTX_S16:
-				upper = 32767;
-				break;
-			case MTX_S32:
-				upper = 2147483647;
-				break;
-			case MTX_U32:
-				upper = 4294967295;
-				break;
-			default:
-				break;
-		}
-	}
+	if (OBJ_GET(widget,"raw_lower"))
+		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
-		upper = (gfloat)(gint)OBJ_GET(widget,"raw_upper");
-
-	if (NULL == OBJ_GET(widget,"raw_lower"))
-	{
-		switch (size)
-		{
-			case MTX_U08:
-			case MTX_U16:
-			case MTX_U32:
-				lower = 0;
-				break;
-			case MTX_CHAR:
-			case MTX_S08:
-				lower = -128;
-				break;
-			case MTX_S16:
-				lower = -32768;
-				break;
-			case MTX_S32:
-				lower = -2147483648;
-				break;
-			default:
-				break;
-		}
-	}
+		lower = (gfloat)get_extreme_from_size(size,LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		upper = (gfloat)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
-		lower = (gfloat)(gint)OBJ_GET(widget,"raw_lower");
+		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{

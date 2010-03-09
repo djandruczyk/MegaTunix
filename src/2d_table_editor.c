@@ -25,6 +25,7 @@
 #include <gui_handlers.h>
 #include <keyparser.h>
 #include <listmgmt.h>
+#include <notifications.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
 #include <tabloader.h>
@@ -58,13 +59,16 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *dummy = NULL;
 	GtkWidget *gauge = NULL;
 	GtkWidget *parent = NULL;
+	GtkWidget *curve_parent = NULL;
 	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
 	GList *curve_list = NULL;
+	GList *gauge_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar **vector = NULL;
@@ -97,7 +101,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	tmpbuf = g_strdup_printf("2D Table Group Editor");
 	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
 	g_free(tmpbuf);
-	gtk_window_resize(GTK_WINDOW(window),640,480);
+	gtk_window_resize(GTK_WINDOW(window),800,530);
 
 	widget = glade_xml_get_widget(xml,"get_data_button");
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
@@ -129,10 +133,26 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gtk_box_pack_start(GTK_BOX(widget),notebook,TRUE,TRUE,0);
 	for (j = 0;j < num_tabs;j++)
 	{
+		table_num = (gint)strtod(vector[j],NULL);
+		if (table_num >= firmware->total_te_tables)
+		{
+			warn_user("Requested to create 2D table editor window for an undefined (out of range) table ID");
+			return FALSE;
+		}
+		if (!firmware->te_params)
+		{
+			warn_user("No 2D table Editor tables (te_tables) defined in interrogation profile, yet told to create a graph for a table... BUG detected!");
+			continue;
+		}
+		if (!firmware->te_params[table_num])
+		{
+			warn_user("Requested to create a 2D table editor window for an undefined table!");
+			continue;
+		}
 		xml = glade_xml_new(main_xml->filename,"te_layout_hbox1",NULL);
 		widget = glade_xml_get_widget(xml,"te_layout_hbox1");
-		table_num = (gint)strtod(vector[j],NULL);
 		label = gtk_label_new(firmware->te_params[table_num]->title);
+		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
 			OBJ_SET(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
@@ -146,23 +166,26 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		{
 			parent = glade_xml_get_widget(xml,"te_gaugeframe");
 			gauge = mtx_gauge_face_new();
+			gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
+
+			OBJ_SET(window,"gauge",gauge);
 			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 			lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 			g_free(filename);
-			create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+			id = create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+			OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
 			gtk_container_add(GTK_CONTAINER(parent),gauge);
 		}
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),widget,label);
-		parent = glade_xml_get_widget(xml,"te_right_frame");
+		curve_parent = glade_xml_get_widget(xml,"te_right_frame");
 		curve = mtx_curve_new();
 		curve_list = g_list_prepend(curve_list,(gpointer)curve);
-		gtk_container_add(GTK_CONTAINER(parent),curve);
-		gtk_widget_realize(curve);
 		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
-		mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
+		mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
+		mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 		cdata = g_new0(CurveData, 1);
 		cdata->curve = curve;
 		cdata->axis = _X_;
@@ -189,8 +212,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
 		rows = firmware->te_params[table_num]->bincount;
 		mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
-		x_table = gtk_table_new(rows,1,TRUE);
-		y_table = gtk_table_new(rows,1,TRUE);
+		x_table = gtk_table_new(rows+1,1,FALSE);
+		y_table = gtk_table_new(rows+1,1,FALSE);
 
 		x_parent = glade_xml_get_widget(xml,"te_x_frame");
 		y_parent = glade_xml_get_widget(xml,"te_y_frame");
@@ -213,10 +236,10 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
-			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
-			OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_dl_conv_expr));
-			OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_ul_conv_expr));
+			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
+			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -261,10 +284,10 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
-			OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
-			OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_dl_conv_expr));
-			OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_ul_conv_expr));
+			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
+			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -296,41 +319,53 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			page = firmware->te_params[table_num]->y_page;
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
-
 			update_widget(G_OBJECT(entry),NULL);
 		}
+		/* Create the "LOCK" buttons */
+		dummy = gtk_toggle_button_new_with_label("Unlocked");
+		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
+		g_signal_connect(G_OBJECT(dummy),"toggled",
+				G_CALLBACK(set_axis_locking),curve);
+		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
+		gtk_table_attach(GTK_TABLE(x_table),dummy,
+				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+		dummy = gtk_toggle_button_new_with_label("Unlocked");
+		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
+		g_signal_connect(G_OBJECT(dummy),"toggled",
+				G_CALLBACK(set_axis_locking),curve);
+		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
+		gtk_table_attach(GTK_TABLE(y_table),dummy,
+				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+
 		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 		mtx_curve_set_hard_limits(MTX_CURVE(curve),
-				firmware->te_params[table_num]->x_raw_lower,
-				firmware->te_params[table_num]->x_raw_upper,
-				firmware->te_params[table_num]->y_raw_lower,
-				firmware->te_params[table_num]->y_raw_upper);
+				(gfloat)firmware->te_params[table_num]->x_raw_lower,
+				(gfloat)firmware->te_params[table_num]->x_raw_upper,
+				(gfloat)firmware->te_params[table_num]->y_raw_lower,
+				(gfloat)firmware->te_params[table_num]->y_raw_upper);
 		OBJ_SET(curve,"x_entries",x_entries);
 		OBJ_SET(curve,"y_entries",y_entries);
 		if (firmware->te_params[table_num]->bind_to_list)
 			g_list_foreach(get_list(firmware->te_params[table_num]->bind_to_list),alter_widget_state,NULL);
+		create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
+		gtk_container_add(GTK_CONTAINER(curve_parent),curve);
 	}
 	OBJ_SET(window,"widget_list",widget_list);
 	OBJ_SET(window,"curve_list",curve_list);
-	lookup_current_value(cdata->source,&tmpf);
-	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
+	OBJ_SET(window,"gauge_list",gauge_list);
 	gtk_widget_show_all(window);
 	return TRUE;
 
 }
 
 
-EXPORT gboolean create_2d_table_editor(gint table_num)
+EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 {
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	GtkWidget *widget = NULL;
 	GtkWidget *window = NULL;
-	GtkWidget *parent = NULL;
 	GtkWidget *curve = NULL;
 	GtkWidget *x_parent = NULL;
 	GtkWidget *y_parent = NULL;
@@ -338,12 +373,15 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	GtkWidget *y_table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *dummy = NULL;
 	GtkWidget *gauge = NULL;
+	GtkWidget *curve_parent = NULL;
 	CurveData *cdata = NULL;
 	GArray *x_entries = NULL;
 	GArray *y_entries = NULL;
 	GList *widget_list = NULL;
 	GList *curve_list = NULL;
+	GList *gauge_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	extern GList ***ve_widgets;
@@ -355,58 +393,84 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	guint32 id = 0;
 	gfloat tmpf = 0.0;
 	gint rows = 0;
+	gboolean embedded = FALSE;
 
+	if (table_num >= firmware->total_te_tables)
+	{
+		warn_user("Requested to create 2D table editor window for an undefined (out of range) table ID");
+		return FALSE;
+	}
+	if (!firmware->te_params)
+	{
+		warn_user("No 2D table Editor tables (te_tables) defined in interrogation profile, yet told to create a graph for a table... BUG detected!");
+		return FALSE;
+	}
+	if (!firmware->te_params[table_num])
+	{
+		warn_user("Requested to create a 2D table editor window for an undefined table!");
+		return FALSE;
+	}
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if (!main_xml)
 		return FALSE;
 
-	xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
-	window = glade_xml_get_widget(xml,"table_editor_window");
-	if (firmware->te_params[table_num]->bind_to_list)
+	if (GTK_IS_WIDGET(parent)) /* Embedded mode */
+		embedded = TRUE;
+
+	if (!embedded)
 	{
-		OBJ_SET(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
-		bind_to_lists(window,firmware->te_params[table_num]->bind_to_list);
-		widget_list = g_list_prepend(widget_list,(gpointer)window);
+		xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
+		window = glade_xml_get_widget(xml,"table_editor_window");
+		if (firmware->te_params[table_num]->bind_to_list)
+		{
+			OBJ_SET(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			bind_to_lists(window,firmware->te_params[table_num]->bind_to_list);
+			widget_list = g_list_prepend(widget_list,(gpointer)window);
+		}
+		glade_xml_signal_autoconnect(xml);
+
+		g_signal_connect(G_OBJECT(window),"destroy_event",
+				G_CALLBACK(close_2d_editor),window);
+		g_signal_connect(G_OBJECT(window),"delete_event",
+				G_CALLBACK(close_2d_editor),window);
+		tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
+		gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
+		g_free(tmpbuf);
+		gtk_window_set_default_size(GTK_WINDOW(window),640,480);
+
+		widget = glade_xml_get_widget(xml,"get_data_button");
+		OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
+		OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
+		bind_to_lists(widget,"get_data_buttons");
+		widget_list = g_list_prepend(widget_list,(gpointer)widget);
+
+		widget = glade_xml_get_widget(xml,"burn_data_button");
+		OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
+		bind_to_lists(widget,"burners");
+		widget_list = g_list_prepend(widget_list,(gpointer)widget);
+
+		widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
+		gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
+
+		widget = glade_xml_get_widget(xml,"close_menuitem");
+		OBJ_SET(widget,"window",(gpointer)window);
+
+		curve_parent = glade_xml_get_widget(xml,"te_right_frame");
 	}
-	glade_xml_signal_autoconnect(xml);
-
-	g_signal_connect(G_OBJECT(window),"destroy_event",
-			G_CALLBACK(close_2d_editor),window);
-	g_signal_connect(G_OBJECT(window),"delete_event",
-			G_CALLBACK(close_2d_editor),window);
-	tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
-	gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
-	g_free(tmpbuf);
-	gtk_window_set_default_size(GTK_WINDOW(window),640,480);
-
-	widget = glade_xml_get_widget(xml,"get_data_button");
-	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
-	OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
-	bind_to_lists(widget,"get_data_buttons");
-	widget_list = g_list_prepend(widget_list,(gpointer)widget);
-
-	widget = glade_xml_get_widget(xml,"burn_data_button");
-	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-	OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
-	bind_to_lists(widget,"burners");
-	widget_list = g_list_prepend(widget_list,(gpointer)widget);
-
-	widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
-	gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
-
-	widget = glade_xml_get_widget(xml,"close_menuitem");
-	OBJ_SET(widget,"window",(gpointer)window);
-
-	parent = glade_xml_get_widget(xml,"te_right_frame");
+	else
+		curve_parent = parent;
 	curve = mtx_curve_new();
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
-	gtk_container_add(GTK_CONTAINER(parent),curve);
 	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
-	mtx_curve_set_x_axis_lock_state(MTX_CURVE(curve),TRUE);
-	if (firmware->te_params[table_num]->gauge)
+	mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
+	mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
+
+	if ((firmware->te_params[table_num]->gauge) && (!embedded))
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
 		gauge = mtx_gauge_face_new();
+		gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 		tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
@@ -414,17 +478,16 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 
 		g_free(filename);
-		create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+		id = create_value_change_watch(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+		OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
 		gtk_container_add(GTK_CONTAINER(parent),gauge);
 	}
 	cdata = g_new0(CurveData, 1);
 	cdata->curve = curve;
 	cdata->axis = _X_;
 	cdata->source = firmware->te_params[table_num]->x_source;
-	id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
 	OBJ_SET(curve,"cdata",(gpointer)cdata);
-	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),TRUE);
 	g_signal_connect(G_OBJECT(curve),"coords-changed",
 			G_CALLBACK(coords_changed), NULL);
@@ -433,21 +496,32 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 	g_signal_connect(G_OBJECT(curve),"marker-proximity",
 			G_CALLBACK(marker_proximity), NULL);
 
-	label = glade_xml_get_widget(xml,"x_units");
-	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
-	label = glade_xml_get_widget(xml,"y_units");
-	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
-	label = glade_xml_get_widget(xml,"x_title");
-	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
-	label = glade_xml_get_widget(xml,"y_title");
-	gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
+	if (!embedded)
+	{
+		label = glade_xml_get_widget(xml,"x_units");
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_units);
+		label = glade_xml_get_widget(xml,"y_units");
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_units);
+		label = glade_xml_get_widget(xml,"x_title");
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->x_name);
+		label = glade_xml_get_widget(xml,"y_title");
+		gtk_label_set_markup(GTK_LABEL(label),firmware->te_params[table_num]->y_name);
+	}
 	rows = firmware->te_params[table_num]->bincount;
 	mtx_curve_set_empty_array(MTX_CURVE(curve),rows);
-	x_table = gtk_table_new(rows,1,TRUE);
-	y_table = gtk_table_new(rows,1,TRUE);
+	x_table = gtk_table_new(rows,1,FALSE);
+	y_table = gtk_table_new(rows,1,FALSE);
 
-	x_parent = glade_xml_get_widget(xml,"te_x_frame");
-	y_parent = glade_xml_get_widget(xml,"te_y_frame");
+	if (embedded)
+	{
+		x_parent = gtk_frame_new(NULL);
+		y_parent = gtk_frame_new(NULL);
+	}
+	else
+	{
+		x_parent = glade_xml_get_widget(xml,"te_x_frame");
+		y_parent = glade_xml_get_widget(xml,"te_y_frame");
+	}
 	gtk_container_set_border_width(GTK_CONTAINER(x_table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(y_table),5);
 	gtk_container_add(GTK_CONTAINER(x_parent),x_table);
@@ -468,10 +542,10 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_lower));
-		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->x_raw_upper));
-		OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_dl_conv_expr));
-		OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->x_ul_conv_expr));
+		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
+		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -516,10 +590,10 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_lower));
-		OBJ_SET(entry,"raw_upper",GINT_TO_POINTER(firmware->te_params[table_num]->y_raw_upper));
-		OBJ_SET(entry,"dl_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_dl_conv_expr));
-		OBJ_SET(entry,"ul_conv_expr",GINT_TO_POINTER(firmware->te_params[table_num]->y_ul_conv_expr));
+		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
+		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -554,26 +628,49 @@ EXPORT gboolean create_2d_table_editor(gint table_num)
 
 		update_widget(G_OBJECT(entry),NULL);
 	}
+	/* Create the "LOCK" buttons */
+	dummy = gtk_toggle_button_new_with_label("Unlocked");
+	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_X_));
+	g_signal_connect(G_OBJECT(dummy),"toggled",
+			G_CALLBACK(set_axis_locking),curve);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
+	gtk_table_attach(GTK_TABLE(x_table),dummy,
+			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+	dummy = gtk_toggle_button_new_with_label("Unlocked");
+	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
+	g_signal_connect(G_OBJECT(dummy),"toggled",
+			G_CALLBACK(set_axis_locking),curve);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
+	gtk_table_attach(GTK_TABLE(y_table),dummy,
+			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
-			firmware->te_params[table_num]->x_raw_lower,
-			firmware->te_params[table_num]->x_raw_upper,
-			firmware->te_params[table_num]->y_raw_lower,
-			firmware->te_params[table_num]->y_raw_upper);
-	OBJ_SET(window,"widget_list",widget_list);
-	OBJ_SET(window,"curve_list",curve_list);
+			(gfloat)firmware->te_params[table_num]->x_raw_lower,
+			(gfloat)firmware->te_params[table_num]->x_raw_upper,
+			(gfloat)firmware->te_params[table_num]->y_raw_lower,
+			(gfloat)firmware->te_params[table_num]->y_raw_upper);
+	/* One shot to get marker drawn. */
+	create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
+	/* continuous to catch changes. */
+	id = create_value_change_watch(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
+	if (!embedded)
+	{
+		OBJ_SET(window,"widget_list",widget_list);
+		OBJ_SET(window,"curve_list",curve_list);
+		OBJ_SET(window,"x_entries",x_entries);
+		OBJ_SET(window,"y_entries",y_entries);
+	}
 	OBJ_SET(curve,"x_entries",x_entries);
 	OBJ_SET(curve,"y_entries",y_entries);
-	OBJ_SET(window,"x_entries",x_entries);
-	OBJ_SET(window,"y_entries",y_entries);
+	gtk_container_add(GTK_CONTAINER(curve_parent),curve);
 
-	lookup_current_value(cdata->source,&tmpf);
-	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),tmpf);
-	gtk_widget_show_all(window);
+	if (embedded)
+		gtk_widget_show_all(curve);
+	else
+		gtk_widget_show_all(window);
 	return TRUE;
 }
 
@@ -587,12 +684,21 @@ gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 	{
 		g_list_foreach(list,remove_widget,(gpointer)list);
 		g_list_free(list);
+		list = NULL;
 	}
 	list = OBJ_GET(widget, "curve_list");
 	if (list)
 	{
 		g_list_foreach(list,clean_curve,NULL);
 		g_list_free(list);
+		list = NULL;
+	}
+	list = OBJ_GET(widget, "gauge_list");
+	if (list)
+	{
+		g_list_foreach(list,gauge_cleanup,NULL);
+		g_list_free(list);
+		list = NULL;
 	}
 	gtk_widget_destroy(widget);
 	return FALSE;
@@ -616,6 +722,19 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 	if (( page >= 0 ) && (offset >= 0))
 		ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
 }
+
+
+void gauge_cleanup(gpointer gauge_ptr, gpointer data)
+{
+	gint id = 0;
+	GtkWidget *widget = (GtkWidget *)gauge_ptr;
+	if (OBJ_GET(widget, "gauge_id"))
+	{
+		id = (gint)OBJ_GET(widget, "gauge_id");
+		remove_watch(id);
+	}
+}
+
 
 
 void clean_curve(gpointer curve_ptr, gpointer data)
@@ -677,7 +796,6 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	/* X Coord */
-	/*
 	array = OBJ_GET(curve,"x_entries");
 	entry = g_array_index(array,GtkWidget *,index);
 	precision = (gint)OBJ_GET(entry, "precision");
@@ -685,7 +803,6 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
 	g_free(tmpbuf);
-	*/
 
 	/* Y Coord */
 	array = OBJ_GET(curve,"y_entries");
@@ -716,9 +833,9 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one red */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+		highlight_entry(entry,&red);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+		highlight_entry(entry,&red);
 		if (!OBJ_GET(curve,"last_proximity_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -741,16 +858,16 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 			}
 		}
 	}
@@ -778,16 +895,16 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+				highlight_entry(entry,&green);
 			}
 		}
 	}
@@ -816,9 +933,9 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one green */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		highlight_entry(entry,&green);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&green);
+		highlight_entry(entry,&green);
 		if (!OBJ_GET(curve,"last_marker_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -841,16 +958,16 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 			}
 		}
 	}
@@ -878,16 +995,16 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,NULL);
+				highlight_entry(entry,NULL);
 			}
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				gtk_widget_modify_base(GTK_WIDGET(entry),GTK_STATE_NORMAL,&red);
+				highlight_entry(entry,&red);
 			}
 		}
 	}
@@ -902,11 +1019,82 @@ EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT void update_curve_marker(DataWatch *watch, gfloat f_val)
+
+EXPORT void update_curve_marker(DataWatch *watch)
 {
 	CurveData *cdata = (CurveData *)watch->user_data;
+	if (!MTX_IS_CURVE(cdata->curve))
+	{
+	        remove_watch(watch->id);
+		return;
+	}
 	if (cdata->axis == _X_)
-		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),f_val);
+		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),watch->val);
 	if (cdata->axis == _Y_)
-		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),f_val);
+		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),watch->val);
 }
+
+
+gboolean set_axis_locking(GtkWidget *widget, gpointer data)
+{
+	Axis axis = (Axis)OBJ_GET(widget,"axis");
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	if (state)
+		gtk_button_set_label(GTK_BUTTON(widget)," Locked ");
+	else
+		gtk_button_set_label(GTK_BUTTON(widget),"Unlocked");
+	if (axis == _X_)
+		mtx_curve_set_x_axis_lock_state(MTX_CURVE(data),state);
+	if (axis == _Y_)
+		mtx_curve_set_y_axis_lock_state(MTX_CURVE(data),state);
+	return TRUE;
+}
+
+
+EXPORT gboolean add_2d_table(GtkWidget *widget)
+{
+	gint table_num = 0;
+
+	if (!GTK_IS_WIDGET(widget))
+		return FALSE;
+
+	table_num = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
+	create_2d_table_editor(table_num,widget);
+	return TRUE;
+}
+
+
+void highlight_entry(GtkWidget *widget, GdkColor *color)
+{
+#ifdef __WIN32__
+	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
+		gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+	else
+		printf("widget isn't visible or sensitive\n");
+	return;
+#else
+	GdkGC *gc = OBJ_GET(widget,"hl_gc");
+	extern GdkColor white;
+	if (!GDK_IS_DRAWABLE(widget->window))
+		return;
+	if (!gc)
+	{
+		gc = gdk_gc_new(widget->window);
+		gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
+		OBJ_SET(widget,"hl_gc",(gpointer)gc);
+	}
+	if (color)
+		gdk_gc_set_rgb_fg_color(gc,color);
+	else
+		gdk_gc_set_rgb_fg_color(gc,&white);
+	/* Top */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,widget->allocation.width-4,2);
+	/* Bottom */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,widget->allocation.height-5,widget->allocation.width-4,2);
+	/* Left */
+	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,2,widget->allocation.height-6);
+	/* Right */
+	gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-4,2,2,widget->allocation.height-6);
+#endif
+}
+

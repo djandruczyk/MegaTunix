@@ -146,7 +146,7 @@ void populate_debugging(GtkWidget *parent)
 	GtkWidget *vbox2 = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
-	static gint columns = 5;
+	const gint columns = 6;
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;

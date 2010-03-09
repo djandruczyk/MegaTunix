@@ -125,7 +125,6 @@ void *thread_dispatcher(gpointer data)
 	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
 	CmdLineArgs *args = NULL;
-	gboolean result;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 
@@ -179,7 +178,7 @@ void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-					result = message->command->function(
+					message->status = message->command->function(
 							message->command,
 							message->command->func_call_arg);
 
@@ -476,8 +475,11 @@ void table_write(gint page, gint num_bytes, guint8 * data)
 {
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	g_static_mutex_lock(&mutex);
 
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
+
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
 	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
@@ -486,14 +488,16 @@ void table_write(gint page, gint num_bytes, guint8 * data)
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
- 	 * race condition
- 	 */
+	 * race condition
+	 */
 	store_new_block(0,page,0,data,num_bytes);
 
 	if (firmware->multi_page)
 		handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->table_write_command,output);
+
+	g_static_mutex_unlock(&mutex);
 	return;
 }
 

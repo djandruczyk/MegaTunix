@@ -26,9 +26,8 @@ attempt to match what it recorded with the profile,  once an exact match is
 found it will read a list of tab names to load from the interrogation profile 
 and load those tabs followed by calling the "bind_data()" function for each
 widget in the glade definition.  bind_data() looks inside the datamap file 
-for a section named after the widget, and proceeds to read the "keys" and 
-"key_types" fields from that section.  A check is run to make sure there are
-the same number of keys and key_types defined, and then each one of the keys
+for a section named after the widget, and proceeds to read the "keys"
+field from that section.  and then each one of the keys
 are loaded and bound to the widget using the g_object_set_data() call.  This
 is done because all of the signal handlers throughout megatunix extract that
 data to make apprpriate decisions about handling data.
@@ -50,17 +49,9 @@ NOTES regarding the datamap files:
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
 keys themselves are not, as the string compare functions are case insensitive.
 
-2. Valid key_types are:
-	_INT_		Integer value
-	_ENUM_		String represnetation of an enumeration, translated via
-			a call to "translate_string()"
-	_STRING_	A literal string. (used for binding text to a widget
-			that changes (like a temperature label))
-	_BOOL_		A boolean, valid values are "TRUE" and "FALSE"
+2. There is no limit to the number of keys that you can bind to a widget.
 
-3. There is no limit to the number of keys that you can bind to a widget.
-
-4. Most commonly used keys are:
+3. Most commonly used keys are:
 	group		(string) Points to a section to get additional 
 			params from. See notes above regarding groups
 	page		(integer) page in ecu that this control refers to
@@ -116,17 +107,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			choice, uses translate_string() to convert to an integer
 	toggle_groups	(string) List of groups of widgets to enable/disable
 			based on the state of this control.
-	toggle_group	(string) Name of group of widgets to enable/disable
-			based on the state of this control.
-	invert_states	(comma seperated list of booleans) Determines if the 
-			group being toggled needs to be enabled or disabled 
-			depending on button state.
-			Swap from TRUE to FALSE when on-screen behavior is
-			backwards to what you want...
-	invert_state	(boolean) Determines if the group being toggled needs
-			to be enabled or disabled depending on button state.
-			Swap from TRUE to FALSE when on-screen behavior is
-			backwards to what you want...
 	dl_type		(enum) Normal values are IMMEDIATE (means send the 
 			value right away) and DEFERRED, meaning that the
 			control is usually dependant on some calculation or

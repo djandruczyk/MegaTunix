@@ -18,19 +18,9 @@ NOTES regarding the files:
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
 keys themselves are not, as the string compare functions are case insensitive.
 
-2. There should be the same number of key's and key_types. The key is any text
-The key_type is special text as show below:
-  Valid key_types are:
-	_INT_		Integer value
-	_ENUM_		String represnetation of an enumeration, translated via
-			a call to "translate_string()"
-	_STRING_	A literal string. (used for binding text to a widget
-			that changes (like a temperature label))
-	_BOOL_		A boolean, valid values are "TRUE" and "FALSE"
+2. There is no limit to the number of keys that you can bind to a widget.
 
-3. There is no limit to the number of keys that you can bind to a widget.
-
-4. Most commonly used keys are:
+3. Most commonly used keys are:
 	applicable_firmwares (string) comma sepertated list of firmware names
 			(from interrogation profiles) that this realtime map 
 			is applicable to.  This is a new addition, after
@@ -50,8 +40,6 @@ The key_type is special text as show below:
 			the section are listed on this line.  keys specifc to
 			complex conversions and depend_on are loaded by
 			specialized handlers.
-	key_types	(string) List of keytypes for the respective keys
-			above. 
 	internal_names	(CSV string) list of names for this variable 
 			internally to megatunix
 			used by the datalogger, loogviewer and Dashboard.

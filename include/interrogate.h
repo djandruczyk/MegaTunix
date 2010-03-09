@@ -25,6 +25,15 @@ typedef enum
 	RESULT_TEXT
 }Test_Result;
 
+typedef enum
+{
+	COUNT=0x260,
+	NUMMATCH,
+	SUBMATCH,
+	FULLMATCH,
+	REGEX
+}MatchClass;
+
 typedef struct _Detection_Test Detection_Test;
 /*!
  \brief The _Detection_Test struct holds the basics for each ECU test.
