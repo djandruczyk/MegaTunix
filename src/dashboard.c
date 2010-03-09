@@ -69,8 +69,8 @@ void load_dashboard(gchar *filename, gpointer data)
 
 	LIBXML_TEST_VERSION
 
-	/*parse the file and get the DOM */
-	doc = xmlReadFile(filename, NULL, 0);
+		/*parse the file and get the DOM */
+		doc = xmlReadFile(filename, NULL, 0);
 	if (doc == NULL)
 	{
 		printf("error: could not parse file %s\n",filename);
@@ -97,7 +97,7 @@ void load_dashboard(gchar *filename, gpointer data)
 			GDK_BUTTON_RELEASE_MASK |
 			GDK_KEY_PRESS_MASK 
 			);
-			
+
 	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
 			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (window), "focus-in-event",
@@ -143,6 +143,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	g_free(key);
 	g_free(prefix);
 	g_free(filename);
+	OBJ_SET(ebox,"index", data);
 
 	width = (gint)OBJ_GET(dash,"orig_width");
 	height = (gint)OBJ_GET(dash,"orig_height");
@@ -738,6 +739,11 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 		       	G_CALLBACK(toggle_dash_fullscreen),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
+	item = gtk_menu_item_new_with_label("Close...");
+	g_signal_connect(G_OBJECT(item),"activate",
+		       	G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
 	if (event)
 	{
 		button = event->button;
@@ -753,6 +759,22 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
 			button, event_time);
 	gtk_widget_show_all(menu);
+}
+
+
+gboolean close_dash(GtkWidget *widget, gpointer data)
+{
+	gint index = 0;
+	gchar * tmpbuf = NULL;
+	GtkWidget *cbutton = NULL;
+	
+	index = (gint)data;
+	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
+	cbutton = lookup_widget(tmpbuf);
+	if (GTK_IS_BUTTON(cbutton))
+		g_signal_emit_by_name(cbutton,"clicked");
+	g_free(tmpbuf);
+	return TRUE;
 }
 
 

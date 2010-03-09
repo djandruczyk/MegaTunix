@@ -205,7 +205,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			break;
 
 	}
-	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
+	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete!"),FALSE,FALSE);
 	tabs_loaded = TRUE;
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);

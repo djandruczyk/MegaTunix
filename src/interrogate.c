@@ -209,11 +209,7 @@ EXPORT gboolean interrogate_ecu()
 		if (total_read > 0)
 		{
 			if (test->result_type == RESULT_TEXT)
-			{
-				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
-				thread_update_logbar("interr_view","info",g_strdup_printf("%s",test->result_str),FALSE,FALSE);
-				thread_update_logbar("interr_view",NULL,g_strdup(")\n"),FALSE,FALSE);
-			}
+				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (%s)\n",test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
 			else if (test->result_type == RESULT_DATA)
 				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
 			ptr = buf;

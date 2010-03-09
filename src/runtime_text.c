@@ -49,8 +49,6 @@ EXPORT void load_rt_text_pf()
 	GtkWidget *parent = NULL;
 	gint x = 0;
 	gint y = 0;
-	gint w = 0;
-	gint h = 0;
 	GtkListStore *store = NULL;
 	gchar *filename = NULL;
 	GladeXML *main_xml = NULL;
