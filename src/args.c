@@ -73,7 +73,10 @@ void handle_args(gint argc, gchar * argv[])
 
 	if (args->version)
 	{
-		printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
+		if (g_strcasecmp(_VER_SUFFIX_,"") == 0)
+			printf("%i.%i.%i\n",_MAJOR_,_MINOR_,_MICRO_);
+		else
+			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
 		exit(0);
 	}
 	if (netinfo)
