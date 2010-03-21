@@ -43,6 +43,10 @@ bind_to_list=staging_ctrls
 keys=bind_to_list
 bind_to_list=map_second_staging,staging_ctrls
 
+[multi_param_staging_table]
+keys=bind_to_list
+bind_to_list=map_second_staging,staging_ctrls
+
 [orfc_params_table]
 keys=bind_to_list
 bind_to_list=orfc_params
@@ -108,7 +112,7 @@ bitvals=0,3
 bitmask=192
 choices=Off,Manifold Pressure
 toggle_groups=,sec_stage_ctrls
-tooltip=Sets the staging algorithm to just trigger on one variable or AS WELL as the manifold pressure values below.
+tooltip=Sets the staging algorithm to just trigger on one variable (above) or AS WELL as the manifold pressure values below (dual threshold triggering). This combines two MT controls into one as it makes little sense to do it like megatune as there isn't any feasable situation where you'd use one without the other., hence MtX links them to make the UI simpler.
 
 [orfc_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
