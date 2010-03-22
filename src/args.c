@@ -55,29 +55,41 @@ void handle_args(gint argc, gchar * argv[])
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
-		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Netowrk socket instead of serial","host[:port]"},
+		{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},
+		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Network socket instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
 		{"no-maingui",'m',0,G_OPTION_ARG_NONE,&args->hide_maingui,"Hide Main Gui window (i.e, dash only)",NULL},
 		{"autolog",'a',0,G_OPTION_ARG_NONE,&args->autolog_dump,"Automatically dump datalog to file every N minutes",NULL},
-		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"How many minutes of data logged per logfile (default 5 minutes)","N"},
-		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into",NULL},
-		{"log_basename",'b',0,G_OPTION_ARG_FILENAME,&args->autolog_basename,"Base filename for logs.",NULL},
+		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"How many minutes of data logged per logfile (default 5 minutes)","Minutes per log (integer)"},
+		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into","Directory to place logs in"},
+		{"log_basename",'b',0,G_OPTION_ARG_FILENAME,&args->autolog_basename,"Base filename for logs.","Root of logfile name"},
 		{ NULL },
 	};
 
-	context = g_option_context_new ("- MegaTunix options");
+	context = g_option_context_new ("- MegaTunix Options");
 	g_option_context_add_main_entries (context, entries, NULL);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_parse (context, &argc, &argv, &error);
 
-	if (args->version)
+	if (error)
 	{
-		if (g_strcasecmp(_VER_SUFFIX_,"") == 0)
-			printf("%i.%i.%i\n",_MAJOR_,_MINOR_,_MICRO_);
-		else
-			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
-		exit(0);
+		printf("ERROR OCCURRED\n");
+		switch (error->code) 
+		{
+			case G_OPTION_ERROR_UNKNOWN_OPTION:
+				printf("G_OPTION_ERROR_UNKNOWN_OPTION\n");
+				break;
+			case G_OPTION_ERROR_BAD_VALUE:
+				printf("G_OPTION_ERROR_BAD_VALUE\n");
+				break;
+			case G_OPTION_ERROR_FAILED:
+				printf("G_OPTION_ERROR_FAILED\n");
+				break;
+			default:
+				printf("not sure the error\n");
+				break;
+		}
 	}
 	if (netinfo)
 	{
@@ -96,6 +108,7 @@ void handle_args(gint argc, gchar * argv[])
 			else
 				args->network_port = atoi(vector[1]);
 			args->network_mode = TRUE;
+			args->listen_mode = FALSE;
 		}
 		g_strfreev(vector);
 	}
@@ -130,6 +143,10 @@ void handle_args(gint argc, gchar * argv[])
 		offline = TRUE;
 		g_timeout_add(1000,(GtkFunction)set_offline_mode,NULL);
 	}
+	if (args->listen_mode)
+	{
+		printf("Should do listen mode\n");
+	}
 	if (args->debug)
 	{
 		printf("debug option \"%i\"\n",args->debug);
@@ -143,9 +160,18 @@ void handle_args(gint argc, gchar * argv[])
 		printf("autolog_minutes \"%i\"\n",args->autolog_minutes);
 		printf("autolog_dump_dir \"%s\"\n",args->autolog_dump_dir);
 		printf("autolog_basename \"%s\"\n",args->autolog_basename);
+		printf("listen mode \"%i\"\n",args->listen_mode);
 		printf("network mode \"%i\"\n",args->network_mode);
 		printf("network host \"%s\"\n",args->network_host);
 		printf("network port \"%i\"\n",args->network_port);
+	}
+	if (args->version)
+	{
+		if (g_strcasecmp(_VER_SUFFIX_,"") == 0)
+			printf("%i.%i.%i\n",_MAJOR_,_MINOR_,_MICRO_);
+		else
+			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
+		exit(0);
 	}
 	OBJ_SET(global_data,"args",args);
 	g_option_context_free(context);
@@ -166,6 +192,7 @@ CmdLineArgs * init_args()
 	args->autolog_minutes = 5;
 	args->autolog_dump_dir = NULL;
 	args->autolog_basename = NULL;
+	args->listen_mode = FALSE;
 	args->network_mode = FALSE;
 	args->network_host = NULL;
 	args->network_port = 0;
