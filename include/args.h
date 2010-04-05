@@ -40,6 +40,7 @@ struct _CmdLineArgs
 	gchar * network_host;	/* Network host */
 	gint network_port;	/* Network port */
 	gboolean network_mode;	/* Network mode */
+	gboolean listen_mode;	/* Listen mode */
 };
 
 /* Prototypes */
