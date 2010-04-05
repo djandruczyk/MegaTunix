@@ -109,7 +109,7 @@ bitvals=0,1,2
 offset=593
 bitmask=3
 toggle_groups=,baro_on_boot,baro_dual
-tooltip=Sets ECU barometer correction to bei either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
+tooltip=Sets ECU barometer correction to be either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
 
 [xtau_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip

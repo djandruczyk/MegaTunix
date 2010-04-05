@@ -93,7 +93,7 @@ tooltip=This button Pops up a window to calculate the required fuel
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Disabled,Enabled
 bitvals=0,1
-offset=0
+offset=2
 bitmask=32
 toggle_groups=,bank2
 tooltip=Enables controls for injector channel 2
@@ -123,7 +123,7 @@ bitvals=0,1,2
 offset=593
 bitmask=3
 toggle_groups=def_baro,def_baro:low_baro:high_baro,baro_dual
-tooltip=Sets ECU barometer correction to bei either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
+tooltip=Sets ECU barometer correction to be either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
 
 [realtime_baro_port_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
