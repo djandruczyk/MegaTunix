@@ -242,6 +242,7 @@ void upload_firmware(gint fd, gint file_fd)
 	gint res = 0;
 	gchar buf[128];
 	gint chunk = 128;
+	gint result = 0;
 	gint i = 0;
 	GTimeVal last;
 	GTimeVal now;
@@ -257,7 +258,7 @@ void upload_firmware(gint fd, gint file_fd)
 		last = now;
 		g_get_current_time(&now);
 		i+=res;
-		write (fd,buf,chunk);
+		result = write (fd,buf,chunk);
 		elapsed = now.tv_usec - last.tv_usec;
 		if (elapsed < 0)
 			elapsed += 1000000;

@@ -19,14 +19,14 @@ if test x"$MTX_VER_SUFFIX" != "x"; then
 else
 	VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION"
 fi
-AM_INIT_AUTOMAKE(megatunix, "$VER_STRING")
-
 AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE(megatunix, "$VER_STRING")
 
 AM_MAINTAINER_MODE
 
 dnl Checks for programs.
 AC_PROG_INSTALL
+AC_PROG_LIBTOOL
 AC_PROG_LN_S
 AC_PROG_AWK
 AC_PROG_MKDIR_P
@@ -34,7 +34,6 @@ AM_PROG_MKDIR_P
 AC_PROG_MAKE_SET
 AC_PROG_CC
 AC_PROG_CXX
-LT_INIT
 AM_PROG_LEX
 if test "$LEX" != "flex"; 
 then
@@ -53,10 +52,10 @@ dnl AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
 dnl check paths for necessary files
 
-dnl MACRO definition to determine if running GTK> 2.8 or not for use of cairo
+dnl MACRO definition to determine if running GTK>2.12 or not for use of cairo
 AC_DEFUN([PKG_CHECK_GTK], 
 [
-	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],,)
+	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.12.0 gthread-2.0],,)
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 ])
