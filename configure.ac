@@ -69,7 +69,9 @@ AC_SUBST(GLEXT_LIBS)
 
 dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
-LIBGLADE_LIBS+="-Wl,--export-dynamic"
+if test `uname -s` != "Darwin"; then
+	LIBGLADE_LIBS+="-Wl,--export-dynamic"
+fi
 AC_SUBST(LIBGLADE_CFLAGS)
 AC_SUBST(LIBGLADE_LIBS)
 
