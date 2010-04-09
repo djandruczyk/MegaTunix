@@ -57,7 +57,7 @@ fi
   }
 }
 
-(grep "^AM_PROG_LIBTOOL" "$CONFIGURE" >/dev/null) && {
+(grep "^A[CM]_PROG_LIBTOOL" "$CONFIGURE" >/dev/null) && {
   (if [ "$os" == "Darwin" ]; then glibtool --version ; else libtool --version ; fi) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool\' installed."
@@ -138,7 +138,7 @@ do
         echo "Running xml-i18n-toolize..."
 	xml-i18n-toolize --copy --force --automake
       fi
-      if grep "^AM_PROG_LIBTOOL" "$bn" >/dev/null; then
+      if grep "^A[CM]_PROG_LIBTOOL" "$bn" >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
 	  echo "Running libtoolize.."
 	  if [ "$os" == "Darwin" ]; then
