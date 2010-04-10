@@ -712,11 +712,23 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 	gint offset = -1;
 	remove_from_lists(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
 	if (OBJ_GET(widget_ptr,"page"))
+	{
+#ifdef _64BIT_
+		page = (gint)(gint64)OBJ_GET(widget_ptr,"page");
+#else
 		page = (gint)OBJ_GET(widget_ptr,"page");
+#endif
+	}
 	else
 		page = -1;
 	if (OBJ_GET(widget_ptr,"offset"))
+	{
+#ifdef _64BIT_
+		offset = (gint)(gint64)OBJ_GET(widget_ptr,"offset");
+#else
 		offset = (gint)OBJ_GET(widget_ptr,"offset");
+#endif
+	}
 	else
 		offset = -1;
 	if (( page >= 0 ) && (offset >= 0))
@@ -730,7 +742,11 @@ void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 	GtkWidget *widget = (GtkWidget *)gauge_ptr;
 	if (OBJ_GET(widget, "gauge_id"))
 	{
+#ifdef _64BIT_
+		id = (gint)(gint64)OBJ_GET(widget, "gauge_id");
+#else
 		id = (gint)OBJ_GET(widget, "gauge_id");
+#endif
 		remove_watch(id);
 	}
 }
@@ -753,7 +769,11 @@ void clean_curve(gpointer curve_ptr, gpointer data)
 	cdata = OBJ_GET(widget, "cdata");
 	if (cdata)
 		g_free(cdata);
+#ifdef _64BIT_
+	id = (guint32)(guint64)OBJ_GET(widget, "marker_id");
+#else
 	id = (guint32)OBJ_GET(widget, "marker_id");
+#endif
 	if (id > 0)
 		remove_watch(id);
 }
@@ -767,7 +787,11 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	gchar * text = NULL;
 	gfloat tmpf = 0.0;
 	
+#ifdef _64BIT_
+	index = (gint)(gint64) OBJ_GET(widget,"curve_index");
+#else
 	index = (gint) OBJ_GET(widget,"curve_index");
+#endif
 	axis = (Axis) OBJ_GET(widget,"curve_axis");
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
@@ -798,7 +822,11 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	/* X Coord */
 	array = OBJ_GET(curve,"x_entries");
 	entry = g_array_index(array,GtkWidget *,index);
+#ifdef _64BIT_
+	precision = (gint)(gint64)OBJ_GET(entry, "precision");
+#else
 	precision = (gint)OBJ_GET(entry, "precision");
+#endif
 	tmpbuf = g_strdup_printf("%1$.*2$f",point.x,precision);
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
@@ -807,7 +835,11 @@ void coords_changed(GtkWidget *curve, gpointer data)
 	/* Y Coord */
 	array = OBJ_GET(curve,"y_entries");
 	entry  = g_array_index(array,GtkWidget *,index);
+#ifdef _64BIT_
+	precision = (gint)(gint64)OBJ_GET(entry, "precision");
+#else
 	precision = (gint)OBJ_GET(entry, "precision");
+#endif
 	tmpbuf = g_strdup_printf("%1$.*2$f",point.y,precision);
 	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 	g_signal_emit_by_name(entry, "activate");
@@ -846,7 +878,11 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
+#ifdef _64BIT_
+			last = (gint)(gint64)OBJ_GET(curve,"last_proximity_vertex");
+#else
 			last = (gint)OBJ_GET(curve,"last_proximity_vertex");
+#endif
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
@@ -854,7 +890,11 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
+#ifdef _64BIT_
+			last_marker = (gint)(gint64)OBJ_GET(curve,"last_marker_vertex");
+#else
 			last_marker = (gint)OBJ_GET(curve,"last_marker_vertex");
+#endif
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
@@ -883,7 +923,11 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
+#ifdef _64BIT_
+			last = (gint)(gint64)OBJ_GET(curve,"last_proximity_vertex");
+#else
 			last = (gint)OBJ_GET(curve,"last_proximity_vertex");
+#endif
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
@@ -891,7 +935,11 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
+#ifdef _64BIT_
+			last_marker = (gint)(gint64)OBJ_GET(curve,"last_marker_vertex");
+#else
 			last_marker = (gint)OBJ_GET(curve,"last_marker_vertex");
+#endif
 			if (last_marker != last) /* Set to marker color instead */
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
@@ -946,7 +994,11 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
+#ifdef _64BIT_
+			last = (gint)(gint64)OBJ_GET(curve,"last_marker_vertex");
+#else
 			last = (gint)OBJ_GET(curve,"last_marker_vertex");
+#endif
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
@@ -954,7 +1006,11 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
+#ifdef _64BIT_
+			last_vertex = (gint)(gint64)OBJ_GET(curve,"last_proximity_vertex");
+#else
 			last_vertex = (gint)OBJ_GET(curve,"last_proximity_vertex");
+#endif
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
@@ -983,7 +1039,11 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
+#ifdef _64BIT_
+			last = (gint)(gint64)OBJ_GET(curve,"last_marker_vertex");
+#else
 			last = (gint)OBJ_GET(curve,"last_marker_vertex");
+#endif
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
@@ -991,7 +1051,11 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 		}
 		else
 		{	/* Need to reset previous vertex back to defaults */
+#ifdef _64BIT_
+			last_vertex = (gint)(gint64)OBJ_GET(curve,"last_proximity_vertex");
+#else
 			last_vertex = (gint)OBJ_GET(curve,"last_proximity_vertex");
+#endif
 			if (last != last_vertex)
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
