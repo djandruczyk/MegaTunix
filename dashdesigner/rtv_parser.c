@@ -1,3 +1,4 @@
+#include <config.h>
 #include <configfile.h>
 #include <defines.h>
 #include <dirent.h>
@@ -71,7 +72,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 
 						if (g_hash_table_lookup_extended(rtv_data->rtv_hash,vector[k],&orig,&value))
 						{
-							tmpi = (gint)value + 1;
+							tmpi = (GINT)value + 1;
 							/*printf("Value on pre-existing var %s is %i\n",(gchar *)orig,(gint)value);*/
 							g_hash_table_replace(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
 						}
@@ -103,7 +104,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 		element = g_list_nth_data(rtv_data->rtv_list,i);
 		/*printf("element %s\n",element);*/
 		int_name = g_hash_table_lookup(rtv_data->int_ext_hash,element);
-		icount = (gint)g_hash_table_lookup(rtv_data->rtv_hash,int_name);
+		icount = (GINT)g_hash_table_lookup(rtv_data->rtv_hash,int_name);
 		/*printf("int name %s\n",int_name);*/
 		gtk_list_store_append(store,&iter);
 		/*printf("var %s, %s, icount %i, total %i\n",element,int_name,icount,rtv_data->total_files);*/

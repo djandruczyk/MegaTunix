@@ -168,7 +168,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	gchar * tmpbuf = NULL;
 	gint output = -1;
 
-	output = (gint)OBJ_GET(widget,"output_num");
+	output = (GINT)OBJ_GET(widget,"output_num");
 	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
 	OBJ_SET(renderer, "column", (gint *)COL_NAME);
@@ -290,20 +290,20 @@ void cell_edited(GtkCellRendererText *cell,
 	GHashTable *hash = NULL;
 	extern GHashTable *sources_hash;
 
-	column = (gint) OBJ_GET (cell, "column");
-	canID = (gint) OBJ_GET(model,"canID");
-	page = (gint) OBJ_GET(model,"page");
+	column = (GINT) OBJ_GET (cell, "column");
+	canID = (GINT) OBJ_GET(model,"canID");
+	page = (GINT) OBJ_GET(model,"page");
 	size = (DataSize) OBJ_GET(model,"size");
-	src_offset = (gint) OBJ_GET(model,"src_offset");
-	lim_offset = (gint) OBJ_GET(model,"lim_offset");
-	hys_offset = (gint) OBJ_GET(model,"hys_offset");
-	ulimit_offset = (gint) OBJ_GET(model,"ulimit_offset");
+	src_offset = (GINT) OBJ_GET(model,"src_offset");
+	lim_offset = (GINT) OBJ_GET(model,"lim_offset");
+	hys_offset = (GINT) OBJ_GET(model,"hys_offset");
+	ulimit_offset = (GINT) OBJ_GET(model,"ulimit_offset");
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
-	rt_offset = (gint) OBJ_GET(object,"offset");
-	precision = (gint) OBJ_GET(object,"precision");
+	rt_offset = (GINT) OBJ_GET(object,"offset");
+	precision = (GINT) OBJ_GET(object,"precision");
 	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
 	if (OBJ_GET(object,"multi_expr_hash"))
 	{
@@ -352,7 +352,7 @@ void cell_edited(GtkCellRendererText *cell,
 		else
 			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
-		temp_dep = (gboolean)OBJ_GET(object,"temp_dep");
+		temp_dep = (GBOOLEAN)OBJ_GET(object,"temp_dep");
 
 		if (new < lower)
 			new = lower;
@@ -373,7 +373,7 @@ void cell_edited(GtkCellRendererText *cell,
 		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
 		{
-			if ((gint)OBJ_GET(global_data,"temp_units") == CELSIUS)
+			if ((GINT)OBJ_GET(global_data,"temp_units") == CELSIUS)
 				x = (new*9.0/5.0)+32;
 			else
 				x = new;
@@ -450,13 +450,13 @@ void update_model_from_view(GtkWidget * widget)
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
-	src_offset = (gint)OBJ_GET(model,"src_offset");
-	lim_offset = (gint)OBJ_GET(model,"lim_offset");
-	hys_offset = (gint)OBJ_GET(model,"hys_offset");
-	ulimit_offset = (gint)OBJ_GET(model,"ulimit_offset");
-	page = (gint)OBJ_GET(model,"page");
-	canID = (gint)OBJ_GET(model,"canID");
+	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	src_offset = (GINT)OBJ_GET(model,"src_offset");
+	lim_offset = (GINT)OBJ_GET(model,"lim_offset");
+	hys_offset = (GINT)OBJ_GET(model,"hys_offset");
+	ulimit_offset = (GINT)OBJ_GET(model,"ulimit_offset");
+	page = (GINT)OBJ_GET(model,"page");
+	canID = (GINT)OBJ_GET(model,"canID");
 
 	offset = get_ecu_data(canID,page,src_offset,MTX_U08);
 	cur_val = get_ecu_data(canID,page,lim_offset,MTX_U08);
@@ -467,10 +467,10 @@ void update_model_from_view(GtkWidget * widget)
 	while (looptest)
 	{
 		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
-		if (offset == (gint)OBJ_GET(object,"offset"))
+		if (offset == (GINT)OBJ_GET(object,"offset"))
 		{
-			precision =(gint)OBJ_GET(object,"precision");
-			temp_dep =(gboolean)OBJ_GET(object,"temp_dep");
+			precision =(GINT)OBJ_GET(object,"precision");
+			temp_dep =(GBOOLEAN)OBJ_GET(object,"temp_dep");
 			if (OBJ_GET(object,"multi_expr_hash"))
 			{
 				hash = OBJ_GET(object,"multi_expr_hash");
@@ -725,8 +725,8 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		upper = OBJ_GET(object,"real_upper");
 		dl_conv = OBJ_GET(object,"dl_conv_expr");
 		ul_conv = OBJ_GET(object,"ul_conv_expr");
-		precision = (gint) OBJ_GET(object,"precision");
-		bitval = (gint) OBJ_GET(object,"offset");
+		precision = (GINT) OBJ_GET(object,"precision");
+		bitval = (GINT) OBJ_GET(object,"offset");
 		if ((!lower) && (!upper))
 			range = g_strdup_printf("Valid Range: undefined");
 		else
@@ -754,12 +754,12 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
-		if ((width = (gint)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
+		if ((width = (GINT)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
 		else
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
 
-		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(gint)OBJ_GET(global_data,"font_size")));
+		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(GINT)OBJ_GET(global_data,"font_size")));
 
 		gtk_container_remove (GTK_CONTAINER (widget), GTK_BIN (widget)->child);
 		gtk_container_add (GTK_CONTAINER (widget), entry);

@@ -461,7 +461,7 @@ void update_trigtooth_display(gint page)
 
 EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 {
-	gint handler = (gint)OBJ_GET(widget, "handler");
+	gint handler = (GINT)OBJ_GET(widget, "handler");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
@@ -470,12 +470,12 @@ EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 
 			case START_TOOTHMON_LOGGER:
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				start_tickler(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
 			case STOP_TOOTHMON_LOGGER:

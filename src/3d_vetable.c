@@ -266,13 +266,8 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	if (winstat == NULL)
 		winstat = g_hash_table_new(NULL,NULL);
-#ifdef _64BIT_
-	if ((gboolean)(gint64)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num))
+	if ((GBOOLEAN)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num))
 			== TRUE)
-#else
-	if ((gboolean)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num))
-			== TRUE)
-#endif
 		return TRUE;
 	else
 		g_hash_table_insert(winstat,GINT_TO_POINTER(table_num), GINT_TO_POINTER(TRUE));

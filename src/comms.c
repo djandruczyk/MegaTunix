@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
+#include <defines.h>
 #include <3d_vetable.h>
 #include <comms.h>
-#include <config.h>
 #include <dataio.h>
 #include <datamgmt.h>
-#include <defines.h>
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
@@ -146,25 +146,15 @@ EXPORT void send_to_slaves(void *data)
 		return;
 
 	msg = g_new0(SlaveMessage, 1);
-#ifdef _64BIT_
-	msg->page = (guint8)(gint64)OBJ_GET(output->object,"page");
-	msg->offset = (guint16)(gint64)OBJ_GET(output->object,"offset");
-	msg->length = (guint16)(gint64)OBJ_GET(output->object,"num_bytes");
-#else
-	msg->page = (guint8)OBJ_GET(output->object,"page");
-	msg->offset = (guint16)OBJ_GET(output->object,"offset");
-	msg->length = (guint16)OBJ_GET(output->object,"num_bytes");
-#endif
+	msg->page = (guint8)(GINT)OBJ_GET(output->object,"page");
+	msg->offset = (guint16)(GINT)OBJ_GET(output->object,"offset");
+	msg->length = (guint16)(GINT)OBJ_GET(output->object,"num_bytes");
 	msg->size = (DataSize)OBJ_GET(output->object,"size");
 	msg->mode = (WriteMode)OBJ_GET(output->object,"mode");
 	if (msg->mode == MTX_CHUNK_WRITE)
 		msg->data = g_memdup(OBJ_GET(output->object,"data"), msg->length);
 	else if (msg->mode == MTX_SIMPLE_WRITE)
-#ifdef _64BIT_
-		msg->value = (gint)(gint64)OBJ_GET(output->object,"value");
-#else
-		msg->value = (gint)OBJ_GET(output->object,"value");
-#endif
+		msg->value = (GINT)OBJ_GET(output->object,"value");
 	else
 	{
 		printf("Non simple/chunk write command, not notifying slaves\n");
@@ -206,16 +196,9 @@ EXPORT void update_write_status(void *data)
 		goto red_or_black;
 	else
 	{
-#ifdef _64BIT_
-		page = (gint)(gint64)OBJ_GET(output->object,"page");
-		offset = (gint)(gint64)OBJ_GET(output->object,"offset");
-		length = (gint)(gint64)OBJ_GET(output->object,"num_bytes");
-#else
-		page = (gint)OBJ_GET(output->object,"page");
-		offset = (gint)OBJ_GET(output->object,"offset");
-		length = (gint)OBJ_GET(output->object,"num_bytes");
-#endif
-
+		page = (GINT)OBJ_GET(output->object,"page");
+		offset = (GINT)OBJ_GET(output->object,"offset");
+		length = (GINT)OBJ_GET(output->object,"num_bytes");
 		mode = (WriteMode)OBJ_GET(output->object,"mode");
 
 		if (!message->status) /* Bad write! */
@@ -338,19 +321,11 @@ gboolean write_data(Io_Message *message)
 
 	if (output)
 	{
-#ifdef _64BIT_
-		canID = (gint)(gint64)OBJ_GET(output->object,"canID");
-		page = (gint)(gint64)OBJ_GET(output->object,"page");
-		offset = (gint)(gint64)OBJ_GET(output->object,"offset");
-		value = (gint)(gint64)OBJ_GET(output->object,"value");
-		num_bytes = (gint)(gint64)OBJ_GET(output->object,"num_bytes");
-#else
-		canID = (gint)OBJ_GET(output->object,"canID");
-		page = (gint)OBJ_GET(output->object,"page");
-		offset = (gint)OBJ_GET(output->object,"offset");
-		value = (gint)OBJ_GET(output->object,"value");
-		num_bytes = (gint)OBJ_GET(output->object,"num_bytes");
-#endif
+		canID = (GINT)OBJ_GET(output->object,"canID");
+		page = (GINT)OBJ_GET(output->object,"page");
+		offset = (GINT)OBJ_GET(output->object,"offset");
+		value = (GINT)OBJ_GET(output->object,"value");
+		num_bytes = (GINT)OBJ_GET(output->object,"num_bytes");
 		size = (DataSize)OBJ_GET(output->object,"size");
 		data = (guint8 *)OBJ_GET(output->object,"data");
 		mode = (WriteMode)OBJ_GET(output->object,"mode");

@@ -104,11 +104,11 @@ EXPORT void load_status_pf(void)
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
-		x = (gint)OBJ_GET(global_data,"status_x_origin");
-		y = (gint)OBJ_GET(global_data,"status_y_origin");
+		x = (GINT)OBJ_GET(global_data,"status_x_origin");
+		y = (GINT)OBJ_GET(global_data,"status_y_origin");
 		gtk_window_move(GTK_WINDOW(window),x,y);
-		w = (gint)OBJ_GET(global_data,"status_width");
-		h = (gint)OBJ_GET(global_data,"status_height");
+		w = (GINT)OBJ_GET(global_data,"status_width");
+		h = (GINT)OBJ_GET(global_data,"status_height");
 		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 		gtk_window_resize(GTK_WINDOW(window),w,h);
 		g_signal_connect(G_OBJECT(window),"delete_event",

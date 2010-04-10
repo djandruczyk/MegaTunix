@@ -179,7 +179,7 @@ void alter_widget_state(gpointer key, gpointer data)
 	for (i=0;i<num_groups;i++)
 	{
 		value = g_hash_table_lookup(widget_group_states,groups[i]);
-		if ((gboolean)value == FALSE)
+		if ((GBOOLEAN)value == FALSE)
 		{
 			state = FALSE;
 			break;

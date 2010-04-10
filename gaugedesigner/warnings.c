@@ -1,3 +1,4 @@
+#include <config.h>
 #include <defines.h>
 #include <events.h>
 #include <gauge.h>
@@ -219,7 +220,7 @@ gboolean remove_w_range(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	index = (gint)OBJ_GET((widget),"range_index");
+	index = (GINT)OBJ_GET((widget),"range_index");
 	mtx_gauge_face_remove_warning_range(MTX_GAUGE_FACE(gauge),index);
 	changed = TRUE;
 	update_onscreen_w_ranges();
@@ -230,7 +231,7 @@ gboolean remove_w_range(GtkWidget * widget, gpointer data)
 
 gboolean alter_w_range_data(GtkWidget *widget, gpointer data)
 {
-	gint index = (gint)OBJ_GET((widget),"index");
+	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	GdkColor color;
 	WrField field = (WrField)data;

@@ -176,7 +176,7 @@ gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 	table = (GtkTable *)gtk_bin_get_child(GTK_BIN(widget));
 	if (GTK_IS_TABLE(table))
-		format = (gint)OBJ_GET(table,"format");
+		format = (GINT)OBJ_GET(table,"format");
 	else
 		return FALSE;
 

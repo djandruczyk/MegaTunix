@@ -398,8 +398,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:
-			page = (gint)OBJ_GET(output->object,"page");
-			canID = (gint)OBJ_GET(output->object,"canID");
+			page = (GINT)OBJ_GET(output->object,"page");
+			canID = (GINT)OBJ_GET(output->object,"canID");
 			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
@@ -441,8 +441,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
-			page = (gint)OBJ_GET(output->object,"page");
-			canID = (gint)OBJ_GET(output->object,"canID");
+			page = (GINT)OBJ_GET(output->object,"page");
+			canID = (GINT)OBJ_GET(output->object,"canID");
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
@@ -539,7 +539,7 @@ EXPORT void post_single_burn_pf(void *data)
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
 	extern Firmware_Details * firmware;
-	gint page = (gint)OBJ_GET(output->object,"page");
+	gint page = (GINT)OBJ_GET(output->object,"page");
 
 	/* sync temp buffer with current burned settings */
 	if (!firmware->page_params[page]->dl_by_default)
@@ -558,19 +558,19 @@ EXPORT void startup_default_timeouts_pf()
 	gint rate = 0;
 
 	set_title(g_strdup("Starting up data renderers..."));
-	rate = (gint)OBJ_GET(global_data,"rtslider_fps");
+	rate = (GINT)OBJ_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
-	rate = (gint)OBJ_GET(global_data,"rttext_fps");
+	rate = (GINT)OBJ_GET(global_data,"rttext_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
 	OBJ_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
-	rate = (gint)OBJ_GET(global_data,"dashboard_fps");
+	rate = (GINT)OBJ_GET(global_data,"dashboard_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_dashboards,NULL);
 	OBJ_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
-	rate = (gint)OBJ_GET(global_data,"ve3d_fps");
+	rate = (GINT)OBJ_GET(global_data,"ve3d_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_ve3ds,NULL);
 	OBJ_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
 

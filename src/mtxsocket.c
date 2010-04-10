@@ -245,7 +245,7 @@ void *socket_thread_manager(gpointer data)
 			g_free(socket);
 			g_thread_exit(0);
 		}
-		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+		if (!(GBOOLEAN)OBJ_GET(global_data,"network_access"))
 		{
 			close(socket->fd);
 			g_free(socket);
@@ -348,7 +348,7 @@ void *ascii_socket_server(gpointer data)
 	{
 		if (leaving)
 			goto close_ascii;
-		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+		if (!(GBOOLEAN)OBJ_GET(global_data,"network_access"))
 			goto close_ascii;
 
 		FD_ZERO(&rd);
@@ -441,7 +441,7 @@ void *binary_socket_server(gpointer data)
 		/* Condition handling */
 		if (leaving)
 			goto close_binary;
-		if (!(gboolean)OBJ_GET(global_data,"network_access"))
+		if (!(GBOOLEAN)OBJ_GET(global_data,"network_access"))
 			goto close_binary;
 		res = recv(fd,&buf,1,0);
 		if (res <= 0)
@@ -1560,7 +1560,7 @@ void *notify_slaves_thread(gpointer data)
 		if (!slave_list) /* List not created yet.. */
 			continue;
 
-		if ((leaving) || (!(gboolean)OBJ_GET(global_data,"network_access")))
+		if ((leaving) || (!(GBOOLEAN)OBJ_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(slave_msg_queue) != NULL)

@@ -92,8 +92,8 @@ EXPORT void load_rt_text_pf()
 	xml = glade_xml_new(main_xml->filename,"rtt_window",NULL);
 	window = glade_xml_get_widget(xml,"rtt_window");
 	register_widget("rtt_window",window);
-	x = (gint)OBJ_GET(global_data,"rtt_x_origin");
-	y = (gint)OBJ_GET(global_data,"rtt_y_origin");
+	x = (GINT)OBJ_GET(global_data,"rtt_x_origin");
+	y = (GINT)OBJ_GET(global_data,"rtt_y_origin");
 	gtk_window_move(GTK_WINDOW(window),x,y);
 	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
 	g_object_set(window, "resizable", FALSE, NULL);
@@ -271,7 +271,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	rtt->markup = (gboolean)OBJ_GET(parent,"markup");
+	rtt->markup = (GBOOLEAN)OBJ_GET(parent,"markup");
 	rtt->label_prefix = OBJ_GET(parent,"label_prefix");
 	rtt->label_suffix = OBJ_GET(parent,"label_suffix");
 	rtt->object = object;
@@ -325,7 +325,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	rtt_hash = OBJ_GET(global_data,"rtt_hash");
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
-	show_prefix = (gboolean)OBJ_GET(widget,"show_prefix");
+	show_prefix = (GBOOLEAN)OBJ_GET(widget,"show_prefix");
 
 	if (!rtt_hash)
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
@@ -369,7 +369,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	extern GStaticMutex rtv_mutex;
 
 	history = (GArray *)OBJ_GET(rtt->object,"history");
-	precision = (gint)OBJ_GET(rtt->object,"precision");
+	precision = (GINT)OBJ_GET(rtt->object,"precision");
 
 	if (!history)
 		return;
@@ -463,7 +463,7 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 			-1);
 
 	history = (GArray *)OBJ_GET(rtt->object,"history");
-	precision = (gint)OBJ_GET(rtt->object,"precision");
+	precision = (GINT)OBJ_GET(rtt->object,"precision");
 
 	if (!history)
 		return FALSE;

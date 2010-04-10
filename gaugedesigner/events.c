@@ -1,3 +1,4 @@
+#include <config.h>
 #include <defines.h>
 #include <alerts.h>
 #include <events.h>
@@ -164,7 +165,7 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 {
 	GdkColor color;
-	gint handler = (gint)OBJ_GET((widget),"handler");
+	gint handler = (GINT)OBJ_GET((widget),"handler");
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -289,7 +290,7 @@ gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 	y_spin = (GtkWidget *)OBJ_GET(widget,"y_spin");
 	if ((!GTK_IS_WIDGET(x_spin)) || (!GTK_IS_WIDGET(y_spin)))
 		return FALSE;
-	if ((gboolean)OBJ_GET(x_spin,"relative"))
+	if ((GBOOLEAN)OBJ_GET(x_spin,"relative"))
 	{
 		x_o_spin = (GtkWidget *)OBJ_GET(x_spin,"x_o_spin");
 		y_o_spin = (GtkWidget *)OBJ_GET(x_spin,"y_o_spin");

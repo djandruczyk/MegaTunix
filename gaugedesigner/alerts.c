@@ -1,5 +1,6 @@
-#include <alerts.h>
+#include <config.h>
 #include <defines.h>
+#include <alerts.h>
 #include <events.h>
 #include <gauge.h>
 #include <getfiles.h>
@@ -156,7 +157,7 @@ gboolean remove_a_range(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	index = (gint)OBJ_GET((widget),"range_index");
+	index = (GINT)OBJ_GET((widget),"range_index");
 	mtx_gauge_face_remove_alert_range(MTX_GAUGE_FACE(gauge),index);
 	changed = TRUE;
 	update_onscreen_a_ranges();
@@ -167,7 +168,7 @@ gboolean remove_a_range(GtkWidget * widget, gpointer data)
 
 gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
 {
-	gint index = (gint)OBJ_GET((widget),"index");
+	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	GdkColor color;
 	AlertField field = (AlertField)OBJ_GET(widget,"handler");

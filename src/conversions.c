@@ -71,8 +71,8 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	g_static_mutex_lock(&mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() after lock reentrant mutex\n"));
 
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
 
 	if (!OBJ_GET(widget,"size"))
 		printf(__FILE__": convert_before_download, FATAL ERROR, size undefined for widget at page %i, offset %i!! \n",page,offset);
@@ -243,7 +243,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	g_static_mutex_lock(&mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after lock reentrant mutex\n"));
 
-	ul_complex = (gboolean)OBJ_GET(widget,"ul_complex");
+	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
 	if (ul_complex)
 	{
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
@@ -253,10 +253,10 @@ gfloat convert_after_upload(GtkWidget * widget)
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
+	canID = (GINT)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
-	canID = (gint)OBJ_GET(widget,"canID");
 	if (size == 0)
 		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i, widget %s\n",page,offset,(char *)glade_get_widget_name(widget));
 
@@ -392,11 +392,11 @@ void convert_temps(gpointer widget, gpointer units)
 	if ((!widget) || (leaving))
 		return;
 	dep_obj = (GObject *)OBJ_GET(widget,"dep_object");
-	widget_temp = (gint)OBJ_GET(widget,"widget_temp");
+	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	if (dep_obj)
 		state = check_dependancies(G_OBJECT(dep_obj));
 
-	if ((int)units == FAHRENHEIT) 
+	if ((GINT)units == FAHRENHEIT) 
 	{
 		/*printf("fahr %s\n",glade_get_widget_name(widget));*/
 		if (GTK_IS_LABEL(widget))

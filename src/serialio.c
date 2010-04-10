@@ -340,7 +340,7 @@ void *serial_repair_thread(gpointer data)
 	while (!serial_is_open) 	
 	{
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
-		autodetect = (gboolean) OBJ_GET(global_data,"autodetect_port");
+		autodetect = (GBOOLEAN) OBJ_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */
 		{
 			potential_ports = (gchar *)OBJ_GET(global_data, "override_port");

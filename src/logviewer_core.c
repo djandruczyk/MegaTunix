@@ -71,7 +71,7 @@ EXPORT void create_stripchart(GtkWidget *parent)
 		else
 			max = get_extreme_from_size(size,UPPER);
 		if (OBJ_GET(object,"precision"))
-			precision = (gint)OBJ_GET(object,"precision");
+			precision = (GINT)OBJ_GET(object,"precision");
 		else
 			precision = 0;
 		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);

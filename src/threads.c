@@ -11,16 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
+#include <defines.h>
 #include <args.h>
 #include <3d_vetable.h>
 #include <comms.h>
 #include <comms_gui.h>
-#include <config.h>
 #include <conversions.h>
 #include <dataio.h>
 #include <datalogging_gui.h>
 #include <datamgmt.h>
-#include <defines.h>
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
@@ -721,7 +721,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_CHAR:
 				/*printf("8 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (gint)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)OBJ_GET(output->object,arg->internal_name);
 				/*printf("value %i\n",v);*/
 				block->data = g_new0(guint8,1);
 				block->data[0] = (guint8)v;
@@ -731,7 +731,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_S16:
 				/*printf("16 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (gint)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)OBJ_GET(output->object,arg->internal_name);
 				/*printf("value %i\n",v);*/
 				block->data = g_new0(guint8,2);
 				block->data[0] = (v & 0xff00) >> 8;
@@ -742,7 +742,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_S32:
 /*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (gint)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)OBJ_GET(output->object,arg->internal_name);
 /*				printf("value %i\n",v); */
 				block->data = g_new0(guint8,4);
 				block->data[0] = (v & 0xff000000) >> 24;
@@ -757,7 +757,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 				if (!arg->internal_name)
 					printf("ERROR, MTX_UNDEF, donno what to do!!\n");
 				sent_data = (guint8 *)OBJ_GET(output->object,arg->internal_name);
-				len = (gint)OBJ_GET(output->object,"num_bytes");
+				len = (GINT)OBJ_GET(output->object,"num_bytes");
 				block->data = g_memdup(sent_data,len);
 				block->len = len;
 				/*

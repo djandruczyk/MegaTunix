@@ -362,7 +362,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case HEX_VIEW:
 			case DECIMAL_VIEW:
 			case BINARY_VIEW:
-				update_raw_memory_view((ToggleButton)handler,(gint)obj_data);
+				update_raw_memory_view((ToggleButton)handler,(GINT)obj_data);
 				break;	
 			default:
 				break;
@@ -439,15 +439,15 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
 
-	canID = (gint)OBJ_GET(widget,"canID");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	canID = (GINT)OBJ_GET(widget,"canID");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
 	size = (DataSize)OBJ_GET(widget,"size");
-	dl_type = (gint)OBJ_GET(widget,"dl_type");
-	bitval = (gint)OBJ_GET(widget,"bitval");
-	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
+	bitval = (GINT)OBJ_GET(widget,"bitval");
+	bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
-	handler = (gint)OBJ_GET(widget,"handler");
+	handler = (GINT)OBJ_GET(widget,"handler");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
@@ -622,11 +622,11 @@ EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 	gint dload_val = 0;
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
-	dl_type = (gint) OBJ_GET(widget,"dl_type");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
 	size = (DataSize)OBJ_GET(widget,"size");
-	canID = (gint)OBJ_GET(widget,"canID");
+	canID = (GINT)OBJ_GET(widget,"canID");
 	
 	value = gtk_range_get_value(GTK_RANGE(widget));
 	dload_val = convert_before_download(widget,value);
@@ -693,13 +693,13 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
-	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	handler = (MtxButton)OBJ_GET(widget,"handler");
-	dl_type = (gint) OBJ_GET(widget,"dl_type");
-	canID = (gint)OBJ_GET(widget,"canID");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	canID = (GINT)OBJ_GET(widget,"canID");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
 	if (!OBJ_GET(widget,"size"))
 		size = MTX_U08 ; 	/* default! */
 	else
@@ -715,9 +715,9 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
-		base = (gint)OBJ_GET(widget,"base");
-	precision = (gint)OBJ_GET(widget,"precision");
-	use_color = (gboolean)OBJ_GET(widget,"use_color");
+		base = (GINT)OBJ_GET(widget,"base");
+	precision = (GINT)OBJ_GET(widget,"precision");
+	use_color = (GBOOLEAN)OBJ_GET(widget,"use_color");
 	if (use_color)
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -800,7 +800,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case TRIGGER_ANGLE:
-			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
+			spconfig_offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
 				dbg_func(CRITICAL,g_strdup(__FILE__": std_entry_handler()\n\tERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
@@ -837,7 +837,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case ODDFIRE_ANGLE:
-			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
+			oddfire_bit_offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 			{
 				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
@@ -967,7 +967,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case INCREMENT_VALUE:
 		case DECREMENT_VALUE:
 			dest = OBJ_GET(widget,"partner_widget");
-			tmp2 = (gint)OBJ_GET(widget,"amount");
+			tmp2 = (GINT)OBJ_GET(widget,"amount");
 			if (OBJ_GET(widget,"raw_lower"))
 				raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 			else
@@ -976,10 +976,10 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 			else
 				raw_upper = get_extreme_from_size(size,UPPER);
-			canID = (gint)OBJ_GET(dest,"canID");
-			page = (gint)OBJ_GET(dest,"page");
+			canID = (GINT)OBJ_GET(dest,"canID");
+			page = (GINT)OBJ_GET(dest,"page");
 			size = (DataSize)OBJ_GET(dest,"size");
-			offset = (gint)OBJ_GET(dest,"offset");
+			offset = (GINT)OBJ_GET(dest,"offset");
 			tmpi = get_ecu_data(canID,page,offset,size);
 			if (handler == INCREMENT_VALUE)
 				tmpi = tmpi+tmp2 > raw_upper? raw_upper:tmpi+tmp2;
@@ -1176,13 +1176,13 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	page = (gint) OBJ_GET(widget,"page");
-	offset = (gint) OBJ_GET(widget,"offset");
-	bitmask = (gint) OBJ_GET(widget,"bitmask");
+	page = (GINT) OBJ_GET(widget,"page");
+	offset = (GINT) OBJ_GET(widget,"offset");
+	bitmask = (GINT) OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
-	dl_type = (gint) OBJ_GET(widget,"dl_type");
-	handler = (gint) OBJ_GET(widget,"handler");
-	canID = (gint)OBJ_GET(widget,"canID");
+	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	handler = (GINT) OBJ_GET(widget,"handler");
+	canID = (GINT)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
@@ -1513,15 +1513,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(
 			widget,"reqd_fuel");
 	handler = (MtxButton)OBJ_GET(widget,"handler");
-	dl_type = (gint) OBJ_GET(widget,"dl_type");
-	canID = (gint) OBJ_GET(widget,"canID");
-	page = (gint) OBJ_GET(widget,"page");
-	offset = (gint) OBJ_GET(widget,"offset");
+	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	canID = (GINT) OBJ_GET(widget,"canID");
+	page = (GINT) OBJ_GET(widget,"page");
+	offset = (GINT) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
-	bitmask = (gint) OBJ_GET(widget,"bitmask");
+	bitmask = (GINT) OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
-	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
 	tmpi = (int)(value+.001);
@@ -1543,7 +1543,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case RTSLIDER_FPS:
 			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
-			source = (gint)OBJ_GET(global_data,"rtslider_id");
+			source = (GINT)OBJ_GET(global_data,"rtslider_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GtkFunction)update_rtsliders,NULL);
@@ -1551,7 +1551,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case RTTEXT_FPS:
 			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
-			source = (gint)OBJ_GET(global_data,"rttext_id");
+			source = (GINT)OBJ_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
@@ -1559,7 +1559,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case DASHBOARD_FPS:
 			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
-			source = (gint)OBJ_GET(global_data,"dashboard_id");
+			source = (GINT)OBJ_GET(global_data,"dashboard_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_dashboards,NULL);
@@ -1567,7 +1567,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case VE3D_FPS:
 			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
-			source = (gint)OBJ_GET(global_data,"ve3d_id");
+			source = (GINT)OBJ_GET(global_data,"ve3d_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_ve3ds,NULL);
@@ -1731,7 +1731,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits(table_num);
 			break;
 		case TRIGGER_ANGLE:
-			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
+			spconfig_offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
 				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
@@ -1768,7 +1768,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case ODDFIRE_ANGLE:
-			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
+			oddfire_bit_offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 			{
 				dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
@@ -2194,10 +2194,10 @@ void update_widget(gpointer object, gpointer user_data)
 	if ((GTK_IS_OBJECT(user_data)) && (widget == user_data))
 		return;
 
-	dl_type = (gint)OBJ_GET(widget,"dl_type");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
-	canID = (gint)OBJ_GET(widget,"canID");
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
+	canID = (GINT)OBJ_GET(widget,"canID");
 	if (!OBJ_GET(widget,"size"))
 		size = MTX_U08 ; 	/* default! */
 	else
@@ -2210,19 +2210,19 @@ void update_widget(gpointer object, gpointer user_data)
 		raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		raw_upper = get_extreme_from_size(size,UPPER);
-	bitval = (gint)OBJ_GET(widget,"bitval");
-	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitval = (GINT)OBJ_GET(widget,"bitval");
+	bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
 	if (!OBJ_GET(widget,"base"))
 		base = 10;
 	else
-		base = (gint)OBJ_GET(widget,"base");
+		base = (GINT)OBJ_GET(widget,"base");
 
-	precision = (gint)OBJ_GET(widget,"precision");
-	temp_dep = (gboolean)OBJ_GET(widget,"temp_dep");
+	precision = (GINT)OBJ_GET(widget,"precision");
+	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
-	use_color = (gboolean)OBJ_GET(widget,"use_color");
+	use_color = (GBOOLEAN)OBJ_GET(widget,"use_color");
 	if (use_color)
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -2235,7 +2235,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 	if (temp_dep)
 	{
-		if ((gint)OBJ_GET(global_data,"temp_units") == CELSIUS)
+		if ((GINT)OBJ_GET(global_data,"temp_units") == CELSIUS)
 			value = (value-32)*(5.0/9.0);
 	}
 
@@ -2245,9 +2245,9 @@ void update_widget(gpointer object, gpointer user_data)
 	 */
 	if ((GTK_IS_ENTRY(widget)) && (!GTK_IS_SPIN_BUTTON(widget)))
 	{
-		if ((int)OBJ_GET(widget,"handler") == ODDFIRE_ANGLE)
+		if ((GINT)OBJ_GET(widget,"handler") == ODDFIRE_ANGLE)
 		{
-			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
+			oddfire_bit_offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 				return;
 			switch (get_ecu_data(canID,page,oddfire_bit_offset,size))
@@ -2268,9 +2268,9 @@ void update_widget(gpointer object, gpointer user_data)
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
 		}
-		else if ((int)OBJ_GET(widget,"handler") == TRIGGER_ANGLE)
+		else if ((GINT)OBJ_GET(widget,"handler") == TRIGGER_ANGLE)
 		{
-			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
+			spconfig_offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			switch ((get_ecu_data(canID,page,spconfig_offset,size) & 0x03))
 			{
 				case 2:
@@ -2342,9 +2342,9 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{
-		if ((int)OBJ_GET(widget,"handler") == ODDFIRE_ANGLE)
+		if ((GINT)OBJ_GET(widget,"handler") == ODDFIRE_ANGLE)
 		{
-			oddfire_bit_offset = (gint)OBJ_GET(widget,"oddfire_bit_offset");
+			oddfire_bit_offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (oddfire_bit_offset == 0)
 				return;
 			switch (get_ecu_data(canID,page,oddfire_bit_offset,size))
@@ -2364,9 +2364,9 @@ void update_widget(gpointer object, gpointer user_data)
 
 			}
 		}
-		else if ((int)OBJ_GET(widget,"handler") == TRIGGER_ANGLE)
+		else if ((GINT)OBJ_GET(widget,"handler") == TRIGGER_ANGLE)
 		{
-			spconfig_offset = (gint)OBJ_GET(widget,"spconfig_offset");
+			spconfig_offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			switch ((get_ecu_data(canID,page,spconfig_offset,size) & 0x03))
 			{
 				case 2:
@@ -2421,7 +2421,7 @@ void update_widget(gpointer object, gpointer user_data)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 				gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
-				if ((int)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
+				if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
 				{
 					/* Get the rest of the data from the combo */
 					gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
@@ -2745,11 +2745,11 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 
-	canID = (gint) OBJ_GET(widget,"canID");
-	page = (gint) OBJ_GET(widget,"page");
-	offset = (gint) OBJ_GET(widget,"offset");
+	canID = (GINT) OBJ_GET(widget,"canID");
+	page = (GINT) OBJ_GET(widget,"page");
+	offset = (GINT) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
-	reverse_keys = (gboolean) OBJ_GET(widget,"reverse_keys");
+	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
 	if (OBJ_GET(widget,"table_num"))
 		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	if (OBJ_GET(widget,"raw_lower"))
@@ -2928,7 +2928,7 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	 * gtk_editable_select_region(GTK_EDITABLE(widget),0,-1);
 	 */
 
-	if ((gboolean)data == TRUE)
+	if ((GBOOLEAN)data == TRUE)
 		goto testit;
 
 	if (event->button != 1) /* Left button click  */
@@ -2938,8 +2938,8 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 		return FALSE;
 
 testit:
-	marked = (gboolean)OBJ_GET(widget,"marked");
-	page = (gint)OBJ_GET(widget,"page");
+	marked = (GBOOLEAN)OBJ_GET(widget,"marked");
+	page = (GINT)OBJ_GET(widget,"page");
 
 	if (marked)
 	{
@@ -3086,7 +3086,7 @@ void swap_labels(gchar * input, gboolean state)
 		widget = NULL;
 		widget = lookup_widget(fields[i]);
 		if (GTK_IS_WIDGET(widget))
-			switch_labels((gpointer)widget,(gpointer)state);
+			switch_labels((gpointer)widget,GINT_TO_POINTER(state));
 		else if ((list = get_list(fields[i])) != NULL)
 			g_list_foreach(list,switch_labels,GINT_TO_POINTER(state));
 	}
@@ -3104,13 +3104,13 @@ void swap_labels(gchar * input, gboolean state)
 void switch_labels(gpointer key, gpointer data)
 {
 	GtkWidget * widget = (GtkWidget *) key;
-	gboolean state = (gboolean) data;
+	gboolean state = (GBOOLEAN) data;
 	gint temp_units;
 
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
 	if (GTK_IS_WIDGET(widget))
 	{
-		if ((gboolean)OBJ_GET(widget,"temp_dep") == TRUE)
+		if ((GBOOLEAN)OBJ_GET(widget,"temp_dep") == TRUE)
 		{
 			if (state)
 			{
@@ -3341,7 +3341,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	for (i=0;i<num_groups;i++)
 	{
 /*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
@@ -3352,7 +3352,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	for (i=0;i<num_groups;i++)
 	{
 /*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
@@ -3388,8 +3388,8 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	if (!ready)
 		return;
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
-	page = (gint)OBJ_GET(widget,"page");
-	offset = (gint)OBJ_GET(widget,"offset");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
 
 	/*printf("toggling combobox groups\n");*/
 	choices = parse_keys(toggle_groups,&num_choices,",");
@@ -3411,7 +3411,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 		for (j=0;j<num_groups;j++)
 		{
 			/*printf("setting all widgets in group %s to state %i\n\n",groups[j],state);*/
-			g_hash_table_insert(widget_group_states,g_strdup(groups[j]),(gpointer)state);
+			g_hash_table_insert(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 			g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 		}
 		g_strfreev(groups);
@@ -3423,7 +3423,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	for (j=0;j<num_groups;j++)
 	{
 		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[j]),(gpointer)state);
+		g_hash_table_insert(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
@@ -3473,7 +3473,7 @@ void set_widget_label_from_array(gpointer key, gpointer data)
 	gchar *labels = NULL;
 	gchar **vector = NULL;
 	GtkWidget *label = (GtkWidget *)key;
-	gint index = (gint)data;
+	gint index = (GINT)data;
 
 	if (!GTK_IS_LABEL(label))
 		return;
@@ -3624,7 +3624,7 @@ EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 		upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size((DataSize)OBJ_GET(widget,"size"),UPPER);
-	precision = (gint)OBJ_GET(widget,"precision");
+	precision = (GINT)OBJ_GET(widget,"precision");
 
 	val = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(widget)),NULL);
 

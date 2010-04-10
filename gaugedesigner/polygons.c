@@ -1,3 +1,4 @@
+#include <config.h>
 #include <defines.h>
 #include <events.h>
 #include <loadsave.h>
@@ -269,7 +270,7 @@ void reset_onscreen_polygons()
 
 gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 {
-	gint index = (gint)OBJ_GET((widget),"index");
+	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	GHashTable *hash = NULL;
 	GtkWidget *tmpwidget = NULL;
@@ -354,7 +355,7 @@ gboolean remove_polygon(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	index = (gint)OBJ_GET((widget),"polygon_index");
+	index = (GINT)OBJ_GET((widget),"polygon_index");
 	mtx_gauge_face_remove_polygon(MTX_GAUGE_FACE(gauge),index);
 	changed = TRUE;
 	update_onscreen_polygons();
@@ -436,9 +437,9 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 
 	table = (GtkWidget *)OBJ_GET((widget),"points_table");
 	hash = (GHashTable *)OBJ_GET((widget),"points_hash");
-	live = (gboolean)OBJ_GET((widget),"live");
-	index = (gint)OBJ_GET((widget),"index");
-	num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+	live = (GBOOLEAN)OBJ_GET((widget),"live");
+	index = (GINT)OBJ_GET((widget),"index");
+	num_points = (GINT)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
 	rows = ((GtkTable *)table)->nrows;
 

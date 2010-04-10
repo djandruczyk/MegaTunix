@@ -98,9 +98,9 @@ void rescale_table(GtkWidget *widget)
 			for (j=0;j<g_list_length(list);j++)
 			{
 				tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
-				if ((gboolean)OBJ_GET(tmpwidget,"marked"))
+				if ((GBOOLEAN)OBJ_GET(tmpwidget,"marked"))
 				{
-					precision = (gint)OBJ_GET(tmpwidget,"precision");
+					precision = (GINT)OBJ_GET(tmpwidget,"precision");
 					tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
 					value = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 					g_free(tmpbuf);
@@ -242,11 +242,11 @@ void reqfuel_rescale_table(GtkWidget *widget)
 					tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
 					if (GTK_IS_ENTRY(tmpwidget))
 					{
-						canID = (gint)OBJ_GET(tmpwidget,"canID");
-						page = (gint)OBJ_GET(tmpwidget,"page");
-						offset = (gint)OBJ_GET(tmpwidget,"offset");
+						canID = (GINT)OBJ_GET(tmpwidget,"canID");
+						page = (GINT)OBJ_GET(tmpwidget,"page");
+						offset = (GINT)OBJ_GET(tmpwidget,"offset");
 						size = (DataSize)OBJ_GET(tmpwidget,"size");
-						use_color = (gint)OBJ_GET(tmpwidget,"use_color");
+						use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
 						if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
 							raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
 						else

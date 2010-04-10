@@ -1,5 +1,6 @@
-#include <tblocks.h>
+#include <config.h>
 #include <defines.h>
+#include <tblocks.h>
 #include <events.h>
 #include <gauge.h>
 #include <getfiles.h>
@@ -149,7 +150,7 @@ void reset_onscreen_tblocks()
 
 gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 {
-	gint index = (gint)OBJ_GET((widget),"index");
+	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	gchar * tmpbuf = NULL;
 	GdkColor color;
@@ -196,7 +197,7 @@ gboolean remove_tblock(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	index = (gint)OBJ_GET((widget),"tblock_index");
+	index = (GINT)OBJ_GET((widget),"tblock_index");
 	mtx_gauge_face_remove_text_block(MTX_GAUGE_FACE(gauge),index);
 	changed = TRUE;
 	update_onscreen_tblocks();

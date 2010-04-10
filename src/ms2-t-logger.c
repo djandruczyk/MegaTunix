@@ -358,7 +358,7 @@ void ms2_update_trigtooth_display(gint page)
 
 gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 {
-	gint handler = (gint)OBJ_GET(widget,"handler");
+	gint handler = (GINT)OBJ_GET(widget,"handler");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
@@ -370,7 +370,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				io_cmd("ms2_e_read_toothmon",NULL);
 				break;
 			case START_TRIGMON_LOGGER:
@@ -378,7 +378,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				io_cmd("ms2_e_read_trigmon",NULL);
 				break;
 			case START_COMPOSITEMON_LOGGER:
@@ -386,7 +386,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
-				bind_ttm_to_page((gint)OBJ_GET(widget,"page"));
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				io_cmd("ms2_e_read_compositemon",NULL);
 				break;
 			case STOP_TOOTHMON_LOGGER:
@@ -422,7 +422,7 @@ EXPORT void ms2_ttm_update(DataWatch *watch)
 {
 	gint page = 0;
 
-	page = (gint)OBJ_GET(ttm_data->darea,"page");
+	page = (GINT)OBJ_GET(ttm_data->darea,"page");
 	_ms2_crunch_trigtooth_data(page);
 	ms2_update_trigtooth_display(page);
 	if (ttm_data->stop)
@@ -445,7 +445,7 @@ EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 		ttm_data->zoom = (gfloat)gtk_range_get_value(GTK_RANGE(widget));
 		if (ttm_data->pixmap)
 		{
-			page = (gint)OBJ_GET(ttm_data->darea,"page");
+			page = (GINT)OBJ_GET(ttm_data->darea,"page");
 			ms2_update_trigtooth_display(page);
 		}
 	}

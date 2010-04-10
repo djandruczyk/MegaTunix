@@ -78,7 +78,7 @@ void process_rt_vars(void *incoming)
 	/* Backup current rtv copy */
 	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
 	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
-	temp_units = (gint)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
 	if (rtv_map->ts_array->len%250 == 0)
@@ -119,7 +119,7 @@ void process_rt_vars(void *incoming)
 				tmpf = handle_special(object,special);
 				goto store_it;
 			}
-			temp_dep = (gboolean)OBJ_GET(object,"temp_dep");
+			temp_dep = (GBOOLEAN)OBJ_GET(object,"temp_dep");
 			hash = (GHashTable *)OBJ_GET(object,"multi_expr_hash");
 			if (hash)
 			{
@@ -145,7 +145,7 @@ void process_rt_vars(void *incoming)
 			}
 			else
 				assert(evaluator);
-			offset = (gint)OBJ_GET(object,"offset");
+			offset = (GINT)OBJ_GET(object,"offset");
 			size = (DataSize)OBJ_GET(object,"size");
 			if (OBJ_GET(object,"complex_expr"))
 			{
@@ -231,7 +231,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
-	total_symbols = (gint)OBJ_GET(object,"total_symbols");
+	total_symbols = (GINT)OBJ_GET(object,"total_symbols");
 	if (OBJ_GET(object,"real_lower"))
 		lower_limit = strtod(OBJ_GET(object,"real_lower"),NULL);
 	else
@@ -256,16 +256,16 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				size = MTX_U08;
 
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (gint) OBJ_GET(object,tmpbuf);
+				page = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (gint) OBJ_GET(object,tmpbuf);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (gint) OBJ_GET(object,tmpbuf);
+				canID = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (gint) OBJ_GET(object,tmpbuf);
+				bitmask = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
@@ -278,13 +278,13 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				break;
 			case VE_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (gint) OBJ_GET(object,tmpbuf);
+				page = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (gint) OBJ_GET(object,tmpbuf);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (gint) OBJ_GET(object,tmpbuf);
+				canID = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
 				size = (DataSize) OBJ_GET(object,tmpbuf);
@@ -295,7 +295,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				break;
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (gint) OBJ_GET(object,tmpbuf);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
 				size = (DataSize) OBJ_GET(object,tmpbuf);
@@ -307,10 +307,10 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 			case RAW_EMB_BIT:
 				size = MTX_U08;
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (gint) OBJ_GET(object,tmpbuf);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (gint) OBJ_GET(object,tmpbuf);
+				bitmask = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
@@ -411,7 +411,7 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 		return 0.0;
 	}
 
-	offset = (gint)OBJ_GET(object,"offset");
+	offset = (GINT)OBJ_GET(object,"offset");
 	if (multi->lookuptable)
 		x = direct_lookup_data(multi->lookuptable,raw_realtime[offset]);
 	else
@@ -716,7 +716,7 @@ gboolean lookup_precision(gchar *internal_name, gint *precision)
 		*precision = 0;
 		return FALSE;
 	}
-	*precision = (gint )OBJ_GET(object,"precision");
+	*precision = (GINT)OBJ_GET(object,"precision");
 	return TRUE;
 }
 

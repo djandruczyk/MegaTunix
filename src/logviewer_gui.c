@@ -181,7 +181,7 @@ void present_viewer_choices(void)
 			OBJ_SET(button,"object",(gpointer)object);
 			/* so we can set the state from elsewhere...*/
 			OBJ_SET(object,"lview_button",(gpointer)button);
-			if ((gboolean)OBJ_GET(object,"being_viewed"))
+			if ((GBOOLEAN)OBJ_GET(object,"being_viewed"))
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		}
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -325,7 +325,7 @@ void populate_viewer()
 		if (!object)
 			dbg_func(CRITICAL,g_strdup("ERROR, object is NULL\n"));
 
-		being_viewed = (gboolean)OBJ_GET(object,"being_viewed");
+		being_viewed = (GBOOLEAN)OBJ_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
 		if (g_hash_table_lookup(lv_data->traces,name)==NULL)
 		{
@@ -483,7 +483,7 @@ Viewable_Value * build_v_value(GObject *object)
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->object = object;
 	/* IS it a floating point value? */
-	v_value->precision = (gint)OBJ_GET(object,"precision");
+	v_value->precision = (GINT)OBJ_GET(object,"precision");
 	v_value->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	v_value->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
@@ -929,7 +929,7 @@ void trace_update(gboolean redraw_all)
 
 	pixmap = lv_data->pixmap;
 
-	lv_zoom = (gint)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
 	/*
 	if (sig_id == 0)
 		sig_id = g_signal_handler_find(lookup_widget("logviewer_log_position_hscale"),G_SIGNAL_MATCH_FUNC,0,0,NULL,(gpointer)logviewer_log_position_change,NULL);
@@ -940,7 +940,7 @@ void trace_update(gboolean redraw_all)
 	w = lv_data->darea->allocation.width;
 	h = lv_data->darea->allocation.height;
 
-	log_pos = (gfloat)((gint)OBJ_GET(lv_data->darea,"log_pos_x100"))/100.0;
+	log_pos = (gfloat)((GINT)OBJ_GET(lv_data->darea,"log_pos_x100"))/100.0;
 	/*printf("log_pos is %f\n",log_pos);*/
 	/* Full screen redraw, only with configure events (usually) */
 	if ((gboolean)redraw_all)
@@ -1151,7 +1151,7 @@ void scroll_logviewer_traces()
 	if (!pixmap)
 		return;
 
-	lv_zoom = (gint)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 	start = end + lv_zoom;
@@ -1207,9 +1207,9 @@ void scroll_logviewer_traces()
  */
 gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 {
-	gboolean state = (gboolean)data;
+	gboolean state = (GBOOLEAN)data;
 
-	g_list_foreach(get_list("viewables"),set_widget_active,(gpointer)state);
+	g_list_foreach(get_list("viewables"),set_widget_active,GINT_TO_POINTER(state));
 
 	return TRUE;
 }
@@ -1231,7 +1231,7 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	 * the redraw routine wil have to adjsut the slider as it scrolls 
 	 * through the data...
 	 */
-	if ((gboolean)data)
+	if ((GBOOLEAN)data)
 		return TRUE;
 	if (blocked)
 		return TRUE;
@@ -1351,7 +1351,7 @@ EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
 
-	lv_zoom = (gint)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
 
 	lv_data = g_new0(Logview_Data,1);
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);

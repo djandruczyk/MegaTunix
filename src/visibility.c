@@ -97,8 +97,8 @@ gboolean hide_tab(GtkWidget *widget, gpointer data)
 	GladeXML *main_xml = NULL;
 	extern GdkColor red;
 	extern GdkColor black;
-	gint index = (gint)data;
-	gint total = (gint)OBJ_GET(global_data,"notebook_rows");
+	gint index = (GINT)data;
+	gint total = (GINT)OBJ_GET(global_data,"notebook_rows");
 	gint i = 0;
 	gboolean hidden = FALSE;
 	gint *hidden_list;

@@ -31,7 +31,7 @@ extern GObject *global_data;
  */
 void set_widget_sensitive(gpointer widget, gpointer state)
 {
-        gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);
+        gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
 }
 
 
@@ -44,7 +44,7 @@ void set_widget_sensitive(gpointer widget, gpointer state)
  */
 void set_widget_active(gpointer widget, gpointer state)
 {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gboolean)state);
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)state);
 }
 
 

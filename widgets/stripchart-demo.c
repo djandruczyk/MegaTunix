@@ -12,6 +12,8 @@
  */
 
 
+#include <config.h>
+#include <defines.h>
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <stripchart.h>
@@ -88,10 +90,6 @@ gboolean update_stripchart(gpointer data)
 
 gboolean remove_trace(gpointer data)
 {
-#ifdef _64BIT_
-	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint32)(gint64)data);
-#else
-	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint32)data);
-#endif
+	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(GINT)data);
 	return FALSE;
 }

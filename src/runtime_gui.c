@@ -65,7 +65,7 @@ EXPORT gboolean update_runtime_vars_pf()
 	count++;
 	if (conn_status != connected)
 	{
-		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,(gpointer)connected);
+		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(connected));
 		conn_status = connected;
 		forced_update = TRUE;
 	}
@@ -145,8 +145,8 @@ void rt_update_status(gpointer key, gpointer data)
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source));
 
-	bitval = (gint)OBJ_GET(widget,"bitval");
-	bitmask = (gint)OBJ_GET(widget,"bitmask");
+	bitval = (GINT)OBJ_GET(widget,"bitval");
+	bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
 
 
@@ -191,7 +191,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		return;
 	if ((gint)history->len-1 <= 0)
 		return;
-	precision = (gint)OBJ_GET(slider->object,"precision");
+	precision = (GINT)OBJ_GET(slider->object,"precision");
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": rt_update_values() after lock rtv_mutex\n"));

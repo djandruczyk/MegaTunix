@@ -13,6 +13,7 @@
 
 
 #include <config.h>
+#include <defines.h>
 #include <cairo/cairo.h>
 #include <curve.h>
 #include <curve-private.h>
@@ -1148,11 +1149,7 @@ gboolean cancel_peak(gpointer data)
 	curve = MTX_CURVE(data);
 
 	priv = MTX_CURVE_GET_PRIVATE(curve);
-#ifdef _64BIT_
-	axis = (gint)(gint64)g_object_get_data(G_OBJECT(curve),"axis");
-#else
-	axis = (gint)g_object_get_data(G_OBJECT(curve),"axis");
-#endif
+	axis = (GINT)g_object_get_data(G_OBJECT(curve),"axis");
 
 	switch (axis)
 	{

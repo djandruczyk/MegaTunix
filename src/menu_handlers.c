@@ -11,9 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <afr_calibrate.h>
 #include <config.h>
 #include <defines.h>
+#include <afr_calibrate.h>
 #include <enums.h>
 #include <firmware.h>
 #include <fileio.h>
@@ -616,9 +616,9 @@ EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"dl_conv_expr",OBJ_GET(partner,"dl_conv_expr"));
 		OBJ_SET(item,"ul_conv_expr",OBJ_GET(partner,"ul_conv_expr"));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
-		ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")],(gpointer)item);
+		ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
 
-		g_list_foreach(ve_widgets[(gint)OBJ_GET(partner,"page")][(gint)OBJ_GET(partner,"offset")],update_widget,NULL);
+		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));

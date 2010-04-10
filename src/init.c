@@ -245,11 +245,11 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
-		if ((gint)OBJ_GET(global_data,"lv_zoom") < 1)
+		if ((GINT)OBJ_GET(global_data,"lv_zoom") < 1)
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
 			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
-		if ((gint)OBJ_GET(global_data,"lv_scroll_delay") < 40)
+		if ((GINT)OBJ_GET(global_data,"lv_scroll_delay") < 40)
 			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
@@ -314,16 +314,16 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
-	cfg_write_boolean(cfgfile, "Global", "Tooltips",(gboolean)OBJ_GET(global_data,"tips_in_use"));
-	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(gboolean)OBJ_GET(global_data,"network_access"));
+	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)OBJ_GET(global_data,"tips_in_use"));
+	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)OBJ_GET(global_data,"network_access"));
 		
-	cfg_write_int(cfgfile, "Global", "Temp_Scale", (gint)OBJ_GET(global_data,"temp_units"));
-	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (gint)OBJ_GET(global_data,"rtslider_fps"));
-	cfg_write_int(cfgfile, "Global", "RTText_FPS", (gint)OBJ_GET(global_data,"rttext_fps"));
-	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (gint)OBJ_GET(global_data,"dashboard_fps"));
-	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (gint)OBJ_GET(global_data,"ve3d_fps"));
+	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)OBJ_GET(global_data,"temp_units"));
+	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)OBJ_GET(global_data,"rtslider_fps"));
+	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)OBJ_GET(global_data,"rttext_fps"));
+	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)OBJ_GET(global_data,"dashboard_fps"));
+	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)OBJ_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
-	cfg_write_int(cfgfile, "Serial", "read_timeout", (gint)OBJ_GET(global_data,"read_timeout"));
+	cfg_write_int(cfgfile, "Serial", "read_timeout", (GINT)OBJ_GET(global_data,"read_timeout"));
 	tmpbuf = OBJ_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
@@ -335,8 +335,8 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
 			dash = OBJ_GET(widget,"dash");
-			orig_width = (gint) OBJ_GET(dash,"orig_width");
-		        orig_height = (gint) OBJ_GET(dash,"orig_height");
+			orig_width = (GINT) OBJ_GET(dash,"orig_width");
+		        orig_height = (GINT) OBJ_GET(dash,"orig_height");
 			if (GTK_WIDGET_VISIBLE(widget))
 			{
 				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
@@ -364,8 +364,8 @@ void save_config(void)
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
 			cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
 			dash = OBJ_GET(widget,"dash");
-			orig_width = (gint) OBJ_GET(dash,"orig_width");
-		        orig_height = (gint) OBJ_GET(dash,"orig_height");
+			orig_width = (GINT) OBJ_GET(dash,"orig_width");
+		        orig_height = (GINT) OBJ_GET(dash,"orig_height");
 			if (GTK_WIDGET_VISIBLE(widget))
 			{
 				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
@@ -452,13 +452,13 @@ void save_config(void)
 	cfg_write_string(cfgfile, "Serial", "potential_ports", 
 				(gchar *)OBJ_GET(global_data,"potential_ports"));
 	cfg_write_boolean(cfgfile, "Serial", "autodetect_port", 
-				(gboolean)OBJ_GET(global_data,"autodetect_port"));
+				(GBOOLEAN)OBJ_GET(global_data,"autodetect_port"));
 	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
-	cfg_write_int(cfgfile, "Serial", "baudrate", (gint)OBJ_GET(global_data,"baudrate"));
+	cfg_write_int(cfgfile, "Serial", "baudrate", (GINT)OBJ_GET(global_data,"baudrate"));
 			
-	cfg_write_int(cfgfile, "Logviewer", "zoom", (gint)OBJ_GET(global_data,"lv_zoom"));
-	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(gint) OBJ_GET(global_data,"lv_scroll_delay"));
+	cfg_write_int(cfgfile, "Logviewer", "zoom", (GINT)OBJ_GET(global_data,"lv_zoom"));
+	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) OBJ_GET(global_data,"lv_scroll_delay"));
 
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);

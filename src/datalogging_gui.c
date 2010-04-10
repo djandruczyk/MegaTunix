@@ -150,7 +150,7 @@ EXPORT void populate_dlog_choices_pf()
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
-		if ((gboolean)OBJ_GET(object,"log_by_default")==TRUE)
+		if ((GBOOLEAN)OBJ_GET(object,"log_by_default")==TRUE)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL|GTK_SHRINK),
@@ -284,7 +284,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if((override) || ((gboolean)OBJ_GET(object,"being_logged")))
+		if((override) || ((GBOOLEAN)OBJ_GET(object,"being_logged")))
 			total_logables++;
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
@@ -294,7 +294,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if((override) || ((gboolean)OBJ_GET(object,"being_logged")))
+		if((override) || ((GBOOLEAN)OBJ_GET(object,"being_logged")))
 		{
 			/* If space delimited, QUOTE the header names */
 			string = (gchar *)OBJ_GET(object,"dlog_field_name");
@@ -348,7 +348,7 @@ EXPORT void run_datalog_pf(void)
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if((gboolean)OBJ_GET(object,"being_logged"))
+		if((GBOOLEAN)OBJ_GET(object,"being_logged"))
 			total_logables++;
 	}
 
@@ -364,11 +364,11 @@ EXPORT void run_datalog_pf(void)
 	for(i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if (!((gboolean)OBJ_GET(object,"being_logged")))
+		if (!((GBOOLEAN)OBJ_GET(object,"being_logged")))
 			continue;
 
 		history = (GArray *)OBJ_GET(object,"history");
-		precision = (gint)OBJ_GET(object,"precision");
+		precision = (GINT)OBJ_GET(object,"precision");
 		if ((gint)history->len-1 <= 0)
 			value = 0.0;
 		else
@@ -451,7 +451,7 @@ void dlog_select_defaults(void)
 		state = FALSE;
 		object = g_array_index(rtv_map->rtv_list,GObject *, i);
 		button = (GtkWidget *)OBJ_GET(object,"dlog_button");
-		state = (gboolean)OBJ_GET(object,"log_by_default");
+		state = (GBOOLEAN)OBJ_GET(object,"log_by_default");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),state);
 	}
 }
@@ -606,7 +606,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
 		histories[i] = (GArray *)OBJ_GET(object,"history");
-		precisions[i] = (gint)OBJ_GET(object,"precision");
+		precisions[i] = (GINT)OBJ_GET(object,"precision");
 	}
 
 	for (x=0;x<rtv_map->ts_array->len;x++)

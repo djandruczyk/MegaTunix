@@ -97,12 +97,12 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
-		if ((width = (gint)OBJ_GET((GtkWidget *)object,"max_chars")) > 0)
+		if ((width = (GINT)OBJ_GET((GtkWidget *)object,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
 		else
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
 
-		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(gint)OBJ_GET(global_data,"font_size")));
+		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(GINT)OBJ_GET(global_data,"font_size")));
 
 		gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
 		gtk_container_add (GTK_CONTAINER (object), entry);

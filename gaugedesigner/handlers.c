@@ -1,3 +1,4 @@
+#include <config.h>
 #include <defines.h>
 #include <events.h>
 #include <handlers.h>
@@ -374,7 +375,7 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 		printf("control %s has no handler\n",(gchar *)glade_get_widget_name(widget));
 		return FALSE;
 	}
-	handler = (gint)OBJ_GET((widget),"handler");
+	handler = (GINT)OBJ_GET((widget),"handler");
 
 	if (GTK_IS_WIDGET(gauge))
 		g = MTX_GAUGE_FACE(gauge);
@@ -405,7 +406,7 @@ EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
 	GtkWidget *lowpartner = NULL;
 	GtkWidget *highpartner = NULL;
 	MtxGaugeFace *g = NULL;
-	gint handler = (gint)OBJ_GET((widget),"spin_handler");
+	gint handler = (GINT)OBJ_GET((widget),"spin_handler");
 	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (gint)(tmpf+0.00001);
 
@@ -501,8 +502,8 @@ EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
 EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	gint value = (gint)OBJ_GET((widget),"special_value");
-	gint handler = (gint)OBJ_GET((widget),"handler");
+	gint value = (GINT)OBJ_GET((widget),"special_value");
+	gint handler = (GINT)OBJ_GET((widget),"handler");
 	MtxGaugeFace *g = NULL;
 
 	if (GTK_IS_WIDGET(gauge))
@@ -523,7 +524,7 @@ EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	gint handler = (gint)OBJ_GET((widget),"handler");
+	gint handler = (GINT)OBJ_GET((widget),"handler");
 	MtxGaugeFace *g = NULL;
 
 	if (GTK_IS_WIDGET(gauge))

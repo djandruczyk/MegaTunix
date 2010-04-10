@@ -207,7 +207,7 @@ void  update_logbar(
 	if (result == NULL)
 		counter = 0;
 	else
-		counter = (gint)result;
+		counter = (GINT)result;
 
 	if (count)
 	{
@@ -310,7 +310,7 @@ void warn_user(gchar *message)
 
 gboolean get_response(GtkWidget *widget, gpointer data)
 {
-	gint response = (gint)data;
+	gint response = (GINT)data;
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		close_dialog(widget,NULL);

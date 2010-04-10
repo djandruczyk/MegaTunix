@@ -46,31 +46,31 @@ gboolean check_dependancies(GObject *object )
 	gint type = 0;
 	gint num_deps = 0;
 
-	num_deps = (gint)OBJ_GET(object,"num_deps");
+	num_deps = (GINT)OBJ_GET(object,"num_deps");
 	deps = OBJ_GET(object,"deps");
 	/*printf("number of deps %i, %i\n",num_deps,g_strv_length(deps));*/
 	for (i=0;i<num_deps;i++)
 	{
 		/*printf("dep name %s\n",deps[i]);*/
 		tmpbuf = g_strdup_printf("%s_type",deps[i]);
-		type = (gint)OBJ_GET(object,tmpbuf);
+		type = (GINT)OBJ_GET(object,tmpbuf);
 		g_free(tmpbuf);
 		switch (type)
 		{
 			case VE_EMB_BIT:
 				/*printf("VE_EMB_BIT\n");*/
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
-				page = (gint)OBJ_GET(object,tmpbuf);
+				page = (GINT)OBJ_GET(object,tmpbuf);
 				/*printf("page %i\n",page);*/
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-				offset = (gint)OBJ_GET(object,tmpbuf);
+				offset = (GINT)OBJ_GET(object,tmpbuf);
 				/*printf("offset %i\n",offset);*/
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_canID",deps[i]);
-				canID = (gint)OBJ_GET(object,tmpbuf);
+				canID = (GINT)OBJ_GET(object,tmpbuf);
 				/*printf("canID %i\n",canID);*/
 				g_free(tmpbuf);
 
@@ -80,13 +80,13 @@ gboolean check_dependancies(GObject *object )
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
-				bitmask = (gint)OBJ_GET(object,tmpbuf);
+				bitmask = (GINT)OBJ_GET(object,tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				/*printf("bitmask %i\n",bitmask); */
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
-				bitval = (gint)OBJ_GET(object,tmpbuf);
+				bitval = (GINT)OBJ_GET(object,tmpbuf);
 				/*printf("bitval %i\n",bitval); */
 				g_free(tmpbuf);
 
@@ -99,11 +99,11 @@ gboolean check_dependancies(GObject *object )
 			case VE_VAR:
 
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
-				page = (gint)OBJ_GET(object,g_strdup_printf("%s_page",deps[i]));
+				page = (GINT)OBJ_GET(object,g_strdup_printf("%s_page",deps[i]));
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-				offset = (gint)OBJ_GET(object,g_strdup_printf("%s_offset",deps[i]));
+				offset = (GINT)OBJ_GET(object,g_strdup_printf("%s_offset",deps[i]));
 				g_free(tmpbuf);
 				break;
 			default:

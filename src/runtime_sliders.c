@@ -545,8 +545,8 @@ EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
 	else
 		mapae_ctrl_state = TRUE;
 
-	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),(gpointer)tpsae_ctrl_state);
-	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),(gpointer)mapae_ctrl_state);
+	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),GINT_TO_POINTER(tpsae_ctrl_state));
+	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),GINT_TO_POINTER(mapae_ctrl_state));
 	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);
 	g_list_foreach(get_list("map_ae_ctrls"),alter_widget_state,NULL);
 	return FALSE;

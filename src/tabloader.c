@@ -365,7 +365,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 			case MTX_INT:
 			case MTX_BOOL:
 			case MTX_ENUM:
-				tmpi = (gint)OBJ_GET(group->object,group->keys[i]);
+				tmpi = (GINT)OBJ_GET(group->object,group->keys[i]);
 				OBJ_SET(widget,group->keys[i],GINT_TO_POINTER(tmpi));
 				if (strstr(group->keys[i], "temp_dep"))
 				{
@@ -601,11 +601,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		switch (widget_type)
 		{
 			case MTX_RANGE:
-				gtk_range_set_value(GTK_RANGE(widget),(gint)OBJ_GET(global_data,initializer));
+				gtk_range_set_value(GTK_RANGE(widget),(GINT)OBJ_GET(global_data,initializer));
 				break;
 
 			case MTX_SPINBUTTON:
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)OBJ_GET(global_data,initializer));
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,initializer));
 				break;
 			case MTX_ENTRY:
 				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)OBJ_GET(global_data,initializer));

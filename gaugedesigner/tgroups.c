@@ -1,3 +1,4 @@
+#include <config.h>
 #include <defines.h>
 #include <events.h>
 #include <tgroups.h>
@@ -198,7 +199,7 @@ void reset_onscreen_tgroups()
 
 gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 {
-	gint index = (gint)OBJ_GET((widget),"index");
+	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	gchar * tmpbuf = NULL;
 	GdkColor color;
@@ -258,7 +259,7 @@ gboolean remove_tgroup(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	index = (gint)OBJ_GET((widget),"tgroup_index");
+	index = (GINT)OBJ_GET((widget),"tgroup_index");
 	mtx_gauge_face_remove_tick_group(MTX_GAUGE_FACE(gauge),index);
 	changed = TRUE;
 	update_onscreen_tgroups();
