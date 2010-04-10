@@ -271,6 +271,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			== TRUE)
 #else
 	if ((gboolean)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num))
+			== TRUE)
 #endif
 		return TRUE;
 	else

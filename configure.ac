@@ -2,7 +2,6 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AC_CONFIG_AUX_DIR_DEFAULT([.])
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
@@ -81,7 +80,7 @@ AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 
 AC_CHECK_SIZEOF([int *])
-if test SIZEOF_INT_P=="8"; then
+if test "SIZEOF_INT_P" == "8"; then
 	echo "64 bit"
 	AC_DEFINE([_64BIT_], [], [OS has 64 bit pointers])
 else
