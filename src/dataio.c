@@ -209,7 +209,7 @@ gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 
 	*len = 0;
 	timeout.tv_sec = 0;
-	timeout.tv_usec = OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(gint)OBJ_GET(global_data, "read_timeout")*1000;
+	timeout.tv_usec = OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(GINT)OBJ_GET(global_data, "read_timeout")*1000;
 	/* Network mode requires select to see if data is ready, otherwise
 	 * connection will block.  Serial is configured with timeout if no
 	 * data is avail,  hence we simulate that with select.. Setting this
