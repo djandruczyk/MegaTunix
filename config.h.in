@@ -85,6 +85,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* The size of `int *', as computed by sizeof. */
+#undef SIZEOF_INT_P
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
@@ -106,3 +109,9 @@
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
 #undef YYTEXT_POINTER
+
+/* OS has 32 bit pointers */
+#undef _32BIT_
+
+/* OS has 64 bit pointers */
+#undef _64BIT_

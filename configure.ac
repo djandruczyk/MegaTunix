@@ -80,6 +80,15 @@ PKG_CHECK_MODULES(LIBXML2,libxml-2.0 )
 AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 
+AC_CHECK_SIZEOF([int *])
+if test SIZEOF_INT_P=="8"; then
+	echo "64 bit"
+	AC_DEFINE([_64BIT_], [], [OS has 64 bit pointers])
+else
+	echo "32 bit"
+	AC_DEFINE([_32BIT_], [], [OS has 32 bit pointers])
+fi
+
 
 dnl ===============
 dnl Debugging stuff

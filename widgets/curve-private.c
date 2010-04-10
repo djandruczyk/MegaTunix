@@ -623,7 +623,7 @@ void generate_static_curve(MtxCurve *curve)
 	{
 		message = g_strdup_printf("%s",priv->x_axis_label);
 		cairo_text_extents (cr, message, &extents);
-		//cairo_move_to(cr,(priv->w/2) + priv->x_border - (extents.width/2.0),priv->h - (extents.height/2));
+		/*cairo_move_to(cr,(priv->w/2) + priv->x_border - (extents.width/2.0),priv->h - (extents.height/2));*/
 		cairo_move_to(cr,(priv->w/2) - (extents.width/2.0),priv->h - (extents.height/2));
 		cairo_show_text (cr, message);
 		g_free(message);
@@ -634,7 +634,7 @@ void generate_static_curve(MtxCurve *curve)
 	{
 		message = g_strdup_printf("%s",priv->y_axis_label);
 		cairo_text_extents (cr, message, &extents);
-		//cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));
+		/*cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));*/
 		cairo_move_to(cr,1.5*extents.height,(priv->h/2) + (extents.width/2.0));
 		cairo_save(cr);
 		cairo_rotate(cr,-M_PI/2.0);
@@ -1148,7 +1148,11 @@ gboolean cancel_peak(gpointer data)
 	curve = MTX_CURVE(data);
 
 	priv = MTX_CURVE_GET_PRIVATE(curve);
+#ifdef _64BIT_
+	axis = (gint)(gint64)g_object_get_data(G_OBJECT(curve),"axis");
+#else
 	axis = (gint)g_object_get_data(G_OBJECT(curve),"axis");
+#endif
 
 	switch (axis)
 	{

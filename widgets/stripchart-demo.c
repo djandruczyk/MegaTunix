@@ -50,17 +50,17 @@ int main (int argc, char **argv)
 	{
 		for (i=0;i<3;i++)
 			data[i] = j;
-		//printf("setting values to %f, %f, %f\n",data[0],data[1],data[2]);
+		/*printf("setting values to %f, %f, %f\n",data[0],data[1],data[2]); */
 		mtx_stripchart_set_values(MTX_STRIPCHART(chart),data);
 	}
 	mtx_stripchart_get_latest_values(MTX_STRIPCHART(chart),data);
-//	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);
+/*	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);*/
 
-	//mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);
+	/*mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);*/
 	
 
 	gtk_timeout_add(40,(GtkFunction)update_stripchart,(gpointer)chart);
-//	gtk_timeout_add(4000,(GtkFunction)remove_trace,GINT_TO_POINTER(trace2));
+/*	gtk_timeout_add(4000,(GtkFunction)remove_trace,GINT_TO_POINTER(trace2));*/
 
 	gtk_widget_show_all (window);
 
@@ -82,12 +82,16 @@ gboolean update_stripchart(gpointer data)
 	vals[1]+=1.25;
 	vals[2]+=2.125;
 	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
-//	printf("This should scroll stripchart \n");
+/*	printf("This should scroll stripchart \n"); */
 	return TRUE;
 }
 
 gboolean remove_trace(gpointer data)
 {
-	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint)data);
+#ifdef _64BIT_
+	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint32)(gint64)data);
+#else
+	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(gint32)data);
+#endif
 	return FALSE;
 }
