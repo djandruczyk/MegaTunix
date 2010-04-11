@@ -1108,11 +1108,7 @@ gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 	gchar *tmpbuf = NULL;
 	Dash_Gauge *d_gauge = NULL;
 
-#ifdef _64BIT_
-	tmpbuf = g_strdup_printf("dash_%i",(gint)(gint64)user_data);
-#else
-	tmpbuf = g_strdup_printf("dash_%i",(gint)user_data);
-#endif
+	tmpbuf = g_strdup_printf("dash_%i",(GINT)user_data);
 	if (g_strrstr((gchar *)key,tmpbuf) != NULL)
 	{
 		g_free(tmpbuf);

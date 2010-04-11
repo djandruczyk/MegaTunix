@@ -80,12 +80,12 @@ AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 
 AC_CHECK_SIZEOF([int *])
-if test "SIZEOF_INT_P" == "8"; then
+if test $ac_cv_sizeof_int_p -eq 8; then
 	echo "64 bit"
-	AC_DEFINE([_64BIT_], [], [OS has 64 bit pointers])
+	AC_DEFINE([__64BIT__], [], [OS has 64 bit pointers])
 else
 	echo "32 bit"
-	AC_DEFINE([_32BIT_], [], [OS has 32 bit pointers])
+	AC_DEFINE([__32BIT__], [], [OS has 32 bit pointers])
 fi
 
 

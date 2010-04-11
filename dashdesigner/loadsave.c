@@ -138,7 +138,7 @@ gboolean check_datasources_set(GtkWidget *dash)
 					GTK_DIALOG_MODAL,
 					GTK_MESSAGE_ERROR,
 					GTK_BUTTONS_OK,
-					"At least one gauge has no datasrouce set, PLEASE fix and re-attempt to save\n");
+					"At least one gauge has no datasource set, PLEASE fix and re-attempt to save\n");
 			gtk_dialog_run(GTK_DIALOG(dialog));
 			gtk_widget_destroy(dialog);
 			return FALSE;

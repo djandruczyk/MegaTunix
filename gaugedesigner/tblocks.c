@@ -353,7 +353,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_LAYER));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
-	g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+	g_object_set(G_OBJECT(widget),"climb-rate", 1.0, "digits", 0, "numeric", TRUE, NULL);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)tblock->layer);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
 	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);

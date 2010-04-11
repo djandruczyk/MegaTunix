@@ -1035,7 +1035,7 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 		OBJ_SET(widget,"points_table",points_table);
 		OBJ_SET(widget,"points_hash",hash);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(adj_generic_num_points),NULL);
-		g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+		g_object_set(G_OBJECT(widget),"climb-rate", 1.0, "digits", 0, "numeric", TRUE, NULL);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),((MtxGenPoly *)poly->data)->num_points);
 		g_signal_connect(G_OBJECT(widget),"value_changed",G_CALLBACK(alter_polygon_data),NULL);
 		gtk_table_attach(GTK_TABLE(subtable),widget,0,1,1,2,0,0,0,0);
@@ -1050,9 +1050,9 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 				OBJ_SET(dummy,"index",GINT_TO_POINTER(index));
 				OBJ_SET(dummy,"num_points_spin",widget);
 				OBJ_SET(dummy,"handler",GINT_TO_POINTER(POLY_POINTS));
-				g_signal_handlers_block_by_func (dummy,(gpointer)alter_polygon_data, NULL);
+				g_signal_handlers_block_by_func (dummy,alter_polygon_data, NULL);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].x);
-				g_signal_handlers_unblock_by_func (dummy,(gpointer)alter_polygon_data, NULL);
+				g_signal_handlers_unblock_by_func (dummy,alter_polygon_data, NULL);
 			}
 			else
 				printf("Spinbutton %s MISSING\n",tmpbuf);
@@ -1064,9 +1064,9 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 				OBJ_SET(dummy,"index",GINT_TO_POINTER(index));
 				OBJ_SET(dummy,"handler",GINT_TO_POINTER(POLY_POINTS));
 				OBJ_SET(dummy,"num_points_spin",widget);
-				g_signal_handlers_block_by_func (dummy,(gpointer)alter_polygon_data, NULL);
+				g_signal_handlers_block_by_func (dummy,alter_polygon_data, NULL);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].y);
-				g_signal_handlers_unblock_by_func (dummy,(gpointer)alter_polygon_data, NULL);
+				g_signal_handlers_unblock_by_func (dummy,alter_polygon_data, NULL);
 			}
 			else
 				printf("Spinbutton %s MISSING\n",tmpbuf);
@@ -1086,7 +1086,7 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(POLY_LAYER));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
-	g_object_set(G_OBJECT(widget),"climb-rate", 1, "digits", 0, "numeric", TRUE, NULL);
+	g_object_set(G_OBJECT(widget),"climb-rate", 1.0, "digits", 0, "numeric", TRUE, NULL);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)poly->layer);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_polygon_data),NULL);
 	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);

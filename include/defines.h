@@ -32,7 +32,7 @@
 #define HOME g_get_home_dir
 #endif
 
-#ifdef _64BIT_
+#ifdef __64BIT__
 #define GINT gint)(gint64
 #define GBOOLEAN gboolean)(gint64
 #else

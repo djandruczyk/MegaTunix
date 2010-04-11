@@ -10,7 +10,7 @@ DIST_SUBDIRS = $(subdirs)
 
 DEPDIR = ${subdirs}/.deps
 
-CLEANFILES = *~ core -rf autom4te.cache gmon.out
+CLEANFILES = *~ core autom4te.cache gmon.out
 
 EXTRA_DIST =  configure CREDITS AUTHORS TODO README INSTALL LICENSE megatunix.spec
 

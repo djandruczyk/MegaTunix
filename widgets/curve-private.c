@@ -237,7 +237,7 @@ void update_curve (MtxCurve *curve)
 		cairo_set_source_rgb (cr, 0.0,0.7,1.0);
 		for (i=0;i<priv->num_points;i++)
 		{
-			cairo_arc(cr,priv->points[i].x,priv->points[i].y,3,0,2*M_PI);
+			cairo_arc(cr,priv->points[i].x,priv->points[i].y,3,0,2*G_PI);
 			cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
 		}
 		cairo_fill(cr);
@@ -251,7 +251,7 @@ void update_curve (MtxCurve *curve)
 				priv->colors[CURVE_COL_SEL].blue/65535.0);
 		cairo_move_to (cr, priv->points[priv->active_coord].x,priv->points[priv->active_coord].y);
 		cairo_new_sub_path(cr);
-		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*M_PI);
+		cairo_arc(cr,priv->points[priv->active_coord].x,priv->points[priv->active_coord].y,4,0,2*G_PI);
 	}
 	cairo_stroke(cr);
 
@@ -263,7 +263,7 @@ void update_curve (MtxCurve *curve)
 				priv->colors[CURVE_COL_PROX].blue/65535.0);
 		cairo_move_to (cr, priv->points[priv->proximity_vertex].x,priv->points[priv->proximity_vertex].y);
 		cairo_new_sub_path(cr);
-		cairo_arc(cr,priv->points[priv->proximity_vertex].x,priv->points[priv->proximity_vertex].y,4.5,0,2*M_PI);
+		cairo_arc(cr,priv->points[priv->proximity_vertex].x,priv->points[priv->proximity_vertex].y,4.5,0,2*G_PI);
 	}
 	cairo_stroke(cr);
 
@@ -638,7 +638,7 @@ void generate_static_curve(MtxCurve *curve)
 		/*cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));*/
 		cairo_move_to(cr,1.5*extents.height,(priv->h/2) + (extents.width/2.0));
 		cairo_save(cr);
-		cairo_rotate(cr,-M_PI/2.0);
+		cairo_rotate(cr,-G_PI/2.0);
 		cairo_show_text (cr, message);
 		cairo_restore(cr);
 		g_free(message);
