@@ -421,3 +421,93 @@ gboolean write_data(Io_Message *message)
 }
 
 
+EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
+{
+	gint i = 0;
+	gint result = 0;
+	GDir *a_dir = NULL;
+	GDir *b_dir = NULL;
+	GList *found = NULL;
+	GHashTable *hash = NULL;
+	const gchar * entry = NULL;
+	gchar *ports = NULL;
+	GtkWidget *dialog = NULL;
+	GError *err = NULL;
+	GtkWindow *top = (GtkWindow *)lookup_widget("main_window");
+
+	dialog = gtk_message_dialog_new (top,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_INFO,
+			GTK_BUTTONS_OK,
+			"Going to start serial port scan, please make sure USB/Serial adapter is unplugged, then click on the \"OK\" Button");
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+
+	/* Read list of dev before device plugin */
+	b_dir = g_dir_open("/dev",0,&err);
+	if (b_dir)
+	{
+		hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		while ((entry = g_dir_read_name(b_dir)) != NULL)
+			g_hash_table_insert(hash,g_strdup(entry),GINT_TO_POINTER(1));
+	}
+
+	dialog = gtk_message_dialog_new (top,
+			GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_INFO,
+			GTK_BUTTONS_OK,
+			"Please plugin the USB->serial adapter and click the \"OK\" Button");
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+	sleep(1);
+
+	/* Read list of dev AFTER device plugin */
+	a_dir = g_dir_open("/dev",0,&err);
+	if (a_dir)
+	{
+		while ((entry = g_dir_read_name(a_dir)) != NULL)
+			if (!g_hash_table_lookup(hash,(gconstpointer)entry))
+				found = g_list_prepend(found,g_strdup(entry));
+	}
+	g_hash_table_destroy(hash);
+	g_dir_close(a_dir);
+	g_dir_close(b_dir);
+	if (g_list_length(found) == 0)
+	{
+		dialog = gtk_message_dialog_new (top,
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_WARNING,
+				GTK_BUTTONS_OK,
+				"No new devices were detected! You may wish to check if you need to install a driver first for the device.  Google is probably your best place to start.");
+
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+	}
+	else
+	{
+		entry = g_strdup("MegaTunix detected the following devices:\n\n");
+		for (i=0;i<g_list_length(found);i++)
+			entry = g_strconcat(entry,g_list_nth_data(found,i),"\n",NULL);
+		entry = g_strconcat(entry,"\nWould you like to add these to the ports to be scanned?",NULL);
+		dialog = gtk_message_dialog_new (top,
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_QUESTION,
+				GTK_BUTTONS_YES_NO,
+				entry,NULL);
+		result = gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (dialog);
+		if (result == GTK_RESPONSE_YES)
+		{
+			ports = (gchar *)OBJ_GET(global_data,"potential_ports");
+			for (i=0;i<g_list_length(found);i++)
+				ports = g_strconcat(ports,",/dev/",g_list_nth_data(found,i),NULL);
+			OBJ_SET(global_data,"potential_ports",ports);
+		}
+	}
+	for (i=0;i<g_list_length(found);i++)
+		g_free(g_list_nth_data(found,i));
+	g_list_free(found);
+	
+	return TRUE;
+
+}

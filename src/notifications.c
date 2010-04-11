@@ -290,7 +290,7 @@ void warn_user(gchar *message)
 	if ((args->be_quiet))
 		return;
 
-	warning_dialog = gtk_message_dialog_new(NULL,0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 			
 	if (!interrogated)
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);

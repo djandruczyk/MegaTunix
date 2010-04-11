@@ -319,6 +319,12 @@ void finalize_core_gui(GladeXML * xml)
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
 	gtk_tooltips_set_tip(tip,ebox,"These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
 
+	/* Locate Port button */
+#ifdef __WIN32__
+	widget = glade_xml_get_widget(xml,"locate_port_button");
+	gtk_widget_set_sensisitive (widget,FALSE);
+#endif
+	
 	/* Read Timeout threshold spinner */
 	widget = glade_xml_get_widget(xml,"read_timeout_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"read_timeout"));
