@@ -500,7 +500,7 @@ y_raw_upper=500
 y_precision=2
 
 [te_table_8]
-title= X (Puddling) Factor Correction
+title=X (Puddling) Factor Correction
 is_fuel=FALSE
 bind_to_list=xtau_warmup
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
@@ -535,7 +535,7 @@ y_fixed_scale=TRUE
 y_precision=0
 
 [te_table_9]
-title= Tau (Time) Factor Correction
+title=Tau (Time) Factor Correction
 is_fuel=FALSE
 bind_to_list=xtau_warmup
 gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
@@ -568,7 +568,7 @@ y_raw_upper=600
 y_precision=0
 
 [te_table_10]
-title= X(Puddling) Factor (Accel)
+title=X (Puddling) Factor (Accel)
 is_fuel=FALSE
 bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
@@ -601,7 +601,7 @@ y_raw_upper=900
 y_precision=1
 
 [te_table_11]
-title= X(Puddling) Factor (Decel)
+title=X (Puddling) Factor (Decel)
 is_fuel=FALSE
 bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
@@ -634,7 +634,7 @@ y_raw_upper=900
 y_precision=1
 
 [te_table_12]
-title= Tau(time) Factor (Accel)
+title=Tau (time) Factor (Accel)
 is_fuel=FALSE
 bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
@@ -667,7 +667,7 @@ y_raw_upper=20000
 y_precision=0
 
 [te_table_13]
-title= Tau(time) Factor (Decel)
+title=Tau (time) Factor (Decel)
 is_fuel=FALSE
 bind_to_list=xtau_accel
 gauge=MegaTune/Xtau-Corr1-Gauge.xml
