@@ -278,7 +278,6 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		section = g_strdup(groupnames[x]);
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
-		//	setup_group(group,tmpbuf);
 			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
 			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
 			g_free(tmpbuf);
@@ -438,10 +437,8 @@ void remove_from_lists(gchar * lists, gpointer data)
 	GList *list = NULL;
 
 	if (!lists)
-	{
-/*		printf(__FILE__": Error, remove_from_list(), lists is NULL\n");*/
 		return;
-	}
+
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	for (i=0;i<bind_num_keys;i++)
@@ -484,12 +481,12 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	section = (gchar *)glade_get_widget_name(widget);
+	section = widget->name;
 	if (section == NULL)
 		return;
 
-	g_free(OBJ_GET(widget,"name"));
-	OBJ_SET(widget,"name",g_strdup(section));
+//	g_free(OBJ_GET(widget,"name"));
+//	OBJ_SET(widget,"name",g_strdup(section));
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
