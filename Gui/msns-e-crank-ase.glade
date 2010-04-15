@@ -916,7 +916,7 @@ source</property>
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_0">
+				    <widget class="GtkEntry" id="IATCTemp_entry_0_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -945,7 +945,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_0">
+				    <widget class="GtkEntry" id="IATCorS_entry_0_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -974,7 +974,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_1">
+				    <widget class="GtkEntry" id="IATCorS_entry_1_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1003,7 +1003,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_2">
+				    <widget class="GtkEntry" id="IATCTemp_entry_2_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1032,7 +1032,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_2">
+				    <widget class="GtkEntry" id="IATCorS_entry_2_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1061,7 +1061,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_3">
+				    <widget class="GtkEntry" id="IATCTemp_entry_3_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1090,7 +1090,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_3">
+				    <widget class="GtkEntry" id="IATCorS_entry_3_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1119,7 +1119,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_4">
+				    <widget class="GtkEntry" id="IATCTemp_entry_4_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1148,7 +1148,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_4">
+				    <widget class="GtkEntry" id="IATCorS_entry_4_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1177,7 +1177,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_5">
+				    <widget class="GtkEntry" id="IATCTemp_entry_5_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1206,7 +1206,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_5">
+				    <widget class="GtkEntry" id="IATCorS_entry_5_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1235,7 +1235,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_6">
+				    <widget class="GtkEntry" id="IATCTemp_entry_6_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1264,7 +1264,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCorS_entry_6">
+				    <widget class="GtkEntry" id="IATCorS_entry_6_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1351,7 +1351,7 @@ source</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="IATCTemp_entry_1">
+				    <widget class="GtkEntry" id="IATCTemp_entry_1_of_9">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2509,7 +2509,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_8">
+					<widget class="GtkEntry" id="warmup_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2539,7 +2539,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_9">
+					<widget class="GtkEntry" id="warmup_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2569,7 +2569,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_10">
+					<widget class="GtkEntry" id="warmup_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2683,7 +2683,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_7">
+					<widget class="GtkEntry" id="warmup_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2713,7 +2713,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_6">
+					<widget class="GtkEntry" id="warmup_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2743,7 +2743,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_5">
+					<widget class="GtkEntry" id="warmup_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2773,7 +2773,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_4">
+					<widget class="GtkEntry" id="warmup_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2803,7 +2803,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_3">
+					<widget class="GtkEntry" id="warmup_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2833,7 +2833,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_2">
+					<widget class="GtkEntry" id="warmup_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2863,7 +2863,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="warmup_entry_1">
+					<widget class="GtkEntry" id="warmup_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2934,7 +2934,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_10">
+					<widget class="GtkEntry" id="ase_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2963,7 +2963,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_9">
+					<widget class="GtkEntry" id="ase_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -2992,7 +2992,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_8">
+					<widget class="GtkEntry" id="ase_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3021,7 +3021,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_7">
+					<widget class="GtkEntry" id="ase_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3050,7 +3050,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_6">
+					<widget class="GtkEntry" id="ase_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3079,7 +3079,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_5">
+					<widget class="GtkEntry" id="ase_entry_4_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3108,7 +3108,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_4">
+					<widget class="GtkEntry" id="ase_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3137,7 +3137,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_3">
+					<widget class="GtkEntry" id="ase_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3166,7 +3166,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_2">
+					<widget class="GtkEntry" id="ase_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3195,7 +3195,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="ase_entry_1">
+					<widget class="GtkEntry" id="ase_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3608,7 +3608,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_10">
+					<widget class="GtkEntry" id="crank_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3638,7 +3638,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_9">
+					<widget class="GtkEntry" id="crank_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3668,7 +3668,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_8">
+					<widget class="GtkEntry" id="crank_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3698,7 +3698,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_7">
+					<widget class="GtkEntry" id="crank_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3728,7 +3728,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_6">
+					<widget class="GtkEntry" id="crank_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3758,7 +3758,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_5">
+					<widget class="GtkEntry" id="crank_entry_4_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3788,7 +3788,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_4">
+					<widget class="GtkEntry" id="crank_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3818,7 +3818,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_3">
+					<widget class="GtkEntry" id="crank_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3848,7 +3848,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_2">
+					<widget class="GtkEntry" id="crank_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -3878,7 +3878,7 @@ Related Advance</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="crank_entry_1">
+					<widget class="GtkEntry" id="crank_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>

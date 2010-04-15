@@ -83,7 +83,7 @@ bind_to_list=ego_ctrl
 
 [AFR2_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=dt_controls
+bind_to_list=dual_table
 
 [topframe_title]
 keys=set_label
@@ -253,7 +253,7 @@ table_num=9
 
 [AFR2_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=dt_controls
+bind_to_list=dual_table
 table_num=10
 
 #----- Gauges --------------------------------------------------------------

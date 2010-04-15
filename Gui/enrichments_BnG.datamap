@@ -4,7 +4,7 @@
 description=Object data map for Std B&G Enrichments
 tab_name=_Enrichments
 id_prefix=ENRICH_
-groups=defaults,warmup_bins
+groups=defaults,warmup_bins,accel
 
 #----- Groups ----------------------------------------------------------------
 
@@ -20,6 +20,12 @@ handler=_GENERIC_
 [warmup_bins]
 keys=use_color
 use_color=TRUE
+
+[accel]
+keys=precision,dl_conv_expr,ul_conv_expr
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -164,54 +170,9 @@ offset=66
 keys=offset
 offset=67
 
-[warmup_entry_1]
-keys=offset
+[warmup_entry]
+keys=group
 offset=68
-group=warmup_bins
-
-[warmup_entry_2]
-keys=offset
-offset=69
-group=warmup_bins
-
-[warmup_entry_3]
-keys=offset
-offset=70
-group=warmup_bins
-
-[warmup_entry_4]
-keys=offset
-offset=71
-group=warmup_bins
-
-[warmup_entry_5]
-keys=offset
-offset=72
-group=warmup_bins
-
-[warmup_entry_6]
-keys=offset
-offset=73
-group=warmup_bins
-
-[warmup_entry_7]
-keys=offset
-offset=74
-group=warmup_bins
-
-[warmup_entry_8]
-keys=offset
-offset=75
-group=warmup_bins
-
-[warmup_entry_9]
-keys=offset
-offset=76
-group=warmup_bins
-
-[warmup_entry_10]
-keys=offset
-offset=77
 group=warmup_bins
 
 [accel_tpstrigthresh_entry]
@@ -239,33 +200,10 @@ ul_conv_expr=x/10
 keys=offset
 offset=123
 
-[accelbins_entry_1]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
+[accelbins_entry]
+keys=group
+group=accel
 offset=78
-precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-
-[accelbins_entry_2]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
-offset=79
-precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-
-[accelbins_entry_3]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
-offset=80
-precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
-
-[accelbins_entry_4]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
-offset=81
-precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
 
 [accel_decel_fuel_cut_entry]
 keys=offset

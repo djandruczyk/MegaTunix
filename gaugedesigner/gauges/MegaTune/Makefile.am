@@ -8,6 +8,7 @@ gauges_files = 	\
 	Batt-Gauge.xml \
 	Coolant-Temp_degC-Gauge.xml \
 	Coolant-Temp_degF-Gauge.xml \
+	Coolant-Temp_Universal-Gauge.xml \
 	Dutycycle1-Gauge.xml \
 	Dutycycle2-Gauge.xml \
 	Dwell-Gauge.xml \

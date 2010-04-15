@@ -2212,7 +2212,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="rpm_entry_1">
+					<widget class="GtkEntry" id="rpm_entry_1_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2269,7 +2269,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="rpm_entry_2">
+					<widget class="GtkEntry" id="rpm_entry_2_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2297,7 +2297,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="rpm_entry_3">
+					<widget class="GtkEntry" id="rpm_entry_3_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2325,7 +2325,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="rpm_entry_4">
+					<widget class="GtkEntry" id="rpm_entry_4_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2353,7 +2353,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="rpm_entry_0">
+					<widget class="GtkEntry" id="rpm_entry_0_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2427,7 +2427,7 @@
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="x_accel_entry_1">
+					<widget class="GtkEntry" id="x_accel_entry_1_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2455,7 +2455,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_accel_entry_2">
+					<widget class="GtkEntry" id="x_accel_entry_2_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2483,7 +2483,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_accel_entry_3">
+					<widget class="GtkEntry" id="x_accel_entry_3_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2511,7 +2511,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_accel_entry_4">
+					<widget class="GtkEntry" id="x_accel_entry_4_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2647,7 +2647,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_accel_entry_0">
+					<widget class="GtkEntry" id="x_accel_entry_0_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2722,7 +2722,7 @@ Factors</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="x_decel_entry_1">
+					<widget class="GtkEntry" id="x_decel_entry_1_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2750,7 +2750,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_decel_entry_2">
+					<widget class="GtkEntry" id="x_decel_entry_2_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2778,7 +2778,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_decel_entry_3">
+					<widget class="GtkEntry" id="x_decel_entry_3_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2806,7 +2806,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_decel_entry_4">
+					<widget class="GtkEntry" id="x_decel_entry_4_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -2942,7 +2942,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="x_decel_entry_0">
+					<widget class="GtkEntry" id="x_decel_entry_0_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3059,7 +3059,7 @@ Factors</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_accel_entry_1">
+					<widget class="GtkEntry" id="tau_accel_entry_1_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3087,7 +3087,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_accel_entry_2">
+					<widget class="GtkEntry" id="tau_accel_entry_2_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3115,7 +3115,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_accel_entry_3">
+					<widget class="GtkEntry" id="tau_accel_entry_3_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3143,7 +3143,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_accel_entry_4">
+					<widget class="GtkEntry" id="tau_accel_entry_4_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3279,7 +3279,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_accel_entry_0">
+					<widget class="GtkEntry" id="tau_accel_entry_0_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3354,7 +3354,7 @@ Factors</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_decel_entry_1">
+					<widget class="GtkEntry" id="tau_decel_entry_1_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3382,7 +3382,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_decel_entry_2">
+					<widget class="GtkEntry" id="tau_decel_entry_2_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3410,7 +3410,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_decel_entry_3">
+					<widget class="GtkEntry" id="tau_decel_entry_3_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3438,7 +3438,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_decel_entry_4">
+					<widget class="GtkEntry" id="tau_decel_entry_4_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3574,7 +3574,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_decel_entry_0">
+					<widget class="GtkEntry" id="tau_decel_entry_0_of_4">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3748,7 +3748,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_1">
+					<widget class="GtkEntry" id="temp_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3804,7 +3804,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_2">
+					<widget class="GtkEntry" id="temp_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3832,7 +3832,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_3">
+					<widget class="GtkEntry" id="temp_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3860,7 +3860,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_4">
+					<widget class="GtkEntry" id="temp_entry_4_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3888,7 +3888,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_5">
+					<widget class="GtkEntry" id="temp_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3916,7 +3916,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_6">
+					<widget class="GtkEntry" id="temp_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3944,7 +3944,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_7">
+					<widget class="GtkEntry" id="temp_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -3972,7 +3972,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_8">
+					<widget class="GtkEntry" id="temp_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4000,7 +4000,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_9">
+					<widget class="GtkEntry" id="temp_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4028,7 +4028,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="temp_entry_0">
+					<widget class="GtkEntry" id="temp_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4122,7 +4122,7 @@ Factors</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_2">
+					<widget class="GtkEntry" id="puddling_table_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4150,7 +4150,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_3">
+					<widget class="GtkEntry" id="puddling_table_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4178,7 +4178,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_4">
+					<widget class="GtkEntry" id="puddling_table_entry_4_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4206,7 +4206,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_5">
+					<widget class="GtkEntry" id="puddling_table_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4234,7 +4234,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_6">
+					<widget class="GtkEntry" id="puddling_table_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4262,7 +4262,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_7">
+					<widget class="GtkEntry" id="puddling_table_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4290,7 +4290,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_8">
+					<widget class="GtkEntry" id="puddling_table_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4454,7 +4454,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_9">
+					<widget class="GtkEntry" id="puddling_table_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4482,7 +4482,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_0">
+					<widget class="GtkEntry" id="puddling_table_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4510,7 +4510,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="puddling_table_entry_1">
+					<widget class="GtkEntry" id="puddling_table_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4556,7 +4556,7 @@ Factors</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_1">
+					<widget class="GtkEntry" id="tau_table_entry_1_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4584,7 +4584,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_2">
+					<widget class="GtkEntry" id="tau_table_entry_2_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4612,7 +4612,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_3">
+					<widget class="GtkEntry" id="tau_table_entry_3_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4640,7 +4640,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_4">
+					<widget class="GtkEntry" id="tau_table_entry_4_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4668,7 +4668,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_5">
+					<widget class="GtkEntry" id="tau_table_entry_5_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4696,7 +4696,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_6">
+					<widget class="GtkEntry" id="tau_table_entry_6_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4724,7 +4724,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_7">
+					<widget class="GtkEntry" id="tau_table_entry_7_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4752,7 +4752,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_8">
+					<widget class="GtkEntry" id="tau_table_entry_8_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4780,7 +4780,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_9">
+					<widget class="GtkEntry" id="tau_table_entry_9_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -4944,7 +4944,7 @@ Factors</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="tau_table_entry_0">
+					<widget class="GtkEntry" id="tau_table_entry_0_of_9">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
