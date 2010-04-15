@@ -795,6 +795,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
 		else
 			printf("NO \"[cf]_gauge\" key found in te_table%i\n",i);
+		if(!cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->te_params[i]->x_use_color))
+			firmware->te_params[i]->x_use_color = FALSE;
+		if(!cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->te_params[i]->y_use_color))
+			firmware->te_params[i]->y_use_color = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"x_temp_dep",&firmware->te_params[i]->x_temp_dep))
 			firmware->te_params[i]->x_temp_dep = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep))

@@ -273,6 +273,7 @@ struct _TE_Params
 
 	gboolean x_temp_dep;	/*! Temperature dependant? */
 	gboolean x_lock;	/*! Flag for 2d table editor */
+	gboolean x_use_color;	/*! USe color? */
 	gint x_page;		/*! what page this column resides in */
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
@@ -287,6 +288,7 @@ struct _TE_Params
 
 	gboolean y_temp_dep;	/*! Temperature dependant? */
 	gboolean y_lock;	/*! Flag for 2d table editor */
+	gboolean y_use_color;	/*! USe color? */
 	gint y_page;		/*! what page this column resides in */
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */
