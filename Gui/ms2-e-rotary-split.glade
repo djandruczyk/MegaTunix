@@ -749,7 +749,7 @@ with most &quot;Weight&quot;</property>
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_0">
+				    <widget class="GtkEntry" id="load_entry_0_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -778,7 +778,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_1">
+				    <widget class="GtkEntry" id="load_entry_1_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -807,7 +807,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_2">
+				    <widget class="GtkEntry" id="load_entry_2_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -836,7 +836,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_3">
+				    <widget class="GtkEntry" id="load_entry_3_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -865,7 +865,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_4">
+				    <widget class="GtkEntry" id="load_entry_4_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -894,7 +894,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_5">
+				    <widget class="GtkEntry" id="load_entry_5_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -951,7 +951,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_6">
+				    <widget class="GtkEntry" id="load_entry_6_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -980,7 +980,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="load_entry_7">
+				    <widget class="GtkEntry" id="load_entry_7_of_7">
 				      <property name="width_request">35</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1112,7 +1112,7 @@ with most &quot;Weight&quot;</property>
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_0">
+				    <widget class="GtkEntry" id="rpm_entry_0_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1141,7 +1141,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_1">
+				    <widget class="GtkEntry" id="rpm_entry_1_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1170,7 +1170,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_2">
+				    <widget class="GtkEntry" id="rpm_entry_2_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1199,7 +1199,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_3">
+				    <widget class="GtkEntry" id="rpm_entry_3_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1228,7 +1228,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_4">
+				    <widget class="GtkEntry" id="rpm_entry_4_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1257,7 +1257,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_5">
+				    <widget class="GtkEntry" id="rpm_entry_5_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1286,7 +1286,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_6">
+				    <widget class="GtkEntry" id="rpm_entry_6_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1314,7 +1314,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="rpm_entry_7">
+				    <widget class="GtkEntry" id="rpm_entry_7_of_7">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1393,7 +1393,7 @@ with most &quot;Weight&quot;</property>
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,0)">
+				    <widget class="GtkEntry" id="trail_entry_0_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1424,7 +1424,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,1)">
+				    <widget class="GtkEntry" id="trail_entry_8_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1455,7 +1455,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,2)">
+				    <widget class="GtkEntry" id="trail_entry_16_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1486,7 +1486,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,3)">
+				    <widget class="GtkEntry" id="trail_entry_24_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1517,7 +1517,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,4)">
+				    <widget class="GtkEntry" id="trail_entry_32_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1548,7 +1548,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,5)">
+				    <widget class="GtkEntry" id="trail_entry_40_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1579,7 +1579,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,0)">
+				    <widget class="GtkEntry" id="trail_entry_1_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1610,7 +1610,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,1)">
+				    <widget class="GtkEntry" id="trail_entry_9_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1641,7 +1641,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,2)">
+				    <widget class="GtkEntry" id="trail_entry_17_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1672,7 +1672,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,3)">
+				    <widget class="GtkEntry" id="trail_entry_25_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1703,7 +1703,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,4)">
+				    <widget class="GtkEntry" id="trail_entry_33_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1734,7 +1734,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,5)">
+				    <widget class="GtkEntry" id="trail_entry_41_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1765,7 +1765,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,0)">
+				    <widget class="GtkEntry" id="trail_entry_2_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1796,7 +1796,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,1)">
+				    <widget class="GtkEntry" id="trail_entry_10_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1827,7 +1827,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,2)">
+				    <widget class="GtkEntry" id="trail_entry_18_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1858,7 +1858,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,3)">
+				    <widget class="GtkEntry" id="trail_entry_26_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1889,7 +1889,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,4)">
+				    <widget class="GtkEntry" id="trail_entry_34_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1920,7 +1920,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,5)">
+				    <widget class="GtkEntry" id="trail_entry_42_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1951,7 +1951,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,0)">
+				    <widget class="GtkEntry" id="trail_entry_3_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -1982,7 +1982,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,1)">
+				    <widget class="GtkEntry" id="trail_entry_11_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2013,7 +2013,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,2)">
+				    <widget class="GtkEntry" id="trail_entry_19_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2044,7 +2044,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,3)">
+				    <widget class="GtkEntry" id="trail_entry_27_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2075,7 +2075,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,4)">
+				    <widget class="GtkEntry" id="trail_entry_35_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2106,7 +2106,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,5)">
+				    <widget class="GtkEntry" id="trail_entry_43_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2137,7 +2137,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,0)">
+				    <widget class="GtkEntry" id="trail_entry_4_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2168,7 +2168,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,1)">
+				    <widget class="GtkEntry" id="trail_entry_12_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2199,7 +2199,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,2)">
+				    <widget class="GtkEntry" id="trail_entry_20_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2230,7 +2230,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,3)">
+				    <widget class="GtkEntry" id="trail_entry_28_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2261,7 +2261,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,4)">
+				    <widget class="GtkEntry" id="trail_entry_36_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2292,7 +2292,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,5)">
+				    <widget class="GtkEntry" id="trail_entry_44_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2323,7 +2323,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,0)">
+				    <widget class="GtkEntry" id="trail_entry_5_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2354,7 +2354,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,1)">
+				    <widget class="GtkEntry" id="trail_entry_13_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2385,7 +2385,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,2)">
+				    <widget class="GtkEntry" id="trail_entry_21_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2416,7 +2416,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,3)">
+				    <widget class="GtkEntry" id="trail_entry_29_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2447,7 +2447,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,4)">
+				    <widget class="GtkEntry" id="trail_entry_37_of_63">
 				      <property name="width_request">30</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2478,7 +2478,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,5)">
+				    <widget class="GtkEntry" id="trail_entry_45_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2509,7 +2509,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,6)">
+				    <widget class="GtkEntry" id="trail_entry_48_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2539,7 +2539,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(0,7)">
+				    <widget class="GtkEntry" id="trail_entry_56_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2569,7 +2569,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,7)">
+				    <widget class="GtkEntry" id="trail_entry_57_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2599,7 +2599,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(1,6)">
+				    <widget class="GtkEntry" id="trail_entry_49_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2629,7 +2629,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,7)">
+				    <widget class="GtkEntry" id="trail_entry_58_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2659,7 +2659,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(2,6)">
+				    <widget class="GtkEntry" id="trail_entry_50_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2689,7 +2689,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,7)">
+				    <widget class="GtkEntry" id="trail_entry_59_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2719,7 +2719,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(3,6)">
+				    <widget class="GtkEntry" id="trail_entry_51_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2749,7 +2749,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,7)">
+				    <widget class="GtkEntry" id="trail_entry_60_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2779,7 +2779,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(4,6)">
+				    <widget class="GtkEntry" id="trail_entry_52_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2809,7 +2809,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,7)">
+				    <widget class="GtkEntry" id="trail_entry_61_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2839,7 +2839,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(5,6)">
+				    <widget class="GtkEntry" id="trail_entry_53_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2869,7 +2869,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,7)">
+				    <widget class="GtkEntry" id="trail_entry_62_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2899,7 +2899,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,7)">
+				    <widget class="GtkEntry" id="trail_entry_63_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2929,7 +2929,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,6)">
+				    <widget class="GtkEntry" id="trail_entry_54_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2959,7 +2959,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,6)">
+				    <widget class="GtkEntry" id="trail_entry_55_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -2989,7 +2989,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,5)">
+				    <widget class="GtkEntry" id="trail_entry_46_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3019,7 +3019,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,4)">
+				    <widget class="GtkEntry" id="trail_entry_38_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3049,7 +3049,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,4)">
+				    <widget class="GtkEntry" id="trail_entry_39_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3079,7 +3079,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,3)">
+				    <widget class="GtkEntry" id="trail_entry_30_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3109,7 +3109,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,3)">
+				    <widget class="GtkEntry" id="trail_entry_31_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3139,7 +3139,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,2)">
+				    <widget class="GtkEntry" id="trail_entry_22_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3169,7 +3169,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,2)">
+				    <widget class="GtkEntry" id="trail_entry_23_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3199,7 +3199,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,1)">
+				    <widget class="GtkEntry" id="trail_entry_15_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3229,7 +3229,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,0)">
+				    <widget class="GtkEntry" id="trail_entry_6_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3259,7 +3259,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,0)">
+				    <widget class="GtkEntry" id="trail_entry_7_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3317,7 +3317,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(6,1)">
+				    <widget class="GtkEntry" id="trail_entry_14_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
@@ -3347,7 +3347,7 @@ with most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="trail_entry_(7,5)">
+				    <widget class="GtkEntry" id="trail_entry_47_of_63">
 				      <property name="width_request">40</property>
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
