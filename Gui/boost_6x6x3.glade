@@ -122,7 +122,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_0">
+					    <widget class="GtkEntry" id="B1_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -151,7 +151,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_1">
+					    <widget class="GtkEntry" id="B1_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -180,7 +180,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_2">
+					    <widget class="GtkEntry" id="B1_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -209,7 +209,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_3">
+					    <widget class="GtkEntry" id="B1_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -238,7 +238,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_4">
+					    <widget class="GtkEntry" id="B1_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -267,7 +267,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_5">
+					    <widget class="GtkEntry" id="B1_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -376,7 +376,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -407,7 +407,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -438,7 +438,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -469,7 +469,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -500,7 +500,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -531,7 +531,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(0,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -562,7 +562,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -593,7 +593,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -624,7 +624,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -655,7 +655,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -686,7 +686,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -717,7 +717,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(1,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -748,7 +748,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -779,7 +779,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -810,7 +810,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -841,7 +841,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -872,7 +872,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -903,7 +903,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(2,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -934,7 +934,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -965,7 +965,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -996,7 +996,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1027,7 +1027,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1058,7 +1058,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1089,7 +1089,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1120,7 +1120,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1151,7 +1151,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1182,7 +1182,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1213,7 +1213,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1244,7 +1244,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(4,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1275,7 +1275,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1306,7 +1306,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,1)">
+					    <widget class="GtkEntry" id="B1_boost_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1337,7 +1337,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,2)">
+					    <widget class="GtkEntry" id="B1_boost_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1368,7 +1368,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,3)">
+					    <widget class="GtkEntry" id="B1_boost_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1399,7 +1399,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,4)">
+					    <widget class="GtkEntry" id="B1_boost_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1430,7 +1430,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(5,5)">
+					    <widget class="GtkEntry" id="B1_boost_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1461,7 +1461,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_(3,0)">
+					    <widget class="GtkEntry" id="B1_boost_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1567,7 +1567,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_0">
+					    <widget class="GtkEntry" id="B1_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1596,7 +1596,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_1">
+					    <widget class="GtkEntry" id="B1_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1625,7 +1625,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_2">
+					    <widget class="GtkEntry" id="B1_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1654,7 +1654,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_3">
+					    <widget class="GtkEntry" id="B1_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1683,7 +1683,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_4">
+					    <widget class="GtkEntry" id="B1_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1712,7 +1712,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_5">
+					    <widget class="GtkEntry" id="B1_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2316,7 +2316,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_0">
+					    <widget class="GtkEntry" id="B2_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2345,7 +2345,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_1">
+					    <widget class="GtkEntry" id="B2_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2374,7 +2374,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_2">
+					    <widget class="GtkEntry" id="B2_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2403,7 +2403,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_3">
+					    <widget class="GtkEntry" id="B2_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2432,7 +2432,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_4">
+					    <widget class="GtkEntry" id="B2_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2461,7 +2461,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_5">
+					    <widget class="GtkEntry" id="B2_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2570,7 +2570,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2601,7 +2601,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2632,7 +2632,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2663,7 +2663,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2694,7 +2694,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2725,7 +2725,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(0,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2756,7 +2756,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2787,7 +2787,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2818,7 +2818,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2849,7 +2849,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2880,7 +2880,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2911,7 +2911,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(1,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2942,7 +2942,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2973,7 +2973,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3004,7 +3004,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3035,7 +3035,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3066,7 +3066,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3097,7 +3097,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(2,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3128,7 +3128,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3159,7 +3159,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3190,7 +3190,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3221,7 +3221,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3252,7 +3252,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3283,7 +3283,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(3,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3314,7 +3314,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3345,7 +3345,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3376,7 +3376,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3407,7 +3407,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3438,7 +3438,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3469,7 +3469,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(4,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3500,7 +3500,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,0)">
+					    <widget class="GtkEntry" id="B2_boost_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3531,7 +3531,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,1)">
+					    <widget class="GtkEntry" id="B2_boost_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3562,7 +3562,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,2)">
+					    <widget class="GtkEntry" id="B2_boost_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3593,7 +3593,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,3)">
+					    <widget class="GtkEntry" id="B2_boost_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3624,7 +3624,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,4)">
+					    <widget class="GtkEntry" id="B2_boost_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3655,7 +3655,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_(5,5)">
+					    <widget class="GtkEntry" id="B2_boost_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3761,7 +3761,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_0">
+					    <widget class="GtkEntry" id="B2_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3790,7 +3790,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_1">
+					    <widget class="GtkEntry" id="B2_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3819,7 +3819,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_2">
+					    <widget class="GtkEntry" id="B2_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3848,7 +3848,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_3">
+					    <widget class="GtkEntry" id="B2_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3877,7 +3877,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_4">
+					    <widget class="GtkEntry" id="B2_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3906,7 +3906,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_5">
+					    <widget class="GtkEntry" id="B2_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4510,7 +4510,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_0">
+					    <widget class="GtkEntry" id="B3_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4539,7 +4539,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_1">
+					    <widget class="GtkEntry" id="B3_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4568,7 +4568,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_2">
+					    <widget class="GtkEntry" id="B3_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4597,7 +4597,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_3">
+					    <widget class="GtkEntry" id="B3_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4626,7 +4626,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_4">
+					    <widget class="GtkEntry" id="B3_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4655,7 +4655,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_5">
+					    <widget class="GtkEntry" id="B3_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4764,7 +4764,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4795,7 +4795,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4826,7 +4826,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4857,7 +4857,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4888,7 +4888,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4919,7 +4919,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(0,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4950,7 +4950,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4981,7 +4981,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5012,7 +5012,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5043,7 +5043,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5074,7 +5074,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5105,7 +5105,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(1,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5136,7 +5136,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5167,7 +5167,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5198,7 +5198,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5229,7 +5229,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5260,7 +5260,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5291,7 +5291,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(2,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5322,7 +5322,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5353,7 +5353,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5384,7 +5384,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5415,7 +5415,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5446,7 +5446,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5477,7 +5477,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(3,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5508,7 +5508,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5539,7 +5539,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5570,7 +5570,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5601,7 +5601,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5632,7 +5632,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5663,7 +5663,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(4,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5694,7 +5694,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,0)">
+					    <widget class="GtkEntry" id="B3_boost_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5725,7 +5725,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,1)">
+					    <widget class="GtkEntry" id="B3_boost_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5756,7 +5756,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,2)">
+					    <widget class="GtkEntry" id="B3_boost_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5787,7 +5787,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,3)">
+					    <widget class="GtkEntry" id="B3_boost_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5818,7 +5818,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,4)">
+					    <widget class="GtkEntry" id="B3_boost_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5849,7 +5849,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_(5,5)">
+					    <widget class="GtkEntry" id="B3_boost_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5955,7 +5955,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_0">
+					    <widget class="GtkEntry" id="B3_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5984,7 +5984,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_1">
+					    <widget class="GtkEntry" id="B3_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6013,7 +6013,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_2">
+					    <widget class="GtkEntry" id="B3_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6042,7 +6042,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_3">
+					    <widget class="GtkEntry" id="B3_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6071,7 +6071,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_4">
+					    <widget class="GtkEntry" id="B3_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6100,7 +6100,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_5">
+					    <widget class="GtkEntry" id="B3_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
