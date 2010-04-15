@@ -162,14 +162,25 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			bind_to_lists(label,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)label);
 		}
-		if (firmware->te_params[table_num]->gauge)
+
+		if (firmware->te_params[table_num]->gauge ||
+				firmware->te_params[table_num]->c_gauge ||
+				firmware->te_params[table_num]->f_gauge)
 		{
 			parent = glade_xml_get_widget(xml,"te_gaugeframe");
 			gauge = mtx_gauge_face_new();
 			gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 
 			OBJ_SET(window,"gauge",gauge);
-			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
+			if (firmware->te_params[table_num]->gauge_temp_dep)
+			{
+				if ((GINT)OBJ_GET(global_data,"temp_units") == CELSIUS)
+					tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
+				else
+					tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
+			}
+			else
+				tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 			lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);
@@ -466,12 +477,22 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 
-	if ((firmware->te_params[table_num]->gauge) && (!embedded))
+	if ((firmware->te_params[table_num]->gauge ||
+				firmware->te_params[table_num]->c_gauge ||
+				firmware->te_params[table_num]->f_gauge) && (!embedded))
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
 		gauge = mtx_gauge_face_new();
 		gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
-		tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
+		if (firmware->te_params[table_num]->gauge_temp_dep)
+		{
+			if ((GINT)OBJ_GET(global_data,"temp_units") == CELSIUS)
+				tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
+			else
+				tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
+		}
+		else
+			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		lookup_current_value(firmware->te_params[table_num]->gauge_datasource, &tmpf);

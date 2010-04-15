@@ -784,10 +784,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		cfg_read_boolean(cfgfile,section,"x_lock",&firmware->te_params[i]->x_lock);
 		cfg_read_boolean(cfgfile,section,"y_lock",&firmware->te_params[i]->y_lock);
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
-		if(cfg_read_string(cfgfile,section,"gauge",&firmware->te_params[i]->gauge))
+		if(!cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep))
+			firmware->te_params[i]->gauge_temp_dep = FALSE;
+		cfg_read_string(cfgfile,section,"gauge",&firmware->te_params[i]->gauge);
+		cfg_read_string(cfgfile,section,"c_gauge",&firmware->te_params[i]->c_gauge);
+		cfg_read_string(cfgfile,section,"f_gauge",&firmware->te_params[i]->f_gauge);
+		if (firmware->te_params[i]->f_gauge || firmware->te_params[i]->c_gauge || firmware->te_params[i]->gauge)	
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
 		else
-			printf("NO \"gauge\" key found in te_table%i\n",i);
+			printf("NO \"[cf]_gauge\" key found in te_table%i\n",i);
 		if(!cfg_read_boolean(cfgfile,section,"x_temp_dep",&firmware->te_params[i]->x_temp_dep))
 			firmware->te_params[i]->x_temp_dep = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep))
