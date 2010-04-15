@@ -474,6 +474,12 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint widget_type = 0;
 	gchar * initializer = NULL;
 	GdkColor color;
+	gchar *size = NULL;
+	gint index = 0;
+	gint count = 0;
+	gint result = 0;
+	gchar *ptr = NULL;
+	gboolean indexed = FALSE;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
@@ -481,34 +487,49 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	section = widget->name;
-	if (section == NULL)
+	if (widget->name == NULL)
 		return;
 
-//	g_free(OBJ_GET(widget,"name"));
-//	OBJ_SET(widget,"name",g_strdup(section));
-	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+	if (NULL != (ptr = g_strrstr_len(widget->name,strlen(widget->name),"_of_")))
+	{
+		indexed = TRUE;
+		ptr = g_strrstr_len(widget->name,ptr-widget->name,"_");
+		tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');
+		section = g_strndup(widget->name,ptr-widget->name);
+		/*printf("(indexed) section is %s\n",section);*/
+		result = sscanf(tmpbuf,"%d of %d",&index,&count);
+		/*printf("sscanf result %i\n",result);
+		printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
+		g_free(tmpbuf);
+	}
+	else
+		section = g_strdup(widget->name);
+
+	if(cfg_read_string(cfgfile, section, "keys", &tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
 		dbg_func(TABLOADER,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys));
 		g_free(tmpbuf);
 	}
-	else
+	else 
+	{
+		g_free(section);
 		return;
+	}
 
 	page = -1;
 	/* Bind the data in the "defaults" group per tab to EVERY var in that
 	 * tab
 	 */
-	page = bind_group_data(cfgfile,widget,groups,"defaults");
+	page = bind_group_data(cfgfile, widget, groups, "defaults");
 
-	if (cfg_read_string(cfgfile,section,"group",&tmpbuf))
+	if(cfg_read_string(cfgfile, section, "group", &tmpbuf))
 	{
 		page = bind_group_data(cfgfile,widget,groups,tmpbuf);
 		g_free(tmpbuf);
 	}
 
-	if ((!cfg_read_int(cfgfile,section,"page",&page)) && (page == -1))
+	if ((!cfg_read_int(cfgfile, section, "page", &page)) && (page == -1))
 	{
 		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
 
@@ -516,23 +537,23 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	/* Bind widgets to lists if they have the bind_to_list flag set...
 	*/
 	tmpbuf = NULL;
-	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
+	if (cfg_read_string(cfgfile, section, "bind_to_list", &tmpbuf))
 	{
-		bind_to_lists(widget,tmpbuf);
+		bind_to_lists(widget, tmpbuf);
 		g_free(tmpbuf);
 	}
 
 	/* Color selections */
-	if (cfg_read_string(cfgfile,section,"active_fg",&tmpbuf))
+	if (cfg_read_string(cfgfile, section, "active_fg", &tmpbuf))
 	{
-		gdk_color_parse(tmpbuf,&color);
-		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&color);
+		gdk_color_parse(tmpbuf, &color);
+		gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &color);
 		g_free(tmpbuf);
 	}
-	if (cfg_read_string(cfgfile,section,"inactive_fg",&tmpbuf))
+	if (cfg_read_string(cfgfile, section, "inactive_fg", &tmpbuf))
 	{
-		gdk_color_parse(tmpbuf,&color);
-		gtk_widget_modify_fg(widget,GTK_STATE_INSENSITIVE,&color);
+		gdk_color_parse(tmpbuf, &color);
+		gtk_widget_modify_fg(widget, GTK_STATE_INSENSITIVE, &color);
 		g_free(tmpbuf);
 	}
 
@@ -614,7 +635,32 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(initializer);
 	}
 	offset = -1;
-	cfg_read_int(cfgfile,section,"offset",&offset);
+	cfg_read_int(cfgfile,section, "offset", &offset);
+	if (offset >=0 && indexed)
+	{
+		/*printf("indexed widget %s\n",widget->name); */
+		if (cfg_read_string(cfgfile, section, "size", &size))
+		{
+
+			offset += index * get_multiplier (translate_string (size));
+			g_free(size);
+		}
+		else
+		{
+			if(OBJ_GET(widget, "size"))
+			{
+				offset += index * get_multiplier ((gint) OBJ_GET(widget, "size"));
+			}
+			else
+			{
+				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tIndexed Object %s has index and offset, but no size!!!!\n",section));     
+				g_free(section);
+				return;
+			}
+		}
+		/*printf("widget %s, offset %i\n",widget->name,offset);*/
+		OBJ_SET(widget,"offset",GINT_TO_POINTER(offset));
+	}
 	if (offset >= 0)
 	{
 		/* The way we do it now is to STORE widgets in LISTS for each
@@ -624,6 +670,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		if (page < 0)
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n",section,page,offset));
+			g_free(section);
 			return;
 		}
 		if (page < firmware->total_pages)
@@ -639,8 +686,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 			}
 		}
 		else
-				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset));
-
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset));
 
 	}
 	/* If there is a "group" key in a section it means that it gets the
@@ -648,7 +694,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 * redundant keys all throughout the file...
 	 */
 
-	bind_keys(G_OBJECT(widget),cfgfile,section,keys,num_keys);
+	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/
@@ -669,6 +715,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		run_post_functions(tmpbuf);
 		g_free(tmpbuf);
 	}
+	g_free(section);
 	g_strfreev(keys);
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }

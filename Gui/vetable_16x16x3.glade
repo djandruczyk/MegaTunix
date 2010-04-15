@@ -7881,7 +7881,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_0">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -7909,7 +7909,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_1">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -7937,7 +7937,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_2">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -7965,7 +7965,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_3">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -7993,7 +7993,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_4">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8021,7 +8021,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_5">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8049,7 +8049,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_6">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8077,7 +8077,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_7">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8105,7 +8105,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_8">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8133,7 +8133,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_9">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8161,7 +8161,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_10">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8189,7 +8189,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_11">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8217,7 +8217,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_12">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8244,7 +8244,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_13">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8271,7 +8271,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_14">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8298,7 +8298,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_rpm_entry_15">
+					    <widget class="GtkEntry" id="VE1_rpm_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8405,7 +8405,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_15">
+					    <widget class="GtkEntry" id="VE1_load_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8432,7 +8432,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_14">
+					    <widget class="GtkEntry" id="VE1_load_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8459,7 +8459,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_13">
+					    <widget class="GtkEntry" id="VE1_load_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8486,7 +8486,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_12">
+					    <widget class="GtkEntry" id="VE1_load_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8513,7 +8513,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_11">
+					    <widget class="GtkEntry" id="VE1_load_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8540,7 +8540,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_10">
+					    <widget class="GtkEntry" id="VE1_load_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8567,7 +8567,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_9">
+					    <widget class="GtkEntry" id="VE1_load_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8594,7 +8594,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_8">
+					    <widget class="GtkEntry" id="VE1_load_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8621,7 +8621,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_7">
+					    <widget class="GtkEntry" id="VE1_load_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8648,7 +8648,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_6">
+					    <widget class="GtkEntry" id="VE1_load_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8675,7 +8675,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_5">
+					    <widget class="GtkEntry" id="VE1_load_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8702,7 +8702,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_4">
+					    <widget class="GtkEntry" id="VE1_load_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8729,7 +8729,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_3">
+					    <widget class="GtkEntry" id="VE1_load_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8756,7 +8756,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_2">
+					    <widget class="GtkEntry" id="VE1_load_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8783,7 +8783,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_1">
+					    <widget class="GtkEntry" id="VE1_load_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -8810,7 +8810,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE1_load_entry_0">
+					    <widget class="GtkEntry" id="VE1_load_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9639,7 +9639,7 @@ maintain same PW</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_0">
+					    <widget class="GtkEntry" id="VE2_load_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9667,7 +9667,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_1">
+					    <widget class="GtkEntry" id="VE2_load_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9695,7 +9695,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_2">
+					    <widget class="GtkEntry" id="VE2_load_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9723,7 +9723,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_3">
+					    <widget class="GtkEntry" id="VE2_load_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9751,7 +9751,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_4">
+					    <widget class="GtkEntry" id="VE2_load_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9779,7 +9779,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_5">
+					    <widget class="GtkEntry" id="VE2_load_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9807,7 +9807,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_6">
+					    <widget class="GtkEntry" id="VE2_load_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9835,7 +9835,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_7">
+					    <widget class="GtkEntry" id="VE2_load_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9863,7 +9863,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_8">
+					    <widget class="GtkEntry" id="VE2_load_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9891,7 +9891,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_9">
+					    <widget class="GtkEntry" id="VE2_load_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9919,7 +9919,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_10">
+					    <widget class="GtkEntry" id="VE2_load_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -9947,7 +9947,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_11">
+					    <widget class="GtkEntry" id="VE2_load_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10003,7 +10003,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_12">
+					    <widget class="GtkEntry" id="VE2_load_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10031,7 +10031,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_13">
+					    <widget class="GtkEntry" id="VE2_load_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10059,7 +10059,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_14">
+					    <widget class="GtkEntry" id="VE2_load_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10087,7 +10087,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_load_entry_15">
+					    <widget class="GtkEntry" id="VE2_load_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10190,7 +10190,7 @@ maintain same PW</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_0">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10218,7 +10218,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_1">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10246,7 +10246,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_2">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10274,7 +10274,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_3">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10302,7 +10302,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_4">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10330,7 +10330,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_5">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10358,7 +10358,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_6">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10386,7 +10386,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_7">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10414,7 +10414,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_8">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10442,7 +10442,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_9">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10470,7 +10470,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_10">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10498,7 +10498,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_11">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10526,7 +10526,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_12">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10554,7 +10554,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_13">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10582,7 +10582,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_14">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -10610,7 +10610,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE2_rpm_entry_15">
+					    <widget class="GtkEntry" id="VE2_rpm_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19201,7 +19201,7 @@ maintain same PW</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_0">
+					    <widget class="GtkEntry" id="VE3_load_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19229,7 +19229,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_1">
+					    <widget class="GtkEntry" id="VE3_load_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19257,7 +19257,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_2">
+					    <widget class="GtkEntry" id="VE3_load_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19285,7 +19285,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_3">
+					    <widget class="GtkEntry" id="VE3_load_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19313,7 +19313,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_4">
+					    <widget class="GtkEntry" id="VE3_load_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19341,7 +19341,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_5">
+					    <widget class="GtkEntry" id="VE3_load_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19369,7 +19369,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_6">
+					    <widget class="GtkEntry" id="VE3_load_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19397,7 +19397,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_7">
+					    <widget class="GtkEntry" id="VE3_load_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19425,7 +19425,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_8">
+					    <widget class="GtkEntry" id="VE3_load_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19453,7 +19453,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_9">
+					    <widget class="GtkEntry" id="VE3_load_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19481,7 +19481,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_10">
+					    <widget class="GtkEntry" id="VE3_load_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19509,7 +19509,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_11">
+					    <widget class="GtkEntry" id="VE3_load_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19565,7 +19565,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_12">
+					    <widget class="GtkEntry" id="VE3_load_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19593,7 +19593,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_13">
+					    <widget class="GtkEntry" id="VE3_load_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19621,7 +19621,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_14">
+					    <widget class="GtkEntry" id="VE3_load_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19649,7 +19649,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_load_entry_15">
+					    <widget class="GtkEntry" id="VE3_load_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19729,7 +19729,7 @@ maintain same PW</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_0">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_0_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19757,7 +19757,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_1">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_1_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19785,7 +19785,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_2">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_2_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19813,7 +19813,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_3">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_3_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19841,7 +19841,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_5">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_5_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19869,7 +19869,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_6">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_6_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19897,7 +19897,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_7">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_7_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19925,7 +19925,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_8">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_8_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19953,7 +19953,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_9">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_9_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -19981,7 +19981,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_10">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_10_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20009,7 +20009,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_11">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_11_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20037,7 +20037,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_4">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_4_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20065,7 +20065,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_12">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_12_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20093,7 +20093,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_13">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_13_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20121,7 +20121,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_14">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_14_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
@@ -20149,7 +20149,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="VE3_rpm_entry_15">
+					    <widget class="GtkEntry" id="VE3_rpm_entry_15_of_15">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">True</property>
