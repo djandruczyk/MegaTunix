@@ -783,6 +783,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		section = g_strdup_printf("te_table_%i",i);
 		cfg_read_boolean(cfgfile,section,"x_lock",&firmware->te_params[i]->x_lock);
 		cfg_read_boolean(cfgfile,section,"y_lock",&firmware->te_params[i]->y_lock);
+		if (!cfg_read_boolean(cfgfile,section,"reversed",&firmware->te_params[i]->reversed))
+			firmware->te_params[i]->reversed = FALSE;
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
 		if(!cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep))
 			firmware->te_params[i]->gauge_temp_dep = FALSE;

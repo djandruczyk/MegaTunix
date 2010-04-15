@@ -255,6 +255,7 @@ struct _TE_Params
 {
 	gchar *title;		/*! Title used on TE window */
 	gboolean gauge_temp_dep;/*! Temperature dependant? */
+	gboolean reversed;	/*! reverse order of bins */
 	gchar *gauge;		/*! Generic Gauge to stick in lower left */
 	gchar *c_gauge;		/*! C Gauge to stick in lower left */
 	gchar *f_gauge;		/*! F Gauge to stick in lower left */

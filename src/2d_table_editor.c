@@ -278,8 +278,12 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			g_signal_connect(G_OBJECT(entry),"activate",
 					G_CALLBACK(std_entry_handler),NULL);
 
-			gtk_table_attach(GTK_TABLE(x_table),entry,
-					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
+			if (firmware->te_params[table_num]->reversed)
+				gtk_table_attach(GTK_TABLE(x_table),entry,
+						0,1,rows-i-1,rows-i, GTK_SHRINK,GTK_SHRINK,0,0);
+			else
+				gtk_table_attach(GTK_TABLE(x_table),entry,
+						0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 			page = firmware->te_params[table_num]->x_page;
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
@@ -325,8 +329,12 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			g_signal_connect(G_OBJECT(entry),"activate",
 					G_CALLBACK(std_entry_handler),NULL);
 
-			gtk_table_attach(GTK_TABLE(y_table),entry,
-					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
+			if (firmware->te_params[table_num]->reversed)
+				gtk_table_attach(GTK_TABLE(y_table),entry,
+						0,1,rows-i-1,rows-i, GTK_SHRINK,GTK_SHRINK,0,0);
+			else
+				gtk_table_attach(GTK_TABLE(y_table),entry,
+						0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 			page = firmware->te_params[table_num]->y_page;
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
@@ -594,8 +602,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		g_signal_connect(G_OBJECT(entry),"activate",
 				G_CALLBACK(std_entry_handler),NULL);
 
-		gtk_table_attach(GTK_TABLE(x_table),entry,
-				0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
+		if (firmware->te_params[table_num]->reversed)
+			gtk_table_attach(GTK_TABLE(x_table),entry,
+					0,1,rows-i-1,rows-i, GTK_SHRINK,GTK_SHRINK,0,0);
+		else
+			gtk_table_attach(GTK_TABLE(x_table),entry,
+					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->x_page;
 		ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
@@ -641,8 +653,12 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		g_signal_connect(G_OBJECT(entry),"activate",
 				G_CALLBACK(std_entry_handler),NULL);
 
-		gtk_table_attach(GTK_TABLE(y_table),entry,
-				0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
+		if (firmware->te_params[table_num]->reversed)
+			gtk_table_attach(GTK_TABLE(y_table),entry,
+					0,1,rows-i-1,rows-i, GTK_SHRINK,GTK_SHRINK,0,0);
+		else
+			gtk_table_attach(GTK_TABLE(y_table),entry,
+					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->y_page;
 		ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
