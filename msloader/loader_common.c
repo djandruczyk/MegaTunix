@@ -251,7 +251,7 @@ FirmwareType detect_firmware(gchar * filename)
 	GIOChannel *chan = NULL;
 	GError *error = NULL;
 	gchar * buf = NULL;
-	guint len = 0;
+	gsize len = 0;
 	FirmwareType type = MS1;
 
 	if (NULL != g_strrstr(filename,"bootstrap.s19"))
@@ -277,7 +277,7 @@ FirmwareType detect_firmware(gchar * filename)
 void unlock_port()
 {
 #ifndef __WIN32__
-//	printf("told to unlock serial,  path \"%s\"\n",fname);
+/*	printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (serial_lockfile)
 	{
 		if (g_file_test(serial_lockfile,G_FILE_TEST_IS_REGULAR))
@@ -317,20 +317,20 @@ gboolean lock_port(gchar * name)
 	g_strfreev(vector);
 	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
 	{
-//		printf("found existing lock!\n");
+/*		printf("found existing lock!\n");*/
 		if(g_file_get_contents(lock,&contents,NULL,&err))
 		{
-//			printf("read existing lock\n");
+/*			printf("read existing lock\n");*/
 			vector = g_strsplit(g_strchug(contents)," ", -1);
-//			printf("lock had %i fields\n",g_strv_length(vector));
+/*			printf("lock had %i fields\n",g_strv_length(vector));*/
 			pid = (gint)g_ascii_strtoull(vector[0],NULL,10);
-//			printf("pid in lock \"%i\"\n",pid);
+/*			printf("pid in lock \"%i\"\n",pid);*/
 			g_free(contents);
 			g_strfreev(vector);
 			tmpbuf = g_strdup_printf("/proc/%i",pid);
 			if (g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
 			{
-//				printf("process active\n");
+/*				printf("process active\n");*/
 				g_free(tmpbuf);
 				g_free(lock);
 				return FALSE;

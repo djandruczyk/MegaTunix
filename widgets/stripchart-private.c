@@ -117,8 +117,9 @@ void mtx_stripchart_init (MtxStripChart *chart)
 	priv->gc = NULL;
 	priv->traces = g_array_new(FALSE,TRUE,sizeof(MtxStripChartTrace *));
 	mtx_stripchart_init_colors(chart);
-//	if (GTK_WIDGET_REALIZED(chart))
-//		mtx_stripchart_redraw (chart);
+/*	if (GTK_WIDGET_REALIZED(chart))
+		mtx_stripchart_redraw (chart);
+*/
 }
 
 

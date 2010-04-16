@@ -1112,8 +1112,8 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
-	GdkColor *last_color = NULL;
 #ifdef __WIN32__
+	GdkColor *last_color = NULL;
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
 	{
 		if (!color) 

@@ -649,7 +649,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		{
 			if(OBJ_GET(widget, "size"))
 			{
-				offset += index * get_multiplier ((gint) OBJ_GET(widget, "size"));
+				offset += index * get_multiplier ((GINT) OBJ_GET(widget, "size"));
 			}
 			else
 			{
