@@ -245,6 +245,7 @@ c_gauge=MegaTune/Coolant-Temp_degC-Gauge.xml
 f_gauge=MegaTune/Coolant-Temp_degF-Gauge.xml
 gauge_datasource=cltdeg
 bincount=10
+x_use_color=TRUE
 x_temp_dep=TRUE
 x_axis_label=Coolant Temp (deg)
 x_page=0

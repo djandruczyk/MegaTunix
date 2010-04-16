@@ -1109,7 +1109,17 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
 #ifdef __WIN32__
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
-		gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+	{
+		if (!color) 
+		{
+			if (OBJ_GET(widget,"use_color")) 	/* Color reset */
+				update_widget((GObject *)widget,NULL);
+			else
+				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+		}
+		else
+			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+	}
 	else
 		printf("widget isn't visible or sensitive\n");
 	return;
@@ -1127,7 +1137,12 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 	if (color)
 		gdk_gc_set_rgb_fg_color(gc,color);
 	else
-		gdk_gc_set_rgb_fg_color(gc,&white);
+	{
+		if (OBJ_GET(widget, "use_color"))
+			gdk_gc_set_rgb_fg_color(gc,&widget->style->base[GTK_STATE_NORMAL]);
+		else
+			gdk_gc_set_rgb_fg_color(gc,&white);
+	}
 	/* Top */
 	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,widget->allocation.width-4,2);
 	/* Bottom */

@@ -322,7 +322,7 @@ void finalize_core_gui(GladeXML * xml)
 	/* Locate Port button */
 #ifdef __WIN32__
 	widget = glade_xml_get_widget(xml,"locate_port_button");
-	gtk_widget_set_sensisitive (widget,FALSE);
+	gtk_widget_set_sensitive (widget,FALSE);
 #endif
 	
 	/* Read Timeout threshold spinner */
