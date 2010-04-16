@@ -1131,10 +1131,11 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 			if (OBJ_GET(widget,"use_color"))
 			{
 				last_color = OBJ_GET(widget,"last_color");
-				if (last_color)
-					g_free(last_color);
-				last_color = gdk_color_copy(&widget->style->base[GTK_STATE_NORMAL]);
-				OBJ_SET(widget,"last_color",(gpointer)last_color);
+				if (!last_color)
+				{
+					last_color = gdk_color_copy(&widget->style->base[GTK_STATE_NORMAL]);
+					OBJ_SET(widget,"last_color",(gpointer)last_color);
+				}
 			}
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 		}
