@@ -38,6 +38,7 @@ extern Firmware_Details *firmware;
 extern GdkColor green;
 extern GdkColor red;
 extern GdkColor blue;
+extern GdkColor black;
 typedef struct
 {
 	GtkWidget *curve;
@@ -290,6 +291,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 			update_widget(G_OBJECT(entry),NULL);
+			gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
 
 			/* Y Column */
@@ -341,6 +343,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 			update_widget(G_OBJECT(entry),NULL);
+			gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 		}
 		/* Create the "LOCK" buttons */
 		dummy = gtk_toggle_button_new_with_label("Unlocked");
@@ -616,6 +619,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
+		gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
 
 		/* Y Column */
@@ -668,6 +672,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
+		gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 	}
 	/* Create the "LOCK" buttons */
 	dummy = gtk_toggle_button_new_with_label("Unlocked");
@@ -1107,18 +1112,32 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
+	GdkColor *last_color = NULL;
 #ifdef __WIN32__
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
 	{
 		if (!color) 
 		{
 			if (OBJ_GET(widget,"use_color")) 	/* Color reset */
-				update_widget((GObject *)widget,NULL);
+			{
+				last_color = OBJ_GET(widget,"last_color");
+				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,last_color);
+			}
 			else
 				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 		}
 		else
+		{
+			if (OBJ_GET(widget,"use_color"))
+			{
+				last_color = OBJ_GET(widget,"last_color");
+				if (last_color)
+					g_free(last_color);
+				last_color = gdk_color_copy(&widget->style->base[GTK_STATE_NORMAL]);
+				OBJ_SET(widget,"last_color",(gpointer)last_color);
+			}
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
+		}
 	}
 	else
 		printf("widget isn't visible or sensitive\n");
