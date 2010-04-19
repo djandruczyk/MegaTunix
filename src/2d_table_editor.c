@@ -290,9 +290,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			page = firmware->te_params[table_num]->x_page;
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
-
 			update_widget(G_OBJECT(entry),NULL);
-			gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
 			/* Y Column */
 			entry = gtk_entry_new();
@@ -343,7 +341,6 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 			update_widget(G_OBJECT(entry),NULL);
-			gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 		}
 		/* Create the "LOCK" buttons */
 		dummy = gtk_toggle_button_new_with_label("Unlocked");
@@ -622,7 +619,6 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
-		gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
 		/* Y Column */
 		entry = gtk_entry_new();
@@ -676,7 +672,6 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
-		gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 	}
 	/* Create the "LOCK" buttons */
 	dummy = gtk_toggle_button_new_with_label("Unlocked");
