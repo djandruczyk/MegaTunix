@@ -2335,6 +2335,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 			}
 		}
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{
@@ -2399,6 +2400,7 @@ void update_widget(gpointer object, gpointer user_data)
 				}
 			}
 		}
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 	{

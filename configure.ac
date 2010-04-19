@@ -186,6 +186,7 @@ msloader/resources.rc
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
+gaugedesigner/gauges/AutoGauge/Makefile
 gaugedesigner/gauges/Speco/Makefile
 gaugedesigner/gauges/SportComp/Makefile
 gaugedesigner/gauges/UltraLite/Makefile

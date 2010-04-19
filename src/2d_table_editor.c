@@ -31,7 +31,7 @@
 #include <tabloader.h>
 #include <watches.h>
 #include <widgetmgmt.h>
-
+#include <mtxmatheval.h>
 
 extern GObject *global_data;
 extern Firmware_Details *firmware;
@@ -39,6 +39,7 @@ extern GdkColor green;
 extern GdkColor red;
 extern GdkColor blue;
 extern GdkColor black;
+
 typedef struct
 {
 	GtkWidget *curve;
@@ -293,7 +294,6 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			update_widget(G_OBJECT(entry),NULL);
 			gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
-
 			/* Y Column */
 			entry = gtk_entry_new();
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),6);
@@ -418,6 +418,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 	gfloat tmpf = 0.0;
 	gint rows = 0;
 	gboolean embedded = FALSE;
+	void *evaluator = NULL;
 
 	if (table_num >= firmware->total_te_tables)
 	{
@@ -585,6 +586,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
 		OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->x_temp_dep));
 		OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
+		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
+
 		if(firmware->te_params[table_num]->x_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
@@ -621,7 +624,6 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		update_widget(G_OBJECT(entry),NULL);
 		gtk_widget_modify_text(entry,GTK_STATE_NORMAL,&black);
 
-
 		/* Y Column */
 		entry = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(entry),6);
@@ -639,6 +641,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
 		OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->y_temp_dep));
 		OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
+		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
+
 		if(firmware->te_params[table_num]->y_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",OBJ_GET(global_data,"temp_units"));
@@ -692,11 +696,23 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
+
+	evaluator = evaluator_create(firmware->te_params[table_num]->x_ul_conv_expr);
+	firmware->te_params[table_num]->x_2d_lower_limit = evaluator_evaluate_x(evaluator,firmware->te_params[table_num]->x_raw_lower);
+	firmware->te_params[table_num]->x_2d_upper_limit = evaluator_evaluate_x(evaluator,firmware->te_params[table_num]->x_raw_upper);
+	evaluator_destroy(evaluator);
+
+	evaluator = evaluator_create(firmware->te_params[table_num]->y_ul_conv_expr);
+	firmware->te_params[table_num]->y_2d_lower_limit = evaluator_evaluate_x(evaluator,firmware->te_params[table_num]->y_raw_lower);
+	firmware->te_params[table_num]->y_2d_upper_limit = evaluator_evaluate_x(evaluator,firmware->te_params[table_num]->y_raw_upper);
+	evaluator_destroy(evaluator);
+
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
-			(gfloat)firmware->te_params[table_num]->x_raw_lower,
-			(gfloat)firmware->te_params[table_num]->x_raw_upper,
-			(gfloat)firmware->te_params[table_num]->y_raw_lower,
-			(gfloat)firmware->te_params[table_num]->y_raw_upper);
+		firmware->te_params[table_num]->x_2d_lower_limit,
+		firmware->te_params[table_num]->x_2d_upper_limit,
+		firmware->te_params[table_num]->y_2d_lower_limit,
+		firmware->te_params[table_num]->y_2d_upper_limit);
+		
 	/* One shot to get marker drawn. */
 	create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 	/* continuous to catch changes. */
@@ -841,23 +857,30 @@ void coords_changed(GtkWidget *curve, gpointer data)
 
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
-	/* X Coord */
-	array = OBJ_GET(curve,"x_entries");
-	entry = g_array_index(array,GtkWidget *,index);
-	precision = (GINT)OBJ_GET(entry, "precision");
-	tmpbuf = g_strdup_printf("%1$.*2$f",point.x,precision);
-	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
-	g_signal_emit_by_name(entry, "activate");
-	g_free(tmpbuf);
 
-	/* Y Coord */
-	array = OBJ_GET(curve,"y_entries");
-	entry  = g_array_index(array,GtkWidget *,index);
-	precision = (GINT)OBJ_GET(entry, "precision");
-	tmpbuf = g_strdup_printf("%1$.*2$f",point.y,precision);
-	gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
-	g_signal_emit_by_name(entry, "activate");
-	g_free(tmpbuf);
+	if(!mtx_curve_get_x_axis_lock_state(MTX_CURVE(curve)))
+	{
+		/* X Coord */
+		array = OBJ_GET(curve,"x_entries");
+		entry = g_array_index(array,GtkWidget *,index);
+		precision = (GINT)OBJ_GET(entry, "precision");
+		tmpbuf = g_strdup_printf("%1$.*2$f",point.x,precision);
+		gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
+		g_signal_emit_by_name(entry, "activate");
+		g_free(tmpbuf);
+	}
+
+	if(!mtx_curve_get_y_axis_lock_state(MTX_CURVE(curve)))
+	{
+		/* Y Coord */
+		array = OBJ_GET(curve,"y_entries");
+		entry  = g_array_index(array,GtkWidget *,index);
+		precision = (GINT)OBJ_GET(entry, "precision");
+		tmpbuf = g_strdup_printf("%1$.*2$f",point.y,precision);
+		gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
+		g_signal_emit_by_name(entry, "activate");
+		g_free(tmpbuf);
+	}
 }
 
 
@@ -879,9 +902,9 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 	{
 		/* Turn the current one red */
 		entry = g_array_index(x_array,GtkWidget *,index);
-		highlight_entry(entry,&red);
+		highlight_entry(entry,&blue);
 		entry = g_array_index(y_array,GtkWidget *,index);
-		highlight_entry(entry,&red);
+		highlight_entry(entry,&blue);
 		if (!OBJ_GET(curve,"last_proximity_vertex"))
 		{
 			/* Last undefined, must be first run, 
@@ -1011,9 +1034,9 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				highlight_entry(entry,&red);
+				highlight_entry(entry,&blue);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				highlight_entry(entry,&red);
+				highlight_entry(entry,&blue);
 			}
 		}
 	}
@@ -1048,9 +1071,9 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 			else
 			{
 				entry = g_array_index(x_array,GtkWidget *,last-1);
-				highlight_entry(entry,&red);
+				highlight_entry(entry,&blue);
 				entry = g_array_index(y_array,GtkWidget *,last-1);
-				highlight_entry(entry,&red);
+				highlight_entry(entry,&blue);
 			}
 		}
 	}
@@ -1113,32 +1136,17 @@ EXPORT gboolean add_2d_table(GtkWidget *widget)
 void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
 #ifdef __WIN32__
-	GdkColor *last_color = NULL;
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
 	{
 		if (!color) 
 		{
 			if (OBJ_GET(widget,"use_color")) 	/* Color reset */
-			{
-				last_color = OBJ_GET(widget,"last_color");
-				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,last_color);
-			}
+				update_widget((GObject *)widget,NULL);
 			else
 				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 		}
 		else
-		{
-			if (OBJ_GET(widget,"use_color"))
-			{
-				last_color = OBJ_GET(widget,"last_color");
-				if (!last_color)
-				{
-					last_color = gdk_color_copy(&widget->style->base[GTK_STATE_NORMAL]);
-					OBJ_SET(widget,"last_color",(gpointer)last_color);
-				}
-			}
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
-		}
 	}
 	else
 		printf("widget isn't visible or sensitive\n");

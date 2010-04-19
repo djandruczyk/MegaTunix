@@ -278,6 +278,8 @@ struct _TE_Params
 	gint x_base;		/*! offset of column in page  */
 	gint x_raw_lower;	/*! X raw lower in ECU units */
 	gint x_raw_upper;	/*! X raw upper in ECU units */
+	gint x_2d_lower_limit;
+	gint x_2d_upper_limit;
 	DataSize x_size;	/*! enumeration size for the var */
 	gchar *x_dl_conv_expr;	/*! dl conv expr */
 	gchar *x_ul_conv_expr;	/*! ul conv expr */
@@ -293,6 +295,8 @@ struct _TE_Params
 	gint y_base;		/*! offset of column in page  */
 	gint y_raw_lower;	/*! Y raw lower in ECU units */
 	gint y_raw_upper;	/*! Y raw upper in ECU units */
+	gint y_2d_lower_limit;
+	gint y_2d_upper_limit;
 	DataSize y_size;	/*! enumeration size for the var */
 	gchar *y_dl_conv_expr;	/*! dl conv expr */
 	gchar *y_ul_conv_expr;	/*! ul conv expr */
