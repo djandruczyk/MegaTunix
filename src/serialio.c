@@ -377,9 +377,15 @@ void *serial_repair_thread(gpointer data)
 				{
 					if (autodetect)
 						thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+#ifdef __PIS_SUPPORT__
+					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 8192 Baud for ECU link\n"),FALSE,FALSE);
+					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 8192 for comms test\n",vector[i]));
+					setup_serial_params(8192);
+#else
 					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 9600 for comms test\n",vector[i]));
 					setup_serial_params(9600);
+#endif
 					/* read out any junk in buffer and toss it */
 					read_wrapper(serial_params->fd,&buf,1024,&len);
 
@@ -391,6 +397,7 @@ void *serial_repair_thread(gpointer data)
 						serial_is_open = TRUE;
 						break;
 					}
+#ifndef __PIS_SUPPORT__
 					else
 					{
 						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 115200 for comms test\n",vector[i]));
@@ -415,6 +422,7 @@ void *serial_repair_thread(gpointer data)
 
 						}
 					}
+#endif
 				}
 				else
 					unlock_serial();

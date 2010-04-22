@@ -20,7 +20,7 @@
 typedef enum
 {
 	MS1=0xcca,
-	MS2
+	MS2,
 }FirmwareType;
 
 

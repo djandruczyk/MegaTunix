@@ -6,7 +6,8 @@ rtmap_files = 	README \
 		MSnS-Extra-HR-029x.rtv_map \
 		MSnS-Extra-029x.rtv_map \
 		MS2-Std.rtv_map \
-		MS2-Extra-2.1.0.rtv_map
+		MS2-Extra-2.1.0.rtv_map \
+		PIS_V1_00-firmware.rtv_map
 
 rtmap_DATA = $(rtmap_files)
 

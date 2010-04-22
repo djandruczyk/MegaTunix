@@ -97,3 +97,6 @@
 
 /* OS has 64 bit pointers */
 #undef __64BIT__
+
+/* User requested PIS firmare support */
+#undef __PIS_SUPPORT__

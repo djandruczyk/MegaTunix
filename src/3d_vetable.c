@@ -392,7 +392,10 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			g_object_ref(ve_view->z_objects[i][j]);
 			gtk_object_sink(GTK_OBJECT(ve_view->z_objects[i][j]));
 			OBJ_SET(ve_view->z_objects[i][j],"page",GINT_TO_POINTER(ve_view->z_page));
-			OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((j*ve_view->y_bincount)+i))));
+			if (firmware->capabilities & PIS)
+				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((i*ve_view->y_bincount)+j))));
+			else
+				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((j*ve_view->y_bincount)+i))));
 			OBJ_SET(ve_view->z_objects[i][j],"size",GINT_TO_POINTER(ve_view->z_size));
 			OBJ_SET(ve_view->z_objects[i][j],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->z_conv_expr));
 			if (firmware->table_params[table_num]->z_multi_source)

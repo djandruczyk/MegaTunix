@@ -5,7 +5,8 @@ rtslider_files = 	README \
 			DT-firmware.rts_conf \
 			MSnS-Extra-firmware.rts_conf \
 			MS2-Std-firmware.rts_conf \
-			MS2-Extra-firmware.rts_conf 
+			MS2-Extra-firmware.rts_conf \
+			PIS_V1_00-firmware.rts_conf
 
 rtslider_DATA = $(rtslider_files)
 

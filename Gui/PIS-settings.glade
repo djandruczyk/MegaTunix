@@ -1,0 +1,2408 @@
+<?xml version="1.0"?>
+<glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
+  <widget class="GtkWindow" id="window1">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">window1</property>
+    <child>
+      <widget class="GtkFrame" id="topframe">
+        <property name="visible">True</property>
+        <property name="label_xalign">0</property>
+        <child>
+          <widget class="GtkVBox" id="main_vbox1">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <property name="shadow_type">etched-in</property>
+                <child>
+                  <widget class="GtkViewport" id="viewport1">
+                    <property name="visible">True</property>
+                    <property name="shadow_type">none</property>
+                    <child>
+                      <widget class="GtkNotebook" id="table_notebook">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="show_border">False</property>
+                        <property name="enable_popup">True</property>
+                        <signal name="switch_page" handler="subtab_changed"/>
+                        <child>
+                          <widget class="GtkVBox" id="vbox1">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <widget class="GtkTable" id="table3">
+                                <property name="visible">True</property>
+                                <property name="n_columns">4</property>
+                                <child>
+                                  <widget class="GtkTable" id="table1">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">2</property>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame1">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table2">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">2</property>
+                                            <child>
+                                              <widget class="GtkTable" id="table4">
+                                                <property name="visible">True</property>
+                                                <property name="border_width">5</property>
+                                                <property name="n_rows">5</property>
+                                                <property name="n_columns">2</property>
+                                                <property name="column_spacing">2</property>
+                                                <property name="row_spacing">2</property>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label49">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Crank Threshold</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label52">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Reference Angle</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="crank_threshold">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="reference_angle">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label54">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Crank Dwell</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="crank_dwell">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label55">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Min IAR</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">3</property>
+                                                    <property name="bottom_attach">4</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label56">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Max IAR</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">4</property>
+                                                    <property name="bottom_attach">5</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="min_iar">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">3</property>
+                                                    <property name="bottom_attach">4</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="max_iar">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">4</property>
+                                                    <property name="bottom_attach">5</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkCheckButton" id="cranking_bypass">
+                                                <property name="label" translatable="yes">Cranking Bypass</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="bitmask_button_handler"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label1">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Ignition</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame2">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table5">
+                                            <property name="visible">True</property>
+                                            <property name="border_width">5</property>
+                                            <property name="n_rows">4</property>
+                                            <property name="n_columns">2</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label61">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Limit Hysterisis (RPM)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label3">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Soft Offset (RPM)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label4">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Soft IAR</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="rpm_limit_hysterisis">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="rpm_limit_soft_offset">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="soft_iar">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="hard_iar">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label5">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Hard IAR</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label2">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">RPM Limiter</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="x_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkFrame" id="frame26">
+                                    <property name="visible">True</property>
+                                    <property name="border_width">5</property>
+                                    <property name="label_xalign">0</property>
+                                    <child>
+                                      <widget class="GtkTable" id="table28">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="n_rows">2</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table29">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">12</property>
+                                            <property name="n_columns">2</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label64">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Update (ms)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_update">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label65">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Min RPM</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label66">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Max RPM</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label67">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Min TPS %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label68">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Max TPS %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label69">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Uptime (s)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label70">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Min CTS (deg)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label71">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Min BPW %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">7</property>
+                                                <property name="bottom_attach">8</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label72">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Max BPW %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">8</property>
+                                                <property name="bottom_attach">9</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label73">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Transient (ms)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">9</property>
+                                                <property name="bottom_attach">10</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label74">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Proportional %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">10</property>
+                                                <property name="bottom_attach">11</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label75">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Integral %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">11</property>
+                                                <property name="bottom_attach">12</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_min_rpm">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_max_rpm">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_min_tps">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_max_tps">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_uptime">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_min_cts">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_min">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">7</property>
+                                                <property name="bottom_attach">8</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_max">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">8</property>
+                                                <property name="bottom_attach">9</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_transient">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">9</property>
+                                                <property name="bottom_attach">10</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_proportional">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">10</property>
+                                                <property name="bottom_attach">11</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="EGO_integral">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">11</property>
+                                                <property name="bottom_attach">12</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkCheckButton" id="closed_loop">
+                                            <property name="label" translatable="yes">Enabled</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="draw_indicator">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label78">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Closed Loop EGO</property>
+                                        <property name="use_markup">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="x_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkFrame" id="frame24">
+                                    <property name="visible">True</property>
+                                    <property name="border_width">5</property>
+                                    <property name="label_xalign">0</property>
+                                    <child>
+                                      <widget class="GtkTable" id="table14">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="n_rows">3</property>
+                                        <property name="column_spacing">2</property>
+                                        <property name="row_spacing">2</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table23">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">7</property>
+                                            <property name="n_columns">2</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label34">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Range</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_range">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_update">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_on_throttle">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_hysterisis">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_rpm_roc">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_max_tps">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_delay">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Update (ms)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label36">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">On Throttle</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label37">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">RPM Hysterisis</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label38">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Max RPM ROC</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label39">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Max TPS %</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label40">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Control Delay</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkTable" id="table24">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">5</property>
+                                            <property name="n_columns">4</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_CTS_bin_0_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_CTS_bin_1_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_CTS_bin_2_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label35">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">CTS bins</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_cranking_0_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_cranking_1_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_cranking_2_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label41">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Cranking</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label42">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Minimum</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label43">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Start</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label47">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Idle RPM</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_minimum_0_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_minimum_1_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_minimum_2_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_start_0_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_start_1_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_start_2_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_idle_rpm_0_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_idle_rpm_1_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="IAC_idle_rpm_2_of_2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkCheckButton" id="iac_enabled">
+                                            <property name="label" translatable="yes">Enabled</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="draw_indicator">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label33">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">IAC Idle Control</property>
+                                        <property name="use_markup">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="x_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkTable" id="table10">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">3</property>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame5">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table8">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">2</property>
+                                            <child>
+                                              <widget class="GtkTable" id="table9">
+                                                <property name="visible">True</property>
+                                                <property name="border_width">5</property>
+                                                <property name="n_rows">3</property>
+                                                <property name="n_columns">2</property>
+                                                <property name="column_spacing">2</property>
+                                                <property name="row_spacing">2</property>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label11">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Cylinders</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="cylinders">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="inject_skips">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label12">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Inject Skips</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label15">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="xpad">5</property>
+                                                    <property name="label" translatable="yes">Flood Clear %</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkEntry" id="flood_clear">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="has_frame">False</property>
+                                                    <property name="invisible_char">&#x25CF;</property>
+                                                    <property name="width_chars">5</property>
+                                                    <signal name="button_press_event" handler="widget_grab"/>
+                                                    <signal name="changed" handler="entry_changed_handler"/>
+                                                    <signal name="key_press_event" handler="key_event"/>
+                                                    <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                    <signal name="activate" handler="std_entry_handler"/>
+                                                    <signal name="key_release_event" handler="key_event"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkCheckButton" id="two_stroke">
+                                                <property name="label" translatable="yes">Two Stroke</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label13">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Engine</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame3">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table6">
+                                            <property name="visible">True</property>
+                                            <property name="border_width">5</property>
+                                            <property name="n_rows">2</property>
+                                            <property name="n_columns">2</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label6">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Start MAP Blending (RPM)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label7">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">MAP Only (RPM)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="alpha_start_map_rpm">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="alpha_map_only_rpm">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label10">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Alpha-N</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame4">
+                                        <property name="visible">True</property>
+                                        <property name="border_width">5</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkTable" id="table7">
+                                            <property name="visible">True</property>
+                                            <property name="border_width">5</property>
+                                            <property name="n_rows">2</property>
+                                            <property name="n_columns">2</property>
+                                            <property name="column_spacing">2</property>
+                                            <property name="row_spacing">2</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label8">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Fan On (deg)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label9">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="xpad">5</property>
+                                                <property name="label" translatable="yes">Fan Off (deg)</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="fan_on">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkEntry" id="fan_off">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">5</property>
+                                                <signal name="button_press_event" handler="widget_grab"/>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label14">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Auxiliary	</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="x_options"></property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkHBox" id="hbox1">
+                                <property name="visible">True</property>
+                                <child>
+                                  <widget class="GtkAspectFrame" id="CFG_gaugeframe1">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkAspectFrame" id="CFG_gaugeframe2">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkAspectFrame" id="CFG_gaugeframe3">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkAspectFrame" id="CFG_gaugeframe4">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkAspectFrame" id="CFG_gaugeframe5">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">none</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="CFG_notebook_tab_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Settings</property>
+                          </widget>
+                          <packing>
+                            <property name="tab_fill">False</property>
+                            <property name="type">tab</property>
+                          </packing>
+                        </child>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkFrame" id="runtime_status_frame">
+                <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <child>
+                  <widget class="GtkHBox" id="runtime_status_hbox0">
+                    <property name="visible">True</property>
+                    <property name="border_width">5</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_cranking_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_cranking_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">CRANKING</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_running_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_running_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">RUNNING</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_warmup_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_asc_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">ASC</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_ase_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_accel_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">ACCEL</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_accel_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_decel_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">DECEL</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_decel_frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_close_loop_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">CLOSED LOOP</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_decel_frame1">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_idle_control_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">IDLE CONTROL</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_decel_frame2">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_alpha_n_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">ALPHA N</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkFrame" id="runtime_status_decel_frame3">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <widget class="GtkLabel" id="runtime_fan_label">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="label" translatable="yes">FAN</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="runtime_status_frame_title">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Runtime Status</property>
+                  </widget>
+                  <packing>
+                    <property name="type">label_item</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkFrame" id="Cmd_Frame">
+                <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <child>
+                  <widget class="GtkTable" id="commands_table">
+                    <property name="visible">True</property>
+                    <property name="border_width">5</property>
+                    <property name="n_columns">4</property>
+                    <property name="column_spacing">5</property>
+                    <property name="row_spacing">5</property>
+                    <child>
+                      <widget class="GtkButton" id="burn_data_button">
+                        <property name="label" translatable="yes">Permanently Store Data in ECU</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="std_button_handler"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="x_options">GTK_EXPAND</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="get_data_button">
+                        <property name="label" translatable="yes">Get Data from ECU</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="std_button_handler"/>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_EXPAND</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="runtime_start_realtime_button">
+                        <property name="label" translatable="yes">Start Reading RT Data</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="std_button_handler"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="x_options">GTK_EXPAND</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="runtime_stop_realtime_button">
+                        <property name="label" translatable="yes">Stop Reading RT Data</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="std_button_handler"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="right_attach">4</property>
+                        <property name="x_options">GTK_EXPAND</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="commands_label">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Commands</property>
+                  </widget>
+                  <packing>
+                    <property name="type">label_item</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="topframe_title">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">PIS - Settings</property>
+          </widget>
+          <packing>
+            <property name="type">label_item</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>

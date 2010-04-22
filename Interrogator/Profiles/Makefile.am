@@ -6,6 +6,7 @@ profiles = README \
 	Dualtable-1.02.prof \
 	MS-II-Extra_2.1.0.prof \
 	MS-II.prof \
+	PIS_V1_00.prof \
 	SquirtnSpark-Extra-HR-029x.prof \
 	SquirtnSpark-Extra-HR-010a.prof \
 	SquirtnSpark-Extra-HR-011x.prof \

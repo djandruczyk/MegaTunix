@@ -132,7 +132,27 @@ gui_files = 	README \
 		warmupwizard.datamap \
 		warmupwizard.glade \
 		test.datamap \
-		test.glade
+		test.glade \
+		PIS-accel.glade \
+		PIS-alpha_biar_16x10.datamap \
+		PIS-alpha_biar_16x10.glade \
+		PIS-alpha_bpw_16x10.datamap \
+		PIS-alpha_bpw_16x10.glade \
+		PIS-biar_16x16.datamap \
+		PIS-biar_16x16.glade \
+		PIS-boost_16x10.datamap \
+		PIS-boost_16x10.glade \
+		PIS-bpw_16x16.datamap \
+		PIS-bpw_16x16.glade \
+		PIS-corrections.datamap \
+		PIS-corrections.glade \
+		PIS-ego_16x16.glade \
+		PIS-ego_16x16.datamap \
+		PIS-runtime.datamap \
+		PIS-runtime.glade \
+		PIS-settings.datamap \
+	       	PIS-settings.glade 
+
 
 gui_DATA = $(gui_files)
 

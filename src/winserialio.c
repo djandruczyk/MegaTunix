@@ -43,10 +43,13 @@ void win32_setup_serial_params(gint fd, gint baud)
 	/* Populate struct with defaults from windows */
 	GetCommState((HANDLE) _get_osfhandle(fd), &dcb);
 
+	/*
 	if (baud == 9600)
 		dcb.BaudRate = CBR_9600;
 	else if (baud == 115200)
 		dcb.BaudRate = CBR_115200;
+		*/
+	dcb.BaudRate = baud;
 	dcb.ByteSize = 8;
 	dcb.Parity   = NOPARITY;        /* NOPARITY and friends are */
 	dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */

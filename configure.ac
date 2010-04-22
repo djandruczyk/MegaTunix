@@ -81,14 +81,22 @@ AC_SUBST(LIBXML2_LIBS)
 
 AC_CHECK_SIZEOF([int *])
 if test $ac_cv_sizeof_int_p -eq 8; then
-	echo "64 bit"
 	AC_DEFINE([__64BIT__], [], [OS has 64 bit pointers])
 else
-	echo "32 bit"
 	AC_DEFINE([__32BIT__], [], [OS has 32 bit pointers])
 fi
 
 
+dnl ===============
+dnl Device specific stuff
+dnl ===============
+
+AC_ARG_ENABLE(pis,
+[  --enable-pis         enable pis support [default=no]],, enable_pis=no)
+
+if test "$enable_pis" = yes ; then
+	AC_DEFINE([__PIS_SUPPORT__], [], [User requested PIS firmare support])
+fi
 dnl ===============
 dnl Debugging stuff
 dnl ===============
@@ -224,4 +232,5 @@ Configuration:
     Install Path:                       ${prefix}
     General Debugging:                  ${enable_debug}
     Profiling:                          ${enable_profiling}
+    PIS Support:                        ${enable_pis}
 "

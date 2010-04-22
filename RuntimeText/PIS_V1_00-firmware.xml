@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<runtimetext>
+	<api>
+		<major>1</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for MS-2 Standard.</description>
+	</info>
+	<rtt>
+		<internal_name>Seconds</internal_name>
+		<datasource>status_seconds</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>RPM</internal_name>
+		<datasource>status_rpm_rpm</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>RPM Limit</internal_name>
+		<datasource>status_rpm_limit</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>CTS (deg)</internal_name>
+		<datasource>cts_temp</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>CTS Correction %</internal_name>
+		<datasource>status_cts_correction</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>CTS IAR (+adv/-ret)</internal_name>
+		<datasource>status_cts_iar</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>MAT (deg)</internal_name>
+		<datasource>mat_temp</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>MAT (%)</internal_name>
+		<datasource>status_mat_correction</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>MAT IAR (+adv/-ret)</internal_name>
+		<datasource>status_mat_iar</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>MAP (kPa)</internal_name>
+		<datasource>status_map_map</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>TPS (%)</internal_name>
+		<datasource>status_tps_tps</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>TPS ROC (%)</internal_name>
+		<datasource>status_tps_roc</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>ACC CTS (%)</internal_name>
+		<datasource>status_ae_cts_factor</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>ACC ROC (%)</internal_name>
+		<datasource>status_ae_roc_factor</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>ACC BPW (ms)</internal_name>
+		<datasource>status_ae_BPW</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>ACC APW (ms)</internal_name>
+		<datasource>status_ae_APW</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Lambda</internal_name>
+		<datasource>lambda</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Lambda Target</internal_name>
+		<datasource>lambda_target</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Lambda (%)</internal_name>
+		<datasource>status_ego_correction</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Final APW (ms)</internal_name>
+		<datasource>status_APW</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>IAR (+adv/-ret)</internal_name>
+		<datasource>status_ign_AIAR</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Voltage (V)</internal_name>
+		<datasource>status_adc_volt</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Injector Open (ms)</internal_name>
+		<datasource>status_open_delay</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>IAC RPM</internal_name>
+		<datasource>status_iac_idle_rpm</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>IAC POS</internal_name>
+		<datasource>status_iac_position</datasource>
+	</rtt>
+</runtimetext>

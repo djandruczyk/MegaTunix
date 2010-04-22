@@ -521,7 +521,7 @@ void draw_ve_marker()
 			right_w = 0;
 		}
 	}
-	/*printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);*/
+	/* printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);*/
 
 	page = firmware->table_params[table]->y_page;
 	base = firmware->table_params[table]->y_base;
@@ -589,22 +589,44 @@ redraw:
 	size = firmware->table_params[table]->z_size;
 	z_mult = get_multiplier(size);
 	/*printf("bottom bin %i, top bin %i, bottom_weight %f, top_weight %f\n",bin[2],bin[3],bottom_w,top_w);*/
-	if ((bin[0] == -1) || (bin[2] == -1))
-		z_bin[0] = -1;
+	if (firmware->capabilities & PIS)
+	{
+		if ((bin[0] == -1) || (bin[2] == -1))
+			z_bin[0] = -1;
+		else
+			z_bin[0] = bin[2]+(bin[0]*firmware->table_params[table]->y_bincount);
+		if ((bin[0] == -1) || (bin[3] == -1))
+			z_bin[1] = -1;
+		else
+			z_bin[1] = bin[3]+(bin[0]*firmware->table_params[table]->y_bincount);
+		if ((bin[1] == -1) || (bin[2] == -1))
+			z_bin[2] = -1;
+		else
+			z_bin[2] = bin[2]+(bin[1]*firmware->table_params[table]->y_bincount);
+		if ((bin[1] == -1) || (bin[3] == -1))
+			z_bin[3] = -1;
+		else
+			z_bin[3] = bin[3]+(bin[1]*firmware->table_params[table]->y_bincount);
+	}
 	else
-		z_bin[0] = bin[0]+(bin[2]*firmware->table_params[table]->x_bincount);
-	if ((bin[0] == -1) || (bin[3] == -1))
-		z_bin[1] = -1;
-	else
-		z_bin[1] = bin[0]+(bin[3]*firmware->table_params[table]->x_bincount);
-	if ((bin[1] == -1) || (bin[2] == -1))
-		z_bin[2] = -1;
-	else
-		z_bin[2] = bin[1]+(bin[2]*firmware->table_params[table]->x_bincount);
-	if ((bin[1] == -1) || (bin[3] == -1))
-		z_bin[3] = -1;
-	else
-		z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
+	{
+		if ((bin[0] == -1) || (bin[2] == -1))
+			z_bin[0] = -1;
+		else
+			z_bin[0] = bin[0]+(bin[2]*firmware->table_params[table]->x_bincount);
+		if ((bin[0] == -1) || (bin[3] == -1))
+			z_bin[1] = -1;
+		else
+			z_bin[1] = bin[0]+(bin[3]*firmware->table_params[table]->x_bincount);
+		if ((bin[1] == -1) || (bin[2] == -1))
+			z_bin[2] = -1;
+		else
+			z_bin[2] = bin[1]+(bin[2]*firmware->table_params[table]->x_bincount);
+		if ((bin[1] == -1) || (bin[3] == -1))
+			z_bin[3] = -1;
+		else
+			z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
+	}
 	/* Take the PREVIOUS ones and reset them back to their DEFAULT color
 	*/
 	for (i=0;i<4;i++)
