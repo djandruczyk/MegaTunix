@@ -371,10 +371,20 @@ void set_title(gchar * text)
 
 	if (firmware)
 	{
-		if (firmware->actual_signature)
-			tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+		if (firmware->capabilities & PIS)
+		{
+			if (firmware->actual_signature)
+				tmpbuf = g_strdup_printf("MegaTunix-P.I.S. %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+			else
+				tmpbuf = g_strconcat("MegaTunix-P.I.S. ",VERSION,",   ",text,NULL);
+		}
 		else
-			tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+		{
+			if (firmware->actual_signature)
+				tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+			else
+				tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+		}
 	}
 	else
 		tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);

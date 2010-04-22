@@ -520,5 +520,74 @@
 				<function>ms2_ttm_watch</function>
 			</post_functions>
 		</cmd>
+		<cmd>
+			<name>pis_get_signature</name>
+			<desc>Triggers the ecu to echo back it's api signature</desc>
+			<type>_WRITE_CMD_</type>
+			<base>t</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_SIGNATURE_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>pis_veconst</name>
+			<desc>Triggers the delco to return the VE/Constants</desc>
+			<type>_WRITE_CMD_</type>
+			<base>r</base>
+			<args>
+				<arg>MS2_OFFSET</arg>
+				<arg>MS2_NUM_BYTES</arg>
+			</args>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_MS2_VECONST_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>pis_generic_write</name>
+			<desc>Generic write function, sets data to any offset and length</desc>
+			<type>_WRITE_CMD_</type>
+			<base>w</base>
+			<args>
+				<arg>MS2_OFFSET</arg>
+				<arg>MS2_NUM_BYTES</arg>
+				<arg>DATACHUNK</arg>
+			</args>
+			<post_functions>
+			<defer_post_functions>FALSE</defer_post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
+				<function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>pis_std_rtvars</name>
+			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
+			<type>_WRITE_CMD_</type>
+			<base>a</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_MS2_RT_VARS_</helper_func_arg>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+				<function>fire_off_rtv_watches_pf</function>
+				<function>run_datalog_pf</function>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>pis_get_textrev</name>
+			<desc>Triggers the ecu to echo back it's textual revision</desc>
+			<type>_WRITE_CMD_</type>
+			<base>v</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_TEXT_REV_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>pis_thermal_calibration</name>
+			<desc>This command expects 256 words (16bit) (MAT,CLT)</desc>
+			<type>_WRITE_CMD_</type>
+			<base>@</base>
+			<args>
+				<arg>MS2_TABLE_INDEX</arg>
+				<arg>DATACHUNK</arg>
+			</args>
+		</cmd>
 	</commands>
 </comms>
