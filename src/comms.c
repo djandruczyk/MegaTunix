@@ -387,7 +387,7 @@ gboolean write_data(Io_Message *message)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
 				if ((notifies) && ((j % notif_divisor) == 0))
-					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf("Sending %i or %i bytes",j,block->len));
+					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf("Sending %i of %i bytes",j,block->len));
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
