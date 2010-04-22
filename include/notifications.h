@@ -27,6 +27,7 @@ void warn_user(gchar *);
 void set_title(gchar *);
 void conn_warning(void);
 void kill_conn_warning(void);
+gboolean reset_infolabel(gpointer);
 gboolean get_response(GtkWidget *, gpointer );
 
 gint close_dialog(GtkWidget *, gpointer);

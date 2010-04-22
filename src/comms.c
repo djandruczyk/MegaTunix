@@ -300,6 +300,8 @@ gboolean write_data(Io_Message *message)
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
+	gboolean notifies = FALSE;
+	gint notif_divisor = 32;
 	DataSize size = MTX_U08;
 	gint value = 0;
 	WriteMode mode = MTX_CMD_WRITE;
@@ -379,9 +381,13 @@ gboolean write_data(Io_Message *message)
 		else if (block->type == DATA)
 		{
 	/*		printf("Block type of DATA!\n");*/
+			if (block->len > 100)
+				notifies = TRUE;
 			for (j=0;j<block->len;j++)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
+				if ((notifies) && ((j % notif_divisor) == 0))
+					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf("Sending %i or %i bytes",j,block->len));
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
@@ -398,6 +404,11 @@ gboolean write_data(Io_Message *message)
 			}
 		}
 
+	}
+	if (notifies)
+	{
+		thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup("Transfer Completed"));
+		g_timeout_add(2000,(GtkFunction)reset_infolabel,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 
 	 * and pending match, in the case of a failed write, the 

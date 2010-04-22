@@ -339,11 +339,23 @@ gboolean close_dialog(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+ \brief reset_infolabel() resets infolabel text to "Ready"
+ */
+gboolean reset_infolabel(gpointer data)
+{
+	static GtkWidget *info_label = NULL;
+	if (!info_label)
+		info_label = (GtkWidget *)lookup_widget("info_label");
+	if (GTK_IS_WIDGET(info_label))
+		gtk_label_set_markup(GTK_LABEL(info_label),"<big>Ready...</big>");
+	return FALSE;
+}
 
 /*!
  \brief set_title() appends text to the titlebar of the application to
  give user notifications...
- \param text (gchar *) text to append, (static strings only please)
+ \param text (gchar *) text to append, dynamic strings only
  */
 void set_title(gchar * text)
 {
