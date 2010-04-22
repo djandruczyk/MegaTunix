@@ -30,7 +30,8 @@ typedef enum
 	MS2		= 1<<4,
 	MS2_STD		= 1<<5,
 	MS2_E		= 1<<6,
-	MS2_E_COMPMON	= 1<<7
+	MS2_E_COMPMON	= 1<<7,
+	PIS		= 1<<8
 }Capability;
 
 

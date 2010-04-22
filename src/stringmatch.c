@@ -35,6 +35,8 @@ void build_string_2_enum_table()
 	str_2_enum = g_hash_table_new(g_str_hash,g_str_equal);
 
 	/* Firmware capabilities */
+	g_hash_table_insert(str_2_enum,"_PIS_",
+			GINT_TO_POINTER(PIS));
 	g_hash_table_insert(str_2_enum,"_MS1_",
 			GINT_TO_POINTER(MS1));
 	g_hash_table_insert(str_2_enum,"_MS1_STD_",

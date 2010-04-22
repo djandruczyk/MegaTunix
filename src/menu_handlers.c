@@ -287,6 +287,7 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	extern volatile gboolean leaving;
+	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
@@ -306,11 +307,16 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"c_label",g_strdup("Temperature(\302\260 C)"));
 		OBJ_SET(item,"f_label",g_strdup("Temperature(\302\260 F)"));
 		register_widget("temp_label",item);
-		item = glade_xml_get_widget(xml,"bias_entry");
-		register_widget("bias_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("100000"));
-		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		if (firmware->capabilities & PIS)
+			gtk_widget_destroy(glade_xml_get_widget(xml,"bias_resistor_table"));
+		else
+		{
+			item = glade_xml_get_widget(xml,"bias_entry");
+			register_widget("bias_entry",item);
+			OBJ_SET(item,"raw_lower",g_strdup("0"));
+			OBJ_SET(item,"raw_upper",g_strdup("100000"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		}
 
 		item = glade_xml_get_widget(xml,"temp1_entry");
 		register_widget("temp1_entry",item);
