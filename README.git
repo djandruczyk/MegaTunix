@@ -1,0 +1,14 @@
+As of 4/26/2010  CVS is deprecated, I moved to git.
+
+to update  run "git pull"
+
+To generate the necessary files after pulling run "./autogen.sh"
+
+it's REQUIRED to run "./autogen.sh" after every git pull 
+in case the developer chanegd the configure.ac or Makefile.am files.  
+autogen will take care of creating the files that depend on those so that 
+you don't end up with build problems...
+
+As for the automake/autoconf warnings,  in 99.995% of the cases it's safe
+to ignore those warnings.  You can thank the autofoo tool maintainers for
+those..
