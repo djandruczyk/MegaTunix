@@ -768,6 +768,7 @@ gboolean close_dash(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *cbutton = NULL;
 	
+	fullscreen = FALSE;
 	index = (GINT)data;
 	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
 	cbutton = lookup_widget(tmpbuf);
