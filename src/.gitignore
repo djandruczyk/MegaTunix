@@ -1,6 +1,2 @@
-Makefile
-Makefile.in
-.deps
 resources.rc
 megatunix
-*.o

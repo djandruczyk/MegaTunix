@@ -26,3 +26,8 @@ missing
 install.sh
 install-sh
 depcomp
+*.o
+*.lo
+*.la
+.deps
+.libs

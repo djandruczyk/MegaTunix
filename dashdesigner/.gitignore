@@ -1,7 +1,2 @@
-Makefile
-Makefile.in
-deps
 resources.rc
 dashdesigner
-.deps
-*.o
