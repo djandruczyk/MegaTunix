@@ -1,0 +1,8 @@
+Makefile
+Makefile.in
+.deps
+*.gladep
+idea
+resources.rc
+gaugedesigner
+*.o

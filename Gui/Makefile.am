@@ -133,7 +133,6 @@ gui_files = 	README \
 		warmupwizard.glade \
 		test.datamap \
 		test.glade \
-		PIS-accel.glade \
 		PIS-alpha_biar_16x10.datamap \
 		PIS-alpha_biar_16x10.glade \
 		PIS-alpha_bpw_16x10.datamap \

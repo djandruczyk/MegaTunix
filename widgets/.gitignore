@@ -1,0 +1,17 @@
+*.o
+*.la
+*.lo
+7seg 
+Makefile 
+Makefile.in 
+TODO
+output2.xml
+idea
+apifix
+curvedemo
+gaugedemo
+piedemo
+progressdemo
+stripchartdemo
+.deps
+.libs

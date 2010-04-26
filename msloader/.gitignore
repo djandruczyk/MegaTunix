@@ -1,0 +1,10 @@
+Makefile
+Makefile.in
+deps
+notes
+resources.rc
+msloader
+mtxloader
+.deps
+.libs
+*.o

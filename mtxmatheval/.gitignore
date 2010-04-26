@@ -1,0 +1,13 @@
+Makefile
+Makefile.in
+foo
+foo.c
+g77_interface.c
+parser.c
+parser.h
+scanner.c
+*.o
+*.lo
+*.la
+.deps
+.libs
