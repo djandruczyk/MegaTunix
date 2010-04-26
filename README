@@ -48,3 +48,6 @@ I recommend glade-2.x as 3.x has a lot of issues.  Unfortunately glade-2.x
 doesn't appear to be available with the very latest linux distros (ubuntu 9.10
 does not have it)
 
+As of 4/26/2010 MegaTunix has moved version control into Git.
+To work with git run:
+cd ; mkdir git ; git clone http://github.com/djandruczyk/MegaTunix.git

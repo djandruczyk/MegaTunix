@@ -1,3 +1,5 @@
+As of 4/26/2010  CVS is deprecated,  moved to git
+see README.git
 
 To generate the necessary files to use from CVS run "./autogen.sh"
 
