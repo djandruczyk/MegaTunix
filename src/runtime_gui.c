@@ -487,7 +487,8 @@ breakout:
 		if ((active_page == RUNTIME_TAB) || (active_page == SETTINGS_TAB )|| (active_page == CORRECTIONS_TAB))
 				update_tab_gauges();
 	}
-	else if ((active_page == VETABLES_TAB) || (active_page == SPARKTABLES_TAB) || (active_page == AFRTABLES_TAB) || (active_page == BOOSTTABLES_TAB) || (active_page == ROTARYTABLES_TAB) || (active_page == ALPHA_N_TAB) || (forced_update))
+
+	if ((active_page == VETABLES_TAB) || (active_page == SPARKTABLES_TAB) || (active_page == AFRTABLES_TAB) || (active_page == BOOSTTABLES_TAB) || (active_page == ROTARYTABLES_TAB) || (active_page == ALPHA_N_TAB) || (forced_update))
 	{
 		draw_ve_marker();
 		update_tab_gauges();
