@@ -397,6 +397,15 @@ void *serial_repair_thread(gpointer data)
 						serial_is_open = TRUE;
 						break;
 					}
+					else
+					{
+						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed for 8192 baud rate,  no ECU found, closing port %s.\n", vector[i]));
+						close_serial();
+						unlock_serial();
+						/*g_usleep(100000);*/
+
+					}
+
 #ifndef __PIS_SUPPORT__
 					else
 					{
