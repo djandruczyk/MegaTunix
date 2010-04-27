@@ -1,6 +1,6 @@
 [global]
 description=Object data map for lambda tab
-tab_name=_EGO Table
+tab_name=_Lambda Targets
 id_prefix=EGO_
 groups=defaults
 
@@ -38,7 +38,7 @@ page=0
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
-tooltip=This button retrieves the EGO constants block of data and updates all controls with the current values.
+tooltip=This button retrieves the Lambda Targets constants block of data and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
@@ -65,7 +65,7 @@ table_num=1
 keys=table_num,tooltip,bind_to_list
 table_num=2
 bind_to_list=3d_buttons
-tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+tooltip=This pops up a 3 dimensional view of the current Lambda Target table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 #----- Widgets --------------------------------------------------------------
 
@@ -85,22 +85,22 @@ table_num=2
 [EGO_gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
-datasource=status_tps_tps
+gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
+datasource=status_map_map
 table_num=2
 
 [EGO_gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_CLT_degC_Gauge.xml
-datasource=cts_celcius
+datasource=cts_temp
 table_num=2
 
 [EGO_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAT_degC_Gauge.xml
-datasource=mat_celcius
+datasource=mat_temp
 table_num=2
 
 [EGO_gaugeframe5]
@@ -159,7 +159,7 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=16384
 use_color=TRUE
-tooltip=The RPM bins in combination with the MAP bins on the left side of the EGO table define the vertexes (points on the EGO map).  The ECU will interpolate between vertexes providing a smooth transition between points on the EGO map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The RPM bins in combination with the Manifold Absolute Pressure (MAP) bins on the left side of the Lambda Table table define the vertexes (points on the Lambda map).  The ECU will interpolate between vertexes providing a smooth transition between points on the Lambda map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- EGO-Table Entries -----------------------------------------------------
 
@@ -176,7 +176,7 @@ dl_conv_expr=(x-.5)*255
 ul_conv_expr=.5 + ((1/255) * x)
 precision=2
 use_color=TRUE
-tooltip=The EGO entries are for closed loop targets. Fueling correction % will be adjustedto reach targets. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The Lambda entries are for closed loop targets. Fuelling correction % will be adjusted to reach targets. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #------- Runtime Status Indicators ------------------------------------------
 

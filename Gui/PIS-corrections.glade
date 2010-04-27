@@ -98,6 +98,7 @@
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
+					  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 24 Apr 2010 00:19:36 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">0</property>
@@ -2953,6 +2954,7 @@
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
+					  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 24 Apr 2010 00:19:20 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">0</property>
@@ -5011,6 +5013,7 @@
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
+					  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 24 Apr 2010 00:19:50 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">0</property>
@@ -5548,7 +5551,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		      <child>
-			<widget class="GtkLabel" id="runtime_close_loop_label">
+			<widget class="GtkLabel" id="runtime_closed_loop_label">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">CLOSED LOOP</property>

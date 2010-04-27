@@ -162,6 +162,7 @@ z_precision=0
 
 [table_3]
 table_name=Spark Table 1, MSnSpark-Extra
+is_spark=TRUE
 x_page=3
 x_base_offset=144
 x_bincount=12
@@ -191,6 +192,7 @@ z_precision=1
 
 [table_4]
 table_name=Spark Table 2, MSnSpark-Extra
+is_spark=TRUE
 x_page=4
 x_base_offset=144
 x_bincount=12

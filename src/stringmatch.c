@@ -250,6 +250,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	/* Page Identifiers */
+	g_hash_table_insert(str_2_enum,"_SETTINGS_TAB_",
+			GINT_TO_POINTER(SETTINGS_TAB));
+	g_hash_table_insert(str_2_enum,"_CORRECTIONS_TAB_",
+			GINT_TO_POINTER(CORRECTIONS_TAB));
 	g_hash_table_insert(str_2_enum,"_DATALOGGING_TAB_",
 			GINT_TO_POINTER(DATALOGGING_TAB));
 	g_hash_table_insert(str_2_enum,"_ACCEL_WIZ_TAB_",

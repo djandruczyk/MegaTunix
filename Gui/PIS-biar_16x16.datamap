@@ -1,6 +1,6 @@
 [global]
-description=Object data map for base pulse width tab
-tab_name=_BIAR Table
+description=Object data map for base ignition +advance / -retard tab
+tab_name=Base _Ignition
 id_prefix=BIAR_
 groups=defaults
 
@@ -36,7 +36,7 @@ page=0
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
-tooltip=This button retrieves the BIAR constants block of data and updates all controls with the current values.
+tooltip=This button retrieves the Base Ignition +Advance / -Retards (BIAR) constants block of data and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
@@ -63,7 +63,7 @@ table_num=1
 keys=table_num,tooltip,bind_to_list
 table_num=1
 bind_to_list=3d_buttons
-tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+tooltip=This pops up a 3 dimensional view of the current Base Ignition +Advance / -Retard Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button hold down and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [BIAR_rescale_button]
 keys=handler,data
@@ -95,15 +95,15 @@ table_num=1
 [BIAR_gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
-datasource=status_ign_AIAR
+gaugexml=SportComp/AM_SportComp_CLT_degC_Gauge.xml
+datasource=cts_temp
 table_num=1
 
 [BIAR_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_MAT_degC_Gauge.xml
-datasource=mat_celcius
+gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
+datasource=status_ign_AIAR
 table_num=1
 
 [BIAR_gaugeframe5]
@@ -146,7 +146,7 @@ raw_upper=350
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 use_color=TRUE
-tooltip=The MAP bins in combination with the RPM bins on the bottom of the BIAR table define the vertexes (points on the BIAR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The Manifold Absolute Pressure (MAP) bins in combination with the RPM bins on the bottom of the Base Ignition +Advance / -Retards (BIAR) table define the vertexes (points on the BIAR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- RPM Entries ---------------------------------------------------------
 
@@ -162,7 +162,7 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=16384
 use_color=TRUE
-tooltip=The RPM bins in combination with the MAP bins on the left side of the BIAR table define the vertexes (points on the BIAR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the BIAR map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The RPM bins in combination with the Manifold Absolute Pressure (MAP) bins on the left side of the Base Ignition +Advance / -Retards (BIAR) table define the vertexes (points on the BIAR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the BIAR map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- BIAR-Table Entries -----------------------------------------------------
 
@@ -179,7 +179,7 @@ dl_conv_expr=x*(28444/10000)
 ul_conv_expr=x/(28444/10000)
 precision=1
 use_color=TRUE
-tooltip=The BIAR Entries control the ignition timing. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+tooltip=The Base Ignition +Advance / -Retard (BIAR) Entries control the ignition timing. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #------- Runtime Status Indicators ------------------------------------------
 
@@ -281,4 +281,3 @@ source=status_flags3
 bitval=1
 bitshift=4
 bitmask=16
-

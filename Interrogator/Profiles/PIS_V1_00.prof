@@ -3,7 +3,7 @@ major=1
 minor=4
 
 [interrogation_profile]
-name=V1_00
+name=Delco P.I.S V1_00
 
 [parameters]
 InterCharDelay=1
@@ -24,27 +24,11 @@ MultiPage=FALSE
 ChunkWriteSupport=TRUE
 TotalTables=6
 TotalTETables=10
-TotalPages=2
+TotalPages=4
 
 [table_0]
-table_name=PIS - Base Pulse Width (BPW) Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=MAP vs. RPM (BPW)
+is_fuel=TRUE
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -70,24 +54,8 @@ z_conv_expr=x/66
 z_precision=2
 
 [table_1]
-table_name=PIS - Base Ignition +Advance / -Retard (BIAR) Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=MAP vs. RPM (BIAR)
+is_spark=TRUE
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -113,24 +81,7 @@ z_conv_expr=x/(28444/10000)
 z_precision=1
 
 [table_2]
-table_name=PIS - Lambda Closed Loop Target Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=Lambda Targets
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -156,24 +107,8 @@ z_conv_expr=.5 + ((1/255) * x)
 z_precision=2
 
 [table_3]
-table_name=PIS - Alpha-N- Base Ignition +Advance / -Retard (ANBIAR) Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=TPS vs. RPM (ANBIAR)
+is_spark=TRUE
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -199,24 +134,8 @@ z_conv_expr=x/(28444/10000)
 z_precision=1
 
 [table_4]
-table_name=PIS - Alpha-N-Base Pulse Width (ANBPW) Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=TPS vs. RPM (ANBPW)
+is_fuel=TRUE
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -242,24 +161,7 @@ z_conv_expr=x/66
 z_precision=2
 
 [table_5]
-table_name=PIS - Boost Limiting (kPa) Table
-is_fuel=FALSE
-reqfuel_page=0
-reqfuel_offset=0
-reqfuel_size=_U16_
-divider_page=0
-divider_offset=0
-alternate_page=0
-alternate_offset=0
-num_inj_page=0
-num_inj_offset=0
-num_inj_mask=0
-num_cyl_page=0
-num_cyl_offset=0
-num_cyl_mask=0
-stroke_page=0
-stroke_offset=0
-stroke_mask=0
+table_name=Boost Limiting (kPa)
 x_page=0
 x_base_offset=6
 x_bincount=16
@@ -683,12 +585,21 @@ dl_by_default=FALSE
 phys_ecu_page=0
 length=124
 
+[page_2]
+dl_by_default=FALSE
+phys_ecu_page=0
+length=512
+
+[page_3]
+dl_by_default=FALSE
+phys_ecu_page=0
+length=512
+
 [interrogation]
-match_on=clock,title,version,status
-clock=_COUNT_,2
-title=_SUBMATCH_,PIS firmware (C) 2010 Jason Roughley. pis.controller@gmail.com
-version=_SUBMATCH_,V1.00
-status=_COUNT_,124
+match_on=MS-II_Clock,MS_Signature,MS_VerNum
+MS-II_Clock=_COUNT_,2
+MS_Signature=_SUBMATCH_,PIS firmware (C) 2010 Jason Roughley. pis.controller@gmail.com
+MS_VerNum=_SUBMATCH_,V1.00
 
 [gui]
 RealtimeMapFile=PIS_V1_00-firmware
@@ -696,8 +607,8 @@ SliderMapFile=PIS_V1_00-firmware
 RuntimeTextMapFile=PIS_V1_00-firmware
 StatusMapFile=PIS_V1_00-firmware
 
-LoadTabs=PIS-runtime,datalogging,logviewer,tools,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10
-TabConfs=PIS-runtime,datalogging,logviewer,tools,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10
+LoadTabs=PIS-runtime,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10,datalogging,logviewer,tools
+TabConfs=PIS-runtime,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10,datalogging,logviewer,tools
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

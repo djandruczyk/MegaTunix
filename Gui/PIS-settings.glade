@@ -60,6 +60,7 @@
 
 		      <child>
 			<widget class="GtkVBox" id="vbox1">
+			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
@@ -3658,7 +3659,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		      <child>
-			<widget class="GtkLabel" id="runtime_close_loop_label">
+			<widget class="GtkLabel" id="runtime_closed_loop_label">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">CLOSED LOOP</property>

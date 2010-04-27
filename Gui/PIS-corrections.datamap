@@ -1,6 +1,6 @@
 [global]
 description=Object data map for alpha-n base ignition +advance / -retard tab
-tab_name=Corrections
+tab_name=_Corrections
 id_prefix=COR_
 groups=defaults
 
@@ -14,11 +14,11 @@ page=0
 #----- topframe  --------------------------------------------------------------
 
 [topframe]
-keys=table_num,tab_ident,sub-notebook,bind_to_list
-tab_ident=_COR_TAB_
+keys=tab_ident,sub-notebook,bind_to_list,table_num
+tab_ident=_CORRECTIONS_TAB_
 sub-notebook=table_notebook
 bind_to_list=valid_ecu_ctrls
-table_num=4
+table_num=0
 
 #----- Buttons ----------------------------------------------------------------
 
@@ -112,83 +112,37 @@ handler=_BURN_FLASH_
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
-[COR_export_button]
-keys=handler,table_num
-handler=_EXPORT_SINGLE_TABLE_
-table_num=4
-
-[COR_import_button]
-keys=handler,table_num
-handler=_IMPORT_SINGLE_TABLE_
-table_num=4
-
-[COR_3d_view_button]
-keys=table_num,tooltip,bind_to_list
-table_num=4
-bind_to_list=3d_buttons
-tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
-
-#----- Widgets ----------------------------------------------------------------
-
-[COR_vbox1]
-keys=table_num
-table_num=4
-
 #----- Gauges -----------------------------------------------------------------
 
 [COR_gaugeframe1]
-keys=post_functions_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=status_rpm_rpm
-table_num=4
 
 [COR_gaugeframe2]
-keys=post_functions_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
-datasource=status_tps_tps
-table_num=4
+gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
+datasource=status_map_map
 
 [COR_gaugeframe3]
-keys=post_functions_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_CLT_degC_Gauge.xml
-datasource=cts_celcius
-table_num=4
+datasource=cts_temp
 
 [COR_gaugeframe4]
-keys=post_functions_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAT_degC_Gauge.xml
-datasource=mat_celcius
-table_num=4
+datasource=mat_temp
 
 [COR_gaugeframe5]
-keys=post_functions_with_arg,gaugexml,datasource,table_num
+keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
 datasource=lambda
-table_num=4
-
-#----- Rescale Entry ----------------------------------------------------------
-
-[COR_rescale_entry]
-keys=table_num
-table_num=4
-
-#----- Rescale Combo ----------------------------------------------------------
-
-[COR_rescale_combo]
-keys=table_num,post_functions_with_arg
-table_num=4
-post_functions_with_arg=lock_entry
-
-#----- MAIN PWTable Container -------------------------------------------------
-
-[COR_main_table]
-keys=rescaler_frame
-rescaler_frame=COR_rescale_frame
 
 #----- CTS Settings / Corrections ---------------------------------------------
 

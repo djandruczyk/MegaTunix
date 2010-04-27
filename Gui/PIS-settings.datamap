@@ -1,6 +1,6 @@
 [global]
 description=Object data map for settings tab
-tab_name=Settings
+tab_name=_Settings
 id_prefix=CFG_
 groups=defaults
 
@@ -14,10 +14,11 @@ page=0
 #----- topframe  --------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook,bind_to_list
-tab_ident=_CFG_TAB_
+keys=tab_ident,sub-notebook,bind_to_list,table_num
+tab_ident=_SETTINGS_TAB_
 sub-notebook=table_notebook
 bind_to_list=valid_ecu_ctrls
+table_num=0
 
 #----- Buttons ----------------------------------------------------------------
 
@@ -33,7 +34,7 @@ handler=_STOP_REALTIME_
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_
 bind_to_list=get_data_buttons
-tooltip=This button retrieves the COR constants block of data and updates all controls with the current values.
+tooltip=This button retrieves the Settings constants block of data and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
@@ -72,6 +73,8 @@ keys=post_functions_with_arg,gaugexml,datasource
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
 datasource=lambda
+
+#---- Settings ----------------------------------------------------------------
 
 [cranking_bypass]
 keys=handler,offset,bitmask,bitshift,bitval

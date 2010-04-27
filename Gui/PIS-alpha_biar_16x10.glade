@@ -400,7 +400,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="ANBIAR_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS</property>
+					      <property name="label" translatable="yes">%</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -430,7 +430,7 @@
 				      <child>
 					<widget class="GtkLabel" id="ANBIAR_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">MAP Bins</property>
+					  <property name="label" translatable="yes">TPS Bins</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5975,6 +5975,7 @@
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
+					  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 24 Apr 2010 00:42:05 GMT"/>
 					</widget>
 					<packing>
 					  <property name="padding">0</property>
@@ -5991,6 +5992,7 @@
 					  <property name="use_underline">True</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
+					  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 24 Apr 2010 00:42:15 GMT"/>
 					</widget>
 					<packing>
 					  <property name="padding">0</property>
@@ -6170,7 +6172,7 @@
 		      <child>
 			<widget class="GtkLabel" id="ANBIAR_notebook_tab_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">ANBIAR</property>
+			  <property name="label" translatable="yes">Alpha-N Base Ignition +Advance / -Retard</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6524,7 +6526,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		      <child>
-			<widget class="GtkLabel" id="runtime_close_loop_label">
+			<widget class="GtkLabel" id="runtime_closed_loop_label">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">CLOSED LOOP</property>
@@ -6693,7 +6695,7 @@
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">PIS - Boost Targets</property>
+	  <property name="label" translatable="yes">PIS Alpha-N Base Ignition +Advance / -Retard</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

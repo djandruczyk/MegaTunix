@@ -10,7 +10,6 @@
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
-
 #include <config.h>
 #include <defines.h>
 #include <afr_calibrate.h>
@@ -26,7 +25,9 @@
 #include <threads.h>
 #include <vex_support.h>
 #include <widgetmgmt.h>
-
+#include <debugging.h>
+#include <mtxmatheval.h>
+#include <datamgmt.h>
 
 extern GObject *global_data;
 static struct 
@@ -216,6 +217,7 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 	GladeXML *xml = NULL;
 	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
+	extern Firmware_Details *firmware;
 
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
@@ -232,40 +234,81 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
-		OBJ_SET(item,"offset",GINT_TO_POINTER(518));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2676));
+		else
+			OBJ_SET(item,"offset",GINT_TO_POINTER(518));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("2047"));
-		OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-		ve_widgets[0][518] = g_list_prepend(
-				ve_widgets[0][518],
-				(gpointer)item);
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ve_widgets[0][2676] = g_list_prepend(
+					ve_widgets[0][2676],
+					(gpointer)item);
+		}
+		else
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ve_widgets[0][518] = g_list_prepend(
+					ve_widgets[0][518],
+					(gpointer)item);
+		}
 
 		item = glade_xml_get_widget(xml,"tpsMax_entry");
 		register_widget("tpsMax_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
-		OBJ_SET(item,"offset",GINT_TO_POINTER(520));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2678));
+		else
+			OBJ_SET(item,"offset",GINT_TO_POINTER(520));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("2047"));
-		OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-		ve_widgets[0][520] = g_list_prepend(
-				ve_widgets[0][520],
-				(gpointer)item);
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ve_widgets[0][2678] = g_list_prepend(
+					ve_widgets[0][2678],
+					(gpointer)item);
 
-		/* Force them to update */
-		g_list_foreach(ve_widgets[0][518],update_widget,NULL);
-		g_list_foreach(ve_widgets[0][520],update_widget,NULL);
+			/* Force them to update */
+			g_list_foreach(ve_widgets[0][2676],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2678],update_widget,NULL);
+
+		}
+		else
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ve_widgets[0][520] = g_list_prepend(
+					ve_widgets[0][520],
+					(gpointer)item);
+
+			/* Force them to update */
+			g_list_foreach(ve_widgets[0][518],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][520],update_widget,NULL);
+
+		}
 
 		item = glade_xml_get_widget(xml,"get_tps_button_min");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
-		OBJ_SET(item,"source",g_strdup("tpsADC"));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+		else
+			OBJ_SET(item,"source",g_strdup("tpsADC"));
 		OBJ_SET(item,"dest_widget",g_strdup("tpsMin_entry"));
+
 		item = glade_xml_get_widget(xml,"get_tps_button_max");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
-		OBJ_SET(item,"source",g_strdup("tpsADC"));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+		else
+			OBJ_SET(item,"source",g_strdup("tpsADC"));
 		OBJ_SET(item,"dest_widget",g_strdup("tpsMax_entry"));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
@@ -444,6 +487,7 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 	GladeXML *xml = NULL;
 	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
+	extern Firmware_Details *firmware;
 
 	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
@@ -457,31 +501,63 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 
 		item = glade_xml_get_widget(xml,"map0_entry");
 		register_widget("map0_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-1"));
-		OBJ_SET(item,"raw_upper",g_strdup("327"));
-		OBJ_SET(item,"page",GINT_TO_POINTER(0));
-		OBJ_SET(item,"offset",GINT_TO_POINTER(506));
-		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
-		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-		ve_widgets[0][506] = g_list_prepend(
-				ve_widgets[0][506],
-				(gpointer)item);
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_lower",g_strdup("0"));
+			OBJ_SET(item,"raw_upper",g_strdup("600"));
+			OBJ_SET(item,"page",GINT_TO_POINTER(0));
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2702));
+			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
+			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
+			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
+			ve_widgets[0][2702] = g_list_prepend(
+					ve_widgets[0][2702],
+					(gpointer)item);
+		}
+		else
+		{
+			OBJ_SET(item,"raw_lower",g_strdup("-1"));
+			OBJ_SET(item,"raw_upper",g_strdup("327"));
+			OBJ_SET(item,"page",GINT_TO_POINTER(0));
+			OBJ_SET(item,"offset",GINT_TO_POINTER(506));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+			ve_widgets[0][506] = g_list_prepend(
+					ve_widgets[0][506],
+					(gpointer)item);
+		}
 
 		item = glade_xml_get_widget(xml,"map5_entry");
 		register_widget("map5_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-1"));
-		OBJ_SET(item,"raw_upper",g_strdup("327"));
-		OBJ_SET(item,"page",GINT_TO_POINTER(0));
-		OBJ_SET(item,"offset",GINT_TO_POINTER(508));
-		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
-		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-		ve_widgets[0][508] = g_list_prepend(
-				ve_widgets[0][508],
-				(gpointer)item);
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_lower",g_strdup("0"));
+			OBJ_SET(item,"raw_upper",g_strdup("600"));
+			OBJ_SET(item,"page",GINT_TO_POINTER(0));
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2704));
+			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
+			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
+			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
+			ve_widgets[0][2704] = g_list_prepend(
+					ve_widgets[0][2704],
+					(gpointer)item);
+		}
+		else
+		{
+			OBJ_SET(item,"raw_lower",g_strdup("-1"));
+			OBJ_SET(item,"raw_upper",g_strdup("327"));
+			OBJ_SET(item,"page",GINT_TO_POINTER(0));
+			OBJ_SET(item,"offset",GINT_TO_POINTER(508));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+			ve_widgets[0][508] = g_list_prepend(
+					ve_widgets[0][508],
+					(gpointer)item);
+		}
 
 		item = glade_xml_get_widget(xml,"baro0_entry");
 		register_widget("baro0_entry",item);
@@ -497,6 +573,9 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 				ve_widgets[0][530],
 				(gpointer)item);
 
+		if (firmware->capabilities & PIS)
+			gtk_widget_destroy(item);
+
 		item = glade_xml_get_widget(xml,"baro5_entry");
 		register_widget("baro5_entry",item);
 		OBJ_SET(item,"raw_lower",g_strdup("-1"));
@@ -511,11 +590,20 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 				ve_widgets[0][532],
 				(gpointer)item);
 
-		/* Force them to update */
-		g_list_foreach(ve_widgets[0][506],update_widget,NULL);
-		g_list_foreach(ve_widgets[0][508],update_widget,NULL);
-		g_list_foreach(ve_widgets[0][530],update_widget,NULL);
-		g_list_foreach(ve_widgets[0][532],update_widget,NULL);
+		if (firmware->capabilities & PIS)
+		{
+			gtk_widget_destroy(item);
+			g_list_foreach(ve_widgets[0][2702],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2704],update_widget,NULL);
+		}
+		else
+		{
+			/* Force them to update */
+			g_list_foreach(ve_widgets[0][506],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][508],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][530],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][532],update_widget,NULL);
+		}
 
 		item = glade_xml_get_widget(xml,"get_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(READ_VE_CONST));
@@ -656,3 +744,245 @@ EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 	io_cmd("ms2_reboot",NULL);
 	return TRUE;
 }
+
+/*!
+ \ show / hide window
+ \ populates the combo box with available spark maps that could be filled out by the generator
+  */
+EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	extern volatile gboolean leaving;
+	extern GList ***ve_widgets;
+	extern Firmware_Details *firmware;
+	GList *spark_tables = NULL;
+	gint t;
+
+	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	if ((!main_xml) || (leaving))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"create_ignition_window",NULL);
+		window = glade_xml_get_widget(xml,"create_ignition_window");
+		glade_xml_signal_autoconnect(xml);
+
+		for (t=0; t != firmware->total_tables; t++)
+		{
+			if (firmware->table_params[t]->is_spark)
+				spark_tables = g_list_append(spark_tables, firmware->table_params[t]->table_name);
+		}
+
+		if (spark_tables)
+		{
+			item = glade_xml_get_widget(xml,"spark_table_combo");
+			gtk_combo_set_popdown_strings(GTK_COMBO(item), spark_tables);
+		}
+		else
+		{
+			dbg_func(CRITICAL, g_strdup_printf(__FILE__ ": show_create_ignition_map_window():\n\tUnable to find or allocate any table titles!\n"));
+			return TRUE;	// panic
+		}
+
+		gtk_widget_show_all(GTK_WIDGET(window));
+		return TRUE;
+	}
+
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}
+
+EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
+{
+	GladeXML* xml;
+	GtkWidget* item;
+	gint i, x, y;
+	gint table;
+	gchar *table_title;
+	extern Firmware_Details *firmware;
+	gint canID = firmware->canID;
+	gdouble x_bin[64], y_bin[64];
+	gint page;
+	gint base;
+	DataSize size;
+	gint mult;
+	void *evaluator;
+	gdouble light_advance;
+	gdouble idle_rpm, idle_load, idle_advance;
+	gdouble peak_torque_rpm, peak_torque_load, peak_torque_advance;
+	gdouble advance;
+	gdouble maximum_rpm_advance;
+	gdouble maximum_retard, retard_start_load;
+	extern GList ***ve_widgets;
+	GList *list = NULL;
+	gchar * tmpbuf;
+	gint precision;
+
+	xml = glade_get_widget_tree (GTK_WIDGET (widget));
+
+	// find the combo box
+	item = glade_xml_get_widget (xml, "spark_table_combo");
+	if (!item)
+	{
+		dbg_func(CRITICAL, g_strdup_printf(__FILE__ ": create_ignition_map():\n\tUnable to find spark table combo! where am I?\n"));
+		return TRUE;
+	}
+
+	// the selected text in the combo box
+	table_title = (gchar *) gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(item)->entry));
+	if (table_title == NULL)
+	{
+		dbg_func(CRITICAL, g_strdup_printf(__FILE__ ": create_ignition_map():\n\ttable_title was unavailable\n"));
+		return TRUE;
+	}
+
+	// iterate through the firmware tables looking for a match
+	for (table=0; table!= firmware->total_tables; table++)
+		if (!g_strcmp0(table_title, firmware->table_params[table]->table_name)) // we have a match?
+			break;
+
+	// light load
+	item = glade_xml_get_widget (xml, "light_advance");
+	light_advance = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	// idle
+	item = glade_xml_get_widget (xml, "idle_rpm");
+	idle_rpm = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	item = glade_xml_get_widget (xml, "idle_advance");
+	idle_advance = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	item = glade_xml_get_widget (xml, "idle_load");
+	idle_load = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	// peak torque
+	item = glade_xml_get_widget (xml, "peak_torque_rpm");
+	peak_torque_rpm = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	item = glade_xml_get_widget (xml, "peak_torque_advance");
+	peak_torque_advance = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	item = glade_xml_get_widget (xml, "peak_torque_load");
+	peak_torque_load = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	// extra advance at tables maximum RPM
+	item = glade_xml_get_widget (xml, "maximum_rpm_advance");
+	maximum_rpm_advance = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	// retard
+	item = glade_xml_get_widget (xml, "maximum_retard");
+	maximum_retard = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	item = glade_xml_get_widget (xml, "retard_start_load");
+	retard_start_load = strtod(gtk_entry_get_text(GTK_ENTRY(item)), NULL);
+
+	// build a copy of the x and y bins
+	/* Find bin corresponding to rpm  */
+	page = firmware->table_params[table]->x_page;
+	base = firmware->table_params[table]->x_base;
+	size = firmware->table_params[table]->x_size;
+	mult = get_multiplier(size);
+
+	evaluator = evaluator_create(firmware->table_params[table]->x_conv_expr);
+
+	// fetch us a copy of the x bins
+	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
+		x_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+
+	evaluator_destroy(evaluator);
+
+	/* Find bin corresponding to load  */
+	page = firmware->table_params[table]->y_page;
+	base = firmware->table_params[table]->y_base;
+	size = firmware->table_params[table]->y_size;
+	mult = get_multiplier(size);
+
+	evaluator = evaluator_create(firmware->table_params[table]->y_conv_expr);
+
+	// fetch us a copy of the y bins
+	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
+		y_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+
+	evaluator_destroy(evaluator);
+
+	page = firmware->table_params[table]->z_page;
+	base = firmware->table_params[table]->z_base;
+	size = firmware->table_params[table]->z_size;
+	mult = get_multiplier(size);
+
+
+	// generate a spark table :)
+	for (y=0; y != firmware->table_params[table]->y_bincount; y++)
+	{
+		for (x=0; x != firmware->table_params[table]->x_bincount; x++)
+		{
+
+			// idle -> peak torque rpm, advance interpolate
+			advance = linear_interpolate(x_bin[x], idle_rpm, peak_torque_rpm, idle_advance, peak_torque_advance);
+
+			// maximum extra advance?
+			if (x_bin[x] > peak_torque_rpm)
+				advance += linear_interpolate(x_bin[x], peak_torque_rpm, x_bin[firmware->table_params[table]->x_bincount-1], 0, maximum_rpm_advance);
+
+			// low load advance
+			// high load retard
+			if (y_bin[y] > retard_start_load)
+				advance -= linear_interpolate(y_bin[y], retard_start_load, y_bin[firmware->table_params[table]->y_bincount-1], 0, maximum_retard);
+
+			/* HACK ALERT,  this assumes the list at
+			 * ve_widgets[page][offset], contains the VEtable widget at
+			 * offset 0 of that list.  (assumptions are bad practice!)
+			 */
+			if (firmware->capabilities & PIS)
+				list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((x * firmware->table_params[table]->y_bincount) * mult) + (y * mult)];
+			else
+				list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((y * firmware->table_params[table]->y_bincount) * mult) + (x * mult)];
+			widget = g_list_nth_data(list,0);
+			precision = (GINT)OBJ_GET(widget, "precision");
+			tmpbuf = g_strdup_printf("%1$.*2$f", advance, precision);
+			gtk_entry_set_text(GTK_ENTRY(widget), tmpbuf);
+			g_free(tmpbuf);
+
+			std_entry_handler(GTK_WIDGET(widget), NULL);
+		}
+	}
+
+	gtk_widget_hide(glade_xml_get_widget (xml, "create_ignition_window"));
+	return TRUE;
+}
+
+/* non extrapolating linear dual line interpolation (3 times fast after 6 beers :-) */
+gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
+{
+	gdouble slope1, slope2, result;
+	gdouble ratio;
+	gint negative = 0;
+
+	// prevent extrapolation
+	if (offset <= slope1_a) return slope2_a;
+	if (offset >= slope1_b) return slope2_b;
+
+	offset -= slope1_a;
+	slope1 = slope1_b - slope1_a;
+
+	if (slope2_a > slope2_b)
+	{
+		slope2 = slope2_a - slope2_b;
+		negative = 1;
+	}
+	else slope2 = slope2_b - slope2_a;
+
+	ratio = (gdouble) offset / slope1;
+	result = ((gdouble)slope2_a * (1-ratio) + (gdouble)slope2_b * ratio);
+	return result;
+}
+
+
+

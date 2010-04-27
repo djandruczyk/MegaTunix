@@ -257,6 +257,7 @@ z_precision=0
 
 [table_6]
 table_name=Spark Advance Table 1, MS-II-Extra 12x12
+is_spark=TRUE
 is_fuel=FALSE
 x_page=2
 x_base_offset=576
@@ -291,6 +292,7 @@ z_precision=1
 
 [table_7]
 table_name=Spark Advance Table 2, MS-II-Extra 12x12
+is_spark=TRUE
 is_fuel=FALSE
 x_page=2
 x_base_offset=600
@@ -325,6 +327,7 @@ z_precision=1
 
 [table_8]
 table_name=Spark Advance Table 3, MS-II-Extra 12x12
+is_spark=TRUE
 is_fuel=FALSE
 x_page=3
 x_base_offset=299

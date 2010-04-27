@@ -121,6 +121,7 @@ z_precision=0
 
 [table_2]
 table_name=Spark Advance Table 1, MS-II STD
+is_spark=TRUE
 is_fuel=FALSE
 x_page=0
 x_base_offset=398

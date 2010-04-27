@@ -163,7 +163,7 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 	if (firmware->capabilities & PIS)
 	{
 		// write thermal table the PIS way :)
-		table_write(tabletype==CTS?1:2,256,(guint8 *)table);
+		table_write(tabletype==CTS?2:3,256,(guint8 *)table);
 	}
 	else if (firmware->capabilities & MS2_E)
 		table_write(tabletype==CTS?5:6,2048,(guint8 *)table);

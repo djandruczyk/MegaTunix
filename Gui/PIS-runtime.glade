@@ -589,21 +589,21 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="runtime_status_frame">
+			    <widget class="GtkFrame" id="frame10">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkHBox" id="runtime_status_hbox0">
+				<widget class="GtkHBox" id="hbox2">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="homogeneous">True</property>
 				  <property name="spacing">0</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="runtime_status_cranking_frame">
+				    <widget class="GtkFrame" id="frame11">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
@@ -638,7 +638,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="runtime_status_running_frame">
+				    <widget class="GtkFrame" id="frame12">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
@@ -673,17 +673,17 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="runtime_status_warmup_frame">
+				    <widget class="GtkFrame" id="frame13">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkLabel" id="runtime_warmup_label">
+					<widget class="GtkLabel" id="runtime_asc_label">
 					  <property name="visible">True</property>
 					  <property name="sensitive">False</property>
-					  <property name="label" translatable="yes">WARMUP</property>
+					  <property name="label" translatable="yes">ASC</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -708,42 +708,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="runtime_status_ase_frame">
-				      <property name="visible">True</property>
-				      <property name="label_xalign">0</property>
-				      <property name="label_yalign">0.5</property>
-				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-				      <child>
-					<widget class="GtkLabel" id="runtime_ase_label">
-					  <property name="visible">True</property>
-					  <property name="sensitive">False</property>
-					  <property name="label" translatable="yes">AS_ENRICH</property>
-					  <property name="use_underline">False</property>
-					  <property name="use_markup">False</property>
-					  <property name="justify">GTK_JUSTIFY_LEFT</property>
-					  <property name="wrap">False</property>
-					  <property name="selectable">False</property>
-					  <property name="xalign">0.5</property>
-					  <property name="yalign">0.5</property>
-					  <property name="xpad">0</property>
-					  <property name="ypad">0</property>
-					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					  <property name="width_chars">-1</property>
-					  <property name="single_line_mode">False</property>
-					  <property name="angle">0</property>
-					</widget>
-				      </child>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">True</property>
-				      <property name="fill">True</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkFrame" id="runtime_status_accel_frame">
+				    <widget class="GtkFrame" id="frame14">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
@@ -778,7 +743,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="runtime_status_decel_frame">
+				    <widget class="GtkFrame" id="frame15">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
@@ -811,11 +776,151 @@
 				      <property name="fill">True</property>
 				    </packing>
 				  </child>
+
+				  <child>
+				    <widget class="GtkFrame" id="frame16">
+				      <property name="visible">True</property>
+				      <property name="label_xalign">0</property>
+				      <property name="label_yalign">0.5</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+				      <child>
+					<widget class="GtkLabel" id="runtime_closed_loop_label">
+					  <property name="visible">True</property>
+					  <property name="sensitive">False</property>
+					  <property name="label" translatable="yes">CLOSED LOOP</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkFrame" id="frame17">
+				      <property name="visible">True</property>
+				      <property name="label_xalign">0</property>
+				      <property name="label_yalign">0.5</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+				      <child>
+					<widget class="GtkLabel" id="runtime_idle_control_label">
+					  <property name="visible">True</property>
+					  <property name="sensitive">False</property>
+					  <property name="label" translatable="yes">IDLE CONTROL</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkFrame" id="frame18">
+				      <property name="visible">True</property>
+				      <property name="label_xalign">0</property>
+				      <property name="label_yalign">0.5</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+				      <child>
+					<widget class="GtkLabel" id="runtime_alpha_n_label">
+					  <property name="visible">True</property>
+					  <property name="sensitive">False</property>
+					  <property name="label" translatable="yes">ALPHA N</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkFrame" id="frame19">
+				      <property name="visible">True</property>
+				      <property name="label_xalign">0</property>
+				      <property name="label_yalign">0.5</property>
+				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+				      <child>
+					<widget class="GtkLabel" id="runtime_fan_label">
+					  <property name="visible">True</property>
+					  <property name="sensitive">False</property>
+					  <property name="label" translatable="yes">FAN</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					  <property name="width_chars">-1</property>
+					  <property name="single_line_mode">False</property>
+					  <property name="angle">0</property>
+					</widget>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
 				</widget>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="runtime_status_frame_title">
+				<widget class="GtkLabel" id="label19">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Runtime Status</property>
 				  <property name="use_underline">False</property>
