@@ -397,6 +397,7 @@ void *serial_repair_thread(gpointer data)
 						serial_is_open = TRUE;
 						break;
 					}
+#ifdef __PIS_SUPPORT__
 					else
 					{
 						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed for 8192 baud rate,  no ECU found, closing port %s.\n", vector[i]));
@@ -405,8 +406,7 @@ void *serial_repair_thread(gpointer data)
 						/*g_usleep(100000);*/
 
 					}
-
-#ifndef __PIS_SUPPORT__
+#else
 					else
 					{
 						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 115200 for comms test\n",vector[i]));
@@ -433,8 +433,6 @@ void *serial_repair_thread(gpointer data)
 					}
 #endif
 				}
-				else
-					unlock_serial();
 			}
 		}
 		queue_function(g_strdup("conn_warning"));
