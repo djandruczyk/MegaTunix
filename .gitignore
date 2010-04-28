@@ -27,6 +27,8 @@ missing
 install.sh
 install-sh
 depcomp
+ylwrap
+m4
 *.o
 *.lo
 *.la
