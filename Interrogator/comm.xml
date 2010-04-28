@@ -2,13 +2,6 @@
 <comms>
 	<potential_args>
 		<arg>
-			<name>PAGE</name>
-			<desc>Page inside ECU firmware</desc>
-			<type>_DATA_</type>
-			<internal_name>page</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
 			<name>MS2_CAN_ID</name>
 			<desc>This is the CAN ID, 0-15 is valid.</desc>
 			<type>_DATA_</type>
@@ -319,7 +312,7 @@
 			<type>_WRITE_CMD_</type>
 			<base>t</base>
 			<args>
-				<arg>PAGE</arg>
+				<arg>MS2_TABLE_INDEX</arg>
 				<arg>PAUSE_100MS</arg>
 				<arg>DATACHUNK</arg>
 			</args>
@@ -592,7 +585,7 @@
 			<type>_WRITE_CMD_</type>
 			<base>@</base>
 			<args>
-				<arg>PAGE</arg>
+				<arg>MS2_TABLE_INDEX</arg>
 				<arg>DATACHUNK</arg>
 			</args>
 		</cmd>
