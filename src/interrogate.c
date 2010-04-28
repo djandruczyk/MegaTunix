@@ -672,6 +672,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffixes",&firmware->table_params[i]->x_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffixes\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"x_conv_expr",&firmware->table_params[i]->x_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"x_conv_exprs",&firmware->table_params[i]->x_conv_exprs))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
@@ -703,6 +704,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffixes",&firmware->table_params[i]->y_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"y_conv_expr",&firmware->table_params[i]->y_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"y_conv_exprs",&firmware->table_params[i]->y_conv_exprs))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
