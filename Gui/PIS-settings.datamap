@@ -131,7 +131,7 @@ tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a valu
 [min_iar]
 keys=offset,page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,precision,tooltip
 page=0
-offset=2138
+offset=2160
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 size=_S16_
@@ -146,7 +146,7 @@ tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a valu
 [max_iar]
 keys=offset,page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,precision,tooltip
 page=0
-offset=2140
+offset=2162
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 size=_S16_
@@ -728,8 +728,8 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-dl_conv_expr=x/1
-ul_conv_expr=x*1
+dl_conv_expr=(x+459.67)*(5/9)
+ul_conv_expr=x*(9/5)-459.67
 use_color=TRUE
 tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
