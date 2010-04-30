@@ -23,28 +23,28 @@ source=status_rpm_rpm
 upper_limit=16384
 
 [rt_slider_2]
-slider_name=TPS
+slider_name=Throttle %
 table=0
 row=2
 source=status_tps_tps
 upper_limit=100
 
 [rt_slider_3]
-slider_name=MAP
+slider_name=Manifold Pressure
 table=0
 row=3
 source=status_map_map
 upper_limit=350
 
 [rt_slider_4]
-slider_name=CTS (deg)
+slider_name=Coolant Temperature (deg)
 table=0
 row=4
 source=cts_temp
 upper_limit=150
 
 [rt_slider_5]
-slider_name=MAT (deg)
+slider_name=Manifold Temperature (deg)
 table=0
 row=5
 source=mat_temp
@@ -86,19 +86,19 @@ row=5
 source=status_ego_correction
 
 [rt_slider_12]
-slider_name=CTS Correction %
+slider_name=Coolant Correction %
 table=2
 row=0
 source=status_cts_correction
 
 [rt_slider_13]
-slider_name=MAT Correction %
+slider_name=Manifold Correction %
 table=2
 row=1
 source=status_mat_correction
 
 [rt_slider_14]
-slider_name=ASC %
+slider_name=After Start %
 table=2
 row=2
 source=status_asc_applied_correction
@@ -116,19 +116,19 @@ row=4
 source=duty_cycle
 
 [rt_slider_17]
-slider_name=CTS IAR
+slider_name=Coolant Ignition
 table=3
 row=0
 source=status_cts_iar
 
 [rt_slider_18]
-slider_name=MAT IAR
+slider_name=Manifold Ignition
 table=3
 row=1
 source=status_mat_iar
 
 [rt_slider_19]
-slider_name=Final IAR
+slider_name=Final Ignition
 table=3
 row=2
 source=status_ign_AIAR
