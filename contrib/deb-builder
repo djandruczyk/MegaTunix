@@ -1,12 +1,12 @@
 #!/bin/bash
 
-DEB_RELEASES="hardy intrepid jaunty karmic"
+DEB_RELEASES="hardy intrepid jaunty karmic lucid"
 
 trap "{ echo \"ABORT!!\"; exit 255; }" SIGINT SIGTERM
 if [ $# -eq 1 ]; then
 	dist=$1
 	echo "Dist specified on CLI is \"$dist\""
-pdebuild --buildresult Output/"$dist" --pbuilderroot "sudo DIST=$dist"
+pdebuild --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist"
 else
 	echo "Building for dists \"$DEB_RELEASES\""
 	for dist in `echo "$DEB_RELEASES"` ; do

@@ -21,16 +21,16 @@ LicenseFile=.\LICENSE
 InfoBeforeFile=.\WIN_NOTES.txt
 
 [Files]
-Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\widgets\gaugedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\widgets\piedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\widgets\curvedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\widgets\progressdemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\widgets\apifix.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\dashdesigner\dashdesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\msloader\mtxloader.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\cvs\MegaTunix\msloader\msloader.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\src\megatunix.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\gaugedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\piedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\curvedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\progressdemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\apifix.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\dashdesigner\dashdesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\msloader\mtxloader.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\msloader\msloader.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
