@@ -34,3 +34,6 @@ m4
 *.la
 .deps
 .libs
+*.glade.bak
+*.gladep.bak
+*.gladep
