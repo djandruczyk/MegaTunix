@@ -21,7 +21,7 @@
 gboolean set_offline_mode(void);
 gchar * present_firmware_choices(void);
 gint ptr_sort(gconstpointer , gconstpointer );
-gboolean offline_ecu_restore(GtkWidget *, gpointer );
+void offline_ecu_restore_pf(void);
 /* Prototypes */
 
 #endif
