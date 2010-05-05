@@ -1,9 +1,9 @@
 #!/bin/sh
 
-CVSDIR=/home/dave/cvs/MegaTunix
-ISS_FILE=dave/cvs/MegaTunix/MegaTunix.iss
+GITDIR=/home/dave/git/MegaTunix
+ISS_FILE=dave/git/MegaTunix/MegaTunix.iss
 DRIVE=L
 
-SUFFIX=`grep SUFFIX ${CVSDIR}/MegaTunix.iss |cut -f2 -d= |tr -d [:cntrl:]`
-wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe ${DRIVE}:/${ISS_FILE}
-mv ${CVSDIR}/Output/setup.exe ${CVSDIR}/../MTX_Builds/Output/megatunix-${SUFFIX}-setup.exe
+SUFFIX=`grep SUFFIX "${GITDIR}"/MegaTunix.iss |cut -f2 -d= |tr -d [:cntrl:]`
+wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe "${DRIVE}":/"${ISS_FILE}"
+mv "${GITDIR}"/Output/setup.exe "${GITDIR}"/../MTX_Builds/Output/megatunix-"${SUFFIX}"-setup.exe

@@ -41,8 +41,10 @@ int main (int argc, char **argv)
 	gtk_container_add (GTK_CONTAINER (window), curve);
 	for (i=0;i<11;i++)
 	{
-		points[i].x=i*1000;
-		points[i].y=(i*1000)-5000;
+		//points[i].x=i*1000;
+		//points[i].y=(i*1000)-5000;
+		points[i].x=i-6;
+		points[i].y=powf(2.0,(gfloat)i);
 		/*points[i].y=exp(i/2.0);*/
 	}
 	gtk_widget_show(curve);
@@ -54,8 +56,10 @@ int main (int argc, char **argv)
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),"X Axis");
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"This is the Y Axis");
-	mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,20000.0,-10000.0,10000.0);
-	mtx_curve_set_y_precision(MTX_CURVE(curve),1);
+	mtx_curve_set_hard_limits(MTX_CURVE(curve),-7.0,7.0,0.0,1200.0);
+	//mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,12000.0,-6000.0,7000.0);
+	mtx_curve_set_x_precision(MTX_CURVE(curve),2);
+	mtx_curve_set_y_precision(MTX_CURVE(curve),2);
 	g_signal_connect(G_OBJECT(curve), "coords-changed",
 			G_CALLBACK(coords_changed),NULL);
 	g_signal_connect(G_OBJECT(curve), "vertex-proximity",
@@ -100,11 +104,14 @@ void marker_proximity(MtxCurve *curve, gpointer data)
 gboolean update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = data;
-	gint min = -4000;
-	gint max = 12000;
-	static gint step = 125;
+	gfloat min = -8.0;
+	gfloat max = 8.0;
+	//gfloat min = -5000.0;
+	//gfloat max = 8000.0;
+	static gfloat step = 0.125;
+	//static gfloat step = 125;
 	static gboolean rising = TRUE;
-	static gint value = 0;
+	static gfloat value = 0;
 
 	if (value > max)
 		rising = FALSE;
@@ -115,7 +122,7 @@ gboolean update_curve_marker(gpointer data)
 		value+=step;
 	else
 		value-=step;
-/*	printf("Setting x marker to %i\n",value);*/
+/*	printf("Setting x marker to %f\n",value); */
 /*	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value); */
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 	return TRUE;

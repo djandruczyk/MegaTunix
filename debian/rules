@@ -18,6 +18,7 @@ DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 # JAB run autogen first if input file have changed
 configure.ac:
 Makefile.am:
+	./autogen.sh 
 
 configure: configure.ac Makefile.am
 	./autogen.sh 

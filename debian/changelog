@@ -1,5 +1,11 @@
-megatunix (0.9.19-beta2) stable; urgency=low
+megatunix (0.9.20) stable; urgency=low
+  * 0.9.20 PIS Custom delco device firmware support (cpuTorture). Spark table 
+  generator tool (cpuTorture). MS2-E-2.1.x Revlimiter added. Converted to
+  git for version control.
 
+ -- David Andruczyk <djandruczyk@yahoo.com>  Wed, 10 Mar 2010 21:52:15 -0500
+
+megatunix (0.9.19-beta2) stable; urgency=low
   * 0.9.19-beta2 beta release
 
  -- David Andruczyk <djandruczyk@yahoo.com>  Wed, 10 Mar 2010 21:52:15 -0500

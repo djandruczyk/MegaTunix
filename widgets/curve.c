@@ -416,7 +416,7 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 	}
 	if (value > priv->peak_x_marker)
 	{
-		priv->peak_x_marker = value;
+		priv->peak_x_marker = value > priv->highest_x ? priv->highest_x:value;
 		get_peak_cross = TRUE;
 		if (priv->x_peak_timeout)
 		{
@@ -537,7 +537,7 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 	}
 	if (value > priv->peak_y_marker)
 	{
-		priv->peak_y_marker = value;
+		priv->peak_y_marker = value > priv->highest_y ? priv->highest_y:value;
 		get_peak_cross = TRUE;
 		if (priv->y_peak_timeout)
 		{
