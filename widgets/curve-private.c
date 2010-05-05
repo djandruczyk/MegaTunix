@@ -949,10 +949,10 @@ void mtx_curve_redraw (MtxCurve *curve, gboolean full)
 void recalc_extremes(MtxCurvePrivate *priv)
 {
         gint i = 0;
-        priv->highest_x = -100000.0;
-        priv->highest_y = -100000.0;
-        priv->lowest_x = 100000.0;
-        priv->lowest_y = 100000.0;
+        priv->highest_x = G_MINFLOAT;
+        priv->highest_y = G_MINFLOAT;
+        priv->lowest_x = G_MAXFLOAT;
+        priv->lowest_y = G_MAXFLOAT;
         for (i=0;i<priv->num_points;i++)
         {
                 if (priv->coords[i].x < priv->lowest_x)
@@ -977,11 +977,13 @@ void recalc_extremes(MtxCurvePrivate *priv)
 			priv->highest_x *= 1.25;
 		}
 	}
+	/*
 	else
 	{
 		priv->lowest_x *= 0.95;
 		priv->highest_x *= 1.05;
 	}
+	*/
 	if  (priv->lowest_y == priv->highest_y) /* Horizontal Line */
 	{
 		if ( priv->lowest_y == 0.0)	/* Special case */
@@ -995,11 +997,13 @@ void recalc_extremes(MtxCurvePrivate *priv)
 			priv->highest_y *= 1.25;
 		}
 	}
+	/*
 	else
 	{
 		priv->lowest_y *= 0.95;
 		priv->highest_y *= 1.05;
 	}
+	*/
 	priv->x_scale = (gfloat)(priv->w-(2*priv->x_border))/((priv->highest_x - (priv->lowest_x + 0.000001)));
 	priv->y_scale = (gfloat)(priv->h-(2*priv->y_border))/((priv->highest_y - (priv->lowest_y + 0.000001)));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
