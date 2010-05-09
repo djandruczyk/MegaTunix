@@ -32,7 +32,7 @@ ones are needed to run the program, and devel packages are needed for
 programs like megatunix to compile against.
 
 MegaTunix requires the following libraries (and their dependancies);
-* minimum GTK-2.10  (2.12 or newer recommended) and the dev package
+* minimum GTK-2.12  and the dev package
   - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
 * Gtkglext-1.x (and the dev package)
   - gtkglext depends on gtk+ and glib
