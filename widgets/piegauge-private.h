@@ -40,8 +40,6 @@ struct _MtxPieGaugePrivate
         gint precision;         /* Text precision */
         gint start_angle;       /* Start angle */
         gint sweep_angle;       /* Sweep angle */
-        gint value_xpos;        /* Text X position offset */
-        gint value_ypos;        /* Text X position offset */
         gchar *value_font;      /* Font string for value */
         gfloat value_font_scale;/* Font scale */
         gchar *valname;         /* Value text to the let of the number */
