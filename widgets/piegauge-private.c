@@ -101,8 +101,6 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	priv->start_angle = 180;	/* lower left quadrant */
 	priv->sweep_angle = 180;	/* CW sweep */
 	priv->value_font = g_strdup("Bitstream Vera Sans");
-	priv->value_xpos = 0;
-	priv->value_ypos = 0;
 	priv->value_font_scale = 0.2;
 	priv->cr = NULL;
 	priv->colormap = gdk_colormap_get_system();
@@ -210,8 +208,8 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	cairo_text_extents (cr, message, &extents);
 
 	cairo_move_to (cr, 
-			priv->pie_radius*2 + 5 +priv->value_xpos,
-			priv->pie_yc - (extents.height/4) + priv->value_ypos);
+			((priv->w-(priv->pie_radius*2.0 + 5)-extents.width)/2.0) +priv->pie_radius*2.0,
+			priv->pie_yc - (extents.height/4.0));
 	cairo_show_text (cr, message);
 	g_free(message);
 
