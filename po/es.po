@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: djandrucyk@yahoo.com\n"
-"POT-Creation-Date: 2010-05-10 11:47-0400\n"
+"POT-Creation-Date: 2010-05-10 12:50-0400\n"
 "PO-Revision-Date: 2010-05-10 11:55-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
 "Language-Team: English\n"
@@ -16,7 +16,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: src/2d_table_editor.c:103
+msgid "2D Table Group Editor"
+msgstr "2D Table Editor del Grupo"
+
+#: src/2d_table_editor.c:835
+#, c-format
+msgid "ERROR in update_2d_curve()!!!\n"
+msgstr "ERROR en update_2d_curve()!!!\n"
+
+#: src/2d_table_editor.c:1145
+#, c-format
+msgid "widget isn't visible or sensitive\n"
+msgstr "widget no es visible o sensible\n"
+
 #: src/xmlcomm.c:34
 #, c-format
 msgid "comm xml filename is NULL!\n"
 msgstr "Nombre de archivo xml comm es nula\n"
+
+#~ msgid "Hello World!\n"
+#~ msgstr "hallo welt!\n"

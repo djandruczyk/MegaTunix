@@ -100,9 +100,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			G_CALLBACK(close_2d_editor),window);
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(close_2d_editor),window);
-	tmpbuf = g_strdup_printf("2D Table Group Editor");
-	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
-	g_free(tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(window),_("2D Table Group Editor"));
 	gtk_window_resize(GTK_WINDOW(window),800,530);
 
 	widget = glade_xml_get_widget(xml,"get_data_button");
@@ -834,7 +832,7 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	else if (axis == _Y_)
 		point.y = tmpf;
 	else
-		printf("ERROR in update_2d_curve()!!!\n");
+		printf(_("ERROR in update_2d_curve()!!!\n"));
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
 	
@@ -1144,7 +1142,7 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 	}
 	else
-		printf("widget isn't visible or sensitive\n");
+		printf(_("widget isn't visible or sensitive\n"));
 	return;
 #else
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");

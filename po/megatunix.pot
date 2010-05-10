@@ -8,13 +8,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: megatunix 0.9.20-~git\n"
 "Report-Msgid-Bugs-To: djandrucyk@yahoo.com\n"
-"POT-Creation-Date: 2010-05-10 11:47-0400\n"
+"POT-Creation-Date: 2010-05-10 12:50-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/2d_table_editor.c:103
+msgid "2D Table Group Editor"
+msgstr ""
+
+#: src/2d_table_editor.c:835
+#, c-format
+msgid "ERROR in update_2d_curve()!!!\n"
+msgstr ""
+
+#: src/2d_table_editor.c:1145
+#, c-format
+msgid "widget isn't visible or sensitive\n"
+msgstr ""
 
 #: src/xmlcomm.c:34
 #, c-format
