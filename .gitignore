@@ -40,3 +40,4 @@ m4
 ChangeLog
 ABOUT-NLS
 gettext.h
+*.exe
