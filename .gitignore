@@ -12,11 +12,11 @@ config.h
 config.h.in
 config.log
 config.status
+config.rpath
 configure
 idea
 libtool
 megatunix.spec
-po
 python
 stamp-h
 stamp-h1
@@ -37,3 +37,6 @@ m4
 *.glade.bak
 *.gladep.bak
 *.gladep
+ChangeLog
+ABOUT-NLS
+gettext.h

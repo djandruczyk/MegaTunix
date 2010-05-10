@@ -90,7 +90,7 @@ resources.o:
 
 megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxcurve.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
-megatunix_LDFLAGS = 
+megatunix_LDFLAGS = $(LTLIBINTL)
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

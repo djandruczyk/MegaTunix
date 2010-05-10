@@ -148,6 +148,11 @@ do
 	  fi
 	fi
       fi
+      cp configure.ac configure.ac~
+      cp Makefile.am Makefile.am~
+      gettextize
+      mv configure.ac~ configure.ac
+      mv Makefile.am~ Makefile.am
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
       if grep "^A[CM]_CONFIG_HEADERS" "$bn" >/dev/null; then
@@ -157,6 +162,7 @@ do
       echo "Running automake --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt
       echo "Running autoconf ..."
+      ln -s /usr/share/gettext/gettext.h include
       autoconf
     )
   fi

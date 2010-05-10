@@ -59,6 +59,10 @@ gint main(gint argc, gchar ** argv)
 {
 	gchar * filename = NULL;
 
+	setlocale(LC_ALL,"");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain (PACKAGE);
+
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -66,8 +70,6 @@ gint main(gint argc, gchar ** argv)
 	glade_init();
 
 	gl_ability = gdk_gl_init_check(&argc, &argv);
-
-	gtk_set_locale();
 
 	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref(global_data);

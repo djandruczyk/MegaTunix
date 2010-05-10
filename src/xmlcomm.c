@@ -31,7 +31,7 @@ void load_comm_xml(gchar *filename)
 
 	if (filename == NULL)
 	{
-		printf("xmlcomm filename is NULL!\n");
+		printf(_("comm xml filename is NULL!\n"));
 		return;
 	}
 

@@ -1,0 +1,22 @@
+# English translations for megatunix package.
+# Copyright (C) 2010 David J. Andruczyk
+# This file is distributed under the same license as the megatunix package.
+# David Andruczyk <djandruczyk@yahoo.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: es\n"
+"Report-Msgid-Bugs-To: djandrucyk@yahoo.com\n"
+"POT-Creation-Date: 2010-05-10 11:47-0400\n"
+"PO-Revision-Date: 2010-05-10 11:55-0400\n"
+"Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/xmlcomm.c:34
+#, c-format
+msgid "comm xml filename is NULL!\n"
+msgstr "Nombre de archivo xml comm es nula\n"

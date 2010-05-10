@@ -14,6 +14,9 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
+#include <config.h>
+#include <gettext.h>
+
 /* Definitions */
 #define BAUDRATE B9600
 
@@ -40,6 +43,9 @@
 #define GBOOLEAN gboolean
 #endif
 
+/* Gettext support
+ */
+#define _(x) gettext(x)
 
 /* g_object_get/set macros */
 
