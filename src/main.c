@@ -23,10 +23,14 @@
 #include <enums.h>
 #include <errno.h>
 #include <gdk/gdkgl.h>
+#include <gettext.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
+#ifdef __WIN32__
+#include <locale.h>
+#endif
 #include <locking.h>
 #include <main.h>
 #include <serialio.h>
