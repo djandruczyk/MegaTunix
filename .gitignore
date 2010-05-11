@@ -8,6 +8,7 @@ WIN_NOTES.txt
 aclocal.m4
 autom4te.cache
 build-stamp
+stamp-it
 config.h
 config.h.in
 config.log
@@ -41,3 +42,6 @@ ChangeLog
 ABOUT-NLS
 gettext.h
 *.exe
+intltool-*
+mkinstalldirs
+.intltool-merge-cache

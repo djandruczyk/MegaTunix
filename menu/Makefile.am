@@ -1,12 +1,19 @@
 menudir = $(datadir)/applications/$(MENU_DATA_DIR)
 
 menu_files = 	\
-		       	megatunix.desktop \
-		       	dashdesigner.desktop \
-		       	gaugedesigner.desktop \
-		       	mtxloader.desktop
+		megatunix.desktop \
+		dashdesigner.desktop \
+		gaugedesigner.desktop \
+		mtxloader.desktop
 
-menu_DATA = $(menu_files)
+menu_in_files = 	\
+		megatunix.desktop.in \
+		dashdesigner.desktop.in \
+		gaugedesigner.desktop.in \
+		mtxloader.desktop.in
+
+menu_DATA = $(menu_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = $(menu_DATA)
 

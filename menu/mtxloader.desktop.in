@@ -2,7 +2,7 @@
 Version=1.0
 Encoding=UTF-8
 _Name=MegaTunix Firmware Loader
-_GenericName=mtxloader
+GenericName=mtxloader
 _Comment=mtxloader
 Exec=mtxloader
 Icon=mtxloader

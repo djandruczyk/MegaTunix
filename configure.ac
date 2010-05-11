@@ -25,6 +25,7 @@ AM_INIT_AUTOMAKE(megatunix, "$VER_STRING")
 AM_MAINTAINER_MODE
 
 dnl Checks for programs.
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -34,7 +35,6 @@ AC_PROG_AWK
 AC_PROG_MKDIR_P
 AM_PROG_MKDIR_P
 AC_PROG_MAKE_SET
-AM_GNU_GETTEXT([external])
 AM_PROG_LEX
 if test "$LEX" != "flex"; 
 then
@@ -47,6 +47,18 @@ then
 	echo "You need the 'bison' package"
 	exit 1
 fi
+
+dnl Gettext Goodness
+AC_PROG_INTLTOOL([0.21])
+GETTEXT_PACKAGE=megatunix
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE([GETTEXT_PACKAGE], [], ["$GETTEXT_PACKAGE"])
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
+ALL_LINGUAS="es "
+AM_GLIB_GNU_GETTEXT
+dnl AM_GNU_GETTEXT([external])
+mtxlocaledir='${prefix}/share/MegaTunix/locale'
+AC_SUBST(mtxlocaledir)
 
 dnl Checks for header files.
 dnl AC_HEADER_STDC
@@ -166,11 +178,11 @@ REALTIME_MAPS_DATA_DIR=RealtimeMaps
 RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
-DATA_DIR=$datarootdir/MegaTunix
-LOCALE_DIR=$datarootdir/MegaTunix/locale
+dnl DATA_DIR=$datarootdir/MegaTunix
+dnl LOCALE_DIR=$datarootdir/MegaTunix/locale
 
-AC_SUBST(DATA_DIR)
-AC_SUBST(LOCALE_DIR)
+dnl AC_SUBST(DATA_DIR)
+dnl AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(SNAPSHOTS_DATA_DIR)
 AC_SUBST(DASHES_DATA_DIR)
