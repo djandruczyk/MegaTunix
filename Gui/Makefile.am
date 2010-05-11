@@ -163,4 +163,4 @@ gui_DATA = $(gui_map_files) $(gui_glade_files)
 
 EXTRA_DIST = $(gui_DATA) README
 
-CLEANFILES = *.gladep *.bak gmon.out *.h
+CLEANFILES = *.gladep *.bak gmon.out *.h *.datamap

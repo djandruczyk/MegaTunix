@@ -12,20 +12,20 @@ raw_list=raw_secl
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,real_lower,real_upper,log_by_default,tooltip
 internal_names=hr_clock
-dlog_gui_name=HR Clock
+_dlog_gui_name=HR Clock
 dlog_field_name=Time
 offset=0
 real_lower=0
 real_upper=2147483648
 special=hr_clock
 precision=3
-tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
+_tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
 log_by_default=TRUE
 
 [derived_1]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_seconds,raw_secl
-dlog_gui_name=Seconds
+_dlog_gui_name=Seconds
 dlog_field_name=Seconds
 offset=0
 size=_U16_
@@ -33,13 +33,13 @@ real_lower=0
 real_upper=65535
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.seconds" is the PIS clock returned by the ECU, this runs from 0-65535 and recylcles indefinitely, resolution 1 second.
+_tooltip="status.seconds" is the PIS clock returned by the ECU, this runs from 0-65535 and recylcles indefinitely, resolution 1 second.
 log_by_default=TRUE
 
 [derived_2]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_irq_tics
-dlog_gui_name=Milliseconds
+_dlog_gui_name=Milliseconds
 dlog_field_name=Milliseconds
 offset=2
 size=_U16_
@@ -47,13 +47,13 @@ real_lower=0
 real_upper=999
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.irq_tics" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
+_tooltip="status.irq_tics" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
 log_by_default=TRUE
 
 [derived_3]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_flags1
-dlog_gui_name=Flags 1
+_dlog_gui_name=Flags 1
 dlog_field_name=Flags 1
 offset=4
 size=_U08_
@@ -61,13 +61,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.flags" is for tracking ECU internal state.
+_tooltip="status.flags" is for tracking ECU internal state.
 log_by_default=TRUE
 
 [derived_4]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_flags2
-dlog_gui_name=Flags 2
+_dlog_gui_name=Flags 2
 dlog_field_name=Flags 2
 offset=5
 size=_U08_
@@ -75,13 +75,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.flags" is for tracking ECU internal state.
+_tooltip="status.flags" is for tracking ECU internal state.
 log_by_default=TRUE
 
 [derived_5]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_flags3
-dlog_gui_name=Flags 3
+_dlog_gui_name=Flags 3
 dlog_field_name=Flags 3
 offset=6
 size=_U08_
@@ -89,13 +89,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.flags" is for tracking ECU internal state.
+_tooltip="status.flags" is for tracking ECU internal state.
 log_by_default=TRUE
 
 [derived_6]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_flags4
-dlog_gui_name=Flags 4
+_dlog_gui_name=Flags 4
 dlog_field_name=Flags 4
 offset=7
 size=_U08_
@@ -103,13 +103,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.flags" is for tracking ECU internal state.
+_tooltip="status.flags" is for tracking ECU internal state.
 log_by_default=TRUE
 
 [derived_7]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_discrete
-dlog_gui_name=Discrete
+_dlog_gui_name=Discrete
 dlog_field_name=Discrete
 offset=8
 size=_U16_
@@ -117,13 +117,13 @@ real_lower=0
 real_upper=65535
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="Discrete" contains the current state of B10, C7, C8, B9, C9, C15, D11, ACREQ, INJLOOP.
+_tooltip="Discrete" contains the current state of B10, C7, C8, B9, C9, C15, D11, ACREQ, INJLOOP.
 log_by_default=TRUE
 
 [derived_8]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_roc_clk
-dlog_gui_name=ROC Clock
+_dlog_gui_name=ROC Clock
 dlog_field_name=ROC Clock
 offset=10
 size=_U16_
@@ -131,13 +131,13 @@ real_lower=0
 real_upper=100
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.roc_clk" counts the number of ms until the next Rate Of Change calculation is to be performed.
+_tooltip="status.roc_clk" counts the number of ms until the next Rate Of Change calculation is to be performed.
 log_by_default=TRUE
 
 [derived_9]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_iac_clk
-dlog_gui_name=IAC Clock
+_dlog_gui_name=IAC Clock
 dlog_field_name=IAC Clock
 offset=12
 size=_U16_
@@ -145,13 +145,13 @@ real_lower=0
 real_upper=100
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.iac_clk" counts the number of ms until the next Intake Air Control update.
+_tooltip="status.iac_clk" counts the number of ms until the next Intake Air Control update.
 log_by_default=TRUE
 
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_clk
-dlog_gui_name=EGO Clock
+_dlog_gui_name=EGO Clock
 dlog_field_name=EGO Clock
 offset=14
 size=_U16_
@@ -159,13 +159,13 @@ real_lower=0
 real_upper=200
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.ego_clk" counts the number of ms until the next Exhaust Gas Oxygen calculation is to be performed.
+_tooltip="status.ego_clk" counts the number of ms until the next Exhaust Gas Oxygen calculation is to be performed.
 log_by_default=TRUE
 
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_clk
-dlog_gui_name=ASC Clock
+_dlog_gui_name=ASC Clock
 dlog_field_name=ASC Clock
 offset=16
 size=_U16_
@@ -173,13 +173,13 @@ real_lower=0
 real_upper=1000
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.asc_clk" counts down the number of After Start Correction injection events remaining.
+_tooltip="status.asc_clk" counts down the number of After Start Correction injection events remaining.
 log_by_default=TRUE
 
 [derived_12]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_clk
-dlog_gui_name=AE Clock
+_dlog_gui_name=AE Clock
 dlog_field_name=AE Clock
 offset=18
 size=_U16_
@@ -187,13 +187,13 @@ real_lower=0
 real_upper=100
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.ae_clk" counts down the number of ms Acceleration Enrichment async pulses to be performed.
+_tooltip="status.ae_clk" counts down the number of ms Acceleration Enrichment async pulses to be performed.
 log_by_default=TRUE
 
 [derived_13]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_inj_clk
-dlog_gui_name=INJ Clock
+_dlog_gui_name=INJ Clock
 dlog_field_name=INJ Clock
 offset=20
 size=_U16_
@@ -201,13 +201,13 @@ real_lower=0
 real_upper=6
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.inj_clk" counts down the number of injection events to skip.
+_tooltip="status.inj_clk" counts down the number of injection events to skip.
 log_by_default=TRUE
 
 [derived_14]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_transient_clk
-dlog_gui_name=EGO TRANS
+_dlog_gui_name=EGO TRANS
 dlog_field_name=EGO TRANS
 offset=22
 size=_U16_
@@ -215,13 +215,13 @@ real_lower=0
 real_upper=5000
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.transient_clk" counts down the number of ms until closed loop can be entered after a transient fuel event.
+_tooltip="status.transient_clk" counts down the number of ms until closed loop can be entered after a transient fuel event.
 log_by_default=TRUE
 
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_rpm_rpm
-dlog_gui_name=RPM
+_dlog_gui_name=RPM
 dlog_field_name=RPM
 offset=24
 size=_U16_
@@ -229,13 +229,13 @@ real_lower=0
 real_upper=16384
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.rpm.rpm" engine speed in revolutions per minute.
+_tooltip="status.rpm.rpm" engine speed in revolutions per minute.
 log_by_default=TRUE
 
 [derived_16]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_rpm_magic
-dlog_gui_name=Magic
+_dlog_gui_name=Magic
 dlog_field_name=Magic
 offset=26
 size=_U16_
@@ -243,13 +243,13 @@ real_lower=0
 real_upper=500
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.rpm.magic" internal value based on number of cylinders the duration of reference pulse and alignment of the stars that allows the rpm to be calculated amazingly fast.
+_tooltip="status.rpm.magic" internal value based on number of cylinders the duration of reference pulse and alignment of the stars that allows the rpm to be calculated amazingly fast.
 log_by_default=TRUE
 
 [derived_17]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_rpm_roc
-dlog_gui_name=RPM ROC
+_dlog_gui_name=RPM ROC
 dlog_field_name=RPM ROC
 offset=28
 size=_S16_
@@ -257,13 +257,13 @@ real_lower=-200
 real_upper=200
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.rpm.roc" the Rate Of Change in RPM during the last ROC Clock period (100ms)
+_tooltip="status.rpm.roc" the Rate Of Change in RPM during the last ROC Clock period (100ms)
 log_by_default=TRUE
 
 [derived_18]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_rpm_last
-dlog_gui_name=RPM Last
+_dlog_gui_name=RPM Last
 dlog_field_name=RPM Last
 offset=30
 size=_U16_
@@ -271,13 +271,13 @@ real_lower=0
 real_upper=16384
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.rpm.last" engine RPM @ the last ROC update.
+_tooltip="status.rpm.last" engine RPM @ the last ROC update.
 log_by_default=TRUE
 
 [derived_19]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_rpm_limit
-dlog_gui_name=Limit
+_dlog_gui_name=Limit
 dlog_field_name=Limit
 offset=32
 size=_U16_
@@ -285,13 +285,13 @@ real_lower=0
 real_upper=16384
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.rpm.limit" current hard RPM limit where fuel pulses will be cut!
+_tooltip="status.rpm.limit" current hard RPM limit where fuel pulses will be cut!
 log_by_default=TRUE
 
 [derived_20]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_iar
-dlog_gui_name=CTS IAR
+_dlog_gui_name=CTS IAR
 dlog_field_name=CTS IAR
 offset=34
 size=_S16_
@@ -300,13 +300,13 @@ real_upper=32767
 precision=2
 dl_conv_expr=x*(28444/10000)
 ul_conv_expr=x/(28444/10000)
-tooltip="status.cts.iar" ignition +advance/-retard correction based on engine coolant temperature.
+_tooltip="status.cts.iar" ignition +advance/-retard correction based on engine coolant temperature.
 log_by_default=TRUE
 
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_kelvin
-dlog_gui_name=CTS (deg K)
+_dlog_gui_name=CTS (deg K)
 dlog_field_name=CTS (deg K)
 offset=36
 size=_U16_
@@ -314,13 +314,13 @@ real_lower=0
 real_upper=600
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.cts.kelvin" Coolant Temperate Sender (deg K).
+_tooltip="status.cts.kelvin" Coolant Temperate Sender (deg K).
 log_by_default=TRUE
 
 [derived_22]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_correction
-dlog_gui_name=CTS %
+_dlog_gui_name=CTS %
 dlog_field_name=CTS %
 offset=38
 size=_U16_
@@ -329,13 +329,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.cts.correction" % of BPW to add to final PW based on Coolant Temperate Sender (deg)
+_tooltip="status.cts.correction" % of BPW to add to final PW based on Coolant Temperate Sender (deg)
 log_by_default=TRUE
 
 [derived_23]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_pw
-dlog_gui_name=CTS PW
+_dlog_gui_name=CTS PW
 dlog_field_name=CTS PW
 offset=40
 size=_S16_
@@ -344,13 +344,13 @@ real_upper=5
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.cts.pw" (status.cts.correction) % of BPW converted to milliseconds
+_tooltip="status.cts.pw" (status.cts.correction) % of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_24]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_iar
-dlog_gui_name=MAT IAR
+_dlog_gui_name=MAT IAR
 dlog_field_name=MAT IAR
 offset=42
 size=_S16_
@@ -359,13 +359,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*(28444/10000)
 ul_conv_expr=x/(28444/10000)
-tooltip="status.mat.iar" ignition +advance/-retard correction based on manifold air temperature.
+_tooltip="status.mat.iar" ignition +advance/-retard correction based on manifold air temperature.
 log_by_default=TRUE
 
 [derived_25]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_kelvin
-dlog_gui_name=MAT (deg K)
+_dlog_gui_name=MAT (deg K)
 dlog_field_name=MAT (deg K)
 offset=44
 size=_U16_
@@ -373,13 +373,13 @@ real_lower=0
 real_upper=600
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.mat.kelvin" Manifold Air Temperature (deg K).
+_tooltip="status.mat.kelvin" Manifold Air Temperature (deg K).
 log_by_default=TRUE
 
 [derived_26]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_correction
-dlog_gui_name=MAT %
+_dlog_gui_name=MAT %
 dlog_field_name=MAT %
 offset=46
 size=_U16_
@@ -388,13 +388,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.mat.correction" % of BPW to add to final PW based on Manifold Air Temperature.
+_tooltip="status.mat.correction" % of BPW to add to final PW based on Manifold Air Temperature.
 log_by_default=TRUE
 
 [derived_27]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_pw
-dlog_gui_name=MAT PW
+_dlog_gui_name=MAT PW
 dlog_field_name=MAT PW
 offset=48
 size=_S16_
@@ -403,13 +403,13 @@ real_upper=5
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.mat.pw" (status.mat.correction) % of BPW converted to milliseconds
+_tooltip="status.mat.pw" (status.mat.correction) % of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_28]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_base_correction
-dlog_gui_name=ASC Base %
+_dlog_gui_name=ASC Base %
 dlog_field_name=ASC Base %
 offset=50
 size=_U16_
@@ -418,13 +418,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.asc.base_correction" After Start Correction, initial % of BPW
+_tooltip="status.asc.base_correction" After Start Correction, initial % of BPW
 log_by_default=TRUE
 
 [derived_29]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_duration
-dlog_gui_name=ASC Duration
+_dlog_gui_name=ASC Duration
 dlog_field_name=ASC Duration
 offset=52
 size=_U16_
@@ -432,13 +432,13 @@ real_lower=0
 real_upper=1000
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.asc.durtation" Number of injection cycles over which the base % will be tappered to nothing.
+_tooltip="status.asc.durtation" Number of injection cycles over which the base % will be tappered to nothing.
 log_by_default=TRUE
 
 [derived_30]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_applied_correction
-dlog_gui_name=ASC Applied %
+_dlog_gui_name=ASC Applied %
 dlog_field_name=ASC Applied %
 offset=54
 size=_U16_
@@ -447,13 +447,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.asc.applied_correction" % of BPW currently being applied.
+_tooltip="status.asc.applied_correction" % of BPW currently being applied.
 log_by_default=TRUE
 
 [derived_31]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_pw
-dlog_gui_name=ASC PW
+_dlog_gui_name=ASC PW
 dlog_field_name=ASC PW
 offset=56
 size=_S16_
@@ -462,13 +462,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.asc.pw" (status.asc.applied_correction) % of BPW converted to milliseconds
+_tooltip="status.asc.pw" (status.asc.applied_correction) % of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_32]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_tps
-dlog_gui_name=TPS %
+_dlog_gui_name=TPS %
 dlog_field_name=TPS %
 offset=58
 size=_U16_
@@ -477,13 +477,13 @@ real_upper=100
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="status.tps.tps" current throttle position as percentage, taking into account calibration.
+_tooltip="status.tps.tps" current throttle position as percentage, taking into account calibration.
 log_by_default=TRUE
 
 [derived_33]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_last
-dlog_gui_name=TPS Last %
+_dlog_gui_name=TPS Last %
 dlog_field_name=TPS Last %
 offset=60
 size=_U16_
@@ -492,13 +492,13 @@ real_upper=100
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="status.tps.last" last Throttle Position Sensor % during TPS ROC update (100ms).
+_tooltip="status.tps.last" last Throttle Position Sensor % during TPS ROC update (100ms).
 log_by_default=TRUE
 
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_roc
-dlog_gui_name=TPS ROC %
+_dlog_gui_name=TPS ROC %
 dlog_field_name=TPS ROC %
 offset=62
 size=_S16_
@@ -507,13 +507,13 @@ real_upper=100
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="status.tps.roc" the rate of change over the last (50ms)
+_tooltip="status.tps.roc" the rate of change over the last (50ms)
 log_by_default=TRUE
 
 [derived_35]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_iac_start
-dlog_gui_name=IAC Start
+_dlog_gui_name=IAC Start
 dlog_field_name=IAC Start
 offset=64
 size=_U16_
@@ -521,13 +521,13 @@ real_lower=0
 real_upper=200
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.iac.start" number of steps where idle control first takes over your throttle.
+_tooltip="status.iac.start" number of steps where idle control first takes over your throttle.
 log_by_default=TRUE
 
 [derived_36]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=statis_iac_minimum
-dlog_gui_name=IAC Min
+_dlog_gui_name=IAC Min
 dlog_field_name=IAC Min
 offset=66
 size=_U16_
@@ -535,13 +535,13 @@ real_lower=0
 real_upper=200
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.iac.minimum" the minimum position the IAC can go to, causing the IAC to act as a throttle stop.
+_tooltip="status.iac.minimum" the minimum position the IAC can go to, causing the IAC to act as a throttle stop.
 log_by_default=TRUE
 
 [derived_37]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_iac_target
-dlog_gui_name=IAC Target
+_dlog_gui_name=IAC Target
 dlog_field_name=IAC Target
 offset=68
 size=_U16_
@@ -549,13 +549,13 @@ real_lower=0
 real_upper=200
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.iac.target" current position that the IAC has been commnaded to go.
+_tooltip="status.iac.target" current position that the IAC has been commnaded to go.
 log_by_default=TRUE
 
 [derived_38]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_iac_position
-dlog_gui_name=IAC Position
+_dlog_gui_name=IAC Position
 dlog_field_name=IAC Position
 offset=70
 size=_U16_
@@ -563,13 +563,13 @@ real_lower=0
 real_upper=200
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.iac.position" the current position of the IAC.
+_tooltip="status.iac.position" the current position of the IAC.
 log_by_default=TRUE
 
 [derived_39]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_iac_idle_rpm
-dlog_gui_name=IAC Idle
+_dlog_gui_name=IAC Idle
 dlog_field_name=IAC Idle
 offset=72
 size=_U16_
@@ -577,13 +577,13 @@ real_lower=0
 real_upper=1200
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.iac.idle_rpm" this is our engines idling target that the IAC is trying to match.
+_tooltip="status.iac.idle_rpm" this is our engines idling target that the IAC is trying to match.
 log_by_default=TRUE
 
 [derived_40]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ign_AIAR
-dlog_gui_name=AIAR
+_dlog_gui_name=AIAR
 dlog_field_name=AIAR
 offset=74
 size=_S16_
@@ -592,13 +592,13 @@ real_upper=255
 precision=2
 dl_conv_expr=x*(28444/10000)
 ul_conv_expr=x/(28444/10000)
-tooltip="status.ign.AIAR" Applied Ignition +Advance/-Retard.
+_tooltip="status.ign.AIAR" Applied Ignition +Advance/-Retard.
 log_by_default=TRUE
 
 [derived_41]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ign_dwell
-dlog_gui_name=Dwell
+_dlog_gui_name=Dwell
 dlog_field_name=Dwell
 offset=76
 size=_U16_
@@ -607,13 +607,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.ign.dwell" period of time to dwell the ignition module.
+_tooltip="status.ign.dwell" period of time to dwell the ignition module.
 log_by_default=TRUE
 
 [derived_42]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_map_map
-dlog_gui_name=MAP
+_dlog_gui_name=MAP
 dlog_field_name=MAP
 offset=78
 size=_U16_
@@ -621,13 +621,13 @@ real_lower=0
 real_upper=350
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="status.map.map" Manifold Absolute Pressure.
+_tooltip="status.map.map" Manifold Absolute Pressure.
 log_by_default=TRUE
 
 [derived_43]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_map_limit
-dlog_gui_name=MAP Limit
+_dlog_gui_name=MAP Limit
 dlog_field_name=MAP Limit
 offset=80
 size=_U16_
@@ -635,13 +635,13 @@ real_lower=0
 real_upper=350
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.map.limit" Manifold Absolute Pressure where the boost solenoid will be opened.
+_tooltip="status.map.limit" Manifold Absolute Pressure where the boost solenoid will be opened.
 log_by_default=TRUE
 
 [derived_44]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_correction
-dlog_gui_name=Lambda Correction %
+_dlog_gui_name=Lambda Correction %
 dlog_field_name=Lambda Correction %
 offset=82
 size=_U16_
@@ -650,13 +650,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x/1
 ul_conv_expr=x/(32768/100)
-tooltip="status.ego.correction" Exhaust Gas Oxygen correction.
+_tooltip="status.ego.correction" Exhaust Gas Oxygen correction.
 log_by_default=TRUE
 
 [derived_45]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_target
-dlog_gui_name=EGO Target
+_dlog_gui_name=EGO Target
 dlog_field_name=EGO Target
 offset=84
 size=_U16_
@@ -664,13 +664,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.ego.target" this is the actual ADC count we are seeking from the EGO sensor.
+_tooltip="status.ego.target" this is the actual ADC count we are seeking from the EGO sensor.
 log_by_default=TRUE
 
 [derived_46]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_error
-dlog_gui_name=EGO Error
+_dlog_gui_name=EGO Error
 dlog_field_name=EGO Error
 offset=86
 size=_S16_
@@ -678,13 +678,13 @@ real_lower=-255
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.ego.target" the amount of error between where the EGO is reading and where we want it to read.
+_tooltip="status.ego.target" the amount of error between where the EGO is reading and where we want it to read.
 log_by_default=TRUE
 
 [derived_47]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_integral
-dlog_gui_name=EGO Integral
+_dlog_gui_name=EGO Integral
 dlog_field_name=EGO Integral
 offset=88
 size=_S16_
@@ -692,13 +692,13 @@ real_lower=-10000
 real_upper=10000
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.ego.integral"this is the integral accumulative error of the PI controller.
+_tooltip="status.ego.integral"this is the integral accumulative error of the PI controller.
 log_by_default=TRUE
 
 [derived_48]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_pw
-dlog_gui_name=EGO PW
+_dlog_gui_name=EGO PW
 dlog_field_name=EGO PW
 offset=90
 size=_U16_
@@ -707,13 +707,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.ego.pw" this is the adjustment that will be applied to the overall fueling due to the EGO.
+_tooltip="status.ego.pw" this is the adjustment that will be applied to the overall fueling due to the EGO.
 log_by_default=TRUE
 
 [derived_49]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_cts_factor
-dlog_gui_name=AE CTS %
+_dlog_gui_name=AE CTS %
 dlog_field_name=AE CTS %
 offset=92
 size=_U16_
@@ -722,13 +722,13 @@ real_upper=20
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.ae.cts_factor" % of Acceleration Enrichment that will be used due to the engine's coolant temperature.
+_tooltip="status.ae.cts_factor" % of Acceleration Enrichment that will be used due to the engine's coolant temperature.
 log_by_default=TRUE
 
 [derived_50]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_roc_factor
-dlog_gui_name=AE ROC %
+_dlog_gui_name=AE ROC %
 dlog_field_name=AE ROC %
 offset=94
 size=_U16_
@@ -737,13 +737,13 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-tooltip="status.ae.roc_factor" % of Acceleration Enrichment that will be used due to the TPS ROC.
+_tooltip="status.ae.roc_factor" % of Acceleration Enrichment that will be used due to the TPS ROC.
 log_by_default=TRUE
 
 [derived_51]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_BPW
-dlog_gui_name=AE BPW
+_dlog_gui_name=AE BPW
 dlog_field_name=AE BPW
 offset=96
 size=_U16_
@@ -752,13 +752,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.ae.BPW" This is the AE base pulse width BPW. It is chosen from a table that considers your current RPM vs current TPS. This value is then % adjusted depending upon the actual TPS ROC/50ms. The final result is then % adjusted according to the CTS.
+_tooltip="status.ae.BPW" This is the AE base pulse width BPW. It is chosen from a table that considers your current RPM vs current TPS. This value is then % adjusted depending upon the actual TPS ROC/50ms. The final result is then % adjusted according to the CTS.
 log_by_default=TRUE
 
 [derived_52]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_APW
-dlog_gui_name=AE APW
+_dlog_gui_name=AE APW
 dlog_field_name=AE APW
 offset=98
 size=_U16_
@@ -767,13 +767,13 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.ae.APW" applied PW is the current acceleration injection pulse width and is tapered to nothing over the duration.
+_tooltip="status.ae.APW" applied PW is the current acceleration injection pulse width and is tapered to nothing over the duration.
 log_by_default=TRUE
 
 [derived_53]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_APW
-dlog_gui_name=APW
+_dlog_gui_name=APW
 dlog_field_name=APW
 offset=100
 size=_U16_
@@ -782,13 +782,13 @@ real_upper=20
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.APW" Applied Pulse Width is the final pulse width that will be seen at the injector(s).
+_tooltip="status.APW" Applied Pulse Width is the final pulse width that will be seen at the injector(s).
 log_by_default=TRUE
 
 [derived_54]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_open_delay
-dlog_gui_name=Open Delay
+_dlog_gui_name=Open Delay
 dlog_field_name=Open Delay
 offset=102
 size=_U16_
@@ -797,13 +797,13 @@ real_upper=3
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-tooltip="status.open_delay" time it takes for injector pintle to be fully open vs VOLTS .
+_tooltip="status.open_delay" time it takes for injector pintle to be fully open vs VOLTS .
 log_by_default=TRUE
 
 [derived_55]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_rpm
-dlog_gui_name=IDX RPM
+_dlog_gui_name=IDX RPM
 dlog_field_name=IDX RPM
 offset=104
 size=_U08_
@@ -811,13 +811,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_rpm" rpm bin index
+_tooltip="status.idx_rpm" rpm bin index
 log_by_default=TRUE
 
 [derived_56]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_map
-dlog_gui_name=IDX MAP
+_dlog_gui_name=IDX MAP
 dlog_field_name=IDX MAP
 offset=105
 size=_U08_
@@ -825,13 +825,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_map" map bin index
+_tooltip="status.idx_map" map bin index
 log_by_default=TRUE
 
 [derived_57]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_cts
-dlog_gui_name=IDX CTS
+_dlog_gui_name=IDX CTS
 dlog_field_name=IDX CTS
 offset=106
 size=_U08_
@@ -839,13 +839,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_cts" cts bin index
+_tooltip="status.idx_cts" cts bin index
 log_by_default=TRUE
 
 [derived_58]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_mat
-dlog_gui_name=IDX MAT
+_dlog_gui_name=IDX MAT
 dlog_field_name=IDX MAT
 offset=107
 size=_U08_
@@ -853,13 +853,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_mat" mat bin index
+_tooltip="status.idx_mat" mat bin index
 log_by_default=TRUE
 
 [derived_59]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_tps
-dlog_gui_name=IDX TPS
+_dlog_gui_name=IDX TPS
 dlog_field_name=IDX TPS
 offset=108
 size=_U08_
@@ -867,13 +867,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_tps" tps bin index
+_tooltip="status.idx_tps" tps bin index
 log_by_default=TRUE
 
 [derived_60]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_iac
-dlog_gui_name=IDX IAC
+_dlog_gui_name=IDX IAC
 dlog_field_name=IDX IAC
 offset=109
 size=_U08_
@@ -881,13 +881,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_iac" iac bin index
+_tooltip="status.idx_iac" iac bin index
 log_by_default=TRUE
 
 [derived_61]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_AE_tps
-dlog_gui_name=IDX AE TPS
+_dlog_gui_name=IDX AE TPS
 dlog_field_name=IDX AE TPS
 offset=110
 size=_U08_
@@ -895,13 +895,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_AE_tps" AE_tps bin index
+_tooltip="status.idx_AE_tps" AE_tps bin index
 log_by_default=TRUE
 
 [derived_62]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_AE_rpm
-dlog_gui_name=IDX AE RPM
+_dlog_gui_name=IDX AE RPM
 dlog_field_name=IDX AE RPM
 offset=111
 size=_U08_
@@ -909,13 +909,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_AE_rpm" AE_rpm bin index
+_tooltip="status.idx_AE_rpm" AE_rpm bin index
 log_by_default=TRUE
 
 [derived_63]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_idx_AE_roc
-dlog_gui_name=IDX AE ROC
+_dlog_gui_name=IDX AE ROC
 dlog_field_name=IDX AE ROC
 offset=112
 size=_U08_
@@ -923,13 +923,13 @@ real_lower=0
 real_upper=16
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.idx_AE_roc" AE_roc bin index
+_tooltip="status.idx_AE_roc" AE_roc bin index
 log_by_default=TRUE
 
 [derived_64]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_wbo2
-dlog_gui_name=ADC WBO2
+_dlog_gui_name=ADC WBO2
 dlog_field_name=ADC WBO2
 offset=113
 size=_U08_
@@ -937,13 +937,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.wbo2" WBO2 ADC reading
+_tooltip="status.adc.wbo2" WBO2 ADC reading
 log_by_default=TRUE
 
 [derived_65]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_volt
-dlog_gui_name=ADC VOLT
+_dlog_gui_name=ADC VOLT
 dlog_field_name=ADC VOLT
 offset=114
 size=_U08_
@@ -952,13 +952,13 @@ real_upper=25.5
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="status.adc.volt" VOLT ADC reading
+_tooltip="status.adc.volt" VOLT ADC reading
 log_by_default=TRUE
 
 [derived_66]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_nbo2
-dlog_gui_name=ADC NBO2
+_dlog_gui_name=ADC NBO2
 dlog_field_name=ADC NBO2
 offset=115
 size=_U08_
@@ -966,13 +966,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.nbo2" NBO2 ADC reading
+_tooltip="status.adc.nbo2" NBO2 ADC reading
 log_by_default=TRUE
 
 [derived_67]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_map
-dlog_gui_name=ADC MAP
+_dlog_gui_name=ADC MAP
 dlog_field_name=ADC MAP
 offset=116
 size=_U08_
@@ -980,13 +980,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.map" MAP ADC reading
+_tooltip="status.adc.map" MAP ADC reading
 log_by_default=TRUE
 
 [derived_68]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_cts
-dlog_gui_name=ADC CTS
+_dlog_gui_name=ADC CTS
 dlog_field_name=ADC CTS
 offset=117
 size=_U08_
@@ -994,13 +994,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.cts" CTS ADC reading
+_tooltip="status.adc.cts" CTS ADC reading
 log_by_default=TRUE
 
 [derived_69]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_tps
-dlog_gui_name=ADC TPS
+_dlog_gui_name=ADC TPS
 dlog_field_name=ADC TPS
 offset=118
 size=_U08_
@@ -1008,13 +1008,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.tps" TPS ADC reading
+_tooltip="status.adc.tps" TPS ADC reading
 log_by_default=TRUE
 
 [derived_70]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_pumpvolt
-dlog_gui_name=ADC PUMPVOLT
+_dlog_gui_name=ADC PUMPVOLT
 dlog_field_name=ADC PUMPVOLT
 offset=119
 size=_U08_
@@ -1022,13 +1022,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc." ADC reading
+_tooltip="status.adc." ADC reading
 log_by_default=TRUE
 
 [derived_71]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_diag
-dlog_gui_name=ADC DIAG
+_dlog_gui_name=ADC DIAG
 dlog_field_name=ADC DIAG
 offset=120
 size=_U08_
@@ -1036,13 +1036,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.diag" DIAG ADC reading
+_tooltip="status.adc.diag" DIAG ADC reading
 log_by_default=TRUE
 
 [derived_72]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_mat
-dlog_gui_name=ADC MAT
+_dlog_gui_name=ADC MAT
 dlog_field_name=ADC MAT
 offset=121
 size=_U08_
@@ -1050,13 +1050,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.mat" MAT ADC reading
+_tooltip="status.adc.mat" MAT ADC reading
 log_by_default=TRUE
 
 [derived_73]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_esc
-dlog_gui_name=ADC ESC
+_dlog_gui_name=ADC ESC
 dlog_field_name=ADC ESC
 offset=122
 size=_U08_
@@ -1064,13 +1064,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.esc" ESC ADC reading
+_tooltip="status.adc.esc" ESC ADC reading
 log_by_default=TRUE
 
 [derived_74]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_adc_vmaf
-dlog_gui_name=ADC VMAF
+_dlog_gui_name=ADC VMAF
 dlog_field_name=ADC VMAF
 offset=123
 size=_U08_
@@ -1078,13 +1078,13 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status.adc.vmaf" VMAF ADC reading
+_tooltip="status.adc.vmaf" VMAF ADC reading
 log_by_default=TRUE
 
 [derived_75]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=lambda
-dlog_gui_name=Lambda
+_dlog_gui_name=Lambda
 dlog_field_name=Lambda
 offset=113
 size=_U08_
@@ -1093,13 +1093,13 @@ real_upper=2
 precision=2                                     r
 dl_conv_expr=x*1
 ul_conv_expr=(5/10) + ((1/256) * x)
-tooltip=current ego lambda reading
+_tooltip=current ego lambda reading
 log_by_default=TRUE
 
 [derived_76]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=lambda_target
-dlog_gui_name=Lambda Target
+_dlog_gui_name=Lambda Target
 dlog_field_name=Lamda Target
 offset=84
 size=_U16_
@@ -1108,13 +1108,13 @@ real_upper=2
 precision=2
 dl_conv_expr=x*1
 ul_conv_expr=(5/10) + ((1/256) * x)
-tooltip=ego closed loop lambda target
+_tooltip=ego closed loop lambda target
 log_by_default=TRUE
 
 [derived_77]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=duty_cycle
-dlog_gui_name=Dutycycle
+_dlog_gui_name=Dutycycle
 dlog_field_name=DutyCycle
 offset=2
 real_lower=0
@@ -1137,13 +1137,13 @@ rpm_size=_U16_
 pw_offset=100
 pw_size=_U16_
 precision=2
-tooltip="Duty Cycle" is the injector Duty cycle.
+_tooltip="Duty Cycle" is the injector Duty cycle.
 log_by_default=TRUE
 
 [derived_78]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default,temp_dep
 internal_names=cts_temp
-dlog_gui_name=CTS (deg)
+_dlog_gui_name=CTS (deg)
 dlog_field_name=CTS (deg)
 offset=36
 size=_U16_
@@ -1151,14 +1151,14 @@ real_lower=0
 real_upper=1000
 dl_conv_expr=(x+459.67)*(5/9)
 ul_conv_expr=x*(9/5)-459.67
-tooltip=current engine coolant temperature
+_tooltip=current engine coolant temperature
 log_by_default=TRUE
 temp_dep=TRUE
 
 [derived_79]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default,temp_dep
 internal_names=mat_temp
-dlog_gui_name=MAT (deg)
+_dlog_gui_name=MAT (deg)
 dlog_field_name=MAT (deg)
 offset=44
 size=_U16_
@@ -1166,6 +1166,6 @@ real_lower=0
 real_upper=1000
 dl_conv_expr=(x+459.67)*(5/9)
 ul_conv_expr=x*(9/5)-459.67
-tooltip=current manifold temperature
+_tooltip=current manifold temperature
 log_by_default=TRUE
 temp_dep=TRUE

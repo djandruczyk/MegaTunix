@@ -1,14 +1,18 @@
 rtmapdir = $(datadir)/MegaTunix/$(REALTIME_MAPS_DATA_DIR)
 
-rtmap_files = 	README \
-		BnG-Std.rtv_map \
-		DT-Std.rtv_map \
-		MSnS-Extra-HR-029x.rtv_map \
-		MSnS-Extra-029x.rtv_map \
-		MS2-Std.rtv_map \
-		MS2-Extra-2.1.0.rtv_map \
-		PIS_V1_00-firmware.rtv_map
+rtmap_in_files = 	\
+		BnG-Std.rtv_map.in \
+		DT-Std.rtv_map.in \
+		MSnS-Extra-HR-029x.rtv_map.in \
+		MSnS-Extra-029x.rtv_map.in \
+		MS2-Std.rtv_map.in \
+		MS2-Extra-2.1.0.rtv_map.in \
+		PIS_V1_00-firmware.rtv_map.in
 
-rtmap_DATA = $(rtmap_files)
+rtmap_DATA = $(rtmap_in_files:.rtv_map.in=.rtv_map)
+@INTLTOOL_RTVMAP_RULE@
 
-EXTRA_DIST = $(rtmap_DATA)
+EXTRA_DIST = $(rtmap_DATA) README
+
+CLEANFILES = *.rtv_map
+

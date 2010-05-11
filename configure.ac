@@ -52,8 +52,10 @@ dnl Gettext Goodness
 AC_PROG_INTLTOOL([0.21])
 INTLTOOL_PROF_RULE='%.prof:      %.prof.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
 INTLTOOL_DATAMAP_RULE='%.datamap:      %.datamap.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+INTLTOOL_RTVMAP_RULE='%.rtv_map:      %.rtv_map.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
 AC_SUBST(INTLTOOL_PROF_RULE)
 AC_SUBST(INTLTOOL_DATAMAP_RULE)
+AC_SUBST(INTLTOOL_RTVMAP_RULE)
 
 GETTEXT_PACKAGE=megatunix
 AC_SUBST(GETTEXT_PACKAGE)

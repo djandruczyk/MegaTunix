@@ -19,21 +19,21 @@ raw_list=raw_secl
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=hr_clock
-dlog_gui_name=HR Clock
+_dlog_gui_name=HR Clock
 dlog_field_name=Time
 offset=0
 lower_limit=0
 upper_limit=2147483648
 special=hr_clock
 precision=3
-tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
+_tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
 log_by_default=TRUE
 
 [derived_1]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=raw_secl
-dlog_gui_name=MS-II Clock
+_dlog_gui_name=MS-II Clock
 dlog_field_name=SecL
 offset=0
 size=_U16_
@@ -41,14 +41,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x%256
 ul_conv_expr=x*1
-tooltip="MS-2 Clock" is the MegaSquirt clock returned by the ECU, this runs from 0-65535 and recylcles indefinitely, resolution 1 second.
+_tooltip="MS-2 Clock" is the MegaSquirt clock returned by the ECU, this runs from 0-65535 and recylcles indefinitely, resolution 1 second.
 log_by_default=TRUE
 
 [derived_2]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw1
-dlog_gui_name=PW 1
+_dlog_gui_name=PW 1
 dlog_field_name=PW
 offset=2
 size=_U16_
@@ -57,14 +57,14 @@ upper_limit=65
 dl_conv_expr=x/0.000666
 ul_conv_expr=x*0.000666
 precision=3
-tooltip="PW" is the pulsewidth for injector channel 1. Resolution of 1 us.
+_tooltip="PW" is the pulsewidth for injector channel 1. Resolution of 1 us.
 log_by_default=TRUE
 
 [derived_3]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=pw2
-dlog_gui_name=PW 2
+_dlog_gui_name=PW 2
 dlog_field_name=PW2
 offset=4
 size=_U16_
@@ -73,14 +73,14 @@ upper_limit=65
 dl_conv_expr=x/0.000666
 ul_conv_expr=x*0.000666
 precision=3
-tooltip="PW2" is the pulsewidth for injector channel 2. Resolution of 1 us.
+_tooltip="PW2" is the pulsewidth for injector channel 2. Resolution of 1 us.
 log_by_default=TRUE
 
 [derived_4]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=rpm
-dlog_gui_name=RPM
+_dlog_gui_name=RPM
 dlog_field_name=RPM
 offset=6
 size=_U16_
@@ -88,14 +88,14 @@ lower_limit=0
 upper_limit=12000
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="RPM" is the engine's speed in revolutions per minute.
+_tooltip="RPM" is the engine's speed in revolutions per minute.
 log_by_default=TRUE
 
 [derived_5]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=sparkangle
-dlog_gui_name=Spark Adv.
+_dlog_gui_name=Spark Adv.
 dlog_field_name=SparkAdv
 offset=8
 size=_S16_
@@ -104,42 +104,42 @@ upper_limit=90
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Spark Adv." is the Current spark advance being run.
+_tooltip="Spark Adv." is the Current spark advance being run.
 log_by_default=TRUE
 
 [derived_6]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=squirtbit
-dlog_gui_name=SquirtBits
+_dlog_gui_name=SquirtBits
 dlog_field_name=Squirt
 offset=10
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="Squirt" is a bitfield containing information such as which injectors are firing, which are scheduled to fire, etc.
+_tooltip="Squirt" is a bitfield containing information such as which injectors are firing, which are scheduled to fire, etc.
 log_by_default=FALSE
 
 [derived_7]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=enginebit
-dlog_gui_name=EngineBits
+_dlog_gui_name=EngineBits
 dlog_field_name=Engine
 offset=11
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
+_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
 log_by_default=TRUE
 
 [derived_8]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afrtgt1
-dlog_gui_name=AfrTarget 1
+_dlog_gui_name=AfrTarget 1
 dlog_field_name=AFRtrgt1
 offset=12
 lower_limit=0
@@ -147,14 +147,14 @@ upper_limit=26
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="AfrTarget 1" is The target AFR
+_tooltip="AfrTarget 1" is The target AFR
 log_by_default=FALSE
 
 [derived_9]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afrtgt2
-dlog_gui_name=AfrTarget 2
+_dlog_gui_name=AfrTarget 2
 dlog_field_name=Afrtrgt2
 offset=13
 lower_limit=0
@@ -162,42 +162,42 @@ upper_limit=26
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="AfrTarget 2" is The target AFR
+_tooltip="AfrTarget 2" is The target AFR
 log_by_default=FALSE
 
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=wb02_en1
-dlog_gui_name=WbO2en 1
+_dlog_gui_name=WbO2en 1
 dlog_field_name=wb02en1
 offset=14
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="WB02ena 1" is a flag indicating whether the wb afr reading is valid.
+_tooltip="WB02ena 1" is a flag indicating whether the wb afr reading is valid.
 log_by_default=FALSE
 
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=wb02_en2
-dlog_gui_name=WbO2en 2
+_dlog_gui_name=WbO2en 2
 dlog_field_name=wb02en2
 offset=15
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="WB02ena 2" is a flag indicating whether the wb afr reading is valid.
+_tooltip="WB02ena 2" is a flag indicating whether the wb afr reading is valid.
 log_by_default=FALSE
 
 [derived_12]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barokpa
-dlog_gui_name=Baro (kPa)
+_dlog_gui_name=Baro (kPa)
 dlog_field_name=barokpa
 offset=16
 size=_S16_
@@ -206,14 +206,14 @@ upper_limit=400
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Baro (kPa)" is the barometer reading in kPa.
+_tooltip="Baro (kPa)" is the barometer reading in kPa.
 log_by_default=TRUE
 
 [derived_13]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapkpa
-dlog_gui_name=MAP (kPa)
+_dlog_gui_name=MAP (kPa)
 dlog_field_name=MAP
 offset=18
 size=_S16_
@@ -222,14 +222,14 @@ upper_limit=400
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Map (kPa)" is the manifold pressure reading in kPa.
+_tooltip="Map (kPa)" is the manifold pressure reading in kPa.
 log_by_default=TRUE
 
 [derived_14]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=matdeg
-dlog_gui_name=MAT (deg)
+_dlog_gui_name=MAT (deg)
 dlog_field_name=IAT
 offset=20
 size=_S16_
@@ -239,14 +239,14 @@ upper_limit=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="MAT (deg)" is the manifold air temperature reading in degrees.
+_tooltip="MAT (deg)" is the manifold air temperature reading in degrees.
 log_by_default=TRUE
 
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_BOOL_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cltdeg
-dlog_gui_name=CLT (deg)
+_dlog_gui_name=CLT (deg)
 dlog_field_name=CLT
 offset=22
 size=_S16_
@@ -256,14 +256,14 @@ upper_limit=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="CLT (deg)" is the coolant temperature reading in degrees.
+_tooltip="CLT (deg)" is the coolant temperature reading in degrees.
 log_by_default=TRUE
 
 [derived_16]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpspercent
-dlog_gui_name=TPS (%)
+_dlog_gui_name=TPS (%)
 dlog_field_name=TP
 offset=24
 size=_S16_
@@ -272,14 +272,14 @@ upper_limit=105
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="TPS (%)" is the throttle position reading in percent of full scale.
+_tooltip="TPS (%)" is the throttle position reading in percent of full scale.
 log_by_default=TRUE
 
 [derived_17]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=battvolt
-dlog_gui_name=Batt (v)
+_dlog_gui_name=Batt (v)
 dlog_field_name=vBatt
 offset=26
 size=_S16_
@@ -288,14 +288,14 @@ upper_limit=18
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Batt (v)" is the battery voltage.
+_tooltip="Batt (v)" is the battery voltage.
 log_by_default=TRUE
 
 [derived_18]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr1
-dlog_gui_name=AFR 1
+_dlog_gui_name=AFR 1
 dlog_field_name=AFR
 offset=28
 size=_S16_
@@ -304,14 +304,14 @@ upper_limit=24
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="AFR 1" is the AFR from O2 sensor 1.
+_tooltip="AFR 1" is the AFR from O2 sensor 1.
 log_by_default=TRUE
 
 [derived_19]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr2
-dlog_gui_name=AFR 2
+_dlog_gui_name=AFR 2
 dlog_field_name=afr2
 offset=30
 size=_S16_
@@ -320,14 +320,14 @@ upper_limit=24
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="AFR 2" is the AFR from O2 sensor 2.
+_tooltip="AFR 2" is the AFR from O2 sensor 2.
 log_by_default=TRUE
 
 [derived_20]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=lambda
-dlog_gui_name=Lambda 1
+_dlog_gui_name=Lambda 1
 dlog_field_name=lambda1
 offset=28
 size=_S16_
@@ -336,14 +336,14 @@ upper_limit=2
 dl_conv_expr=x*147
 ul_conv_expr=x/147
 precision=3
-tooltip="Lambda 1" is the Lambda reading from O2 sensor 1.
+_tooltip="Lambda 1" is the Lambda reading from O2 sensor 1.
 log_by_default=FALSE
 
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=lambda2
-dlog_gui_name=Lambda 2
+_dlog_gui_name=Lambda 2
 dlog_field_name=lambda2
 offset=30
 size=_S16_
@@ -352,14 +352,14 @@ upper_limit=2
 dl_conv_expr=x*147
 ul_conv_expr=x/147
 precision=3
-tooltip="Lambda 2" is the Lambda reading from O2 sensor 2.
+_tooltip="Lambda 2" is the Lambda reading from O2 sensor 2.
 log_by_default=FALSE
 
 [derived_22]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=knock
-dlog_gui_name=Knock (v)
+_dlog_gui_name=Knock (v)
 dlog_field_name=knockRet
 offset=32
 size=_S16_
@@ -368,14 +368,14 @@ upper_limit=5
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Knock" is the knock sensor voltage reading.
+_tooltip="Knock" is the knock sensor voltage reading.
 log_by_default=FALSE
 
 [derived_23]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egocorr
-dlog_gui_name=EGO Corr 1
+_dlog_gui_name=EGO Corr 1
 dlog_field_name=Gego
 offset=34
 size=_S16_
@@ -383,14 +383,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="EGO Corr 1" is the EGO correction factor for injector1 and O2 sensor 1
+_tooltip="EGO Corr 1" is the EGO correction factor for injector1 and O2 sensor 1
 log_by_default=TRUE
 
 [derived_24]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=egocorr2
-dlog_gui_name=EGO Corr 2
+_dlog_gui_name=EGO Corr 2
 dlog_field_name=Gego2
 offset=36
 size=_S16_
@@ -398,14 +398,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="EGO Corr 2" is the EGO correction factor for injector2 and O2 sensor 2
+_tooltip="EGO Corr 2" is the EGO correction factor for injector2 and O2 sensor 2
 log_by_default=TRUE
 
 [derived_25]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=aircorr
-dlog_gui_name=AIR Corr
+_dlog_gui_name=AIR Corr
 dlog_field_name=Gair
 offset=38
 size=_S16_
@@ -413,14 +413,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="AIR Corr" is the AIR temp correction factor for both channels
+_tooltip="AIR Corr" is the AIR temp correction factor for both channels
 log_by_default=TRUE
 
 [derived_26]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=warmcorr
-dlog_gui_name=Warm Corr
+_dlog_gui_name=Warm Corr
 dlog_field_name=Gwarm
 offset=40
 size=_S16_
@@ -428,14 +428,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Warm Corr" is the current amount of warmup correction (%).
+_tooltip="Warm Corr" is the current amount of warmup correction (%).
 log_by_default=TRUE
 
 [derived_27]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsaccel
-dlog_gui_name=Accel Enr.
+_dlog_gui_name=Accel Enr.
 dlog_field_name=AccelEnrich
 offset=42
 size=_S16_
@@ -444,14 +444,14 @@ upper_limit=25
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Accel Enr." is the current amount of acceleration enrichment (ms).
+_tooltip="Accel Enr." is the current amount of acceleration enrichment (ms).
 log_by_default=TRUE
 
 [derived_28]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsfuelcut
-dlog_gui_name=Fuel Cut.
+_dlog_gui_name=Fuel Cut.
 dlog_field_name=tpsfuelcut
 offset=44
 size=_S16_
@@ -459,14 +459,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Fuel Cut" is the current amount of fuel cut (%).
+_tooltip="Fuel Cut" is the current amount of fuel cut (%).
 log_by_default=TRUE
 
 [derived_29]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=barocorr
-dlog_gui_name=Baro Corr.
+_dlog_gui_name=Baro Corr.
 dlog_field_name=Gbaro
 offset=46
 size=_S16_
@@ -474,14 +474,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Barr Corr" is the current amount of Baro Correction (%).
+_tooltip="Barr Corr" is the current amount of Baro Correction (%).
 log_by_default=TRUE
 
 [derived_30]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=gammae
-dlog_gui_name=GammaE
+_dlog_gui_name=GammaE
 dlog_field_name=Gammae
 offset=48
 size=_S16_
@@ -489,14 +489,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Gammae" is the sum of all enrichments.
+_tooltip="Gammae" is the sum of all enrichments.
 log_by_default=TRUE
 
 [derived_31]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr1
-dlog_gui_name=VE 1
+_dlog_gui_name=VE 1
 dlog_field_name=Gve
 offset=50
 size=_S16_
@@ -504,14 +504,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="VE 1" is the current VE for injector channel 1.
+_tooltip="VE 1" is the current VE for injector channel 1.
 log_by_default=TRUE
 
 [derived_32]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=vecurr2
-dlog_gui_name=VE 2
+_dlog_gui_name=VE 2
 dlog_field_name=Gve2
 offset=52
 size=_S16_
@@ -519,14 +519,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="VE 2" is the current VE for injector channel 1.
+_tooltip="VE 2" is the current VE for injector channel 1.
 log_by_default=TRUE
 
 [derived_33]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=iacstep,idledc
-dlog_gui_name=IAC Step
+_dlog_gui_name=IAC Step
 dlog_field_name=IAC
 offset=54
 size=_S16_
@@ -534,14 +534,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="IAC Step/IdleDC" is the current position for the Stepper IAC (steps) or the current PWM idle dutycycle.
+_tooltip="IAC Step/IdleDC" is the current position for the Stepper IAC (steps) or the current PWM idle dutycycle.
 log_by_default=TRUE
 
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=coldadv
-dlog_gui_name=Cold Adv (deg)
+_dlog_gui_name=Cold Adv (deg)
 dlog_field_name=ColdAdv
 offset=56
 size=_S16_
@@ -550,14 +550,14 @@ upper_limit=100
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Cold Adv (deg)" is the current Cold spark advance addon.
+_tooltip="Cold Adv (deg)" is the current Cold spark advance addon.
 log_by_default=TRUE
 
 [derived_35]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tpsdot
-dlog_gui_name=TPSdot
+_dlog_gui_name=TPSdot
 dlog_field_name=tpsDOT
 offset=58
 size=_S16_
@@ -565,14 +565,14 @@ lower_limit=-1000
 upper_limit=1000
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="TPSdot" is the rate of change of the TPS signal.
+_tooltip="TPSdot" is the rate of change of the TPS signal.
 log_by_default=TRUE
 
 [derived_36]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=mapdot
-dlog_gui_name=MAPdot
+_dlog_gui_name=MAPdot
 dlog_field_name=mapDOT
 offset=60
 size=_S16_
@@ -580,14 +580,14 @@ lower_limit=-1000
 upper_limit=1000
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="MAPdot" is the rate of change of the MAP signal.
+_tooltip="MAPdot" is the rate of change of the MAP signal.
 log_by_default=TRUE
 
 [derived_37]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dwell
-dlog_gui_name=Dwell
+_dlog_gui_name=Dwell
 dlog_field_name=Dwell
 offset=62
 size=_S16_
@@ -596,14 +596,14 @@ upper_limit=12
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Dwell" is the ignition coil charge time (ms.)
+_tooltip="Dwell" is the ignition coil charge time (ms.)
 log_by_default=TRUE
 
 [derived_38]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=maf
-dlog_gui_name=MAF
+_dlog_gui_name=MAF
 dlog_field_name=MAF
 offset=64
 size=_S16_
@@ -612,14 +612,14 @@ upper_limit=3
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 precision=3
-tooltip="MAF" is the mass air flow rate in grams/sec (g/sec).
+_tooltip="MAF" is the mass air flow rate in grams/sec (g/sec).
 log_by_default=TRUE
 
 [derived_39]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=calcMAP
-dlog_gui_name=calcMAP
+_dlog_gui_name=calcMAP
 dlog_field_name=calcMAP
 offset=66
 size=_S16_
@@ -627,14 +627,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="calcMAP" is a blend of TPS and MAP, depending upon active algorithm.
+_tooltip="calcMAP" is a blend of TPS and MAP, depending upon active algorithm.
 log_by_default=FALSE
 
 [derived_40]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=fuelcorr
-dlog_gui_name=Fuel Corr.
+_dlog_gui_name=Fuel Corr.
 dlog_field_name=E85FuelCorr
 offset=68
 size=_S16_
@@ -642,14 +642,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Fuel Corr." is correction factor based on how mcuh alcohol is in the fuel.
+_tooltip="Fuel Corr." is correction factor based on how mcuh alcohol is in the fuel.
 log_by_default=FALSE
 
 [derived_41]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=portstatus
-dlog_gui_name=Port Status
+_dlog_gui_name=Port Status
 dlog_field_name=portstatus
 offset=70
 size=_S16_
@@ -657,14 +657,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="Port Status" is a bitfield showing the status of ports 0-6
+_tooltip="Port Status" is a bitfield showing the status of ports 0-6
 log_by_default=FALSE
 
 [derived_42]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=knockretard
-dlog_gui_name=Knock Ret.
+_dlog_gui_name=Knock Ret.
 dlog_field_name=knockretard
 offset=71
 size=_U08_
@@ -673,14 +673,14 @@ upper_limit=26
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="Knock Ret." is the current amount of spark retard due to knock.
+_tooltip="Knock Ret." is the current amount of spark retard due to knock.
 log_by_default=FALSE
 
 [derived_43]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=xtaucorr1
-dlog_gui_name=X-tau corr1
+_dlog_gui_name=X-tau corr1
 dlog_field_name=xTau1
 offset=72
 size=_S16_
@@ -688,14 +688,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="X-tau corr1" is the current X-Tau fuel correction for channel 1
+_tooltip="X-tau corr1" is the current X-Tau fuel correction for channel 1
 log_by_default=FALSE
 
 [derived_44]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2volt1
-dlog_gui_name=O<sub>2</sub> Volts 1
+_dlog_gui_name=O<sub>2</sub> Volts 1
 dlog_field_name=egovolt1
 offset=74
 size=_S16_
@@ -704,14 +704,14 @@ upper_limit=5
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 precision=3
-tooltip="O2" is the current O2 sensor voltage for sensor 1
+_tooltip="O2" is the current O2 sensor voltage for sensor 1
 log_by_default=FALSE
 
 [derived_45]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=o2volt2
-dlog_gui_name=O<sub>2</sub> Volts 2 (ms2)
+_dlog_gui_name=O<sub>2</sub> Volts 2 (ms2)
 dlog_field_name=egovolt2
 offset=76
 size=_S16_
@@ -720,14 +720,14 @@ upper_limit=5
 dl_conv_expr=x*100
 ul_conv_expr=x/100
 precision=3
-tooltip="EGO Volts 2" is the current O2 sensor voltage for sensor 2
+_tooltip="EGO Volts 2" is the current O2 sensor voltage for sensor 2
 log_by_default=FALSE
 
 [derived_46]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=amcupdates
-dlog_gui_name=AMC Updates
+_dlog_gui_name=AMC Updates
 dlog_field_name=amcupdates
 offset=78
 size=_S16_
@@ -735,14 +735,14 @@ lower_limit=0
 upper_limit=32768
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="AMC Updates" is the total number of Automatic Mixture Control updates thusfar (I think)
+_tooltip="AMC Updates" is the total number of Automatic Mixture Control updates thusfar (I think)
 log_by_default=FALSE
 
 [derived_47]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=kpaix
-dlog_gui_name=MAP/baro
+_dlog_gui_name=MAP/baro
 dlog_field_name=MAP/baro
 offset=80
 size=_S16_
@@ -750,14 +750,14 @@ lower_limit=0
 upper_limit=400
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-tooltip="kpaix" is MAP/baro
+_tooltip="kpaix" is MAP/baro
 log_by_default=FALSE
 
 [derived_48]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=xtaucorr2
-dlog_gui_name=X-tau corr2
+_dlog_gui_name=X-tau corr2
 dlog_field_name=xTau2
 offset=82
 size=_S16_
@@ -765,14 +765,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="X-tau corr2" is the current X-Tau fuel correction for channel 2
+_tooltip="X-tau corr2" is the current X-Tau fuel correction for channel 2
 log_by_default=FALSE
 
 [derived_49]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare1
-dlog_gui_name=Spare1
+_dlog_gui_name=Spare1
 dlog_field_name=Spare1
 offset=84
 size=_S16_
@@ -780,14 +780,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_50]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare2
-dlog_gui_name=Spare2
+_dlog_gui_name=Spare2
 dlog_field_name=Spare2
 offset=86
 size=_S16_
@@ -795,14 +795,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_51]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=trig_fix
-dlog_gui_name=trig_fix
+_dlog_gui_name=trig_fix
 dlog_field_name=Triggers±
 offset=88
 size=_S16_
@@ -810,14 +810,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_52]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare4
-dlog_gui_name=spare4
+_dlog_gui_name=spare4
 dlog_field_name=spare4
 offset=90
 size=_S16_
@@ -825,14 +825,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_53]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare5
-dlog_gui_name=spare5
+_dlog_gui_name=spare5
 dlog_field_name=spare5
 offset=92
 size=_S16_
@@ -840,14 +840,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_54]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare6
-dlog_gui_name=spare6
+_dlog_gui_name=spare6
 dlog_field_name=spare6
 offset=94
 size=_S16_
@@ -855,14 +855,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_55]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare7
-dlog_gui_name=spare7
+_dlog_gui_name=spare7
 dlog_field_name=spare7
 offset=96
 size=_S16_
@@ -870,14 +870,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_56]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare8
-dlog_gui_name=spare8
+_dlog_gui_name=spare8
 dlog_field_name=spare8
 offset=98
 size=_S16_
@@ -885,14 +885,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_57]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare9
-dlog_gui_name=spare9
+_dlog_gui_name=spare9
 dlog_field_name=spare9
 offset=100
 size=_S16_
@@ -900,14 +900,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_58]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=spare10
-dlog_gui_name=spare10
+_dlog_gui_name=spare10
 dlog_field_name=spare10
 offset=102
 size=_S16_
@@ -915,14 +915,14 @@ lower_limit=0
 upper_limit=100
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_59]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=tachcount
-dlog_gui_name=Tach Count
+_dlog_gui_name=Tach Count
 dlog_field_name=tachCount
 offset=104
 size=_U16_
@@ -930,14 +930,14 @@ lower_limit=0
 upper_limit=65535
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_60]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=ospare
-dlog_gui_name=ospare
+_dlog_gui_name=ospare
 dlog_field_name=ospare
 offset=106
 size=_U08_
@@ -945,14 +945,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_61]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=cksum
-dlog_gui_name=cksum
+_dlog_gui_name=cksum
 dlog_field_name=cksum
 offset=107
 size=_U08_
@@ -960,14 +960,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip=
+_tooltip=
 log_by_default=FALSE
 
 [derived_62]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=deltaT
-dlog_gui_name=deltaT
+_dlog_gui_name=deltaT
 dlog_field_name=deltaT
 offset=108
 size=_U32_
@@ -975,14 +975,14 @@ lower_limit=0
 upper_limit=4294967295
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="deltaT" is the normallized time between trigger pulses (uSec)
+_tooltip="deltaT" is the normallized time between trigger pulses (uSec)
 log_by_default=FALSE
 
 [derived_63]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle1
-dlog_gui_name=Dutycycle 1
+_dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
 offset=2
 lower_limit=0
@@ -1008,14 +1008,14 @@ stroke_bitmask=1
 raw_rpm_offset=6
 raw_rpm_size=_U16_
 precision=2
-tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
+_tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
 log_by_default=TRUE
 
 [derived_64]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=dcycle2
-dlog_gui_name=Dutycycle 2
+_dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
 offset=4
 lower_limit=0
@@ -1041,14 +1041,14 @@ stroke_bitmask=1
 raw_rpm_offset=6
 raw_rpm_size=_U16_
 precision=2
-tooltip="Dcycle2" is the injector Duty cycle for injector channel 2.
+_tooltip="Dcycle2" is the injector Duty cycle for injector channel 2.
 log_by_default=TRUE
 
 [derived_65]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=fuelcomp
-dlog_gui_name=Fuel Comp.
+_dlog_gui_name=Fuel Comp.
 dlog_field_name=Ethanol%
 offset=68
 size=_S16_
@@ -1056,14 +1056,14 @@ lower_limit=0
 upper_limit=255
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="Fuel Comp." is composition factor based on how much ethanol is in the fuel.
+_tooltip="Fuel Comp." is composition factor based on how much ethanol is in the fuel.
 log_by_default=TRUE
 
 [derived_66]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr_err_l
-dlog_gui_name=AFR Error Left
+_dlog_gui_name=AFR Error Left
 dlog_field_name=AfrErrL
 offset=12
 lower_limit=-25
@@ -1077,14 +1077,14 @@ afr_size=_S16_
 afrtgt_offset=12
 afrtgt_size=_U08_
 precision=1
-tooltip="AFR Error Left" is the difference between target AFR and actual AFR for the first O2 channel
+_tooltip="AFR Error Left" is the difference between target AFR and actual AFR for the first O2 channel
 log_by_default=TRUE
 
 [derived_67]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_INT_,_STRING_,_INT_,_INT_,_BOOL_
 internal_names=afr_err_r
-dlog_gui_name=AFR Error right
+_dlog_gui_name=AFR Error right
 dlog_field_name=AfrErrR
 offset=13
 lower_limit=-25
@@ -1098,501 +1098,501 @@ afr_size=_S16_
 afrtgt_offset=13
 afrtgt_size=_U08_
 precision=1
-tooltip="AFR Error Right" is the difference between target AFR and actual AFR for the second O2 channel.
+_tooltip="AFR Error Right" is the difference between target AFR and actual AFR for the second O2 channel.
 log_by_default=TRUE
 
 [derived_68]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=portStatus
-dlog_gui_name=portStatus
+_dlog_gui_name=portStatus
 dlog_field_name=portStatus
 offset=70
 size=_U08_
 ul_conv_expr=x*1
 dl_conv_expr=x*1
-tooltip="portStatus" is the bitfield for status of ports 0 thru 6 (debug tool)
+_tooltip="portStatus" is the bitfield for status of ports 0 thru 6 (debug tool)
 log_by_default=FALSE
 
 [derived_69]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_
 internal_names=knockRetard
-dlog_gui_name=knockRetard
+_dlog_gui_name=knockRetard
 dlog_field_name=knockRetard
 offset=71
 size=_U08_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-tooltip="knockRetard." is the amount of spark retard currently in use due to detected knock levels
+_tooltip="knockRetard." is the amount of spark retard currently in use due to detected knock levels
 log_by_default=FALSE
 
 [derived_70]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=EAEFuelCorr1
-dlog_gui_name=EAEFuelCorr1
+_dlog_gui_name=EAEFuelCorr1
 dlog_field_name=EAEFuelCorr1
 offset=72
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="EAEFuelCorr1" is the amount of fuel correction in % by the EAE algorithm
+_tooltip="EAEFuelCorr1" is the amount of fuel correction in % by the EAE algorithm
 log_by_default=FALSE
 
 [derived_71]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=status1
-dlog_gui_name=status1
+_dlog_gui_name=status1
 dlog_field_name=status1
 offset=78
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status1" is a status register for debug/info purposes
+_tooltip="status1" is a status register for debug/info purposes
 log_by_default=FALSE
 
 [derived_72]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=status2
-dlog_gui_name=status2
+_dlog_gui_name=status2
 dlog_field_name=status2
 offset=79
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status2" is a status register for debug/info purposes
+_tooltip="status2" is a status register for debug/info purposes
 log_by_default=FALSE
 
 [derived_73]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=status3
-dlog_gui_name=status3
+_dlog_gui_name=status3
 dlog_field_name=status3
 offset=80
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status3" is a status register for debug/info purposes
+_tooltip="status3" is a status register for debug/info purposes
 log_by_default=FALSE
 
 [derived_74]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=status4
-dlog_gui_name=status4
+_dlog_gui_name=status4
 dlog_field_name=status4
 offset=81
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-tooltip="status4" is a status register for debug/info purposes
+_tooltip="status4" is a status register for debug/info purposes
 log_by_default=FALSE
 
 [derived_75]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=looptime
-dlog_gui_name=looptime
+_dlog_gui_name=looptime
 dlog_field_name=looptime
 offset=82
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*0.6667
-tooltip="looptime" is the total time for the mainloop to process in uSec.
+_tooltip="looptime" is the total time for the mainloop to process in uSec.
 log_by_default=FALSE
 
 [derived_76]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=status5
-dlog_gui_name=status5
+_dlog_gui_name=status5
 dlog_field_name=status5
 offset=84
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="status5" is unknown
+_tooltip="status5" is unknown
 log_by_default=FALSE
 
 [derived_77]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=tpsADC
-dlog_gui_name=tpsADC
+_dlog_gui_name=tpsADC
 dlog_field_name=tpsADC
 offset=86
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="tpsADC" is the raw TPS signal ADC value dued for the calibrator.
+_tooltip="tpsADC" is the raw TPS signal ADC value dued for the calibrator.
 log_by_default=FALSE
 
 [derived_78]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=fuelload2
-dlog_gui_name=fuelload2
+_dlog_gui_name=fuelload2
 dlog_field_name=fuelload2
 offset=88
 size=_U16_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
-tooltip="fuelload2" is unknown
+_tooltip="fuelload2" is unknown
 log_by_default=FALSE
 
 [derived_79]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=ignload
-dlog_gui_name=ignload
+_dlog_gui_name=ignload
 dlog_field_name=ignload
 offset=90
 size=_U16_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
-tooltip="ignload" is unknown
+_tooltip="ignload" is unknown
 log_by_default=FALSE
 
 [derived_80]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=ignload2
-dlog_gui_name=ignload2
+_dlog_gui_name=ignload2
 dlog_field_name=ignload2
 offset=92
 size=_U16_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
-tooltip="ignload" is unknown
+_tooltip="ignload" is unknown
 log_by_default=FALSE
 
 [derived_81]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=sync_bits
-dlog_gui_name=sync_bits
+_dlog_gui_name=sync_bits
 dlog_field_name=sync_bits
 offset=104
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="sync_bits" is something to due with wheel decode...
+_tooltip="sync_bits" is something to due with wheel decode...
 log_by_default=FALSE
 
 [derived_82]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=timing_err
-dlog_gui_name=timing_err
+_dlog_gui_name=timing_err
 dlog_field_name=timing_err
 offset=105
 size=_U08_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
-tooltip="timing_err" is the accuracy of the timing predictor
+_tooltip="timing_err" is the accuracy of the timing predictor
 log_by_default=FALSE
 
 [derived_83]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=deltaT
-dlog_gui_name=deltaT
+_dlog_gui_name=deltaT
 dlog_field_name=deltaT
 offset=106
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="timing_err" is the normalized time between trigger pulses
+_tooltip="timing_err" is the normalized time between trigger pulses
 log_by_default=FALSE
 
 [derived_84]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=wallfuel1
-dlog_gui_name=wallfuel1
+_dlog_gui_name=wallfuel1
 dlog_field_name=wallfuel1
 offset=110
 size=_U32_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="wallfuel1" is something for EAE in uSecs.
+_tooltip="wallfuel1" is something for EAE in uSecs.
 log_by_default=FALSE
 
 [derived_85]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc0
-dlog_gui_name=gpioadc0
+_dlog_gui_name=gpioadc0
 dlog_field_name=gpioadc0
 offset=114
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc0" is unknown
+_tooltip="gpioadc0" is unknown
 log_by_default=FALSE
 
 [derived_86]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc1
-dlog_gui_name=gpioadc1
+_dlog_gui_name=gpioadc1
 dlog_field_name=gpioadc1
 offset=116
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc1" is unknown
+_tooltip="gpioadc1" is unknown
 log_by_default=FALSE
 
 [derived_87]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc2
-dlog_gui_name=gpioadc2
+_dlog_gui_name=gpioadc2
 dlog_field_name=gpioadc2
 offset=118
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc2" is unknown
+_tooltip="gpioadc2" is unknown
 log_by_default=FALSE
 
 [derived_88]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc3
-dlog_gui_name=gpioadc3
+_dlog_gui_name=gpioadc3
 dlog_field_name=gpioadc3
 offset=120
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc3" is unknown
+_tooltip="gpioadc3" is unknown
 log_by_default=FALSE
 
 [derived_89]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc4
-dlog_gui_name=gpioadc4
+_dlog_gui_name=gpioadc4
 dlog_field_name=gpioadc4
 offset=122
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc4" is unknown
+_tooltip="gpioadc4" is unknown
 log_by_default=FALSE
 
 [derived_90]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc5
-dlog_gui_name=gpioadc5
+_dlog_gui_name=gpioadc5
 dlog_field_name=gpioadc5
 offset=124
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc1" is unknown
+_tooltip="gpioadc1" is unknown
 log_by_default=FALSE
 
 [derived_91]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc6
-dlog_gui_name=gpioadc6
+_dlog_gui_name=gpioadc6
 dlog_field_name=gpioadc6
 offset=126
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc6" is unknown
+_tooltip="gpioadc6" is unknown
 log_by_default=FALSE
 
 [derived_92]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioadc7
-dlog_gui_name=gpioadc7
+_dlog_gui_name=gpioadc7
 dlog_field_name=gpioadc7
 offset=128
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioadc7" is unknown
+_tooltip="gpioadc7" is unknown
 log_by_default=FALSE
 
 [derived_93]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpiopwmin0
-dlog_gui_name=gpiopwmin0
+_dlog_gui_name=gpiopwmin0
 dlog_field_name=gpiopwmin0
 offset=130
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpiopwmin0" is unknown
+_tooltip="gpiopwmin0" is unknown
 log_by_default=FALSE
 
 [derived_94]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpiopwmin1
-dlog_gui_name=gpiopwmin1
+_dlog_gui_name=gpiopwmin1
 dlog_field_name=gpiopwmin1
 offset=132
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpiopwmin1" is unknown
+_tooltip="gpiopwmin1" is unknown
 log_by_default=FALSE
 
 [derived_95]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpiopwmin2
-dlog_gui_name=gpiopwmin2
+_dlog_gui_name=gpiopwmin2
 dlog_field_name=gpiopwmin2
 offset=134
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpiopwmin2" is unknown
+_tooltip="gpiopwmin2" is unknown
 log_by_default=FALSE
 
 [derived_96]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpiopwmin3
-dlog_gui_name=gpiopwmin3
+_dlog_gui_name=gpiopwmin3
 dlog_field_name=gpiopwmin3
 offset=136
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpiopwmin3" is unknown
+_tooltip="gpiopwmin3" is unknown
 log_by_default=FALSE
 
 [derived_97]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioport0
-dlog_gui_name=gpioport0
+_dlog_gui_name=gpioport0
 dlog_field_name=gpioport0
 offset=138
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioport0" is unknown
+_tooltip="gpioport0" is unknown
 log_by_default=FALSE
 
 [derived_98]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioport1
-dlog_gui_name=gpioport1
+_dlog_gui_name=gpioport1
 dlog_field_name=gpioport1
 offset=139
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioport1" is unknown
+_tooltip="gpioport1" is unknown
 log_by_default=FALSE
 
 [derived_99]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=gpioport2
-dlog_gui_name=gpioport2
+_dlog_gui_name=gpioport2
 dlog_field_name=gpioport2
 offset=140
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="gpioport2" is unknown
+_tooltip="gpioport2" is unknown
 log_by_default=FALSE
 
 [derived_100]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=adc6
-dlog_gui_name=adc6
+_dlog_gui_name=adc6
 dlog_field_name=adc6
 offset=141
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="adc6" is unknown
+_tooltip="adc6" is unknown
 log_by_default=FALSE
 
 [derived_101]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=adc7
-dlog_gui_name=adc7
+_dlog_gui_name=adc7
 dlog_field_name=adc7
 offset=143
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="adc7" is unknown
+_tooltip="adc7" is unknown
 log_by_default=FALSE
 
 [derived_102]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=wallfuel2
-dlog_gui_name=wallfuel2
+_dlog_gui_name=wallfuel2
 dlog_field_name=wallfuel2
 offset=145
 size=_U32_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="wallfuel2" is unknown
+_tooltip="wallfuel2" is unknown
 log_by_default=FALSE
 
 [derived_103]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=EAEFuelCorr2
-dlog_gui_name=EAEFuelCorr2
+_dlog_gui_name=EAEFuelCorr2
 dlog_field_name=EAEFuelCorr2
 offset=149
 size=_U16_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="EAEFuelCorr2" is EAE Fuel correction for inj channel 2 in uSec.
+_tooltip="EAEFuelCorr2" is EAE Fuel correction for inj channel 2 in uSec.
 log_by_default=FALSE
 
 [derived_104]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=boostduty
-dlog_gui_name=boostduty
+_dlog_gui_name=boostduty
 dlog_field_name=boostduty
 offset=151
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="boostduty" is pwm boost output duty cycle.
+_tooltip="boostduty" is pwm boost output duty cycle.
 log_by_default=FALSE
 
 [derived_105]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_ENUM_,_STRING_,_STRING_,_STRING_,_BOOL_
 internal_names=checksum
-dlog_gui_name=checksum
+_dlog_gui_name=checksum
 dlog_field_name=checksum
 offset=152
 size=_U08_
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-tooltip="checksum" is an XOR checksum.
+_tooltip="checksum" is an XOR checksum.
 log_by_default=FALSE
 
