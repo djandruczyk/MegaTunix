@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=MegaTunix
-GenericName=MegaTunix
-Comment=megatunix
-Exec=megatunix
-Icon=megatunix
+_Name=MegaTunix Firmware Loader
+_GenericName=mtxloader
+_Comment=mtxloader
+Exec=mtxloader
+Icon=mtxloader
 Type=Application
 Categories=Automotive;Favorites,Other;Utility

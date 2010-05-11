@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=MegaTunix Dash Designer
-GenericName=dashdesigner
-Comment=megatunix Dash Designer
+_Name=MegaTunix Dash Designer
+_GenericName=dashdesigner
+_Comment=megatunix Dash Designer
 Exec=dashdesigner
 Icon=dashdesigner
 Type=Application

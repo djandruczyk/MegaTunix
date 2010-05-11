@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=MegaTunix Gauge Designer
-GenericName=gaugedesigner
-Comment=megatunix gauge designer
+_Name=MegaTunix Gauge Designer
+_GenericName=gaugedesigner
+_Comment=megatunix gauge designer
 Exec=gaugedesigner
 Icon=gaugedesigner
 Type=Application
