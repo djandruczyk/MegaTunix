@@ -1,160 +1,166 @@
 guidir = $(datadir)/MegaTunix/$(GUI_DATA_DIR)
 
-gui_files = 	README \
+gui_glade_files = 	\
 		main.glade \
 		template.glade \
 		afrtable_8x8x2.glade \
-		afrtable_8x8x2-029x.datamap \
 		afrtable_12x12x2.glade \
-		afrtable_12x12x2-MS-II.datamap \
-		afrtable_12x12x2-MS-II-Extra.datamap \
-		boost_6x6x3-029x.datamap \
 		boost_6x6x3.glade \
 		B_n_G_constants.glade \
-		B_n_G_constants.datamap \
 		datalogging.glade \
-		datalogging.datamap \
 		error_status.glade \
-		error_status.datamap \
 		dt-params.glade \
-		dt-params.datamap \
 		enrichments.glade \
-		enrichments_BnG.datamap \
 		Dualtable-constants.glade \
-		Dualtable-constants.datamap \
 		logviewer.glade \
-		logviewer.datamap \
 		memviewer.glade \
-		memviewer.datamap \
 		ms2-accel.glade \
-		ms2-accel.datamap \
 		ms2-alpha-n_6x6x1.glade \
-		ms2-alpha-n_6x6x1.datamap \
 		ms2-e-accel.glade \
-		ms2-e-accel.datamap \
 		ms2-e-boost_knock_launch.glade \
-		ms2-e-boost_knock_launch.datamap \
 		ms2-e-boost_8x8x2.glade \
-		ms2-e-boost_8x8x2.datamap \
 		ms2-e-corrections_misc.glade \
-		ms2-e-corrections_misc.datamap \
 		ms2-e-crank_idle_warmup.glade \
-		ms2-e-crank_idle_warmup.datamap \
 		ms2-e-debugging.glade \
-		ms2-e-debugging.datamap \
 		ms2-e-globals.glade \
-		ms2-e-globals.datamap \
 		ms2-e-ignition.glade \
-		ms2-e-ignition.datamap \
 		ms2-e-nitrous_staging_orfc.glade \
-		ms2-e-nitrous_staging_orfc.datamap \
 		ms2-e-noise_lag.glade \
-		ms2-e-noise_lag.datamap \
 		ms2-e-toothtrigger.glade \
-		ms2-e-toothtrigger-2.1.x.datamap \
 		ms2-globals.glade \
-		ms2-globals.datamap \
 		ms2-idle_ego_rev.glade \
-		ms2-idle_ego_rev.datamap \
 		ms2-ignition.glade \
-		ms2-ignition.datamap \
 		ms2-knock_dwell.glade \
-		ms2-knock_dwell.datamap \
 		ms2-misc-fuel.glade \
-		ms2-misc-fuel.datamap \
 		ms2-e-rotary-split.glade \
-		ms2-e-rotary-split.datamap \
 		ms2-user_outputs.glade \
-		ms2-user_outputs.datamap \
 		ms2-warmup.glade \
-		ms2-warmup.datamap \
 		msns-e-accelwizard.glade \
-		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \
-		msns-e-advanced-029x.datamap \
 		msns-e-boost-knock.glade \
-		msns-e-boost-knock-029x.datamap \
 		msns-e-crank-ase.glade \
-		msns-e-crank-ase-029x.datamap \
 		msns-e-ego.glade \
-		msns-e-ego-029x.datamap \
 		msns-e-features.glade \
-		msns-e-features-029x.datamap \
 		msns-e-fuelconstants.glade \
-		msns-e-fuelconstants-hr.datamap \
-		msns-e-fuelconstants-029x.datamap \
 		msns-e-idle.glade \
-		msns-e-idle-029x.datamap \
-		msns-e-idle-hr.datamap \
 		msns-e-output-pins.glade \
-		msns-e-output-pins-029x.datamap \
 		msns-e-outputs-sel.glade \
-		msns-e-outputs-sel-029x.datamap \
 		msns-e-toothtrigger.glade \
-		msns-e-toothtrigger-029x.datamap \
 		msns-e-traction.glade \
-		msns-e-traction-029x.datamap \
 		msns-e-water-nos-launch.glade \
-		msns-e-water-nos-launch-029x.datamap \
 		msns-e-wheeldecode.glade \
 		msns-e-wheeldecode-029yx.glade \
-		msns-e-wheeldecode-029x.datamap \
-		msns-e-wheeldecode-hr_10x.datamap \
 		mtxloader.glade \
 		raweditor.glade \
-		raweditor.datamap \
-		rotary-trail-029x.datamap \
 		rotary-trail.glade \
 		runtime.glade \
-		runtime.datamap \
 		sparktable_12x12x1.glade \
-		sparktable_12x12x1-MS-II.datamap \
 		sparktable_12x12x2.glade \
-		sparktable_12x12x2-029x.datamap \
 		sparktable_12x12x3.glade \
-		sparktable_12x12x3-MS-II-Extra.datamap \
 		sparktable_8x8e.glade \
-		sparktable_8x8e-EDIS.datamap \
-		sparktable_8x8e-Std.datamap \
 		tools.glade \
-		tools.datamap \
-		vetable_12x12x3-029x.datamap \
-		vetable_12x12x3-MS-II-Extra.datamap \
 		vetable_12x12x3.glade \
-		vetable_12x12x2-MS-II.datamap \
 		vetable_12x12x2.glade \
-		vetable_16x16x3-MS-II-Extra.datamap \
 		vetable_16x16x3.glade \
 		vetable_8x8e.glade \
-		vetable_8x8e-BnG.datamap \
-		vetable_8x8e-DT_1.datamap \
-		vetable_8x8e-DT_2.datamap \
-		warmupwizard.datamap \
 		warmupwizard.glade \
-		test.datamap \
 		test.glade \
-		PIS-alpha_biar_16x10.datamap \
 		PIS-alpha_biar_16x10.glade \
-		PIS-alpha_bpw_16x10.datamap \
 		PIS-alpha_bpw_16x10.glade \
-		PIS-biar_16x16.datamap \
 		PIS-biar_16x16.glade \
-		PIS-boost_16x10.datamap \
 		PIS-boost_16x10.glade \
-		PIS-bpw_16x16.datamap \
 		PIS-bpw_16x16.glade \
-		PIS-corrections.datamap \
 		PIS-corrections.glade \
 		PIS-ego_16x16.glade \
-		PIS-ego_16x16.datamap \
-		PIS-runtime.datamap \
 		PIS-runtime.glade \
-		PIS-settings.datamap \
 	       	PIS-settings.glade 
 
 
-gui_DATA = $(gui_files)
+gui_in_files = 	\
+		afrtable_8x8x2-029x.datamap.in \
+		afrtable_12x12x2-MS-II.datamap.in \
+		afrtable_12x12x2-MS-II-Extra.datamap.in \
+		boost_6x6x3-029x.datamap.in \
+		B_n_G_constants.datamap.in \
+		datalogging.datamap.in \
+		error_status.datamap.in \
+		dt-params.datamap.in \
+		enrichments_BnG.datamap.in \
+		Dualtable-constants.datamap.in \
+		logviewer.datamap.in \
+		memviewer.datamap.in \
+		ms2-accel.datamap.in \
+		ms2-alpha-n_6x6x1.datamap.in \
+		ms2-e-accel.datamap.in \
+		ms2-e-boost_knock_launch.datamap.in \
+		ms2-e-boost_8x8x2.datamap.in \
+		ms2-e-corrections_misc.datamap.in \
+		ms2-e-crank_idle_warmup.datamap.in \
+		ms2-e-debugging.datamap.in \
+		ms2-e-globals.datamap.in \
+		ms2-e-ignition.datamap.in \
+		ms2-e-nitrous_staging_orfc.datamap.in \
+		ms2-e-noise_lag.datamap.in \
+		ms2-e-toothtrigger-2.1.x.datamap.in \
+		ms2-globals.datamap.in \
+		ms2-idle_ego_rev.datamap.in \
+		ms2-ignition.datamap.in \
+		ms2-knock_dwell.datamap.in \
+		ms2-misc-fuel.datamap.in \
+		ms2-e-rotary-split.datamap.in \
+		ms2-user_outputs.datamap.in \
+		ms2-warmup.datamap.in \
+		msns-e-accelwizard-029x.datamap.in \
+		msns-e-advanced-029x.datamap.in \
+		msns-e-boost-knock-029x.datamap.in \
+		msns-e-crank-ase-029x.datamap.in \
+		msns-e-ego-029x.datamap.in \
+		msns-e-features-029x.datamap.in \
+		msns-e-fuelconstants-hr.datamap.in \
+		msns-e-fuelconstants-029x.datamap.in \
+		msns-e-idle-029x.datamap.in \
+		msns-e-idle-hr.datamap.in \
+		msns-e-output-pins-029x.datamap.in \
+		msns-e-outputs-sel-029x.datamap.in \
+		msns-e-toothtrigger-029x.datamap.in \
+		msns-e-traction-029x.datamap.in \
+		msns-e-water-nos-launch-029x.datamap.in \
+		msns-e-wheeldecode-029x.datamap.in \
+		msns-e-wheeldecode-hr_10x.datamap.in \
+		raweditor.datamap.in \
+		rotary-trail-029x.datamap.in \
+		runtime.datamap.in \
+		sparktable_12x12x1-MS-II.datamap.in \
+		sparktable_12x12x2-029x.datamap.in \
+		sparktable_12x12x3-MS-II-Extra.datamap.in \
+		sparktable_8x8e-EDIS.datamap.in \
+		sparktable_8x8e-Std.datamap.in \
+		tools.datamap.in \
+		vetable_12x12x3-029x.datamap.in \
+		vetable_12x12x3-MS-II-Extra.datamap.in \
+		vetable_12x12x2-MS-II.datamap.in \
+		vetable_16x16x3-MS-II-Extra.datamap.in \
+		vetable_8x8e-BnG.datamap.in \
+		vetable_8x8e-DT_1.datamap.in \
+		vetable_8x8e-DT_2.datamap.in \
+		warmupwizard.datamap.in \
+		test.datamap.in \
+		PIS-alpha_biar_16x10.datamap.in \
+		PIS-alpha_bpw_16x10.datamap.in \
+		PIS-biar_16x16.datamap.in \
+		PIS-boost_16x10.datamap.in \
+		PIS-bpw_16x16.datamap.in \
+		PIS-corrections.datamap.in \
+		PIS-ego_16x16.datamap.in \
+		PIS-runtime.datamap.in \
+		PIS-settings.datamap.in 
 
-EXTRA_DIST = $(gui_DATA)
 
-CLEANFILES = *.gladep *.bak gmon.out
+gui_map_files = $(gui_in_files:.datamap.in=.datamap)
+@INTLTOOL_DATAMAP_RULE@
+
+gui_DATA = $(gui_map_files) $(gui_glade_files)
+
+EXTRA_DIST = $(gui_DATA) README
+
+CLEANFILES = *.gladep *.bak gmon.out *.h

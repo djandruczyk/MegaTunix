@@ -1,0 +1,286 @@
+[global]
+description=Object data map for alpha-n base pulse width tab
+tab_name=Alpha Fuel
+id_prefix=ANBPW_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+size=_U16_
+page=0
+
+#----- topframe & title ----------------------------------------------------------------
+
+[topframe]
+keys=table_num,tab_ident,sub-notebook,bind_to_list
+tab_ident=_ALPHA_N_TAB_
+sub-notebook=table_notebook
+bind_to_list=valid_ecu_ctrls
+table_num=4
+
+#----- Buttons ---------------------------------------------------------------
+
+[runtime_start_realtime_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_START_REALTIME_
+page=0
+
+[runtime_stop_realtime_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_STOP_REALTIME_
+page=0
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the Alpha-N Base Pulse Width (ANBPW) constants block of data and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[ANBPW_tracking_checkbutton]
+keys=handler,table_num
+handler=_TRACKING_FOCUS_
+table_num=4
+
+[ANBPW_export_button]
+keys=handler,table_num
+handler=_EXPORT_SINGLE_TABLE_
+table_num=4
+
+[ANBPW_import_button]
+keys=handler,table_num
+handler=_IMPORT_SINGLE_TABLE_
+table_num=4
+
+[ANBPW_3d_view_button]
+keys=table_num,tooltip,bind_to_list
+table_num=4
+bind_to_list=3d_buttons
+_tooltip=This pops up a 3 dimensional view of the current Alpha-N Base Pulse Width (ANBPW) table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button hold down and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+
+[ANBPW_rescale_button]
+keys=handler,data
+handler=_RESCALE_TABLE_
+data=ANBPW_rescale_entry,ANBPW_rescale_combo
+
+#----- Widgets --------------------------------------------------------------
+
+[ANBPW_vbox1]
+keys=table_num
+table_num=4
+
+#----- Gauges --------------------------------------------------------------
+
+[ANBPW_gaugeframe1]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=status_rpm_rpm
+table_num=4
+
+[ANBPW_gaugeframe2]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=status_tps_tps
+table_num=4
+
+[ANBPW_gaugeframe3]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_CLT_degC_Gauge.xml
+datasource=cts_temp
+table_num=4
+
+[ANBPW_gaugeframe4]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_MAT_degC_Gauge.xml
+datasource=mat_temp
+table_num=4
+
+[ANBPW_gaugeframe5]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
+datasource=lambda
+table_num=4
+
+#----- Rescale Entry ------------------------------------------------------
+
+[ANBPW_rescale_entry]
+keys=table_num
+table_num=4
+
+#----- Rescale Combo ------------------------------------------------------
+
+[ANBPW_rescale_combo]
+keys=table_num,post_functions_with_arg
+table_num=4
+post_functions_with_arg=lock_entry
+
+#----- MAIN PWTable Container ---------------------------------------------
+
+[ANBPW_main_table]
+keys=rescaler_frame
+rescaler_frame=ANBPW_rescale_frame
+
+#----- Load Entries (MAP/TPS) -----------------------------------------------
+
+[ANBPW_load_entry]
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
+page=0
+offset=2682
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+size=_U16_
+raw_lower=0
+raw_upper=1000
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+use_color=TRUE
+_tooltip=The Throttle Position Sensor (TPS) bins in combination with the RPM bins on the bottom of the Alpha-N Base Pulse Width (ANBPW) table define the vertexes (points on the ANBPW map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Alpha-N Base Pulse Width (ANBPW) map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+#----- RPM Entries ---------------------------------------------------------
+
+[ANBPW_rpm_entry]
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+page=0
+offset=6
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+size=_U16_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+raw_lower=0
+raw_upper=16384
+use_color=TRUE
+_tooltip=The RPM bins in combination with the Throttle Position Sensor (TPS) bins on the left side of the Alpha-N Base Pulse Width (ANBPW) table define the vertexes (points on the ANBPW map).  The ECU will interpolate between vertexes providing a smooth transition between points on the Alpha-N Base Pulse Width (ANBPW) map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+#----- ANBPW-Table Entries -----------------------------------------------------
+
+[ANBPW_entry]
+keys=page,dl_type,handler,raw_lower,raw_upper,use_color,tooltip,size,ul_conv_expr,dl_conv_expr,precision
+page=0
+offset=3424
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+raw_lower=0
+raw_upper=1320
+size=_U16_
+dl_conv_expr=x*66
+ul_conv_expr=x/66
+precision=2
+use_color=TRUE
+_tooltip=The Alpha-N Base Pulse Width (ANBPW) Entries control how much fuel is injected into the engine. They refer to the fuelling portion and exclude the open time which is derived from the opening voltage correction table. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+#------- Runtime Status Indicators ------------------------------------------
+
+[runtime_cranking_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags1
+bitval=1
+bitshift=6
+bitmask=64
+
+[runtime_running_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags1
+bitval=1
+bitshift=5
+bitmask=32
+
+[runtime_asc_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags1
+bitval=1
+bitshift=4
+bitmask=16
+
+[runtime_accel_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags2
+bitval=1
+bitshift=2
+bitmask=4
+
+[runtime_decel_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags2
+bitval=1
+bitshift=1
+bitmask=2
+
+[runtime_closed_loop_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags2
+bitval=1
+bitshift=3
+bitmask=8
+
+[runtime_idle_control_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags3
+bitval=1
+bitshift=6
+bitmask=128
+
+[runtime_alpha_n_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags3
+bitval=1
+bitshift=5
+bitmask=32
+
+[runtime_fan_label]
+keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
+page=0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=status_flags3
+bitval=1
+bitshift=4
+bitmask=16

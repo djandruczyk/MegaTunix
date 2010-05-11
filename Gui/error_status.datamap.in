@@ -1,0 +1,35 @@
+# Tools Tab
+
+[global]
+description=Object data map for MSnS-E Error status...
+tab_name=_Error Status
+#id_prefix=ERR_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+page=0
+size=_U08_
+
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=tab_ident
+tab_ident=_ERROR_STATUS_TAB_
+
+#----- Buttons ---------------------------------------------------------------
+
+[error_status_reboot_button]
+keys=handler,tooltip
+handler=_REBOOT_GETERR_
+_tooltip=This button will send the "!!X" string to the ECU to enter the bootloader and then reboot.  It will trigger a read to readback the message from the ECU and display it in the box below.  If nothing comes back it means there are no problems. This is to be used when the ECU is running the fuel pump once per second as that is how MSnS-E signals an error condition.  These problems can occur when setting two features that conflict with each other. (like nitrous and water injection,  both can NOT be used at the same time as they use the same output pin)
+
+#----- Textview ----------------------------------------------------
+
+[error_status_view]
+keys=create_tags
+create_tags=warning,info
+warning=foreground,red
+info=foreground,dark green

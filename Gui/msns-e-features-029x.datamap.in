@@ -1,0 +1,286 @@
+[global]
+description=Object data map for MSnS-Extra features tab
+tab_name=_Firmware Features
+id_prefix=features_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+
+[burn_data_button]
+keys=handler,bind_to_list
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+
+#------ Widgets --------------------------------------------------------------
+
+[edis_persona_table]
+keys=bind_to_list
+bind_to_list=edis_controls
+
+[edis_multispark_table]
+keys=bind_to_list
+bind_to_list=edis_controls,multispark
+
+#------ Labels --------------------------------------------------------------
+
+[fuel_transition_label]
+keys=bind_to_list
+bind_to_list=ve_switch
+
+[spark_transition_label]
+keys=bind_to_list
+bind_to_list=spark_switch
+
+[2nd_o2_label]
+keys=bind_to_list
+bind_to_list=dt_controls
+
+[inj2_cranking_label]
+keys=bind_to_list
+bind_to_list=dt_controls
+
+[variable_launch_feature_label]
+keys=bind_to_list
+bind_to_list=launch_controls
+
+[nos_antilag_feature_label]
+keys=bind_to_list
+bind_to_list=nos_subfeatures
+
+[nos_which_bank_label]
+keys=bind_to_list
+bind_to_list=dt_controls,nos_subfeatures,x2_nitrous_control,x3_nitrous_control
+
+[nos_feature_label]
+keys=bind_to_list
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
+
+[water_inj_feature_label]
+keys=bind_to_list
+bind_to_list=water_features,x2_water_injection,x3_water_injection
+
+[boost_ctrl_feature_label]
+keys=bind_to_list
+bind_to_list=boost_controller
+
+[edis_multi_rpm_label]
+keys=bind_to_list
+bind_to_list=multispark
+
+[gammae_2_label]
+keys=bind_to_list
+bind_to_list=dt_controls
+
+
+#------ Radio Buttons --------------------------------------------------------
+
+[persona_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=0
+bitvals=0,1,2,4,12,16,48,64,128
+bitmask=255
+choices=Fuel Only,MSnS Distributor Mode,Neon/420 Wheel,Generic N-1 wheel,Generic N-2 wheel,EDIS,Dual EDIS,Ford TFI,GM 7pin HEI
+toggle_groups=,spark_controls:nonedis_controls,spark_controls:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:edis_controls,spark_controls:edis_controls,spark_controls:nonedis_controls,spark_controls:nonedis_controls
+_tooltip=Sets the ECU ignition mode to one of the following: Fuel Only, Simple Distributor mode, Neon/420a wheel, Generic N-1 wheel (i.e. 12-1, 36-1), Generic N-2 wheel (60-2), EDIS, Dual EDIS, Ford TFI, or GM 7 pin HEI
+
+[edis_multispark_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=66
+bitvals=0,1
+bitmask=8
+choices=Disabled,Enabled
+toggle_groups=,multispark
+_tooltip=This enables EDIS Multispark mode up to the RPM threshold set below.
+
+[table_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=33
+bitvals=0,1
+bitmask=16
+choices=Single Table,Dual Table
+toggle_groups=alt_simul:nondt_controls,dt_controls
+_tooltip=Dual Table mode is used to have independant fueling tables for each of the two injector outputs.  When enabled, Fuel table 2 drives injector two and fuel tables 1 OR 3 drive injector channel 1.  Table three is switched in based on an external input (nitrous, or other). Single table mode completely ignores table 2.  Both injector channel outpus are based on table 1 or 3 (table 3 is selected based on an outside input).  In this mode simultaneous injection (both injector tables fire at once) and alternate mode (ping pong effect) are allowed.  in DT mode, alternate mode is not allowed as the other channel is used by table 2.
+
+[gammae_13_combo]
+keys=offset,bitvals,bitmask,tooltip
+offset=33
+bitvals=0,1
+bitmask=33
+choices=Disabled,Enabled
+_tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector.
+
+[gammae_2_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
+offset=33
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+bind_to_list=dt_controls
+_tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector. NOTE: This only applies if DT mode is set...
+
+[cpulse2_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
+offset=11
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+bind_to_list=dt_controls
+_tooltip=Enables or Disables the firing of injector channel two during cranking.
+
+[second_o2_combo]
+keys=page,offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+page=2
+offset=188
+bitvals=0,1
+bitmask=1
+choices=Disabled,Enabled
+bind_to_list=dt_controls
+toggle_groups=,second_o2
+_tooltip=Enable or Disabled the use of ADC6 as a secondary EGO input for DT mode ONLY
+
+[fuel_switch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=92
+bitvals=0,1
+bitmask=1
+choices=Never,NOS/Pin6 Input
+toggle_groups=,ve_switch
+_tooltip=Either sets to Never switches VEtables even if NOS is active, or pin6 goes low, or to switch to table 3 from table 1 when Pin6 goes low OR when NOS is active.
+
+[spark_switch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=76
+bitvals=0,1
+bitmask=128
+choices=Never,NOS/Pin6 Input
+toggle_groups=,spark_switch
+_tooltip=Either sets to Never switches Spark tables even if NOS is active, or pin6 goes low, or to switch to table 2 from table 1 when Pin6 goes low OR when NOS is active.
+
+[nos_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+offset=11
+bitvals=0,1
+bitmask=128
+choices=Disabled,Enabled
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
+toggle_groups=water_features:x2_tach_pin:x3_tach_pin,nos_subfeatures:nos_params
+_tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
+
+[nos_antilag_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
+offset=76
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+bind_to_list=nos_subfeatures,x2_nitrous_control,x3_nitrous_control
+_tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
+
+[shift_combo]
+keys=offset,bitvals,bitmask,tooltip
+offset=12
+bitvals=0,1
+bitmask=2
+choices=Disabled,Enabled
+_tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
+
+[launch_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=12
+bitvals=0,1
+bitmask=4
+choices=Disabled,Enabled
+toggle_groups=,launch_controls
+_tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
+
+[var_launch_combo]
+keys=offset,bitvals,bitmask,bind_to_list,tooltip
+offset=46
+bitvals=0,1
+bitmask=2
+choices=Disabled,Enabled
+bind_to_list=launch_controls
+_tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
+
+[boost_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+offset=12
+bitvals=0,1
+bitmask=1
+choices=Disabled,Enabled
+bind_to_list=boost_controller
+toggle_groups=x4_tach_pin,boost_controls
+_tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
+
+[water_combo]
+keys=offset,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+offset=46
+bitvals=0,1
+bitmask=8
+choices=Disabled,Enabled
+bind_to_list=water_features,x2_water_injection,x3_water_injection
+toggle_groups=nos_features:x2_tach_pin:x3_tach_pin,water_controls:water_params
+_tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
+
+[knock_combo]
+keys=offset,bitvals,bitmask,toggle_groups,tooltip
+offset=46
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+toggle_groups=,knock_controls
+_tooltip=Knock detection will require an additional circuit to feed in a signal to the ECU when knock is occurring,  the ECU will retard the spark advance as needed to alleviate the knocking. Thsi feature is ONLY enabled when using a spark personality.
+
+[traction_combo]
+keys=offset,bitvals,bitmask,tooltip
+offset=92
+bitvals=0,1
+bitmask=32
+choices=Disabled,Enabled
+_tooltip=Traction control is accomplished by multiple levels of control.  Spark retard, spark cut, and fuel enrichment are able to be used to aid in traction control. See the Traction Tab for the rest of the controls...
+
+#----- Entries ----------------------------------------------------------------
+
+[edis_multispark_limit_entry]
+keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=21
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_upper=25
+bind_to_list=edis_controls,multispark
+_tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
+
+[fuel_switch_delay_entry]
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=93
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=250
+bind_to_list=ve_switch
+_tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
+
+[spark_switch_delay_entry]
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=87
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=250
+bind_to_list=spark_switch
+_tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the spark tables are transitioned from SP1 to SP2.

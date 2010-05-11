@@ -1,0 +1,236 @@
+[global]
+description=Object data map for the MS2 Ignition Tab
+tab_name=_Ignition
+id_prefix=IGN_
+groups=defaults
+bind_to_list=valid_ecu_ctrls
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,dl_type,handler
+page=0
+size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[alpha_beta_gamma_table]
+keys=bind_to_list
+bind_to_list=abg_controls
+
+[topframe]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+#----- Combo Boxes -----------------------------------------------------------
+
+[predictor_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Last Interval,Alpha-Beta-Gamma Filter
+bitvals=0,1
+offset=19
+bitmask=3
+toggle_groups=,abg_controls
+_tooltip=Sets ECU Input trigger predictor to use with the last interval,  or an alpha-beta-gamma filter,  see http://www.megamanual.com/mt28.htm#ib for more information.
+
+[tach_sync_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Check Only at Steady Speed,Check Accel and Steady Speed,Check Decel and Steady Speed,Check Always
+bitvals=0,1,2,3
+offset=993
+bitmask=3
+_tooltip=Sets ECU Input trigger to fire on either the rising or falling edge.
+
+[ign_capture_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip,require_reboot
+choices=Falling Edge,Rising Edge
+bitvals=0,1
+offset=2
+bitmask=1
+require_reboot=TRUE
+bind_to_list=nonedis_controls
+_tooltip=Sets ECU Input trigger to fire on either the rising or falling edge.
+
+[crank_trigger_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip,require_reboot
+choices=Calculated,Trigger Return,Trigger Rise
+bitvals=0,1,2
+offset=2
+bitmask=6
+require_reboot=TRUE
+bind_to_list=nonedis_controls
+_tooltip=Sets ECU Crank trigger point.
+
+[coil_charge_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip,require_reboot
+choices=Standard Coil Charge,EDIS,EDIS Multispark
+bitvals=0,1,2
+offset=2
+bitmask=48
+require_reboot=TRUE
+toggle_groups=nonedis_controls,nonedis_controls,
+_tooltip=Sets ECU Crank trigger point.
+
+[spark_polarity_combo]
+keys=offset,choices,bitvals,bitmask,tooltip,require_reboot
+choices=Going Low (Normal),Going High (Inverted)
+bitvals=0,1
+offset=3
+bitmask=1
+require_reboot=TRUE
+_tooltip=Sets ECU Ignition Output Polarity. Be careful, setting this incorrectly can overheat/fry your ignition module.
+
+[dual_spark_combo]
+keys=offset,choices,bitvals,bitmask,tooltip,require_reboot
+choices=No Dual Spark,Dual Tach Inputs,Falling Cam Sync with Tach or Wheel,Rising Cam Sync with Tach or Wheel,Single Crank Wheel Input,Single Cam Wheel Input,Dual Inputs with Timing from 1 cam tooth,M-0 Wheel w/ Falling Crank Sync,M-0 Wheel w/ Rising Crank Sync
+bitvals=0,1,2,3,4,5,6,7,8
+offset=601
+bitmask=15
+require_reboot=TRUE
+_tooltip=See http://www.megamanual.com/mt28.htm#ia
+
+#----- Entries ----------------------------------------------------------------
+
+[trigger_offset_entry]
+keys=precision,raw_lower,raw_upper,offset,size,dl_conv_expr,ul_conv_expr,tooltip
+offset=42
+size=_S16_
+precision=2
+raw_lower=-3590
+raw_upper=3590
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=Trigger Offset (deg) (adv_offset in the code) is the advance before (or after) top dead center (BTDC) that the engine gets in it's signal from the engine's variable reluctor (VR) or Hall sensor. In many cases, this will be used as the 'base timing' for cranking as well as if the module loses its connection the ECU.
+
+[skip_pulses_entry]
+keys=offset,tooltip
+offset=1
+_tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MegaSquirt-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
+
+[alpha_entry]
+keys=offset,raw_lower,raw_upper,tooltip
+offset=990
+raw_lower=50
+raw_upper=150
+_tooltip=alpha (α) should be > 50% and < 150%; (default is 90%). The value of alpha will be typically be 90 to 100% or a bit higher. 
+
+[beta_entry]
+keys=offset,raw_upper,tooltip
+offset=991
+raw_upper=100
+_tooltip=beta (β) should be < 100%, (default is 80%) The value of beta will be moderately small so that speed estimates are not unduly affected by variations from input data. A typical value is around 5% to 80%.
+
+[gamma_entry]
+keys=offset,raw_upper,tooltip
+offset=992
+raw_upper=50
+_tooltip=gamma (γ) should be < 50% (default is 10%). The gamma gain term helps to track changes with less sensitivity to input data and helps to maintain consistency between the velocity and acceleration variables.  A typical value is around 10%. 
+
+[time_mask_entry]
+keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=971
+precision=1
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=Time Mask time (milliseconds) after tach input capture during which further interrupts are inhibited to mask coil ring or VR noise.
+
+[percent_mask_entry]
+keys=offset,raw_upper,tooltip
+offset=972
+raw_upper=200
+_tooltip=Percentage Mask is the percentage of the predicted interval before the next tooth (dtpred) after the last tach input capture during which further interrupts are inhibited to mask coil ring or VR sensor noise. 
+
+[cranking_tolerance_entry]
+keys=offset,tooltip
+offset=544
+_tooltip=Cranking: This is the next pulse tolerance while cranking (enginebit is 3) - it should be set fairly high. This is because the starter motor speed can vary quite a bit, depending on the compression and which cylinders happen to reach firing conditions first, etc.
+
+[afterstart_tolerance_entry]
+keys=offset,tooltip
+offset=545
+_tooltip=After-start: This is the next pulse tolerance while afterstart enrichment is active, and it should be lower than the value while cranking. 
+
+[running_tolerance_entry]
+keys=offset,tooltip
+offset=546
+_tooltip=Normal Running: This is the next pulse tolerance once afterstart enrichment ends, and it should be the lowest of the three (since the engine speed is more stable in normal running conditions - there's more rotational inertia, and fewer variations in things like air/fuel mixtures. As well, if you have a VR sensor, the signal is stronger, etc.)
+
+[trigger_teeth_entry]
+keys=offset,tooltip,size,raw_upper,require_reboot
+offset=966
+size=_U16_
+raw_upper=512
+require_reboot=TRUE
+_tooltip=Trigger Wheel Teeth (No_Teeth): is the nominal (include missing) teeth for wheel decoding. ( Set it 0 for no wheel decoding). 
+
+[missing_teeth_entry]
+keys=offset,tooltip,require_reboot
+offset=968
+_tooltip=Missing Teeth (No_Miss_Teeth): Number of consecutive missing teeth. 
+require_reboot=TRUE
+
+[skip_teeth_entry]
+keys=offset,tooltip,require_reboot
+offset=969
+require_reboot=TRUE
+_tooltip=Skip Teeth (No_Skip_Teeth): Number of teeth (between tach pulses) to be skipped. You must create the same number of 'tach' signals as you want ignition events. On a four cylinder four stroke engine, this is two per revolution. Suppose it has a 60-2 wheel. What you need to have happen is for MegaSquirt-II to 'skip' a certain number of teeth so the only the right number of teeth are counted as 'tach signals' per revolution. Since we have determined the number of tach signals we want is 2, we need to skip 60/2 or 30 teeth. For a eight cylinder 60-2, we need 4 ignition events per revolution, so we set skip teeth to 60/4 or 15. And for an eight cylinder 36-1 wheel, we would set skip teeth 36/4 or 9.
+
+[delay_teeth_entry]
+keys=offset,tooltip,require_reboot
+offset=970
+require_reboot=TRUE
+_tooltip=Delay Teeth (Delay_Teeth): Number of teeth to delay after 1st tooth after the missing teeth before 1st tach synch declared. You get synch as soon as you detect "first real tooth after the missing tooth". If that tooth is at TDC when it is detected, then there is 0 delay. If TDC doesn't occur until the next tooth is detected, then there is a delay of one tooth, and so forth.
+
+[offset_advance_entry]
+keys=precision,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+offset=620
+size=_S16_
+precision=1
+raw_lower=-3500
+raw_upper=3500
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=See http://www.megamanual.com/mt28.htm#ia Offset (advance) for Output #2
+
+[mat_retard_lo_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=1
+offset=944
+size=_U16_
+raw_upper=10000
+_tooltip=Start IAT Retard: RPM at which to begin applying the intake air temperature based spark retard amount. It will be zero below this, and rise linearly to the full amount at the Full IAT Retard rpm (below). 
+
+[mat_retard_hi_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=1
+offset=942
+size=_U16_
+raw_upper=10000
+_tooltip=Full IAT Retard: RPM at which to fully apply the intake air temperature based spark retard amount. It will be the full amount of retard above this, and fall linearly zero at the Start IAT Retard rpm (above). 
+
+[fet_delay_entry]
+keys=offset,tooltip
+offset=742
+_tooltip=Help not provided by firmware authors.
+
+[vr_delay_entry]
+keys=offset,tooltip
+offset=743
+_tooltip=Help not provided by firmware authors.
+
