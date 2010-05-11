@@ -50,6 +50,9 @@ fi
 
 dnl Gettext Goodness
 AC_PROG_INTLTOOL([0.21])
+INTLTOOL_PROF_RULE='%.prof:      %.prof.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+AC_SUBST(INTLTOOL_PROF_RULE)
+
 GETTEXT_PACKAGE=megatunix
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE([GETTEXT_PACKAGE], [], ["$GETTEXT_PACKAGE"])

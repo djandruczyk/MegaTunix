@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: djandrucyk@yahoo.com\n"
-"POT-Creation-Date: 2010-05-10 19:57-0400\n"
+"POT-Creation-Date: 2010-05-10 21:34-0400\n"
 "PO-Revision-Date: 2010-05-10 11:55-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
 "Language-Team: English\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "2D Table Group Editor"
 msgstr "2D Table Editor del Grupo"
 
-#: .././src/2d_table_editor.c:456
+#: .././src/2d_table_editor.c:456 .././Gui/main.glade.h:15
 #, fuzzy
 msgid "2D Table Editor"
 msgstr "2D Table Editor del Grupo"
@@ -51,5 +51,6964 @@ msgstr "hallo welt!\n"
 msgid "comm xml filename is NULL!\n"
 msgstr "Nombre de archivo xml comm es nula\n"
 
-#~ msgid "Cranking Pulse vs. Temp"
-#~ msgstr "Pulso de arranque vs Temp"
+#: .././Gui/afrtable_12x12x2.glade.h:1 .././Gui/boost_6x6x3.glade.h:1
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:1 .././Gui/ms2-e-rotary-split.glade.h:1
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:1
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:1 .././Gui/PIS-biar_16x16.glade.h:1
+#: .././Gui/PIS-boost_16x10.glade.h:1 .././Gui/PIS-bpw_16x16.glade.h:1
+#: .././Gui/PIS-ego_16x16.glade.h:1 .././Gui/rotary-trail.glade.h:1
+#: .././Gui/sparktable_12x12x1.glade.h:1 .././Gui/sparktable_12x12x2.glade.h:1
+#: .././Gui/sparktable_12x12x3.glade.h:1 .././Gui/sparktable_8x8e.glade.h:1
+#: .././Gui/vetable_12x12x2.glade.h:1 .././Gui/vetable_12x12x3.glade.h:1
+#: .././Gui/vetable_16x16x3.glade.h:5 .././Gui/vetable_8x8e.glade.h:1
+msgid ""
+"  +\n"
+"  -\n"
+"  *\n"
+"  /"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:5 .././Gui/afrtable_8x8x2.glade.h:5
+#: .././Gui/B_n_G_constants.glade.h:3 .././Gui/boost_6x6x3.glade.h:5
+#: .././Gui/dt-params.glade.h:1 .././Gui/Dualtable-constants.glade.h:3
+#: .././Gui/enrichments.glade.h:5 .././Gui/ms2-accel.glade.h:6
+#: .././Gui/ms2-alpha-n_6x6x1.glade.h:5 .././Gui/ms2-e-accel.glade.h:7
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:5
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:3
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:1
+#: .././Gui/ms2-e-rotary-split.glade.h:7 .././Gui/msns-e-accelwizard.glade.h:1
+#: .././Gui/msns-e-advanced.glade.h:1 .././Gui/msns-e-boost-knock.glade.h:1
+#: .././Gui/msns-e-crank-ase.glade.h:7 .././Gui/msns-e-ego.glade.h:4
+#: .././Gui/msns-e-features.glade.h:1 .././Gui/msns-e-fuelconstants.glade.h:3
+#: .././Gui/msns-e-idle.glade.h:1 .././Gui/msns-e-output-pins.glade.h:1
+#: .././Gui/msns-e-traction.glade.h:1
+#: .././Gui/msns-e-water-nos-launch.glade.h:1
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:1
+#: .././Gui/msns-e-wheeldecode.glade.h:1 .././Gui/PIS-bpw_16x16.glade.h:5
+#: .././Gui/PIS-corrections.glade.h:1 .././Gui/rotary-trail.glade.h:5
+#: .././Gui/sparktable_12x12x1.glade.h:5 .././Gui/sparktable_12x12x2.glade.h:5
+#: .././Gui/sparktable_12x12x3.glade.h:7 .././Gui/sparktable_8x8e.glade.h:5
+#: .././Gui/vetable_12x12x2.glade.h:5 .././Gui/vetable_12x12x3.glade.h:5
+#: .././Gui/vetable_16x16x3.glade.h:11 .././Gui/vetable_8x8e.glade.h:5
+#: .././Gui/warmupwizard.glade.h:1
+msgid "0"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:6 .././Gui/afrtable_8x8x2.glade.h:6
+#: .././Gui/boost_6x6x3.glade.h:6 .././Gui/ms2-alpha-n_6x6x1.glade.h:6
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:6 .././Gui/ms2-e-rotary-split.glade.h:8
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:7
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:7 .././Gui/PIS-biar_16x16.glade.h:5
+#: .././Gui/PIS-boost_16x10.glade.h:7 .././Gui/PIS-bpw_16x16.glade.h:6
+#: .././Gui/PIS-ego_16x16.glade.h:5 .././Gui/rotary-trail.glade.h:6
+#: .././Gui/sparktable_12x12x1.glade.h:7 .././Gui/sparktable_12x12x2.glade.h:7
+#: .././Gui/sparktable_12x12x3.glade.h:9 .././Gui/sparktable_8x8e.glade.h:7
+#: .././Gui/vetable_12x12x2.glade.h:6 .././Gui/vetable_12x12x3.glade.h:6
+#: .././Gui/vetable_16x16x3.glade.h:12 .././Gui/vetable_8x8e.glade.h:6
+msgid "3D View"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:7 .././Gui/afrtable_8x8x2.glade.h:7
+#: .././Gui/boost_6x6x3.glade.h:7 .././Gui/ms2-alpha-n_6x6x1.glade.h:7
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:7 .././Gui/ms2-e-rotary-split.glade.h:9
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:8
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:8 .././Gui/PIS-biar_16x16.glade.h:6
+#: .././Gui/PIS-boost_16x10.glade.h:8 .././Gui/PIS-bpw_16x16.glade.h:7
+#: .././Gui/PIS-ego_16x16.glade.h:6 .././Gui/rotary-trail.glade.h:14
+#: .././Gui/sparktable_12x12x1.glade.h:8 .././Gui/sparktable_12x12x2.glade.h:8
+#: .././Gui/sparktable_12x12x3.glade.h:10 .././Gui/sparktable_8x8e.glade.h:8
+#: .././Gui/vetable_12x12x2.glade.h:7 .././Gui/vetable_12x12x3.glade.h:7
+#: .././Gui/vetable_16x16x3.glade.h:13 .././Gui/vetable_8x8e.glade.h:7
+msgid "<b>X</b>"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:8
+msgid "AFR Table 1 (AFR)"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:9
+msgid "AFR Table 2 (AFR)"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:10
+msgid "AFR Table 2(DT)"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:11
+msgid "AFR-Table 1"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:12 .././Gui/vetable_12x12x2.glade.h:8
+#: .././Gui/vetable_12x12x3.glade.h:8 .././Gui/vetable_16x16x3.glade.h:14
+#: .././Gui/vetable_8x8e.glade.h:8
+msgid "Alter Reqfuel and Rescale table"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:13 .././Gui/afrtable_8x8x2.glade.h:13
+#: .././Gui/B_n_G_constants.glade.h:8 .././Gui/boost_6x6x3.glade.h:14
+#: .././Gui/dt-params.glade.h:5 .././Gui/Dualtable-constants.glade.h:8
+#: .././Gui/enrichments.glade.h:21 .././Gui/main.glade.h:52
+#: .././Gui/ms2-accel.glade.h:26 .././Gui/ms2-alpha-n_6x6x1.glade.h:8
+#: .././Gui/ms2-e-accel.glade.h:37 .././Gui/ms2-e-boost_8x8x2.glade.h:15
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:14
+#: .././Gui/ms2-e-corrections_misc.glade.h:27
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:33
+#: .././Gui/ms2-e-debugging.glade.h:7 .././Gui/ms2-e-globals.glade.h:9
+#: .././Gui/ms2-e-ignition.glade.h:16
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:13
+#: .././Gui/ms2-e-noise_lag.glade.h:11 .././Gui/ms2-e-rotary-split.glade.h:10
+#: .././Gui/ms2-globals.glade.h:5 .././Gui/ms2-idle_ego_rev.glade.h:11
+#: .././Gui/ms2-ignition.glade.h:22 .././Gui/ms2-knock_dwell.glade.h:14
+#: .././Gui/ms2-misc-fuel.glade.h:10 .././Gui/ms2-user_outputs.glade.h:2
+#: .././Gui/ms2-warmup.glade.h:28 .././Gui/ms2-xtau.glade.h:12
+#: .././Gui/msns-e-accelwizard.glade.h:23 .././Gui/msns-e-advanced.glade.h:8
+#: .././Gui/msns-e-boost-knock.glade.h:14 .././Gui/msns-e-crank-ase.glade.h:21
+#: .././Gui/msns-e-ego.glade.h:10 .././Gui/msns-e-features.glade.h:3
+#: .././Gui/msns-e-fuelconstants.glade.h:10 .././Gui/msns-e-idle.glade.h:5
+#: .././Gui/msns-e-output-pins.glade.h:2 .././Gui/msns-e-outputs-sel.glade.h:1
+#: .././Gui/msns-e-traction.glade.h:9
+#: .././Gui/msns-e-water-nos-launch.glade.h:6
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:5
+#: .././Gui/msns-e-wheeldecode.glade.h:5
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:15
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:15 .././Gui/PIS-biar_16x16.glade.h:13
+#: .././Gui/PIS-boost_16x10.glade.h:15 .././Gui/PIS-bpw_16x16.glade.h:14
+#: .././Gui/PIS-corrections.glade.h:22 .././Gui/PIS-ego_16x16.glade.h:12
+#: .././Gui/PIS-runtime.glade.h:6 .././Gui/PIS-settings.glade.h:10
+#: .././Gui/raweditor.glade.h:1 .././Gui/rotary-trail.glade.h:15
+#: .././Gui/runtime.glade.h:4 .././Gui/sparktable_12x12x1.glade.h:9
+#: .././Gui/sparktable_12x12x2.glade.h:9
+#: .././Gui/sparktable_12x12x3.glade.h:11 .././Gui/sparktable_8x8e.glade.h:9
+#: .././Gui/template.glade.h:2 .././Gui/test.glade.h:2
+#: .././Gui/vetable_12x12x2.glade.h:9 .././Gui/vetable_12x12x3.glade.h:9
+#: .././Gui/vetable_16x16x3.glade.h:15 .././Gui/vetable_8x8e.glade.h:9
+#: .././Gui/warmupwizard.glade.h:8
+msgid "Commands"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:14 .././Gui/vetable_12x12x2.glade.h:10
+#: .././Gui/vetable_12x12x3.glade.h:10 .././Gui/vetable_16x16x3.glade.h:16
+msgid "Cur."
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:15 .././Gui/afrtable_8x8x2.glade.h:14
+#: .././Gui/boost_6x6x3.glade.h:15 .././Gui/ms2-alpha-n_6x6x1.glade.h:9
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:16
+#: .././Gui/ms2-e-rotary-split.glade.h:11
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:17
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:17 .././Gui/PIS-biar_16x16.glade.h:15
+#: .././Gui/PIS-boost_16x10.glade.h:17 .././Gui/PIS-bpw_16x16.glade.h:16
+#: .././Gui/PIS-ego_16x16.glade.h:14 .././Gui/rotary-trail.glade.h:16
+#: .././Gui/sparktable_12x12x1.glade.h:10
+#: .././Gui/sparktable_12x12x2.glade.h:10
+#: .././Gui/sparktable_12x12x3.glade.h:12 .././Gui/sparktable_8x8e.glade.h:10
+#: .././Gui/vetable_12x12x2.glade.h:11 .././Gui/vetable_12x12x3.glade.h:11
+#: .././Gui/vetable_16x16x3.glade.h:17 .././Gui/vetable_8x8e.glade.h:12
+msgid "Export Table"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:16 .././Gui/afrtable_8x8x2.glade.h:15
+#: .././Gui/boost_6x6x3.glade.h:16 .././Gui/ms2-alpha-n_6x6x1.glade.h:10
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:17
+#: .././Gui/sparktable_12x12x1.glade.h:11
+#: .././Gui/sparktable_12x12x2.glade.h:12
+#: .././Gui/sparktable_12x12x3.glade.h:13 .././Gui/sparktable_8x8e.glade.h:12
+#: .././Gui/vetable_12x12x2.glade.h:12 .././Gui/vetable_12x12x3.glade.h:12
+#: .././Gui/vetable_16x16x3.glade.h:18 .././Gui/vetable_8x8e.glade.h:13
+msgid ""
+"Focus follows\n"
+"Vertex with \n"
+"most \"Weight\""
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:19 .././Gui/afrtable_8x8x2.glade.h:18
+#: .././Gui/B_n_G_constants.glade.h:15 .././Gui/boost_6x6x3.glade.h:19
+#: .././Gui/dt-params.glade.h:14 .././Gui/Dualtable-constants.glade.h:14
+#: .././Gui/enrichments.glade.h:39 .././Gui/main.glade.h:77
+#: .././Gui/ms2-accel.glade.h:33 .././Gui/ms2-alpha-n_6x6x1.glade.h:13
+#: .././Gui/ms2-e-accel.glade.h:48 .././Gui/ms2-e-boost_8x8x2.glade.h:20
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:30
+#: .././Gui/ms2-e-corrections_misc.glade.h:37
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:52
+#: .././Gui/ms2-e-debugging.glade.h:17 .././Gui/ms2-e-globals.glade.h:17
+#: .././Gui/ms2-e-ignition.glade.h:28
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:22
+#: .././Gui/ms2-e-noise_lag.glade.h:21 .././Gui/ms2-e-rotary-split.glade.h:14
+#: .././Gui/ms2-globals.glade.h:15 .././Gui/ms2-idle_ego_rev.glade.h:21
+#: .././Gui/ms2-ignition.glade.h:30 .././Gui/ms2-knock_dwell.glade.h:16
+#: .././Gui/ms2-misc-fuel.glade.h:21 .././Gui/ms2-user_outputs.glade.h:5
+#: .././Gui/ms2-warmup.glade.h:32 .././Gui/ms2-xtau.glade.h:16
+#: .././Gui/msns-e-accelwizard.glade.h:29 .././Gui/msns-e-advanced.glade.h:16
+#: .././Gui/msns-e-boost-knock.glade.h:18 .././Gui/msns-e-crank-ase.glade.h:37
+#: .././Gui/msns-e-ego.glade.h:17 .././Gui/msns-e-features.glade.h:15
+#: .././Gui/msns-e-fuelconstants.glade.h:14 .././Gui/msns-e-idle.glade.h:14
+#: .././Gui/msns-e-output-pins.glade.h:7 .././Gui/msns-e-outputs-sel.glade.h:2
+#: .././Gui/msns-e-traction.glade.h:10
+#: .././Gui/msns-e-water-nos-launch.glade.h:8
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:19
+#: .././Gui/msns-e-wheeldecode.glade.h:19
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:20
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:20 .././Gui/PIS-biar_16x16.glade.h:18
+#: .././Gui/PIS-boost_16x10.glade.h:20 .././Gui/PIS-bpw_16x16.glade.h:19
+#: .././Gui/PIS-corrections.glade.h:31 .././Gui/PIS-ego_16x16.glade.h:17
+#: .././Gui/PIS-settings.glade.h:25 .././Gui/raweditor.glade.h:2
+#: .././Gui/rotary-trail.glade.h:21 .././Gui/sparktable_12x12x1.glade.h:14
+#: .././Gui/sparktable_12x12x2.glade.h:15
+#: .././Gui/sparktable_12x12x3.glade.h:16 .././Gui/sparktable_8x8e.glade.h:15
+#: .././Gui/template.glade.h:7 .././Gui/test.glade.h:5
+#: .././Gui/vetable_12x12x2.glade.h:19 .././Gui/vetable_12x12x3.glade.h:21
+#: .././Gui/vetable_16x16x3.glade.h:28 .././Gui/vetable_8x8e.glade.h:16
+#: .././Gui/warmupwizard.glade.h:13
+msgid "Get Data from ECU"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:20 .././Gui/afrtable_8x8x2.glade.h:19
+#: .././Gui/boost_6x6x3.glade.h:20 .././Gui/ms2-alpha-n_6x6x1.glade.h:14
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:21
+#: .././Gui/ms2-e-rotary-split.glade.h:16
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:22
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:22 .././Gui/PIS-biar_16x16.glade.h:20
+#: .././Gui/PIS-boost_16x10.glade.h:22 .././Gui/PIS-bpw_16x16.glade.h:21
+#: .././Gui/PIS-ego_16x16.glade.h:19 .././Gui/rotary-trail.glade.h:22
+#: .././Gui/sparktable_12x12x1.glade.h:15
+#: .././Gui/sparktable_12x12x2.glade.h:16
+#: .././Gui/sparktable_12x12x3.glade.h:19 .././Gui/sparktable_8x8e.glade.h:16
+#: .././Gui/vetable_12x12x2.glade.h:20 .././Gui/vetable_12x12x3.glade.h:22
+#: .././Gui/vetable_16x16x3.glade.h:29 .././Gui/vetable_8x8e.glade.h:17
+msgid "Import Table"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:21 .././Gui/afrtable_8x8x2.glade.h:20
+#: .././Gui/boost_6x6x3.glade.h:21 .././Gui/ms2-alpha-n_6x6x1.glade.h:15
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:22
+#: .././Gui/ms2-e-rotary-split.glade.h:17
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:23
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:23 .././Gui/PIS-biar_16x16.glade.h:21
+#: .././Gui/PIS-boost_16x10.glade.h:23 .././Gui/PIS-bpw_16x16.glade.h:22
+#: .././Gui/PIS-ego_16x16.glade.h:20 .././Gui/rotary-trail.glade.h:23
+#: .././Gui/sparktable_12x12x1.glade.h:16
+#: .././Gui/sparktable_12x12x2.glade.h:17
+#: .././Gui/sparktable_12x12x3.glade.h:20 .././Gui/sparktable_8x8e.glade.h:17
+#: .././Gui/vetable_12x12x2.glade.h:21 .././Gui/vetable_12x12x3.glade.h:23
+#: .././Gui/vetable_16x16x3.glade.h:30 .././Gui/vetable_8x8e.glade.h:18
+msgid "Import/Export"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:22 .././Gui/PIS-biar_16x16.glade.h:22
+#: .././Gui/PIS-bpw_16x16.glade.h:23 .././Gui/PIS-ego_16x16.glade.h:21
+#: .././Gui/sparktable_12x12x1.glade.h:17
+#: .././Gui/sparktable_12x12x2.glade.h:18
+#: .././Gui/sparktable_12x12x3.glade.h:21 .././Gui/sparktable_8x8e.glade.h:18
+#: .././Gui/vetable_12x12x2.glade.h:22 .././Gui/vetable_12x12x3.glade.h:24
+#: .././Gui/vetable_8x8e.glade.h:19
+msgid "Kpa"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:23 .././Gui/PIS-biar_16x16.glade.h:23
+#: .././Gui/PIS-bpw_16x16.glade.h:24 .././Gui/PIS-ego_16x16.glade.h:23
+#: .././Gui/sparktable_12x12x1.glade.h:18
+#: .././Gui/sparktable_12x12x2.glade.h:19
+#: .././Gui/sparktable_12x12x3.glade.h:22 .././Gui/sparktable_8x8e.glade.h:19
+#: .././Gui/vetable_12x12x2.glade.h:23 .././Gui/vetable_12x12x3.glade.h:25
+#: .././Gui/vetable_8x8e.glade.h:20
+msgid "MAP Bins"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:24
+msgid "MS-II AFR-Table"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:25 .././Gui/vetable_12x12x2.glade.h:25
+#: .././Gui/vetable_12x12x3.glade.h:27 .././Gui/vetable_16x16x3.glade.h:32
+msgid "New"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:26 .././Gui/afrtable_8x8x2.glade.h:22
+#: .././Gui/B_n_G_constants.glade.h:31 .././Gui/boost_6x6x3.glade.h:23
+#: .././Gui/dt-params.glade.h:27 .././Gui/Dualtable-constants.glade.h:25
+#: .././Gui/enrichments.glade.h:41 .././Gui/main.glade.h:101
+#: .././Gui/ms2-accel.glade.h:41 .././Gui/ms2-alpha-n_6x6x1.glade.h:18
+#: .././Gui/ms2-e-accel.glade.h:56 .././Gui/ms2-e-boost_8x8x2.glade.h:24
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:50
+#: .././Gui/ms2-e-corrections_misc.glade.h:57
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:87
+#: .././Gui/ms2-e-debugging.glade.h:38 .././Gui/ms2-e-globals.glade.h:33
+#: .././Gui/ms2-e-ignition.glade.h:37
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:35
+#: .././Gui/ms2-e-noise_lag.glade.h:42 .././Gui/ms2-e-rotary-split.glade.h:21
+#: .././Gui/ms2-globals.glade.h:37 .././Gui/ms2-idle_ego_rev.glade.h:37
+#: .././Gui/ms2-ignition.glade.h:38 .././Gui/ms2-knock_dwell.glade.h:29
+#: .././Gui/ms2-misc-fuel.glade.h:37 .././Gui/ms2-user_outputs.glade.h:16
+#: .././Gui/ms2-warmup.glade.h:39 .././Gui/ms2-xtau.glade.h:21
+#: .././Gui/msns-e-accelwizard.glade.h:35 .././Gui/msns-e-advanced.glade.h:34
+#: .././Gui/msns-e-boost-knock.glade.h:32 .././Gui/msns-e-crank-ase.glade.h:43
+#: .././Gui/msns-e-ego.glade.h:28 .././Gui/msns-e-features.glade.h:21
+#: .././Gui/msns-e-fuelconstants.glade.h:24 .././Gui/msns-e-idle.glade.h:33
+#: .././Gui/msns-e-output-pins.glade.h:18
+#: .././Gui/msns-e-outputs-sel.glade.h:8 .././Gui/msns-e-traction.glade.h:20
+#: .././Gui/msns-e-water-nos-launch.glade.h:33
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:30
+#: .././Gui/msns-e-wheeldecode.glade.h:29
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:25
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:25 .././Gui/PIS-biar_16x16.glade.h:25
+#: .././Gui/PIS-boost_16x10.glade.h:25 .././Gui/PIS-bpw_16x16.glade.h:26
+#: .././Gui/PIS-corrections.glade.h:38 .././Gui/PIS-ego_16x16.glade.h:25
+#: .././Gui/PIS-settings.glade.h:53 .././Gui/raweditor.glade.h:4
+#: .././Gui/rotary-trail.glade.h:27 .././Gui/sparktable_12x12x1.glade.h:20
+#: .././Gui/sparktable_12x12x2.glade.h:21
+#: .././Gui/sparktable_12x12x3.glade.h:24 .././Gui/sparktable_8x8e.glade.h:21
+#: .././Gui/template.glade.h:8 .././Gui/test.glade.h:8
+#: .././Gui/vetable_12x12x2.glade.h:26 .././Gui/vetable_12x12x3.glade.h:28
+#: .././Gui/vetable_16x16x3.glade.h:33 .././Gui/vetable_8x8e.glade.h:24
+msgid "Permanently Store Data in ECU"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:27 .././Gui/afrtable_8x8x2.glade.h:23
+#: .././Gui/boost_6x6x3.glade.h:24 .././Gui/ms2-alpha-n_6x6x1.glade.h:19
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:25
+#: .././Gui/ms2-e-rotary-split.glade.h:22
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:26
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:26 .././Gui/PIS-biar_16x16.glade.h:26
+#: .././Gui/PIS-boost_16x10.glade.h:26 .././Gui/PIS-bpw_16x16.glade.h:27
+#: .././Gui/PIS-ego_16x16.glade.h:26 .././Gui/rotary-trail.glade.h:28
+#: .././Gui/sparktable_12x12x1.glade.h:21
+#: .././Gui/sparktable_12x12x2.glade.h:22
+#: .././Gui/sparktable_12x12x3.glade.h:25 .././Gui/sparktable_8x8e.glade.h:22
+#: .././Gui/vetable_12x12x2.glade.h:27 .././Gui/vetable_12x12x3.glade.h:29
+#: .././Gui/vetable_16x16x3.glade.h:34 .././Gui/vetable_8x8e.glade.h:25
+msgid "RPM Bins"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:28 .././Gui/afrtable_8x8x2.glade.h:24
+#: .././Gui/boost_6x6x3.glade.h:25 .././Gui/ms2-alpha-n_6x6x1.glade.h:20
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:26
+#: .././Gui/ms2-e-rotary-split.glade.h:24
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:28
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:28 .././Gui/PIS-biar_16x16.glade.h:28
+#: .././Gui/PIS-boost_16x10.glade.h:28 .././Gui/PIS-bpw_16x16.glade.h:29
+#: .././Gui/PIS-ego_16x16.glade.h:28 .././Gui/rotary-trail.glade.h:29
+#: .././Gui/sparktable_12x12x1.glade.h:22
+#: .././Gui/sparktable_12x12x2.glade.h:23
+#: .././Gui/sparktable_12x12x3.glade.h:26 .././Gui/sparktable_8x8e.glade.h:23
+#: .././Gui/vetable_12x12x2.glade.h:28 .././Gui/vetable_12x12x3.glade.h:30
+#: .././Gui/vetable_16x16x3.glade.h:35 .././Gui/vetable_8x8e.glade.h:26
+msgid "Recalculate"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:29 .././Gui/vetable_12x12x2.glade.h:29
+#: .././Gui/vetable_12x12x3.glade.h:31 .././Gui/vetable_16x16x3.glade.h:36
+msgid "ReqFuel"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:30 .././Gui/vetable_12x12x2.glade.h:30
+#: .././Gui/vetable_12x12x3.glade.h:32 .././Gui/vetable_16x16x3.glade.h:37
+#: .././Gui/vetable_8x8e.glade.h:27
+msgid "Rescale"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:31 .././Gui/afrtable_8x8x2.glade.h:25
+#: .././Gui/boost_6x6x3.glade.h:26 .././Gui/ms2-alpha-n_6x6x1.glade.h:21
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:27
+#: .././Gui/ms2-e-rotary-split.glade.h:25
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:29
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:29 .././Gui/PIS-biar_16x16.glade.h:29
+#: .././Gui/PIS-boost_16x10.glade.h:29 .././Gui/PIS-bpw_16x16.glade.h:30
+#: .././Gui/PIS-ego_16x16.glade.h:29 .././Gui/rotary-trail.glade.h:30
+#: .././Gui/sparktable_12x12x1.glade.h:23
+#: .././Gui/sparktable_12x12x2.glade.h:24
+#: .././Gui/sparktable_12x12x3.glade.h:27 .././Gui/sparktable_8x8e.glade.h:24
+#: .././Gui/vetable_12x12x2.glade.h:31 .././Gui/vetable_12x12x3.glade.h:33
+#: .././Gui/vetable_16x16x3.glade.h:38 .././Gui/vetable_8x8e.glade.h:28
+msgid "Rescale Subset of Table"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:32 .././Gui/vetable_12x12x2.glade.h:32
+#: .././Gui/vetable_12x12x3.glade.h:34 .././Gui/vetable_16x16x3.glade.h:39
+msgid ""
+"Rescale table to\n"
+"maintain same PW"
+msgstr ""
+
+#: .././Gui/afrtable_12x12x2.glade.h:34
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:34
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:34 .././Gui/PIS-biar_16x16.glade.h:33
+#: .././Gui/PIS-boost_16x10.glade.h:34 .././Gui/PIS-bpw_16x16.glade.h:34
+#: .././Gui/PIS-ego_16x16.glade.h:33 .././Gui/sparktable_12x12x1.glade.h:27
+#: .././Gui/sparktable_12x12x2.glade.h:30 .././Gui/sparktable_8x8e.glade.h:28
+#: .././Gui/vetable_12x12x2.glade.h:34 .././Gui/vetable_12x12x3.glade.h:36
+#: .././Gui/vetable_16x16x3.glade.h:41 .././Gui/vetable_8x8e.glade.h:31
+msgid "Tracking  option"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:1 .././Gui/ms2-alpha-n_6x6x1.glade.h:1
+msgid ""
+"+\n"
+"-\n"
+"*\n"
+"/"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:8
+msgid "AFR Table 1"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:9
+msgid "AFR Table 2"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:10
+msgid "Air Fuel Ratio (Actual AFR)"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:11
+msgid "Air Fuel Ratio Table for VE-Table 1"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:12
+msgid "Air Fuel Ratio Table for VE-Table 3"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:21 .././Gui/vetable_8x8e.glade.h:21
+msgid "MegaSquirt VE-Table"
+msgstr ""
+
+#: .././Gui/afrtable_8x8x2.glade.h:26 .././Gui/boost_6x6x3.glade.h:31
+#: .././Gui/ms2-alpha-n_6x6x1.glade.h:26 .././Gui/ms2-e-boost_8x8x2.glade.h:32
+#: .././Gui/ms2-e-rotary-split.glade.h:30 .././Gui/rotary-trail.glade.h:33
+#: .././Gui/sparktable_12x12x3.glade.h:34
+msgid "Tracking option"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:1
+msgid "# of Cylinders"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:2
+msgid "# of Fuel Injectors"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:4 .././Gui/Dualtable-constants.glade.h:4
+msgid "Barometer Correction"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:5
+msgid ""
+"Battery Voltage\n"
+"Correction (ms/V)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:7 .././Gui/Dualtable-constants.glade.h:7
+#: .././Gui/msns-e-fuelconstants.glade.h:9
+msgid "Calculate Required Fuel"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:9
+msgid "Cylinders/Injection Configuration"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:10 .././Gui/Dualtable-constants.glade.h:9
+msgid "Engine Firing Style"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:11 .././Gui/Dualtable-constants.glade.h:10
+#: .././Gui/ms2-e-globals.glade.h:14 .././Gui/ms2-globals.glade.h:11
+#: .././Gui/msns-e-fuelconstants.glade.h:12
+msgid "Engine Stroke"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:12
+msgid "Fast Idle Control"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:13
+msgid "Fast Idle Threshold (Deg F.)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:14
+msgid "Fuel Injection Strategy"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:16 .././Gui/Dualtable-constants.glade.h:15
+msgid "Injection Style"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:17
+msgid "Injection/Engine Parameters"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:18
+msgid "Injector Current control (PWM)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:19 .././Gui/Dualtable-constants.glade.h:16
+#: .././Gui/msns-e-fuelconstants.glade.h:16
+msgid ""
+"Injector Open\n"
+"Time (ms)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:21
+msgid "Injector Opening Control"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:22
+msgid "Injector firing pattern"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:23 .././Gui/Dualtable-constants.glade.h:18
+#: .././Gui/msns-e-fuelconstants.glade.h:18
+msgid "MAP Sensor Type"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:24
+msgid "MegaSquirt ECU Constants"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:25 .././Gui/Dualtable-constants.glade.h:19
+msgid "O<sub>2</sub> Sensor Type"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:27 .././Gui/Dualtable-constants.glade.h:21
+#: .././Gui/msns-e-fuelconstants.glade.h:20
+#, no-c-format
+msgid ""
+"PWM Current\n"
+"Limit (%)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:29 .././Gui/Dualtable-constants.glade.h:23
+#: .././Gui/msns-e-fuelconstants.glade.h:22
+msgid ""
+"PWM Time\n"
+"Threshold (ms.)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:32
+msgid "Required Fuel ( For one cylinder in ms.)"
+msgstr ""
+
+#: .././Gui/B_n_G_constants.glade.h:33
+msgid "Squirts / Cycle"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:8 .././Gui/ms2-e-boost_8x8x2.glade.h:8
+msgid "Boost Controller Tables"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:10 .././Gui/ms2-e-boost_8x8x2.glade.h:10
+#, no-c-format
+msgid "Boost Controller, KPA Target, TPS % vs. RPM"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:11
+msgid "Boost Table 1 (KPA Target)"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:12
+msgid "BoostTable 2 (DC Target)"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:13
+msgid "BoostTable 2 (KPA Target)"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:22 .././Gui/ms2-e-boost_8x8x2.glade.h:23
+msgid "MegaSquirtnSpark Extra Boost Tables"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:28 .././Gui/ms2-alpha-n_6x6x1.glade.h:23
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:29
+#, no-c-format
+msgid "TPS %"
+msgstr ""
+
+#: .././Gui/boost_6x6x3.glade.h:30 .././Gui/ms2-alpha-n_6x6x1.glade.h:25
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:31
+#, no-c-format
+msgid "TPS % Bins"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:1
+msgid "Comma"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:2
+msgid "DataLog File Selection"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:3
+msgid "DataLogging Operations"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:4
+msgid "DataLogging Status Messages"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:5
+msgid "Deselect All"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:6
+msgid "Logable Data"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:7
+msgid "Logging Delimiter"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:8
+msgid "MegaSquirt DataLogging"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:9
+msgid "No Log Selected Yet..."
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:10
+msgid "Options"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:11
+msgid "Select All"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:12
+msgid "Select Defaults"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:13
+msgid "Select Log File"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:14
+msgid "Start Custom Logging"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:15
+msgid "Stop Logging and Save"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:16
+msgid "Tab"
+msgstr ""
+
+#: .././Gui/datalogging.glade.h:17
+msgid "Write internal log to disk"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:2
+msgid "Boost Actuator Control"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:3
+msgid ""
+"Boost Solenoid\n"
+"Actuator Speed"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:6
+msgid "Cranking Threshold"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:7
+msgid "Cranking and Revlimiter"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:9
+#, no-c-format
+msgid "Diff. Gain (%)   "
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:10
+#, fuzzy
+msgid "Dual Table Mode"
+msgstr "2D Table Editor del Grupo"
+
+#: .././Gui/dt-params.glade.h:11 .././Gui/msns-e-idle.glade.h:12
+msgid "Fast Idle Speed (RPM)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:12
+msgid "Fast Idle Temp (cold)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:13
+msgid "GammaE"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:15
+msgid "Hard Revlimit"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:16
+msgid ""
+"Idle Control\n"
+"Methodology"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:18
+msgid "Idle Control Parameters"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:19
+msgid "Idle Threshold (TPSADC )"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:20
+msgid "Injector 1"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:21
+msgid "Injector 2"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:22
+msgid "Injector to Table Mapping"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:23
+msgid "Launch Control RPM"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:24
+msgid "Launch Control/Shift Light"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:25
+msgid "Lower Threshold. (RPM)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:26
+msgid "MegaSquirt Dualtable Parameters"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:29
+#, no-c-format
+msgid "Prop. Gain (%) "
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:30 .././Gui/msns-e-features.glade.h:24
+msgid "RPM"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:31 .././Gui/msns-e-idle.glade.h:35
+msgid "Slow Idle Speed (RPM)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:32
+msgid "Slow Idle Temp (hot)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:33
+msgid "Table Assignment"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:34
+msgid "Upd. Rate (ms.)"
+msgstr ""
+
+#: .././Gui/dt-params.glade.h:35
+msgid "Upper Threshold. (RPM)"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:1
+#: .././Gui/msns-e-fuelconstants.glade.h:1
+msgid "# Cylinders"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:2
+#: .././Gui/msns-e-fuelconstants.glade.h:2
+msgid "# Injectors"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:5
+msgid ""
+"Battery Voltage\n"
+"Correction (ms/Volt)"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:11
+#: .././Gui/msns-e-fuelconstants.glade.h:13
+msgid "Engine/Injection Parameters"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:12
+msgid ""
+"Fuel Injection\n"
+"Control Strategy"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:26
+#: .././Gui/msns-e-fuelconstants.glade.h:25
+msgid "Reqd Fuel (ms. per squirt)"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:27
+#: .././Gui/msns-e-fuelconstants.glade.h:26
+msgid "Reqd Fuel (per cyl/cycle)"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:28
+msgid "Sensor Parameters"
+msgstr ""
+
+#: .././Gui/Dualtable-constants.glade.h:29
+#: .././Gui/msns-e-fuelconstants.glade.h:29
+msgid "Squirts/Cyc."
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:1
+msgid "# of Cycles"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:2
+msgid ""
+"# of Ignition Events\n"
+"Between Steps"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:4
+msgid "-40 deg F."
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:6
+msgid "15V/sec"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:7
+msgid "170 deg F."
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:8
+msgid "2V/sec"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:9
+msgid "4V/sec"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:10
+msgid "8V/sec"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:11
+msgid ""
+"Accel Enrich\n"
+"Duration (sec)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:13
+msgid "Acceleration Enrichment Bins (ms)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:14
+msgid "Acceleration Enrichments"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:15 .././Gui/warmupwizard.glade.h:4
+msgid "Afterstart Enrichment"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:16
+msgid ""
+"Cold Accel Enrich\n"
+"Add-on (ms)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:19
+#, no-c-format
+msgid ""
+"Cold Accel Enrich\n"
+"Multiplier (%)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:22 .././Gui/warmupwizard.glade.h:9
+#, fuzzy
+msgid "Cranking Pulsewidth (ms)"
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/enrichments.glade.h:24
+#, no-c-format
+msgid "Decel Fuel Cut (%)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:25
+msgid ""
+"EGO +/- Limit\n"
+"(Percent)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:27
+msgid "EGO Active RPM\n"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:29
+msgid ""
+"EGO Active Temp\n"
+"(deg F.)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:31
+msgid ""
+"EGO Step\n"
+"(Percent)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:33
+msgid ""
+"EGO Switching\n"
+"Voltage"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:35
+msgid "Engine Temperature  in deg F."
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:37
+#, no-c-format
+msgid "Enrich %"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:38 .././Gui/msns-e-ego.glade.h:14
+msgid "Exhaust O<sub>2</sub> Feedback Settings"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:40
+msgid "MegaSquirt Enrichments"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:42
+msgid "Priming Pulse"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:43
+msgid ""
+"TPS Trigger Threshold \n"
+"(V/sec)"
+msgstr ""
+
+#: .././Gui/enrichments.glade.h:46
+#, no-c-format
+msgid "Warmup Enrichment Bins (%)"
+msgstr ""
+
+#: .././Gui/error_status.glade.h:1
+msgid "ECU Error Messages"
+msgstr ""
+
+#: .././Gui/error_status.glade.h:2
+msgid "ECU diagnostics on boot"
+msgstr ""
+
+#: .././Gui/error_status.glade.h:3
+msgid ""
+"If your ecu powers up and the fuel pump turns on/off once per second the ECU "
+"was set with conflicting data. Click on the above \"Reboot ECU\" button "
+"above to retrieve the error message from the unit.  Once the problem is "
+"resolved you should burn the setings to the ECU and power cycle it."
+msgstr ""
+
+#: .././Gui/error_status.glade.h:4 .././Gui/tools.glade.h:5
+msgid "MegaSquirt Tools"
+msgstr ""
+
+#: .././Gui/error_status.glade.h:5
+msgid "Reboot ECU"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:2
+#, no-c-format
+msgid "Log Position (%)"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:3
+msgid "MegaSquirt Visual Log Viewer"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:4
+msgid "Playback Controls"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:5
+msgid "Playback Mode"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:6
+msgid "Playback Speed"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:7
+msgid "Position"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:8
+msgid "Realtime Mode"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:9
+msgid "Scroll Speed"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:10
+msgid "Select logfile"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:11
+msgid "Select variables"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:12
+msgid "Start Playback"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:13
+msgid "Start reading RT Vars"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:14
+msgid "Stop Playback"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:15
+msgid "Stop reading RT Vars"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:16
+msgid "Viewer/Playback Parameters"
+msgstr ""
+
+#: .././Gui/logviewer.glade.h:17 .././Gui/ms2-e-toothtrigger.glade.h:9
+msgid "Zoom"
+msgstr ""
+
+#: .././Gui/main.glade.h:1
+msgid "\t"
+msgstr ""
+
+#: .././Gui/main.glade.h:2 .././Gui/ms2-accel.glade.h:1
+#: .././Gui/ms2-e-accel.glade.h:1
+msgid " "
+msgstr ""
+
+#: .././Gui/main.glade.h:3
+msgid "        Exit          "
+msgstr ""
+
+#: .././Gui/main.glade.h:4
+msgid "-40"
+msgstr ""
+
+#: .././Gui/main.glade.h:5
+msgid "1"
+msgstr ""
+
+#: .././Gui/main.glade.h:6
+msgid "100.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:7
+msgid "100700.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:8
+msgid "115.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:9
+msgid "15.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:10
+msgid "177.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:11
+msgid "19.7"
+msgstr ""
+
+#: .././Gui/main.glade.h:12
+msgid "20.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:13
+msgid "2238.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:14
+msgid "2490.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:16
+msgid "30"
+msgstr ""
+
+#: .././Gui/main.glade.h:17
+msgid "30.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:18
+msgid "3500"
+msgstr ""
+
+#: .././Gui/main.glade.h:19
+msgid "3D Display/VEtable update rate (FPS)"
+msgstr ""
+
+#: .././Gui/main.glade.h:20
+msgid "4"
+msgstr ""
+
+#: .././Gui/main.glade.h:21
+msgid "40.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:22
+msgid "5.0"
+msgstr ""
+
+#: .././Gui/main.glade.h:23
+msgid "850"
+msgstr ""
+
+#: .././Gui/main.glade.h:24
+msgid "9.7"
+msgstr ""
+
+#: .././Gui/main.glade.h:25
+msgid "99"
+msgstr ""
+
+#: .././Gui/main.glade.h:26
+msgid "<b><big>Tab Visibility</big></b>"
+msgstr ""
+
+#: .././Gui/main.glade.h:27
+msgid ""
+"<b>Match the above value with \n"
+"timing light reading. (BTDC)</b>"
+msgstr ""
+
+#: .././Gui/main.glade.h:29
+msgid "<big>Hidden</big>"
+msgstr ""
+
+#: .././Gui/main.glade.h:30
+msgid "<big>Tab Name</big>"
+msgstr ""
+
+#: .././Gui/main.glade.h:31
+msgid "<small>Offset in deg.</small>"
+msgstr ""
+
+#: .././Gui/main.glade.h:32
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\"> Barometer Sensor "
+"(usually identical to MAP)\t\t\t</span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:33
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\"> Forced Induction "
+"(decurve)                                </span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:34
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\"> MAP Sensor (F1 for "
+"common Values)\t\t\t\t\t</span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:35
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\"> Maximum RPM "
+"Advance                                     </span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:36
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">Idle "
+"Characteristics                                               </span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:37
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">Light Load "
+"(deceleration)                                     </span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:38
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">Peak "
+"Torque                                                           </span>"
+msgstr ""
+
+#: .././Gui/main.glade.h:39
+msgid "AFR"
+msgstr ""
+
+#: .././Gui/main.glade.h:40
+msgid "About MegaTunix"
+msgstr ""
+
+#: .././Gui/main.glade.h:41
+msgid "Allow Network Access"
+msgstr ""
+
+#: .././Gui/main.glade.h:42
+msgid "Auto-Scan Serial Ports"
+msgstr ""
+
+#: .././Gui/main.glade.h:43
+msgid "Bias Resistor Value (Ohms)"
+msgstr ""
+
+#: .././Gui/main.glade.h:44
+msgid "Burn to Flash"
+msgstr ""
+
+#: .././Gui/main.glade.h:45
+msgid "Calibrate TPS"
+msgstr ""
+
+#: .././Gui/main.glade.h:46
+msgid "Calibrate Throttle Position Sensor"
+msgstr ""
+
+#: .././Gui/main.glade.h:47
+msgid "Cancel"
+msgstr ""
+
+#: .././Gui/main.glade.h:48
+msgid "Celsius"
+msgstr ""
+
+#: .././Gui/main.glade.h:49
+msgid "Close"
+msgstr ""
+
+#: .././Gui/main.glade.h:50
+msgid "Closed Throttle ADC Count"
+msgstr ""
+
+#: .././Gui/main.glade.h:51
+msgid "Comm Port and Baud Rate"
+msgstr ""
+
+#: .././Gui/main.glade.h:53
+msgid "Context Sensitve Help"
+msgstr ""
+
+#: .././Gui/main.glade.h:54
+msgid ""
+"Coolant Temperature\n"
+"Air Temperature"
+msgstr ""
+
+#: .././Gui/main.glade.h:56
+msgid "Create Ignition Map"
+msgstr ""
+
+#: .././Gui/main.glade.h:57
+msgid "Curve Wizard"
+msgstr ""
+
+#: .././Gui/main.glade.h:58
+msgid "Dashboard update rate (FPS)"
+msgstr ""
+
+#: .././Gui/main.glade.h:59
+msgid "Dashboard(s) Selection"
+msgstr ""
+
+#: .././Gui/main.glade.h:60
+msgid "Delay between reads (ms)"
+msgstr ""
+
+#: .././Gui/main.glade.h:61
+msgid "ECU Hard reset Count"
+msgstr ""
+
+#: .././Gui/main.glade.h:62
+msgid "ECU Revision Number"
+msgstr ""
+
+#: .././Gui/main.glade.h:63
+msgid "ECU Runtime Variable Settings"
+msgstr ""
+
+#: .././Gui/main.glade.h:64
+msgid "ECU Signature String"
+msgstr ""
+
+#: .././Gui/main.glade.h:65
+msgid "ECU _Errors..."
+msgstr ""
+
+#: .././Gui/main.glade.h:66
+msgid "EGO Sensor Type"
+msgstr ""
+
+#: .././Gui/main.glade.h:67
+msgid "E_xport Tables..."
+msgstr ""
+
+#: .././Gui/main.glade.h:68
+msgid "Extra Advance @ Lightest Load"
+msgstr ""
+
+#: .././Gui/main.glade.h:69
+msgid "Extra Advance @ Max RPM"
+msgstr ""
+
+#: .././Gui/main.glade.h:70
+msgid "Fahrenheit"
+msgstr ""
+
+#: .././Gui/main.glade.h:71
+msgid "Full Throttle ADC Count"
+msgstr ""
+
+#: .././Gui/main.glade.h:72
+msgid "General MegaTunix Settings"
+msgstr ""
+
+#: .././Gui/main.glade.h:73
+msgid "Generate Ignition Map"
+msgstr ""
+
+#: .././Gui/main.glade.h:74
+msgid "Generic Linear Wideband Settings"
+msgstr ""
+
+#: .././Gui/main.glade.h:75
+msgid "Get Current"
+msgstr ""
+
+#: .././Gui/main.glade.h:76
+msgid "Get Data"
+msgstr ""
+
+#: .././Gui/main.glade.h:78 .././Gui/PIS-runtime.glade.h:10
+#: .././Gui/runtime.glade.h:7
+msgid "Good Runtime Reads"
+msgstr ""
+
+#: .././Gui/main.glade.h:79 .././Gui/PIS-runtime.glade.h:11
+#: .././Gui/runtime.glade.h:8
+msgid "Good VE/Constants Reads"
+msgstr ""
+
+#: .././Gui/main.glade.h:80
+msgid "I_mport Tables..."
+msgstr ""
+
+#: .././Gui/main.glade.h:81
+msgid "Idle @ Load"
+msgstr ""
+
+#: .././Gui/main.glade.h:82
+msgid "Idle @ RPM"
+msgstr ""
+
+#: .././Gui/main.glade.h:83 .././Gui/ms2-e-corrections_misc.glade.h:43
+msgid "Idle Advance"
+msgstr ""
+
+#: .././Gui/main.glade.h:84
+msgid "Interrogate ECU"
+msgstr ""
+
+#: .././Gui/main.glade.h:85
+msgid "Interrogation/Tab status"
+msgstr ""
+
+#: .././Gui/main.glade.h:86
+msgid "Linear Ignition Base Map Generator"
+msgstr ""
+
+#: .././Gui/main.glade.h:87
+msgid "Locate Port"
+msgstr ""
+
+#: .././Gui/main.glade.h:88
+msgid "MS-II AFR Calibration"
+msgstr ""
+
+#: .././Gui/main.glade.h:89
+msgid "MS-II AFR Calibrator"
+msgstr ""
+
+#: .././Gui/main.glade.h:90
+msgid "MS2  Re-initialize"
+msgstr ""
+
+#: .././Gui/main.glade.h:91
+msgid "MS2 Full Reboot"
+msgstr ""
+
+#: .././Gui/main.glade.h:92
+msgid "MS2 _AFR Calibrator"
+msgstr ""
+
+#: .././Gui/main.glade.h:93
+msgid "MegaSquirt ECU Information"
+msgstr ""
+
+#: .././Gui/main.glade.h:94
+msgid "MegaSquirt I/O Statistics"
+msgstr ""
+
+#: .././Gui/main.glade.h:95
+msgid "MegaTunix Communication Parameters"
+msgstr ""
+
+#: .././Gui/main.glade.h:96
+msgid "MegaTunix Debugging"
+msgstr ""
+
+#: .././Gui/main.glade.h:97
+msgid "MegaTunix Tab Visibility"
+msgstr ""
+
+#: .././Gui/main.glade.h:98
+msgid "Peak Torque @ Load"
+msgstr ""
+
+#: .././Gui/main.glade.h:99
+msgid "Peak Torque @ RPM"
+msgstr ""
+
+#: .././Gui/main.glade.h:100
+msgid "Peak Torque Advance"
+msgstr ""
+
+#: .././Gui/main.glade.h:102
+msgid "Point 1"
+msgstr ""
+
+#: .././Gui/main.glade.h:103
+msgid "Point 2"
+msgstr ""
+
+#: .././Gui/main.glade.h:104
+msgid "Reset I/O Status Counters"
+msgstr ""
+
+#: .././Gui/main.glade.h:105
+msgid "Resistance (Ohms)"
+msgstr ""
+
+#: .././Gui/main.glade.h:106
+msgid "Restore ECU..."
+msgstr ""
+
+#: .././Gui/main.glade.h:107
+msgid "Retard @ Maximum Load"
+msgstr ""
+
+#: .././Gui/main.glade.h:108
+msgid "Reverse Connect"
+msgstr ""
+
+#: .././Gui/main.glade.h:109 .././Gui/PIS-runtime.glade.h:18
+#: .././Gui/runtime.glade.h:14 .././Gui/warmupwizard.glade.h:17
+msgid "Runtime Data"
+msgstr ""
+
+#: .././Gui/main.glade.h:110
+msgid "Runtime Sliders update rate (FPS)"
+msgstr ""
+
+#: .././Gui/main.glade.h:111
+msgid "Runtime Text update rate (FPS)"
+msgstr ""
+
+#: .././Gui/main.glade.h:112
+msgid "Runtime Vars"
+msgstr ""
+
+#: .././Gui/main.glade.h:113
+msgid "Send to ECU"
+msgstr ""
+
+#: .././Gui/main.glade.h:114
+msgid "Sensor Calibration"
+msgstr ""
+
+#: .././Gui/main.glade.h:115
+msgid "Sensor Calibrator (MAP/Baro)"
+msgstr ""
+
+#: .././Gui/main.glade.h:116
+msgid "Sensor Table"
+msgstr ""
+
+#: .././Gui/main.glade.h:117 .././Gui/PIS-runtime.glade.h:20
+#: .././Gui/runtime.glade.h:16
+msgid "Serial I/O Error Count"
+msgstr ""
+
+#: .././Gui/main.glade.h:118
+msgid "Serial Port"
+msgstr ""
+
+#: .././Gui/main.glade.h:119
+msgid "Serial Status Messages"
+msgstr ""
+
+#: .././Gui/main.glade.h:120
+msgid "Serial/Network Read Timeout (ms)"
+msgstr ""
+
+#: .././Gui/main.glade.h:121
+msgid "Slaves:"
+msgstr ""
+
+#: .././Gui/main.glade.h:122
+msgid "Starting @ Load"
+msgstr ""
+
+#: .././Gui/main.glade.h:123
+msgid "T_uning"
+msgstr ""
+
+#: .././Gui/main.glade.h:124
+#, fuzzy
+msgid "Table Generator"
+msgstr "2D Table Editor del Grupo"
+
+#: .././Gui/main.glade.h:125
+msgid "Tabs"
+msgstr ""
+
+#: .././Gui/main.glade.h:126
+msgid "Temperature"
+msgstr ""
+
+#: .././Gui/main.glade.h:127
+msgid "Temperature Scale"
+msgstr ""
+
+#: .././Gui/main.glade.h:128
+msgid "Textual Version"
+msgstr ""
+
+#: .././Gui/main.glade.h:129
+msgid "Thermister Measurements"
+msgstr ""
+
+#: .././Gui/main.glade.h:130
+msgid "Trigger Offset"
+msgstr ""
+
+#: .././Gui/main.glade.h:131
+msgid "Trigger Offset Tool"
+msgstr ""
+
+#: .././Gui/main.glade.h:132
+msgid ""
+"Type in the hostname that you want to CONNECT to  in the box to the right of "
+"this button to allow remote access to your tuning session from a remote user "
+"runing megatunix in \"listen\" mode.  This is so you can \"phone home\" to a "
+"remotely waiting megatunix instance such that both you and the remote party "
+"can tune together. This alleviates having to have specific firewall ports "
+"open on your end as long as your machine can connect outbound."
+msgstr ""
+
+#: .././Gui/main.glade.h:133
+msgid ""
+"Type in the hostname that you want to CONNECT to to allow remote mtx "
+"access.  This is so you can \"phone home\" to a remotely waiting megatunix "
+"instance such that both you and hte remote party can tune together. This "
+"alleviates having to have specific firewall ports open on your end as long "
+"as your machine can connect outbound."
+msgstr ""
+
+#: .././Gui/main.glade.h:134
+msgid "Use Offline Mode"
+msgstr ""
+
+#: .././Gui/main.glade.h:135
+msgid "Use ToolTips"
+msgstr ""
+
+#: .././Gui/main.glade.h:136
+msgid "Value at 0.0 volts (kPa)"
+msgstr ""
+
+#: .././Gui/main.glade.h:137
+msgid "Value at 5.0 volts (kPa)"
+msgstr ""
+
+#: .././Gui/main.glade.h:138
+msgid "Voltage"
+msgstr ""
+
+#: .././Gui/main.glade.h:139
+msgid "_AFR Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:140 .././Gui/mtxloader.glade.h:24
+msgid "_About"
+msgstr ""
+
+#: .././Gui/main.glade.h:141
+msgid "_Backup ECU..."
+msgstr ""
+
+#: .././Gui/main.glade.h:142
+msgid "_Boost Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:143
+msgid "_Calibrate Thermister Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:144
+msgid "_Communications"
+msgstr ""
+
+#: .././Gui/main.glade.h:145 .././Gui/mtxloader.glade.h:25
+msgid "_File"
+msgstr ""
+
+#: .././Gui/main.glade.h:146
+msgid "_General"
+msgstr ""
+
+#: .././Gui/main.glade.h:147 .././Gui/mtxloader.glade.h:26
+msgid "_Help"
+msgstr ""
+
+#: .././Gui/main.glade.h:148
+msgid "_Lookuptables Setup"
+msgstr ""
+
+#: .././Gui/main.glade.h:149
+msgid "_Rotary Trailing Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:150
+msgid "_Runtime Data"
+msgstr ""
+
+#: .././Gui/main.glade.h:151
+msgid "_Set Tab Visibility"
+msgstr ""
+
+#: .././Gui/main.glade.h:152
+msgid "_Spark Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:153
+msgid "_TPS Calibrate"
+msgstr ""
+
+#: .././Gui/main.glade.h:154
+msgid "_Tools"
+msgstr ""
+
+#: .././Gui/main.glade.h:155
+msgid "_VE Tables"
+msgstr ""
+
+#: .././Gui/main.glade.h:156
+msgid "_View"
+msgstr ""
+
+#: .././Gui/main.glade.h:157
+msgid "designed by David J. Andruczyk (c) 2010"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:1
+msgid "0x0000-0x00FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:2
+msgid "0x0100-0x01FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:3
+msgid "0x0200-0x2FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:4
+msgid "0x300-0x3FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:5
+msgid "256 bytes from address 0x0000-0x00FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:6
+msgid "256 bytes from address 0x0100-0x01FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:7
+msgid "256 bytes from address 0x0200-0x02FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:8
+msgid "256 bytes from address 0x0300-0x03FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:9
+msgid "Binary"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:10
+msgid "Decimal"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:11
+msgid "Hex"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:12
+msgid "MegaSquirt Raw Memory Viewer"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:13
+msgid "Raw Memory Viewer Settings"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:14
+msgid "Read Memory from 0x0000-0x00FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:15
+msgid "Read Memory from 0x0100-0x01FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:16
+msgid "Read Memory from 0x0200-0x02FF"
+msgstr ""
+
+#: .././Gui/memviewer.glade.h:17
+msgid "Read Memory from 0x0300-0x03FF"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:3 .././Gui/ms2-e-accel.glade.h:3
+#: .././Gui/ms2-e-corrections_misc.glade.h:2
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:2
+#: .././Gui/ms2-e-rotary-split.glade.h:6 .././Gui/ms2-warmup.glade.h:3
+#: .././Gui/ms2-xtau.glade.h:2 .././Gui/msns-e-crank-ase.glade.h:5
+#: .././Gui/sparktable_12x12x3.glade.h:6 .././Gui/vetable_16x16x3.glade.h:10
+#, no-c-format
+msgid "(%)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:5 .././Gui/ms2-warmup.glade.h:5
+#: .././Gui/ms2-xtau.glade.h:4
+#, no-c-format
+msgid "(Corr %)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:7 .././Gui/ms2-xtau.glade.h:5
+msgid "<small> </small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:8 .././Gui/ms2-xtau.glade.h:6
+msgid "<small>(Accel)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:9 .././Gui/ms2-xtau.glade.h:7
+msgid "<small>(Decel)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:11 .././Gui/ms2-e-accel.glade.h:20
+#, no-c-format
+msgid "<small>Rate (%/s)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:12 .././Gui/ms2-e-accel.glade.h:21
+msgid "<small>Rate (kPa/s)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:13 .././Gui/ms2-warmup.glade.h:19
+#: .././Gui/ms2-xtau.glade.h:8
+msgid "<small>Tau (Time)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:14 .././Gui/ms2-e-crank_idle_warmup.glade.h:22
+#: .././Gui/ms2-warmup.glade.h:20 .././Gui/ms2-xtau.glade.h:9
+msgid "<small>Temp</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:15 .././Gui/ms2-e-accel.glade.h:28
+msgid "<small>Val (ms)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:16 .././Gui/ms2-warmup.glade.h:21
+#: .././Gui/ms2-xtau.glade.h:10
+msgid "<small>X (Puddling)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:17 .././Gui/ms2-xtau.glade.h:11
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">\tMapDOT trending "
+"threshold is the start of MAP Trending for faster AE/X-Tau enrichment\t</"
+"span>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:18 .././Gui/ms2-e-accel.glade.h:29
+msgid "AE Biased towards MAP"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:19 .././Gui/ms2-e-accel.glade.h:30
+msgid "AE Biased towards TPS"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:20 .././Gui/ms2-e-accel.glade.h:31
+msgid "Accel Taper Time (s)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:21 .././Gui/ms2-e-accel.glade.h:32
+#: .././Gui/msns-e-accelwizard.glade.h:11
+msgid "Accel Time"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:22 .././Gui/ms2-e-accel.glade.h:33
+msgid "Acceleration Enrichment Parameters"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:23 .././Gui/ms2-e-accel.glade.h:34
+#: .././Gui/msns-e-accelwizard.glade.h:20
+msgid "Cold Accel Enrich. (ms)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:25 .././Gui/ms2-e-accel.glade.h:36
+#, no-c-format
+msgid "Cold Accel Mult (%)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:28 .././Gui/ms2-e-accel.glade.h:39
+#: .././Gui/msns-e-accelwizard.glade.h:26
+#, no-c-format
+msgid "Decel Fuel Amount (%)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:29 .././Gui/ms2-e-accel.glade.h:42
+#: .././Gui/ms2-e-corrections_misc.glade.h:29
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:46
+#: .././Gui/ms2-e-noise_lag.glade.h:16 .././Gui/ms2-warmup.glade.h:30
+#: .././Gui/ms2-xtau.glade.h:13 .././Gui/PIS-corrections.glade.h:28
+msgid "Edit"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:30 .././Gui/ms2-e-accel.glade.h:43
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:47 .././Gui/ms2-warmup.glade.h:31
+#: .././Gui/ms2-xtau.glade.h:14 .././Gui/PIS-corrections.glade.h:29
+msgid "Edit Group"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:31 .././Gui/ms2-e-accel.glade.h:45
+msgid "End Pulsewidth (ms)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:32 .././Gui/ms2-xtau.glade.h:15
+msgid "Finish Transition<small> (-kpa/second)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:34 .././Gui/ms2-e-accel.glade.h:49
+msgid "High RPM AE Threshold"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:35 .././Gui/ms2-e-accel.glade.h:51
+msgid "Low RPM AE Threshold"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:36 .././Gui/ms2-e-accel.glade.h:52
+msgid "MAP-Based AE"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:37 .././Gui/ms2-e-accel.glade.h:53
+#: .././Gui/msns-e-accelwizard.glade.h:33
+msgid "MAPdot Threshold (kPa/s)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:38
+msgid "MS2-Extra Acceleration Enrichments"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:39 .././Gui/ms2-xtau.glade.h:19
+msgid "MapDOT Trending Threshold<small> (-kpa/second)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:40 .././Gui/ms2-xtau.glade.h:20
+msgid "Max MAP added per sample<small> (kpa)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:42 .././Gui/ms2-xtau.glade.h:22
+msgid "RPM\n"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:44 .././Gui/ms2-e-accel.glade.h:57
+msgid "Simple Accel Enrich"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:45 .././Gui/ms2-xtau.glade.h:24
+msgid "Start Transition<small> (-kpa/second)</small>"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:46 .././Gui/ms2-e-accel.glade.h:58
+msgid "Std TPS/MAP Based Accelleration Enrichments"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:47 .././Gui/ms2-e-accel.glade.h:59
+msgid "TPS-Based AE"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:48 .././Gui/ms2-e-accel.glade.h:60
+#: .././Gui/msns-e-accelwizard.glade.h:42
+msgid "TPSdot Threshold (V/s)"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:49 .././Gui/ms2-xtau.glade.h:25
+msgid ""
+"Tau (Time)\n"
+"Factors"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:51 .././Gui/ms2-xtau.glade.h:27
+msgid ""
+"X (Puddling)\n"
+"Factors"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:53
+msgid "X-Tau Accel Enrich"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:54
+msgid "X-Tau Accel Enrichment"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:55 .././Gui/ms2-xtau.glade.h:29
+msgid "X-Tau Enrichment Tables"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:56 .././Gui/ms2-xtau.glade.h:30
+msgid "X-Tau Temp Compensation"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:57
+msgid "X-Tau params can be accessed from the tab at the top of this window"
+msgstr ""
+
+#: .././Gui/ms2-accel.glade.h:58 .././Gui/ms2-xtau.glade.h:31
+msgid "mapDOT Settings"
+msgstr ""
+
+#: .././Gui/ms2-alpha-n_6x6x1.glade.h:16
+msgid "MS-2 Alpha-N MAP LookupTable from TPS/RPM"
+msgstr ""
+
+#: .././Gui/ms2-alpha-n_6x6x1.glade.h:17
+msgid "MS-2 Alpha-N MAP Lookuptable"
+msgstr ""
+
+#: .././Gui/ms2-alpha-n_6x6x1.glade.h:27
+msgid "`Faked` MAP value from TPS and RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:4 .././Gui/ms2-e-corrections_misc.glade.h:3
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:4 .././Gui/ms2-warmup.glade.h:8
+msgid "(deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:5 .././Gui/ms2-e-corrections_misc.glade.h:4
+msgid "(kpa)"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:6 .././Gui/ms2-e-crank_idle_warmup.glade.h:7
+msgid "(rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:9
+#, no-c-format
+msgid "<small>%</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:10
+msgid ""
+"<small>Adhere-to-Walls\n"
+"CLT Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:12
+msgid ""
+"<small>Adhere-to-Walls\n"
+"Constant</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:14
+msgid ""
+"<small>Adhere-to-Walls\n"
+"RPM Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:16
+msgid "<small>CLT</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:17 .././Gui/ms2-e-corrections_misc.glade.h:9
+msgid "<small>Corr.</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:18
+msgid "<small>RPM</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:22
+msgid ""
+"<small>Sucked-from-Walls\n"
+"CLT Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:24
+msgid ""
+"<small>Sucked-from-Walls\n"
+"Constant</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:26
+msgid ""
+"<small>Sucked-from-Walls\n"
+"RPM Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:40
+msgid "EAE Constants and Corrections"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:41
+msgid "EAE Lag Compensation"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:44
+msgid "Enabled EAE disables traditional Accel Enrichment. See EAE Tab above."
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:46
+msgid "Enhanced Accel Enrich"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:47
+msgid "Enhanced Accel Enrichment"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:50
+msgid "Lag Compensation Source"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:54
+msgid "MAX RPM (rpms)"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:55
+msgid "MS2/2-Extra Acceleration Enrichments"
+msgstr ""
+
+#: .././Gui/ms2-e-accel.glade.h:61
+msgid "Threshold (unit/sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:12
+#, no-c-format
+msgid "Boost Controller,Duty Target, TPS % vs. RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:13
+msgid "Boost Table 1 (Duty Target)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_8x8x2.glade.h:14
+msgid "BoostTable 2 (kPa Target)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:1
+msgid " Open Loop "
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:2
+msgid " closed Loop "
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:4
+#: .././Gui/ms2-knock_dwell.glade.h:11
+msgid "Advance Check Time (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:5
+#: .././Gui/ms2-knock_dwell.glade.h:12
+msgid "Advance Step Size (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:6
+msgid "Advancing"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:7
+#: .././Gui/ms2-e-corrections_misc.glade.h:24
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:25
+#: .././Gui/ms2-idle_ego_rev.glade.h:7
+msgid "Algorithm"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:8
+#: .././Gui/msns-e-boost-knock.glade.h:10
+msgid "Boost Control"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:9
+msgid "Boost Control Pin"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:10
+#: .././Gui/msns-e-boost-knock.glade.h:11 .././Gui/msns-e-features.glade.h:2
+msgid "Boost Controller"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:11
+#: .././Gui/msns-e-boost-knock.glade.h:12
+msgid "Boost Solenoid PWM rate"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:13
+#, no-c-format
+msgid "Closed Duty (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:15
+msgid "Control interval (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:16
+#: .././Gui/ms2-e-corrections_misc.glade.h:28
+msgid "Cut X sparks"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:17
+msgid "Detection"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:18
+#: .././Gui/msns-e-boost-knock.glade.h:16
+msgid "Differential Gain"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:20
+#, no-c-format
+msgid "Enable when TPS over (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:21
+msgid "Flat Shift"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:22
+msgid ""
+"Flat Shift\n"
+"arming RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:24
+msgid ""
+"Flat Shift hard\n"
+"rev limit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:26
+msgid ""
+"Flat shift retard\n"
+"above (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:28
+#: .././Gui/ms2-e-corrections_misc.glade.h:34
+msgid "From Y Events"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:29
+msgid "From Y events"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:31
+msgid "Hysteresis (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:32
+msgid "Input Pin"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:33
+msgid "Integral Gain"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:34
+#: .././Gui/ms2-e-globals.glade.h:27 .././Gui/ms2-knock_dwell.glade.h:17
+#: .././Gui/msns-e-boost-knock.glade.h:22
+msgid "Knock Control"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:35
+#: .././Gui/ms2-knock_dwell.glade.h:18
+msgid "Knock Count (knocks)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:36
+msgid "Knock Ignored above MAP (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:37
+msgid "Knock Input pin"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:38
+msgid "Knock indicated by:"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:39
+#: .././Gui/msns-e-features.glade.h:17
+#: .././Gui/msns-e-water-nos-launch.glade.h:12
+msgid "Launch Control"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:40
+msgid "Launch Retard above (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:41
+msgid "Launch hard limit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:42
+msgid "Limiter Method"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:43
+#: .././Gui/msns-e-boost-knock.glade.h:27
+msgid "MSnS-Extra Boost Control"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:44
+msgid "Maximum Boost (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:45
+msgid "Maximum retard (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:47
+#, no-c-format
+msgid "Open Duty (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:48
+msgid "Output Polarity"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:49
+msgid "Overboost Protection"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:51
+msgid "Prop. Gain"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:52
+msgid "Pullup/down on input"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:53
+msgid "RPM window high (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:54
+msgid "RPM window low (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:55
+#: .././Gui/ms2-knock_dwell.glade.h:30
+msgid "Recovery Advance (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:56
+#: .././Gui/ms2-knock_dwell.glade.h:31
+msgid "Retard Check Time (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:57
+#: .././Gui/ms2-knock_dwell.glade.h:32
+msgid "Retard Step Size (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:58
+msgid "Retard to (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:59
+msgid "Retard to: (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-boost_knock_launch.glade.h:60
+msgid "Retarding"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:5
+msgid "(volts)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:6
+msgid "<big>Go to idle advance when:</big>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:7
+msgid "<small>Baro.</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:8
+msgid "<small>Batt</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:10
+msgid ""
+"<small>Dwell Battery\n"
+"Adjustment</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:12
+msgid "<small>Fuelload</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:13
+msgid ""
+"<small>Idle Advance\n"
+"Timing</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:15
+msgid ""
+"<small>MAT Based\n"
+"Timing Retard</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:17
+msgid "<small>MAT.</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:18
+msgid ""
+"<small>Nonlliear Baro\n"
+"Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:20
+msgid ""
+"<small>Nonlliear MAT\n"
+"Correction</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:22
+msgid "<small>Retard</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:23
+msgid "<small>Timing</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:25
+msgid "Be sure nothing else uses this pin."
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:26
+msgid "CLT Based?"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:30
+msgid "Edit All"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:31
+msgid "Edit CLT Based Revlimiter Bins"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:32
+msgid "Flex Fuel"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:33
+msgid "FlexFuel Sensor"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:35
+msgid ""
+"Fuel Table\n"
+"Switching"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:38
+msgid "Hard RevLimit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:40
+#, no-c-format
+msgid "High Freq Fuel Corr. (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:41
+msgid "High Freq Timing Corr. (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:42
+msgid "High Frequency (Hz)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:44
+msgid "Idle Advance Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:46
+#, no-c-format
+msgid "Low Freq Fuel Corr. (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:47
+msgid "Low Freq Timing Corr. (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:48
+msgid "Low Frequency (Hz)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:49
+msgid "MAP greater than (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:50
+msgid "MAT Correction Value"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:52
+#, no-c-format
+msgid "MAT correction scaling (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:53
+msgid "MS2-Extra Corrections and Misc Features"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:54
+msgid "Max Retard (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:55
+msgid "Misc Corrections"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:56
+msgid "Output Pin"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:58
+msgid "RPM when in TPS bypass (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:59
+#: .././Gui/ms2-e-globals.glade.h:38 .././Gui/ms2-globals.glade.h:41
+#: .././Gui/ms2-idle_ego_rev.glade.h:38
+msgid "Rev Limiter"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:60
+msgid "RevLimit Adder (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:62
+#, no-c-format
+msgid "RevLimit TPS bypass (TPS%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:63
+msgid "Sensor Pin"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:64
+msgid "Soft RevLimit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:65
+msgid "Source"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:66
+msgid ""
+"Spark Table\n"
+"Switching"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:68
+msgid "Speed"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:70
+#, no-c-format
+msgid "TPS greater than (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:72
+#, no-c-format
+msgid "TPS is below: (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:73
+msgid "Table Switching"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:74
+msgid "Tach Output"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:75
+msgid "Tachometer Output"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:77
+#, no-c-format
+msgid ""
+"This value allows you to scale down the built in air density (MAT) "
+"correction. 100% means the PV=nRT ideal gas law is followed, Lower values "
+"give less aggressive correction, (0% is interpreted as 100% for backwards "
+"compatibility) This value and the table are used at the same time."
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:78
+msgid "after delay: (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:79
+msgid "and CLT is above:"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:80
+msgid "and RPM is below:"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:82
+#, no-c-format
+msgid "and load is above: (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-corrections_misc.glade.h:83
+msgid "rpm greater than (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:3 .././Gui/ms2-warmup.glade.h:7
+msgid "(cycles)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:5
+msgid "(duty cyc)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:6 .././Gui/ms2-warmup.glade.h:9
+msgid "(ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:8
+msgid "(steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:9
+msgid "<b>Cranking and Afterstart Enrichment vs Temp</b>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:10
+msgid "<b>Warmup Enrich,Cold Advance, Idle, vs Temp</b>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:11 .././Gui/ms2-warmup.glade.h:12
+msgid "<small>ASE Taper</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:12 .././Gui/ms2-warmup.glade.h:13
+msgid "<small>ASE</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:13 .././Gui/ms2-warmup.glade.h:14
+msgid "<small>Cold Adv.</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:14
+msgid "<small>Coolant</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:15 .././Gui/ms2-warmup.glade.h:15
+msgid "<small>Cr. Pulse</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:16
+msgid "<small>Crank Duty</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:17
+msgid "<small>Crank Steps</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:18 .././Gui/ms2-warmup.glade.h:16
+msgid "<small>Idle PWM</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:19
+msgid "<small>Idle RPM</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:20 .././Gui/ms2-warmup.glade.h:17
+msgid "<small>Idle Steps</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:21 .././Gui/ms2-warmup.glade.h:18
+msgid "<small>Pr. Pulse</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:23
+msgid "<small>Warmup Enr.</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:24
+msgid "<span background=\"red\" foreground=\"white\"> Start Value </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:26
+msgid "Close Delay (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:27
+msgid "Closed Loop Idle"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:28
+msgid "Closed Loop Idle PID Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:29
+msgid "Clt Based Cranking Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:30
+#: .././Gui/ms2-idle_ego_rev.glade.h:8
+msgid "Cold Position (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:31
+#: .././Gui/ms2-idle_ego_rev.glade.h:9
+msgid "Cold Taper Time (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:32
+msgid "Cold Temp"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:34
+msgid "Common Closed Loop Idle Valve Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:35
+msgid "Crank-to-Run Taper Time(s)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:36
+msgid "Cranking RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:37
+msgid "Cranking Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:38
+msgid "Cranking and Warmup"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:39
+msgid "Cranking and Warmup Tables"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:40
+#, fuzzy
+msgid "Cranking fuel pulse rate: "
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:42
+#, no-c-format
+msgid "Dashpot Adder (duty %)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:43
+msgid "Dashpot Adder (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:45
+#, no-c-format
+msgid "Derivative Gain (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:48
+msgid ""
+"Engines with lots of cylinders such as a V12 may find that injecting fuel on "
+"every tach event gives difficult hot starting. This option allows the fuel "
+"to be injected on alternate events (with twice the PW)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:49
+msgid "Fast Idle Temp"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:51
+#, no-c-format
+msgid "Flood clear TPS(%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:53
+#: .././Gui/ms2-idle_ego_rev.glade.h:22 .././Gui/ms2-user_outputs.glade.h:6
+msgid "Hysteresis"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:54
+msgid "IAC Idle Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:55
+msgid "IAC Stepper Closed Loop Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:56
+msgid "IAC Stepper Open Loop Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:57
+msgid "Idle Activation RPM adder (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:59
+#, no-c-format
+msgid "Idle Activation TPS threshold (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:60
+#: .././Gui/ms2-idle_ego_rev.glade.h:23 .././Gui/msns-e-idle.glade.h:16
+msgid "Idle Control"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:61
+msgid "Idle Valve Closed Steps (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:63
+#, no-c-format
+msgid "Idle Valve Closed duty (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:65
+#, no-c-format
+msgid "Idle Valve Open Duty (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:66
+msgid "Idle Valve Open Steps (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:67
+msgid "Initial Time Step Size (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:69
+#, no-c-format
+msgid "Integral Gain (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:70 .././Gui/ms2-warmup.glade.h:37
+#: .././Gui/ms2-xtau.glade.h:17
+msgid "MS-II Warmup Params"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:71 .././Gui/ms2-warmup.glade.h:38
+#: .././Gui/ms2-xtau.glade.h:18
+msgid "MS-II Warmup/ASE"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:72
+msgid "Min # of steps to move (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:74
+#, no-c-format
+msgid "Min Duty for PID (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:76
+#, no-c-format
+msgid "Min Steps for PID (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:77
+msgid "NOTE: Close delay of 0 means don't close"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:78
+msgid "PID Control Interval (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:79
+msgid "PID Lockout Detection"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:80
+msgid "PID delay (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:82
+#, no-c-format
+msgid "PID lockout max decel load (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:83
+msgid "PID ramp to target Time (sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:84
+msgid "PWM Closed Loop Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:85
+msgid "PWM Freq."
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:86
+msgid "PWM Idle Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:89
+#, no-c-format
+msgid "Proportional Gain (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:90
+msgid "RPM with Valve Closed (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:91
+msgid "RPM with Valve Open (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:92
+msgid ""
+"The primary idle control\n"
+" parameters are in the \n"
+"Idle subtab.  See the top\n"
+"of this window to get there..."
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:96
+msgid "Time Step Size (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:97
+msgid "Valve Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-crank_idle_warmup.glade.h:98
+msgid "lockout rpmDOT thresh. (rpm/sec)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:1
+msgid ""
+"<b><span background=\"red\" foreground=\"white\">     FOR EXPERT USE "
+"ONLY     </span></b>"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:2
+msgid "<big>For PWM valves enter 0-100, for stepper,  0-255</big>"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:3
+msgid "<big>Set the steps <b>before</b> enabling testing</big>"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:4
+msgid "Board Type (not used)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:5
+msgid "CAN Parameters"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:6
+msgid "Coil Output to test"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:8
+msgid "Debug Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:9
+msgid ""
+"Debug output in\n"
+"GPIOADC fields"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:11
+msgid "Dwell (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:12
+msgid "Enable initial values"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:13
+msgid "Enable status4 for tooth and status5 for time after tooth."
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:14
+msgid "Enter '12345' and hit burn to enable Test Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:15
+msgid "Experimental Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:16
+msgid "Fuel Pump"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:18
+msgid "IAC home position (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:19
+msgid "IAC run position (steps)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:20
+msgid "Idle Actuator Testing"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:21
+msgid "Idle Valve Test"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:22
+msgid "Inj. Channel to test"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:23
+msgid "Inj. PWM Params"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:24 .././Gui/ms2-globals.glade.h:23
+msgid "Injector PWM Period (us)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:25
+msgid "Injector Sequencing"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:26
+msgid "Injector Time mask"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:27
+msgid "Injector sequence start"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:28
+msgid ""
+"Missing Tooth Wheel\n"
+"debugging"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:30
+msgid "Move to which position?"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:31
+msgid "My CAN ID"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:32
+msgid "Output Interval (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:33
+msgid "Output Test Modes"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:34
+msgid "PW (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:36 .././Gui/ms2-e-globals.glade.h:31
+#: .././Gui/ms2-globals.glade.h:35
+#, no-c-format
+msgid "PWM Current Limit (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:37
+msgid "PWM Time Threshold (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:39
+msgid "Poll Remote"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:40
+msgid "Remote CAN ID"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:41 .././Gui/template.glade.h:9
+msgid "Template Tab"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:42
+msgid "Test Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:43
+msgid "Total Number of injections"
+msgstr ""
+
+#: .././Gui/ms2-e-debugging.glade.h:44
+msgid "Vanos cam position debugging"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:1
+msgid "<big>Bank 1</big>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:2
+msgid "<big>Bank 2</big>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:3
+msgid "<small>Default baro (kPa)</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:4
+msgid "<small>High Limit (kPa)</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:5
+msgid "<small>Low Limit (kPa)</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:6
+msgid ""
+"<span background=\"red\" foreground=\"white\">Spark Mode <small>(Input "
+"Trigger)</small> </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:7 .././Gui/ms2-globals.glade.h:2
+msgid "Baro Correction"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:8 .././Gui/ms2-globals.glade.h:3
+msgid "Batt. Voltage Correction (ms/V)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:10 .././Gui/ms2-globals.glade.h:6
+#: .././Gui/PIS-settings.glade.h:16
+msgid "Cylinders"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:11 .././Gui/ms2-globals.glade.h:7
+msgid "ECU Global Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:12 .././Gui/ms2-globals.glade.h:9
+msgid "EGO Sensor Type(s)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:13
+msgid "Enchanced Accel Enrich"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:15
+msgid "Engine Type"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:16 .././Gui/ms2-globals.glade.h:12
+#: .././Gui/ms2-misc-fuel.glade.h:13
+msgid "Flex Fuel Sensor"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:18 .././Gui/ms2-globals.glade.h:16
+msgid "Idle Control Algorithm"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:19
+msgid "InIjector PWM Period (us.)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:20
+msgid "Incorporate AFRTarget"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:21 .././Gui/ms2-globals.glade.h:17
+msgid "Injection Parameters"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:22 .././Gui/ms2-globals.glade.h:20
+msgid "Injector Characteristics"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:23 .././Gui/ms2-globals.glade.h:21
+msgid "Injector Layout"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:24 .././Gui/ms2-globals.glade.h:22
+msgid "Injector Open Time (msec)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:25 .././Gui/ms2-globals.glade.h:24
+#: .././Gui/msns-e-advanced.glade.h:23
+msgid "Injector Staging"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:26 .././Gui/ms2-globals.glade.h:25
+msgid "Injectors"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:28 .././Gui/ms2-globals.glade.h:33
+msgid "MS-2 Basic Parameters"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:29
+msgid "Multiply MAP"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:32 .././Gui/ms2-globals.glade.h:36
+msgid "PWM Time Threshold (msec)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:34
+msgid "Primary Fuel Algorithm"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:35
+msgid "Primary Ignition Load"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:36
+msgid "Realtime Baro Port"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:37 .././Gui/ms2-globals.glade.h:40
+msgid "Required Fuel"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:39
+msgid "Secondary Fuel"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:40
+msgid "Secondary Fuel Load"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:41
+msgid "Secondary Ignition Load"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:42
+msgid "Single/Dual Table"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:43 .././Gui/ms2-globals.glade.h:42
+msgid "Squirts/Cycle"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:44
+msgid "Stoichiometric AFR"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:45 .././Gui/ms2-globals.glade.h:46
+msgid "per Cycle (ms.)"
+msgstr ""
+
+#: .././Gui/ms2-e-globals.glade.h:46 .././Gui/ms2-globals.glade.h:47
+msgid "per Squirt (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:1 .././Gui/ms2-e-noise_lag.glade.h:1
+#: .././Gui/ms2-ignition.glade.h:1
+msgid ""
+"<b><span background=\"red\" foreground=\"white\">\t\t\t\t\t\t\t\t\t\t\t\n"
+"\t\tRed Settings require an MS-II Reboot\t\n"
+"\t\t\t\t\t\t\t\t\t\t\t</span></b>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:4
+msgid ""
+"<span background=\"red\" foreground=\"white\"> 2nd Trig active on </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:5
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Ign Input Capture </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:6 .././Gui/ms2-ignition.glade.h:9
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Missing Teeth (teeth)</span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:7
+msgid "<span background=\"red\" foreground=\"white\"> Spark Mode </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:8
+msgid "<span background=\"red\" foreground=\"white\"> Spark Output </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:9
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Tooth #1 Angle (deg BTDC) </"
+"span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:10 .././Gui/ms2-ignition.glade.h:12
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Trigger Wheel Teeth (teeth)</"
+"span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:11
+msgid "<span background=\"red\" foreground=\"white\"> Wheel Speed </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:12
+msgid ""
+"<span background=\"red\" foreground=\"white\"> and every rotation of </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:13
+msgid "Accel Compensation (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:14
+msgid "Advance Source"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:15
+msgid "Angle between trigger and return (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:17
+msgid "Cranking Advance (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:18
+msgid "Cranking Dwell (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:19 .././Gui/PIS-corrections.glade.h:27
+msgid "Dwell"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:21
+#, no-c-format
+msgid "Dwell Duty (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:22
+msgid "Dwell Time(ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:23
+msgid "Dwell Type"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:24
+msgid "Fixed Advance"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:25
+msgid "GM HEI/DIS"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:26
+msgid "General Ignition Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:27
+msgid "Generic Trigger Wheel Settings"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:29 .././Gui/ms2-e-noise_lag.glade.h:27
+#: .././Gui/ms2-ignition.glade.h:33
+msgid "MS2 Ignition Parameters"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:30
+msgid "Max Dwell Duration (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:31
+msgid "Max Spark Duration (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:32
+msgid "Middle LED indicator"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:33
+msgid "Number of Coils"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:34
+msgid "Oddfire Phasing"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:35
+msgid "Oddfire Small Angle (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:36
+msgid "Over-Dwell Protection"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:38
+msgid "Skip Pulses (at startup)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:39
+msgid ""
+"Spark A output pin\n"
+"<small>(D14 Preferred)</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:41
+msgid "Spark Hardware Latency (usec)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:42
+msgid "Timing for Fixed Advance (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:43
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:40
+#: .././Gui/msns-e-wheeldecode.glade.h:39
+msgid "Trigger Angle (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:44
+msgid "Trigger wheel type"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:45
+msgid "Under-Dwell Protection"
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:46
+msgid "Use CAM signal if avail."
+msgstr ""
+
+#: .././Gui/ms2-e-ignition.glade.h:47
+msgid "Use Prediction"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:2
+msgid "0q"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:3
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Primary Injector Size (cc) </"
+"span>"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:4
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Secondary Injector Size (cc) "
+"</span>"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:5
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Staged Injection 1st param.</"
+"span>"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:6
+msgid "Additional Fuel PW @ N<sub>2</sub>O max rpm(ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:7
+msgid "Additional Fuel PW @ N<sub>2</sub>O min rpm(ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:8
+msgid "Additional fuel PW @ N<sub>2</sub>O max rpm (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:9
+msgid "Additional fuel PW @ N<sub>2</sub>O min rpm (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:10
+msgid "And CLT temp above (units)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:12
+#, no-c-format
+msgid "And TPS > (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:14
+msgid "Cut Fuel when:"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:15
+msgid "Delay EGO after fuel return (s)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:16
+msgid "Delay after stage 1(s)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:17
+msgid "Enable N<sub>2</sub>0 above (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:18
+msgid "Enable Stage 2 above (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:19
+msgid "Enable input pin"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:20
+msgid ""
+"Enrich which bank\n"
+"in DualTable Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:23
+msgid "If Stage 2 off, retard timing by (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:24
+msgid "MS2-Extra Staged Injection. Nitrous and OverRun Fuel Cut"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:25
+#: .././Gui/PIS-settings.glade.h:39
+msgid "Max RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:26
+msgid "Max RPM for N<sub>2</sub>O usage"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:27
+msgid "Nitrous Control"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:28
+#: .././Gui/msns-e-water-nos-launch.glade.h:29
+msgid "Nitrous Oxide System"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:29
+msgid "Nitrous delay after flat shift(s)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:30
+msgid "Nitrous delay after launch (s)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:31
+msgid ""
+"Ouput pins for\n"
+"stage 1 and 2"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:33
+msgid "Over Run Fuel Cut"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:34
+msgid "Over Run Fuel Cut (decel cut)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:36
+msgid "Primary reduction delay (ign events)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:37
+msgid "Primary staging hysteresis (units)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:38
+msgid "Primary staging threshold (units)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:39
+msgid "RPM greater than (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:40
+msgid "Retard Timing by (deg)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:41
+msgid "Secondary Staging Logic"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:42
+msgid "Secondary enrichment (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:43
+msgid "Secondary staging hysteresis (units)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:44
+msgid "Secondary staging threshold (units)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:45
+msgid "Stage 2 Nitrous"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:46
+msgid "Staged Injection"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:47
+msgid ""
+"Staged Injection\n"
+"2nd Parameter"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:49
+msgid "Staging Gradual Transition"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:50
+msgid "Transition Events (ign events)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:51
+msgid "after delay (s)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:52
+msgid "and CLT greater than: (degf)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:53
+msgid "and MAP lower than (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-e-nitrous_staging_orfc.glade.h:55
+#, no-c-format
+msgid "and TPS lower than (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:4
+msgid "<small>(rpm)</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:5
+msgid "<small>uSecs</small>"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:6
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Cam Noise Filtering </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:7
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Crank Noise Filtering </span>"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:9
+#, no-c-format
+msgid "After-start (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:10
+msgid "CLT/MAT/Battery Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:12
+msgid "Crank Noise Filtering"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:14 .././Gui/ms2-ignition.glade.h:24
+#, no-c-format
+msgid "Cranking (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:15
+msgid "EDIS Noise Filtering"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:17
+msgid "Engine RPM"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:18
+msgid ""
+"False Trigger\n"
+"method"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:20
+msgid "Filter Period"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:22
+msgid "Input Smoothing/Lag Factors"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:23
+msgid "Lambda/AFR Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:24
+msgid "MAP Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:26
+#, no-c-format
+msgid "MAP Sampling percent mask (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:29
+#, no-c-format
+msgid ""
+"NOTE: MAP sample percent mask will cause MAP\n"
+"to be sampled a certain percentage between\n"
+"tach events. 50% will sample halfway\n"
+"between tach events."
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:33
+msgid "Next Pulse Tolerance"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:34
+msgid "Noise Filter"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:35
+msgid "Noise Filter Time Period (uSec)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:37
+#, no-c-format
+msgid "Normal Running (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:39
+#, no-c-format
+msgid "Percentage (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:41 .././Gui/ms2-ignition.glade.h:37
+#, no-c-format
+msgid "Percentage Mask (%)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:43
+msgid "Polarity Checking"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:44 .././Gui/ms2-globals.glade.h:39
+msgid "RPM Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:45 .././Gui/ms2-globals.glade.h:43
+msgid "TPS Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:46
+msgid "Tach Interrupt Masking"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:47
+msgid "Tach Period Rejection"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:48
+msgid "Time (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-noise_lag.glade.h:49
+msgid "Time Mask (ms)"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:12 .././Gui/rotary-trail.glade.h:19
+msgid ""
+"Focus follows Vertex\n"
+"with most \"Weight\""
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:15
+msgid "Ign Load"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:18
+msgid "MS2-Extra Rotary Split Table"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:19
+msgid "Negative Split"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:20
+msgid "Output Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:23
+msgid "RX-8 Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:26
+msgid "Rotary Mode"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:27
+msgid "Rotary Parameters"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:28
+msgid "Rotary Split Table"
+msgstr ""
+
+#: .././Gui/ms2-e-rotary-split.glade.h:29
+msgid "Rotary Split table"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:1
+msgid "Composite Wheel Logger"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:2
+#: .././Gui/msns-e-toothtrigger.glade.h:1
+msgid "Disabled"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:3 .././Gui/ms2-user_outputs.glade.h:4
+#: .././Gui/msns-e-toothtrigger.glade.h:2 .././Gui/PIS-settings.glade.h:18
+msgid "Enabled"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:4
+#: .././Gui/msns-e-toothtrigger.glade.h:3
+msgid "MSnS-Extra Tooth/Trigger Logger"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:5
+msgid ""
+"The above display shows a graphical representaiton of the crank or crank/cam "
+"wheels"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:6
+#: .././Gui/msns-e-toothtrigger.glade.h:5
+msgid "Tooth Logger"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:7
+#: .././Gui/msns-e-toothtrigger.glade.h:6
+msgid "Trigger Logger"
+msgstr ""
+
+#: .././Gui/ms2-e-toothtrigger.glade.h:8
+msgid "Trigger/Tooth/Composite Wheel Logger"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:1 .././Gui/ms2-misc-fuel.glade.h:7
+msgid "Automatic Mixture Control"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:4
+msgid "CLT/IAT/Battery Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:8
+msgid "ECU Type                         "
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:10
+msgid "Engine Displacement (cu. in.)"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:13
+msgid "Fuel Injection Algorithm"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:14 .././Gui/msns-e-features.glade.h:10
+msgid "Fueling Mode"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:19
+#, no-c-format
+msgid "Injection Timing Delay (%)"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:26
+msgid "Input Smoothing and Sampling Rates"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:27
+msgid "Knock Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:28
+msgid "Lambda Averaging Lag Factor"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:29 .././Gui/ms2-misc-fuel.glade.h:23
+msgid "MAF Hardware Config"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:30
+msgid "MAF Sensor"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:31
+msgid "MAP Sample Rate (msec)"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:32
+msgid "MAP/MAF Averaging Lag Factor  "
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:38
+msgid "Prime, ASE, WUE, Baro"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:44
+msgid "TPS Sample Rate (msec)"
+msgstr ""
+
+#: .././Gui/ms2-globals.glade.h:45
+msgid "X-Tau Usage"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:1
+msgid "Acceleration Step Size (msec)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:2
+msgid "Active Above RPM"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:3
+msgid "Active Below MAP (KPa)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:5
+#, no-c-format
+msgid "Active Below TPS (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:6
+msgid "Active above CLT"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:10
+msgid "Cold Temperature"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:13
+#, no-c-format
+msgid "Controller Authority (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:15
+#, no-c-format
+msgid "Controller Step Size (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:16
+msgid "Crank-to-Run Taper Time (sec)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:17
+msgid "Cranking Position (extend, steps)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:18
+msgid "EGO Control"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:19
+msgid "EGO Sensor(s) Type"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:20
+msgid "Fast Idle Temp "
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:24
+msgid "Ign. Events per Step"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:25
+msgid "Lower Limit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:26
+msgid "MS2 Idle/Revlimiter/EGO Settings"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:27 .././Gui/ms2-knock_dwell.glade.h:24
+msgid "Maximum Retard (deg)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:28
+msgid "Min # Steps to move"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:29
+msgid "NB Switching Voltage"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:31
+#, no-c-format
+msgid "PID Derivative (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:33
+#, no-c-format
+msgid "PID Integral (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:35
+#, no-c-format
+msgid "PID Proportional Gain (%)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:36
+msgid "PWM Frequency (Hz)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:39
+msgid "Start Value (retract)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:40
+msgid "Time Step Size (msec)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:41
+msgid "Time-Based After Start (extended warm-up)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:42
+msgid "Transport Delay 2 (revs)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:43
+msgid "Transport delay 1 (msec)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:44
+msgid "Upper Limit (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-idle_ego_rev.glade.h:45
+msgid "Wideband Controller Settings"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:4
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Coil Charge Scheme</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:5
+msgid "<span background=\"red\" foreground=\"white\"> Cranking Trigger</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:6
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Delay Teeth (teeth)</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:7
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Dual Spark Options </span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:8
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Ignition Input Capture</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:10
+msgid ""
+"<span background=\"red\" foreground=\"white\"> Skip teeth (teeth)</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:11
+msgid "<span background=\"red\" foreground=\"white\"> Spark Output</span>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:13
+msgid "Advanced Ignition Settings"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:15
+#, no-c-format
+msgid "After-Start (%)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:17
+#, no-c-format
+msgid "Alpha (%)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:18
+msgid "Base Ignition Settings"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:20
+#, no-c-format
+msgid "Beta (%)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:21
+msgid "Check Tach Sync Option"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:25
+msgid "Dual Spark Ignition Options"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:26
+msgid "FET Output Delay (µSec)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:27
+msgid "Full IAT Retard (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:29
+#, no-c-format
+msgid "Gamma (%)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:31
+msgid "IAT-Based Spark Retard Limiting Opions"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:32
+msgid "Ignition Predictor Settings"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:34
+msgid "Next-Pulse Tolerance"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:35
+msgid "Offset (advance) for Output #2 (deg)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:40
+#, no-c-format
+msgid "Running (%)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:41
+msgid "Signal Delay Parameters"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:42
+msgid "Skip Pulses"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:43
+msgid "Start IAT Retard (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:44
+msgid "Tach Signal Masking"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:45
+msgid "Time Mask (msec)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:46
+msgid "Trigger Offset (deg)"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:47
+msgid "Trigger Wheel (set to 0 for no wheel) <b>Set only with engine OFF!</b>"
+msgstr ""
+
+#: .././Gui/ms2-ignition.glade.h:48
+msgid "VR Input Delay (µsec/1000rpm)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:1
+msgid "<b><i>Additional</i> Dwell</b>"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:2
+msgid "<b>Detection</b>"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:3
+msgid ""
+"<b>RPM</b>\n"
+"(rpm)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:5
+msgid "<b>Recovery</b>"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:6
+msgid "<b>Retarding</b>"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:7
+msgid ""
+"<b>Threshold</b>\n"
+"(volts)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:9
+msgid "<b>Voltage</b>"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:10
+msgid "Accel Compensation (msec)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:13
+msgid "Battery Voltage Compensation"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:15
+msgid "Dwell Settings"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:19
+msgid "Knock Sensor Settings"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:20
+msgid "Knock Thresholds"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:21
+msgid "MS2 Knock and Dwell Parameters"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:22
+msgid "Max Dwell Duration (msec)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:23
+msgid "Max Spark Duration (msec)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:25
+msgid "No Knock Above MAP (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:26
+msgid "No Knock Above RPM (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:27
+msgid "No Knock Below RPM (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:28
+msgid "Peak (V)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:33
+msgid "Threshold  (V)"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:34
+msgid "Threshold Direction"
+msgstr ""
+
+#: .././Gui/ms2-knock_dwell.glade.h:35
+msgid "View Graphically"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:1
+msgid "<b>Must</b> have EGO correction enabled for AMC to operate!"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:2
+msgid ""
+"<b>NOTE:</b> MAF must <b>NOT</b> be on\n"
+"MAP pin for MAF/MAP blend."
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:4
+msgid "AFR Table Calc"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:5
+msgid "Additional Fuel (switched by E0 or cyclic"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:6
+msgid "Alpha-N Blending"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:8
+msgid "Baro Spark Advance (deg/kPa over 100)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:9
+msgid "Blend to SD Threshold (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:11
+msgid "Edit MAF Correction Table"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:12
+msgid "Flash Update Interval (sec)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:14
+msgid "Flex Fuel Settings"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:15
+msgid "Frequency (high) (Hz.)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:16
+msgid "Frequency (low) (Hz.)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:18
+#, no-c-format
+msgid "Fuel Correction (high) (%)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:20
+#, no-c-format
+msgid "Fuel Correction (low) (%)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:22
+msgid "Invert above settings"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:24
+msgid "MAF Only Below RPM (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:25
+msgid "MAF Sensor Usage"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:26
+msgid "MAF vs. MAP Usage"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:27
+msgid "MAP Only Above RPM (rpm)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:28
+msgid "MAP/MAF Blend Settings"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:29
+msgid "Max Cranking Speed (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:31
+#, no-c-format
+msgid "Minimum VE Change (%)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:32
+msgid "Misc Fuel Settings"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:33
+msgid "NB AFR Stoich Voltage"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:35
+#, no-c-format
+msgid "Nitrous Oxide Enrichment (%)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:36
+msgid "Other Fuel Settings"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:38
+msgid "Pure AN to Blend Threshold (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:39
+msgid "See Tables for MAF flow setting"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:40
+msgid "Spark Retard when N2O Active (deg)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:42
+#, no-c-format
+msgid "Step Size (%)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:43
+msgid "Table Change Inverval (sec)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:44
+msgid "Timing Correction (high) (deg.)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:45
+msgid "Timing Correction (low) (deg.)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:46
+msgid "Update After (events)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:47
+msgid "Use MAP/baro for tables"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:48
+msgid "VE Table Adjustments"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:49
+msgid "Vertex Tolerance (RPM)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:50
+msgid "Vertex Tolerance (kPa)"
+msgstr ""
+
+#: .././Gui/ms2-misc-fuel.glade.h:51
+msgid "WB AFR Stoich Value (AFR)"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:1
+msgid "<b>Output Ports</b>"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:3
+msgid "Conditions"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:7
+msgid "MS2 User Outputs"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:8
+msgid "Output Channel"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:9
+msgid "PA0 - Knock Enable"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:10
+msgid "PM2 - Fidle"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:11
+msgid "PM3 - Inj LED"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:12
+msgid "PM4 - Accel LED"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:13
+msgid "PM5 - Warmup LED"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:14
+msgid "PT6 - IAC1"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:15
+msgid "PT7 - IAC2"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:17
+msgid "Port Settings"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:18
+msgid "Power On Value"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:19
+msgid "Threshold"
+msgstr ""
+
+#: .././Gui/ms2-user_outputs.glade.h:20
+msgid "Trigger Value"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:1
+msgid "   "
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:6
+msgid "(Steps)"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:10
+msgid "2-Point Baro Correction"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:11
+msgid "2-Point Priming Pulse"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:22
+msgid "ASE Settings"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:24
+#, no-c-format
+msgid "At Total Vacuum<small> (%)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:26
+#, no-c-format
+msgid "Cold ASE<small> (%)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:27
+msgid "Cold Count<small> (cyc.)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:29
+msgid "Data Sources"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:34
+#, no-c-format
+msgid "Hot ASE<small> (%)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:35
+msgid "Hot Count<small> (cyc.)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:36
+msgid "Hot Start ASE ?"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:40
+msgid "Pr. Delay<small> (sec)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:41
+msgid "Priming Pulse<small> (ms)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:43
+#, no-c-format
+msgid "Rate<small> (%)</small>"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:44
+msgid "Two-Point ASE Params"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:45
+msgid "Warmup Data Sources"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:46
+msgid "Warmup Tables"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:47
+msgid "When Cold"
+msgstr ""
+
+#: .././Gui/ms2-warmup.glade.h:48
+msgid "When Hot"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:2
+msgid ""
+"Accel Enrich\n"
+"Decay"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:4
+msgid ""
+"Accel Enrich\n"
+"Trigger"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:6
+msgid ""
+"Accel Enrich\n"
+"during ASE"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:8
+msgid ""
+"Accel Enrich\n"
+"in Boost"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:10
+msgid "Accel Enrich Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:12
+msgid "Accel Time: (ms)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:13
+msgid ""
+"Accel Timer \n"
+"Units"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:15
+msgid ""
+"Accel val @ end\n"
+"of decay time"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:17
+msgid "Acceleration Enrichments Tables"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:18
+msgid ""
+"Alternative AE \n"
+"Scheme"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:22
+#, no-c-format
+msgid "Cold Accel Muliplier (%)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:24
+msgid "Decel Cut Setpoint (KPa)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:27
+msgid "Decel Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:28
+msgid "Eng. RPM"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:30
+msgid "MAP Threshold (kPa/s)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:31
+msgid "MAP-Based"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:32
+msgid "MAPdot Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:34
+msgid "MSnS-Extra Accel Enrichment Wizard"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:36
+msgid "RPM Based Accel Enrichment"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:37
+msgid "RPM-Based"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:38
+msgid "Rate (V/s)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:39
+msgid "Rate (kPa/s)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:40
+msgid "TPS Threshold (V/s)"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:41
+msgid "TPS-Based"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:43
+msgid ""
+"Turn Decel Enrich\n"
+"off when:"
+msgstr ""
+
+#: .././Gui/msns-e-accelwizard.glade.h:45
+msgid "Value (ms)"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:2
+msgid ""
+"Additional Staging\n"
+"threshold?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:4
+msgid "Advance latency controls"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:5
+msgid "Advanced Options"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:6
+msgid "Barometric Correction"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:7 .././Gui/msns-e-boost-knock.glade.h:8
+#: .././Gui/msns-e-water-nos-launch.glade.h:5
+msgid "Base Sparks"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:9
+msgid ""
+"Constant Baro\n"
+"Correction? "
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:11
+msgid ""
+"Constant Baro\n"
+"corr. in Alpha-N ?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:13
+msgid ""
+"False Trigger\n"
+"Detection?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:15
+msgid "Fuel cut when RPM over"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:17
+msgid "Hard Limiter Style"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:18
+msgid "Hard Rev-Limiter RPM"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:19
+msgid ""
+"Hybrid Alpha-N\n"
+"Mode"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:21
+msgid "Ignition Latency"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:22
+msgid "Injector Bank 2 <b>OFF</b> until:"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:24
+msgid ""
+"Injector Staging\n"
+"Style"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:26
+msgid "Injector Staging Delay"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:27
+msgid "KPA Staging Off Delta"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:28
+msgid "KPa Staging Threshold"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:29
+msgid "Max KPa for Baro Correction"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:30
+msgid "Max Time on Soft Limiter"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:31
+msgid "MegaSquirtnSpark  Extra Advanced Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:32
+msgid "Min KPa for Baro Correction"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:33
+msgid "Over-run Fuel Cut"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:35
+msgid "Rev-Limiter Settings"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:36
+msgid "Scaling Factor (Primary Flow / Total Flow)"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:37
+#: .././Gui/msns-e-water-nos-launch.glade.h:38
+msgid "Soft Limit Spark Angle"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:38
+msgid "Soft Rev-Limit RPM"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:39
+msgid "Sparks to Cut"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:40
+msgid "Staging Off delta "
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:41
+msgid "Staging point"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:42
+msgid "Then reduce Banks #1 and #2 by Scaling Factor"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:43
+msgid "Use Baro Correction?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:44
+msgid ""
+"Use MAF\n"
+"Sensor on X7?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:46
+msgid ""
+"Use MAF Air\n"
+"Density Correction?"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:48
+msgid "afer  this many seconds:"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:49
+msgid "and CLT greater than:"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:50
+msgid "and MAP lower than:"
+msgstr ""
+
+#: .././Gui/msns-e-advanced.glade.h:51
+msgid "and TPS lower than:"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:2
+msgid "100"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:3
+msgid "<i>Boost Related Knock controls</i>"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:4
+msgid "<i>Knock Ignition Retard Settings</i>"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:5
+msgid "<i>Knock Ignore Params</i>"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:6
+msgid "Above x RPM"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:7
+msgid "Advance when no knock"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:9
+msgid "Below x RPM"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:13
+msgid "Closed Loop kPa Limit"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:15
+msgid "Cut Sparks"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:17
+msgid "First knock, retard by (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:19
+msgid "IAT to start reducing @"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:20
+msgid ""
+"Increase in boost\n"
+"ctrlr output gives:"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:23
+msgid ""
+"MAX Boost to remove \n"
+"when knocking  (PSI)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:25
+msgid ""
+"MIN Boost to remove when\n"
+"knock detected (PSI)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:28
+msgid "Max Retard Allowed"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:29
+msgid ""
+"OverBoost\n"
+"Protection Style"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:31
+msgid "OverBoost cutoff (kPa)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:33
+msgid "Proportional Gain"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:34
+msgid ""
+"Reduce boost by 1 PSI\n"
+"for every X deg F. over."
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:36
+msgid "Subsequent retard (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:37
+msgid ""
+"TPS  value in raw ADC\n"
+"to begin boost reduction"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:39
+msgid "Typ. Ambient Pressure (kPa)"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:40
+msgid "Update rate in ms."
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:41
+msgid ""
+"Use Boost Table3\n"
+"based on input"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:43
+msgid "Wait time between steps"
+msgstr ""
+
+#: .././Gui/msns-e-boost-knock.glade.h:44
+msgid "When MAP above x kPa"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:1
+msgid "& IAT >"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:2
+msgid "& MAP Above (KPa)"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:3
+msgid "& below CLT"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:6
+msgid "(ms.)"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:8
+msgid "ASE"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:9
+msgid "ASE Fixed Hold Time"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:10
+msgid "ASE Total Decay Time"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:11
+msgid "Adv. 1 deg per"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:12
+msgid "AfterStart Enrich Decay"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:13
+msgid "AfterStart Enrich Params"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:14
+msgid "AfterStart Enrich time in:"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:15
+msgid "Air Density Correction Table"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:16
+msgid "Air Density Correction:"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:17
+msgid "CLT"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:18
+msgid ""
+"CLT/IAT\n"
+"Related Advance"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:20
+msgid "CLT/IAT Corrected Air Density"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:23
+#, no-c-format
+msgid "Correction (%)"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:24
+msgid "Correction Based on:"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:25 .././Gui/PIS-settings.glade.h:14
+msgid "Cranking"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:26
+msgid ""
+"Cranking\n"
+"RPM"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:28
+#, fuzzy
+msgid ""
+"Cranking table temp\n"
+"source"
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/msns-e-crank-ase.glade.h:30
+msgid "Cranking, Warmup & ASE Bins"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:31
+msgid "End Correction at (RPM):"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:32
+msgid "First Start Enrich."
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:33
+msgid "Fixed MAP Value"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:34
+msgid "Fixed Priming Pulse (ms)"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:35
+msgid ""
+"Flood Clear\n"
+"TPS"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:38
+msgid "IAT/CLT Related Ignition"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:39
+msgid "MAP Mode during ASE"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:40
+msgid "MAT"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:41
+msgid "Max Advance"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:42
+msgid "MegaSquirtnSpark-Extra  Enrichments"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:44
+msgid "Priming Mode"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:45
+msgid "Priming Source"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:46
+msgid "Priming/Cranking Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:47
+msgid "Ret. 1 deg per"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:48
+msgid "Start to reduce Correction at (RPM):"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:49
+msgid "Temp"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:50
+msgid "Use Fixed ASE/MAP when CLT below"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:51
+msgid "Warmup"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:52
+msgid "When to Prime"
+msgstr ""
+
+#: .././Gui/msns-e-crank-ase.glade.h:54
+#, no-c-format
+msgid "Xtra fuel %"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:1
+msgid "+/- Limit (#)"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:3
+#, no-c-format
+msgid "+/- Limit (%)"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:5
+msgid "Active RPM"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:6
+msgid "Active Temp"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:7
+msgid "Advanced EGO/Target AFR Settings"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:9
+#, no-c-format
+msgid "Alt. EGO Limit +/- (%)"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:11
+msgid ""
+"Control Algorithm\n"
+"for AFR Tables"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:13
+msgid "Exhaust O<sub>2</sub>  (DT ONLY) Settings"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:15
+msgid "For VE Table 1/3"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:16
+msgid "For VE Table 2"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:18
+msgid ""
+"Go to open loop\n"
+"based upon:"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:20
+msgid "KPa to go Open Loop @"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:21
+msgid "MegaSquirtnSpark-Extra Exhaust Gas Oxygen Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:22
+msgid ""
+"Number of O<sub>2</sub> \n"
+"Sensors"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:24
+msgid ""
+"O<sub>2</sub> Correction\n"
+"Step Counter"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:26
+msgid "O<sub>2</sub> Sensor 1 Type"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:27
+msgid "O<sub>2</sub> Sensor 2 Type"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:30
+#, no-c-format
+msgid "Step (%)"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:31
+msgid "Switching Voltage"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:32
+msgid "TPS Target AFR Thresh."
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:33
+msgid "TPS to go Open Loop @"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:34
+msgid "Target AFR Table Selection"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:35
+msgid "Use Alt. limit above (kPa)"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:36
+msgid ""
+"Use Target\n"
+"Tables when"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:38
+msgid "mSec Btwn Steps"
+msgstr ""
+
+#: .././Gui/msns-e-ego.glade.h:39
+msgid "mSec btwn Steps"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:4
+msgid "Delay before switching (s)"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:5
+msgid "Dual Table Mode Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:6 .././Gui/test.glade.h:3
+msgid "ECU Personality"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:7
+msgid "EDIS Multispark"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:8
+msgid "Firmware Features"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:9
+msgid "Fuel/Spark Table Selection"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:11
+msgid ""
+"GammaE for \n"
+"Table 2"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:13
+msgid ""
+"GammaE for \n"
+"Tables 1/3"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:16
+msgid "Knock Detection"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:18
+msgid "MSnS-Extra Features Configuration"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:19
+#: .././Gui/msns-e-water-nos-launch.glade.h:30
+msgid "Nitrous System"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:20
+msgid "Nos Anti-Lag"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:22
+msgid ""
+"Pulse Inj Ch 2.\n"
+"during cranking?"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:25
+msgid "Shift Lights "
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:26
+msgid ""
+"Switch from Spark\n"
+"Table 1->2 on:"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:28
+msgid ""
+"Switch from VE     \n"
+"Table 1->3 on:"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:30 .././Gui/msns-e-traction.glade.h:24
+msgid "Traction Control"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:31
+msgid "Up to:"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:32
+msgid ""
+"Use Second O<sub>2</sub>\n"
+"Sensor?"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:34
+#: .././Gui/msns-e-water-nos-launch.glade.h:41
+msgid "Variable Launch"
+msgstr ""
+
+#: .././Gui/msns-e-features.glade.h:35
+#: .././Gui/msns-e-water-nos-launch.glade.h:42
+msgid "Water Injection"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:4
+msgid "Bank 1 O<sub>2</sub> Sensor"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:5
+msgid "Bank 2 O<sub>2</sub> Sensor"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:6
+msgid "Baro. Correction"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:7
+msgid ""
+"Batt. Voltage\n"
+"Correction (ms/Volt)"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:11
+msgid "Engine Firing Pattern"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:15
+msgid "Inj. Firing Pattern"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:27
+msgid "Select the MAP Sensor in use on your Vehicle"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:28
+msgid "Sensor Params"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:30
+msgid ""
+"Table 1/3 Fuel\n"
+"Injection Strategy"
+msgstr ""
+
+#: .././Gui/msns-e-fuelconstants.glade.h:32
+msgid ""
+"Table 2 (DT) Fuel\n"
+"Injection Strategy"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:2
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">               Dashpot "
+"Settings               </span>"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:3
+msgid "Closed Loop Idle Controls"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:4
+msgid "Closure Speed (sec.)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:6
+msgid "Cranking DutyCycle"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:7
+msgid "Dashpot Adder (DC)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:8
+msgid "Dashpot Settle Time (sec)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:9
+msgid "Deadband Range"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:10
+msgid "Fast Idle (cold) Temp"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:11
+msgid "Fast Idle Cutoff Temp "
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:13
+msgid "Fast Recovery Time (sec.)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:15
+msgid "Idle Activation Adder (RPM)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:17
+msgid ""
+"Idle Control Active\n"
+"during which modes?"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:19
+msgid "Idle Control Mode"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:20
+msgid "Idle High Temp DutyCycle"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:21
+msgid "Idle Low Temp DutyCycle"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:22
+msgid "Idle PWM Frequency (Hz)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:23
+msgid "Idle Timing Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:24
+msgid "Idle advance (-10 = use map)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:25
+msgid "Idle advance CLT threshold"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:26
+msgid "Idle advance RPM threshold"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:27
+msgid "Idle advance TPS threshold"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:28
+msgid "Idle advance Wait Time"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:29
+msgid "Lower Limit"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:30
+msgid "MSnS-Extra Idle Configuration"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:31
+msgid "Minimum DutyCycle"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:32
+msgid "PWM Idle Controls"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:34
+msgid "Slow Idle (hot) Temp"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:36
+msgid "Slow Recovery Time (sec.)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:37
+msgid "Startup Delay (sec)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:38
+msgid "TPS Threshold (ADC)"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:39
+msgid "Upper Limit"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:40
+msgid "Valve Closed DutyCycle"
+msgstr ""
+
+#: .././Gui/msns-e-idle.glade.h:41
+msgid "Warmup Controls"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:3
+msgid "FIdle Output Pin"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:4
+msgid "Fan Controls"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:5
+msgid "Fan Off Temp"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:6
+msgid "Fan On Temp"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:8
+msgid "High Thresh."
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:9
+msgid "Knock in/Spark F"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:10
+msgid "LED 17 Output Pin"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:11
+msgid "LED 18 Output Pin"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:12
+msgid "LED 19 Output Pin"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:13
+msgid "Low Thresh."
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:14
+msgid "MSnS-Extra Output Pins Configuration"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:15
+msgid "Multiplex Ignition"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:16
+msgid "Output 3/Spark D"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:17
+msgid "Output Pins Mapping"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:19
+msgid "ShiftLight"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:20
+msgid ""
+"Tach Output Pin\n"
+"Make sure unused"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:22
+msgid "Tach Output Rate"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:23
+msgid "X2(JS0) function"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:24
+msgid "X4 (JS2) Function"
+msgstr ""
+
+#: .././Gui/msns-e-output-pins.glade.h:25
+msgid "pin 10 shift/Spark E"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:3
+msgid "MegaSquirtnSpark-Extra User Outputs"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:4
+msgid "Output 1 Behavior"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:5
+msgid "Output 2 Behavior"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:6
+msgid "Output 3 Source"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:7
+msgid "Output 4 Source"
+msgstr ""
+
+#: .././Gui/msns-e-outputs-sel.glade.h:9
+msgid "User Selectable Outputs"
+msgstr ""
+
+#: .././Gui/msns-e-toothtrigger.glade.h:4
+msgid ""
+"The above display shows the tooth times, and will show the time in usec. or "
+"0.1msec. units. This graphically shows the quality of the wheel input signal."
+msgstr ""
+
+#: .././Gui/msns-e-toothtrigger.glade.h:7
+msgid "Trigger/Tooth Logger"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:2
+msgid "<i>Enrichment Bins (mSec)</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:3
+msgid "<i>RPMdot Thresholds</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:4
+msgid "<i>Retard Ignition by (deg)</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:5
+msgid "<i>Retard+Enrich+spark cut for x cycles</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:6
+msgid "<i>Spark Cut \"n\" from Base Value</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:7
+msgid "<i>Traction Control Operating Range</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:8
+msgid "<i>VSS Parameters</i>"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:12
+#, no-c-format
+msgid "Half Slip Thresh. (%)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:14
+#, no-c-format
+msgid "Low Slip Thresh. (%)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:15
+msgid "MSnS-Extra Traction Control"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:16
+msgid "Max Undriven Input (V)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:17
+msgid "Min Undriven Input (V)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:18
+msgid ""
+"NOS during\n"
+"Traction Control"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:21
+msgid "RPMdot Thresh. (RPM/s)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:23
+#, no-c-format
+msgid "Sensor Differential (%)"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:25
+msgid "Traction Control Mode"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:26
+msgid "Traction Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-traction.glade.h:27
+msgid "or Until"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:2
+msgid ""
+"Add Nitrous enrich\n"
+"to which bank?"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:4
+msgid "Arming RPM"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:7
+msgid "Flat Shift Controls"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:9
+msgid "Hard RPM Limit"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:10
+msgid "Hard Revlimit (RPM)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:11
+msgid "KPa Enable Setpoint"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:13
+msgid ""
+"Launch Control Hard \n"
+"Cut Limiter Type"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:15
+msgid "MAT Enable Setpoint (F)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:16
+msgid "MSnS-Extra Wateer/NOS/Launch Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:17
+msgid ""
+"Maximum KPA to fire\n"
+"NOS Antilag"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:19
+msgid "Maximum RPM"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:20
+msgid "Min Coolant Temp"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:21
+msgid "Min TPS (RAW ADC)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:22
+msgid ""
+"Minimum KPA to fire\n"
+"NOS Antilag"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:24
+msgid "Minimum RPM"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:25
+msgid "Minimum TPS to enable"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:26
+msgid "NOS Antilag System"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:27
+msgid "NOS Delay After Flat Shift"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:28
+msgid "NOS Delay After Launch"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:31
+msgid "PW to add at max RPM"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:32
+msgid "PW to add at min RPM"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:34
+msgid "RPM Enable Setpoint"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:35
+msgid "Retard Above (RPM)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:36
+msgid "Retard Ignition to (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:37
+msgid "Retard Spark by (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:39
+msgid "Soft RPM Limit"
+msgstr ""
+
+#: .././Gui/msns-e-water-nos-launch.glade.h:40
+msgid "Sparks to Drop"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:2
+#: .././Gui/msns-e-wheeldecode.glade.h:2
+msgid "A"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:3
+#: .././Gui/msns-e-wheeldecode.glade.h:3
+msgid "B"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:4
+#: .././Gui/msns-e-wheeldecode.glade.h:4 .././Gui/mtxloader.glade.h:2
+msgid "C"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:6
+#: .././Gui/msns-e-wheeldecode.glade.h:6
+#, fuzzy
+msgid "Cranking Angle (deg)"
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:7
+#: .././Gui/msns-e-wheeldecode.glade.h:7
+#, fuzzy
+msgid "Cranking Dwell (ms.)"
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:8
+#: .././Gui/msns-e-wheeldecode.glade.h:8
+msgid ""
+"Cranking Trigger\n"
+"Style"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:10
+#: .././Gui/msns-e-wheeldecode.glade.h:10
+msgid "D"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:11
+#: .././Gui/msns-e-wheeldecode.glade.h:11
+msgid "Decoder Algorithm"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:12
+#: .././Gui/msns-e-wheeldecode.glade.h:12
+msgid "Dual Distributors"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:13
+#: .././Gui/msns-e-wheeldecode.glade.h:13
+msgid "Dwell Control"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:14
+#: .././Gui/msns-e-wheeldecode.glade.h:14
+msgid "Dwell Style"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:15
+#: .././Gui/msns-e-wheeldecode.glade.h:15
+msgid "E"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:16
+#: .././Gui/msns-e-wheeldecode.glade.h:16 .././Gui/mtxloader.glade.h:6
+msgid "F"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:17
+#: .././Gui/msns-e-wheeldecode.glade.h:17
+msgid "Fixed Angle (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:18
+#: .././Gui/msns-e-wheeldecode.glade.h:18
+msgid "Fixed Dwell Amount"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:20
+msgid "Hardware Latency (us)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:21
+#: .././Gui/msns-e-wheeldecode.glade.h:20
+msgid "Ignition Hold Count"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:22
+#: .././Gui/msns-e-wheeldecode.glade.h:21
+msgid "Ignition Output Polarity"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:23
+#: .././Gui/msns-e-wheeldecode.glade.h:22
+msgid "MSnS-Extra Crank/Cam Wheel Decoder"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:24
+#: .././Gui/msns-e-wheeldecode.glade.h:23
+msgid "Min Discharge time (ms.)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:25
+#: .././Gui/msns-e-wheeldecode.glade.h:24
+msgid ""
+"Number of \n"
+"steps/outputs"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:27
+#: .././Gui/msns-e-wheeldecode.glade.h:26
+msgid "Oddfire Offset"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:28
+#: .././Gui/msns-e-wheeldecode.glade.h:27
+msgid ""
+"Oddfire Support\n"
+"(Highly Experimental !!)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:31
+#: .././Gui/msns-e-wheeldecode.glade.h:30
+msgid "Return"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:32
+#: .././Gui/msns-e-wheeldecode.glade.h:31
+msgid "Running Dwell (ms.)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:33
+#: .././Gui/msns-e-wheeldecode.glade.h:32
+msgid ""
+"Second Trigger\n"
+"triggers on:"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:35
+#: .././Gui/msns-e-wheeldecode.glade.h:34
+msgid ""
+"Second Trigger and \n"
+"Missing Teeth:"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:37
+#: .././Gui/msns-e-wheeldecode.glade.h:36
+msgid "Stim For Wheel"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:38
+#: .././Gui/msns-e-wheeldecode.glade.h:37
+msgid "Stim for wheel"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:39
+#: .././Gui/msns-e-wheeldecode.glade.h:38
+msgid "Trigger"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:41
+#: .././Gui/msns-e-wheeldecode.glade.h:40
+msgid "Trigger Params"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:42
+#: .././Gui/msns-e-wheeldecode.glade.h:41
+msgid "Trigger Wheel Teeth"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:43
+#: .././Gui/msns-e-wheeldecode.glade.h:42
+msgid "Trim Angle (deg)"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:44
+#: .././Gui/msns-e-wheeldecode.glade.h:43
+msgid "Use Second Trigger?"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:45
+#: .././Gui/msns-e-wheeldecode.glade.h:44
+msgid "Wheel Parameters"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:46
+#: .././Gui/msns-e-wheeldecode.glade.h:45
+msgid "Wheel Style"
+msgstr ""
+
+#: .././Gui/msns-e-wheeldecode-029yx.glade.h:47
+#: .././Gui/msns-e-wheeldecode.glade.h:46
+msgid "Wheel Trigger Points"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:1
+msgid "Bias Resistance"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:3
+msgid "Enter CLT Sensor Info"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:4
+msgid "Enter IAT Sensor Info"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:5
+msgid "Enter Sensor Parameters"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:7
+msgid "Get ECU Signature"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:8
+msgid "Load"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:9
+msgid "Load Firmware"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:10 .././menu/mtxloader.desktop.in.h:1
+msgid "MegaTunix Firmware Loader"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:11
+msgid "Port and Firmware File"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:12
+msgid "Port:"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:13
+msgid "Select A File"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:14
+msgid "Status Messages"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:15
+msgid "Temp/Ohms pair 1"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:16
+msgid "Temp/Ohms pair 2"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:17
+msgid "Temp/Ohms pair 3"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:18
+msgid "Temperature Units"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:19
+msgid ""
+"Use Alternative\n"
+"CLT Sensor"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:21
+msgid ""
+"Use Alternative\n"
+"IAT Sensor"
+msgstr ""
+
+#: .././Gui/mtxloader.glade.h:23
+msgid "Use Alternative Sensors in this new firmware? (MS1 Only)"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:6
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:6 .././Gui/PIS-boost_16x10.glade.h:6
+#, no-c-format
+msgid "%"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:9
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:9 .././Gui/PIS-biar_16x16.glade.h:7
+#: .././Gui/PIS-boost_16x10.glade.h:9 .././Gui/PIS-bpw_16x16.glade.h:8
+#: .././Gui/PIS-corrections.glade.h:10 .././Gui/PIS-ego_16x16.glade.h:7
+#: .././Gui/PIS-runtime.glade.h:1 .././Gui/PIS-settings.glade.h:1
+#: .././Gui/runtime.glade.h:1 .././Gui/warmupwizard.glade.h:2
+msgid "ACCEL"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:10
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:10 .././Gui/PIS-biar_16x16.glade.h:8
+#: .././Gui/PIS-boost_16x10.glade.h:10 .././Gui/PIS-bpw_16x16.glade.h:9
+#: .././Gui/PIS-corrections.glade.h:12 .././Gui/PIS-ego_16x16.glade.h:8
+#: .././Gui/PIS-runtime.glade.h:2 .././Gui/PIS-settings.glade.h:2
+msgid "ALPHA N"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:11
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:11 .././Gui/PIS-biar_16x16.glade.h:9
+#: .././Gui/PIS-boost_16x10.glade.h:11 .././Gui/PIS-bpw_16x16.glade.h:10
+#: .././Gui/PIS-corrections.glade.h:13 .././Gui/PIS-ego_16x16.glade.h:9
+#: .././Gui/PIS-runtime.glade.h:3 .././Gui/PIS-settings.glade.h:3
+msgid "ASC"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:12
+msgid "Alpha-N Base Ignition +Advance / -Retard"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:13
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:13 .././Gui/PIS-biar_16x16.glade.h:11
+#: .././Gui/PIS-boost_16x10.glade.h:13 .././Gui/PIS-bpw_16x16.glade.h:12
+#: .././Gui/PIS-corrections.glade.h:18 .././Gui/PIS-ego_16x16.glade.h:10
+#: .././Gui/PIS-runtime.glade.h:4 .././Gui/PIS-settings.glade.h:6
+msgid "CLOSED LOOP"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:14
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:14 .././Gui/PIS-biar_16x16.glade.h:12
+#: .././Gui/PIS-boost_16x10.glade.h:14 .././Gui/PIS-bpw_16x16.glade.h:13
+#: .././Gui/PIS-corrections.glade.h:19 .././Gui/PIS-ego_16x16.glade.h:11
+#: .././Gui/PIS-runtime.glade.h:5 .././Gui/PIS-settings.glade.h:7
+#: .././Gui/runtime.glade.h:3 .././Gui/warmupwizard.glade.h:7
+msgid "CRANKING"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:16
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:16 .././Gui/PIS-biar_16x16.glade.h:14
+#: .././Gui/PIS-boost_16x10.glade.h:16 .././Gui/PIS-bpw_16x16.glade.h:15
+#: .././Gui/PIS-corrections.glade.h:25 .././Gui/PIS-ego_16x16.glade.h:13
+#: .././Gui/PIS-runtime.glade.h:8 .././Gui/PIS-settings.glade.h:17
+#: .././Gui/runtime.glade.h:6 .././Gui/warmupwizard.glade.h:10
+msgid "DECEL"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:18
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:18 .././Gui/PIS-biar_16x16.glade.h:16
+#: .././Gui/PIS-boost_16x10.glade.h:18 .././Gui/PIS-bpw_16x16.glade.h:17
+#: .././Gui/PIS-corrections.glade.h:30 .././Gui/PIS-ego_16x16.glade.h:15
+#: .././Gui/PIS-runtime.glade.h:9 .././Gui/PIS-settings.glade.h:20
+msgid "FAN"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:19
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:19 .././Gui/PIS-biar_16x16.glade.h:17
+#: .././Gui/PIS-boost_16x10.glade.h:19 .././Gui/PIS-bpw_16x16.glade.h:18
+#: .././Gui/PIS-ego_16x16.glade.h:16
+msgid "Focus follows Vertex with most \"Weight\""
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:21
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:21 .././Gui/PIS-biar_16x16.glade.h:19
+#: .././Gui/PIS-boost_16x10.glade.h:21 .././Gui/PIS-bpw_16x16.glade.h:20
+#: .././Gui/PIS-corrections.glade.h:33 .././Gui/PIS-ego_16x16.glade.h:18
+#: .././Gui/PIS-runtime.glade.h:13 .././Gui/PIS-settings.glade.h:28
+msgid "IDLE CONTROL"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:24
+msgid "PIS Alpha-N Base Ignition +Advance / -Retard"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:27
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:27 .././Gui/PIS-biar_16x16.glade.h:27
+#: .././Gui/PIS-boost_16x10.glade.h:27 .././Gui/PIS-bpw_16x16.glade.h:28
+#: .././Gui/PIS-corrections.glade.h:40 .././Gui/PIS-ego_16x16.glade.h:27
+#: .././Gui/PIS-runtime.glade.h:16 .././Gui/PIS-settings.glade.h:58
+#: .././Gui/runtime.glade.h:12 .././Gui/warmupwizard.glade.h:16
+msgid "RUNNING"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:30
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:30 .././Gui/PIS-biar_16x16.glade.h:30
+#: .././Gui/PIS-boost_16x10.glade.h:30 .././Gui/PIS-bpw_16x16.glade.h:31
+#: .././Gui/PIS-corrections.glade.h:41 .././Gui/PIS-ego_16x16.glade.h:30
+#: .././Gui/PIS-runtime.glade.h:19 .././Gui/PIS-settings.glade.h:61
+#: .././Gui/runtime.glade.h:15 .././Gui/warmupwizard.glade.h:18
+msgid "Runtime Status"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:31
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:31 .././Gui/PIS-biar_16x16.glade.h:31
+#: .././Gui/PIS-boost_16x10.glade.h:31 .././Gui/PIS-bpw_16x16.glade.h:32
+#: .././Gui/PIS-corrections.glade.h:42 .././Gui/PIS-ego_16x16.glade.h:31
+#: .././Gui/PIS-runtime.glade.h:21 .././Gui/PIS-settings.glade.h:67
+#: .././Gui/runtime.glade.h:17
+msgid "Start Reading RT Data"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:32
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:32 .././Gui/PIS-biar_16x16.glade.h:32
+#: .././Gui/PIS-boost_16x10.glade.h:32 .././Gui/PIS-bpw_16x16.glade.h:33
+#: .././Gui/PIS-corrections.glade.h:43 .././Gui/PIS-ego_16x16.glade.h:32
+#: .././Gui/PIS-runtime.glade.h:22 .././Gui/PIS-settings.glade.h:68
+#: .././Gui/runtime.glade.h:18
+msgid "Stop Reading RT Data"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:33
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:33 .././Gui/PIS-boost_16x10.glade.h:33
+msgid "TPS Bins"
+msgstr ""
+
+#: .././Gui/PIS-alpha_biar_16x10.glade.h:35
+msgid "config.alpha_N.BIAR"
+msgstr ""
+
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:12
+msgid "Alpha-N Base Pulse Width"
+msgstr ""
+
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:24
+msgid "PIS - Alpha-N Base Pulse Width"
+msgstr ""
+
+#: .././Gui/PIS-alpha_bpw_16x10.glade.h:35
+msgid "config.alpha_N.BPW"
+msgstr ""
+
+#: .././Gui/PIS-biar_16x16.glade.h:10
+msgid "Base Ignition +Advance / -Retard"
+msgstr ""
+
+#: .././Gui/PIS-biar_16x16.glade.h:24
+msgid "PIS - Base Ignition +Advance / -Retard"
+msgstr ""
+
+#: .././Gui/PIS-biar_16x16.glade.h:34
+msgid "config.ign.BIAR"
+msgstr ""
+
+#: .././Gui/PIS-boost_16x10.glade.h:12
+msgid "BOOST"
+msgstr ""
+
+#: .././Gui/PIS-boost_16x10.glade.h:24
+msgid "PIS - Boost Targets"
+msgstr ""
+
+#: .././Gui/PIS-boost_16x10.glade.h:35
+msgid "config.boost.target"
+msgstr ""
+
+#: .././Gui/PIS-bpw_16x16.glade.h:11
+msgid "Base Pulse Width"
+msgstr ""
+
+#: .././Gui/PIS-bpw_16x16.glade.h:25
+msgid "PIS - Base Pulse Width"
+msgstr ""
+
+#: .././Gui/PIS-bpw_16x16.glade.h:35
+msgid "config.BPW"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:2
+msgid "12.8"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:3
+msgid "16.0"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:4
+msgid "19.2"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:5
+msgid "22.4"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:6
+msgid "25.5"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:7
+msgid "3.2"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:8
+msgid "6.4"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:9
+msgid "9.6"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:11
+msgid "AE *"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:15
+#, no-c-format
+msgid "ASC %"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:17
+#, no-c-format
+msgid "BPW %"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:20
+msgid "CTS Settings / Corrections"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:21 .././Gui/PIS-settings.glade.h:8
+msgid "CTS bins"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:23
+msgid "Corrections"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:24
+msgid "Crank PW"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:26
+msgid "Duration"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:32
+msgid "IAR"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:34
+msgid "MAT Corrections"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:35
+msgid "MAT bins"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:36
+msgid "Open Delay"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:37
+msgid "PIS - Corrections"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:39
+msgid "RPM Limit"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:44
+msgid "Voltage Correction"
+msgstr ""
+
+#: .././Gui/PIS-corrections.glade.h:45
+msgid "Volts"
+msgstr ""
+
+#: .././Gui/PIS-ego_16x16.glade.h:22
+msgid "Lambda Targets"
+msgstr ""
+
+#: .././Gui/PIS-ego_16x16.glade.h:24
+msgid "PIS - Lambda Targets"
+msgstr ""
+
+#: .././Gui/PIS-ego_16x16.glade.h:34
+msgid "config.ego.target"
+msgstr ""
+
+#: .././Gui/PIS-runtime.glade.h:7 .././Gui/runtime.glade.h:5
+msgid "Corrections/Enrichments"
+msgstr ""
+
+#: .././Gui/PIS-runtime.glade.h:12 .././Gui/runtime.glade.h:9
+msgid "Hard Reset Count"
+msgstr ""
+
+#: .././Gui/PIS-runtime.glade.h:14 .././Gui/runtime.glade.h:10
+msgid "MegaSquirt I/O status"
+msgstr ""
+
+#: .././Gui/PIS-runtime.glade.h:15 .././Gui/runtime.glade.h:11
+msgid "MegaSquirt Runtime Display"
+msgstr ""
+
+#: .././Gui/PIS-runtime.glade.h:17 .././Gui/runtime.glade.h:13
+msgid "Reset Status Counters"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:4
+msgid "Alpha-N"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:5
+msgid "Auxiliary\t"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:9
+msgid "Closed Loop EGO"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:11
+msgid "Control Delay"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:12
+msgid "Crank Dwell"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:13
+msgid "Crank Threshold"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:15
+msgid "Cranking Bypass"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:19
+msgid "Engine"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:21
+msgid "Fan Off (deg)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:22
+msgid "Fan On (deg)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:24
+#, no-c-format
+msgid "Flood Clear %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:26
+msgid "Hard IAR"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:27
+msgid "IAC Idle Control"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:29
+msgid "Idle RPM"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:30
+msgid "Ignition"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:31
+msgid "Inject Skips"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:33
+#, no-c-format
+msgid "Integral %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:34
+msgid "Limit Hysterisis (RPM)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:35
+msgid "MAP Only (RPM)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:37
+#, no-c-format
+msgid "Max BPW %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:38
+msgid "Max IAR"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:40
+msgid "Max RPM ROC"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:42
+#, no-c-format
+msgid "Max TPS %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:44
+#, no-c-format
+msgid "Min BPW %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:45
+msgid "Min CTS (deg)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:46
+msgid "Min IAR"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:47
+msgid "Min RPM"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:49
+#, no-c-format
+msgid "Min TPS %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:50
+msgid "Minimum"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:51
+msgid "On Throttle"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:52
+msgid "PIS - Settings"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:55
+#, no-c-format
+msgid "Proportional %"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:56
+msgid "RPM Hysterisis"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:57
+msgid "RPM Limiter"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:59
+msgid "Range"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:60
+msgid "Reference Angle"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:62
+msgid "Settings"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:63
+msgid "Soft IAR"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:64
+msgid "Soft Offset (RPM)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:65
+msgid "Start"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:66
+msgid "Start MAP Blending (RPM)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:69
+msgid "Transient (ms)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:70
+msgid "Two Stroke"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:71
+msgid "Update (ms)"
+msgstr ""
+
+#: .././Gui/PIS-settings.glade.h:72
+msgid "Uptime (s)"
+msgstr ""
+
+#: .././Gui/raweditor.glade.h:3
+msgid "MegaSquirt Raw Data Editor"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:7
+msgid ""
+"<b>NOTE!!! </b>\n"
+"In the Split table (to the left):\n"
+"\t> 20 means trailing OFF!!\n"
+"\t0 means fire simultaneously\n"
+"\tany other values are valid \n"
+"\ttrailing delay in degrees"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:13
+msgid "<b>NOTE:</b> This is for <i>Twin rotor</i> ONLY!!"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:17
+msgid ""
+"Fixed Split for testing\n"
+"(<b>-10 = use map</b> to left)"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:24
+msgid "KPa"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:25
+msgid "KPa Bins"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:26
+msgid "MegaSquirtnSpark Extra Rotary Trailing Table"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:31
+msgid "Rotary Trailing Parameters"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:32
+msgid "Rotary Trailing in degrees"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:34
+msgid "Trailing Output Type"
+msgstr ""
+
+#: .././Gui/rotary-trail.glade.h:35
+msgid "Trailing Split Support"
+msgstr ""
+
+#: .././Gui/runtime.glade.h:2 .././Gui/warmupwizard.glade.h:3
+msgid "AS_ENRICH"
+msgstr ""
+
+#: .././Gui/runtime.glade.h:19 .././Gui/warmupwizard.glade.h:21
+msgid "WARMUP"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:6 .././Gui/sparktable_12x12x2.glade.h:6
+#: .././Gui/sparktable_12x12x3.glade.h:8 .././Gui/sparktable_8x8e.glade.h:6
+msgid "0.0"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:19
+#: .././Gui/sparktable_12x12x2.glade.h:20
+msgid "MegaSquirtnSpark-Extra Spark Tables"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:24
+#: .././Gui/sparktable_12x12x2.glade.h:25
+#: .././Gui/sparktable_12x12x3.glade.h:28
+msgid "Spark Advance Table 1 (deg. BTDC)"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:25
+#: .././Gui/sparktable_12x12x2.glade.h:27
+#: .././Gui/sparktable_12x12x3.glade.h:31
+msgid "Spark Table 1"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:26 .././Gui/sparktable_8x8e.glade.h:27
+msgid "Timing Offset Controls"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x1.glade.h:28
+#: .././Gui/sparktable_12x12x2.glade.h:31
+msgid "Trigger Angle"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x2.glade.h:11 .././Gui/sparktable_8x8e.glade.h:11
+msgid "Fixed Angle"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x2.glade.h:26
+msgid "Spark Advance Table 2 (Input Selectable) (deg. BTDC)"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x2.glade.h:28
+#: .././Gui/sparktable_12x12x3.glade.h:32
+msgid "Spark Table 2"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x2.glade.h:29
+msgid "Temporary Timing Offset Controls"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x2.glade.h:32 .././Gui/sparktable_8x8e.glade.h:29
+msgid "Trim Angle"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:17
+msgid "Ign Load2"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:18
+msgid "Ign. Load"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:23
+msgid "MS2--Extra Spark Tables"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:29
+msgid "Spark Advance Table 2 (secondary ign load) (deg. BTDC)"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:30
+msgid "Spark Advance Table 3 (Input Selectable) (deg. BTDC)"
+msgstr ""
+
+#: .././Gui/sparktable_12x12x3.glade.h:33
+msgid "Spark Table 3"
+msgstr ""
+
+#: .././Gui/sparktable_8x8e.glade.h:20
+msgid "MegaSquirtnSpark/EDIS Spark Table"
+msgstr ""
+
+#: .././Gui/sparktable_8x8e.glade.h:25
+msgid "Spark Advance (deg. BTDC)"
+msgstr ""
+
+#: .././Gui/sparktable_8x8e.glade.h:26
+msgid "Spark Advance table"
+msgstr ""
+
+#: .././Gui/template.glade.h:1
+msgid ""
+"<span background=\"dark blue\" foreground=\"white\">     Text/Numeric "
+"Entry     </span>"
+msgstr ""
+
+#: .././Gui/template.glade.h:3
+msgid "Frame 1"
+msgstr ""
+
+#: .././Gui/template.glade.h:4
+msgid "Frame 2"
+msgstr ""
+
+#: .././Gui/template.glade.h:5
+msgid "Frame 3"
+msgstr ""
+
+#: .././Gui/template.glade.h:6
+msgid "Frame 4"
+msgstr ""
+
+#: .././Gui/template.glade.h:10
+msgid "comboboxentry"
+msgstr ""
+
+#: .././Gui/template.glade.h:11
+msgid "spinbutton"
+msgstr ""
+
+#: .././Gui/test.glade.h:1
+msgid "Combo-test"
+msgstr ""
+
+#: .././Gui/test.glade.h:4
+msgid "ECU Type"
+msgstr ""
+
+#: .././Gui/test.glade.h:6
+msgid "MS-II"
+msgstr ""
+
+#: .././Gui/test.glade.h:7
+msgid "MicroSquirt"
+msgstr ""
+
+#: .././Gui/test.glade.h:9
+msgid "TEMPLATE_TITLE"
+msgstr ""
+
+#: .././Gui/test.glade.h:10
+msgid "Undefined"
+msgstr ""
+
+#: .././Gui/tools.glade.h:1
+msgid "Backup All ECU Parameters"
+msgstr ""
+
+#: .././Gui/tools.glade.h:2
+msgid "Backup/Restore All Settings"
+msgstr ""
+
+#: .././Gui/tools.glade.h:3
+msgid "Export VE/Spark Tbls"
+msgstr ""
+
+#: .././Gui/tools.glade.h:4
+msgid "Import VE/Spark Tbls"
+msgstr ""
+
+#: .././Gui/tools.glade.h:6
+msgid "Restore All ECU Parameters"
+msgstr ""
+
+#: .././Gui/tools.glade.h:7
+msgid "Tools Status Messages"
+msgstr ""
+
+#: .././Gui/tools.glade.h:8
+msgid "UNDO VEX Load"
+msgstr ""
+
+#: .././Gui/tools.glade.h:9
+msgid "VE/Spark Table Import/Export (VEX Files)"
+msgstr ""
+
+#: .././Gui/tools.glade.h:10
+msgid "VEX File Comment:"
+msgstr ""
+
+#: .././Gui/vetable_12x12x2.glade.h:16 .././Gui/vetable_12x12x3.glade.h:16
+#: .././Gui/vetable_16x16x3.glade.h:23
+#, no-c-format
+msgid "Fuel Table 1 Volumetric Efficiency (%)"
+msgstr ""
+
+#: .././Gui/vetable_12x12x2.glade.h:18 .././Gui/vetable_12x12x3.glade.h:18
+#: .././Gui/vetable_16x16x3.glade.h:25
+#, no-c-format
+msgid "Fuel Table 2 (DT ONLY) Volumetric Efficiency (%)"
+msgstr ""
+
+#: .././Gui/vetable_12x12x2.glade.h:24 .././Gui/vetable_12x12x3.glade.h:26
+msgid "MegaSquirtnSpark-Extra VE-Table"
+msgstr ""
+
+#: .././Gui/vetable_12x12x2.glade.h:35 .././Gui/vetable_12x12x3.glade.h:37
+#: .././Gui/vetable_16x16x3.glade.h:42
+msgid "VE-Table 1"
+msgstr ""
+
+#: .././Gui/vetable_12x12x2.glade.h:36 .././Gui/vetable_12x12x3.glade.h:39
+#: .././Gui/vetable_16x16x3.glade.h:44
+msgid "Vetable 2(DT)"
+msgstr ""
+
+#: .././Gui/vetable_12x12x3.glade.h:20 .././Gui/vetable_16x16x3.glade.h:27
+#, no-c-format
+msgid "Fuel Table 3 Volumetric Efficiency (%)"
+msgstr ""
+
+#: .././Gui/vetable_12x12x3.glade.h:38 .././Gui/vetable_16x16x3.glade.h:43
+msgid "VE-Table 3"
+msgstr ""
+
+#: .././Gui/vetable_16x16x3.glade.h:1
+msgid ""
+"  +\n"
+"  -\n"
+"  *\n"
+"  "
+msgstr ""
+
+#: .././Gui/vetable_16x16x3.glade.h:21
+msgid "Fuel Load"
+msgstr ""
+
+#: .././Gui/vetable_16x16x3.glade.h:31
+msgid "MS2-Extra VE-Table(s)"
+msgstr ""
+
+#: .././Gui/vetable_8x8e.glade.h:10
+msgid ""
+"Current\n"
+"ReqFuel"
+msgstr ""
+
+#: .././Gui/vetable_8x8e.glade.h:22
+msgid ""
+"New\n"
+"ReqFuel"
+msgstr ""
+
+#: .././Gui/vetable_8x8e.glade.h:29
+msgid ""
+"Rescales Table to\n"
+"maintain same PW"
+msgstr ""
+
+#: .././Gui/vetable_8x8e.glade.h:33
+#, no-c-format
+msgid "Volumetric Efficiency (%)"
+msgstr ""
+
+#: .././Gui/vetable_8x8e.glade.h:35
+#, no-c-format
+msgid "Volumetric Efficiency Table (%)"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:5
+msgid "Burn to ECU"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:6
+msgid "CONNECTED"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:12
+#, no-c-format
+msgid "Enrichment (%)"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:14
+msgid "MegaSquirt Warmup Wizard"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:15
+#, fuzzy
+msgid "Priming Pulse   "
+msgstr "Pulso de arranque vs Temp"
+
+#: .././Gui/warmupwizard.glade.h:19
+msgid "Start Reading RT Vars"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:20
+msgid "Stop Reading RT Vars"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:23
+#, no-c-format
+msgid "Warmup Enrichment %"
+msgstr ""
+
+#: .././Gui/warmupwizard.glade.h:24
+msgid "for # of cycles"
+msgstr ""
+
+#: .././desktop/Automotive.directory.in.h:1
+msgid "Automotive"
+msgstr ""
+
+#: .././menu/dashdesigner.desktop.in.h:1
+msgid "MegaTunix Dash Designer"
+msgstr ""
+
+#: .././menu/dashdesigner.desktop.in.h:2
+msgid "megatunix Dash Designer"
+msgstr ""
+
+#: .././menu/gaugedesigner.desktop.in.h:1
+msgid "MegaTunix Gauge Designer"
+msgstr ""
+
+#: .././menu/gaugedesigner.desktop.in.h:2
+msgid "megatunix gauge designer"
+msgstr ""
+
+#: .././menu/megatunix.desktop.in.h:1
+msgid "MegaTunix"
+msgstr ""
+
+#: .././menu/megatunix.desktop.in.h:2
+msgid "megatunix"
+msgstr ""
+
+#: .././menu/mtxloader.desktop.in.h:2
+msgid "mtxloader"
+msgstr ""

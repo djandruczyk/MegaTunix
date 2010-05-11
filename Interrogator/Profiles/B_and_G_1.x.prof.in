@@ -3,7 +3,7 @@ major=1
 minor=4
 
 [interrogation_profile]
-name=Standard Bowling & Grippo v2.0-3.01
+name=Old Bowling & Grippo v1.0
 
 [parameters]
 TextVerVia=ms1_get_textrev
@@ -23,7 +23,7 @@ TotalTables=1
 TotalPages=1
 
 [table_0]
-table_name=VE-Table 0, B&G 2.0-3.01
+_table_name=VE-Table 0, B&G 1.x
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=90
@@ -47,7 +47,7 @@ x_base_offset=100
 x_bincount=8
 x_size=_U08_
 x_source=rpm
-x_suffix=RPM
+_x_suffix=RPM
 x_conv_expr=x*100
 x_precision=0
 y_page=0
@@ -58,12 +58,12 @@ y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4115,MPX4250
 y_sources=tpsadc,mapkpa,mapkpa
-y_suffixes=TPS ADC,KPa,KPa
+_y_suffixes=TPS ADC,KPa,KPa
 y_conv_exprs=x*1,x*1,x*1
 y_precisions=0,0,0
 z_page=0
 z_base_offset=0
-z_size=_U08_
+u_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
@@ -78,7 +78,7 @@ length=125
 match_on=MS-I_Clock,MS-I_RTVars,MS_VerNum,MS-I_VEconst
 MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
-MS_VerNum=_NUMMATCH_,20
+MS_VerNum=_NUMMATCH_,0
 MS-I_VEconst=_COUNT_,125
 
 [gui]

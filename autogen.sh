@@ -132,7 +132,7 @@ do
       fi
       if grep "^AC_PROG_INTLTOOL" "$bn" >/dev/null; then
         echo "Running intltoolize..."
-	intltoolize --copy --force --automake
+	intltoolize --copy --automake 1>/dev/null
       fi
       if grep "^AM_PROG_XML_I18N_TOOLS" "$bn" >/dev/null; then
         echo "Running xml-i18n-toolize..."

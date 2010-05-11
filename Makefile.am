@@ -24,7 +24,11 @@ update-po: check-gettext
 	@find $(srcdir)/gaugedesigner/ -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
 	@find $(srcdir)/dashdesigner/ -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
 	@find $(srcdir)/widgets/ -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
-	@find $(srcdir)/msloader/ -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+	@find $(srcdir)/msloader/ -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
+	@find $(srcdir)/Gui/ -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
+	@find $(srcdir)/desktop/ -name "*.directory.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
+	@find $(srcdir)/menu/ -name "*.desktop.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; 
+	@find $(srcdir)/Interrogator/Profiles/ -name "*.prof.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	if diff $(srcdir)/po/POTFILES.in $(srcdir)/po/POTFILES.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/POTFILES.in.2 ; \
 	else \
