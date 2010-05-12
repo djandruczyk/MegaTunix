@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-Extra Output Pins
-tab_name=_Output Pins
+_tab_name=_Output Pins
 id_prefix=output_pins_
 groups=defaults
 

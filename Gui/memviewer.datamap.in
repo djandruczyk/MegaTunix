@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Raw Memory viewer (ECUS that support "F" cmd)
-tab_name=_Memory Viewer
+_tab_name=_Memory Viewer
 id_prefix=MEMVIEWER_
 groups=defaults
 post_functions=finish_memviewer

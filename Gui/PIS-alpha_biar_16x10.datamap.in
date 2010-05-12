@@ -1,6 +1,6 @@
 [global]
 description=Object data map for alpha-n base ignition +advance / -retard tab
-tab_name=Alpha Ignition
+_tab_name=Alpha Ignition
 id_prefix=ANBIAR_
 groups=defaults
 

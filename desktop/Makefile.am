@@ -9,3 +9,4 @@ desktop_DATA = $(desktop_files:.directory.in=.directory)
 
 EXTRA_DIST = $(desktop_DATA)
 
+CLEANFILES = $(desktop_files) *.h

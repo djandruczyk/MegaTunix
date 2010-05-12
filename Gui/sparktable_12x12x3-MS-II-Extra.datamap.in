@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the Spark Advance Tables (MS-II-Extra)
-tab_name=_Spark Tables
+_tab_name=_Spark Tables
 id_prefix=SP_
 groups=defaults,load_1n2,load_3,rpm_1n2,rpm_3,spark_1,spark_2,spark_3
 bind_to_list=ign

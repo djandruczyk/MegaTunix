@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for MSnS-E Error status...
-tab_name=_Error Status
+_tab_name=_Error Status
 #id_prefix=ERR_
 groups=defaults
 

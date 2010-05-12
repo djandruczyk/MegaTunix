@@ -28,9 +28,7 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
-#ifdef __WIN32__
 #include <locale.h>
-#endif
 #include <locking.h>
 #include <main.h>
 #include <serialio.h>
@@ -76,8 +74,8 @@ gint main(gint argc, gchar ** argv)
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 
 	/* For testing if gettext works
-	printf (_("Hello World!\n"));
 	*/
+	printf(_("Hello World!\n"));
 
 	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref(global_data);

@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2 User Outpus (Spare ports)
-tab_name=_User Outputs
+_tab_name=_User Outputs
 id_prefix=UO_
 groups=defaults
 bind_to_list=valid_ecu_ctrls

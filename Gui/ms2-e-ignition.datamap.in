@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2-Extra Ignition Tab
-tab_name=_Ignition
+_tab_name=_Ignition
 id_prefix=IGN_
 groups=defaults
 

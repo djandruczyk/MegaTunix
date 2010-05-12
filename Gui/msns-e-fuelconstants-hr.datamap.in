@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-Extra Fuel
-tab_name=_Fuel Parameters
+_tab_name=_Fuel Parameters
 id_prefix=MSnS_FUEL_
 groups=defaults
 

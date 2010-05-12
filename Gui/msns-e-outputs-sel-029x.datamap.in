@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-Extra 029x User Outputs mapping
-tab_name=_Output Mapping
+_tab_name=_Output Mapping
 id_prefix=output_mapping_
 groups=defaults
 

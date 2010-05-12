@@ -1,7 +1,7 @@
 # Datalogging datamap speccific to all firmware variants
 [global]
 description=Object data map for Datalogging for all firmwares
-tab_name=_DataLogging
+_tab_name=_DataLogging
 id_prefix=dlog_
 groups=defaults
 

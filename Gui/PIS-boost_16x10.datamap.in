@@ -1,6 +1,6 @@
 [global]
 description=Object data map for boost-n base ignition +advance / -retard tab
-tab_name=_Boost
+_tab_name=_Boost
 id_prefix=BOOST_
 groups=defaults
 

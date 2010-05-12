@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Dualtable specific(0.90-1.02) Parameters
-tab_name=_DT Parameters
+_tab_name=_DT Parameters
 id_prefix=dtp_
 groups=defaults
 

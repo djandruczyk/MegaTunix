@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-E 024+ series Cranking/Warmup Enrichments
-tab_name=_Cranking/Warmup
+_tab_name=_Cranking/Warmup
 id_prefix=CR_WU_
 groups=defaults,warmup,crank,ase,IATCTemp,IATCorS
 

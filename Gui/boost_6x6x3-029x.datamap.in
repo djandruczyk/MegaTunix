@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Boost Tables
-tab_name=_Boost Tables
+_tab_name=_Boost Tables
 id_prefix=BT_
 groups=defaults,load,rpm,table_1,table_2,table_3
 bind_to_list=boost_controls

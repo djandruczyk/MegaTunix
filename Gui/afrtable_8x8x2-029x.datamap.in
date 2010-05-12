@@ -1,6 +1,6 @@
 [global]
 description=Object data map for AFR-Tables 
-tab_name=_AFR Tables
+_tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,load_2,rpm,afrtable1,afrtable2
 

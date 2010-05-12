@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Std B&G Enrichments
-tab_name=_Enrichments
+_tab_name=_Enrichments
 id_prefix=ENRICH_
 groups=defaults,warmup_bins,accel
 

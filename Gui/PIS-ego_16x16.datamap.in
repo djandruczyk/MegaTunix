@@ -1,6 +1,6 @@
 [global]
 description=Object data map for lambda tab
-tab_name=_Lambda Targets
+_tab_name=_Lambda Targets
 id_prefix=EGO_
 groups=defaults
 

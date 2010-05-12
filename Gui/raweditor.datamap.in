@@ -1,6 +1,6 @@
 [global]
 description=Object data map for Raw Table Editor 
-tab_name=_Raw Memory Editor
+_tab_name=_Raw Memory Editor
 post_functions=finish_raweditor
 id_prefix=raweditor_
 groups=defaults

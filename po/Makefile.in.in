@@ -56,8 +56,10 @@ COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 SOURCES = 
 POFILES = @POFILES@
 GMOFILES = @GMOFILES@
-DISTFILES = ChangeLog Makefile.in.in POTFILES.in $(GETTEXT_PACKAGE).pot \
+DISTFILES = ChangeLog Makefile.in.in POTFILES.in SPECIALS.in $(GETTEXT_PACKAGE).pot \
 $(POFILES) $(GMOFILES) $(SOURCES)
+
+SPECIALS = \
 
 POTFILES = \
 
@@ -91,8 +93,11 @@ all: all-@USE_NLS@
 
 all-yes: $(CATALOGS)
 all-no:
-
-$(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
+$(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES) $(SPECIALS)
+	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
+	  --add-comments --keyword=_ --keyword=N_ \
+	  --files-from=$(srcdir)/SPECIALS -C --from-code=UTF-8 \
+	&& $$(for i in `cat SPECIALS`; do rm -f "../$$i" ; done && rm SPECIALS)
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
           --flag=g_strdup_printf:1:c-format \
@@ -111,6 +116,7 @@ $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
           --flag=g_scanner_error:2:c-format \
           --flag=g_scanner_warn:2:c-format \
 	  --files-from=$(srcdir)/POTFILES.in \
+	  --join-existing \
 	&& test ! -f $(GETTEXT_PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
 		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
@@ -201,7 +207,7 @@ mostlyclean:
 clean: mostlyclean
 
 distclean: clean
-	rm -f Makefile Makefile.in POTFILES *.mo *.msg *.cat *.cat.m
+	rm -f Makefile Makefile.in POTFILES SPECIALS *.mo *.msg *.cat *.cat.m
 
 maintainer-clean: distclean
 	@echo "This command is intended for maintainers to use;"
@@ -260,8 +266,14 @@ POTFILES: POTFILES.in
 		| sed -e '$$s/\\$$//') > $@-t \
 	    && chmod a-w $@-t \
 	    && mv $@-t $@ )
-
-Makefile: Makefile.in.in ../config.status POTFILES
+SPECIALS: SPECIALS.in
+	@if test -f "SPECIALS" ; then \
+		rm SPECIALS; \
+	fi && \
+	for i in `cat SPECIALS.in`; do \
+		intltool-extract --type="gettext/ini" "../$$i" ; echo "$$i.h" >> SPECIALS ; \
+	done
+Makefile: Makefile.in.in ../config.status POTFILES SPECIALS
 	cd .. \
 	  && CONFIG_FILES=$(subdir)/$@.in CONFIG_HEADERS= \
 	       $(SHELL) ./config.status

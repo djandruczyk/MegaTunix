@@ -66,8 +66,8 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
 ALL_LINGUAS="es "
 AM_GLIB_GNU_GETTEXT
 dnl AM_GNU_GETTEXT([external])
-mtxlocaledir='${prefix}/share/MegaTunix/locale'
-AC_SUBST(mtxlocaledir)
+MTXLOCALEDIR=[${prefix}/share/MegaTunix/locale]
+AC_SUBST(MTXLOCALEDIR)
 
 dnl Checks for header files.
 dnl AC_HEADER_STDC
@@ -188,8 +188,10 @@ RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
 DATA_DIR=$datarootdir/MegaTunix
+datadir=$datarootdir/MegaTunix
 LOCALE_DIR=$datarootdir/MegaTunix/locale
 
+AC_SUBST(datadir)
 AC_SUBST(DATA_DIR)
 AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)

@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-E 029 series EGO Params
-tab_name=_EGO Settings
+_tab_name=_EGO Settings
 id_prefix=ego_
 groups=defaults
 

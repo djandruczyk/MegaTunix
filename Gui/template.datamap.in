@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the Template Tab
-tab_name=_Template
+_tab_name=_Template
 id_prefix=Temp_
 groups=defaults
 

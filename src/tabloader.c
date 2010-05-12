@@ -113,7 +113,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 
 			label = gtk_label_new(NULL);
-			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
+			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),_(tab_name));
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
 			{
 				if (tmpi)

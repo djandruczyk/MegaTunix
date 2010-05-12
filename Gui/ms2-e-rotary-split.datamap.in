@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MS2-E Rotary Split Table
-tab_name=_Rotary
+_tab_name=_Rotary
 id_prefix=Rot_
 groups=defaults,load,rpm,table
 bind_to_list=ign

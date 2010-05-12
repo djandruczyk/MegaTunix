@@ -1,6 +1,6 @@
 [global]
 description=Object data map for VE-Table 2, 8x8 (page 1)
-tab_name=_VE Table(2)
+_tab_name=_VE Table(2)
 id_prefix=VE2_
 groups=defaults,load,rpm,vetable
 bind_to_list=dt_controls

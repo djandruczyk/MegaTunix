@@ -1,6 +1,6 @@
 [global]
 description=Object data map for settings tab
-tab_name=_Settings
+_tab_name=_Settings
 id_prefix=CFG_
 groups=defaults
 

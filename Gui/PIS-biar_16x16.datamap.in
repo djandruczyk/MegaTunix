@@ -1,6 +1,6 @@
 [global]
 description=Object data map for base ignition +advance / -retard tab
-tab_name=Base _Ignition
+_tab_name=Base _Ignition
 id_prefix=BIAR_
 groups=defaults
 

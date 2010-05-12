@@ -1,6 +1,6 @@
 [global]
 description=Object data map for alpha-n base pulse width tab
-tab_name=Alpha Fuel
+_tab_name=Alpha Fuel
 id_prefix=ANBPW_
 groups=defaults
 

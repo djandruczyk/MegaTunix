@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for MS2 Alpha-N conv table
-tab_name=_Alpha-N
+_tab_name=_Alpha-N
 id_prefix=AN_
 groups=defaults,load,rpm,table_1
 bind_to_list=valid_ecu_ctrls,an_ctrls

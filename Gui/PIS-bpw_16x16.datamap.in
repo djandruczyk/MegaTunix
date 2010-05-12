@@ -1,6 +1,6 @@
 [global]
 description=Object data map for Base Pulse Width tab
-tab_name=Base _Fuel
+_tab_name=Base _Fuel
 id_prefix=BPW_
 groups=defaults
 

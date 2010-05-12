@@ -1,6 +1,6 @@
 [global]
 description=Object data map for Rotary Trailing Table
-tab_name=_Rotary Trailing
+_tab_name=_Rotary Trailing
 id_prefix=Rot_
 groups=defaults,load,rpm,table
 

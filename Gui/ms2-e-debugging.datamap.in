@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2-Extra debugging Tab
-tab_name=_Debugging/Advanced
+_tab_name=_Debugging/Advanced
 id_prefix=DBG
 ellipsize=TRUE
 groups=defaults

@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MS-II Warmup tables
-tab_name=_Warmup Tables
+_tab_name=_Warmup Tables
 id_prefix=WARM_
 groups=defaults,temp,cp,pp,ase,aset,isteps,ipwm,coldadv,puddling,tau
 bind_to_list=valid_ecu_ctrls

@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for B&G Constants (most firmwares except DT... )
-tab_name=_Engine Vitals
+_tab_name=_Engine Vitals
 id_prefix=CONST_
 groups=defaults
 

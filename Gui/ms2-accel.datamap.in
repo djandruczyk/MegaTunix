@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MS2 Accel enrich including X-Tau
-tab_name=_Accel Enrich
+_tab_name=_Accel Enrich
 id_prefix=ae_
 groups=defaults,temp,warm_x,warm_tau,rpm,x_accel,x_decel,tau_accel,tau_decel
 bind_to_list=valid_ecu_ctrls

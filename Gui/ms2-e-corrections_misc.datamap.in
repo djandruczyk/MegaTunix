@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MS2-Extra Corrections/Misc Tab
-tab_name=_Misc/Corrections
+_tab_name=_Misc/Corrections
 id_prefix=mc_
 ellipsize=TRUE
 groups=defaults,dwellv,dwellc,NLbaro,NLbcorr,NLmat,NLmcorr,mat,matretard,iafuel,iadeg

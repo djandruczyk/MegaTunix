@@ -16,6 +16,7 @@
 
 #include <config.h>
 #include <gettext.h>
+#include <libintl.h>
 
 /* Definitions */
 #define BAUDRATE B9600

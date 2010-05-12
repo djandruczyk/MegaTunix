@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-E 029 series Traction Control
-tab_name=_Traction Control
+_tab_name=_Traction Control
 id_prefix=traction_
 groups=defaults
 

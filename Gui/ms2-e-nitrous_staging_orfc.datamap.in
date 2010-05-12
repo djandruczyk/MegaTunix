@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the Nitrous/Staging/ORFC tab
-tab_name=_N<sub>2</sub>O/Staging/ORFC
+_tab_name=_N<sub>2</sub>O/Staging/ORFC
 id_prefix=NSO_
 groups=defaults
 ellipsize=TRUE

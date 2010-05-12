@@ -14,5 +14,5 @@ rtmap_DATA = $(rtmap_in_files:.rtv_map.in=.rtv_map)
 
 EXTRA_DIST = $(rtmap_DATA) README
 
-CLEANFILES = *.rtv_map
+CLEANFILES = *.rtv_map *.h
 

@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MSnS-Extra features tab
-tab_name=_Firmware Features
+_tab_name=_Firmware Features
 id_prefix=features_
 groups=defaults
 

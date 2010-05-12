@@ -1,6 +1,6 @@
 [global]
 description=Object data map for alpha-n base ignition +advance / -retard tab
-tab_name=_Corrections
+_tab_name=_Corrections
 id_prefix=COR_
 groups=defaults
 

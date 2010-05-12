@@ -1,6 +1,6 @@
 [global]
 description=Object data map for WaterInj/NOS/LaunchCtrl for msns-E
-tab_name=_Water/NOS/Launch
+_tab_name=_Water/NOS/Launch
 id_prefix=wnl_
 groups=defaults
 

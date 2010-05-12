@@ -18,3 +18,5 @@ profiles_DATA = $(profiles_in:.prof.in=.prof)
 @INTLTOOL_PROF_RULE@
 
 EXTRA_DIST = $(profiles) README
+
+CLEANFILES = *.h

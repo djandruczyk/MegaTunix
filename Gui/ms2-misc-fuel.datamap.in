@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MS2-Misc Fuel Settings
-tab_name=_Misc Fuel
+_tab_name=_Misc Fuel
 id_prefix=MISC_
 groups=defaults
 bind_to_list=valid_ecu_ctrls

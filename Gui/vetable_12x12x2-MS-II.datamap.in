@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the combined VEtables tab
-tab_name=_VE Tables
+_tab_name=_VE Tables
 id_prefix=VE_
 groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2
 bind_to_list=valid_ecu_ctrls

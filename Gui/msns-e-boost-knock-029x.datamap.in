@@ -1,6 +1,6 @@
 [global]
 description=Object data map for Idle/Boost settings for MSnS-E
-tab_name=_Boost/_Knock
+_tab_name=_Boost/_Knock
 id_prefix=boost_knock_
 groups=defaults
 

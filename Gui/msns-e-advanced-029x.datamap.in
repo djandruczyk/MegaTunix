@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Advanced settings 
-tab_name=_Advanced Options
+_tab_name=_Advanced Options
 id_prefix=adv_
 groups=defaults
 

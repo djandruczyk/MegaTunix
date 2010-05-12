@@ -1002,7 +1002,7 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			res = net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
 			break;
 		case HELP:
-			tmpbuf = g_strdup("\
+			tmpbuf = g_strdup("\n\
 Supported Calls:\n\r\
 help\n\r\
 quit\n\r\

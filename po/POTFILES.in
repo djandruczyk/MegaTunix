@@ -1,4 +1,4 @@
-[encoding: UTF-8]
+#[encoding: UTF-8]
 ./src/2d_table_editor.c
 ./src/3d_vetable.c
 ./src/about_gui.c
@@ -79,11 +79,13 @@
 ./gaugedesigner/tblocks.c
 ./gaugedesigner/tgroups.c
 ./gaugedesigner/warnings.c
+./gaugedesigner/gaugedesigner.glade
 ./dashdesigner/events.c
 ./dashdesigner/loadsave.c
 ./dashdesigner/main.c
 ./dashdesigner/rtv_parser.c
 ./dashdesigner/xml.c
+./dashdesigner/dashdesigner.glade
 ./widgets/apifix.c
 ./widgets/curve.c
 ./widgets/curve-demo.c
@@ -184,9 +186,3 @@
 ./Gui/vetable_16x16x3.glade
 ./Gui/vetable_8x8e.glade
 ./Gui/warmupwizard.glade
-./desktop/Automotive.directory.in
-./menu/dashdesigner.desktop.in
-./menu/gaugedesigner.desktop.in
-./menu/megatunix.desktop.in
-./menu/mtxloader.desktop.in
-./Interrogator/Profiles/shit.prof.in

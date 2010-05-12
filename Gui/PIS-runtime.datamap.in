@@ -1,6 +1,6 @@
 [global]
 description=Object data map for MegaSquirt Runtime Display
-tab_name=_Runtime Display
+_tab_name=_Runtime Display
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------

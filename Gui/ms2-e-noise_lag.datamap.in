@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2-Extra Noise/Lag Tab
-tab_name=_Noise/Filtering
+_tab_name=_Noise/Filtering
 id_prefix=NOISE_
 groups=defaults
 

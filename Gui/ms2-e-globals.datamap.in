@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS-2 Globals tab
-tab_name=_Global Settings
+_tab_name=_Global Settings
 id_prefix=MS2_GLOB_
 groups=defaults
 

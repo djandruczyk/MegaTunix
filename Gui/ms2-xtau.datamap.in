@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2 X-Tau tab
-tab_name=_X-Tau
+_tab_name=_X-Tau
 id_prefix=XTAU_
 groups=defaults,temp,warm_x,warm_tau,rpm,x_accel,x_decel,tau_accel,tau_decel
 

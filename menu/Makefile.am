@@ -17,3 +17,4 @@ menu_DATA = $(menu_files:.desktop.in=.desktop)
 
 EXTRA_DIST = $(menu_DATA)
 
+CLEANFILES = *.h $(menu_files)

@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the MS2-idle
-tab_name=_Idle/Revlimit/EGO
+_tab_name=_Idle/Revlimit/EGO
 id_prefix=ms2idle_
 groups=defaults
 bind_to_list=valid_ecu_ctrls

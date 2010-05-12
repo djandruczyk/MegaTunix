@@ -2,7 +2,7 @@
 
 [global]
 description=Object data map for Accel Wizard
-tab_name=_Accel Wizard
+_tab_name=_Accel Wizard
 id_prefix=ae_
 groups=defaults
 

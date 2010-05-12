@@ -1,6 +1,6 @@
 [global]
 description=Object data map for Idle settings for MSnS-E
-tab_name=_Idle Control
+_tab_name=_Idle Control
 id_prefix=idle_
 groups=defaults
 
