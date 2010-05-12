@@ -374,7 +374,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 			case MTX_STRING:
 				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
 				if (OBJ_GET(widget,"tooltip") != NULL)
-					gtk_tooltips_set_tip(tip,widget,(gchar *)OBJ_GET(widget,"tooltip"),NULL);
+					gtk_tooltips_set_tip(tip,widget,(gchar *)_(OBJ_GET(widget,"tooltip")),NULL);
 				if (OBJ_GET(group->object, "bind_to_list"))
 					bind_to_lists(widget,(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
@@ -578,7 +578,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget  has "tooltip" set the tip on the widget */
 	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
 	{
-		gtk_tooltips_set_tip(tip,widget,tmpbuf,NULL);
+		gtk_tooltips_set_tip(tip,widget,_(tmpbuf),NULL);
 		g_free(tmpbuf);
 	}
 

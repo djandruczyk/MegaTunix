@@ -145,7 +145,7 @@ EXPORT void load_status_pf(void)
 					0,0);
 
 			label = gtk_label_new(NULL);
-			gtk_label_set_markup(GTK_LABEL(label),tmpbuf);
+			gtk_label_set_markup(GTK_LABEL(label),_(tmpbuf));
 			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 			g_free(tmpbuf);
 			if (cfg_read_string(cfgfile,section,"active_fg",&tmpbuf))

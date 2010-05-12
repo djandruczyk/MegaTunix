@@ -236,9 +236,14 @@ EXPORT gboolean load_realtime_map_pf(void )
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
-						OBJ_SET(object,
-								keys[j],
-								g_strdup(tmpbuf));
+						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
+							OBJ_SET(object,
+									keys[j],
+									g_strdup(_(tmpbuf)));
+						else
+							OBJ_SET(object,
+									keys[j],
+									g_strdup(tmpbuf));
 						if (strstr(keys[j],"internal_names") != NULL)
 						{
 							vector = g_strsplit(tmpbuf,",",-1); 

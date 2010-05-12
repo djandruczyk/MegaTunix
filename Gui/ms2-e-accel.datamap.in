@@ -78,9 +78,10 @@ raw_upper=200
 _tooltip=EAE Sucked-from-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAEAWWCLT]
-keys=page,size,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
 page=1
 size=_S16_
+use_color=TRUE
 raw_lower=-400
 raw_upper=4500
 dl_conv_expr=x*10
@@ -97,9 +98,10 @@ raw_upper=200
 _tooltip=EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details
 
 [EAESOWCLT]
-keys=page,size,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
 page=1
 size=_S16_
+use_color=TRUE
 raw_lower=-400
 raw_upper=4500
 dl_conv_expr=x*10

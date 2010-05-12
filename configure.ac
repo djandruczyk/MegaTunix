@@ -187,11 +187,11 @@ REALTIME_MAPS_DATA_DIR=RealtimeMaps
 RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
-dnl DATA_DIR=$datarootdir/MegaTunix
-dnl LOCALE_DIR=$datarootdir/MegaTunix/locale
+DATA_DIR=$datarootdir/MegaTunix
+LOCALE_DIR=$datarootdir/MegaTunix/locale
 
-dnl AC_SUBST(DATA_DIR)
-dnl AC_SUBST(LOCALE_DIR)
+AC_SUBST(DATA_DIR)
+AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(SNAPSHOTS_DATA_DIR)
 AC_SUBST(DASHES_DATA_DIR)

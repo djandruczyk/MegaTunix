@@ -51,9 +51,10 @@ raw_upper=120
 _tooltip=Nonlinear Baro correction/compensation value, corresponds to baro reading at the left
 
 [NLmat]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
+use_color=TRUE
 raw_lower=-400
 raw_upper=3000
 dl_conv_expr=x*10
@@ -72,9 +73,10 @@ raw_upper=120
 _tooltip=NON-Linear MAT correction
 
 [mat]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
+use_color=TRUE
 raw_lower=-400
 raw_upper=3000
 dl_conv_expr=x*10
