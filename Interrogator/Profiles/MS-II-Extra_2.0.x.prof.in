@@ -22,10 +22,14 @@ Table_Write_Command=ms2_table_reflash
 Capabilities=_MS2_,_MS2_EXTRA_
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
+CLT_Table_Page=5
+MAT_Table_Page=6
+EGO_Table_Page=7
+MAF_Table_Page=8
 TotalTables=11
-TotalPages=7
-ToothmonPage=5
-TrigmonPage=6
+TotalPages=11
+ToothmonPage=9
+TrigmonPage=10
 
 [table_0]
 _table_name=VE-Table 1, MS-II-Extra 12x12
@@ -455,10 +459,30 @@ length=1024
 
 [page_5]
 dl_by_default=FALSE
+phys_ecu_page=0
+length=2048
+
+[page_6]
+dl_by_default=FALSE
+phys_ecu_page=1
+length=2048
+
+[page_7]
+dl_by_default=FALSE
+phys_ecu_page=2
+length=1024
+
+[page_8]
+dl_by_default=FALSE
+phys_ecu_page=3
+length=2048
+
+[page_9]
+dl_by_default=FALSE
 phys_ecu_page=240
 length=1024
 
-[page_6]
+[page_10]
 dl_by_default=FALSE
 phys_ecu_page=241
 length=1024

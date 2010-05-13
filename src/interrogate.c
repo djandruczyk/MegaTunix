@@ -409,6 +409,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
+	if (firmware->capabilities & PIS)
+	{
+		if(!cfg_read_int(cfgfile,"parameters","CLT_Table_Page",
+					&firmware->clt_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,"parameters","MAT_Table_Page",
+					&firmware->mat_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+	}
 	if (firmware->capabilities & MS2)
 	{
 		if(!cfg_read_int(cfgfile,"parameters","MS2_RT_Page",
@@ -417,6 +426,18 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		if(!cfg_read_int(cfgfile,"parameters","InterCharDelay",
 					&firmware->interchardelay))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"InterCharDelay\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,"parameters","CLT_Table_Page",
+					&firmware->clt_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,"parameters","MAT_Table_Page",
+					&firmware->mat_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,"parameters","EGO_Table_Page",
+					&firmware->ego_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"EGO_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,"parameters","MAF_Table_Page",
+					&firmware->maf_table_page))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAF_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_int(cfgfile,"parameters","RT_total_bytes",
 				&firmware->rtvars_size))

@@ -371,15 +371,9 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	fprintf(f, "//------------------------------------------------------------------------------\n");
 	fclose(f);
 
-
-	/* Send it to ECU, we use 4 as that is the virtual page that references the actual
-	 * page in the firmware (page 2) for the AFR table. See the interrogation profile
-	 * [page_x] sections for more details
-	 */
-	if (firmware->capabilities & MS2_E)
-		table_write(7,1024,(guint8 *)table);
-	else
-		table_write(4,1024,(guint8 *)table);
+	table_write(firmware->ego_table_page,
+			firmware->page_params[firmware->ego_table_page]->length,
+		       	(guint8 *)table);
 
 	return TRUE;
 }

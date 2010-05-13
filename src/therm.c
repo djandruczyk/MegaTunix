@@ -160,15 +160,16 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 	fprintf(f, "//------------------------------------------------------------------------------\n");
 	fclose(f);
 
-	if (firmware->capabilities & PIS)
-	{
-		// write thermal table the PIS way :)
-		table_write(tabletype==CTS?2:3,512,(guint8 *)table);
-	}
-	else if (firmware->capabilities & MS2_E)
-		table_write(tabletype==CTS?5:6,2048,(guint8 *)table);
+	if (tabletype == CTS)
+		table_write(firmware->clt_table_page,
+			firmware->page_params[firmware->clt_table_page]->length,
+		       	(guint8 *)table);
+	else if (tabletype == MAT)
+		table_write(firmware->mat_table_page,
+			firmware->page_params[firmware->mat_table_page]->length,
+		       	(guint8 *)table);
 	else
-		table_write(tabletype==CTS?2:3,2048,(guint8 *)table);
+		printf(_("Serious ERROR!, tabletype is not CTS or MAT\n"));
 
 	return TRUE;
 }

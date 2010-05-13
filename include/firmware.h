@@ -106,6 +106,10 @@ struct _Firmware_Details
 	gint total_te_tables;	/*! How many te tables do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
+	gint clt_table_page;	/*! Where CLT table is stored */
+	gint mat_table_page;	/*! Where MAT table is stored */
+	gint ego_table_page;	/*! Where EGO table is stored */
+	gint maf_table_page;	/*! Where MAF table is stored */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
 	gint compositemon_page;	/*! Composite Monitor RO Page (ms2-extra only)*/
 	Page_Params **page_params;/*! special vars per page */
