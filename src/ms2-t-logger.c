@@ -331,14 +331,14 @@ void ms2_update_trigtooth_display(gint page)
 	g_free(message);
 
 	cairo_set_font_size(cr,11);
-	message = g_strdup_printf("Engine RPM:  %.1f",ttm_data->rpm);
+	message = g_strdup_printf(_("Engine RPM:  %.1f"),ttm_data->rpm);
 	cairo_text_extents (cr, message, &extents);
 	space +=extents.height;
 	cairo_move_to(cr,ttm_data->usable_begin+5,space+extents.height/8);
 	cairo_show_text(cr,message);
 	g_free(message);
 
-	message = g_strdup_printf("Sample Time: %i ms.",ttm_data->sample_time);
+	message = g_strdup_printf(_("Sample Time: %i ms."),ttm_data->sample_time);
 	cairo_text_extents (cr, message, &extents);
 	space +=extents.height;
 	cairo_move_to(cr,ttm_data->usable_begin+5,space+extents.height/8);

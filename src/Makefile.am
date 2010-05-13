@@ -33,7 +33,6 @@ megatunix_SOURCES = \
 	dep_processor.c \
 	dispatcher.c \
 	fileio.c \
-	firmware.c \
 	gui_handlers.c \
 	helpers.c \
 	init.c \
@@ -72,7 +71,6 @@ megatunix_SOURCES = \
 	therm.c \
 	threads.c \
 	timeout_handlers.c \
-	tuning_gui.c \
 	user_outputs.c \
 	vetable_gui.c \
 	vex_support.c \

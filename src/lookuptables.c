@@ -336,19 +336,19 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 
 	if (!table)
 	{
-		printf("FATAL_ERROR: direct_lookup_data, table paramer is null\n");
+		printf(_("FATAL_ERROR: direct_lookup_data, table parameter is null\n"));
 		assert(table);
 	}
 
 	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
 	if (!lookuptable)
 	{
-		printf("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n",table);
+		printf(_("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"),table);
 		return offset;
 	}
 	if (!lookuptable->array)
 	{
-		printf("FATAL_ERROR: direct_lookup_data, %s->array is null\n",table);
+		printf(_("FATAL_ERROR: direct_lookup_data, %s->array is null\n"),table);
 		return offset;
 	}
 	return lookuptable->array[offset];
@@ -390,7 +390,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 	else	/* i.e.  NOT created,  build it */
 	{
 		lookuptables_config_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title(GTK_WINDOW(lookuptables_config_window),"MegaTunix LookupTables");
+		gtk_window_set_title(GTK_WINDOW(lookuptables_config_window),_("MegaTunix LookupTables"));
 		gtk_window_set_default_size(GTK_WINDOW(lookuptables_config_window),300,200);
 		vbox = gtk_vbox_new(FALSE,0);
 		gtk_container_add(GTK_CONTAINER(lookuptables_config_window),vbox);
@@ -556,7 +556,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	}
 	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,int_name);
 	if (!lookuptable)
-		printf("BAD things man,  gonna crash!\n");
+		printf(_("No lookuptable found! expect a crash!!\n"));
 	g_free(lookuptable->array); /* Free the old one */
 	g_free(lookuptable->filename); /* Free the old one */
 	g_free(lookuptable); /* Free the old one */
@@ -609,7 +609,7 @@ void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {
 	LookupTable *table;
 	table = (LookupTable *)value;
-	printf(__FILE__": dump_hash()\n\tKey %s, Value %p, %s\n",(gchar *)key, value,table->filename);
+	printf(_(": dump_hash()\n\tKey %s, Value %p, %s\n"),(gchar *)key, value,table->filename);
 }
 
 

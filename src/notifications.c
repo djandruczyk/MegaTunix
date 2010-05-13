@@ -314,7 +314,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		close_dialog(widget,NULL);
-		set_title(g_strdup("Offline Mode..."));
+		set_title(g_strdup(_("Offline Mode...")));
 		set_offline_mode();
 	}
 	if (response == GTK_RESPONSE_CLOSE)

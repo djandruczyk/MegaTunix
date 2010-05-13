@@ -155,7 +155,7 @@ gboolean setup_socket(gint port)
 	res = WSAStartup(MAKEWORD(2,2), &wsaData);
 	if (res != 0)
 	{
-		printf("WSAStartup failed: %d\n",res);
+		printf(_("WSAStartup failed: %d\n"),res);
 		return FALSE;
 	}
 #endif
@@ -340,7 +340,7 @@ void *ascii_socket_server(gpointer data)
 	gint res = 0;
 
 
-	tmpbuf = g_strdup_printf("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r",VERSION);
+	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r"),VERSION);
 	net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
 	g_free(tmpbuf);
 
@@ -576,7 +576,7 @@ close_binary:
 								if (firmware->text_revision)
 									res = net_send(fd,(guint8 *)firmware->text_revision,firmware->txt_rev_len,0);
 								else
-									printf("text_revision undefined!\n");
+									printf(_("text_revision undefined!\n"));
 						}
 						/*						printf("numeric/text revision sent, %i bytes delivered\n",res);*/
 						continue;
@@ -979,25 +979,25 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			break;
 		case GET_SIGNATURE:
 			if (!firmware)
-				net_send(fd,(guint8 *)"Not Connected yet",strlen(" Not Connected yet"),0);
+				net_send(fd,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")),0);
 			else
 			{
 				if (firmware->actual_signature)
 					net_send(fd,(guint8 *)firmware->actual_signature,strlen(firmware->actual_signature),0);
 				else
-					net_send(fd,(guint8 *)"Offline mode, no signature",strlen("Offline mode, no signature"),0);
+					net_send(fd,(guint8 *)_("Offline mode, no signature"),strlen(_("Offline mode, no signature")),0);
 			}
 			res = net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
 			break;
 		case GET_REVISION:
 			if (!firmware)
-				net_send(fd,(guint8 *)"Not Connected yet",strlen(" Not Connected yet"),0);
+				net_send(fd,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")),0);
 			else
 			{
 				if (firmware->text_revision)
 					net_send(fd,(guint8 *)firmware->text_revision,strlen(firmware->text_revision),0);
 				else
-					net_send(fd,(guint8 *)"Offline mode, no revision",strlen("Offline mode, no revision"),0);
+					net_send(fd,(guint8 *)_("Offline mode, no revision"),strlen(_("Offline mode, no revision")),0);
 			}
 			res = net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
 			break;
@@ -1118,7 +1118,7 @@ void socket_get_rtv_list(gint fd)
 			len = strlen(tmpbuf);
 			res = net_send(fd,(guint8 *)tmpbuf,len,0);
 			if (res != len)
-				printf("SHORT WRITE!\n");
+				printf(_("SHORT WRITE!\n"));
 			g_free(tmpbuf);
 		}
 	}
@@ -1126,7 +1126,7 @@ void socket_get_rtv_list(gint fd)
 	len = strlen(tmpbuf);
 	res = net_send(fd,(guint8 *)tmpbuf,len,0);
 	if (len != res)
-		printf("SHORT WRITE!\n");
+		printf(_("SHORT WRITE!\n"));
 	g_free(tmpbuf);
 }
 
@@ -1164,7 +1164,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		len = strlen(tmpbuf);
 		res = net_send(fd,(guint8 *)tmpbuf,len,0);
 		if (len != res)
-			printf("SHORT WRITE!\n");
+			printf(_("SHORT WRITE!\n"));
 		g_free(tmpbuf);
 		g_strfreev(vars); 
 	}
@@ -1356,7 +1356,7 @@ void *network_repair_thread(gpointer data)
 		}
 		else
 		{
-			printf ("Unable to open network port, sleeping 500 ms to see if it resolves\n");
+			printf (_("Unable to open network port, sleeping 500 ms to see if it resolves\n"));
 			g_usleep(500000); /* Sleep 500ms */
 		}
 	}
@@ -1621,7 +1621,7 @@ void *notify_slaves_thread(gpointer data)
 					memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
 			}
 			else
-				printf("Slave update WRITE ERROR!\n");
+				printf(_("Peer update WRITE ERROR!\n"));
 			g_free(buffer);
 
 			if (res == -1)
@@ -1784,7 +1784,7 @@ close_control:
 					state = GET_DATABYTE;
 				continue;
 			default:
-				printf("Case not handled, bug in state machine!\n");
+				printf(_("Case not handled, bug in state machine!\n"));
 				continue;
 
 		}

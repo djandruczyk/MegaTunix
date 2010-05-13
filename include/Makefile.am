@@ -71,7 +71,6 @@ headers = \
         therm.h \
         threads.h \
         timeout_handlers.h \
-        tuning_gui.h \
         unions.h \
 	user_outputs.h \
         vetable_gui.h \

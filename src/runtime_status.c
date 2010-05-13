@@ -74,12 +74,12 @@ EXPORT void load_status_pf(void)
 		return;
 	}
 
-	set_title(g_strdup("Loading RT Status..."));
+	set_title(g_strdup(_("Loading RT Status...")));
 	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
 	if (!filename)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
-		set_title(g_strdup("ERROR RT Statusfile DOES NOT EXIST!!!"));
+		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
 		return;
 	}
         cfgfile = cfg_open_file(filename);
@@ -90,20 +90,20 @@ EXPORT void load_status_pf(void)
 		{
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
 			g_free(filename);
-			set_title(g_strdup("ERROR RT Status API MISMATCH!!!"));
+			set_title(g_strdup(_("ERROR RT Status API MISMATCH!!!")));
 			return;
 		}
 
 		if(!cfg_read_int(cfgfile,"global","total_status",&count))
 		{
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
-			set_title(g_strdup("ERROR RT Status cfgfile problem!!!"));
+			set_title(g_strdup(_("ERROR RT Status cfgfile problem!!!")));
 			return;
 		}
 
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
-		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
+		gtk_window_set_title(GTK_WINDOW(window),_("ECU Status"));
 		x = (GINT)OBJ_GET(global_data,"status_x_origin");
 		y = (GINT)OBJ_GET(global_data,"status_y_origin");
 		gtk_window_move(GTK_WINDOW(window),x,y);
@@ -202,7 +202,7 @@ EXPORT void load_status_pf(void)
 	}
 
 	g_free(filename);
-	set_title(g_strdup("RT Status Loaded..."));
+	set_title(g_strdup(_("RT Status Loaded...")));
 	return;
 }
 

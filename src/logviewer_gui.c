@@ -87,16 +87,16 @@ void present_viewer_choices(void)
 	if (playback_mode)
 	{
 		gtk_window_set_title(GTK_WINDOW(window),
-				"Playback Mode: Logviewer Choices");
-		frame = gtk_frame_new("Select Variables to playback from the list below...");
+				_("Playback Mode: Logviewer Choices"));
+		frame = gtk_frame_new(_("Select Variables to playback from the list below..."));
 		max_viewables = log_info->field_count;
 	}
 	else
 	{
 		/* Realtime Viewing mode... */
 		gtk_window_set_title(GTK_WINDOW(window),
-				"Realtime Mode: Logviewer Choices");
-		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
+				_("Realtime Mode: Logviewer Choices"));
+		frame = gtk_frame_new(_("Select Realtime Variables to view from the list below..."));
 		max_viewables = rtv_map->derived_total;
 
 	}

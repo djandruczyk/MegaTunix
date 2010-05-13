@@ -77,7 +77,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	if (!firmware->tab_confs)
 		return FALSE;
 
-	set_title(g_strdup("Loading Gui Tabs..."));
+	set_title(g_strdup(_("Loading Gui Tabs...")));
 	bindgroup = g_new0(BindGroup,1);
 	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
@@ -89,22 +89,22 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
-			update_logbar("interr_view","warning",g_strdup_printf("Glade File: "),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_("Glade File: ")),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
-			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_("  is MISSING!\n")),FALSE,FALSE);
 			i++;
 			continue;
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]));
-			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_("Datamap File: ")),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
-			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_("  is MISSING!\n")),FALSE,FALSE);
 			i++;
 			continue;
 		}
-		update_logbar("interr_view",NULL,g_strdup_printf("Load of tab: "),FALSE,FALSE);
+		update_logbar("interr_view",NULL,g_strdup_printf(_("Load of tab: ")),FALSE,FALSE);
 		update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 		xml = glade_xml_new(glade_file,"topframe",NULL);
 		cfgfile = cfg_open_file(map_file);
@@ -148,7 +148,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			if (topframe == NULL)
 			{
 				dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
-				set_title(g_strdup("ERROR Gui Tabs XML problem!!!"));
+				set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
 				return FALSE;
 			}
 			else
@@ -178,13 +178,13 @@ EXPORT gboolean load_gui_tabs_pf(void)
 #ifndef DEBUG
 			g_object_unref(xml);
 #endif
-			update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
+			update_logbar("interr_view",NULL,g_strdup_printf(_(" completed.\n")),FALSE,FALSE);
 		}
 		else
 		{
-			update_logbar("interr_view","warning",g_strdup_printf("\nDatamap File: "),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_("\nDatamap File: ")),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
-			update_logbar("interr_view","warning",g_strdup_printf(" Could not be processed!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(_(" Could not be processed!\n")),FALSE,FALSE);
 		}
 		g_free(map_file);
 		g_free(glade_file);
@@ -205,11 +205,11 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			break;
 
 	}
-	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete!"),FALSE,FALSE);
+	update_logbar("interr_view","warning",g_strdup_printf(_("Tab Loading Complete!")),FALSE,FALSE);
 	tabs_loaded = TRUE;
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
-	set_title(g_strdup("Gui Tabs Loaded..."));
+	set_title(g_strdup(_("Gui Tabs Loaded...")));
 	return TRUE;
 }
 
@@ -402,7 +402,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 
 	if (!lists)
 	{
-		printf(__FILE__": Error, bind_to_lists(), lists is NULL\n");
+		printf(_("Error, bind_to_lists(), lists is NULL\n"));
 		return;
 	}
 	tmpvector = parse_keys(lists,&bind_num_keys,",");

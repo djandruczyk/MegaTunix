@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-12 17:34-0400\n"
+"POT-Creation-Date: 2010-05-12 21:47-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9066,20 +9066,1149 @@ msgstr ""
 msgid "widget isn't visible or sensitive\n"
 msgstr ""
 
-#: src/dataio.c:257
-msgid "Write error!"
+#. Copy the frames per second into a string to display in the window
+#: src/3d_vetable.c:104
+#, c-format
+msgid "Current Frames Per Second: %i"
 msgstr ""
 
-#. For testing if gettext works
-#.
-#: src/main.c:78
+#: src/about_gui.c:49 src/core_gui.c:175
 #, c-format
-msgid "Hello World!\n"
+msgid "MegaTunix %s Tuning Software for Unix-class OS's"
+msgstr ""
+
+#: src/afr_calibrate.c:317
+#, c-format
+msgid "default case, shouldn't have gotten here. afr_enum is %i"
+msgstr ""
+
+#: src/args.c:77
+#, c-format
+msgid "ERROR OCCURRED\n"
+msgstr ""
+
+#: src/args.c:90
+#, c-format
+msgid "not sure what the error is\n"
+msgstr ""
+
+#: src/args.c:100
+#, c-format
+msgid "Network info provided is invalid!\n"
+msgstr ""
+
+#: src/args.c:148
+#, c-format
+msgid "Should do listen mode\n"
+msgstr ""
+
+#: src/args.c:152
+#, c-format
+msgid "debug option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:153
+#, c-format
+msgid "Global debug filename\"%s\"\n"
+msgstr ""
+
+#: src/args.c:154
+#, c-format
+msgid "version option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:155
+#, c-format
+msgid "quiet option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:156
+#, c-format
+msgid "no rttext option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:157
+#, c-format
+msgid "no status option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:158
+#, c-format
+msgid "no maingui option \"%i\"\n"
+msgstr ""
+
+#: src/args.c:159
+#, c-format
+msgid "autolog_dump \"%i\"\n"
+msgstr ""
+
+#: src/args.c:160
+#, c-format
+msgid "autolog_minutes \"%i\"\n"
+msgstr ""
+
+#: src/args.c:161
+#, c-format
+msgid "autolog_dump_dir \"%s\"\n"
+msgstr ""
+
+#: src/args.c:162
+#, c-format
+msgid "autolog_basename \"%s\"\n"
+msgstr ""
+
+#: src/args.c:163
+#, c-format
+msgid "listen mode \"%i\"\n"
+msgstr ""
+
+#: src/args.c:164
+#, c-format
+msgid "network mode \"%i\"\n"
+msgstr ""
+
+#: src/args.c:165
+#, c-format
+msgid "network host \"%s\"\n"
+msgstr ""
+
+#: src/args.c:166
+#, c-format
+msgid "network port \"%i\"\n"
+msgstr ""
+
+#: src/comms.c:86
+#, c-format
+msgid "Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"
+msgstr ""
+
+#: src/comms.c:100
+#, c-format
+msgid ""
+"Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test"
+"()\n"
+msgstr ""
+
+#: src/comms.c:112
+msgid "ECU Connected..."
+msgstr ""
+
+#: src/comms.c:113
+#, c-format
+msgid "ECU Comms Test Successfull\n"
+msgstr ""
+
+#: src/comms.c:123
+#, c-format
+msgid "COMMS ISSUES: Check COMMS tab"
+msgstr ""
+
+#: src/comms.c:125
+#, c-format
+msgid "I/O with ECU Timeout\n"
+msgstr ""
+
+#: src/comms.c:159
+#, c-format
+msgid "Non simple/chunk write command, not notifying peers\n"
+msgstr ""
+
+#: src/comms.c:389
+#, c-format
+msgid "Sending %i of %i bytes"
+msgstr ""
+
+#: src/conversions.c:78
+msgid ""
+": convert_before_download, FATAL ERROR, size undefined for widget at page"
+msgstr ""
+
+#: src/conversions.c:78
+msgid "offset"
+msgstr ""
+
+#: src/conversions.c:113 src/conversions.c:285
+#, c-format
+msgid "big problem, source key is undefined!!\n"
+msgstr ""
+
+#: src/conversions.c:261
+#, c-format
+msgid "BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"
+msgstr ""
+
+#: src/core_gui.c:75
+#, c-format
+msgid "ERROR! Could NOT locate file %s"
+msgstr ""
+
+#: src/core_gui.c:77
+msgid ""
+"\n"
+"<b>MegaTunix</b> doesn't appear to be installed correctly!\n"
+"\n"
+"Did you forget to run <i>\"sudo make install\"</i> ??\n"
+"\n"
+msgstr ""
+
+#: src/dashboard.c:76
+#, c-format
+msgid "Error: could not parse dashboard XML file %s"
+msgstr ""
+
+#: src/dashboard.c:81
+msgid "Dash Cluster"
+msgstr ""
+
+#: src/dashboard.c:249
+#, c-format
+msgid "ERROR, load_geometry, xml node is empty!!\n"
+msgstr ""
+
+#: src/dashboard.c:288
+#, c-format
+msgid "ERROR, load_gauge, xml node is empty!!\n"
+msgstr ""
+
+#: src/dashboard.c:637
+#, c-format
+msgid "dashboard widget is null cannot set attribute(s)!\n"
+msgstr ""
+
+#: src/dashboard.c:859
+#, c-format
+msgid "dashboard widget is null cannot reset tattletale!\n"
+msgstr ""
+
+#: src/dataio.c:257
+#, c-format
+msgid "Write error! \"%s\"\n"
+msgstr ""
+
+#: src/datalogging_gui.c:86
+msgid "Populating Datalogger..."
+msgstr ""
+
+#: src/datalogging_gui.c:91
+#, c-format
+msgid "datalogger windows not present, returning\n"
+msgstr ""
+
+#: src/datalogging_gui.c:524
+#, c-format
+msgid "Autolog dump (log number %i) successfully completed.\n"
+msgstr ""
+
+#: src/datamgmt.c:207
+#, c-format
+msgid "ERROR! attempted set of data with NO SIZE defined\n"
+msgstr ""
+
+#: src/debugging.c:83
+#, c-format
+msgid "Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"
+msgstr ""
+
+#: src/dep_processor.c:110
+#, c-format
+msgid "CASE NOT HANDLED, dep_processor BUG!\n"
+msgstr ""
+
+#: src/dispatcher.c:114
+#, c-format
+msgid "ERROR postfunction was NULL, continuing\n"
+msgstr ""
+
+#: src/dispatcher.c:120
+#, c-format
+msgid "ERROR, couldn't find function with arg \"%s\"\n"
+msgstr ""
+
+#: src/dispatcher.c:127
+#, c-format
+msgid "ERROR, couldn't find function \"%s\"\n"
+msgstr ""
+
+#: src/fileio.c:163
+#, c-format
+msgid "Full Backup Complete...\n"
+msgstr ""
+
+#: src/fileio.c:207
+#, c-format
+msgid ""
+":restore_all_ecu_settings()\n"
+"\tAPI MAJOR version mismatch: \"%i\" != \"%i\"\n"
+" can not load this file for restoration\n"
+msgstr ""
+
+#: src/fileio.c:211
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tAPI MINOR version mismatch: \"%i\" != \"%i\"\n"
+" can not load this file for restoration\n"
+msgstr ""
+
+#: src/fileio.c:217
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"Firmware name mismatch: \"%s\" != \"%s\"\n"
+"can not load this file for restoration\n"
+msgstr ""
+
+#: src/fileio.c:223
+msgid "Restoring ECU settings from File"
+msgstr ""
+
+#: src/fileio.c:238
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do "
+"NOT match,\n"
+"\tcorruption SHOULD be expected\n"
+msgstr ""
+
+#: src/fileio.c:246
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tNumber of variables in this backup \"%i\" does NOT match the length of the "
+"table \"%i\", expect a crash!!!\n"
+msgstr ""
+
+#: src/gui_handlers.c:1016
+msgid "User initiated interrogation..."
+msgstr ""
+
+#: src/gui_handlers.c:1057
+msgid "Reading VE/Constants..."
+msgstr ""
+
+#: src/gui_handlers.c:1107 src/notifications.c:317
+msgid "Offline Mode..."
+msgstr ""
+
+#: src/gui_handlers.c:1423
+#, c-format
+msgid "std_combo_handler, default case!!! wrong wrong wrong!!\n"
+msgstr ""
+
+#: src/gui_handlers.c:1867
+msgid "Updating Controls..."
+msgstr ""
+
+#: src/gui_handlers.c:2046 src/helpers.c:329
+msgid "Ready..."
+msgstr ""
+
+#: src/gui_handlers.c:2412
+#, c-format
+msgid ""
+"ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, "
+"value %i\n"
+msgstr ""
+
+#: src/gui_handlers.c:3331
+#, c-format
+msgid ""
+"toggle_groups_linked, numeber of choices is out of range, it should be 2, it "
+"is %i"
+msgstr ""
+
+#: src/gui_handlers.c:3396
+#, c-format
+msgid "active is %i, num_choices is %i\n"
+msgstr ""
+
+#: src/gui_handlers.c:3397
+#, c-format
+msgid "active is out of bounds for widget %s\n"
+msgstr ""
+
+#: src/helpers.c:73
+msgid "Queuing read of all ECU data..."
+msgstr ""
+
+#: src/helpers.c:323
+msgid "Adjusting for local Temp units..."
+msgstr ""
+
+#: src/helpers.c:360
+#, c-format
+msgid "MS2_WRITE_VERIFY not written yet\n"
+msgstr ""
+
+#: src/helpers.c:363
+#, c-format
+msgid "MS2_MISMATCH_COUNT not written yet\n"
+msgstr ""
+
+#: src/helpers.c:366
+#, c-format
+msgid "MS1_CLOCK not written yet\n"
+msgstr ""
+
+#: src/helpers.c:369
+#, c-format
+msgid "MS2_CLOCK not written yet\n"
+msgstr ""
+
+#: src/helpers.c:436
+#, c-format
+msgid "MS1 Reset detected!, lastcount %i, current %i\n"
+msgstr ""
+
+#: src/helpers.c:476
+#, c-format
+msgid "MS2 rtvars reset detected, lastcount is %i, current %i"
+msgstr ""
+
+#: src/helpers.c:489
+#, c-format
+msgid "MS2_BOOTLOADER not written yet\n"
+msgstr ""
+
+#: src/helpers.c:497
+msgid "No ECU Errors were reported....\n"
+msgstr ""
+
+#: src/helpers.c:564
+msgid "Starting up data renderers..."
+msgstr ""
+
+#: src/interrogate.c:212
+#, c-format
+msgid "Command \"%s\" (%s), returned %i bytes (%s)\n"
+msgstr ""
+
+#: src/interrogate.c:214
+#, c-format
+msgid "Command \"%s\" (%s), returned %i bytes\n"
+msgstr ""
+
+#: src/interrogate.c:369 src/interrogate.c:1167 src/offline.c:215
+#, c-format
+msgid ""
+"Interrogation profile API mismatch (%i.%i != %i.%i):\n"
+"\tFile %s will be skipped\n"
+msgstr ""
+
+#: src/interrogate.c:800
+#, c-format
+msgid "NO \"[cf]_gauge\" key found in te_table%i\n"
+msgstr ""
+
+#: src/interrogate.c:898
+#, c-format
+msgid "X multi_sources length mismatch!\n"
+msgstr ""
+
+#: src/interrogate.c:932
+#, c-format
+msgid "Y multi_sources length mismatch!\n"
+msgstr ""
+
+#: src/interrogate.c:967
+#, c-format
+msgid "Z multi_sources length mismatch!\n"
+msgstr ""
+
+#: src/interrogate.c:994
+#, c-format
+msgid "Detected Firmware: %s\n"
+msgstr ""
+
+#: src/interrogate.c:995
+#, c-format
+msgid "Loading Settings from: \"%s\"\n"
+msgstr ""
+
+#: src/interrogate.c:1034
+#, c-format
+msgid ""
+"Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
+"\tFile %s.\n"
+msgstr ""
+
+#: src/interrogate.c:1173
+#, c-format
+msgid "ERROR:!! \"match_on\" key missing from interrogation profile\n"
+msgstr ""
+
+#: src/interrogate.c:1184
+#, c-format
+msgid "ERROR test data not found for test \"%s\"\n"
+msgstr ""
+
+#: src/interrogate.c:1204
+#, c-format
+msgid ""
+"ERROR interrogation check_for match vector does NOT have two args it has %i\n"
+msgstr ""
+
+#: src/locking.c:79
+#, c-format
+msgid ""
+"ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network "
+"socket mode (see -n option)!\n"
+msgstr ""
+
+#: src/locking.c:80
+msgid ""
+"<b>MegaTunix</b> is already Running!\n"
+"Multiple instances are <b><u>NOT</u></b> allowed unless running\n"
+"in network socket mode, see the -n option!\n"
+msgstr ""
+
+#: src/locking.c:197
+#, c-format
+msgid "Error setting serial lock %s\n"
+msgstr ""
+
+#: src/logviewer_core.c:208
+#, c-format
+msgid "LOG signature is \"%s\"\n"
+msgstr ""
+
+#: src/logviewer_core.c:213
+#, c-format
+msgid "Good this firmware is compatible with the firmware we're using\n"
+msgstr ""
+
+#: src/logviewer_core.c:215
+#, c-format
+msgid "mismatch between datalog and current firmware\n"
+msgstr ""
+
+#. Should insert some sort of marker at this index
+#. * in the data arrays...
+#.
+#: src/logviewer_core.c:329
+#, c-format
+msgid "MARK found in logfile. MTX doesn't do anything with these yet...!\n"
+msgstr ""
+
+#: src/logviewer_core.c:335
+#, c-format
+msgid "non numerical line detected\n"
+msgstr ""
+
+#: src/logviewer_core.c:342
+#, c-format
+msgid ""
+"Datalog error, field count assertion failure\n"
+"Expected %i fields, got %i instead\n"
+msgstr ""
+
+#: src/logviewer_gui.c:90
+msgid "Playback Mode: Logviewer Choices"
+msgstr ""
+
+#: src/logviewer_gui.c:91
+msgid "Select Variables to playback from the list below..."
+msgstr ""
+
+#: src/logviewer_gui.c:98
+msgid "Realtime Mode: Logviewer Choices"
+msgstr ""
+
+#: src/logviewer_gui.c:99
+msgid "Select Realtime Variables to view from the list below..."
+msgstr ""
+
+#: src/lookuptables.c:339
+#, c-format
+msgid "FATAL_ERROR: direct_lookup_data, table parameter is null\n"
+msgstr ""
+
+#: src/lookuptables.c:346
+#, c-format
+msgid "FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"
+msgstr ""
+
+#: src/lookuptables.c:351
+#, c-format
+msgid "FATAL_ERROR: direct_lookup_data, %s->array is null\n"
+msgstr ""
+
+#: src/lookuptables.c:393
+msgid "MegaTunix LookupTables"
+msgstr ""
+
+#: src/lookuptables.c:559
+#, c-format
+msgid "No lookuptable found! expect a crash!!\n"
+msgstr ""
+
+#: src/lookuptables.c:612
+#, c-format
+msgid ""
+": dump_hash()\n"
+"\tKey %s, Value %p, %s\n"
+msgstr ""
+
+#: src/ms1-t-logger.c:422
+msgid "Tooth times in usec."
+msgstr ""
+
+#: src/ms1-t-logger.c:424
+msgid "Trigger times in usec."
+msgstr ""
+
+#: src/ms1-t-logger.c:427
+msgid "Tooth times in msec."
+msgstr ""
+
+#: src/ms1-t-logger.c:429
+msgid "Trigger times in msec."
+msgstr ""
+
+#: src/ms1-t-logger.c:438 src/ms2-t-logger.c:334
+#, c-format
+msgid "Engine RPM:  %.1f"
+msgstr ""
+
+#: src/ms1-t-logger.c:445 src/ms2-t-logger.c:341
+#, c-format
+msgid "Sample Time: %i ms."
+msgstr ""
+
+#: src/mtxsocket.c:158
+#, c-format
+msgid "WSAStartup failed: %d\n"
+msgstr ""
+
+#: src/mtxsocket.c:343
+#, c-format
+msgid ""
+"Welcome to MegaTunix %s, ASCII mode enabled\n"
+"\rEnter 'help' for assistance\n"
+"\r"
+msgstr ""
+
+#: src/mtxsocket.c:579
+#, c-format
+msgid "text_revision undefined!\n"
+msgstr ""
+
+#: src/mtxsocket.c:982 src/mtxsocket.c:994
+msgid "Not Connected yet"
+msgstr ""
+
+#: src/mtxsocket.c:988
+msgid "Offline mode, no signature"
+msgstr ""
+
+#: src/mtxsocket.c:1000
+msgid "Offline mode, no revision"
+msgstr ""
+
+#: src/mtxsocket.c:1121 src/mtxsocket.c:1129 src/mtxsocket.c:1167
+#, c-format
+msgid "SHORT WRITE!\n"
+msgstr ""
+
+#: src/mtxsocket.c:1359
+#, c-format
+msgid "Unable to open network port, sleeping 500 ms to see if it resolves\n"
+msgstr ""
+
+#: src/mtxsocket.c:1624
+#, c-format
+msgid "Peer update WRITE ERROR!\n"
+msgstr ""
+
+#: src/mtxsocket.c:1787
+#, c-format
+msgid "Case not handled, bug in state machine!\n"
+msgstr ""
+
+#: src/raweditor.c:71
+#, c-format
+msgid "Page %i"
+msgstr ""
+
+#: src/raweditor.c:74
+#, c-format
+msgid "Page %i RAW ECU data (in HEX)"
+msgstr ""
+
+#: src/req_fuel.c:123
+#, c-format
+msgid ""
+"Serious Error, table_num not defined for reqfuel calc, contact author!\n"
+msgstr ""
+
+#: src/req_fuel.c:156
+msgid "Required Fuel Calculator"
+msgstr ""
+
+#: src/req_fuel.c:169
+msgid "Required Fuel parameters"
+msgstr ""
+
+#: src/rtv_map_loader.c:77
+msgid "Loading Realtime Map..."
+msgstr ""
+
+#: src/rtv_map_loader.c:82
+msgid "ERROR RT Map file DOES NOT EXIST!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:90
+msgid "ERROR RT Map file could NOT be opened!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:98
+msgid "ERROR RT Map API MISMATCH!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:110
+msgid "ERROR RT Map missing data!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:118
+msgid "ERROR RT Map signature MISMATCH!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:156
+msgid "ERROR RT Map missing data problem!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:169
+msgid "ERROR RT Map offset missing!!!"
+msgstr ""
+
+#: src/rtv_map_loader.c:275
+msgid "RT Map loaded..."
+msgstr ""
+
+#: src/rtv_processor.c:75
+#, c-format
+msgid "ERROR, INPUT IS NULL!!!!\n"
+msgstr ""
+
+#: src/rtv_processor.c:95
+#, c-format
+msgid ""
+"Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n"
+msgstr ""
+
+#: src/rtv_processor.c:404
+#, c-format
+msgid ": ERROR: multi_expression hash key is NULL!\n"
+msgstr ""
+
+#: src/runtime_gui.c:385 src/runtime_gui.c:424 src/runtime_gui.c:463
+#, c-format
+msgid "multi is null!!\n"
+msgstr ""
+
+#: src/runtime_sliders.c:81
+msgid "Loading RT Sliders..."
+msgstr ""
+
+#: src/runtime_sliders.c:100
+msgid "ERROR RT Sliders API MISMATCH!!!"
+msgstr ""
+
+#: src/runtime_sliders.c:175
+msgid "RT Sliders Loaded..."
+msgstr ""
+
+#: src/runtime_sliders.c:304 src/runtime_sliders.c:437
+#, c-format
+msgid "No \"real_lower\" value defined for control name %s, datasource %s\n"
+msgstr ""
+
+#: src/runtime_sliders.c:308 src/runtime_sliders.c:441
+#, c-format
+msgid "No \"real_upper\" value defined for control name %s, datasource %s\n"
+msgstr ""
+
+#: src/runtime_status.c:77
+msgid "Loading RT Status..."
+msgstr ""
+
+#: src/runtime_status.c:82
+msgid "ERROR RT Statusfile DOES NOT EXIST!!!"
+msgstr ""
+
+#: src/runtime_status.c:93
+msgid "ERROR RT Status API MISMATCH!!!"
+msgstr ""
+
+#: src/runtime_status.c:100
+msgid "ERROR RT Status cfgfile problem!!!"
+msgstr ""
+
+#: src/runtime_status.c:106
+msgid "ECU Status"
+msgstr ""
+
+#: src/runtime_status.c:205
+msgid "RT Status Loaded..."
+msgstr ""
+
+#: src/runtime_text.c:78
+msgid "Loading RT Text..."
+msgstr ""
+
+#: src/runtime_text.c:87
+msgid "ERROR RunTimeText Map XML file DOES NOT EXIST!!!"
+msgstr ""
+
+#: src/runtime_text.c:109 src/xmlcomm.c:45
+#, c-format
+msgid "error: could not parse file %s\n"
+msgstr ""
+
+#: src/runtime_text.c:130
+msgid "RT Text Loaded..."
+msgstr ""
+
+#: src/runtime_text.c:170 src/xmlcomm.c:148
+#, c-format
+msgid "ERROR, load_potential_args, xml node is empty!!\n"
+msgstr ""
+
+#: src/serialio.c:83
+#, c-format
+msgid "%s Opened Successfully\n"
+msgstr ""
+
+#: src/serialio.c:99
+#, c-format
+msgid "Error Opening \"%s\", Error Code: \"%s\""
+msgstr ""
+
+#: src/serialio.c:101
+#, c-format
+msgid "Error Opening \"%s\", Error Code: %s \n"
+msgstr ""
+
+#: src/serialio.c:279
+#, c-format
+msgid "Serial Port Closed\n"
+msgstr ""
+
+#: src/serialio.c:373
+#, c-format
+msgid "Attempting to open port %s\n"
+msgstr ""
+
+#: src/serialio.c:381
+#, c-format
+msgid "Trying 8192 Baud for ECU link\n"
+msgstr ""
+
+#: src/serialio.c:385
+#, c-format
+msgid "Trying 9600 Baud for ECU link\n"
+msgstr ""
+
+#: src/serialio.c:392
+#, c-format
+msgid "Searching for ECU\n"
+msgstr ""
+
+#. We have a winner !!  Abort loop
+#. We have a winner !!
+#. Abort loop
+#: src/serialio.c:396 src/serialio.c:421
+#, c-format
+msgid "Search successfull\n"
+msgstr ""
+
+#: src/serialio.c:417
+#, c-format
+msgid "Trying 115200 Baud for ECU link\n"
+msgstr ""
+
+#: src/tabloader.c:80
+msgid "Loading Gui Tabs..."
+msgstr ""
+
+#: src/tabloader.c:92
+#, c-format
+msgid "Glade File: "
+msgstr ""
+
+#: src/tabloader.c:94 src/tabloader.c:103
+#, c-format
+msgid "  is MISSING!\n"
+msgstr ""
+
+#: src/tabloader.c:101
+#, c-format
+msgid "Datamap File: "
+msgstr ""
+
+#: src/tabloader.c:107
+#, c-format
+msgid "Load of tab: "
+msgstr ""
+
+#: src/tabloader.c:151
+msgid "ERROR Gui Tabs XML problem!!!"
+msgstr ""
+
+#: src/tabloader.c:181
+#, c-format
+msgid " completed.\n"
+msgstr ""
+
+#: src/tabloader.c:185
+#, c-format
+msgid ""
+"\n"
+"Datamap File: "
+msgstr ""
+
+#: src/tabloader.c:187
+#, c-format
+msgid " Could not be processed!\n"
+msgstr ""
+
+#: src/tabloader.c:208
+#, c-format
+msgid "Tab Loading Complete!"
+msgstr ""
+
+#: src/tabloader.c:212
+msgid "Gui Tabs Loaded..."
+msgstr ""
+
+#: src/tabloader.c:405
+#, c-format
+msgid "Error, bind_to_lists(), lists is NULL\n"
+msgstr ""
+
+#: src/threads.c:93
+#, c-format
+msgid "Command %s is INVALID, aborting call\n"
+msgstr ""
+
+#: src/threads.c:177
+#, c-format
+msgid "CRITICAL ERROR, function \"%s()\" is not found!!\n"
+msgstr ""
+
+#: src/threads.c:263
+#, c-format
+msgid "ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"
+msgstr ""
+
+#: src/threads.c:648
+#, c-format
+msgid ""
+"There are %i pending I/O transactions waiting to get to the ECU, please be "
+"patient.\n"
+msgstr ""
+
+#: src/threads.c:655
+#, c-format
+msgid "Approximately %i Transactions remaining, please wait\n"
+msgstr ""
+
+#: src/threads.c:660
+#, c-format
+msgid "All Transactions complete\n"
+msgstr ""
+
+#: src/threads.c:758
+#, c-format
+msgid "ERROR, MTX_UNDEF, donno what to do!!\n"
+msgstr ""
+
+#: src/timeout_handlers.c:305
+msgid "Initiating background ECU interrogation..."
+msgstr ""
+
+#: src/vetable_gui.c:143
+#, c-format
+msgid "!!! ERROR !!!, rescaler passed invalid enum\n"
+msgstr ""
+
+#: src/vetable_gui.c:194
+#, c-format
+msgid "applicable tables not defined!!!\n"
+msgstr ""
+
+#: src/vetable_gui.c:199
+#, c-format
+msgid "table_num not defined!!!\n"
+msgstr ""
+
+#: src/vex_support.c:762
+#, c-format
+msgid "VEX Header: EVEME %s"
+msgstr ""
+
+#: src/vex_support.c:766
+#, c-format
+msgid "VEX Header: Revision %s"
+msgstr ""
+
+#: src/vex_support.c:770
+#, c-format
+msgid "VEX Header: UserComment: %s"
+msgstr ""
+
+#: src/vex_support.c:774
+#, c-format
+msgid "VEX Header: Date %s"
+msgstr ""
+
+#: src/vex_support.c:778
+#, c-format
+msgid "VEX Header: Time %s"
+msgstr ""
+
+#: src/vex_support.c:814
+#, c-format
+msgid "VEX Import: Page %i out of range <---ERROR\n"
+msgstr ""
+
+#: src/vex_support.c:822
+#, c-format
+msgid "VEX Import: Page %i\n"
+msgstr ""
+
+#: src/vex_support.c:868
+#, c-format
+msgid "VEX Import: Table %i\n"
+msgstr ""
+
+#: src/vex_support.c:1091
+#, c-format
+msgid "VEX Import: VE-Table loaded successfully\n"
+msgstr ""
+
+#: src/vex_support.c:1184
+#, c-format
+msgid ""
+"VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!="
+"%i), aborting!!!\n"
+msgstr ""
+
+#: src/vex_support.c:1191
+#, c-format
+msgid ""
+"VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!"
+"=%i), aborting!!!\n"
+msgstr ""
+
+#: src/vex_support.c:1321
+#, c-format
+msgid "VEX Import: VEtable on page %i updated with data from the VEX file\n"
+msgstr ""
+
+#: src/visibility.c:53
+msgid "Tab Visibility"
+msgstr ""
+
+#: src/visibility.c:62
+#, c-format
+msgid "ERROR, glade element not found!\n"
+msgstr ""
+
+#: src/widgetmgmt.c:170
+#, c-format
+msgid "Error with widget %s, bind_to_list is null\n"
 msgstr ""
 
 #: src/xmlcomm.c:34
 #, c-format
 msgid "comm xml filename is NULL!\n"
+msgstr ""
+
+#: src/xmlcomm.c:90 src/xmlcomm.c:118
+#, c-format
+msgid "ERROR, get_potential_arg_name, xml node is empty!!\n"
+msgstr ""
+
+#: src/xmlcomm.c:201
+#, c-format
+msgid "ERROR, load_command_section, xml node is empty!!\n"
+msgstr ""
+
+#: src/xmlcomm.c:227
+#, c-format
+msgid "ERROR Function %s is NULL\n"
+msgstr ""
+
+#: src/xmlcomm.c:250
+#, c-format
+msgid "ERROR Helper Function %s is NULL\n"
+msgstr ""
+
+#: src/xmlcomm.c:279
+#, c-format
+msgid "ERROR, load_cmd_arguments, xml node is empty!!\n"
+msgstr ""
+
+#: src/xmlcomm.c:308
+#, c-format
+msgid "ERROR, load_cmd_post_functions, xml node is empty!!\n"
+msgstr ""
+
+#: src/xmlcomm.c:325
+#, c-format
+msgid "ERROR Post Function %s is NULL\n"
+msgstr ""
+
+#: src/xmlcomm.c:338
+#, c-format
+msgid "ERROR Post Function w/arg %s is NULL\n"
+msgstr ""
+
+#: src/xmlcomm.c:357
+#, c-format
+msgid "Command key \"%s\"\n"
+msgstr ""
+
+#: src/xmlcomm.c:358
+#, c-format
+msgid "Command name \"%s\"\n"
+msgstr ""
+
+#: src/xmlcomm.c:359
+#, c-format
+msgid "Command desc \"%s\"\n"
+msgstr ""
+
+#: src/xmlcomm.c:361
+#, c-format
+msgid "Command base \"%s\"\n"
+msgstr ""
+
+#: src/xmlcomm.c:363
+#, c-format
+msgid "Helper function \"%s\"\n"
+msgstr ""
+
+#: src/xmlcomm.c:366
+#, c-format
+msgid "Command args (%i): \n"
+msgstr ""
+
+#: src/xmlcomm.c:375
+#, c-format
+msgid "Defer Post Functions (%i): \n"
+msgstr ""
+
+#: src/xmlcomm.c:376
+#, c-format
+msgid "Post Functions (%i): \n"
+msgstr ""
+
+#: src/xmlcomm.c:389
+#, c-format
+msgid "Function call %s (%p)\n"
 msgstr ""
 
 #: gaugedesigner/gaugedesigner.glade:8

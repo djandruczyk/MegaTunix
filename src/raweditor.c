@@ -68,10 +68,10 @@ EXPORT void finish_raweditor(void)
 	{
 		if (!firmware->page_params[i]->dl_by_default)
 			continue;
-		tmpstr=g_strdup_printf("Page %i",i);
+		tmpstr=g_strdup_printf(_("Page %i"),i);
 		label = gtk_label_new(tmpstr);
 		g_free(tmpstr);
-		tmpstr = g_strdup_printf("Page %i RAW ECU data (in HEX)",i);
+		tmpstr = g_strdup_printf(_("Page %i RAW ECU data (in HEX)"),i);
 		frame = gtk_frame_new(tmpstr);
 		g_free(tmpstr);
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);

@@ -140,7 +140,7 @@ gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 			return input/factor;
 			break;
 		default:
-			printf("!!! ERROR !!!, rescaler passed invalid enum\n");
+			printf(_("!!! ERROR !!!, rescaler passed invalid enum\n"));
 			break;
 	}
 	return 0;
@@ -191,12 +191,12 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	if (!OBJ_GET(widget,"applicable_tables"))
 	{
-		printf("applicable tables not defined!!!\n");
+		printf(_("applicable tables not defined!!!\n"));
 		return;
 	}
 	if (!OBJ_GET(widget,"table_num"))
 	{
-		printf("table_num not defined!!!\n");
+		printf(_("table_num not defined!!!\n"));
 		return;
 	}
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");

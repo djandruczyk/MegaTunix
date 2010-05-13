@@ -28,6 +28,7 @@ void set_store_black_pf(void);
 void enable_3d_buttons_pf(void);
 void disable_burner_buttons_pf(void);
 void reset_temps_pf(void);
+void ready_msg_pf(void);
 void simple_read_pf(void *, XmlCmdType);
 gboolean read_ve_const(void *, XmlCmdType);
 gboolean burn_all_helper(void *, XmlCmdType);

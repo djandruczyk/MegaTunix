@@ -111,20 +111,20 @@ trypop:
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			if (!pf)
 			{
-				printf("ERROR postfunction was null, continuing\n");
+				printf(_("ERROR postfunction was NULL, continuing\n"));
 				continue;
 			}
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
-					printf("ERROR, couldn't find function w arg \"%s\"\n",pf->name);
+					printf(_("ERROR, couldn't find function with arg \"%s\"\n"),pf->name);
 				else
 					pf->function_w_arg(message);
 			}
 			else
 			{
 				if (!pf->function)
-					printf("ERROR, couldn't find function \"%s\"\n",pf->name);
+					printf(_("ERROR, couldn't find function \"%s\"\n"),pf->name);
 				else
 					pf->function();
 			}

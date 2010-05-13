@@ -70,7 +70,7 @@ EXPORT void spawn_read_ve_const_pf(void)
 	if (!firmware)
 		return;
 
-	set_title(g_strdup("Queuing read of all ECU data..."));
+	set_title(g_strdup(_("Queuing read of all ECU data...")));
 
 	io_cmd(firmware->get_all_command,NULL);
 }
@@ -320,8 +320,13 @@ EXPORT void disable_burner_buttons_pf(void)
 
 EXPORT void reset_temps_pf(void)
 {
-	set_title(g_strdup("Adjusting for local Temp units..."));
+	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(OBJ_GET(global_data,"temp_units"));
+}
+
+EXPORT void ready_msg_pf(void)
+{
+	set_title(g_strdup(_("Ready...")));
 }
 
 EXPORT void simple_read_pf(void * data, XmlCmdType type)
@@ -352,16 +357,16 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	switch (type)
 	{
 		case WRITE_VERIFY:
-			printf("MS2_WRITE_VERIFY not written yet\n");
+			printf(_("MS2_WRITE_VERIFY not written yet\n"));
 			break;
 		case MISMATCH_COUNT:
-			printf("MS2_MISMATCH_COUNT not written yet\n");
+			printf(_("MS2_MISMATCH_COUNT not written yet\n"));
 			break;
 		case MS1_CLOCK:
-			printf("MS1_CLOCK not written yet\n");
+			printf(_("MS1_CLOCK not written yet\n"));
 			break;
 		case MS2_CLOCK:
-			printf("MS2_CLOCK not written yet\n");
+			printf(_("MS2_CLOCK not written yet\n"));
 			break;
 		case NUM_REV:
 			if (offline)
@@ -428,7 +433,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - ptr8[0] != 255))
 			{
 				ms_reset_count++;
-				printf("MS1 Reset detected!, lastcount %i, current %i\n",lastcount,ptr8[0]);
+				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
 				gdk_beep();
 			}
 			else
@@ -468,8 +473,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					(lastcount - curcount != 65535))
 			{
 				ms_reset_count++;
-				printf("MS2 rtvars reset detected, lastcount %i, current %i\n",lastcount,curcount);
-			 
+				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
 				gdk_beep();
 			}
 			else
@@ -482,7 +486,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_BOOTLOADER:
-			printf("MS2_BOOTLOADER not written yet\n");
+			printf(_("MS2_BOOTLOADER not written yet\n"));
 			break;
 		case MS1_GETERROR:
 			forced_update = TRUE;
@@ -490,7 +494,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
-				thread_update_logbar("error_status_view",NULL,g_strdup("No ECU Errors were reported....\n"),FALSE,FALSE);
+				thread_update_logbar("error_status_view",NULL,g_strdup(_("No ECU Errors were reported....\n")),FALSE,FALSE);
 				break;
 			}
 			if (g_utf8_validate(((gchar *)message->recv_buf)+1,count-1,NULL))
@@ -557,7 +561,7 @@ EXPORT void startup_default_timeouts_pf()
 	gint source = 0;
 	gint rate = 0;
 
-	set_title(g_strdup("Starting up data renderers..."));
+	set_title(g_strdup(_("Starting up data renderers...")));
 	rate = (GINT)OBJ_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));

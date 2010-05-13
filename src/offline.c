@@ -212,7 +212,7 @@ gchar * present_firmware_choices()
 		get_file_api(cfgfile,&major,&minor);
 		if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 		{
-			thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
+			thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
 			i++;
 			continue;
 		}

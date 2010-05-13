@@ -42,7 +42,7 @@ void load_comm_xml(gchar *filename)
 
 	if (doc == NULL)
 	{
-		printf("error: could not parse file %s\n",filename);
+		printf(_("error: could not parse file %s\n"),filename);
 		return;
 	}
 
@@ -87,7 +87,7 @@ void load_potential_args(GHashTable *arguments, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, get_potential_arg_name, xml node is empty!!\n");
+		printf(_("ERROR, get_potential_arg_name, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -115,7 +115,7 @@ void load_commands(GHashTable *commands_hash, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, get_potential_arg_name, xml node is empty!!\n");
+		printf(_("ERROR, get_potential_arg_name, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -145,7 +145,7 @@ void load_arg_details(PotentialArg *arg, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, load_potential_args, xml node is empty!!\n");
+		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -198,7 +198,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, load_command_section, xml node is empty!!\n");
+		printf(_("ERROR, load_command_section, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -224,7 +224,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,cmd->func_call_name,(void *)&cmd->function);
 				if (!(cmd->function))
-					printf("ERROR Function %s is NULL\n",cmd->func_call_name);
+					printf(_("ERROR Function %s is NULL\n"),cmd->func_call_name);
 				g_module_close(module);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
@@ -247,7 +247,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,cmd->helper_func_name,(void *)&cmd->helper_function);
 				if (!(cmd->helper_function))
-					printf("ERROR Helper Function %s is NULL\n",cmd->helper_func_name);
+					printf(_("ERROR Helper Function %s is NULL\n"),cmd->helper_func_name);
 				g_module_close(module);
 
 			}
@@ -276,7 +276,7 @@ void load_cmd_args(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, load_cmd_arguments, xml node is empty!!\n");
+		printf(_("ERROR, load_cmd_arguments, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -305,7 +305,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf("ERROR, load_cmd_post_functions, xml node is empty!!\n");
+		printf(_("ERROR, load_cmd_post_functions, xml node is empty!!\n"));
 		return;
 	}
 
@@ -322,7 +322,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,pf->name,(void *)&pf->function);
 				if (!(pf->function))
-					printf("ERROR Post Function %s is NULL\n",pf->name);
+					printf(_("ERROR Post Function %s is NULL\n"),pf->name);
 				pf->w_arg = FALSE;
 				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
@@ -335,7 +335,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,pf->name,(void *)&pf->function_w_arg);
 				if (!(pf->function_w_arg))
-					printf("ERROR Post Function w/arg %s is NULL\n",pf->name);
+					printf(_("ERROR Post Function w/arg %s is NULL\n"),pf->name);
 				pf->w_arg = TRUE;
 				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
@@ -354,16 +354,16 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	guint i = 0;
 
 	cmd = (Command *)value;
-	printf("Command key \"%s\"\n",(gchar *)key);
-	printf("Command name \"%s\"\n",cmd->name);
-	printf("Command desc \"%s\"\n",cmd->desc);
+	printf(_("Command key \"%s\"\n"),(gchar *)key);
+	printf(_("Command name \"%s\"\n"),cmd->name);
+	printf(_("Command desc \"%s\"\n"),cmd->desc);
 	if (cmd->base)
-		printf("Command base \"%s\"\n",cmd->base);
+		printf(_("Command base \"%s\"\n"),cmd->base);
 	if (cmd->helper_function)
-		printf("Helper function \"%s\"\n",cmd->helper_func_name);
+		printf(_("Helper function \"%s\"\n"),cmd->helper_func_name);
 	if (cmd->args->len > 0 )
 	{
-		printf("Command args (%i): \n",cmd->args->len);
+		printf(_("Command args (%i): \n"),cmd->args->len);
 		for (i=0;i<cmd->args->len;i++)
 		{
 			arg = g_array_index(cmd->args,PotentialArg *,i);
@@ -372,8 +372,8 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	}
 	if (cmd->post_functions->len > 0 )
 	{
-		printf("Defer Post Functions (%i): \n",cmd->defer_post_functions);
-		printf("Post Functions (%i): \n",cmd->post_functions->len);
+		printf(_("Defer Post Functions (%i): \n"),cmd->defer_post_functions);
+		printf(_("Post Functions (%i): \n"),cmd->post_functions->len);
 		for (i=0;i<cmd->post_functions->len;i++)
 		{
 			pf = g_array_index(cmd->post_functions,PostFunction *,i);
@@ -386,7 +386,7 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	if (cmd->type == FUNC_CALL)
 	{
 
-		printf("Function call %s (%p)\n",cmd->func_call_name,cmd->function);
+		printf(_("Function call %s (%p)\n"),cmd->func_call_name,cmd->function);
 	}
 	printf("\n\n");
 }

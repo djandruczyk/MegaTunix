@@ -314,7 +314,7 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 			USE_TABLE(generic);
 			break;
 		default:
-			printf("default case,  shouldn't have gotten here. afr_enum is %i\n",afr_enum);
+			printf(_("default case, shouldn't have gotten here. afr_enum is %i"),afr_enum);
 			break;
 	}
 	f = fopen("/tmp/afrTable.log", "w");

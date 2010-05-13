@@ -76,8 +76,8 @@ void unix_create_mtx_lock()
 		else
 		*/
 		{
-			printf ("ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network socket mode (see -n option)!\n");
-			dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed unless running\nin network socket mode, see the -n option!\n");
+			printf (_("ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network socket mode (see -n option)!\n"));
+			dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed unless running\nin network socket mode, see the -n option!\n"));
 		}
 		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
 		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
@@ -194,7 +194,7 @@ gboolean lock_serial(gchar * name)
 		return TRUE;
 	}
 	else
-		printf("Error setting serial lock %s\n",(gchar *)strerror(errno));
+		printf(_("Error setting serial lock %s\n"),(gchar *)strerror(errno));
 #endif
 	return TRUE;
 }

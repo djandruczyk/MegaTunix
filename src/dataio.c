@@ -254,7 +254,7 @@ gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 	*len = res;
 	if (res < 0)
 	{
-		printf("%s \"%s\"\n",_("Write error!"),strerror(errno));
+		printf(_("Write error! \"%s\"\n"),strerror(errno));
 		return FALSE;
 	}
 	return TRUE;

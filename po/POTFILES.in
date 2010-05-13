@@ -20,7 +20,6 @@
 ./src/dep_processor.c
 ./src/dispatcher.c
 ./src/fileio.c
-./src/firmware.c
 ./src/gui_handlers.c
 ./src/helpers.c
 ./src/init.c
@@ -59,7 +58,6 @@
 ./src/therm.c
 ./src/threads.c
 ./src/timeout_handlers.c
-./src/tuning_gui.c
 ./src/user_outputs.c
 ./src/vetable_gui.c
 ./src/vex_support.c

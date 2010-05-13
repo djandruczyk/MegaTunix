@@ -302,7 +302,7 @@ gboolean signal_toothtrig_read(TicklerType type)
  */
 gboolean early_interrogation()
 {
-	set_title(g_strdup("Initiating background ECU interrogation..."));
+	set_title(g_strdup(_("Initiating background ECU interrogation...")));
 	update_logbar("interr_view","warning",g_strdup("Initiating background ECU interrogation...\n"),FALSE,FALSE);
 	io_cmd("interrogation",NULL);
 	return FALSE;

@@ -209,9 +209,9 @@ EXPORT gboolean interrogate_ecu()
 		if (total_read > 0)
 		{
 			if (test->result_type == RESULT_TEXT)
-				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes (%s)\n",test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
+				thread_update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
 			else if (test->result_type == RESULT_DATA)
-				thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",test->actual_test, test->test_desc,total_read),FALSE,FALSE);
+				thread_update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE);
 			ptr = buf;
 			if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
 			{
@@ -366,7 +366,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -797,7 +797,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		if (firmware->te_params[i]->f_gauge || firmware->te_params[i]->c_gauge || firmware->te_params[i]->gauge)	
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
 		else
-			printf("NO \"[cf]_gauge\" key found in te_table%i\n",i);
+			printf(_("NO \"[cf]_gauge\" key found in te_table%i\n"),i);
 		if(!cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->te_params[i]->x_use_color))
 			firmware->te_params[i]->x_use_color = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->te_params[i]->y_use_color))
@@ -895,7 +895,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("X multi_sources length mismatch!\n");
+				printf(_("X multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -929,7 +929,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("Y multi_sources length mismatch!\n");
+				printf(_("Y multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -964,7 +964,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			len4 = g_strv_length(conv_exprs);
 			len5 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
-				printf("Z multi_sources length mismatch!\n");
+				printf(_("Z multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
@@ -991,8 +991,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	/* Display firmware version in the window... */
 
 	dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
-	thread_update_logbar("interr_view","warning",g_strdup_printf("Detected Firmware: %s\n",firmware->name),FALSE,FALSE);
-	thread_update_logbar("interr_view","info",g_strdup_printf("Loading Settings from: \"%s\"\n",firmware->profile_filename),FALSE,FALSE);
+	thread_update_logbar("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
+	thread_update_logbar("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
 
 	return TRUE;
 
@@ -1031,7 +1031,7 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		return NULL;
 	}
 
@@ -1164,13 +1164,13 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
 
 	if (cfg_read_string(cfgfile,"interrogation","match_on",&tmpbuf) == FALSE)
-		printf("ERROR:!! match_on key missing from interrogation profile\n");
+		printf(_("ERROR:!! \"match_on\" key missing from interrogation profile\n"));
 	match_on = g_strsplit(tmpbuf,",",-1);
 	g_free(tmpbuf);
 
@@ -1181,7 +1181,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		test = g_hash_table_lookup(tests_hash,match_on[i]);
 		if (!test)
 		{
-			printf("ERROR test data not found for test %s\n",match_on[i]);
+			printf(_("ERROR test data not found for test \"%s\"\n"),match_on[i]);
 			continue;
 		}
 
@@ -1201,7 +1201,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 		 * stringparse to get them into a consistent form
 		 */
 		if (g_strv_length(vector) != 2)
-			printf("ERROR interrogation check_for match vector does NOT have two args it has %i\n",g_strv_length(vector));
+			printf(_("ERROR interrogation check_for match vector does NOT have two args it has %i\n"),g_strv_length(vector));
 		class = translate_string(vector[0]);
 		/*printf("potential data is %s\n",vector[1]);*/
 		switch (class)

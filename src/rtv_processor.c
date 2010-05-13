@@ -72,7 +72,7 @@ void process_rt_vars(void *incoming)
 	gint seconds = 0;
 
 	if (!incoming)
-		printf("ERROR  INOPUT IS NULL!!!!\n");
+		printf(_("ERROR, INPUT IS NULL!!!!\n"));
 	/* Store timestamps in ringbuffer */
 
 	/* Backup current rtv copy */
@@ -92,7 +92,7 @@ void process_rt_vars(void *incoming)
 		tmpf -= minutes*60.0;
 		seconds = (gint)tmpf;
 
-		thread_update_logbar("dlog_view",NULL,g_strdup_printf("Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n",rtv_map->ts_array->len,hours,minutes,seconds),FALSE,FALSE);
+		thread_update_logbar("dlog_view",NULL,g_strdup_printf(_("Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n"),rtv_map->ts_array->len,hours,minutes,seconds),FALSE,FALSE);
 	}
 
 	for (i=0;i<rtv_map->rtvars_size;i++)
@@ -401,7 +401,7 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 	if (!hash_key)
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": ERROR: multi_expression hash key is NULL!\n"));
-		printf(__FILE__": ERROR: multi_expression hash key is NULL!\n");
+		printf(_(": ERROR: multi_expression hash key is NULL!\n"));
 		return 0.0;
 	}
 	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);

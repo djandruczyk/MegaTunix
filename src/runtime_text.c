@@ -75,7 +75,7 @@ EXPORT void load_rt_text_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
-	set_title(g_strdup("Loading RT Text..."));
+	set_title(g_strdup(_("Loading RT Text...")));
 	if (!rtt_hash)
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
@@ -84,7 +84,7 @@ EXPORT void load_rt_text_pf()
 	if (!filename)
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->rtt_map_file));
-		set_title(g_strdup("ERROR RunTimeText Map XML file DOES NOT EXIST!!!"));
+		set_title(g_strdup(_("ERROR RunTimeText Map XML file DOES NOT EXIST!!!")));
 		return; 
 	}
 
@@ -106,7 +106,7 @@ EXPORT void load_rt_text_pf()
 	g_free(filename);
 	if (doc == NULL)
 	{
-		printf("error: could not parse file %s\n",filename);
+		printf(_("error: could not parse file %s\n"),filename);
 		return;
 	}
 
@@ -127,7 +127,7 @@ EXPORT void load_rt_text_pf()
 	else if ((!args->hide_rttext) && (xml_result))
 		gtk_widget_show_all(window);
 
-	set_title(g_strdup("RT Text Loaded..."));
+	set_title(g_strdup(_("RT Text Loaded...")));
 	return;
 }
 
@@ -167,7 +167,7 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 
 	if (!node->children)
 	{
-		printf("ERROR, load_potential_args, xml node is empty!!\n");
+		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;

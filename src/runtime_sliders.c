@@ -78,7 +78,7 @@ EXPORT void load_sliders_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
-	set_title(g_strdup("Loading RT Sliders..."));
+	set_title(g_strdup(_("Loading RT Sliders...")));
 	rt_sliders = OBJ_GET(global_data,"rt_sliders");
 	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
@@ -97,7 +97,7 @@ EXPORT void load_sliders_pf()
 		{
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\tRuntime Sliders profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API,filename));
 			g_free(filename);
-			set_title(g_strdup("ERROR RT Sliders API MISMATCH!!!"));
+			set_title(g_strdup(_("ERROR RT Sliders API MISMATCH!!!")));
 			return;
 		}
 		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
@@ -172,7 +172,7 @@ finish_off:
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
 	}
 	g_free(filename);
-	set_title(g_strdup("RT Sliders Loaded..."));
+	set_title(g_strdup(_("RT Sliders Loaded...")));
 	return;
 }
 
@@ -301,11 +301,11 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	if (OBJ_GET(object,"real_lower"))
 		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
-		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	if (OBJ_GET(object,"real_upper"))
 		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
-		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",ctrl_name,source);
+		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
 
@@ -434,11 +434,11 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	if (OBJ_GET(object,"real_lower"))
 		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
 	else
-		printf("No \"real_lower\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
+		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	if (OBJ_GET(object,"real_upper"))
 		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
 	else
-		printf("No \"real_upper\" value defined for control name %s, datasource %s\n",slider->ctrl_name,source);
+		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))

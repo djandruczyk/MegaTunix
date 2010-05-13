@@ -73,12 +73,12 @@ void load_dashboard(gchar *filename, gpointer data)
 		doc = xmlReadFile(filename, NULL, 0);
 	if (doc == NULL)
 	{
-		printf("error: could not parse file %s\n",filename);
+		printf(_("Error: could not parse dashboard XML file %s"),filename);
 		return;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	register_widget(filename,window);
-	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
+	gtk_window_set_title(GTK_WINDOW(window),_("Dash Cluster"));
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 
@@ -246,7 +246,7 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 	gint height = 0;
 	if (!node->children)
 	{
-		printf("ERROR, load_geometry, xml node is empty!!\n");
+		printf(_("ERROR, load_geometry, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -285,7 +285,7 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 	gchar *datasource = NULL;
 	if (!node->children)
 	{
-		printf("ERROR, load_gauge, xml node is empty!!\n");
+		printf(_("ERROR, load_gauge, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -634,7 +634,7 @@ void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 	dash = (GtkWidget *)OBJ_GET(widget,"dash");
 	if (!GTK_IS_WIDGET(dash))
 	{
-		printf("dash widget is null!\n");
+		printf(_("dashboard widget is null cannot set attribute(s)!\n"));
 		return;
 	}
 	children = GTK_FIXED(dash)->children;
@@ -856,7 +856,7 @@ gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
 	dash = (GtkWidget *)OBJ_GET(widget,"dash");
 	if (!GTK_IS_WIDGET(dash))
 	{
-		printf("dash widget is null!\n");
+		printf(_("dashboard widget is null cannot reset tattletale!\n"));
 		return FALSE;
 	}
 	children = GTK_FIXED(dash)->children;
@@ -873,7 +873,6 @@ gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
 gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)data;
-	printf("should toggle aa\n");
 	dash_toggle_attribute(gtk_widget_get_toplevel(widget),ANTIALIAS);
 	return TRUE;
 }

@@ -330,12 +330,12 @@ gboolean all_table_export(GIOChannel *iochannel)
 
 		g_string_append_printf(output, "EVEME 1.0\n");
 		g_string_append_printf(output, "UserRev: 1.00\n");
-		g_string_append_printf(output,"UserComment: Table %i; (%s) %s\n",table,firmware->table_params[table]->table_name,vex_comment);
-		g_string_append_printf(output,"Date: %.2i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
+		g_string_append_printf(output, "UserComment: Table %i; (%s) %s\n",table,firmware->table_params[table]->table_name,vex_comment);
+		g_string_append_printf(output, "Date: %.2i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
 
-		g_string_append_printf(output,"Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
-		g_string_append_printf(output,"Page %i\n",z_page);
-		g_string_append_printf(output,"VE Table RPM Range              [%2i]\n",x_bincount);
+		g_string_append_printf(output, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
+		g_string_append_printf(output, "Page %i\n",z_page);
+		g_string_append_printf(output, "VE Table RPM Range              [%2i]\n",x_bincount);
 
 		for (i=0;i<x_bincount;i++)
 			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
@@ -759,23 +759,23 @@ GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
 	{
 		case VEX_EVEME:
 			vex->version = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: EVEME %s",result),FALSE,FALSE);
+			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: EVEME %s"),result),FALSE,FALSE);
 			break;
 		case VEX_USER_REV:	
 			vex->revision = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Revision %s",result),FALSE,FALSE);
+			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Revision %s"),result),FALSE,FALSE);
 			break;
 		case VEX_USER_COMMENT:	
 			vex->comment = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: UserComment: %s",result),FALSE,FALSE);
+			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: UserComment: %s"),result),FALSE,FALSE);
 			break;
 		case VEX_DATE:	
 			vex->date = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Date %s",result),FALSE,FALSE);
+			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Date %s"),result),FALSE,FALSE);
 			break;
 		case VEX_TIME:	
 			vex->time = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Time %s",result),FALSE,FALSE);
+			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Time %s"),result),FALSE,FALSE);
 			break;
 		default:
 			break;
@@ -811,7 +811,7 @@ GIOStatus process_page(Vex_Import *vex, gchar *string)
 	if ((page < 0 ) || (page > firmware->total_pages))
 	{
 		status =  G_IO_STATUS_ERROR;
-		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: Page %i out of range <---ERROR\n",page),FALSE,FALSE);
+		update_logbar("tools_view","warning",g_strdup_printf(_("VEX Import: Page %i out of range <---ERROR\n"),page),FALSE,FALSE);
 		return status;
 	}
 	else
@@ -819,7 +819,7 @@ GIOStatus process_page(Vex_Import *vex, gchar *string)
 		status = G_IO_STATUS_NORMAL;
 		vex->page = page;
 		vex->got_page = TRUE;
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: Page %i\n",page),FALSE,FALSE);
+		update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: Page %i\n"),page),FALSE,FALSE);
 
 	}
 
@@ -865,7 +865,7 @@ GIOStatus process_table(Vex_Import *vex)
 		}
 	}
 
-	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: Table %i\n",vex->table),FALSE,FALSE);
+	update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: Table %i\n"),vex->table),FALSE,FALSE);
 	return G_IO_STATUS_NORMAL;
 }
 
@@ -1088,7 +1088,7 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		vex->got_ve = TRUE;
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VE-Table loaded successfully\n"),FALSE,FALSE);
+		update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: VE-Table loaded successfully\n")),FALSE,FALSE);
 	}
 	return status;
 }
@@ -1181,14 +1181,14 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	/* If dimensions do NOT match, ABORT!!! */
 	if (firmware->table_params[table]->x_bincount != vex->total_x_bins)
 	{
-		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins),FALSE,FALSE);
+		update_logbar("tools_view","warning",g_strdup_printf(_("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n"),firmware->table_params[table]->x_bincount,vex->total_x_bins),FALSE,FALSE);
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins));
 
 		return;
 	}
 	if (firmware->table_params[table]->y_bincount != vex->total_y_bins)
 	{
-		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins),FALSE,FALSE);
+		update_logbar("tools_view","warning",g_strdup_printf(_("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n"),firmware->table_params[table]->y_bincount,vex->total_y_bins),FALSE,FALSE);
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins));
 		return;
 	}
@@ -1318,7 +1318,7 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 	}
 	io_cmd(firmware->burn_all_command,NULL);
 
-	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page),FALSE,FALSE);
+	update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: VEtable on page %i updated with data from the VEX file\n"),vex->page),FALSE,FALSE);
 }
 
 

@@ -382,7 +382,7 @@ gboolean update_ve3ds(gpointer data)
 						multi = g_hash_table_lookup(hash,"DEFAULT");
 
 					if (!multi)
-						printf("multi is null!!\n");
+						printf(_("multi is null!!\n"));
 
 					lookup_current_value(multi->source,&x);
 				}
@@ -421,7 +421,7 @@ gboolean update_ve3ds(gpointer data)
 						multi = g_hash_table_lookup(hash,"DEFAULT");
 
 					if (!multi)
-						printf("multi is null!!\n");
+						printf(_("multi is null!!\n"));
 
 					lookup_current_value(multi->source,&y);
 				}
@@ -460,7 +460,7 @@ gboolean update_ve3ds(gpointer data)
 						multi = g_hash_table_lookup(hash,"DEFAULT");
 
 					if (!multi)
-						printf("multi is null!!\n");
+						printf(_("multi is null!!\n"));
 
 					lookup_current_value(multi->source,&y);
 				}

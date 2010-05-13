@@ -46,7 +46,7 @@ void build_about(GtkWidget *frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	tmpbuf = g_strdup_printf("MegaTunix %s Tuning Software for Unix-class OS's",VERSION);
+	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),VERSION);
 	label = gtk_label_new(tmpbuf);
 	g_free(tmpbuf);
 	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);

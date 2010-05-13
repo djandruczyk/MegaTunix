@@ -16,6 +16,7 @@
 #include <configfile.h>
 #include <datamgmt.h>
 #include <debugging.h>
+#include <defines.h>
 #include <firmware.h>
 #include <string.h>
 
@@ -203,7 +204,7 @@ void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new)
 			data[offset+3] = (guint8)((gint32)s32 >> 24);
 			break;
 		default:
-			printf("ERROR! attempted set of data with NO SIZE defined\n");
+			printf(_("ERROR! attempted set of data with NO SIZE defined\n"));
 	}
 }
  

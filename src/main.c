@@ -74,8 +74,8 @@ gint main(gint argc, gchar ** argv)
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 
 	/* For testing if gettext works
-	*/
 	printf(_("Hello World!\n"));
+	*/
 
 	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref(global_data);
