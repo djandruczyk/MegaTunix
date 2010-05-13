@@ -205,14 +205,14 @@ read_again:
 		if (g_strrstr(a_line->str,"\"") != NULL)
 		{
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
-			printf("LOG signature is \"%s\"\n",log_info->signature);
+			printf(_("LOG signature is \"%s\"\n"),log_info->signature);
 			if (offline)
 			{
 				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
 				if (strstr(rtv_map->applicable_signatures,log_info->signature) != NULL)
-					printf("Good this firmware is compatible with the firmware we're using\n");
+					printf(_("Good this firmware is compatible with the firmware we're using\n"));
 				else
-					printf("mismatch between datalog and current firmware\n");
+					printf(_("mismatch between datalog and current firmware\n"));
 			}
 			goto read_again;
 		}
@@ -326,20 +326,20 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			/* Should insert some sort of marker at this index
 			 * in the data arrays... 
 			 */
-			printf("MARK found in logfile. MTX doesn't do anything with these yet...!\n");
+			printf(_("MARK found in logfile. MTX doesn't do anything with these yet...!\n"));
 			continue;
 		}
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
 		if ((!g_ascii_isdigit(data[0][0])) && (!g_ascii_isdigit(data[0][1])))
 		{
-			printf("non numerical line detected\n");
+			printf(_("non numerical line detected\n"));
 			printf("text %s\n",data[0]);
 			g_strfreev(data);
 			continue;
 		}
 		if (g_strv_length(data) != log_info->field_count)
 		{
-			printf("Datalog error, field count assertion failure\nExpected %i fields, got %i instead\n",log_info->field_count,g_strv_length(data));
+			printf(_("Datalog error, field count assertion failure\nExpected %i fields, got %i instead\n"),log_info->field_count,g_strv_length(data));
 			g_strfreev(data);
 			continue;
 		}

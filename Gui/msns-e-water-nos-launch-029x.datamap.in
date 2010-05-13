@@ -1,0 +1,417 @@
+[global]
+description=Object data map for WaterInj/NOS/LaunchCtrl for msns-E
+_tab_name=_Water/NOS/Launch
+id_prefix=wnl_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+
+[burn_data_button]
+keys=handler,bind_to_list
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+
+#----- Widgets ----------------------------------------------------------------
+
+[nitrous_frame]
+keys=bind_to_list
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
+
+[water_inj_frame]
+keys=bind_to_list
+bind_to_list=x2_water_injection,x3_water_injection
+
+[flat_shift_frame]
+keys=bind_to_list
+bind_to_list=launch_controls
+
+[water_inj_params_table]
+keys=bind_to_list
+bind_to_list=water_controls
+
+[water_inj_features_table]
+keys=bind_to_list
+bind_to_list=water_features
+
+[nitrous_feature_table]
+keys=bind_to_list
+bind_to_list=nos_features
+
+[nos_params_table]
+keys=bind_to_list
+bind_to_list=nos_params
+
+[nos_dt_mapping_table]
+keys=bind_to_list
+bind_to_list=dt_controls,nos_params
+
+[nos_antilag_feature_table]
+keys=bind_to_list
+bind_to_list=nos_params
+
+[nos_antilag_params_table]
+keys=bind_to_list
+bind_to_list=antilag_controls,nos_params
+
+[launch_params_table]
+keys=bind_to_list
+bind_to_list=launch_controls
+
+[variable_launch_feature_table]
+keys=bind_to_list
+bind_to_list=launch_controls
+
+[launch_feature_ebox]
+keys=tooltip
+_tooltip=Launch control is used to limit the rpm of the engine for rapid launch (drag racing), By enabling this you can select how to limit the engine's power for a faster takeoff.  NOTE: spark drop is NOT available on EDIS setups, and the soft limiter is NOT available at all when NOT using a spark mode.
+
+[variable_launch_feature_ebox]
+keys=tooltip
+_tooltip=Variable Launch control uses an external input for the user to set the hard cut limit without needed to run any tuning software.  The Best way to implement it is to hada thumbswitch that is easily accessed, rev the engine to the target hardlimit rpm and hit the button.  The ECU will use this rpm as the hard limit RPM. See http://megasquirt.sf.net/extra/launch.htm
+
+#----- Labels ----------------------------------------------------------------
+
+[lc_sparkdrop_label]
+keys=bind_to_list
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
+
+[lc_sparkbase_label]
+keys=bind_to_list
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
+
+[nitrous_frame_title]
+keys=bind_to_list
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
+
+[water_inj_frame_title]
+keys=bind_to_list
+bind_to_list=water_features,x2_water_injection,x3_water_injection
+
+[nos_spark_retard_label]
+keys=bind_to_list
+bind_to_list=spark_controls,x2_nitrous_control,x3_nitrous_control
+
+[nos_delay_after_launch_label]
+keys=bind_to_list
+bind_to_list=launch_controls,nos_params
+
+[nos_delay_after_flat_shift_label]
+keys=bind_to_list
+bind_to_list=launch_controls,nos_params
+
+[water_iat_setpoint_label]
+keys=c_label,f_label,temp_dep,bind_to_list
+c_label=MAT Enable Setpoint (\302\260C.)
+f_label=MAT Enable Setpoint (\302\260F.)
+temp_dep=TRUE
+bind_to_list=temperature
+
+[nos_min_clt_temp_label]
+keys=c_label,f_label,temp_dep,bind_to_list
+c_label=Min Coolant Temp (\302\260C.)
+f_label=Min Coolant Temp (\302\260F.)
+temp_dep=TRUE
+bind_to_list=temperature,x2_nitrous_control,x3_nitrous_control
+
+#----- Radio/Checkbuttons ----------------------------------------------------
+
+[wi_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+offset=46
+bitvals=0,1
+bitmask=8
+choices=Disabled,Enabled
+toggle_groups=nos_features:x2_tach_pin,water_controls:x3_tach_pin
+bind_to_list=water_features,x2_water_injection,x3_water_injection
+_tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
+
+[nos_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+offset=11
+bitvals=0,1
+bitmask=128
+choices=Disabled,Enabled
+toggle_groups=water_features:x2_tach_pin,x3_tach_pin,nos_subfeatures:nos_params
+bind_to_list=nos_features
+_tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
+
+[nos_enr_bank_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+offset=66
+bitvals=0,1
+bitmask=32
+choices=Bank 1,Bank2
+bind_to_list=dt_controls,nos_params
+_tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
+
+[nos_antilag_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+offset=66
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+toggle_groups=,antilag_controls
+bind_to_list=nos_params,x2_nitrous_control,x3_nitrous_control
+_tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
+
+[launch_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=12
+bitvals=0,1
+bitmask=4
+choices=Disabled,Enabled
+toggle_groups=,launch_controls
+_tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
+
+[var_launch_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=46
+bitvals=0,1
+bitmask=2
+choices=Disabled,Enabled
+_tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
+
+[launch_limit_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+offset=76
+bitvals=1,2,3
+bitmask=3
+choices=Fuel,Spark,Both
+toggle_groups=,lc_spark_ctrls,lc_spark_ctrls
+bind_to_list=launch_controls
+_tooltip=Sets the launch control revlimiter style to be either fuel drop, spark drop, or both
+
+#----- Spinbuttons ----------------------------------------------------------
+
+[water_inj_iat_setpoint_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
+offset=61
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+raw_lower=30
+raw_upper=160
+temp_dep=TRUE
+bind_to_list=temperature,water_controls
+_tooltip=When IAT (Intake Air Temp, MAT) is ABOVE this value and the next two conditions are met, water injection will be enabled...
+
+[water_inj_kpa_setpoint_entry]
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+offset=62
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression,water_controls
+_tooltip=When the intake manifold pressure is above this point (in KPA) and the IAT setpoint and RPM setpoitns have been reached for water injection, the water injection output will turn on.
+
+[water_inj_rpm_setpoint_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+offset=63
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_upper=120
+bind_to_list=water_controls
+_tooltip=When the engine RPM exceeds this value and the setpoints for the IAT temp and manifold pressure are also reached for water injection, the water injection output will turn on.
+
+[nos_min_clt_temp_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,raw_lower,raw_upper,bind_to_list,tooltip
+offset=22
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+raw_lower=30
+raw_upper=160
+bind_to_list=temperature,nos_params
+_tooltip=The engine temp MUST be above this point for the NOS system to even function.
+
+[nos_min_rpm_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,bind_to_list,tooltip
+offset=23
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_lower=10
+bind_to_list=nos_params
+_tooltip=When the engine RPM is between this an MAX rpm and the other conditions are met, nitrous enrich will be added to the existing fuel pulsewidth.
+
+[nos_max_rpm_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,bind_to_list,tooltip
+offset=24
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_lower=30
+bind_to_list=nos_params
+_tooltip=When the engine RPM is between this an MAX rpm and the other conditions are met, nitrous enrich will be added to the exist fuel pulsewidth.
+
+[nos_min_pw_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=69
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+bind_to_list=nos_params
+_tooltip=The pulsewidth to add on top of the existing PW at the NOS min RPM. Pulsewidths are interpolated between the two extremes.
+
+[nos_max_pw_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=70
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+bind_to_list=nos_params
+_tooltip=The pulsewidth to add on top of the existing PW at the NOS max RPM. Pulsewidths are interpolated between the two extremes.
+
+[nos_min_tps_entry]
+keys=offset,bind_to_list,tooltip
+offset=67
+bind_to_list=nos_params
+_tooltip=The minimum TPS value in RAW ADC counts to be reached before Nitrous enrichment can be activated...
+
+[nos_spark_retard_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+offset=68
+precision=2
+dl_conv_expr=x/(352/1000)
+ul_conv_expr=x*(352/1000)
+raw_upper=85
+bind_to_list=spark_controls,nos_params
+_tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a spark ECU Personality.
+
+[nos_delay_after_launch_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=157
+precision=2
+dl_conv_expr=x*100
+ul_conv_expr=x/100
+bind_to_list=launch_controls,nos_params
+_tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
+
+[nos_flat_shift_delay_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=158
+precision=2
+dl_conv_expr=x*100
+ul_conv_expr=x/100
+bind_to_list=launch_controls,nos_params
+_tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
+
+[nos_antilag_min_kpa_entry]
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+offset=85
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression,nos_params,antilag_controls
+_tooltip=This control and the next one down determine the range of manifold pressures in which NOS antilag can be used.
+
+[nos_antilag_max_kpa_entry]
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+offset=86
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression,nos_params,antilag_controls
+_tooltip=This control and the previous one up determine the range of manifold pressures in which NOS antilag can be used.
+
+[launch_hard_rpm_limit_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=20
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=launch_controls
+_tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
+
+[lc_sparkbase_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=78
+dl_conv_expr=x-1
+ul_conv_expr=x+1
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
+_tooltip=This control Sets the base number of sparks used by the round robin spark drop routine.  AFAIK This should be set to 1 higher than your number of cylinders (i.e, set to 5 for a 4 cyl)
+
+[lc_sparkdrop_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=77
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
+_tooltip=This control Sets the number of sparks to drop for each iteration through the sparkbase control above. Thus if you have a 4 cyl , with base-sparks set to 5 and sparkdrop to 1 it'll drop 1 out of 5 ignition events and this will rotate across all cylinders, so that they are all equally dropped.  Use higher numbers for more RPM limiting.
+
+[launch_min_tps_entry]
+keys=offset,bind_to_list,tooltip
+offset=41
+bind_to_list=launch_controls
+_tooltip=This control sets the threshold where the throttle has to be opened MORE than this amount (in raw ADC counts) for Launch control to be activated...
+
+[launch_soft_angle_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=42
+precision=2
+dl_conv_expr=(x/(352/1000))+(284/10)
+ul_conv_expr=(x-(284/10))*(352/1000)
+bind_to_list=launch_controls,spark_controls
+_tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
+
+[launch_soft_rpm_limit_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+offset=43
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_upper=60
+bind_to_list=launch_controls,spark_controls
+_tooltip=This control Sets the soft revlimit RPM (where ignition is cut back) for the launch limite
+
+[flat_shift_arming_rpm_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=124
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=launch_controls
+_tooltip=This is the arming RPM for flat shift mode. Allows you to hold the throttle wide open during shifting as it'll try to control engine revs to prevent turbo spooldown during shifting.  NOTE: This is rather hard on turbo's
+
+[flat_shift_retard_above_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+offset=140
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_lower=30
+raw_upper=60
+bind_to_list=launch_controls,spark_controls
+_tooltip=This control and the previous one work together and this enables a timing retard if the engine goes above this RPM (at least that's what I think it does, but the docs are iffy on that point)
+
+[flat_shift_retard_angle_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+offset=141
+precision=2
+dl_conv_expr=(x/(352/1000))+(284/10)
+ul_conv_expr=(x-(284/10))*(352/1000)
+raw_upper=156
+bind_to_list=launch_controls,spark_controls
+_tooltip=This control and the previous two work together and this is the amount that timnig is pulled back during flat shift to control engine RPM.
+
+[flat_shift_hard_revlimit_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+offset=128
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_lower=30
+raw_upper=60
+bind_to_list=launch_controls
+_tooltip=This is the hard revlimit used during flatshift. 

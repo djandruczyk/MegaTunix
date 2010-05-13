@@ -80,7 +80,7 @@ void open_debug()
 			time(t);
 			tm = localtime(t);
 			g_free(t);
-			tmpbuf = g_strdup_printf("Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
+			tmpbuf = g_strdup_printf(_("Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"),1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
 			g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);
 			g_free(tmpbuf);
 		}

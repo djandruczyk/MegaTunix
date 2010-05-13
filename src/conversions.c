@@ -75,7 +75,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	offset = (GINT)OBJ_GET(widget,"offset");
 
 	if (!OBJ_GET(widget,"size"))
-		printf(__FILE__": convert_before_download, FATAL ERROR, size undefined for widget at page %i, offset %i!! \n",page,offset);
+		printf(__FILE__"%s %i %s %i\n",_(": convert_before_download, FATAL ERROR, size undefined for widget at page"),page,_("offset"),offset);
 
 	size = (DataSize)OBJ_GET(widget,"size");
 
@@ -110,7 +110,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		hash = OBJ_GET(widget,"dl_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
 		if (!source_key)
-			printf("big problem, source key is undefined!!\n");
+			printf(_("big problem, source key is undefined!!\n"));
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 		if (tmpbuf)
@@ -258,7 +258,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	canID = (GINT)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	if (size == 0)
-		printf("BIG ASS PROBLEM, size undefined! at page %i, offset %i, widget %s\n",page,offset,(char *)glade_get_widget_name(widget));
+		printf(_("BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"),page,offset,(gchar *)glade_get_widget_name(widget));
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -282,7 +282,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 		hash = OBJ_GET(widget,"ul_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
 		if (!source_key)
-			printf("big problem, source key is undefined!!\n");
+			printf(_("big problem, source key is undefined!!\n"));
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 		if (tmpbuf)

@@ -3,15 +3,21 @@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I m4
 
-subdirs = include mtxmatheval mtxcommon widgets msloader src gaugedesigner dashdesigner ecu_snapshots Interrogator LookupTables RealtimeMaps RuntimeSliders RuntimeStatus RuntimeText Gui menu category icons desktop
+subdirs = include mtxmatheval mtxcommon widgets msloader src gaugedesigner dashdesigner ecu_snapshots Interrogator LookupTables RealtimeMaps RuntimeSliders RuntimeStatus RuntimeText Gui menu category icons desktop po
 
-SUBDIRS = $(subdirs) 
+SUBDIRS =  $(subdirs) 
 
-DIST_SUBDIRS = $(subdirs)  
+DIST_SUBDIRS =  $(subdirs)  
 
 DEPDIR = ${subdirs}/.deps
 
+INTLTOOL_FILES = intltool-extract.in \
+		intltool-merge.in \
+		intltool-update.in
+
 CLEANFILES = *~ core autom4te.cache gmon.out
 
-EXTRA_DIST =  configure CREDITS AUTHORS TODO README INSTALL LICENSE megatunix.spec
+DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-merge-cache
+
+EXTRA_DIST = config.rpath m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
 

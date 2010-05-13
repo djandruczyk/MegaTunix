@@ -27,6 +27,7 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
+#include <locale.h>
 #include <locking.h>
 #include <main.h>
 #include <serialio.h>
@@ -59,6 +60,10 @@ gint main(gint argc, gchar ** argv)
 {
 	gchar * filename = NULL;
 
+	setlocale(LC_ALL,"");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain (PACKAGE);
+
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -67,7 +72,9 @@ gint main(gint argc, gchar ** argv)
 
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 
-	gtk_set_locale();
+	/* For testing if gettext works
+	printf(_("Hello World!\n"));
+	*/
 
 	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref(global_data);

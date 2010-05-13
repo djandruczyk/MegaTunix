@@ -1,0 +1,402 @@
+[global]
+description=Object data map for the MS-2 Globals tab
+_tab_name=_Global Settings
+id_prefix=MS2_GLOB_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,dl_type,handler
+page=0
+size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Labels ---------------------------------------------------------------
+
+[num_injectors_0_label]
+keys=page,bind_to_list
+page=1
+bind_to_list=interdep_0_ctrl
+
+[num_squirts_per_cycle_0_label]
+keys=page,bind_to_list
+page=1
+bind_to_list=interdep_0_ctrl
+
+[num_cylinders_0_label]
+keys=page,bind_to_list
+page=2
+bind_to_list=interdep_0_ctrl
+
+[maf_hw_cfg_label]
+keys=bind_to_list
+bind_to_list=maf_ctrls
+
+#----- Widgets ---------------------------------------------------------------
+
+[global_params_table]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+[inj_params_frame]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+[inj_char_frame]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+[inputs_frame]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[calc_reqfuel_button]
+keys=handler,tooltip,table_num
+handler=_REQ_FUEL_POPUP_
+table_num=0
+_tooltip=This button Pops up a window to calculate the required fuel
+
+
+#------- Combo Boxes ------------------------------------------------------
+
+[persona_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=MS2,MicroSquirt,Undefined
+offset=744
+bitvals=1,2,255
+bitmask=255
+toggle_groups=valid_ecu_ctrls,valid_ecu_ctrls,
+_tooltip=Sets ECU type to Stock MS2 or Microsquirt
+
+[fuel_mode_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Single Table,Dual Table
+bitvals=0,1
+offset=629
+bitmask=1
+toggle_groups=,dt_controls
+_tooltip=Sets ECU fuel mode to Single Table or Dual Table
+
+[fuel_algo_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
+bitvals=0,1,2
+offset=630
+bitmask=3
+toggle_groups=sd_ctrls,an_ctrls,an_ctrls
+_tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
+
+[barocorr_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Initial MAP reading,Two Sensors
+bitvals=0,1,2
+offset=593
+bitmask=3
+toggle_groups=,baro_on_boot,baro_dual
+_tooltip=Sets ECU barometer correction to be either Disabled, based on initial MAP reading at power up, or based onDual MAP Sensors. (extra hardware needed)
+
+[xtau_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Off,Accel/Decel Only,Warmup + Accel/Decel
+bitvals=0,1,2
+offset=676
+bitmask=3
+toggle_groups=,xtau_accel,xtau_accel:xtau_warmup
+_tooltip=Sets ECU xTau Enrichment scheme to be off, Used only during Accel/Decel, or during warmup and Accel/Decel
+
+[warmup_source_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Two-Point,Use Tables
+bitvals=0,1
+offset=926
+bitmask=1
+_tooltip=Sets ECU Prime/ASE/WUE/Baro correctiosn to be based off of a two point linear interpolation, or off of interpolated lookuptables.
+
+[ego_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Narrow-Band,Dual NB,Wide-Band,Dual WB
+bitvals=0,1,2,3,4
+offset=594
+bitmask=7
+toggle_groups=,ego_ctrl,ego_ctrl:dual_nb,ego_ctrl:wb_ctrls,ego_ctrl:dual_wb:wb_ctrls
+_tooltip=Sets ECU EGO Sensor type and configuration. 
+
+[idle_algo_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=None,Solenoid,IAC Stepper Moving Only,IAC Stepper Always On,PWM Warmup,15-Minute IAC
+bitvals=0,1,2,3,4,5
+offset=547
+bitmask=7
+toggle_groups=NA,solenoid_controls,iac_moving,iac_always,pwm_warmup:pwm_other,15_iac
+_tooltip=Sets the Idle Control Algorithm
+
+[revlimiter_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=None,Spark Retard,Fuel Cut
+bitvals=0,1,2
+offset=17
+bitmask=3
+toggle_groups=,spark_limit,fuel_limit
+_tooltip=Sets the Revlimiter algorithm
+
+[flexfuel_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=908
+bitmask=1
+toggle_groups=,flex_fuel
+_tooltip=Enables or Disables use of a FlexFuel Sensor (requires additional hardware)
+
+[amc_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+choices=Disabled,RAM update,FLASH update
+bitvals=0,1,2
+offset=628
+bitmask=3
+bind_to_list=ego_ctrl
+toggle_groups=,amc_controls,amc_controls
+_tooltip=Enables or Disables use of the Automatic mixture control, nad tells it to update either the IN RAM state or in FLASH state.  Thus making the adjustments from it be permanent or temporary
+
+[maf_use_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,MAF Only,MAF/MAP Blend
+bitvals=0,1,2
+offset=600
+bitmask=3
+toggle_groups=,maf_ctrls,maf_ctrls:maf_blend_ctrls
+_tooltip=Enables or Disables use of a MAF (Mass Air Flow) sensor, and sets whether it's to be the primary input, or used in a blend wiht the MAP Sensor.
+
+[maf_pin_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+choices=MAF on MAP pin,MAF on BARO pin,MAF on Knock Pin
+bitvals=0,1,2
+offset=600
+bitmask=48
+bind_to_list=maf_ctrls
+_tooltip=Sets what pin the MAF sensor is connected to
+
+[fuel_algo_combo2]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
+bitvals=0,1,2
+offset=630
+bitmask=3
+toggle_groups=sd_ctrls,an_ctrls,an_ctrls
+_tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
+
+[alternate_combo]
+keys=handler,dl_type,offset,table_num,choices,bitvals,bitmask,tooltip
+handler=_ALT_SIMUL_
+dl_type=_DEFERRED_
+choices=Simultaneous,Alternating
+table_num=0
+bitvals=0,1
+offset=611
+bitmask=1
+_tooltip=Sets the injector firing pattern.
+
+[stroke_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Four-Stroke,Two-Stroke
+bitvals=0,1
+offset=617
+bitmask=1
+_tooltip=Sets the engine type, 2 stroke, or 4 stroke
+
+[inj_port_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Port Injection,Throttle Body
+bitvals=0,1
+offset=618
+bitmask=1
+_tooltip=Sets the Fuel Injector placement.
+
+#----- Spinbuttons -----------------------------------------------------------
+
+[req_fuel_per_cycle_0_spin]
+keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+offset=608
+size=_U16_
+table_num=0
+dl_type=_DEFERRED_
+handler=_REQ_FUEL_1_
+bind_to_list=interdep_0_ctrl
+ul_complex=TRUE
+ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=31
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
+alternate_bitmask=1
+register_as=req_fuel_per_cycle_0_spin
+
+[req_fuel_per_squirt_0_spin]
+keys=offset,size,table_num,ul_conv_expr,bind_to_list,register_as
+offset=608
+size=_U16_
+table_num=0
+ul_conv_expr=x/1000
+bind_to_list=interdep_0_ctrl
+register_as=req_fuel_per_squirt_0_spin
+
+[num_injectors_0_spin]
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
+offset=619
+bitmask=31
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_INJECTORS_1_
+bind_to_list=interdep_0_ctrl
+register_as=num_injectors_0_spin
+
+[num_cylinders_0_spin]
+keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,register_as
+offset=0
+bitmask=15
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_CYLINDERS_1_
+bind_to_list=interdep_0_ctrl
+register_as=num_cylinders_0_spin
+
+[inj_per_cycle_0_spin]
+keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+offset=610
+table_num=0
+dl_type=_DEFERRED_
+handler=_NUM_SQUIRTS_1_
+bind_to_list=interdep_0_ctrl
+ul_complex=TRUE
+ul_conv_expr=cylinders_1/divider_1
+expr_symbols=cylinders_1,divider_1
+expr_types=_VE_EMB_BIT_,_VE_VAR_
+cylinders_1_page=0
+cylinders_1_offset=0
+cylinders_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+register_as=inj_per_cycle_0_spin
+
+#----- Entries ---------------------------------------------------------------
+
+[displacement_entry]
+keys=offset,size,tooltip
+offset=988
+size=_U16_
+_tooltip=This is the engine displacement in Cubic Inches.  It is used mainly only for MAF support to make things scale correctly.
+
+[inj_delay_entry]
+keys=offset,tooltip
+offset=752
+_tooltip=This is used to offset injector firing a certain percentage of degrees from the TACH PULSE input. It's useful  in some cases to help smooth out a lumpy idle, in case an injector is firing at overlap on one cylinder.
+
+[inj_open_time_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=612
+dl_conv_expr=x/0.10
+ul_conv_expr=x*0.10
+precision=1
+_tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
+
+[batt_corr_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=616
+precision=2
+dl_conv_expr=x/0.0166667
+ul_conv_expr=x*0.0166667
+_tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
+
+[pwm_limit_entry]
+keys=offset,raw_upper,tooltip
+offset=615
+raw_upper=100
+_tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
+
+[pwm_thresh_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=613
+dl_conv_expr=x/0.10
+ul_conv_expr=x*0.10
+precision=1
+_tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
+
+[pwm_period_entry]
+keys=offset,precision,raw_lower,raw_upper,require_reboot,tooltip
+offset=614
+raw_lower=40
+raw_upper=100
+precision=1
+require_reboot=TRUE
+_tooltip=This sets the PWM Period in uS. 
+
+[tps_rate_entry]
+keys=offset,tooltip
+offset=750
+_tooltip=This sets the TPS Sensor sampling rate in milliseconds
+
+[tps_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=624
+raw_upper=100
+_tooltip=This sets the TPS Sensor Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[map_rate_entry]
+keys=offset,tooltip
+offset=749
+_tooltip=This sets the TPS Sensor sampling rate in milliseconds
+
+[map_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=623
+raw_upper=100
+_tooltip=This sets the MAP/MAF Sensor Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[rpm_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=622
+raw_upper=100
+_tooltip=This sets the RPM Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[lambda_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=625
+raw_upper=100
+_tooltip=This sets the LAmbda/EGO Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[adc_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=626
+raw_upper=100
+_tooltip=This sets the ADC Lag Factor for things like IAT, CLT, Battey Voltage. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+
+[knock_lag_entry]
+keys=offset,raw_upper,tooltip
+offset=627
+raw_upper=100
+_tooltip=This sets the Knock Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
+

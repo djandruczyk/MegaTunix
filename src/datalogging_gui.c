@@ -83,12 +83,12 @@ EXPORT void populate_dlog_choices_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
-	set_title(g_strdup("Populating Datalogger..."));
+	set_title(g_strdup(_("Populating Datalogger...")));
 
 	vbox = lookup_widget("dlog_logable_vars_vbox1");
 	if (!GTK_IS_WIDGET(vbox))
 	{
-		printf("datalogger not present,  returning\n");
+		printf(_("datalogger windows not present, returning\n"));
 		return;
 	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
@@ -521,7 +521,7 @@ gboolean autolog_dump(gpointer data)
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	g_io_channel_unref(iochannel);
 	dlog_index++;
-	update_logbar("dlog_view",NULL,g_strdup_printf("Autolog dump (log number %i) successfully completed.\n",dlog_index),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,g_strdup_printf(_("Autolog dump (log number %i) successfully completed.\n"),dlog_index),FALSE,FALSE);
 	g_free(filename);
 	return TRUE;
 }

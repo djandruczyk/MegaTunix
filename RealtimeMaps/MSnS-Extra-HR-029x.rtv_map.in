@@ -1,0 +1,855 @@
+[API]
+major=1
+minor=2
+
+[realtime_map]
+applicable_firmwares=MegaSquirtnSpark-Extra Highres 029x,MegaSquirtnSpark-Extra Highres 010x,MegaSquirtnSpark-Extra Highres 011x
+applicable_signatures=MS/Extra format hr_10 **********,MS/Extra format hr_09 **********,MS/Extra format hr_08 **********,MS/Extra format hr_11 **********
+derived_total=57
+raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt1,afr1,egocorr,aircorr,warmcorr,raw_rpm,pw1,pw2,tpsaccel,barocorr,gammae,vecurr,sparkangle
+
+[derived_0]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=hr_clock
+_dlog_gui_name=HR Clock
+dlog_field_name=Time
+offset=0
+real_lower=0
+real_upper=2147483648
+special=hr_clock
+precision=3
+_tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
+log_by_default=TRUE
+
+[derived_1]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=raw_secl
+_dlog_gui_name=MS Clock
+dlog_field_name=SecL
+offset=0
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="MS Clock" is the MegaSquirt clock returned by the ECU, this runs from 0-255 and recylcles indefinitely, resolution 1 second.
+log_by_default=TRUE
+
+[derived_2]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=raw_rpm
+_dlog_gui_name=RAW RPM
+dlog_field_name=RPM/100
+offset=13
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpm/100
+log_by_default=TRUE
+
+[derived_3]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,ul_conv_expr,complex_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=rpm
+_dlog_gui_name=RPM
+dlog_field_name=RPM
+offset=13
+real_lower=0
+real_upper=25500
+complex_expr=TRUE
+ul_conv_expr=(60000000*(2-stroke))/(((iTimeX*65536)+(iTime))*(cyls+1))
+expr_symbols=stroke,cyls,iTimeX,iTime
+expr_types=_VE_EMB_BIT_,_VE_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
+stroke_page=1
+stroke_offset=182
+stroke_bitmask=4
+raw_rpm_offset=13
+cyls_page=1
+cyls_offset=182
+cyls_bitmask=240
+iTimeX_offset=39
+iTimeX_size=_U08_
+iTime_offset=24
+iTime_size=_U16_
+_tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with this firmware but NOT below 500 RPM. 
+log_by_default=FALSE
+
+[derived_4]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=enginebit
+_dlog_gui_name=EngineBits
+dlog_field_name=Engine
+offset=2
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
+log_by_default=TRUE
+
+[derived_5]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=gammae
+_dlog_gui_name=GammaE
+dlog_field_name=Gammae
+offset=18
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="GammaE" is the summation of ALL enrichments (temp enrich,accel enrich, warmup enrich, etc..) in the MegaSquirt ECU.
+log_by_default=TRUE
+
+[derived_6]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpsvolt
+_dlog_gui_name=TPS Volts
+dlog_field_name=TPSvolts
+offset=7
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="TPS Volts" is the reading from the Throttle Position sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
+log_by_default=FALSE
+
+[derived_7]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=mapvolt
+_dlog_gui_name=MAP Volts
+dlog_field_name=MAPvolts
+offset=4
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="MAP Volts" is the reading from the Manifold Absolute Pressure sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
+log_by_default=FALSE
+
+[derived_8]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=barovolt
+_dlog_gui_name=BARO Volts
+dlog_field_name=BAROvolts
+offset=3
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="BARO Volts" is the reading from the Manifold Absolute Pressure sensor at ECU powerup, used for barometer correction. The value is converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
+log_by_default=FALSE
+
+[derived_9]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=matvolt
+_dlog_gui_name=MAT Volts
+dlog_field_name=MATvolts
+offset=5
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="MAT Volts" is the reading from the Manifold Air Temperature sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
+log_by_default=FALSE
+
+[derived_10]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=cltvolt
+_dlog_gui_name=CLT Volts
+dlog_field_name=CLTvolts
+offset=6
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="CLT Volts" is the reading from the Engine Coolant Temperature sensor converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)
+log_by_default=FALSE
+
+[derived_11]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpsadc
+_dlog_gui_name=TPS ADC
+dlog_field_name=TPScounts
+offset=7
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="TPS ADC" is the raw ADC counts from the Throttle Position sensor reading. Range is 0-255 counts, resolution of 1 counts
+log_by_default=FALSE
+
+[derived_12]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=mapadc
+_dlog_gui_name=MAP ADC
+dlog_field_name=MAPcounts
+offset=4
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="MAP ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor reading. Range is 0-255 counts, resolution of 1 counts
+log_by_default=FALSE
+
+[derived_13]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=baroadc
+_dlog_gui_name=BARO ADC
+dlog_field_name=BAROcounts
+offset=3
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="BARO ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor when read at ECU powerup for Baro correction. Range is 0-255 counts, resolution of 1 counts
+log_by_default=FALSE
+
+[derived_14]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=matadc
+_dlog_gui_name=MAT ADC
+dlog_field_name=MATcounts
+offset=5
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="MAT ADC" is the raw ADC counts from the Manifold Air Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
+log_by_default=FALSE
+
+[derived_15]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=cltadc
+_dlog_gui_name=CLT ADC
+dlog_field_name=CLTcounts
+offset=6
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="CLT ADC" is the raw ADC counts from the Engine Coolant Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
+log_by_default=FALSE
+
+[derived_16]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpspercent
+_dlog_gui_name=TPS %
+dlog_field_name=TPSpercent
+offset=7
+real_lower=0
+real_upper=100
+dl_conv_expr=(x/100)*255
+ul_conv_expr=(x/255)*100
+precision=2
+_tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a adc of 255 is equal to 100% open).
+log_by_default=TRUE
+
+[derived_17]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,tooltip,log_by_default
+internal_names=mapkpa
+_dlog_gui_name=MAP (kPa)
+dlog_field_name=MAPkpa
+offset=4
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+lower_limits=0,0,20,20
+upper_limits=115,250,308,416
+multi_lookuptables=na_map,boosted_map,,
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+_tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA is atmospheric pressure at sea level.
+log_by_default=TRUE
+
+[derived_18]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,tooltip,log_by_default
+internal_names=barokpa
+_dlog_gui_name=BARO kPa
+dlog_field_name=BAROkpa
+offset=3
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+lower_limits=0,0,20,20
+upper_limits=115,250,308,416
+multi_lookuptables=na_map,boosted_map,,
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+_tooltip="BARO KPA" is the Barometer Pressure in KPA (Kilopascals) This is read by the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA is atmospheric pressure at sea level.
+log_by_default=FALSE
+
+[derived_19]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,real_lower,real_upper,log_by_default
+internal_names=matdeg
+_dlog_gui_name=MAT (\302\260)
+dlog_field_name=MATdeg
+offset=5
+real_lower=-40
+real_upper=215
+lookuptable=mat_table
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+_tooltip="MAT (\302\260)" is the Manifold Air Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
+log_by_default=TRUE
+
+[derived_20]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,dl_conv_expr,ul_conv_expr,tooltip,temp_dep,real_lower,real_upper,log_by_default
+internal_names=cltdeg
+_dlog_gui_name=CLT (\302\260)
+dlog_field_name=CLTdeg
+offset=6
+real_lower=-40
+real_upper=215
+lookuptable=clt_table
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+_tooltip="CLT (\302\260)" is the Engine Coolant Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
+log_by_default=TRUE
+
+[derived_21]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=o2volt1
+_dlog_gui_name=O<sub>2</sub> Volts 1
+dlog_field_name=O2
+offset=9
+real_lower=0
+real_upper=5
+dl_conv_expr=x*(255/5)
+ul_conv_expr=x*(5/255)
+precision=2
+_tooltip="O2 Volts" is the Exhaust Oxygen Sensor voltage. Range 0-5 Volts, resolution 19.6 mv.
+log_by_default=TRUE
+
+[derived_22]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=o2adc
+_dlog_gui_name=O<sub>2</sub> ADC
+dlog_field_name=O2counts
+offset=9
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="O2 ADC" is the raw ADC counts for the Exhaust Gas Oxygen reading, Range 0-255, resolution 1 adc
+log_by_default=FALSE
+
+[derived_23]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,real_lower,real_upper,log_by_default
+internal_names=afr1
+_dlog_gui_name=AFR
+dlog_field_name=AFR
+offset=9
+real_lower=8
+real_upper=23
+lookuptable=nbo2_table
+alt_lookuptable=wbo2_table
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+depend_on=o2_sensor
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+precision=1
+_tooltip="AFR" Is the Air Fuel ratio the engine is running at.  This is calculated from a lookuptable, if this reading seems wrong make sure you've specified the proper lookuptable in the Interrogation Profile and selected the right sensor type in the Enrichments Tab.
+log_by_default=FALSE
+
+[derived_24]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,dl_conv_expr,ul_conv_expr,precision,tooltip,depend_on,real_lower,real_upper,log_by_default
+internal_names=lambda
+_dlog_gui_name=Lambda
+dlog_field_name=Lambda
+offset=9
+real_lower=0
+real_upper=2
+lookuptable=nbo2_table
+alt_lookuptable=wbo2_table
+dl_conv_expr=x*147
+ul_conv_expr=x/147
+depend_on=o2_sensor
+o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+precision=3
+_tooltip="Lambda" is a representation of AFR (Air Fuel Ratio).  1.0 is stoichiometric combustion (AFR 14.7:1), less than 1 is a "rich" mixture and greater than 1 is a "lean" mixture
+log_by_default=FALSE
+
+[derived_25]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=battvolt
+_dlog_gui_name=BATT Volts
+dlog_field_name=BATTvolts
+offset=8
+real_lower=6
+real_upper=18
+dl_conv_expr=(x/30)*255
+ul_conv_expr=(x/255)*30
+precision=2
+_tooltip="BATT Volts" is the Battery voltage in DC volts.
+log_by_default=FALSE
+
+[derived_26]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=battadc
+_dlog_gui_name=BATT ADC
+dlog_field_name=BATTcounts
+offset=8
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="BATT ADC" is the raw ADC counts for the Battery Voltage input, Range 0-255, resolution 1 adc
+log_by_default=FALSE
+
+[derived_27]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=aircorr
+_dlog_gui_name=AIRCorr
+dlog_field_name=Gair
+offset=11
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="AIRcorr" is the Air temperature correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
+log_by_default=TRUE
+
+[derived_28]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=barocorr
+_dlog_gui_name=BAROCorr
+dlog_field_name=Gbaro
+offset=17
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="BAROcorr" is the Barometer correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
+log_by_default=TRUE
+
+[derived_29]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=egocorr
+_dlog_gui_name=EGOCorr
+dlog_field_name=Gego
+offset=10
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="EGOcorr" is the Exhaust Gas Correction factor.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel. The EGO Feedback settings on the Enrichments tab have the most effect on this parameter.
+log_by_default=TRUE
+
+[derived_30]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=warmcorr
+_dlog_gui_name=WARMCorr
+dlog_field_name=Gwarm
+offset=12
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="WARMcorr" is the Warmup Correction factor.  This influenced by the Coolant Temp sensor input and the Warmup Enrichment bins on the Enrichments tab.  This is expressed as a percentage, 100 being NO enrichment, anything over 100 causes additional fuel to be added, less than 100 means less fuel.
+log_by_default=TRUE
+
+[derived_31]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpsaccel
+_dlog_gui_name=TPSAccel
+dlog_field_name=TPSacc
+offset=16
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="TPSaccel\" is the amount of Acceleration enrichment being dispensed. Units are in milliseconds x10, so 10 ms shows upa as 100 in the log
+log_by_default=TRUE
+
+[derived_32]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=vecurr1
+_dlog_gui_name=VE 1
+dlog_field_name=Gve1
+offset=19
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="VE 1" is the instantaneous volumetric efficiency for table 1 that the ECU is calculating fuel for.
+log_by_default=TRUE
+
+[derived_33]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=pw1
+_dlog_gui_name=PW 1
+dlog_field_name=PW1
+offset=14
+size=_U16_
+ul_conv_expr=x/1000
+real_lower=0
+real_upper=26
+precision=3
+_tooltip="PW 1" is the pulsewidth in milliseconds for the injectors tied to injector channel 1.
+log_by_default=TRUE
+
+[derived_34]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=dcycle1
+_dlog_gui_name=Dutycycle 1 
+dlog_field_name=DutyCycle1
+offset=14
+real_lower=0
+real_upper=100
+complex_expr=TRUE
+ul_conv_expr=100*((((cyls+1)/divider)/(alternate+1))*(hr_pw_1/1000)/((1200/(stroke+1))/raw_rpm))
+expr_symbols=cyls,divider,alternate,hr_pw_1,stroke,raw_rpm
+expr_types=_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_
+cyls_page=1
+cyls_offset=182
+cyls_bitmask=240
+divider_page=1
+divider_offset=149
+divider_size=_U08_
+alternate_page=1
+alternate_offset=150
+alternate_bitmask=1
+hr_pw_1_offset=14
+hr_pw_1_size=_U16_
+stroke_page=1
+stroke_offset=182
+stroke_bitmask=4
+raw_rpm_offset=13
+raw_rpm_size=_U08_
+precision=1
+_tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
+log_by_default=TRUE
+
+[derived_35]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=dcycle2
+_dlog_gui_name=Dutycycle 2
+dlog_field_name=DutyCycle2
+offset=20
+real_lower=0
+real_upper=100
+complex_expr=TRUE
+ul_conv_expr=100*((((cyls+1)/divider)/(alternate+1))*(hr_pw_2/1000)/((1200/(stroke+1))/raw_rpm))
+expr_symbols=cyls,divider,alternate,hr_pw_2,stroke,raw_rpm
+expr_types=_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_
+cyls_page=2
+cyls_offset=182
+cyls_bitmask=240
+divider_page=2
+divider_offset=149
+divider_size=_U08_
+alternate_page=2
+alternate_offset=150
+alternate_bitmask=1
+hr_pw_2_offset=20
+hr_pw_2_size=_U16_
+stroke_page=2
+stroke_offset=182
+stroke_bitmask=4
+raw_rpm_offset=13
+raw_rpm_size=_U08_
+precision=1
+_tooltip="Dcycle2" is the injector Duty cycle for injector channel 2.
+log_by_default=TRUE
+
+[derived_36]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=pw2
+_dlog_gui_name=PW 2
+dlog_field_name=PW2
+offset=20
+size=_U16_
+ul_conv_expr=x/1000
+real_lower=0
+real_upper=26
+precision=3
+_tooltip="PW 2" is the pulsewidth in milliseconds for the injectors tied to injector channel 2.
+log_by_default=TRUE
+
+[derived_37]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=vecurr2
+_dlog_gui_name=VE 2
+dlog_field_name=Gve2
+offset=22
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="VE-2" is the instantaneous volumetric efficiency for table 2 that the ECU is calculating fuel for.
+log_by_default=TRUE
+
+[derived_38]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=idledc
+_dlog_gui_name=Idle DC
+dlog_field_name=IdleDC
+offset=23
+real_lower=0
+real_upper=100
+dl_conv_expr=x*1
+ul_conv_expr=x/1
+_tooltip="Idle DC" is the Duty Cycle the Idle Actuator is being driven at currently.
+log_by_default=FALSE
+
+[derived_39]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=raw_sparkangle
+_dlog_gui_name=Raw Spark Adv.
+dlog_field_name=RawSparkAdv
+offset=26
+real_lower=0
+real_upper=255
+dl_conv_expr=x*1
+ul_conv_expr=x/1
+_tooltip="Raw Spark Advance" is the Current spark advance being run in raw units, (i.e. no conversion).
+log_by_default=FALSE
+
+[derived_40]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=sparkangle
+_dlog_gui_name=Spark Adv.
+dlog_field_name=Spark Angle
+offset=26
+real_lower=-10
+real_upper=80
+dl_conv_expr=(x+10)/(352/1000)
+ul_conv_expr=(x*(352/1000))-10
+precision=1
+_tooltip="Spark Adv." is the Current spark advance being run.
+log_by_default=TRUE
+
+[derived_41]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=iTime
+_dlog_gui_name=iTime
+dlog_field_name=iTime
+offset=24
+size=_U16_
+real_lower=0
+real_upper=65535
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="iTime" is the lower 16 bits of the High Res RPM Calculation specific to MSnEDIS/MSnSpark
+log_by_default=FALSE
+
+[derived_42]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=fueladc
+_dlog_gui_name=Fuel ADC
+dlog_field_name=FuelADC
+offset=28
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="Fuel ADC" is the raw ADC value from X7 (second O2, Fuel pressure or VSS sensor input)
+log_by_default=TRUE
+
+[derived_43]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=egtadc
+_dlog_gui_name=EGT ADC
+dlog_field_name=EGT
+offset=29
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="EGT ADC" is the raw ADC value from X6, If EGT then temp F equals egtADCx7.15625, tempC equals egtADCx3.90625, if VSS Volts equals egtADCx0.019
+log_by_default=TRUE
+
+[derived_44]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=cltiatangle
+_dlog_gui_name=CLT IAT angle
+dlog_field_name=CltIatAngle
+offset=30
+real_lower=-45
+real_upper=45
+dl_conv_expr=(x+45)/(352/1000)
+ul_conv_expr=(x*(352/1000))-45
+precision=1
+_tooltip="CLT IAT angle" is the Spark angle aded/removed for the IAT/CLT temp. 
+log_by_default=FALSE
+
+[derived_45]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=knockangle
+_dlog_gui_name=Knock angle
+dlog_field_name=Knock
+offset=31
+real_lower=0
+real_upper=90
+dl_conv_expr=x/(352/1000)
+ul_conv_expr=x*(352/1000)
+precision=1
+_tooltip="Knock angle" is the Spark angle removed due to knock system compensation
+log_by_default=TRUE
+
+[derived_46]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=egocorr2
+_dlog_gui_name=EGO Corr 2
+dlog_field_name=Gego2
+offset=32
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="EGO Corr 2" is the EGO correction factor for O2 Sensor two when it's fitted...
+log_by_default=FALSE
+
+[derived_47]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=porta
+_dlog_gui_name=Port A
+dlog_field_name=PortA
+offset=33
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="PORT A" is the raw status of PORT A for displaying status indicators..
+log_by_default=FALSE
+
+[derived_48]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=portb
+_dlog_gui_name=Port B
+dlog_field_name=PortB
+offset=34
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="PORT B" is the raw status of PORT B for displaying status indicators..
+log_by_default=FALSE
+
+[derived_49]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=portc
+_dlog_gui_name=Port C
+dlog_field_name=PortC
+offset=35
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="PORT C" is the raw status of PORT C for displaying status indicators..
+log_by_default=FALSE
+
+[derived_50]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=portd
+_dlog_gui_name=Port D
+dlog_field_name=PortD
+offset=36
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="PORT D" is the raw status of PORT D for displaying status indicators..
+log_by_default=FALSE
+
+[derived_51]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpslast
+_dlog_gui_name=TPS Last
+dlog_field_name=TPSLast
+offset=38
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="TPS Last" is the last TPS value (raw ADC?) for use in the accel wizard (to be written)
+log_by_default=TRUE
+
+[derived_52]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=stackL
+_dlog_gui_name=Stack Last
+dlog_field_name=STACKLast
+offset=37
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="STACK Last" is the low byte of the Stack from the ECU (debugging ONLY)
+log_by_default=FALSE
+
+[derived_53]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=bcDC
+_dlog_gui_name=Boost DC
+dlog_field_name=bcDC
+offset=40
+real_lower=0
+real_upper=255
+dl_conv_expr=x/(3922/10000)
+ul_conv_expr=x*(3922/10000)
+_tooltip="Boost DC" is the Duty Cycle of the Bost Controller Ouput signal.
+log_by_default=FALSE
+
+[derived_54]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=iTimeX
+_dlog_gui_name=iTimeX
+dlog_field_name=iTimeX
+offset=39
+real_lower=0
+real_upper=255
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+_tooltip="iTimeX" is the top level iTime byte (the top 8 bits of the 24 bit variable)
+log_by_default=FALSE
+
+[derived_55]
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=tpsdot
+_dlog_gui_name=tpsDOT
+dlog_field_name=tpsDOT
+offset=7
+real_lower=0
+real_upper=25.5
+precision=2
+complex_expr=TRUE
+ul_conv_expr=(step((1-mapProportion)-0.5) * (tpsadc-tpslast)*0.19 )
+expr_symbols=mapProportion,tpsadc,tpslast
+expr_types=_VE_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
+mapProportion_page=0
+mapProportion_offset=66
+mapProportion_bitmask=128
+tpsadc_offset=7
+tpsadc_size=_U08_
+tpslast_offset=38
+tpslast_size=_U08_
+_tooltip="tpsDOT" Is the current TPS rate of change
+log_by_default=FALSE
+
+[derived_56]
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=mapdot
+_dlog_gui_name=mapDOT
+dlog_field_name=mapDOT
+offset=4
+real_lower=0
+real_upper=255
+precision=2
+complex_expr=TRUE
+ul_conv_expr=(step(mapProportion-0.5) * (mapadc-tpslast)*0.1 )
+expr_symbols=mapProportion,mapadc,tpslast
+expr_types=_VE_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
+mapProportion_page=0
+mapProportion_offset=66
+mapProportion_bitmask=128
+mapadc_offset=4
+mapadc_size=_U08_
+tpslast_offset=38
+tpslast_size=_U08_
+_tooltip="mapDOT" Is the current MAP rate of change
+log_by_default=FALSE

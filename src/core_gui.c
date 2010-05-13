@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tabloader.h>
-#include <tuning_gui.h>
 #include <widgetmgmt.h>
 
 
@@ -73,9 +72,9 @@ int setup_gui()
 	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
 	{
-		printf("ERROR!  Could locate %s\n",fname);
+		printf(_("ERROR! Could NOT locate file %s"),fname);
 		g_free(fname);
-		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"\n<b>MegaTunix</b> doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i> ??\n\n");
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i> ??\n\n"));
 
 		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
 		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
@@ -173,7 +172,7 @@ void finalize_core_gui(GladeXML * xml)
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
 	label = glade_xml_get_widget(xml,"about_title_label");
-	tmpbuf = g_strdup_printf("MegaTunix %s Tuning Software for Unix-class OS's",VERSION);
+	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),VERSION);
 	gtk_label_set_text(GTK_LABEL(label),tmpbuf);
 	g_free(tmpbuf);
 

@@ -107,7 +107,7 @@ gboolean check_dependancies(GObject *object )
 				g_free(tmpbuf);
 				break;
 			default:
-				printf("CASE NOT HANDLED, dep_processor!\n");
+				printf(_("CASE NOT HANDLED, dep_processor BUG!\n"));
 
 		}
 	}

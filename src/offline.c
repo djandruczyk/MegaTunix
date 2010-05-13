@@ -124,6 +124,13 @@ gboolean set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("offline_ecu_restore_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
@@ -137,7 +144,6 @@ gboolean set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
-	offline_ecu_restore(NULL,NULL);
 	free_tests_array(tests);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
@@ -206,7 +212,7 @@ gchar * present_firmware_choices()
 		get_file_api(cfgfile,&major,&minor);
 		if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 		{
-			thread_update_logbar("interr_view","warning",g_strdup_printf("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
+			thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
 			i++;
 			continue;
 		}
@@ -335,14 +341,14 @@ gint ptr_sort(gconstpointer a, gconstpointer b)
 }
 
 
-gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
+EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
 
 	if (!interrogated)
-		return FALSE;
+		return;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
@@ -361,6 +367,5 @@ gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
 		g_free(filename);
 	}
 	free_mtxfileio(fileio);
-	return TRUE;
-
+	return;
 }

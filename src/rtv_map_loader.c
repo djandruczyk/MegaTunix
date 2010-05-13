@@ -74,12 +74,12 @@ EXPORT gboolean load_realtime_map_pf(void )
 	if (!((interrogated) && ((connected) || (offline))))
 		return FALSE;
 
-	set_title(g_strdup("Loading Realtime Map..."));
+	set_title(g_strdup(_("Loading Realtime Map...")));
 	filename = get_file(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
-		set_title(g_strdup("ERROR RT Map file DOES NOT EXIST!!!"));
+		set_title(g_strdup(_("ERROR RT Map file DOES NOT EXIST!!!")));
 		return FALSE;
 	}
 	cfgfile = cfg_open_file(filename);
@@ -87,7 +87,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find realtime vars map file %s\n\n",filename));
 		g_free(filename);
-		set_title(g_strdup("ERROR RT Map file could NOT be opened!!!"));
+		set_title(g_strdup(_("ERROR RT Map file could NOT be opened!!!")));
 		return FALSE;
 	}
 	get_file_api(cfgfile,&major,&minor);
@@ -95,7 +95,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tRealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename));
 		g_free(filename);
-		set_title(g_strdup("ERROR RT Map API MISMATCH!!!"));
+		set_title(g_strdup(_("ERROR RT Map API MISMATCH!!!")));
 		return FALSE;
 	}
 	else
@@ -107,7 +107,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
 		cfg_free(cfgfile);
-		set_title(g_strdup("ERROR RT Map missing data!!!"));
+		set_title(g_strdup(_("ERROR RT Map missing data!!!")));
 		return FALSE;
 	}
 	if (strstr(tmpbuf,firmware->name) == NULL)	
@@ -115,7 +115,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
 		cfg_free(cfgfile);
 		g_free(tmpbuf);
-		set_title(g_strdup("ERROR RT Map signature MISMATCH!!!"));
+		set_title(g_strdup(_("ERROR RT Map signature MISMATCH!!!")));
 		return FALSE;
 
 	}
@@ -153,7 +153,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		{
 			dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n\n ",section));
 			g_free(section);
-			set_title(g_strdup("ERROR RT Map missing data problem!!!"));
+			set_title(g_strdup(_("ERROR RT Map missing data problem!!!")));
 			return FALSE;
 		}
 		else
@@ -166,7 +166,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 			dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n",section));
 			g_free(section);
 			g_strfreev(keys);
-			set_title(g_strdup("ERROR RT Map offset missing!!!"));
+			set_title(g_strdup(_("ERROR RT Map offset missing!!!")));
 			return FALSE;
 		}
 		/* Create object to hold all the data. (dynamically)*/
@@ -236,9 +236,14 @@ EXPORT gboolean load_realtime_map_pf(void )
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
-						OBJ_SET(object,
-								keys[j],
-								g_strdup(tmpbuf));
+						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
+							OBJ_SET(object,
+									keys[j],
+									g_strdup(_(tmpbuf)));
+						else
+							OBJ_SET(object,
+									keys[j],
+									g_strdup(tmpbuf));
 						if (strstr(keys[j],"internal_names") != NULL)
 						{
 							vector = g_strsplit(tmpbuf,",",-1); 
@@ -267,7 +272,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
 	rtvars_loaded = TRUE;
-	set_title(g_strdup("RT Map loaded..."));
+	set_title(g_strdup(_("RT Map loaded...")));
 	return TRUE;
 }
 

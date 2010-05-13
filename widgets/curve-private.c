@@ -662,7 +662,7 @@ void generate_static_curve(MtxCurve *curve)
 		/* Find longest one */
 		for (i = 0;i <= max_lines;i++)
 		{
-			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision);
+			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision==0?1:priv->y_precision);
 			cairo_text_extents (cr, message, &extents);
 			if (extents.width > longest)
 				longest = extents.width;
@@ -674,7 +674,7 @@ void generate_static_curve(MtxCurve *curve)
 				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		for(i = 0;i <= max_lines;i++)
 		{
-			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision);
+			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision==0?1:priv->y_precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,priv->y_label_border  + (longest - extents.width) ,priv->h - (priv->y_border+i*spread-(extents.height/2.0)));
 			cairo_show_text (cr, message);
@@ -710,7 +710,7 @@ void generate_static_curve(MtxCurve *curve)
 				priv->colors[CURVE_COL_TEXT].blue/65535.0);
 		for(i = 0;i <= max_lines;i++)
 		{
-			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->x_scale)+priv->lowest_x,priv->x_precision);
+			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->x_scale)+priv->lowest_x,priv->x_precision==0?1:priv->x_precision);
 			cairo_text_extents (cr, message, &extents);
 			cairo_move_to(cr,priv->x_border+i*spread-(extents.width/2.0),priv->h - priv->y_border + 2*extents.height);
 			cairo_show_text (cr, message);
@@ -953,6 +953,7 @@ void recalc_extremes(MtxCurvePrivate *priv)
         priv->highest_y = G_MINFLOAT;
         priv->lowest_x = G_MAXFLOAT;
         priv->lowest_y = G_MAXFLOAT;
+
         for (i=0;i<priv->num_points;i++)
         {
                 if (priv->coords[i].x < priv->lowest_x)
@@ -964,12 +965,13 @@ void recalc_extremes(MtxCurvePrivate *priv)
                 if (priv->coords[i].y > priv->highest_y)
                         priv->highest_y = priv->coords[i].y;
         }
-	if  (priv->lowest_x == priv->highest_x) /* Vertical Line */
+	/*printf("X range (%f<->%f), Y range (%f<->%f)\n",priv->lowest_x, priv->highest_x, priv->lowest_y, priv->highest_y);*/
+	if  (fabs(priv->lowest_x-priv->highest_x) < 2) /* Vertical Line */
 	{
 		if ( priv->lowest_x == 0.0)	/* Special case */
 		{
-			priv->lowest_x -= 10;
-			priv->highest_x += 10;
+			priv->lowest_x -= 5;
+			priv->highest_x += 5;
 		}
 		else
 		{
@@ -984,12 +986,12 @@ void recalc_extremes(MtxCurvePrivate *priv)
 		priv->highest_x *= 1.05;
 	}
 	*/
-	if  (priv->lowest_y == priv->highest_y) /* Horizontal Line */
+	if  (fabs(priv->lowest_y-priv->highest_y) < 2) /* Horizontal Line */
 	{
 		if ( priv->lowest_y == 0.0)	/* Special case */
 		{
-			priv->lowest_y -= 10;
-			priv->highest_y += 10;
+			priv->lowest_y -= 5;
+			priv->highest_y += 5;
 		}
 		else
 		{

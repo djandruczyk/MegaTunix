@@ -50,7 +50,7 @@ EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
 		xml = glade_xml_new(main_xml->filename,"tab_visibility_top_vbox",NULL);
 
 		vis_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title(GTK_WINDOW(vis_window),"Tab Visibility");
+		gtk_window_set_title(GTK_WINDOW(vis_window),_("Tab Visibility"));
 		gtk_window_set_default_size(GTK_WINDOW(vis_window),200,300);
 		g_signal_connect(G_OBJECT(vis_window),"delete_event",
 				G_CALLBACK(gtk_widget_hide),vis_window);
@@ -59,7 +59,7 @@ EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
 		if (GTK_IS_WIDGET(vbox))
 			gtk_container_add(GTK_CONTAINER(vis_window),vbox);
 		else
-			printf("ERROR, glade element not found!\n");
+			printf(_("ERROR, glade element not found!\n"));
 
 		rows = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 		OBJ_SET(global_data,"notebook_rows",GINT_TO_POINTER(rows));

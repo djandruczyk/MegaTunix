@@ -80,7 +80,7 @@ gboolean open_serial(gchar * port_name)
 		port_open = TRUE;
 		serial_params->fd = fd;
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",port_name));
-		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",port_name),FALSE,FALSE);
+		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("%s Opened Successfully\n"),port_name),FALSE,FALSE);
 
 	}
 	else
@@ -96,9 +96,9 @@ gboolean open_serial(gchar * port_name)
 		err_text = (gchar *)g_strerror(errno);
 		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"",port_name,err_text));
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf(_("Error Opening \"%s\", Error Code: \"%s\""),port_name,err_text));
 
-		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",port_name,err_text),FALSE,FALSE);
+		thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error Opening \"%s\", Error Code: %s \n"),port_name,err_text),FALSE,FALSE);
 	}
 
 	/*printf("open_serial returning\n");*/
@@ -275,8 +275,8 @@ void close_serial()
 	port_open = FALSE;
 
 	/* An Closing the comm port */
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"));
-	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),FALSE,FALSE);
+	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
+	thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after UNlock serio_mutex\n"));
@@ -370,7 +370,7 @@ void *serial_repair_thread(gpointer data)
 			}
 			g_usleep(100000);
 			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
-			thread_update_logbar("comms_view",NULL,g_strdup_printf("Attempting to open port %s\n",vector[i]),FALSE,FALSE);
+			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial(vector[i]))
 			{
 				if (open_serial(vector[i]))
@@ -378,22 +378,22 @@ void *serial_repair_thread(gpointer data)
 					if (autodetect)
 						thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
 #ifdef __PIS_SUPPORT__
-					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 8192 Baud for ECU link\n"),FALSE,FALSE);
+					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Trying 8192 Baud for ECU link\n")),FALSE,FALSE);
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 8192 for comms test\n",vector[i]));
 					setup_serial_params(8192);
 #else
-					thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 9600 Baud for ECU link\n"),FALSE,FALSE);
+					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Trying 9600 Baud for ECU link\n")),FALSE,FALSE);
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 9600 for comms test\n",vector[i]));
 					setup_serial_params(9600);
 #endif
 					/* read out any junk in buffer and toss it */
 					read_wrapper(serial_params->fd,&buf,1024,&len);
 
-					thread_update_logbar("comms_view",NULL,g_strdup_printf("Searching for ECU\n"),FALSE,FALSE);
+					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
 					if (comms_test())
 					{	/* We have a winner !!  Abort loop */
-						thread_update_logbar("comms_view",NULL,g_strdup_printf("Search successfull\n"),FALSE,FALSE);
+						thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
 						serial_is_open = TRUE;
 						break;
 					}
@@ -414,11 +414,11 @@ void *serial_repair_thread(gpointer data)
 						/* read out any junk in buffer and toss it */
 						read_wrapper(serial_params->fd,&buf,1024,&len);
 						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
-						thread_update_logbar("comms_view",NULL,g_strdup_printf("Trying 115200 Baud for ECU link\n"),FALSE,FALSE);
+						thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Trying 115200 Baud for ECU link\n")),FALSE,FALSE);
 						if (comms_test())
 						{	/* We have a winner !!  
 							   Abort loop */
-							thread_update_logbar("comms_view",NULL,g_strdup_printf("Search successfull\n"),FALSE,FALSE);
+							thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
 							serial_is_open = TRUE;
 							break;
 						}

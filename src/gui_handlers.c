@@ -1013,7 +1013,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			reqfuel_rescale_table(widget);
 			break;
 		case INTERROGATE_ECU:
-			set_title(g_strdup("User initiated interrogation..."));
+			set_title(g_strdup(_("User initiated interrogation...")));
 			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
 			widget = lookup_widget("interrogate_button");
 			if (GTK_IS_WIDGET(widget))
@@ -1054,7 +1054,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				start_tickler(RTV_TICKLER);
 			break;
 		case READ_VE_CONST:
-			set_title(g_strdup("Reading VE/Constants..."));
+			set_title(g_strdup(_("Reading VE/Constants...")));
 			io_cmd(firmware->get_all_command, NULL);
 			break;
 		case READ_RAW_MEMORY:
@@ -1104,7 +1104,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case OFFLINE_MODE:
-			set_title(g_strdup("Offline Mode..."));
+			set_title(g_strdup(_("Offline Mode...")));
 			set_offline_mode();
 			break;
 		case TE_TABLE:
@@ -1420,7 +1420,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			return TRUE;
 			break;
 		default:
-			printf("std_combo_handler, default case!!!  wrong wrong wrong!!\n");
+			printf(_("std_combo_handler, default case!!! wrong wrong wrong!!\n"));
 			break;
 	}
 
@@ -1864,7 +1864,7 @@ EXPORT void update_ve_const_pf()
 	if (!((connected) || (offline)))
 		return;
 
-	set_title(g_strdup("Updating Controls..."));
+	set_title(g_strdup(_("Updating Controls...")));
 	paused_handlers = TRUE;
 
 	/* DualTable Fuel Calculations
@@ -2043,7 +2043,7 @@ EXPORT void update_ve_const_pf()
 		firmware->table_params[i]->color_update = FALSE;
 
 	paused_handlers = FALSE;
-	set_title(g_strdup("Ready..."));
+	set_title(g_strdup(_("Ready...")));
 	return;
 }
 
@@ -2409,7 +2409,7 @@ void update_widget(gpointer object, gpointer user_data)
 		tmpi = ((gint)value & bitmask) >> bitshift;
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 		if (!GTK_IS_TREE_MODEL(model))
-			printf("ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(gint)value);
+			printf(_("ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n"),page,offset,bitmask,bitshift,(gint)value);
 		valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
 		i = 0;
 		while (valid)
@@ -3328,7 +3328,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 
 	choices = parse_keys(toggle_groups,&num_choices,",");
 	if (num_choices != 2)
-		printf("toggle_groups_linked, numeber of choices is out of range,  should be 2, its '%i'\n",num_choices);
+		printf(_("toggle_groups_linked, numeber of choices is out of range, it should be 2, it is %i"),num_choices);
 
 	/*printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
 
@@ -3393,8 +3393,8 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	choices = parse_keys(toggle_groups,&num_choices,",");
 	if (active >= num_choices)
 	{
-		printf("active is %i, num_choices %i\n",active,num_choices);
-		printf("active is out of bounds for widget %s\n",glade_get_widget_name(widget));
+		printf(_("active is %i, num_choices is %i\n"),active,num_choices);
+		printf(_("active is out of bounds for widget %s\n"),glade_get_widget_name(widget));
 	}
 	/*printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);*/
 

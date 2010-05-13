@@ -1,0 +1,410 @@
+[global]
+description=Object data map for MSnS-Extra Wheel Decoder
+_tab_name=Ignition/_Wheel
+id_prefix=WD_
+groups=defaults,triggers,trig_ret,oddfire
+bind_to_list=spark_controls
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[triggers]
+keys=tooltip
+_tooltip=The Trigger points are the points on the crank wheel for triggering each ignition event.  You should set the trigger points at least 20 deg before your MAXIMUM timing advance. (i.e if you set max advance to 40 deg, then the tooth you trigger on should be crossing the sensor at about 60deg BTDC).  See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
+
+[trig_ret]
+keys=bind_to_list,tooltip
+bind_to_list=trigger_return
+_tooltip=The trigger return points are ONLY used for cranking if you select "Trigger Return" based cranking below. These points (depending on your wheel used) should end up at around 10deg BTDC for easy starting. See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
+
+[oddfire]
+keys=page,dl_conv_expr,ul_conv_expr,precision,bind_to_list,handler,tooltip
+page=6
+dl_conv_expr=x/(352/1000)
+ul_conv_expr=x*(352/1000)
+precision=2
+handler=_ODDFIRE_ANGLE_
+bind_to_list=oddfire_controls
+_tooltip=The Oddfire bins are HIGHLY EXPERIMENTAL and likely to be buggy. These are degree offsets for each corresponding trigger point to handle oddfire engines. See http://megasquirt.sourceforge.net/extra/setup-oddwheel.html for more information.
+
+#----- Labels ----------------------------------------------------------------
+
+[sfw_cnt_label]
+keys=page,bind_to_list
+page=7
+bind_to_list=s4w_controls
+
+[return_tooth_label]
+keys=page,bind_to_list
+page=7
+bind_to_list=trigger_return
+
+[cranking_trigger_style_label]
+keys=page,bind_to_list
+page=7
+bind_to_list=nonedis_controls,spark_controls
+
+[oddfire_offset]
+keys=page,bind_to_list
+page=7
+bind_to_list=oddfire_controls
+
+[2nd_trig_edge_label]
+keys=page,bind_to_list
+page=7
+bind_to_list=2nd_trigger
+
+[2nd_trig_missing_label]
+keys=page,bind_to_list
+page=7
+bind_to_list=2nd_trigger
+
+#----- Widgets ---------------------------------------------------------------
+
+[s4w_eventbox]
+keys=tooltip,bind_to_list
+bind_to_list=wheel_decode
+_tooltip=Stim for wheel is ONLY FOR USE on the stimulator. DO NOT USE THIS MODE on the car.  This option is for toothed wheel users to test their Megasquirt on the bench using the stimulator where the correct input signal is unavailable. DO NOT use on the real engine or you will flood the engine with fuel.
+
+[fixed_dwell_table]
+keys=page,bind_to_list
+page=7
+bind_to_list=fixed_dwell
+
+[dwell_params_table]
+keys=page,bind_to_list
+page=7
+bind_to_list=dwell_control
+
+[triggers_frame]
+keys=page,bind_to_list
+page=7
+bind_to_list=wheel_decode
+
+[wheel_params_frame]
+keys=page,bind_to_list
+page=7
+bind_to_list=wheel_decode
+
+[wheel_toptable]
+keys=page,bind_to_list
+page=7
+bind_to_list=spark_controls
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,page,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+page=7
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,page,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+page=7
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+
+#----- Radio Buttons ----------------------------------------------------------
+
+[decoder_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=025 Style,024s9 Style
+toggle_groups=,025_spark
+bitvals=0,1
+offset=92
+bitmask=8
+_tooltip=Sets the wheel decode algorithm to either 025 style or 024s9 style.
+
+[style_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=-1,-2
+bitvals=0,1
+offset=0
+bitmask=8
+_tooltip=Sets the wheel to be of the "-1" variety, (i.e. 36-1, 12-1, 4-1, etc) or of the "-2" variety, (i.e. 60-2)
+
+[2nd_trig_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+toggle_groups=,2nd_trigger
+bitvals=0,1
+offset=11
+bitmask=1
+_tooltip=Sets the second trigger input
+
+[2nd_trig_edge_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+choices=Rising Edge,Falling Edge,Both Edges
+bind_to_list=2nd_trigger
+bitvals=0,1,2
+offset=33
+bitmask=3
+_tooltip=Sets the second trigger input to trigger on the Rising or Falling Edge.
+
+[2nd_trig_missing_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+choices=No Missing,Missing
+bind_to_list=2nd_trigger
+bitvals=0,1
+offset=66
+bitmask=1
+_tooltip=I have no idea what the hell this one is for. See http://megasquirt.sf.net/extra for more information.
+
+[oddfire_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=3
+choices=Disabled,Enabled
+toggle_groups=,oddfire_controls
+bitvals=0,1
+offset=173
+bitmask=16
+_tooltip=Enables/Disables Oddfire controls
+
+[dwell_style_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Fixed Dwell,Dwell Control
+toggle_groups=fixed_dwell,dwell_control
+bitvals=0,1
+offset=109
+bitmask=2
+_tooltip=Selects Fixed dwell or dwell control
+
+[fixed_dwell_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=50%,75%,HEI4 minimum
+bitvals=0,1,2
+offset=12
+bitmask=96
+_tooltip=Selects the amount fo dwell when in fixed mode
+
+[dual_dist_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=92
+bitmask=16
+_tooltip=Use dual distributor mode or not
+
+[invert_ign_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+choices=Normal,Inverted
+bitvals=0,1
+offset=173
+bitmask=8
+_tooltip=Sets ignition output polarity
+
+[crank_trig_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,bind_to_list,tooltip
+page=3
+choices=Trigger Return,Time Based
+toggle_groups=trigger_return,time_based
+bind_to_list=nonedis_controls,spark_controls
+bitvals=0,1
+offset=173
+bitmask=4
+_tooltip=Sets the cranking timing control to use Trigger Return (second column of Trigger points table above) or time based timing (which can be error prone if the engine doesn't have a stable and consistent cranking RPM)
+
+[s4w_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+toggle_groups=,s4w_controls
+bitvals=0,1
+offset=11
+bitmask=4
+_tooltip=Enables or Disables Stim-4-Wheel mode (bench debugging tool)
+
+#----- SpinButtons -----------------------------------------------------------
+
+[trigger_entry_1]
+keys=offset
+offset=25
+group=triggers
+
+
+[trigger_entry_2]
+keys=offset
+offset=26
+group=triggers
+
+[trigger_entry_3]
+keys=offset
+offset=27
+group=triggers
+
+[trigger_entry_4]
+keys=offset
+offset=28
+group=triggers
+
+[trigger_entry_5]
+keys=offset
+offset=145
+group=triggers
+
+[trigger_entry_6]
+keys=offset
+offset=146
+group=triggers
+
+[return_entry_1]
+keys=offset
+offset=29
+group=trig_ret
+
+[return_entry_2]
+keys=offset
+offset=30
+group=trig_ret
+
+[return_entry_3]
+keys=offset
+offset=31
+group=trig_ret
+
+[return_entry_4]
+keys=offset
+offset=32
+group=trig_ret
+
+[return_entry_5]
+keys=offset
+offset=147
+group=trig_ret
+
+[return_entry_6]
+keys=offset
+offset=148
+group=trig_ret
+
+[oddfire_offset_entry_1]
+keys=offset,oddfire_bit_offset
+offset=167
+group=oddfire
+oddfire_bit_offset=166
+
+[oddfire_offset_entry_2]
+keys=offset,oddfire_bit_offset
+offset=169
+group=oddfire
+oddfire_bit_offset=168
+
+[oddfire_offset_entry_3]
+keys=offset,oddfire_bit_offset
+offset=171
+group=oddfire
+oddfire_bit_offset=170
+
+[oddfire_offset_entry_4]
+keys=offset,oddfire_bit_offset
+offset=173
+group=oddfire
+oddfire_bit_offset=172
+
+[oddfire_offset_entry_5]
+keys=offset,oddfire_bit_offset
+offset=175
+group=oddfire
+oddfire_bit_offset=174
+
+[oddfire_offset_entry_6]
+keys=offset,oddfire_bit_offset
+offset=177
+group=oddfire
+oddfire_bit_offset=176
+
+[trig_wheel_teeth_entry]
+keys=offset,tooltip
+offset=90
+_tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
+
+[trigger_angle_entry]
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,handler,spconfig_offset,tooltip
+page=3
+offset=168
+precision=2
+dl_conv_expr=x*(284/100)
+ul_conv_expr=x/(284/100)
+handler=_TRIGGER_ANGLE_
+spconfig_offset=173
+_tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
+
+[crank_angle_entry]
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+page=3
+offset=171
+precision=2
+dl_conv_expr=(x/(352/1000))+(284/10)
+ul_conv_expr=(x-(284/10))*(352/1000)
+_tooltip=This is the Crank Timing (when not using trigger return)
+
+[fixed_angle_entry]
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+page=3
+offset=169
+precision=2
+dl_conv_expr=(x/(352/1000))+(284/10)
+ul_conv_expr=(x-(284/10))*(352/1000)
+_tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
+
+[trim_angle_entry]
+keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+page=3
+offset=170
+precision=2
+dl_conv_expr=x/(352/1000)
+ul_conv_expr=x*(352/1000)
+_tooltip=This is global offset for the crank table, to shift all values one way or another.
+
+[ign_hold_entry]
+keys=page,offset,raw_upper,tooltip
+page=3
+offset=172
+raw_upper=100
+_tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
+
+[crankdwell_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+offset=110
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+_tooltip=This is the ignition dwell during cranking. 
+
+[rundwell_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=111
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=80
+_tooltip=This is the ignition dwell during normal engine running. 
+
+[min_discharge_entry]
+keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+offset=143
+precision=1
+raw_upper=15
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+_tooltip=This is the time allowed between ignition events for the plug to fire before the coil is allowed to recharge. This can limit dwell at high RPM's.
+
+[s4w_num_steps_entry]
+keys=offset,raw_lower,raw_upper,bind_to_list,tooltip
+offset=13
+raw_upper=6
+raw_lower=1
+bind_to_list=s4w_controls
+_tooltip=Number of steps/outputs. (Not too sure on this one....)

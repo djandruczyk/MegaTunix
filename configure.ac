@@ -25,6 +25,7 @@ AM_INIT_AUTOMAKE(megatunix, "$VER_STRING")
 AM_MAINTAINER_MODE
 
 dnl Checks for programs.
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -46,6 +47,27 @@ then
 	echo "You need the 'bison' package"
 	exit 1
 fi
+
+dnl Gettext Goodness
+AC_PROG_INTLTOOL([0.21])
+INTLTOOL_PROF_RULE='%.prof:      %.prof.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+INTLTOOL_DATAMAP_RULE='%.datamap:      %.datamap.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+INTLTOOL_RTVMAP_RULE='%.rtv_map:      %.rtv_map.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+INTLTOOL_STATUS_RULE='%.status_conf:      %.status_conf.in      $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
+AC_SUBST(INTLTOOL_PROF_RULE)
+AC_SUBST(INTLTOOL_DATAMAP_RULE)
+AC_SUBST(INTLTOOL_RTVMAP_RULE)
+AC_SUBST(INTLTOOL_STATUS_RULE)
+
+GETTEXT_PACKAGE=megatunix
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE([GETTEXT_PACKAGE], [], ["$GETTEXT_PACKAGE"])
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
+ALL_LINGUAS="es "
+AM_GLIB_GNU_GETTEXT
+dnl AM_GNU_GETTEXT([external])
+MTXLOCALEDIR=[${prefix}/share/MegaTunix/locale]
+AC_SUBST(MTXLOCALEDIR)
 
 dnl Checks for header files.
 dnl AC_HEADER_STDC
@@ -166,7 +188,12 @@ RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
 DATA_DIR=$datarootdir/MegaTunix
+datadir=$datarootdir/MegaTunix
+LOCALE_DIR=$datarootdir/MegaTunix/locale
 
+AC_SUBST(datadir)
+AC_SUBST(DATA_DIR)
+AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(SNAPSHOTS_DATA_DIR)
 AC_SUBST(DASHES_DATA_DIR)
@@ -180,11 +207,11 @@ AC_SUBST(RTSLIDERS_DATA_DIR)
 AC_SUBST(RTTEXT_DATA_DIR)
 AC_SUBST(RTSTATUS_DATA_DIR)
 
-MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$DATA_DIR\\\" -DSNAPSHOTS_DATA_DIR=\\\"$SNAPSHOTS_DATA_DIR\\\" -DLOOKUPTABLES_DATA_DIR=\\\"$LOOKUPTABLES_DATA_DIR\\\" -DINTERROGATOR_DATA_DIR=\\\"$INTERROGATOR_DATA_DIR\\\"  -DGUI_DATA_DIR=\\\"$GUI_DATA_DIR\\\" -DGAUGES_DATA_DIR=\\\"$GAUGES_DATA_DIR\\\" -DDASHES_DATA_DIR=\\\"$DASHES_DATA_DIR\\\" -DGAUGEDESIGNER_GLADE_DIR=\\\"$GAUGEDESIGNER_GLADE_DIR\\\" -DDASHDESIGNER_GLADE_DIR=\\\"$DASHDESIGNER_GLADE_DIR\\\" -DREALTIME_MAPS_DATA_DIR=\\\"$REALTIME_MAPS_DATA_DIR\\\" -DRTSLIDERS_DATA_DIR=\\\"$RTSLIDERS_DATA_DIR\\\" -DRTTEXT_DATA_DIR=\\\"$RTTEXT_DATA_DIR\\\" -DRTSTATUS_DATA_DIR=\\\"$RTSTATUS_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION -D_VER_SUFFIX_=\\\"$MTX_VER_SUFFIX\\\" "
+MEGATUNIX_DEFINES="$CFLAGS -DLOCALEDIR=\\\"$LOCALE_DIR\\\" -DDATA_DIR=\\\"$DATA_DIR\\\" -DSNAPSHOTS_DATA_DIR=\\\"$SNAPSHOTS_DATA_DIR\\\" -DLOOKUPTABLES_DATA_DIR=\\\"$LOOKUPTABLES_DATA_DIR\\\" -DINTERROGATOR_DATA_DIR=\\\"$INTERROGATOR_DATA_DIR\\\"  -DGUI_DATA_DIR=\\\"$GUI_DATA_DIR\\\" -DGAUGES_DATA_DIR=\\\"$GAUGES_DATA_DIR\\\" -DDASHES_DATA_DIR=\\\"$DASHES_DATA_DIR\\\" -DGAUGEDESIGNER_GLADE_DIR=\\\"$GAUGEDESIGNER_GLADE_DIR\\\" -DDASHDESIGNER_GLADE_DIR=\\\"$DASHDESIGNER_GLADE_DIR\\\" -DREALTIME_MAPS_DATA_DIR=\\\"$REALTIME_MAPS_DATA_DIR\\\" -DRTSLIDERS_DATA_DIR=\\\"$RTSLIDERS_DATA_DIR\\\" -DRTTEXT_DATA_DIR=\\\"$RTTEXT_DATA_DIR\\\" -DRTSTATUS_DATA_DIR=\\\"$RTSTATUS_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION -D_VER_SUFFIX_=\\\"$MTX_VER_SUFFIX\\\" "
 
 AC_SUBST(MEGATUNIX_DEFINES)
 
-AC_CONFIG_FILES([
+AC_CONFIG_FILES([ po/Makefile.in
 Makefile 
 include/Makefile
 mtxcommon/Makefile
@@ -205,6 +232,7 @@ gaugedesigner/gauges/Honda/Makefile
 gaugedesigner/gauges/Ghost/Makefile
 gaugedesigner/gauges/MegaTune/Makefile
 src/resources.rc
+po/Makefile
 widgets/Makefile
 dashdesigner/Makefile
 dashdesigner/dashboards/Makefile

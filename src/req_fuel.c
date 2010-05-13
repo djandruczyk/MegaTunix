@@ -120,7 +120,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 		table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 	{
-		printf("Serious Error, table_num not defined for reqfuel calc, contact author!\n");
+		printf(_("Serious Error, table_num not defined for reqfuel calc, contact author!\n"));
 		return FALSE;
 	}
 
@@ -153,9 +153,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	reqd_fuel->table_num = (gint)strtol(tmpbuf,NULL,10);
 
-	tmpbuf = g_strdup_printf("Required Fuel Calculator");
-	gtk_window_set_title(GTK_WINDOW(popup),tmpbuf);
-	g_free(tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(popup),_("Required Fuel Calculator"));
 	gtk_container_set_border_width(GTK_CONTAINER(popup),5);
 	gtk_widget_realize(popup);
 	OBJ_SET(popup,"reqd_fuel",reqd_fuel);
@@ -168,9 +166,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(popup),vbox);
-	tmpbuf = g_strdup_printf("Required Fuel parameters");
-	frame = gtk_frame_new(tmpbuf);
-	g_free(tmpbuf);
+	frame = gtk_frame_new(_("Required Fuel parameters"));
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(4,2,FALSE);

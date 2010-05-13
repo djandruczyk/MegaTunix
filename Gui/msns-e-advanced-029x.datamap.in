@@ -1,0 +1,358 @@
+
+
+[global]
+description=Object data map for Advanced settings 
+_tab_name=_Advanced Options
+id_prefix=adv_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+
+[burn_data_button]
+keys=handler,bind_to_list
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+
+#----- Widgets ----------------------------------------------------------------
+
+[staging_frame]
+keys=bind_to_list
+bind_to_list=nondt_controls
+
+[staging_table]
+keys=bind_to_list
+bind_to_list=staging_ctrls
+
+[staging_condition_table]
+keys=bind_to_list
+bind_to_list=map_second_staging,staging_ctrls
+
+[multi_param_staging_table]
+keys=bind_to_list
+bind_to_list=map_second_staging,staging_ctrls
+
+[orfc_params_table]
+keys=bind_to_list
+bind_to_list=orfc_params
+
+[barocorr_params_table]
+keys=bind_to_list
+bind_to_list=barocorr_params
+
+
+#----- Labels ----------------------------------------------------------------
+
+[orfc_clt_label]
+keys=bind_to_list,temp_dep,c_label,f_label
+bind_to_list=temperature
+temp_dep=TRUE
+c_label=and CLT greater than: (\302\260C.)
+f_label=and CLT greater than: (\302\260F.)
+
+[an_barocorr_label]
+keys=bind_to_list
+bind_to_list=alpha-n_controls
+
+[false_trig_label]
+keys=bind_to_list
+bind_to_list=025_spark
+
+[hard_spark_base_label]
+keys=bind_to_list
+bind_to_list=nonedis_controls,spark_controls,limit_spark_ctrls
+
+[hard_spark_cut_label]
+keys=bind_to_list
+bind_to_list=nonedis_controls,spark_controls,limit_spark_ctrls
+
+[sec_staging_thresh_label]
+keys=bind_to_list
+bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
+
+[sec_staging_delta_label]
+keys=bind_to_list
+bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
+
+[maf_aircorr_label]
+keys=bind_to_list
+bind_to_list=maf_controls
+
+#----- Radio/Checkbuttons ----------------------------------------------------
+
+[staging_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,set_widgets_label,tooltip
+offset=76
+bitvals=0,1,2,3
+bitmask=12
+choices=Off,RPM based,MAP based,TPS based
+toggle_groups=,staging_ctrls:map_second_staging,staging_ctrls,staging_ctrls:map_second_staging
+set_widgets_label=adv_staging_point_label,,Staging point (RPM/100),Staging point (KPa),Staging point (TPSADC),adv_staging_delta_label,,Staging Off Delta (RPM/100),Staging Off Delta (KPa),Staging Off Delta (TPSADC)
+_tooltip=Sets the staging mode to be based on RPM only, MAP, or TPS.
+
+[adtl_staging_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=109
+bitvals=0,3
+bitmask=192
+choices=Off,Manifold Pressure
+toggle_groups=,sec_stage_ctrls
+_tooltip=Sets the staging algorithm to just trigger on one variable (above) or AS WELL as the manifold pressure values below (dual threshold triggering). This combines two MT controls into one as it makes little sense to do it like megatune as there isn't any feasable situation where you'd use one without the other., hence MtX links them to make the UI simpler.
+
+[orfc_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=66
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+toggle_groups=,orfc_params
+_tooltip=Disables or Enables Over-Run Fuel cut. (i.e. cutting fuel on decel, i.e. engine braking)
+
+[limiter_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=46
+bitvals=1,2,3
+bitmask=48
+choices=Spark,Fuel,Fuel & Spark
+toggle_groups=limit_spark_ctrls,,limit_spark_ctrls
+_tooltip=Sets the hard revlimiter type, Spark only, Fuel only, or Both
+
+[hybrid_an_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=11
+bitvals=0,1
+bitmask=32
+choices=Disabled,Enabled
+_tooltip=Enables or Disables Hybrid A/N mode
+
+[maf_x7_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=184
+bitvals=0,1
+bitmask=32
+choices=Disabled,Enabled
+toggle_groups=,maf_controls
+_tooltip=Enables or Disables use of MAF sensor on X7 input pin
+
+[maf_corr_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+offset=184
+bitvals=0,1
+bitmask=64
+choices=Use IAT Sensor,Internal to MAF
+bind_to_list=maf_controls
+_tooltip=Uses either Intake air temp for temp correction, or leaves it internal to the MAF sensor, which iwll output a temp compensated signal.
+
+[false_trig_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+offset=92
+bitvals=1,0
+bitmask=4
+choices=Enabled,Disabled
+bind_to_list=025_spark
+_tooltip=Enables or disables the False Trigger detection code in the firmware. Filters if triggertime is too short in wheel mode.
+
+[barocorr_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=184
+bitvals=0,1
+bitmask=8
+choices=Disabled,Enabled
+toggle_groups=,barocorr_params
+_tooltip=Enables or disables the use of constant baro correction. Requires use of additional map sensor on x6 or x7
+
+[const_baro_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=184
+bitvals=0,1
+bitmask=128
+choices=Disabled,Enabled
+_tooltip=Enables or Disables constant baro correction in normal modes
+
+[const_an_baro_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+offset=184
+bitvals=0,1
+bitmask=8
+bind_to_list=alpha-n_controls
+choices=Disabled,Enabled
+_tooltip=Enables or Disables constant baro correction in Alpha-N mode
+
+#----- Spinbuttons ----------------------------------------------------------
+
+[barocorr_max_adc_entry]
+keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+offset=82
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression
+_tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
+
+[barocorr_min_adc_entry]
+keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+offset=83
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression
+_tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
+
+[soft_revlimit_rpm_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=2
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=spark_controls
+_tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
+
+[soft_revlimit_sparkangle_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=3
+precision=2
+dl_conv_expr=(x/(352/1000))+(284/10)
+ul_conv_expr=(x-(284/10))*(352/1000)
+bind_to_list=spark_controls
+_tooltip=The spark advance to run on the soft revlimiter.
+
+[soft_revlimit_max_time_entry]
+keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+offset=157
+precision=1
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+bind_to_list=spark_controls
+_tooltip=The Amount of time to run on the soft limitera. If this timeout is exceeded the hard limiter will kick in, even if the hard revlimit RPM has not yet been reached.
+
+[hard_revlimit_rpm_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=6
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+_tooltip=The Hard revlimiter RPM threshold.  when this is exceeded the hard revlimit params take effect whether that be spark drop, fuel drop or both.
+
+[hard_spark_base_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+offset=78
+dl_conv_expr=x+1
+ul_conv_expr=x-1
+raw_upper=20
+bind_to_list=spark_controls,nonedis_controls,limit_spark_ctrls
+_tooltip=This is the round robin spark drop routine.  Typically you should set this to one MORE than the total number of cylinders the engine has.
+
+[hard_spark_cut_entry]
+keys=offset,raw_upper,bind_to_list,tooltip
+offset=45
+raw_upper=20
+bind_to_list=spark_controls,nonedis_controls,limit_spark_ctrls
+_tooltip=This is the number of sparks to drop for ever number of sparks in the Base sparks variable above,  so if you have a 4 cyle engine set base sparks to 5 and this to one, it'll do an evenly balanced round robin spark drop. Use a higher number for more spark drop and more engien power cutoff.
+
+[staging_transition_entry]
+keys=offset,tooltip
+offset=80
+_tooltip=This sets the threshold point at which to enable injector staging. This is a raw units control, and thus is either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
+
+[staging_off_delta_entry]
+keys=offset,tooltip
+offset=81
+_tooltip=This sets the off delta point at which to disable injector staging. This is a raw units control, and thus its units are either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
+
+[staging_scale_entry]
+keys=offset,tooltip
+offset=79
+_tooltip=This is the scaling factor used for injector scaling.  This value is calculated by  dividing the total flow of the Primary injectors (on inj channel 1) by the TOTAL injector flow of both the primaries and secondaries, and then taking that quantitiy and multiplying by 512.  ((prim_flow/(prim_flow+sec_flow))*512)
+
+[staging_delay_entry]
+keys=page,offset,tooltip
+page=3
+offset=179
+_tooltip=This control sets the number of engine cycles at which point staging is phased in.
+
+[sec_staging_thresh_entry]
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+page=3
+offset=180
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
+_tooltip=This control sets the threshold where the manifold pressure needs to be exceeded along with the above staging params to enable injector staging.
+
+[sec_staging_delta_entry]
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+page=3
+offset=181
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
+_tooltip=This control sets the Off delta where the manifold pressure needs to drop by this amount below the above threshold before injector staging is turned off.
+
+[orfc_rpm_entry]
+keys=offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+offset=71
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+raw_lower=10
+raw_upper=60
+_tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
+
+[orfc_map_entry]
+keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+offset=72
+source_key=map_sensor
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression
+_tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.  This value is in KPa.
+
+[orfc_tps_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=73
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+_tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in RAW ADC counts
+
+[orfc_clt_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,temp_dep,tooltip
+offset=182
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature
+_tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in Degrees (check general tab for temp scale in use )
+
+[orfc_time_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=130
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+_tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in seconds
+
+[adv_latency_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=34
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+_tooltip=Hardware Latency Compensation (ignition latency compensator)
+

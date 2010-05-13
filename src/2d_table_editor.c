@@ -100,9 +100,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			G_CALLBACK(close_2d_editor),window);
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(close_2d_editor),window);
-	tmpbuf = g_strdup_printf("2D Table Group Editor");
-	gtk_window_set_title(GTK_WINDOW(window),"2D Table Group Editor");
-	g_free(tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(window),_("2D Table Group Editor"));
 	gtk_window_resize(GTK_WINDOW(window),800,530);
 
 	widget = glade_xml_get_widget(xml,"get_data_button");
@@ -196,7 +194,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		curve_parent = glade_xml_get_widget(xml,"te_right_frame");
 		curve = mtx_curve_new();
 		curve_list = g_list_prepend(curve_list,(gpointer)curve);
-		mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+		mtx_curve_set_title(MTX_CURVE(curve),_(firmware->te_params[table_num]->title));
 		mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
 		mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 		cdata = g_new0(CurveData, 1);
@@ -455,7 +453,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 				G_CALLBACK(close_2d_editor),window);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(close_2d_editor),window);
-		tmpbuf = g_strdup_printf("2D Table Editor (%s)",firmware->te_params[table_num]->title);
+		tmpbuf = g_strdup_printf("%s (%s)",_("2D Table Editor"),firmware->te_params[table_num]->title);
 		gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 		g_free(tmpbuf);
 		gtk_window_set_default_size(GTK_WINDOW(window),640,480);
@@ -484,7 +482,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		curve_parent = parent;
 	curve = mtx_curve_new();
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
-	mtx_curve_set_title(MTX_CURVE(curve),firmware->te_params[table_num]->title);
+	mtx_curve_set_title(MTX_CURVE(curve),(gchar *)_(firmware->te_params[table_num]->title));
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
 
@@ -834,7 +832,7 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	else if (axis == _Y_)
 		point.y = tmpf;
 	else
-		printf("ERROR in update_2d_curve()!!!\n");
+		printf(_("ERROR in update_2d_curve()!!!\n"));
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
 	
@@ -1144,7 +1142,7 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 	}
 	else
-		printf("widget isn't visible or sensitive\n");
+		printf(_("widget isn't visible or sensitive\n"));
 	return;
 #else
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");

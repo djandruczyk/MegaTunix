@@ -123,16 +123,16 @@ do
       aclocalinclude="$ACLOCAL_FLAGS"
 
       if grep "^AM_GLIB_GNU_GETTEXT" "$bn" >/dev/null; then
-	echo "Creating $dr/aclocal.m4 ..."
-	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+	echo "Creating $dr/m4/aclocal.m4 ..."
+	test -r $dr/m4/aclocal.m4 || touch $dr/m4/aclocal.m4
 	echo "Running glib-gettextize...  Ignore non-fatal messages."
-	echo "no" | glib-gettextize --force --copy
-	echo "Making $dr/aclocal.m4 writable ..."
-	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+	echo "no" | glib-gettextize --force --copy 1>/dev/null
+	echo "Making $dr/m4/aclocal.m4 writable ..."
+	test -r $dr/m4/aclocal.m4 && chmod u+w $dr/m4/aclocal.m4
       fi
       if grep "^AC_PROG_INTLTOOL" "$bn" >/dev/null; then
         echo "Running intltoolize..."
-	intltoolize --copy --force --automake
+	intltoolize --copy --automake 1>/dev/null
       fi
       if grep "^AM_PROG_XML_I18N_TOOLS" "$bn" >/dev/null; then
         echo "Running xml-i18n-toolize..."
@@ -148,6 +148,8 @@ do
 	  fi
 	fi
       fi
+      echo "Unborking the po/Makefile.in.in with custom file"
+      cp -f po/working-Makefile.in.in po/Makefile.in.in
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
       if grep "^A[CM]_CONFIG_HEADERS" "$bn" >/dev/null; then
@@ -157,6 +159,10 @@ do
       echo "Running automake --gnu $am_opt ..."
       automake --add-missing --gnu $am_opt
       echo "Running autoconf ..."
+      if ! [ -L ./include/gettext.h ] ; then
+      	echo "Creating gettext.h symlink"
+      	ln -s /usr/share/gettext/gettext.h include
+      fi
       autoconf
     )
   fi

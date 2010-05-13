@@ -74,7 +74,7 @@ void handle_args(gint argc, gchar * argv[])
 
 	if (error)
 	{
-		printf("ERROR OCCURRED\n");
+		printf(_("ERROR OCCURRED\n"));
 		switch (error->code) 
 		{
 			case G_OPTION_ERROR_UNKNOWN_OPTION:
@@ -87,7 +87,7 @@ void handle_args(gint argc, gchar * argv[])
 				printf("G_OPTION_ERROR_FAILED\n");
 				break;
 			default:
-				printf("not sure the error\n");
+				printf(_("not sure what the error is\n"));
 				break;
 		}
 	}
@@ -97,7 +97,7 @@ void handle_args(gint argc, gchar * argv[])
 		g_free(netinfo);
 		if (g_strv_length(vector) > 2)
 		{
-			printf("Network info provided is invalid!\n");
+			printf(_("Network info provided is invalid!\n"));
 			args->network_mode = FALSE;
 		}
 		else
@@ -145,25 +145,25 @@ void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->listen_mode)
 	{
-		printf("Should do listen mode\n");
+		printf(_("Should do listen mode\n"));
 	}
 	if (args->debug)
 	{
-		printf("debug option \"%i\"\n",args->debug);
-		printf("Global debug filename\"%s\"\n",args->dbglog);
-		printf("version option \"%i\"\n",args->version);
-		printf("quiet option \"%i\"\n",args->be_quiet);
-		printf("no rttext option \"%i\"\n",args->hide_rttext);
-		printf("no status option \"%i\"\n",args->hide_status);
-		printf("no maingui option \"%i\"\n",args->hide_maingui);
-		printf("autolog_dump \"%i\"\n",args->autolog_dump);
-		printf("autolog_minutes \"%i\"\n",args->autolog_minutes);
-		printf("autolog_dump_dir \"%s\"\n",args->autolog_dump_dir);
-		printf("autolog_basename \"%s\"\n",args->autolog_basename);
-		printf("listen mode \"%i\"\n",args->listen_mode);
-		printf("network mode \"%i\"\n",args->network_mode);
-		printf("network host \"%s\"\n",args->network_host);
-		printf("network port \"%i\"\n",args->network_port);
+		printf(_("debug option \"%i\"\n"),args->debug);
+		printf(_("Global debug filename\"%s\"\n"),args->dbglog);
+		printf(_("version option \"%i\"\n"),args->version);
+		printf(_("quiet option \"%i\"\n"),args->be_quiet);
+		printf(_("no rttext option \"%i\"\n"),args->hide_rttext);
+		printf(_("no status option \"%i\"\n"),args->hide_status);
+		printf(_("no maingui option \"%i\"\n"),args->hide_maingui);
+		printf(_("autolog_dump \"%i\"\n"),args->autolog_dump);
+		printf(_("autolog_minutes \"%i\"\n"),args->autolog_minutes);
+		printf(_("autolog_dump_dir \"%s\"\n"),args->autolog_dump_dir);
+		printf(_("autolog_basename \"%s\"\n"),args->autolog_basename);
+		printf(_("listen mode \"%i\"\n"),args->listen_mode);
+		printf(_("network mode \"%i\"\n"),args->network_mode);
+		printf(_("network host \"%s\"\n"),args->network_host);
+		printf(_("network port \"%i\"\n"),args->network_port);
 	}
 	if (args->version)
 	{

@@ -167,7 +167,7 @@ void alter_widget_state(gpointer key, gpointer data)
 
 	if (!OBJ_GET(widget,"bind_to_list"))
 	{
-		printf("Error with widget %s, bind_to_list is null\n",glade_get_widget_name(widget));
+		printf(_("Error with widget %s, bind_to_list is null\n"),glade_get_widget_name(widget));
 		return;
 	}
 	else

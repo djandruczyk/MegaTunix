@@ -1,0 +1,211 @@
+[global]
+description=Object data map for VE-Table 2, 8x8 (page 1)
+_tab_name=_VE Table(2)
+id_prefix=VE2_
+groups=defaults,load,rpm,vetable
+bind_to_list=dt_controls
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=1
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[load]
+keys=use_color,tooltip
+use_color=TRUE
+_tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[rpm]
+keys=dl_conv_expr,ul_conv_expr,use_color,tooltip
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+use_color=TRUE
+_tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[vetable]
+keys=use_color,table_num,tooltip
+use_color=TRUE
+table_num=1
+_tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=tab_ident,table_num,bind_to_list
+tab_ident=_VETABLES_TAB_
+table_num=1
+bind_to_list=dt_controls
+
+[VE1_gaugeframe1]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=1
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[VE1_gaugeframe2]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=1
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
+
+[VE1_gaugeframe3]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=1
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
+datasource=mapkpa
+
+[VE1_gaugeframe4]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=1
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
+datasource=egocorr
+
+[VE1_gaugeframe5]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=1
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
+datasource=afr
+
+#----- Labels ----------------------------------------------------------------
+
+[topframe_title]
+keys=set_label
+set_label=MegaSquirt VE-Table 2 (DualTable)
+
+[title]
+keys=set_label
+set_label=VE Table 2 (DualTable)
+
+[load_tbl_lab]
+keys=label,alt_label,depend_on
+label=MAP Bins
+alt_label=TPS Bins
+depend_on=alpha_n_button
+alpha_n_button=_VE_EMB_BIT_,_U08_,0,118,4,2,1
+
+[load_tbl_units]
+keys=label,alt_label,depend_on
+label=Kpa
+alt_label=TPSADC
+depend_on=alpha_n_button
+alpha_n_button=_VE_EMB_BIT_,_U08_,0,118,4,2,1
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[export_button]
+keys=handler,table_num
+handler=_EXPORT_SINGLE_TABLE_
+table_num=1
+
+[import_button]
+keys=handler,table_num
+handler=_IMPORT_SINGLE_TABLE_
+table_num=1
+
+[3d_view_button]
+keys=table_num,tooltip,bind_to_list
+table_num=1
+bind_to_list=3d_buttons
+_tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+
+[rescale_button]
+keys=handler,data
+handler=_RESCALE_TABLE_
+data=VE2_rescale_entry,VE2_rescale_combo
+
+[reqfuel_rescale_button]
+keys=handler,data,table_num,applicable_tables
+table_num=1
+applicable_tables=1
+handler=_REQFUEL_RESCALE_TABLE_
+data=VE2_new_reqfuel_entry
+
+[tracking_checkbutton]
+keys=handler,table_num
+handler=_TRACKING_FOCUS_
+table_num=1
+
+
+#----- Rescale Entries ------------------------------------------------------
+
+[rescale_entry]
+keys=table_num
+table_num=1
+
+#----- Rescale Combos ------------------------------------------------------
+
+[rescale_combo]
+keys=table_num,post_functions_with_arg
+table_num=1
+post_functions_with_arg=lock_entry
+
+#----- MAIN VETable Container ------------------------------------------------
+
+[main_vetable]
+keys=rescaler_frame
+rescaler_frame=VE2_rescale_frame
+
+#----- Load Entries (MAP/TPS) -----------------------------------------------
+
+[load_entry]
+keys=group
+offset=108
+group=load
+
+#----- RPM Entries ---------------------------------------------------------
+
+[rpm_entry]
+keys=group
+offset=100
+group=rpm
+
+#----- VE-Table Entries -----------------------------------------------------
+
+[ve_entry]
+keys=group
+offset=0
+group=vetable
+
+[curr_reqfuel_entry]
+keys=offset,precision,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+offset=90
+table_num=1
+precision=1
+dl_type=_IGNORED_
+handler=_LOCKED_REQ_FUEL_
+bind_to_list=interdep_1_ctrl
+ul_complex=TRUE
+ul_conv_expr=(reqfuel_2*((injectors_2+1)/divider_2))/10
+expr_symbols=reqfuel_2,injectors_2,divider_2
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
+reqfuel_2_page=1
+reqfuel_2_offset=90
+injectors_2_page=1
+injectors_2_offset=117
+injectors_2_bitmask=240
+divider_2_page=1
+divider_2_offset=91
+

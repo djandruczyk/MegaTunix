@@ -101,7 +101,7 @@ void CalculateFrameRate()
 		lastTime = currentTime.tv_sec;
 
 		/* Copy the frames per second into a string to display in the window*/
-		sprintf(strFrameRate, "Current Frames Per Second: %d", (int)framesPerSecond);
+		sprintf(strFrameRate, _("Current Frames Per Second: %i"), (int)framesPerSecond);
 
 		/* Reset the frames per second*/
 		framesPerSecond = 0;
@@ -413,7 +413,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		}
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), ve_view->table_name);
+	gtk_window_set_title(GTK_WINDOW(window), _(ve_view->table_name));
 	gtk_widget_set_size_request(window,DEFAULT_WIDTH,DEFAULT_HEIGHT);
 	gtk_container_set_border_width(GTK_CONTAINER(window),0);
 	ve_view->window = window;
@@ -2344,7 +2344,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
-			printf("multi is null!!\n");
+			printf("BUG! multi is null!!\n");
 
 		lookup_current_value(multi->source,&x_val);
 		cur_val->x_val = x_val;
@@ -2388,7 +2388,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
-			printf("multi is null!!\n");
+			printf("BUG! multi is null!!\n");
 		/* Edit value */
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
@@ -2435,7 +2435,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
-			printf("multi is null!!\n");
+			printf("BUG! multi is null!!\n");
 
 		/* Edit value */
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;

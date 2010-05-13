@@ -90,7 +90,7 @@ void io_cmd(gchar *io_cmd_name, void *data)
 		command = g_hash_table_lookup(commands_hash,io_cmd_name);
 		if (!command)
 		{
-			printf("Command %s is INVALID, aborting call\n",io_cmd_name);
+			printf(_("Command %s is INVALID, aborting call\n"),io_cmd_name);
 			return;;
 		}
 		message = initialize_io_message();
@@ -174,7 +174,7 @@ void *thread_dispatcher(gpointer data)
 		{
 			case FUNC_CALL:
 				if (!message->command->function)
-					printf("CRITICAL ERROR, function \"%s()\" is not found!!\n",message->command->func_call_name);
+					printf(_("CRITICAL ERROR, function \"%s()\" is not found!!\n"),message->command->func_call_name);
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
@@ -260,7 +260,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	/*		printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
-			printf("ERROR!!! Size undefined for var at canID %i, page %i, offset %i\n",canID,page,offset);
+			printf(_("ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
 	}
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
@@ -645,19 +645,19 @@ void *restore_update(gpointer data)
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
-	thread_update_logbar("tools_view","warning",g_strdup_printf("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n",max_xfers),FALSE,FALSE);
+	thread_update_logbar("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);
 	while (remaining_xfers > 5)
 	{
 		remaining_xfers = g_async_queue_length(io_data_queue);
 		g_usleep(10000);
 		if (remaining_xfers <= (last_xferd-50))
 		{
-			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Transactions remaining, please wait\n",remaining_xfers),FALSE,FALSE);
+			thread_update_logbar("tools_view",NULL,g_strdup_printf(_("Approximately %i Transactions remaining, please wait\n"),remaining_xfers),FALSE,FALSE);
 			last_xferd = remaining_xfers;
 		}
 
 	}
-	thread_update_logbar("tools_view","info",g_strdup_printf("All Transactions complete\n"),FALSE,FALSE);
+	thread_update_logbar("tools_view","info",g_strdup_printf(_("All Transactions complete\n")),FALSE,FALSE);
 
 	return NULL;
 }
@@ -755,7 +755,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 				/*printf("arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
 				if (!arg->internal_name)
-					printf("ERROR, MTX_UNDEF, donno what to do!!\n");
+					printf(_("ERROR, MTX_UNDEF, donno what to do!!\n"));
 				sent_data = (guint8 *)OBJ_GET(output->object,arg->internal_name);
 				len = (GINT)OBJ_GET(output->object,"num_bytes");
 				block->data = g_memdup(sent_data,len);

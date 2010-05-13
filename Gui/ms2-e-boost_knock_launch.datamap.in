@@ -1,0 +1,469 @@
+[global]
+description=Object data map for the MS2-Extra Boost/KnockLaunch Tab
+_tab_name=_Boost/Knock/Launch
+id_prefix=BKL_
+groups=defaults
+ellipsize=TRUE
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=1
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ----------------------------------------------------------------
+
+[boost_params_table]
+keys=bind_to_list
+bind_to_list=boost_control
+
+[boost_params_table]
+keys=bind_to_list
+bind_to_list=boost_control
+
+[boost_oloop_table]
+keys=bind_to_list
+bind_to_list=boost_oloop
+
+[boost_cloop_table]
+keys=bind_to_list
+bind_to_list=boost_cloop
+
+[knock_params_table]
+keys=bind_to_list
+bind_to_list=knock
+
+[obp_basics_table]
+keys=bind_to_list
+bind_to_list=obp_fuel
+
+[obp_spark_table]
+keys=bind_to_list
+bind_to_list=obp_spark
+
+[launch_left_table]
+keys=bind_to_list
+bind_to_list=launch_control
+
+[launch_right_params_table]
+keys=bind_to_list
+bind_to_list=launch_control
+
+[launch_spark_controls]
+keys=bind_to_list
+bind_to_list=launch_spark
+
+[knock_control_frame]
+keys=bind_to_list
+bind_to_list=ign
+
+[launch_frame]
+keys=bind_to_list
+bind_to_list=ign
+
+[flatshift_frame]
+keys=bind_to_list
+bind_to_list=flatshift,ign
+
+#----- Labels ----------------------------------------------------------------
+
+[knock_recovery_advance_label]
+keys=bind_to_list
+bind_to_list=knock_aggressive
+
+[boost_open_loop_label]
+keys=bind_to_list
+bind_to_list=boost_oloop
+
+[boost_closed_loop_label]
+keys=bind_to_list
+bind_to_list=boost_cloop
+
+#----- Combos ----------------------------------------------------------------
+
+[boost_control_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=67
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=8
+toggle_groups=,boost_control
+_tooltip=Enables or Disables the Boost control function
+
+[boost_pwm_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=67
+choices=78Hz,39Hz,26Hz,19.5Hz,15.6Hz,13Hz,11.1Hz
+bitvals=1,2,3,4,5,6,7
+bitmask=7
+_tooltip=Sets boost actuator PWM frequency
+
+[boost_pin_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=68
+choices=IAC1,IAC2,JS11,Fidle
+bitvals=1,2,4,8
+bitmask=15
+_tooltip=Selects the pin used for boost control.  NOTE: this may conflict with other features, be wary.
+
+[boost_polarity_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=67
+choices=Normal,Inverted
+bitvals=0,1
+bitmask=32
+_tooltip=Sets the output polarity
+
+[boost_algorithm_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=67
+choices=Open-Loop,Closed-Loop
+bitvals=0,1
+bitmask=16
+toggle_groups=boost_oloop,boost_cloop
+_tooltip=Sets the boost control algorithm, when in open loop the boost-duty table is used, otherwise the boost target table is used
+
+[obp_combo]
+keys=page,offset,choices,bitmask,bitvals,toggle_groups,tooltip
+page=0
+offset=570
+choices=None,Fuel Cut,Spark Cut,Both
+bitvals=0,1,2,3
+bitmask=3
+toggle_groups=,obp_fuel,obp_spark,obp_fuel:obp_spark
+_tooltip=Overboost Protect method used
+
+[knock_combo]
+keys=page,offset,choices,bitmask,bitvals,toggle_groups,tooltip
+page=0
+offset=927
+choices=Disabled,Safe Mode,Aggressive Mode
+bitvals=0,1,2
+bitmask=3
+toggle_groups=,knock,knock:knock_aggressive
+_tooltip=Knock Mitigation Mode option
+
+[knock_input_pin_combo]
+keys=page,offset,choices,bitmask,bitvals,tooltip
+page=0
+offset=927
+choices=MS2 AD7/JS4,MS2 AD6/JS5
+bitvals=0,1
+bitmask=4
+_tooltip=Knock Input pin
+
+[knock_indicated_combo]
+keys=page,offset,choices,bitmask,bitvals,tooltip
+page=0
+offset=927
+choices=Low Input,High Input
+bitvals=0,1
+bitmask=16
+_tooltip=Knock Input direction
+
+[knock_pullup_combo]
+keys=page,offset,choices,bitmask,bitvals,tooltip
+page=0
+offset=927
+choices=Same as knock,None,Pull Up,Pull Down
+bitvals=0,1,2,3
+bitmask=96
+_tooltip=See MS2-Extra Manuals
+
+[launch_combo]
+keys=page,offset,choices,bitmask,bitvals,toggle_groups,tooltip
+page=2
+offset=673
+choices=Off,Launch,Launch/Flatshift
+bitvals=0,1,3
+bitmask=192
+toggle_groups=,launch_control,launch_control:flatshift
+_tooltip=See MS2-Extra Manuals
+
+[launch_input_combo]
+keys=page,offset,choices,bitmask,bitvals,tooltip
+page=2
+offset=673
+choices=PE0/JS7,PE1,JS10,JS11,JS5,JS4
+bitvals=0,1,2,3,4,5
+bitmask=7
+_tooltip=Launch control input pin
+
+[launch_method_combo]
+keys=page,offset,choices,bitmask,bitvals,toggle_groups,tooltip
+page=2
+offset=682
+choices=None,Spark Cut,Fuel Cut,Spark and Fuel
+bitvals=0,1,2,3
+bitmask=3
+toggle_groups=,launch_spark,,launch_spark
+_tooltip=Use Spark retard, Spark Cut, Fuel Cut or both to achieve launch control
+
+#----- Entries ----------------------------------------------------------------
+
+[boost_ctrl_interval_entry]
+keys=offset,size,raw_lower,raw_upper,tooltip
+offset=74
+size=_U16_
+raw_lower=10
+raw_upper=500
+_tooltip=See MS2-Extra Manuals
+
+[closed_duty_entry]
+keys=offset,raw_upper,tooltip
+offset=72
+raw_upper=100
+_tooltip=See MS2-Extra Manuals
+
+[open_duty_entry]
+keys=offset,raw_upper,tooltip
+offset=73
+raw_upper=100
+_tooltip=See MS2-Extra Manuals
+
+[bc_pgain_entry]
+keys=offset,raw_upper,tooltip
+offset=69
+raw_upper=100
+_tooltip=See MS2-Extra Manuals
+
+[bc_igain_entry]
+keys=offset,raw_upper,tooltip
+offset=70
+raw_upper=100
+_tooltip=See MS2-Extra Manuals
+
+[bc_dgain_entry]
+keys=offset,raw_upper,tooltip
+offset=71
+raw_upper=100
+_tooltip=See MS2-Extra Manuals
+
+[obp_max_boost_entry]
+keys=page,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+page=0
+offset=571
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=10000
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[obp_hysteresis_entry]
+keys=page,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+page=0
+offset=573
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=1000
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[obp_cut_x_entry]
+keys=page,offset,tooltip
+page=0
+offset=575
+_tooltip=See MS2-Extra Manuals
+
+[obp_y_events_entry]
+keys=page,offset,tooltip
+page=0
+offset=576
+_tooltip=See MS2-Extra Manuals
+
+[launch_retard_above_rpm_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=2
+offset=674
+size=_S16_
+raw_upper=15000
+_tooltip=See MS2-Extra Manuals
+
+[launch_retard_to_entry]
+keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=2
+offset=676
+size=_S16_
+raw_lower=-900
+raw_upper=1800
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[launch_enable_tps_entry]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=2
+offset=680
+size=_S16_
+raw_upper=1000
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[launch_hard_limit_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=2
+offset=678
+size=_S16_
+raw_upper=15000
+_tooltip=See MS2-Extra Manuals
+
+[launch_cut_x_sparks_entry]
+keys=page,offset,tooltip
+page=2
+offset=683
+_tooltip=See MS2-Extra Manuals
+
+[launch_from_y_events_entry]
+keys=page,offset,tooltip
+page=2
+offset=684
+_tooltip=See MS2-Extra Manuals
+
+[flatshift_arming_rpm_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=2
+offset=685
+size=_S16_
+raw_upper=5000
+_tooltip=See MS2-Extra Manuals
+
+[flatshift_retard_above_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=2
+offset=687
+size=_S16_
+raw_upper=15000
+_tooltip=See MS2-Extra Manuals
+
+[flatshift_retard_to_entry]
+keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=2
+offset=689
+size=_S16_
+raw_lower=-900
+raw_upper=1800
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[flatshift_hard_revlimit_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=2
+offset=691
+size=_S16_
+raw_upper=15000
+_tooltip=See MS2-Extra Manuals
+
+[knock_count_entry]
+keys=page,offset,tooltip
+page=0
+offset=934
+_tooltip=See MS2-Extra Manuals
+
+[knock_ignored_above_entry]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=936
+size=_U16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=3000
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[rpm_window_low_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=0
+offset=938
+size=_U16_
+raw_upper=10000
+_tooltip=See MS2-Extra Manuals
+
+[rpm_window_high_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=0
+offset=940
+size=_U16_
+raw_upper=10000
+_tooltip=See MS2-Extra Manuals
+
+[max_retard_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=928
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[retard_check_time_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=931
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[retard_step_size_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=929
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[advance_check_time_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=932
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[advance_step_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=0
+offset=930
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=See MS2-Extra Manuals
+
+[recovery_advance_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+page=0
+offset=933
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+bind_to_list=knock_aggressive
+_tooltip=See MS2-Extra Manuals
+

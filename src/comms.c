@@ -81,10 +81,9 @@ gint comms_test()
 	/*printf("sending \"C\"\n"); */
 	if (!write_wrapper(serial_params->fd,"C",1,&len))
 	{
-		printf("WRITE ERROR\n");
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
-		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);
+		thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 		connected = FALSE;
 		return connected;
 	}
@@ -98,7 +97,7 @@ gint comms_test()
 		{
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
-			thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text),FALSE,FALSE);
+			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 			connected = FALSE;
 			return connected;
 		}
@@ -110,8 +109,8 @@ gint comms_test()
 		errcount=0;
 		dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
 		queue_function(g_strdup("kill_conn_warning"));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("ECU Connected..."));
-		thread_update_logbar("comms_view","info",g_strdup_printf("ECU Comms Test Successfull\n"),FALSE,FALSE);
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup(_("ECU Connected...")));
+		thread_update_logbar("comms_view","info",g_strdup_printf(_("ECU Comms Test Successfull\n")),FALSE,FALSE);
 
 	}
 	else
@@ -121,9 +120,9 @@ gint comms_test()
 		errcount++;
 		if (errcount > 5 )
 			queue_function(g_strdup("conn_warning"));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
 		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
-		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),FALSE,FALSE);
+		thread_update_logbar("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
 	}
 	return connected;
 }
@@ -157,12 +156,12 @@ EXPORT void send_to_slaves(void *data)
 		msg->value = (GINT)OBJ_GET(output->object,"value");
 	else
 	{
-		printf("Non simple/chunk write command, not notifying slaves\n");
+		printf(_("Non simple/chunk write command, not notifying peers\n"));
 		g_free(msg);
 		return;
 	}
 
-	/*	printf("Sending message to slave(s)\n");*/
+	/*	printf("Sending message to peer(s)\n");*/
 	g_async_queue_ref(slave_msg_queue);
         g_async_queue_push(slave_msg_queue,(gpointer)msg);
         g_async_queue_unref(slave_msg_queue);
@@ -387,7 +386,7 @@ gboolean write_data(Io_Message *message)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
 				if ((notifies) && ((j % notif_divisor) == 0))
-					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf("Sending %i of %i bytes",j,block->len));
+					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf(_("Sending %i of %i bytes"),j,block->len));
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
