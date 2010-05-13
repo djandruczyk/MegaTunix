@@ -12,7 +12,7 @@ rtmap_in_files = 	\
 rtmap_DATA = $(rtmap_in_files:.rtv_map.in=.rtv_map)
 @INTLTOOL_RTVMAP_RULE@
 
-EXTRA_DIST = $(rtmap_DATA) README
+EXTRA_DIST = $(rtmap_in_files) README
 
 CLEANFILES = *.rtv_map *.h
 

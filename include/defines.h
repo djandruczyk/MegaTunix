@@ -15,7 +15,6 @@
 #define __DEFINES_H__
 
 #include <config.h>
-#include <gettext.h>
 #include <libintl.h>
 
 /* Definitions */

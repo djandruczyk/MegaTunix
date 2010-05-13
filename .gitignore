@@ -5,7 +5,6 @@ MegaTunix.iss
 Output
 RELEASE_NOTES
 WIN_NOTES.txt
-aclocal.m4
 autom4te.cache
 build-stamp
 stamp-it
@@ -29,7 +28,7 @@ install.sh
 install-sh
 depcomp
 ylwrap
-m4
+*.m4
 *.o
 *.lo
 *.la
@@ -38,7 +37,6 @@ m4
 *.glade.bak
 *.gladep.bak
 *.gladep
-ChangeLog
 ABOUT-NLS
 gettext.h
 *.exe

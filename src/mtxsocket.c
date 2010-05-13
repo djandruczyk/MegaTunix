@@ -340,7 +340,7 @@ void *ascii_socket_server(gpointer data)
 	gint res = 0;
 
 
-	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\n\rEnter 'help' for assistance\n\r"),VERSION);
+	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
 	net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
 	g_free(tmpbuf);
 

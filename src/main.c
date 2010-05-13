@@ -23,7 +23,6 @@
 #include <enums.h>
 #include <errno.h>
 #include <gdk/gdkgl.h>
-#include <gettext.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>

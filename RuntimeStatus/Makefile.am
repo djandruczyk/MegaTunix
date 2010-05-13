@@ -10,6 +10,6 @@ rtstatus_in_files = \
 rtstatus_DATA = $(rtstatus_in_files:.status_conf.in=.status_conf)
 @INTLTOOL_STATUS_RULE@
 
-EXTRA_DIST = $(rtstatus_DATA) README
+EXTRA_DIST = $(rtstatus_in_files) README
 
 CLEANFILES = *.status_conf *.h

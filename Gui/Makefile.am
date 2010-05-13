@@ -161,6 +161,6 @@ gui_map_files = $(gui_in_files:.datamap.in=.datamap)
 
 gui_DATA = $(gui_map_files) $(gui_glade_files)
 
-EXTRA_DIST = $(gui_DATA) README
+EXTRA_DIST = $(gui_glade_files) $(gui_in_files) README
 
 CLEANFILES = *.gladep *.bak gmon.out *.h *.datamap

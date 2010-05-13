@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-12 21:47-0400\n"
+"POT-Creation-Date: 2010-05-12 22:25-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9685,8 +9685,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Welcome to MegaTunix %s, ASCII mode enabled\n"
-"\rEnter 'help' for assistance\n"
-"\r"
+"Enter 'help' for assistance\n"
 msgstr ""
 
 #: src/mtxsocket.c:579
