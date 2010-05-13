@@ -45,3 +45,4 @@ gettext.h
 intltool-*
 mkinstalldirs
 .intltool-merge-cache
+*~

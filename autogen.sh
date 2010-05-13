@@ -148,6 +148,8 @@ do
 	  fi
 	fi
       fi
+      echo "Unborking the po/Makefile.in.in with custom file"
+      cp -f po/working-Makefile.in.in po/Makefile.in.in
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
       if grep "^A[CM]_CONFIG_HEADERS" "$bn" >/dev/null; then
