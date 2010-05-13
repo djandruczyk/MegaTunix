@@ -149,6 +149,9 @@ do
 	fi
       fi
       echo "Unborking the po/Makefile.in.in with custom file"
+      if test -e po/Makefile.in.in ; then
+      		rm -f po/Makefile.in.in
+      fi
       cp -f po/working-Makefile.in.in po/Makefile.in.in
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
