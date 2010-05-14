@@ -188,10 +188,8 @@ RTSLIDERS_DATA_DIR=RuntimeSliders
 RTTEXT_DATA_DIR=RuntimeText
 RTSTATUS_DATA_DIR=RuntimeStatus
 DATA_DIR=$datarootdir/MegaTunix
-datadir=$datarootdir/MegaTunix
 LOCALE_DIR=$datarootdir/MegaTunix/locale
 
-AC_SUBST(datadir)
 AC_SUBST(DATA_DIR)
 AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)

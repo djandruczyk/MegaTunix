@@ -30,8 +30,10 @@
 #include <notifications.h>
 #include <mtxmatheval.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
+#include <unistd.h>
 
 Rtv_Map *rtv_map = NULL;
 gboolean rtvars_loaded = FALSE;
@@ -45,7 +47,8 @@ extern GObject *global_data;
  */
 EXPORT gboolean load_realtime_map_pf(void )
 {
-	ConfigFile *cfgfile;
+	GtkWidget *dialog = NULL;
+	ConfigFile *cfgfile = NULL;
 	extern Firmware_Details *firmware;
 	gchar * filename = NULL;
 	gchar *tmpbuf = NULL;
@@ -80,7 +83,16 @@ EXPORT gboolean load_realtime_map_pf(void )
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
 		set_title(g_strdup(_("ERROR RT Map file DOES NOT EXIST!!!")));
-		return FALSE;
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> Realtime Variable map \"%s.rtv_map\" for this firmware doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i>??\n You should notify the author of this bug\n\n"),firmware->rtv_map_file);
+
+		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
+		g_signal_connect(G_OBJECT(dialog),"destroy_event", G_CALLBACK(gtk_main_quit), dialog);
+		gtk_widget_show_all(dialog);
+		gtk_main();
+		if (global_data)
+			g_object_unref(global_data);
+		exit(-1);
 	}
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)

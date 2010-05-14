@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-12 22:25-0400\n"
+"POT-Creation-Date: 2010-05-14 11:59-0400\n"
 "PO-Revision-Date: 2010-05-12 17:34-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
 "Language-Team: Spanish\n"
@@ -4928,7 +4928,7 @@ msgid ""
 "take a few seconds, see the titlebar for updates..)"
 msgstr ""
 
-#: Gui/tools.datamap.in.h:6 Gui/main.glade:415 Gui/main.glade:3160
+#: Gui/tools.datamap.in.h:6 Gui/main.glade:428 Gui/main.glade:3173
 msgid "_Tools"
 msgstr "_Aperos"
 
@@ -5667,7 +5667,7 @@ msgstr ""
 msgid "Cranking Pulse vs. Temp"
 msgstr ""
 
-#: Interrogator/Profiles/MS-II.prof.in.h:29
+#: Interrogator/Profiles/MS-II.prof.in.h:29 Gui/PIS-corrections.glade:6318
 msgid "Cycles"
 msgstr ""
 
@@ -5788,7 +5788,7 @@ msgstr ""
 msgid "VE-Table 1, MS-II V2.8x"
 msgstr ""
 
-#: Interrogator/Profiles/MS-II.prof.in.h:73 Gui/PIS-corrections.glade:4971
+#: Interrogator/Profiles/MS-II.prof.in.h:73 Gui/PIS-corrections.glade:5014
 msgid "Volts"
 msgstr ""
 
@@ -5950,7 +5950,7 @@ msgstr ""
 msgid "Open Delay vs Volts"
 msgstr ""
 
-#: Interrogator/Profiles/PIS_V1_00.prof.in.h:41 Gui/PIS-corrections.glade:1467
+#: Interrogator/Profiles/PIS_V1_00.prof.in.h:41 Gui/PIS-corrections.glade:1470
 msgid "RPM Limit"
 msgstr ""
 
@@ -5970,7 +5970,7 @@ msgstr ""
 msgid "TPS vs. RPM (ANBPW)"
 msgstr ""
 
-#: Interrogator/Profiles/PIS_V1_00.prof.in.h:46 Gui/main.glade:4654
+#: Interrogator/Profiles/PIS_V1_00.prof.in.h:46 Gui/main.glade:4667
 msgid "Voltage"
 msgstr ""
 
@@ -6105,7 +6105,7 @@ msgstr ""
 #: Interrogator/Profiles/SquirtnSpark-Extra-HR-010a.prof.in.h:22
 #: Interrogator/Profiles/SquirtnSpark-Extra-HR-011x.prof.in.h:22
 #: Interrogator/Profiles/SquirtnSpark-Extra-HR-029x.prof.in.h:22
-#: Gui/main.glade:4220
+#: Gui/main.glade:4233
 msgid "Temperature"
 msgstr ""
 
@@ -6421,7 +6421,7 @@ msgstr ""
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:40 RealtimeMaps/DT-Std.rtv_map.in.h:41
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:58
-#: RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in.h:59 Gui/main.glade:4626
+#: RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in.h:59 Gui/main.glade:4639
 msgid "AFR"
 msgstr ""
 
@@ -7337,7 +7337,7 @@ msgstr ""
 #: RealtimeMaps/MS2-Extra-2.1.0.rtv_map.in.h:110
 #: RealtimeMaps/MS2-Std.rtv_map.in.h:80
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:121
-#: Gui/ms2-e-ignition.glade:1814 Gui/PIS-corrections.glade:4347
+#: Gui/ms2-e-ignition.glade:1814 Gui/PIS-corrections.glade:4390
 msgid "Dwell"
 msgstr ""
 
@@ -8560,6 +8560,7 @@ msgid "AE APW"
 msgstr ""
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:98
+#: Gui/PIS-corrections.glade:5592
 msgid "AE BPW"
 msgstr ""
 
@@ -8771,7 +8772,7 @@ msgid "Milliseconds"
 msgstr ""
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:164
-#: Gui/PIS-corrections.glade:4668
+#: Gui/PIS-corrections.glade:4711
 msgid "Open Delay"
 msgstr ""
 
@@ -8823,7 +8824,7 @@ msgstr ""
 #: RuntimeStatus/MSnS-Extra-firmware.status_conf.in.h:1
 #: Gui/PIS-alpha_biar_16x10.glade:6462 Gui/PIS-alpha_bpw_16x10.glade:6462
 #: Gui/PIS-biar_16x16.glade:9427 Gui/PIS-boost_16x10.glade:6462
-#: Gui/PIS-bpw_16x16.glade:9423 Gui/PIS-corrections.glade:5487
+#: Gui/PIS-bpw_16x16.glade:9423 Gui/PIS-corrections.glade:6896
 #: Gui/PIS-ego_16x16.glade:9427 Gui/PIS-runtime.glade:721
 #: Gui/PIS-settings.glade:3595 Gui/runtime.glade:326
 #: Gui/warmupwizard.glade:259
@@ -8854,7 +8855,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:7
 #: Gui/PIS-alpha_biar_16x10.glade:6357 Gui/PIS-alpha_bpw_16x10.glade:6357
 #: Gui/PIS-biar_16x16.glade:9322 Gui/PIS-boost_16x10.glade:6357
-#: Gui/PIS-bpw_16x16.glade:9318 Gui/PIS-corrections.glade:5382
+#: Gui/PIS-bpw_16x16.glade:9318 Gui/PIS-corrections.glade:6791
 #: Gui/PIS-ego_16x16.glade:9322 Gui/PIS-runtime.glade:616
 #: Gui/PIS-settings.glade:3490 Gui/runtime.glade:186
 #: Gui/warmupwizard.glade:119
@@ -8867,7 +8868,7 @@ msgstr ""
 #: RuntimeStatus/MSnS-Extra-firmware.status_conf.in.h:6
 #: Gui/PIS-alpha_biar_16x10.glade:6497 Gui/PIS-alpha_bpw_16x10.glade:6497
 #: Gui/PIS-biar_16x16.glade:9462 Gui/PIS-boost_16x10.glade:6497
-#: Gui/PIS-bpw_16x16.glade:9458 Gui/PIS-corrections.glade:5522
+#: Gui/PIS-bpw_16x16.glade:9458 Gui/PIS-corrections.glade:6931
 #: Gui/PIS-ego_16x16.glade:9462 Gui/PIS-runtime.glade:756
 #: Gui/PIS-settings.glade:3630 Gui/runtime.glade:361
 #: Gui/warmupwizard.glade:294
@@ -8881,7 +8882,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:20
 #: Gui/PIS-alpha_biar_16x10.glade:6392 Gui/PIS-alpha_bpw_16x10.glade:6392
 #: Gui/PIS-biar_16x16.glade:9357 Gui/PIS-boost_16x10.glade:6392
-#: Gui/PIS-bpw_16x16.glade:9353 Gui/PIS-corrections.glade:5417
+#: Gui/PIS-bpw_16x16.glade:9353 Gui/PIS-corrections.glade:6826
 #: Gui/PIS-ego_16x16.glade:9357 Gui/PIS-runtime.glade:651
 #: Gui/PIS-settings.glade:3525 Gui/runtime.glade:221
 #: Gui/warmupwizard.glade:154
@@ -8963,7 +8964,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:2
 #: Gui/PIS-alpha_biar_16x10.glade:6602 Gui/PIS-alpha_bpw_16x10.glade:6602
 #: Gui/PIS-biar_16x16.glade:9567 Gui/PIS-boost_16x10.glade:6602
-#: Gui/PIS-bpw_16x16.glade:9563 Gui/PIS-corrections.glade:5627
+#: Gui/PIS-bpw_16x16.glade:9563 Gui/PIS-corrections.glade:7036
 #: Gui/PIS-ego_16x16.glade:9567 Gui/PIS-runtime.glade:861
 #: Gui/PIS-settings.glade:3735
 msgid "ALPHA N"
@@ -8972,7 +8973,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:3
 #: Gui/PIS-alpha_biar_16x10.glade:6427 Gui/PIS-alpha_bpw_16x10.glade:6427
 #: Gui/PIS-biar_16x16.glade:9392 Gui/PIS-boost_16x10.glade:6427
-#: Gui/PIS-bpw_16x16.glade:9388 Gui/PIS-corrections.glade:5452
+#: Gui/PIS-bpw_16x16.glade:9388 Gui/PIS-corrections.glade:6861
 #: Gui/PIS-ego_16x16.glade:9392 Gui/PIS-runtime.glade:686
 #: Gui/PIS-settings.glade:3560
 msgid "ASC"
@@ -8985,7 +8986,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:5
 #: Gui/PIS-alpha_biar_16x10.glade:6532 Gui/PIS-alpha_bpw_16x10.glade:6532
 #: Gui/PIS-biar_16x16.glade:9497 Gui/PIS-boost_16x10.glade:6532
-#: Gui/PIS-bpw_16x16.glade:9493 Gui/PIS-corrections.glade:5557
+#: Gui/PIS-bpw_16x16.glade:9493 Gui/PIS-corrections.glade:6966
 #: Gui/PIS-ego_16x16.glade:9497 Gui/PIS-runtime.glade:791
 #: Gui/PIS-settings.glade:3665
 msgid "CLOSED LOOP"
@@ -9026,7 +9027,7 @@ msgstr ""
 #: RuntimeStatus/PIS_V1_00-firmware.status_conf.in.h:16
 #: Gui/PIS-alpha_biar_16x10.glade:6567 Gui/PIS-alpha_bpw_16x10.glade:6567
 #: Gui/PIS-biar_16x16.glade:9532 Gui/PIS-boost_16x10.glade:6567
-#: Gui/PIS-bpw_16x16.glade:9528 Gui/PIS-corrections.glade:5592
+#: Gui/PIS-bpw_16x16.glade:9528 Gui/PIS-corrections.glade:7001
 #: Gui/PIS-ego_16x16.glade:9532 Gui/PIS-runtime.glade:826
 #: Gui/PIS-settings.glade:3700
 msgid "IDLE CONTROL"
@@ -9052,7 +9053,7 @@ msgstr ""
 msgid "2D Table Group Editor"
 msgstr ""
 
-#: src/2d_table_editor.c:456 Gui/main.glade:3102
+#: src/2d_table_editor.c:456 Gui/main.glade:3115
 msgid "2D Table Editor"
 msgstr ""
 
@@ -9411,6 +9412,34 @@ msgid ""
 "value %i\n"
 msgstr ""
 
+#: src/gui_handlers.c:3212
+msgid "Save internal log, yes/no ?"
+msgstr ""
+
+#: src/gui_handlers.c:3222
+msgid ""
+"Would you like to save the internal datalog for this session to disk?  It is "
+"a complete log and useful for playback/analysis at a future point in time"
+msgstr ""
+
+#: src/gui_handlers.c:3237
+msgid "Save ECU settings to file?"
+msgstr ""
+
+#: src/gui_handlers.c:3247
+msgid ""
+"Would you like to save the ECU settings to a file so that they can be "
+"restored at a future time?"
+msgstr ""
+
+#: src/gui_handlers.c:3274
+msgid "Quit MegaTunix, yes/no ?"
+msgstr ""
+
+#: src/gui_handlers.c:3284
+msgid "Are you sure you want to quit?"
+msgstr ""
+
 #: src/gui_handlers.c:3331
 #, c-format
 msgid ""
@@ -9489,61 +9518,61 @@ msgstr "Comando \"%s\" (%s), regresó %i bytes (%s)\n"
 msgid "Command \"%s\" (%s), returned %i bytes\n"
 msgstr "Comando \"%s\" (%s),regresó %i bytes\n"
 
-#: src/interrogate.c:369 src/interrogate.c:1167 src/offline.c:215
+#: src/interrogate.c:369 src/interrogate.c:1188 src/offline.c:215
 #, c-format
 msgid ""
 "Interrogation profile API mismatch (%i.%i != %i.%i):\n"
 "\tFile %s will be skipped\n"
 msgstr ""
 
-#: src/interrogate.c:800
+#: src/interrogate.c:821
 #, c-format
 msgid "NO \"[cf]_gauge\" key found in te_table%i\n"
 msgstr ""
 
-#: src/interrogate.c:898
+#: src/interrogate.c:919
 #, c-format
 msgid "X multi_sources length mismatch!\n"
 msgstr ""
 
-#: src/interrogate.c:932
+#: src/interrogate.c:953
 #, c-format
 msgid "Y multi_sources length mismatch!\n"
 msgstr ""
 
-#: src/interrogate.c:967
+#: src/interrogate.c:988
 #, c-format
 msgid "Z multi_sources length mismatch!\n"
 msgstr ""
 
-#: src/interrogate.c:994
+#: src/interrogate.c:1015
 #, c-format
 msgid "Detected Firmware: %s\n"
 msgstr ""
 
-#: src/interrogate.c:995
+#: src/interrogate.c:1016
 #, c-format
 msgid "Loading Settings from: \"%s\"\n"
 msgstr ""
 
-#: src/interrogate.c:1034
+#: src/interrogate.c:1055
 #, c-format
 msgid ""
 "Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
 "\tFile %s.\n"
 msgstr ""
 
-#: src/interrogate.c:1173
+#: src/interrogate.c:1194
 #, c-format
 msgid "ERROR:!! \"match_on\" key missing from interrogation profile\n"
 msgstr ""
 
-#: src/interrogate.c:1184
+#: src/interrogate.c:1205
 #, c-format
 msgid "ERROR test data not found for test \"%s\"\n"
 msgstr ""
 
-#: src/interrogate.c:1204
+#: src/interrogate.c:1225
 #, c-format
 msgid ""
 "ERROR interrogation check_for match vector does NOT have two args it has %i\n"
@@ -9725,6 +9754,39 @@ msgstr ""
 msgid "Case not handled, bug in state machine!\n"
 msgstr ""
 
+#: src/notifications.c:263
+msgid ""
+"The MegaSquirt ECU appears to be currently disconnected.  This means that "
+"either one of the following occurred:\n"
+"   1. Wrong Comm port is selected on the Communications Tab\n"
+"   2. The MegaSquirt serial link is not plugged in\n"
+"   3. The MegaSquirt ECU does not have adequate power.\n"
+"   4. The MegaSquirt ECU is in bootloader mode.\n"
+"\n"
+"Suggest checking the serial settings on the Communications page first, and "
+"then check the Serial Status log at the bottom of that page. If the Serial "
+"Status log says \"I/O with MegaSquirt Timeout\", it means one of a few "
+"possible problems:\n"
+"   1. You selected the wrong COM port (older systems came with two, most "
+"newer ones only have one, try the other one...)\n"
+"   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 "
+"Male/Female cable)\n"
+"   3. The cable is OK, but the MS doesn't have adequate power.\n"
+"   4. If you have the ECU in bootloader mode, none of the lights lite up, "
+"and a terminal program will show a \"Boot>\" prompt Disconnect the Boot "
+"jumper and power cycle the ECU.\n"
+"\n"
+"If it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this "
+"can mean one of two things:\n"
+"   1. The COM port doesn't exist on your computer,\n"
+"\t\t\t\t\tOR\n"
+"   2. You don't have permission to open the port. (/dev/ttySx).\n"
+"UNIX ONLY: Change the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/"
+"ttyS*\" as root), NOTE: This has potential security implications. Check the "
+"Unix/Linux system documentation regarding \"security\" for more "
+"information...\n"
+msgstr ""
+
 #: src/raweditor.c:71
 #, c-format
 msgid "Page %i"
@@ -9749,39 +9811,51 @@ msgstr ""
 msgid "Required Fuel parameters"
 msgstr ""
 
-#: src/rtv_map_loader.c:77
+#: src/rtv_map_loader.c:80
 msgid "Loading Realtime Map..."
 msgstr ""
 
-#: src/rtv_map_loader.c:82
+#: src/rtv_map_loader.c:85
 msgid "ERROR RT Map file DOES NOT EXIST!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:90
+#: src/rtv_map_loader.c:86
+#, c-format
+msgid ""
+"\n"
+"<b>MegaTunix</b> Realtime Variable map \"%s.rtv_map\" for this firmware "
+"doesn't appear to be installed correctly!\n"
+"\n"
+"Did you forget to run <i>\"sudo make install\"</i>??\n"
+" You should notify the author of this bug\n"
+"\n"
+msgstr ""
+
+#: src/rtv_map_loader.c:102
 msgid "ERROR RT Map file could NOT be opened!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:98
+#: src/rtv_map_loader.c:110
 msgid "ERROR RT Map API MISMATCH!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:110
+#: src/rtv_map_loader.c:122
 msgid "ERROR RT Map missing data!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:118
+#: src/rtv_map_loader.c:130
 msgid "ERROR RT Map signature MISMATCH!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:156
+#: src/rtv_map_loader.c:168
 msgid "ERROR RT Map missing data problem!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:169
+#: src/rtv_map_loader.c:181
 msgid "ERROR RT Map offset missing!!!"
 msgstr ""
 
-#: src/rtv_map_loader.c:275
+#: src/rtv_map_loader.c:287
 msgid "RT Map loaded..."
 msgstr ""
 
@@ -9984,6 +10058,11 @@ msgstr ""
 #: src/tabloader.c:405
 #, c-format
 msgid "Error, bind_to_lists(), lists is NULL\n"
+msgstr ""
+
+#: src/therm.c:172
+#, c-format
+msgid "Serious ERROR!, tabletype is not CTS or MAT\n"
 msgstr ""
 
 #: src/threads.c:93
@@ -10402,7 +10481,7 @@ msgid "MegaTunix Gauge Designer"
 msgstr ""
 
 #: gaugedesigner/gaugedesigner.glade:1025 Gui/main.glade:51
-#: Gui/main.glade:3138 Gui/mtxloader.glade:42
+#: Gui/main.glade:3151 Gui/mtxloader.glade:42
 msgid "_File"
 msgstr ""
 
@@ -10451,7 +10530,7 @@ msgid "_Advanced Graphics"
 msgstr ""
 
 #: gaugedesigner/gaugedesigner.glade:1295 dashdesigner/dashdesigner.glade:216
-#: Gui/main.glade:604 Gui/mtxloader.glade:112
+#: Gui/main.glade:617 Gui/mtxloader.glade:112
 msgid "_Help"
 msgstr ""
 
@@ -10613,12 +10692,12 @@ msgstr ""
 #: Gui/ms2-warmup.glade:4503 Gui/ms2-warmup.glade:4979
 #: Gui/ms2-warmup.glade:5413 Gui/ms2-xtau.glade:854 Gui/ms2-xtau.glade:1288
 #: Gui/ms2-xtau.glade:1863 Gui/ms2-xtau.glade:2158 Gui/ms2-xtau.glade:2495
-#: Gui/ms2-xtau.glade:2790 Gui/PIS-corrections.glade:455
-#: Gui/PIS-corrections.glade:803 Gui/PIS-corrections.glade:1151
-#: Gui/PIS-corrections.glade:1499 Gui/PIS-corrections.glade:1847
-#: Gui/PIS-corrections.glade:2195 Gui/PIS-corrections.glade:2543
-#: Gui/PIS-corrections.glade:3311 Gui/PIS-corrections.glade:3659
-#: Gui/PIS-corrections.glade:4379 Gui/PIS-corrections.glade:4700
+#: Gui/ms2-xtau.glade:2790 Gui/PIS-corrections.glade:458
+#: Gui/PIS-corrections.glade:806 Gui/PIS-corrections.glade:1154
+#: Gui/PIS-corrections.glade:1502 Gui/PIS-corrections.glade:1850
+#: Gui/PIS-corrections.glade:2198 Gui/PIS-corrections.glade:2546
+#: Gui/PIS-corrections.glade:3315 Gui/PIS-corrections.glade:3663
+#: Gui/PIS-corrections.glade:4422 Gui/PIS-corrections.glade:4743
 msgid "Edit"
 msgstr ""
 
@@ -11124,7 +11203,7 @@ msgstr ""
 msgid "Optimize Dash Size"
 msgstr ""
 
-#: dashdesigner/dashdesigner.glade:225 Gui/main.glade:613 Gui/main.glade:762
+#: dashdesigner/dashdesigner.glade:225 Gui/main.glade:626 Gui/main.glade:775
 #: Gui/mtxloader.glade:121
 msgid "_About"
 msgstr ""
@@ -11893,7 +11972,7 @@ msgstr ""
 #: Gui/msns-e-wheeldecode.glade:2198 Gui/msns-e-wheeldecode.glade:2228
 #: Gui/msns-e-wheeldecode.glade:2258 Gui/msns-e-wheeldecode.glade:2288
 #: Gui/msns-e-wheeldecode.glade:2318 Gui/PIS-bpw_16x16.glade:8733
-#: Gui/PIS-corrections.glade:4735 Gui/rotary-trail.glade:186
+#: Gui/PIS-corrections.glade:4778 Gui/rotary-trail.glade:186
 #: Gui/rotary-trail.glade:427 Gui/rotary-trail.glade:456
 #: Gui/rotary-trail.glade:485 Gui/rotary-trail.glade:514
 #: Gui/rotary-trail.glade:543 Gui/rotary-trail.glade:572
@@ -12949,15 +13028,16 @@ msgstr ""
 #: Gui/ms2-e-rotary-split.glade:1051 Gui/PIS-alpha_biar_16x10.glade:468
 #: Gui/PIS-alpha_bpw_16x10.glade:468 Gui/PIS-biar_16x16.glade:649
 #: Gui/PIS-boost_16x10.glade:468 Gui/PIS-bpw_16x16.glade:649
-#: Gui/PIS-ego_16x16.glade:649 Gui/rotary-trail.glade:384
-#: Gui/sparktable_12x12x1.glade:4964 Gui/sparktable_12x12x2.glade:4964
-#: Gui/sparktable_12x12x2.glade:10514 Gui/sparktable_12x12x3.glade:4964
-#: Gui/sparktable_12x12x3.glade:10294 Gui/sparktable_12x12x3.glade:16012
-#: Gui/sparktable_8x8e.glade:2449 Gui/vetable_12x12x2.glade:504
-#: Gui/vetable_12x12x2.glade:6482 Gui/vetable_12x12x3.glade:504
-#: Gui/vetable_12x12x3.glade:6482 Gui/vetable_12x12x3.glade:17248
-#: Gui/vetable_16x16x3.glade:88 Gui/vetable_16x16x3.glade:10157
-#: Gui/vetable_16x16x3.glade:27979 Gui/vetable_8x8e.glade:2449
+#: Gui/PIS-corrections.glade:5938 Gui/PIS-ego_16x16.glade:649
+#: Gui/rotary-trail.glade:384 Gui/sparktable_12x12x1.glade:4964
+#: Gui/sparktable_12x12x2.glade:4964 Gui/sparktable_12x12x2.glade:10514
+#: Gui/sparktable_12x12x3.glade:4964 Gui/sparktable_12x12x3.glade:10294
+#: Gui/sparktable_12x12x3.glade:16012 Gui/sparktable_8x8e.glade:2449
+#: Gui/vetable_12x12x2.glade:504 Gui/vetable_12x12x2.glade:6482
+#: Gui/vetable_12x12x3.glade:504 Gui/vetable_12x12x3.glade:6482
+#: Gui/vetable_12x12x3.glade:17248 Gui/vetable_16x16x3.glade:88
+#: Gui/vetable_16x16x3.glade:10157 Gui/vetable_16x16x3.glade:27979
+#: Gui/vetable_8x8e.glade:2449
 msgid "3D View"
 msgstr ""
 
@@ -13227,7 +13307,7 @@ msgstr ""
 #: Gui/afrtable_12x12x2.glade:12049 Gui/afrtable_8x8x2.glade:6492
 #: Gui/B_n_G_constants.glade:1310 Gui/boost_6x6x3.glade:6674
 #: Gui/dt-params.glade:1637 Gui/Dualtable-constants.glade:1819
-#: Gui/enrichments.glade:2332 Gui/main.glade:3455 Gui/ms2-accel.glade:5092
+#: Gui/enrichments.glade:2332 Gui/main.glade:3468 Gui/ms2-accel.glade:5092
 #: Gui/ms2-alpha-n_6x6x1.glade:2246 Gui/ms2-e-accel.glade:8025
 #: Gui/ms2-e-boost_8x8x2.glade:6386 Gui/ms2-e-boost_knock_launch.glade:3336
 #: Gui/ms2-e-corrections_misc.glade:6304
@@ -13248,7 +13328,7 @@ msgstr ""
 #: Gui/msns-e-wheeldecode-029yx.glade:2474 Gui/msns-e-wheeldecode.glade:2415
 #: Gui/PIS-alpha_biar_16x10.glade:6265 Gui/PIS-alpha_bpw_16x10.glade:6246
 #: Gui/PIS-biar_16x16.glade:9230 Gui/PIS-boost_16x10.glade:6265
-#: Gui/PIS-bpw_16x16.glade:9226 Gui/PIS-corrections.glade:5290
+#: Gui/PIS-bpw_16x16.glade:9226 Gui/PIS-corrections.glade:6699
 #: Gui/PIS-ego_16x16.glade:9230 Gui/PIS-settings.glade:3398
 #: Gui/raweditor.glade:58 Gui/rotary-trail.glade:2549
 #: Gui/sparktable_12x12x1.glade:56 Gui/sparktable_12x12x2.glade:56
@@ -13262,7 +13342,7 @@ msgstr ""
 #: Gui/afrtable_12x12x2.glade:12069 Gui/afrtable_8x8x2.glade:6512
 #: Gui/B_n_G_constants.glade:1330 Gui/boost_6x6x3.glade:6694
 #: Gui/dt-params.glade:1657 Gui/Dualtable-constants.glade:1839
-#: Gui/enrichments.glade:2352 Gui/main.glade:3475 Gui/ms2-accel.glade:5112
+#: Gui/enrichments.glade:2352 Gui/main.glade:3488 Gui/ms2-accel.glade:5112
 #: Gui/ms2-alpha-n_6x6x1.glade:2266 Gui/ms2-e-accel.glade:8045
 #: Gui/ms2-e-boost_8x8x2.glade:6406 Gui/ms2-e-boost_knock_launch.glade:3356
 #: Gui/ms2-e-corrections_misc.glade:6324
@@ -13283,7 +13363,7 @@ msgstr ""
 #: Gui/msns-e-wheeldecode-029yx.glade:2494 Gui/msns-e-wheeldecode.glade:2435
 #: Gui/PIS-alpha_biar_16x10.glade:6284 Gui/PIS-alpha_bpw_16x10.glade:6227
 #: Gui/PIS-biar_16x16.glade:9249 Gui/PIS-boost_16x10.glade:6284
-#: Gui/PIS-bpw_16x16.glade:9245 Gui/PIS-corrections.glade:5309
+#: Gui/PIS-bpw_16x16.glade:9245 Gui/PIS-corrections.glade:6718
 #: Gui/PIS-ego_16x16.glade:9249 Gui/PIS-settings.glade:3417
 #: Gui/raweditor.glade:78 Gui/rotary-trail.glade:2569
 #: Gui/sparktable_12x12x1.glade:76 Gui/sparktable_12x12x2.glade:76
@@ -13297,7 +13377,7 @@ msgstr ""
 #: Gui/afrtable_12x12x2.glade:12090 Gui/afrtable_8x8x2.glade:6533
 #: Gui/B_n_G_constants.glade:1351 Gui/boost_6x6x3.glade:6715
 #: Gui/dt-params.glade:1678 Gui/Dualtable-constants.glade:1860
-#: Gui/enrichments.glade:2373 Gui/main.glade:3496 Gui/ms2-accel.glade:5133
+#: Gui/enrichments.glade:2373 Gui/main.glade:3509 Gui/ms2-accel.glade:5133
 #: Gui/ms2-alpha-n_6x6x1.glade:2287 Gui/ms2-e-accel.glade:8066
 #: Gui/ms2-e-boost_8x8x2.glade:6427 Gui/ms2-e-boost_knock_launch.glade:3377
 #: Gui/ms2-e-corrections_misc.glade:6345
@@ -13318,7 +13398,7 @@ msgstr ""
 #: Gui/msns-e-wheeldecode-029yx.glade:2515 Gui/msns-e-wheeldecode.glade:2456
 #: Gui/PIS-alpha_biar_16x10.glade:6304 Gui/PIS-alpha_bpw_16x10.glade:6304
 #: Gui/PIS-biar_16x16.glade:9269 Gui/PIS-boost_16x10.glade:6304
-#: Gui/PIS-bpw_16x16.glade:9265 Gui/PIS-corrections.glade:5329
+#: Gui/PIS-bpw_16x16.glade:9265 Gui/PIS-corrections.glade:6738
 #: Gui/PIS-ego_16x16.glade:9269 Gui/PIS-runtime.glade:1014
 #: Gui/PIS-settings.glade:3437 Gui/raweditor.glade:99
 #: Gui/rotary-trail.glade:2590 Gui/runtime.glade:918
@@ -13997,142 +14077,146 @@ msgid "T_uning"
 msgstr ""
 
 #: Gui/main.glade:402
-msgid "Generate Ignition Map"
+msgid "Generate"
 msgstr ""
 
-#: Gui/main.glade:425
+#: Gui/main.glade:411
+msgid "Ignition Map"
+msgstr ""
+
+#: Gui/main.glade:438
 msgid "Trigger Offset Tool"
 msgstr ""
 
-#: Gui/main.glade:447
+#: Gui/main.glade:460
 msgid "Sensor Calibrator (MAP/Baro)"
 msgstr ""
 
-#: Gui/main.glade:469
+#: Gui/main.glade:482
 msgid "_Calibrate Thermister Tables"
 msgstr ""
 
-#: Gui/main.glade:491
+#: Gui/main.glade:504
 msgid "MS2 _AFR Calibrator"
 msgstr ""
 
-#: Gui/main.glade:513
+#: Gui/main.glade:526
 msgid "_TPS Calibrate"
 msgstr ""
 
-#: Gui/main.glade:535
+#: Gui/main.glade:548
 msgid "MS2  Re-initialize"
 msgstr ""
 
-#: Gui/main.glade:557
+#: Gui/main.glade:570
 msgid "MS2 Full Reboot"
 msgstr ""
 
-#: Gui/main.glade:579
+#: Gui/main.glade:592
 msgid "_Lookuptables Setup"
 msgstr ""
 
-#: Gui/main.glade:658 Gui/ms2-accel.glade:450 Gui/ms2-e-accel.glade:319
+#: Gui/main.glade:671 Gui/ms2-accel.glade:450 Gui/ms2-e-accel.glade:319
 msgid " "
 msgstr ""
 
-#: Gui/main.glade:683
+#: Gui/main.glade:696
 msgid "designed by David J. Andruczyk (c) 2010"
 msgstr ""
 
-#: Gui/main.glade:733
+#: Gui/main.glade:746
 msgid "About MegaTunix"
 msgstr ""
 
-#: Gui/main.glade:834
+#: Gui/main.glade:847
 msgid "Use ToolTips"
 msgstr ""
 
-#: Gui/main.glade:855
+#: Gui/main.glade:868
 msgid "Context Sensitve Help"
 msgstr ""
 
-#: Gui/main.glade:900 Gui/main.glade:4305
+#: Gui/main.glade:913 Gui/main.glade:4318
 msgid "Fahrenheit"
 msgstr ""
 
-#: Gui/main.glade:920 Gui/main.glade:4326
+#: Gui/main.glade:933 Gui/main.glade:4339
 msgid "Celsius"
 msgstr ""
 
-#: Gui/main.glade:942
+#: Gui/main.glade:955
 msgid "Temperature Scale"
 msgstr ""
 
-#: Gui/main.glade:1126
+#: Gui/main.glade:1139
 msgid "Dashboard(s) Selection"
 msgstr ""
 
-#: Gui/main.glade:1175
+#: Gui/main.glade:1188
 msgid "MegaTunix Debugging"
 msgstr ""
 
-#: Gui/main.glade:1249
+#: Gui/main.glade:1262
 msgid "Interrogate ECU"
 msgstr ""
 
-#: Gui/main.glade:1274
+#: Gui/main.glade:1287
 msgid "Use Offline Mode"
 msgstr ""
 
-#: Gui/main.glade:1302
+#: Gui/main.glade:1315
 msgid "ECU Revision Number"
 msgstr ""
 
-#: Gui/main.glade:1366
+#: Gui/main.glade:1379
 msgid "Textual Version"
 msgstr ""
 
-#: Gui/main.glade:1394
+#: Gui/main.glade:1407
 msgid "ECU Signature String"
 msgstr ""
 
-#: Gui/main.glade:1524
+#: Gui/main.glade:1537
 msgid "Interrogation/Tab status"
 msgstr ""
 
-#: Gui/main.glade:1568
+#: Gui/main.glade:1581
 msgid "MegaSquirt ECU Information"
 msgstr ""
 
-#: Gui/main.glade:1606
+#: Gui/main.glade:1619
 msgid "General MegaTunix Settings"
 msgstr ""
 
-#: Gui/main.glade:1635
+#: Gui/main.glade:1648
 msgid "_General"
 msgstr ""
 
-#: Gui/main.glade:1710
+#: Gui/main.glade:1723
 msgid "Serial Port"
 msgstr ""
 
-#: Gui/main.glade:1770
+#: Gui/main.glade:1783
 msgid "Serial/Network Read Timeout (ms)"
 msgstr ""
 
-#: Gui/main.glade:1839
+#: Gui/main.glade:1852
 msgid "Auto-Scan Serial Ports"
 msgstr ""
 
-#: Gui/main.glade:1862
+#: Gui/main.glade:1875
 msgid "Locate Port"
 msgstr ""
 
-#: Gui/main.glade:1908
+#: Gui/main.glade:1921
 msgid "Allow Network Access"
 msgstr ""
 
-#: Gui/main.glade:1952
+#: Gui/main.glade:1965
 msgid "Slaves:"
 msgstr ""
 
-#: Gui/main.glade:1999
+#: Gui/main.glade:2012
 msgid ""
 "Type in the hostname that you want to CONNECT to to allow remote mtx "
 "access.  This is so you can \"phone home\" to a remotely waiting megatunix "
@@ -14141,7 +14225,7 @@ msgid ""
 "as your machine can connect outbound."
 msgstr ""
 
-#: Gui/main.glade:2022
+#: Gui/main.glade:2035
 msgid ""
 "Type in the hostname that you want to CONNECT to  in the box to the right of "
 "this button to allow remote access to your tuning session from a remote user "
@@ -14151,394 +14235,394 @@ msgid ""
 "open on your end as long as your machine can connect outbound."
 msgstr ""
 
-#: Gui/main.glade:2024
+#: Gui/main.glade:2037
 msgid "Reverse Connect"
 msgstr ""
 
-#: Gui/main.glade:2054
+#: Gui/main.glade:2067
 msgid "Comm Port and Baud Rate"
 msgstr ""
 
-#: Gui/main.glade:2216
+#: Gui/main.glade:2229
 msgid "Delay between reads (ms)"
 msgstr ""
 
-#: Gui/main.glade:2242
+#: Gui/main.glade:2255
 msgid "Runtime Sliders update rate (FPS)"
 msgstr ""
 
-#: Gui/main.glade:2269
+#: Gui/main.glade:2282
 msgid "Runtime Text update rate (FPS)"
 msgstr ""
 
-#: Gui/main.glade:2296
+#: Gui/main.glade:2309
 msgid "Dashboard update rate (FPS)"
 msgstr ""
 
-#: Gui/main.glade:2323
+#: Gui/main.glade:2336
 msgid "3D Display/VEtable update rate (FPS)"
 msgstr ""
 
-#: Gui/main.glade:2386
+#: Gui/main.glade:2399
 msgid "ECU Runtime Variable Settings"
 msgstr ""
 
-#: Gui/main.glade:2460 Gui/PIS-runtime.glade:324 Gui/runtime.glade:474
+#: Gui/main.glade:2473 Gui/PIS-runtime.glade:324 Gui/runtime.glade:474
 msgid "Good VE/Constants Reads"
 msgstr ""
 
-#: Gui/main.glade:2488 Gui/PIS-runtime.glade:374 Gui/runtime.glade:524
+#: Gui/main.glade:2501 Gui/PIS-runtime.glade:374 Gui/runtime.glade:524
 msgid "Good Runtime Reads"
 msgstr ""
 
-#: Gui/main.glade:2578 Gui/PIS-runtime.glade:417 Gui/runtime.glade:567
+#: Gui/main.glade:2591 Gui/PIS-runtime.glade:417 Gui/runtime.glade:567
 msgid "Serial I/O Error Count"
 msgstr ""
 
-#: Gui/main.glade:2606
+#: Gui/main.glade:2619
 msgid "ECU Hard reset Count"
 msgstr ""
 
-#: Gui/main.glade:2695
+#: Gui/main.glade:2708
 msgid "Reset I/O Status Counters"
 msgstr ""
 
-#: Gui/main.glade:2713
+#: Gui/main.glade:2726
 msgid "MegaSquirt I/O Statistics"
 msgstr ""
 
-#: Gui/main.glade:2784
+#: Gui/main.glade:2797
 msgid "Serial Status Messages"
 msgstr ""
 
-#: Gui/main.glade:2816
+#: Gui/main.glade:2829
 msgid "MegaTunix Communication Parameters"
 msgstr ""
 
-#: Gui/main.glade:2845
+#: Gui/main.glade:2858
 msgid "_Communications"
 msgstr ""
 
-#: Gui/main.glade:2883
+#: Gui/main.glade:2896
 msgid "        Exit          "
 msgstr ""
 
-#: Gui/main.glade:2935
+#: Gui/main.glade:2948
 msgid "MegaTunix Tab Visibility"
 msgstr ""
 
-#: Gui/main.glade:2979
+#: Gui/main.glade:2992
 msgid "<b><big>Tab Visibility</big></b>"
 msgstr ""
 
-#: Gui/main.glade:3024
+#: Gui/main.glade:3037
 msgid "<big>Hidden</big>"
 msgstr ""
 
-#: Gui/main.glade:3052
+#: Gui/main.glade:3065
 msgid "<big>Tab Name</big>"
 msgstr ""
 
-#: Gui/main.glade:3169
+#: Gui/main.glade:3182
 msgid "Curve Wizard"
 msgstr ""
 
-#: Gui/main.glade:3528
+#: Gui/main.glade:3541
 msgid "Calibrate TPS"
 msgstr ""
 
-#: Gui/main.glade:3565
+#: Gui/main.glade:3578
 msgid "Closed Throttle ADC Count"
 msgstr ""
 
-#: Gui/main.glade:3593
+#: Gui/main.glade:3606
 msgid "Full Throttle ADC Count"
 msgstr ""
 
-#: Gui/main.glade:3650 Gui/main.glade:3698
+#: Gui/main.glade:3663 Gui/main.glade:3711
 msgid "Get Current"
 msgstr ""
 
-#: Gui/main.glade:3759 Gui/main.glade:5897
+#: Gui/main.glade:3772 Gui/main.glade:5910
 msgid "Cancel"
 msgstr ""
 
-#: Gui/main.glade:3841 Gui/main.glade:5639 Gui/main.glade:5979
+#: Gui/main.glade:3854 Gui/main.glade:5652 Gui/main.glade:5992
 msgid "Send to ECU"
 msgstr ""
 
-#: Gui/main.glade:3882
+#: Gui/main.glade:3895
 msgid "Calibrate Throttle Position Sensor"
 msgstr ""
 
-#: Gui/main.glade:3907 Gui/main.glade:4502
+#: Gui/main.glade:3920 Gui/main.glade:4515
 msgid "Table Generator"
 msgstr ""
 
-#: Gui/main.glade:3944
+#: Gui/main.glade:3957
 msgid ""
 "Coolant Temperature\n"
 "Air Temperature"
 msgstr ""
 
-#: Gui/main.glade:3963
+#: Gui/main.glade:3976
 msgid "Sensor Table"
 msgstr ""
 
-#: Gui/main.glade:3999
+#: Gui/main.glade:4012
 msgid "Bias Resistor Value (Ohms)"
 msgstr ""
 
-#: Gui/main.glade:4030
+#: Gui/main.glade:4043
 msgid "2490.0"
 msgstr ""
 
-#: Gui/main.glade:4080
+#: Gui/main.glade:4093
 msgid "100700.0"
 msgstr ""
 
-#: Gui/main.glade:4104
+#: Gui/main.glade:4117
 msgid "2238.0"
 msgstr ""
 
-#: Gui/main.glade:4128
+#: Gui/main.glade:4141
 msgid "177.0"
 msgstr ""
 
-#: Gui/main.glade:4152
+#: Gui/main.glade:4165
 msgid "-40"
 msgstr ""
 
-#: Gui/main.glade:4176
+#: Gui/main.glade:4189
 msgid "30"
 msgstr ""
 
-#: Gui/main.glade:4200
+#: Gui/main.glade:4213
 msgid "99"
 msgstr ""
 
-#: Gui/main.glade:4248
+#: Gui/main.glade:4261
 msgid "Resistance (Ohms)"
 msgstr ""
 
-#: Gui/main.glade:4276
+#: Gui/main.glade:4289
 msgid "\t"
 msgstr ""
 
-#: Gui/main.glade:4350
+#: Gui/main.glade:4363
 msgid "Thermister Measurements"
 msgstr ""
 
-#: Gui/main.glade:4527
+#: Gui/main.glade:4540
 msgid "MS-II AFR Calibrator"
 msgstr ""
 
-#: Gui/main.glade:4581
+#: Gui/main.glade:4594
 msgid "EGO Sensor Type"
 msgstr ""
 
-#: Gui/main.glade:4682
+#: Gui/main.glade:4695
 msgid "Point 1"
 msgstr ""
 
-#: Gui/main.glade:4710
+#: Gui/main.glade:4723
 msgid "Point 2"
 msgstr ""
 
-#: Gui/main.glade:4742
+#: Gui/main.glade:4755
 msgid "1"
 msgstr ""
 
-#: Gui/main.glade:4766
+#: Gui/main.glade:4779
 msgid "19.7"
 msgstr ""
 
-#: Gui/main.glade:4790
+#: Gui/main.glade:4803
 msgid "9.7"
 msgstr ""
 
-#: Gui/main.glade:4814
+#: Gui/main.glade:4827
 msgid "4"
 msgstr ""
 
-#: Gui/main.glade:4836
+#: Gui/main.glade:4849
 msgid "Generic Linear Wideband Settings"
 msgstr ""
 
-#: Gui/main.glade:4989
+#: Gui/main.glade:5002
 msgid "MS-II AFR Calibration"
 msgstr ""
 
-#: Gui/main.glade:5014 Gui/main.glade:5423
+#: Gui/main.glade:5027 Gui/main.glade:5436
 msgid "Sensor Calibration"
 msgstr ""
 
-#: Gui/main.glade:5051 Gui/main.glade:5107
+#: Gui/main.glade:5064 Gui/main.glade:5120
 msgid "Value at 5.0 volts (kPa)"
 msgstr ""
 
-#: Gui/main.glade:5079 Gui/main.glade:5162
+#: Gui/main.glade:5092 Gui/main.glade:5175
 msgid "Value at 0.0 volts (kPa)"
 msgstr ""
 
-#: Gui/main.glade:5135
+#: Gui/main.glade:5148
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\"> MAP Sensor (F1 for "
 "common Values)\t\t\t\t\t</span>"
 msgstr ""
 
-#: Gui/main.glade:5217
+#: Gui/main.glade:5230
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\"> Barometer Sensor "
 "(usually identical to MAP)\t\t\t</span>"
 msgstr ""
 
-#: Gui/main.glade:5377
+#: Gui/main.glade:5390
 msgid "Burn to Flash"
 msgstr ""
 
-#: Gui/main.glade:5395
+#: Gui/main.glade:5408
 msgid "Get Data"
 msgstr ""
 
-#: Gui/main.glade:5449
+#: Gui/main.glade:5462
 msgid "Trigger Offset"
 msgstr ""
 
-#: Gui/main.glade:5580
+#: Gui/main.glade:5593
 msgid ""
 "<b>Match the above value with \n"
 "timing light reading. (BTDC)</b>"
 msgstr ""
 
-#: Gui/main.glade:5619
+#: Gui/main.glade:5632
 msgid "Close"
 msgstr ""
 
-#: Gui/main.glade:5666
+#: Gui/main.glade:5679
 msgid "<small>Offset in deg.</small>"
 msgstr ""
 
-#: Gui/main.glade:5732
+#: Gui/main.glade:5745
 msgid "Runtime Vars"
 msgstr ""
 
-#: Gui/main.glade:5778 Gui/PIS-runtime.glade:133 Gui/runtime.glade:133
+#: Gui/main.glade:5791 Gui/PIS-runtime.glade:133 Gui/runtime.glade:133
 #: Gui/warmupwizard.glade:1405
 msgid "Runtime Data"
 msgstr ""
 
-#: Gui/main.glade:5810
+#: Gui/main.glade:5823
 msgid "Create Ignition Map"
 msgstr ""
 
-#: Gui/main.glade:6039
+#: Gui/main.glade:6052
 msgid "20.0"
 msgstr ""
 
-#: Gui/main.glade:6063
+#: Gui/main.glade:6076
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\"> Forced Induction "
 "(decurve)                                </span>"
 msgstr ""
 
-#: Gui/main.glade:6090
+#: Gui/main.glade:6103
 msgid "Retard @ Maximum Load"
 msgstr ""
 
-#: Gui/main.glade:6117
+#: Gui/main.glade:6130
 msgid "Starting @ Load"
 msgstr ""
 
-#: Gui/main.glade:6149
+#: Gui/main.glade:6162
 msgid "115.0"
 msgstr ""
 
-#: Gui/main.glade:6195 Gui/main.glade:6742
+#: Gui/main.glade:6208 Gui/main.glade:6755
 msgid "5.0"
 msgstr ""
 
-#: Gui/main.glade:6219
+#: Gui/main.glade:6232
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\"> Maximum RPM "
 "Advance                                     </span>"
 msgstr ""
 
-#: Gui/main.glade:6246
+#: Gui/main.glade:6259
 msgid "Extra Advance @ Max RPM"
 msgstr ""
 
-#: Gui/main.glade:6295
+#: Gui/main.glade:6308
 msgid "100.0"
 msgstr ""
 
-#: Gui/main.glade:6323
+#: Gui/main.glade:6336
 msgid "30.0"
 msgstr ""
 
-#: Gui/main.glade:6347
+#: Gui/main.glade:6360
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\">Peak "
 "Torque                                                           </span>"
 msgstr ""
 
-#: Gui/main.glade:6374
+#: Gui/main.glade:6387
 msgid "Peak Torque @ Load"
 msgstr ""
 
-#: Gui/main.glade:6401
+#: Gui/main.glade:6414
 msgid "Peak Torque @ RPM"
 msgstr ""
 
-#: Gui/main.glade:6428
+#: Gui/main.glade:6441
 msgid "Peak Torque Advance"
 msgstr ""
 
-#: Gui/main.glade:6459
+#: Gui/main.glade:6472
 msgid "3500"
 msgstr ""
 
-#: Gui/main.glade:6501
+#: Gui/main.glade:6514
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\">Idle "
 "Characteristics                                               </span>"
 msgstr ""
 
-#: Gui/main.glade:6532
+#: Gui/main.glade:6545
 msgid "15.0"
 msgstr ""
 
-#: Gui/main.glade:6560
+#: Gui/main.glade:6573
 msgid "850"
 msgstr ""
 
-#: Gui/main.glade:6588
+#: Gui/main.glade:6601
 msgid "40.0"
 msgstr ""
 
-#: Gui/main.glade:6612
+#: Gui/main.glade:6625
 msgid "Idle @ Load"
 msgstr ""
 
-#: Gui/main.glade:6639
+#: Gui/main.glade:6652
 msgid "Idle @ RPM"
 msgstr ""
 
-#: Gui/main.glade:6666 Gui/ms2-e-corrections_misc.glade:3701
+#: Gui/main.glade:6679 Gui/ms2-e-corrections_misc.glade:3701
 msgid "Idle Advance"
 msgstr ""
 
-#: Gui/main.glade:6711
+#: Gui/main.glade:6724
 msgid ""
 "<span background=\"dark blue\" foreground=\"white\">Light Load "
 "(deceleration)                                     </span>"
 msgstr ""
 
-#: Gui/main.glade:6766
+#: Gui/main.glade:6779
 msgid "Extra Advance @ Lightest Load"
 msgstr ""
 
-#: Gui/main.glade:6843
+#: Gui/main.glade:6856
 msgid "Linear Ignition Base Map Generator"
 msgstr ""
 
@@ -14770,8 +14854,9 @@ msgstr ""
 #: Gui/ms2-accel.glade:3646 Gui/ms2-accel.glade:4099
 #: Gui/ms2-e-accel.glade:4039 Gui/ms2-e-crank_idle_warmup.glade:3523
 #: Gui/ms2-e-crank_idle_warmup.glade:4045 Gui/ms2-warmup.glade:5490
-#: Gui/ms2-xtau.glade:477 Gui/ms2-xtau.glade:2896 Gui/PIS-corrections.glade:97
-#: Gui/PIS-corrections.glade:2953 Gui/PIS-corrections.glade:5012
+#: Gui/ms2-xtau.glade:477 Gui/ms2-xtau.glade:2896
+#: Gui/PIS-corrections.glade:100 Gui/PIS-corrections.glade:2957
+#: Gui/PIS-corrections.glade:5055
 msgid "Edit Group"
 msgstr ""
 
@@ -18808,7 +18893,7 @@ msgstr ""
 
 #: Gui/PIS-alpha_biar_16x10.glade:6227 Gui/PIS-alpha_bpw_16x10.glade:6284
 #: Gui/PIS-biar_16x16.glade:9192 Gui/PIS-boost_16x10.glade:6227
-#: Gui/PIS-bpw_16x16.glade:9188 Gui/PIS-corrections.glade:5252
+#: Gui/PIS-bpw_16x16.glade:9188 Gui/PIS-corrections.glade:6661
 #: Gui/PIS-ego_16x16.glade:9192 Gui/PIS-runtime.glade:993
 #: Gui/PIS-settings.glade:3360 Gui/runtime.glade:877
 msgid "Stop Reading RT Data"
@@ -18816,7 +18901,7 @@ msgstr ""
 
 #: Gui/PIS-alpha_biar_16x10.glade:6246 Gui/PIS-alpha_bpw_16x10.glade:6265
 #: Gui/PIS-biar_16x16.glade:9211 Gui/PIS-boost_16x10.glade:6246
-#: Gui/PIS-bpw_16x16.glade:9207 Gui/PIS-corrections.glade:5271
+#: Gui/PIS-bpw_16x16.glade:9207 Gui/PIS-corrections.glade:6680
 #: Gui/PIS-ego_16x16.glade:9211 Gui/PIS-runtime.glade:973
 #: Gui/PIS-settings.glade:3379 Gui/runtime.glade:897
 msgid "Start Reading RT Data"
@@ -18824,7 +18909,7 @@ msgstr ""
 
 #: Gui/PIS-alpha_biar_16x10.glade:6637 Gui/PIS-alpha_bpw_16x10.glade:6637
 #: Gui/PIS-biar_16x16.glade:9602 Gui/PIS-boost_16x10.glade:6637
-#: Gui/PIS-bpw_16x16.glade:9598 Gui/PIS-corrections.glade:5662
+#: Gui/PIS-bpw_16x16.glade:9598 Gui/PIS-corrections.glade:7071
 #: Gui/PIS-ego_16x16.glade:9602 Gui/PIS-runtime.glade:896
 #: Gui/PIS-settings.glade:3770
 msgid "FAN"
@@ -18832,7 +18917,7 @@ msgstr ""
 
 #: Gui/PIS-alpha_biar_16x10.glade:6666 Gui/PIS-alpha_bpw_16x10.glade:6666
 #: Gui/PIS-biar_16x16.glade:9631 Gui/PIS-boost_16x10.glade:6666
-#: Gui/PIS-bpw_16x16.glade:9627 Gui/PIS-corrections.glade:5691
+#: Gui/PIS-bpw_16x16.glade:9627 Gui/PIS-corrections.glade:7100
 #: Gui/PIS-ego_16x16.glade:9631 Gui/PIS-runtime.glade:925
 #: Gui/PIS-settings.glade:3799 Gui/runtime.glade:390
 #: Gui/warmupwizard.glade:323
@@ -18891,87 +18976,115 @@ msgstr ""
 msgid "PIS - Base Pulse Width"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:423
+#: Gui/PIS-corrections.glade:426
 msgid "AE *"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:771 Gui/PIS-corrections.glade:3279
+#: Gui/PIS-corrections.glade:774 Gui/PIS-corrections.glade:3283
 msgid "IAR"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:1119 Gui/PIS-corrections.glade:3627
+#: Gui/PIS-corrections.glade:1122 Gui/PIS-corrections.glade:3631
 msgid "BPW %"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:1815
+#: Gui/PIS-corrections.glade:1818
 msgid "Duration"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:2163
+#: Gui/PIS-corrections.glade:2166
 msgid "ASC %"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:2511
+#: Gui/PIS-corrections.glade:2514
 msgid "Crank PW"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:2859 Gui/PIS-settings.glade:1864
+#: Gui/PIS-corrections.glade:2862 Gui/PIS-settings.glade:1864
 msgid "CTS bins"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:2901
+#: Gui/PIS-corrections.glade:2904
 msgid "CTS Settings / Corrections"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:3975
+#: Gui/PIS-corrections.glade:3979
 msgid "MAT bins"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:4017
+#: Gui/PIS-corrections.glade:4021
 msgid "MAT Corrections"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:4761
-msgid "3.2"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4787
-msgid "6.4"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4813
-msgid "9.6"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4839
-msgid "12.8"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4865
-msgid "16.0"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4891
-msgid "19.2"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4917
-msgid "22.4"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:4943
-msgid "25.5"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:5032
-msgid "Voltage Correction"
-msgstr ""
-
-#: Gui/PIS-corrections.glade:5200
+#: Gui/PIS-corrections.glade:4060
 msgid "Corrections"
 msgstr ""
 
-#: Gui/PIS-corrections.glade:5723
+#: Gui/PIS-corrections.glade:4804
+msgid "3.2"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4830
+msgid "6.4"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4856
+msgid "9.6"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4882
+msgid "12.8"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4908
+msgid "16.0"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4934
+msgid "19.2"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4960
+msgid "22.4"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:4986
+msgid "25.5"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:5075
+msgid "Voltage Correction"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:5757
+msgid "TPS bins"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:5902
+msgid "RPM bins"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:6078
+msgid "ROC *"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:6243
+msgid "ROC %"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:6391
+msgid "Min ROC"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:6437
+msgid "Acceleration Enrichment"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:6476
+msgid "Voltage & Acceleration"
+msgstr ""
+
+#: Gui/PIS-corrections.glade:7132
 msgid "PIS - Corrections"
 msgstr ""
 
