@@ -344,6 +344,16 @@ choices=Disabled,Enabled
 toggle_groups=,flexfuel
 _tooltip=Enables or Disables the Flexfuel sensor.
 
+[flex_port_combo]
+keys=page,offset,bitvals,bitmask,bind_to_list,tooltip
+page=0
+offset=908
+bitvals=0,1
+bitmask=2
+choices=Local,Remote
+bind_to_list=can_poll,can_poll_pwm
+_tooltip=If CAN is enabled wiht PWM polling, you can set the flex sensor to be a remote input
+
 [ff_input_pin]
 keys=page,offset,bitvals,bitmask,tooltip
 page=0

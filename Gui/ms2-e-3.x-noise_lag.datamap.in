@@ -1,0 +1,313 @@
+[global]
+description=Object data map for the MS2-Extra Noise/Lag Tab
+_tab_name=_Noise/Filtering
+id_prefix=NOISE_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,dl_type,handler
+page=0
+size=_U08_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[noise_filter_edit_button]
+keys=handler,te_table_num
+handler=_TE_TABLE_
+te_table_num=19
+
+#----- Widgets ---------------------------------------------------------------
+
+[crank_noise_frame]
+keys=bind_to_list
+bind_to_list=crank_noise
+
+[crank_no_noise_table]
+keys=bind_to_list
+bind_to_list=crank_no_noise
+
+[cam_no_noise_table]
+keys=bind_to_list
+bind_to_list=cam_no_noise
+
+[edis_noise_frame]
+keys=bind_to_list
+bind_to_list=edis
+
+[crank_noise_filtering_frame]
+keys=bind_to_list
+bind_to_list=noise
+
+[cam_noise_filtering_frame]
+keys=bind_to_list
+bind_to_list=generic_wheel,noise,dual
+
+#----- Combo Boxes -----------------------------------------------------------
+
+[crank_noise_filter_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=984
+bitmask=1
+toggle_groups=crank_no_noise,crank_noise
+_tooltip=Sets the Crank Noise filter or not.
+
+[crank_tach_period_rejection_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=984
+bitmask=2
+_tooltip=See MS2-Extra Manuals
+
+[crank_interrupt_masking_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=984
+bitmask=4
+_tooltip=See MS2-Extra Manuals
+
+[crank_polarity_checking_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=984
+bitmask=8
+_tooltip=See MS2-Extra Manuals
+
+[cam_noise_filter_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=577
+bitmask=1
+toggle_groups=cam_no_noise,cam_noise
+_tooltip=Sets whether to use noise filtering for the cam signal
+
+[cam_tach_period_rejection_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=577
+bitmask=2
+_tooltip=See MS2-Extra Manuals
+
+[cam_interrupt_masking_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=577
+bitmask=4
+_tooltip=See MS2-Extra Manuals
+
+[cam_polarity_checking_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=577
+bitmask=8
+_tooltip=See MS2-Extra Manuals
+
+[edis_false_trigger_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Off,Simple,Advanced
+bitvals=0,2,3
+offset=997
+bitmask=48
+_tooltip=See MS2-Extra Manuals
+
+#----- Entries ----------------------------------------------------------------
+
+[crank_time_mask_entry]
+keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=971
+precision=1
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=See MS2-Extra Manuals
+
+[crank_percent_mask_entry]
+keys=offset,raw_upper,tooltip
+offset=972
+raw_upper=90
+_tooltip=See MS2-Extra Manuals
+
+[cam_time_mask_entry]
+keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=982
+precision=1
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=See MS2-Extra Manuals
+
+[cam_percent_mask_entry]
+keys=offset,raw_upper,tooltip
+offset=983
+raw_upper=90
+_tooltip=See MS2-Extra Manuals
+
+[cam_time_period_entry]
+keys=size,dl_conv_expr,ul_conv_expr,raw_upper,offset,tooltip
+offset=1
+size=_U16_
+raw_upper=7500
+dl_conv_expr=x/0.66667
+ul_conv_expr=x*0.66667
+_tooltip=See MS2-Extra Manuals
+
+[edis_time_mask_entry]
+keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+offset=971
+precision=1
+dl_conv_expr=x/0.1
+ul_conv_expr=x*0.1
+_tooltip=See MS2-Extra Manuals
+
+[edis_percent_mask_entry]
+keys=offset,raw_upper,tooltip
+offset=972
+raw_upper=90
+_tooltip=See MS2-Extra Manuals
+
+[edis_crank_npt_entry]
+keys=offset,tooltip
+offset=544
+_tooltip=See MS2-Extra Manuals
+
+[edis_ase_npt_entry]
+keys=offset,tooltip
+offset=545
+_tooltip=See MS2-Extra Manuals
+
+[edis_run_npt_entry]
+keys=offset,tooltip
+offset=546
+_tooltip=See MS2-Extra Manuals
+
+[rpm_avg_lag_factor_entry]
+keys=offset,tooltip
+offset=622
+_tooltip=See MS2-Extra Manuals
+
+[map_avg_lag_factor_entry]
+keys=offset,tooltip
+offset=623
+_tooltip=See MS2-Extra Manuals
+
+[tps_avg_lag_factor_entry]
+keys=offset,tooltip
+offset=624
+_tooltip=See MS2-Extra Manuals
+
+[ego_avg_lag_factor_entry]
+keys=offset,tooltip
+offset=625
+_tooltip=See MS2-Extra Manuals
+
+[adc_avg_lag_factor_entry]
+keys=offset,tooltip
+offset=626
+_tooltip=See MS2-Extra Manuals
+
+[mapsample_window_entry]
+keys=offset,raw_upper,tooltip
+offset=750
+raw_upper=50
+_tooltip=How long to sample the MAP sensor looking for the lowest value.
+
+[mapsample_angle_entry]
+keys=offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+offset=584
+size=_S16_
+raw_lower=-3600
+raw_upper=3600
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+_tooltip=See The angle when to start MAP sampling
+
+[noise_rpm_entry_0]
+keys=page,offset,size,tooltip
+page=2
+offset=968
+size=_U16_
+_tooltip=See MS2-Extra Manuals
+
+[noise_rpm_entry_1]
+keys=page,offset,size,tooltip
+page=2
+offset=970
+size=_U16_
+_tooltip=See MS2-Extra Manuals
+
+[noise_rpm_entry_2]
+keys=page,offset,size,tooltip
+page=2
+offset=972
+size=_U16_
+_tooltip=See MS2-Extra Manuals
+
+[noise_rpm_entry_3]
+keys=page,offset,size,tooltip
+page=2
+offset=974
+size=_U16_
+_tooltip=See MS2-Extra Manuals
+
+[noise_period_entry_0]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=2
+offset=974
+size=_U16_
+dl_conv_expr=x/0.6667
+ul_conv_expr=x*0.6667
+raw_upper=64449
+_tooltip=See MS2-Extra Manuals
+
+[noise_period_entry_1]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=2
+offset=976
+size=_U16_
+dl_conv_expr=x/0.6667
+ul_conv_expr=x*0.6667
+raw_upper=64449
+_tooltip=See MS2-Extra Manuals
+
+[noise_period_entry_2]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=2
+offset=978
+size=_U16_
+dl_conv_expr=x/0.6667
+ul_conv_expr=x*0.6667
+raw_upper=64449
+_tooltip=See MS2-Extra Manuals
+
+[noise_period_entry_3]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+page=2
+offset=980
+size=_U16_
+dl_conv_expr=x/0.6667
+ul_conv_expr=x*0.6667
+raw_upper=64449
+_tooltip=See MS2-Extra Manuals
+

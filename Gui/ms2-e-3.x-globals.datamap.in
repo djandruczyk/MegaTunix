@@ -100,12 +100,12 @@ _tooltip=Enables controls for injector channel 2
 
 [fuel_algo_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Speed Density,Percent Baro,Alpha-N
-bitvals=0,1,2
+choices=Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
+bitvals=1,2,3,4,5,6
 offset=630
-bitmask=3
-toggle_groups=speed_density,percent_baro,alpha_n
-_tooltip=Sets ECU fuel algorithm to pure Speed Density,Percent Baro or  Alpha-N
+bitmask=7
+toggle_groups=speed_density,percent_baro,alpha_n,mafmap,maf,itb
+_tooltip=Sets ECU fuel algorithm to pure Speed Density, Percent Baro, Alpha-N, MAFMAP, MAF or ITB
 
 [single_dual_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
@@ -144,13 +144,13 @@ _tooltip=Sets ECU Enhanced Accel Enrichment scheme to be Off, On, or On with Lag
 
 [2nd_fuelload_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
-choices=Disabled,Speed Density, Percent Baro, Alpha-N
-bitvals=0,1,2,3
+choices=Disabled,Speed Density,Percent Baro,Alpha-N,MAFMP,MAF,ITB
+bitvals=0,1,2,3,4,5,6
 offset=630
-bitmask=48
+bitmask=112
 bind_to_list=single_table
-toggle_groups=,second_fuel,second_fuel,second_fuel
-_tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro or Alpha-N.
+toggle_groups=,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel
+_tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro, Alpha-N, MAFMAP, MAF or ITB.
 
 [secondary_fuel_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
@@ -180,19 +180,19 @@ _tooltip=See MS2-Extra Manuals
 
 [primary_ignition_load_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-choices=Speed Density,Percent Baro,Alpha-N
-bitvals=1,2,3
+choices=Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
+bitvals=1,2,3,4,5,6
 offset=631
-bitmask=3
+bitmask=7
 _tooltip=See MS2-Extra Manuals
 
 [secondary_ignition_load_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Disabled,Speed Density,Percent Baro,Alpha-N
-bitvals=0,1,2,3
+choices=Disabled,Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
+bitvals=0,1,2,3,4,5,6
 offset=631
-bitmask=48
-toggle_groups=,secondary_ign,secondary_ign,secondary_ign
+bitmask=112
+toggle_groups=,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign
 _tooltip=See MS2-Extra Manuals
 
 [ego_combo]

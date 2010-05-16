@@ -98,6 +98,7 @@ gui_in_files = 	\
 		ms2-e-crank_idle_warmup.datamap.in \
 		ms2-e-debugging.datamap.in \
 		ms2-e-globals.datamap.in \
+		ms2-e-3.x-globals.datamap.in \
 		ms2-e-ignition.datamap.in \
 		ms2-e-nitrous_staging_orfc.datamap.in \
 		ms2-e-noise_lag.datamap.in \
