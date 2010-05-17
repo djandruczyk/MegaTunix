@@ -49,7 +49,7 @@ bind_to_list=flex_fuel_ctrls
 
 [amc_frame]
 keys=bind_to_list
-bind_to_list=ego_controls
+bind_to_list=ego_ctrl
 
 [amc_ram_table]
 keys=bind_to_list

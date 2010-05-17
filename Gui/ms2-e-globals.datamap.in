@@ -196,12 +196,11 @@ toggle_groups=,secondary_ign,secondary_ign,secondary_ign
 _tooltip=See MS2-Extra Manuals
 
 [ego_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip
 choices=Disabled,Narrow-Band,Dual NB,Wide-Band,Dual WB
 bitvals=0,1,2,3,4
 offset=594
 bitmask=7
-toggle_groups=,ego_ctrl,ego_ctrl:dual_nb,ego_ctrl:wb_ctrls,ego_ctrl:dual_wb:wb_ctrls
 _tooltip=Sets ECU EGO Sensor type and configuration. 
 
 [idle_algo_combo]
@@ -213,30 +212,27 @@ bitmask=15
 _tooltip=Sets the Idle Control Algorithm
 
 [revlimiter_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip
 choices=None,Spark Retard,Fuel Cut,Spark Retard/Fuel Cut,Spark Retard/Cut,Fuel and Spark Cut
 bitvals=0,1,2,3,5,7
 offset=636
 bitmask=7
-toggle_groups=,spark_retard,fuel_cut,spark_retard:fuel_cut,spark_retard:spark_cut,spark_cut:fuel_cut
 _tooltip=Sets the Revlimiter algorithm
 
 [flexfuel_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip
 choices=Disabled,Enabled
 bitvals=0,1
 offset=908
 bitmask=1
-toggle_groups=,flex_fuel
 _tooltip=Enables or Disables use of a FlexFuel Sensor (requires additional hardware)
 
 [knock_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=offset,choices,bitvals,bitmask,tooltip
 choices=Disabled,Safe Mode,Aggressive
 bitvals=0,1,2
 offset=927
 bitmask=3
-toggle_groups=,knock_common,knock_common:knock_aggressive
 _tooltip=Enables or Disables use of Knock control.  May require additional hardware,  see Ms2-Extra manuals
 
 [alternate_combo]
