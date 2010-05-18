@@ -10,7 +10,7 @@ InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev
 RT_Command=ms1_std_rtvars
-RT_total_bytes=145
+RT_total_bytes=169
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
 VE_Command=ms2_veconst
@@ -1503,7 +1503,7 @@ match_on=MS_VerNum
 MS_VerNum=_REGEX_,MS2Extra Rel 3.0.[0-9]
 
 [gui]
-RealtimeMapFile=MS2-Extra-2.1.0
+RealtimeMapFile=MS2-Extra-3.0.x
 SliderMapFile=MS2-Extra-firmware
 RuntimeTextMapFile=MS2-Extra-firmware
 StatusMapFile=MS2-Extra-firmware
