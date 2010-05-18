@@ -335,7 +335,9 @@ void draw_ve_marker()
 	static GdkColor ** old_colors = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
 	GtkRcStyle *style = NULL;
+#ifndef __WIN32__
 	GdkGC *gc = NULL;
+#endif
 	gint i = 0;
 	gint table = 0;
 	gint page = 0;

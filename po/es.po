@@ -2,12 +2,12 @@
 # Copyright (C) 2010 THE megatunix'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the megatunix package.
 # David Andruczyk <djandruczyk@yahoo.com>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-14 11:59-0400\n"
+"POT-Creation-Date: 2010-05-17 20:09-0400\n"
 "PO-Revision-Date: 2010-05-12 17:34-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
 "Language-Team: Spanish\n"
@@ -183,39 +183,45 @@ msgstr ""
 
 #: Gui/B_n_G_constants.datamap.in.h:1
 msgid "Enables or Disables barometer correction."
-msgstr ""
+msgstr "Activa o Desactiva la correccion barometrica"
 
 #: Gui/B_n_G_constants.datamap.in.h:2
 msgid "Sets the Algorithm used to calculate the fuel to be injected."
 msgstr ""
+"Define el Algoritmo a ser utilizado para calcular el combustible a ser "
+"inyectado."
 
 #: Gui/B_n_G_constants.datamap.in.h:3
 msgid "Sets the Engine firing pattern to even or odd fire"
 msgstr ""
+"Define el patron de disparo del motor por uno de fuego par (even) o impar "
+"(odd)"
 
 #: Gui/B_n_G_constants.datamap.in.h:4 Gui/Dualtable-constants.datamap.in.h:5
 msgid "Sets the Injection style"
-msgstr ""
+msgstr "Define el estilo de Inyeccion a ser utilizado"
 
 #: Gui/B_n_G_constants.datamap.in.h:5
 msgid "Sets the Injector firing pattern"
-msgstr ""
+msgstr "Define el patron de disparo de los inyectores"
 
 #: Gui/B_n_G_constants.datamap.in.h:6
+#, fuzzy
 msgid "Sets the MAP sensor to 115KPa or 25KPa (forced induction capable)"
 msgstr ""
+"Define si el sensor de MAP es de 115KPa (Aspirado) o 250KPa (Turbo/Charger)"
 
 #: Gui/B_n_G_constants.datamap.in.h:7 Gui/Dualtable-constants.datamap.in.h:7
 msgid "Sets the O2 sensor type"
-msgstr ""
+msgstr "Define el tipo de sensor de 02 (oxigeno)"
 
 #: Gui/B_n_G_constants.datamap.in.h:8
 msgid "Sets the engine stroke to either 4 stroke or 2 stroke"
-msgstr ""
+msgstr "Define el numero de ciclos (stroke) del motor 4 ciclos o 2 cliclos"
 
 #: Gui/B_n_G_constants.datamap.in.h:9
 msgid "_Engine Vitals"
-msgstr ""
+msgstr "Vitales del Motor"
 
 #: Gui/boost_6x6x3-029x.datamap.in.h:1 Gui/ms2-e-boost_8x8x2.datamap.in.h:1
 msgid ""
@@ -267,7 +273,7 @@ msgstr ""
 #: Gui/boost_6x6x3-029x.datamap.in.h:7 Gui/ms2-e-boost_8x8x2.datamap.in.h:8
 #: Gui/main.glade:289
 msgid "_Boost Tables"
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/datalogging.datamap.in.h:1
 msgid ""
@@ -280,63 +286,68 @@ msgstr ""
 
 #: Gui/datalogging.datamap.in.h:2
 msgid "_DataLogging"
-msgstr ""
+msgstr "DataLogging / Colectar Datos para examinar luego"
 
 #: Gui/dt-params.datamap.in.h:1
 msgid "Defines which table controls injector 1"
-msgstr ""
+msgstr "Define cual tabla controla el banco de inyeccion 1"
 
 #: Gui/dt-params.datamap.in.h:2
 msgid "Defines which table controls injector 2"
-msgstr ""
+msgstr "Define cual tabla controla el banco de inyeccion 2"
 
 #: Gui/dt-params.datamap.in.h:3
 msgid "Enables or Disables Gammae (enrichments) on injector channel 1"
 msgstr ""
+"Activa o Desactiva Gammae (enriquecimientos) en el banco de inyeccion 1"
 
 #: Gui/dt-params.datamap.in.h:4
 msgid "Sets the Idle Control mode"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/dt-params.datamap.in.h:5
 msgid "Sets the Table Mode, single table, or dual independant tables"
 msgstr ""
+"Define el Modo de control de Tablas: Unidas como una sola tabla / Dos tablas "
+"Independientes"
 
 #: Gui/dt-params.datamap.in.h:6
 msgid "Sets the boost controller PWM frequency"
-msgstr ""
+msgstr "Define la frecuencia de pulso PWM del controlador de Boost/Presion"
 
 #: Gui/dt-params.datamap.in.h:7
 msgid "_DT Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/Dualtable-constants.datamap.in.h:1
 msgid "Enables or Disables BARO Correction"
-msgstr ""
+msgstr "Activa o Desactiva la Correccion Barometrica"
 
 #: Gui/Dualtable-constants.datamap.in.h:2
 msgid "Sets the Engine firing pattern"
-msgstr ""
+msgstr "Define el patron de Fuego/Chispa del motor"
 
 #: Gui/Dualtable-constants.datamap.in.h:3
 msgid "Sets the Engine stroke"
-msgstr ""
+msgstr "Define los ciclos (stroke) del motor"
 
 #: Gui/Dualtable-constants.datamap.in.h:4
 msgid "Sets the Fuel control algorithm to eithe Speed Density or Alpha-N"
 msgstr ""
+"Define el Algoritmo de control de Inyeccion ya sea Velocidad/Densidad (MAP) "
+"o Alpha-N (TPS)"
 
 #: Gui/Dualtable-constants.datamap.in.h:6
 msgid "Sets the MAP Sensor type"
-msgstr ""
+msgstr "Define el tipo de Sensor/Sonda MAP"
 
 #: Gui/Dualtable-constants.datamap.in.h:8
 msgid "_Dualtable Constants"
-msgstr ""
+msgstr "Constantes de Doble Tabla"
 
 #: Gui/enrichments_BnG.datamap.in.h:1
 msgid "_Enrichments"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/error_status.datamap.in.h:1
 msgid ""
@@ -352,7 +363,7 @@ msgstr ""
 
 #: Gui/error_status.datamap.in.h:2
 msgid "_Error Status"
-msgstr ""
+msgstr "Estado de Error"
 
 #: Gui/logviewer.datamap.in.h:1
 msgid ""
@@ -412,13 +423,16 @@ msgstr ""
 
 #: Gui/ms2-accel.datamap.in.h:2 Gui/ms2-e-accel.datamap.in.h:2
 msgid "Cold Accel Enrichment in milliseconds."
-msgstr ""
+msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
 
 #: Gui/ms2-accel.datamap.in.h:3 Gui/ms2-e-accel.datamap.in.h:3
 msgid ""
 "Cold Accel multiplier (in percent).  100 means no change,  less than 100 "
 "means to REDUCE AE,  more than 100 adds additional AE."
 msgstr ""
+"El multiplicador de Acelarion en Frio esta en por ciento. 100 significa que "
+"no hay cambio (cero), menos de 100 significa que REDUZCA AE, mas de 100 "
+"siginifica AÑADE AE."
 
 #: Gui/ms2-accel.datamap.in.h:4 Gui/ms2-e-accel.datamap.in.h:10
 msgid "End pulsewidth and end of taper time"
@@ -458,6 +472,8 @@ msgstr ""
 #: Gui/ms2-accel.datamap.in.h:11 Gui/ms2-e-accel.datamap.in.h:15
 msgid "The amount of fuel to cut (in percentage) during deceleration."
 msgstr ""
+"La cantidad de Combusitible a CORTAR (en porciento) durante la "
+"desaceleracion."
 
 #: Gui/ms2-accel.datamap.in.h:12 Gui/ms2-e-crank_idle_warmup.datamap.in.h:30
 #: Gui/ms2-xtau.datamap.in.h:3
@@ -534,7 +550,7 @@ msgstr ""
 
 #: Gui/ms2-accel.datamap.in.h:21 Gui/ms2-e-accel.datamap.in.h:22
 msgid "_Accel Enrich"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-alpha-n_6x6x1.datamap.in.h:1
 msgid ""
@@ -578,47 +594,48 @@ msgstr ""
 
 #: Gui/ms2-e-accel.datamap.in.h:4
 msgid "EAE Added-to-Walls Constant. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Constante Añadido-a-Paredes Manifold Admision"
 
 #: Gui/ms2-e-accel.datamap.in.h:5
 msgid ""
 "EAE Adhered-to-Walls CLT Correction. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Adherido-a-Paredes Manifold Admision (Correccion por Temp. CLT)"
 
 #: Gui/ms2-e-accel.datamap.in.h:6
 msgid ""
 "EAE Adhered-to-Walls RPM Correction. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Adherido-a-Paredes Manifold Admision (Correccion por RRM)"
 
 #: Gui/ms2-e-accel.datamap.in.h:7
 msgid ""
 "EAE Sucked-from-Walls CLT Correction. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Aspirado-de-Paredes Manifold Admision (Correccion por Temp. CLT)"
 
 #: Gui/ms2-e-accel.datamap.in.h:8
 msgid "EAE Sucked-from-Walls Constant. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Constante Aspirado-de-Paredes Manifold Admision"
 
 #: Gui/ms2-e-accel.datamap.in.h:9
 msgid ""
 "EAE Sucked-from-Walls RPM Correction. See MS2-Extra manuals for more details"
-msgstr ""
+msgstr "EAE Aspirado-de-Paredes (Correccion por RPM)"
 
 #: Gui/ms2-e-accel.datamap.in.h:12
 msgid "RPM above which EAE lag compensation is no longer active"
 msgstr ""
+"RPM sobre el cual la Compensacion EAE por Tardanza (Lag) ya no estara activa"
 
 #: Gui/ms2-e-accel.datamap.in.h:16
 msgid "This Sets the EAE LAg compensation source"
-msgstr ""
+msgstr "Esto Define la Fuente de Compensacion en EAE por Tardanza (Lag)"
 
 #: Gui/ms2-e-accel.datamap.in.h:17
 msgid "This enables Enhanced or disables Accel Enrich"
-msgstr ""
+msgstr "Esto Activa o Desactiva los Enriquecimientos por Aceleracion"
 
 #: Gui/ms2-e-accel.datamap.in.h:20
 msgid "Threshold in units/sec for lag compensation source"
-msgstr ""
+msgstr "Campo dado en Unidades/Segundo para la fuente de Compensacion por Lag"
 
 #: Gui/ms2-e-boost_8x8x2.datamap.in.h:2
 msgid ""
@@ -631,28 +648,28 @@ msgstr ""
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:1
 msgid "Enables or Disables the Boost control function"
-msgstr ""
+msgstr "Activa o Desactiva la funcion de Control de Boost/Presion del Turbo"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:2
 msgid "Knock Input direction"
-msgstr ""
+msgstr "Direccion de Entrada de Knock/Pistoneo"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:3
 #: Gui/ms2-e-boost_knock_launch.glade:1417
 msgid "Knock Input pin"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Knock/Pistoneo"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:4
 msgid "Knock Mitigation Mode option"
-msgstr ""
+msgstr "Opcion para Modo de Mitigacion de Knock/Pistoneo"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:5
 msgid "Launch control input pin"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Launch control (control de Largada)"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:6
 msgid "Overboost Protect method used"
-msgstr ""
+msgstr "Metodo Utilizado para Proteccion contra Presion Extrema de Boost/Turbo"
 
 #: Gui/ms2-e-boost_knock_launch.datamap.in.h:7
 #: Gui/ms2-e-globals.datamap.in.h:5
@@ -9154,9 +9171,9 @@ msgid "autolog_dump_dir \"%s\"\n"
 msgstr ""
 
 #: src/args.c:162
-#, c-format
+#, fuzzy, c-format
 msgid "autolog_basename \"%s\"\n"
-msgstr ""
+msgstr "\tEnviado comando \"%s\"\n"
 
 #: src/args.c:163
 #, c-format
@@ -9919,8 +9936,9 @@ msgid "ERROR RT Status cfgfile problem!!!"
 msgstr ""
 
 #: src/runtime_status.c:106
+#, fuzzy
 msgid "ECU Status"
-msgstr ""
+msgstr "Estado de Error"
 
 #: src/runtime_status.c:205
 msgid "RT Status Loaded..."
@@ -10270,9 +10288,9 @@ msgid "Helper function \"%s\"\n"
 msgstr ""
 
 #: src/xmlcomm.c:366
-#, c-format
+#, fuzzy, c-format
 msgid "Command args (%i): \n"
-msgstr ""
+msgstr "\tEnviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:375
 #, c-format
@@ -10872,8 +10890,9 @@ msgid "Inset"
 msgstr ""
 
 #: gaugedesigner/gaugedesigner.glade:5404
+#, fuzzy
 msgid "Tick Params"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: gaugedesigner/gaugedesigner.glade:5437
 #: gaugedesigner/gaugedesigner.glade:6523
@@ -13249,8 +13268,9 @@ msgstr ""
 #: Gui/vetable_12x12x3.glade:11796 Gui/vetable_12x12x3.glade:17774
 #: Gui/vetable_16x16x3.glade:9381 Gui/vetable_16x16x3.glade:18943
 #: Gui/vetable_16x16x3.glade:28505 Gui/vetable_8x8e.glade:3242
+#, fuzzy
 msgid "Export Table"
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/afrtable_12x12x2.glade:5835 Gui/afrtable_12x12x2.glade:11813
 #: Gui/afrtable_8x8x2.glade:3055 Gui/afrtable_8x8x2.glade:6255
@@ -13269,8 +13289,9 @@ msgstr ""
 #: Gui/vetable_12x12x3.glade:11813 Gui/vetable_12x12x3.glade:17791
 #: Gui/vetable_16x16x3.glade:9398 Gui/vetable_16x16x3.glade:18960
 #: Gui/vetable_16x16x3.glade:28522 Gui/vetable_8x8e.glade:3259
+#, fuzzy
 msgid "Import Table"
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/afrtable_12x12x2.glade:5853 Gui/afrtable_12x12x2.glade:11831
 #: Gui/afrtable_8x8x2.glade:3073 Gui/afrtable_8x8x2.glade:6273
@@ -13407,8 +13428,9 @@ msgstr ""
 #: Gui/template.glade:499 Gui/test.glade:373 Gui/vetable_12x12x2.glade:12090
 #: Gui/vetable_12x12x3.glade:18068 Gui/vetable_16x16x3.glade:28799
 #: Gui/vetable_8x8e.glade:3507 Gui/warmupwizard.glade:1540
+#, fuzzy
 msgid "Commands"
-msgstr ""
+msgstr "\tEnviado comando \"%s\"\n"
 
 #: Gui/afrtable_12x12x2.glade:12123
 msgid "MS-II AFR-Table"
@@ -13450,8 +13472,9 @@ msgid "MegaSquirt VE-Table"
 msgstr ""
 
 #: Gui/B_n_G_constants.glade:232 Gui/Dualtable-constants.glade:1701
+#, fuzzy
 msgid "Engine Firing Style"
-msgstr ""
+msgstr "Define el patron de Fuego/Chispa del motor"
 
 #: Gui/B_n_G_constants.glade:258 Gui/Dualtable-constants.glade:1414
 msgid "Barometer Correction"
@@ -13464,21 +13487,25 @@ msgstr ""
 #: Gui/B_n_G_constants.glade:310 Gui/Dualtable-constants.glade:1728
 #: Gui/ms2-e-globals.glade:1286 Gui/ms2-globals.glade:1607
 #: Gui/msns-e-fuelconstants.glade:160
+#, fuzzy
 msgid "Engine Stroke"
-msgstr ""
+msgstr "Define los ciclos (stroke) del motor"
 
 #: Gui/B_n_G_constants.glade:336 Gui/Dualtable-constants.glade:1620
+#, fuzzy
 msgid "Injection Style"
-msgstr ""
+msgstr "Define el estilo de Inyeccion a ser utilizado"
 
 #: Gui/B_n_G_constants.glade:362 Gui/Dualtable-constants.glade:1441
 #: Gui/msns-e-fuelconstants.glade:581
+#, fuzzy
 msgid "MAP Sensor Type"
-msgstr ""
+msgstr "Define el tipo de Sensor/Sonda MAP"
 
 #: Gui/B_n_G_constants.glade:388
+#, fuzzy
 msgid "Injector firing pattern"
-msgstr ""
+msgstr "Define el patron de disparo de los inyectores"
 
 #: Gui/B_n_G_constants.glade:414
 msgid "Fuel Injection Strategy"
@@ -13509,8 +13536,9 @@ msgid "Fast Idle Threshold (Deg F.)"
 msgstr ""
 
 #: Gui/B_n_G_constants.glade:782
+#, fuzzy
 msgid "Fast Idle Control"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/B_n_G_constants.glade:891 Gui/Dualtable-constants.glade:142
 #: Gui/Dualtable-constants.glade:454 Gui/msns-e-fuelconstants.glade:1409
@@ -13567,8 +13595,9 @@ msgstr ""
 #: Gui/boost_6x6x3.glade:70 Gui/boost_6x6x3.glade:2264
 #: Gui/boost_6x6x3.glade:4458 Gui/ms2-e-boost_8x8x2.glade:70
 #: Gui/ms2-e-boost_8x8x2.glade:3220
+#, fuzzy
 msgid "Boost Controller Tables"
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/boost_6x6x3.glade:1499 Gui/boost_6x6x3.glade:3693
 #: Gui/boost_6x6x3.glade:5887 Gui/ms2-e-boost_8x8x2.glade:5547
@@ -13658,12 +13687,14 @@ msgid "Stop Logging and Save"
 msgstr ""
 
 #: Gui/datalogging.glade:597
+#, fuzzy
 msgid "DataLogging Operations"
-msgstr ""
+msgstr "DataLogging / Colectar Datos para examinar luego"
 
 #: Gui/datalogging.glade:647
+#, fuzzy
 msgid "MegaSquirt DataLogging"
-msgstr ""
+msgstr "DataLogging / Colectar Datos para examinar luego"
 
 #: Gui/dt-params.glade:88
 msgid ""
@@ -13688,8 +13719,9 @@ msgid "Boost Actuator Control"
 msgstr ""
 
 #: Gui/dt-params.glade:366
+#, fuzzy
 msgid "Launch Control RPM"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Launch control (control de Largada)"
 
 #: Gui/dt-params.glade:394
 msgid "Lower Threshold. (RPM)"
@@ -13700,8 +13732,9 @@ msgid "Upper Threshold. (RPM)"
 msgstr ""
 
 #: Gui/dt-params.glade:566
+#, fuzzy
 msgid "Launch Control/Shift Light"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Launch control (control de Largada)"
 
 #: Gui/dt-params.glade:640
 msgid ""
@@ -13730,8 +13763,9 @@ msgid "Fast Idle Temp (cold)"
 msgstr ""
 
 #: Gui/dt-params.glade:998
+#, fuzzy
 msgid "Idle Control Parameters"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/dt-params.glade:1066
 msgid "Cranking Threshold"
@@ -13805,8 +13839,9 @@ msgid "Squirts/Cyc."
 msgstr ""
 
 #: Gui/Dualtable-constants.glade:1524
+#, fuzzy
 msgid "Sensor Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/Dualtable-constants.glade:1574
 msgid ""
@@ -13823,12 +13858,14 @@ msgid "# of Cycles"
 msgstr ""
 
 #: Gui/enrichments.glade:116
+#, fuzzy
 msgid "Enrich %"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/enrichments.glade:206 Gui/warmupwizard.glade:1134
+#, fuzzy
 msgid "Afterstart Enrichment"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/enrichments.glade:255
 msgid "Priming Pulse"
@@ -13893,10 +13930,11 @@ msgid "Exhaust O<sub>2</sub> Feedback Settings"
 msgstr ""
 
 #: Gui/enrichments.glade:1625
+#, fuzzy
 msgid ""
 "Accel Enrich\n"
 "Duration (sec)"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/enrichments.glade:1654
 msgid ""
@@ -13905,20 +13943,23 @@ msgid ""
 msgstr ""
 
 #: Gui/enrichments.glade:1759
+#, fuzzy
 msgid ""
 "Cold Accel Enrich\n"
 "Add-on (ms)"
-msgstr ""
+msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
 
 #: Gui/enrichments.glade:1788
+#, fuzzy
 msgid ""
 "Cold Accel Enrich\n"
 "Multiplier (%)"
-msgstr ""
+msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
 
 #: Gui/enrichments.glade:1911
+#, fuzzy
 msgid "Acceleration Enrichment Bins (ms)"
-msgstr ""
+msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
 
 #: Gui/enrichments.glade:1939
 msgid "15V/sec"
@@ -13941,12 +13982,14 @@ msgid "Decel Fuel Cut (%)"
 msgstr ""
 
 #: Gui/enrichments.glade:2262
+#, fuzzy
 msgid "Acceleration Enrichments"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/enrichments.glade:2405
+#, fuzzy
 msgid "MegaSquirt Enrichments"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/error_status.glade:80
 msgid "Reboot ECU"
@@ -14037,16 +14080,18 @@ msgid "Restore ECU..."
 msgstr ""
 
 #: Gui/main.glade:84
+#, fuzzy
 msgid "I_mport Tables..."
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/main.glade:113
 msgid "_Backup ECU..."
 msgstr ""
 
 #: Gui/main.glade:136
+#, fuzzy
 msgid "E_xport Tables..."
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/main.glade:178
 msgid "_View"
@@ -14699,8 +14744,9 @@ msgid "MegaSquirt Raw Memory Viewer"
 msgstr ""
 
 #: Gui/ms2-accel.glade:98 Gui/ms2-accel.glade:171
+#, fuzzy
 msgid "X-Tau Accel Enrichment"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-accel.glade:143
 msgid "X-Tau params can be accessed from the tab at the top of this window"
@@ -14708,8 +14754,9 @@ msgstr ""
 
 #: Gui/ms2-accel.glade:220 Gui/ms2-e-accel.glade:89
 #: Gui/msns-e-accelwizard.glade:1634
+#, fuzzy
 msgid "Accel Time"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-accel.glade:277 Gui/ms2-e-accel.glade:146
 #: Gui/msns-e-accelwizard.glade:2141
@@ -14736,8 +14783,9 @@ msgstr ""
 
 #: Gui/ms2-accel.glade:652 Gui/ms2-e-accel.glade:521
 #: Gui/msns-e-accelwizard.glade:1737
+#, fuzzy
 msgid "Cold Accel Enrich. (ms)"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-accel.glade:679 Gui/ms2-e-accel.glade:548
 msgid "Cold Accel Mult (%)"
@@ -14789,8 +14837,9 @@ msgid "Std TPS/MAP Based Accelleration Enrichments"
 msgstr ""
 
 #: Gui/ms2-accel.glade:1765 Gui/ms2-e-accel.glade:1749
+#, fuzzy
 msgid "Simple Accel Enrich"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-accel.glade:1846 Gui/ms2-xtau.glade:2993
 msgid "Start Transition<small> (-kpa/second)</small>"
@@ -14861,8 +14910,9 @@ msgid "Edit Group"
 msgstr ""
 
 #: Gui/ms2-accel.glade:3667 Gui/ms2-xtau.glade:2917
+#, fuzzy
 msgid "X-Tau Enrichment Tables"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/ms2-accel.glade:3781 Gui/ms2-e-crank_idle_warmup.glade:193
 #: Gui/ms2-e-crank_idle_warmup.glade:1869
@@ -14888,8 +14938,9 @@ msgid "X-Tau Temp Compensation"
 msgstr ""
 
 #: Gui/ms2-accel.glade:5044
+#, fuzzy
 msgid "X-Tau Accel Enrich"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-accel.glade:5165
 msgid "MS2-Extra Acceleration Enrichments"
@@ -14908,8 +14959,9 @@ msgid "MS-2 Alpha-N MAP Lookuptable"
 msgstr ""
 
 #: Gui/ms2-e-accel.glade:1649 Gui/ms2-e-accel.glade:1707
+#, fuzzy
 msgid "Enhanced Accel Enrichment"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-e-accel.glade:1677
 msgid "Enabled EAE disables traditional Accel Enrichment. See EAE Tab above."
@@ -14981,8 +15033,9 @@ msgid "EAE Constants and Corrections"
 msgstr ""
 
 #: Gui/ms2-e-accel.glade:7732
+#, fuzzy
 msgid "Lag Compensation Source"
-msgstr ""
+msgstr "Esto Define la Fuente de Compensacion en EAE por Tardanza (Lag)"
 
 #: Gui/ms2-e-accel.glade:7806
 msgid "MAX RPM (rpms)"
@@ -14997,8 +15050,9 @@ msgid "EAE Lag Compensation"
 msgstr ""
 
 #: Gui/ms2-e-accel.glade:7977
+#, fuzzy
 msgid "Enhanced Accel Enrich"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-e-accel.glade:8098
 msgid "MS2/2-Extra Acceleration Enrichments"
@@ -15079,8 +15133,9 @@ msgstr ""
 
 #: Gui/ms2-e-boost_knock_launch.glade:968
 #: Gui/ms2-e-boost_knock_launch.glade:1268
+#, fuzzy
 msgid "Overboost Protection"
-msgstr ""
+msgstr "Metodo Utilizado para Proteccion contra Presion Extrema de Boost/Turbo"
 
 #: Gui/ms2-e-boost_knock_launch.glade:1012
 #: Gui/ms2-e-boost_knock_launch.glade:2675
@@ -15187,12 +15242,14 @@ msgstr ""
 #: Gui/ms2-e-boost_knock_launch.glade:2752
 #: Gui/ms2-e-boost_knock_launch.glade:2986 Gui/msns-e-features.glade:689
 #: Gui/msns-e-water-nos-launch.glade:425 Gui/msns-e-water-nos-launch.glade:975
+#, fuzzy
 msgid "Launch Control"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Launch control (control de Largada)"
 
 #: Gui/ms2-e-boost_knock_launch.glade:2787
+#, fuzzy
 msgid "Input Pin"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Knock/Pistoneo"
 
 #: Gui/ms2-e-boost_knock_launch.glade:2822
 msgid "Launch Retard above (RPM)"
@@ -15575,8 +15632,9 @@ msgstr ""
 #: Gui/ms2-e-crank_idle_warmup.glade:7026
 #: Gui/ms2-e-crank_idle_warmup.glade:9109 Gui/ms2-idle_ego_rev.glade:1886
 #: Gui/msns-e-idle.glade:2167
+#, fuzzy
 msgid "Idle Control"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/ms2-e-crank_idle_warmup.glade:5778
 msgid "Cranking and Warmup"
@@ -15818,8 +15876,9 @@ msgid "My CAN ID"
 msgstr ""
 
 #: Gui/ms2-e-debugging.glade:701
+#, fuzzy
 msgid "CAN Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/ms2-e-debugging.glade:777
 msgid "Vanos cam position debugging"
@@ -15928,8 +15987,8 @@ msgstr ""
 msgid "Injector Sequencing"
 msgstr ""
 
-#: Gui/ms2-e-debugging.glade:2313 Gui/template.glade:531
-msgid "Template Tab"
+#: Gui/ms2-e-debugging.glade:2313
+msgid "MS2-E Debugging"
 msgstr ""
 
 #: Gui/ms2-e-globals.glade:115 Gui/ms2-globals.glade:650
@@ -15937,8 +15996,9 @@ msgid "Baro Correction"
 msgstr ""
 
 #: Gui/ms2-e-globals.glade:142
+#, fuzzy
 msgid "Enchanced Accel Enrich"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/ms2-e-globals.glade:169
 msgid "Secondary Fuel Load"
@@ -16054,8 +16114,9 @@ msgid "Engine Type"
 msgstr ""
 
 #: Gui/ms2-e-globals.glade:1783 Gui/ms2-globals.glade:2168
+#, fuzzy
 msgid "Injection Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/ms2-e-globals.glade:1832 Gui/ms2-e-globals.glade:2143
 #: Gui/ms2-globals.glade:1255
@@ -16089,8 +16150,9 @@ msgid "Injector Characteristics"
 msgstr ""
 
 #: Gui/ms2-e-globals.glade:2651 Gui/ms2-globals.glade:2317
+#, fuzzy
 msgid "MS-2 Basic Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/ms2-e-ignition.glade:153
 msgid "Angle between trigger and return (deg)"
@@ -16329,8 +16391,9 @@ msgid "Secondary staging threshold (units)"
 msgstr ""
 
 #: Gui/ms2-e-nitrous_staging_orfc.glade:904
+#, fuzzy
 msgid "Staged Injection"
-msgstr ""
+msgstr "Define el estilo de Inyeccion a ser utilizado"
 
 #: Gui/ms2-e-nitrous_staging_orfc.glade:980
 msgid "Over Run Fuel Cut"
@@ -16383,8 +16446,9 @@ msgid ""
 msgstr ""
 
 #: Gui/ms2-e-nitrous_staging_orfc.glade:1781
+#, fuzzy
 msgid "Enable input pin"
-msgstr ""
+msgstr "PIN de Entrada de Señal de Knock/Pistoneo"
 
 #: Gui/ms2-e-nitrous_staging_orfc.glade:1846
 msgid "And CLT temp above (units)"
@@ -16601,8 +16665,9 @@ msgid "Negative Split"
 msgstr ""
 
 #: Gui/ms2-e-rotary-split.glade:687
+#, fuzzy
 msgid "Rotary Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/ms2-e-rotary-split.glade:1016
 msgid "Ign Load"
@@ -16856,8 +16921,9 @@ msgid "VR Input Delay (µsec/1000rpm)"
 msgstr ""
 
 #: Gui/ms2-ignition.glade:198
+#, fuzzy
 msgid "Signal Delay Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/ms2-ignition.glade:302
 msgid "Start IAT Retard (RPM)"
@@ -17420,8 +17486,9 @@ msgid "Decel Cut Setpoint (KPa)"
 msgstr ""
 
 #: Gui/msns-e-accelwizard.glade:1491
+#, fuzzy
 msgid "Decel Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-accelwizard.glade:1558
 msgid ""
@@ -17434,10 +17501,11 @@ msgid "Cold Accel Muliplier (%)"
 msgstr ""
 
 #: Gui/msns-e-accelwizard.glade:1988
+#, fuzzy
 msgid ""
 "Accel Enrich\n"
 "Trigger"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2016
 msgid ""
@@ -17446,30 +17514,35 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-accelwizard.glade:2044
+#, fuzzy
 msgid ""
 "Accel Enrich\n"
 "Decay"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2074
+#, fuzzy
 msgid "Accel Enrich Parameters"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2189
+#, fuzzy
 msgid ""
 "Accel Enrich\n"
 "in Boost"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2236
+#, fuzzy
 msgid ""
 "Accel Enrich\n"
 "during ASE"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2338
+#, fuzzy
 msgid "MAPdot Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-accelwizard.glade:2410
 msgid "MAP Threshold (kPa/s)"
@@ -17490,8 +17563,9 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-accelwizard.glade:2640
+#, fuzzy
 msgid "RPM Based Accel Enrichment"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/msns-e-accelwizard.glade:2782
 msgid "MSnS-Extra Accel Enrichment Wizard"
@@ -17743,10 +17817,11 @@ msgid "100"
 msgstr ""
 
 #: Gui/msns-e-boost-knock.glade:1439
+#, fuzzy
 msgid ""
 "OverBoost\n"
 "Protection Style"
-msgstr ""
+msgstr "Metodo Utilizado para Proteccion contra Presion Extrema de Boost/Turbo"
 
 #: Gui/msns-e-boost-knock.glade:1474
 msgid "Update rate in ms."
@@ -18092,12 +18167,14 @@ msgstr ""
 
 #: Gui/msns-e-features.glade:771 Gui/msns-e-water-nos-launch.glade:1059
 #: Gui/msns-e-water-nos-launch.glade:1288
+#, fuzzy
 msgid "Water Injection"
-msgstr ""
+msgstr "Define el estilo de Inyeccion a ser utilizado"
 
 #: Gui/msns-e-features.glade:798
+#, fuzzy
 msgid "Knock Detection"
-msgstr ""
+msgstr "Direccion de Entrada de Knock/Pistoneo"
 
 #: Gui/msns-e-features.glade:825 Gui/msns-e-traction.glade:317
 #: Gui/msns-e-traction.glade:801
@@ -18133,8 +18210,9 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-features.glade:1153
+#, fuzzy
 msgid "Dual Table Mode Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-features.glade:1295
 msgid "Up to:"
@@ -18169,12 +18247,14 @@ msgid "Sensor Params"
 msgstr ""
 
 #: Gui/msns-e-fuelconstants.glade:306
+#, fuzzy
 msgid "Inj. Firing Pattern"
-msgstr ""
+msgstr "Define el patron de disparo de los inyectores"
 
 #: Gui/msns-e-fuelconstants.glade:333
+#, fuzzy
 msgid "Engine Firing Pattern"
-msgstr ""
+msgstr "Define el patron de Fuego/Chispa del motor"
 
 #: Gui/msns-e-fuelconstants.glade:360
 msgid ""
@@ -18189,8 +18269,9 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-fuelconstants.glade:535
+#, fuzzy
 msgid "Select the MAP Sensor in use on your Vehicle"
-msgstr ""
+msgstr "Define el tipo de Sensor/Sonda MAP"
 
 #: Gui/msns-e-fuelconstants.glade:1322 Gui/msns-e-fuelconstants.glade:1664
 msgid ""
@@ -18273,8 +18354,9 @@ msgid "Idle advance (-10 = use map)"
 msgstr ""
 
 #: Gui/msns-e-idle.glade:1350
+#, fuzzy
 msgid "Idle Timing Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-idle.glade:1400 Gui/msns-e-idle.glade:1785
 msgid "Slow Idle (hot) Temp"
@@ -18293,8 +18375,9 @@ msgid "Idle PWM Frequency (Hz)"
 msgstr ""
 
 #: Gui/msns-e-idle.glade:1651
+#, fuzzy
 msgid "PWM Idle Controls"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/msns-e-idle.glade:1701
 msgid "Idle Low Temp DutyCycle"
@@ -18315,8 +18398,9 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-idle.glade:2055
+#, fuzzy
 msgid "Idle Control Mode"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/msns-e-idle.glade:2100
 msgid "Fast Idle Cutoff Temp "
@@ -18461,8 +18545,9 @@ msgid "Traction Control Mode"
 msgstr ""
 
 #: Gui/msns-e-traction.glade:408
+#, fuzzy
 msgid "<i>VSS Parameters</i>"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-traction.glade:436
 msgid "Sensor Differential (%)"
@@ -18509,8 +18594,9 @@ msgid "or Until"
 msgstr ""
 
 #: Gui/msns-e-traction.glade:1999
+#, fuzzy
 msgid "Traction Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-traction.glade:2133
 msgid "MSnS-Extra Traction Control"
@@ -18667,8 +18753,9 @@ msgid ""
 msgstr ""
 
 #: Gui/msns-e-wheeldecode-029yx.glade:438 Gui/msns-e-wheeldecode.glade:972
+#, fuzzy
 msgid "Wheel Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/msns-e-wheeldecode-029yx.glade:514 Gui/msns-e-wheeldecode.glade:300
 msgid "Fixed Dwell Amount"
@@ -18961,8 +19048,9 @@ msgid "BOOST"
 msgstr ""
 
 #: Gui/PIS-boost_16x10.glade:6698
+#, fuzzy
 msgid "PIS - Boost Targets"
-msgstr ""
+msgstr "Tablas de Turbo/Boost"
 
 #: Gui/PIS-bpw_16x16.glade:8143
 msgid "config.BPW"
@@ -19077,8 +19165,9 @@ msgid "Min ROC"
 msgstr ""
 
 #: Gui/PIS-corrections.glade:6437
+#, fuzzy
 msgid "Acceleration Enrichment"
-msgstr ""
+msgstr "Enriquecimiento por Aceleracion"
 
 #: Gui/PIS-corrections.glade:6476
 msgid "Voltage & Acceleration"
@@ -19097,8 +19186,9 @@ msgid "PIS - Lambda Targets"
 msgstr ""
 
 #: Gui/PIS-runtime.glade:235 Gui/runtime.glade:817
+#, fuzzy
 msgid "Corrections/Enrichments"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/PIS-runtime.glade:490 Gui/runtime.glade:640
 msgid "Hard Reset Count"
@@ -19129,8 +19219,9 @@ msgid "Two Stroke"
 msgstr ""
 
 #: Gui/PIS-settings.glade:314
+#, fuzzy
 msgid "Engine"
-msgstr ""
+msgstr "Vitales del Motor"
 
 #: Gui/PIS-settings.glade:362
 msgid "MAP Only (RPM)"
@@ -19245,8 +19336,9 @@ msgid "Idle RPM"
 msgstr ""
 
 #: Gui/PIS-settings.glade:2378
+#, fuzzy
 msgid "IAC Idle Control"
-msgstr ""
+msgstr "Define el modo de Control de Valvula de Ralenti (baja)"
 
 #: Gui/PIS-settings.glade:2492
 msgid "Min RPM"
@@ -19337,8 +19429,9 @@ msgid ""
 msgstr ""
 
 #: Gui/rotary-trail.glade:2397
+#, fuzzy
 msgid "Rotary Trailing Parameters"
-msgstr ""
+msgstr "Parametros de (DT) doble tabla"
 
 #: Gui/rotary-trail.glade:2622
 msgid "MegaSquirtnSpark Extra Rotary Trailing Table"
@@ -19927,6 +20020,10 @@ msgstr ""
 msgid "Frame 2"
 msgstr ""
 
+#: Gui/template.glade:531
+msgid "Template Tab"
+msgstr ""
+
 #: Gui/test.glade:123
 msgid "Combo-test"
 msgstr ""
@@ -20058,12 +20155,14 @@ msgid ""
 msgstr ""
 
 #: Gui/warmupwizard.glade:953
+#, fuzzy
 msgid "Warmup Enrichment %"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/warmupwizard.glade:1020
+#, fuzzy
 msgid "Enrichment (%)"
-msgstr ""
+msgstr "Enrriquecimientos"
 
 #: Gui/warmupwizard.glade:1046
 msgid "for # of cycles"

@@ -195,8 +195,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		curve = mtx_curve_new();
 		curve_list = g_list_prepend(curve_list,(gpointer)curve);
 		mtx_curve_set_title(MTX_CURVE(curve),_(firmware->te_params[table_num]->title));
-		mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
-		mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
+		mtx_curve_set_x_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->x_axis_label));
+		mtx_curve_set_y_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->y_axis_label));
 		cdata = g_new0(CurveData, 1);
 		cdata->curve = curve;
 		cdata->axis = _X_;
@@ -483,8 +483,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 	curve = mtx_curve_new();
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	mtx_curve_set_title(MTX_CURVE(curve),(gchar *)_(firmware->te_params[table_num]->title));
-	mtx_curve_set_x_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->x_axis_label);
-	mtx_curve_set_y_axis_label(MTX_CURVE(curve),firmware->te_params[table_num]->y_axis_label);
+	mtx_curve_set_x_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->x_axis_label));
+	mtx_curve_set_y_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->y_axis_label));
 
 	if ((firmware->te_params[table_num]->gauge ||
 				firmware->te_params[table_num]->c_gauge ||

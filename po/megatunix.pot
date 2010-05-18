@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-14 11:59-0400\n"
+"POT-Creation-Date: 2010-05-17 20:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15928,8 +15928,8 @@ msgstr ""
 msgid "Injector Sequencing"
 msgstr ""
 
-#: Gui/ms2-e-debugging.glade:2313 Gui/template.glade:531
-msgid "Template Tab"
+#: Gui/ms2-e-debugging.glade:2313
+msgid "MS2-E Debugging"
 msgstr ""
 
 #: Gui/ms2-e-globals.glade:115 Gui/ms2-globals.glade:650
@@ -19925,6 +19925,10 @@ msgstr ""
 
 #: Gui/template.glade:388
 msgid "Frame 2"
+msgstr ""
+
+#: Gui/template.glade:531
+msgid "Template Tab"
 msgstr ""
 
 #: Gui/test.glade:123

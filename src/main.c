@@ -61,7 +61,11 @@ gint main(gint argc, gchar ** argv)
 	gchar * filename = NULL;
 
 	setlocale(LC_ALL,"");
+#ifdef __WIN32__
+	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");
+#else
 	bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
 	textdomain (PACKAGE);
 
 	if(!g_thread_supported())
