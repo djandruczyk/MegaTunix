@@ -269,7 +269,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 
 /*!
  \brief populate_viewer() creates/removes the list of viewable values from
- the objects in use (playback list or realtiem vars list)
+ the objects in use (playback list or realtime vars list)
  */
 void populate_viewer()
 {
