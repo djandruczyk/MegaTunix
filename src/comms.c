@@ -469,7 +469,7 @@ EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 			"Please plugin the USB->serial adapter and click the \"OK\" Button");
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
-	sleep(1);
+	g_usleep(1000000);	/* 1 Sec */
 
 	/* Read list of dev AFTER device plugin */
 	a_dir = g_dir_open("/dev",0,&err);
