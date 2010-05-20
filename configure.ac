@@ -7,7 +7,7 @@ AC_CONFIG_MACRO_DIR([m4])
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
 MTX_MICRO_VERSION=20
-MTX_VER_SUFFIX=~git
+MTX_VER_SUFFIX=~git2
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
@@ -49,7 +49,7 @@ then
 fi
 
 dnl Gettext Goodness
-AC_PROG_INTLTOOL([0.21])
+AC_PROG_INTLTOOL([0.30])
 INTLTOOL_PROF_RULE='%.prof: %.prof.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
 INTLTOOL_DATAMAP_RULE='%.datamap: %.datamap.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
 INTLTOOL_RTVMAP_RULE='%.rtv_map: %.rtv_map.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
