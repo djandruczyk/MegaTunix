@@ -44,6 +44,10 @@ bind_to_list=single_table
 keys=bind_to_list
 bind_to_list=baro_dual
 
+[cid_label]
+keys=bind_to_list
+bind_to_list=maf
+
 #----- Widgets ---------------------------------------------------------------
 
 [inj2_properties_table]
@@ -133,6 +137,15 @@ offset=991
 bitmask=15
 bind_to_list=baro_dual
 _tooltip=Realtime baro source port
+
+[maf_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,AD7 Port,AD6 Port
+bitvals=0,1,2
+offset=600
+bitmask=48
+toggle_groups=,maf,maf
+_tooltip=Sets the usage of a MAF sensor and it's input port
 
 [eae_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
@@ -341,6 +354,14 @@ divider_1_offset=610
 register_as=inj_per_cycle_0_spin
 
 #----- Entries ---------------------------------------------------------------
+
+[cid_entry]
+keys=offset,size,raw_upper,bind_to_list,tooltip
+offset=676
+size=_U16_
+raw_upper=1000
+bind_to_list=maf
+_tooltip=Engine displacement in Cubic Inches (specific to MAF only)
 
 [stoich_afr_entry]
 keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip

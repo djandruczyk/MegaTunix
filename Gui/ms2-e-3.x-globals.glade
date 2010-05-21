@@ -103,7 +103,7 @@
 					      <child>
 						<widget class="GtkTable" id="global_params_table">
 						  <property name="visible">True</property>
-						  <property name="n_rows">16</property>
+						  <property name="n_rows">17</property>
 						  <property name="n_columns">2</property>
 						  <property name="homogeneous">False</property>
 						  <property name="row_spacing">2</property>
@@ -157,8 +157,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">6</property>
-						      <property name="bottom_attach">7</property>
+						      <property name="top_attach">7</property>
+						      <property name="bottom_attach">8</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -184,8 +184,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">7</property>
-						      <property name="bottom_attach">8</property>
+						      <property name="top_attach">8</property>
+						      <property name="bottom_attach">9</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -211,8 +211,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">14</property>
-						      <property name="bottom_attach">15</property>
+						      <property name="top_attach">15</property>
+						      <property name="bottom_attach">16</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -245,8 +245,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">6</property>
-						      <property name="bottom_attach">7</property>
+						      <property name="top_attach">7</property>
+						      <property name="bottom_attach">8</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -262,8 +262,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">7</property>
-						      <property name="bottom_attach">8</property>
+						      <property name="top_attach">8</property>
+						      <property name="bottom_attach">9</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -279,8 +279,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">14</property>
-						      <property name="bottom_attach">15</property>
+						      <property name="top_attach">15</property>
+						      <property name="bottom_attach">16</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -385,8 +385,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">8</property>
-						      <property name="bottom_attach">9</property>
+						      <property name="top_attach">9</property>
+						      <property name="bottom_attach">10</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -412,8 +412,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">8</property>
-						      <property name="bottom_attach">9</property>
+						      <property name="top_attach">9</property>
+						      <property name="bottom_attach">10</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -429,8 +429,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">9</property>
-						      <property name="bottom_attach">10</property>
+						      <property name="top_attach">10</property>
+						      <property name="bottom_attach">11</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -456,8 +456,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">9</property>
-						      <property name="bottom_attach">10</property>
+						      <property name="top_attach">10</property>
+						      <property name="bottom_attach">11</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -483,8 +483,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">10</property>
-						      <property name="bottom_attach">11</property>
+						      <property name="top_attach">11</property>
+						      <property name="bottom_attach">12</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -556,8 +556,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">11</property>
-						      <property name="bottom_attach">12</property>
+						      <property name="top_attach">12</property>
+						      <property name="bottom_attach">13</property>
 						      <property name="x_options">fill</property>
 						    </packing>
 						  </child>
@@ -583,8 +583,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">12</property>
-						      <property name="bottom_attach">13</property>
+						      <property name="top_attach">13</property>
+						      <property name="bottom_attach">14</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -610,8 +610,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">13</property>
-						      <property name="bottom_attach">14</property>
+						      <property name="top_attach">14</property>
+						      <property name="bottom_attach">15</property>
 						      <property name="x_options">fill</property>
 						      <property name="y_options"></property>
 						    </packing>
@@ -674,8 +674,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">10</property>
-						      <property name="bottom_attach">11</property>
+						      <property name="top_attach">11</property>
+						      <property name="bottom_attach">12</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -691,8 +691,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">12</property>
-						      <property name="bottom_attach">13</property>
+						      <property name="top_attach">13</property>
+						      <property name="bottom_attach">14</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -708,8 +708,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">13</property>
-						      <property name="bottom_attach">14</property>
+						      <property name="top_attach">14</property>
+						      <property name="bottom_attach">15</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -1015,8 +1015,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">15</property>
-						      <property name="bottom_attach">16</property>
+						      <property name="top_attach">16</property>
+						      <property name="bottom_attach">17</property>
 						      <property name="x_options">fill</property>
 						      <property name="y_options"></property>
 						    </packing>
@@ -1033,8 +1033,54 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">15</property>
-						      <property name="bottom_attach">16</property>
+						      <property name="top_attach">16</property>
+						      <property name="bottom_attach">17</property>
+						      <property name="y_options">fill</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="label65">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">MAF Sensor</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">6</property>
+						      <property name="bottom_attach">7</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkComboBoxEntry" id="maf_combo">
+						      <property name="visible">True</property>
+						      <property name="add_tearoffs">False</property>
+						      <property name="has_frame">True</property>
+						      <property name="focus_on_click">True</property>
+						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
+						      <property name="top_attach">6</property>
+						      <property name="bottom_attach">7</property>
+						      <property name="x_options">fill</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -1216,7 +1262,7 @@
 						<widget class="GtkTable" id="table10">
 						  <property name="visible">True</property>
 						  <property name="n_rows">2</property>
-						  <property name="n_columns">3</property>
+						  <property name="n_columns">4</property>
 						  <property name="homogeneous">False</property>
 						  <property name="row_spacing">0</property>
 						  <property name="column_spacing">0</property>
@@ -1238,8 +1284,8 @@
 						      <signal name="key_release_event" handler="key_event" last_modification_time="Tue, 10 Feb 2009 18:13:17 GMT"/>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">2</property>
-						      <property name="right_attach">3</property>
+						      <property name="left_attach">3</property>
+						      <property name="right_attach">4</property>
 						      <property name="top_attach">1</property>
 						      <property name="bottom_attach">2</property>
 						      <property name="x_options">expand</property>
@@ -1264,8 +1310,8 @@
 						      <signal name="key_release_event" handler="key_event" last_modification_time="Tue, 10 Feb 2009 18:13:17 GMT"/>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
+						      <property name="left_attach">2</property>
+						      <property name="right_attach">3</property>
 						      <property name="top_attach">1</property>
 						      <property name="bottom_attach">2</property>
 						      <property name="x_options">expand</property>
@@ -1290,8 +1336,8 @@
 						      <signal name="key_release_event" handler="key_event" last_modification_time="Tue, 10 Feb 2009 18:13:17 GMT"/>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
 						      <property name="top_attach">1</property>
 						      <property name="bottom_attach">2</property>
 						      <property name="x_options">expand</property>
@@ -1318,8 +1364,8 @@
 						      <property name="angle">0</property>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">2</property>
-						      <property name="right_attach">3</property>
+						      <property name="left_attach">3</property>
+						      <property name="right_attach">4</property>
 						      <property name="top_attach">0</property>
 						      <property name="bottom_attach">1</property>
 						      <property name="x_options">expand</property>
@@ -1346,8 +1392,8 @@
 						      <property name="angle">0</property>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
+						      <property name="left_attach">2</property>
+						      <property name="right_attach">3</property>
 						      <property name="top_attach">0</property>
 						      <property name="bottom_attach">1</property>
 						      <property name="x_options">expand</property>
@@ -1374,12 +1420,68 @@
 						      <property name="angle">0</property>
 						    </widget>
 						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
 						      <property name="top_attach">0</property>
 						      <property name="bottom_attach">1</property>
 						      <property name="x_options">expand</property>
 						      <property name="y_options">expand</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="cid_label">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">CID</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">0</property>
+						      <property name="bottom_attach">1</property>
+						      <property name="x_options"></property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkEntry" id="cid_entry">
+						      <property name="visible">True</property>
+						      <property name="can_focus">True</property>
+						      <property name="editable">True</property>
+						      <property name="visibility">True</property>
+						      <property name="max_length">6</property>
+						      <property name="text" translatable="yes"></property>
+						      <property name="has_frame">True</property>
+						      <property name="invisible_char">●</property>
+						      <property name="activates_default">False</property>
+						      <property name="width_chars">5</property>
+						      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 16 Feb 2009 19:27:27 GMT"/>
+						      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 16 Feb 2009 19:27:35 GMT"/>
+						      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 16 Feb 2009 19:27:47 GMT"/>
+						      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 16 Feb 2009 19:27:58 GMT"/>
+						      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 16 Feb 2009 19:28:10 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">1</property>
+						      <property name="bottom_attach">2</property>
+						      <property name="x_options">expand</property>
+						      <property name="y_options"></property>
 						    </packing>
 						  </child>
 						</widget>
