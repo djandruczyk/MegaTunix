@@ -1,0 +1,269 @@
+[global]
+description=Object data map for the MS2-Extra debugging Tab
+_tab_name=_Debugging/Advanced
+id_prefix=DBG
+ellipsize=TRUE
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[idle_testing_params_table]
+keys=bind_to_list
+bind_to_list=idle_valve_test
+
+[inj_test_pwm_table]
+keys=bind_to_list
+bind_to_list=inj_test_pwm
+
+[output_test_ign_table]
+keys=bind_to_list
+bind_to_list=test_coils
+
+[output_test_injectors_table]
+keys=bind_to_list
+bind_to_list=test_injectors
+
+[inj_seq_params_table]
+keys=bind_to_list
+bind_to_list=inj_sequence
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+[idle_valve_test_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=4
+offset=386
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=2
+toggle_groups=,idle_valve_test
+_tooltip=Enables or Disables idle valve testing. NOTE set the iac run steps FIRST before enabling.
+
+[idle_valve_pos_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=4
+offset=386
+choices=Run,Home
+bitvals=0,1
+bitmask=1
+_tooltip=Tells ECU to move to either home or run position.
+
+[vanos_pos_debug_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=997
+choices=Disabled,Logged
+bitvals=0,1
+bitmask=128
+_tooltip=Logs vanos information into status4 (tooth) and status5 (time after tooth)
+
+[debug_gpioadc_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=413
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=1
+_tooltip=Enables or Disables debug output in GPIOADC fields
+
+[debug_tooth_wheel_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=413
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=2
+_tooltip=Enables or Disables debug output for missing teeth (see MS2-Extra Manuals)
+
+[inj_sequence_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=2
+offset=672
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=8
+toggle_groups=,inj_sequence
+_tooltip=Enables or Disables Injector sequencing, this is an expert only feature, use with caution.
+
+[output_test_fuelpump_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=2
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=16
+_tooltip=Enables or Disables Fuel pump during test mode. 
+
+[output_test_choice_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=3
+offset=6
+choices=Off,Coils,Injectors
+bitvals=0,1,2
+bitmask=3
+toggle_groups=,test_coils,test_injectors
+_tooltip=Selects either Injectors, Coils or neither to be tested in test mode.
+
+[coil_to_test_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=2
+choices=CoilA,CoilB,CoilC,CoilD,CoilE,CoilF
+bitvals=0,1,2,3,4,5
+bitmask=7
+_tooltip=Selects which coil output to test
+
+[inj_to_test_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=2
+choices=Neither,Inj1,Inj2,Both
+bitvals=0,1,2,3
+bitmask=96
+_tooltip=Selects which injector output to test
+
+[inj_test_pwm_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=3
+offset=2
+choices=Standard,As Below
+bitvals=0,1
+bitmask=128
+toggle_groups=,inj_test_pwm
+_tooltip=Selects to use whatever is configured on the global tab, or the below
+settings.
+
+#----- Entries ---------------------------------------------------------------
+
+[idle_test_home_steps]
+keys=page,offset,size,tooltip
+page=3
+offset=384
+size=_U16_
+_tooltip=IAC Testing home position
+
+[idle_test_run_steps]
+keys=page,offset,size,tooltip
+page=3
+offset=382
+size=_U16_
+_tooltip=IAC Testing run position
+
+[inj_seq_start_entry]
+keys=page,offset,tooltip
+page=2
+offset=1003
+_tooltip=Injector sequence start (Expert use only!, See MS2-Extra Manuals)
+
+[inj_time_mask_entry]
+keys=page,offset,raw_upper,tooltip
+page=2
+offset=1004
+raw_upper=100
+_tooltip=Injector sequence start (Expert use only!, See MS2-Extra Manuals)
+
+[output_test_mode_12345_entry]
+keys=page,offset,size,raw_upper,dont_backup,tooltip
+page=3
+offset=0
+size=_U16_
+raw_upper=65535
+dont_backup=TRUE
+_tooltip=Set this to 12345 and hit enter, then Burn. This enables output test mode.  Set to 0 and hit burn to return to normal. (or power cycle ECU)
+
+[output_interval_entry]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+page=3
+offset=4
+size=_U16_
+dl_conv_expr=x/0.128
+ul_conv_expr=x*0.128
+raw_upper=65535
+dont_backup=TRUE
+precision=1
+_tooltip=Sets output interval in ms. (i.e. how often it runs the test, i.e. 1000 means once per second, 10 means 100x per second)
+
+[test_dwell_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+page=3
+offset=3
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+dont_backup=TRUE
+precision=1
+_tooltip=Sets output dwell in ms.
+
+[inj_test_pw_entry]
+keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+page=3
+offset=7
+size=_U16_
+dl_conv_expr=x/0.000666
+ul_conv_expr=x*0.000666
+raw_upper=65535
+dont_backup=TRUE
+precision=3
+_tooltip=Sets output PW in ms.
+
+[inj_test_pwm_limit_entry]
+keys=page,offset,raw_upper,dont_backup,tooltip
+page=3
+offset=349
+raw_upper=100
+dont_backup=TRUE
+_tooltip=Sets inj output PWM current limit percentage
+
+[inj_test_pwm_period_entry]
+keys=page,offset,raw_lower,raw_upper,dont_backup,tooltip
+page=3
+offset=348
+raw_lower=40
+raw_upper=100
+dont_backup=TRUE
+_tooltip=Sets inj output PWM current limit percentage
+
+[inj_test_pwm_time_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+page=3
+offset=347
+dl_conv_expr=x/0.128
+ul_conv_expr=x*0.128
+dont_backup=TRUE
+precision=1
+_tooltip=Sets inj output PWM time threshold
+
+[inj_test_total_inj_entry]
+keys=page,offset,size,raw_upper,dont_backup,tooltip
+page=3
+offset=9
+size=_U16_
+raw_upper=65535
+dont_backup=TRUE
+_tooltip=Sets the number of injections performed
+

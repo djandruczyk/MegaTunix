@@ -1,0 +1,247 @@
+[global]
+description=Object data map for the MS2-Extra debugging Tab
+_tab_name=_CANbus
+id_prefix=CAN
+ellipsize=TRUE
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[remote_can_device_table]
+keys=bind_to_list
+bind_to_list=can_polling,poll_remote
+
+[poll_remote_table]
+keys=bind_to_list
+bind_to_list=can_poll_at_all,can_polling
+
+[poll_masterslave_table]
+keys=bind_to_list
+bind_to_list=can_polling,can_poll_at_all,poll_remote
+
+[remote_poll_adc_table]
+keys=bind_to_list
+bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+
+[remote_poll_pwm_table]
+keys=bind_to_list
+bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+
+[remote_poll_ports_table]
+keys=bind_to_list
+bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+
+[remote_adc_polling_frame]
+keys=bind_to_list
+bind_to_list=can_polling,can_poll_adc,ms2e_poll,can_pollers
+
+[remote_pwm_polling_frame]
+keys=bind_to_list
+bind_to_list=can_polling,can_poll_pwm,ms2e_poll,can_pollers
+
+[remote_port_polling_frame]
+keys=bind_to_list
+bind_to_list=can_polling,can_poll_ports,ms2e_poll,can_pollers
+
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+[can_board_type_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=740
+choices=MS2,Router,GPIO,4,5,6,7,8,9,10,11,12,13,14
+bitvals=1,2,3,4,5,6,7,8,9,10,11,12,13,14
+bitmask=255
+toggle_groups=can_polling,,,,,,,,,,,,,
+_tooltip=Sets Board type
+
+[can_board_id_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=741
+choices=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+bitmask=255
+toggle_groups=can_poll_at_all,,,,,,,,,,,,,
+_tooltip=Sets Board type
+
+[can_poll_remote_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=751
+choices=Disabled,GPIO,MS2/Extra Slave
+bitvals=0,1,2
+bitmask=15
+toggle_groups=,poll_remote,poll_remote:ms2e_poll
+_tooltip=Enables polling of remote board via CAN
+
+[can_remote_id_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=752
+choices=Disabled,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+bitmask=15
+_tooltip=Remote board ID to poll
+
+[can_poll_slave_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=752
+choices=Master,Slave
+bitvals=0,1
+bitmask=128
+toggle_groups=can_pollers,
+_tooltip=Sets if we are a CAN poller or not
+
+[remote_poll_adc_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=664
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=1
+toggle_groups=,can_poll_adc
+_tooltip=Sets if we are Polling remote ADC channels
+
+[remote_poll_pwm_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=664
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=2
+toggle_groups=,can_poll_pwm
+_tooltip=Sets if we are Polling remote PWM channels
+
+[remote_poll_ports_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=664
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=4
+toggle_groups=,can_poll_ports
+_tooltip=Sets if we are Polling remote Ports 
+
+[remote_port_dir_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=674
+choices=3 Inputs,2 Inputs & 1 Output,1 Input & 2 Outputs,3 Outputs
+bitvals=0,1,3,7
+bitmask=7
+toggle_groups=3in,2in_1out,1in_2out,3out
+_tooltip=Sets Remote port direction bits
+
+[remote_port_1_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=674
+choices=Digital (8 signals),Single Value (one signal)
+bitvals=0,1
+bitmask=16
+_tooltip=Sets Remote port 1 type
+
+[remote_port_2_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=674
+choices=Digital (8 signals),Single Value (one signal)
+bitvals=0,1
+bitmask=32
+_tooltip=Sets Remote port 2 type
+
+[remote_port_3_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=674
+choices=Digital (8 signals),Single Value (one signal)
+bitvals=0,1
+bitmask=64
+_tooltip=Sets Remote port 3 type
+
+[remote_port_3]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=674
+choices=Digital (8 signals),Single Value (one signal)
+bitvals=0,1
+bitmask=64
+_tooltip=Sets Remote port 3 type
+
+[generic_port_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=675
+choices=Disabled,Remote Port 1,Remote Port 2,Remote Port 3
+bitvals=0,1,2,3
+bitmask=3
+_tooltip=Not sure
+
+#----- Entries ---------------------------------------------------------------
+
+[remote_adc_table_entry]
+keys=offset,raw_upper,tooltip
+offset=665
+raw_upper=15
+_tooltip=Remote ADC Table ID (page)
+
+[remote_pwm_table_entry]
+keys=offset,raw_upper,tooltip
+offset=666
+raw_upper=15
+_tooltip=Remote PWM Table ID (page)
+
+[remote_ports_table_entry]
+keys=offset,raw_upper,tooltip
+offset=667
+raw_upper=15
+_tooltip=Remote Ports Table ID (page)
+
+[remote_adc_table_offset_entry]
+keys=offset,size,raw_upper,tooltip
+offset=668
+size=_S16_
+raw_upper=4095
+_tooltip=Remote ADC Table Offset (bytes from beginning of page)
+
+[remote_pwm_table_offset_entry]
+keys=offset,size,raw_upper,tooltip
+offset=670
+size=_S16_
+raw_upper=4095
+_tooltip=Remote PWM Table Offset (bytes from beginning of page)
+
+[remote_ports_table_offset_entry]
+keys=offset,size,raw_upper,tooltip
+offset=672
+size=_S16_
+raw_upper=4095
+_tooltip=Remote Ports Table Offset (bytes from beginning of page)
+
+[remote_pwm_clock_entry]
+keys=offset,raw_upper,tooltip
+offset=678
+raw_upper=50
+_tooltip=Remote PWM Clock frequency in Mhz
+
+[remote_pwm_prescale_entry]
+keys=offset,tooltip
+offset=679
+_tooltip=Remote PWM Clock prescaler
+

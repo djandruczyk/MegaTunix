@@ -17,7 +17,9 @@ gui_glade_files = 	\
 		ms2-accel.glade \
 		ms2-alpha-n_6x6x1.glade \
 		ms2-e-3.x-boost_knock_launch.glade \
+		ms2-e-3.x-can.glade \
 		ms2-e-3.x-corrections_misc.glade \
+		ms2-e-3.x-debugging.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
 		ms2-e-3.x-noise_lag.glade \
@@ -98,7 +100,9 @@ gui_in_files = 	\
 		ms2-alpha-n_6x6x1.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
 		ms2-e-3.x-boost_knock_launch.datamap.in \
+		ms2-e-3.x-can.datamap.in \
 		ms2-e-3.x-corrections_misc.datamap.in \
+		ms2-e-3.x-debugging.datamap.in \
 		ms2-e-3.x-globals.datamap.in \
 		ms2-e-3.x-ignition.datamap.in \
 		ms2-e-3.x-noise_lag.datamap.in \
