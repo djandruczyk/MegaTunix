@@ -16,6 +16,11 @@ gui_glade_files = 	\
 		memviewer.glade \
 		ms2-accel.glade \
 		ms2-alpha-n_6x6x1.glade \
+		ms2-e-3.x-boost_knock_launch.glade \
+		ms2-e-3.x-corrections_misc.glade \
+		ms2-e-3.x-globals.glade \
+		ms2-e-3.x-ignition.glade \
+		ms2-e-3.x-noise_lag.glade \
 		ms2-e-accel.glade \
 		ms2-e-boost_knock_launch.glade \
 		ms2-e-boost_8x8x2.glade \
@@ -91,6 +96,12 @@ gui_in_files = 	\
 		memviewer.datamap.in \
 		ms2-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
+		ms2-e-3.x-accel.datamap.in \
+		ms2-e-3.x-boost_knock_launch.datamap.in \
+		ms2-e-3.x-corrections_misc.datamap.in \
+		ms2-e-3.x-globals.datamap.in \
+		ms2-e-3.x-ignition.datamap.in \
+		ms2-e-3.x-noise_lag.datamap.in \
 		ms2-e-accel.datamap.in \
 		ms2-e-boost_knock_launch.datamap.in \
 		ms2-e-boost_8x8x2.datamap.in \
@@ -98,10 +109,8 @@ gui_in_files = 	\
 		ms2-e-crank_idle_warmup.datamap.in \
 		ms2-e-debugging.datamap.in \
 		ms2-e-globals.datamap.in \
-		ms2-e-3.x-globals.datamap.in \
 		ms2-e-ignition.datamap.in \
 		ms2-e-nitrous_staging_orfc.datamap.in \
-		ms2-e-noise_lag.datamap.in \
 		ms2-e-toothtrigger-2.1.x.datamap.in \
 		ms2-globals.datamap.in \
 		ms2-idle_ego_rev.datamap.in \

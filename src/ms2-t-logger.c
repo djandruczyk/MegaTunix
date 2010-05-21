@@ -73,6 +73,8 @@ EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConf
 	gint w = 0;
 	gint h = 0;
 
+	if (!ttm_data)
+		return FALSE;
 	if(widget->window)
 	{
 		w=widget->allocation.width;
