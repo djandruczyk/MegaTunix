@@ -32,13 +32,13 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 
 #----- Widgets ---------------------------------------------------------------
 
-[remote_can_device_table]
+[remote_can_id_table]
 keys=bind_to_list
-bind_to_list=can_polling,poll_remote
+bind_to_list=can_polling,can_poll_at_all,poll_remote
 
-[poll_remote_table]
+[can_poll_table]
 keys=bind_to_list
-bind_to_list=can_poll_at_all,can_polling
+bind_to_list=can_polling,can_poll_at_all
 
 [poll_masterslave_table]
 keys=bind_to_list
@@ -46,27 +46,27 @@ bind_to_list=can_polling,can_poll_at_all,poll_remote
 
 [remote_poll_adc_table]
 keys=bind_to_list
-bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+bind_to_list=can_polling,poll_generic,can_poll_at_all,can_pollers
 
 [remote_poll_pwm_table]
 keys=bind_to_list
-bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+bind_to_list=can_polling,poll_generic,can_poll_at_all,can_pollers
 
 [remote_poll_ports_table]
 keys=bind_to_list
-bind_to_list=can_polling,ms2e_poll,can_poll_at_all,can_pollers
+bind_to_list=can_polling,poll_generic,can_poll_at_all,can_pollers
 
 [remote_adc_polling_frame]
 keys=bind_to_list
-bind_to_list=can_polling,can_poll_adc,ms2e_poll,can_pollers
+bind_to_list=can_polling,can_poll_adc,poll_generic,can_pollers
 
 [remote_pwm_polling_frame]
 keys=bind_to_list
-bind_to_list=can_polling,can_poll_pwm,ms2e_poll,can_pollers
+bind_to_list=can_polling,can_poll_pwm,poll_generic,can_pollers
 
 [remote_port_polling_frame]
 keys=bind_to_list
-bind_to_list=can_polling,can_poll_ports,ms2e_poll,can_pollers
+bind_to_list=can_polling,can_poll_ports,poll_generic,can_pollers
 
 
 #----- Labels ----------------------------------------------------------------
@@ -94,10 +94,10 @@ _tooltip=Sets Board type
 [can_poll_remote_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 offset=751
-choices=Disabled,GPIO,MS2/Extra Slave
-bitvals=0,1,2
+choices=Disabled,GPIO,MS2/Extra Slave,Generic Board
+bitvals=0,1,2,3
 bitmask=15
-toggle_groups=,poll_remote,poll_remote:ms2e_poll
+toggle_groups=,poll_remote:poll_gpio,poll_remote:poll_ms2e,poll_remote:poll_generic
 _tooltip=Enables polling of remote board via CAN
 
 [can_remote_id_combo]
