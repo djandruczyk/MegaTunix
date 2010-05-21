@@ -5132,7 +5132,7 @@ Switching</property>
 Location</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
-					  <property name="justify">GTK_JUSTIFY_CENTER</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
 					  <property name="wrap">False</property>
 					  <property name="selectable">False</property>
 					  <property name="xalign">0</property>
@@ -5184,14 +5184,14 @@ Location</property>
 				  <child>
 				    <widget class="GtkTable" id="flexfuel_params_table">
 				      <property name="visible">True</property>
-				      <property name="n_rows">7</property>
+				      <property name="n_rows">8</property>
 				      <property name="n_columns">2</property>
 				      <property name="homogeneous">False</property>
 				      <property name="row_spacing">0</property>
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkTable" id="table53">
+					<widget class="GtkTable" id="local_flex_port_table">
 					  <property name="visible">True</property>
 					  <property name="n_rows">1</property>
 					  <property name="n_columns">2</property>
@@ -5202,7 +5202,8 @@ Location</property>
 					  <child>
 					    <widget class="GtkLabel" id="label997">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Sensor Pin</property>
+					      <property name="label" translatable="yes">Local Sensor
+Port</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5227,7 +5228,7 @@ Location</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkComboBoxEntry" id="ff_input_pin">
+					    <widget class="GtkComboBoxEntry" id="local_flex_input_pin">
 					      <property name="visible">True</property>
 					      <property name="add_tearoffs">False</property>
 					      <property name="has_frame">True</property>
@@ -5274,8 +5275,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">1</property>
-					  <property name="bottom_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5302,8 +5303,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">2</property>
-					  <property name="bottom_attach">3</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5330,8 +5331,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">3</property>
-					  <property name="bottom_attach">4</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5358,8 +5359,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">4</property>
-					  <property name="bottom_attach">5</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5386,8 +5387,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">5</property>
-					  <property name="bottom_attach">6</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5414,8 +5415,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">1</property>
 					  <property name="right_attach">2</property>
-					  <property name="top_attach">6</property>
-					  <property name="bottom_attach">7</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
 					  <property name="x_options"></property>
 					  <property name="y_options"></property>
 					</packing>
@@ -5442,8 +5443,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
-					  <property name="top_attach">6</property>
-					  <property name="bottom_attach">7</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -5469,8 +5470,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
-					  <property name="top_attach">5</property>
-					  <property name="bottom_attach">6</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -5496,8 +5497,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
-					  <property name="top_attach">4</property>
-					  <property name="bottom_attach">5</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -5523,8 +5524,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
-					  <property name="top_attach">3</property>
-					  <property name="bottom_attach">4</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -5550,8 +5551,8 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
-					  <property name="top_attach">2</property>
-					  <property name="bottom_attach">3</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>
@@ -5577,8 +5578,73 @@ Location</property>
 					<packing>
 					  <property name="left_attach">0</property>
 					  <property name="right_attach">1</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkTable" id="remote_flex_port_table">
+					  <property name="visible">True</property>
+					  <property name="n_rows">1</property>
+					  <property name="n_columns">2</property>
+					  <property name="homogeneous">False</property>
+					  <property name="row_spacing">0</property>
+					  <property name="column_spacing">0</property>
+
+					  <child>
+					    <widget class="GtkLabel" id="label1050">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">Remote Sensor
+Port</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+					      <property name="width_chars">-1</property>
+					      <property name="single_line_mode">False</property>
+					      <property name="angle">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkComboBoxEntry" id="remote_flex_input_pin">
+					      <property name="visible">True</property>
+					      <property name="add_tearoffs">False</property>
+					      <property name="has_frame">True</property>
+					      <property name="focus_on_click">True</property>
+					      <signal name="changed" handler="std_combo_handler" last_modification_time="Fri, 26 Feb 2010 15:37:44 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options">fill</property>
+					    </packing>
+					  </child>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
 					  <property name="top_attach">1</property>
 					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
 					  <property name="y_options"></property>
 					</packing>
 				      </child>

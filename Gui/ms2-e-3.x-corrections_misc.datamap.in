@@ -210,6 +210,18 @@ bind_to_list=idle_advance
 keys=bind_to_list
 bind_to_list=flexfuel
 
+[flex_port_table]
+keys=bind_to_list
+bind_to_list=flexfuel
+
+[local_flex_port_table]
+keys=bind_to_list
+bind_to_list=flexfuel,flex_local
+
+[remote_flex_port_table]
+keys=bind_to_list
+bind_to_list=flexfuel,flex_remote,can_polling,can_poll_pwm,poll_generic,can_pollers
+
 [fuel_switching_params_table]
 keys=bind_to_list
 bind_to_list=fuel_switching
@@ -345,23 +357,34 @@ toggle_groups=,flexfuel
 _tooltip=Enables or Disables the Flexfuel sensor.
 
 [flex_port_combo]
-keys=page,offset,bitvals,bitmask,bind_to_list,tooltip
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=0
 offset=908
+choices=Local,Remote
 bitvals=0,1
 bitmask=2
-choices=Local,Remote
-bind_to_list=can_poll,can_poll_pwm
-_tooltip=If CAN is enabled wiht PWM polling, you can set the flex sensor to be a remote input
+toggle_groups=flex_local,flex_remote
+_tooltip=If CAN is enabled with PWM polling, you can set the flex sensor to be a remote input
 
-[ff_input_pin]
-keys=page,offset,bitvals,bitmask,tooltip
+[local_flex_input_pin]
+keys=page,offset,bitvals,bitmask,bind_to_list,tooltip
 page=0
 offset=994
-bitvals=0,1
-bitmask=0
 choices=PE0/JS7,JS11
-_tooltip=Sets Flexfuel sensor input pin
+bitvals=0,1
+bitmask=1
+bind_to_list=flex_local
+_tooltip=Sets the Local Flexfuel sensor input pin/port
+
+[remote_flex_input_pin]
+keys=page,offset,bitvals,bitmask,bind_to_list,tooltip
+page=0
+offset=994
+choices=PWM0,PWM1,PWM2,PWM3
+bitvals=0,1,2,3
+bitmask=6
+bind_to_list=flex_remote
+_tooltip=Sets the Remote Flexfuel sensor input pin/port
 
 [tachout_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
