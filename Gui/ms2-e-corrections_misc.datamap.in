@@ -349,7 +349,7 @@ keys=page,offset,bitvals,bitmask,tooltip
 page=0
 offset=994
 bitvals=0,1
-bitmask=0
+bitmask=1
 choices=PE0/JS7,JS11
 _tooltip=Sets Flexfuel sensor input pin
 

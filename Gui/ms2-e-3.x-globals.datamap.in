@@ -131,8 +131,8 @@ _tooltip=Sets ECU barometer correction to be either Disabled, based on initial M
 
 [realtime_baro_port_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-choices=MS2 AD6/JS5,MS2 AD7/JS4,GPIO1 GPI1 AD0,GPIO1 GPI2 AD1,GPIO1 GPI3 AD2,GPIO1 GPI5 AD6,GPIO1 GPI4 AD7
-bitvals=6,7,8,9,10,14,15
+choices=MS2 AD6/JS5,MS2 AD7/JS4,Remote ADC0,Remote ADC1,Remote ADC2,Remote ADC3,Remote ADC4,Remote ADC5,Remote ADC6,Remote ADC7
+bitvals=6,7,8,9,10,11,12,13,14,15
 offset=991
 bitmask=15
 bind_to_list=baro_dual

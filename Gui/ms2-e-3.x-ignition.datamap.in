@@ -290,7 +290,7 @@ keys=offset,choices,bitvals,bitmask,tooltip,require_reboot
 choices=Cam,Crank,Every Cylinder
 bitvals=0,1,2
 offset=988
-bitmask=96
+bitmask=192
 require_reboot=TRUE
 _tooltip=Sets ECU 2nd trigger parameters, see http://msextra.com/doc/ms2extra/MS2-Extra_Gen_Ignition.htm
 
@@ -412,7 +412,7 @@ _tooltip=Number of missing teeth on the trigger wheel
 keys=offset,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
 offset=969
 size=_U16_
-raw_upper=7200
+raw_upper=3600
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
