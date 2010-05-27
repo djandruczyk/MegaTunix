@@ -29,6 +29,7 @@ gui_glade_files = 	\
 		ms2-e-corrections_misc.glade \
 		ms2-e-crank_idle_warmup.glade \
 		ms2-e-debugging.glade \
+		ms2-e-ego_rev.glade \
 		ms2-e-globals.glade \
 		ms2-e-ignition.glade \
 		ms2-e-nitrous_staging_orfc.glade \
@@ -112,6 +113,7 @@ gui_in_files = 	\
 		ms2-e-corrections_misc.datamap.in \
 		ms2-e-crank_idle_warmup.datamap.in \
 		ms2-e-debugging.datamap.in \
+		ms2-e-ego_rev.datamap.in \
 		ms2-e-globals.datamap.in \
 		ms2-e-ignition.datamap.in \
 		ms2-e-nitrous_staging_orfc.datamap.in \
