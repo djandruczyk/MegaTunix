@@ -171,219 +171,195 @@ bind_to_list=rmt8_2nd_cond
 #----- Combos ----------------------------------------------------------------
 
 [rmt1_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=864
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt1
 _tooltip=Initial value for this pin at power on
 
 [rmt2_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=865
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt2
 _tooltip=Initial value for this pin at power on
 
 [rmt3_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=866
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt3
 _tooltip=Initial value for this pin at power on
 
 [rmt4_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=867
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt4
 _tooltip=Initial value for this pin at power on
 
 [rmt5_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=868
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt5
 _tooltip=Initial value for this pin at power on
 
 [rmt6_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=869
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt6
 _tooltip=Initial value for this pin at power on
 
 [rmt7_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=870
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt7
 _tooltip=Initial value for this pin at power on
 
 [rmt8_enable_toggle_button]
-keys=offset,bitmask,bitval,width,toggle_groups,tooltip
+keys=offset,bitmask,bitval,toggle_groups,tooltip
 offset=871
 bitmask=255
 bitval=1
-width=7
 toggle_groups=,rmt8
 _tooltip=Initial value for this pin at power on
 
 [rmt1_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=896
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt2_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=897
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt3_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=898
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt4_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=899
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt5_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=900
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt6_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=901
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt7_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=902
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt8_poweron_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=903
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt1_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=904
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt2_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=905
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt3_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=906
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt4_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=907
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt5_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=908
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt6_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=909
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt7_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=910
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt8_triggerval_combo]
-keys=offset,bitmask,bitvals,choices,width,tooltip
+keys=offset,bitmask,bitvals,choices,tooltip
 offset=911
 bitmask=255
 bitvals=0,1
 choices=0,1
-width=7
 _tooltip=Initial value for this pin at power on
 
 [rmt1_cond1_combo]

@@ -4873,7 +4873,7 @@
 			  <property name="column_spacing">0</property>
 
 			  <child>
-			    <widget class="GtkFrame" id="frame32">
+			    <widget class="GtkFrame" id="rmt8_conditions_frame">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -5156,7 +5156,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkTable" id="table358">
+				    <widget class="GtkTable" id="rmt8_second_cond_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">1</property>
 				      <property name="n_columns">2</property>
@@ -5218,7 +5218,7 @@
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkLabel" id="label235">
+					<widget class="GtkLabel" id="rmt8_range1_label">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes"></property>
 					  <property name="use_underline">False</property>
@@ -5246,7 +5246,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="label236">
+					<widget class="GtkLabel" id="rmt8_range2_label">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes"></property>
 					  <property name="use_underline">False</property>
@@ -5367,7 +5367,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkTable" id="table362">
+					<widget class="GtkTable" id="rmt8_values_table">
 					  <property name="border_width">15</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">2</property>
@@ -5526,7 +5526,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label231">
+			<widget class="GtkLabel" id="rmt8_conditions_frame">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Port Channel 8</property>
 			  <property name="use_underline">False</property>
