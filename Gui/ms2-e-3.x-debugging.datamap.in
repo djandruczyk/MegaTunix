@@ -148,6 +148,15 @@ bitvals=0,1,2,3
 bitmask=96
 _tooltip=Selects which injector output to test
 
+[adtl_inj_to_test_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=3
+offset=6
+choices=Neither,Inj3,Inj4,Both
+bitvals=0,1,2,3
+bitmask=48
+_tooltip=Selects which additional injector output to test
+
 [inj_test_pwm_combo]
 keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
 page=3
