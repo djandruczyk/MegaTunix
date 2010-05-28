@@ -97,7 +97,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]));
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_confs[i]));
 			update_logbar("interr_view","warning",g_strdup_printf(_("Datamap File: ")),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf(_("  is MISSING!\n")),FALSE,FALSE);
