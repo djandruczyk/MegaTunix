@@ -171,7 +171,7 @@ _tooltip=Sets the EGO Sensor type and configuration
 [2nd_ego_sensor_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
 choices=MS2 AD6/JS5,MS2 AD7/JS4,Remote ADC0,Remote ADC1,Remote ADC2,Remote ADC3,Remote ADC4,Remote ADC5,Remote ADC6,Remote ADC7
-bitvals=6,7,8,9,10,14,15
+bitvals=6,7,8,9,10,11,12,13,14,15
 offset=992
 bitmask=15
 _tooltip=Sets the 2nd EGO Sensor input port/pin

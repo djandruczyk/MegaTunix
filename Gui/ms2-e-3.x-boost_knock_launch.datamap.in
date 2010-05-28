@@ -106,6 +106,18 @@ bind_to_list=boost_oloop
 keys=bind_to_list
 bind_to_list=boost_cloop
 
+[boost_location_label]
+keys=bind_to_list
+bind_to_list=can_polling,can_poll_ports,poll_generic,can_pollers
+
+[boost_pin_label]
+keys=bind_to_list
+bind_to_list=boost_local
+
+[boost_remote_port_label]
+keys=bind_to_list
+bind_to_list=boost_remote
+
 #----- Combos ----------------------------------------------------------------
 
 [boost_control_combo]
@@ -125,12 +137,32 @@ bitvals=1,2,3,4,5,6,7
 bitmask=7
 _tooltip=Sets boost actuator PWM frequency
 
+[boost_location_combo]
+keys=offset,choices,bitmask,bitvals,bind_to_list,toggle_groups,tooltip
+offset=67
+choices=Local,Remote
+bitvals=0,1
+bitmask=64
+bind_to_list=can_polling,can_poll_ports,poll_generic,can_pollers
+toggle_groups=boost_local,boost_remote
+_tooltip=Sets boost actuator Pin Location
+
 [boost_pin_combo]
-keys=offset,choices,bitmask,bitvals,tooltip
+keys=offset,choices,bitmask,bitvals,bind_to_list,tooltip
 offset=68
 choices=IAC1,IAC2,JS11,Fidle
 bitvals=1,2,4,8
 bitmask=15
+bind_to_list=boost_local
+_tooltip=Selects the pin used for boost control.  NOTE: this may conflict with other features, be wary.
+
+[boost_remote_port_combo]
+keys=offset,choices,bitmask,bitvals,bind_to_list,tooltip
+offset=68
+choices=Port 1,Port 2,Port 3
+bitvals=1,2,3
+bitmask=48
+bind_to_list=boost_remote
 _tooltip=Selects the pin used for boost control.  NOTE: this may conflict with other features, be wary.
 
 [boost_polarity_combo]
@@ -271,19 +303,19 @@ _tooltip=See MS2-Extra Manuals
 [bc_pgain_entry]
 keys=offset,raw_upper,tooltip
 offset=69
-raw_upper=100
+raw_upper=200
 _tooltip=See MS2-Extra Manuals
 
 [bc_igain_entry]
 keys=offset,raw_upper,tooltip
 offset=70
-raw_upper=100
+raw_upper=200
 _tooltip=See MS2-Extra Manuals
 
 [bc_dgain_entry]
 keys=offset,raw_upper,tooltip
 offset=71
-raw_upper=100
+raw_upper=200
 _tooltip=See MS2-Extra Manuals
 
 [obp_max_boost_entry]
