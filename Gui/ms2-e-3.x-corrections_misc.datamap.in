@@ -226,6 +226,14 @@ bind_to_list=flexfuel,flex_remote,can_polling,can_poll_pwm,poll_generic,can_poll
 keys=bind_to_list
 bind_to_list=fuel_switching
 
+[fuel_switch_location_table]
+keys=bind_to_list
+bind_to_list=fs_hardware
+
+[fuel_switch_remote_port_table]
+keys=bind_to_list
+bind_to_list=fs_hardware,fs_remote
+
 [spark_table_switching]
 keys=bind_to_list
 bind_to_list=ign
@@ -233,6 +241,14 @@ bind_to_list=ign
 [spark_switching_params_table]
 keys=bind_to_list
 bind_to_list=spark_switching
+
+[spark_switch_location_table]
+keys=bind_to_list
+bind_to_list=ss_hardware
+
+[spark_switch_remote_port_table]
+keys=bind_to_list
+bind_to_list=ss_hardware,ss_remote
 
 [tachout_params_table]
 keys=bind_to_list
@@ -299,7 +315,7 @@ bind_to_list=revlimit,rev_cut
 [fuel_tbl_switch_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=1
-offset=1000
+offset=828
 bitvals=0,1
 bitmask=2
 choices=Disabled,Enabled
@@ -309,17 +325,36 @@ _tooltip=This enables or disables Fuel Table Switching (VE1->VE3)
 [fuel_switch_source_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=1
-offset=1000
+offset=828
+choices=Hardware,RPM,kPa,TPS
 bitvals=0,1,2,3
 bitmask=12
-choices=Hardware,RPM,kPa,TPS
-toggle_groups=,fs_rpm,fs_map,fs_tps
+toggle_groups=fs_hardware,fs_rpm,fs_map,fs_tps
 _tooltip=sets the fuel table switching source
+
+[fuel_switch_location_combo]
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
+page=1
+offset=827
+choices=Local,Remote
+bitvals=0,1
+bitmask=1
+toggle_groups=fs_local,fs_remote
+_tooltip=sets the fuel table switching location
+
+[fuel_switch_remote_port_combo]
+keys=page,offset,bitvals,bitmask,tooltip
+page=1
+offset=827
+choices=Remote Port3 Bit 0,Remote Port3 Bit 1,Remote Port3 Bit 2,Remote Port3 Bit 3,Remote Port3 Bit 4,Remote Port3 Bit 5,Remote Port3 Bit 6,Remote Port3 Bit 7
+bitvals=0,1,2,3,4,5,6,7
+bitmask=13
+_tooltip=sets the fuel table switching remote port/bit
 
 [spark_tbl_switch_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=1
-offset=1000
+offset=828
 bitvals=0,1
 bitmask=16
 choices=Disabled,Enabled
@@ -329,12 +364,31 @@ _tooltip=This enables or disables Spark Table Switching (SP1->SP3)
 [spark_switch_source_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=1
-offset=1000
+offset=828
 bitvals=0,1,2,3
 bitmask=96
 choices=Hardware,RPM,kPa,TPS
-toggle_groups=,ss_rpm,ss_map,ss_tps
+toggle_groups=ss_hardware,ss_rpm,ss_map,ss_tps
 _tooltip=This sets the spark table switching source
+
+[spark_switch_location_combo]
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
+page=1
+offset=827
+choices=Local,Remote
+bitvals=0,1
+bitmask=16
+toggle_groups=ss_local,ss_remote
+_tooltip=sets the fuel table switching location
+
+[spark_switch_remote_port_combo]
+keys=page,offset,bitvals,bitmask,tooltip
+page=1
+offset=827
+choices=Remote Port3 Bit 0,Remote Port3 Bit 1,Remote Port3 Bit 2,Remote Port3 Bit 3,Remote Port3 Bit 4,Remote Port3 Bit 5,Remote Port3 Bit 6,Remote Port3 Bit 7
+bitvals=0,1,2,3,4,5,6,7
+bitmask=224
+_tooltip=sets the fuel table switching remote port/bit
 
 [idle_advance_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
@@ -389,7 +443,7 @@ _tooltip=Sets the Remote Flexfuel sensor input pin/port
 [tachout_combo]
 keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
 page=1
-offset=1014
+offset=842
 bitvals=0,1
 bitmask=128
 choices=Disabled,Enabled
@@ -399,7 +453,7 @@ _tooltip=Enables or Disables the Tachometer output signal.
 [tach_pin_combo]
 keys=page,offset,bitvals,bitmask,tooltip
 page=1
-offset=1014
+offset=842
 bitvals=0,1,2,3,4,5,6,7
 bitmask=7
 choices=IGN (JS10),IAC1,IAC2,JS11,FIDLE,D14,D16,D15
@@ -408,7 +462,7 @@ _tooltip=Sets pin used for tachout,  NOTE: make sure this pin is NOT assigned so
 [tach_speed_combo]
 keys=page,offset,bitvals,bitmask,tooltip
 page=1
-offset=1014
+offset=842
 bitvals=0,1
 bitmask=64
 choices=Normal,Half Speed
@@ -417,7 +471,7 @@ _tooltip=Sets tachout rate
 [tach_speed_combo]
 keys=page,offset,bitvals,bitmask,tooltip
 page=1
-offset=1014
+offset=842
 bitvals=0,1
 bitmask=64
 choices=Normal,Half Speed
@@ -458,7 +512,7 @@ _tooltip=Sets Revlimiter algorithm
 [matcorr_scaling_entry]
 keys=page,offset,raw_lower,raw_upper,tooltip
 page=1
-offset=980
+offset=826
 raw_lower=50
 raw_upper=150
 _tooltip=MAT Correction factor
@@ -721,12 +775,12 @@ offset=894
 [mat_retard_temp_entry]
 keys=group
 group=mat
-offset=658
+offset=524
 
 [mat_retard_deg_entry]
 keys=group
 group=matretard
-offset=670
+offset=536
 
 [ia_fuelload_entry]
 keys=group

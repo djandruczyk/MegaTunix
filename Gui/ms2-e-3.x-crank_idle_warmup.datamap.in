@@ -381,22 +381,22 @@ group=temp
 
 [cp_entry]
 keys=group
-offset=598
+offset=464
 group=cp
 
 [pp_entry]
 keys=group
-offset=578
+offset=444
 group=pp
 
 [ase_entry]
 keys=group
-offset=618
+offset=484
 group=ase
 
 [ase_taper_entry]
 keys=group
-offset=638
+offset=504
 group=aset
 
 [wue_temp_entry]
@@ -603,15 +603,15 @@ _tooltip=Unknown, see MegaManual
 [crank_to_run_taper_entry]
 keys=page,offset,raw_upper,tooltip
 page=1
-offset=1003
+offset=831
 raw_upper=100
 _tooltip=Unknown, see MegaManual
 
 [pwm_valve_mode_combo]
 keys=page,offset,choices,bitvals,bitmask,bind_to_list,tooltip
 page=1
-offset=1004
-choices=Normal,Inverted
+offset=832
+choices=Normalm 0% is Off,Inverted 100% is Off
 bitvals=0,1
 bitmask=2
 bind_to_list=pwm_common

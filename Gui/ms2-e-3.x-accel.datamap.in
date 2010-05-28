@@ -449,7 +449,7 @@ _tooltip=This is the high rpm threshold where AE scaling becomes enabled.  Above
 [eae_lag_source_combo]
 keys=page,offset,bitvals,bitmask,tooltip
 page=1
-offset=1015
+offset=843
 bitvals=0,1
 bitmask=1
 choices=TPSdot,MAPdot
@@ -459,7 +459,7 @@ _tooltip=This Sets the EAE LAg compensation source
 keys=page,size,offset,raw_upper,tooltip
 page=1
 size=_S16_
-offset=1016
+offset=844
 raw_upper=1000
 _tooltip=Threshold in units/sec for lag compensation source
 
@@ -467,48 +467,48 @@ _tooltip=Threshold in units/sec for lag compensation source
 keys=page,size,offset,tooltip
 page=1
 size=_U16_
-offset=1018
+offset=846
 _tooltip=RPM above which EAE lag compensation is no longer active
 
 [EAEAWCKPA_entry]
 keys=group
 group=EAEAWCKPA
-offset=724
+offset=590
 
 [EAEBAWC_entry]
 keys=group
 group=EAEBAWC
-offset=772
+offset=638
 
 [EAESOCKPA_entry]
 keys=group
 group=EAESOCKPA
-offset=748
+offset=614
 
 [EAEBSOC_entry]
 keys=group
 group=EAEBSOC
-offset=784
+offset=650
 
 [EAEAWCRPM_entry]
 keys=group
 group=EAEAWCRPM
-offset=676
+offset=542
 
 [EAEAWN_entry]
 keys=group
 group=EAEAWN
-offset=796
+offset=662
 
 [EAESOCRPM_entry]
 keys=group
 group=EAESOCRPM
-offset=700
+offset=566
 
 [EAESON_entry]
 keys=group
 group=EAESON
-offset=808
+offset=674
 
 [EAEAWWCLT_entry]
 keys=group
@@ -518,7 +518,7 @@ offset=932
 [EAEAWW_entry]
 keys=group
 group=EAEAWW
-offset=820
+offset=686
 
 [EAESOWCLT_entry]
 keys=group
@@ -528,5 +528,5 @@ offset=956
 [EAESOW_entry]
 keys=group
 group=EAESOW
-offset=832
+offset=698
 
