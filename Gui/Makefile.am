@@ -23,6 +23,7 @@ gui_glade_files = 	\
 		ms2-e-3.x-debugging.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
+		ms2-e-3.x-nitrous_staging_orfc.glade \
 		ms2-e-3.x-noise_lag.glade \
 		ms2-e-3.x-remote_outputs.glade \
 		ms2-e-accel.glade \

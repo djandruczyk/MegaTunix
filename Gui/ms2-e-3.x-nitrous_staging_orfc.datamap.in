@@ -48,6 +48,22 @@ bind_to_list=n2o_controls
 keys=bind_to_list
 bind_to_list=n2o_controls
 
+[n2o_local_input_pin_table]
+keys=bind_to_list
+bind_to_list=n2o_in_local
+
+[n2o_remote_input_pin_table]
+keys=bind_to_list
+bind_to_list=n2o_in_remote
+
+[n2o_local_output_pins_table]
+keys=bind_to_list
+bind_to_list=n2o_out_local
+
+[n2o_remote_output_pins_table]
+keys=bind_to_list
+bind_to_list=n2o_out_remote
+
 [staging_params_table]
 keys=bind_to_list
 bind_to_list=inj_staging
@@ -125,11 +141,11 @@ labels=Secondary staging hysteresis,Secondary staging hysteresis (RPM),Secondary
 [staged_inj_combo]
 keys=offset,choices,bitmask,bitvals,toggle_labels,toggle_groups,tooltip
 offset=697
-bitvals=0,1,2,3,4
+bitvals=0,1,2,3,4,5
 bitmask=7
-choices=Off,RPM,MAP,TPS,Duty
+choices=Off,RPM,MAP,TPS,Duty,Table
 toggle_labels=staged_units
-toggle_groups=,inj_staging,inj_staging,inj_staging,inj_staging
+toggle_groups=,inj_staging,inj_staging,inj_staging,inj_staging,inj_staging:staging_table
 _tooltip=See MS2-Extra Manuals
 
 [staging_transition_combo]
@@ -178,20 +194,54 @@ choices=Disabled,Enabled
 toggle_groups=,n2o_controls
 _tooltip=See MS2-Extra Manuals
 
-[n2o_input_pin_combo]
-keys=offset,choices,bitmask,bitvals,tooltip
-offset=707
-bitvals=0,1,2,3,4,5
-bitmask=112
-choices=PE0/JS7,PE1,JS10,JS11,JS5,JS4
+[n2o_input_location_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=803
+choices=Local,Remote
+bitvals=0,1
+bitmask=1
+toggle_groups=n2o_in_local,n2o_in_remote
 _tooltip=See MS2-Extra Manuals
 
-[n2o_output_pins_combo]
+[n2o_local_input_pin_combo]
 keys=offset,choices,bitmask,bitvals,tooltip
 offset=707
+choices=PE0/JS7,PE1,JS10,JS11,JS5,JS4
+bitvals=0,1,2,3,4,5
+bitmask=112
+_tooltip=See MS2-Extra Manuals
+
+[n2o_remote_input_pin_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=803
+choices=Remote Port3 Bit 0,Remote Port3 Bit 1,Remote Port3 Bit 2,Remote Port3 Bit 3,Remote Port3 Bit 4,Remote Port3 Bit 5,Remote Port3 Bit 6,Remote Port3 Bit 7
+bitvals=0,1,2,3,4,5,6,7
+bitmask=28
+_tooltip=See MS2-Extra Manuals
+
+[n2o_output_location_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=803
+choices=Local,Remote
+bitvals=0,1
+bitmask=1
+toggle_groups=n2o_out_local,n2o_out_remote
+_tooltip=See MS2-Extra Manuals
+
+[n2o_local_output_pins_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=707
+choices=IAC1+2,FIDLE+D15
 bitvals=0,1
 bitmask=128
-choices=IAC1+2,FIDLE+D15
+_tooltip=See MS2-Extra Manuals
+
+[n2o_remote_output_pins_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=803
+choices=Remote Port1 Bits 0+1,Remote Port1 Bits 1+2,Remote Port1 Bits 2+3,Remote Port1 Bits 3+4,Remote Port1 Bits 4+5,Remote Port1 Bits 5+6,Remote Port1 Bits 6+7
+bitvals=0,1,2,3,4,5,6
+bitmask=224
 _tooltip=See MS2-Extra Manuals
 
 [which_bank_combo]
