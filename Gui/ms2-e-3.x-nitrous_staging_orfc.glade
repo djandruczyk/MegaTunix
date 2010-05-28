@@ -1749,7 +1749,7 @@ forstage 1 and 2</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkTable" id="n20_local_input_pin_table">
+					<widget class="GtkTable" id="n2o_local_input_pin_table">
 					  <property name="visible">True</property>
 					  <property name="n_rows">1</property>
 					  <property name="n_columns">2</property>
@@ -2408,7 +2408,7 @@ in DualTable Mode</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkComboBoxEntry" id="n20_output_location_combo">
+					    <widget class="GtkComboBoxEntry" id="n2o_output_location_combo">
 					      <property name="visible">True</property>
 					      <property name="add_tearoffs">False</property>
 					      <property name="has_frame">True</property>

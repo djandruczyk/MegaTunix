@@ -224,7 +224,7 @@ keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
 offset=803
 choices=Local,Remote
 bitvals=0,1
-bitmask=1
+bitmask=2
 toggle_groups=n2o_out_local,n2o_out_remote
 _tooltip=See MS2-Extra Manuals
 
