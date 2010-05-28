@@ -1508,8 +1508,8 @@ SliderMapFile=MS2-Extra-firmware
 RuntimeTextMapFile=MS2-Extra-firmware
 StatusMapFile=MS2-Extra-firmware
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-nitrous_staging_orfc,ms2-e-3.x-corrections_misc,vetable_16x16x3,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-debugging
-TabConfs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-nitrous_staging_orfc,ms2-e-3.x-corrections_misc,vetable_16x16x3-MS-II-Extra,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-debugging
+LoadTabs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-nitrous_staging_orfc,ms2-e-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-debugging
+TabConfs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-nitrous_staging_orfc,ms2-e-3.x-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3-MS-II-Extra,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-debugging
 #LoadTabs=runtime,ms2-user_outputs,ms2-e-debugging
 #TabConfs=runtime,ms2-user_outputs,ms2-e-debugging
 
