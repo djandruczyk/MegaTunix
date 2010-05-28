@@ -3,7 +3,7 @@ description=Object data map for the combined AFRtables tab
 _tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,rpm_1,afr_1,load_2,rpm_2,afr_2
-bind_to_list=ego_ctrl,valid_ecu_ctrls
+bind_to_list=ego_ctrl,wb_ego,valid_ecu_ctrls
 
 #----- Groups ----------------------------------------------------------------
 
@@ -77,7 +77,7 @@ _tooltip=The AFR Entries control how much fuel is injected into the engine. They
 
 [AFR2_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=dt_controls
+bind_to_list=dual_ego,wb_ego,dt_controls
 
 [topframe_title]
 keys=set_label
@@ -245,7 +245,7 @@ divider_offset=149
 keys=tab_ident,sub-notebook,bind_to_list
 tab_ident=_AFRTABLES_TAB_
 sub-notebook=AFR_afrtable_notebook
-bind_to_list=valid_ecu_ctrls,ego_ctrl
+bind_to_list=valid_ecu_ctrls,ego_ctrl,wb_ego
 
 [AFR1_vbox1]
 keys=table_num
