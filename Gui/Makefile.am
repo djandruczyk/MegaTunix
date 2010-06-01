@@ -1,18 +1,27 @@
 guidir = $(datadir)/MegaTunix/$(GUI_DATA_DIR)
 
 gui_glade_files = 	\
-		main.glade \
-		template.glade \
+		B_n_G_constants.glade \
+		Dualtable-constants.glade \
+		PIS-alpha_biar_16x10.glade \
+		PIS-alpha_bpw_16x10.glade \
+		PIS-biar_16x16.glade \
+		PIS-boost_16x10.glade \
+		PIS-bpw_16x16.glade \
+		PIS-corrections.glade \
+		PIS-ego_16x16.glade \
+		PIS-runtime.glade \
+	       	PIS-settings.glade \
 		afrtable_8x8x2.glade \
 		afrtable_12x12x2.glade \
 		boost_6x6x3.glade \
-		B_n_G_constants.glade \
 		datalogging.glade \
-		error_status.glade \
 		dt-params.glade \
 		enrichments.glade \
-		Dualtable-constants.glade \
+		error_status.glade \
+		inj_timing_6x6x3.glade \
 		logviewer.glade \
+		main.glade \
 		memviewer.glade \
 		ms2-accel.glade \
 		ms2-alpha-n_6x6x1.glade \
@@ -70,35 +79,36 @@ gui_glade_files = 	\
 		sparktable_12x12x2.glade \
 		sparktable_12x12x3.glade \
 		sparktable_8x8e.glade \
+		template.glade \
+		test.glade \
 		tools.glade \
 		vetable_12x12x3.glade \
 		vetable_12x12x2.glade \
 		vetable_16x16x3.glade \
 		vetable_8x8e.glade \
-		warmupwizard.glade \
-		test.glade \
-		PIS-alpha_biar_16x10.glade \
-		PIS-alpha_bpw_16x10.glade \
-		PIS-biar_16x16.glade \
-		PIS-boost_16x10.glade \
-		PIS-bpw_16x16.glade \
-		PIS-corrections.glade \
-		PIS-ego_16x16.glade \
-		PIS-runtime.glade \
-	       	PIS-settings.glade 
+		warmupwizard.glade 
 
 
 gui_in_files = 	\
+		B_n_G_constants.datamap.in \
+		Dualtable-constants.datamap.in \
+		PIS-alpha_biar_16x10.datamap.in \
+		PIS-alpha_bpw_16x10.datamap.in \
+		PIS-biar_16x16.datamap.in \
+		PIS-boost_16x10.datamap.in \
+		PIS-bpw_16x16.datamap.in \
+		PIS-corrections.datamap.in \
+		PIS-ego_16x16.datamap.in \
+		PIS-runtime.datamap.in \
+		PIS-settings.datamap.in \
 		afrtable_8x8x2-029x.datamap.in \
 		afrtable_12x12x2-MS-II.datamap.in \
 		afrtable_12x12x2-MS-II-Extra.datamap.in \
 		boost_6x6x3-029x.datamap.in \
-		B_n_G_constants.datamap.in \
 		datalogging.datamap.in \
-		error_status.datamap.in \
 		dt-params.datamap.in \
 		enrichments_BnG.datamap.in \
-		Dualtable-constants.datamap.in \
+		error_status.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \
 		ms2-accel.datamap.in \
@@ -112,6 +122,7 @@ gui_in_files = 	\
 		ms2-e-3.x-ego_rev.datamap.in \
 		ms2-e-3.x-globals.datamap.in \
 		ms2-e-3.x-ignition.datamap.in \
+		ms2-e-3.x-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.x-local_outputs.datamap.in \
 		ms2-e-3.x-nitrous_staging_orfc.datamap.in \
 		ms2-e-3.x-noise_lag.datamap.in \
@@ -161,6 +172,8 @@ gui_in_files = 	\
 		sparktable_12x12x3-MS-II-Extra.datamap.in \
 		sparktable_8x8e-EDIS.datamap.in \
 		sparktable_8x8e-Std.datamap.in \
+		template.datamap.in \
+		test.datamap.in \
 		tools.datamap.in \
 		vetable_12x12x3-029x.datamap.in \
 		vetable_12x12x3-MS-II-Extra.datamap.in \
@@ -169,17 +182,7 @@ gui_in_files = 	\
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \
 		vetable_8x8e-DT_2.datamap.in \
-		warmupwizard.datamap.in \
-		test.datamap.in \
-		PIS-alpha_biar_16x10.datamap.in \
-		PIS-alpha_bpw_16x10.datamap.in \
-		PIS-biar_16x16.datamap.in \
-		PIS-boost_16x10.datamap.in \
-		PIS-bpw_16x16.datamap.in \
-		PIS-corrections.datamap.in \
-		PIS-ego_16x16.datamap.in \
-		PIS-runtime.datamap.in \
-		PIS-settings.datamap.in 
+		warmupwizard.datamap.in 
 
 
 gui_map_files = $(gui_in_files:.datamap.in=.datamap)

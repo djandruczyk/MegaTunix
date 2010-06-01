@@ -686,6 +686,8 @@ redraw:
 		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
 		widget = g_list_nth_data(list,0);
 
+		if (!GTK_IS_WIDGET(widget))
+			return;
 		if ((i == heaviest) && (tracking_focus[table]) && (widget != last_widgets[table][z_bin[i]]))
 			gtk_widget_grab_focus(widget);
 

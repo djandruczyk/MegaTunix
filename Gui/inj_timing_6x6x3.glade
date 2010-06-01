@@ -58,16 +58,16 @@
 		      <signal name="switch_page" handler="subtab_changed" last_modification_time="Wed, 17 Jan 2007 16:16:11 GMT"/>
 
 		      <child>
-			<widget class="GtkVBox" id="B1_vbox1">
+			<widget class="GtkVBox" id="Iadv1_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkLabel" id="B1_title">
+			    <widget class="GtkLabel" id="Iadv1_title">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Boost Controller Tables</property>
+			      <property name="label" translatable="yes">Injection Timing Table 1</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -90,13 +90,13 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B1_boost_hbox0">
+			    <widget class="GtkHBox" id="Iadv1_advance_hbox0">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="B1_basetable">
+				<widget class="GtkTable" id="Iadv1_basetable">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">2</property>
@@ -105,14 +105,14 @@
 				  <property name="column_spacing">5</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="B1_rpm_frame">
+				    <widget class="GtkFrame" id="Iadv1_rpm_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B1_rpm_tbl">
+					<widget class="GtkTable" id="Iadv1_rpm_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">1</property>
@@ -122,7 +122,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -151,7 +151,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -180,7 +180,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -209,7 +209,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -238,7 +238,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -267,7 +267,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_rpm_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv1_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -298,7 +298,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B1_rpm_label">
+					<widget class="GtkLabel" id="Iadv1_rpm_label">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">RPM Bins</property>
 					  <property name="use_underline">False</property>
@@ -331,14 +331,14 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B1_boost_frame">
+				    <widget class="GtkFrame" id="Iadv1_advance_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B1_main_table">
+					<widget class="GtkTable" id="Iadv1_main_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -348,7 +348,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkLabel" id="B1_boost_filler_label">
+					    <widget class="GtkLabel" id="Iadv1_advance_filler_label">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes"></property>
 					      <property name="use_underline">False</property>
@@ -376,7 +376,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_0_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -407,7 +407,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_6_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -438,7 +438,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_12_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -469,7 +469,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_18_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -500,7 +500,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_24_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -531,7 +531,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_30_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -562,7 +562,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_1_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -593,7 +593,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_7_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -624,7 +624,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_13_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -655,7 +655,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_19_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -686,7 +686,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_25_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -717,7 +717,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_31_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -748,7 +748,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_2_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -779,7 +779,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_8_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -810,7 +810,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_14_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -841,7 +841,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_20_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -872,7 +872,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_26_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -903,7 +903,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_32_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -934,7 +934,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_9_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -965,7 +965,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_15_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -996,7 +996,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_21_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1027,7 +1027,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_27_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1058,7 +1058,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_33_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1089,7 +1089,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_4_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1120,7 +1120,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_10_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1151,7 +1151,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_16_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1182,7 +1182,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_22_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1213,7 +1213,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_28_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1244,7 +1244,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_34_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1275,7 +1275,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_5_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1306,7 +1306,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_11_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1337,7 +1337,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_17_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1368,7 +1368,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_23_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1399,7 +1399,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_29_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1430,7 +1430,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_35_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1461,7 +1461,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_boost_entry_3_of_35">
+					    <widget class="GtkEntry" id="Iadv1_advance_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1494,9 +1494,9 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B1_boost_label">
+					<widget class="GtkLabel" id="Iadv1_advance_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Injection Timing</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1527,7 +1527,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="B1_3d_view_button">
+				    <widget class="GtkButton" id="Iadv1_3d_view_button">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
@@ -1550,14 +1550,14 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B1_load_frame">
+				    <widget class="GtkFrame" id="Iadv1_load_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B1_load_tbl">
+					<widget class="GtkTable" id="Iadv1_load_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -1567,7 +1567,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1596,7 +1596,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1625,7 +1625,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1654,7 +1654,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1683,7 +1683,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1712,7 +1712,7 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B1_load_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv1_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -1741,9 +1741,9 @@
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="B1_load_tbl_units">
+					    <widget class="GtkLabel" id="Iadv1_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">%</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1771,9 +1771,9 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B1_load_tbl_lab">
+					<widget class="GtkLabel" id="Iadv1_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">FuelLoad</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1818,13 +1818,13 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B1_rescale_hbox">
+			    <widget class="GtkHBox" id="Iadv1_rescale_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkFrame" id="B1_rescale_frame">
+				<widget class="GtkFrame" id="Iadv1_rescale_frame">
 				  <property name="visible">True</property>
 				  <property name="sensitive">False</property>
 				  <property name="label_xalign">0</property>
@@ -1842,7 +1842,7 @@
 				      <property name="column_spacing">5</property>
 
 				      <child>
-					<widget class="GtkEntry" id="B1_rescale_entry">
+					<widget class="GtkEntry" id="Iadv1_rescale_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -1894,7 +1894,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B1_rescale_button">
+					<widget class="GtkButton" id="Iadv1_rescale_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Recalculate</property>
@@ -1913,7 +1913,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="B1_rescale_combo">
+					<widget class="GtkComboBoxEntry" id="Iadv1_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
 					  <property name="items" translatable="yes">  +
@@ -1937,7 +1937,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="B1_rescale_frame_title">
+				    <widget class="GtkLabel" id="Iadv1_rescale_frame_title">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Rescale Subset of Table</property>
 				      <property name="use_underline">False</property>
@@ -1967,7 +1967,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkFrame" id="B1_tracking_frame">
+				<widget class="GtkFrame" id="Iadv1_tracking_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -1980,7 +1980,7 @@
 				      <property name="spacing">0</property>
 
 				      <child>
-					<widget class="GtkCheckButton" id="B1_tracking_checkbutton">
+					<widget class="GtkCheckButton" id="Iadv1_tracking_checkbutton">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Focus follows
@@ -2048,7 +2048,7 @@ most &quot;Weight&quot;</property>
 				      <property name="spacing">5</property>
 
 				      <child>
-					<widget class="GtkButton" id="B1_export_button">
+					<widget class="GtkButton" id="Iadv1_export_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Export Table</property>
@@ -2065,7 +2065,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B1_import_button">
+					<widget class="GtkButton" id="Iadv1_import_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Import Table</property>
@@ -2128,7 +2128,7 @@ most &quot;Weight&quot;</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B1_gaugeframe1">
+				<widget class="GtkAspectFrame" id="Iadv1_gaugeframe1">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -2150,7 +2150,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B1_gaugeframe2">
+				<widget class="GtkAspectFrame" id="Iadv1_gaugeframe2">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -2172,7 +2172,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B1_gaugeframe3">
+				<widget class="GtkAspectFrame" id="Iadv1_gaugeframe3">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -2194,7 +2194,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B1_gaugeframe4">
+				<widget class="GtkAspectFrame" id="Iadv1_gaugeframe4">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -2229,9 +2229,9 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="B1_notebook_label">
+			<widget class="GtkLabel" id="Iadv1_notebook_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Boost Table 1 (KPA Target)</property>
+			  <property name="label" translatable="yes">Injection Timing Table 1</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2252,16 +2252,16 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkVBox" id="B2_vbox1">
+			<widget class="GtkVBox" id="Iadv2_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkLabel" id="B2_title">
+			    <widget class="GtkLabel" id="Iadv2_title">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Boost Controller Tables</property>
+			      <property name="label" translatable="yes">Injection Timing Table 2</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2284,13 +2284,13 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B2_boost_hbox0">
+			    <widget class="GtkHBox" id="Iadv2_advance_hbox0">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="B2_basetable">
+				<widget class="GtkTable" id="Iadv2_basetable">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">2</property>
@@ -2299,14 +2299,14 @@ most &quot;Weight&quot;</property>
 				  <property name="column_spacing">5</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="B2_rpm_frame">
+				    <widget class="GtkFrame" id="Iadv2_rpm_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B2_rpm_tbl">
+					<widget class="GtkTable" id="Iadv2_rpm_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">1</property>
@@ -2316,7 +2316,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2345,7 +2345,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2374,7 +2374,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2403,7 +2403,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2432,7 +2432,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2461,7 +2461,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_rpm_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv2_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2492,7 +2492,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B2_rpm_label">
+					<widget class="GtkLabel" id="Iadv2_rpm_label">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">RPM Bins</property>
 					  <property name="use_underline">False</property>
@@ -2525,14 +2525,14 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B2_boost_frame">
+				    <widget class="GtkFrame" id="Iadv2_advance_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B2_main_table">
+					<widget class="GtkTable" id="Iadv2_main_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -2542,7 +2542,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkLabel" id="B2_boost_filler_label">
+					    <widget class="GtkLabel" id="Iadv2_advance_filler_label">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes"></property>
 					      <property name="use_underline">False</property>
@@ -2570,7 +2570,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_0_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2601,7 +2601,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_6_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2632,7 +2632,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_12_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2663,7 +2663,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_18_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2694,7 +2694,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_24_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2725,7 +2725,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_30_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2756,7 +2756,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_1_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2787,7 +2787,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_7_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2818,7 +2818,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_13_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2849,7 +2849,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_19_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2880,7 +2880,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_25_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2911,7 +2911,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_31_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2942,7 +2942,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_2_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -2973,7 +2973,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_8_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3004,7 +3004,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_14_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3035,7 +3035,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_20_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3066,7 +3066,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_26_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3097,7 +3097,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_32_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3128,7 +3128,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_3_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3159,7 +3159,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_9_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3190,7 +3190,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_15_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3221,7 +3221,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_21_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3252,7 +3252,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_27_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3283,7 +3283,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_33_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3314,7 +3314,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_4_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3345,7 +3345,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_10_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3376,7 +3376,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_16_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3407,7 +3407,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_22_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3438,7 +3438,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_28_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3469,7 +3469,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_34_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3500,7 +3500,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_5_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3531,7 +3531,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_11_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3562,7 +3562,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_17_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3593,7 +3593,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_23_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3624,7 +3624,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_29_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3655,7 +3655,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_boost_entry_35_of_35">
+					    <widget class="GtkEntry" id="Iadv2_advance_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3688,9 +3688,9 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B2_boost_label">
+					<widget class="GtkLabel" id="Iadv2_advance_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Injection Timing (Siamese)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3721,7 +3721,7 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="B2_3d_view_button">
+				    <widget class="GtkButton" id="Iadv2_3d_view_button">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
@@ -3744,14 +3744,14 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B2_load_frame">
+				    <widget class="GtkFrame" id="Iadv2_load_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B2_load_tbl">
+					<widget class="GtkTable" id="Iadv2_load_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -3761,7 +3761,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3790,7 +3790,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3819,7 +3819,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3848,7 +3848,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3877,7 +3877,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3906,7 +3906,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B2_load_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv2_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -3935,9 +3935,9 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="B2_load_tbl_units">
+					    <widget class="GtkLabel" id="Iadv2_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">%</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3965,9 +3965,9 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B2_load_tbl_lab">
+					<widget class="GtkLabel" id="Iadv2_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">FuelLoad</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4012,13 +4012,13 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B2_rescale_hbox">
+			    <widget class="GtkHBox" id="Iadv2_rescale_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkFrame" id="B2_rescale_frame">
+				<widget class="GtkFrame" id="Iadv2_rescale_frame">
 				  <property name="visible">True</property>
 				  <property name="sensitive">False</property>
 				  <property name="label_xalign">0</property>
@@ -4036,7 +4036,7 @@ most &quot;Weight&quot;</property>
 				      <property name="column_spacing">5</property>
 
 				      <child>
-					<widget class="GtkEntry" id="B2_rescale_entry">
+					<widget class="GtkEntry" id="Iadv2_rescale_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4088,7 +4088,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B2_rescale_button">
+					<widget class="GtkButton" id="Iadv2_rescale_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Recalculate</property>
@@ -4107,7 +4107,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="B2_rescale_combo">
+					<widget class="GtkComboBoxEntry" id="Iadv2_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
 					  <property name="items" translatable="yes">  +
@@ -4131,7 +4131,7 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="B2_rescale_frame_title">
+				    <widget class="GtkLabel" id="Iadv2_rescale_frame_title">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Rescale Subset of Table</property>
 				      <property name="use_underline">False</property>
@@ -4161,7 +4161,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkFrame" id="B2_tracking_frame">
+				<widget class="GtkFrame" id="Iadv2_tracking_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -4174,7 +4174,7 @@ most &quot;Weight&quot;</property>
 				      <property name="spacing">0</property>
 
 				      <child>
-					<widget class="GtkCheckButton" id="B2_tracking_checkbutton">
+					<widget class="GtkCheckButton" id="Iadv2_tracking_checkbutton">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Focus follows
@@ -4242,7 +4242,7 @@ most &quot;Weight&quot;</property>
 				      <property name="spacing">5</property>
 
 				      <child>
-					<widget class="GtkButton" id="B2_export_button">
+					<widget class="GtkButton" id="Iadv2_export_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Export Table</property>
@@ -4259,7 +4259,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B2_import_button">
+					<widget class="GtkButton" id="Iadv2_import_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Import Table</property>
@@ -4322,7 +4322,7 @@ most &quot;Weight&quot;</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B2_gaugeframe1">
+				<widget class="GtkAspectFrame" id="Iadv2_gaugeframe1">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -4344,7 +4344,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B2_gaugeframe2">
+				<widget class="GtkAspectFrame" id="Iadv2_gaugeframe2">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -4366,7 +4366,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B2_gaugeframe3">
+				<widget class="GtkAspectFrame" id="Iadv2_gaugeframe3">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -4388,7 +4388,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B2_gaugeframe4">
+				<widget class="GtkAspectFrame" id="Iadv2_gaugeframe4">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -4423,9 +4423,9 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="B2_notebook_label">
+			<widget class="GtkLabel" id="Iadv2_notebook_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">BoostTable 2 (DC Target)</property>
+			  <property name="label" translatable="yes">Injection Timing Table 2</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4446,16 +4446,16 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkVBox" id="B3_vbox1">
+			<widget class="GtkVBox" id="Iadv3_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkLabel" id="B3_title">
+			    <widget class="GtkLabel" id="Iadv3_title">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Boost Controller Tables</property>
+			      <property name="label" translatable="yes">Injection Timing Table 3</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4478,13 +4478,13 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B3_boost_hbox0">
+			    <widget class="GtkHBox" id="Iadv3_advance_hbox0">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="B3_basetable">
+				<widget class="GtkTable" id="Iadv3_basetable">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">2</property>
@@ -4493,14 +4493,14 @@ most &quot;Weight&quot;</property>
 				  <property name="column_spacing">5</property>
 
 				  <child>
-				    <widget class="GtkFrame" id="B3_rpm_frame">
+				    <widget class="GtkFrame" id="Iadv3_rpm_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B3_rpm_tbl">
+					<widget class="GtkTable" id="Iadv3_rpm_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">1</property>
@@ -4510,7 +4510,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_0_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4539,7 +4539,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_1_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4568,7 +4568,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_2_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4597,7 +4597,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_3_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4626,7 +4626,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_4_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4655,7 +4655,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_rpm_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv3_rpm_entry_5_of_5">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4686,7 +4686,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B3_rpm_label">
+					<widget class="GtkLabel" id="Iadv3_rpm_label">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">RPM Bins</property>
 					  <property name="use_underline">False</property>
@@ -4719,14 +4719,14 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B3_boost_frame">
+				    <widget class="GtkFrame" id="Iadv3_advance_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B3_main_table">
+					<widget class="GtkTable" id="Iadv3_main_table">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -4736,7 +4736,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkLabel" id="B3_boost_filler_label">
+					    <widget class="GtkLabel" id="Iadv3_advance_filler_label">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes"></property>
 					      <property name="use_underline">False</property>
@@ -4764,7 +4764,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_0_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_0_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4795,7 +4795,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_6_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_6_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4826,7 +4826,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_12_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_12_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4857,7 +4857,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_18_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_18_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4888,7 +4888,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_24_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_24_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4919,7 +4919,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_30_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_30_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4950,7 +4950,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_1_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_1_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -4981,7 +4981,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_7_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_7_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5012,7 +5012,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_13_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_13_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5043,7 +5043,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_19_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_19_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5074,7 +5074,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_25_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_25_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5105,7 +5105,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_31_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_31_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5136,7 +5136,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_2_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_2_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5167,7 +5167,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_8_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_8_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5198,7 +5198,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_14_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_14_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5229,7 +5229,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_20_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_20_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5260,7 +5260,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_26_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_26_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5291,7 +5291,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_32_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_32_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5322,7 +5322,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_3_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_3_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5353,7 +5353,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_9_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_9_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5384,7 +5384,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_15_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_15_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5415,7 +5415,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_21_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_21_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5446,7 +5446,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_27_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_27_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5477,7 +5477,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_33_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_33_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5508,7 +5508,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_4_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_4_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5539,7 +5539,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_10_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_10_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5570,7 +5570,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_16_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_16_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5601,7 +5601,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_22_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_22_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5632,7 +5632,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_28_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_28_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5663,7 +5663,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_34_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_34_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5694,7 +5694,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_5_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_5_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5725,7 +5725,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_11_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_11_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5756,7 +5756,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_17_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_17_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5787,7 +5787,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_23_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_23_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5818,7 +5818,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_29_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_29_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5849,7 +5849,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_boost_entry_35_of_35">
+					    <widget class="GtkEntry" id="Iadv3_advance_entry_35_of_35">
 					      <property name="width_request">30</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5882,9 +5882,9 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B3_boost_label">
+					<widget class="GtkLabel" id="Iadv3_advance_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Injection Timing (Siamese)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5915,7 +5915,7 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="B3_3d_view_button">
+				    <widget class="GtkButton" id="Iadv3_3d_view_button">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
 				      <property name="can_focus">True</property>
@@ -5938,14 +5938,14 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkFrame" id="B3_load_frame">
+				    <widget class="GtkFrame" id="Iadv3_load_frame">
 				      <property name="visible">True</property>
 				      <property name="label_xalign">0</property>
 				      <property name="label_yalign">0.5</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkTable" id="B3_load_tbl">
+					<widget class="GtkTable" id="Iadv3_load_tbl">
 					  <property name="border_width">5</property>
 					  <property name="visible">True</property>
 					  <property name="n_rows">7</property>
@@ -5955,7 +5955,7 @@ most &quot;Weight&quot;</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_0_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_0_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -5984,7 +5984,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_1_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_1_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6013,7 +6013,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_2_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_2_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6042,7 +6042,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_3_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_3_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6071,7 +6071,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_4_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_4_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6100,7 +6100,7 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkEntry" id="B3_load_entry_5_of_5">
+					    <widget class="GtkEntry" id="Iadv3_load_entry_5_of_5">
 					      <property name="width_request">35</property>
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -6129,9 +6129,9 @@ most &quot;Weight&quot;</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="B3_load_tbl_units">
+					    <widget class="GtkLabel" id="Iadv3_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">%</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6159,9 +6159,9 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="B3_load_tbl_lab">
+					<widget class="GtkLabel" id="Iadv3_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">FuelLoad</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6206,13 +6206,13 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="B3_rescale_hbox">
+			    <widget class="GtkHBox" id="Iadv3_rescale_hbox">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkFrame" id="B3_rescale_frame">
+				<widget class="GtkFrame" id="Iadv3_rescale_frame">
 				  <property name="visible">True</property>
 				  <property name="sensitive">False</property>
 				  <property name="label_xalign">0</property>
@@ -6230,7 +6230,7 @@ most &quot;Weight&quot;</property>
 				      <property name="column_spacing">5</property>
 
 				      <child>
-					<widget class="GtkEntry" id="B3_rescale_entry">
+					<widget class="GtkEntry" id="Iadv3_rescale_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -6282,7 +6282,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B3_rescale_button">
+					<widget class="GtkButton" id="Iadv3_rescale_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Recalculate</property>
@@ -6301,7 +6301,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="B3_rescale_combo">
+					<widget class="GtkComboBoxEntry" id="Iadv3_rescale_combo">
 					  <property name="width_request">60</property>
 					  <property name="visible">True</property>
 					  <property name="items" translatable="yes">  +
@@ -6325,7 +6325,7 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="B3_rescale_frame_title">
+				    <widget class="GtkLabel" id="Iadv3_rescale_frame_title">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Rescale Subset of Table</property>
 				      <property name="use_underline">False</property>
@@ -6355,7 +6355,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkFrame" id="B3_tracking_frame">
+				<widget class="GtkFrame" id="Iadv3_tracking_frame">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -6368,7 +6368,7 @@ most &quot;Weight&quot;</property>
 				      <property name="spacing">0</property>
 
 				      <child>
-					<widget class="GtkCheckButton" id="B3_tracking_checkbutton">
+					<widget class="GtkCheckButton" id="Iadv3_tracking_checkbutton">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Focus follows
@@ -6436,7 +6436,7 @@ most &quot;Weight&quot;</property>
 				      <property name="spacing">5</property>
 
 				      <child>
-					<widget class="GtkButton" id="B3_export_button">
+					<widget class="GtkButton" id="Iadv3_export_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Export Table</property>
@@ -6453,7 +6453,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkButton" id="B3_import_button">
+					<widget class="GtkButton" id="Iadv3_import_button">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">Import Table</property>
@@ -6516,7 +6516,7 @@ most &quot;Weight&quot;</property>
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B3_gaugeframe1">
+				<widget class="GtkAspectFrame" id="Iadv3_gaugeframe1">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -6538,7 +6538,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B3_gaugeframe2">
+				<widget class="GtkAspectFrame" id="Iadv3_gaugeframe2">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -6560,7 +6560,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B3_gaugeframe3">
+				<widget class="GtkAspectFrame" id="Iadv3_gaugeframe3">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -6582,7 +6582,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkAspectFrame" id="B3_gaugeframe4">
+				<widget class="GtkAspectFrame" id="Iadv3_gaugeframe4">
 				  <property name="visible">True</property>
 				  <property name="label_xalign">0</property>
 				  <property name="label_yalign">0.5</property>
@@ -6617,9 +6617,9 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="B3_notebook_label">
+			<widget class="GtkLabel" id="Iadv3_notebook_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">BoostTable 2 (KPA Target)</property>
+			  <property name="label" translatable="yes">Injection Timing Table 3</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6745,7 +6745,7 @@ most &quot;Weight&quot;</property>
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MegaSquirtnSpark Extra Boost Tables</property>
+	  <property name="label" translatable="yes">MSnS-Extra Injection Timing Tables</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

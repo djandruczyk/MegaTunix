@@ -583,7 +583,7 @@ z_precision=1
 [table_16]
 _table_name=Injection Timing Table 3
 is_fuel=FALSE
-x_page=2
+x_page=1
 x_base_offset=420
 x_bincount=6
 x_size=_U16_
@@ -592,7 +592,7 @@ _x_suffix=RPM
 x_conv_expr=x*1
 x_raw_upper=15000
 x_precision=0
-y_page=2
+y_page=1
 y_base_offset=432
 y_bincount=8
 y_size=_S16_
@@ -602,7 +602,7 @@ y_conv_expr=x/10
 y_raw_lower=0
 y_raw_upper=4000
 y_precision=1
-z_page=2
+z_page=1
 z_base_offset=348
 z_size=_S16_
 z_source=
@@ -1732,8 +1732,8 @@ SliderMapFile=MS2-Extra-firmware
 RuntimeTextMapFile=MS2-Extra-firmware
 StatusMapFile=MS2-Extra-firmware
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,ms2-e-toothtrigger,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging
-TabConfs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-3.x-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3-MS-II-Extra,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,ms2-e-toothtrigger-2.1.x,ms2-e-3.x-can,ms2-e-3.x-local_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging
+LoadTabs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,inj_timing_6x6x3,ms2-e-toothtrigger,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging
+TabConfs=runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-3.x-ego_rev,ms2-e-3.x-corrections_misc,vetable_16x16x3-MS-II-Extra,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,ms2-e-3.x-inj_timing_6x6x3,ms2-e-toothtrigger-2.1.x,ms2-e-3.x-can,ms2-e-3.x-local_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging
 #LoadTabs=runtime,ms2-user_outputs,ms2-e-debugging
 #TabConfs=runtime,ms2-user_outputs,ms2-e-debugging
 
