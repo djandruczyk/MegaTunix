@@ -26,6 +26,7 @@ gui_glade_files = 	\
 		ms2-e-3.x-nitrous_staging_orfc.glade \
 		ms2-e-3.x-noise_lag.glade \
 		ms2-e-3.x-remote_outputs.glade \
+		ms2-e-3.x-sequential.glade \
 		ms2-e-accel.glade \
 		ms2-e-boost_knock_launch.glade \
 		ms2-e-boost_8x8x2.glade \
@@ -115,6 +116,7 @@ gui_in_files = 	\
 		ms2-e-3.x-nitrous_staging_orfc.datamap.in \
 		ms2-e-3.x-noise_lag.datamap.in \
 		ms2-e-3.x-remote_outputs.datamap.in \
+		ms2-e-3.x-sequential.datamap.in \
 		ms2-e-accel.datamap.in \
 		ms2-e-boost_knock_launch.datamap.in \
 		ms2-e-boost_8x8x2.datamap.in \

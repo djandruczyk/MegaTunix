@@ -1,0 +1,280 @@
+[global]
+description=Object data map for the MS2-Extra 3.x Sequential
+_tab_name=_Sequential Injection
+id_prefix=Seq_
+ellipsize=true
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=3
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[seq_main_params_table]
+keys=bind_to_list
+bind_to_list=seq_inj
+
+[fixed_inj_timing_1_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_fixed
+
+[fixed_inj_timing_2_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese,seq_fixed,seq_dual
+
+[fixed_inj_timing_3_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese,seq_fixed
+
+[fixed_inj_timing_1_staging_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_fixed,inj_staging
+
+[fixed_inj_timing_2_staging_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese,seq_fixed,seq_dual,inj_staging
+
+[fixed_inj_timing_3_staging_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese,seq_fixed,inj_staging
+
+[seq_num_timing_vals_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese
+
+[fixed_inj_cranking_2_table]
+keys=bind_to_list
+bind_to_list=seq_inj,seq_siamese,seq_dual
+
+[additional_injectors_table]
+keys=bind_to_list
+bind_to_list=bank2,extra_inj
+
+[siamese_hybrid_table]
+keys=bind_to_list
+bind_to_list=seq_siamese
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+[seq_inj_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=415
+choices=Untimed injection,Sequential/Semi-sequential,Semi-sequential Siamese,Sequential Siamese
+bitvals=0,1,2,3
+bitmask=3
+toggle_groups=,seq_inj,seq_inj,seq_inj:seq_siamese
+tooltip=Sets to normal injection,sequential/semi-sequential injection, Semi-sequential siamese injection, and full sequential siamese injection
+
+[injtimingmode_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=415
+choices=Start-of-pulse,Mid-pulse,End-of-pulse
+bitvals=0,1,2
+bitmask=192
+tooltip=See MS2-Extra Manuals
+
+[injusetable_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=415
+choices=Fixed Timing,Use Table
+bitvals=0,1
+bitmask=32
+toggle_groups=seq_fixed,seq_table
+tooltip=See MS2-Extra Manuals
+
+[injdualvalue_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=415
+choices=Single Value,Dual Values
+bitvals=0,1
+bitmask=8
+toggle_groups=seq_single,seq_dual
+tooltip=See MS2-Extra Manuals
+
+[usevetrim_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=415
+choices=Disabled, Enabled
+bitvals=0,1
+bitmask=16
+toggle_groups=,ve_trim
+tooltip=Enables or Disables VE Trim Tables
+
+[extrainj_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,bind_to_list,tooltip
+offset=415
+choices=Standard Drivers,Additional Drivers
+bitvals=0,1
+bitmask=4
+toggle_groups=inj_pwm,extra_inj
+bind_to_list=bank2
+tooltip=NOTE: When set to Additional Drivers, PWM is not available for ANY injector channel.
+
+#----- Entries ---------------------------------------------------------------
+
+[injadv1_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=416
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injadv2_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=418
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injadv3_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=420
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injstagedadv1_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=422
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injstagedadv2_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=424
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injstagedadv3_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=426
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injcrankadv1_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=620
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injcrankadv2_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+offset=622
+size=_S16_
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+raw_lower=-3600
+raw_upper=7200
+tooltip=See MS2-Extra Manuals
+
+[injOpen3_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=628
+size=_U16_
+dl_conv_expr=x*1000
+ul_conv_expr=x/1000
+precision=3
+raw_upper=25500
+tooltip=See MS2-Extra Manuals
+
+[injOpen4_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=632
+size=_U16_
+dl_conv_expr=x*1000
+ul_conv_expr=x/1000
+precision=3
+raw_upper=25500
+tooltip=See MS2-Extra Manuals
+
+[battFac3_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=630
+size=_U16_
+dl_conv_expr=x/0.000166667
+ul_conv_expr=x*0.000166667
+precision=3
+raw_upper=6000
+tooltip=See MS2-Extra Manuals
+
+[battFac4_entry]
+keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+offset=634
+size=_U16_
+dl_conv_expr=x/0.000166667
+ul_conv_expr=x*0.000166667
+precision=3
+raw_upper=6000
+tooltip=See MS2-Extra Manuals
+
+[hybrid_rpm_entry]
+keys=offset,size,raw_upper,tooltip
+offset=624
+size=_U16_
+raw_upper=15000
+tooltip=See MS2-Extra Manuals
+
+[hybrid_hyst_entry]
+keys=offset,size,raw_upper,tooltip
+offset=626
+size=_U16_
+raw_upper=15000
+tooltip=See MS2-Extra Manuals
+

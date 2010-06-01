@@ -70,6 +70,14 @@ bind_to_list=low_baro
 keys=bind_to_list
 bind_to_list=high_baro
 
+[inj1_pwm_table]
+keys=bind_to_list
+bind_to_list=inj_pwm
+
+[inj2_pwm_table]
+keys=bind_to_list
+bind_to_list=inj_pwm
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
