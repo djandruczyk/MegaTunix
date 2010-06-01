@@ -86,6 +86,7 @@ gui_glade_files = 	\
 		vetable_12x12x2.glade \
 		vetable_16x16x3.glade \
 		vetable_8x8e.glade \
+		vetrim_16x16x4.glade \
 		warmupwizard.glade 
 
 
@@ -182,6 +183,7 @@ gui_in_files = 	\
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \
 		vetable_8x8e-DT_2.datamap.in \
+		vetrim_16x16x4-MS-II-Extra-3.x.datamap.in \
 		warmupwizard.datamap.in 
 
 

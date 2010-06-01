@@ -26,7 +26,7 @@ raw_lower=0
 raw_upper=4000
 precision=1
 use_color=TRUE
-_tooltip=The LOAD (TPS) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+_tooltip=The LOAD (%) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_3]
 keys=page,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
@@ -38,7 +38,7 @@ raw_lower=0
 raw_upper=4000
 precision=1
 use_color=TRUE
-_tooltip=The LOAD (TPS) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+_tooltip=The LOAD (%) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_12]
 keys=size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
@@ -100,7 +100,6 @@ _tooltip=See MS2-Extra Manuals
 
 [Iadv1_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=14
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
@@ -108,7 +107,6 @@ datasource=rpm
 
 [Iadv1_gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=14
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
@@ -116,7 +114,6 @@ datasource=tpspercent
 
 [Iadv1_gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=14
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
@@ -124,7 +121,6 @@ datasource=mapkpa
 
 [Iadv1_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=14
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_DC_Gauge.xml
@@ -132,7 +128,6 @@ datasource=bcDC
 
 [Iadv2_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=15
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
@@ -140,7 +135,6 @@ datasource=rpm
 
 [Iadv2_gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=15
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
@@ -148,7 +142,6 @@ datasource=tpspercent
 
 [Iadv2_gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=15
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
@@ -156,7 +149,6 @@ datasource=mapkpa
 
 [Iadv2_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=15
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_DC_Gauge.xml
@@ -164,7 +156,6 @@ datasource=bcDC
 
 [Iadv3_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=16
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
@@ -172,7 +163,6 @@ datasource=rpm
 
 [Iadv3_gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=16
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
@@ -180,7 +170,6 @@ datasource=tpspercent
 
 [Iadv3_gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=16
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
@@ -188,7 +177,6 @@ datasource=mapkpa
 
 [Iadv3_gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-page=1
 table_num=16
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_DC_Gauge.xml
@@ -231,27 +219,27 @@ set_label=Injector Timing Table 2 (Siamese)
 keys=set_label
 set_label=Injector Timing Table 3 (Siamese)
 
-[Iadv1_boost_filler_label]
+[Iadv1_advance_filler_label]
 keys=set_label
 set_label=%
 
-[Iadv2_boost_filler_label]
+[Iadv2_advance_filler_label]
 keys=set_label
 set_label=%
 
-[Iadv3_boost_filler_label]
+[Iadv3_advance_filler_label]
 keys=set_label
 set_label=%
 
-[Iadv1_boost_label]
+[Iadv1_advance_label]
 keys=set_label
 set_label=Injector Timing Table 1
 
-[Iadv2_boost_label]
+[Iadv2_advance_label]
 keys=set_label
 set_label=Injector Timing Table 2 (Siamese)
 
-[Iadv3_boost_label]
+[Iadv3_advance_label]
 keys=set_label
 set_label=Injector Timing Table 3 (Siamese)
 
