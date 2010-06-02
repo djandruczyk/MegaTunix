@@ -483,6 +483,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"lookuptable",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"match_type",
+			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"max_chars",
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"multi_expr_keys",
@@ -573,6 +575,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"width",
 			GINT_TO_POINTER(MTX_INT));
+
+	/* Match conditions */
+	g_hash_table_insert(str_2_enum,"_OR_",
+			GINT_TO_POINTER(OR));
+	g_hash_table_insert(str_2_enum,"_AND_",
+			GINT_TO_POINTER(AND));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 

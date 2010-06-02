@@ -76,7 +76,7 @@
 				<widget class="GtkTable" id="table6">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
-				  <property name="n_rows">5</property>
+				  <property name="n_rows">4</property>
 				  <property name="n_columns">2</property>
 				  <property name="homogeneous">False</property>
 				  <property name="row_spacing">0</property>
@@ -92,7 +92,7 @@
 				      <property name="column_spacing">0</property>
 
 				      <child>
-					<widget class="GtkComboBoxEntry" id="idle_valve_test_combo">
+					<widget class="GtkComboBoxEntry" id="iactestlock_combo">
 					  <property name="visible">True</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
@@ -163,7 +163,7 @@
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkComboBoxEntry" id="idle_valve_pos_combo">
+					    <widget class="GtkComboBoxEntry" id="iactest_combo">
 					      <property name="visible">True</property>
 					      <property name="add_tearoffs">False</property>
 					      <property name="has_frame">True</property>
@@ -216,7 +216,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="idle_test_home_steps">
+					<widget class="GtkEntry" id="iachometest_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -307,7 +307,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkEntry" id="idle_test_run_steps">
+				    <widget class="GtkEntry" id="iacpostest_entry">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="editable">True</property>
@@ -337,11 +337,11 @@
 				  <child>
 				    <widget class="GtkLabel" id="label11">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;big&gt;Set the steps &lt;b&gt;before&lt;/b&gt; enabling testing&lt;/big&gt;</property>
+				      <property name="label" translatable="yes">Set the steps &lt;b&gt;before&lt;/b&gt; enabling testing or PWM valves enter 0-100, for stepper,  0-255</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
+				      <property name="wrap">True</property>
 				      <property name="selectable">False</property>
 				      <property name="xalign">0</property>
 				      <property name="yalign">0.5</property>
@@ -357,34 +357,6 @@
 				      <property name="right_attach">2</property>
 				      <property name="top_attach">3</property>
 				      <property name="bottom_attach">4</property>
-				      <property name="y_padding">1</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="label12">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">&lt;big&gt;For PWM valves enter 0-100, for stepper,  0-255&lt;/big&gt;</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">True</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">4</property>
-				      <property name="bottom_attach">5</property>
 				      <property name="y_padding">1</property>
 				      <property name="y_options"></property>
 				    </packing>
@@ -1027,7 +999,7 @@ GPIOADC fields</property>
 		      <child>
 			<widget class="GtkTable" id="table5">
 			  <property name="visible">True</property>
-			  <property name="n_rows">1</property>
+			  <property name="n_rows">2</property>
 			  <property name="n_columns">1</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">0</property>
@@ -1951,6 +1923,138 @@ GPIOADC fields</property>
 			    <packing>
 			      <property name="left_attach">0</property>
 			      <property name="right_attach">1</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkFrame" id="maf_corr_frame">
+			      <property name="visible">True</property>
+			      <property name="label_xalign">0</property>
+			      <property name="label_yalign">0.5</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+			      <child>
+				<widget class="GtkTable" id="table33">
+				  <property name="border_width">5</property>
+				  <property name="visible">True</property>
+				  <property name="n_rows">1</property>
+				  <property name="n_columns">1</property>
+				  <property name="homogeneous">False</property>
+				  <property name="row_spacing">0</property>
+				  <property name="column_spacing">0</property>
+
+				  <child>
+				    <widget class="GtkButton" id="maf_corr_edit_button">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <signal name="clicked" handler="std_button_handler" last_modification_time="Wed, 02 Jun 2010 01:35:13 GMT"/>
+
+				      <child>
+					<widget class="GtkAlignment" id="alignment1">
+					  <property name="visible">True</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xscale">0</property>
+					  <property name="yscale">0</property>
+					  <property name="top_padding">0</property>
+					  <property name="bottom_padding">0</property>
+					  <property name="left_padding">0</property>
+					  <property name="right_padding">0</property>
+
+					  <child>
+					    <widget class="GtkHBox" id="hbox1">
+					      <property name="visible">True</property>
+					      <property name="homogeneous">False</property>
+					      <property name="spacing">2</property>
+
+					      <child>
+						<widget class="GtkImage" id="image1">
+						  <property name="visible">True</property>
+						  <property name="stock">gtk-edit</property>
+						  <property name="icon_size">4</property>
+						  <property name="xalign">0.5</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						</widget>
+						<packing>
+						  <property name="padding">0</property>
+						  <property name="expand">False</property>
+						  <property name="fill">False</property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkLabel" id="label46">
+						  <property name="visible">True</property>
+						  <property name="label" translatable="yes">Edit MAF Correction Table</property>
+						  <property name="use_underline">True</property>
+						  <property name="use_markup">False</property>
+						  <property name="justify">GTK_JUSTIFY_LEFT</property>
+						  <property name="wrap">False</property>
+						  <property name="selectable">False</property>
+						  <property name="xalign">0.5</property>
+						  <property name="yalign">0.5</property>
+						  <property name="xpad">0</property>
+						  <property name="ypad">0</property>
+						  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						  <property name="width_chars">-1</property>
+						  <property name="single_line_mode">False</property>
+						  <property name="angle">0</property>
+						</widget>
+						<packing>
+						  <property name="padding">0</property>
+						  <property name="expand">False</property>
+						  <property name="fill">False</property>
+						</packing>
+					      </child>
+					    </widget>
+					  </child>
+					</widget>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">1</property>
+				      <property name="top_attach">0</property>
+				      <property name="bottom_attach">1</property>
+				      <property name="y_options">expand</property>
+				    </packing>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label45">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">MAF Correction </property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">True</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="type">label_item</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
 			      <property name="top_attach">0</property>
 			      <property name="bottom_attach">1</property>
 			      <property name="y_options"></property>
@@ -2071,7 +2175,7 @@ GPIOADC fields</property>
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MS2-E Debugging</property>
+	  <property name="label" translatable="yes">MS2-E Experimental/Debugging</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

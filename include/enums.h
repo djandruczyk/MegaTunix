@@ -288,4 +288,10 @@ typedef enum
 	UPPER
 }Extreme;
 
+typedef enum
+{
+	OR=0x450,
+	AND
+}MatchType;
+
 #endif

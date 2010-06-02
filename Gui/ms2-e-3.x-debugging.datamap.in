@@ -1,7 +1,7 @@
 [global]
 description=Object data map for the MS2-Extra debugging Tab
-_tab_name=_Debugging/Advanced
-id_prefix=DBG
+_tab_name=_Advanced/Experimental
+id_prefix=EXP
 ellipsize=TRUE
 groups=defaults
 
@@ -18,6 +18,12 @@ handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
+[maf_corr_edit_button]
+keys=handler,te_table_num,tooltip
+handler=_TE_TABLE_
+te_table_num=26
+_tooltip=Opens the 2D editor to alter the stock MAF curve to suit your vehicle.
+
 [get_data_button]
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_
@@ -31,6 +37,11 @@ bind_to_list=burners
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 #----- Widgets ---------------------------------------------------------------
+
+[maf_corr_frame]
+keys=bind_to_list,match_type
+match_type=_OR_
+bind_to_list=maf,maf2
 
 [idle_testing_params_table]
 keys=bind_to_list
@@ -56,7 +67,7 @@ bind_to_list=inj_sequence
 
 #----- Combos ----------------------------------------------------------------
 
-[idle_valve_test_combo]
+[iactestlock_combo]
 keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
 page=4
 offset=386
@@ -66,7 +77,7 @@ bitmask=2
 toggle_groups=,idle_valve_test
 _tooltip=Enables or Disables idle valve testing. NOTE set the iac run steps FIRST before enabling.
 
-[idle_valve_pos_combo]
+[iactest_combo]
 keys=page,offset,choices,bitvals,bitmask,tooltip
 page=4
 offset=386
@@ -170,14 +181,14 @@ settings.
 
 #----- Entries ---------------------------------------------------------------
 
-[idle_test_home_steps]
+[iachometest_entry]
 keys=page,offset,size,tooltip
 page=3
 offset=384
 size=_U16_
 _tooltip=IAC Testing home position
 
-[idle_test_run_steps]
+[iacpostest_entry]
 keys=page,offset,size,tooltip
 page=3
 offset=382

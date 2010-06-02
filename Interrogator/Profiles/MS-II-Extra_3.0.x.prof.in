@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=4
+minor=5
 
 [interrogation_profile]
 name=MS-II-Extra V3.0.x series
@@ -27,7 +27,7 @@ MAT_Table_Page=7
 EGO_Table_Page=8
 MAF_Table_Page=9
 TotalTables=21
-TotalTETables=26
+TotalTETables=27
 TotalPages=13
 ToothmonPage=10
 TrigmonPage=11
@@ -1655,6 +1655,43 @@ y_dl_conv_expr=x*1
 y_ul_conv_expr=x/1
 y_raw_lower=0
 y_raw_upper=15000
+y_precision=0
+
+[te_table_26]
+_title=MAF Correction Table (to alter default MAF curve)
+bind_to_list=maf,maf2
+match_type=_OR_
+is_fuel=FALSE
+gauge_temp_dep=FALSE
+gauge=MegaTune/MAF-Gauge.xml
+gauge_datasource=maf
+bincount=12
+x_use_color=TRUE
+x_temp_dep=FALSE
+x_lock=FALSE
+_x_axis_label=g/sec
+x_page=4
+x_base_offset=960
+x_size=_U16_
+x_source=maf
+_x_units=(g/sec)
+_x_name=Flow
+x_dl_conv_expr=x/0.01
+x_ul_conv_expr=x*0.01
+x_raw_lower=0
+x_raw_upper=65000
+x_precision=1
+y_page=4
+_y_axis_label=Correction
+y_base_offset=984
+y_size=_U08_
+y_source=
+_y_units=(%)
+_y_name=Correction
+y_dl_conv_expr=x*1
+y_ul_conv_expr=x/1
+y_raw_lower=0
+y_raw_upper=255
 y_precision=0
 
 [page_0]

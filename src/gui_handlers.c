@@ -504,7 +504,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -523,7 +523,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -1248,7 +1248,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -1269,7 +1269,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 				check_req_fuel_limits(table_num);
@@ -1641,7 +1641,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = divider_offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 				err_flag = FALSE;
@@ -1679,7 +1679,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
 
@@ -1693,7 +1693,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				d_data->offset = divider_offset;
 				d_data->value = dload_val;
 				d_data->size = MTX_U08;
-				g_hash_table_insert(interdep_vars[table_num],
+				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 
@@ -1723,7 +1723,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			d_data->offset = offset;
 			d_data->value = dload_val;
 			d_data->size = MTX_U08;
-			g_hash_table_insert(interdep_vars[table_num],
+			g_hash_table_replace(interdep_vars[table_num],
 					GINT_TO_POINTER(offset),
 					d_data);
 
@@ -3340,7 +3340,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	for (i=0;i<num_groups;i++)
 	{
 /*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
+		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
@@ -3351,7 +3351,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	for (i=0;i<num_groups;i++)
 	{
 /*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
+		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
@@ -3410,7 +3410,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 		for (j=0;j<num_groups;j++)
 		{
 			/*printf("setting all widgets in group %s to state %i\n\n",groups[j],state);*/
-			g_hash_table_insert(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
+			g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 			g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 		}
 		g_strfreev(groups);
@@ -3422,7 +3422,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	for (j=0;j<num_groups;j++)
 	{
 		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
-		g_hash_table_insert(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
+		g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 	}
 	g_strfreev(groups);
