@@ -38,11 +38,13 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VE Trim Table define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [trim_1]
-keys=page,size,precision,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
+keys=page,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
 page=3
 size=_S08_
 table_num=17
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=(x/0.0976562500)-1024
 ul_conv_expr=(x+1024)*0.0976562500
 use_color=TRUE
@@ -67,10 +69,12 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VE Trim Table define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [trim_2]
-keys=size,precision,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
+keys=size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
 size=_S08_
 table_num=18
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=(x/0.0976562500)-1024
 ul_conv_expr=(x+1024)*0.0976562500
 use_color=TRUE
@@ -95,10 +99,12 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VE Trim Table define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [trim_3]
-keys=size,precision,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
+keys=size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
 size=_S08_
 table_num=19
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=(x/0.0976562500)-1024
 ul_conv_expr=(x+1024)*0.0976562500
 use_color=TRUE
@@ -123,10 +129,12 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VE Trim Table define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [trim_4]
-keys=size,precision,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
+keys=size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,table_num,tooltip
 size=_S08_
 table_num=20
 precision=1
+raw_lower=-128
+raw_upper=127
 dl_conv_expr=(x/0.0976562500)-1024
 ul_conv_expr=(x+1024)*0.0976562500
 use_color=TRUE

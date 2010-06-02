@@ -984,6 +984,11 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				min = tmpf;
 		}
 	}
+	if (min == max)
+	{
+		min-=1;
+		max+=1;
+	}
 	ve_view->z_trans = min-((max-min)*0.15);
 	ve_view->z_max = max;
 	ve_view->z_scale = 1.0/((max-min)/0.75);
@@ -2607,6 +2612,11 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			ve_view->z_maxval = tmpi;
 		if (tmpi < ve_view->z_minval)
 			ve_view->z_minval = tmpi;
+	}
+	if (ve_view->z_maxval == ve_view->z_minval)
+	{
+		ve_view->z_minval-=10;
+		ve_view->z_maxval+=10;
 	}
 	scaler = (256.0/((ve_view->z_maxval-ve_view->z_minval)*1.05));
 	for(y=0;y<ve_view->y_bincount-1;++y)

@@ -44,6 +44,11 @@ extern gboolean just_starting;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
+GdkColor red = { 0, 65535, 0, 0};
+GdkColor green = { 0, 0, 65535, 0};
+GdkColor blue = { 0, 0, 0, 65535};
+GdkColor black = { 0, 0, 0, 0};
+GdkColor white = { 0, 65535, 65535, 65535};
 GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
@@ -66,8 +71,15 @@ void init(void)
 	GHashTable *table = NULL;
 	GHashTable *commands = NULL;
 	gboolean *hidden_list = NULL;
+	GdkColormap *colormap = NULL;
 	gint i = 0;
 
+	colormap = gdk_colormap_get_system ();
+	gdk_colormap_alloc_color(colormap,&red,FALSE,TRUE);
+	gdk_colormap_alloc_color(colormap,&green,FALSE,TRUE);
+	gdk_colormap_alloc_color(colormap,&blue,FALSE,TRUE);
+	gdk_colormap_alloc_color(colormap,&black,FALSE,TRUE);
+	gdk_colormap_alloc_color(colormap,&white,FALSE,TRUE);
 	hidden_list = g_new0(gboolean, 100); /*static, 100 max tabs... */
 	for (i=0;i<100;i++)
 		hidden_list[i]=FALSE;

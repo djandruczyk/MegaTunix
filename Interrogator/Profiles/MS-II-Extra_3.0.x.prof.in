@@ -640,7 +640,7 @@ z_size=_S08_
 z_source=
 z_suffix=(%)
 z_conv_expr=(x+1024)*0.09765625
-z_raw_lower=-127
+z_raw_lower=-128
 z_raw_upper=127
 z_precision=1
 
@@ -672,7 +672,7 @@ z_size=_S08_
 z_source=
 z_suffix=(%)
 z_conv_expr=(x+1024)*0.09765625
-z_raw_lower=-127
+z_raw_lower=-128
 z_raw_upper=127
 z_precision=1
 
@@ -704,7 +704,7 @@ z_size=_S08_
 z_source=
 z_suffix=(%)
 z_conv_expr=(x+1024)*0.09765625
-z_raw_lower=-127
+z_raw_lower=-128
 z_raw_upper=127
 z_precision=1
 
@@ -736,7 +736,7 @@ z_size=_S08_
 z_source=
 z_suffix=(%)
 z_conv_expr=(x+1024)*0.09765625
-z_raw_lower=-127
+z_raw_lower=-128
 z_raw_upper=127
 z_precision=1
 

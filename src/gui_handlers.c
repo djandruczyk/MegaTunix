@@ -78,12 +78,11 @@ extern GObject *global_data;
 
 gint active_page = -1;
 gint active_table = -1;
-GdkColor red = { 0, 65535, 0, 0};
-GdkColor green = { 0, 0, 65535, 0};
-GdkColor blue = { 0, 0, 0, 65535};
-GdkColor black = { 0, 0, 0, 0};
-GdkColor white = { 0, 65535, 65535, 65535};
-
+extern GdkColor red;
+extern GdkColor green;
+extern GdkColor blue;
+extern GdkColor black;
+extern GdkColor white;
 gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
 volatile gboolean leaving = FALSE;
@@ -2335,7 +2334,8 @@ void update_widget(gpointer object, gpointer user_data)
 
 			}
 		}
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		if (OBJ_GET(widget,"not_sent"))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{
@@ -2400,7 +2400,8 @@ void update_widget(gpointer object, gpointer user_data)
 				}
 			}
 		}
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		if (OBJ_GET(widget,"not_sent"))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 	{
