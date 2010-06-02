@@ -130,8 +130,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">3</property>
-						      <property name="bottom_attach">4</property>
+						      <property name="top_attach">7</property>
+						      <property name="bottom_attach">8</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -157,35 +157,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">6</property>
-						      <property name="bottom_attach">7</property>
-						      <property name="y_options">expand</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkLabel" id="2nd_fuelload_label">
-						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Secondary Fuel Load</property>
-						      <property name="use_underline">False</property>
-						      <property name="use_markup">False</property>
-						      <property name="justify">GTK_JUSTIFY_LEFT</property>
-						      <property name="wrap">False</property>
-						      <property name="selectable">False</property>
-						      <property name="xalign">0</property>
-						      <property name="yalign">0.5</property>
-						      <property name="xpad">0</property>
-						      <property name="ypad">0</property>
-						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						      <property name="width_chars">-1</property>
-						      <property name="single_line_mode">False</property>
-						      <property name="angle">0</property>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
-						      <property name="top_attach">7</property>
-						      <property name="bottom_attach">8</property>
+						      <property name="top_attach">10</property>
+						      <property name="bottom_attach">11</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -336,8 +309,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">3</property>
-						      <property name="bottom_attach">4</property>
+						      <property name="top_attach">7</property>
+						      <property name="bottom_attach">8</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -353,25 +326,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">6</property>
-						      <property name="bottom_attach">7</property>
-						      <property name="y_options">fill</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkComboBoxEntry" id="2nd_fuelload_combo">
-						      <property name="visible">True</property>
-						      <property name="add_tearoffs">False</property>
-						      <property name="has_frame">True</property>
-						      <property name="focus_on_click">True</property>
-						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
-						      <property name="top_attach">7</property>
-						      <property name="bottom_attach">8</property>
+						      <property name="top_attach">10</property>
+						      <property name="bottom_attach">11</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -482,8 +438,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">2</property>
-						      <property name="bottom_attach">3</property>
+						      <property name="top_attach">6</property>
+						      <property name="bottom_attach">7</property>
 						      <property name="x_options">fill</property>
 						      <property name="y_options"></property>
 						    </packing>
@@ -517,8 +473,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">2</property>
-						      <property name="bottom_attach">3</property>
+						      <property name="top_attach">6</property>
+						      <property name="bottom_attach">7</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -551,50 +507,6 @@
 						  </child>
 
 						  <child>
-						    <widget class="GtkComboBoxEntry" id="secondary_fuel_combo">
-						      <property name="visible">True</property>
-						      <property name="add_tearoffs">False</property>
-						      <property name="has_frame">True</property>
-						      <property name="focus_on_click">True</property>
-						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
-						      <property name="top_attach">8</property>
-						      <property name="bottom_attach">9</property>
-						      <property name="y_options">fill</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkLabel" id="secondary_fuel_label">
-						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Secondary Fuel</property>
-						      <property name="use_underline">False</property>
-						      <property name="use_markup">False</property>
-						      <property name="justify">GTK_JUSTIFY_LEFT</property>
-						      <property name="wrap">False</property>
-						      <property name="selectable">False</property>
-						      <property name="xalign">0</property>
-						      <property name="yalign">0.5</property>
-						      <property name="xpad">0</property>
-						      <property name="ypad">0</property>
-						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						      <property name="width_chars">-1</property>
-						      <property name="single_line_mode">False</property>
-						      <property name="angle">0</property>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
-						      <property name="top_attach">8</property>
-						      <property name="bottom_attach">9</property>
-						      <property name="y_options">expand</property>
-						    </packing>
-						  </child>
-
-						  <child>
 						    <widget class="GtkComboBoxEntry" id="multiply_map_combo">
 						      <property name="visible">True</property>
 						      <property name="add_tearoffs">False</property>
@@ -605,8 +517,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">9</property>
-						      <property name="bottom_attach">10</property>
+						      <property name="top_attach">11</property>
+						      <property name="bottom_attach">12</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -632,8 +544,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">9</property>
-						      <property name="bottom_attach">10</property>
+						      <property name="top_attach">11</property>
+						      <property name="bottom_attach">12</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -659,8 +571,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">10</property>
-						      <property name="bottom_attach">11</property>
+						      <property name="top_attach">12</property>
+						      <property name="bottom_attach">13</property>
 						      <property name="y_options">expand</property>
 						    </packing>
 						  </child>
@@ -732,64 +644,9 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">11</property>
-						      <property name="bottom_attach">12</property>
-						      <property name="x_options">fill</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkLabel" id="label56">
-						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Primary Ignition Load</property>
-						      <property name="use_underline">False</property>
-						      <property name="use_markup">False</property>
-						      <property name="justify">GTK_JUSTIFY_LEFT</property>
-						      <property name="wrap">False</property>
-						      <property name="selectable">False</property>
-						      <property name="xalign">0</property>
-						      <property name="yalign">0.5</property>
-						      <property name="xpad">0</property>
-						      <property name="ypad">0</property>
-						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						      <property name="width_chars">-1</property>
-						      <property name="single_line_mode">False</property>
-						      <property name="angle">0</property>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
-						      <property name="top_attach">12</property>
-						      <property name="bottom_attach">13</property>
-						      <property name="y_options">expand</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkLabel" id="label57">
-						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Secondary Ignition Load</property>
-						      <property name="use_underline">False</property>
-						      <property name="use_markup">False</property>
-						      <property name="justify">GTK_JUSTIFY_LEFT</property>
-						      <property name="wrap">False</property>
-						      <property name="selectable">False</property>
-						      <property name="xalign">0</property>
-						      <property name="yalign">0.5</property>
-						      <property name="xpad">0</property>
-						      <property name="ypad">0</property>
-						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-						      <property name="width_chars">-1</property>
-						      <property name="single_line_mode">False</property>
-						      <property name="angle">0</property>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">0</property>
-						      <property name="right_attach">1</property>
 						      <property name="top_attach">13</property>
 						      <property name="bottom_attach">14</property>
 						      <property name="x_options">fill</property>
-						      <property name="y_options"></property>
 						    </packing>
 						  </child>
 
@@ -850,42 +707,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">10</property>
-						      <property name="bottom_attach">11</property>
-						      <property name="y_options">fill</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkComboBoxEntry" id="primary_ignition_load_combo">
-						      <property name="visible">True</property>
-						      <property name="add_tearoffs">False</property>
-						      <property name="has_frame">True</property>
-						      <property name="focus_on_click">True</property>
-						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
 						      <property name="top_attach">12</property>
 						      <property name="bottom_attach">13</property>
-						      <property name="y_options">fill</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkComboBoxEntry" id="secondary_ignition_load_combo">
-						      <property name="visible">True</property>
-						      <property name="add_tearoffs">False</property>
-						      <property name="has_frame">True</property>
-						      <property name="focus_on_click">True</property>
-						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
-						    </widget>
-						    <packing>
-						      <property name="left_attach">1</property>
-						      <property name="right_attach">2</property>
-						      <property name="top_attach">13</property>
-						      <property name="bottom_attach">14</property>
 						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
@@ -901,8 +724,8 @@
 						    <packing>
 						      <property name="left_attach">1</property>
 						      <property name="right_attach">2</property>
-						      <property name="top_attach">5</property>
-						      <property name="bottom_attach">6</property>
+						      <property name="top_attach">9</property>
+						      <property name="bottom_attach">10</property>
 						      <property name="x_options">fill</property>
 						    </packing>
 						  </child>
@@ -928,8 +751,8 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">1</property>
-						      <property name="top_attach">5</property>
-						      <property name="bottom_attach">6</property>
+						      <property name="top_attach">9</property>
+						      <property name="bottom_attach">10</property>
 						      <property name="x_options">fill</property>
 						      <property name="y_options"></property>
 						    </packing>
@@ -1165,8 +988,192 @@
 						    <packing>
 						      <property name="left_attach">0</property>
 						      <property name="right_attach">2</property>
+						      <property name="top_attach">8</property>
+						      <property name="bottom_attach">9</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="2nd_fuelload_label">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">Secondary Fuel Load</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">2</property>
+						      <property name="bottom_attach">3</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkComboBoxEntry" id="2nd_fuelload_combo">
+						      <property name="visible">True</property>
+						      <property name="add_tearoffs">False</property>
+						      <property name="has_frame">True</property>
+						      <property name="focus_on_click">True</property>
+						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
+						      <property name="top_attach">2</property>
+						      <property name="bottom_attach">3</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options">fill</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="secondary_fuel_label">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">Secondary Fuel</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">3</property>
+						      <property name="bottom_attach">4</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkComboBoxEntry" id="secondary_fuel_combo">
+						      <property name="visible">True</property>
+						      <property name="add_tearoffs">False</property>
+						      <property name="has_frame">True</property>
+						      <property name="focus_on_click">True</property>
+						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
+						      <property name="top_attach">3</property>
+						      <property name="bottom_attach">4</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options">fill</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="label56">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">Primary Ignition Load</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
 						      <property name="top_attach">4</property>
 						      <property name="bottom_attach">5</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkLabel" id="label57">
+						      <property name="visible">True</property>
+						      <property name="label" translatable="yes">Secondary Ignition Load</property>
+						      <property name="use_underline">False</property>
+						      <property name="use_markup">False</property>
+						      <property name="justify">GTK_JUSTIFY_LEFT</property>
+						      <property name="wrap">False</property>
+						      <property name="selectable">False</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.5</property>
+						      <property name="xpad">0</property>
+						      <property name="ypad">0</property>
+						      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+						      <property name="width_chars">-1</property>
+						      <property name="single_line_mode">False</property>
+						      <property name="angle">0</property>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">0</property>
+						      <property name="right_attach">1</property>
+						      <property name="top_attach">5</property>
+						      <property name="bottom_attach">6</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options"></property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkComboBoxEntry" id="primary_ignition_load_combo">
+						      <property name="visible">True</property>
+						      <property name="add_tearoffs">False</property>
+						      <property name="has_frame">True</property>
+						      <property name="focus_on_click">True</property>
+						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
+						      <property name="top_attach">4</property>
+						      <property name="bottom_attach">5</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options">fill</property>
+						    </packing>
+						  </child>
+
+						  <child>
+						    <widget class="GtkComboBoxEntry" id="secondary_ignition_load_combo">
+						      <property name="visible">True</property>
+						      <property name="add_tearoffs">False</property>
+						      <property name="has_frame">True</property>
+						      <property name="focus_on_click">True</property>
+						      <signal name="changed" handler="std_combo_handler" last_modification_time="Sun, 25 Jan 2009 17:20:01 GMT"/>
+						    </widget>
+						    <packing>
+						      <property name="left_attach">1</property>
+						      <property name="right_attach">2</property>
+						      <property name="top_attach">5</property>
+						      <property name="bottom_attach">6</property>
+						      <property name="x_options">fill</property>
+						      <property name="y_options">fill</property>
 						    </packing>
 						  </child>
 						</widget>

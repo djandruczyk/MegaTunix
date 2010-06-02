@@ -156,9 +156,11 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
 			OBJ_SET(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET(widget,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists(widget,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)widget);
 			OBJ_SET(label,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET(label,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists(label,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)label);
 		}
@@ -444,6 +446,7 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
 			OBJ_SET(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET(window,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists(window,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)window);
 		}

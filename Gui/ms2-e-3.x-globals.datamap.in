@@ -56,6 +56,11 @@ bind_to_list=maf,maf2
 
 #----- Widgets ---------------------------------------------------------------
 
+[itb_curves_button_table]
+keys=bind_to_list,match_type
+match_type=_OR_
+bind_to_list=itb_fuel1,itb_fuel2,itb_ign1,itb_ign2,itb_afr,itb_eae
+
 [inj2_properties_table]
 keys=bind_to_list
 bind_to_list=bank2
@@ -85,6 +90,18 @@ keys=bind_to_list
 bind_to_list=inj_pwm
 
 #----- Buttons ---------------------------------------------------------------
+
+[itb_switchpoint_edit_button]
+keys=handler,te_table_num,tooltip
+handler=_TE_TABLE_
+te_table_num=27
+_tooltip=See MS2-Extra Manuals
+
+[itb_loadvals_edit_button]
+keys=handler,te_table_num,tooltip
+handler=_TE_TABLE_
+te_table_num=28
+_tooltip=See MS2-Extra Manuals
 
 [get_data_button]
 keys=handler,bind_to_list,tooltip
@@ -122,7 +139,7 @@ choices=Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
 bitvals=1,2,3,4,5,6
 offset=630
 bitmask=7
-toggle_groups=speed_density,percent_baro,alpha_n,mafmap,maf,itb
+toggle_groups=speed_density,percent_baro,alpha_n,mafmap,maf,itb_fuel1
 _tooltip=Sets ECU fuel algorithm to pure Speed Density, Percent Baro, Alpha-N, MAFMAP, MAF or ITB
 
 [single_dual_combo]
@@ -177,7 +194,7 @@ bitvals=0,1,2,3,4,5,6
 offset=630
 bitmask=112
 bind_to_list=single_table
-toggle_groups=,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel
+toggle_groups=,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel:itb_fuel2
 _tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro, Alpha-N, MAFMAP, MAF or ITB.
 
 [secondary_fuel_combo]
@@ -207,11 +224,12 @@ toggle_groups=,incorp_afrtarget
 _tooltip=See MS2-Extra Manuals
 
 [primary_ignition_load_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
 bitvals=1,2,3,4,5,6
 offset=631
 bitmask=7
+toggle_groups=,,,,,itb_ign1
 _tooltip=See MS2-Extra Manuals
 
 [secondary_ignition_load_combo]
@@ -220,23 +238,25 @@ choices=Disabled,Speed Density,Percent Baro,Alpha-N,MAFMAP,MAF,ITB
 bitvals=0,1,2,3,4,5,6
 offset=631
 bitmask=112
-toggle_groups=,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign
+toggle_groups=,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign,secondary_ign:itb_ign2
 _tooltip=See MS2-Extra Manuals
 
 [afr_load_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Use primary load,MAP,%Baro,TPS,MAFMAP,ITB
 bitvals=0,1,2,3,4,6
 offset=985
 bitmask=7
+toggle_groups=,,,,,itb_afr
 _tooltip=See MS2-Extra Manuals
 
 [eae_load_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Use primary load,MAP,%Baro,TPS,MAFMAP,ITB
 bitvals=0,1,2,3,4,6
 offset=985
 bitmask=112
+toggle_groups=,,,,,itb_eae
 _tooltip=See MS2-Extra Manuals
 
 [alternate_combo]

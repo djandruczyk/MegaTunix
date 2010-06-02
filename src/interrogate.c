@@ -810,6 +810,11 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		if (!cfg_read_boolean(cfgfile,section,"reversed",&firmware->te_params[i]->reversed))
 			firmware->te_params[i]->reversed = FALSE;
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
+		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
+		{
+			firmware->te_params[i]->match_type = translate_string(tmpbuf);
+			g_free(tmpbuf);
+		}
 		if(!cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep))
 			firmware->te_params[i]->gauge_temp_dep = FALSE;
 		cfg_read_string(cfgfile,section,"gauge",&firmware->te_params[i]->gauge);
@@ -817,8 +822,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		cfg_read_string(cfgfile,section,"f_gauge",&firmware->te_params[i]->f_gauge);
 		if (firmware->te_params[i]->f_gauge || firmware->te_params[i]->c_gauge || firmware->te_params[i]->gauge)	
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
-		else
-			printf(_("NO \"[cf]_gauge\" key found in te_table%i\n"),i);
 		if(!cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->te_params[i]->x_use_color))
 			firmware->te_params[i]->x_use_color = FALSE;
 		if(!cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->te_params[i]->y_use_color))
