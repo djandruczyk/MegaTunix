@@ -127,7 +127,7 @@ precision=0
 dl_conv_expr=x/0.39063
 ul_conv_expr=x*0.39063
 precision=1
-raw_upper=256
+raw_upper=512
 use_color=FALSE
 _tooltip=The Duty bins are what the Idle actuator is set to  during cranking.
 to assist with startup.
@@ -136,10 +136,10 @@ to assist with startup.
 keys=page,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
-precision=1
-raw_upper=256
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+precision=0
+raw_upper=512
 use_color=FALSE
 _tooltip=The step bins determine the IAC actuator position for cranking based on temperature. 
 
