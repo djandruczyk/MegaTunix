@@ -1653,7 +1653,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-			/*printf("table num %i\n",table_num);*/
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_divider = get_ecu_data(canID,page,divider_offset,size);
 			firmware->rf_params[table_num]->last_num_cyls = firmware->rf_params[table_num]->num_cyls;
