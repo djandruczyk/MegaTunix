@@ -5,6 +5,7 @@ id_prefix=VET16_
 size=_U08_
 ellipsize=TRUE
 groups=defaults,load_1,rpm_1,trim_1,load_2,rpm_2,trim_2,load_3,rpm_3,trim_3,load_4,rpm_4,trim_4
+bind_to_list=seq_inj,ve_trim
 
 #----- Groups ----------------------------------------------------------------
 
@@ -143,17 +144,26 @@ _tooltip=The VE Entries control how much fuel is injected into the engine. They 
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook
+keys=tab_ident,sub-notebook,bind_to_list
 tab_ident=_VETABLES_TAB_
 sub-notebook=VET16_vetable_notebook
+bind_to_list=seq_inj,ve_trim
+
+[VET1_notebook_tab_label]
+keys=bind_to_list
+bind_to_list=seq_inj,ve_trim
 
 [VET2_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=dual_table
+bind_to_list=seq_inj,ve_trim
 
 [VET3_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=fuel_switching
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
+
+[VET4_notebook_tab_label]
+keys=bind_to_list
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 
 [topframe_title]
 keys=set_label
@@ -267,22 +277,23 @@ data=VET16_VET4_rescale_entry,VET16_VET4_rescale_combo
 #----- Widgets --------------------------------------------------------------
 
 [VET1_vbox1]
-keys=table_num
+keys=bind_to_list,table_num
+bind_to_list=seq_inj,ve_trim
 table_num=17
 
 [VET2_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=dual_table
+bind_to_list=seq_inj,ve_trim
 table_num=18
 
 [VET3_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=bank2,seq_inj
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 table_num=19
 
 [VET4_vbox1]
 keys=bind_to_list,table_num
-bind_to_list=bank2,seq_inj
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 table_num=20
 
 #----- Gauges --------------------------------------------------------------
