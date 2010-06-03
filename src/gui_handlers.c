@@ -2025,22 +2025,21 @@ EXPORT void update_ve_const_pf()
 			return;
 		if (!firmware->page_params[page]->dl_by_default)
 			continue;
+		thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf(_("Updating Controls on Page %i"),page));
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
 			if ((leaving) || (!firmware))
 				return;
 			if (ve_widgets[page][offset] != NULL)
-			{
-				/* printf("updating group of widgets at page %i, offset %i\n",page,offset);*/
 				g_list_foreach(ve_widgets[page][offset],
 						update_widget,NULL);
-			}
 		}
 	}
 	for (i=0;i<firmware->total_tables;i++)
 		firmware->table_params[i]->color_update = FALSE;
 
 	paused_handlers = FALSE;
+	thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf(_("Ready...")));
 	set_title(g_strdup(_("Ready...")));
 	return;
 }
