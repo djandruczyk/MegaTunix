@@ -2323,7 +2323,7 @@ void update_widget(gpointer object, gpointer user_data)
 				}
 				else
 				{
-					if (changed)
+					if ((changed) || (value == 0))
 					{
 						color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
 						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
@@ -3007,23 +3007,24 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 
 	if (OBJ_GET(widget,"sub-notebook"))
 	{
-		/*printf(" This tab has a sub-notebook\n"); */
+/*		printf(" This tab has a sub-notebook\n"); */
 		sub = lookup_widget( (OBJ_GET(widget,"sub-notebook")));
 		if (GTK_IS_WIDGET(sub))
 		{
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
-			/*printf("subtable found, searching for active page\n");*/
+/*			printf("subtable found, searching for active page\n"); */
 			if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 			{
 				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
-			/*	printf("found it,  active table %i\n",active_table);*/
+				printf("found it,  active table %i\n",active_table);
 			}
 			else
+			{
 				active_table = -1;
-			/*else
-			 *	printf("didn't find table_num key on subtable\n");
-			 */
+/*			 	printf("didn't find table_num key on subtable\n"); */
+			}
+			 
 		}
 	}
 
@@ -3053,7 +3054,7 @@ EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint p
 		active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		return;
-/*	printf("active table changed to %i\n",active_table); */
+	/*printf("active table changed to %i\n",active_table); */
 	forced_update = TRUE;
 
 	return;

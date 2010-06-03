@@ -2,7 +2,7 @@
 description=Object data map for the Nitrous/Staging/ORFC tab
 _tab_name=_N<sub>2</sub>O/Staging/ORFC
 id_prefix=NSO_
-groups=defaults
+groups=defaults,load,rpm,staging
 ellipsize=TRUE
 
 #----- Groups ----------------------------------------------------------------
@@ -15,6 +15,31 @@ raw_lower=0
 raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+
+[load]
+keys=use_color,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+use_color=TRUE
+size=_S16_
+precision=1
+raw_lower=0
+raw_upper=2500
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+_tooltip=Load Values for staging percentage table
+
+[rpm]
+keys=use_color,size,raw_upper,tooltip
+use_color=TRUE
+size=_U16_
+raw_upper=16000
+_tooltip=RPM Values for staging percentage table
+
+[staging]
+keys=use_color,size,raw_upper,tooltip
+size=_U08_
+raw_upper=100
+use_color=TRUE
+_tooltip=Staging values in percentage
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -30,7 +55,85 @@ handler=_BURN_MS_FLASH_
 bind_to_list=burners
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[3d_view_button]
+keys=table_num,tooltip,bind_to_list
+table_num=21
+bind_to_list=3d_buttons
+_tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+
+[tracking_checkbutton]
+keys=handler,table_num
+handler=_TRACKING_FOCUS_
+table_num=21
+
+[export_button]
+keys=handler,table_num
+handler=_EXPORT_SINGLE_TABLE_
+table_num=21
+
+[import_button]
+keys=handler,table_num
+handler=_IMPORT_SINGLE_TABLE_
+table_num=21
+
+[rescale_button]
+keys=handler,data
+handler=_RESCALE_TABLE_
+data=NSO_rescale_entry,NSO_rescale_combo
+
+
 #----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=tab_ident,sub-notebook
+tab_ident=_STAGING_TAB_
+sub-notebook=NSO_notebook1
+
+[gaugeframe1]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[gaugeframe2]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=fuelload
+
+[gaugeframe3]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
+
+[gaugeframe4]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
+datasource=afr1
+
+[rescale_entry]
+keys=table_num
+table_num=21
+
+[rescale_combo]
+keys=table_num,post_functions_with_arg
+table_num=21
+post_functions_with_arg=lock_entry
+
+[main_table]
+keys=rescaler_frame
+rescaler_frame=NSO_rescale_frame
+
 
 [no2_dt_enrich_combo]
 keys=bind_to_list
@@ -80,6 +183,11 @@ bind_to_list=sec_staging
 keys=bind_to_list
 bind_to_list=orfc
 
+[staging_table_vbox1]
+keys=bind_to_list,table_num
+table_num=21
+bind_to_list=staging_table
+
 #----- Labels ---------------------------------------------------------------
 
 [orfc_clt_label]
@@ -95,6 +203,10 @@ bind_to_list=temperature
 f_label=and CLT temp above: (\302\260F.)
 c_label=and CLT temp above: (\302\260C.)
 temp_dep=TRUE
+
+[staging_tab_label]
+keys=bind_to_list
+bind_to_list=staging_table
 
 [orfc_ego_label]
 keys=bind_to_list
@@ -531,3 +643,17 @@ raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
+[load_entry]
+keys=group
+group=load
+offset=791
+
+[rpm_entry]
+keys=group
+group=rpm
+offset=779
+
+[staging_entry]
+keys=group
+group=staging
+offset=743

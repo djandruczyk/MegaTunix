@@ -26,7 +26,7 @@ CLT_Table_Page=6
 MAT_Table_Page=7
 EGO_Table_Page=8
 MAF_Table_Page=9
-TotalTables=21
+TotalTables=22
 TotalTETables=29
 TotalPages=13
 ToothmonPage=10
@@ -739,6 +739,38 @@ z_conv_expr=(x+1024)*0.09765625
 z_raw_lower=-128
 z_raw_upper=127
 z_precision=1
+
+[table_21]
+_table_name=Injector Staging Table
+is_fuel=FALSE
+x_page=2
+x_base_offset=779
+x_bincount=6
+x_size=_U16_
+x_source=rpm
+_x_suffix=RPM
+x_conv_expr=x*1
+x_raw_upper=16000
+x_precision=0
+y_page=2
+y_base_offset=791
+y_bincount=6
+y_size=_S16_
+y_source=fuelload
+_y_suffix=(%)
+y_conv_expr=x/10
+y_raw_lower=0
+y_raw_upper=2500
+y_precision=1
+z_page=2
+z_base_offset=743
+z_size=_U08_
+z_source=
+z_suffix=(%)
+z_conv_expr=x*1
+z_raw_lower=0
+z_raw_upper=100
+z_precision=0
 
 [te_table_0]
 _title=EAE Adhere-to-walls Constant
