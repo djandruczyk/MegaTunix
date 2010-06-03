@@ -194,7 +194,7 @@ bitvals=0,1,2,3,4,5,6
 offset=630
 bitmask=112
 bind_to_list=single_table
-toggle_groups=,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel:itb_fuel2
+toggle_groups=,second_fuel,second_fuel,second_fuel,second_fuel,second_fuel:maf2,second_fuel:itb_fuel2
 _tooltip=Sets ECU Secondary Fuelload to either disabled, Speed Density, Percent Baro, Alpha-N, MAFMAP, MAF or ITB.
 
 [secondary_fuel_combo]
