@@ -584,7 +584,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		cfg_read_boolean(cfgfile,section,"is_fuel",&firmware->table_params[i]->is_fuel);
 		if ((firmware->table_params[i]->is_fuel) && !(firmware->capabilities & PIS))
 		{
-			printf ("table %i is fuel and not PIS\n",i);
 			if(!cfg_read_int(cfgfile,section,"divider_page",&firmware->table_params[i]->divider_page))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"divider_offset",&firmware->table_params[i]->divider_offset))
@@ -642,8 +641,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
 		}
-		else
-			printf("table $i is NOT a fuel table \n",i);
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->table_params[i]->x_page))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"y_page",&firmware->table_params[i]->y_page))

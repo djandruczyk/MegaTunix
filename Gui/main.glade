@@ -3456,30 +3456,10 @@
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">1</property>
-	      <property name="n_columns">2</property>
-	      <property name="homogeneous">False</property>
+	      <property name="n_columns">3</property>
+	      <property name="homogeneous">True</property>
 	      <property name="row_spacing">5</property>
-	      <property name="column_spacing">5</property>
-
-	      <child>
-		<widget class="GtkButton" id="burn_data_button">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Permanently Store Data in ECU</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
-		  <property name="top_attach">0</property>
-		  <property name="bottom_attach">1</property>
-		  <property name="x_options">expand</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
+	      <property name="column_spacing">50</property>
 
 	      <child>
 		<widget class="GtkButton" id="get_data_button">
@@ -3496,8 +3476,41 @@
 		  <property name="right_attach">1</property>
 		  <property name="top_attach">0</property>
 		  <property name="bottom_attach">1</property>
-		  <property name="x_options">expand</property>
-		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="burn_data_button">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Burn to ECU Flash</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="2d_close_button">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label">gtk-close</property>
+		  <property name="use_stock">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
 		</packing>
 	      </child>
 	    </widget>

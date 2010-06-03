@@ -103,6 +103,10 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gtk_window_set_title(GTK_WINDOW(window),_("2D Table Group Editor"));
 	gtk_window_resize(GTK_WINDOW(window),800,530);
 
+	widget = glade_xml_get_widget(xml,"2d_close_button");
+	g_signal_connect_swapped(G_OBJECT(widget),"clicked",
+			G_CALLBACK(close_2d_editor),window);
+
 	widget = glade_xml_get_widget(xml,"get_data_button");
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
 	OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
@@ -460,6 +464,10 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 		g_free(tmpbuf);
 		gtk_window_set_default_size(GTK_WINDOW(window),640,480);
+
+		widget = glade_xml_get_widget(xml,"2d_close_button");
+		g_signal_connect_swapped(G_OBJECT(widget),"clicked",
+				G_CALLBACK(close_2d_editor),window);
 
 		widget = glade_xml_get_widget(xml,"get_data_button");
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
