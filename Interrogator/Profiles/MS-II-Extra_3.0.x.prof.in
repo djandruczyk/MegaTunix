@@ -78,6 +78,8 @@ z_precision=0
 
 [table_1]
 _table_name=VE-Table 2, MS-II-Extra 12x12
+bind_to_list=dualtable,second_fuel
+match_type=_OR_
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -121,6 +123,8 @@ z_precision=0
 
 [table_2]
 _table_name=VE-Table 3, MS-II-Extra 12x12
+bind_to_list=fuel_switching,seq_inj
+match_type=_OR_
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -207,6 +211,8 @@ z_precision=0
 
 [table_4]
 _table_name=VE-Table 2, MS-II-Extra 16x16
+bind_to_list=dualtable,second_fuel
+match_type=_OR_
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -250,6 +256,8 @@ z_precision=0
 
 [table_5]
 _table_name=VE-Table 3, MS-II-Extra 16x16
+bind_to_list=fuel_switching,seq_inj
+match_type=_OR_
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -293,6 +301,7 @@ z_precision=0
 
 [table_6]
 _table_name=Spark Advance Table 1, MS-II-Extra 12x12
+bind_to_list=ign
 is_spark=TRUE
 is_fuel=FALSE
 x_page=2
@@ -321,6 +330,8 @@ z_precision=1
 
 [table_7]
 _table_name=Spark Advance Table 2, MS-II-Extra 12x12
+bind_to_list=secondary_ign,spark_switching
+match_type=_OR_
 is_spark=TRUE
 is_fuel=FALSE
 x_page=2
@@ -349,6 +360,7 @@ z_precision=1
 
 [table_8]
 _table_name=Spark Advance Table 3, MS-II-Extra 12x12
+bind_to_list=spark_switching
 is_spark=TRUE
 is_fuel=FALSE
 x_page=3
@@ -377,6 +389,7 @@ z_precision=1
 
 [table_9]
 _table_name=AFR Table 1, MS-II-Extra 12x12
+bind_to_list=wb_ego
 is_fuel=FALSE
 x_page=0
 x_base_offset=374
@@ -404,6 +417,7 @@ z_precision=1
 
 [table_10]
 _table_name=AFR Table 2, MS-II-Extra 12x12
+bind_to_list=wb_ego,dualtable
 is_fuel=FALSE
 x_page=0
 x_base_offset=398
@@ -431,6 +445,7 @@ z_precision=1
 
 [table_11]
 _table_name=Rotary Split Table
+bind_to_list,ign,rotary
 is_fuel=FALSE
 x_page=2
 x_base_offset=951
@@ -460,6 +475,7 @@ z_precision=1
 
 [table_12]
 _table_name=Boost Duty Table (Open Loop)
+bind_to_list=boost_control,boost_oloop
 is_fuel=FALSE
 x_page=1
 x_base_offset=316
@@ -489,6 +505,7 @@ z_precision=0
 
 [table_13]
 _table_name=Boost Target (kPA, Closed Loop)
+bind_to_list=boost_control,boost_cloop
 is_fuel=FALSE
 x_page=1
 x_base_offset=220
@@ -518,6 +535,7 @@ z_precision=1
 
 [table_14]
 _table_name=Injection Timing Table 1
+bind_to_list=seq_inj,seq_table
 is_fuel=FALSE
 x_page=3
 x_base_offset=572
@@ -550,6 +568,7 @@ z_precision=1
 
 [table_15]
 _table_name=Injection Timing Table 2
+bind_to_list=seq_inj,seq_dual,seq_table
 is_fuel=FALSE
 x_page=3
 x_base_offset=584
@@ -582,6 +601,7 @@ z_precision=1
 
 [table_16]
 _table_name=Injection Timing Table 3
+bind_to_list=seq_inj,seq_siamese,seq_table
 is_fuel=FALSE
 x_page=1
 x_base_offset=420
@@ -614,6 +634,7 @@ z_precision=1
 
 [table_17]
 _table_name=VE Trim Table 1
+bind_to_list=seq_inj,ve_trim
 is_fuel=FALSE
 x_page=3
 x_base_offset=892
@@ -646,6 +667,7 @@ z_precision=1
 
 [table_18]
 _table_name=VE Trim Table 2
+bind_to_list=seq_inj,ve_trim
 is_fuel=FALSE
 x_page=5
 x_base_offset=768
@@ -678,6 +700,7 @@ z_precision=1
 
 [table_19]
 _table_name=VE Trim Table 3
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 is_fuel=FALSE
 x_page=5
 x_base_offset=800
@@ -710,6 +733,7 @@ z_precision=1
 
 [table_20]
 _table_name=VE Trim Table 4
+bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 is_fuel=FALSE
 x_page=5
 x_base_offset=832
@@ -742,6 +766,7 @@ z_precision=1
 
 [table_21]
 _table_name=Injector Staging Table
+bind_to_list=staging_table
 is_fuel=FALSE
 x_page=2
 x_base_offset=779

@@ -226,11 +226,9 @@ RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 
 
 /*!
- \brief create_ve3d_view does the initial work of creating the 3D 
-vetable
+ \brief create_ve3d_view does the initial work of creating the 3D vetable
  widget, it creates the datastructures, creates the window, initializes 
-OpenGL
- and binds al lthe handlers to the window that are needed
+ OpenGL and binds all the handlers to the window that are needed.
  */
 EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 {
@@ -418,6 +416,13 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_container_set_border_width(GTK_CONTAINER(window),0);
 	ve_view->window = window;
 	OBJ_SET(window,"ve_view",(gpointer)ve_view);
+	if  (firmware->table_params[table_num]->bind_to_list)
+	{
+		printf("table %i, bind to list\n",table_num);
+		OBJ_SET(window,"bind_to_list", g_strdup(firmware->table_params[table_num]->bind_to_list));
+		OBJ_SET(window,"match_type", GINT_TO_POINTER(firmware->table_params[table_num]->match_type));
+		bind_to_lists(window,firmware->table_params[table_num]->bind_to_list);
+	}
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);

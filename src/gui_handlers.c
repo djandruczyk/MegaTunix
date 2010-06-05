@@ -3017,7 +3017,7 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
 			if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 			{
 				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
-				printf("found it,  active table %i\n",active_table);
+				/*printf("found it,  active table %i\n",active_table);*/
 			}
 			else
 			{

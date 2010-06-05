@@ -165,6 +165,8 @@ struct _Table_Params
 	DataSize x_size;	/*! enumeration size for the var */
 	gint x_bincount;	/*! how many RPM bins (X axis) */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
+	gchar *bind_to_list;	/*! Bind to list for sensitivity */
+	MatchType match_type;	/*! Match type for sensitivity */
 	gboolean x_multi_source;/*! uses multiple keyed sources? */
 	gchar *x_source_key;	/*! this is the key to sources_hash to 
 				 *  get the search key for x_multi_hash

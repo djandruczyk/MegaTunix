@@ -580,6 +580,12 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		firmware->table_params[i] = initialize_table_params();
 
 		section = g_strdup_printf("table_%i",i);
+		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->table_params[i]->bind_to_list);
+		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
+		{
+			firmware->table_params[i]->match_type = translate_string(tmpbuf);
+			g_free(tmpbuf);
+		}
 		cfg_read_boolean(cfgfile,section,"is_spark",&firmware->table_params[i]->is_spark);
 		cfg_read_boolean(cfgfile,section,"is_fuel",&firmware->table_params[i]->is_fuel);
 		if ((firmware->table_params[i]->is_fuel) && !(firmware->capabilities & PIS))
