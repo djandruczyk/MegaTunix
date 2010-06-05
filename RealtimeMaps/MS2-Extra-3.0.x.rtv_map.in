@@ -16,7 +16,7 @@ raw_list=adc6,adc7,afr1,afr1,afrtgt1,afrtgt2,aircorr,barocorr,barokpa,battvolt,b
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=hr_clock
-_dlog_gui_name=HR Clock
+dlog_gui_name=HR Clock
 dlog_field_name=Time
 offset=0
 real_lower=0
@@ -29,7 +29,7 @@ log_by_default=TRUE
 [derived_1]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=raw_secl
-_dlog_gui_name=MS-II Clock
+dlog_gui_name=MS-II Clock
 dlog_field_name=SecL
 offset=0
 size=_U16_
@@ -43,7 +43,7 @@ log_by_default=TRUE
 [derived_2]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=pw1
-_dlog_gui_name=PW 1 (ms.)
+dlog_gui_name=PW 1 (ms.)
 dlog_field_name=PW
 offset=2
 size=_U16_
@@ -58,7 +58,7 @@ log_by_default=TRUE
 [derived_3]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=pw2
-_dlog_gui_name=PW 2 (ms.)
+dlog_gui_name=PW 2 (ms.)
 dlog_field_name=PW2
 offset=4
 size=_U16_
@@ -73,7 +73,7 @@ log_by_default=TRUE
 [derived_4]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=rpm
-_dlog_gui_name=RPM
+dlog_gui_name=RPM
 dlog_field_name=RPM
 offset=6
 size=_U16_
@@ -87,7 +87,7 @@ log_by_default=TRUE
 [derived_5]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=sparkangle
-_dlog_gui_name=Spark Adv.
+dlog_gui_name=Spark Adv.
 dlog_field_name=SparkAdv
 offset=8
 size=_S16_
@@ -102,7 +102,7 @@ log_by_default=TRUE
 [derived_6]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=squirtbit
-_dlog_gui_name=SquirtBits
+dlog_gui_name=SquirtBits
 dlog_field_name=Squirt
 offset=10
 real_lower=0
@@ -115,7 +115,7 @@ log_by_default=FALSE
 [derived_7]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=enginebit
-_dlog_gui_name=EngineBits
+dlog_gui_name=EngineBits
 dlog_field_name=Engine
 offset=11
 real_lower=0
@@ -128,7 +128,7 @@ log_by_default=TRUE
 [derived_8]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afrtgt1
-_dlog_gui_name=AfrTarget 1
+dlog_gui_name=AfrTarget 1
 dlog_field_name=AFR Target 1
 offset=12
 real_lower=8
@@ -142,7 +142,7 @@ log_by_default=FALSE
 [derived_9]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afrtgt2
-_dlog_gui_name=AfrTarget 2
+dlog_gui_name=AfrTarget 2
 dlog_field_name=AFR Target 2
 offset=13
 real_lower=8
@@ -156,7 +156,7 @@ log_by_default=FALSE
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=wbo2_en1
-_dlog_gui_name=WbO2en 1
+dlog_gui_name=WbO2en 1
 dlog_field_name=wbo2en1
 offset=14
 real_lower=0
@@ -169,7 +169,7 @@ log_by_default=FALSE
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=wbo2_en2
-_dlog_gui_name=WbO2en 2
+dlog_gui_name=WbO2en 2
 dlog_field_name=wbo2en2
 offset=15
 real_lower=0
@@ -182,7 +182,7 @@ log_by_default=FALSE
 [derived_12]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=barokpa
-_dlog_gui_name=Baro (kPa)
+dlog_gui_name=Baro (kPa)
 dlog_field_name=barokpa
 offset=16
 size=_S16_
@@ -197,7 +197,7 @@ log_by_default=TRUE
 [derived_13]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=mapkpa
-_dlog_gui_name=MAP (kPa)
+dlog_gui_name=MAP (kPa)
 dlog_field_name=MAP
 offset=18
 size=_S16_
@@ -212,7 +212,7 @@ log_by_default=TRUE
 [derived_14]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=matdeg
-_dlog_gui_name=MAT (deg)
+dlog_gui_name=MAT (deg)
 dlog_field_name=MAT
 offset=20
 size=_S16_
@@ -228,7 +228,7 @@ log_by_default=TRUE
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=cltdeg
-_dlog_gui_name=CLT (deg)
+dlog_gui_name=CLT (deg)
 dlog_field_name=CLT
 offset=22
 size=_S16_
@@ -244,7 +244,7 @@ log_by_default=TRUE
 [derived_16]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpspercent
-_dlog_gui_name=TPS (%)
+dlog_gui_name=TPS (%)
 dlog_field_name=TP
 offset=24
 size=_S16_
@@ -259,7 +259,7 @@ log_by_default=TRUE
 [derived_17]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=battvolt
-_dlog_gui_name=Batt (v)
+dlog_gui_name=Batt (v)
 dlog_field_name=Batt V
 offset=26
 size=_S16_
@@ -274,7 +274,7 @@ log_by_default=TRUE
 [derived_18]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr1
-_dlog_gui_name=AFR 1 
+dlog_gui_name=AFR 1 
 dlog_field_name=AFR
 offset=28
 size=_S16_
@@ -289,7 +289,7 @@ log_by_default=TRUE
 [derived_19]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr2
-_dlog_gui_name=AFR 2
+dlog_gui_name=AFR 2
 dlog_field_name=AFR 2
 offset=30
 size=_S16_
@@ -304,7 +304,7 @@ log_by_default=FALSE
 [derived_20]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=lambda
-_dlog_gui_name=Lambda 1
+dlog_gui_name=Lambda 1
 dlog_field_name=Lambda
 offset=28
 size=_S16_
@@ -319,7 +319,7 @@ log_by_default=FALSE
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=lambda2
-_dlog_gui_name=Lambda 2
+dlog_gui_name=Lambda 2
 dlog_field_name=Lambda 2
 offset=30
 size=_S16_
@@ -334,7 +334,7 @@ log_by_default=FALSE
 [derived_22]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=knock
-_dlog_gui_name=Knock (v)
+dlog_gui_name=Knock (v)
 dlog_field_name=knockRet
 offset=32
 size=_S16_
@@ -349,7 +349,7 @@ log_by_default=FALSE
 [derived_23]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=egocorr
-_dlog_gui_name=EGO Corr
+dlog_gui_name=EGO Corr
 dlog_field_name=Gego
 offset=34
 real_lower=0
@@ -368,7 +368,7 @@ log_by_default=TRUE
 [derived_24]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=egocorr1
-_dlog_gui_name=EGO Corr 1
+dlog_gui_name=EGO Corr 1
 dlog_field_name=Gego1
 offset=34
 size=_S16_
@@ -382,7 +382,7 @@ log_by_default=FALSE
 [derived_25]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=egocorr2
-_dlog_gui_name=EGO Corr 2
+dlog_gui_name=EGO Corr 2
 dlog_field_name=Gego2
 offset=36
 size=_S16_
@@ -396,7 +396,7 @@ log_by_default=FALSE
 [derived_26]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=aircorr
-_dlog_gui_name=AIR Corr
+dlog_gui_name=AIR Corr
 dlog_field_name=Gair
 offset=38
 size=_S16_
@@ -410,7 +410,7 @@ log_by_default=TRUE
 [derived_27]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=warmcorr
-_dlog_gui_name=Warm Corr
+dlog_gui_name=Warm Corr
 dlog_field_name=Gwarm
 offset=40
 size=_S16_
@@ -424,7 +424,7 @@ log_by_default=TRUE
 [derived_28]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpsaccel
-_dlog_gui_name=Accel Enr.
+dlog_gui_name=Accel Enr.
 dlog_field_name=TPSacc
 offset=42
 size=_S16_
@@ -439,7 +439,7 @@ log_by_default=TRUE
 [derived_29]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpsfuelcut
-_dlog_gui_name=Fuel Cut.
+dlog_gui_name=Fuel Cut.
 dlog_field_name=tpsfuelcut
 offset=44
 size=_S16_
@@ -453,7 +453,7 @@ log_by_default=FALSE
 [derived_30]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=barocorr
-_dlog_gui_name=Baro Corr.
+dlog_gui_name=Baro Corr.
 dlog_field_name=Gbaro
 offset=46
 size=_S16_
@@ -467,7 +467,7 @@ log_by_default=TRUE
 [derived_31]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=gammae
-_dlog_gui_name=GammaE
+dlog_gui_name=GammaE
 dlog_field_name=Gammae
 offset=48
 size=_S16_
@@ -481,7 +481,7 @@ log_by_default=TRUE
 [derived_32]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=vecurr1
-_dlog_gui_name=VE 1
+dlog_gui_name=VE 1
 dlog_field_name=Gve
 offset=50
 size=_S16_
@@ -495,7 +495,7 @@ log_by_default=TRUE
 [derived_33]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=vecurr2
-_dlog_gui_name=VE 2
+dlog_gui_name=VE 2
 dlog_field_name=Gve2
 offset=52
 size=_S16_
@@ -509,7 +509,7 @@ log_by_default=TRUE
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=iacstep
-_dlog_gui_name=IAC Step
+dlog_gui_name=IAC Step
 dlog_field_name=IACstep
 offset=54
 size=_S16_
@@ -523,7 +523,7 @@ log_by_default=TRUE
 [derived_35]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=idledc
-_dlog_gui_name=Idle DC
+dlog_gui_name=Idle DC
 dlog_field_name=PWM Idle Duty
 offset=54
 size=_S16_
@@ -538,7 +538,7 @@ log_by_default=TRUE
 [derived_36]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=coldadv
-_dlog_gui_name=Cold Adv (deg)
+dlog_gui_name=Cold Adv (deg)
 dlog_field_name=ColdAdv
 offset=56
 size=_S16_
@@ -553,7 +553,7 @@ log_by_default=TRUE
 [derived_37]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpsdot
-_dlog_gui_name=tpsDOT (%/s)
+dlog_gui_name=tpsDOT (%/s)
 dlog_field_name=tpsDOT
 offset=58
 size=_S16_
@@ -567,7 +567,7 @@ log_by_default=TRUE
 [derived_38]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=mapdot
-_dlog_gui_name=mapDOT (kPa/s)
+dlog_gui_name=mapDOT (kPa/s)
 dlog_field_name=mapDOT
 offset=60
 size=_S16_
@@ -581,7 +581,7 @@ log_by_default=TRUE
 [derived_39]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dwell
-_dlog_gui_name=Dwell
+dlog_gui_name=Dwell
 dlog_field_name=Dwell
 offset=62
 size=_U16_
@@ -596,7 +596,7 @@ log_by_default=TRUE
 [derived_40]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=mafmap
-_dlog_gui_name=mafmap
+dlog_gui_name=mafmap
 dlog_field_name=MAFMAP
 offset=64
 size=_S16_
@@ -611,7 +611,7 @@ log_by_default=FALSE
 [derived_41]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=fuelload
-_dlog_gui_name=fuelload
+dlog_gui_name=fuelload
 dlog_field_name=Load
 offset=66
 size=_S16_
@@ -626,7 +626,7 @@ log_by_default=TRUE
 [derived_42]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=fuelcorr
-_dlog_gui_name=Fuel Corr.
+dlog_gui_name=Fuel Corr.
 dlog_field_name=E85FuelCorr
 offset=68
 size=_S16_
@@ -640,7 +640,7 @@ log_by_default=FALSE
 [derived_43]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=portstatus
-_dlog_gui_name=Port Status
+dlog_gui_name=Port Status
 dlog_field_name=portstatus
 offset=70
 size=_S16_
@@ -654,7 +654,7 @@ log_by_default=FALSE
 [derived_44]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=knockretard
-_dlog_gui_name=Knock Ret.
+dlog_gui_name=Knock Ret.
 dlog_field_name=knockRet
 offset=71
 size=_U08_
@@ -669,7 +669,7 @@ log_by_default=FALSE
 [derived_45]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=EAEFuelCorr1
-_dlog_gui_name=EAEFuelCorr1
+dlog_gui_name=EAEFuelCorr1
 dlog_field_name=EAE1 %
 offset=72
 size=_S16_
@@ -683,7 +683,7 @@ log_by_default=TRUE
 [derived_46]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=o2volt1
-_dlog_gui_name=O<sub>2</sub> Volts 1
+dlog_gui_name=O<sub>2</sub> Volts 1
 dlog_field_name=egovolt1
 offset=74
 size=_S16_
@@ -698,7 +698,7 @@ log_by_default=FALSE
 [derived_47]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=o2volt2
-_dlog_gui_name=O<sub>2</sub> Volts 2 (ms2)
+dlog_gui_name=O<sub>2</sub> Volts 2 (ms2)
 dlog_field_name=egovolt2
 offset=76
 size=_S16_
@@ -713,7 +713,7 @@ log_by_default=FALSE
 [derived_48]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=status1
-_dlog_gui_name=status1
+dlog_gui_name=status1
 dlog_field_name=status1
 offset=78
 size=_U08_
@@ -725,7 +725,7 @@ log_by_default=TRUE
 [derived_49]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=status2
-_dlog_gui_name=status2
+dlog_gui_name=status2
 dlog_field_name=status2
 offset=79
 size=_U08_
@@ -737,7 +737,7 @@ log_by_default=TRUE
 [derived_50]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=status3
-_dlog_gui_name=status3
+dlog_gui_name=status3
 dlog_field_name=status3
 offset=80
 size=_U08_
@@ -749,7 +749,7 @@ log_by_default=TRUE
 [derived_51]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=status4
-_dlog_gui_name=status4
+dlog_gui_name=status4
 dlog_field_name=status4
 offset=81
 size=_U08_
@@ -761,7 +761,7 @@ log_by_default=TRUE
 [derived_52]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=looptime
-_dlog_gui_name=looptime
+dlog_gui_name=looptime
 dlog_field_name=looptime
 offset=82
 size=_U16_
@@ -773,7 +773,7 @@ log_by_default=FALSE
 [derived_53]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=status5
-_dlog_gui_name=status5
+dlog_gui_name=status5
 dlog_field_name=status5
 offset=84
 size=_U16_
@@ -785,7 +785,7 @@ log_by_default=TRUE
 [derived_54]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=tpsADC
-_dlog_gui_name=tpsADC
+dlog_gui_name=tpsADC
 dlog_field_name=tpsADC
 offset=86
 size=_U16_
@@ -797,7 +797,7 @@ log_by_default=FALSE
 [derived_55]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=fuelload2
-_dlog_gui_name=fuelload2
+dlog_gui_name=fuelload2
 dlog_field_name=Secondary Load
 offset=88
 size=_U16_
@@ -809,7 +809,7 @@ log_by_default=TRUE
 [derived_56]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=ignload
-_dlog_gui_name=ignload
+dlog_gui_name=ignload
 dlog_field_name=Ign Load
 offset=90
 size=_U16_
@@ -822,7 +822,7 @@ log_by_default=TRUE
 [derived_57]
 keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=ignload2
-_dlog_gui_name=ignload2
+dlog_gui_name=ignload2
 dlog_field_name=Secondary Ign Load
 offset=92
 size=_U16_
@@ -835,7 +835,7 @@ log_by_default=TRUE
 [derived_58]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=synccnt
-_dlog_gui_name=synccnt
+dlog_gui_name=synccnt
 dlog_field_name=Lost sync count
 offset=94
 size=_U08_
@@ -847,7 +847,7 @@ log_by_default=TRUE
 [derived_59]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=timing_err
-_dlog_gui_name=timing_err
+dlog_gui_name=timing_err
 dlog_field_name=timing err%
 offset=95
 size=_U08_
@@ -859,7 +859,7 @@ log_by_default=TRUE
 [derived_60]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=deltaT
-_dlog_gui_name=deltaT
+dlog_gui_name=deltaT
 dlog_field_name=deltaT
 offset=96
 size=_S32_
@@ -871,7 +871,7 @@ log_by_default=TRUE
 [derived_61]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=wallfuel1
-_dlog_gui_name=wallfuel1
+dlog_gui_name=wallfuel1
 dlog_field_name=WallFuel1
 offset=100
 size=_U32_
@@ -883,7 +883,7 @@ log_by_default=TRUE
 [derived_62]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc0
-_dlog_gui_name=gpioadc0
+dlog_gui_name=gpioadc0
 dlog_field_name=gpioadc0
 offset=104
 size=_U16_
@@ -895,7 +895,7 @@ log_by_default=TRUE
 [derived_63]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc1
-_dlog_gui_name=gpioadc1
+dlog_gui_name=gpioadc1
 dlog_field_name=gpioadc1
 offset=106
 size=_U16_
@@ -907,7 +907,7 @@ log_by_default=TRUE
 [derived_64]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc2
-_dlog_gui_name=gpioadc2
+dlog_gui_name=gpioadc2
 dlog_field_name=gpioadc2
 offset=108
 size=_U16_
@@ -919,7 +919,7 @@ log_by_default=TRUE
 [derived_65]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc3
-_dlog_gui_name=gpioadc3
+dlog_gui_name=gpioadc3
 dlog_field_name=gpioadc3
 offset=110
 size=_U16_
@@ -931,7 +931,7 @@ log_by_default=TRUE
 [derived_66]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc4
-_dlog_gui_name=gpioadc4
+dlog_gui_name=gpioadc4
 dlog_field_name=gpioadc4
 offset=112
 size=_U16_
@@ -943,7 +943,7 @@ log_by_default=FALSE
 [derived_67]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc5
-_dlog_gui_name=gpioadc5
+dlog_gui_name=gpioadc5
 dlog_field_name=gpioadc5
 offset=114
 size=_U16_
@@ -955,7 +955,7 @@ log_by_default=FALSE
 [derived_68]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc6
-_dlog_gui_name=gpioadc6
+dlog_gui_name=gpioadc6
 dlog_field_name=gpioadc6
 offset=116
 size=_U16_
@@ -967,7 +967,7 @@ log_by_default=FALSE
 [derived_69]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioadc7
-_dlog_gui_name=gpioadc7
+dlog_gui_name=gpioadc7
 dlog_field_name=gpioadc7
 offset=118
 size=_U16_
@@ -979,7 +979,7 @@ log_by_default=FALSE
 [derived_70]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpiopwmin0
-_dlog_gui_name=gpiopwmin0
+dlog_gui_name=gpiopwmin0
 dlog_field_name=gpiopwmin0
 offset=120
 size=_U16_
@@ -991,7 +991,7 @@ log_by_default=FALSE
 [derived_71]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpiopwmin1
-_dlog_gui_name=gpiopwmin1
+dlog_gui_name=gpiopwmin1
 dlog_field_name=gpiopwmin1
 offset=122
 size=_U16_
@@ -1003,7 +1003,7 @@ log_by_default=FALSE
 [derived_72]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpiopwmin2
-_dlog_gui_name=gpiopwmin2
+dlog_gui_name=gpiopwmin2
 dlog_field_name=gpiopwmin2
 offset=124
 size=_U16_
@@ -1015,7 +1015,7 @@ log_by_default=FALSE
 [derived_73]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpiopwmin3
-_dlog_gui_name=gpiopwmin3
+dlog_gui_name=gpiopwmin3
 dlog_field_name=gpiopwmin3
 offset=126
 size=_U16_
@@ -1027,7 +1027,7 @@ log_by_default=FALSE
 [derived_74]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=adc6
-_dlog_gui_name=adc6
+dlog_gui_name=adc6
 dlog_field_name=adc6
 offset=128
 size=_U16_
@@ -1039,7 +1039,7 @@ log_by_default=TRUE
 [derived_75]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=adc7
-_dlog_gui_name=adc7
+dlog_gui_name=adc7
 dlog_field_name=adc7
 offset=130
 size=_U16_
@@ -1051,7 +1051,7 @@ log_by_default=TRUE
 [derived_76]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=wallfuel2
-_dlog_gui_name=wallfuel2
+dlog_gui_name=wallfuel2
 dlog_field_name=WallFuel2
 offset=132
 size=_U32_
@@ -1063,7 +1063,7 @@ log_by_default=TRUE
 [derived_77]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=EAEFuelCorr2
-_dlog_gui_name=EAEFuelCorr2
+dlog_gui_name=EAEFuelCorr2
 dlog_field_name=EAE2 %
 offset=136
 size=_U16_
@@ -1075,7 +1075,7 @@ log_by_default=TRUE
 [derived_78]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=boostduty
-_dlog_gui_name=boostduty
+dlog_gui_name=boostduty
 dlog_field_name=Boost Duty
 offset=138
 size=_U08_
@@ -1087,7 +1087,7 @@ log_by_default=TRUE
 [derived_79]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=syncreason
-_dlog_gui_name=syncreason
+dlog_gui_name=syncreason
 dlog_field_name=Lost sync reason
 offset=139
 size=_U08_
@@ -1099,7 +1099,7 @@ log_by_default=TRUE
 [derived_80]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=user0
-_dlog_gui_name=user0
+dlog_gui_name=user0
 dlog_field_name=user0
 offset=140
 size=_U08_
@@ -1111,31 +1111,31 @@ log_by_default=FALSE
 [derived_81]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=inj_adv1
-_dlog_gui_name=inj_adv1
+dlog_gui_name=inj_adv1
 dlog_field_name=inj_adv1
 offset=142
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
 _tooltip="inj_adv1" is undefined
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_82]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=inj_adv2
-_dlog_gui_name=inj_adv2
+dlog_gui_name=inj_adv2
 dlog_field_name=inj_adv2
 offset=144
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x*0.1
 _tooltip="inj_adv2" is undefined
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_83]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=pw3
-_dlog_gui_name=PW 3 (ms.)
+dlog_gui_name=PW 3 (ms.)
 dlog_field_name=PW3
 offset=146
 size=_U16_
@@ -1150,7 +1150,7 @@ log_by_default=TRUE
 [derived_84]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=pw4
-_dlog_gui_name=PW 4 (ms.)
+dlog_gui_name=PW 4 (ms.)
 dlog_field_name=PW4
 offset=148
 size=_U16_
@@ -1165,55 +1165,55 @@ log_by_default=TRUE
 [derived_85]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=vetrim1curr
-_dlog_gui_name=vetrim1curr
+dlog_gui_name=vetrim1curr
 dlog_field_name=vetrim1curr
 offset=150
 size=_S16_
 dl_conv_expr=x/0.00976562500
 ul_conv_expr=x*0.00976562500
 _tooltip="vetrim1curr" is the current trim value associated with injector channel 1
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_86]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=vetrim2curr
-_dlog_gui_name=vetrim2curr
+dlog_gui_name=vetrim2curr
 dlog_field_name=vetrim2curr
 offset=152
 size=_S16_
 dl_conv_expr=x/0.00976562500
 ul_conv_expr=x*0.00976562500
 _tooltip="vetrim2curr" is the current trim value associated with injector channel 2
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_87]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=vetrim3curr
-_dlog_gui_name=vetrim3curr
+dlog_gui_name=vetrim3curr
 dlog_field_name=vetrim3curr
 offset=154
 size=_S16_
 dl_conv_expr=x/0.00976562500
 ul_conv_expr=x*0.00976562500
 _tooltip="vetrim3curr" is the current trim value associated with injector channel 3
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_88]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=vetrim4curr
-_dlog_gui_name=vetrim4curr
+dlog_gui_name=vetrim4curr
 dlog_field_name=vetrim4curr
 offset=156
 size=_S16_
 dl_conv_expr=x/0.00976562500
 ul_conv_expr=x*0.00976562500
 _tooltip="vetrim4curr" is the current trim value associated with injector channel 4
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_89]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=maf
-_dlog_gui_name=maf
+dlog_gui_name=maf
 dlog_field_name=MAF
 offset=158
 size=_U16_
@@ -1225,43 +1225,43 @@ log_by_default=FALSE
 [derived_90]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=eaeload
-_dlog_gui_name=eaeload
+dlog_gui_name=eaeload
 dlog_field_name=eaeload
 offset=160
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 _tooltip="eaeload" is undefined
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_91]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=afrload
-_dlog_gui_name=afrload
+dlog_gui_name=afrload
 dlog_field_name=afrload
 offset=162
 size=_S16_
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 _tooltip="afrload" is undefined
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_92]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=rpmdot
-_dlog_gui_name=rpmdot
+dlog_gui_name=rpmdot
 dlog_field_name=rpmdot
 offset=164
 size=_S16_
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 _tooltip="rpmdot" is undefined
-log_by_default=FALSE
+log_by_default=TRUE
 
 [derived_93]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioport0
-_dlog_gui_name=gpioport0
+dlog_gui_name=gpioport0
 dlog_field_name=gpioport0
 offset=166
 size=_U08_
@@ -1273,7 +1273,7 @@ log_by_default=FALSE
 [derived_94]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioport1
-_dlog_gui_name=gpioport1
+dlog_gui_name=gpioport1
 dlog_field_name=gpioport1
 offset=167
 size=_U08_
@@ -1285,7 +1285,7 @@ log_by_default=FALSE
 [derived_95]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=gpioport2
-_dlog_gui_name=gpioport2
+dlog_gui_name=gpioport2
 dlog_field_name=gpioport2
 offset=168
 size=_U08_
@@ -1297,7 +1297,7 @@ log_by_default=FALSE
 [derived_96]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,complex_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=accdecenrich
-_dlog_gui_name=AccDecEnrich
+dlog_gui_name=AccDecEnrich
 dlog_field_name=TPSacc
 offset=42
 size=_S16_
@@ -1321,7 +1321,7 @@ log_by_default=TRUE
 [derived_97]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
 internal_names=rpm100
-_dlog_gui_name=rpm100
+dlog_gui_name=rpm100
 dlog_field_name=rpm100
 offset=6
 size=_U16_
@@ -1333,7 +1333,7 @@ log_by_default=FALSE
 [derived_98]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle1
-_dlog_gui_name=Dutycycle 1
+dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
 offset=2
 real_lower=0
@@ -1365,7 +1365,7 @@ log_by_default=TRUE
 [derived_99]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle2
-_dlog_gui_name=Dutycycle 2
+dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
 offset=4
 real_lower=0
@@ -1397,7 +1397,7 @@ log_by_default=TRUE
 [derived_100]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr_err_l
-_dlog_gui_name=AFR Error Left
+dlog_gui_name=AFR Error Left
 dlog_field_name=AfrErrL
 offset=12
 real_lower=-25
@@ -1417,7 +1417,7 @@ log_by_default=FALSE
 [derived_101]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr_err_r
-_dlog_gui_name=AFR Error right
+dlog_gui_name=AFR Error right
 dlog_field_name=AfrErrR
 offset=13
 real_lower=-25
