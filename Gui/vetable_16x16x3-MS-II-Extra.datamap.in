@@ -93,8 +93,9 @@ tab_ident=_VETABLES_TAB_
 sub-notebook=VE16_vetable_notebook
 
 [VE2_notebook_tab_label]
-keys=bind_to_list
-bind_to_list=dual_table
+keys=bind_to_list,match_type
+bind_to_list=dual_table,second_fuel
+match_type=_OR_
 
 [VE3_notebook_tab_label]
 keys=bind_to_list,match_type,
@@ -302,8 +303,9 @@ keys=table_num
 table_num=3
 
 [VE2_vbox1]
-keys=bind_to_list,table_num
-bind_to_list=dual_table
+keys=bind_to_list,table_num,match_type
+match_type=_OR_
+bind_to_list=dual_table,second_fuel
 table_num=4
 
 [VE3_vbox1]

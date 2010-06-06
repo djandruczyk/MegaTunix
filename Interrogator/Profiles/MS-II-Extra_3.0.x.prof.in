@@ -211,7 +211,7 @@ z_precision=0
 
 [table_4]
 _table_name=VE-Table 2, MS-II-Extra 16x16
-bind_to_list=dualtable,second_fuel
+bind_to_list=dual_table,second_fuel
 match_type=_OR_
 is_fuel=TRUE
 reqfuel_page=0

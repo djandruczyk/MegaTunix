@@ -33,6 +33,7 @@
 #include <3d_vetable.h>
 #include <assert.h>
 #include <config.h>
+#include <cairo/cairo.h>
 #include <conversions.h>
 #include <datamgmt.h>
 #include <defines.h>
@@ -79,11 +80,9 @@ GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 
 void CalculateFrameRate()
 {
-
-
-	static float framesPerSecond    = 0.0f;        /* This will store our fps*/
-	static long lastTime            = 0;           /* This will hold the time from the last frame*/
-	static char strFrameRate[50]    = {0};         /* We will store the string here for the window title*/
+	static float framesPerSecond = 0.0f;	/* This will store our fps*/
+	static long lastTime = 0;		/* This will hold the time from the last frame*/
+	static char strFrameRate[50] = {0};	/* We will store the string here for the window title*/
 
 	/* struct for the time value*/
 	GTimeVal  currentTime;
@@ -99,13 +98,10 @@ void CalculateFrameRate()
 	if( currentTime.tv_sec - lastTime >= ONE_SECOND )
 	{
 		lastTime = currentTime.tv_sec;
-
 		/* Copy the frames per second into a string to display in the window*/
 		sprintf(strFrameRate, _("Current Frames Per Second: %i"), (int)framesPerSecond);
-
 		/* Reset the frames per second*/
 		framesPerSecond = 0;
-
 	}
 
 	/* draw frame rate on screen */
@@ -418,7 +414,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	OBJ_SET(window,"ve_view",(gpointer)ve_view);
 	if  (firmware->table_params[table_num]->bind_to_list)
 	{
-		printf("table %i, bind to list\n",table_num);
 		OBJ_SET(window,"bind_to_list", g_strdup(firmware->table_params[table_num]->bind_to_list));
 		OBJ_SET(window,"match_type", GINT_TO_POINTER(firmware->table_params[table_num]->match_type));
 		bind_to_lists(window,firmware->table_params[table_num]->bind_to_list);
@@ -800,6 +795,12 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	ve3d_draw_axis(ve_view,cur_vals);
 	free_current_values(cur_vals);
 	CalculateFrameRate();
+	/* Grey things out if we're supposed to be insensitive */
+	if (!GTK_WIDGET_IS_SENSITIVE(widget))
+	{
+		printf("grey it!\n");
+		ve3d_grey_window(ve_view);
+	}
 
 	gdk_gl_drawable_swap_buffers (gldrawable);
 	glFlush ();
@@ -931,10 +932,32 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 }
 
 
+void ve3d_grey_window(Ve_View_3D *ve_view)
+{
+	GdkPixmap *pmap = NULL;
+	cairo_t * cr = NULL;
+	GtkWidget * widget = ve_view->drawing_area;
+
+	/* Not sure how to "grey" the window to make it appear insensitve */
+	pmap=gdk_pixmap_new(widget->window,
+			widget->allocation.width,
+			widget->allocation.height,
+			gtk_widget_get_visual(widget)->depth);
+	cr = gdk_cairo_create (pmap);
+	cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+	cairo_rectangle (cr,
+			0,0, 
+			widget->allocation.width, 
+			widget->allocation.height);
+	cairo_fill(cr);
+	cairo_destroy(cr);
+	g_object_unref(pmap);
+}
+
+
 /*!
  \brief ve3d_calculate_scaling is called during a redraw to recalculate 
-the
- dimensions for the scales to make thing look pretty
+ the dimensions for the scales to make thing look pretty
  */
 void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
