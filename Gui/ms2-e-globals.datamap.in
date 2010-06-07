@@ -20,17 +20,17 @@ handler=_GENERIC_
 [num_injectors_0_label]
 keys=page,bind_to_list
 page=1
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 
 [num_squirts_per_cycle_0_label]
 keys=page,bind_to_list
 page=1
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 
 [num_cylinders_0_label]
 keys=page,bind_to_list
 page=2
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 
 [2nd_fuelload_label]
 keys=bind_to_list
@@ -298,7 +298,7 @@ size=_U16_
 table_num=3
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 ul_complex=TRUE
 ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
@@ -322,7 +322,7 @@ offset=608
 size=_U16_
 table_num=3
 ul_conv_expr=x/1000
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [num_injectors_0_spin]
@@ -332,7 +332,7 @@ bitmask=15
 table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 register_as=num_injectors_0_spin
 
 [num_cylinders_0_spin]
@@ -342,7 +342,7 @@ bitmask=15
 table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 register_as=num_cylinders_0_spin
 
 [inj_per_cycle_0_spin]
@@ -351,7 +351,7 @@ offset=610
 table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_3_ctrl
 ul_complex=TRUE
 ul_conv_expr=cylinders_1/divider_1
 expr_symbols=cylinders_1,divider_1

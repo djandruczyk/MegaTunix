@@ -168,6 +168,7 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 	gint nB = 0;
 	gint iV = 0;
 	gint adcCount = 0;
+	gchar * filename = NULL;
 	gdouble afr = 0.0;
 	gdouble (*Fv)(gint adc) = NULL;
 	gboolean NB = FALSE;
@@ -317,7 +318,9 @@ EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 			printf(_("default case, shouldn't have gotten here. afr_enum is %i"),afr_enum);
 			break;
 	}
-	f = fopen("/tmp/afrTable.log", "w");
+	filename = g_build_filename(HOME(), "afrtable.log",NULL);
+	f = fopen(filename, "w");
+	g_free(filename);
 	iV = 0;
 	afr = 0.0;
 	time(&tim);

@@ -2910,6 +2910,11 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 {
 	gboolean marked = FALSE;
 	gint page = -1;
+	/*
+	gint table_num = -1;
+	const gchar * widget_name = NULL;
+	gchar **vector = NULL;
+	*/
 	extern GdkColor red;
 	static GdkColor old_bg;
 	static GdkColor text_color;
@@ -2918,6 +2923,7 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
+	extern Firmware_Details *firmware;
 
 	/* Select all chars on click */
 	/*
@@ -2937,6 +2943,15 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 testit:
 	marked = (GBOOLEAN)OBJ_GET(widget,"marked");
 	page = (GINT)OBJ_GET(widget,"page");
+	/*
+	table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+	widget_name = glade_get_widget_name(widget);
+	vector = g_strsplit(widget_name,"_",-1);
+	printf("Widget %s, table_num %i, x rows %i, y cols %i vector size %i\n",widget_name,table_num,firmware->table_params[table_num]->x_bincount,firmware->table_params[table_num]->y_bincount,g_strv_length(vector));
+	printf("Total entries in this table %s, index of this one %s\n",vector[g_strv_length(vector)-1],vector[g_strv_length(vector)-3]);
+	printf("Row %i, col %i\n",strtol(vector[g_strv_length(vector)-3],NULL,10)/firmware->table_params[table_num]->x_bincount,strtol(vector[g_strv_length(vector)-3],NULL,10)%firmware->table_params[table_num]->x_bincount);
+	g_strfreev(vector);
+	*/
 
 	if (marked)
 	{
