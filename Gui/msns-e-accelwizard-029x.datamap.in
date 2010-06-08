@@ -61,6 +61,12 @@ post_functions_with_arg=register_rt_range
 source=mapdot
 tab_ident=_ACCEL_WIZ_TAB_
 
+#[rpmdot_pbar]
+#keys=post_functions_with_arg,source,tab_ident
+#post_functions_with_arg=register_rt_range
+#source=rpmdot
+#tab_ident=_ACCEL_WIZ_TAB_
+
 [accel_map_layout_table]
 keys=bind_to_list
 bind_to_list=ae_mapdot_controls,ae_normal_controls

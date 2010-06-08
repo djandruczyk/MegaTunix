@@ -161,16 +161,19 @@ datasource=bcDC
 #----- Widgets ----------------------------------------------------------------
 
 [B1_vbox1]
-keys=table_num
+keys=table_num,bind_to_list
 table_num=7
+bind_to_list=boost_controls
 
 [B2_vbox1]
-keys=table_num
+keys=table_num,bind_to_list
 table_num=8
+bind_to_list=boost_controls
 
 [B3_vbox1]
-keys=table_num
+keys=table_num,bind_to_list
 table_num=9
+bind_to_list=boost_controls,boost2
 
 #----- Labels ----------------------------------------------------------------
 
@@ -217,29 +220,6 @@ set_label=Boost Table 3 (KPA Target)
 
 #----- widgets ---------------------------------------------------------------
 
-[B1_basetable]
-keys=bind_to_list
-bind_to_list=boost_controls
-
-[B2_basetable]
-keys=bind_to_list
-bind_to_list=boost_controls
-
-[B3_basetable]
-keys=bind_to_list
-bind_to_list=boost_controls
-
-[B1_tracking_frame]
-keys=bind_to_list
-bind_to_list=boost_controls
-
-[B2_tracking_frame]
-keys=bind_to_list
-bind_to_list=boost_controls
-
-[B3_tracking_frame]
-keys=bind_to_list
-bind_to_list=boost_controls
 
 #----- Buttons ---------------------------------------------------------------
 

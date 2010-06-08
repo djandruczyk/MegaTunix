@@ -145,12 +145,13 @@ bind_to_list=boost_controls
 _tooltip=When "More Boost" is selected a higher Duty Cycle means MORE boost will be generated, otherwise higher duty cycle means LESS boost wil be generated..
 
 [boost_input_combo]
-keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
 offset=116
 bitvals=0,1
 bitmask=64
 choices=No,Yes
 bind_to_list=boost_controls
+toggle_groups=,boost2
 _tooltip=When set to Yes, Boost Table 3 will be used based on the state of pin6 of JP1. (table 3 USED when input is LOW)
 
 [obp_combo]

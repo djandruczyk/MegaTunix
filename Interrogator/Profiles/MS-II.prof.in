@@ -79,6 +79,7 @@ z_precision=0
 
 [table_1]
 _table_name=VE-Table 1, MS-II V2.8x
+bind_to_list=dt_controls
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -127,6 +128,7 @@ z_precision=0
 
 [table_2]
 _table_name=Spark Advance Table 1, MS-II STD
+bind_to_list=spark_controls
 is_spark=TRUE
 is_fuel=FALSE
 x_page=0
@@ -159,6 +161,7 @@ z_precision=1
 
 [table_3]
 _table_name=AFR Table 1
+bind_to_list=ego_ctrl,wb_ego
 is_fuel=FALSE
 x_page=0
 x_base_offset=374
@@ -190,6 +193,7 @@ z_precision=1
 
 [table_4]
 _table_name=AFR Table 2
+bind_to_list=ego_ctrl,wb_ego,dual_ego,dt_controls
 is_fuel=FALSE
 x_page=0
 x_base_offset=374
@@ -221,6 +225,7 @@ z_precision=1
 
 [table_5]
 _table_name=Alpha-N MAP Translation Table
+bind_to_list=an_ctrls
 is_fuel=FALSE
 x_page=0
 x_base_offset=722

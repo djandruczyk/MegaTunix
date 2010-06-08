@@ -83,6 +83,7 @@ z_precision=0
 
 [table_1]
 _table_name=Fuel VE-Table 2, MSnSpark-Extra
+bind_to_list=dt_controls
 is_fuel=TRUE
 dtmode_page=0
 dtmode_offset=33
@@ -162,6 +163,7 @@ z_precision=0
 
 [table_3]
 _table_name=Spark Table 1, MSnSpark-Extra
+bind_to_list=spark_controls
 is_spark=TRUE
 x_page=3
 x_base_offset=144
@@ -192,6 +194,7 @@ z_precision=1
 
 [table_4]
 _table_name=Spark Table 2, MSnSpark-Extra
+bind_to_list=spark_controls,spark_switch
 is_spark=TRUE
 x_page=4
 x_base_offset=144
@@ -222,6 +225,7 @@ z_precision=1
 
 [table_5]
 _table_name=AFR Table 1, MSnSpark-Extra
+bind_to_list=afr1
 x_page=6
 x_base_offset=64
 x_bincount=8
@@ -255,6 +259,7 @@ z_precision=2
 
 [table_6]
 _table_name=AFR Table 2, MSnSpark-Extra
+bind_to_list=afr2,dt_controls
 x_page=6
 x_base_offset=144
 x_bincount=8
@@ -288,6 +293,7 @@ z_precision=1
 
 [table_7]
 _table_name=Boost Table 1, KPA target: RPM vs TPS, MSnSpark-Extra
+bind_to_list=boost_controls
 x_page=7
 x_base_offset=36
 x_bincount=6
@@ -317,6 +323,7 @@ z_precisions=0,0,0,0
 
 [table_8]
 _table_name=Boost Table 2, DC Target: RPM vs TPS, MSnSpark-Extra
+bind_to_list=boost_controls
 x_page=7
 x_base_offset=84
 x_bincount=6
@@ -343,6 +350,7 @@ z_precision=1
 
 [table_9]
 _table_name=Boost Table 3, switched on demand, MSnSpark-Extra
+bind_to_list=boost_controls,boost2
 x_page=7
 x_base_offset=132
 x_bincount=6
@@ -372,6 +380,7 @@ z_precisions=0,0,0,0
 
 [table_10]
 _table_name=Rotary Trailing, MSnSpark-Extra
+bind_to_list=rotary_trailing
 x_page=8
 x_base_offset=99
 x_bincount=6

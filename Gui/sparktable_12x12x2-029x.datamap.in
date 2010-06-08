@@ -82,9 +82,10 @@ keys=table_num
 table_num=3
 
 [SP2_vbox1]
-keys=page,table_num
+keys=page,table_num,bind_to_list
 page=4
 table_num=4
+bind_to_list=spark_switch
 
 [SP1_gaugeframe1]
 keys=page,post_functions_with_arg,gaugexml,datasource,table_num
