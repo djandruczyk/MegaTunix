@@ -2,7 +2,7 @@ Source: megatunix
 Section: Electronics
 Priority: optional
 Maintainer: Alan Barrow <alan@pinztrek.com>
-Build-Depends: debhelper (>= 5), autotools-dev, libgtkglext1-dev, flex, bison, libglade2-dev, gdb, automake1.9, libtool
+Build-Depends: debhelper (>= 5), autotools-dev, libgtkglext1-dev, flex, bison, libglade2-dev, gdb, automake1.9, libtool, libxml-parser-perl, intltool
 Standards-Version: 3.7.2
 
 Package: megatunix
