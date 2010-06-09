@@ -1,0 +1,35 @@
+0.9.20
+ - Full Support of MS2-Extra 3.0.3[stu] Alpha firmware
+ - First support of non-MS PIS firmware for GM ALDL generation ECU's, requires
+   --enable-pis compile time option
+ - Significant speedups in  re-render speed of tabs
+ - Numerous logic improvements and tab behavior
+ - Lots of internal bugfixes
+ - Some more tab redesigns
+
+ 0.9.19-beta2
+ - Full B&G MS2 and K&J MS2-Extra 2.1.x support of all features
+ - Multiuser TCP is disbaled by default (for security), enable via Comms Tab.
+ - Slave instances handle master disruption gracefully.
+ - Multi user tuning improved in stability
+ - New Stripchart widget for accel wizard and logviewer (not done in logviewer yet)
+ - New VEtable highlighter for linux which is about 10x more cpu friendly
+ - Gauge rendering performance improvements
+ - 2D curve extensive fixes and perf improvements.
+ - Overall performance improvements
+ - Tab redesigns
+
+0.9.19-beta1
+ - Full MS2 (B&G) v2.8x support with the except of "spareports"
+ - Multi-user tuning now available via beta TCP socket support.  The 
+   instance of megatunix connected to the physical ECU is considered the master
+   . to connect to that master, run megatunix  with the -n <hostname|IP Address>
+   option to tell that instance to connect to that master.
+ - Gauges now have daytime/nitetime colorscheme capability. (not all gauges
+   converted yet)
+ - New 2-D table editor for MS2's lookuptables.
+ - New Progressbar widget for RT vars screens with peak/hold function and 
+   faster rendering speed.
+ - 2D VEtables color rescaling redone and more accurate.
+ - Numerous bugfixes for crashes.
+

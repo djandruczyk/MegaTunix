@@ -3,7 +3,6 @@ Makefile.in
 MS2-reqs
 MegaTunix.iss
 Output
-RELEASE_NOTES
 WIN_NOTES.txt
 autom4te.cache
 build-stamp
