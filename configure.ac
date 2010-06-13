@@ -147,7 +147,7 @@ if test "$cross_compiling" = yes ; then
 		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32 -lws2_32"
 	fi
 else
-	EXTRA_LIBS=""
+	EXTRA_LIBS=" -lm"
 fi
 
 AC_SUBST(WIN32_RESOURCES)
