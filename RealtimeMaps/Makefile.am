@@ -4,6 +4,7 @@ rtmap_in_files = 	\
 		BnG-Std.rtv_map.in \
 		DT-Std.rtv_map.in \
 		MSnS-Extra-HR-029x.rtv_map.in \
+		MSnS-Extra-HR-011d.rtv_map.in \
 		MSnS-Extra-029x.rtv_map.in \
 		MS2-Std.rtv_map.in \
 		MS2-Extra-2.1.0.rtv_map.in \

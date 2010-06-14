@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra Highres 011[ab]
+name=MegaSquirtnSpark-Extra Highres 011d
 
 [parameters]
 SignatureVia=get_signature
@@ -512,17 +512,17 @@ MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
 MSnS-E_RTVars=_COUNT_,42
 MS-I_VEconst=_COUNT_,189
-MS_Signature=_REGEX_,format hr_11[ab]
+MS_Signature=_REGEX_,format hr_11[d]
 
 [gui]
-RealtimeMapFile=MSnS-Extra-HR-029x
+RealtimeMapFile=MSnS-Extra-HR-011d
 SliderMapFile=MSnS-Extra-firmware
 RuntimeTextMapFile=MSnS-Extra-firmware
 StatusMapFile=MSnS-Extra-firmware
 
-LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins-hr-011x,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode-029yx,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
+LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins-hr-011x,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode-hr-11d,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
 
-TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-hr,msns-e-idle-hr,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-hr-011x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-hr_10x,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,rotary-trail-029x,msns-e-toothtrigger-029x,error_status
+TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-hr,msns-e-idle-hr,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-hr-011x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-hr_11d,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,rotary-trail-029x,msns-e-toothtrigger-029x,error_status
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

@@ -1,0 +1,389 @@
+[global]
+description=Object data map for MSnS-Extra Output Pins
+_tab_name=_Output Pins/Antilag
+id_prefix=output_pins_
+allipsize=TRUE
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+
+[burn_data_button]
+keys=handler,bind_to_list
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+
+#------ Widgets --------------------------------------------------------------
+
+[fan_controls_frame]
+keys=bind_to_list
+bind_to_list=fan_controls
+
+[antilag_frame]
+keys=bind_to_list
+bind_to_list=spark_controls
+
+[als_params_table]
+keys=bind_to_list
+bind_to_list=antilag
+
+[als_retard_table]
+keys=bind_to_list
+bind_to_list=als_retard
+
+[als_pwm_table]
+keys=bind_to_list
+bind_to_list=pwm_idle_controls
+
+[shiftlight_frame]
+keys=bind_to_list
+bind_to_list=shiftlight_controller
+
+#------ Labels --------------------------------------------------------------
+
+[x4_output_label]
+keys=bind_to_list
+bind_to_list=x4_output_controls
+
+[shift_low_label]
+keys=bind_to_list
+bind_to_list=shift_controls
+
+[shift_high_label]
+keys=bind_to_list
+bind_to_list=shift_controls
+
+[tach_output_rate_label]
+keys=bind_to_list
+bind_to_list=tachout_params
+
+[efan_on_temp_label]
+keys=bind_to_list,temp_dep,c_label,f_label
+temp_dep=TRUE
+c_label=Fan On Temp \302\260C.
+f_label=Fan On Temp \302\260F.
+bind_to_list=temperature
+
+[efan_off_temp_label]
+keys=bind_to_list,temp_dep,c_label,f_label
+temp_dep=TRUE
+c_label=Fan Off Temp \302\260C.
+f_label=Fan Off Temp \302\260F.
+bind_to_list=temperature
+
+#------ Combo Buttons --------------------------------------------------------
+
+[fidle_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Idle Control,Spark A
+toggle_groups=idle_control,
+offset=1
+bitvals=0,1
+bitmask=1
+_tooltip=By Setting this control you have Idle control (either PWM or BnG) style. By selecting spark A you loose idle control altogether.
+
+[led17_pin_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Squirt Ind.,Spark A
+offset=1
+bitvals=0,1
+bitmask=2
+_tooltip=Sets the LED17 pin to be the "Squirt" Indicator (it flashes when the injectors are being fired) or the Spark A output (requires additional hardware). 
+
+[led18_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Warmup Ind.,IRQ Trigger,Output 4,Spark C
+toggle_groups=,,output_4,
+offset=1
+bitvals=0,1,2,3
+bitmask=12
+_tooltip=Sets the LED18 pin to be used for either the Warmup indicator,  IRQ Trigger indicator, Output4, or Spark C. (Requires additonal hardware for Spark C)
+
+[led19_pin_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Accel Ind.,Spark B
+offset=1
+bitvals=0,1
+bitmask=16
+_tooltip=Sets the LED19 pin to be either the Accel Indicator, or the Spark B output (requires additional hardware)
+
+[tachout_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Off,X2 (JS0),X3 (JS1),X4 (JS2),X5 (JS3),Output 3,Pin 10
+toggle_groups=x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control,tachout_params:x3_water_injection:x3_nitrous_control
+offset=144
+bitvals=0,1,2,3,4,5,6
+bitmask=7
+_tooltip=Picks a pin for tachometer output
+
+[tachout_rate_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
+choices=Normal,Half Speed
+bind_to_list=tachout_params
+offset=144
+bitvals=0,1
+bitmask=128
+_tooltip=Sets the Tach output to be the same as engine firing speed or 1/2 engine firing speed.
+
+[x2_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Water Injection,Fan Control
+toggle_groups=x2_water_injection:x2_nitrous_control,x2_tacho_pin:fan_controls
+offset=1
+bitvals=0,1
+bitmask=32
+_tooltip=This sets the X2 port for Water Injection/Nitrous Oxide functionality OR Fan control. (external relay required for fan control)
+
+[x4_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Output 1,Boost Ctrl.
+toggle_groups=output_1,x4_tach_pin
+offset=12
+bitvals=0,1
+bitmask=1
+_tooltip=This sets the X4 port for Output 1 (see user outputs tab), or sets this pin to the Boost Controller functionality
+
+[output3_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Output 3,Spark D
+toggle_groups=output_3,spark_d
+offset=12
+bitvals=0,1
+bitmask=16
+_tooltip=Sets the Output 3 Port (U1, pin15) to be used for User Controlled Output 3. or Spark D
+
+[pin10_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Shiftlight,Spark E
+toggle_groups=shiftlight_controller,spark_e
+offset=116
+bitvals=0,1
+bitmask=8
+_tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark E. (Requires external Hardware)
+
+[knock_pin_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Knock Input,Spark F
+toggle_groups=knock_controller,spark_f
+offset=116
+bitvals=0,1
+bitmask=16
+_tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality or Spark E. (Requires external Hardware)
+
+[multiplex_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Normal,Toyota DLI
+toggle_groups=knock_controller,spark_f
+offset=1
+bitvals=0,1
+bitmask=128
+_tooltip=Sets the ignition mode to either Normal or Toyota DLI multiplex (see msns-extra documentation)
+
+[shiftlight_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+toggle_groups=spark_e:spark_f:knock_controller:js10_ctrl,shift_controls
+offset=12
+bitvals=0,1
+bitmask=2
+_tooltip=Enables or Disables the shiftlight function
+
+[als_enable_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=8
+offset=127
+bitmask=1
+bitvals=0,1
+choices=Disabled,Enabled
+toggle_groups=,antilag
+_tooltip=Enables or Disables the antilag function
+
+[als_retard_timing_combo]
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=8
+offset=127
+bitmask=2
+bitvals=0,1
+choices=Disabled,Enabled
+toggle_groups=,als_retard
+_tooltip=Enables or Disables the antilag timing retard
+
+[als_pwm_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=8
+offset=127
+bitmask=4
+bitvals=0,1
+choices=Disabled,Enabled
+_tooltip=Enables or Disables the antilag PWM Latching
+
+
+#------ Entries ------------------------------------------------------------
+
+[shift_lower_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+offset=18
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+temp_dep=TRUE
+bind_to_list=shift_controls
+_tooltip=The lower threshold for the Shiftlight.
+
+[shift_high_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+offset=19
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+temp_dep=TRUE
+bind_to_list=shift_controls
+_tooltip=The lower threshold for the Shiftlight.
+
+[efan_ontemp_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+offset=74
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature
+_tooltip=The temp at which the cooling fan turns ON at.
+
+[efan_offtemp_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+offset=75
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature
+_tooltip=The temp at which the cooling fan turns OFF at.
+
+[als_tps_entry]
+keys=page,offset,tooltip
+page=8
+offset=125
+_tooltip=The TPS value in ADC to enable AntiLag
+
+[als_timeout_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+page=8
+offset=129
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+precision=1
+_tooltip=The Timeout to disable in seconds
+
+[als_cut_entry]
+keys=page,offset,raw_upper,tooltip
+page=8
+offset=126
+raw_upper=20
+_tooltip=The Number of sparks to cut from N events.
+
+[als_dc_entry]
+keys=page,offset,tooltip
+page=8
+offset=128
+_tooltip=The Dutycycle to pulse the IAC actuator at during antilag.
+
+[als_rpm1_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=117
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_rpm2_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=118
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_rpm3_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=119
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_rpm4_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=120
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_fuel1_entry]
+keys=page,offset,tooltip
+page=8
+offset=121
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_fuel2_entry]
+keys=page,offset,tooltip
+page=8
+offset=122
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_fuel3_entry]
+keys=page,offset,tooltip
+page=8
+offset=123
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_fuel4_entry]
+keys=page,offset,tooltip
+page=8
+offset=124
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_retard1_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=113
+ul_conv_expr=(x-156.25)*0.352
+dl_conv_expr=(x/0.352)+156.25
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_retard2_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=114
+ul_conv_expr=(x-156.25)*0.352
+dl_conv_expr=(x/0.352)+156.25
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_retard3_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=115
+ul_conv_expr=(x-156.25)*0.352
+dl_conv_expr=(x/0.352)+156.25
+_tooltip=See MSnS-Extra HR Manuals
+
+[als_retard4_entry]
+keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+page=8
+offset=116
+ul_conv_expr=(x-156.25)*0.352
+dl_conv_expr=(x/0.352)+156.25
+_tooltip=See MSnS-Extra HR Manuals
+

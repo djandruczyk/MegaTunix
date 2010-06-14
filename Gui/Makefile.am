@@ -65,12 +65,14 @@ gui_glade_files = 	\
 		msns-e-fuelconstants.glade \
 		msns-e-idle.glade \
 		msns-e-output-pins.glade \
+		msns-e-output-pins-hr-011x.glade \
 		msns-e-outputs-sel.glade \
 		msns-e-toothtrigger.glade \
 		msns-e-traction.glade \
 		msns-e-water-nos-launch.glade \
 		msns-e-wheeldecode.glade \
 		msns-e-wheeldecode-029yx.glade \
+		msns-e-wheeldecode-hr-11d.glade \
 		mtxloader.glade \
 		raweditor.glade \
 		rotary-trail.glade \
@@ -160,12 +162,14 @@ gui_in_files = 	\
 		msns-e-idle-029x.datamap.in \
 		msns-e-idle-hr.datamap.in \
 		msns-e-output-pins-029x.datamap.in \
+		msns-e-output-pins-hr-011x.datamap.in \
 		msns-e-outputs-sel-029x.datamap.in \
 		msns-e-toothtrigger-029x.datamap.in \
 		msns-e-traction-029x.datamap.in \
 		msns-e-water-nos-launch-029x.datamap.in \
 		msns-e-wheeldecode-029x.datamap.in \
 		msns-e-wheeldecode-hr_10x.datamap.in \
+		msns-e-wheeldecode-hr_11d.datamap.in \
 		raweditor.datamap.in \
 		rotary-trail-029x.datamap.in \
 		runtime.datamap.in \

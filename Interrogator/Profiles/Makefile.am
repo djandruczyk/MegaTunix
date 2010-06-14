@@ -11,6 +11,7 @@ profiles_in = \
 	SquirtnSpark-Extra-HR-029x.prof.in \
 	SquirtnSpark-Extra-HR-010a.prof.in \
 	SquirtnSpark-Extra-HR-011x.prof.in \
+	SquirtnSpark-Extra-HR-011d.prof.in \
 	SquirtnSpark-Extra-029x.prof.in \
 	SquirtnSpark-Extra-029yx.prof.in 
 
