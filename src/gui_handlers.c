@@ -3719,14 +3719,15 @@ void refocus_cell(GtkWidget *widget, Direction dir)
 {
 	gchar *widget_name = NULL;
 	GtkWidget *widget_2_focus = NULL;
+	gchar *ptr = NULL;
 	gchar *tmpbuf = NULL;
 	gchar *prefix = NULL;
-	gchar **vector = NULL;
-	gchar **row_col = NULL;
 	gboolean return_now = FALSE;
 	gint table_num = -1;
 	gint row = -1;
 	gint col = -1;
+	gint index = -1;
+	gint count = -1;
 	extern Firmware_Details *firmware;
 
 
@@ -3738,13 +3739,14 @@ void refocus_cell(GtkWidget *widget, Direction dir)
 	else
 		return;
 	
-	vector = g_strsplit(widget_name,"(",2);
-	prefix = g_strdup(vector[0]);
-	row_col = g_strsplit(g_strdelimit(vector[1],")",' '),",",2);
-	g_strfreev(vector);
-	col = (gint)strtol(row_col[0],NULL,10);
-	row = (gint)strtol(row_col[1],NULL,10);
-	g_strfreev(row_col);
+	ptr = g_strrstr_len(widget_name,strlen(widget_name),"_of_");
+	ptr = g_strrstr_len(widget_name,ptr-widget_name,"_");
+	tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');
+	prefix = g_strndup(widget_name,ptr-widget_name);
+	sscanf(tmpbuf,"%d of %d",&index, &count);
+	g_free(tmpbuf);
+	row = index/firmware->table_params[table_num]->x_bincount;
+	col = index%firmware->table_params[table_num]->x_bincount;
 
 	switch (dir)
 	{
@@ -3775,7 +3777,7 @@ void refocus_cell(GtkWidget *widget, Direction dir)
 	}
 	if (return_now)
 		return;
-	tmpbuf = g_strdup_printf("%s(%i,%i)",prefix,col,row);
+	tmpbuf = g_strdup_printf("%s_%i_of_%i",prefix,col+(row*firmware->table_params[table_num]->x_bincount),count);
 
 	widget_2_focus = lookup_widget(tmpbuf);
 	if (GTK_IS_WIDGET(widget_2_focus))
