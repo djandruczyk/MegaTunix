@@ -1,3 +1,10 @@
+0.9.21
+ - OS-X Compile fixes.  Segfault fixes for table rescaling.
+ - Full Support for MSnSpark Extra Highres 011d
+ - Added missing controls for Antilag for MSnS-E highres branch
+ - po Makefile logic fixed
+ - Minor Tab cleanup
+
 0.9.20
  - Full Support of MS2-Extra 3.0.3[stu] Alpha firmware
  - First support of non-MS PIS firmware for GM ALDL generation ECU's, requires

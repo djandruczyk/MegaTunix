@@ -148,11 +148,14 @@ do
 	  fi
 	fi
       fi
-      echo "Unborking the po/Makefile.in.in with custom file"
-      if test -e po/Makefile.in.in ; then
-      		rm -f po/Makefile.in.in
+      if test -e ./po/Makefile.in.in ; then
+      		echo "Removing the borked po/Makefile.in.in..."
+      		rm -f ./po/Makefile.in.in
       fi
-      cp -f po/working-Makefile.in.in po/Makefile.in.in
+      if test -e ./po/working-Makefile.in.in ; then
+      		echo "Unborking the po/Makefile.in.in with custom file"
+      		cp -f ./po/working-Makefile.in.in ./po/Makefile.in.in
+      fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
       if grep "^A[CM]_CONFIG_HEADERS" "$bn" >/dev/null; then

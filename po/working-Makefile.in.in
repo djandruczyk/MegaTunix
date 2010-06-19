@@ -61,13 +61,14 @@ GMOFILES = @GMOFILES@
 DISTFILES = ChangeLog Makefile.in.in POTFILES.in SPECIALS.in $(GETTEXT_PACKAGE).pot \
 $(POFILES) $(GMOFILES) $(SOURCES)
 
-SPECIALS = \
+SPECIALS = SPECIALS \
 
 POTFILES = \
 
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 INSTOBJEXT = @INSTOBJEXT@
+EXTRA_DIST = $(DISTFILES) working-Makefile.in.in
 
 .SUFFIXES:
 .SUFFIXES: .c .o .po .pox .gmo .mo .msg .cat
@@ -95,11 +96,11 @@ all: all-@USE_NLS@
 
 all-yes: $(CATALOGS)
 all-no:
-$(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES) $(SPECIALS)
+$(srcdir)/$(GETTEXT_PACKAGE).pot: $(SPECIALS) $(POTFILES)
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --files-from=$(srcdir)/SPECIALS -C --from-code=UTF-8 \
-	&& $$(for i in `cat SPECIALS`; do rm -f "../$$i" ; done && rm SPECIALS)
+	&& $$(for i in `cat $(srcdir)/SPECIALS`; do rm -f "../$$i" ; done && rm $(srcdir)/SPECIALS)
 	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
           --flag=g_strdup_printf:1:c-format \
@@ -121,7 +122,8 @@ $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES) $(SPECIALS)
 	  --join-existing \
 	&& test ! -f $(GETTEXT_PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
-		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
+		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot \
+		&& rm $(srcdir)/POTFILES)
 
 install: install-exec install-data
 install-exec:
@@ -204,12 +206,12 @@ dvi info tags TAGS ID:
 
 mostlyclean:
 	rm -f core core.* *.pox $(GETTEXT_PACKAGE).po *.old.po cat-id-tbl.tmp
-	rm -fr *.o SPECIALS stamp-it
+	rm -fr *.o SPECIALS POTFILES stamp-it
 
 clean: mostlyclean
 
 distclean: clean
-	rm -f Makefile Makefile.in POTFILES SPECIALS *.mo *.msg *.cat *.cat.m
+	rm -f Makefile Makefile.in *.mo *.msg *.cat *.cat.m
 
 maintainer-clean: distclean
 	@echo "This command is intended for maintainers to use;"
@@ -269,13 +271,13 @@ POTFILES: POTFILES.in
 	    && chmod a-w $@-t \
 	    && mv $@-t $@ )
 SPECIALS: SPECIALS.in
-	@if test -f "SPECIALS" ; then \
-		rm SPECIALS; \
+	(if test -f "$(srcdir)/SPECIALS" ; then \
+		rm $(srcdir)/SPECIALS; \
 	fi && \
-	for i in `cat SPECIALS.in`; do \
-		intltool-extract --type="gettext/ini" "../$$i" ; echo "$$i.h" >> SPECIALS ; \
-	done
-Makefile: Makefile.in.in ../config.status POTFILES SPECIALS
+	for i in `cat $(srcdir)/SPECIALS.in`; do \
+		intltool-extract --type="gettext/ini" "../$$i" ; echo "$$i.h" >> $(srcdir)/SPECIALS ; \
+	done)
+Makefile: Makefile.in.in ../config.status POTFILES
 	cd .. \
 	  && CONFIG_FILES=$(subdir)/$@.in CONFIG_HEADERS= \
 	       $(SHELL) ./config.status
