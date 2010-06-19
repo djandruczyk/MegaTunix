@@ -44,3 +44,4 @@ mkinstalldirs
 .intltool-merge-cache
 *~
 announcement
+megatunix*.tar.gz
