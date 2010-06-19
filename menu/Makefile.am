@@ -15,6 +15,6 @@ menu_in_files = 	\
 menu_DATA = $(menu_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-EXTRA_DIST = $(menu_DATA)
+EXTRA_DIST = $(menu_in_files)
 
 CLEANFILES = *.h $(menu_files)
