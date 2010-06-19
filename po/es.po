@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-08 19:56-0400\n"
+"POT-Creation-Date: 2010-06-19 07:55-0400\n"
 "PO-Revision-Date: 2010-05-12 17:34-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
 "Language-Team: Spanish\n"
@@ -12932,26 +12932,26 @@ msgstr ""
 #: Gui/msns-e-traction.glade:1560 Gui/msns-e-traction.glade:1589
 #: Gui/msns-e-traction.glade:1618 Gui/msns-e-traction.glade:1647
 #: Gui/msns-e-traction.glade:1676 Gui/msns-e-traction.glade:1705
-#: Gui/msns-e-traction.glade:1734 Gui/msns-e-water-nos-launch.glade:192
-#: Gui/msns-e-water-nos-launch.glade:222 Gui/msns-e-water-nos-launch.glade:252
-#: Gui/msns-e-water-nos-launch.glade:282 Gui/msns-e-water-nos-launch.glade:744
-#: Gui/msns-e-water-nos-launch.glade:774 Gui/msns-e-water-nos-launch.glade:804
-#: Gui/msns-e-water-nos-launch.glade:834 Gui/msns-e-water-nos-launch.glade:864
-#: Gui/msns-e-water-nos-launch.glade:903
-#: Gui/msns-e-water-nos-launch.glade:1109
-#: Gui/msns-e-water-nos-launch.glade:1139
-#: Gui/msns-e-water-nos-launch.glade:1169
-#: Gui/msns-e-water-nos-launch.glade:1544
-#: Gui/msns-e-water-nos-launch.glade:1574
-#: Gui/msns-e-water-nos-launch.glade:1604
-#: Gui/msns-e-water-nos-launch.glade:1634
-#: Gui/msns-e-water-nos-launch.glade:1664
-#: Gui/msns-e-water-nos-launch.glade:1694
-#: Gui/msns-e-water-nos-launch.glade:1724
-#: Gui/msns-e-water-nos-launch.glade:1754
-#: Gui/msns-e-water-nos-launch.glade:2044
-#: Gui/msns-e-water-nos-launch.glade:2110
-#: Gui/msns-e-water-nos-launch.glade:2140
+#: Gui/msns-e-traction.glade:1734 Gui/msns-e-water-nos-launch.glade:293
+#: Gui/msns-e-water-nos-launch.glade:323 Gui/msns-e-water-nos-launch.glade:353
+#: Gui/msns-e-water-nos-launch.glade:383 Gui/msns-e-water-nos-launch.glade:413
+#: Gui/msns-e-water-nos-launch.glade:452 Gui/msns-e-water-nos-launch.glade:786
+#: Gui/msns-e-water-nos-launch.glade:816 Gui/msns-e-water-nos-launch.glade:846
+#: Gui/msns-e-water-nos-launch.glade:1176
+#: Gui/msns-e-water-nos-launch.glade:1206
+#: Gui/msns-e-water-nos-launch.glade:1236
+#: Gui/msns-e-water-nos-launch.glade:1266
+#: Gui/msns-e-water-nos-launch.glade:1296
+#: Gui/msns-e-water-nos-launch.glade:1326
+#: Gui/msns-e-water-nos-launch.glade:1356
+#: Gui/msns-e-water-nos-launch.glade:1386
+#: Gui/msns-e-water-nos-launch.glade:1676
+#: Gui/msns-e-water-nos-launch.glade:1789
+#: Gui/msns-e-water-nos-launch.glade:1819
+#: Gui/msns-e-water-nos-launch.glade:2040
+#: Gui/msns-e-water-nos-launch.glade:2070
+#: Gui/msns-e-water-nos-launch.glade:2100
+#: Gui/msns-e-water-nos-launch.glade:2130
 #: Gui/msns-e-wheeldecode-029yx.glade:411
 #: Gui/msns-e-wheeldecode-029yx.glade:646
 #: Gui/msns-e-wheeldecode-029yx.glade:676
@@ -14986,7 +14986,7 @@ msgstr ""
 #: Gui/msns-e-ego.glade:2068 Gui/msns-e-features.glade:1455
 #: Gui/msns-e-fuelconstants.glade:1954 Gui/msns-e-idle.glade:2237
 #: Gui/msns-e-output-pins.glade:1173 Gui/msns-e-outputs-sel.glade:478
-#: Gui/msns-e-traction.glade:2060 Gui/msns-e-water-nos-launch.glade:2371
+#: Gui/msns-e-traction.glade:2060 Gui/msns-e-water-nos-launch.glade:2272
 #: Gui/msns-e-wheeldecode-029yx.glade:2474 Gui/msns-e-wheeldecode.glade:2415
 #: Gui/PIS-alpha_biar_16x10.glade:6265 Gui/PIS-alpha_bpw_16x10.glade:6246
 #: Gui/PIS-biar_16x16.glade:9230 Gui/PIS-boost_16x10.glade:6265
@@ -15030,7 +15030,7 @@ msgstr ""
 #: Gui/msns-e-ego.glade:2088 Gui/msns-e-features.glade:1475
 #: Gui/msns-e-fuelconstants.glade:1974 Gui/msns-e-idle.glade:2257
 #: Gui/msns-e-output-pins.glade:1193 Gui/msns-e-outputs-sel.glade:498
-#: Gui/msns-e-traction.glade:2080 Gui/msns-e-water-nos-launch.glade:2391
+#: Gui/msns-e-traction.glade:2080 Gui/msns-e-water-nos-launch.glade:2292
 #: Gui/msns-e-wheeldecode-029yx.glade:2494 Gui/msns-e-wheeldecode.glade:2435
 #: Gui/PIS-alpha_biar_16x10.glade:6284 Gui/PIS-alpha_bpw_16x10.glade:6227
 #: Gui/PIS-biar_16x16.glade:9249 Gui/PIS-boost_16x10.glade:6284
@@ -15075,7 +15075,7 @@ msgstr ""
 #: Gui/msns-e-ego.glade:2109 Gui/msns-e-features.glade:1496
 #: Gui/msns-e-fuelconstants.glade:1995 Gui/msns-e-idle.glade:2278
 #: Gui/msns-e-output-pins.glade:1214 Gui/msns-e-outputs-sel.glade:519
-#: Gui/msns-e-traction.glade:2101 Gui/msns-e-water-nos-launch.glade:2412
+#: Gui/msns-e-traction.glade:2101 Gui/msns-e-water-nos-launch.glade:2313
 #: Gui/msns-e-wheeldecode-029yx.glade:2515 Gui/msns-e-wheeldecode.glade:2456
 #: Gui/PIS-alpha_biar_16x10.glade:6304 Gui/PIS-alpha_bpw_16x10.glade:6304
 #: Gui/PIS-biar_16x16.glade:9269 Gui/PIS-boost_16x10.glade:6304
@@ -16788,7 +16788,7 @@ msgstr ""
 #: Gui/ms2-e-3.x-boost_knock_launch.glade:1882
 #: Gui/ms2-e-boost_knock_launch.glade:2752
 #: Gui/ms2-e-boost_knock_launch.glade:2986 Gui/msns-e-features.glade:689
-#: Gui/msns-e-water-nos-launch.glade:425 Gui/msns-e-water-nos-launch.glade:975
+#: Gui/msns-e-water-nos-launch.glade:115 Gui/msns-e-water-nos-launch.glade:660
 #, fuzzy
 msgid "Launch Control"
 msgstr "PIN de Entrada de Señal de Launch control (control de Largada)"
@@ -18480,7 +18480,7 @@ msgstr ""
 
 #: Gui/ms2-e-3.x-nitrous_staging_orfc.glade:2553
 #: Gui/ms2-e-nitrous_staging_orfc.glade:2289
-#: Gui/msns-e-water-nos-launch.glade:2302
+#: Gui/msns-e-water-nos-launch.glade:1924
 msgid "Nitrous Oxide System"
 msgstr ""
 
@@ -20008,7 +20008,7 @@ msgid "Hard Rev-Limiter RPM"
 msgstr ""
 
 #: Gui/msns-e-advanced.glade:130 Gui/msns-e-boost-knock.glade:1604
-#: Gui/msns-e-water-nos-launch.glade:711
+#: Gui/msns-e-water-nos-launch.glade:595
 msgid "Base Sparks"
 msgstr ""
 
@@ -20020,7 +20020,7 @@ msgstr ""
 msgid "Max Time on Soft Limiter"
 msgstr ""
 
-#: Gui/msns-e-advanced.glade:212 Gui/msns-e-water-nos-launch.glade:928
+#: Gui/msns-e-advanced.glade:212 Gui/msns-e-water-nos-launch.glade:477
 msgid "Soft Limit Spark Angle"
 msgstr ""
 
@@ -20581,7 +20581,7 @@ msgstr ""
 msgid "Fuel/Spark Table Selection"
 msgstr ""
 
-#: Gui/msns-e-features.glade:607 Gui/msns-e-water-nos-launch.glade:1377
+#: Gui/msns-e-features.glade:607 Gui/msns-e-water-nos-launch.glade:1060
 msgid "Nitrous System"
 msgstr ""
 
@@ -20593,12 +20593,12 @@ msgstr ""
 msgid "Shift Lights "
 msgstr ""
 
-#: Gui/msns-e-features.glade:717 Gui/msns-e-water-nos-launch.glade:499
+#: Gui/msns-e-features.glade:717 Gui/msns-e-water-nos-launch.glade:188
 msgid "Variable Launch"
 msgstr ""
 
-#: Gui/msns-e-features.glade:771 Gui/msns-e-water-nos-launch.glade:1059
-#: Gui/msns-e-water-nos-launch.glade:1288
+#: Gui/msns-e-features.glade:771 Gui/msns-e-water-nos-launch.glade:735
+#: Gui/msns-e-water-nos-launch.glade:967
 #, fuzzy
 msgid "Water Injection"
 msgstr "Define el estilo de Inyeccion a ser utilizado"
@@ -21034,119 +21034,121 @@ msgstr "Parametros de (DT) doble tabla"
 msgid "MSnS-Extra Traction Control"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:79
-msgid "Arming RPM"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:106
-msgid "Hard Revlimit (RPM)"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:133
-msgid "Retard Above (RPM)"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:160
-msgid "Retard Ignition to (deg)"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:337
-msgid "Flat Shift Controls"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:535
-msgid "Hard RPM Limit"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:563
-msgid "Minimum TPS to enable"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:591
-msgid "Soft RPM Limit"
-msgstr ""
-
-#: Gui/msns-e-water-nos-launch.glade:646
+#: Gui/msns-e-water-nos-launch.glade:251
 msgid ""
 "Launch Control Hard \n"
 "Cut Limiter Type"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:683
+#: Gui/msns-e-water-nos-launch.glade:514
+msgid "Minimum TPS to enable"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:541
+msgid "Soft RPM Limit"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:568
+msgid "Hard RPM Limit"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:622
 msgid "Sparks to Drop"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1194
+#: Gui/msns-e-water-nos-launch.glade:871
 msgid "MAT Enable Setpoint (F)"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1222
+#: Gui/msns-e-water-nos-launch.glade:899
 msgid "KPa Enable Setpoint"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1250
+#: Gui/msns-e-water-nos-launch.glade:927
 msgid "RPM Enable Setpoint"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1474
+#: Gui/msns-e-water-nos-launch.glade:1133
 msgid ""
 "Add Nitrous enrich\n"
 "to which bank?"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1779
+#: Gui/msns-e-water-nos-launch.glade:1411
 msgid "Min Coolant Temp"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1807
+#: Gui/msns-e-water-nos-launch.glade:1439
 msgid "Minimum RPM"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1835
+#: Gui/msns-e-water-nos-launch.glade:1467
 msgid "Maximum RPM"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1863
+#: Gui/msns-e-water-nos-launch.glade:1495
 msgid "PW to add at min RPM"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1891
+#: Gui/msns-e-water-nos-launch.glade:1523
 msgid "PW to add at max RPM"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1919
+#: Gui/msns-e-water-nos-launch.glade:1551
 msgid "Min TPS (RAW ADC)"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1947
+#: Gui/msns-e-water-nos-launch.glade:1579
 msgid "NOS Delay After Launch"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:1975
+#: Gui/msns-e-water-nos-launch.glade:1607
 msgid "NOS Delay After Flat Shift"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:2012
+#: Gui/msns-e-water-nos-launch.glade:1644
 msgid "Retard Spark by (deg)"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:2165
+#: Gui/msns-e-water-nos-launch.glade:1747
+msgid ""
+"Turbo NOS Antilag\n"
+"System (see help)"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:1844
 msgid ""
 "Minimum KPA to fire\n"
 "NOS Antilag"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:2194
+#: Gui/msns-e-water-nos-launch.glade:1873
 msgid ""
 "Maximum KPA to fire\n"
 "NOS Antilag"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:2265
-msgid "NOS Antilag System"
+#: Gui/msns-e-water-nos-launch.glade:1981
+msgid "Arming RPM"
 msgstr ""
 
-#: Gui/msns-e-water-nos-launch.glade:2444
+#: Gui/msns-e-water-nos-launch.glade:2008
+msgid "Hard Revlimit (RPM)"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:2155
+msgid "Retard Above (RPM)"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:2182
+msgid "Retard Ignition to (deg)"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:2211
+msgid "Flat Shift Controls"
+msgstr ""
+
+#: Gui/msns-e-water-nos-launch.glade:2345
 msgid "MSnS-Extra Wateer/NOS/Launch Parameters"
 msgstr ""
 
