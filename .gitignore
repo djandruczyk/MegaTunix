@@ -43,3 +43,4 @@ intltool-*
 mkinstalldirs
 .intltool-merge-cache
 *~
+announcement
