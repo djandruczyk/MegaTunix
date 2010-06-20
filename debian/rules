@@ -26,12 +26,12 @@ configure: configure.ac Makefile.am
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
+#ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+#	cp -f /usr/share/misc/config.sub config.sub
+#endif
+#ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+#	cp -f /usr/share/misc/config.guess config.guess
+#endif
 	# JAB modified to correct prefix, build flags break compiler
 	# not used in normal mtx configure, so we will ignore
 	# and just build with the correct directory prefixes
