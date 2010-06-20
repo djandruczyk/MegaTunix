@@ -60,12 +60,14 @@
 ./Gui/msns-e-idle-029x.datamap.in
 ./Gui/msns-e-idle-hr.datamap.in
 ./Gui/msns-e-output-pins-029x.datamap.in
+./Gui/msns-e-output-pins-hr-011x.datamap.in
 ./Gui/msns-e-outputs-sel-029x.datamap.in
 ./Gui/msns-e-toothtrigger-029x.datamap.in
 ./Gui/msns-e-traction-029x.datamap.in
 ./Gui/msns-e-water-nos-launch-029x.datamap.in
 ./Gui/msns-e-wheeldecode-029x.datamap.in
 ./Gui/msns-e-wheeldecode-hr_10x.datamap.in
+./Gui/msns-e-wheeldecode-hr_11d.datamap.in
 ./Gui/PIS-alpha_biar_16x10.datamap.in
 ./Gui/PIS-alpha_bpw_16x10.datamap.in
 ./Gui/PIS-biar_16x16.datamap.in
@@ -102,6 +104,7 @@
 ./RealtimeMaps/MS2-Extra-3.0.x.rtv_map.in
 ./RealtimeMaps/MS2-Std.rtv_map.in
 ./RealtimeMaps/MSnS-Extra-029x.rtv_map.in
+./RealtimeMaps/MSnS-Extra-HR-011d.rtv_map.in
 ./RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in
 ./RealtimeMaps/PIS_V1_00-firmware.rtv_map.in
 ./RuntimeStatus/MS1-Std-firmware.status_conf.in
@@ -120,5 +123,6 @@
 ./Interrogator/Profiles/SquirtnSpark-Extra-029x.prof.in
 ./Interrogator/Profiles/SquirtnSpark-Extra-029yx.prof.in
 ./Interrogator/Profiles/SquirtnSpark-Extra-HR-010a.prof.in
+./Interrogator/Profiles/SquirtnSpark-Extra-HR-011d.prof.in
 ./Interrogator/Profiles/SquirtnSpark-Extra-HR-011x.prof.in
 ./Interrogator/Profiles/SquirtnSpark-Extra-HR-029x.prof.in

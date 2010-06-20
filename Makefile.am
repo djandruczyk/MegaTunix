@@ -27,22 +27,25 @@ check-gettext:
 	"'checking whether to use NLS... yes'!" ; exit 1 ; fi
 
 update-po: check-gettext
-	@find $(srcdir)/ -name "*.c" -print | sort > $(srcdir)/po/POTFILES.in.2 ; 
-	@find $(srcdir)/ -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+	(rm $(srcdir)/po/POTFILES.in.2 ; \
+	  for dir in $$(echo Gui src dashdesigner gaugedesigner widgets msloader); do \
+		find $$dir -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+		find $$dir -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+	  done ;\
 	if diff $(srcdir)/po/POTFILES.in $(srcdir)/po/POTFILES.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/POTFILES.in.2 ; \
 	else \
 		mv $(srcdir)/po/POTFILES.in.2 $(srcdir)/po/POTFILES.in ; \
-	fi 
-	@find $(srcdir)/Gui -name "*.in" -print | sort > $(srcdir)/po/SPECIALS.in.2 ; 
-	@find $(srcdir)/RealtimeMaps -name "*map.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; 
-	@find $(srcdir)/RuntimeStatus -name "*conf.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; 
-	@find $(srcdir)/Interrogator -name "*prof.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
+	fi ;\
+	find $(srcdir)/Gui -name "*.in" -print | sort > $(srcdir)/po/SPECIALS.in.2 ; \
+	find $(srcdir)/RealtimeMaps -name "*map.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
+	find $(srcdir)/RuntimeStatus -name "*conf.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
+	find $(srcdir)/Interrogator -name "*prof.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
 	if diff $(srcdir)/po/SPECIALS.in $(srcdir)/po/SPECIALS.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/SPECIALS.in.2 ; \
 	else \
 		mv $(srcdir)/po/SPECIALS.in.2 $(srcdir)/po/SPECIALS.in ; \
-	fi 
-	cd po && $(MAKE) $(AM_MAKEFLAGS) update-po
+	fi \
+	&& cd po && $(MAKE) $(AM_MAKEFLAGS) update-po)
 
 .PHONY: check-gettext update-po
