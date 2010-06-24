@@ -540,9 +540,6 @@ gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer da
 
 gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	GtkWidget *tmpwidget;
-	gint x = 0;
-	gint y = 0;
 	if (event->type == GDK_KEY_RELEASE)
 		return FALSE;
 
@@ -555,48 +552,17 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_M:
 		case GDK_m:
-			tmpwidget = lookup_widget("main_window");
-			if (GTK_WIDGET_VISIBLE(tmpwidget))
-				gtk_widget_hide_all (tmpwidget);
-			else
-			{
-				x = (GINT)OBJ_GET(global_data,"main_x_origin");
-				y = (GINT)OBJ_GET(global_data,"main_y_origin");
-				gtk_widget_show_all(tmpwidget);
-				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-			}
+			toggle_main_visible();
 			return TRUE;
 			break;
 		case GDK_R:
 		case GDK_r:
-			tmpwidget = lookup_widget("rtt_window");
-			if (!GTK_IS_WIDGET(tmpwidget))
-				break;
-			if (GTK_WIDGET_VISIBLE(tmpwidget))
-				gtk_widget_hide_all (tmpwidget);
-			else
-			{
-				x = (GINT)OBJ_GET(global_data,"rtt_x_origin");
-				y = (GINT)OBJ_GET(global_data,"rtt_y_origin");
-				gtk_widget_show_all(tmpwidget);
-				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-			}
+			toggle_rtt_visible();
 			return TRUE;
 			break;
 		case GDK_S:
 		case GDK_s:
-			tmpwidget = lookup_widget("status_window");
-			if (!GTK_IS_WIDGET(tmpwidget))
-				break;
-			if (GTK_WIDGET_VISIBLE(tmpwidget))
-				gtk_widget_hide_all (tmpwidget);
-			else
-			{
-				x = (GINT)OBJ_GET(global_data,"status_x_origin");
-				y = (GINT)OBJ_GET(global_data,"status_y_origin");
-				gtk_widget_show_all(tmpwidget);
-				gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-			}
+			toggle_status_visible();
 			return TRUE;
 			break;
 		case GDK_f:
@@ -616,6 +582,73 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	return FALSE;
 }
 
+
+void toggle_status_visible()
+{
+	gint x = 0;
+	gint y = 0;
+	GtkWidget *tmpwidget = lookup_widget("status_window");
+	if (!GTK_IS_WIDGET(tmpwidget))
+		return;
+	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	{
+		gtk_widget_hide_all (tmpwidget);
+		OBJ_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
+	}
+	else
+	{
+		x = (GINT)OBJ_GET(global_data,"status_x_origin");
+		y = (GINT)OBJ_GET(global_data,"status_y_origin");
+		gtk_widget_show_all(tmpwidget);
+		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+		OBJ_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));
+	}
+}
+
+
+void toggle_rtt_visible()
+{
+	gint x = 0;
+	gint y = 0;
+	GtkWidget *tmpwidget = lookup_widget("rtt_window");
+	if (!GTK_IS_WIDGET(tmpwidget))
+		return;
+	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	{
+		gtk_widget_hide_all (tmpwidget);
+		OBJ_SET(global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
+	}
+	else
+	{
+		x = (GINT)OBJ_GET(global_data,"rtt_x_origin");
+		y = (GINT)OBJ_GET(global_data,"rtt_y_origin");
+		gtk_widget_show_all(tmpwidget);
+		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+		OBJ_SET(global_data,"rtt_visible",GINT_TO_POINTER(TRUE));
+	}
+}
+
+void toggle_main_visible()
+{
+	gint x = 0;
+	gint y = 0;
+	GtkWidget *tmpwidget = lookup_widget("main_window");
+	if (!GTK_IS_WIDGET(tmpwidget))
+		return;
+	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	{
+		gtk_widget_hide_all (tmpwidget);
+		OBJ_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
+	}
+	else
+	{
+		x = (GINT)OBJ_GET(global_data,"main_x_origin");
+		y = (GINT)OBJ_GET(global_data,"main_y_origin");
+		gtk_widget_show_all(tmpwidget);
+		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
+		OBJ_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));
+	}
+}
 
 void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
@@ -743,6 +776,12 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 		       	G_CALLBACK(toggle_dash_on_top),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
+	item = gtk_check_menu_item_new_with_label("Hide MTX Gui");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),!(gboolean)OBJ_GET(global_data,"gui_visible"));
+	g_signal_connect_swapped(G_OBJECT(item),"toggled",
+		       	G_CALLBACK(toggle_gui_visible),(gpointer)widget);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
 	item = gtk_menu_item_new_with_label("Close...");
 	g_signal_connect(G_OBJECT(item),"activate",
 		       	G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
@@ -772,6 +811,8 @@ gboolean close_dash(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *cbutton = NULL;
 
+	if (!(gboolean)OBJ_GET(global_data,"gui_visible"))
+		toggle_gui_visible(NULL,NULL);
         OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
 	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
@@ -1251,4 +1292,31 @@ void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),GTK_WINDOW(lookup_widget("main_window")));
         	OBJ_SET(dash,"dash_on_top",GINT_TO_POINTER(TRUE));
 	}
+}
+
+
+void toggle_gui_visible(GtkWidget *widget, gpointer data)
+{
+	/* IF visible, hide them */
+	if ((gboolean)OBJ_GET(global_data,"gui_visible"))
+	{
+		if (OBJ_GET(global_data,"main_visible"))
+			toggle_main_visible();
+		if (OBJ_GET(global_data,"status_visible"))
+			toggle_status_visible();
+		if (OBJ_GET(global_data,"rtt_visible"))
+			toggle_rtt_visible();
+		OBJ_SET(global_data,"gui_visible",GINT_TO_POINTER(FALSE));
+	}
+	else
+	{
+		if (!OBJ_GET(global_data,"main_visible"))
+			toggle_main_visible();
+		if (!OBJ_GET(global_data,"status_visible"))
+			toggle_status_visible();
+		if (!OBJ_GET(global_data,"rtt_visible"))
+			toggle_rtt_visible();
+		OBJ_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));
+	}
+			
 }

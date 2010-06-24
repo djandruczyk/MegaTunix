@@ -147,6 +147,12 @@ void handle_args(gint argc, gchar * argv[])
 	{
 		printf(_("Should do listen mode\n"));
 	}
+	if (args->hide_rttext)
+		OBJ_SET(global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
+	if (args->hide_status)
+		OBJ_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
+	if (args->hide_maingui)
+		OBJ_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
 	if (args->debug)
 	{
 		printf(_("debug option \"%i\"\n"),args->debug);

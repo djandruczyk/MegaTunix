@@ -85,6 +85,10 @@ void init(void)
 		hidden_list[i]=FALSE;
 
 	OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));	/* Don't make dash fullscreen by default */
+	OBJ_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	OBJ_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	OBJ_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	OBJ_SET(global_data,"rtt_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
 	OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */

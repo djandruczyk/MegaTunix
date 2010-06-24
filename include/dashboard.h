@@ -69,6 +69,10 @@ gboolean set_dash_time_mode(GtkWidget *, gpointer);
 gboolean get_dash_daytime_mode(GtkWidget *);
 void set_dash_daytime_mode(GtkWidget *, gboolean);
 gboolean close_dash(GtkWidget *, gpointer );
+void toggle_main_visible();
+void toggle_status_visible();
+void toggle_rtt_visible();
+void toggle_gui_visible(GtkWidget *widget, gpointer data);
 
 
 /* Prototypes */
