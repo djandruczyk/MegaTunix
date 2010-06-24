@@ -36,8 +36,6 @@ static volatile gboolean moving = FALSE;
 static volatile gboolean resizing = FALSE;
 GStaticMutex dash_mutex = G_STATIC_MUTEX_INIT;
 extern GObject *global_data;
-static volatile gboolean fullscreen = FALSE;
-
 
 /*!
  \brief load_dashboard() loads the specified dashboard configuration file
@@ -80,7 +78,6 @@ void load_dashboard(gchar *filename, gpointer data)
 	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),_("Dash Cluster"));
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 
 	g_signal_connect(G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
@@ -473,7 +470,7 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	}
 
 	gdk_gc_set_foreground (gc1, &white);
-	if (fullscreen)
+	if ((gboolean)OBJ_GET(global_data,"dash_fullscreen"))
 		gdk_draw_rectangle(bitmap,gc1,TRUE,0,0,width,height);
 	else
 	{
@@ -702,6 +699,7 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 	GtkWidget *n_item = NULL;
 	gint button = 0;
 	gint event_time = 0;
+	GtkWidget *dash = GTK_BIN(widget)->child;
 
 	menu = gtk_menu_new();
 
@@ -734,9 +732,15 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Fullscreen");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),fullscreen);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(gboolean)OBJ_GET(global_data,"dash_fullscreen"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
 		       	G_CALLBACK(toggle_dash_fullscreen),(gpointer)widget);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	item = gtk_check_menu_item_new_with_label("Stay on Top");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(gboolean)OBJ_GET(dash,"dash_on_top"));
+	g_signal_connect_swapped(G_OBJECT(item),"toggled",
+		       	G_CALLBACK(toggle_dash_on_top),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_menu_item_new_with_label("Close...");
@@ -768,7 +772,7 @@ gboolean close_dash(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *cbutton = NULL;
 
-        fullscreen = FALSE;
+        OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
 	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
 	cbutton = lookup_widget(tmpbuf);
@@ -1212,14 +1216,39 @@ gboolean focus_event(GtkWidget *widget, gpointer data)
 
 void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
-	if (fullscreen)
+	GtkWidget *dash = OBJ_GET(widget,"dash");
+
+	if ((gboolean)OBJ_GET(global_data,"dash_fullscreen"))
 	{
-		fullscreen = FALSE;
+        	OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
+		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),GTK_WINDOW(lookup_widget("main_window")));
 	}
 	else
 	{
-		fullscreen = TRUE;
+        	OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(TRUE));
+		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
+	}
+}
+
+
+void toggle_dash_on_top(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *dash = GTK_BIN(widget)->child;
+
+	if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+	{
+        	OBJ_SET(dash,"dash_on_top",GINT_TO_POINTER(FALSE));
+		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
+	}
+	else
+	{
+		if (!(gboolean)OBJ_GET(global_data,"dash_fullscreen"))
+			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),GTK_WINDOW(lookup_widget("main_window")));
+        	OBJ_SET(dash,"dash_on_top",GINT_TO_POINTER(TRUE));
 	}
 }

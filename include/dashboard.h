@@ -62,6 +62,7 @@ gboolean dash_lookup_attribute(GtkWidget *, MtxGenAttr);
 gboolean toggle_dash_tattletales(GtkWidget *, gpointer);
 gboolean toggle_dash_antialias(GtkWidget *, gpointer);
 void toggle_dash_fullscreen(GtkWidget *, gpointer);
+void toggle_dash_on_top(GtkWidget *, gpointer);
 gboolean reset_dash_tattletales(GtkWidget *, gpointer);
 gboolean toggle_dash_daytime(GtkWidget *, gpointer);
 gboolean set_dash_time_mode(GtkWidget *, gpointer);
