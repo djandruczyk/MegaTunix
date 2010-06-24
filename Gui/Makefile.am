@@ -143,6 +143,7 @@ gui_in_files = 	\
 		ms2-e-nitrous_staging_orfc.datamap.in \
 		ms2-e-noise_lag.datamap.in \
 		ms2-e-toothtrigger-2.1.x.datamap.in \
+		ms2-e-toothtrigger-3.x.datamap.in \
 		ms2-globals.datamap.in \
 		ms2-idle_ego_rev.datamap.in \
 		ms2-ignition.datamap.in \
