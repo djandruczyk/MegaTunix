@@ -32,9 +32,9 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 
 #----- Widgets ---------------------------------------------------------------
 
-[seq_main_params_table]
-keys=bind_to_list
-bind_to_list=seq_inj
+#[seq_main_params_table]
+#keys=bind_to_list
+#bind_to_list=seq_inj
 
 [fixed_inj_timing_1_table]
 keys=bind_to_list
@@ -70,7 +70,7 @@ bind_to_list=seq_inj,seq_siamese,seq_dual
 
 [additional_injectors_table]
 keys=bind_to_list
-bind_to_list=bank2,extra_inj
+bind_to_list=extra_inj
 
 [siamese_hybrid_table]
 keys=bind_to_list
@@ -125,13 +125,12 @@ toggle_groups=,ve_trim
 tooltip=Enables or Disables VE Trim Tables
 
 [extrainj_combo]
-keys=offset,bitmask,bitvals,choices,toggle_groups,bind_to_list,tooltip
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
 offset=415
 choices=Standard Drivers,Additional Drivers
 bitvals=0,1
 bitmask=4
 toggle_groups=inj_pwm,extra_inj
-bind_to_list=bank2
 tooltip=NOTE: When set to Additional Drivers, PWM is not available for ANY injector channel.
 
 #----- Entries ---------------------------------------------------------------

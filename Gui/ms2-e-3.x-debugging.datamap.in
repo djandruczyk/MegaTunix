@@ -49,7 +49,7 @@ bind_to_list=idle_valve_test
 
 [inj_test_pwm_table]
 keys=bind_to_list
-bind_to_list=inj_test_pwm
+bind_to_list=inj_test_pwm,inj_pwm
 
 [output_test_ign_table]
 keys=bind_to_list
@@ -169,13 +169,14 @@ bitmask=48
 _tooltip=Selects which additional injector output to test
 
 [inj_test_pwm_combo]
-keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=page,offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
 page=3
 offset=2
 choices=Standard,As Below
 bitvals=0,1
 bitmask=128
 toggle_groups=,inj_test_pwm
+bind_to_list=inj_pwm
 _tooltip=Selects to use whatever is configured on the global tab, or the below
 settings.
 
