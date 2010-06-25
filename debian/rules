@@ -24,6 +24,7 @@ configure: configure.ac Makefile.am
 	./autogen.sh 
 
 config.status: configure
+	./autogen.sh
 	dh_testdir
 	# Add here commands to configure the package.
 #ifneq "$(wildcard /usr/share/misc/config.sub)" ""
