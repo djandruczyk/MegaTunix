@@ -1,3 +1,8 @@
+megatunix (0.9.22) stable; urgency=low
+  * Dash issues resolver,  3.03u seq injector issue fixed, 3.03 alpha TTM
+  fixed up
+
+ -- David Andruczyk <djandruczyk@yahoo.com>  Fri, 25 Jun 2010 08:11:30 -0500
 megatunix (0.9.21) stable; urgency=low
   * 0.9.21 OS-X compile fixes.  po Makefile issues fixed. segfault issues with
   table rescaling fixed. Added support for MSns-HighRes-Extra 011d
