@@ -202,7 +202,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkEntry" id="trig_angle_entry">
+					<widget class="GtkEntry" id="trigger_offset_entry">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>

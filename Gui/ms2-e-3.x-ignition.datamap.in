@@ -321,7 +321,7 @@ _tooltip=See http://msextra.com/doc/ms2extra/MS2-Extra_Gen_Ignition.htm
 
 #----- Entries ----------------------------------------------------------------
 
-[trig_angle_entry]
+[trigger_offset_entry]
 keys=precision,raw_lower,raw_upper,offset,size,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
 offset=42
 size=_S16_
