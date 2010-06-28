@@ -75,33 +75,6 @@ bind_to_list=dt_controls
 keys=set_label
 set_label=MegaSquirtnSpark-Extra FUEL VE Tables
 
-[VE1_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,5,184,4,2,1
-
-[VE1_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,5,184,4,2,1
-
-[VE2_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,5,184,4,2,1
-
-[VE2_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,5,184,4,2,1
 
 #----- Buttons ---------------------------------------------------------------
 

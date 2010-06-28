@@ -108,7 +108,7 @@ void thread_update_widget(gchar *, WidgetType, gchar *);
 gboolean queue_function(gchar * );
 void chunk_write(gint, gint, gint, gint, guint8 *);
 void build_output_string(Io_Message *, Command *, gpointer);
-void handle_page_change(gint , gint );
+void ms_handle_page_change(gint , gint );
 void queue_ms1_page_change(gint );
 void table_write(gint, gint, guint8 *);
 

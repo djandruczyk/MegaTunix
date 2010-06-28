@@ -326,7 +326,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 	 * burns and/or page changing
 	 */
 	if (firmware->multi_page)
-		handle_page_change(page,last_page);
+		ms_handle_page_change(page,last_page);
 
 	output->queue_update = queue_update;
 	io_cmd(firmware->write_command,output);
@@ -335,7 +335,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 }
 
 
-void handle_page_change(gint page, gint last)
+void ms_handle_page_change(gint page, gint last)
 {
 	extern Firmware_Details *firmware;
 	guint8 ** ecu_data = firmware->ecu_data;
@@ -456,7 +456,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	store_new_block(canID,page,offset,data,num_bytes);
 
 	if (firmware->multi_page)
-		handle_page_change(page,last_page);
+		ms_handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
 	return;
@@ -493,7 +493,7 @@ void table_write(gint page, gint num_bytes, guint8 * data)
 	store_new_block(0,page,0,data,num_bytes);
 
 	if (firmware->multi_page)
-		handle_page_change(page,last_page);
+		ms_handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->table_write_command,output);
 
