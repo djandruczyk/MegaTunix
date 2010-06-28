@@ -201,7 +201,7 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 
 
 /*!
- \brief add_rtt() creates the rt_text from the passed data, and attaches
+ \brief create_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
  \param parent (GtkWidget *) parent widget
  \param ctrl_name (gchar *) name of the rt_text as defined in the config file
@@ -218,13 +218,13 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 
 	if (!rtv_map)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": create_rtt()\n\tBad things man, rtv_map is null!!\n"));
 		return NULL;
 	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": create_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
 		return NULL;
 	}
 
@@ -328,8 +328,10 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	show_prefix = (GBOOLEAN)OBJ_GET(widget,"show_prefix");
 
 	if (!rtt_hash)
+	{
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-	OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
+		OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
+	}
 
 	if ((rtt_hash) && (ctrl_name) && (source))
 		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
