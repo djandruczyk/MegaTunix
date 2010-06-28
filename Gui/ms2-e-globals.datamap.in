@@ -101,7 +101,7 @@ _tooltip=Enables controls for injector channel 2
 [fuel_algo_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Speed Density,Percent Baro,Alpha-N
-bitvals=0,1,2
+bitvals=1,2,3
 offset=630
 bitmask=3
 toggle_groups=speed_density,percent_baro,alpha_n
