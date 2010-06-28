@@ -5685,7 +5685,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
 		<widget class="GtkButton" id="burn_data_button">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Send to ECU</property>
+		  <property name="label" translatable="yes">Burn to ECU Flash</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>

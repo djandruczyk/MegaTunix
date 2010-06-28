@@ -967,12 +967,12 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case DECREMENT_VALUE:
 			dest = OBJ_GET(widget,"partner_widget");
 			tmp2 = (GINT)OBJ_GET(widget,"amount");
-			if (OBJ_GET(widget,"raw_lower"))
-				raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+			if (OBJ_GET(dest,"raw_lower"))
+				raw_lower = (gint)strtol(OBJ_GET(dest,"raw_lower"),NULL,10);
 			else
 				raw_lower = get_extreme_from_size(size,LOWER);
-			if (OBJ_GET(widget,"raw_upper"))
-				raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+			if (OBJ_GET(dest,"raw_upper"))
+				raw_upper = (gint)strtol(OBJ_GET(dest,"raw_upper"),NULL,10);
 			else
 				raw_upper = get_extreme_from_size(size,UPPER);
 			canID = (GINT)OBJ_GET(dest,"canID");
