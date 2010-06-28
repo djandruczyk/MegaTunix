@@ -319,6 +319,17 @@ label_prefix=<b>
 label_suffix=\302\260</b>
 post_functions_with_arg=add_additional_rtt
 
+[cloop_idle_clt_temp_box]
+keys=ctrl_name,markup,label_prefix,label_suffix,source,show_prefix,post_functions_with_arg
+ctrl_name=cloop_idle_clt_temp_label
+source=cltdeg
+show_prefix=FALSE
+markup=TRUE
+label_prefix=<b>
+label_suffix=\302\260</b>
+post_functions_with_arg=add_additional_rtt
+
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
