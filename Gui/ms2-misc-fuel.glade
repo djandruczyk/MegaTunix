@@ -869,7 +869,7 @@ MAP pin for MAF/MAP blend.</property>
 				      <child>
 					<widget class="GtkLabel" id="label37">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">MAP Only Above RPM (rpm)</property>
+					  <property name="label" translatable="yes">MAP Only below RPM (rpm)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -896,7 +896,7 @@ MAP pin for MAF/MAP blend.</property>
 				      <child>
 					<widget class="GtkLabel" id="label38">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">MAF Only Below RPM (rpm)</property>
+					  <property name="label" translatable="yes">MAF Only above RPM (rpm)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2338,7 +2338,7 @@ MAP pin for MAF/MAP blend.</property>
 				  <child>
 				    <widget class="GtkLabel" id="label43">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Baro Spark Advance (deg/kPa over 100)</property>
+				      <property name="label" translatable="yes">Baro Spark Advance (deg/kPa below 100)</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>

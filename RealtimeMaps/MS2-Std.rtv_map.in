@@ -996,17 +996,17 @@ size=_S16_
 real_lower=0
 real_upper=255
 complex_expr=TRUE
-ul_conv_expr=(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)
-# This SHOULD work, but it does not..  weird..
-#ul_conv_expr=(accelEnrich/10) + (tspden * tspfuelcut) + ((1 - tspden) * 100)
-expr_symbols=accelEnrich,tpsfuelcut,tpsden
-expr_types=_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_
+# This changed in 2.891, 2.890 nad older below
+#ul_conv_expr=(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)
+ul_conv_expr=(((accelEnrich/10) + ((tpsfuelcut/100*(pulseWidth1/1000))-(pulseWidth1/1000)))/(pulseWidth1/10)) + 100
+expr_symbols=accelEnrich,tpsfuelcut,pulseWidth1
+expr_types=_RAW_VAR_,_RAW_VAR_,_RAW_VAR_
 accelEnrich_offset=42
 accelEnrich_size=_S16_
-tpsden_offset=11
-tpsden_bitmask=32
 tpsfuelcut_offset=44
 tpsfuelcut_size=_S16_
+pulseWidth1_offset=2
+pulseWidth1_size=_U16_
 _tooltip="AccDecEnrich" Is the current accel/decel enrichment
 log_by_default=TRUE
 
