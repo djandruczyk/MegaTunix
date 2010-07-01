@@ -146,6 +146,7 @@ gboolean lock_serial(gchar * name)
 	gchar *lock = NULL;
 	gchar **vector = NULL;
 	gchar *contents = NULL;
+	gboolean res = FALSE;
 	GError *err = NULL;
 	gint i = 0;
 	gint pid = 0;
@@ -155,13 +156,14 @@ gboolean lock_serial(gchar * name)
 	if (!g_file_test("/proc",G_FILE_TEST_IS_DIR))
 		return TRUE;
 
-	lock = g_strdup_printf("/var/lock/LCK..");
+	tmpbuf = g_strdup_printf("/var/lock/LCK..");
 	vector = g_strsplit(name,PSEP,-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
 		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0))
 			continue;
-		lock = g_strconcat(lock,vector[i],NULL);
+		lock = g_strconcat(tmpbuf,vector[i],NULL);
+		g_free(tmpbuf);
 	}
 	g_strfreev(vector);
 	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
@@ -177,7 +179,9 @@ gboolean lock_serial(gchar * name)
 			g_free(contents);
 			g_strfreev(vector);
 			tmpbuf = g_strdup_printf("/proc/%i",pid);
-			if (g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
+			res = g_file_test(tmpbuf,G_FILE_TEST_IS_DIR);
+			g_free(tmpbuf);
+			if (res)
 			{
 //				printf("process active\n");
 				return FALSE;
@@ -188,8 +192,11 @@ gboolean lock_serial(gchar * name)
 		
 	}
 	contents = g_strdup_printf("     %i",getpid());
-	if(g_file_set_contents(lock,contents,-1,&err))
+	res = g_file_set_contents(lock,contents,-1,&err);
+	g_free(contents);
+	if (res)
 	{
+
 		OBJ_SET(global_data,"serial_lockfile",(gpointer)lock);
 		return TRUE;
 	}

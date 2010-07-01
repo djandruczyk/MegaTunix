@@ -22,6 +22,7 @@
 #include <glade/glade-xml.h>
 #include <glib.h>
 #include <gui_handlers.h>
+#include <init.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <notifications.h>
@@ -43,7 +44,6 @@ extern GObject *global_data;
  */
 EXPORT void load_rt_text_pf()
 {
-	GHashTable *rtt_hash = NULL;
 	GtkWidget *treeview = NULL; 
 	GtkWidget *window = NULL;
 	GtkWidget *parent = NULL;
@@ -76,9 +76,6 @@ EXPORT void load_rt_text_pf()
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Text...")));
-	if (!rtt_hash)
-		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-	OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
 
 	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("xml"));
 	if (!filename)
@@ -329,7 +326,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 
 	if (!rtt_hash)
 	{
-		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_rtt);
 		OBJ_SET(global_data,"rtt_hash",(gpointer)rtt_hash);
 	}
 

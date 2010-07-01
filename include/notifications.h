@@ -21,7 +21,7 @@
 void set_group_color(GuiColor, gchar * );
 void set_reqfuel_color(GuiColor, gint );
 void set_widget_color(gpointer, gpointer );
-void update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
+void update_logbar(const gchar *, const gchar *, const gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
 void set_title(gchar *);

@@ -517,8 +517,8 @@ void table_write(gint page, gint num_bytes, guint8 * data)
  \param clear (gboolean) Flag to clear the display before writing the text
  */
 void  thread_update_logbar(
-		gchar * view_name, 
-		gchar * tagname, 
+		const gchar * view_name, 
+		const gchar * tagname, 
 		gchar * msg,
 		gboolean count,
 		gboolean clear)

@@ -20,6 +20,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
+#include <init.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <stdlib.h>
@@ -132,7 +133,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	lookuptable->filename = g_strdup(vector[g_strv_length(vector)-1]);
 	g_strfreev(vector);
 	if (!lookuptables)
-		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
+		lookuptables = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_lookuptable);
 	g_hash_table_insert(lookuptables,g_strdup(table_name),lookuptable);
 	/*g_hash_table_foreach(lookuptables,dump_lookuptables,NULL);*/
 

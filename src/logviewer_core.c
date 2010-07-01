@@ -113,23 +113,23 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("dlog_view",g_strdup("warning"),g_strdup("NO FILE opened for logviewing!\n"),FALSE,FALSE);
+		update_logbar("dlog_view","warning",_("NO FILE opened for logviewing!\n"),FALSE,FALSE);
 		return FALSE;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "r+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("dlog_view",g_strdup("warning"),g_strdup("File open FAILURE! \n"),FALSE,FALSE);
+		update_logbar("dlog_view","warning",_("File open FAILURE! \n"),FALSE,FALSE);
 		return FALSE;
 	}
 
-	update_logbar("dlog_view",NULL,g_strdup("DataLog ViewFile Opened\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("DataLog ViewFile Opened\n"),FALSE,FALSE);
 	load_logviewer_file(iochannel);
 	g_io_channel_shutdown(iochannel,FALSE,NULL);
 	g_io_channel_unref(iochannel);
 
-	update_logbar("dlog_view",NULL,g_strdup("LogView File Closed\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("LogView File Closed\n"),FALSE,FALSE);
 	gtk_widget_set_sensitive(lookup_widget("logviewer_controls_hbox"),TRUE);
 	free_mtxfileio(fileio);
 	return TRUE;

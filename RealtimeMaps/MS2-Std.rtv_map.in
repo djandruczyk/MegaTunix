@@ -139,7 +139,7 @@ log_by_default=FALSE
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afrtgt2
 _dlog_gui_name=AfrTarget 2
-dlog_field_name=Afrtrgt2
+dlog_field_name=AFRtrgt2
 offset=13
 real_lower=8
 real_upper=23
@@ -151,9 +151,9 @@ log_by_default=FALSE
 
 [derived_10]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
-internal_names=wb02_en1
+internal_names=wbo2_en1
 _dlog_gui_name=WbO2en 1
-dlog_field_name=wb02en1
+dlog_field_name=wbo2en1
 offset=14
 real_lower=0
 real_upper=255
@@ -164,9 +164,9 @@ log_by_default=FALSE
 
 [derived_11]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
-internal_names=wb02_en2
+internal_names=wbo2_en2
 _dlog_gui_name=WbO2en 2
-dlog_field_name=wb02en2
+dlog_field_name=wbo2en2
 offset=15
 real_lower=0
 real_upper=255

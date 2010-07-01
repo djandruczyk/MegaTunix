@@ -26,6 +26,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
+#include <init.h>
 #include <keyparser.h>
 #include <notifications.h>
 #include <mtxmatheval.h>
@@ -151,7 +152,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	}
 	rtv_map->offset_hash = g_hash_table_new(g_direct_hash,g_direct_equal);
 	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GObject *));
-	rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
+	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_map->rtvars_size = firmware->rtvars_size;
 	rtv_map->derived_total = derived_total;
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE, sizeof(GTimeVal),4096);
@@ -273,12 +274,14 @@ EXPORT gboolean load_realtime_map_pf(void )
 
 			}
 		}
+		OBJ_SET(object,"keys",g_strdupv(keys));
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_replace(rtv_map->offset_hash,GINT_TO_POINTER(offset),list);
 		g_array_append_val(rtv_map->rtv_list,object);
 
 		g_free(section);
+
 		g_strfreev(keys);
 	}
 	cfg_free(cfgfile);

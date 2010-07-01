@@ -1,0 +1,3200 @@
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcDefaultMapModifiers
+   fun:XSetLocaleModifiers
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XcursorSetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcOpenConverter
+   fun:_XrmDefaultInitParseInfo
+   fun:_XrmInitParseInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XrmDefaultInitParseInfo
+   fun:_XrmInitParseInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XiGetExtensionVersion
+   fun:_XiCheckExtInit
+   fun:XListInputDevices
+   fun:_gdk_input_common_init
+   fun:_gdk_input_init
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_XCBInitDisplayLock
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libxcb.so.1.0.0
+   obj:/usr/lib/libxcb.so.1.0.0
+   fun:xcb_connect_to_fd
+   fun:xcb_connect
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcBlanksCreate
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_ft_font_face_create_for_pattern
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_metrics
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   fun:XInput_find_display
+   fun:XListInputDevices
+   fun:_gdk_input_common_init
+   fun:_gdk_input_init
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XAddConnectionWatch
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XRenderFindDisplay
+   fun:XRenderQueryExtension
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XOpenDevice
+   fun:_gdk_input_common_init
+   fun:_gdk_input_init
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XDamageFindDisplay
+   fun:XDamageQueryExtension
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XCompositeFindDisplay
+   fun:XCompositeQueryExtension
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XFixesFindDisplay
+   fun:XFixesQueryExtension
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   obj:/usr/lib/libGL.so.169.12
+   fun:_dl_init
+   obj:/lib/ld-2.7.so
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XauFileName
+   fun:XauGetBestAuthByAddr
+   obj:/usr/lib/libxcb.so.1.0.0
+   fun:xcb_connect
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbGetMap
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+   fun:gtk_text_view_value_changed
+   fun:_gtk_marshal_VOID__OBJECT_OBJECT
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:initialize_io_message
+   fun:io_cmd
+   fun:leave
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:gtk_widget_event_internal
+   fun:gtk_main_do_event
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:_XlcResolveLocaleName
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:theme_create_rc_style
+   fun:gtk_theme_engine_create_rc_style
+   fun:gtk_rc_parse_engine
+   fun:gtk_rc_parse_style
+   fun:gtk_rc_parse_any
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FT_New_Memory
+   fun:FT_Init_FreeType
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:pango_cairo_font_map_new
+   fun:pango_cairo_font_map_get_default
+   fun:gdk_pango_context_get_for_screen
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libxcb.so.1.0.0
+   obj:/usr/lib/libxcb.so.1.0.0
+   fun:xcb_wait_for_reply
+   fun:xcb_query_extension_reply
+   fun:xcb_get_extension_data
+   fun:xcb_prefetch_maximum_request_length
+   fun:xcb_get_maximum_request_length
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XrmInternalStringToQuark
+   fun:XrmStringToQuark
+   fun:_XlcGetCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetCreate
+   fun:FcConfigCreate
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+   fun:FcConfigGetCurrent
+   fun:FcConfigSubstituteWithPat
+   fun:FcConfigSubstitute
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcPatternAdd
+   fun:FcPatternBuild
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libGL.so.169.12
+   fun:_dl_init
+   obj:/lib/ld-2.7.so
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XPollfdCacheInit
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_gdk_xsettings_client_new_with_grab_funcs
+   fun:_gdk_x11_events_init_screen
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextAddDisplay
+   obj:/usr/lib/libXinerama.so.1.0.0
+   fun:XineramaIsActive
+   fun:init_xinerama_support
+   fun:_gdk_x11_screen_new
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XInitExtension
+   fun:XkbUseExtension
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XiCheckExtInit
+   fun:XListInputDevices
+   fun:_gdk_input_common_init
+   fun:_gdk_input_init
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbUseExtension
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:nss_parse_service_list
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_get_home_dir
+   fun:get_module_path
+   fun:_gtk_get_module_path
+   fun:_gtk_find_module
+   fun:gtk_rc_find_module_in_path
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbAllocServerMap
+   fun:_XkbReadGetMapReply
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XkbGetUpdatedMap
+   fun:XkbGetMap
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbGetMap
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+   fun:gtk_text_view_value_changed
+   fun:_gtk_marshal_VOID__OBJECT_OBJECT
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_get_home_dir
+   fun:get_module_path
+   fun:_gtk_get_module_path
+   fun:_gtk_find_module
+   fun:gtk_rc_find_module_in_path
+   fun:gtk_theme_engine_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:vasprintf
+   fun:g_vasprintf
+   fun:g_strdup_vprintf
+   fun:g_strdup_printf
+   fun:gtk_entry_update_primary_selection
+   fun:gtk_editable_select_region
+   fun:gtk_entry_state_changed
+   fun:g_cclosure_marshal_VOID__ENUM
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XReply
+   fun:XSync
+   fun:gdk_flush
+   fun:gtk_main
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:gdk_x11_ref_cairo_surface
+   fun:_gdk_drawable_ref_cairo_surface
+   fun:gdk_pixmap_ref_cairo_surface
+   fun:_gdk_drawable_ref_cairo_surface
+   fun:gdk_window_begin_paint_region
+   fun:gtk_main_do_event
+   fun:gdk_window_process_updates_internal
+   fun:gdk_window_process_all_updates
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcConfigCreate
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+   fun:FcConfigGetCurrent
+   fun:FcConfigSubstituteWithPat
+   fun:FcConfigSubstitute
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:tsearch
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getpwnam_r@@GLIBC_2.1.2
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_get_home_dir
+   fun:get_module_path
+   fun:_gtk_get_module_path
+   fun:_gtk_find_module
+   fun:gtk_rc_find_module_in_path
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XShmCreateImage
+   fun:_gdk_image_new_for_depth
+   fun:allocate_scratch_images
+   fun:_gdk_image_get_scratch
+   fun:gdk_x11_draw_pixbuf
+   fun:gdk_draw_pixbuf
+   fun:gdk_draw_pixbuf
+   fun:gdk_window_draw_pixbuf
+   fun:gdk_draw_pixbuf
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:qt_theme_pixbuf_render
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcMatrixCopy
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+   fun:FcConfigGetCurrent
+   fun:FcConfigSubstituteWithPat
+   fun:FcConfigSubstitute
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrCopy
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:gdk_x11_ref_cairo_surface
+   fun:_gdk_drawable_ref_cairo_surface
+   fun:gdk_pixmap_ref_cairo_surface
+   fun:_gdk_drawable_ref_cairo_surface
+   fun:gdk_window_begin_paint_region
+   fun:gtk_main_do_event
+   fun:gdk_window_process_updates_internal
+   fun:gdk_window_process_all_updates
+   fun:gtk_container_idle_sizer
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_XkbReadGetMapReply
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XkbGetUpdatedMap
+   fun:XkbGetMap
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+   fun:gtk_text_view_value_changed
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcLangSetCreate
+   fun:FcLangSetCopy
+   fun:FcValueSave
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetAdd
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_create
+   fun:setup_backing_rect_method
+   fun:gdk_window_clear_backing_rect
+   fun:gdk_window_begin_paint_region
+   fun:gtk_main_do_event
+   fun:gdk_window_process_updates_internal
+   fun:gdk_window_process_all_updates
+   fun:gtk_container_idle_sizer
+   fun:gdk_threads_dispatch
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_ft_font_face_create_for_pattern
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_metrics
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_text_layout_get_line_display
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XAddExtension
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:expand_dynamic_string_token
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+   fun:gtk_theme_engine_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   obj:/usr/lib/libgthread-2.0.so.0.1600.6
+   fun:g_thread_create_full
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_select_font_face
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_check_map_versions
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+   fun:gtk_theme_engine_load
+   fun:g_type_module_use
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbGetNames
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+   fun:gtk_text_view_value_changed
+   fun:_gtk_marshal_VOID__OBJECT_OBJECT
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XGetWindowProperty
+   fun:gdk_x11_screen_supports_net_wm_hint
+   fun:gdk_x11_window_set_user_time
+   fun:setup_toplevel_window
+   fun:gdk_window_new
+   fun:gtk_window_realize
+   fun:g_cclosure_marshal_VOID__VOID
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:FcBlanksAdd
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XkbAllocClientMap
+   fun:_XkbReadGetMapReply
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XkbGetUpdatedMap
+   fun:XkbGetMap
+   fun:get_xkb
+   fun:update_direction
+   fun:gdk_keymap_get_direction
+   fun:gtk_text_view_check_keymap_direction
+   fun:gtk_text_view_ensure_layout
+   fun:gtk_text_view_update_layout_width
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XInternAtom
+   fun:gdk_x11_atom_to_xatom_for_display
+   fun:_gdk_x11_screen_new
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcConfigSubstituteWithPat
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XrmGetStringDatabase
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcLangSetCreate
+   fun:FcLangSetCopy
+   fun:FcValueSave
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcLangSetCreate
+   fun:FcLangSetCopy
+   fun:FcValueSave
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FT_New_Memory
+   fun:FT_Init_FreeType
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_ft_font_face_create_for_pattern
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_metrics
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcPatternGetString
+   fun:pango_fc_font_description_from_pattern
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_select_font_face
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_glyphs
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_renderer_draw_glyphs
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:gdk_pango_renderer_draw_glyphs
+   fun:pango_renderer_draw_glyphs
+   fun:pango_renderer_draw_layout_line
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcAddCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/libfontconfig.so.1.3.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcPatternAdd
+   fun:FcPatternBuild
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcPatternAdd
+   fun:FcPatternBuild
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+   fun:gtk_theme_engine_load
+   fun:g_type_module_use
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcCreateDefaultCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XInitExtension
+   fun:XkbUseExtension
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_type_init_with_debug_flags
+   fun:g_type_init
+   fun:gdk_pre_parse_libgtk_only
+   fun:pre_parse_hook
+   fun:g_option_context_parse
+   fun:gtk_parse_args
+   fun:gtk_init_check
+   fun:gtk_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLocaleDataBase
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcSetConverter
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+   fun:_gdk_windowing_init
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_text
+   fun:update_gauge_position
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_metrics
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_text_layout_get_line_display
+   fun:gtk_text_layout_real_wrap
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcCreateDefaultCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XUpdateAtomCache
+   fun:XInternAtom
+   fun:gdk_x11_atom_to_xatom_for_display
+   fun:_gdk_x11_screen_new
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcDirCacheLoad
+   fun:FcDirCacheRead
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcConfigBuildFonts
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+   fun:FcConfigGetCurrent
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XRenderQueryFormats
+   fun:XRenderQueryVersion
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorGetTheme
+   fun:gdk_x11_display_set_cursor_theme
+   fun:settings_update_cursor_theme
+   fun:gtk_settings_get_for_screen
+   fun:gtk_settings_get_default
+   fun:gtk_style_init
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_text
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcCreateDefaultCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSupportsLocale
+   fun:_gdk_x11_initialize_locale
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcPatternCreate
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:xcb_connect_to_fd
+   fun:xcb_connect
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libpangoft2*
+   fun:pango_ot_info_get_gdef
+   fun:pango_ot_info_get_gsub
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_info_find_script
+   fun:pango_ot_ruleset_new_for
+   fun:pango_ot_ruleset_new_from_description
+   fun:pango_ot_ruleset_get_for_description
+   *
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:FcFontSetAdd
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcConfigBuildFonts
+   fun:FcInitLoadConfigAndFonts
+   fun:FcInit
+   fun:FcConfigGetCurrent
+   fun:FcConfigSubstituteWithPat
+   fun:FcConfigSubstitute
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_glyph_extents
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_glyph_extents
+   fun:pango_ot_buffer_output
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcLangSetCreate
+   fun:FcLangSetCopy
+   fun:FcValueSave
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_buffer_add_glyph
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   obj:/usr/lib/libexpat.so.1.5.2
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcInitLoadConfig
+   fun:FcInitLoadConfigAndFonts
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XrmInternalStringToQuark
+   fun:XrmStringToQuark
+   fun:_XlcGetCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   obj:/usr/lib/libX11.so.6.2.0
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:update_gauge_position
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:xcb_connect_to_fd
+   fun:xcb_connect
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrCopy
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcPatternGetString
+   fun:pango_fc_font_description_from_pattern
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:FT_GlyphLoader_CheckPoints
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:FT_Load_Glyph
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_fc_font_lock_face
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_copy
+   fun:pango_cairo_context_set_font_options
+   fun:gdk_pango_context_get_for_screen
+   fun:gtk_widget_create_pango_context
+   fun:gtk_widget_get_pango_context
+   fun:gtk_widget_create_pango_layout
+   fun:gtk_label_ensure_layout
+   fun:gtk_label_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XCreateGC
+   fun:_gdk_x11_gc_new
+   fun:gdk_gc_new_with_values
+   fun:gdk_gc_new_with_values
+   fun:gtk_gc_new
+   fun:g_cache_insert
+   fun:gtk_gc_get
+   fun:gtk_style_real_realize
+   fun:g_cclosure_marshal_VOID__VOID
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XEnq
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XEventsQueued
+   fun:XPending
+   fun:gdk_check_xpending
+   fun:gdk_event_prepare
+   fun:g_main_context_prepare
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_main_context_pending
+   fun:gtk_events_pending
+   fun:pf_dispatcher
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:FT_Render_Glyph_Internal
+   fun:FT_Render_Glyph
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcConfigSubstituteWithPat
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_itemize_with_base_dir
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:g_closure_new_simple
+   fun:g_cclosure_new
+   fun:g_signal_connect_data
+   fun:gtk_im_multicontext_set_slave
+   fun:gtk_im_multicontext_get_slave
+   fun:gtk_im_multicontext_set_client_window
+   fun:gtk_im_context_set_client_window
+   fun:gtk_entry_realize
+   fun:g_cclosure_marshal_VOID__VOID
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_try_malloc
+   fun:gdk_pixbuf_new
+   fun:gdk_pixbuf__png_image_load
+   fun:_gdk_pixbuf_generic_image_load
+   fun:gdk_pixbuf_new_from_file
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:g_cache_insert
+   fun:qt_theme_pixbuf_get_pixbuf
+   fun:qt_theme_pixbuf_render
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_connect_data
+   fun:gtk_notebook_real_insert_page
+   fun:gtk_notebook_insert_page_menu
+   fun:gtk_notebook_append_page
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gdk_window_init
+   fun:g_type_create_instance
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_string_sized_new
+   fun:g_string_new_len
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_value_copy
+   fun:insert_rc_property
+   fun:gtk_rc_style_real_merge
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_list_alloc
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:gtk_rc_init_style
+   fun:gtk_rc_get_style
+   fun:gtk_widget_reset_rc_style
+   fun:gtk_widget_realize
+   fun:gtk_widget_map
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:XCreateGlyphCursor
+   fun:XCreateFontCursor
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_ft_font_face_create_for_pattern
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_fc_font_lock_face
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_info_get_gsub
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_info_find_script
+   fun:pango_ot_ruleset_new_for
+   fun:pango_ot_ruleset_new_from_description
+   fun:pango_ot_ruleset_get_for_description
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_glyphs
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_renderer_draw_glyphs
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   fun:FcFontRenderPrepare
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_font
+   fun:pango_context_load_font
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_line_get_extents
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XEnq
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XReply
+   fun:XSync
+   fun:gdk_flush
+   fun:alloc_scratch_image
+   fun:_gdk_image_get_scratch
+   fun:gdk_x11_draw_pixbuf
+   fun:gdk_draw_pixbuf
+   fun:gdk_draw_pixbuf
+   fun:gdk_window_draw_pixbuf
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_New_GlyphSlot
+   fun:FT_Open_Face
+   fun:FT_New_Face
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:g_closure_new_simple
+   fun:g_cclosure_new
+   fun:g_cclosure_new_object
+   fun:g_signal_connect_object
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_strdup
+   fun:gtk_widget_set_name
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:g_closure_add_marshal_guards
+   fun:g_object_watch_closure
+   fun:g_cclosure_new_object
+   fun:g_signal_connect_object
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_datalist_id_set_data_full
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:atk_relation_set_new
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_ft_font_face_create_for_pattern
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_fc_font_lock_face
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_text
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_info_get_gsub
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_ot_info_find_script
+   fun:pango_ot_ruleset_new_for
+   fun:pango_ot_ruleset_new_from_description
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:FT_CMap_New
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:FT_Open_Face
+   fun:FT_New_Face
+   obj:/usr/lib/libcairo.so.2.17.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_copy
+   fun:pango_cairo_context_set_font_options
+   fun:gtk_widget_update_pango_context
+   fun:gtk_widget_set_style_internal
+   fun:gtk_widget_modify_color_component
+   fun:update_widget
+   fun:g_list_foreach
+   fun:update_ve_const_pf
+   fun:pf_dispatcher
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_main_context_dispatch
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XCreateGC
+   fun:XOpenDisplay
+   fun:gdk_display_open
+   fun:gdk_display_open_default_libgtk_only
+   fun:gtk_init_check
+   fun:gtk_init
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_glyph_extents
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   fun:pango_font_get_glyph_extents
+   fun:pango_ot_buffer_output
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:FT_Open_Face
+   fun:FT_New_Face
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:gtk_label_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+   fun:g_signal_emit_by_name
+   fun:do_size_request
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:g_closure_add_marshal_guards
+   fun:g_object_watch_closure
+   fun:g_cclosure_new_object
+   fun:g_signal_connect_object
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:pango_layout_new
+   fun:gtk_widget_create_pango_layout
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_list_alloc
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:gtk_rc_init_style
+   fun:gtk_rc_get_style
+   fun:gtk_widget_reset_rc_style
+   fun:gtk_widget_realize
+   fun:gtk_widget_set_parent
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_fill_preserve
+   fun:cairo_fill
+   fun:gtk_cell_renderer_text_render
+   fun:gtk_cell_renderer_render
+   fun:gtk_tree_view_column_cell_process_action
+   fun:_gtk_tree_view_column_cell_render
+   fun:gtk_tree_view_expose
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_create
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+   obj:/usr/lib/libpangoft2-1.0.so.0.2002.3
+   fun:pango_font_map_load_fontset
+   fun:pango_context_get_metrics
+   fun:gtk_entry_size_request
+   fun:g_cclosure_marshal_VOID__BOXED
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libfontconfig.so.1.3.0
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_create
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_text_extents
+   fun:generate_gauge_background
+   fun:mtx_gauge_face_configure
+   fun:_gtk_marshal_BOOLEAN__BOXED
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XEnq
+   obj:/usr/lib/libX11.so.6.2.0
+   fun:_XReply
+   fun:XTranslateCoordinates
+   fun:gdk_event_translate
+   fun:_gdk_events_queue
+   fun:gdk_event_dispatch
+   fun:g_main_context_dispatch
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_main_context_iteration
+   fun:gtk_main_iteration
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:pango_glyph_string_set_size
+   fun:pango_ot_buffer_output
+   obj:/usr/lib/pango/1.6.0/modules/pango-basic-fc.so
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_shape
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   obj:/usr/lib/libpango-1.0.so.0.2002.3
+   fun:pango_layout_get_lines_readonly
+   fun:gtk_entry_adjust_scroll
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gdk_window_new
+   fun:gtk_invisible_realize
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_show_glyphs
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/libfreetype.so.6.3.16
+   fun:FT_Load_Glyph
+   obj:/usr/lib/libcairo.so.2.17.3
+   obj:/usr/lib/libcairo.so.2.17.3
+   fun:cairo_scaled_font_glyph_extents
+   obj:/usr/lib/libpangocairo-1.0.so.0.2002.3
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_strdup
+   fun:pango_font_description_copy
+   fun:pango_context_set_font_description
+   fun:update_pango_context
+   fun:gtk_widget_create_pango_context
+   fun:gtk_widget_get_pango_context
+   fun:gtk_widget_create_pango_layout
+   fun:gtk_entry_ensure_layout
+   fun:gtk_entry_adjust_scroll
+   fun:gtk_entry_realize
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_ptr_array_add
+   fun:g_main_context_check
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_main_context_pending
+   fun:gtk_events_pending
+   fun:load_gui_tabs_pf
+   fun:pf_dispatcher
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_main_context_dispatch
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_object_newv
+   fun:g_object_new_valist
+   fun:g_object_new
+   fun:gtk_im_context_simple_new
+   fun:gtk_im_multicontext_get_slave
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_list_alloc
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:gtk_rc_init_style
+   fun:gtk_rc_get_style
+   fun:gtk_widget_reset_rc_style
+   fun:gtk_widget_modify_color_component
+   fun:update_widget
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.1600.6
+   fun:g_slice_alloc
+   fun:g_slist_copy
+   fun:gtk_rc_style_append_color_hashes
+   fun:gtk_rc_init_style
+   fun:gtk_rc_get_style
+   fun:gtk_widget_reset_rc_style
+   fun:gtk_widget_modify_color_component
+   fun:update_widget
+   fun:g_list_foreach
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_connect_closure
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   obj:/usr/lib/libglade-2.0.so.0.0.7
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+   fun:glade_standard_build_children
+   fun:glade_xml_set_common_params
+   fun:glade_xml_build_widget
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_try_malloc
+   fun:gdk_pixbuf_new
+   fun:gdk_pixbuf__png_image_load
+   fun:_gdk_pixbuf_generic_image_load
+   fun:gdk_pixbuf_new_from_file
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:g_cache_insert
+   fun:qt_theme_pixbuf_get_pixbuf
+   fun:qt_theme_pixbuf_render
+   obj:/usr/lib/gtk-2.0/2.10.0/engines/libqtpixmap.so
+   fun:gtk_paint_hline
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:gtk_table_attach
+   fun:gtk_table_attach_defaults
+   fun:gtk_table_add
+   fun:g_cclosure_marshal_VOID__OBJECT
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_closure_invoke
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+   fun:g_signal_emit_valist
+   fun:g_signal_emit
+   fun:gtk_container_add
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:cairo_font_options_copy
+   fun:pango_cairo_context_set_font_options
+   fun:gdk_pango_context_get_for_screen
+   fun:gtk_widget_create_pango_context
+   fun:gtk_widget_get_pango_context
+   fun:gtk_widget_create_pango_layout
+   fun:gtk_entry_ensure_layout
+   fun:gtk_entry_adjust_scroll
+   fun:gtk_entry_realize
+   fun:g_cclosure_marshal_VOID__VOID
+   obj:/usr/lib/libgobject-2.0.so.0.1600.6
+}

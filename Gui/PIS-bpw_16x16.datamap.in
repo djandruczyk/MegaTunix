@@ -122,8 +122,8 @@ table_num=0
 #----- Rescale Combos ------------------------------------------------------
 
 [BPW_rescale_combo]
-keys=table_num,post_function_with_arg
-post_function_with_arg=lock_entry
+keys=table_num,post_functions_with_arg
+post_functions_with_arg=lock_entry
 table_num=0
 
 #----- MAIN PWTable Container ---------------------------------------------

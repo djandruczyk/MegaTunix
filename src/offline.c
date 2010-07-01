@@ -362,7 +362,7 @@ EXPORT void offline_ecu_restore_pf(void)
 	filename = choose_file(fileio);
 	if (filename)
 	{
-		update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),FALSE,FALSE);
+		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE);
 		restore_all_ecu_settings(filename);
 		g_free(filename);
 	}

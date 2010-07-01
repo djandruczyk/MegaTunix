@@ -65,7 +65,8 @@
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 static gint upd_count = 0;
-static gboolean grab_allowed = FALSE;
+static gboolean grab_single_cell = FALSE;
+static gboolean grab_multi_cell = FALSE;
 extern gboolean interrogated;
 extern gboolean playback_mode;
 extern gchar *delimiter;
@@ -340,14 +341,14 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
-				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Comma\"\n"),FALSE,FALSE);
+				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Comma\"\n"),FALSE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
 				preferred_delimiter = TAB;
-				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Tab\"\n"),FALSE,FALSE);
+				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Tab\"\n"),FALSE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
@@ -1013,7 +1014,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case INTERROGATE_ECU:
 			set_title(g_strdup(_("User initiated interrogation...")));
-			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",_("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
 			widget = lookup_widget("interrogate_button");
 			if (GTK_IS_WIDGET(widget))
 				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
@@ -2765,18 +2766,28 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	upper = upper > hardupper ? hardupper:upper;
 	lower = lower < hardlower ? hardlower:lower;
 	value = get_ecu_data(canID,page,offset,size);
+	if (event->keyval == GDK_Control_L)
+	{
+		if (event->type == GDK_KEY_PRESS)
+			grab_single_cell = TRUE;
+		else
+			grab_single_cell = FALSE;
+		return FALSE;
+	}
 	if (event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
-			grab_allowed = TRUE;
+			grab_multi_cell = TRUE;
 		else
-			grab_allowed = FALSE;
+			grab_multi_cell = FALSE;
 		return FALSE;
 	}
 
 	if (event->type == GDK_KEY_RELEASE)
 	{
-		grab_allowed = FALSE;
+/*		grab_single_cell = FALSE;
+		grab_multi_cell = FALSE;
+		*/
 		return FALSE;
 	}
 
@@ -2863,25 +2874,41 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_H:
 		case GDK_h:
 			if (active_table >= 0)
+			{
 				refocus_cell(widget,GO_LEFT);
+				if (grab_single_cell)
+					widget_grab(widget,(GdkEventButton *)event,GINT_TO_POINTER(TRUE));
+			}
 			retval = TRUE;
 			break;
 		case GDK_L:
 		case GDK_l:
 			if (active_table >= 0)
+			{
 				refocus_cell(widget,GO_RIGHT);
+				if (grab_single_cell)
+					widget_grab(widget,(GdkEventButton *)event,GINT_TO_POINTER(TRUE));
+			}
 			retval = TRUE;
 			break;
 		case GDK_K:
 		case GDK_k:
 			if (active_table >= 0)
+			{
 				refocus_cell(widget,GO_UP);
+				if (grab_single_cell)
+					widget_grab(widget,(GdkEventButton *)event,GINT_TO_POINTER(TRUE));
+			}
 			retval = TRUE;
 			break;
 		case GDK_J:
 		case GDK_j:
 			if (active_table >= 0)
+			{
 				refocus_cell(widget,GO_DOWN);
+				if (grab_single_cell)
+					widget_grab(widget,(GdkEventButton *)event,GINT_TO_POINTER(TRUE));
+			}
 			retval = TRUE;
 			break;
 		case GDK_Escape:
@@ -2918,9 +2945,6 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	gchar **vector = NULL;
 	*/
 	extern GdkColor red;
-	static GdkColor old_bg;
-	static GdkColor text_color;
-	static GtkStyle *style;
 	static gint total_marked = 0;
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
@@ -2939,7 +2963,7 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	if (event->button != 1) /* Left button click  */
 		return FALSE;
 
-	if (!grab_allowed)
+	if (!grab_single_cell)
 		return FALSE;
 
 testit:
@@ -2959,17 +2983,12 @@ testit:
 	{
 		total_marked--;
 		OBJ_SET(widget,"marked",GINT_TO_POINTER(FALSE));
-		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&old_bg);
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&text_color);
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else
 	{
 		total_marked++;
 		OBJ_SET(widget,"marked",GINT_TO_POINTER(TRUE));
-		style = gtk_widget_get_style(widget);
-		old_bg = style->bg[GTK_STATE_NORMAL];
-		text_color = style->text[GTK_STATE_NORMAL];
-		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	}
 

@@ -89,8 +89,8 @@ struct _Io_Message
  */
 struct _Text_Message
 {
-	gchar *view_name;	/*! Textview name */
-	gchar *tagname;		/*! Texttag to use */
+	const gchar *view_name;	/*! Textview name */
+	const gchar *tagname;	/*! Texttag to use */
 	gchar *msg;		/*! message to display */
 	gboolean count;		/*! display a counter */
 	gboolean clear;		/*! Clear the window? */
@@ -103,7 +103,7 @@ void *thread_dispatcher(gpointer);	/* thread that processes messages */
 void *restore_update(gpointer);		/* Thread to update tools status.. */
 void start_restore_monitor(void);	/* Thread jumpstarter */
 void send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
-void thread_update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
+void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(gchar *, WidgetType, gchar *);
 gboolean queue_function(gchar * );
 void chunk_write(gint, gint, gint, gint, guint8 *);

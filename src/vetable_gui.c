@@ -302,7 +302,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 							data[(i*4)+3] = ((gint)value & 0xff000000) >> 24;
 						}
 
-						gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
+						gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
 						if (use_color)
 						{
 							color = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);

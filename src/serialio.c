@@ -252,6 +252,7 @@ void setup_serial_params(gint baudrate)
  */
 void close_serial()
 {
+	extern volatile gboolean leaving;
 	if (!serial_params)
 		return;
 	if (serial_params->open == FALSE)
@@ -276,7 +277,8 @@ void close_serial()
 
 	/* An Closing the comm port */
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
-	thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
+	if (!leaving)
+		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after UNlock serio_mutex\n"));

@@ -159,9 +159,9 @@ void set_widget_color(gpointer widget, gpointer color)
  \param clear (gboolean) if set, clear display before displaying text
  */
 void  update_logbar(
-		gchar * view_name, 
-		gchar * tagname, 
-		gchar * message,
+		const gchar * view_name, 
+		const gchar * tagname, 
+		const gchar * message,
 		gboolean count,
 		gboolean clear)
 {
@@ -175,33 +175,22 @@ void  update_logbar(
 	GtkWidget * widget = NULL;
 	extern volatile gboolean leaving;
 
-	if (leaving)
-	{
-		g_free(message);
-		return;
-	}
-
 	widget = (GtkWidget *)lookup_widget(view_name);
 
-	if (!widget)
-	{
-		g_free(message);
+	if ((leaving) || (!widget))
 		return;
-	}
+
 	if (!GTK_IS_OBJECT(widget))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name));
-		g_free(message);
 		return;
 	}
 
 	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
 	if (!textbuffer)
-	{
-		g_free(message);
 		return;
-	}
+
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
 	result = OBJ_GET(widget,"counter");	
 	if (result == NULL)
@@ -232,7 +221,6 @@ void  update_logbar(
 				message,-1,tagname,NULL);
 	}
 
-	g_free(message);
 	/* Get it's parent (the scrolled window) and slide it to the
 	 * bottom so the new message is visible... 
 	 */

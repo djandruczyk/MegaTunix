@@ -23,10 +23,15 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <lookuptables.h>
 #include <mtxmatheval.h>
+#include <rtv_map_loader.h>
+#include <runtime_sliders.h>
+#include <runtime_text.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stringmatch.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <threads.h>
@@ -112,7 +117,7 @@ void init(void)
 
 	/* initialize all global variables to known states */
 	OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
-	g_free(OBJ_GET(global_data,"potential_ports"));
+	cleanup(OBJ_GET(global_data,"potential_ports"));
 #ifdef __WIN32__
 	OBJ_SET(global_data,"override_port",g_strdup("COM1"));
 	OBJ_SET(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9"));
@@ -181,9 +186,9 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			g_free(OBJ_GET(global_data,"dash_1_name"));
+			cleanup(OBJ_GET(global_data,"dash_1_name"));
 			OBJ_SET(global_data,"dash_1_name",g_strdup(tmpbuf));
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &tmpi))
 			OBJ_SET(global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
@@ -193,9 +198,9 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			g_free(OBJ_GET(global_data,"dash_2_name"));
+			cleanup(OBJ_GET(global_data,"dash_2_name"));
 			OBJ_SET(global_data,"dash_2_name",g_strdup(tmpbuf));
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
 			OBJ_SET(global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
@@ -238,20 +243,20 @@ gboolean read_config(void)
 			for (i=0;i<g_strv_length(vector);i++)
 				hidden_list[atoi(vector[i])] = TRUE;
 			g_strfreev(vector);
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 		}
 
 		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
 		{
-			g_free(OBJ_GET(global_data,"potential_ports"));
+			cleanup(OBJ_GET(global_data,"potential_ports"));
 			OBJ_SET(global_data,"potential_ports",g_strdup(tmpbuf));
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
 		{
-			g_free(OBJ_GET(global_data,"override_port"));
+			cleanup(OBJ_GET(global_data,"override_port"));
 			OBJ_SET(global_data,"override_port",g_strdup(tmpbuf));
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 		}
 		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
 			OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
@@ -273,14 +278,14 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
 		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
-		g_free(filename);
+		cleanup(filename);
 		return TRUE;
 	}
 	else
 	{
 		serial_params->port_name = g_strdup(DEFAULT_PORT);
 		dbg_func(CRITICAL,g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
-		g_free(filename);
+		cleanup(filename);
 		save_config();
 		return FALSE;	/* No file found */
 	}
@@ -459,7 +464,7 @@ void save_config(void)
 		}
 		tmpbuf = g_strndup(string->str,string->len);
 		cfg_write_string(cfgfile, "Window", "hidden_tabs_list", tmpbuf);
-		g_free(tmpbuf);
+		cleanup(tmpbuf);
 
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
@@ -484,7 +489,7 @@ void save_config(void)
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
-	g_free(filename);
+	cleanup(filename);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() after UNlock reentrant mutex\n"));
@@ -503,34 +508,34 @@ void make_megasquirt_dirs(void)
 
 	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GUI_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GAUGES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,DASHES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,LOOKUPTABLES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,REALTIME_MAPS_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSLIDERS_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSTATUS_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
-	g_free(filename);
+	cleanup(filename);
 
 	return;
 }
@@ -612,6 +617,13 @@ void mem_alloc()
 void mem_dealloc()
 {
 	gint i = 0;
+	gint j = 0;
+	gpointer data;
+	GHashTable *hash = NULL;
+	GtkListStore *store = NULL;
+	extern GHashTable *dynamic_widgets;
+	extern GHashTable *lookuptables;
+	extern Rtv_Map *rtv_map;
 	extern Firmware_Details *firmware;
 	extern GStaticMutex serio_mutex;
 
@@ -619,96 +631,131 @@ void mem_dealloc()
 	g_static_mutex_lock(&serio_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
-	if (serial_params->port_name)
-		g_free(serial_params->port_name);
-	serial_params->port_name = NULL;
-	if (serial_params)
-		g_free(serial_params);
-	serial_params = NULL;
+	cleanup(serial_params->port_name);
+	cleanup(serial_params);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
 	/* Firmware datastructure.... */
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		if (ve_widgets[i])
+		{
+			for (j=0;j<firmware->page_params[i]->length;j++)
+			{
+				g_list_foreach(ve_widgets[i][j],dealloc_widget,NULL);
+				g_list_free(ve_widgets[i][j]);
+			}
+
+		}
+		cleanup(ve_widgets[i]);
+	}
 	if (firmware)
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			if (firmware->ecu_data[i])
-				g_free(firmware->ecu_data[i]);
-			if (firmware->ecu_data_last[i])
-				g_free(firmware->ecu_data_last[i]);
-			if (firmware->ecu_data_backup[i])
-				g_free(firmware->ecu_data_backup[i]);
-			if (firmware->page_params[i])
-				g_free(firmware->page_params[i]);
+			cleanup(firmware->ecu_data[i]);
+			cleanup(firmware->ecu_data_last[i]);
+			cleanup(firmware->ecu_data_backup[i]);
+			cleanup(firmware->page_params[i]);
 		}
-		if (firmware->rt_data)
-			g_free(firmware->rt_data);
-		if (firmware->rt_data_last)
-			g_free(firmware->rt_data_last);
-		g_free(firmware->page_params);
+		cleanup(firmware->page_params);
+		cleanup(firmware->rt_data);
+		cleanup(firmware->rt_data_last);
 
-		if (firmware->name)
-			g_free(firmware->name);
-		if (firmware->tab_list)
-			g_strfreev(firmware->tab_list);
-		if (firmware->tab_confs)
-			g_strfreev(firmware->tab_confs);
-		if (firmware->rtv_map_file)
-			g_free(firmware->rtv_map_file);
-		if (firmware->sliders_map_file)
-			g_free(firmware->sliders_map_file);
-		if (firmware->status_map_file)
-			g_free(firmware->status_map_file);
-		if (firmware->get_all_command)
-			g_free(firmware->get_all_command);
-		if (firmware->ve_command)
-			g_free(firmware->ve_command);
-		if (firmware->rt_command)
-			g_free(firmware->rt_command);
-		if (firmware->write_command)
-			g_free(firmware->write_command);
-		if (firmware->burn_command)
-			g_free(firmware->burn_command);
-		if (firmware->burn_all_command)
-			g_free(firmware->burn_all_command);
-		if (firmware->page_command)
-			g_free(firmware->page_command);
-		firmware->page_params = NULL;
+		cleanup (firmware->name);
+		cleanup (firmware->profile_filename);
+		cleanup (firmware->actual_signature);
+		cleanup (firmware->text_revision);
+		g_strfreev (firmware->tab_list);
+		g_strfreev (firmware->tab_confs);
+		cleanup (firmware->rtv_map_file);
+		cleanup (firmware->sliders_map_file);
+		cleanup (firmware->rtt_map_file);
+		cleanup (firmware->status_map_file);
+		cleanup (firmware->rt_command);
+		cleanup (firmware->get_all_command);
+		cleanup (firmware->ve_command);
+		cleanup (firmware->write_command);
+		cleanup (firmware->table_write_command);
+		cleanup (firmware->chunk_write_command);
+		cleanup (firmware->burn_all_command);
+		cleanup (firmware->burn_command);
+		cleanup (firmware->raw_mem_command);
+		cleanup (firmware->page_command);
+		cleanup (firmware->SignatureVia);
+		cleanup (firmware->TextVerVia);
+		cleanup (firmware->NumVerVia);
 		for (i=0;i<firmware->total_te_tables;i++)
 		{
 			if (firmware->te_params[i])
 				dealloc_te_params(firmware->te_params[i]);
 		}
-		g_free(firmware->te_params);
-		firmware->te_params = NULL;
+		cleanup(firmware->te_params);
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			if (firmware->table_params[i])
 				dealloc_table_params(firmware->table_params[i]);
-			if (firmware->rf_params[i])
-				g_free(firmware->rf_params[i]);
+			cleanup (firmware->rf_params[i]);
 			if (interdep_vars[i])
 			{
 				g_hash_table_destroy(interdep_vars[i]);
 				interdep_vars[i] = NULL;
 			}
 		}
-		g_free(firmware->table_params);
-		firmware->table_params = NULL;
-		g_free(firmware->rf_params);
-		firmware->rf_params = NULL;
-		g_free(firmware->ecu_data);
-		g_free(firmware->ecu_data_last);
-		g_free(firmware->ecu_data_backup);
-		g_free(firmware);
-		firmware = NULL;
+		cleanup(firmware->table_params);
+		cleanup(firmware->rf_params);
+		cleanup(firmware->ecu_data);
+		cleanup(firmware->ecu_data_last);
+		cleanup(firmware->ecu_data_backup);
+		cleanup(firmware);
 	}
+	if (lookuptables)
+		g_hash_table_destroy(lookuptables);
 	if(widget_group_states)
 		g_hash_table_destroy(widget_group_states);
 	if(sources_hash)
 		g_hash_table_destroy(sources_hash);
+	if (rtv_map)
+	{
+		if (rtv_map->raw_list)
+			g_strfreev(rtv_map->raw_list);
+		cleanup (rtv_map->applicable_signatures);
+		g_array_free(rtv_map->ts_array,TRUE);
+		for(i=0;i<rtv_map->rtv_list->len;i++)
+		{
+			data = g_array_index(rtv_map->rtv_list,gpointer,i);
+			dealloc_rtv_object(data);
+		}
+		g_array_free(rtv_map->rtv_list,TRUE);
+		g_hash_table_destroy(rtv_map->rtv_hash);
+		g_hash_table_destroy(rtv_map->offset_hash);
+		cleanup(rtv_map);
+	}
+	/* Runtime Text*/
+	store = OBJ_GET(global_data,"rtt_model");
+	if (store)
+		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+	hash = OBJ_GET(global_data,"rtt_hash");
+	if (hash)
+		g_hash_table_destroy(hash);
+	/* Runtime Sliders */
+	hash = OBJ_GET(global_data,"ww_sliders");
+	if (hash)
+		g_hash_table_destroy(hash);
+	hash = OBJ_GET(global_data,"rt_sliders");
+	if (hash)
+		g_hash_table_destroy(hash);
+	hash = OBJ_GET(global_data,"ve3d_sliders");
+	if (hash)
+		g_hash_table_destroy(hash);
+	hash = OBJ_GET(global_data,"enr_sliders");
+	if (hash)
+		g_hash_table_destroy(hash);
+	/* Dynamic widgets master hash */
+	if (dynamic_widgets)
+		g_hash_table_destroy(dynamic_widgets);
 }
 
 
@@ -790,6 +837,9 @@ Table_Params * initialize_table_params(void)
 	table_params->y_conv_expr = NULL;
 	table_params->z_conv_expr = NULL;
 	table_params->table_name = NULL;
+	table_params->x_eval = NULL;
+	table_params->y_eval = NULL;
+	table_params->z_eval = NULL;
 	/* X lookuptable container */
 	table_params->x_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
         g_object_ref(G_OBJECT(table_params->x_object));
@@ -846,22 +896,18 @@ void dealloc_client_data(MtxSocketClient *client)
 {
 	extern Firmware_Details *firmware;
 	gint i = 0;
+	/*printf("dealloc_client_data\n");*/
 	if (client)
 	{
-		if (client->ip)
-			g_free(client->ip);
+		cleanup (client->ip);
 
 		if (client->ecu_data)
 		{
-/*			printf("deallocing client ecu data params\n");*/
 			for (i=0;i<firmware->total_pages;i++)
-			{
-				if (client->ecu_data[i])
-					g_free(client->ecu_data[i]);
-			}
-			g_free(client->ecu_data);
+				cleanup (client->ecu_data[i]);
+			cleanup(client->ecu_data);
 		}
-		g_free(client);
+		cleanup(client);
 	}
 }
 
@@ -873,32 +919,29 @@ void dealloc_client_data(MtxSocketClient *client)
 void dealloc_message(Io_Message * message)
 {
 	OutputData *data;
+	/*printf("dealloc_message\n");*/
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
 	message->functions = NULL;
 	if (message->sequence)
 		dealloc_array(message->sequence, SEQUENCE);
 	message->sequence = NULL;
-	if (message->recv_buf)
-		g_free(message->recv_buf);
-	message->recv_buf = NULL;
+	cleanup (message->recv_buf);
 	if (message->command)
 		if (message->command->type == NULL_CMD)
-			g_free(message->command);
+			cleanup(message->command);
 	message->command = NULL;
         if (message->payload)
 	{
 		data = (OutputData *)message->payload;
-		if (GTK_IS_OBJECT(data->object))
+		if (G_IS_OBJECT(data->object))
 		{
-			gtk_object_destroy(GTK_OBJECT(data->object));
+			cleanup(OBJ_GET(data->object,"data"));
 			g_object_unref(data->object);
 		}
-                g_free(message->payload);
-		message->payload = NULL;
+                cleanup(message->payload);
 	}
-        g_free(message);
-	message = NULL;
+        cleanup(message);
 }
 
 
@@ -908,6 +951,7 @@ void dealloc_array(GArray *array, ArrayType type)
 	PotentialArg *arg = NULL;
 	guint i = 0;
 
+	/*printf("dealloc_array\n");*/
 	switch (type)
 	{
 		case FUNCTIONS:
@@ -919,9 +963,8 @@ void dealloc_array(GArray *array, ArrayType type)
 				db = g_array_index(array,DBlock *,i);
 				if (!db)
 					continue;
-				if (db->data)
-					g_free(db->data);
-				g_free(db);
+				cleanup (db->data);
+				cleanup(db);
 			}
 			g_array_free(array,TRUE);
 			break;
@@ -931,15 +974,11 @@ void dealloc_array(GArray *array, ArrayType type)
 				arg = g_array_index(array,PotentialArg *,i);
 				if (!arg)
 					continue;
-				if (arg->name)
-					g_free(arg->name);
-				if (arg->desc)
-					g_free(arg->desc);
-				if (arg->internal_name)
-					g_free(arg->internal_name);
-				if (arg->static_string)
-					g_free(arg->static_string);
-				g_free(arg);
+				cleanup (arg->name);
+				cleanup (arg->desc);
+				cleanup (arg->internal_name);
+				cleanup (arg->static_string);
+				cleanup(arg);
 			}
 			g_array_free(array,TRUE);
 			break;
@@ -954,13 +993,10 @@ void dealloc_array(GArray *array, ArrayType type)
  */
 void dealloc_w_update(Widget_Update * w_update)
 {
-        if (w_update->widget_name)
-                g_free(w_update->widget_name);
-        if (w_update->msg)
-                g_free(w_update->msg);
-        g_free(w_update);
-	w_update = NULL;
-
+	/*printf("dealloc_w_update\n");*/
+        cleanup (w_update->widget_name);
+        cleanup (w_update->msg);
+        cleanup (w_update);
 }
 
 
@@ -971,8 +1007,10 @@ void dealloc_w_update(Widget_Update * w_update)
  */
 void dealloc_textmessage(Text_Message * message)
 {
-	g_free(message);
-	message = NULL;
+	/*printf("dealloc_textmessage\n");*/
+	cleanup(message->msg);
+	cleanup(message);
+	return;
 }
 
 
@@ -984,10 +1022,9 @@ void dealloc_textmessage(Text_Message * message)
  */
 void dealloc_qfunction(QFunction * qfunc)
 {
-	if (qfunc->func_name)
-		g_free(qfunc->func_name);
-	g_free(qfunc);
-	qfunc = NULL;
+	/*printf("dealloc_qfunction\n");*/
+	cleanup (qfunc->func_name);
+	cleanup (qfunc);
 }
 
 
@@ -998,68 +1035,56 @@ void dealloc_qfunction(QFunction * qfunc)
  */
 void dealloc_table_params(Table_Params * table_params)
 {
-	if(table_params->table_name)
-		g_free(table_params->table_name);
-	if(table_params->x_source_key)
-		g_free(table_params->x_source_key);
-	if(table_params->y_source_key)
-		g_free(table_params->y_source_key);
-	if(table_params->z_source_key)
-		g_free(table_params->z_source_key);
-	if(table_params->x_multi_expr_keys)
-		g_free(table_params->x_multi_expr_keys);
-	if(table_params->y_multi_expr_keys)
-		g_free(table_params->y_multi_expr_keys);
-	if(table_params->z_multi_expr_keys)
-		g_free(table_params->z_multi_expr_keys);
-	if(table_params->x_suffixes)
-		g_free(table_params->x_suffixes);
-	if(table_params->y_suffixes)
-		g_free(table_params->y_suffixes);
-	if(table_params->z_suffixes)
-		g_free(table_params->z_suffixes);
-	if(table_params->x_conv_exprs)
-		g_free(table_params->x_conv_exprs);
-	if(table_params->y_conv_exprs)
-		g_free(table_params->y_conv_exprs);
-	if(table_params->z_conv_exprs)
-		g_free(table_params->z_conv_exprs);
-	if(table_params->x_precisions)
-		g_free(table_params->x_precisions);
-	if(table_params->y_precisions)
-		g_free(table_params->y_precisions);
-	if(table_params->z_precisions)
-		g_free(table_params->z_precisions);
+
+	/*printf("dealloc_table_params\n");*/
+	cleanup(table_params->table_name);
+	cleanup(table_params->bind_to_list);
+	cleanup(table_params->x_source_key);
+	cleanup(table_params->y_source_key);
+	cleanup(table_params->z_source_key);
+	cleanup(table_params->x_multi_expr_keys);
+	cleanup(table_params->y_multi_expr_keys);
+	cleanup(table_params->z_multi_expr_keys);
+	cleanup(table_params->x_sources);
+	cleanup(table_params->y_sources);
+	cleanup(table_params->z_sources);
+	cleanup(table_params->x_suffixes);
+	cleanup(table_params->y_suffixes);
+	cleanup(table_params->z_suffixes);
+	cleanup(table_params->x_conv_exprs);
+	cleanup(table_params->y_conv_exprs);
+	cleanup(table_params->z_conv_exprs);
+	cleanup(table_params->x_precisions);
+	cleanup(table_params->y_precisions);
+	cleanup(table_params->z_precisions);
+	cleanup(table_params->x_source);
+	cleanup(table_params->y_source);
+	cleanup(table_params->z_source);
+	cleanup(table_params->x_suffix);
+	cleanup(table_params->y_suffix);
+	cleanup(table_params->z_suffix);
+	cleanup(table_params->x_conv_expr);
+	cleanup(table_params->y_conv_expr);
+	cleanup(table_params->z_conv_expr);
 	if (table_params->x_multi_hash)
 		g_hash_table_destroy(table_params->x_multi_hash);
 	if (table_params->y_multi_hash)
 		g_hash_table_destroy(table_params->y_multi_hash);
 	if (table_params->z_multi_hash)
 		g_hash_table_destroy(table_params->z_multi_hash);
-	if(table_params->x_conv_expr)
-		g_free(table_params->x_conv_expr);
-	if(table_params->y_conv_expr)
-		g_free(table_params->y_conv_expr);
-	if(table_params->z_conv_expr)
-		g_free(table_params->z_conv_expr);
-	if(table_params->x_source)
-		g_free(table_params->x_source);
-	if(table_params->y_source)
-		g_free(table_params->y_source);
-	if(table_params->z_source)
-		g_free(table_params->z_source);
-	if(table_params->x_suffix)
-		g_free(table_params->x_suffix);
-	if(table_params->y_suffix)
-		g_free(table_params->y_suffix);
-	if(table_params->z_suffix)
-		g_free(table_params->z_suffix);
 	if(table_params->x_eval)
 		evaluator_destroy(table_params->x_eval);
 	if(table_params->y_eval)
 		evaluator_destroy(table_params->y_eval);
-	if(table_params->z_eval)
+/*	if(table_params->z_eval)
 		evaluator_destroy(table_params->z_eval);
+		*/
+	if(table_params->x_object)
+		dealloc_dep_object(table_params->x_object);
+	if(table_params->y_object)
+		dealloc_dep_object(table_params->y_object);
+	if(table_params->z_object)
+		dealloc_dep_object(table_params->z_object);
 
 	g_free(table_params);
 	return;
@@ -1067,35 +1092,220 @@ void dealloc_table_params(Table_Params * table_params)
 
 
 /*!
+ \brief dealloc_dep_object() deallocates the dependancy object used 
+ for dependancy management
+ \param object (GObject *) pointer to object to deallocate
+ */
+void dealloc_dep_object(GObject *object)
+{
+	GObject *dep_obj = NULL;
+	gchar * deps = NULL;
+
+	/*printf("dealloc_dep_object\n");*/
+	if (!G_IS_OBJECT(object))
+		return;
+	dep_obj = OBJ_GET(object,"dep_object");
+	if (!G_IS_OBJECT(dep_obj))
+	{
+		g_object_unref(object);
+		return;
+	}
+	deps = OBJ_GET(dep_obj,"deps");
+	cleanup(deps);
+	OBJ_SET(dep_obj,"deps",NULL);
+	OBJ_SET(dep_obj,"num_deps",NULL);
+	g_object_unref(dep_obj);
+	g_object_unref(object);
+	return;
+}
+
+
+/*!
+ \brief dealloc_rtvp_object() deallocates the rtv object used 
+ for runtime vars data
+ \param object (GObject *) pointer to object to deallocate
+ */
+void dealloc_rtv_object(gpointer data)
+{
+	gchar **keys = NULL;
+	void * eval = NULL;
+	DataType keytype = 0;
+	gint i = 0;
+	/*static gint count = 0;*/
+	GObject * object = (GObject *) data;
+
+	if (!G_IS_OBJECT(object))
+		return;
+	/*printf("object %i, pointer %p, names \"%s\" \"%s\" \"%s\"\n",count++,(void *)object,(gchar *)OBJ_GET(object,"dlog_gui_name"),(gchar *)OBJ_GET(object,"dlog_field_name"),(gchar *)OBJ_GET(object,"internal_names"));*/
+	if (!(GBOOLEAN)OBJ_GET(object,"history"))
+		g_array_free(OBJ_GET(object,"history"),TRUE);
+	keys = (gchar **)OBJ_GET(object,"keys");
+	if (!keys)
+	{
+		g_object_unref(object);
+		return;
+	}
+	for (i=0;i<g_strv_length(keys);i++)
+	{
+		keytype = translate_string(keys[i]);
+		switch ((DataType)keytype)
+		{
+			case MTX_INT:
+			case MTX_ENUM:
+			case MTX_BOOL:
+				OBJ_SET(object,keys[i],NULL);
+				break;
+			case MTX_STRING:
+			case MTX_FLOAT:
+				cleanup(OBJ_GET(object,keys[i]));
+				OBJ_SET(object,keys[i],NULL);
+				break;
+		}
+	}
+	g_strfreev(keys);
+	cleanup(OBJ_GET(object,"internal_names"));
+	if ((eval = OBJ_GET(object,"ul_evaluator")))
+		evaluator_destroy(eval);
+	eval = NULL;
+	if ((eval = OBJ_GET(object,"dl_evaluator")))
+		evaluator_destroy(eval);
+	g_object_unref(object);
+}
+/*!
  \brief dealloc_te_params() deallocates the structure used for firmware
  te parameters
  \param te_params (TE_Params *) pointer to struct to deallocate
  */
 void dealloc_te_params(TE_Params * te_params)
 {
-	if(te_params->title)
-		g_free(te_params->title);
-	if(te_params->x_dl_conv_expr)
-		g_free(te_params->x_dl_conv_expr);
-	if(te_params->y_dl_conv_expr)
-		g_free(te_params->y_dl_conv_expr);
-	if(te_params->x_ul_conv_expr)
-		g_free(te_params->x_ul_conv_expr);
-	if(te_params->y_ul_conv_expr)
-		g_free(te_params->y_ul_conv_expr);
-	if(te_params->x_source)
-		g_free(te_params->x_source);
-	if(te_params->y_source)
-		g_free(te_params->y_source);
-	if(te_params->x_name)
-		g_free(te_params->x_name);
-	if(te_params->y_name)
-		g_free(te_params->y_name);
-	if(te_params->x_units)
-		g_free(te_params->x_units);
-	if(te_params->y_units)
-		g_free(te_params->y_units);
-	g_free(te_params);
+	/*printf("dealloc_te_params\n");*/
+	cleanup(te_params->title);
+	cleanup(te_params->gauge);
+	cleanup(te_params->c_gauge);
+	cleanup(te_params->f_gauge);
+	cleanup(te_params->gauge_datasource);
+	cleanup(te_params->bg_color);
+	cleanup(te_params->grat_color);
+	cleanup(te_params->trace_color);
+	cleanup(te_params->cross_color);
+	cleanup(te_params->marker_color);
+	cleanup(te_params->bind_to_list);
+	cleanup(te_params->x_axis_label);
+	cleanup(te_params->y_axis_label);
+	cleanup(te_params->x_dl_conv_expr);
+	cleanup(te_params->y_dl_conv_expr);
+	cleanup(te_params->x_ul_conv_expr);
+	cleanup(te_params->y_ul_conv_expr);
+	cleanup(te_params->x_source);
+	cleanup(te_params->y_source);
+	cleanup(te_params->x_name);
+	cleanup(te_params->y_name);
+	cleanup(te_params->x_units);
+	cleanup(te_params->y_units);
+	g_list_free(te_params->entries);
+	cleanup(te_params);
+	return;
+}
+
+
+void dealloc_lookuptable(gpointer data)
+{
+	LookupTable * table = (LookupTable *)data;
+	/*printf("dealloc_lookuptable\n");*/
+	cleanup(table->array);
+	cleanup(table->filename);
+	cleanup(table);
+	return;
+}
+
+
+void dealloc_widget(gpointer data, gpointer user_data)
+{
+	GtkWidget * widget = (GtkWidget *) data;
+
+	/*printf("dealloc_widget\n");*/
+	cleanup (OBJ_GET(widget,"algorithms"));
+	cleanup (OBJ_GET(widget,"alt_lookuptable"));
+	cleanup (OBJ_GET(widget,"applicable_tables"));
+	cleanup (OBJ_GET(widget,"bind_to_list"));
+	cleanup (OBJ_GET(widget,"bitvals"));
+	cleanup (OBJ_GET(widget,"choices"));
+	cleanup (OBJ_GET(widget,"complex_expr"));
+	cleanup (OBJ_GET(widget,"data"));
+	cleanup (OBJ_GET(widget,"depend_on"));
+	cleanup (OBJ_GET(widget,"dl_conv_expr"));
+	cleanup (OBJ_GET(widget,"dl_conv_exprs"));
+	cleanup (OBJ_GET(widget,"fullname"));
+	cleanup (OBJ_GET(widget,"group"));
+	cleanup (OBJ_GET(widget,"group_2_update"));
+	cleanup (OBJ_GET(widget,"initializer"));
+	cleanup (OBJ_GET(widget,"lookuptable"));
+	cleanup (OBJ_GET(widget,"multi_expr_keys"));
+	cleanup (OBJ_GET(widget,"post_function_with_arg"));
+	cleanup (OBJ_GET(widget,"post_functions_with_arg"));
+	cleanup (OBJ_GET(widget,"raw_lower"));
+	cleanup (OBJ_GET(widget,"raw_upper"));
+	cleanup (OBJ_GET(widget,"register_as"));
+	cleanup (OBJ_GET(widget,"source"));
+	cleanup (OBJ_GET(widget,"sources"));
+	cleanup (OBJ_GET(widget,"source_key"));
+	cleanup (OBJ_GET(widget,"source_value"));
+	cleanup (OBJ_GET(widget,"source_values"));
+	cleanup (OBJ_GET(widget,"table_num"));
+	cleanup (OBJ_GET(widget,"te_table_num"));
+	cleanup (OBJ_GET(widget,"tooltip"));
+	cleanup (OBJ_GET(widget,"ul_conv_expr"));
+	cleanup (OBJ_GET(widget,"ul_conv_exprs"));
+	if (OBJ_GET(widget,"dl_evaluator"))
+		evaluator_destroy (OBJ_GET(widget,"dl_evaluator"));
+	if (OBJ_GET(widget,"ul_evaluator"))
+		evaluator_destroy (OBJ_GET(widget,"ul_evaluator"));
+}
+
+
+gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
+{
+	Rt_Text *rtt = NULL;
+	gtk_tree_model_get (model, iter,
+			COL_RTT_OBJECT, &rtt,
+			-1);
+	dealloc_rtt((gpointer)rtt);
+	return FALSE;
+}
+
+void dealloc_rtt(gpointer data)
+{
+	Rt_Text *rtt = (Rt_Text *)data;
+	/*printf("dealloc_rtt\n");*/
+	cleanup(rtt->ctrl_name);
+	cleanup(rtt->label_prefix);
+	cleanup(rtt->label_suffix);
+	cleanup(rtt);
+	/* Don't free object as it is just a ptr to the actual
+	 * data in the rtv object and that gets freed elsewhere
+	 */
+
+}
+
+
+void dealloc_slider(gpointer data)
+{
+	Rt_Slider *slider = (Rt_Slider *)data;
+	/*printf("dealloc_slider\n");*/
+	cleanup(slider->ctrl_name);
+	/* Don't free object or history as those are just ptr's to the actual
+	 * data in the rtv object and that gets freed elsewhere
+	 */
+	cleanup(slider);
+	return;
+}
+
+
+void cleanup(void *data)
+{
+	if (data)
+		g_free(data);
+	data = NULL;
 	return;
 }
 

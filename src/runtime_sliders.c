@@ -21,6 +21,7 @@
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
+#include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <progress.h>
@@ -82,9 +83,9 @@ EXPORT void load_sliders_pf()
 	rt_sliders = OBJ_GET(global_data,"rt_sliders");
 	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
-		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!ww_sliders)
-		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	OBJ_SET(global_data,"rt_sliders",rt_sliders);
 	OBJ_SET(global_data,"ww_sliders",ww_sliders);
 
@@ -211,7 +212,7 @@ void load_ve3d_sliders(gint table_num)
 	OBJ_SET(global_data,"ve3d_sliders",ve3d_sliders);
 
 	if (!ve3d_sliders[table_num])
-		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
@@ -408,13 +409,13 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	ww_sliders = OBJ_GET(global_data,"ww_sliders");
 	enr_sliders = OBJ_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
-		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!aw_sliders)
-		aw_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		aw_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!ww_sliders)
-		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!enr_sliders)
-		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	OBJ_SET(global_data,"rt_sliders",rt_sliders);
 	OBJ_SET(global_data,"aw_sliders",aw_sliders);
 	OBJ_SET(global_data,"ww_sliders",ww_sliders);

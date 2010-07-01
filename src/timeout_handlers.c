@@ -59,17 +59,17 @@ void start_tickler(TicklerType type)
 				break;
 			if (restart_realtime)
 			{
-				update_logbar("comms_view",NULL,g_strdup("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE);
+				update_logbar("comms_view",NULL,_("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE);
 				break;
 			}
 			if (realtime_id == 0)
 			{
 				flush_rt_arrays();
 				realtime_id = g_timeout_add(serial_params->read_wait,(GtkFunction)signal_read_rtvars,NULL);
-				update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),FALSE,FALSE);
+				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE);
 			}
 			else
-				update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),FALSE,FALSE);
+				update_logbar("comms_view","warning",_("Realtime Reader ALREADY started\n"),FALSE,FALSE);
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
@@ -154,11 +154,11 @@ void stop_tickler(TicklerType type)
 			if (realtime_id)
 			{
 				g_source_remove(realtime_id);
-				update_logbar("comms_view",NULL,g_strdup("Realtime Reader stopped\n"),FALSE,FALSE);
+				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE);
 				realtime_id = 0;
 			}
 			else
-				update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),FALSE,FALSE);
+				update_logbar("comms_view","warning",_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE);
 
 			if (!leaving)
 				reset_runtime_status();
@@ -303,7 +303,7 @@ gboolean signal_toothtrig_read(TicklerType type)
 gboolean early_interrogation()
 {
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
-	update_logbar("interr_view","warning",g_strdup("Initiating background ECU interrogation...\n"),FALSE,FALSE);
+	update_logbar("interr_view","warning",_("Initiating background ECU interrogation...\n"),FALSE,FALSE);
 	io_cmd("interrogation",NULL);
 	return FALSE;
 }

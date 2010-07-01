@@ -143,6 +143,8 @@ EXPORT void send_to_slaves(void *data)
 
 	if (!output) /* If no data, don't bother the slaves */
 		return;
+	if (!(gboolean)OBJ_GET(global_data,"network_access"))
+		return;
 
 	msg = g_new0(SlaveMessage, 1);
 	msg->page = (guint8)(GINT)OBJ_GET(output->object,"page");
