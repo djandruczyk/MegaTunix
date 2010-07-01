@@ -89,6 +89,15 @@ _tooltip=This button Pops up a window to calculate the required fuel
 
 #------- Combo Boxes ------------------------------------------------------
 
+[fueltable_size_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=997
+choices=16x16,12x12
+bitvals=0,1
+bitmask=4
+toggle_groups=ve_16x16,ve_12x12
+_tooltip=Selects the fuel table size used.
+
 [use_bank2_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Disabled,Enabled

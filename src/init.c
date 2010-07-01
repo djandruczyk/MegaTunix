@@ -660,6 +660,11 @@ void mem_dealloc()
 			cleanup(firmware->ecu_data_backup[i]);
 			cleanup(firmware->page_params[i]);
 		}
+		cleanup(firmware->table_params);
+		cleanup(firmware->rf_params);
+		cleanup(firmware->ecu_data);
+		cleanup(firmware->ecu_data_last);
+		cleanup(firmware->ecu_data_backup);
 		cleanup(firmware->page_params);
 		cleanup(firmware->rt_data);
 		cleanup(firmware->rt_data_last);
@@ -704,11 +709,6 @@ void mem_dealloc()
 				interdep_vars[i] = NULL;
 			}
 		}
-		cleanup(firmware->table_params);
-		cleanup(firmware->rf_params);
-		cleanup(firmware->ecu_data);
-		cleanup(firmware->ecu_data_last);
-		cleanup(firmware->ecu_data_backup);
 		cleanup(firmware);
 	}
 	if (lookuptables)

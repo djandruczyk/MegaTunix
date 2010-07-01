@@ -1,8 +1,10 @@
 [global]
 description=Object data map for the combined VEtables tab
-_tab_name=_VE Tables
+_tab_name=_VE Tables (12x12)
 id_prefix=VE12_
 size=_U08_
+ellipsize=TRUE
+bind_to_list=ve_12x12
 groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2,load_3,rpm_3,ve_3
 
 #----- Groups ----------------------------------------------------------------
@@ -89,59 +91,25 @@ _tooltip=The VE Entries control how much fuel is injected into the engine. They 
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook
+keys=bind_to_list,tab_ident,sub-notebook
+bind_to_list=ve_12x12
 tab_ident=_VETABLES_TAB_
 sub-notebook=VE_vetable_notebook
 
 [VE2_notebook_tab_label]
 keys=bind_to_list
-bind_to_list=dt_controls
+bind_to_list=dual_table,second_fuel
+match_type=_OR_
+
+[VE3_notebook_tab_label]
+keys=bind_to_list,match_type
+bind_to_list=fuel_switching,seq_siamese
+match_type=_OR_
+
 
 [topframe_title]
 keys=set_label
 set_label=MegaSquirtnSpark-Extra FUEL VE Tables
-
-[VE1_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE1_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE2_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE2_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE3_load_tbl_lab]
-keys=label,alt_label,depend_on
-label=MAP Bins
-alt_label=TPS Bins
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
-
-[VE3_load_tbl_units]
-keys=label,alt_label,depend_on
-label=Kpa
-alt_label=TPSADC
-depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,4,184,4,2,1
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -216,21 +184,21 @@ data=VE12_VE1_rescale_entry,VE12_VE1_rescale_combo
 [VE1_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=0
-applicable_tables=3,5
+applicable_tables=0,1,2
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE12_VE1_new_reqfuel_entry
 
 [VE2_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=1
-applicable_tables=4
+applicable_tables=0,1,2
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE12_VE2_new_reqfuel_entry
 
 [VE3_reqfuel_rescale_button]
 keys=handler,data,table_num,applicable_tables
 table_num=2
-applicable_tables=3,5
+applicable_tables=0,1,2
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE12_VE3_new_reqfuel_entry
 
@@ -259,76 +227,77 @@ data=VE12_VE3_rescale_entry,VE12_VE3_rescale_combo
 #----- Spinners -------------------------------------------------------------
 [VE1_curr_reqfuel_entry]
 keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-offset=148
-precision=1
+offset=608
+precision=3
 table_num=0
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-ul_conv_expr=(reqfuel*((injectors+1)/(divider*((alternate+1)/((dtmode*alternate)+1)))))/10
-expr_symbols=reqfuel,injectors,divider,alternate,dtmode
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_VE_EMB_BIT_
-reqfuel_page=4
-reqfuel_offset=148
-injectors_page=4
-injectors_offset=183
-injectors_bitmask=240
-divider_page=4
-divider_offset=149
-alternate_page=4
-alternate_offset=150
+ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
 alternate_bitmask=1
-dtmode_page=0
-dtmode_offset=33
-dtmode_bitmask=16
 
 [VE2_curr_reqfuel_entry]
 keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-offset=148
+offset=608
+size=_U16_
 table_num=1
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_1_ctrl
 ul_complex=TRUE
-precision=1
-ul_conv_expr=(reqfuel*((injectors+1)/divider))/10
-expr_symbols=reqfuel,injectors,divider
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
-reqfuel_page=4
-reqfuel_offset=148
-injectors_page=4
-injectors_offset=183
-injectors_bitmask=240
-divider_page=4
-divider_offset=149
-
+precision=3
+ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
+alternate_bitmask=1
 
 [VE3_curr_reqfuel_entry]
 keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
-offset=148
-table_num=0
+offset=608
+size=_U16_
+table_num=2
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
-bind_to_list=interdep_0_ctrl
+bind_to_list=interdep_2_ctrl
 ul_complex=TRUE
-precision=1
-ul_conv_expr=(reqfuel*((injectors+1)/(divider*((alternate+1)/((dtmode*alternate)+1)))))/10
-expr_symbols=reqfuel,injectors,divider,alternate,dtmode
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_VE_EMB_BIT_
-reqfuel_page=4
-reqfuel_offset=148
-injectors_page=4
-injectors_offset=183
-injectors_bitmask=240
-divider_page=4
-divider_offset=149
-alternate_page=4
-alternate_offset=150
+precision=3
+ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
+expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
+expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
+reqfuel_1_page=0
+reqfuel_1_offset=608
+reqfuel_1_size=_U16_
+injectors_1_page=0
+injectors_1_offset=619
+injectors_1_bitmask=15
+divider_1_page=0
+divider_1_offset=610
+alternate_page=0
+alternate_offset=611
 alternate_bitmask=1
-dtmode_page=0
-dtmode_offset=33
-dtmode_bitmask=16
 
 
 #----- Widgets --------------------------------------------------------------
@@ -338,12 +307,15 @@ keys=table_num
 table_num=0
 
 [VE2_vbox1]
-keys=bind_to_list,table_num
-bind_to_list=dt_controls
+keys=bind_to_list,table_num,match_type
+match_type=_OR_
+bind_to_list=dual_table,second_fuel
 table_num=1
 
 [VE3_vbox1]
-keys=table_num
+keys=bind_to_list,table_num,match_type
+bind_to_list=fuel_switching,seq_siamese
+match_type=_OR_
 table_num=2
 
 #----- Gauges --------------------------------------------------------------
@@ -506,7 +478,7 @@ offset=864
 group=load_1
 
 [VE2_load_entry]
-keys=ogroup
+keys=group
 offset=888
 group=load_2
 
