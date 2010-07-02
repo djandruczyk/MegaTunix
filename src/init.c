@@ -653,22 +653,6 @@ void mem_dealloc()
 	}
 	if (firmware)
 	{
-		for (i=0;i<firmware->total_pages;i++)
-		{
-			cleanup(firmware->ecu_data[i]);
-			cleanup(firmware->ecu_data_last[i]);
-			cleanup(firmware->ecu_data_backup[i]);
-			cleanup(firmware->page_params[i]);
-		}
-		cleanup(firmware->table_params);
-		cleanup(firmware->rf_params);
-		cleanup(firmware->ecu_data);
-		cleanup(firmware->ecu_data_last);
-		cleanup(firmware->ecu_data_backup);
-		cleanup(firmware->page_params);
-		cleanup(firmware->rt_data);
-		cleanup(firmware->rt_data_last);
-
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
 		cleanup (firmware->actual_signature);
@@ -692,12 +676,26 @@ void mem_dealloc()
 		cleanup (firmware->SignatureVia);
 		cleanup (firmware->TextVerVia);
 		cleanup (firmware->NumVerVia);
+
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			cleanup(firmware->ecu_data[i]);
+			cleanup(firmware->ecu_data_last[i]);
+			cleanup(firmware->ecu_data_backup[i]);
+			cleanup(firmware->page_params[i]);
+		}
+		cleanup(firmware->ecu_data);
+		cleanup(firmware->ecu_data_last);
+		cleanup(firmware->ecu_data_backup);
+		cleanup(firmware->page_params);
+
 		for (i=0;i<firmware->total_te_tables;i++)
 		{
 			if (firmware->te_params[i])
 				dealloc_te_params(firmware->te_params[i]);
 		}
 		cleanup(firmware->te_params);
+
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			if (firmware->table_params[i])
@@ -709,6 +707,11 @@ void mem_dealloc()
 				interdep_vars[i] = NULL;
 			}
 		}
+		cleanup(firmware->table_params);
+		cleanup(interdep_vars);
+		cleanup(firmware->rf_params);
+		cleanup(firmware->rt_data);
+		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
 	}
 	if (lookuptables)
@@ -830,12 +833,16 @@ Table_Params * initialize_table_params(void)
 	table_params->x_precision = 0;
 	table_params->y_precision = 0;
 	table_params->z_precision = 0;
+	table_params->bind_to_list = NULL;
 	table_params->x_suffix = NULL;
 	table_params->y_suffix = NULL;
 	table_params->z_suffix = NULL;
 	table_params->x_conv_expr = NULL;
 	table_params->y_conv_expr = NULL;
 	table_params->z_conv_expr = NULL;
+	table_params->x_source_key = NULL;
+	table_params->y_source_key = NULL;
+	table_params->z_source_key = NULL;
 	table_params->table_name = NULL;
 	table_params->x_eval = NULL;
 	table_params->y_eval = NULL;
@@ -1035,8 +1042,6 @@ void dealloc_qfunction(QFunction * qfunc)
  */
 void dealloc_table_params(Table_Params * table_params)
 {
-
-	/*printf("dealloc_table_params\n");*/
 	cleanup(table_params->table_name);
 	cleanup(table_params->bind_to_list);
 	cleanup(table_params->x_source_key);
