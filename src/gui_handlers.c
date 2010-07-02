@@ -3588,7 +3588,7 @@ void refresh_widgets_at_offset(gint page, gint offset)
 
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-			update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+		update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
 	update_ve3d_if_necessary(page,offset);
 }
 
