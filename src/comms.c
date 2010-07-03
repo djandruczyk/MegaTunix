@@ -192,6 +192,7 @@ EXPORT void update_write_status(void *data)
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	extern gboolean paused_handlers;
+	extern volatile gboolean offline;
 
 	if (!output)
 		goto red_or_black;
@@ -243,6 +244,8 @@ EXPORT void update_write_status(void *data)
 	 * avoid unnecessary burns to the FLASH 
 	 */
 
+	if (offline)
+		return;
 red_or_black:
 	for (i=0;i<firmware->total_pages;i++)
 	{

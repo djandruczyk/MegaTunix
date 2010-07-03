@@ -23,6 +23,7 @@
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
+#include <init.h>
 #include <keyparser.h>
 #include <listmgmt.h>
 #include <notifications.h>
@@ -255,8 +256,8 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
 			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
-			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
-			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
+			OBJ_SET(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr));
+			OBJ_SET(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr));
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -585,8 +586,8 @@ EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
 		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
-		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
-		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
+		OBJ_SET(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr));
+		OBJ_SET(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr));
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -787,6 +788,7 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 		offset = -1;
 	if (( page >= 0 ) && (offset >= 0))
 		ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
+	//dealloc_widget(widget_ptr,NULL);
 }
 
 

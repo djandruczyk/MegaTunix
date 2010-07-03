@@ -46,6 +46,8 @@ GAsyncQueue *io_data_queue = NULL;
 GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
 GAsyncQueue *gui_dispatch_queue = NULL;
+GCond *gui_dispatch_cond = NULL;
+GCond *pf_dispatch_cond = NULL;
 GObject *global_data = NULL;
 
 /*!
@@ -71,6 +73,8 @@ gint main(gint argc, gchar ** argv)
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
+	gui_dispatch_cond = g_cond_new();
+	pf_dispatch_cond = g_cond_new();
 	gtk_init(&argc, &argv);
 	glade_init();
 

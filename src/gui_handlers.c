@@ -118,9 +118,13 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern volatile gboolean offline;
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
+	GTimeVal now;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	gint count = 0;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	GMutex *mutex = g_mutex_new();
+	extern GCond *pf_dispatch_cond;
+	extern GCond *gui_dispatch_cond;
 
 	if (!args->be_quiet)
 	{
@@ -226,16 +230,24 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 			gtk_main_iteration();
 		count++;
 	}
+	g_mutex_lock(mutex);
 	if (pf_dispatcher_id)
 		g_source_remove(pf_dispatcher_id);
 	pf_dispatcher_id = 0;
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
 	if (gui_dispatcher_id)
 		g_source_remove(gui_dispatcher_id);
 	gui_dispatcher_id = 0;
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
+	g_mutex_unlock(mutex);
+
 	close_serial();
 	unlock_serial();
-
 
 	/* Grab and release all mutexes to get them to relinquish
 	*/

@@ -52,6 +52,8 @@
 extern GAsyncQueue *pf_dispatch_queue;
 extern GAsyncQueue *gui_dispatch_queue;
 extern GObject *global_data;
+extern GCond *pf_dispatch_cond;
+extern GCond *gui_dispatch_cond;
 
 
 /*!
@@ -147,8 +149,9 @@ dealloc:
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. 
 	 * */
-	if(count < 15)
+	if((count < 15) && (!leaving))
 		goto trypop;
+	g_cond_signal(pf_dispatch_cond);
 	return TRUE;
 }
 
@@ -267,11 +270,12 @@ dealloc:
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if(count < 3)
+	if ((count < 3) && (!leaving))
 	{
 		/*printf("trying to handle another message\n");*/
 		goto trypop;
 	}
 	/*printf("returning\n");*/
+	g_cond_signal(gui_dispatch_cond);
 	return TRUE;
 }
