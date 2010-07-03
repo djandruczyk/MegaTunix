@@ -617,7 +617,7 @@ void mem_alloc()
 void mem_dealloc()
 {
 	gint i = 0;
-	//gint j = 0;
+	gint j = 0;
 	gpointer data;
 	GHashTable *hash = NULL;
 	GtkListStore *store = NULL;
@@ -638,7 +638,6 @@ void mem_dealloc()
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
 	/* Firmware datastructure.... */
-/*
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		if (ve_widgets[i])
@@ -648,12 +647,10 @@ void mem_dealloc()
 				g_list_foreach(ve_widgets[i][j],dealloc_widget,NULL);
 				g_list_free(ve_widgets[i][j]);
 			}
-			cleanup(ve_widgets[i][j]);
 
 		}
 		cleanup(ve_widgets[i]);
 	}
-*/
 	if (firmware)
 	{
 		cleanup (firmware->name);
@@ -1230,8 +1227,8 @@ void dealloc_widget(gpointer data, gpointer user_data)
 
 	if (!GTK_IS_WIDGET(widget))
 		return;
-printf ("deallocating widget \"%s\"\n",widget->name);
 	/*printf("dealloc_widget\n");*/
+/*
 	cleanup (OBJ_GET(widget,"algorithms"));
 	cleanup (OBJ_GET(widget,"alt_lookuptable"));
 	cleanup (OBJ_GET(widget,"applicable_tables"));
@@ -1264,6 +1261,7 @@ printf ("deallocating widget \"%s\"\n",widget->name);
 	cleanup (OBJ_GET(widget,"tooltip"));
 	cleanup (OBJ_GET(widget,"ul_conv_expr"));
 	cleanup (OBJ_GET(widget,"ul_conv_exprs"));
+*/
 	if (OBJ_GET(widget,"dl_evaluator"))
 		evaluator_destroy (OBJ_GET(widget,"dl_evaluator"));
 	if (OBJ_GET(widget,"ul_evaluator"))
