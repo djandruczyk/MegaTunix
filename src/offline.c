@@ -97,8 +97,7 @@ gboolean set_offline_mode(void)
 	if (!firmware)
 		firmware = g_new0(Firmware_Details,1);
 	load_firmware_details(firmware,filename);
-	update_interrogation_gui(firmware,tests_hash);
-
+	update_interrogation_gui(firmware);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));

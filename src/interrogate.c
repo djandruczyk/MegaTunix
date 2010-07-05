@@ -115,8 +115,8 @@ EXPORT gboolean interrogate_ecu()
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
-	gtk_widget_set_sensitive(lookup_widget("offline_button"),FALSE);
-	gtk_widget_set_sensitive(lookup_widget("interrogate_button"),FALSE);
+	thread_widget_set_sensitive("offline_button",FALSE);
+	thread_widget_set_sensitive("interrogate_button",FALSE);
 	/* how many tests.... */
 	tests_to_run = tests->len;
 
@@ -189,11 +189,11 @@ EXPORT gboolean interrogate_ecu()
 			total_read += len;
 
 			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",test->test_name,len,total_read));
-			/* If we get nothing back (i.e. timeout, assume done)*/
+			/* If we get nothing back (i.e. timeout, inc counter)*/
 			if ((!res) || (len == 0))
 				zerocount++;
 
-			if (zerocount > 1)
+			if (zerocount > 2)
 				break;
 		}
 		dbg_func(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));
@@ -236,8 +236,8 @@ EXPORT gboolean interrogate_ecu()
 	interrogated = determine_ecu(tests,tests_hash);	
 	if (interrogated)
 	{
-		gtk_widget_set_sensitive(lookup_widget("interrogate_button"),FALSE);
-		gtk_widget_set_sensitive(lookup_widget("offline_button"),FALSE);
+		thread_widget_set_sensitive("interrogate_button",FALSE);
+		thread_widget_set_sensitive("offline_button",FALSE);
 	}
 
 	free_tests_array(tests);
@@ -245,8 +245,8 @@ EXPORT gboolean interrogate_ecu()
 
 	if (!interrogated)
 	{
-		gtk_widget_set_sensitive(lookup_widget("interrogate_button"),TRUE);
-		gtk_widget_set_sensitive(lookup_widget("offline_button"),TRUE);
+		thread_widget_set_sensitive("interrogate_button",TRUE);
+		thread_widget_set_sensitive("offline_button",TRUE);
 	}
 
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
@@ -329,7 +329,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 
 		if (!load_firmware_details(firmware,filename))
 			return FALSE;
-		update_interrogation_gui(firmware,tests_hash);
+		update_interrogation_gui(firmware);
 		return TRUE;
 	}
 }
@@ -813,29 +813,23 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		section = g_strdup_printf("te_table_%i",i);
 		cfg_read_boolean(cfgfile,section,"x_lock",&firmware->te_params[i]->x_lock);
 		cfg_read_boolean(cfgfile,section,"y_lock",&firmware->te_params[i]->y_lock);
-		if (!cfg_read_boolean(cfgfile,section,"reversed",&firmware->te_params[i]->reversed))
-			firmware->te_params[i]->reversed = FALSE;
+		cfg_read_boolean(cfgfile,section,"reversed",&firmware->te_params[i]->reversed);
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
 		{
 			firmware->te_params[i]->match_type = translate_string(tmpbuf);
 			g_free(tmpbuf);
 		}
-		if(!cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep))
-			firmware->te_params[i]->gauge_temp_dep = FALSE;
+		cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep);
 		cfg_read_string(cfgfile,section,"gauge",&firmware->te_params[i]->gauge);
 		cfg_read_string(cfgfile,section,"c_gauge",&firmware->te_params[i]->c_gauge);
 		cfg_read_string(cfgfile,section,"f_gauge",&firmware->te_params[i]->f_gauge);
 		if (firmware->te_params[i]->f_gauge || firmware->te_params[i]->c_gauge || firmware->te_params[i]->gauge)	
 			cfg_read_string(cfgfile,section,"gauge_datasource",&firmware->te_params[i]->gauge_datasource);
-		if(!cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->te_params[i]->x_use_color))
-			firmware->te_params[i]->x_use_color = FALSE;
-		if(!cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->te_params[i]->y_use_color))
-			firmware->te_params[i]->y_use_color = FALSE;
-		if(!cfg_read_boolean(cfgfile,section,"x_temp_dep",&firmware->te_params[i]->x_temp_dep))
-			firmware->te_params[i]->x_temp_dep = FALSE;
-		if(!cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep))
-			firmware->te_params[i]->y_temp_dep = FALSE;
+		cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->te_params[i]->x_use_color);
+		cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->te_params[i]->y_use_color);
+		cfg_read_boolean(cfgfile,section,"x_temp_dep",&firmware->te_params[i]->x_temp_dep);
+		cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep);
 		if(!cfg_read_string(cfgfile,section,"x_axis_label",&firmware->te_params[i]->x_axis_label))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_string(cfgfile,section,"y_axis_label",&firmware->te_params[i]->y_axis_label))
@@ -1165,7 +1159,7 @@ gint translate_capabilities(gchar *string)
 
 /*!
  \brief check_for_match() compares the resutls of the interrogation with the
- ECU to the canidates in turn.  when a match occurs TRUE is returns
+ ECU to the canidates in turn. When a match occurs TRUE is returned
  otherwise it returns FALSE
  \param cmd_array (GArray *) array of commands
  \param potential (Canidate *) potential 
@@ -1200,7 +1194,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	}
 
 	if (cfg_read_string(cfgfile,"interrogation","match_on",&tmpbuf) == FALSE)
-		printf(_("ERROR:!! \"match_on\" key missing from interrogation profile\n"));
+		printf(_("ERROR:!! \"match_on\" key missing from interrogation profile [interrogation] section\n"));
 	match_on = g_strsplit(tmpbuf,",",-1);
 	g_free(tmpbuf);
 
@@ -1320,7 +1314,7 @@ void interrogate_error(gchar *text, gint num)
 /* !brief updates the interrogation gui with the text revision, signature
  * and ecu numerical revision
  */
-void update_interrogation_gui(Firmware_Details *firmware,GHashTable *tests_hash)
+void update_interrogation_gui(Firmware_Details *firmware)
 {
 	if (firmware->TextVerVia)
 		io_cmd(firmware->TextVerVia,NULL);

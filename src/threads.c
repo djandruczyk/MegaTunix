@@ -623,6 +623,39 @@ void  thread_update_widget(
 
 
 /*!
+ \brief thread_set_sensitive() is a function to be called from within threads
+ to update a widgets sensitivity state.
+ \param widget_name (gchar *) textual name of the widget to update
+ \param stats (gboolean) the state to set
+ */
+void thread_widget_set_sensitive(gchar * widget_name, gboolean state)
+{
+
+	Io_Message *message = NULL;
+	Widget_Update *w_update = NULL;
+	extern GAsyncQueue *gui_dispatch_queue;
+	gint tmp = 0;
+
+	message = initialize_io_message();
+
+	w_update = g_new0(Widget_Update, 1);
+	w_update->widget_name = widget_name;
+	w_update->type = MTX_SENSITIVE;
+	w_update->state = state;
+
+	message->payload = w_update;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_WIDGET;
+	g_array_append_val(message->functions,tmp);
+
+	g_async_queue_ref(gui_dispatch_queue);
+	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	g_async_queue_unref(gui_dispatch_queue);
+	return;
+}
+
+
+/*!
  \brief start_restore_monitor kicks off a thread to update the tools view
  during an ECU restore to provide user feedback since this is a time
  consuming operation.  if uses message passing over asyncqueues to send the 

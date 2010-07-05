@@ -48,6 +48,7 @@ struct _Widget_Update
 	gchar *widget_name;	/*! Widget name */
 	WidgetType type;	/*! what type of widget are we updating */
 	gchar *msg;		/*! message to display */
+	gboolean state;		/*! state to set widget (MTX_SENSITIVE) */
 };
 
 
@@ -105,6 +106,7 @@ void start_restore_monitor(void);	/* Thread jumpstarter */
 void send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(gchar *, WidgetType, gchar *);
+void thread_widget_set_sensitive(gchar * widget_name, gboolean state);
 gboolean queue_function(gchar * );
 void chunk_write(gint, gint, gint, gint, guint8 *);
 void build_output_string(Io_Message *, Command *, gpointer);

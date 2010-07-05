@@ -238,6 +238,11 @@ trypop:
 						case MTX_TITLE:
 							set_title(g_strdup(w_update->msg));
 							break;
+						case MTX_SENSITIVE:
+							if (NULL == (widget = lookup_widget(w_update->widget_name)))
+								break;
+							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
+							break;
 						default:
 							break;
 					}

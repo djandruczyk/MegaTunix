@@ -874,13 +874,20 @@ TE_Params * initialize_te_params(void)
 	te_params = g_malloc0(sizeof(TE_Params));
 	te_params->x_lock = FALSE;
 	te_params->y_lock = FALSE;
+	te_params->x_use_color = FALSE;
+	te_params->y_use_color = FALSE;
+	te_params->x_temp_dep = FALSE;
+	te_params->y_temp_dep = FALSE;
 	te_params->x_page = -1;
 	te_params->y_page = -1;
 	te_params->x_base = -1;
 	te_params->y_base = -1;
+	te_params->reversed = FALSE;
 	te_params->bincount = -1;
 	te_params->x_precision = 0;
 	te_params->y_precision = 0;
+	te_params->x_axis_label = NULL;
+	te_params->y_axis_label = NULL;
 	te_params->x_name = NULL;
 	te_params->y_name = NULL;
 	te_params->x_units = NULL;
@@ -889,6 +896,7 @@ TE_Params * initialize_te_params(void)
 	te_params->x_ul_conv_expr = NULL;
 	te_params->y_dl_conv_expr = NULL;
 	te_params->y_ul_conv_expr = NULL;
+	te_params->gauge_temp_dep = FALSE;
 	te_params->title = NULL;
 
 	return te_params;

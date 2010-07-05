@@ -65,7 +65,7 @@ void free_tests_array(GArray *);
 void interrogate_error(gchar *, gint);
 gint translate_capabilities(gchar *);
 gboolean load_firmware_details(Firmware_Details *, gchar * );
-void update_interrogation_gui(Firmware_Details *,GHashTable *);
+void update_interrogation_gui(Firmware_Details *);
 /* Prototypes */
 
 #endif
