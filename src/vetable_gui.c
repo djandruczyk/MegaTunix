@@ -157,12 +157,12 @@ void reqfuel_rescale_table(GtkWidget *widget)
 {
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
-	gint table_num = -1;
 	DataSize z_size = MTX_U08;
 	gint z_base = -1;
 	gint z_page = -1;
 	gint x_bins = -1;
 	gint y_bins = -1;
+	gint table_num = -1;
 	gint old = 0;
 	gint canID = 0;
 	gint page = 0;
@@ -170,11 +170,9 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	DataSize size = 0;
 	GtkWidget *tmpwidget = NULL;
 	gchar * tmpbuf = NULL;
-	GList *list = NULL;
 	gfloat percentage = 0.0;
 	gint mult = 0;
 	gint i = 0;
-	guint j = 0;
 	guint x = 0;
 	gchar **vector = NULL;
 	guint8 *data = NULL;
@@ -232,85 +230,76 @@ void reqfuel_rescale_table(GtkWidget *widget)
 		canID = firmware->canID;
 		data = g_new0(guint8, x_bins*y_bins*mult);
 
-		for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
+		for (i=0;i<firmware->table_params[table_num]->table->len;i++)
 		{
-			if (NULL != (list = ve_widgets[z_page][i]))
+			tmpwidget = g_array_index(firmware->table_params[table_num]->table,GtkWidget *, i);
+			if (GTK_IS_ENTRY(tmpwidget))
 			{
-				list = g_list_first(list);
-				for (j=0;j<g_list_length(list);j++)
+				canID = (GINT)OBJ_GET(tmpwidget,"canID");
+				page = (GINT)OBJ_GET(tmpwidget,"page");
+				offset = (GINT)OBJ_GET(tmpwidget,"offset");
+				size = (DataSize)OBJ_GET(tmpwidget,"size");
+				use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
+				if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
+					raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
+				else
+					raw_lower = get_extreme_from_size(size,LOWER);
+				if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
+					raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
+				else
+					raw_upper = get_extreme_from_size(size,UPPER);
+				value = get_ecu_data(canID,page,offset,size);
+				value *= percentage;
+				if (value < raw_lower)
+					value = raw_lower;
+				if (value > raw_upper)
+					value = raw_upper;
+
+				/* What we are doing is doing the 
+				 * forware/reverse conversion which
+				 * will give us an exact value if the 
+				 * user inputs something in
+				 * between,  thus we can reset the 
+				 * display to a sane value...
+				 */
+				old = get_ecu_data(canID,page,offset,size);
+				set_ecu_data(canID,page,offset,size,value);
+
+				real_value = convert_after_upload(tmpwidget);
+				set_ecu_data(canID,page,offset,size,old);
+
+				tmpbuf = g_strdup_printf("%i",(gint)real_value);
+				g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
+						(gpointer)entry_changed_handler,
+						NULL);
+				gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
+				g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
+						(gpointer)entry_changed_handler,
+						NULL);
+				g_free(tmpbuf);
+
+				if (!firmware->chunk_support)
+					send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
+				if (mult == 1)
+					data[offset] = (guint8)value;
+				else if (mult == 2)
 				{
-					tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
-					if (GTK_IS_ENTRY(tmpwidget))
-					{
-						canID = (GINT)OBJ_GET(tmpwidget,"canID");
-						page = (GINT)OBJ_GET(tmpwidget,"page");
-						offset = (GINT)OBJ_GET(tmpwidget,"offset");
-						size = (DataSize)OBJ_GET(tmpwidget,"size");
-						use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
-						if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-							raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
-						else
-							raw_lower = get_extreme_from_size(size,LOWER);
-						if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-							raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
-						else
-							raw_upper = get_extreme_from_size(size,UPPER);
-						value = get_ecu_data(canID,page,offset,size);
-						value *= percentage;
-						if (value < raw_lower)
-							value = raw_lower;
-						if (value > raw_upper)
-							value = raw_upper;
+					data[offset*2] = ((gint32)value & 0x00ff);
+					data[(offset*2)+1] = ((gint32)value & 0xff00) >> 8;
+				}
+				else if (mult == 4)
+				{
+					data[offset*4] = ((gint32)value & 0x00ff);
+					data[(offset*4)+1] = ((gint32)value & 0xff00) >> 8;
+					data[(offset*4)+2] = ((gint32)value & 0xff0000) >> 16;
+					data[(offset*4)+3] = ((gint32)value & 0xff000000) >> 24;
+				}
 
-						/* What we are doing is doing the 
-						 * forware/reverse conversion which
-						 * will give us an exact value if the 
-						 * user inputs something in
-						 * between,  thus we can reset the 
-						 * display to a sane value...
-						 */
-						old = get_ecu_data(canID,page,offset,size);
-						set_ecu_data(canID,page,offset,size,value);
-
-						real_value = convert_after_upload(tmpwidget);
-						set_ecu_data(canID,page,offset,size,old);
-
-						tmpbuf = g_strdup_printf("%i",(gint)real_value);
-						g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-								(gpointer)entry_changed_handler,
-								NULL);
-						gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
-						g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-								(gpointer)entry_changed_handler,
-								NULL);
-						g_free(tmpbuf);
-
-						if (!firmware->chunk_support)
-							send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
-						if (mult == 1)
-							data[i] = (guint8)value;
-						else if (mult == 2)
-						{
-							data[i*2] = ((gint)value & 0x00ff);
-							data[(i*2)+1] = ((gint)value & 0xff00) >> 8;
-						}
-						else if (mult == 4)
-						{
-							data[i*4] = ((gint)value & 0x00ff);
-							data[(i*4)+1] = ((gint)value & 0xff00) >> 8;
-							data[(i*4)+2] = ((gint)value & 0xff0000) >> 16;
-							data[(i*4)+3] = ((gint)value & 0xff000000) >> 24;
-						}
-
-						gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
-						if (use_color)
-						{
-							color = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
-							gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
-						}
-
-
-					}
+				gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
+				if (use_color)
+				{
+					color = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
+					gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
 				}
 			}
 		}
@@ -582,7 +571,7 @@ void draw_ve_marker()
 	/*
 	   for (i=0;i<4;i++)
 	   last_z_weight[i] = z_weight[i];
-	   */
+	 */
 	return;
 
 redraw:
@@ -630,14 +619,14 @@ redraw:
 			z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
 	}
 	/* Take the PREVIOUS ones and reset them back to their DEFAULT color
-	*/
+	 */
 	for (i=0;i<4;i++)
 	{
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
 #ifdef __WIN32__
-		  	gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 #else
 			if (GDK_IS_DRAWABLE(widget->window))
 			{
@@ -670,7 +659,7 @@ redraw:
 	}
 	/*for (i=0;i<4;i++)
 	  last_z_weight[i] = z_weight[i];
-	  */
+	 */
 
 	/* Color the 4 vertexes according to their weight 
 	 * Save the old colors as well
@@ -704,10 +693,10 @@ redraw:
 
 		/* modify_base is REALLY REALLY slow, as it triggers a size recalc all the
 		 * way thru the widget tree, which is atrociously expensive!
-		  gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		 gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 		 */
 #ifdef __WIN32__
-		  gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 #else
 		if (GDK_IS_DRAWABLE(widget->window))
 		{

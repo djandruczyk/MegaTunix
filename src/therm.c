@@ -144,7 +144,7 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 	{
 		res  = bias / ((bins-1)/(double)(adcCount==0?0.01:adcCount) - 1.0);
 		temp = Tf(res);
-		if (!firmware->capabilities & PIS )
+		if (!(firmware->capabilities & PIS))
 		{
 			if      (temp <  -40.0) temp = tabletype == CTS ? 180.0 : 70.0;
 			else if (temp >  350.0) temp = tabletype == CTS ? 180.0 : 70.0;

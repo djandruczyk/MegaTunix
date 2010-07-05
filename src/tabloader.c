@@ -28,6 +28,7 @@
 #include <memory_gui.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
 #include <tabloader.h>
@@ -475,6 +476,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** keys = NULL;
+	gint table_num = 0;
 	gint num_keys = 0;
 	gint offset = 0;
 	gint page = 0;
@@ -724,6 +726,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(section);
 	g_strfreev(keys);
+	if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
+	{
+		table_num = (gint)strtol(tmpbuf,NULL,10);
+		page = (gint)OBJ_GET(widget,"page");
+		offset = (gint)OBJ_GET(widget,"offset");
+		if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
+			g_array_append_val(firmware->table_params[table_num]->table,widget);
+	}
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }
 
