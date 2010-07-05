@@ -166,7 +166,7 @@ void *thread_dispatcher(gpointer data)
 		{
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
-			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
+			thread_update_widget("titlebar",MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
 			continue;
 		}
 
@@ -558,7 +558,7 @@ void  thread_update_logbar(
  functions (ones that take no params)
  \param name name of function to lookup and run in the main gui context..
  */
-gboolean queue_function(gchar * name)
+gboolean queue_function(const gchar * name)
 {
 	Io_Message *message = NULL;
 	QFunction *qfunc = NULL;
@@ -593,7 +593,7 @@ gboolean queue_function(gchar * name)
  \param msg (gchar *) the message to be sent (required)
  */
 void  thread_update_widget(
-		gchar * widget_name,
+		const gchar * widget_name,
 		WidgetType type,
 		gchar * msg)
 {
@@ -628,7 +628,7 @@ void  thread_update_widget(
  \param widget_name (gchar *) textual name of the widget to update
  \param stats (gboolean) the state to set
  */
-void thread_widget_set_sensitive(gchar * widget_name, gboolean state)
+void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
 
 	Io_Message *message = NULL;
@@ -642,6 +642,7 @@ void thread_widget_set_sensitive(gchar * widget_name, gboolean state)
 	w_update->widget_name = widget_name;
 	w_update->type = MTX_SENSITIVE;
 	w_update->state = state;
+	w_update->msg = NULL;
 
 	message->payload = w_update;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));

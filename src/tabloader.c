@@ -734,7 +734,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
  found execute it
  \param functions (gchar *) CSV list of functions to run
  */
-void run_post_functions(gchar * functions)
+void run_post_functions(const gchar * functions)
 {
 	void (*function)(void);
 	gchar ** vector = NULL;
@@ -770,7 +770,7 @@ void run_post_functions(gchar * functions)
  \param functions (gchar *) CSV list of functions to run
  \param widget (GtkWidget *) pointer to widget to be passed to the function
  */
-void run_post_functions_with_arg(gchar * functions, GtkWidget *widget)
+void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
 	void (*function)(GtkWidget *);
 	gchar ** vector = NULL;

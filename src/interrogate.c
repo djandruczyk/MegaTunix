@@ -102,7 +102,7 @@ EXPORT gboolean interrogate_ecu()
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
-	thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogating ECU..."));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
@@ -253,7 +253,7 @@ EXPORT gboolean interrogate_ecu()
 	g_static_mutex_unlock(&mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-	thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogation Complete..."));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
 	return interrogated;
 }
 

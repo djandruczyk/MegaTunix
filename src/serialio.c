@@ -96,7 +96,7 @@ gboolean open_serial(gchar * port_name)
 		err_text = (gchar *)g_strerror(errno);
 		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf(_("Error Opening \"%s\", Error Code: \"%s\""),port_name,err_text));
+		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("Error Opening \"%s\", Error Code: \"%s\""),port_name,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error Opening \"%s\", Error Code: %s \n"),port_name,err_text),FALSE,FALSE);
 	}
@@ -309,7 +309,7 @@ void *serial_repair_thread(gpointer data)
 
 	if (offline)
 	{
-		g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));
+		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
 		g_thread_exit(0);
 	}
 
@@ -358,7 +358,7 @@ void *serial_repair_thread(gpointer data)
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				/*printf ("exiting repair thread immediately\n");*/
-				g_timeout_add(100,(GtkFunction)queue_function,g_strdup("kill_conn_warning"));
+				g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
@@ -378,7 +378,7 @@ void *serial_repair_thread(gpointer data)
 				if (open_serial(vector[i]))
 				{
 					if (autodetect)
-						thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+						thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 #ifdef __PIS_SUPPORT__
 					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Trying 8192 Baud for ECU link\n")),FALSE,FALSE);
 					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to 8192 for comms test\n",vector[i]));
@@ -437,13 +437,13 @@ void *serial_repair_thread(gpointer data)
 				}
 			}
 		}
-		queue_function(g_strdup("conn_warning"));
+		queue_function("conn_warning");
 	}
 
 	if (serial_is_open)
 	{
-		queue_function(g_strdup("kill_conn_warning"));
-		thread_update_widget(g_strdup("active_port_entry"),MTX_ENTRY,g_strdup(vector[i]));
+		queue_function("kill_conn_warning");
+		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 	}
 	if (vector)
 		g_strfreev(vector);

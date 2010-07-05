@@ -32,7 +32,7 @@ typedef struct _OutputData OutputData;
  */
 struct _QFunction
 {
-	gchar *func_name;	/*! Function Name */
+	const gchar *func_name;	/*! Function Name */
 	gint  dummy;		/*! filler for more shit later.. */
 };
 
@@ -45,7 +45,7 @@ struct _QFunction
  */
 struct _Widget_Update
 {
-	gchar *widget_name;	/*! Widget name */
+	const gchar *widget_name;	/*! Widget name */
 	WidgetType type;	/*! what type of widget are we updating */
 	gchar *msg;		/*! message to display */
 	gboolean state;		/*! state to set widget (MTX_SENSITIVE) */
@@ -105,9 +105,9 @@ void *restore_update(gpointer);		/* Thread to update tools status.. */
 void start_restore_monitor(void);	/* Thread jumpstarter */
 void send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-void thread_update_widget(gchar *, WidgetType, gchar *);
-void thread_widget_set_sensitive(gchar * widget_name, gboolean state);
-gboolean queue_function(gchar * );
+void thread_update_widget(const gchar *, WidgetType, gchar *);
+void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
+gboolean queue_function(const gchar * );
 void chunk_write(gint, gint, gint, gint, guint8 *);
 void build_output_string(Io_Message *, Command *, gpointer);
 void ms_handle_page_change(gint , gint );

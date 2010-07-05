@@ -108,8 +108,8 @@ gint comms_test()
 		connected = TRUE;
 		errcount=0;
 		dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
-		queue_function(g_strdup("kill_conn_warning"));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup(_("ECU Connected...")));
+		queue_function("kill_conn_warning");
+		thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
 		thread_update_logbar("comms_view","info",g_strdup_printf(_("ECU Comms Test Successfull\n")),FALSE,FALSE);
 
 	}
@@ -119,8 +119,8 @@ gint comms_test()
 		connected = FALSE;
 		errcount++;
 		if (errcount > 5 )
-			queue_function(g_strdup("conn_warning"));
-		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
+			queue_function("conn_warning");
+		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
 		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
 		thread_update_logbar("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
 	}
@@ -391,7 +391,7 @@ gboolean write_data(Io_Message *message)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
 				if ((notifies) && ((j % notif_divisor) == 0))
-					thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup_printf(_("Sending %i of %i bytes"),j,block->len));
+					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Sending %i of %i bytes"),j,block->len));
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
@@ -411,7 +411,7 @@ gboolean write_data(Io_Message *message)
 	}
 	if (notifies)
 	{
-		thread_update_widget(g_strdup("info_label"),MTX_LABEL,g_strdup("Transfer Completed"));
+		thread_update_widget("info_label",MTX_LABEL,g_strdup("Transfer Completed"));
 		g_timeout_add(2000,(GtkFunction)reset_infolabel,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 

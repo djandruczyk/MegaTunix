@@ -91,7 +91,7 @@ gboolean set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
-	queue_function(g_strdup("kill_conn_warning"));
+	queue_function("kill_conn_warning");
 
 	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)

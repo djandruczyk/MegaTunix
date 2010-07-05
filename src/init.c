@@ -1006,7 +1006,6 @@ void dealloc_array(GArray *array, ArrayType type)
 void dealloc_w_update(Widget_Update * w_update)
 {
 	/*printf("dealloc_w_update\n");*/
-        cleanup (w_update->widget_name);
         cleanup (w_update->msg);
         cleanup (w_update);
 }
@@ -1035,7 +1034,6 @@ void dealloc_textmessage(Text_Message * message)
 void dealloc_qfunction(QFunction * qfunc)
 {
 	/*printf("dealloc_qfunction\n");*/
-	cleanup (qfunc->func_name);
 	cleanup (qfunc);
 }
 

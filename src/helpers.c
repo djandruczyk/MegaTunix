@@ -375,9 +375,9 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			ptr8 = (guchar *)message->recv_buf;
 			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
-				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
+				thread_update_widget("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
 			else
-				thread_update_widget(g_strdup("ecu_revision_entry"),MTX_ENTRY,g_strdup(""));
+				thread_update_widget("ecu_revision_entry",MTX_ENTRY,g_strdup(""));
 			break;
 		case TEXT_REV:
 			if (offline)
@@ -385,7 +385,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				thread_update_widget("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				 firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
 			}
@@ -396,7 +396,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 count = read_data(-1,&message->recv_buf,FALSE);
                          if (count > 0)
 			 {
-				 thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 thread_update_widget("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				 firmware->signature_len = count;
 				 firmware->actual_signature = g_strndup(message->recv_buf,count);
 			 }
