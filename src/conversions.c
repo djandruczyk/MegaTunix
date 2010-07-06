@@ -186,12 +186,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 		if (return_value > upper)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",upper));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (ecu units, evaluated)!!\n",upper));
 			return_value = upper;
 		}
 		if (return_value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (evaluated)!!\n",lower));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (ecu units, evaluated)!!\n",lower));
 			return_value = lower;
 		}
 	}

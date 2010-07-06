@@ -2756,6 +2756,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gboolean reverse_keys = FALSE;
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
+	extern gboolean *tracking_focus;
+
 
 	canID = (GINT) OBJ_GET(widget,"canID");
 	page = (GINT) OBJ_GET(widget,"page");
@@ -2947,6 +2949,15 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				if (grab_single_cell)
 					widget_grab(widget,(GdkEventButton *)event,GINT_TO_POINTER(TRUE));
 			}
+			retval = TRUE;
+			break;
+		case GDK_F:
+		case GDK_f:
+			printf("tracking focus key!\n");
+			if (tracking_focus[active_table])
+				tracking_focus[active_table] = FALSE;
+			else
+				tracking_focus[active_table] = TRUE;
 			retval = TRUE;
 			break;
 		case GDK_Escape:

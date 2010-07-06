@@ -348,7 +348,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	MultiSource * multi = NULL;
 	gchar **sources = NULL;
 	gchar **suffixes = NULL;
-	gchar **conv_exprs = NULL;
+	gchar **ul_conv_exprs = NULL;
+	gchar **dl_conv_exprs = NULL;
 	gchar **precisions = NULL;
 	gchar **expr_keys = NULL;
 	gint major = 0;
@@ -358,6 +359,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	gint len3 = 0;
 	gint len4 = 0;
 	gint len5 = 0;
+	gint len6 = 0;
 	gint j = 0;
 
 	cfgfile = cfg_open_file(filename);
@@ -699,9 +701,12 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffixes",&firmware->table_params[i]->x_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			cfg_read_string(cfgfile,section,"x_conv_expr",&firmware->table_params[i]->x_conv_expr);
-			if(!cfg_read_string(cfgfile,section,"x_conv_exprs",&firmware->table_params[i]->x_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr);
+			cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr);
+			if(!cfg_read_string(cfgfile,section,"x_ul_conv_exprs",&firmware->table_params[i]->x_ul_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"x_dl_conv_exprs",&firmware->table_params[i]->x_dl_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
 		}
@@ -711,8 +716,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffix",&firmware->table_params[i]->x_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"x_conv_expr",&firmware->table_params[i]->x_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -731,9 +738,12 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffixes",&firmware->table_params[i]->y_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			cfg_read_string(cfgfile,section,"y_conv_expr",&firmware->table_params[i]->y_conv_expr);
-			if(!cfg_read_string(cfgfile,section,"y_conv_exprs",&firmware->table_params[i]->y_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr);
+			cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr);
+			if(!cfg_read_string(cfgfile,section,"y_ul_conv_exprs",&firmware->table_params[i]->y_ul_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"y_dl_conv_exprs",&firmware->table_params[i]->y_dl_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -744,8 +754,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffix",&firmware->table_params[i]->y_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"y_conv_expr",&firmware->table_params[i]->y_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -764,8 +776,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffixes",&firmware->table_params[i]->z_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"z_conv_exprs",&firmware->table_params[i]->z_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"z_ul_conv_exprs",&firmware->table_params[i]->z_ul_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"z_dl_conv_exprs",&firmware->table_params[i]->z_dl_conv_exprs))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_precisions",&firmware->table_params[i]->z_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -776,8 +790,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffix",&firmware->table_params[i]->z_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"z_conv_expr",&firmware->table_params[i]->z_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"z_ul_conv_expr",&firmware->table_params[i]->z_ul_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			if(!cfg_read_string(cfgfile,section,"z_dl_conv_expr",&firmware->table_params[i]->z_dl_conv_expr))
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
@@ -911,21 +927,25 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->x_conv_exprs,",",-1);
+			ul_conv_exprs = g_strsplit(firmware->table_params[i]->x_ul_conv_exprs,",",-1);
+			dl_conv_exprs = g_strsplit(firmware->table_params[i]->x_dl_conv_exprs,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len4 = g_strv_length(ul_conv_exprs);
+			len5 = g_strv_length(dl_conv_exprs);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("X multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
+				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
+				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -933,11 +953,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
+			g_strfreev(ul_conv_exprs);
+			g_strfreev(dl_conv_exprs);
 			g_strfreev(precisions);
 		}
 		else
-			firmware->table_params[i]->x_eval = evaluator_create(firmware->table_params[i]->x_conv_expr);
+		{
+			firmware->table_params[i]->x_ul_eval = evaluator_create(firmware->table_params[i]->x_ul_conv_expr);
+			firmware->table_params[i]->x_dl_eval = evaluator_create(firmware->table_params[i]->x_dl_conv_expr);
+		}
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)
 		{
@@ -945,21 +969,25 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->y_conv_exprs,",",-1);
+			ul_conv_exprs = g_strsplit(firmware->table_params[i]->y_ul_conv_exprs,",",-1);
+			dl_conv_exprs = g_strsplit(firmware->table_params[i]->y_dl_conv_exprs,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len4 = g_strv_length(ul_conv_exprs);
+			len5 = g_strv_length(dl_conv_exprs);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("Y multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
+				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
+				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -967,11 +995,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
+			g_strfreev(ul_conv_exprs);
+			g_strfreev(dl_conv_exprs);
 			g_strfreev(precisions);
 		}
 		else
-			firmware->table_params[i]->y_eval = evaluator_create(firmware->table_params[i]->y_conv_expr);
+		{
+			firmware->table_params[i]->y_ul_eval = evaluator_create(firmware->table_params[i]->y_ul_conv_expr);
+			firmware->table_params[i]->y_dl_eval = evaluator_create(firmware->table_params[i]->y_dl_conv_expr);
+		}
 
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->z_multi_source)
@@ -980,21 +1012,25 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
-			conv_exprs = g_strsplit(firmware->table_params[i]->z_conv_exprs,",",-1);
+			ul_conv_exprs = g_strsplit(firmware->table_params[i]->z_ul_conv_exprs,",",-1);
+			dl_conv_exprs = g_strsplit(firmware->table_params[i]->z_dl_conv_exprs,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(conv_exprs);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len4 = g_strv_length(ul_conv_exprs);
+			len5 = g_strv_length(dl_conv_exprs);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("Z multi_sources length mismatch!\n"));
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->conv_expr = g_strdup(conv_exprs[j]);
-				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
+				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
+				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1002,11 +1038,15 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(conv_exprs);
+			g_strfreev(ul_conv_exprs);
+			g_strfreev(dl_conv_exprs);
 			g_strfreev(precisions);
 		}
 		else
-			firmware->table_params[i]->z_eval = evaluator_create(firmware->table_params[i]->z_conv_expr);
+		{
+			firmware->table_params[i]->z_ul_eval = evaluator_create(firmware->table_params[i]->z_ul_conv_expr);
+			firmware->table_params[i]->z_dl_eval = evaluator_create(firmware->table_params[i]->z_dl_conv_expr);
+		}
 
 	}
 

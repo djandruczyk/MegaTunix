@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=5
+minor=6
 
 [interrogation_profile]
 name=Old Bowling & Grippo v1.0
@@ -48,7 +48,8 @@ x_bincount=8
 x_size=_U08_
 x_source=rpm
 _x_suffix=RPM
-x_conv_expr=x*100
+x_ul_conv_expr=x*100
+x_dl_conv_expr=x/100
 x_precision=0
 y_page=0
 y_base_offset=108
@@ -59,14 +60,16 @@ y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4115,MPX4250
 y_sources=tpsadc,mapkpa,mapkpa
 _y_suffixes=TPS ADC,KPa,KPa
-y_conv_exprs=x*1,x*1,x*1
+y_ul_conv_exprs=x*1,x*1,x*1
+y_dl_conv_exprs=x*1,x*1,x*1
 y_precisions=0,0,0
 z_page=0
 z_base_offset=0
 u_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
-z_conv_expr=x*1
+z_ul_conv_expr=x*1
+z_dl_conv_expr=x*1
 z_precision=0
 
 [page_0]

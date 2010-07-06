@@ -47,8 +47,10 @@ struct _MultiExpr
 struct _MultiSource
 {
 	gchar *source;		/* name of rtvars datasource */
-	gchar *conv_expr;	/* conversion expression ms units to real */
-	void * evaluator;	/* evaluator pointer */
+	gchar *ul_conv_expr;	/* conversion expression ms units to real */
+	gchar *dl_conv_expr;	/* conversion expression ms units to real */
+	void * ul_eval;		/* evaluator pointer */
+	void * dl_eval;		/* evaluator pointer */
 	gchar * suffix;		/* textual suffix for this evaluator*/
 	gint precision;		/* Precision for floating point */
 };

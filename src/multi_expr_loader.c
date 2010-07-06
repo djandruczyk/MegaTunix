@@ -174,10 +174,14 @@ void free_multi_source(gpointer data)
 	MultiSource *multi = (MultiSource *)data;
 	if (multi->source)
 		g_free(multi->source);	
-	if (multi->conv_expr)
-		g_free(multi->conv_expr);	
-	if (multi->evaluator)
-		evaluator_destroy(multi->evaluator);
+	if (multi->ul_conv_expr)
+		g_free(multi->ul_conv_expr);	
+	if (multi->dl_conv_expr)
+		g_free(multi->dl_conv_expr);	
+	if (multi->ul_eval)
+		evaluator_destroy(multi->ul_eval);
+	if (multi->dl_eval)
+		evaluator_destroy(multi->dl_eval);
 	if (multi->suffix)
 		g_free(multi->suffix);
 	g_free(multi);

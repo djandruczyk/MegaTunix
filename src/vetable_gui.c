@@ -425,12 +425,12 @@ void draw_ve_marker()
 
 		if (!multi)
 			return;
-		eval[table][_X_] = multi->evaluator;
+		eval[table][_X_] = multi->ul_eval;
 		lookup_current_value(multi->source,&x_source);
 	}
 	else
 	{
-		eval[table][_X_] = firmware->table_params[table]->x_eval;
+		eval[table][_X_] = firmware->table_params[table]->x_ul_eval;
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
 	}
 
@@ -460,12 +460,12 @@ void draw_ve_marker()
 		if (!multi)
 			return;
 
-		eval[table][_Y_] = multi->evaluator;
+		eval[table][_Y_] = multi->ul_eval;
 		lookup_current_value(multi->source,&y_source);
 	}
 	else
 	{
-		eval[table][_Y_] = firmware->table_params[table]->y_eval;
+		eval[table][_Y_] = firmware->table_params[table]->y_ul_eval;
 		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
 	}
 	if ((x_source == prev_x_source) && (y_source == prev_y_source))
@@ -681,7 +681,10 @@ redraw:
 		if (!GTK_IS_WIDGET(widget))
 			return;
 		if ((i == heaviest) && (tracking_focus[table]) && (widget != last_widgets[table][z_bin[i]]))
+		{
+			printf("grabbing widget wiht most weight!\n");
 			gtk_widget_grab_focus(widget);
+		}
 
 		last_widgets[table][z_bin[i]] = widget;
 		last[table][i] = z_bin[i];

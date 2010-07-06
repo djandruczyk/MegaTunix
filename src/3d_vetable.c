@@ -349,12 +349,12 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
 		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
 		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
-		OBJ_SET(ve_view->x_objects[i],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->x_conv_expr));
+		OBJ_SET(ve_view->x_objects[i],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->x_ul_conv_expr));
 		if (firmware->table_params[table_num]->x_multi_source)
 		{
 			OBJ_SET(ve_view->x_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key));
 			OBJ_SET(ve_view->x_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->x_multi_expr_keys));
-			OBJ_SET(ve_view->x_objects[i],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->x_conv_exprs));
+			OBJ_SET(ve_view->x_objects[i],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->x_ul_conv_exprs));
 		}
 	}
 	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
@@ -365,12 +365,12 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
 		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
 		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
-		OBJ_SET(ve_view->y_objects[i],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->y_conv_expr));
+		OBJ_SET(ve_view->y_objects[i],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->y_ul_conv_expr));
 		if (firmware->table_params[table_num]->y_multi_source)
 		{
 			OBJ_SET(ve_view->y_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key));
 			OBJ_SET(ve_view->y_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys));
-			OBJ_SET(ve_view->y_objects[i],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->y_conv_exprs));
+			OBJ_SET(ve_view->y_objects[i],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->y_ul_conv_exprs));
 		}
 	}
 
@@ -391,12 +391,12 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			else
 				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((j*ve_view->y_bincount)+i))));
 			OBJ_SET(ve_view->z_objects[i][j],"size",GINT_TO_POINTER(ve_view->z_size));
-			OBJ_SET(ve_view->z_objects[i][j],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->z_conv_expr));
+			OBJ_SET(ve_view->z_objects[i][j],"ul_conv_expr",g_strdup(firmware->table_params[table_num]->z_ul_conv_expr));
 			if (firmware->table_params[table_num]->z_multi_source)
 			{
 				OBJ_SET(ve_view->z_objects[i][j],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key));
 				OBJ_SET(ve_view->z_objects[i][j],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->z_multi_expr_keys));
-				OBJ_SET(ve_view->z_objects[i][j],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->z_conv_exprs));
+				OBJ_SET(ve_view->z_objects[i][j],"ul_conv_exprs",g_strdup(firmware->table_params[table_num]->z_ul_conv_exprs));
 			}
 			if (firmware->table_params[table_num]->z_depend_on)
 			{

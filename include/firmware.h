@@ -175,13 +175,16 @@ struct _Table_Params
 	gchar *x_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *x_sources;	/*! comma sep list of sources */
 	gchar *x_suffixes;	/*! comma sep list of suffixes */
-	gchar *x_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *x_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *x_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *x_precisions;	/*! comma sep list of precisions */
 	GHashTable *x_multi_hash;/*! Hash table to store the above */
 	gchar *x_source;	/*! X datasource for 3d displays */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
-	gchar *x_conv_expr;	/*! x conversion expression */
-	void *x_eval;		/*! evaluator for x variable */
+	gchar *x_ul_conv_expr;	/*! x conversion expression */
+	gchar *x_dl_conv_expr;	/*! x conversion expression */
+	void *x_ul_eval;	/*! evaluator for x variable */
+	void *x_dl_eval;	/*! evaluator for x variable */
 	gint x_precision;	/*! how many decimal places */
 	GObject *x_object;	/*! Container for lookuptable deps */
 
@@ -196,13 +199,16 @@ struct _Table_Params
 	gchar *y_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *y_sources;	/*! comma sep list of sources */
 	gchar *y_suffixes;	/*! comma sep list of suffixes */
-	gchar *y_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *y_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *y_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *y_precisions;	/*! comma sep list of precisions */
 	GHashTable *y_multi_hash;/*! Hash table to store the above */
 	gchar *y_source;	/*! Y datasource for 3d displays */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
-	gchar *y_conv_expr;	/*! y conversion expression */
-	void *y_eval;		/*! evaluator for y variable */
+	gchar *y_ul_conv_expr;	/*! y conversion expression */
+	gchar *y_dl_conv_expr;	/*! y conversion expression */
+	void *y_ul_eval;	/*! evaluator for y variable */
+	void *y_dl_eval;	/*! evaluator for y variable */
 	gint y_precision;	/*! how many decimal places */
 	GObject *y_object;	/*! Container for lookuptable deps */
 
@@ -216,13 +222,16 @@ struct _Table_Params
 	gchar *z_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *z_sources;	/*! comma sep list of sources */
 	gchar *z_suffixes;	/*! comma sep list of suffixes */
-	gchar *z_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *z_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *z_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *z_precisions;	/*! comma sep list of precisions */
 	GHashTable *z_multi_hash;/*! Hash table to store the above */
 	gchar *z_source;	/*! Z datasource for 3d displays */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
-	gchar *z_conv_expr;	/*! z conversion expression */
-	void *z_eval;		/*! evaluator for z variable */
+	gchar *z_ul_conv_expr;	/*! z conversion expression */
+	gchar *z_dl_conv_expr;	/*! z conversion expression */
+	void *z_ul_eval;	/*! evaluator for z variable */
+	void *z_dl_eval;	/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
 	gchar * z_depend_on;	/*! Z axis dependancy string name */
 	GObject *z_object;	/*! Container for lookuptable deps */

@@ -891,7 +891,7 @@ EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier(size);
 
-	evaluator = evaluator_create(firmware->table_params[table]->x_conv_expr);
+	evaluator = evaluator_create(firmware->table_params[table]->x_ul_conv_expr);
 
 	// fetch us a copy of the x bins
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
@@ -905,7 +905,7 @@ EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier(size);
 
-	evaluator = evaluator_create(firmware->table_params[table]->y_conv_expr);
+	evaluator = evaluator_create(firmware->table_params[table]->y_ul_conv_expr);
 
 	// fetch us a copy of the y bins
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)

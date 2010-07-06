@@ -835,16 +835,28 @@ Table_Params * initialize_table_params(void)
 	table_params->x_suffix = NULL;
 	table_params->y_suffix = NULL;
 	table_params->z_suffix = NULL;
-	table_params->x_conv_expr = NULL;
-	table_params->y_conv_expr = NULL;
-	table_params->z_conv_expr = NULL;
+	table_params->x_ul_conv_expr = NULL;
+	table_params->x_dl_conv_expr = NULL;
+	table_params->y_ul_conv_expr = NULL;
+	table_params->y_dl_conv_expr = NULL;
+	table_params->z_ul_conv_expr = NULL;
+	table_params->z_dl_conv_expr = NULL;
+	table_params->x_ul_conv_exprs = NULL;
+	table_params->x_dl_conv_exprs = NULL;
+	table_params->y_ul_conv_exprs = NULL;
+	table_params->y_dl_conv_exprs = NULL;
+	table_params->z_ul_conv_exprs = NULL;
+	table_params->z_dl_conv_exprs = NULL;
 	table_params->x_source_key = NULL;
 	table_params->y_source_key = NULL;
 	table_params->z_source_key = NULL;
 	table_params->table_name = NULL;
-	table_params->x_eval = NULL;
-	table_params->y_eval = NULL;
-	table_params->z_eval = NULL;
+	table_params->x_ul_eval = NULL;
+	table_params->y_ul_eval = NULL;
+	table_params->z_ul_eval = NULL;
+	table_params->x_dl_eval = NULL;
+	table_params->y_dl_eval = NULL;
+	table_params->z_dl_eval = NULL;
 	/* X lookuptable container */
 	table_params->x_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
         g_object_ref(G_OBJECT(table_params->x_object));
@@ -1057,9 +1069,12 @@ void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_suffixes);
 	cleanup(table_params->y_suffixes);
 	cleanup(table_params->z_suffixes);
-	cleanup(table_params->x_conv_exprs);
-	cleanup(table_params->y_conv_exprs);
-	cleanup(table_params->z_conv_exprs);
+	cleanup(table_params->x_ul_conv_exprs);
+	cleanup(table_params->y_ul_conv_exprs);
+	cleanup(table_params->z_ul_conv_exprs);
+	cleanup(table_params->x_dl_conv_exprs);
+	cleanup(table_params->y_dl_conv_exprs);
+	cleanup(table_params->z_dl_conv_exprs);
 	cleanup(table_params->x_precisions);
 	cleanup(table_params->y_precisions);
 	cleanup(table_params->z_precisions);
@@ -1069,21 +1084,30 @@ void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_suffix);
 	cleanup(table_params->y_suffix);
 	cleanup(table_params->z_suffix);
-	cleanup(table_params->x_conv_expr);
-	cleanup(table_params->y_conv_expr);
-	cleanup(table_params->z_conv_expr);
+	cleanup(table_params->x_ul_conv_expr);
+	cleanup(table_params->y_ul_conv_expr);
+	cleanup(table_params->z_ul_conv_expr);
+	cleanup(table_params->x_dl_conv_expr);
+	cleanup(table_params->y_dl_conv_expr);
+	cleanup(table_params->z_dl_conv_expr);
 	if (table_params->x_multi_hash)
 		g_hash_table_destroy(table_params->x_multi_hash);
 	if (table_params->y_multi_hash)
 		g_hash_table_destroy(table_params->y_multi_hash);
 	if (table_params->z_multi_hash)
 		g_hash_table_destroy(table_params->z_multi_hash);
-	if(table_params->x_eval)
-		evaluator_destroy(table_params->x_eval);
-	if(table_params->y_eval)
-		evaluator_destroy(table_params->y_eval);
-	if(table_params->z_eval)
-		evaluator_destroy(table_params->z_eval);
+	if(table_params->x_ul_eval)
+		evaluator_destroy(table_params->x_ul_eval);
+	if(table_params->y_ul_eval)
+		evaluator_destroy(table_params->y_ul_eval);
+	if(table_params->z_ul_eval)
+		evaluator_destroy(table_params->z_ul_eval);
+	if(table_params->x_dl_eval)
+		evaluator_destroy(table_params->x_dl_eval);
+	if(table_params->y_dl_eval)
+		evaluator_destroy(table_params->y_dl_eval);
+	if(table_params->z_dl_eval)
+		evaluator_destroy(table_params->z_dl_eval);
 	if(table_params->x_object)
 		dealloc_dep_object(table_params->x_object);
 	if(table_params->y_object)
