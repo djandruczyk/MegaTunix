@@ -317,15 +317,17 @@ void reqfuel_rescale_table(GtkWidget *widget)
 
 void draw_ve_marker()
 {
-	static gfloat prev_x_source = 0.0;
-	static gfloat prev_y_source = 0.0;
+	static gfloat *prev_x_source;
+	static gfloat *prev_y_source;
 	gfloat x_source = 0.0;
 	gfloat y_source = 0.0;
+	gfloat x_raw = 0.0;
+	gfloat y_raw = 0.0;
 	GtkWidget *widget = NULL;
 	static GtkWidget ***last_widgets = NULL;
 	static gint **last = NULL;
 	static GdkColor ** old_colors = NULL;
-	static GdkColor color= { 0, 0,16384,16384};
+	static GdkColor color = { 0, 0,16384,16384};
 	GtkRcStyle *style = NULL;
 #ifndef __WIN32__
 	GdkGC *gc = NULL;
@@ -352,7 +354,8 @@ void draw_ve_marker()
 	gfloat max = 0.0;
 	gint heaviest = -1;
 	GList *list = NULL;
-	static void ***eval;
+	static void **y_eval;
+	static void **x_eval;
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
@@ -365,17 +368,18 @@ void draw_ve_marker()
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
-	enum
-	{
-		_X_=0,
-		_Y_
-	};
 
 	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
 		return;
 
-	if (!eval)
-		eval = g_new0(void **, firmware->total_tables);
+	if (!x_eval)
+		x_eval = g_new0(void *, firmware->total_tables);
+	if (!y_eval)
+		y_eval = g_new0(void *, firmware->total_tables);
+	if (!prev_x_source)
+		prev_x_source = g_new0(gfloat, firmware->total_tables);
+	if (!prev_y_source)
+		prev_y_source = g_new0(gfloat, firmware->total_tables);
 
 	if (!last)
 	{
@@ -397,8 +401,6 @@ void draw_ve_marker()
 	}
 
 	table = active_table;
-	if (!eval[table])
-		eval[table] = g_new0(void *, 2);
 
 	if (firmware->table_params[table]->x_multi_source)
 	{
@@ -425,12 +427,12 @@ void draw_ve_marker()
 
 		if (!multi)
 			return;
-		eval[table][_X_] = multi->ul_eval;
+		x_eval[table] = multi->dl_eval;
 		lookup_current_value(multi->source,&x_source);
 	}
 	else
 	{
-		eval[table][_X_] = firmware->table_params[table]->x_ul_eval;
+		x_eval[table] = firmware->table_params[table]->x_dl_eval;
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
 	}
 
@@ -460,15 +462,15 @@ void draw_ve_marker()
 		if (!multi)
 			return;
 
-		eval[table][_Y_] = multi->ul_eval;
+		y_eval[table] = multi->dl_eval;
 		lookup_current_value(multi->source,&y_source);
 	}
 	else
 	{
-		eval[table][_Y_] = firmware->table_params[table]->y_ul_eval;
+		y_eval[table] = firmware->table_params[table]->y_dl_eval;
 		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
 	}
-	if ((x_source == prev_x_source) && (y_source == prev_y_source))
+	if ((x_source == prev_x_source[table]) && (y_source == prev_y_source[table]))
 	{
 		/*printf("table marker,  values haven't changed\n"); */
 		return;
@@ -476,17 +478,19 @@ void draw_ve_marker()
 	else
 	{
 		/*printf("values have changed, continuing\n"); */
-		prev_x_source = x_source;
-		prev_y_source = y_source;
+		prev_x_source[table] = x_source;
+		prev_y_source[table] = y_source;
 	}
+
 	/* Find bin corresponding to current rpm  */
 	page = firmware->table_params[table]->x_page;
 	base = firmware->table_params[table]->x_base;
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier(size);
+	x_raw  = evaluator_evaluate_x(x_eval[table],x_source);
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
-		if (evaluator_evaluate_x(eval[table][_X_],get_ecu_data(canID,page,base,size)) >= x_source)
+		if (get_ecu_data(canID,page,base,size) >= x_raw)
 		{
 			bin[0] = -1;
 			bin[1] = 0;
@@ -494,20 +498,20 @@ void draw_ve_marker()
 			right_w = 1;
 			break;
 		}
-		left = evaluator_evaluate_x(eval[table][_X_],get_ecu_data(canID,page,base+(i*mult),size));
-		right = evaluator_evaluate_x(eval[table][_X_],get_ecu_data(canID,page,base+((i+1)*mult),size));
+		left = get_ecu_data(canID,page,base+(i*mult),size);
+		right = get_ecu_data(canID,page,base+((i+1)*mult),size);
 
-		if ((x_source > left) && (x_source <= right))
+		if ((x_raw > left) && (x_raw <= right))
 		{
 			bin[0] = i;
 			bin[1] = i+1;
 
-			right_w = (float)(x_source-left)/(float)(right-left);
+			right_w = (float)(x_raw-left)/(float)(right-left);
 			left_w = 1.0-right_w;
 			break;
 
 		}
-		if (x_source > right)
+		if (x_raw > right)
 		{
 			bin[0] = i+1;
 			bin[1] = -1;
@@ -521,9 +525,10 @@ void draw_ve_marker()
 	base = firmware->table_params[table]->y_base;
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier(size);
+	y_raw  = evaluator_evaluate_x(y_eval[table],y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
-		if (evaluator_evaluate_x(eval[table][_Y_],get_ecu_data(canID,page,base,size)) >= y_source)
+		if (get_ecu_data(canID,page,base,size) >= y_raw)
 		{
 			bin[2] = -1;
 			bin[3] = 0;
@@ -531,20 +536,20 @@ void draw_ve_marker()
 			bottom_w = 0;
 			break;
 		}
-		bottom = evaluator_evaluate_x(eval[table][_Y_],get_ecu_data(canID,page,base+(i*mult),size));
-		top = evaluator_evaluate_x(eval[table][_Y_],get_ecu_data(canID,page,base+((i+1)*mult),size));
+		bottom = get_ecu_data(canID,page,base+(i*mult),size);
+		top = get_ecu_data(canID,page,base+((i+1)*mult),size);
 
-		if ((y_source > bottom) && (y_source <= top))
+		if ((y_raw > bottom) && (y_raw <= top))
 		{
 			bin[2] = i;
 			bin[3] = i+1;
 
-			top_w = (float)(y_source-bottom)/(float)(top-bottom);
+			top_w = (float)(y_raw-bottom)/(float)(top-bottom);
 			bottom_w = 1.0-top_w;
 			break;
 
 		}
-		if (y_source > top)
+		if (y_raw > top)
 		{
 			bin[2] = i+1;
 			bin[3] = -1;
