@@ -508,7 +508,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		/*printf("(indexed) section is %s\n",section);*/
 		result = sscanf(tmpbuf,"%d of %d",&index,&count);
 		/*printf("sscanf result %i\n",result);
-		printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
+		  printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
 		g_free(tmpbuf);
 	}
 	else
@@ -726,13 +726,16 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(section);
 	g_strfreev(keys);
-	if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
+	if (GTK_IS_ENTRY(widget))
 	{
-		table_num = (gint)strtol(tmpbuf,NULL,10);
-		page = (gint)OBJ_GET(widget,"page");
-		offset = (gint)OBJ_GET(widget,"offset");
-		if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
-			g_array_append_val(firmware->table_params[table_num]->table,widget);
+		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
+		{
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+			page = (gint)OBJ_GET(widget,"page");
+			offset = (gint)OBJ_GET(widget,"offset");
+			if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
+				g_array_append_val(firmware->table_params[table_num]->table,widget);
+		}
 	}
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }

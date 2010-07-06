@@ -5511,7 +5511,8 @@
 					  <property name="items" translatable="yes">  +
   -
   *
-  /</property>
+  /
+  =</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
@@ -11229,7 +11230,8 @@ most &quot;Weight&quot;</property>
 					  <property name="items" translatable="yes">  +
   -
   *
-  /</property>
+  /
+  =</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>
@@ -16947,7 +16949,8 @@ most &quot;Weight&quot;</property>
 					  <property name="items" translatable="yes">  +
   -
   *
-  /</property>
+  /
+  =</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="has_frame">True</property>
 					  <property name="focus_on_click">True</property>

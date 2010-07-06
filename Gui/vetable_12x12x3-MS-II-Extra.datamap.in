@@ -211,7 +211,7 @@ _tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of 
 [VE2_rescale_button]
 keys=handler,data
 handler=_RESCALE_TABLE_
-data=VE12_VE2_rescale_s,VE12_VE2_rescale_combopinner
+data=VE12_VE2_rescale_spinner,VE12_VE2_rescale_combo
 
 [VE3_3d_view_button]
 keys=table_num,tooltip,bind_to_list

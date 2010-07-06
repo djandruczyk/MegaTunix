@@ -130,10 +130,34 @@ gboolean set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("setup_menu_handlers_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("enable_3d_buttons_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("ready_msg_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
+
+	/*
 	io_cmd(firmware->get_all_command,NULL);
+	*/
 
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -345,6 +369,7 @@ EXPORT void offline_ecu_restore_pf(void)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	extern gboolean interrogated;
+	extern Firmware_Details *firmware;
 
 	if (!interrogated)
 		return;
@@ -365,6 +390,8 @@ EXPORT void offline_ecu_restore_pf(void)
 		restore_all_ecu_settings(filename);
 		g_free(filename);
 	}
+	else
+		io_cmd(firmware->get_all_command,NULL);
 	free_mtxfileio(fileio);
 	return;
 }

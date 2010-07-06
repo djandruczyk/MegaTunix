@@ -139,6 +139,9 @@ gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 		case DIVIDE:
 			return input/factor;
 			break;
+		case EQUAL:
+			return factor;
+			break;
 		default:
 			printf(_("!!! ERROR !!!, rescaler passed invalid enum\n"));
 			break;

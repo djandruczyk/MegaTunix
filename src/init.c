@@ -750,9 +750,6 @@ void mem_dealloc()
 	hash = OBJ_GET(global_data,"rt_sliders");
 	if (hash)
 		g_hash_table_destroy(hash);
-	hash = OBJ_GET(global_data,"ve3d_sliders");
-	if (hash)
-		g_hash_table_destroy(hash);
 	hash = OBJ_GET(global_data,"enr_sliders");
 	if (hash)
 		g_hash_table_destroy(hash);

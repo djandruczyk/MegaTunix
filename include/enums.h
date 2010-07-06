@@ -256,7 +256,8 @@ typedef enum
 	ADD=0,
 	SUBTRACT,
 	MULTIPLY,
-	DIVIDE
+	DIVIDE,
+	EQUAL
 }ScaleOp;
 
 typedef enum

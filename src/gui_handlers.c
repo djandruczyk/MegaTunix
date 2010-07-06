@@ -2883,8 +2883,31 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			send = TRUE;
 			retval = TRUE;
 			break;
+		case GDK_minus:
+		case GDK_KP_Subtract:
+			if (lower >= 0)
+			{
+				if (reverse_keys)
+				{
+					if (value <= (upper-1))
+						dload_val = value + 1;
+					else
+						return FALSE;
+				}
+				else 
+				{
+					if (value >= (lower+1))
+						dload_val = value - 1;
+					else
+						return FALSE;
+				}
+				send = TRUE;
+				retval = TRUE;
+			}
+			break;
 		case GDK_H:
 		case GDK_h:
+		case GDK_KP_Left:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_LEFT);
@@ -2895,6 +2918,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_L:
 		case GDK_l:
+		case GDK_KP_Right:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_RIGHT);
@@ -2905,6 +2929,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_K:
 		case GDK_k:
+		case GDK_KP_Up:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_UP);
@@ -2915,6 +2940,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_J:
 		case GDK_j:
+		case GDK_KP_Down:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_DOWN);
