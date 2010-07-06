@@ -1,3 +1,11 @@
+0.9.22:
+ - Segfault fixes (more) for table rescaling
+ - 2D VE marker minor speed improvements
+ - Numerous memory leak bugs cleaned up
+ - added missing 12x12/16x16 table selection for MS2-Extra 2.x and 3.x
+ - Comms fixed to prevent loss of serieal sync on MS1-Extra chunk writes
+ - Live temp displayed on tabs where there a temperature grouped controls.
+ 
 0.9.21
  - OS-X Compile fixes.  Segfault fixes for table rescaling.
  - Full Support for MSnSpark Extra Highres 011d
