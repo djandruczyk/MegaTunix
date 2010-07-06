@@ -197,6 +197,7 @@
 				<arg>MS1_OFFSET</arg>
 				<arg>MS1_NUM_BYTES</arg>
 				<arg>DATACHUNK</arg>
+				<arg>PAUSE_500MS</arg>
 			</args>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>

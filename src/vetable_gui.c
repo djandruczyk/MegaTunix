@@ -353,6 +353,7 @@ void draw_ve_marker()
 	gfloat bottom = 0.0;
 	gfloat max = 0.0;
 	gint heaviest = -1;
+	gboolean focus = FALSE;
 	GList *list = NULL;
 	static void **y_eval;
 	static void **x_eval;
@@ -685,10 +686,11 @@ redraw:
 
 		if (!GTK_IS_WIDGET(widget))
 			return;
-		if ((i == heaviest) && (tracking_focus[table]) && (widget != last_widgets[table][z_bin[i]]))
+		if ((i == heaviest) && (tracking_focus[table]))
 		{
-			printf("grabbing widget wiht most weight!\n");
-			gtk_widget_grab_focus(widget);
+			g_object_get(widget,"has_focus",&focus,NULL);
+			if (!focus)
+				gtk_widget_grab_focus(widget);
 		}
 
 		last_widgets[table][z_bin[i]] = widget;

@@ -2953,7 +2953,6 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_F:
 		case GDK_f:
-			printf("tracking focus key!\n");
 			if (tracking_focus[active_table])
 				tracking_focus[active_table] = FALSE;
 			else

@@ -379,6 +379,7 @@ gboolean write_data(Io_Message *message)
 			if (block->action == SLEEP)
 			{
 	/*			printf("Sleeping for %i usec\n", block->arg);*/
+				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
 				g_usleep(block->arg);
 			}
 		}
