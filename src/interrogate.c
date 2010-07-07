@@ -944,8 +944,14 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				multi->source = g_strdup(sources[j]);
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
-				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
-				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				if (multi->ul_conv_expr)
+					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX ul_conv_exprs is NULL for table %i\n",i));
+				if (multi->dl_conv_expr)
+					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -986,8 +992,14 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				multi->source = g_strdup(sources[j]);
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
-				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
-				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				if (multi->ul_conv_expr)
+					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY ul_conv_exprs is NULL for table %i\n",i));
+				if (multi->dl_conv_expr)
+					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1029,8 +1041,14 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				multi->source = g_strdup(sources[j]);
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
-				multi->ul_eval = evaluator_create(multi->ul_conv_expr);
-				multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				if (multi->ul_conv_expr)
+					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ ul_conv_exprs is NULL for table %i\n",i));
+				if (multi->dl_conv_expr)
+					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+				else
+					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
