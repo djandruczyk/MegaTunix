@@ -704,9 +704,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr);
 			cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"x_ul_conv_exprs",&firmware->table_params[i]->x_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_dl_conv_exprs",&firmware->table_params[i]->x_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
 		}
@@ -717,9 +717,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			if(!cfg_read_string(cfgfile,section,"x_suffix",&firmware->table_params[i]->x_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -741,9 +741,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr);
 			cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"y_ul_conv_exprs",&firmware->table_params[i]->y_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_dl_conv_exprs",&firmware->table_params[i]->y_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -755,9 +755,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			if(!cfg_read_string(cfgfile,section,"y_suffix",&firmware->table_params[i]->y_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, table, %i ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -777,9 +777,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			if(!cfg_read_string(cfgfile,section,"z_suffixes",&firmware->table_params[i]->z_suffixes))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffixes\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_ul_conv_exprs",&firmware->table_params[i]->z_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_ul_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_dl_conv_exprs",&firmware->table_params[i]->z_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_dl_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_precisions",&firmware->table_params[i]->z_precisions))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -791,9 +791,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			if(!cfg_read_string(cfgfile,section,"z_suffix",&firmware->table_params[i]->z_suffix))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_ul_conv_expr",&firmware->table_params[i]->z_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_dl_conv_expr",&firmware->table_params[i]->z_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
@@ -880,10 +880,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_name",&firmware->te_params[i]->x_name))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_name\" variable not found in interrogation profile, ERROR\n"));
-		if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->te_params[i]->x_dl_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->te_params[i]->x_ul_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+		if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->te_params[i]->x_dl_conv_expr))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_raw_lower",&firmware->te_params[i]->x_raw_lower))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_raw_upper",&firmware->te_params[i]->x_raw_upper))
@@ -894,10 +894,10 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"y_name",&firmware->te_params[i]->y_name))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_name\" variable not found in interrogation profile, ERROR\n"));
-		if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->te_params[i]->y_dl_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->te_params[i]->y_ul_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+		if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->te_params[i]->y_dl_conv_expr))
+			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_raw_lower",&firmware->te_params[i]->y_raw_lower))
 			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_raw_upper",&firmware->te_params[i]->y_raw_upper))
