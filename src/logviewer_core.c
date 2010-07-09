@@ -339,7 +339,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 		}
 		if (g_strv_length(data) != log_info->field_count)
 		{
-			printf(_("Datalog error, field count assertion failure\nExpected %i fields, got %i instead\n"),log_info->field_count,g_strv_length(data));
+			printf(_("Datalog error, field count assertion failure\nExpected %i fields, got %i instead, tossing this record!\n"),log_info->field_count,g_strv_length(data));
 			g_strfreev(data);
 			continue;
 		}
@@ -390,6 +390,7 @@ void free_log_info()
 		if (!object)
 			continue;
 		array = (GArray *)OBJ_GET(object,"data_array");
+		g_free(OBJ_GET(object,"lview_name"));
 		if (array)
 			g_array_free(array,TRUE);
 	}

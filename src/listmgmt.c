@@ -40,6 +40,8 @@ GList * get_list(gchar * key)
  */
 void store_list(gchar * key, GList * list)
 {
+	if (!lists_hash)
+		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	g_hash_table_insert(lists_hash,g_strdup(key),(gpointer)list);
 	return;
 }

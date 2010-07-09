@@ -104,10 +104,16 @@ void present_viewer_choices(void)
 			G_CALLBACK(reenable_select_params_button),
 			NULL);
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
+			G_CALLBACK(save_default_choices),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
 			G_CALLBACK(reenable_select_params_button),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
+			G_CALLBACK(save_default_choices),
 			NULL);
 	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
 			G_CALLBACK(gtk_widget_destroy),
@@ -210,13 +216,13 @@ void present_viewer_choices(void)
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
 	OBJ_SET(button,"state",GINT_TO_POINTER(TRUE));
 	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(set_lview_choices_state),
+			G_CALLBACK(set_all_lview_choices_state),
 			GINT_TO_POINTER(TRUE));
 	button = gtk_button_new_with_label("De-select All");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
 	OBJ_SET(button,"state",GINT_TO_POINTER(FALSE));
 	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(set_lview_choices_state),
+			G_CALLBACK(set_all_lview_choices_state),
 			GINT_TO_POINTER(FALSE));
 
 	button = gtk_button_new_with_label("Close");
@@ -225,9 +231,13 @@ void present_viewer_choices(void)
 			G_CALLBACK(reenable_select_params_button),
 			NULL);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(save_default_choices),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 
+	set_default_lview_choices_state();
 	gtk_widget_show_all(window);
 	return;
 }
@@ -238,6 +248,42 @@ gboolean reenable_select_params_button(GtkWidget *widget)
 	gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_params_button")),TRUE);
 	return FALSE;
 
+}
+
+gboolean save_default_choices(GtkWidget *widget)
+{
+	GtkWidget *tmpwidget = NULL;
+	GList * list = NULL;
+	GList * defaults = NULL;
+	GObject *object = NULL;
+	gchar *name = NULL;
+	gint i = 0;
+
+	defaults = get_list("logviewer_defaults");
+	if (defaults)
+	{
+		g_list_foreach(defaults,(GFunc)g_free,NULL);
+		g_list_free(defaults);
+		defaults = NULL;
+		store_list("logviewer_defaults",NULL);
+	}
+	list = get_list("viewables");
+	for (i=0;i<g_list_length(list);i++)
+	{
+		tmpwidget = g_list_nth_data(list,i);
+		object = OBJ_GET(tmpwidget,"object");
+		if ((gboolean)OBJ_GET(object,"being_viewed"))
+		{
+			if (playback_mode)
+				name = OBJ_GET(object,"lview_name");
+			else
+				name = OBJ_GET(object,"dlog_gui_name");
+
+			defaults = g_list_append(defaults,g_strdup(name));
+		}
+	}
+	store_list("logviewer_defaults",defaults);
+	return FALSE;
 }
 
 /*!
@@ -1199,19 +1245,55 @@ void scroll_logviewer_traces()
 
 
 /*!
- \brief set_lview_choices_state() sets all the logables to either be 
+ \brief set_all_lview_choices_state() sets all the logables to either be 
  selected or deselected (select all fucntionality)
  \param widget (GtkWidget *) unused
  \param data (gpointer) state to set the widgets to
  \returns TRUE
  */
-gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
+gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
 {
 	gboolean state = (GBOOLEAN)data;
 
 	g_list_foreach(get_list("viewables"),set_widget_active,GINT_TO_POINTER(state));
 
 	return TRUE;
+}
+
+
+/*!
+ \brief set_default_lview_choices_state() sets the default logviewer values
+ */
+void set_default_lview_choices_state(void)
+{
+	GList *defaults = NULL;
+	GList *list = NULL;
+	GtkWidget * widget = NULL;
+	gint i = 0;
+	gint j = 0;
+	gchar * name;
+	gchar * potential;
+	GObject *object;
+
+	defaults = get_list("logviewer_defaults");
+	list = get_list("viewables");
+	for (i=0;i<g_list_length(defaults);i++)
+	{
+		name = g_list_nth_data(defaults,i);
+		for (j=0;j<g_list_length(list);j++)
+		{
+			widget = g_list_nth_data(list,j);
+			object = OBJ_GET(widget,"object");
+			if (playback_mode)
+				potential = OBJ_GET(object,"lview_name");
+			else
+				potential = OBJ_GET(object,"dlog_gui_name");
+			if (g_strcasecmp(name,potential) == 0)
+
+				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));
+		}
+	}
+	return;
 }
 
 
@@ -1376,4 +1458,53 @@ EXPORT void finish_logviewer(void)
 EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	return FALSE;
+}
+
+
+
+void write_logviewer_defaults(ConfigFile *cfgfile)
+{
+	GList * list = NULL;
+	gint i = 0;
+	gchar * name = NULL;
+	GString *string = NULL;
+	extern GObject *global_data;
+
+	list = get_list("logviewer_defaults");
+	if (list)
+	{
+		string = g_string_new(NULL);
+		for (i=0;i<g_list_length(list);i++)
+		{
+			name = g_list_nth_data(list,i);
+			g_string_append(string,name);
+			if (i < (g_list_length(list)-1))
+				g_string_append(string,",");
+		}
+		cfg_write_string(cfgfile,"Logviewer","defaults",string->str);
+		g_string_free(string,TRUE);
+	}
+	else
+		cfg_write_string(cfgfile,"Logviewer","defaults","");
+}
+
+
+void read_logvewer_defaults(ConfigFile *cfgfile)
+{
+	gchar *tmpbuf = NULL;
+	GList *defaults = NULL;
+	gchar **vector = NULL;
+	gint i = 0;
+
+	cfg_read_string(cfgfile,"Logviewer","defaults",&tmpbuf);
+	if (!tmpbuf)
+		return;
+	
+	vector = g_strsplit(tmpbuf,",",-1);
+	for (i=0;i<g_strv_length(vector);i++)
+		defaults = g_list_append(defaults,g_strdup(vector[i]));
+	g_strfreev(vector);
+	if (defaults)
+		store_list("logviewer_defaults",defaults);
+
 }

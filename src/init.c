@@ -23,6 +23,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <logviewer_gui.h>
 #include <lookuptables.h>
 #include <mtxmatheval.h>
 #include <rtv_map_loader.h>
@@ -267,6 +268,8 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
+		read_logvewer_defaults(cfgfile);
+
 		if ((GINT)OBJ_GET(global_data,"lv_zoom") < 1)
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
@@ -481,6 +484,7 @@ void save_config(void)
 			
 	cfg_write_int(cfgfile, "Logviewer", "zoom", (GINT)OBJ_GET(global_data,"lv_zoom"));
 	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) OBJ_GET(global_data,"lv_scroll_delay"));
+	write_logviewer_defaults(cfgfile);
 
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);

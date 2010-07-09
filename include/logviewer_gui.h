@@ -14,6 +14,7 @@
 #ifndef __LOGVIEWER_GUI_H__
 #define __LOGVIEWER_GUI_H__
 
+#include <configfile.h>
 #include <enums.h>
 #include <logviewer_core.h>
 #include <gtk/gtk.h>
@@ -53,7 +54,7 @@ void present_viewer_choices(void);
 void scroll_logviewer_traces(void);
 void reset_logviewer_state(void);
 gboolean view_value_set(GtkWidget *, gpointer );
-gboolean set_lview_choices_state(GtkWidget *, gpointer);
+gboolean set_all_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 Viewable_Value * build_v_value(GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
@@ -68,7 +69,10 @@ void set_logviewer_mode(Lv_Mode);
 void finish_logviewer(void);
 void populate_viewer(void);
 gboolean reenable_select_params_button(GtkWidget *);
-
+gboolean save_default_choices(GtkWidget *);
+void set_default_lview_choices_state(void);
+void write_logviewer_defaults(ConfigFile *);
+void read_logviewer_defaults(ConfigFile *);
 /* Prototypes */
 
 #endif
