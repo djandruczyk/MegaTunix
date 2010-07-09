@@ -4,7 +4,7 @@ minor=0
 
 [global]
 description=Status boxes configuration for Std firmware
-total_status=10
+total_status=25
 
 [status_0]
 _create_label=CONNECTED
@@ -28,7 +28,7 @@ bitval=1
 bitmask=2
 
 [status_2]
-_create_label=RUNNING
+_create_label=READY
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -64,7 +64,7 @@ bitval=1
 bitmask=4
 
 [status_5]
-_create_label=ACCEL
+_create_label=TPSACCEL
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -76,7 +76,7 @@ bitval=1
 bitmask=16
 
 [status_6]
-_create_label=DECEL
+_create_label=TPSDECEL
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -88,31 +88,31 @@ bitval=1
 bitmask=32
 
 [status_7]
-_create_label=BURN NEEDED
+_create_label=MAPACCEL
 active_fg=red
 inactive_fg=dim grey
 col=0
 row=7
 keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
-source=status1
+source=enginebit
 bitval=1
-bitmask=1
+bitmask=64
 
 [status_8]
-_create_label=LOST DATA
+_create_label=MAPDECEL
 active_fg=red
 inactive_fg=dim grey
 col=0
 row=8
 keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
-source=status1
+source=enginebit
 bitval=1
-bitmask=2
+bitmask=128
 
 [status_9]
-_create_label=CONFIG ERROR
+_create_label=BURN NEEDED
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -121,5 +121,185 @@ keys=bind_to_list,bitval,bitmask,source
 bind_to_list=runtime_status
 source=status1
 bitval=1
+bitmask=1
+
+[status_10]
+_create_label=LOST DATA
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=10
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitmask=2
+
+[status_11]
+_create_label=CONFIG ERROR
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=11
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status1
+bitval=1
 bitmask=4
+
+[status_12]
+_create_label=Synced
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=12
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitmask=8
+
+[status_13]
+_create_label=CL Idle
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=13
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=128
+
+[status_14]
+_create_label=Fuel Tbl Sw
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=14
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitmask=32
+
+[status_15]
+_create_label=Spark Tbl Sw
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=15
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status1
+bitval=1
+bitmask=64
+
+[status_16]
+_create_label=N2O Stg 1
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=16
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=1
+
+[status_17]
+_create_label=N2O Stg 2
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=17
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=2
+
+[status_18]
+_create_label=Hard Limit
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=18
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=4
+
+[status_19]
+_create_label=Launch
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=19
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=8
+
+[status_20]
+_create_label=Flat Shift
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=20
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=16
+
+[status_21]
+_create_label=Spark Cut
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=21
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=32
+
+[status_22]
+_create_label=Over Boost
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=22
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status2
+bitval=1
+bitmask=64
+
+[status_23]
+_create_label=Knock
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=23
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=knock
+bitval=1
+bitmask=1
+
+[status_24]
+_create_label=T-Log
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=24
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=status3
+bitval=1
+bitmask=2
 

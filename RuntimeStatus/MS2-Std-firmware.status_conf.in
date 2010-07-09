@@ -64,7 +64,7 @@ bitval=1
 bitmask=4
 
 [status_5]
-_create_label=ACCEL
+_create_label=TPSACCEL
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -76,7 +76,7 @@ bitval=1
 bitmask=16
 
 [status_6]
-_create_label=DECEL
+_create_label=TPSDECEL
 active_fg=red
 inactive_fg=dim grey
 col=0
@@ -86,4 +86,28 @@ bind_to_list=runtime_status
 source=enginebit
 bitval=1
 bitmask=32
+
+[status_7]
+_create_label=MAPACCEL
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=7
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=enginebit
+bitval=1
+bitmask=32
+
+[status_6]
+_create_label=MAPDECEL
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=8
+keys=bind_to_list,bitval,bitmask,source
+bind_to_list=runtime_status
+source=enginebit
+bitval=1
+bitmask=64
 

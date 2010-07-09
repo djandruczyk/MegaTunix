@@ -195,9 +195,9 @@ read_again:
 
 	if (status == G_IO_STATUS_NORMAL) /* good read */
 	{
-		/* This searchjed for a quoted string which should be the 
+		/* This searched for a quoted string which should be the 
 		 * ecu signature.  pre 0.9.15 versions of megatunix shoved the
-		 * internal name ofthe firmware in there which is a problem as
+		 * internal name of the firmware in there which is a problem as
 		 * it makes the logs locked to megatunix which is a bad thing 
 		 * as it hurts interoperability.  0.9.16+ changes this to use 
 		 * the REAL signature returned by the firmware. 
@@ -209,10 +209,13 @@ read_again:
 			if (offline)
 			{
 				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
-				if (strstr(rtv_map->applicable_signatures,log_info->signature) != NULL)
-					printf(_("Good this firmware is compatible with the firmware we're using\n"));
-				else
-					printf(_("mismatch between datalog and current firmware\n"));
+				if (rtv_map->applicable_signatures)
+				{
+					if (strstr(rtv_map->applicable_signatures,log_info->signature) != NULL)
+						printf(_("Good this firmware is compatible with the firmware we're using\n"));
+					else
+						printf(_("mismatch between datalog and current firmware, playback via full gui will probably not work like you expected\n"));
+				}
 			}
 			goto read_again;
 		}

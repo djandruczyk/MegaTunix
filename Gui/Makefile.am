@@ -47,6 +47,7 @@ gui_glade_files = 	\
 		ms2-e-ignition.glade \
 		ms2-e-nitrous_staging_orfc.glade \
 		ms2-e-noise_lag.glade \
+		ms2-e-runtime.glade \
 		ms2-e-toothtrigger.glade \
 		ms2-globals.glade \
 		ms2-idle_ego_rev.glade \
@@ -54,6 +55,7 @@ gui_glade_files = 	\
 		ms2-knock_dwell.glade \
 		ms2-misc-fuel.glade \
 		ms2-e-rotary-split.glade \
+		ms2-runtime.glade \
 		ms2-user_outputs.glade \
 		ms2-warmup.glade \
 		msns-e-accelwizard.glade \
@@ -84,8 +86,8 @@ gui_glade_files = 	\
 		template.glade \
 		test.glade \
 		tools.glade \
-		vetable_12x12x3.glade \
 		vetable_12x12x2.glade \
+		vetable_12x12x3.glade \
 		vetable_16x16x3.glade \
 		vetable_8x8e.glade \
 		vetrim_16x16x4.glade \
@@ -142,6 +144,8 @@ gui_in_files = 	\
 		ms2-e-ignition.datamap.in \
 		ms2-e-nitrous_staging_orfc.datamap.in \
 		ms2-e-noise_lag.datamap.in \
+		ms2-e-rotary-split.datamap.in \
+		ms2-e-runtime.datamap.in \
 		ms2-e-toothtrigger-2.1.x.datamap.in \
 		ms2-e-toothtrigger-3.x.datamap.in \
 		ms2-globals.datamap.in \
@@ -149,7 +153,7 @@ gui_in_files = 	\
 		ms2-ignition.datamap.in \
 		ms2-knock_dwell.datamap.in \
 		ms2-misc-fuel.datamap.in \
-		ms2-e-rotary-split.datamap.in \
+		ms2-runtime.datamap.in \
 		ms2-user_outputs.datamap.in \
 		ms2-warmup.datamap.in \
 		msns-e-accelwizard-029x.datamap.in \
@@ -182,9 +186,9 @@ gui_in_files = 	\
 		template.datamap.in \
 		test.datamap.in \
 		tools.datamap.in \
+		vetable_12x12x2-MS-II.datamap.in \
 		vetable_12x12x3-029x.datamap.in \
 		vetable_12x12x3-MS-II-Extra.datamap.in \
-		vetable_12x12x2-MS-II.datamap.in \
 		vetable_16x16x3-MS-II-Extra.datamap.in \
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \
