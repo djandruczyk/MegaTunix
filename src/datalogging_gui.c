@@ -582,15 +582,19 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	guint i = 0;
 	guint x = 0;
 	guint j = 0;
+	guint notif_divisor = 128;
+	gboolean notifies = FALSE;
 	gsize count = 0;
 	GString *output;
 	GObject * object = NULL;
 	GArray **histories = NULL;
 	gint *precisions = NULL;
 	gchar *tmpbuf = NULL;
+	gchar *msg = NULL;
 	gfloat value = 0.0;
 	extern gint realtime_id;
 	gboolean restart_tickler = FALSE;
+	GtkWidget * info_label = NULL;
 
 	if (realtime_id)
 	{
@@ -604,6 +608,9 @@ void dump_log_to_disk(GIOChannel *iochannel)
 
 	histories = g_new0(GArray *,rtv_map->derived_total);
 	precisions = g_new0(gint ,rtv_map->derived_total);
+	info_label = lookup_widget("info_label");
+	if (GTK_IS_LABEL(info_label))
+		notifies = TRUE;
 
 	for(i=0;i<rtv_map->derived_total;i++)
 	{
@@ -630,7 +637,16 @@ void dump_log_to_disk(GIOChannel *iochannel)
 				output = g_string_append(output,delimiter);
 		}
 		output = g_string_append(output,"\r\n");
+		if (notifies && ((x % notif_divisor) == 0))
+		{
+			msg = g_strdup_printf(_("Flushing Datalog %i of %i records"),x,rtv_map->ts_array->len);
+			gtk_label_set_text(GTK_LABEL(info_label),msg);
+			g_free(msg);
+		}
 	}
+	g_usleep(100000);
+	if (notifies)
+		gtk_label_set_text(GTK_LABEL(info_label),"Datalog buffer written to disk");
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_free(precisions);
 	g_free(histories);
