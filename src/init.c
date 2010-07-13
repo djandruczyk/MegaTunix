@@ -268,7 +268,7 @@ gboolean read_config(void)
 			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
-		read_logvewer_defaults(cfgfile);
+		read_logviewer_defaults(cfgfile);
 
 		if ((GINT)OBJ_GET(global_data,"lv_zoom") < 1)
 			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));

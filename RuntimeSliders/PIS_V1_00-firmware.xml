@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<runtimestatus>
+        <api>
+                <major>1</major>
+                <minor>0</minor>
+        </api>
+        <rt_rts>
+		<slider_name>Clock</slider_name>
+		<table>0</table>
+		<row>0</row>
+		<source>status_seconds</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>RPM</slider_name>
+		<table>0</table>
+		<row>1</row>
+		<source>status_rpm_rpm</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Throttle %</slider_name>
+		<table>0</table>
+		<row>2</row>
+		<source>status_tps_tps</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Manifold Pressure</slider_name>
+		<table>0</table>
+		<row>3</row>
+		<source>status_map_map</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Coolant Temperature (deg)</slider_name>
+		<table>0</table>
+		<row>4</row>
+		<source>cts_temp</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Manifold Temperature (deg)</slider_name>
+		<table>0</table>
+		<row>5</row>
+		<source>mat_temp</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Battery Voltage</slider_name>
+		<table>1</table>
+		<row>0</row>
+		<source>status_adc_volt</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>IAC Idle</slider_name>
+		<table>1</table>
+		<row>1</row>
+		<source>status_iac_idle_rpm</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>IAC Pos</slider_name>
+		<table>1</table>
+		<row>2</row>
+		<source>status_iac_position</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Lambda</slider_name>
+		<table>1</table>
+		<row>3</row>
+		<source>lambda</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Lambda Target</slider_name>
+		<table>1</table>
+		<row>4</row>
+		<source>lambda_target</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Lambda Correction %</slider_name>
+		<table>1</table>
+		<row>5</row>
+		<source>status_ego_correction</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Coolant Correction %</slider_name>
+		<table>2</table>
+		<row>0</row>
+		<source>status_cts_correction</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Manifold Correction %</slider_name>
+		<table>2</table>
+		<row>1</row>
+		<source>status_mat_correction</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>After Start %</slider_name>
+		<table>2</table>
+		<row>2</row>
+		<source>status_asc_applied_correction</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Injector APW</slider_name>
+		<table>2</table>
+		<row>3</row>
+		<source>status_APW</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Injector Duty %</slider_name>
+		<table>2</table>
+		<row>4</row>
+		<source>duty_cycle</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Coolant Ignition</slider_name>
+		<table>3</table>
+		<row>0</row>
+		<source>status_cts_iar</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Manifold Ignition</slider_name>
+		<table>3</table>
+		<row>1</row>
+		<source>status_mat_iar</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>Final Ignition</slider_name>
+		<table>3</table>
+		<row>2</row>
+		<source>status_ign_AIAR</source>
+	</rt_rts>
+	<ve3d_rts>
+		<slider_name>ve3d_rpm</slider_name>
+		<table>0</table>
+		<row>0</row>
+		<source>status_rpm_rpm</source>
+	</ve3d_rts>
+	<ve3d_rts>
+		<slider_name>ve3d_afr1</slider_name>
+		<table>0</table>
+		<row>1</row>
+		<source>lambda</source>
+	</ve3d_rts>
+	<ve3d_rts>
+		<slider_name>ve3d_map</slider_name>
+		<table>1</table>
+		<row>0</row>
+		<source>status_map_map</source>
+	</ve3d_rts>
+	<ve3d_rts>
+		<slider_name>ve3d_clt</slider_name>
+		<table>1</table>
+		<row>1</row>
+		<source>cts_temp</source>
+	</ve3d_rts>
+</runtimestatus>

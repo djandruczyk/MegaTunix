@@ -16,6 +16,8 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 
 typedef struct _Rt_Slider Rt_Slider;
@@ -54,6 +56,8 @@ void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
 Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
 gboolean free_ve3d_sliders(gint);
+gboolean load_rts_xml_elements(xmlNode *, const gchar *, GHashTable *,gint, TabIdent);
+void load_rts(xmlNode *, GHashTable *, gint, TabIdent);
 EXPORT gboolean rtslider_button_handler(GtkWidget *,GdkEventButton *, gpointer);
 EXPORT gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
 /* Prototypes */

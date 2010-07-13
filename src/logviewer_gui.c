@@ -1490,7 +1490,7 @@ void write_logviewer_defaults(ConfigFile *cfgfile)
 }
 
 
-void read_logvewer_defaults(ConfigFile *cfgfile)
+void read_logviewer_defaults(ConfigFile *cfgfile)
 {
 	gchar *tmpbuf = NULL;
 	GList *defaults = NULL;

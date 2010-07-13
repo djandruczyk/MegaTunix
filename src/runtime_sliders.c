@@ -22,6 +22,8 @@
 #include <glade/glade-xml.h>
 #include <glib.h>
 #include <init.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <progress.h>
@@ -30,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <widgetmgmt.h>
+#include <xmlbase.h>
 
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
@@ -43,22 +46,14 @@ extern GObject *global_data;
  */
 EXPORT void load_sliders_pf()
 {
-	ConfigFile *cfgfile = NULL;
-	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
-	gint count = 0;
-	gint table = 0;
-	gint row = 0;
-	gint major = 0;
-	gint minor = 0;
-	gchar *ctrl_name = NULL;
-	gchar *source = NULL;
-	gchar *section = NULL;
-	gint i = 0;
+	xmlDoc * doc = NULL;
+	xmlNode *root_element = NULL;
+	gboolean res = FALSE;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
 	extern gboolean interrogated;
@@ -89,92 +84,96 @@ EXPORT void load_sliders_pf()
 	OBJ_SET(global_data,"rt_sliders",rt_sliders);
 	OBJ_SET(global_data,"ww_sliders",ww_sliders);
 
-	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
-	cfgfile = cfg_open_file(filename);
-	if (cfgfile)
-	{
-		get_file_api(cfgfile,&major,&minor);
-		if ((major != RT_SLIDERS_MAJOR_API) || (minor != RT_SLIDERS_MINOR_API))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\tRuntime Sliders profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API,filename));
-			g_free(filename);
-			set_title(g_strdup(_("ERROR RT Sliders API MISMATCH!!!")));
-			return;
-		}
-		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t could NOT read \"rt_total_sliders\" value from\n\t file \"%s\"\n",filename));
-			goto do_ww_sliders;
-		}
-		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		for (i=0;i<count;i++)
-		{
-			slider = NULL;
-			row = -1;
-			table = -1;
-			section = g_strdup_printf("rt_slider_%i",i);
-			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if(!cfg_read_int(cfgfile,section,"table",&table))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
 
-			slider = add_slider(ctrl_name,table,0,row,source,RUNTIME_TAB);
-			if (slider)
-			{
-				if (g_hash_table_lookup(rt_sliders,ctrl_name)==NULL)
-					g_hash_table_insert(rt_sliders,g_strdup(ctrl_name),(gpointer)slider);
-			}
-			g_free(section);
-			g_free(ctrl_name);
-			g_free(source);
-		}
-		/* Now warmup wizard... */
-do_ww_sliders:
-		if (!cfg_read_int(cfgfile,"global","ww_total_sliders",&count))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t could NOT read \"ww_total_sliders\" value from\n\t file \"%s\"\n",filename));
-			goto finish_off;
-		}
-		for (i=0;i<count;i++)
-		{
-			slider = NULL;
-			row = -1;
-			table = -1;
-			section = g_strdup_printf("ww_slider_%i",i);
-			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if(!cfg_read_int(cfgfile,section,"table",&table))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
-
-			slider = add_slider(ctrl_name,table,0,row,source,WARMUP_WIZ_TAB);
-			if (slider)
-			{
-				if (g_hash_table_lookup(ww_sliders,ctrl_name)==NULL)
-					g_hash_table_insert(ww_sliders,g_strdup(ctrl_name),(gpointer)slider);
-			}
-			g_free(section);
-			g_free(ctrl_name);
-			g_free(source);
-		}
-finish_off:
-		cfg_free(cfgfile);
-	}
-	else
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
-	}
+	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	LIBXML_TEST_VERSION
+		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
-	set_title(g_strdup(_("RT Sliders Loaded...")));
+	if (doc == NULL)
+	{
+		printf(_("error: could not parse file %s\n"),filename);
+		return;
+	}
+	root_element = xmlDocGetRootElement(doc);
+	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
+	if (!res)
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
+	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
+	if (!res)
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tWarmup Wizard Sliders XML parse/load failure\n"));
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+
 	return;
+}
+
+gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash,gint table_num, TabIdent tab_id)
+{
+	xmlNode *cur_node = NULL;
+
+	/* Iterate though all nodes... */
+	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+				if (!xml_api_check(cur_node,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API))
+				{
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rtt_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
+					return FALSE;
+				}
+			if (g_strcasecmp((gchar *)cur_node->name,prefix) == 0)
+				load_rts(cur_node,hash,table_num,tab_id);
+		}
+		if (!load_rts_xml_elements(cur_node->children,prefix,hash,table_num,tab_id))
+			return FALSE;
+	}
+	return TRUE;
+}
+
+void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
+{
+	gchar *slider_name = NULL;
+	gchar *source = NULL;
+	gint row = 0;
+	gint table = 0;
+	Rt_Slider *slider = NULL;
+	xmlNode *cur_node = NULL;
+
+	if (!node->children)
+	{
+		printf(_("ERROR, load_rts, xml node is empty!!\n"));
+		return;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"slider_name") == 0)
+				generic_xml_gchar_import(cur_node,&slider_name);
+			if (g_strcasecmp((gchar *)cur_node->name,"source") == 0)
+				generic_xml_gchar_import(cur_node,&source);
+			if (g_strcasecmp((gchar *)cur_node->name,"row") == 0)
+				generic_xml_gint_import(cur_node,&row);
+			if (g_strcasecmp((gchar *)cur_node->name,"table") == 0)
+				generic_xml_gint_import(cur_node,&table);
+		}
+		cur_node = cur_node->next;
+	}
+	if ((slider_name) && (source))
+		slider = add_slider(slider_name,table,table_num,row,source,tab_id);
+	if (slider)
+	{
+		if (g_hash_table_lookup(hash,slider_name) == NULL)
+			g_hash_table_insert(hash,g_strdup(slider_name),(gpointer)slider);
+	}
+	g_free(slider_name);
+	g_free(source);
 }
 
 
@@ -183,22 +182,18 @@ finish_off:
  specific to the 3D Table views. 
  \param table_num (gint) the table number passed to load sliders for
  */
-void load_ve3d_sliders(gint table_num)
+EXPORT void load_ve3d_sliders(gint table_num)
 {
-	ConfigFile *cfgfile = NULL;
-	Rt_Slider *slider = NULL;
 	extern Firmware_Details *firmware;
-	GHashTable **ve3d_sliders = NULL;
+	extern volatile gboolean leaving;
 	gchar *filename = NULL;
-	gint count = 0;
-	gint table = 0;
-	gint row = 0;
-	gchar *ctrl_name = NULL;
-	gchar *source = NULL;
-	gchar *section = NULL;
-	gint i = 0;
+	xmlDoc * doc = NULL;
+	xmlNode *root_element = NULL;
+	gboolean res = FALSE;
+	GHashTable **ve3d_sliders;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
+	extern gboolean interrogated;
 
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
@@ -214,49 +209,25 @@ void load_ve3d_sliders(gint table_num)
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 
-	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
-	cfgfile = cfg_open_file(filename);
-	if (cfgfile)
+	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	LIBXML_TEST_VERSION
+		doc = xmlReadFile(filename, NULL, 0);
+	g_free(filename);
+	if (doc == NULL)
 	{
-		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
-		if (!cfg_read_int(cfgfile,"global","ve3d_total_sliders",&count))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t could NOT read \"ve3d_total_sliders\" value from\n\t file \"%s\"\n",filename));
-			goto finish_off;
-		}
-		for (i=0;i<count;i++)
-		{
-			slider = NULL;
-			row = -1;
-			table = -1;
-			section = g_strdup_printf("ve3d_slider_%i",i);
-			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if(!cfg_read_int(cfgfile,section,"table",&table))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_sliders_pf()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
-
-			slider = add_slider(ctrl_name,table,table_num,row,source,VE3D_VIEWER_TAB);
-			if (slider)
-			{
-				if (g_hash_table_lookup(ve3d_sliders[table_num],ctrl_name)==NULL)
-					g_hash_table_insert(ve3d_sliders[table_num],g_strdup(ctrl_name),(gpointer)slider);
-			}
-					
-			g_free(section);
-			g_free(ctrl_name);
-			g_free(source);
-		}
-finish_off:
-		cfg_free(cfgfile);
+		printf(_("error: could not parse file %s\n"),filename);
+		return;
 	}
-	if (filename)
-		g_free(filename);
+	root_element = xmlDocGetRootElement(doc);
+	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	res = load_rts_xml_elements(root_element,"ve3d_rts",ve3d_sliders[table_num],table_num,VE3D_VIEWER_TAB);
+	if (!res)
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+
+	return;
 }
 
 
