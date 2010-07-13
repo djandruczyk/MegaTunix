@@ -254,7 +254,6 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
-	slider = g_malloc0(sizeof(Rt_Slider));
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
@@ -263,6 +262,27 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 		return NULL;
 	}
 
+	if (ident == RUNTIME_TAB)
+		name = g_strdup_printf("runtime_rt_table%i",tbl);
+	else if (ident == WARMUP_WIZ_TAB)
+		name = g_strdup_printf("ww_rt_table%i",tbl);
+	else if (ident == VE3D_VIEWER_TAB)
+		name = g_strdup_printf("ve3d_rt_table%i_%i",tbl,table_num);
+	else
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"));
+		return NULL;
+	}
+	table = lookup_widget(name);
+	if (!table)
+	{
+//		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
+		g_free(name);
+		return NULL;
+	}
+	g_free(name);
+
+	slider = g_malloc0(sizeof(Rt_Slider));
 	slider->ctrl_name = g_strdup(ctrl_name);
 	slider->tbl = tbl;
 	slider->table_num = table_num;
@@ -280,26 +300,6 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	slider->history = (GArray *) OBJ_GET(object,"history");
 	slider->object = object;
-
-	if (ident == RUNTIME_TAB)
-		name = g_strdup_printf("runtime_rt_table%i",slider->tbl);
-	else if (ident == WARMUP_WIZ_TAB)
-		name = g_strdup_printf("ww_rt_table%i",slider->tbl);
-	else if (ident == VE3D_VIEWER_TAB)
-		name = g_strdup_printf("ve3d_rt_table%i_%i",slider->tbl,slider->table_num);
-	else
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"));
-		return NULL;
-	}
-	table = lookup_widget(name);
-	if (!table)
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
-		g_free(name);
-		return NULL;
-	}
-	g_free(name);
 	hbox = gtk_hbox_new(FALSE,5);
 
 	label = gtk_label_new(NULL);
