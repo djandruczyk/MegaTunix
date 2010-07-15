@@ -33,6 +33,10 @@
 #include <string.h>
 #ifndef __WIN32__
  #include <termios.h>
+ #ifdef __PIS_SUPPORT__
+  #include <linux/serial.h>
+  #include <sys/ioctl.h>
+ #endif
 #endif
 #include <threads.h>
 #include <unistd.h>
@@ -203,8 +207,10 @@ void setup_serial_params(gint baudrate)
 		baud = B9600;
 	else if (baudrate == 115200)
 		baud = B115200;
-	cfsetispeed(&serial_params->newtio, baud);
-	cfsetospeed(&serial_params->newtio, baud);
+	else if (baudrate == 8192)
+		baud = B38400;
+
+	cfsetspeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
 	serial_params->newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
@@ -236,7 +242,34 @@ void setup_serial_params(gint baudrate)
 	serial_params->newtio.c_cc[VMIN]     = 0;     
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 
-	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
+#ifdef __PIS_SUPPORT__
+	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError getting ioctl\n"));
+	else
+	{
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tget ioctl OK\n"));
+		// copy ioctl structure
+		memcpy(&serial_params->newctl, &serial_params->oldctl, sizeof(serial_params->newctl));
+
+		// and if we are PIS 8192 make a custom divisor
+		if (baudrate == 8192)
+		{
+			if (serial_params->newctl.baud_base < 115200)
+				serial_params->newctl.baud_base = 115200;
+
+			serial_params->newctl.custom_divisor = 14;
+			serial_params->newctl.flags |= (ASYNC_SPD_MASK & ASYNC_SPD_CUST);
+
+			if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->newctl) != 0)
+				dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError setting ioctl\n"));
+			else
+				dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tset ioctl OK\n"));
+		}
+	}
+
+#endif
+
+	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 
 #endif
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before UNlock serio_mutex\n"));
@@ -264,6 +297,13 @@ void close_serial()
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
+ #ifdef __PIS_SUPPORT
+	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring ioctl\n"));
+	else
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tioctl restored OK\n"));
+
+ #endif
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 #endif
 	close(serial_params->fd);
