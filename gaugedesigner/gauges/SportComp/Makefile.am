@@ -22,7 +22,9 @@ gauges_files = 	\
 		AM_SportComp_CLT_degC_Gauge.xml \
 		AM_SportComp_MAT_degC_Gauge.xml \
 		AM_SportComp_VE_Gauge.xml \
-		AM_SportComp_Volts.xml
+		AM_SportComp_Volts.xml \
+		AM_SportComp_O2Lambda_Gauge.xml \
+		AM_SportComp_MAP_Limit_Gauge.xml
 
 gauges_DATA = $(gauges_files)
 
