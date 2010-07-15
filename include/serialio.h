@@ -20,6 +20,9 @@
 #include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
+ #ifdef __PIS_SUPPORT__
+  #include <linux/serial.h>
+ #endif
 #endif
 
 typedef struct _Serial_Params Serial_Params;
@@ -47,6 +50,10 @@ struct _Serial_Params
 	gint errcount;		/*! Serial I/O errors read error count */
 	struct termios oldtio;	/*! serial port settings before we touch it */
 	struct termios newtio;	/*! serial port settings we use when running */
+#ifdef __PIS_SUPPORT__
+	struct serial_struct oldctl;
+	struct serial_struct newctl;
+#endif
 	gboolean net_mode;	/*! When using TCP/IP socket mode */
 };
 #endif
