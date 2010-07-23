@@ -347,9 +347,12 @@ void *serial_repair_thread(gpointer data)
 	gchar ** vector = NULL;
 	guint i = 0;
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
+
 	if (offline)
 	{
 		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+		dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 
@@ -369,6 +372,7 @@ void *serial_repair_thread(gpointer data)
 			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, successfull comms test!\n"));
 				g_thread_exit(0);
 			}
 			i++;
@@ -399,6 +403,7 @@ void *serial_repair_thread(gpointer data)
 			{
 				/*printf ("exiting repair thread immediately\n");*/
 				g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
@@ -487,6 +492,7 @@ void *serial_repair_thread(gpointer data)
 	}
 	if (vector)
 		g_strfreev(vector);
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;
 }

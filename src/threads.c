@@ -128,6 +128,8 @@ void *thread_dispatcher(gpointer data)
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
+
 	args = OBJ_GET(global_data,"args");
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
@@ -142,6 +144,7 @@ void *thread_dispatcher(gpointer data)
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
+			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
@@ -215,6 +218,7 @@ void *thread_dispatcher(gpointer data)
 		else
 			dealloc_message(message);
 	}
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\texiting!!\n"));
 }
 
 
@@ -679,6 +683,7 @@ void *restore_update(gpointer data)
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": restore_update()\n\tThread created!\n"));
 	thread_update_logbar("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);
 	while (remaining_xfers > 5)
 	{
@@ -693,6 +698,7 @@ void *restore_update(gpointer data)
 	}
 	thread_update_logbar("tools_view","info",g_strdup_printf(_("All Transactions complete\n")),FALSE,FALSE);
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": restore_update()\n\tThread exiting!\n"));
 	return NULL;
 }
 

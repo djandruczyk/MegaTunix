@@ -236,6 +236,7 @@ void *socket_thread_manager(gpointer data)
 	GTimeVal cur;
 	static MtxSocketClient *last_bin_client = NULL;
 	gint fd = -1;
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
 	while (TRUE)
 	{
@@ -339,6 +340,7 @@ void *ascii_socket_server(gpointer data)
 	fd_set rd;
 	gint res = 0;
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
 
 	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
 	net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
@@ -436,6 +438,7 @@ void *binary_socket_server(gpointer data)
 	next_state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": binary_socket_server()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		/* Condition handling */
@@ -1297,6 +1300,8 @@ void *network_repair_thread(gpointer data)
 	gint i = 0;
 
 	args = OBJ_GET(global_data,"args");
+
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (offline)
 	{
 		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
@@ -1551,6 +1556,7 @@ void *notify_slaves_thread(gpointer data)
 	extern GAsyncQueue *slave_msg_queue;
 	extern Firmware_Details *firmware;
 
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
 	{
 		g_get_current_time(&cur);
@@ -1690,6 +1696,7 @@ void *control_socket_client(gpointer data)
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
+	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		if (leaving)
