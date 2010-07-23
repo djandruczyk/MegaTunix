@@ -95,7 +95,7 @@ gint main(gint argc, gchar ** argv)
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
 
-	open_debug();	/* Open debug log */
+	open_debug();		/* Open debug log */
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
