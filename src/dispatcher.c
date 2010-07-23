@@ -74,11 +74,17 @@ gboolean pf_dispatcher(gpointer data)
 	extern volatile gboolean leaving;
 
 	if (!pf_dispatch_queue) /*queue not built yet... */
+	{
+		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
+	}
 trypop:
 	/*printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (leaving)
+	{
+		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
+	}
 	/*
 	if (g_async_queue_length(pf_dispatch_queue) >40)
 		printf("WARNING: Postfunction dispatch queue is over 40\n");
@@ -88,6 +94,7 @@ trypop:
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
+		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
 	if (!message->status)
@@ -96,6 +103,7 @@ trypop:
 		 * in this case.
 		 */
 		dealloc_message(message);
+		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
 
@@ -107,6 +115,7 @@ trypop:
 			if (leaving)
 			{
 				dealloc_message(message);
+				g_cond_signal(pf_dispatch_cond);
 				return TRUE;
 			}
 
@@ -179,16 +188,23 @@ gboolean gui_dispatcher(gpointer data)
 	/*extern gint mem_view_style[];*/
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
+	{
+		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
+	}
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
 	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
 	if (leaving)
+	{
+		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
+	}
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
 	/*	printf("no messages waiting, returning\n");*/
+		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
 	}
 
@@ -200,6 +216,7 @@ trypop:
 			if (leaving)
 			{
 				dealloc_message(message);
+				g_cond_signal(gui_dispatch_cond);
 				return TRUE;
 			}
 

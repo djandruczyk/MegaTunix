@@ -26,6 +26,7 @@
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <keyparser.h>
 #include <notifications.h>
@@ -61,6 +62,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	gint i = 0;
 	gint j = 0;
 	guint k = 0;
+	gint tmp = 0;
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
@@ -69,6 +71,9 @@ EXPORT gboolean load_realtime_map_pf(void )
 	GObject * object = NULL;
 	GList * list = NULL;
 	GArray *history = NULL;
+	DataSize size = MTX_U08;
+	void * eval = NULL;
+	gchar * expr = NULL;
 	extern gboolean interrogated;
 	extern gboolean connected;
 	extern volatile gboolean offline;
@@ -273,6 +278,59 @@ EXPORT gboolean load_realtime_map_pf(void )
 					break;
 
 			}
+		}
+		if (!OBJ_GET(object,"real_lower"))
+		{
+			size = (DataSize)OBJ_GET(object,"size");
+			tmp = get_extreme_from_size(size,LOWER);
+			eval = (void *)OBJ_GET(object,"ul_evaluator");
+			if (!eval)
+			{
+				expr = OBJ_GET(object,"ul_conv_expr");
+				if (expr == NULL)
+				{
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_names")));
+					exit (-3);
+				}
+				eval = evaluator_create(expr);
+				if (!eval)
+				{
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+				}
+				assert(eval);
+				OBJ_SET(object,"ul_evaluator",eval);
+			}
+			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
+			OBJ_SET(object,"real_lower",g_strdup_printf("%i",tmpi));
+
+		}
+		eval = NULL;
+		expr = NULL;
+		size = MTX_U08;
+		if (!OBJ_GET(object,"real_upper"))
+		{
+			size = (DataSize)OBJ_GET(object,"size");
+			tmp = get_extreme_from_size(size,UPPER);
+			eval = (void *)OBJ_GET(object,"ul_evaluator");
+			if (!eval)
+			{
+				expr = OBJ_GET(object,"ul_conv_expr");
+				if (expr == NULL)
+				{
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_names")));
+					exit (-3);
+				}
+				eval = evaluator_create(expr);
+				if (!eval)
+				{
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+				}
+				assert(eval);
+				OBJ_SET(object,"ul_evaluator",eval);
+			}
+			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
+			OBJ_SET(object,"real_upper",g_strdup_printf("%i",tmpi));
+
 		}
 		OBJ_SET(object,"keys",g_strdupv(keys));
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
