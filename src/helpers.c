@@ -567,7 +567,7 @@ EXPORT void startup_default_timeouts_pf()
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)OBJ_GET(global_data,"rttext_fps");
-	source = gdk_threads_add_timeout((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
 	OBJ_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)OBJ_GET(global_data,"dashboard_fps");
@@ -577,6 +577,5 @@ EXPORT void startup_default_timeouts_pf()
 	rate = (GINT)OBJ_GET(global_data,"ve3d_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_ve3ds,NULL);
 	OBJ_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
-
 }
 

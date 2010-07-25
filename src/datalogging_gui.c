@@ -29,6 +29,7 @@
 #include <rtv_map_loader.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <threads.h>
 #include <timeout_handlers.h>
 #include <unistd.h>
 #include <widgetmgmt.h>
@@ -523,8 +524,7 @@ gboolean autolog_dump(gpointer data)
 	g_io_channel_unref(iochannel);
 	dlog_index++;
 	tmpbuf = g_strdup_printf(_("Autolog dump (log number %i) successfully completed.\n"),dlog_index);
-	update_logbar("dlog_view",NULL,tmpbuf,FALSE,FALSE);
-	g_free(tmpbuf);
+	thread_update_logbar("dlog_view",NULL,tmpbuf,FALSE,FALSE);
 	g_free(filename);
 	return TRUE;
 }

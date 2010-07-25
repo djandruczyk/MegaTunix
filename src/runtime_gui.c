@@ -59,6 +59,9 @@ EXPORT gboolean update_runtime_vars_pf()
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
 	extern gboolean interrogated;
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 
 	if (!interrogated)
 		return FALSE;
@@ -117,6 +120,9 @@ void rt_update_status(gpointer key, gpointer data)
 	static gchar * source = NULL;
 	static gchar * last_source = "";
 	extern Rtv_Map *rtv_map;
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 
@@ -186,6 +192,9 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	if (!history)
@@ -271,6 +280,9 @@ gboolean update_rtsliders(gpointer data)
 	GHashTable *hash;
 	extern Firmware_Details *firmware;
 	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
@@ -307,6 +319,9 @@ gboolean update_rtsliders(gpointer data)
 
 gboolean update_rttext(gpointer data)
 {
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 	g_static_mutex_lock(&rtt_mutex);
 	if (OBJ_GET(global_data,"rtt_model"))
 		gtk_tree_model_foreach(GTK_TREE_MODEL(OBJ_GET(global_data,"rtt_model")),rtt_foreach,NULL);
@@ -319,6 +334,9 @@ gboolean update_rttext(gpointer data)
 
 gboolean update_dashboards(gpointer data)
 {
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 	extern GStaticMutex dash_mutex;
 
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dashboards() before lock dash_mutex\n"));
@@ -348,6 +366,9 @@ gboolean update_ve3ds(gpointer data)
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
 	extern gint * algorithm;
+	extern volatile gboolean leaving;
+	if (leaving)
+		return FALSE;
 
 	if (!firmware)
 		return TRUE;

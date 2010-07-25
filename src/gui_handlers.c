@@ -1568,7 +1568,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = gdk_threads_add_timeout((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
 			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:

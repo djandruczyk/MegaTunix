@@ -398,6 +398,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 			|| (rtt->textval && ((abs(count-last_upd)%30) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		gdk_threads_enter();
 		if (rtt->markup)
 		{
 			tmpbuf2 = g_strconcat(rtt->label_prefix,tmpbuf,rtt->label_suffix,NULL);
@@ -406,6 +407,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 		else
 			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		gdk_threads_leave();
 		g_free(tmpbuf);
 		last_upd = count;
 	}
@@ -462,10 +464,12 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
+	gdk_threads_enter();
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
 			COL_RTT_LAST, &previous,
 			-1);
+	gdk_threads_leave();
 
 	if (!G_IS_OBJECT(rtt->object))
 		return FALSE;
@@ -487,9 +491,11 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 	if ((current != previous) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
+		gdk_threads_enter();
 		gtk_list_store_set(GTK_LIST_STORE(model), iter,
 				COL_RTT_DATA, tmpbuf,
 			        COL_RTT_LAST, current,	-1);
+		gdk_threads_leave();
 		g_free(tmpbuf);
 		last_upd = count;
 	}
