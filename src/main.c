@@ -124,7 +124,7 @@ gint main(gint argc, gchar ** argv)
 			NULL); /*GError Pointer */
 
 	pf_dispatcher_id = gdk_threads_add_timeout(100,(GtkFunction)pf_dispatcher,NULL);
-	gui_dispatcher_id = gdk_threads_add_timeout(30,(GtkFunction)gui_dispatcher,NULL);
+	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GtkFunction)early_interrogation,NULL);

@@ -57,7 +57,7 @@ extern GCond *gui_dispatch_cond;
 
 
 /*!
- \brief dispatcher() is a GTK+ timeout that runs 10 times per second checking
+ \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second checking
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
  queue has multiple message queued up.
@@ -120,7 +120,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			/*printf("dispatching post function %s\n",pf->name);*/
+			printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -226,14 +226,18 @@ trypop:
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/
 					t_message = (Text_Message *)message->payload;
+					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
+					gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
 					/*printf("run function\n");*/
 					qfunc = (QFunction *)message->payload;
+					gdk_threads_enter();
 					run_post_functions(qfunc->func_name);
+					gdk_threads_leave();
 					dealloc_qfunction(qfunc);
 					message->payload = NULL;
 					break;
@@ -248,23 +252,31 @@ trypop:
 							/*printf("entry\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
+							gdk_threads_enter();
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
+							gdk_threads_leave();
 							break;
 						case MTX_LABEL:
 							/*printf("label\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
+							gdk_threads_enter();
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+							gdk_threads_leave();
 							break;
 						case MTX_TITLE:
 							/*printf("title\n");*/
+							gdk_threads_enter();
 							set_title(g_strdup(w_update->msg));
+							gdk_threads_leave();
 							break;
 						case MTX_SENSITIVE:
 							/*printf("sensitivity change\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
+							gdk_threads_enter();
 							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
+							gdk_threads_leave();
 							break;
 						default:
 							break;
@@ -272,7 +284,9 @@ trypop:
 					dealloc_w_update(w_update);
 					message->payload = NULL;
 					break;
+					gdk_threads_enter();
 					reset_temps(OBJ_GET(global_data,"temp_units"));
+					gdk_threads_leave();
 					/*
 					   case UPD_RAW_MEMORY:
 					   update_raw_memory_view(mem_view_style[message->offset],message->offset);
@@ -280,12 +294,14 @@ trypop:
 					 */
 			}
 
+			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
 				if (leaving)
 					goto dealloc;
 				gtk_main_iteration();
 			}
+			gdk_threads_leave();
 		}
 	}
 dealloc:
