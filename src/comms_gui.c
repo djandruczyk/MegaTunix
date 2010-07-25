@@ -62,6 +62,7 @@ gboolean update_errcounts()
 	if (leaving)
 		return TRUE;
 
+	gdk_threads_enter();
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
 	widget = lookup_widget("runtime_good_ve_entry");
 	if (GTK_IS_ENTRY(widget))
@@ -97,6 +98,7 @@ gboolean update_errcounts()
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
+	gdk_threads_leave();
 
 	return TRUE;
 }

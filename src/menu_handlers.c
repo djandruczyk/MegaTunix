@@ -70,6 +70,7 @@ EXPORT void setup_menu_handlers_pf()
 	if ((!xml) || (leaving))
 		return;
 	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
+	gdk_threads_enter();
 	gtk_widget_set_sensitive(item,TRUE);
 	
 	if (firmware->capabilities & MS2)
@@ -113,6 +114,8 @@ EXPORT void setup_menu_handlers_pf()
 			gtk_widget_set_sensitive(item,TRUE);
 		}
 	}
+	gdk_threads_leave();
+	return;
 }
 
 /*!

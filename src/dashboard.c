@@ -1018,6 +1018,7 @@ EXPORT void initialize_dashboards_pf()
 	gboolean nodash2 = TRUE;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 
+	gdk_threads_enter();
 	label = lookup_widget("dash_1_label");
 	if (OBJ_GET(global_data,"dash_1_name") != NULL)
 		tmpbuf = (gchar *)OBJ_GET(global_data,"dash_1_name");
@@ -1053,6 +1054,7 @@ EXPORT void initialize_dashboards_pf()
 	{
 		retval = present_dash_filechooser(NULL,GINT_TO_POINTER(1));
 		gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
+		gdk_threads_leave();
 		return;
 		if (!retval)
 		{
@@ -1062,6 +1064,8 @@ EXPORT void initialize_dashboards_pf()
 		}
 
 	}
+	gdk_threads_leave();
+	return;
 }
 
 

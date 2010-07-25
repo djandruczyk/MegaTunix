@@ -32,10 +32,12 @@ static GHashTable *watch_hash;
  */
 EXPORT void fire_off_rtv_watches_pf()
 {
+	gdk_threads_enter();
 	if (watch_hash)
 	{
 		g_hash_table_foreach(watch_hash,process_watches,NULL);
 	}
+	gdk_threads_leave();
 }
 
 guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean one_shot,gchar *fname, gpointer user_data)
@@ -166,12 +168,14 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
 	gint i = 0;
+	/*printf("process watches running\n");*/
 	switch (watch->style)
 	{
 		case SINGLE_BIT_STATE:
 		/* When bit becomes this state, fire watch function. This will
 		 * fire each time new vars come in unless watch is set to
 		 * run only once, thus it will evaporate after 1 run */
+			/*printf("single bit state\n");*/
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
@@ -187,6 +191,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 		/* When bit CHANGES from previous state, i.e.  only fire when
 		 * it changes, but if it's stable, don't fire repeatedly 
 		 */
+			/*printf("single bit change\n");*/
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			lookup_previous_value(watch->varname, &tmpf);
@@ -201,6 +206,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 			}
 			break;
 		case VALUE_CHANGE:
+			/*printf("value change\n");*/
 			/* If value changes at ALL from previous value, then
 			 * fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
@@ -222,6 +228,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 				watch->last_val = watch->val;
 			break;
 		case MULTI_VALUE:
+			/*printf("multi value change\n");*/
 			for (i=0;i<watch->num_vars;i++)
 			{
 				if (watch->varnames[i])

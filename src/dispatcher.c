@@ -141,12 +141,17 @@ trypop:
 					pf->function();
 			}
 
+			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
 				if (leaving)
+				{
+					gdk_threads_leave();
 					goto dealloc;
+				}
 				gtk_main_iteration();
 			}
+			gdk_threads_leave();
 		}
 	}
 dealloc:

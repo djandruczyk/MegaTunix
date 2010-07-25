@@ -383,6 +383,7 @@ EXPORT void offline_ecu_restore_pf(void)
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->shortcut_folders = g_strdup("ecu_snapshots,../MTX_ecu_snapshots");
 
+	gdk_threads_enter();
 	filename = choose_file(fileio);
 	if (filename)
 	{
@@ -393,5 +394,6 @@ EXPORT void offline_ecu_restore_pf(void)
 	else
 		io_cmd(firmware->get_all_command,NULL);
 	free_mtxfileio(fileio);
+	gdk_threads_leave();
 	return;
 }

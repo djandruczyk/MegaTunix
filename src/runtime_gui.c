@@ -67,6 +67,7 @@ EXPORT gboolean update_runtime_vars_pf()
 		return FALSE;
 
 	count++;
+	gdk_threads_enter();
 	if (conn_status != connected)
 	{
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(connected));
@@ -83,6 +84,7 @@ EXPORT gboolean update_runtime_vars_pf()
 		count = 0;
 
 	forced_update = FALSE;
+	gdk_threads_leave();
 	return TRUE;
 }
 

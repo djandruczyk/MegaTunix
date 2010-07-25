@@ -320,13 +320,14 @@ void _crunch_trigtooth_data(gint page)
 		ttm_data->vdivisor = 6000;
 	else if (tmp >= 48000)
 		ttm_data->vdivisor = 12000;
-
 }
 
 
 EXPORT void update_trigtooth_display_pf()
 {
+	gdk_threads_enter();
 	update_trigtooth_display(ttm_data->page);
+	gdk_threads_leave();
 }
 
 void update_trigtooth_display(gint page)

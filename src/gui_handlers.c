@@ -1877,7 +1877,9 @@ EXPORT void update_ve_const_pf()
 	if (!((connected) || (offline)))
 		return;
 
+	gdk_threads_enter();
 	set_title(g_strdup(_("Updating Controls...")));
+	gdk_threads_leave();
 	paused_handlers = TRUE;
 
 	/* DualTable Fuel Calculations
@@ -2027,13 +2029,16 @@ EXPORT void update_ve_const_pf()
 			firmware->rf_params[i]->num_squirts = 1;
 		firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
 
+	gdk_threads_enter();
 		set_reqfuel_color(BLACK,i);
+	gdk_threads_leave();
 	}
 
 
 	/* Update all on screen controls (except bitfields (done above)*/
 	upd_count = 0;
 
+	gdk_threads_enter();
 	for (page=0;page<firmware->total_pages;page++)
 	{
 		if ((leaving) || (!firmware))
@@ -2056,6 +2061,7 @@ EXPORT void update_ve_const_pf()
 	paused_handlers = FALSE;
 	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
 	set_title(g_strdup(_("Ready...")));
+	gdk_threads_leave();
 	return;
 }
 

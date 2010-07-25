@@ -74,16 +74,18 @@ EXPORT void load_status_pf(void)
 		return;
 	}
 
+	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
 	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
 	if (!filename)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
 		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
+		gdk_threads_leave();
 		return;
 	}
-        cfgfile = cfg_open_file(filename);
-        if (cfgfile)
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
 	{
 		get_file_api(cfgfile,&major,&minor);
 		if ((major != RT_STATUS_MAJOR_API) || (minor != RT_STATUS_MINOR_API))
@@ -91,6 +93,7 @@ EXPORT void load_status_pf(void)
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
 			g_free(filename);
 			set_title(g_strdup(_("ERROR RT Status API MISMATCH!!!")));
+			gdk_threads_leave();
 			return;
 		}
 
@@ -98,6 +101,7 @@ EXPORT void load_status_pf(void)
 		{
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
 			set_title(g_strdup(_("ERROR RT Status cfgfile problem!!!")));
+			gdk_threads_leave();
 			return;
 		}
 
@@ -203,6 +207,7 @@ EXPORT void load_status_pf(void)
 
 	g_free(filename);
 	set_title(g_strdup(_("RT Status Loaded...")));
+	gdk_threads_leave();
 	return;
 }
 

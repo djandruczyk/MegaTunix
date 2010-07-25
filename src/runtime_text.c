@@ -75,6 +75,7 @@ EXPORT void load_rt_text_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
+	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Text...")));
 
 	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("xml"));
@@ -82,6 +83,7 @@ EXPORT void load_rt_text_pf()
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->rtt_map_file));
 		set_title(g_strdup(_("ERROR RunTimeText Map XML file DOES NOT EXIST!!!")));
+		gdk_threads_leave();
 		return; 
 	}
 
@@ -99,11 +101,12 @@ EXPORT void load_rt_text_pf()
 
 	LIBXML_TEST_VERSION
 
-	doc = xmlReadFile(filename, NULL, 0);
+		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		gdk_threads_leave();
 		return;
 	}
 
@@ -125,6 +128,7 @@ EXPORT void load_rt_text_pf()
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Text Loaded...")));
+	gdk_threads_leave();
 	return;
 }
 

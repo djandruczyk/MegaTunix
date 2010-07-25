@@ -78,6 +78,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	if (!firmware->tab_confs)
 		return FALSE;
 
+	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	bindgroup = g_new0(BindGroup,1);
 	notebook = lookup_widget("toplevel_notebook");
@@ -156,6 +157,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			{
 				dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
 				set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
+				gdk_threads_leave();
 				return FALSE;
 			}
 			else
@@ -206,9 +208,13 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		while (gtk_events_pending())
 		{
 			if (leaving)
+			{
+				gdk_threads_leave();
 				return FALSE;
+			}
 			gtk_main_iteration();
 		}
+
 
 
 	}
@@ -217,6 +223,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
+	gdk_threads_leave();
 	return TRUE;
 }
 

@@ -84,12 +84,14 @@ EXPORT void populate_dlog_choices_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
+	gdk_threads_enter();
 	set_title(g_strdup(_("Populating Datalogger...")));
 
 	vbox = lookup_widget("dlog_logable_vars_vbox1");
 	if (!GTK_IS_WIDGET(vbox))
 	{
 		printf(_("datalogger windows not present, returning\n"));
+		gdk_threads_leave();
 		return;
 	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
@@ -123,7 +125,7 @@ EXPORT void populate_dlog_choices_pf()
 	for (i=0;i<rtv_map->derived_total;i++)
 		list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GObject *,i));
 	list = g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
-	
+
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		tooltip = NULL;
@@ -144,10 +146,10 @@ EXPORT void populate_dlog_choices_pf()
 		 * of the buttons from elsewhere... 
 		 */
 		OBJ_SET(object,"dlog_button",(gpointer)button);
-				
+
 		/* Bind object to the button */
 		OBJ_SET(button,"object",(gpointer)object);
-				
+
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
@@ -167,6 +169,8 @@ EXPORT void populate_dlog_choices_pf()
 	}
 	g_list_free(list);
 	gtk_widget_show_all(vbox);
+	set_title(g_strdup(_("Datalogger Ready...")));
+	gdk_threads_leave();
 	return;
 }
 

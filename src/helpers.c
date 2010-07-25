@@ -48,7 +48,9 @@ EXPORT void start_statuscounts_pf(void)
 
 EXPORT void enable_reboot_button_pf(void)
 {
+	gdk_threads_enter();
 	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
+	gdk_threads_leave();
 }
 
 EXPORT void startup_tcpip_sockets_pf(void)
@@ -70,8 +72,9 @@ EXPORT void spawn_read_ve_const_pf(void)
 	if (!firmware)
 		return;
 
+	gdk_threads_enter();
 	set_title(g_strdup(_("Queuing read of all ECU data...")));
-
+	gdk_threads_leave();
 	io_cmd(firmware->get_all_command,NULL);
 }
 
@@ -275,13 +278,17 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 
 EXPORT void enable_get_data_buttons_pf(void)
 {
+	gdk_threads_enter();
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	gdk_threads_leave();
 }
 
 
 EXPORT void enable_ttm_buttons_pf(void)
 {
+	gdk_threads_enter();
 	g_list_foreach(get_list("ttm_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	gdk_threads_leave();
 }
 
 
@@ -302,31 +309,41 @@ EXPORT void set_store_black_pf(void)
 	gint j = 0;
 	extern Firmware_Details *firmware;
 
+	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
 	for (j=0;j<firmware->total_tables;j++)
 		set_reqfuel_color(BLACK,j);
+	gdk_threads_leave();
 }
 
 EXPORT void enable_3d_buttons_pf(void)
 {
+	gdk_threads_enter();
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	gdk_threads_leave();
 }
 
 
 EXPORT void disable_burner_buttons_pf(void)
 {
+	gdk_threads_enter();
 	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	gdk_threads_leave();
 }
 
 EXPORT void reset_temps_pf(void)
 {
+	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(OBJ_GET(global_data,"temp_units"));
+	gdk_threads_leave();
 }
 
 EXPORT void ready_msg_pf(void)
 {
+	gdk_threads_enter();
 	set_title(g_strdup(_("Ready...")));
+	gdk_threads_leave();
 }
 
 EXPORT void simple_read_pf(void * data, XmlCmdType type)
@@ -434,7 +451,9 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
+				gdk_threads_enter();
 				gdk_beep();
+				gdk_threads_leave();
 			}
 			else
 				ms_goodread_count++;
@@ -474,7 +493,9 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
+				gdk_threads_enter();
 				gdk_beep();
+				gdk_threads_leave();
 			}
 			else
 				ms_goodread_count++;
@@ -561,7 +582,9 @@ EXPORT void startup_default_timeouts_pf()
 	gint source = 0;
 	gint rate = 0;
 
+	gdk_threads_enter();
 	set_title(g_strdup(_("Starting up data renderers...")));
+	gdk_threads_leave();
 	rate = (GINT)OBJ_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));

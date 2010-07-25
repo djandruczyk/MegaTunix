@@ -74,6 +74,7 @@ EXPORT void load_sliders_pf()
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
+	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Sliders...")));
 	rt_sliders = OBJ_GET(global_data,"rt_sliders");
 	ww_sliders = OBJ_GET(global_data,"ww_sliders");
@@ -92,6 +93,7 @@ EXPORT void load_sliders_pf()
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		gdk_threads_leave();
 		return;
 	}
 	root_element = xmlDocGetRootElement(doc);
@@ -108,6 +110,7 @@ EXPORT void load_sliders_pf()
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
+	gdk_threads_leave();
 	return;
 }
 
