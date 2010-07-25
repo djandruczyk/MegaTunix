@@ -390,23 +390,23 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		g_free(tmpbuf);
 
 		/*
-		if (firmware->capabilities & MS1)
-			printf("MS1\n");
-		if (firmware->capabilities & MS1_STD)
-			printf("MS1_STD\n");
-		if (firmware->capabilities & MSNS_E)
-			printf("MSNS_E\n");
-		if (firmware->capabilities & MS1_DT)
-			printf("MS1_DT\n");
-		if (firmware->capabilities & MS2)
-			printf("MS2\n");
-		if (firmware->capabilities & MS2_STD)
-			printf("MS2_STD\n");
-		if (firmware->capabilities & MS2_E)
-			printf("MS2_E\n");
-		if (firmware->capabilities & MS2_E_COMPMON)
-			printf("MS2_E_COMPMON\n");
-			*/
+		   if (firmware->capabilities & MS1)
+		   printf("MS1\n");
+		   if (firmware->capabilities & MS1_STD)
+		   printf("MS1_STD\n");
+		   if (firmware->capabilities & MSNS_E)
+		   printf("MSNS_E\n");
+		   if (firmware->capabilities & MS1_DT)
+		   printf("MS1_DT\n");
+		   if (firmware->capabilities & MS2)
+		   printf("MS2\n");
+		   if (firmware->capabilities & MS2_STD)
+		   printf("MS2_STD\n");
+		   if (firmware->capabilities & MS2_E)
+		   printf("MS2_E\n");
+		   if (firmware->capabilities & MS2_E_COMPMON)
+		   printf("MS2_E_COMPMON\n");
+		 */
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
@@ -491,7 +491,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 				&firmware->total_tables))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
 	cfg_read_int(cfgfile,"parameters","TotalTETables",
-					&firmware->total_te_tables);
+			&firmware->total_te_tables);
 	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))

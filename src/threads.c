@@ -181,20 +181,24 @@ void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
+					gdk_threads_enter();
 					message->status = message->command->function(
 							message->command,
 							message->command->func_call_arg);
+					gdk_threads_leave();
 
 					/*
-				if (!result)
-					message->command->defer_post_functions=TRUE;
-					*/
+					   if (!result)
+					   message->command->defer_post_functions=TRUE;
+					 */
 				}
 				break;
 			case WRITE_CMD:
 				message->status = write_data(message);
+				gdk_threads_enter();
 				if (message->command->helper_function)
 					message->command->helper_function(message, message->command->helper_func_arg);
+				gdk_threads_leave();
 				break;
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/

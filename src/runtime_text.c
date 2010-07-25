@@ -355,9 +355,9 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
  */
 void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
-	Rt_Text *rtt = (Rt_Text *)value;
-	gint count = rtt->count;
-	gint last_upd = rtt->last_upd;
+	Rt_Text *rtt = NULL;
+	gint count = 0;
+	gint last_upd = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -367,6 +367,11 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
+	rtt = (Rt_Text *)value;
+	if (!rtt)
+		return;
+	count = rtt->count;
+	last_upd = rtt->last_upd;
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	precision = (GINT)OBJ_GET(rtt->object,"precision");
 

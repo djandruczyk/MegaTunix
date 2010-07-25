@@ -122,7 +122,10 @@ gboolean deregister_widget(gchar *name)
 
 GtkWidget * lookup_widget(const gchar * name)
 {
-	return (g_hash_table_lookup(dynamic_widgets,name));
+	if (dynamic_widgets)
+		return (g_hash_table_lookup(dynamic_widgets,name));
+	else
+		return NULL;
 }
 
 /*!

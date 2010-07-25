@@ -199,6 +199,9 @@ EXPORT gboolean load_gui_tabs_pf(void)
 
 		i++;
 
+		if (!firmware)
+			break;
+
 		/* Allow gui to update as it should.... */
 		while (gtk_events_pending())
 		{
@@ -206,11 +209,10 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			{
 				return FALSE;
 			}
+			printf("tabloader, gtk_main_iteration\n");
 			gtk_main_iteration();
 		}
 
-		if (!firmware)
-			break;
 
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE);

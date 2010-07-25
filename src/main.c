@@ -72,9 +72,11 @@ gint main(gint argc, gchar ** argv)
 
 	if(!g_thread_supported())
 		g_thread_init(NULL);
-
+	gdk_threads_init();
+	
 	gui_dispatch_cond = g_cond_new();
 	pf_dispatch_cond = g_cond_new();
+	gdk_threads_enter();
 	gtk_init(&argc, &argv);
 	glade_init();
 
@@ -121,13 +123,16 @@ gint main(gint argc, gchar ** argv)
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(100,(GtkFunction)pf_dispatcher,NULL);
-	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
+	//pf_dispatcher_id = g_timeout_add(100,(GtkFunction)pf_dispatcher,NULL);
+	//gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
+	pf_dispatcher_id = gdk_threads_add_timeout(100,(GtkFunction)pf_dispatcher,NULL);
+	gui_dispatcher_id = gdk_threads_add_timeout(30,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	g_timeout_add(500,(GtkFunction)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();
+	gdk_threads_leave();
 	return (0) ;
 }

@@ -120,6 +120,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
+			printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -203,7 +204,7 @@ trypop:
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
-	/*	printf("no messages waiting, returning\n");*/
+		/*	printf("no messages waiting, returning\n");*/
 		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
 	}
@@ -221,16 +222,18 @@ trypop:
 			}
 
 			val = g_array_index(message->functions,UpdateFunction, i);
-
+			printf("gui_dispatcher\n");
 			switch ((UpdateFunction)val)
 			{
 				case UPD_LOGBAR:
+					printf("logbar update\n");
 					t_message = (Text_Message *)message->payload;
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
+					printf("run function\n");
 					qfunc = (QFunction *)message->payload;
 					run_post_functions(qfunc->func_name);
 					dealloc_qfunction(qfunc);
@@ -238,24 +241,29 @@ trypop:
 					break;
 
 				case UPD_WIDGET:
+					printf("widget update\n");
 					widget = NULL;
 					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
+							printf("entry\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
 							break;
 						case MTX_LABEL:
+							printf("label\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
 							break;
 						case MTX_TITLE:
+							printf("title\n");
 							set_title(g_strdup(w_update->msg));
 							break;
 						case MTX_SENSITIVE:
+							printf("sensitivity change\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
@@ -268,12 +276,13 @@ trypop:
 					break;
 					reset_temps(OBJ_GET(global_data,"temp_units"));
 					/*
-				case UPD_RAW_MEMORY:
-					update_raw_memory_view(mem_view_style[message->offset],message->offset);
-					break;
-					*/
+					   case UPD_RAW_MEMORY:
+					   update_raw_memory_view(mem_view_style[message->offset],message->offset);
+					   break;
+					 */
 			}
 
+			/*
 			while (gtk_events_pending())
 			{
 				if (leaving)
@@ -282,6 +291,7 @@ trypop:
 				}
 				gtk_main_iteration();
 			}
+			*/
 		}
 	}
 dealloc:
