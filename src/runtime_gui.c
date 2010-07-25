@@ -122,7 +122,7 @@ void rt_update_status(gpointer key, gpointer data)
 	extern Rtv_Map *rtv_map;
 	extern volatile gboolean leaving;
 	if (leaving)
-		return FALSE;
+		return;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 
@@ -194,7 +194,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
 	if (leaving)
-		return FALSE;
+		return;
 
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	if (!history)
