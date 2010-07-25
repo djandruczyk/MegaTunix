@@ -208,7 +208,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 	dash_shape_combine(dash,FALSE);
 	if (!timer_active)
 	{
-		g_timeout_add(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 
@@ -400,6 +400,7 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	g_static_mutex_unlock(&rtv_mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": update_dash_gauge() after UNlock rtv_mutex\n"));
 
+	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
 	if ((current != previous) || (forced_update))
 	{
@@ -407,6 +408,7 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}
+	gdk_threads_leave();
 
 }
 
@@ -532,7 +534,7 @@ gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer da
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		g_timeout_add(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 	return TRUE;
@@ -934,7 +936,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		g_timeout_add(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 

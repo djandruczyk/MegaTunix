@@ -206,10 +206,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		while (gtk_events_pending())
 		{
 			if (leaving)
-			{
 				return FALSE;
-			}
-			printf("tabloader, gtk_main_iteration\n");
 			gtk_main_iteration();
 		}
 

@@ -560,14 +560,14 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	 * dispatch queue to let it run in the correct "state"....
 	 */
 	if (table_2_update)
-		g_timeout_add(2000,force_update_table,table_2_update);
+		gdk_threads_add_timeout(2000,force_update_table,table_2_update);
 	
 	/* Update controls that are dependant on a controls state...
 	 * In this case, MAP sensor related ctrls */
 	if (group_2_update)
 	{
-		g_timeout_add(2000,force_view_recompute,NULL);
-		g_timeout_add(2000,trigger_group_update,group_2_update);
+		gdk_threads_add_timeout(2000,force_view_recompute,NULL);
+		gdk_threads_add_timeout(2000,trigger_group_update,group_2_update);
 	}
 
 	if (dl_type == IMMEDIATE)
@@ -1231,7 +1231,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				}
 				printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
-				g_timeout_add(2000,update_multi_expression,NULL);
+				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
 			}
 		case GENERIC:
 			tmp = get_ecu_data(canID,page,offset,size);
@@ -1441,7 +1441,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	if (swap_list)
 		swap_labels(swap_list,bitval);
 	if (table_2_update)
-		g_timeout_add(2000,force_update_table,table_2_update);
+		gdk_threads_add_timeout(2000,force_update_table,table_2_update);
 	if (set_labels)
 	{
 		total = get_choice_count(model);
@@ -1568,7 +1568,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
+			tmpi = gdk_threads_add_timeout((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
 			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:
@@ -2680,8 +2680,8 @@ combo_toggle:
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
 
 			}
-			g_timeout_add(2000,force_view_recompute,NULL);
-			g_timeout_add(2000,trigger_group_update,group_2_update);
+			gdk_threads_add_timeout(2000,force_view_recompute,NULL);
+			gdk_threads_add_timeout(2000,trigger_group_update,group_2_update);
 		}
 
 		if (new_state)

@@ -413,7 +413,7 @@ gboolean write_data(Io_Message *message)
 	if (notifies)
 	{
 		thread_update_widget("info_label",MTX_LABEL,g_strdup("Transfer Completed"));
-		g_timeout_add(2000,(GtkFunction)reset_infolabel,NULL);
+		gdk_threads_add_timeout(2000,(GtkFunction)reset_infolabel,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 
 	 * and pending match, in the case of a failed write, the 

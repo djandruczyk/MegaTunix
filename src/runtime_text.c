@@ -370,6 +370,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	rtt = (Rt_Text *)value;
 	if (!rtt)
 		return;
+
 	count = rtt->count;
 	last_upd = rtt->last_upd;
 	history = (GArray *)OBJ_GET(rtt->object,"history");
@@ -466,6 +467,8 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 			COL_RTT_LAST, &previous,
 			-1);
 
+	if (!G_IS_OBJECT(rtt->object))
+		return FALSE;
 	history = (GArray *)OBJ_GET(rtt->object,"history");
 	precision = (GINT)OBJ_GET(rtt->object,"precision");
 

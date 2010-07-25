@@ -120,7 +120,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			printf("dispatching post function %s\n",pf->name);
+			/*printf("dispatching post function %s\n",pf->name);*/
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -144,9 +144,7 @@ trypop:
 			while (gtk_events_pending())
 			{
 				if (leaving)
-				{
 					goto dealloc;
-				}
 				gtk_main_iteration();
 			}
 		}
@@ -222,18 +220,18 @@ trypop:
 			}
 
 			val = g_array_index(message->functions,UpdateFunction, i);
-			printf("gui_dispatcher\n");
+			/*printf("gui_dispatcher\n");*/
 			switch ((UpdateFunction)val)
 			{
 				case UPD_LOGBAR:
-					printf("logbar update\n");
+					/*printf("logbar update\n");*/
 					t_message = (Text_Message *)message->payload;
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
-					printf("run function\n");
+					/*printf("run function\n");*/
 					qfunc = (QFunction *)message->payload;
 					run_post_functions(qfunc->func_name);
 					dealloc_qfunction(qfunc);
@@ -241,29 +239,29 @@ trypop:
 					break;
 
 				case UPD_WIDGET:
-					printf("widget update\n");
+					/*printf("widget update\n");*/
 					widget = NULL;
 					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
-							printf("entry\n");
+							/*printf("entry\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
 							break;
 						case MTX_LABEL:
-							printf("label\n");
+							/*printf("label\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
 							break;
 						case MTX_TITLE:
-							printf("title\n");
+							/*printf("title\n");*/
 							set_title(g_strdup(w_update->msg));
 							break;
 						case MTX_SENSITIVE:
-							printf("sensitivity change\n");
+							/*printf("sensitivity change\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
@@ -282,16 +280,12 @@ trypop:
 					 */
 			}
 
-			/*
 			while (gtk_events_pending())
 			{
 				if (leaving)
-				{
 					goto dealloc;
-				}
 				gtk_main_iteration();
 			}
-			*/
 		}
 	}
 dealloc:

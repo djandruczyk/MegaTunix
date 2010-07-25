@@ -73,7 +73,7 @@ void start_tickler(TicklerType type)
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
-				playback_id = g_timeout_add((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				playback_id = gdk_threads_add_timeout((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
@@ -127,7 +127,7 @@ void start_tickler(TicklerType type)
 			if (!((connected) && (interrogated)))
 				break;
 			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+				statuscounts_id = gdk_threads_add_timeout(100,(GtkFunction)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;

@@ -47,6 +47,7 @@ extern GObject *global_data;
 gboolean forced_update = TRUE;
 gboolean rt_forced_update = TRUE;
 GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
+GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
 
 
 /*!
@@ -206,6 +207,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
 	
+	gdk_threads_enter();
 	if ((current != previous) || (rt_forced_update))
 	{
 		percentage = (current-lower)/(upper-lower);
@@ -248,6 +250,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		last_upd = count;
 	}
 
+	gdk_threads_leave();
 	if (last_upd > 5000)
 		last_upd = 0;
 	count++;
@@ -304,10 +307,12 @@ gboolean update_rtsliders(gpointer data)
 
 gboolean update_rttext(gpointer data)
 {
+	g_static_mutex_lock(&rtt_mutex);
 	if (OBJ_GET(global_data,"rtt_model"))
 		gtk_tree_model_foreach(GTK_TREE_MODEL(OBJ_GET(global_data,"rtt_model")),rtt_foreach,NULL);
 	if (OBJ_GET(global_data,"rtt_hash"))
 		g_hash_table_foreach(OBJ_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
+	g_static_mutex_unlock(&rtt_mutex);
 	return TRUE;
 }
 
@@ -476,16 +481,19 @@ gboolean update_ve3ds(gpointer data)
 				goto breakout;
 
 redraw:
+				gdk_threads_enter();
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+				gdk_threads_leave();
 			}
 		}
 	}
 breakout:
 
+	gdk_threads_enter();
 	if (firmware->capabilities & PIS)
 	{
 		if ((active_page == RUNTIME_TAB) || (active_page == SETTINGS_TAB )|| (active_page == CORRECTIONS_TAB))
-				update_tab_gauges();
+			update_tab_gauges();
 	}
 
 	if ((active_page == VETABLES_TAB) || (active_page == SPARKTABLES_TAB) || (active_page == AFRTABLES_TAB) || (active_page == BOOSTTABLES_TAB) || (active_page == ROTARYTABLES_TAB) || (active_page == ALPHA_N_TAB) ||  (active_page == STAGING_TAB) || (forced_update))
@@ -493,5 +501,6 @@ breakout:
 		draw_ve_marker();
 		update_tab_gauges();
 	}
+	gdk_threads_leave();
 	return TRUE;
 }

@@ -404,7 +404,7 @@ void cell_edited(GtkCellRendererText *cell,
 			send_to_ecu(canID, page, lim_offset, MTX_U08, result, TRUE);
 			break;
 	}
-	g_timeout_add(500,(GtkFunction)deferred_model_update,(GtkWidget *)view);
+	gdk_threads_add_timeout(500,(GtkFunction)deferred_model_update,(GtkWidget *)view);
 	return;
 
 }

@@ -630,6 +630,7 @@ void mem_dealloc()
 	extern Rtv_Map *rtv_map;
 	extern Firmware_Details *firmware;
 	extern GStaticMutex serio_mutex;
+	extern GStaticMutex rtt_mutex;
 
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
@@ -741,12 +742,14 @@ void mem_dealloc()
 		cleanup(rtv_map);
 	}
 	/* Runtime Text*/
+	g_static_mutex_lock(&rtt_mutex);
 	store = OBJ_GET(global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
 	hash = OBJ_GET(global_data,"rtt_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
+	g_static_mutex_unlock(&rtt_mutex);
 	/* Runtime Sliders */
 	hash = OBJ_GET(global_data,"ww_sliders");
 	if (hash)
@@ -1318,6 +1321,7 @@ void dealloc_rtt(gpointer data)
 	cleanup(rtt->ctrl_name);
 	cleanup(rtt->label_prefix);
 	cleanup(rtt->label_suffix);
+	rtt->object = NULL;
 	cleanup(rtt);
 	/* Don't free object as it is just a ptr to the actual
 	 * data in the rtv object and that gets freed elsewhere

@@ -2127,7 +2127,7 @@ void queue_ve3d_update(Ve_View_3D *ve_view)
 		flag = 1;
 		ve_view->mesh_created=FALSE;
 		gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-		g_timeout_add(3000,sleep_and_reset,&flag);
+		gdk_threads_add_timeout(3000,sleep_and_reset,&flag);
 	}
 
 	return;
