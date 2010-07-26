@@ -120,7 +120,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			/*printf("dispatching post function %s\n",pf->name);*/
+			printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));

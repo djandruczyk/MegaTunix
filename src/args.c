@@ -141,7 +141,7 @@ void handle_args(gint argc, gchar * argv[])
 	if (args->offline)
 	{
 		offline = TRUE;
-		gdk_threads_add_timeout(1000,(GtkFunction)set_offline_mode,NULL);
+		g_timeout_add(1000,(GtkFunction)set_offline_mode,NULL);
 	}
 	if (args->listen_mode)
 	{

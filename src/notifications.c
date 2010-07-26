@@ -303,7 +303,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 	{
 		close_dialog(widget,NULL);
 		set_title(g_strdup(_("Offline Mode...")));
-		set_offline_mode();
+		g_timeout_add(100,(GtkFunction)set_offline_mode,NULL);
 	}
 	if (response == GTK_RESPONSE_CLOSE)
 		close_dialog(widget,NULL);

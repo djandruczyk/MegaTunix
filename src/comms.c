@@ -215,7 +215,7 @@ EXPORT void update_write_status(void *data)
 		if (sent_data)
 			g_free(sent_data);
 	}
-	
+
 	if (output->queue_update)
 	{
 		paused_handlers = TRUE;
@@ -223,8 +223,8 @@ EXPORT void update_write_status(void *data)
 		{
 			/* This at least only recalcs the limits on one... */
 			if (((firmware->table_params[i]->x_page == page) ||
-					(firmware->table_params[i]->y_page == page) ||
-					(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
+						(firmware->table_params[i]->y_page == page) ||
+						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
 			{
 				recalc_table_limits(0,i);
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
@@ -234,8 +234,10 @@ EXPORT void update_write_status(void *data)
 			}
 		}
 
+		gdk_threads_enter();
 		for (z=offset;z<offset+length;z++)
 			refresh_widgets_at_offset(page,z);
+		gdk_threads_leave();
 
 		paused_handlers = FALSE;
 	}
@@ -254,13 +256,17 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
+			gdk_threads_enter();
 			set_group_color(RED,"burners");
+			gdk_threads_leave();
 			outstanding_data = TRUE;
 			return;
 		}
 	}
 	outstanding_data = FALSE;
+	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
+	gdk_threads_leave();
 	return;
 }
 

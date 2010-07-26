@@ -1117,7 +1117,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
-			set_offline_mode();
+			g_timeout_add(100,(GtkFunction)set_offline_mode,NULL);
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))

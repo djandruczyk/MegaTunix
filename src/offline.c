@@ -68,6 +68,8 @@ gboolean set_offline_mode(void)
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
+	gdk_threads_enter();
+
 	filename = present_firmware_choices();
 	if (!filename)
 	{
@@ -79,6 +81,7 @@ gboolean set_offline_mode(void)
 		widget = lookup_widget("offline_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+		gdk_threads_leave();
 		return FALSE;
 
 	}
@@ -181,6 +184,7 @@ gboolean set_offline_mode(void)
 	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
+	gdk_threads_leave();
 	return FALSE;
 }
 
