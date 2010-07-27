@@ -101,8 +101,8 @@ void init(void)
 	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
-	OBJ_SET(global_data,"width",GINT_TO_POINTER(640));
-	OBJ_SET(global_data,"height",GINT_TO_POINTER(480));
+	OBJ_SET(global_data,"width",GINT_TO_POINTER(800));
+	OBJ_SET(global_data,"height",GINT_TO_POINTER(600));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
 	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(20));
@@ -130,7 +130,7 @@ void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 20;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 30;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */

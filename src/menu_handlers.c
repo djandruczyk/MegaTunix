@@ -91,6 +91,8 @@ EXPORT void setup_menu_handlers_pf()
 		gtk_widget_set_sensitive(item,TRUE);
 		item = glade_xml_get_widget(xml,"ms2_reboot_menuitem");
 		gtk_widget_set_sensitive(item,TRUE);
+		item = glade_xml_get_widget(xml,"lookuptables_setup_menuitem");
+		gtk_widget_set_sensitive(item,FALSE);
 	}
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)

@@ -1783,8 +1783,10 @@ close_control:
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
+					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)
 						refresh_widgets_at_offset(page,i);
+					gdk_threads_leave();
 					g_free(buffer);
 				}
 				else

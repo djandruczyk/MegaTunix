@@ -87,6 +87,7 @@ extern GdkColor white;
 gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
 volatile gboolean leaving = FALSE;
+volatile gboolean might_be_leaving = FALSE;
 
 
 /*!
@@ -126,14 +127,19 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GCond *pf_dispatch_cond;
 	extern GCond *gui_dispatch_cond;
 
-	if (!args->be_quiet)
-	{
-		if(!prompt_r_u_sure())
-			return TRUE;
-		prompt_to_save();
-	}
 	if (leaving)
 		return TRUE;
+
+	if (!args->be_quiet)
+	{
+		might_be_leaving = TRUE;
+		if(!prompt_r_u_sure())
+		{
+			might_be_leaving = FALSE;
+			return TRUE;
+		}
+		prompt_to_save();
+	}
 
 	leaving = TRUE;
 	/* Stop timeout functions */
@@ -166,44 +172,6 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_static_mutex_lock(&leave_mutex);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after leave_mutex\n"));
 
-	save_config();
-
-	/*
-	 * Can';t do these until I can get nonblocking socket to behave. 
-	 * not sure what I'm doing wrong,  but select loop doesn't detect the 
-	 * connection for some reason, so had to go back to blocking mode, thus
-	 * the threads sit permanently blocked and can't catch the notify.
-	 *
-	if (ascii_socket_id)
-		g_thread_join(ascii_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
-	if (binary_socket_id)
-		g_thread_join(binary_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
-	if (control_socket_id)
-		g_thread_join(control_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
-	*/
-	if (statuscounts_id)
-		g_source_remove(statuscounts_id);
-	statuscounts_id = 0;
-
-	if (lookup_widget("dlog_select_log_button"))
-		iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
-
-	if (iochannel)	
-	{
-		g_io_channel_shutdown(iochannel,TRUE,NULL);
-		g_io_channel_unref(iochannel);
-	}
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
-
-
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
-	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex lock\n"));
-	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	/* This makes us wait until the io queue finishes */
 	while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
@@ -231,6 +199,9 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		count++;
 	}
 	g_mutex_lock(mutex);
+	if (statuscounts_id)
+		g_source_remove(statuscounts_id);
+	statuscounts_id = 0;
 	if (pf_dispatcher_id)
 		g_source_remove(pf_dispatcher_id);
 	pf_dispatcher_id = 0;
@@ -245,6 +216,42 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
 	g_mutex_unlock(mutex);
+
+	save_config();
+
+	/*
+	 * Can';t do these until I can get nonblocking socket to behave. 
+	 * not sure what I'm doing wrong,  but select loop doesn't detect the 
+	 * connection for some reason, so had to go back to blocking mode, thus
+	 * the threads sit permanently blocked and can't catch the notify.
+	 *
+	if (ascii_socket_id)
+		g_thread_join(ascii_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
+	if (binary_socket_id)
+		g_thread_join(binary_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
+	if (control_socket_id)
+		g_thread_join(control_socket_id);
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
+	*/
+
+	if (lookup_widget("dlog_select_log_button"))
+		iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
+
+	if (iochannel)	
+	{
+		g_io_channel_shutdown(iochannel,TRUE,NULL);
+		g_io_channel_unref(iochannel);
+	}
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
+
+
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
+	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex lock\n"));
+	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
+	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	close_serial();
 	unlock_serial();

@@ -401,6 +401,10 @@ void finalize_core_gui(GladeXML * xml)
 	register_widget("comms_sioerr_entry",widget);
 	widget = glade_xml_get_widget(xml,"comms_reset_entry");
 	register_widget("comms_reset_entry",widget);
+	widget = glade_xml_get_widget(xml,"comms_pf_queue_entry");
+	register_widget("comms_pf_queue_entry",widget);
+	widget = glade_xml_get_widget(xml,"comms_gui_queue_entry");
+	register_widget("comms_gui_queue_entry",widget);
 
 	widget = glade_xml_get_widget(xml,"serial_status_view");
 	register_widget("comms_view",widget);

@@ -223,14 +223,15 @@ gboolean signal_read_rtvars()
 	extern Firmware_Details *firmware;
 	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
-	/*
-	extern GAsyncQueue *gui_dispatch_queue;
-	*/
+	/*extern GAsyncQueue *gui_dispatch_queue;*/
 	extern gboolean rtvars_loaded;
 	extern volatile gboolean leaving;
+	extern volatile gboolean might_be_leaving;
 
 	if (leaving)
 		return FALSE;
+	if (might_be_leaving)
+		return TRUE;
 
 	if (!rtvars_loaded)
 		return TRUE;
@@ -248,7 +249,7 @@ gboolean signal_read_rtvars()
 	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
 	*/
 
-	if ((length > 2) || (pf_length > 10))
+	if ((length > 2) || (pf_length > 15))
 		return TRUE;
 
 	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));

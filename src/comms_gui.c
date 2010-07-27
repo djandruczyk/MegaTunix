@@ -30,6 +30,8 @@ extern gint ms_ve_goodread_count;
 extern GdkColor black;
 extern Serial_Params *serial_params;
 extern GdkColor white;
+extern GdkColor red;
+extern GdkColor black;
 extern GObject *global_data;
 
 
@@ -56,8 +58,13 @@ EXPORT gboolean reset_errcounts(GtkWidget *widget)
 gboolean update_errcounts()
 {
 	gchar *tmpbuf = NULL;
+	gint tmp = 0;
 	GtkWidget * widget = NULL;
+	static gboolean pf_red = FALSE;
+	static gboolean gui_red = FALSE;
 	extern volatile gboolean leaving;
+	extern GAsyncQueue *pf_dispatch_queue;
+        extern GAsyncQueue *gui_dispatch_queue;
 	
 	if (leaving)
 		return TRUE;
@@ -95,6 +102,40 @@ gboolean update_errcounts()
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	widget = lookup_widget("runtime_sioerr_entry");
+	if (GTK_IS_ENTRY(widget))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	g_free(tmpbuf);
+	tmp = g_async_queue_length(pf_dispatch_queue);
+	tmpbuf = g_strdup_printf("%i",tmp);
+	widget = lookup_widget("comms_pf_queue_entry");
+	if (GTK_IS_ENTRY(widget))
+	{
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+		if ((!pf_red) && (tmp > 10))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+		if ((pf_red) && ( tmp <3))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	}
+	widget = lookup_widget("runtime_pf_queue_entry");
+	if (GTK_IS_ENTRY(widget))
+	{
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+		if ((!pf_red) && (tmp > 10))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+		if ((pf_red) && ( tmp <3))
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	}
+	if (tmp > 10)
+		pf_red = TRUE;
+	if (tmp < 3)
+		pf_red = FALSE;
+	g_free(tmpbuf);
+	tmp = g_async_queue_length(gui_dispatch_queue);
+	tmpbuf = g_strdup_printf("%i",tmp);
+	widget = lookup_widget("comms_gui_queue_entry");
+	if (GTK_IS_ENTRY(widget))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	widget = lookup_widget("runtime_gui_queue_entry");
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
