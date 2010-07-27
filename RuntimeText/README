@@ -1,41 +1,16 @@
 This README describes the contents of this dir and their file structure.
 
-Last Edited, Feb 1 2007
+Last Edited, July 2010
 
-Inside this dir (RuntimeText) are files with an .rtt_conf extension.  They
-are ASCII text files in .ini file format, using the common "section", 
-"key", and "value" layout as shown below.
+Inside this dir (RuntimeText) are files with an .xml extension.  They
+are relatively simple, use syntax like the following:
+The "internal_name" key is a string to define this value and they should
+be unique, otherwise a duplication will overwrite a previous one.
+The "datasource" key IS important, and must be one of the ones from
+the realtime map files (see internal names)
 
-[section]
-key=value
-
-The rtt_conf files define all of the text values shown on the floating 
-window.  They get their data from the RealTimeMaps (rtv_map)
-
-
-NOTES regarding the files:
-
-- The value names are CaSe SeNsItIvE, so be warned.  Ironically the
-keys themselves are not, as the string compare functions are case insensitive.
-
-[global] section
-contains a "description" key (not really used in the code, but may be in the 
-future
-Also contains two more interger keys, rtt_total, 
-defining the total number of vars displayed on the floating window.
-respectively.
-
-Following that are sections for each text variable.
-
-The sections are named [rt_text_xx], 
-the xx is a number starting at 0 and going up to rt_total-1 
-(since we start from 0 not 1)
-
-Inside each section are 2 keys;
-int_name	[string] internal name used to refer to this control
-source		[string]  This is the datasource name,  you get these from 
-		looking into the RealTimeMap file and looking for the 
-		"internal_name" key for the variable you're interested in.  
-		Everything else is automagic. This is CaSe SenSiTiVe just so
-		you know....
+        <rtt>
+               <internal_name>rpm</internal_name>
+               <datasource>rpm</datasource>
+        </rtt>
 

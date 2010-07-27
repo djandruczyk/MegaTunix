@@ -67,24 +67,26 @@ EXPORT gboolean update_runtime_vars_pf()
 		return FALSE;
 
 	count++;
-	gdk_threads_enter();
 	if (conn_status != connected)
 	{
+		gdk_threads_enter();
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(connected));
+		gdk_threads_leave();
 		conn_status = connected;
 		forced_update = TRUE;
 	}
 	if ((count > 60) && (!forced_update))
 		forced_update = TRUE;
 
+	gdk_threads_enter();
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
 	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
+	gdk_threads_leave();
 
 	if (count > 60 )
 		count = 0;
 
 	forced_update = FALSE;
-	gdk_threads_leave();
 	return TRUE;
 }
 

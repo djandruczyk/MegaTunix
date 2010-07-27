@@ -218,19 +218,25 @@ void stop_tickler(TicklerType type)
 gboolean signal_read_rtvars()
 {
 	gint length = 0;
+	gint pf_length = 0;
 	OutputData *output = NULL;
 	extern Firmware_Details *firmware;
 	extern GAsyncQueue *io_data_queue;
-	/*
 	extern GAsyncQueue *pf_dispatch_queue;
+	/*
 	extern GAsyncQueue *gui_dispatch_queue;
 	*/
 	extern gboolean rtvars_loaded;
+	extern volatile gboolean leaving;
+
+	if (leaving)
+		return FALSE;
 
 	if (!rtvars_loaded)
 		return TRUE;
 
 	length = g_async_queue_length(io_data_queue);
+	pf_length = g_async_queue_length(pf_dispatch_queue);
 
 	/* If queue depth is too great we should not make the problem worse
 	 * so we skip a call as we're probably trying to go faster than the 
@@ -242,7 +248,7 @@ gboolean signal_read_rtvars()
 	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
 	*/
 
-	if (length > 2)
+	if ((length > 2) || (pf_length > 10))
 		return TRUE;
 
 	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));

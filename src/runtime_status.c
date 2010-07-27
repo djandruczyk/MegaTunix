@@ -50,7 +50,6 @@ EXPORT void load_status_pf(void)
 	gint tmpi = 0;
 	gint count = 0;
 	gint row = 0;
-	gint col = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** tmpvector = NULL;
 	gchar ** keys = NULL;
@@ -129,7 +128,6 @@ EXPORT void load_status_pf(void)
 		for (i=0;i<count;i++)
 		{
 			row = -1;
-			col = -1;
 			section = g_strdup_printf("status_%i",i);
 			if (!cfg_read_string(cfgfile,section,"create_label",&tmpbuf))
 			{
@@ -138,12 +136,10 @@ EXPORT void load_status_pf(void)
 			}
 			if (!cfg_read_int(cfgfile,section,"row",&row))
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
-			if (!cfg_read_int(cfgfile,section,"col",&col))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
 			frame = gtk_frame_new(NULL);
 			gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
 			gtk_table_attach(GTK_TABLE(table),frame,
-					col,col+1,row,row+1,
+					0,1,row,row+1,
 					(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),
 					(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),
 					0,0);
