@@ -105,10 +105,10 @@ void init(void)
 	OBJ_SET(global_data,"height",GINT_TO_POINTER(600));
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
-	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(20));
-	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
-	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(25));
-	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(15));
+	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(25));
+	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(20));
+	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
+	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
 	OBJ_SET(global_data,"hidden_list",hidden_list);
 	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);

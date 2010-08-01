@@ -368,12 +368,15 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * tmpbuf2 = NULL;
+	static GRand *rand = NULL;
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
 	rtt = (Rt_Text *)value;
 	if (!rtt)
 		return;
+	if (!rand)
+		rand = g_rand_new();
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
@@ -399,7 +402,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 
 	if ((current != previous) 
 			|| (forced_update) 
-			|| (rtt->textval && ((abs(count-last_upd)%30) == 0)))
+			|| (rtt->textval && ((abs(count-last_upd)%g_rand_int_range(rand,25,50)) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 		gdk_threads_enter();
