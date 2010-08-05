@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<runtimestatus>
+	<api>
+		<major>2</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for MS-1 Standard.</description>
+	</info>
+	<status>
+		<label>CONNECTED</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>connected_widgets</bind_to_list>
+	</status>
+	<status>
+		<label>CRANKING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>RUNNING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>WARMUP</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>AS_ENRICH</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>ACCEL</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>DECEL</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+</runtimestatus>

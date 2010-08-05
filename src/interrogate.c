@@ -102,7 +102,8 @@ EXPORT gboolean interrogate_ecu()
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
-	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
+//	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
+	set_title(g_strdup(_("Interrogating ECU...")));
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
@@ -209,9 +210,9 @@ EXPORT gboolean interrogate_ecu()
 		if (total_read > 0)
 		{
 			if (test->result_type == RESULT_TEXT)
-				thread_update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
+				update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE);
 			else if (test->result_type == RESULT_DATA)
-				thread_update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE);
+				update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE);
 			ptr = buf;
 			if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
 			{
@@ -253,7 +254,8 @@ EXPORT gboolean interrogate_ecu()
 	g_static_mutex_unlock(&mutex);
 	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	//update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	set_title(g_strdup(_("Interrogation Complete...")));
 	return interrogated;
 }
 
@@ -319,7 +321,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
-		thread_update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE);
+		update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE);
 		return FALSE;
 	}
 	else
@@ -329,7 +331,6 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 
 		if (!load_firmware_details(firmware,filename))
 			return FALSE;
-		update_interrogation_gui(firmware);
 		return TRUE;
 	}
 }
@@ -368,7 +369,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -1073,8 +1074,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	/* Display firmware version in the window... */
 
 	dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
-	thread_update_logbar("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
-	thread_update_logbar("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
+	update_logbar("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
+	update_logbar("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
 
 	return TRUE;
 
@@ -1113,7 +1114,7 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		return NULL;
 	}
 
@@ -1246,7 +1247,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -1372,8 +1373,9 @@ void interrogate_error(gchar *text, gint num)
 /* !brief updates the interrogation gui with the text revision, signature
  * and ecu numerical revision
  */
-void update_interrogation_gui(Firmware_Details *firmware)
+void update_interrogation_gui_pf()
 {
+	extern Firmware_Details *firmware;
 	if (firmware->TextVerVia)
 		io_cmd(firmware->TextVerVia,NULL);
 	if (firmware->NumVerVia)

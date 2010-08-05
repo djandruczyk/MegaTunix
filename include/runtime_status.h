@@ -16,9 +16,25 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+
+typedef enum
+{
+	COL_STATUS_WIDGET,
+	COL_STATUS_LAST,
+	STATUS_NUM_COLS
+}StatusCols;
 
 /* Prototypes */
 void load_status_pf(void );
+gboolean load_status_xml_elements(xmlNode *, GtkWidget *);
+void load_status(xmlNode *, GtkWidget *);
+void setup_status_treeview(GtkWidget *);
+gboolean status_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
+
+
 /* Prototypes */
 
 #endif

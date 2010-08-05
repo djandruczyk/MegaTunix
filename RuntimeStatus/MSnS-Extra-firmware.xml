@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<runtimestatus>
+	<api>
+	   	<major>2</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for MS-1 Standard.</description>
+	</info>
+	<status>
+		<label>CONNECTED</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>connected_widgets</bind_to_list>
+	</status>
+	<status>
+		<label>CRANKING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>RUNNING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>WARMUP</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>AS_ENRICH</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>ACCEL</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>DECEL</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>enginebit</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>FUEL PUMP</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Fidle/Spark</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>Fan/H<sub>2</sub>O Inj.</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>NOS/H<sub>2</sub>O Inj.</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>Output 1/BoostCtrl</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>Output 2</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>porta</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>Output 3</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portd</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Output 4/Fan</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portc</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>Launch On</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portd</source>
+		<bitval>0</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>Knocked</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portd</source>
+		<bitval>0</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>NOS/Table 2 On</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portd</source>
+		<bitval>0</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>CONFIG ERROR!!!</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>portc</source>
+		<bitval>1</bitval>
+		<bitmask>128</bitmask>
+	</status>
+</runtimestatus>

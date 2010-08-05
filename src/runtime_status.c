@@ -17,16 +17,21 @@
 #include <api-versions.h>
 #include <configfile.h>
 #include <debugging.h>
+#include <glade/glade-xml.h>
 #include <getfiles.h>
 #include <firmware.h>
 #include <glib.h>
 #include <gui_handlers.h>
 #include <keybinder.h>
 #include <keyparser.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <runtime_status.h>
+#include <tabloader.h>
 #include <widgetmgmt.h>
+#include <xmlbase.h>
 
 
 
@@ -38,30 +43,20 @@ extern GObject *global_data;
  */
 EXPORT void load_status_pf(void)
 {
-	ConfigFile *cfgfile = NULL;
 	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
-	gchar *section = NULL;
 	gint x = 0;
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
-	gint i = 0;
-	gint tmpi = 0;
-	gint count = 0;
-	gint row = 0;
-	gchar * tmpbuf = NULL;
-	gchar ** tmpvector = NULL;
-	gchar ** keys = NULL;
-	gint num_keys = 0;
-	gint major = 0;
-	gint minor = 0;
 	GtkWidget * window;
-	GtkWidget * label;
-	GtkWidget * frame;
-	GtkWidget * table;
+	GtkWidget * parent;
+	GladeXML *xml = NULL;
+	gboolean xml_result = FALSE;
+	xmlDoc *doc = NULL;
+	xmlNode *root_element = NULL;
+	GladeXML *main_xml;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
-	GdkColor color;
 	extern gboolean interrogated;
 
 
@@ -75,135 +70,155 @@ EXPORT void load_status_pf(void)
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
-	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
+	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.status_conf\" not found!!, exiting function\n",firmware->status_map_file));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->status_map_file));
 		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
 		gdk_threads_leave();
 		return;
 	}
-	cfgfile = cfg_open_file(filename);
-	if (cfgfile)
-	{
-		get_file_api(cfgfile,&major,&minor);
-		if ((major != RT_STATUS_MAJOR_API) || (minor != RT_STATUS_MINOR_API))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tRuntime Status profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API,filename));
-			g_free(filename);
-			set_title(g_strdup(_("ERROR RT Status API MISMATCH!!!")));
-			gdk_threads_leave();
-			return;
-		}
+	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	xml = glade_xml_new(main_xml->filename,"status_window",NULL);
+	window = glade_xml_get_widget(xml,"status_window");
+	register_widget("status_window",window);
+	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
+	gtk_window_set_title(GTK_WINDOW(window),_("ECU Status"));
+	x = (GINT)OBJ_GET(global_data,"status_x_origin");
+	y = (GINT)OBJ_GET(global_data,"status_y_origin");
+	gtk_window_move(GTK_WINDOW(window),x,y);
+	w = (GINT)OBJ_GET(global_data,"status_width");
+	h = (GINT)OBJ_GET(global_data,"status_height");
+	gtk_window_set_default_size(GTK_WINDOW(window),w,h);
+	gtk_window_resize(GTK_WINDOW(window),w,h);
+//	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
+//	g_object_set(window, "resizable", FALSE, NULL);
+	parent = glade_xml_get_widget(xml,"status_vbox");
+	glade_xml_signal_autoconnect(xml);
 
-		if(!cfg_read_int(cfgfile,"global","total_status",&count))
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
-			set_title(g_strdup(_("ERROR RT Status cfgfile problem!!!")));
-			gdk_threads_leave();
-			return;
-		}
+	LIBXML_TEST_VERSION
 
-		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
-		gtk_window_set_title(GTK_WINDOW(window),_("ECU Status"));
-		x = (GINT)OBJ_GET(global_data,"status_x_origin");
-		y = (GINT)OBJ_GET(global_data,"status_y_origin");
-		gtk_window_move(GTK_WINDOW(window),x,y);
-		w = (GINT)OBJ_GET(global_data,"status_width");
-		h = (GINT)OBJ_GET(global_data,"status_height");
-		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
-		gtk_window_resize(GTK_WINDOW(window),w,h);
-		g_signal_connect(G_OBJECT(window),"delete_event",
-				G_CALLBACK(prevent_close),NULL);
-		register_widget("status_window",window);
-		gtk_widget_realize(window);
-
-		frame = gtk_frame_new("ECU Status");
-		gtk_container_add(GTK_CONTAINER(window),frame);
-		gtk_container_set_border_width(GTK_CONTAINER(frame),5);
-		table = gtk_table_new(1,count,FALSE);
-		gtk_container_add(GTK_CONTAINER(frame),table);
-		gtk_container_set_border_width(GTK_CONTAINER(table),5);
-		for (i=0;i<count;i++)
-		{
-			row = -1;
-			section = g_strdup_printf("status_%i",i);
-			if (!cfg_read_string(cfgfile,section,"create_label",&tmpbuf))
-			{
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
-				break;
-			}
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
-			frame = gtk_frame_new(NULL);
-			gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
-			gtk_table_attach(GTK_TABLE(table),frame,
-					0,1,row,row+1,
-					(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),
-					(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),
-					0,0);
-
-			label = gtk_label_new(NULL);
-			gtk_label_set_markup(GTK_LABEL(label),_(tmpbuf));
-			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
-			g_free(tmpbuf);
-			if (cfg_read_string(cfgfile,section,"active_fg",&tmpbuf))
-			{
-				gdk_color_parse(tmpbuf,&color);
-				gtk_widget_modify_fg(label,GTK_STATE_NORMAL,&color);
-				g_free(tmpbuf);
-			}
-			if (cfg_read_string(cfgfile,section,"inactive_fg",&tmpbuf))
-			{
-				gdk_color_parse(tmpbuf,&color);
-				gtk_widget_modify_fg(label,GTK_STATE_INSENSITIVE,&color);
-				g_free(tmpbuf);
-			}
-
-			gtk_container_add(GTK_CONTAINER(frame),label);
-			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
-			else
-			{
-				keys = parse_keys(tmpbuf,&num_keys,",");
-				g_free(tmpbuf);
-			}
-
-			bind_keys(G_OBJECT(label),cfgfile,section,keys,num_keys);
-			g_strfreev(keys);
-			/* Bind widgets to lists if thy have the bind_to_list flag set...
-			 *         */
-			if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
-			{
-				tmpvector = parse_keys(tmpbuf,&tmpi,",");
-				g_free(tmpbuf);
-				/* This looks convoluted,  but it allows for an arbritrary 
-				 * number of lists, that are indexed by a keyword.
-				 * The get_list function looks the list up in a hashtable, if
-				 * it isn't found (i.e. new list) it returns NULL which is OK
-				 * as g_list_prepend() uses that to create a new list,  that
-				 * returned list is used to store back into the hashtable so
-				 * that the list is always stored and up to date...
-				 */
-				for (x=0;x<tmpi;x++)
-					store_list(tmpvector[x],g_list_prepend(get_list(tmpvector[x]),(gpointer)label));
-				g_strfreev(tmpvector);
-			}
-			g_free(section);
-		}
-		if (!args->hide_status)
-			gtk_widget_show_all(window);
-		cfg_free(cfgfile);
-	}
-	else
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_pf()\n\tCould not load %s\n",filename));
-	}
-
+		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
+	if (doc == NULL)
+	{
+		printf(_("error: could not parse file %s\n"),filename);
+		gdk_threads_leave();
+		return;
+	}
+
+	root_element = xmlDocGetRootElement(doc);
+	xml_result = load_status_xml_elements(root_element,parent);
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+
+	if (xml_result == FALSE)
+		gtk_widget_destroy(window);
+	else if ((!args->hide_status) && (xml_result))
+		gtk_widget_show_all(window);
+
 	set_title(g_strdup(_("RT Status Loaded...")));
 	gdk_threads_leave();
 	return;
+}
+
+
+gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
+{
+	xmlNode *cur_node = NULL;
+
+	/* Iterate though all nodes... */
+	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+				if (!xml_api_check(cur_node,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API))
+				{
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
+					return FALSE;
+				}
+			if (g_strcasecmp((gchar *)cur_node->name,"status") == 0)
+				load_status(cur_node,parent);
+		}
+		if (!load_status_xml_elements(cur_node->children,parent))
+			return FALSE;
+	}
+	return TRUE;
+}
+
+
+void load_status(xmlNode *node,GtkWidget *parent)
+{
+	gchar *txt = NULL;
+	gchar *active_fg = NULL;
+	gchar *inactive_fg = NULL;
+	gchar *bind_to_list = NULL;
+	gchar *source = NULL;
+	gint bitval = -1;
+	gint bitmask = -1;
+	GtkWidget *label = NULL;
+	GtkWidget *frame = NULL;
+	GdkColor color;
+	xmlNode *cur_node = NULL;
+
+	if (!node->children)
+	{
+		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
+		return;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"label") == 0)
+				generic_xml_gchar_import(cur_node,&txt);
+			if (g_strcasecmp((gchar *)cur_node->name,"active_fg") == 0)
+				generic_xml_gchar_import(cur_node,&active_fg);
+			if (g_strcasecmp((gchar *)cur_node->name,"inactive_fg") == 0)
+				generic_xml_gchar_import(cur_node,&inactive_fg);
+			if (g_strcasecmp((gchar *)cur_node->name,"source") == 0)
+				generic_xml_gchar_import(cur_node,&source);
+			if (g_strcasecmp((gchar *)cur_node->name,"bind_to_list") == 0)
+				generic_xml_gchar_import(cur_node,&bind_to_list);
+			if (g_strcasecmp((gchar *)cur_node->name,"bitval") == 0)
+				generic_xml_gint_import(cur_node,&bitval);
+			if (g_strcasecmp((gchar *)cur_node->name,"bitmask") == 0)
+				generic_xml_gint_import(cur_node,&bitmask);
+		}
+		cur_node = cur_node->next;
+	}
+	/* Minimum requirements */
+	if ((txt) && (active_fg) && (inactive_fg) && (bind_to_list))
+	{
+		frame = gtk_frame_new(NULL);
+		gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
+		label = gtk_label_new(NULL);
+		gtk_label_set_markup(GTK_LABEL(label),_(txt));
+		gtk_container_add(GTK_CONTAINER(frame),label);
+		gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
+		gdk_color_parse(active_fg,&color);
+		gtk_widget_modify_fg(label,GTK_STATE_NORMAL,&color);
+		gdk_color_parse(inactive_fg,&color);
+		gtk_widget_modify_fg(label,GTK_STATE_INSENSITIVE,&color);
+		g_free(txt);
+		g_free(active_fg);
+		g_free(inactive_fg);
+		/* For controls based on ECU data */
+		if ((bitval >= 0) && (bitmask >= 0) && (source))
+		{
+			OBJ_SET(label,"bitval",GINT_TO_POINTER(bitval));
+			OBJ_SET(label,"bitmask",GINT_TO_POINTER(bitmask));
+			OBJ_SET(label,"source",g_strdup(source));
+			g_free(source);
+		}
+		if (bind_to_list)
+		{
+			bind_to_lists(label, bind_to_list);
+			g_free(bind_to_list);
+		}
+		gtk_box_pack_start(GTK_BOX(parent),frame,TRUE,TRUE,0);
+	}
 }
 

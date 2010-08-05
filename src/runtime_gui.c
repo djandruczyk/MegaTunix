@@ -196,10 +196,13 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
+	GRand *rand = NULL;
 	extern volatile gboolean leaving;
 	if (leaving)
 		return;
 
+	if (!rand)
+		rand = g_rand_new();
 	history = (GArray *)OBJ_GET(slider->object,"history");
 	if (!history)
 		return;
@@ -254,7 +257,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 		slider->last_percentage = percentage;
 	}
-	else if (slider->textval && ((abs(count-last_upd)%30) == 0))
+	else if (slider->textval && ((abs(count-last_upd)%g_rand_int_range(rand,25,50)) == 0))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 

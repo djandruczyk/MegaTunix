@@ -100,10 +100,16 @@ gboolean set_offline_mode(void)
 	if (!firmware)
 		firmware = g_new0(Firmware_Details,1);
 	load_firmware_details(firmware,filename);
-	update_interrogation_gui(firmware);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
+
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("update_interrogation_gui_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_realtime_map_pf");

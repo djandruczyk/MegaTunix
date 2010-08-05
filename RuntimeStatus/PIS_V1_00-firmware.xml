@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<runtimestatus>
+	<api>
+		<major>2</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for MS-1 Standard.</description>
+	</info>
+	<status>
+		<label>CONNECTED</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>connected_widgets</bind_to_list>
+	</status>
+	<status>
+		<label>INJECT</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>128</bitmask>
+	</status>
+	<status>
+		<label>CRANKING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>64</bitmask>
+	</status>
+	<status>
+		<label>RUNNING</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>ASC</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>ROC UPDATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>IAC UPDATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>IAC RESET</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>CTS UPDATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags1</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>HARD LIMIT</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>128</bitmask>
+	</status>
+	<status>
+		<label>SOFT LIMIT</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>64</bitmask>
+	</status>
+	<status>
+		<label>BOOST LIMIT</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>EGO UPDATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>CLOSED LOOP</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>ACCELERATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>DECELERATE</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>FUEL CUT</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags2</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>IDLE CONTROL</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags3</source>
+		<bitval>1</bitval>
+		<bitmask>128</bitmask>
+	</status>
+	<status>
+		<label>REF VALID</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags3</source>
+		<bitval>1</bitval>
+		<bitmask>64</bitmask>
+	</status>
+	<status>
+		<label>ALPHA N</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags3</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>CTS FAN</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>status_flags3</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+</runtimestatus>

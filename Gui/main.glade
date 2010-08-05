@@ -4318,4 +4318,43 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
       </widget>
     </child>
   </widget>
+  <widget class="GtkWindow" id="status_window">
+    <property name="title" translatable="yes">ECU Status</property>
+    <child>
+      <widget class="GtkVBox" id="vbox">
+        <property name="visible">True</property>
+        <property name="border_width">5</property>
+        <property name="spacing">1</property>
+        <child>
+          <widget class="GtkFrame" id="status_frame">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <widget class="GtkVBox" id="status_vbox">
+                <property name="visible">True</property>
+                <property name="border_width">5</property>
+                <property name="spacing">1</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label68">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">ECU Status</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>
