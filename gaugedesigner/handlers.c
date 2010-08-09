@@ -244,7 +244,7 @@ void update_general_controls()
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_DAY));
 
 	widget = glade_xml_get_widget(topxml,"gradient_end_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),(mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE)));
 
 	widget = glade_xml_get_widget(topxml,"daytime_radiobutton");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_daytime_mode(g));

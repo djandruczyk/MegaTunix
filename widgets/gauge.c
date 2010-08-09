@@ -70,7 +70,7 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
  \param index (gint) index of color to set.
  \returns a pointer to the internal GdkColor struct WHICH MUST NOT be FREED!!
  */
-GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index)
+const GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
