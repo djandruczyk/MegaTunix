@@ -932,7 +932,6 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() before lock update_mutex\n"));
 		g_static_mutex_lock(&update_mutex);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() after lock update_mutex\n"));
-		printf("playback, update and scroll\n");
 		trace_update(force_redraw);
 		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() before lock update_mutex\n"));
 		g_static_mutex_unlock(&update_mutex);
