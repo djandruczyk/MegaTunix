@@ -493,7 +493,7 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
 /* Colors */
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color);
-const GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index);
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor *color_ref);
 
 /* XML */
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);

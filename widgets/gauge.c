@@ -68,13 +68,20 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
  inside of gauge.h
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param index (gint) index of color to set.
- \returns a pointer to the internal GdkColor struct WHICH MUST NOT be FREED!!
+ \param[in,out] color_ref reference to a user allocated GdkColor
+ \returns GdkColor* color_ref on success, null otherwise
  */
-const GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index)
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor *color_ref)
 {
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *const priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
-	return (&priv->colors[index]);
+
+	if (color_ref)
+	{
+		memcpy (color_ref, &priv->colors[index], sizeof(GdkColor));
+	}
+
+	return ( color_ref );
 }
 
 

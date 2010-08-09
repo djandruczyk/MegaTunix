@@ -57,6 +57,7 @@ void update_text_controls()
 	gchar *tmpbuf = NULL;
 	GtkWidget * widget = NULL;
 	MtxGaugeFace *g = NULL;
+	GdkColor color;
 
 	if (GTK_IS_WIDGET(gauge))
 		g = MTX_GAUGE_FACE(gauge);
@@ -95,10 +96,12 @@ void update_text_controls()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	widget = glade_xml_get_widget(topxml,"value_color_day_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_DAY));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_DAY, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"value_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_NITE));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_NITE, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	hold_handlers = FALSE;
 }
@@ -154,6 +157,7 @@ void update_general_controls()
 	gfloat tmp1 = 0.0;
 	GtkWidget * widget = NULL;
 	MtxGaugeFace *g = NULL;
+	GdkColor color;
 
 	if (GTK_IS_WIDGET(gauge))
 		g = MTX_GAUGE_FACE(gauge);
@@ -223,28 +227,36 @@ void update_general_controls()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	widget = glade_xml_get_widget(topxml,"background_color_day_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_BG_DAY));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_BG_DAY, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"background_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_BG_NITE));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_BG_NITE, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"needle_color_day_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_DAY));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_DAY, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"needle_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_NITE));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_NITE, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"gradient_begin_color_day_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_DAY));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_DAY, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 	
 	widget = glade_xml_get_widget(topxml,"gradient_begin_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_NITE));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_NITE, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 	
 	widget = glade_xml_get_widget(topxml,"gradient_end_color_day_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_DAY));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_DAY, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"gradient_end_color_nite_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),(mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE)));
+	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE, &color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = glade_xml_get_widget(topxml,"daytime_radiobutton");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_daytime_mode(g));
