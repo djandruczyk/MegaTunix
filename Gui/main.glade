@@ -146,6 +146,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_VE Tables</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -154,6 +155,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_Runtime Data</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -162,6 +164,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_Spark Tables</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -170,6 +173,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_AFR Tables</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -178,6 +182,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_Boost Tables</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -186,6 +191,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_Rotary Trailing Table</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -194,6 +200,7 @@
                                     <property name="sensitive">False</property>
                                     <property name="label" translatable="yes">_Injector Staging Table</property>
                                     <property name="use_underline">True</property>
+                                    <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
                               </widget>

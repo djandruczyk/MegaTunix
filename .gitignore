@@ -45,3 +45,5 @@ mkinstalldirs
 *~
 announcement
 megatunix*.tar.gz
+tags
+gmon.out
