@@ -38,7 +38,7 @@ int main (int argc, char **argv)
 	/*gtk_widget_realize(pbar);*/
 	gtk_widget_show_all (window);
 
-	gtk_timeout_add(30,(GtkFunction)update_pbar,(gpointer)pbar);
+	(void)g_timeout_add(30,(GtkFunction)update_pbar,(gpointer)pbar);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

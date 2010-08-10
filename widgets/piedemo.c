@@ -37,7 +37,7 @@ int main (int argc, char **argv)
 	/*mtx_pie_gauge_set_value(MTX_PIE_GAUGE(gauge), 0.0);*/
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),LBOUND, 0.0);*/
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),UBOUND, 8000.0);*/
-	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
+	(void)g_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

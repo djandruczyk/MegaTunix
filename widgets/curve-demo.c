@@ -67,7 +67,7 @@ int main (int argc, char **argv)
 	g_signal_connect(G_OBJECT(curve), "marker-proximity",
 			G_CALLBACK(marker_proximity),NULL);
 
-	gtk_timeout_add(40,(GtkFunction)update_curve_marker,(gpointer)curve);
+	(void)g_timeout_add(40,(GtkFunction)update_curve_marker,(gpointer)curve);
 
 	gtk_widget_show_all (window);
 
