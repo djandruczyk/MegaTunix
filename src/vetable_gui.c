@@ -209,6 +209,8 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	/*new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));*/
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
 	new_reqfuel = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
+	if (new_reqfuel < 0.5)
+		return;
 	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
 
 	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
