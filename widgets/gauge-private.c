@@ -342,6 +342,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	gfloat val = 0.0;
 	gboolean alert = FALSE;
 	MtxAlertRange *range = NULL;
+	GtkStateType state;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -369,8 +370,13 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			 */
 			priv->last_alert_index = i;
 			widget = GTK_WIDGET(gauge);
+#if GTK_MINOR_VERSION >= 20
+			state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+			state = GTK_WIDGET_STATE(widget);
+#endif
 			gdk_draw_drawable(priv->tmp_pixmap,
-					widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+					widget->style->fg_gc[state],
 					priv->bg_pixmap,
 					0,0,
 					0,0,
@@ -390,10 +396,15 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	}
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE(widget);
+#endif
 	if (!alert)
 		/* Not in alert status,  copy from bg_pixmap to current pixmap */
 		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				priv->bg_pixmap,
 				0,0,
 				0,0,
@@ -401,7 +412,7 @@ cairo_jump_out_of_alerts:
 	else
 		/* In ALERT status, copy from tmp_pixmap to current pixmap instead */
 		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				priv->tmp_pixmap,
 				0,0,
 				0,0,
@@ -713,42 +724,53 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
+	GtkStateType state = GTK_STATE_NORMAL;
 
-	if (GTK_WIDGET_IS_SENSITIVE(widget))
-	{
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-	}
-	else
-	{
-		pmap=gdk_pixmap_new(widget->window,
-				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				priv->pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		cr = gdk_cairo_create (pmap);
-		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-		cairo_rectangle (cr,
-				0,0,priv->w,priv->h);
-		cairo_fill(cr);
-		cairo_destroy(cr);
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-				pmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		g_object_unref(pmap);
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
 
-	}
+#if GTK_MINOR_VERSION >= 18
+	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
+#else
+		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+#endif
+		{
+			gdk_draw_drawable(widget->window,
+					widget->style->fg_gc[state],
+					priv->pixmap,
+					event->area.x, event->area.y,
+					event->area.x, event->area.y,
+					event->area.width, event->area.height);
+		}
+		else
+		{
+			pmap=gdk_pixmap_new(widget->window,
+					priv->w,priv->h,
+					gtk_widget_get_visual(widget)->depth);
+			gdk_draw_drawable(pmap,
+					widget->style->fg_gc[state],
+					priv->pixmap,
+					event->area.x, event->area.y,
+					event->area.x, event->area.y,
+					event->area.width, event->area.height);
+			cr = gdk_cairo_create (pmap);
+			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+			cairo_rectangle (cr,
+					0,0,priv->w,priv->h);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+			gdk_draw_drawable(widget->window,
+					widget->style->fg_gc[state],
+					pmap,
+					event->area.x, event->area.y,
+					event->area.x, event->area.y,
+					event->area.width, event->area.height);
+			g_object_unref(pmap);
+
+		}
 	if (GTK_IS_WINDOW(widget->parent))
 	{
 #if GTK_MINOR_VERSION >= 10
@@ -778,6 +800,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 void generate_gauge_background(MtxGaugeFace *gauge)
 {
 	GtkWidget * widget = NULL;
+	GtkStateType state = GTK_STATE_NORMAL;
 	cairo_t *cr = NULL;
 	double dashes[2] = {4.0,4.0};
 	gfloat deg_per_major_tick = 0.0;
@@ -1288,8 +1311,13 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_destroy (cr);
 	/* SAVE copy of this on tmp pixmap */
 	widget = GTK_WIDGET(gauge);
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE(widget);
+#endif
 	gdk_draw_drawable(priv->tmp_pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			widget->style->fg_gc[state],
 			priv->bg_pixmap,
 			0,0,
 			0,0,

@@ -217,12 +217,18 @@ void update_curve (MtxCurve *curve)
 	gchar * message = NULL;
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	GtkStateType state = GTK_STATE_NORMAL;
 
 	widget = GTK_WIDGET(curve);
 
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
 	/* Copy background pixmap to intermediary for final rendering */
 	gdk_draw_drawable(priv->pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			widget->style->fg_gc[state],
 			priv->bg_pixmap,
 			0,0,
 			0,0,
@@ -535,18 +541,27 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	GtkStateType state = GTK_STATE_NORMAL;
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
 
-
-	if (GTK_WIDGET_IS_SENSITIVE(widget))
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
+#if GTK_MINOR_VERSION >= 18
+	if (gtk_widget_is_sensitive(GTK_WIDGET(curve)))
+#else
+	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+#endif
 	{
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
+		gdk_draw_drawable(widget->window,
+				widget->style->fg_gc[state],
+				priv->pixmap,
+				event->area.x, event->area.y,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height);
 	}
 	else
 	{
@@ -554,7 +569,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
 		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				priv->pixmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -566,7 +581,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 		cairo_fill(cr);
 		cairo_destroy(cr);
 		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				pmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -904,7 +919,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 		priv->vertex_selected = FALSE;
 
 		if (priv->auto_rescale_id == 0)
-			priv->auto_rescale_id = g_timeout_add(500,(GtkFunction)auto_rescale,priv);
+			priv->auto_rescale_id = g_timeout_add(500,(GSourceFunc)auto_rescale,priv);
 		if (priv->coord_changed)
 			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;

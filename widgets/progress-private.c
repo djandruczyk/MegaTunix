@@ -14,6 +14,9 @@
  */
 
 
+#undef GTK_DISABLE_DEPRECATED
+#undef GDK_DISABLE_DEPRECATED
+#undef G_DISABLE_DEPRECATED
 #include <config.h>
 #include <cairo/cairo.h>
 #include <progress.h>
@@ -132,7 +135,7 @@ void mtx_progress_bar_real_update (GtkProgress *progress)
 {
 	GtkProgressBar *pbar;
 
-	g_return_if_fail (GTK_IS_PROGRESS (progress));
+	g_return_if_fail (GTK_IS_WIDGET (progress));
 
 	pbar = GTK_PROGRESS_BAR (progress);
 
@@ -292,20 +295,39 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 	GtkProgressBar *pbar;
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
+	GtkStateType state = GTK_STATE_NORMAL;
 
 	g_return_val_if_fail (MTX_IS_PROGRESS_BAR (widget), FALSE);
 
 	pbar = GTK_PROGRESS_BAR (widget);
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
 
-	if (GTK_WIDGET_IS_SENSITIVE(widget))
+#if GTK_MINOR_VERSION >= 18
+        if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
+#else
+	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+#endif
 	{
 
+
+#if GTK_MINOR_VERSION >= 20
+		if (gtk_widget_is_drawable (widget) && pbar->dirty)
+#else
 		if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+#endif
 			mtx_progress_bar_paint (GTK_PROGRESS (pbar));
 
 		g_return_val_if_fail (event != NULL, FALSE);
 
+#if GTK_MINOR_VERSION >= 20
+		if (gtk_widget_is_drawable (widget))
+#else
 		if (GTK_WIDGET_DRAWABLE (widget))
+#endif
 			gdk_draw_drawable (widget->window,
 					widget->style->black_gc,
 					GTK_PROGRESS (widget)->offscreen_pixmap,
@@ -320,7 +342,7 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 				widget->allocation.width,widget->allocation.height,
 				gtk_widget_get_visual(widget)->depth);
 		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				GTK_PROGRESS (widget)->offscreen_pixmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -332,7 +354,7 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 		cairo_fill(cr);
 		cairo_destroy(cr);
 		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				pmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,

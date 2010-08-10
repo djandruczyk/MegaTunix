@@ -58,7 +58,7 @@ Cmd cmd_tbl[] = {
 	{ '}',    1,    NULL,       TYPE_CLOSE,			},
 	{ '*',    1,    c_multi,    TYPE_SUFFIX,		},
 	{ '+',    1,    c_multi,    TYPE_SUFFIX,		},
-//	{ '?',    1,    c_multi,    TYPE_SUFFIX,		},
+/*	{ '?',    1,    c_multi,    TYPE_SUFFIX,		},*/
 	{ '.',    1,    c_any,      TYPE_CMD,			},
 	{ '\\',    2,    c_escape,   TYPE_PREFIX,		},
 	{ 0,    1,    c_achar,    TYPE_CHAR,			}

@@ -74,8 +74,14 @@ void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 			trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 	}
 	g_object_thaw_notify (G_OBJECT (chart));
+#if GTK_MINOR_VERSION >= 18
+	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
+		return;
+#else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(chart)))
 		return;
+#endif
+
 	mtx_stripchart_redraw(chart);
 	return;
 }
@@ -116,8 +122,13 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
 	priv->traces = g_array_append_val(priv->traces,trace);
 
 	g_object_thaw_notify (G_OBJECT (chart));
+#if GTK_MINOR_VERSION >= 18
+	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
+		return trace->id;
+#else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(chart)))
 		return trace->id;
+#endif
 	mtx_stripchart_redraw(chart);
 	return trace->id;
 }
@@ -157,8 +168,13 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 	}
 	g_object_thaw_notify (G_OBJECT (chart));
 	generate_stripchart_static_traces(chart);
+#if GTK_MINOR_VERSION >= 18
+	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
+		return retval;
+#else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(chart)))
 		return retval;
+#endif
 	mtx_stripchart_redraw(chart);
 	return retval;
 }
@@ -180,8 +196,13 @@ gboolean mtx_stripchart_set_name_justification(MtxStripChart *chart, GtkJustific
 	g_object_freeze_notify (G_OBJECT (chart));
 	priv->justification = justification;
 	g_object_thaw_notify (G_OBJECT (chart));
+#if GTK_MINOR_VERSION >= 18
+	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
+		return FALSE;
+#else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(chart)))
 		return FALSE;
+#endif
 	mtx_stripchart_redraw(chart);
 	return TRUE;
 }

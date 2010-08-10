@@ -117,9 +117,19 @@ dnl ===============
 AC_ARG_ENABLE(pis,
 [  --enable-pis         enable pis support [default=no]],, enable_pis=no)
 
-if test "$enable_pis" = yes ; then
+if test "$enable_pis" == yes ; then
 	AC_DEFINE([__PIS_SUPPORT__], [], [User requested PIS firmare support])
 fi
+
+AC_ARG_ENABLE(deprecated,
+[  --enable-deprecated         enable deprecated functions [default=no]],, enable_deprecated=no)
+
+if test "$enable_deprecated" == yes ; then
+	DEPRECATED_CFLAGS=""
+else
+	DEPRECATED_CFLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+fi
+AC_SUBST(DEPRECATED_CFLAGS)
 dnl ===============
 dnl Debugging stuff
 dnl ===============
@@ -258,6 +268,7 @@ Configuration:
 
     Install Path:                       ${prefix}
     General Debugging:                  ${enable_debug}
+    Allow Deprecated functions:         ${enable_deprecated}
     Profiling:                          ${enable_profiling}
     PIS Support:                        ${enable_pis}
 "

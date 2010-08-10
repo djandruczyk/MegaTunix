@@ -194,13 +194,21 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_text_extents_t extents;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	GtkStateType state = GTK_STATE_NORMAL;
 
 	widget = GTK_WIDGET(chart);
+
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
+
 
 	/* Draw new data to trace pixmap */
 	/* Scroll trace pixmap */
 	gdk_draw_drawable(priv->trace_pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			widget->style->fg_gc[state],
 			priv->trace_pixmap,
 			1,0,
 			0,0,
@@ -236,7 +244,7 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	/* Copy background trace pixmap to background for final rendering */
 	gdk_draw_drawable(priv->grat_pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			widget->style->fg_gc[state],
 			priv->trace_pixmap,
 			0,0,
 			0,0,
@@ -448,12 +456,22 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
+	GtkStateType state = GTK_STATE_NORMAL;
 
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
 
-	if (GTK_WIDGET_IS_SENSITIVE(widget))
+#if GTK_MINOR_VERSION >= 18
+	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
+#else
+	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+#endif
 	{
 		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				priv->bg_pixmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -465,7 +483,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
 		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				priv->bg_pixmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -477,7 +495,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 		cairo_fill(cr);
 		cairo_destroy(cr);
 		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				widget->style->fg_gc[state],
 				pmap,
 				event->area.x, event->area.y,
 				event->area.x, event->area.y,
@@ -619,10 +637,17 @@ void render_marker(MtxStripChart *chart)
 	GtkWidget *widget = GTK_WIDGET(chart);
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	GtkStateType state = GTK_STATE_NORMAL;
+
+#if GTK_MINOR_VERSION >= 20
+	state = gtk_widget_get_state(GTK_WIDGET(widget));
+#else
+	state = GTK_WIDGET_STATE (widget);
+#endif
 
 	/* Copy trace+graticule to backing pixmap */
 	gdk_draw_drawable(priv->bg_pixmap,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			widget->style->fg_gc[state],
 			priv->grat_pixmap,
 			0,0,
 			0,0,

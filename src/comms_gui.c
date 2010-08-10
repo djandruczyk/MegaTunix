@@ -61,7 +61,6 @@ gboolean update_errcounts()
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
 	static gboolean pf_red = FALSE;
-	static gboolean gui_red = FALSE;
 	extern volatile gboolean leaving;
 	extern GAsyncQueue *pf_dispatch_queue;
         extern GAsyncQueue *gui_dispatch_queue;

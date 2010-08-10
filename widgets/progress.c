@@ -12,6 +12,10 @@
  */
 
 
+#undef GTK_DISABLE_DEPRECATED
+#undef GDK_DISABLE_DEPRECATED
+#undef G_DISABLE_DEPRECATED
+
 #include <config.h>
 #include <cairo/cairo.h>
 #include <progress.h>
