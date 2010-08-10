@@ -156,8 +156,8 @@ gboolean close_control_socket(void);
 gint socket_get_more_data(gint, void *, gint, gint);
 gboolean open_control_socket(gchar *, gint);
 void notify_slave(gpointer, gpointer);
-gint net_send(gint, guint8 *, gint, gint);
 guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
+gint net_send(gint, guint8 *, gint, gint);
 /* Prototypes */
 
 #endif

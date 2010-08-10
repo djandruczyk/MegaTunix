@@ -1883,7 +1883,11 @@ gint net_send(gint fd, guint8 *buf, gint len, gint flags)
 
 	while (total < len) 
 	{
+#ifdef __WIN32__
+		n = send(fd, (const char *)buf+total, bytesleft, flags);
+#else
 		n = send(fd, buf+total, bytesleft, flags);
+#endif
 		if (n == -1) { return -1; }
 		total += n;
 		bytesleft -= n;
