@@ -55,7 +55,7 @@ int main (int argc, char **argv)
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
-	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
+	(void)g_timeout_add (20, (GSourceFunc)update_gauge, gauge);
 
 
 
