@@ -57,8 +57,6 @@ int main (int argc, char **argv)
 	}
 	g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
-
-
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
 
