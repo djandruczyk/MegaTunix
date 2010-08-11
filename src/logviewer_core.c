@@ -205,7 +205,7 @@ read_again:
 		if (g_strrstr(a_line->str,"\"") != NULL)
 		{
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
-			printf(_("LOG signature is \"%s\"\n"),log_info->signature);
+			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
 			if (offline)
 			{
 				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
