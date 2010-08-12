@@ -167,10 +167,8 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before leave_mutex\n"));
 
 	g_static_mutex_lock(&leave_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after leave_mutex\n"));
 
 
 	/* This makes us wait until the io queue finishes */
@@ -247,22 +245,16 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
 
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
 	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex lock\n"));
 	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	close_serial();
 	unlock_serial();
 
 	/* Grab and release all mutexes to get them to relinquish
 	*/
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before serio_mutex lock\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex lock\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex UNlock\n"));
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

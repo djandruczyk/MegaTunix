@@ -89,17 +89,13 @@ EXPORT gboolean interrogate_ecu()
 	if (offline)
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after lock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
 
 	if (!connected)
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
 //	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
@@ -111,9 +107,7 @@ EXPORT gboolean interrogate_ecu()
 	if ((!tests) || (tests->len < 1))
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
 	thread_widget_set_sensitive("offline_button",FALSE);
@@ -250,9 +244,7 @@ EXPORT gboolean interrogate_ecu()
 		thread_widget_set_sensitive("offline_button",TRUE);
 	}
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
 	//update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
 	set_title(g_strdup(_("Interrogation Complete...")));

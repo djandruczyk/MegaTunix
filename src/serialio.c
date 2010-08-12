@@ -124,9 +124,7 @@ void flush_serial(gint fd, FlushDirection type)
 	if (serial_params->net_mode)
 		return;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() after lock serio_mutex\n"));
 #ifdef __WIN32__
 	if (fd)
 		win32_flush_serial(fd, type);
@@ -147,9 +145,7 @@ void flush_serial(gint fd, FlushDirection type)
 		}
 	}
 #endif	
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() after UNlock serio_mutex\n"));
 }
 
 
@@ -166,23 +162,17 @@ void setup_serial_params(gint baudrate)
 	if (serial_params->open == FALSE)
 		return;
 	/*printf("setup_serial_params entered\n");*/
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after lock serio_mutex\n"));
 #ifdef __WIN32__
 	win32_setup_serial_params(serial_params->fd, baudrate);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after UNlock serio_mutex\n"));
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after lock serio_mutex\n"));
 
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
@@ -272,9 +262,7 @@ void setup_serial_params(gint baudrate)
 	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 
 #endif
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after UNlock serio_mutex\n"));
 	return;
 }
 
@@ -291,9 +279,7 @@ void close_serial()
 	if (serial_params->open == FALSE)
 		return;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after lock serio_mutex\n"));
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
@@ -319,9 +305,7 @@ void close_serial()
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
 	if (!leaving)
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after UNlock serio_mutex\n"));
 	return;
 }
 

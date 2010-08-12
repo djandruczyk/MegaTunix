@@ -123,8 +123,8 @@ gint main(gint argc, gchar ** argv)
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(80,(GtkFunction)pf_dispatcher,NULL);
-	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(200,(GtkFunction)pf_dispatcher,NULL);
+	gui_dispatcher_id = g_timeout_add(40,(GtkFunction)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GtkFunction)early_interrogation,NULL);

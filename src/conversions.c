@@ -67,9 +67,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() after lock reentrant mutex\n"));
 
 	page = (GINT)OBJ_GET(widget,"page");
 	offset = (GINT)OBJ_GET(widget,"offset");
@@ -200,9 +198,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	 if (OBJ_GET(widget,"lookuptable"))
 		return_value = (gint)reverse_lookup(G_OBJECT(widget),tmpi);
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_before_download() after UNlock reentrant mutex\n"));
 	return (return_value);
 }
 
@@ -239,16 +235,12 @@ gfloat convert_after_upload(GtkWidget * widget)
 	extern gint *algorithm;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after lock reentrant mutex\n"));
 
 	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
 	if (ul_complex)
 	{
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
 		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 	}
@@ -349,18 +341,14 @@ gfloat convert_after_upload(GtkWidget * widget)
 	{
 		return_value = tmpi;
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
 		return (return_value);		
 	}
 	/*return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001; */
 	return_value = evaluator_evaluate_x(evaluator,tmpi);
 
 	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": convert_after_upload() after UNlock reentrant mutex\n"));
 	return (return_value);
 }
 

@@ -73,7 +73,7 @@ gboolean pf_dispatcher(gpointer data)
 	Io_Message *message = NULL;
 	extern volatile gboolean leaving;
 	extern volatile gboolean might_be_leaving;
-	/*GTimer *clock;*/
+	GTimer *clock;
 
 	if (!pf_dispatch_queue) /*queue not built yet... */
 	{
@@ -110,10 +110,9 @@ trypop:
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-	/*
+	
 	clock = g_timer_new();
 	g_timer_start(clock);
-	*/
 	if (message->command->post_functions != NULL)
 	{
 		len = message->command->post_functions->len;
@@ -148,7 +147,7 @@ trypop:
 					pf->function();
 			}
 
-	/*		printf("PF Execution time %f\n",g_timer_elapsed(clock, NULL));*/
+
 
 			gdk_threads_enter();
 			while (gtk_events_pending())
@@ -161,6 +160,7 @@ trypop:
 				gtk_main_iteration();
 			}
 			gdk_threads_leave();
+			printf("PF Pending loop execution time %f\n",g_timer_elapsed(clock, NULL));
 		}
 	}
 dealloc:

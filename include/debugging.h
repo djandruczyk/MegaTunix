@@ -34,7 +34,6 @@ typedef enum
 	KEYPARSER	= 1<<10,
 	RTMLOADER	= 1<<11,
 	COMPLEX_EXPR	= 1<<12,
-	MUTEX		= 1<<13,
 	CRITICAL	= 1<<30
 }Dbg_Class;
 
@@ -53,7 +52,6 @@ typedef enum guint
 	KEYPARSER_SHIFT		= 10,
 	RTMLOADER_SHIFT		= 11,
 	COMPLEX_EXPR_SHIFT	= 12,
-	MUTEXT_SHIFT		= 13,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 

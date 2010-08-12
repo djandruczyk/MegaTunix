@@ -324,12 +324,8 @@ gboolean write_data(Io_Message *message)
 	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock write_data mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock write_data mutex\n"));
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock serio_mutex\n"));
 
 	if (output)
 	{
@@ -356,22 +352,14 @@ gboolean write_data(Io_Message *message)
 			case MTX_CMD_WRITE:
 				break;
 		}
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!connected)
 	{
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return FALSE;		/* can't write anything if disconnected */
 	}
 
@@ -433,12 +421,8 @@ gboolean write_data(Io_Message *message)
 			store_new_block(canID,page,offset,data,num_bytes);
 	}
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 	return retval;
 }
 

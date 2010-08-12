@@ -327,9 +327,7 @@ void populate_viewer()
 	extern Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&update_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() after lock reentrant mutex\n"));
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -437,9 +435,7 @@ void populate_viewer()
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&update_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": populate_viewer() after UNlock reentrant mutex\n"));
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 
@@ -900,13 +896,9 @@ EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() before lock update_mutex\n"));
 		g_static_mutex_lock(&update_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() after lock update_mutex\n"));
 		trace_update(force_redraw);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() before UNlock update_mutex\n"));
 		g_static_mutex_unlock(&update_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": update_logview_traces_pf() after UNlock update_mutex\n"));
 		scroll_logviewer_traces();
 	}
 
@@ -929,13 +921,9 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() before lock update_mutex\n"));
 		g_static_mutex_lock(&update_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() after lock update_mutex\n"));
 		trace_update(force_redraw);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() before lock update_mutex\n"));
 		g_static_mutex_unlock(&update_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": pb_update_logview_traces() after lock update_mutex\n"));
 		scroll_logviewer_traces();
 	}
 
