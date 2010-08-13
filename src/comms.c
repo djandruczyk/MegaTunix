@@ -72,13 +72,11 @@ gint comms_test()
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 
-/*	printf("comms test\n"); */
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	/*printf("sending \"C\"\n"); */
 	if (!write_wrapper(serial_params->fd,"C",1,&len))
 	{
 		err_text = (gchar *)g_strerror(errno);
@@ -88,9 +86,7 @@ gint comms_test()
 		return connected;
 	}
 
-/*	printf("reading \n"); */
 	result = read_data(1,NULL,FALSE);
-/*	printf("read %i bytes \n",result); */
 	if (!result) /* Failure,  Attempt MS-II method */
 	{
 		if (!write_wrapper(serial_params->fd,"c",1,&len))

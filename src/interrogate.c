@@ -98,11 +98,12 @@ EXPORT gboolean interrogate_ecu()
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
-//	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
-	set_title(g_strdup(_("Interrogating ECU...")));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
+	//set_title(g_strdup(_("Interrogating ECU...")));
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
+
 
 	if ((!tests) || (tests->len < 1))
 	{
@@ -246,8 +247,8 @@ EXPORT gboolean interrogate_ecu()
 
 	g_static_mutex_unlock(&mutex);
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-	//update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
-	set_title(g_strdup(_("Interrogation Complete...")));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	//set_title(g_strdup(_("Interrogation Complete...")));
 	return interrogated;
 }
 

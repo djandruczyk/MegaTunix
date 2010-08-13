@@ -164,6 +164,7 @@ void *thread_dispatcher(gpointer data)
 				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
 			}
 			g_thread_join(repair_thread);
+			printf("serial repair_thread completed!\n");
 		}
 		if ((!serial_params->open) && (!offline))
 		{
@@ -181,6 +182,7 @@ void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
+
 					gdk_threads_enter();
 					message->status = message->command->function(
 							message->command,

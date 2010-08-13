@@ -81,7 +81,6 @@ gboolean pf_dispatcher(gpointer data)
 		return TRUE;
 	}
 trypop:
-	/*printf("pf_dispatch queue length is %i\n",g_async_queue_length(pf_dispatch_queue));*/
 	if (might_be_leaving)
 		return TRUE;
 	if (leaving)
@@ -89,10 +88,6 @@ trypop:
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-	/*
-	if (g_async_queue_length(pf_dispatch_queue) >40)
-		printf("WARNING: Postfunction dispatch queue is over 40\n");
-	*/
 		
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
@@ -126,7 +121,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-	//		printf("dispatching post function %s\n",pf->name);
+			printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -238,11 +233,11 @@ trypop:
 			}
 
 			val = g_array_index(message->functions,UpdateFunction, i);
-			/*printf("gui_dispatcher\n");*/
+			printf("gui_dispatcher\n");
 			switch ((UpdateFunction)val)
 			{
 				case UPD_LOGBAR:
-					/*printf("logbar update\n");*/
+					printf("logbar update\n");
 					t_message = (Text_Message *)message->payload;
 					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);

@@ -349,10 +349,12 @@ void *serial_repair_thread(gpointer data)
 	 */
 	if (serial_is_open == TRUE)
 	{
+		printf("port is open but throwing errors!\n");
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
 		while (i <= 5)
 		{
+			printf("attempting comms test attempt %i!\n",i);
 			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
@@ -361,7 +363,9 @@ void *serial_repair_thread(gpointer data)
 			}
 			i++;
 		}
+		printf("goingto close serial!\n");
 		close_serial();
+		printf("going to unlock serial!\n");
 		unlock_serial();
 		serial_is_open = FALSE;
 		/* Fall through */
@@ -385,18 +389,18 @@ void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				/*printf ("exiting repair thread immediately\n");*/
-				g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+				printf ("told to exit repair thread immediately\n");
+				g_timeout_add(300,(GtkFunction)queue_function,"kill_conn_warning");
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
 			{
 				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
-				/*printf("File %s, doesn't exist\n",vector[i]);*/
+				printf("File %s, doesn't exist\n",vector[i]);
 
-				/* Wait 100 ms to avoid deadlocking */
-				g_usleep(100000);
+				/* Wait 200 ms to avoid deadlocking */
+				g_usleep(200000);
 				continue;
 			}
 			g_usleep(100000);
