@@ -46,8 +46,10 @@ GAsyncQueue *io_data_queue = NULL;
 GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
 GAsyncQueue *gui_dispatch_queue = NULL;
+GCond *io_dispatch_cond = NULL;
 GCond *gui_dispatch_cond = NULL;
 GCond *pf_dispatch_cond = NULL;
+GCond *statuscounts_cond = NULL;
 GObject *global_data = NULL;
 
 /*!
@@ -74,6 +76,8 @@ gint main(gint argc, gchar ** argv)
 		g_thread_init(NULL);
 	gdk_threads_init();
 	
+	statuscounts_cond = g_cond_new();
+	io_dispatch_cond = g_cond_new();
 	gui_dispatch_cond = g_cond_new();
 	pf_dispatch_cond = g_cond_new();
 	gdk_threads_enter();

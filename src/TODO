@@ -1,5 +1,4 @@
 
-MS2-Extra support
 RTV Slider chooser
 Custom VEtable Widget
 RTT Position/Order save/restore
@@ -8,9 +7,7 @@ Bargraph Dashs
 Fat 3D edit (3d display), multi-vertex scaling
 Complete ground up logviewer rewrite
 XML RealtimeMaps
-XML RuntimeState
-XML RuntimeSliders
 GUI Base RTVars editor (depends on XML RealtimeMaps)
 Backup/Restore Rewrite
 Gauge structure redesign with themes and gauge set containers
-Gauge Needle Alerts. (color chaging needle basedon gauge value)
+Gauge Needle Alerts. (color changing needle based on gauge value)

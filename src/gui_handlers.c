@@ -111,9 +111,6 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern GAsyncQueue *gui_dispatch_queue;
-	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -121,11 +118,12 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
-	gint count = 0;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	GMutex *mutex = g_mutex_new();
 	extern GCond *pf_dispatch_cond;
 	extern GCond *gui_dispatch_cond;
+	extern GCond *io_dispatch_cond;
+	extern GCond *statuscounts_cond;
 
 	if (leaving)
 		return TRUE;
@@ -167,52 +165,39 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-
 	g_static_mutex_lock(&leave_mutex);
 
 
-	/* This makes us wait until the io queue finishes */
-	while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
-	count = 0;
-	while ((g_async_queue_length(gui_dispatch_queue) > 0) && (count < 10))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining gui Dispatch Queue, current length %i\n",g_async_queue_length(gui_dispatch_queue)));
-		g_async_queue_try_pop(gui_dispatch_queue);
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
-	while ((g_async_queue_length(pf_dispatch_queue) > 0) && (count < 10))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining postfunction Dispatch Queue, current length %i\n",g_async_queue_length(pf_dispatch_queue)));
-		g_async_queue_try_pop(pf_dispatch_queue);
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
 	g_mutex_lock(mutex);
-	if (statuscounts_id)
-		g_source_remove(statuscounts_id);
-	statuscounts_id = 0;
+
+	/* IO dispatch queue */
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
+
+	/* PF dispatch queue */
 	if (pf_dispatcher_id)
 		g_source_remove(pf_dispatcher_id);
-	pf_dispatcher_id = 0;
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
+	/* Statuscounts timeout */
+	if (statuscounts_id)
+		g_source_remove(statuscounts_id);
+	statuscounts_id = 0;
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(statuscounts_cond,mutex,&now);
+
+	/* GUI Dispatch timeout */
 	if (gui_dispatcher_id)
 		g_source_remove(gui_dispatcher_id);
 	gui_dispatcher_id = 0;
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
+
 	g_mutex_unlock(mutex);
 
 	save_config();

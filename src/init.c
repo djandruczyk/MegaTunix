@@ -129,8 +129,8 @@ void init(void)
 	serial_params->fd = 0; /* serial port file-descriptor */
 
 	serial_params->errcount = 0; /* I/O error count */
-	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 30;	/* delay between reads in milliseconds */
+	/* default for MS v1.x and 2.x */
+	serial_params->read_wait = 50;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */

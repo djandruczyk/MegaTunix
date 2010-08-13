@@ -198,7 +198,7 @@ void stop_tickler(TicklerType type)
 		case SCOUNTS_TICKLER:
 			if (statuscounts_id)
 				g_source_remove(statuscounts_id);
-				statuscounts_id = 0;
+			statuscounts_id = 0;
 			break;
 		default:
 			break;
@@ -249,7 +249,7 @@ gboolean signal_read_rtvars()
 	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
 	*/
 
-	if ((length > 2) || (pf_length > 15))
+	if ((length > 2) || (pf_length > 10))
 		return TRUE;
 
 	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));

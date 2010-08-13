@@ -73,6 +73,7 @@ gboolean pf_dispatcher(gpointer data)
 	Io_Message *message = NULL;
 	extern volatile gboolean leaving;
 	extern volatile gboolean might_be_leaving;
+	GTimeVal time;
 	GTimer *clock;
 
 	if (!pf_dispatch_queue) /*queue not built yet... */
@@ -89,7 +90,9 @@ trypop:
 		return TRUE;
 	}
 		
-	message = g_async_queue_try_pop(pf_dispatch_queue);
+	g_get_current_time(&time);
+	g_time_val_add(&time,10000);
+	message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
@@ -107,7 +110,6 @@ trypop:
 	}
 	
 	clock = g_timer_new();
-	g_timer_start(clock);
 	if (message->command->post_functions != NULL)
 	{
 		len = message->command->post_functions->len;
@@ -121,7 +123,8 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			//printf("dispatching post function %s\n",pf->name);
+			printf("dispatching post function %s\n",pf->name);
+			g_timer_start(clock);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -141,9 +144,10 @@ trypop:
 				else
 					pf->function();
 			}
+			printf("PF execution time %f\n",g_timer_elapsed(clock, NULL));
 
-
-
+		}
+			g_timer_start(clock);
 			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
@@ -157,7 +161,6 @@ trypop:
 			gdk_flush();
 			gdk_threads_leave();
 			//printf("PF Pending loop execution time %f\n",g_timer_elapsed(clock, NULL));
-		}
 	}
 dealloc:
 	dealloc_message(message);

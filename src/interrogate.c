@@ -1368,7 +1368,47 @@ void interrogate_error(gchar *text, gint num)
  */
 void update_interrogation_gui_pf()
 {
+	GtkWidget *widget = NULL;
+	gfloat min = 0.0;
+	gfloat val = 0.0;
 	extern Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
+	GtkAdjustment *adj = NULL;
+	gdk_threads_enter();
+	widget = lookup_widget("read_wait_spin");
+	if (GTK_IS_SPIN_BUTTON(widget))
+	{
+		printf("found widget!\n");
+		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
+		val = adj->value;
+		printf ("firmware rtvars size %i\n",firmware->rtvars_size);
+		if (firmware->capabilities & MS1)
+		{
+			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));
+			min *= 1.2; /* Add 10% buffer */
+		}
+		else if (firmware->capabilities & PIS)
+		{
+			min = 1000.0*(1.0/(819.2/(firmware->rtvars_size+2.0)));
+			min *= 1.1; /* Add 10% buffer */
+		}
+		else
+		{
+			min = 1000.0*(1.0/(11520.0/(firmware->rtvars_size+5.0)));
+			min *= 1.1; /* Add 10% buffer */
+			if (min < 30)
+				min = 30;
+		}
+
+		printf("current %f, new %f\n",val,min);
+		if (val < min)
+		{
+			val = min;
+			serial_params->read_wait = (gint)val;
+		}
+		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget),min,adj->upper);
+	}
+	gdk_threads_leave();
 	if (firmware->TextVerVia)
 		io_cmd(firmware->TextVerVia,NULL);
 	if (firmware->NumVerVia)

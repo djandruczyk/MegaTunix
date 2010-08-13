@@ -124,17 +124,19 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
+	extern GCond * io_dispatch_cond;
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
+	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	args = OBJ_GET(global_data,"args");
+	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
-	while (1)
+	while (TRUE)
 	{
-		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_data_queue));*/
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
@@ -145,6 +147,7 @@ void *thread_dispatcher(gpointer data)
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
+			g_cond_signal(io_dispatch_cond);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
@@ -164,7 +167,6 @@ void *thread_dispatcher(gpointer data)
 				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
 			}
 			g_thread_join(repair_thread);
-			printf("serial repair_thread completed!\n");
 		}
 		if ((!serial_params->open) && (!offline))
 		{
@@ -196,11 +198,14 @@ void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
+				g_timer_start(clock);
 				message->status = write_data(message);
+				//		printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));
 				gdk_threads_enter();
 				if (message->command->helper_function)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				gdk_threads_leave();
+				//		printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));
 				break;
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/
