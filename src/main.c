@@ -123,11 +123,11 @@ gint main(gint argc, gchar ** argv)
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(20,(GtkFunction)pf_dispatcher,NULL);
-	gui_dispatcher_id = g_timeout_add(35,(GtkFunction)gui_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(20,(GSourceFunc)pf_dispatcher,NULL);
+	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	gdk_threads_add_timeout(500,(GtkFunction)early_interrogation,NULL);
+	gdk_threads_add_timeout(500,(GSourceFunc)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();

@@ -65,7 +65,7 @@ void start_tickler(TicklerType type)
 			if (realtime_id == 0)
 			{
 				flush_rt_arrays();
-				realtime_id = g_timeout_add(serial_params->read_wait,(GtkFunction)signal_read_rtvars,NULL);
+				realtime_id = g_timeout_add(serial_params->read_wait,(GSourceFunc)signal_read_rtvars,NULL);
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE);
 			}
 			else
@@ -73,7 +73,7 @@ void start_tickler(TicklerType type)
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
-				playback_id = gdk_threads_add_timeout((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				playback_id = gdk_threads_add_timeout((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
@@ -94,7 +94,7 @@ void start_tickler(TicklerType type)
 			if (toothmon_id == 0)
 			{
 				signal_toothtrig_read(TOOTHMON_TICKLER);
-				toothmon_id = g_timeout_add(3000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				toothmon_id = g_timeout_add(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
@@ -116,7 +116,7 @@ void start_tickler(TicklerType type)
 			if (trigmon_id == 0)
 			{
 				signal_toothtrig_read(TRIGMON_TICKLER);
-				trigmon_id = g_timeout_add(750,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+				trigmon_id = g_timeout_add(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
@@ -127,7 +127,7 @@ void start_tickler(TicklerType type)
 			if (!((connected) && (interrogated)))
 				break;
 			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+				statuscounts_id = g_timeout_add(100,(GSourceFunc)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;

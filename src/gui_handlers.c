@@ -1116,7 +1116,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
-			g_timeout_add(100,(GtkFunction)set_offline_mode,NULL);
+			g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))
@@ -1559,7 +1559,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rtslider_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GtkFunction)update_rtsliders,NULL);
+			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
 			OBJ_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
 			break;
 		case RTTEXT_FPS:
@@ -1567,7 +1567,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
 			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:
@@ -1575,7 +1575,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"dashboard_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_dashboards,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
 			OBJ_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
 		case VE3D_FPS:
@@ -1583,7 +1583,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"ve3d_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_ve3ds,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
 			OBJ_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
 		case REQ_FUEL_DISP:

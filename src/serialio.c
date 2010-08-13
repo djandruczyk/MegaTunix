@@ -335,7 +335,7 @@ void *serial_repair_thread(gpointer data)
 
 	if (offline)
 	{
-		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
@@ -390,7 +390,7 @@ void *serial_repair_thread(gpointer data)
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				printf ("told to exit repair thread immediately\n");
-				g_timeout_add(300,(GtkFunction)queue_function,"kill_conn_warning");
+				g_timeout_add(300,(GSourceFunc)queue_function,"kill_conn_warning");
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
 				g_thread_exit(0);
 			}

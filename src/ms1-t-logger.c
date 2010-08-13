@@ -281,7 +281,7 @@ void _crunch_trigtooth_data(gint page)
 		if (toothmon_id != 0)
 		{
 			g_source_remove(toothmon_id);
-			toothmon_id = g_timeout_add(ttm_data->sample_time,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			toothmon_id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 		}
 
 	}

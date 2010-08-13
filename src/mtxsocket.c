@@ -1304,7 +1304,7 @@ void *network_repair_thread(gpointer data)
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (offline)
 	{
-		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		g_thread_exit(0);
 	}
 
@@ -1339,7 +1339,7 @@ void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+			g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		if (open_network(args->network_host,args->network_port))
