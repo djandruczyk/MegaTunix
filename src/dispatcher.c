@@ -121,7 +121,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			printf("dispatching post function %s\n",pf->name);
+			//printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -154,8 +154,9 @@ trypop:
 				}
 				gtk_main_iteration();
 			}
+			gdk_flush();
 			gdk_threads_leave();
-			printf("PF Pending loop execution time %f\n",g_timer_elapsed(clock, NULL));
+			//printf("PF Pending loop execution time %f\n",g_timer_elapsed(clock, NULL));
 		}
 	}
 dealloc:
@@ -233,11 +234,11 @@ trypop:
 			}
 
 			val = g_array_index(message->functions,UpdateFunction, i);
-			printf("gui_dispatcher\n");
+			/*printf("gui_dispatcher\n");*/
 			switch ((UpdateFunction)val)
 			{
 				case UPD_LOGBAR:
-					printf("logbar update\n");
+					/*printf("logbar update\n");*/
 					t_message = (Text_Message *)message->payload;
 					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);

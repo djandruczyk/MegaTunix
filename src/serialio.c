@@ -349,12 +349,10 @@ void *serial_repair_thread(gpointer data)
 	 */
 	if (serial_is_open == TRUE)
 	{
-		printf("port is open but throwing errors!\n");
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
 		while (i <= 5)
 		{
-			printf("attempting comms test attempt %i!\n",i);
 			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
@@ -363,9 +361,7 @@ void *serial_repair_thread(gpointer data)
 			}
 			i++;
 		}
-		printf("goingto close serial!\n");
 		close_serial();
-		printf("going to unlock serial!\n");
 		unlock_serial();
 		serial_is_open = FALSE;
 		/* Fall through */
@@ -397,7 +393,6 @@ void *serial_repair_thread(gpointer data)
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
 			{
 				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
-				printf("File %s, doesn't exist\n",vector[i]);
 
 				/* Wait 200 ms to avoid deadlocking */
 				g_usleep(200000);
@@ -468,6 +463,7 @@ void *serial_repair_thread(gpointer data)
 					}
 #endif
 				}
+				g_usleep(100000);
 			}
 		}
 		queue_function("conn_warning");
