@@ -938,7 +938,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern gint realtime_id;
+	extern GThread * realtime_id;
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
 	extern Firmware_Details *firmware;
@@ -1039,7 +1039,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case REBOOT_GETERR:
 			if (offline)
 				break;
-			if (realtime_id > 0)
+			if (realtime_id)
 			{
 				stop_tickler(RTV_TICKLER);
 				restart = TRUE;
@@ -1490,7 +1490,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
-	extern gint realtime_id;
+	extern GThread * realtime_id;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
@@ -1529,12 +1529,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	{
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
-			if (realtime_id > 0)
-			{
-				stop_tickler(RTV_TICKLER);
-				start_tickler(RTV_TICKLER);
-				forced_update=TRUE;
-			}
 			break;
 		case SER_READ_TIMEOUT:
 			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER((gint)value));

@@ -1378,10 +1378,9 @@ void update_interrogation_gui_pf()
 	widget = lookup_widget("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
-		printf("found widget!\n");
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
 		val = adj->value;
-		printf ("firmware rtvars size %i\n",firmware->rtvars_size);
+		//printf ("firmware rtvars size %i\n",firmware->rtvars_size);
 		if (firmware->capabilities & MS1)
 		{
 			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));
@@ -1400,7 +1399,7 @@ void update_interrogation_gui_pf()
 				min = 30;
 		}
 
-		printf("current %f, new %f\n",val,min);
+		//printf("current %f, new %f\n",val,min);
 		if (val < min)
 		{
 			val = min;
