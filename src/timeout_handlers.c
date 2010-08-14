@@ -266,7 +266,9 @@ void signal_read_rtvars(void)
 
 	if (firmware->capabilities & MS2)
 	{
+		gdk_threads_enter();
 		output = initialize_outputdata();
+		gdk_threads_leave();
 		OBJ_SET(output->object,"canID", GINT_TO_POINTER(firmware->canID));
 		OBJ_SET(output->object,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
 		OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
