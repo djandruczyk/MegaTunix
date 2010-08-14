@@ -60,6 +60,7 @@ EXPORT gboolean update_runtime_vars_pf()
 	static gboolean conn_status = FALSE;
 	extern gboolean interrogated;
 	extern volatile gboolean leaving;
+
 	if (leaving)
 		return FALSE;
 
@@ -75,8 +76,6 @@ EXPORT gboolean update_runtime_vars_pf()
 		conn_status = connected;
 		forced_update = TRUE;
 	}
-	if ((count > 60) && (!forced_update))
-		forced_update = TRUE;
 
 	gdk_threads_enter();
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
@@ -196,7 +195,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	GRand *rand = NULL;
+	static GRand *rand = NULL;
 	extern volatile gboolean leaving;
 	if (leaving)
 		return;

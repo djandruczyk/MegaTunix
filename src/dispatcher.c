@@ -123,7 +123,7 @@ trypop:
 			}
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			printf("dispatching post function %s\n",pf->name);
+			/*printf("dispatching post function %s\n",pf->name);*/
 			g_timer_start(clock);
 			if (!pf)
 			{
@@ -144,7 +144,7 @@ trypop:
 				else
 					pf->function();
 			}
-			printf("PF execution time %f\n",g_timer_elapsed(clock, NULL));
+			/*printf("PF execution time %f\n",g_timer_elapsed(clock, NULL));*/
 
 		}
 			g_timer_start(clock);
