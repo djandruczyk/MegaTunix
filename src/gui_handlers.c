@@ -1203,7 +1203,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	switch ((MtxButton)handler)
 	{
 		case MULTI_EXPRESSION:
-			printf("combo MULTI EXPRESSION\n");
+			/*printf("combo MULTI EXPRESSION\n");*/
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
 			{
 				tmpbuf = OBJ_GET(widget,"source_values");
@@ -1213,7 +1213,7 @@ EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 					printf("combo size doesn't match source_values for multi_expression\n");
 					return FALSE;
 				}
-				printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);
+				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
 				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
 			}
