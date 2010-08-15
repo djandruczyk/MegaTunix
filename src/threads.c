@@ -455,7 +455,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, num_bytes %i, data %p\n",page,offset,num_bytes,data));
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
@@ -474,6 +474,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 		ms_handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
+	last_page = page;
 	return;
 }
 

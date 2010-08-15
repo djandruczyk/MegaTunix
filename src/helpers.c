@@ -451,7 +451,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
-				gdk_beep();
+//				gdk_beep();
 			}
 			else
 				ms_goodread_count++;
@@ -491,7 +491,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
-				gdk_beep();
+//				gdk_beep();
 			}
 			else
 				ms_goodread_count++;

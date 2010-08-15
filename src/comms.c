@@ -181,6 +181,7 @@ EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_last = firmware->ecu_data_last;
 	gint i = 0;
+	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
@@ -194,6 +195,7 @@ EXPORT void update_write_status(void *data)
 		goto red_or_black;
 	else
 	{
+		canID = (GINT)OBJ_GET(output->object,"canID");
 		page = (GINT)OBJ_GET(output->object,"page");
 		offset = (GINT)OBJ_GET(output->object,"offset");
 		length = (GINT)OBJ_GET(output->object,"num_bytes");
@@ -222,7 +224,7 @@ EXPORT void update_write_status(void *data)
 						(firmware->table_params[i]->y_page == page) ||
 						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
 			{
-				recalc_table_limits(0,i);
+				recalc_table_limits(canID,i);
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					firmware->table_params[i]->color_update = TRUE;
 				else
@@ -275,6 +277,7 @@ void queue_burn_ecu_flash(gint page)
 {
 	extern Firmware_Details * firmware;
 	extern volatile gboolean offline;
+	extern volatile gboolean last_page;
 	OutputData *output = NULL;
 
 	if (offline)
@@ -286,6 +289,7 @@ void queue_burn_ecu_flash(gint page)
 	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
+	last_page = page;
 }
 
 
