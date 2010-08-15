@@ -89,31 +89,26 @@ EXPORT gboolean interrogate_ecu()
 	if (offline)
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after lock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
 
 	if (!connected)
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
-//	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogating ECU..."));
-	set_title(g_strdup(_("Interrogating ECU...")));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
+	//set_title(g_strdup(_("Interrogating ECU...")));
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
 
+
 	if ((!tests) || (tests->len < 1))
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 		return FALSE;
 	}
 	thread_widget_set_sensitive("offline_button",FALSE);
@@ -250,12 +245,10 @@ EXPORT gboolean interrogate_ecu()
 		thread_widget_set_sensitive("offline_button",TRUE);
 	}
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": interrogate_ecu() after UNlock reentrant mutex\n"));
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-	//update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
-	set_title(g_strdup(_("Interrogation Complete...")));
+	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	//set_title(g_strdup(_("Interrogation Complete...")));
 	return interrogated;
 }
 
@@ -1375,7 +1368,46 @@ void interrogate_error(gchar *text, gint num)
  */
 void update_interrogation_gui_pf()
 {
+	GtkWidget *widget = NULL;
+	gfloat min = 0.0;
+	gfloat val = 0.0;
 	extern Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
+	GtkAdjustment *adj = NULL;
+	gdk_threads_enter();
+	widget = lookup_widget("read_wait_spin");
+	if (GTK_IS_SPIN_BUTTON(widget))
+	{
+		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
+		val = adj->value;
+		//printf ("firmware rtvars size %i\n",firmware->rtvars_size);
+		if (firmware->capabilities & MS1)
+		{
+			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));
+			min *= 1.2; /* Add 10% buffer */
+		}
+		else if (firmware->capabilities & PIS)
+		{
+			min = 1000.0*(1.0/(819.2/(firmware->rtvars_size+2.0)));
+			min *= 1.1; /* Add 10% buffer */
+		}
+		else
+		{
+			min = 1000.0*(1.0/(11520.0/(firmware->rtvars_size+5.0)));
+			min *= 1.1; /* Add 10% buffer */
+			if (min < 30)
+				min = 30;
+		}
+
+		//printf("current %f, new %f\n",val,min);
+		if (val < min)
+		{
+			val = min;
+			serial_params->read_wait = (gint)val;
+		}
+		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget),min,adj->upper);
+	}
+	gdk_threads_leave();
 	if (firmware->TextVerVia)
 		io_cmd(firmware->TextVerVia,NULL);
 	if (firmware->NumVerVia)

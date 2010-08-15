@@ -46,8 +46,11 @@ GAsyncQueue *io_data_queue = NULL;
 GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
 GAsyncQueue *gui_dispatch_queue = NULL;
+GCond *io_dispatch_cond = NULL;
 GCond *gui_dispatch_cond = NULL;
 GCond *pf_dispatch_cond = NULL;
+GCond *statuscounts_cond = NULL;
+GCond *rtv_thread_cond = NULL;
 GObject *global_data = NULL;
 
 /*!
@@ -74,8 +77,11 @@ gint main(gint argc, gchar ** argv)
 		g_thread_init(NULL);
 	gdk_threads_init();
 	
+	statuscounts_cond = g_cond_new();
+	io_dispatch_cond = g_cond_new();
 	gui_dispatch_cond = g_cond_new();
 	pf_dispatch_cond = g_cond_new();
+	rtv_thread_cond = g_cond_new();
 	gdk_threads_enter();
 	gtk_init(&argc, &argv);
 	glade_init();
@@ -123,11 +129,11 @@ gint main(gint argc, gchar ** argv)
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(80,(GtkFunction)pf_dispatcher,NULL);
-	gui_dispatcher_id = g_timeout_add(30,(GtkFunction)gui_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(20,(GSourceFunc)pf_dispatcher,NULL);
+	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	gdk_threads_add_timeout(500,(GtkFunction)early_interrogation,NULL);
+	gdk_threads_add_timeout(500,(GSourceFunc)early_interrogation,NULL);
 
 	ready = TRUE;
 	gtk_main();

@@ -64,9 +64,13 @@ gboolean update_errcounts()
 	extern volatile gboolean leaving;
 	extern GAsyncQueue *pf_dispatch_queue;
         extern GAsyncQueue *gui_dispatch_queue;
+	extern GCond *statuscounts_cond;
 	
 	if (leaving)
+	{
+		g_cond_signal(statuscounts_cond);
 		return TRUE;
+	}
 
 	gdk_threads_enter();
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
@@ -140,5 +144,6 @@ gboolean update_errcounts()
 	g_free(tmpbuf);
 	gdk_threads_leave();
 
+	g_cond_signal(statuscounts_cond);
 	return TRUE;
 }

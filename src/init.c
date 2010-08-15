@@ -129,8 +129,8 @@ void init(void)
 	serial_params->fd = 0; /* serial port file-descriptor */
 
 	serial_params->errcount = 0; /* I/O error count */
-	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 30;	/* delay between reads in milliseconds */
+	/* default for MS v1.x and 2.x */
+	serial_params->read_wait = 50;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */
@@ -325,9 +325,7 @@ void save_config(void)
 	GString *string = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() before lock reentrant mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() after lock reentrant mutex\n"));
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
@@ -494,9 +492,7 @@ void save_config(void)
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
 	cleanup(filename);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() before UNlock reentrant mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": save_config() after UNlock reentrant mutex\n"));
 }
 
 
@@ -632,15 +628,11 @@ void mem_dealloc()
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
 	cleanup(serial_params->port_name);
 	cleanup(serial_params);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() before lock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": mem_dealloc() after lock serio_mutex\n"));
 
 	/* Firmware datastructure.... */
 	for (i=0;i<firmware->total_pages;i++)

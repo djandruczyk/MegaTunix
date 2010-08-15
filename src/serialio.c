@@ -124,9 +124,7 @@ void flush_serial(gint fd, FlushDirection type)
 	if (serial_params->net_mode)
 		return;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() after lock serio_mutex\n"));
 #ifdef __WIN32__
 	if (fd)
 		win32_flush_serial(fd, type);
@@ -147,9 +145,7 @@ void flush_serial(gint fd, FlushDirection type)
 		}
 	}
 #endif	
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": flush_serial() after UNlock serio_mutex\n"));
 }
 
 
@@ -166,23 +162,17 @@ void setup_serial_params(gint baudrate)
 	if (serial_params->open == FALSE)
 		return;
 	/*printf("setup_serial_params entered\n");*/
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after lock serio_mutex\n"));
 #ifdef __WIN32__
 	win32_setup_serial_params(serial_params->fd, baudrate);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after UNlock serio_mutex\n"));
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after lock serio_mutex\n"));
 
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
@@ -272,9 +262,7 @@ void setup_serial_params(gint baudrate)
 	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 
 #endif
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": setup_serial_params() after UNlock serio_mutex\n"));
 	return;
 }
 
@@ -291,9 +279,7 @@ void close_serial()
 	if (serial_params->open == FALSE)
 		return;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after lock serio_mutex\n"));
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
@@ -319,9 +305,7 @@ void close_serial()
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
 	if (!leaving)
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": close_serial() after UNlock serio_mutex\n"));
 	return;
 }
 
@@ -351,7 +335,7 @@ void *serial_repair_thread(gpointer data)
 
 	if (offline)
 	{
-		g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
@@ -401,18 +385,17 @@ void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				/*printf ("exiting repair thread immediately\n");*/
-				g_timeout_add(100,(GtkFunction)queue_function,"kill_conn_warning");
+				printf ("told to exit repair thread immediately\n");
+				g_timeout_add(300,(GSourceFunc)queue_function,"kill_conn_warning");
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
 			{
 				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
-				/*printf("File %s, doesn't exist\n",vector[i]);*/
 
-				/* Wait 100 ms to avoid deadlocking */
-				g_usleep(100000);
+				/* Wait 200 ms to avoid deadlocking */
+				g_usleep(200000);
 				continue;
 			}
 			g_usleep(100000);
@@ -480,6 +463,7 @@ void *serial_repair_thread(gpointer data)
 					}
 #endif
 				}
+				g_usleep(100000);
 			}
 		}
 		queue_function("conn_warning");

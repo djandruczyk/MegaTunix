@@ -387,14 +387,10 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		return;
 	if ((gint)history->len-2 <= 0)
 		return;
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = g_array_index(history, gfloat, history->len-2);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_update_values() after UNlock rtv_mutex\n"));
 
 	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
 		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
@@ -471,12 +467,10 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
-	gdk_threads_enter();
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
 			COL_RTT_LAST, &previous,
 			-1);
-	gdk_threads_leave();
 
 	if (!G_IS_OBJECT(rtt->object))
 		return FALSE;
@@ -487,13 +481,9 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 		return FALSE;
 	if ((gint)history->len-1 <= 0)
 		return FALSE;
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before lock rtv_mutex\n"));
 	g_static_mutex_lock(&rtv_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after lock rtv_mutex\n"));
 	current = g_array_index(history, gfloat, history->len-1);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() before UNlock rtv_mutex\n"));
 	g_static_mutex_unlock(&rtv_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": rtt_foreach() after UNlock rtv_mutex\n"));
 
 	if ((current != previous) || (forced_update))
 	{

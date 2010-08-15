@@ -111,9 +111,6 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern GAsyncQueue *gui_dispatch_queue;
-	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -121,11 +118,12 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
-	gint count = 0;
 	CmdLineArgs *args = OBJ_GET(global_data,"args");
 	GMutex *mutex = g_mutex_new();
 	extern GCond *pf_dispatch_cond;
 	extern GCond *gui_dispatch_cond;
+	extern GCond *io_dispatch_cond;
+	extern GCond *statuscounts_cond;
 
 	if (leaving)
 		return TRUE;
@@ -167,54 +165,39 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before leave_mutex\n"));
-
 	g_static_mutex_lock(&leave_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after leave_mutex\n"));
 
 
-	/* This makes us wait until the io queue finishes */
-	while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
-	count = 0;
-	while ((g_async_queue_length(gui_dispatch_queue) > 0) && (count < 10))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining gui Dispatch Queue, current length %i\n",g_async_queue_length(gui_dispatch_queue)));
-		g_async_queue_try_pop(gui_dispatch_queue);
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
-	while ((g_async_queue_length(pf_dispatch_queue) > 0) && (count < 10))
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining postfunction Dispatch Queue, current length %i\n",g_async_queue_length(pf_dispatch_queue)));
-		g_async_queue_try_pop(pf_dispatch_queue);
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		count++;
-	}
 	g_mutex_lock(mutex);
-	if (statuscounts_id)
-		g_source_remove(statuscounts_id);
-	statuscounts_id = 0;
+
+	/* IO dispatch queue */
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
+
+	/* PF dispatch queue */
 	if (pf_dispatcher_id)
 		g_source_remove(pf_dispatcher_id);
-	pf_dispatcher_id = 0;
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
+	/* Statuscounts timeout */
+	if (statuscounts_id)
+		g_source_remove(statuscounts_id);
+	statuscounts_id = 0;
+	g_get_current_time(&now);
+	g_time_val_add(&now,250000);
+	g_cond_timed_wait(statuscounts_cond,mutex,&now);
+
+	/* GUI Dispatch timeout */
 	if (gui_dispatcher_id)
 		g_source_remove(gui_dispatcher_id);
 	gui_dispatcher_id = 0;
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
+
 	g_mutex_unlock(mutex);
 
 	save_config();
@@ -247,22 +230,16 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
 
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before rtv_mutex lock\n"));
 	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex lock\n"));
 	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after rtv_mutex UNlock\n"));
 
 	close_serial();
 	unlock_serial();
 
 	/* Grab and release all mutexes to get them to relinquish
 	*/
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before serio_mutex lock\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex lock\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after serio_mutex UNlock\n"));
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
@@ -961,7 +938,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern gint realtime_id;
+	extern GThread * realtime_id;
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
 	extern Firmware_Details *firmware;
@@ -1062,7 +1039,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case REBOOT_GETERR:
 			if (offline)
 				break;
-			if (realtime_id > 0)
+			if (realtime_id)
 			{
 				stop_tickler(RTV_TICKLER);
 				restart = TRUE;
@@ -1124,7 +1101,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
-			g_timeout_add(100,(GtkFunction)set_offline_mode,NULL);
+			g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))
@@ -1513,7 +1490,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
-	extern gint realtime_id;
+	extern GThread * realtime_id;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
@@ -1552,12 +1529,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	{
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
-			if (realtime_id > 0)
-			{
-				stop_tickler(RTV_TICKLER);
-				start_tickler(RTV_TICKLER);
-				forced_update=TRUE;
-			}
 			break;
 		case SER_READ_TIMEOUT:
 			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER((gint)value));
@@ -1567,7 +1538,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rtslider_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GtkFunction)update_rtsliders,NULL);
+			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
 			OBJ_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
 			break;
 		case RTTEXT_FPS:
@@ -1575,7 +1546,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_rttext,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
 			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:
@@ -1583,7 +1554,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"dashboard_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_dashboards,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
 			OBJ_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
 		case VE3D_FPS:
@@ -1591,7 +1562,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)OBJ_GET(global_data,"ve3d_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GtkFunction)update_ve3ds,NULL);
+			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
 			OBJ_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
 		case REQ_FUEL_DISP:
@@ -2210,13 +2181,13 @@ void update_widget(gpointer object, gpointer user_data)
 			gtk_main_iteration();
 		}
 	}
-	if (!GTK_IS_OBJECT(widget))
+	if (!GTK_IS_WIDGET(widget))
 		return;
 
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.
 	 */
-	if ((GTK_IS_OBJECT(user_data)) && (widget == user_data))
+	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
 		return;
 
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");

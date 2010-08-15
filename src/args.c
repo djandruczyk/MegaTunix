@@ -136,12 +136,12 @@ void handle_args(gint argc, gchar * argv[])
 			g_free(t);
 			args->autolog_basename = g_strdup_printf("datalog_%.2i-%.2i-%i",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
 		}
-		g_timeout_add(args->autolog_minutes*60000,(GtkFunction)autolog_dump,NULL);
+		g_timeout_add(args->autolog_minutes*60000,(GSourceFunc)autolog_dump,NULL);
 	}
 	if (args->offline)
 	{
 		offline = TRUE;
-		g_timeout_add(1000,(GtkFunction)set_offline_mode,NULL);
+		g_timeout_add(1000,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (args->listen_mode)
 	{

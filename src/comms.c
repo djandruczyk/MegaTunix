@@ -72,13 +72,11 @@ gint comms_test()
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 
-/*	printf("comms test\n"); */
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	/*printf("sending \"C\"\n"); */
 	if (!write_wrapper(serial_params->fd,"C",1,&len))
 	{
 		err_text = (gchar *)g_strerror(errno);
@@ -88,9 +86,7 @@ gint comms_test()
 		return connected;
 	}
 
-/*	printf("reading \n"); */
 	result = read_data(1,NULL,FALSE);
-/*	printf("read %i bytes \n",result); */
 	if (!result) /* Failure,  Attempt MS-II method */
 	{
 		if (!write_wrapper(serial_params->fd,"c",1,&len))
@@ -185,6 +181,7 @@ EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = firmware->ecu_data;
 	guint8 **ecu_data_last = firmware->ecu_data_last;
 	gint i = 0;
+	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
@@ -198,6 +195,7 @@ EXPORT void update_write_status(void *data)
 		goto red_or_black;
 	else
 	{
+		canID = (GINT)OBJ_GET(output->object,"canID");
 		page = (GINT)OBJ_GET(output->object,"page");
 		offset = (GINT)OBJ_GET(output->object,"offset");
 		length = (GINT)OBJ_GET(output->object,"num_bytes");
@@ -226,7 +224,7 @@ EXPORT void update_write_status(void *data)
 						(firmware->table_params[i]->y_page == page) ||
 						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
 			{
-				recalc_table_limits(0,i);
+				recalc_table_limits(canID,i);
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					firmware->table_params[i]->color_update = TRUE;
 				else
@@ -279,6 +277,7 @@ void queue_burn_ecu_flash(gint page)
 {
 	extern Firmware_Details * firmware;
 	extern volatile gboolean offline;
+	extern volatile gboolean last_page;
 	OutputData *output = NULL;
 
 	if (offline)
@@ -290,6 +289,7 @@ void queue_burn_ecu_flash(gint page)
 	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
+	last_page = page;
 }
 
 
@@ -324,12 +324,8 @@ gboolean write_data(Io_Message *message)
 	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock write_data mutex\n"));
 	g_static_mutex_lock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock write_data mutex\n"));
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before lock serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after lock serio_mutex\n"));
 
 	if (output)
 	{
@@ -356,22 +352,14 @@ gboolean write_data(Io_Message *message)
 			case MTX_CMD_WRITE:
 				break;
 		}
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!connected)
 	{
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 		g_static_mutex_unlock(&serio_mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 		g_static_mutex_unlock(&mutex);
-		dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 		return FALSE;		/* can't write anything if disconnected */
 	}
 
@@ -419,7 +407,7 @@ gboolean write_data(Io_Message *message)
 	if (notifies)
 	{
 		thread_update_widget("info_label",MTX_LABEL,g_strdup("Transfer Completed"));
-		gdk_threads_add_timeout(2000,(GtkFunction)reset_infolabel,NULL);
+		gdk_threads_add_timeout(2000,(GSourceFunc)reset_infolabel,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 
 	 * and pending match, in the case of a failed write, the 
@@ -433,12 +421,8 @@ gboolean write_data(Io_Message *message)
 			store_new_block(canID,page,offset,data,num_bytes);
 	}
 
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock serio_mutex\n"));
 	g_static_mutex_unlock(&serio_mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock serio_mutex\n"));
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() before UNlock write_data mutex\n"));
 	g_static_mutex_unlock(&mutex);
-	dbg_func(MUTEX,g_strdup_printf(__FILE__": write_data() after UNlock write_data mutex\n"));
 	return retval;
 }
 

@@ -451,9 +451,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
-				gdk_threads_enter();
-				gdk_beep();
-				gdk_threads_leave();
+//				gdk_beep();
 			}
 			else
 				ms_goodread_count++;
@@ -493,9 +491,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			{
 				ms_reset_count++;
 				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
-				gdk_threads_enter();
-				gdk_beep();
-				gdk_threads_leave();
+//				gdk_beep();
 			}
 			else
 				ms_goodread_count++;
@@ -586,19 +582,19 @@ EXPORT void startup_default_timeouts_pf()
 	set_title(g_strdup(_("Starting up data renderers...")));
 	gdk_threads_leave();
 	rate = (GINT)OBJ_GET(global_data,"rtslider_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rtsliders,NULL);
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL);
 	OBJ_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)OBJ_GET(global_data,"rttext_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_rttext,NULL);
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL);
 	OBJ_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)OBJ_GET(global_data,"dashboard_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_dashboards,NULL);
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL);
 	OBJ_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)OBJ_GET(global_data,"ve3d_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GtkFunction)update_ve3ds,NULL);
+	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
 	OBJ_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
 }
 

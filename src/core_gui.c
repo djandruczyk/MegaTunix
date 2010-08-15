@@ -348,7 +348,8 @@ void finalize_core_gui(GladeXML * xml)
 	ebox = glade_xml_get_widget(xml,"rates_ebox");
 	gtk_tooltips_set_tip(tip,ebox,"These controls set the polling rate of the serial port (i.e. every 30 ms), as well as the update rates for the runtime text, runtime sliders, and dashboards.  The Datalogging always happens at the raw serial polling rate.  This allows you to reduce the update rate of other things that are less relevant and conserver CPU resources for slower systems.",NULL);
 
-	widget = glade_xml_get_widget(xml,"read_delay_spin");
+	widget = glade_xml_get_widget(xml,"read_wait_spin");
+	register_widget("read_wait_spin",widget);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),serial_params->read_wait);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
 

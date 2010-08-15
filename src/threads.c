@@ -124,17 +124,19 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
+	extern GCond * io_dispatch_cond;
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
+	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	args = OBJ_GET(global_data,"args");
+	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
-	while (1)
+	while (TRUE)
 	{
-		/*printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_data_queue));*/
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
@@ -145,6 +147,7 @@ void *thread_dispatcher(gpointer data)
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
+			g_cond_signal(io_dispatch_cond);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
@@ -181,6 +184,7 @@ void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
+
 					gdk_threads_enter();
 					message->status = message->command->function(
 							message->command,
@@ -194,11 +198,14 @@ void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
+				g_timer_start(clock);
 				message->status = write_data(message);
+				//		printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));
 				gdk_threads_enter();
 				if (message->command->helper_function)
 					message->command->helper_function(message, message->command->helper_func_arg);
 				gdk_threads_leave();
+				//		printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));
 				break;
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/
@@ -448,7 +455,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, num_bytes %i, data %p\n",page,offset,num_bytes,data));
+	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
 	output = initialize_outputdata();
 	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
 	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
@@ -467,6 +474,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 		ms_handle_page_change(page,last_page);
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
+	last_page = page;
 	return;
 }
 

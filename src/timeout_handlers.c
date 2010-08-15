@@ -27,7 +27,7 @@
 #include <timeout_handlers.h>
 #include <threads.h>
 
-gint realtime_id = 0;
+GThread *realtime_id = NULL;
 gint playback_id = 0;
 gint toothmon_id = 0;
 gint statuscounts_id = 0;
@@ -41,15 +41,15 @@ extern GObject *global_data;
  enum passed to it.
  \param type (TicklerType enum) is an enum passed which is used to know 
  which timeout to fire up.
- \see signal_read_rtvars
+ \see signal_read_rtvars_thread signal_read_rtvars
  */
 void start_tickler(TicklerType type)
 {
-	extern Serial_Params *serial_params;
 	extern volatile gboolean offline;
 	extern gboolean rtvars_loaded;
 	extern gboolean connected;
 	extern gboolean interrogated;
+	extern GCond *rtv_thread_cond;
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -62,10 +62,15 @@ void start_tickler(TicklerType type)
 				update_logbar("comms_view",NULL,_("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE);
 				break;
 			}
-			if (realtime_id == 0)
+			if (!realtime_id)
 			{
 				flush_rt_arrays();
-				realtime_id = g_timeout_add(serial_params->read_wait,(GtkFunction)signal_read_rtvars,NULL);
+
+				//realtime_id = g_timeout_add(serial_params->read_wait,(GSourceFunc)signal_read_rtvars,NULL);
+				realtime_id = g_thread_create(signal_read_rtvars_thread,
+						NULL, /* Thread args */
+						TRUE, /* Joinable */
+						NULL); /*GError Pointer */
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE);
 			}
 			else
@@ -73,28 +78,28 @@ void start_tickler(TicklerType type)
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
-				playback_id = gdk_threads_add_timeout((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				playback_id = gdk_threads_add_timeout((GINT)OBJ_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
 		case TOOTHMON_TICKLER:
 			if (offline)
 				break;
-			if (realtime_id != 0)
+			if (realtime_id)
 			{
 				/* TTM and Realtime are mutulally exclusive,
 				 * and TTM takes precedence,  so disabled 
 				 * realtime, and manually fire it once per
 				 * TTM read so the gauges will still update
 				 */
-				g_source_remove(realtime_id);
+				g_cond_signal(rtv_thread_cond);
 				restart_realtime = TRUE;
-				realtime_id = 0;
+				realtime_id = NULL;
 			}
 			if (toothmon_id == 0)
 			{
 				signal_toothtrig_read(TOOTHMON_TICKLER);
-				toothmon_id = g_timeout_add(3000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				toothmon_id = g_timeout_add(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
@@ -102,21 +107,21 @@ void start_tickler(TicklerType type)
 		case TRIGMON_TICKLER:
 			if (offline)
 				break;
-			if (realtime_id != 0)
+			if (realtime_id)
 			{
 				/* TTM and Realtime are mutually exclusive,
 				 * and TTM takes precedence,  so disabled 
 				 * realtime, and manually fire it once per
 				 * TTM read so the gauges will still update
 				 */
-				g_source_remove(realtime_id);
+				g_cond_signal(rtv_thread_cond);
 				restart_realtime = TRUE;
-				realtime_id = 0;
+				realtime_id = NULL;
 			}
 			if (trigmon_id == 0)
 			{
 				signal_toothtrig_read(TRIGMON_TICKLER);
-				trigmon_id = g_timeout_add(750,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+				trigmon_id = g_timeout_add(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
@@ -127,7 +132,7 @@ void start_tickler(TicklerType type)
 			if (!((connected) && (interrogated)))
 				break;
 			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+				statuscounts_id = g_timeout_add(100,(GSourceFunc)update_errcounts,NULL);
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;
@@ -146,16 +151,17 @@ void start_tickler(TicklerType type)
  */
 void stop_tickler(TicklerType type)
 {
-	extern Serial_Params *serial_params;
 	extern volatile gboolean leaving;
+	extern GCond *rtv_thread_cond;
 	switch (type)
 	{
 		case RTV_TICKLER:
 			if (realtime_id)
 			{
-				g_source_remove(realtime_id);
+//				g_source_remove(realtime_id);
+				g_cond_signal(rtv_thread_cond);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE);
-				realtime_id = 0;
+				realtime_id = NULL;
 			}
 			else
 				update_logbar("comms_view","warning",_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE);
@@ -198,7 +204,7 @@ void stop_tickler(TicklerType type)
 		case SCOUNTS_TICKLER:
 			if (statuscounts_id)
 				g_source_remove(statuscounts_id);
-				statuscounts_id = 0;
+			statuscounts_id = 0;
 			break;
 		default:
 			break;
@@ -208,55 +214,61 @@ void stop_tickler(TicklerType type)
 
 
 /*!
- \brief signal_read_rtvars() is called by a GTK+ timeout on a periodic basis
+ \brief signal_read_rtvars_thread() is thread which fires off the read msg
  to get a new set of realtiem variables.  It does so by queing messages to
  a thread which handles I/O.  This function will check the queue depth and 
  if the queue is backed up it will skip sending a request for data, as that 
  will only aggravate the queue roadblock.
- \returns TRUE
+ \returns 0 on signal to exit
  */
-gboolean signal_read_rtvars()
+void * signal_read_rtvars_thread(gpointer data)
 {
-	gint length = 0;
-	gint pf_length = 0;
-	OutputData *output = NULL;
-	extern Firmware_Details *firmware;
+	extern Serial_Params *serial_params;
 	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
-	/*extern GAsyncQueue *gui_dispatch_queue;*/
-	extern gboolean rtvars_loaded;
-	extern volatile gboolean leaving;
-	extern volatile gboolean might_be_leaving;
+	extern GCond *rtv_thread_cond;
+	GMutex * mutex = g_mutex_new();
+	GTimeVal time;
 
-	if (leaving)
-		return FALSE;
-	if (might_be_leaving)
-		return TRUE;
+	g_mutex_lock(mutex);
+	while (TRUE)
+	{
 
-	if (!rtvars_loaded)
-		return TRUE;
+		/* Auto-throttling if gui gets sluggish */
+		while (( g_async_queue_length(io_data_queue) > 2) || 
+				(g_async_queue_length(pf_dispatch_queue) > 8))
+			g_usleep(10000);
 
-	length = g_async_queue_length(io_data_queue);
-	pf_length = g_async_queue_length(pf_dispatch_queue);
 
-	/* If queue depth is too great we should not make the problem worse
-	 * so we skip a call as we're probably trying to go faster than the 
-	 * MS and/or serial port can go....
-	 */
-	/*
-	printf("Queue length is %i requests long\n",length);
-	printf("PF Dispatch queue length is %i requests long\n", g_async_queue_length(pf_dispatch_queue));
-	printf("Gui Dispatch queue length is %i requests long\n", g_async_queue_length(gui_dispatch_queue));
-	*/
+		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
+		signal_read_rtvars();
 
-	if ((length > 2) || (pf_length > 15))
-		return TRUE;
+		g_get_current_time(&time);
+		g_time_val_add(&time,serial_params->read_wait*1000);
+		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
+		{
+			g_mutex_unlock(mutex);
+			g_mutex_free(mutex);
+			g_thread_exit(0);
+		}
+	}
+}
 
-	dbg_func(IO_MSG,g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
+
+/*!
+ \brief signal_read_rtvars() sends io message to I/O core to tell ms to send 
+ back runtime vars
+ */
+void signal_read_rtvars(void)
+{
+	OutputData *output = NULL;
+	extern Firmware_Details *firmware;
 
 	if (firmware->capabilities & MS2)
 	{
+		gdk_threads_enter();
 		output = initialize_outputdata();
+		gdk_threads_leave();
 		OBJ_SET(output->object,"canID", GINT_TO_POINTER(firmware->canID));
 		OBJ_SET(output->object,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
 		OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
@@ -265,7 +277,6 @@ gboolean signal_read_rtvars()
 	}
 	else
 		io_cmd(firmware->rt_command,NULL);			
-	return TRUE;	/* Keep going.... */
 }
 
 

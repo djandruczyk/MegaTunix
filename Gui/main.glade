@@ -1366,7 +1366,7 @@
                                                 <property name="n_columns">2</property>
                                                 <property name="column_spacing">5</property>
                                                 <child>
-                                                  <widget class="GtkSpinButton" id="read_delay_spin">
+                                                  <widget class="GtkSpinButton" id="read_wait_spin">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="adjustment">20 10 5000 1 10 0</property>
@@ -2058,8 +2058,14 @@
                           <widget class="GtkImageMenuItem" id="curve_editor_menuitem">
                             <property name="label">Curve Wizard</property>
                             <property name="visible">True</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_stock">False</property>
+                            <child internal-child="image">
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="yalign">0.46000000834465027</property>
+                                <property name="stock">gtk-dialog-question</property>
+                              </widget>
+                            </child>
                           </widget>
                         </child>
                       </widget>
