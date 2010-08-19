@@ -277,7 +277,6 @@ void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
 	gtk_text_buffer_get_iter_at_mark(buffer,&end_iter,end);
 
 	text = gtk_text_buffer_get_text(buffer,&insert_iter,&end_iter,TRUE);
-	printf("insert text \"%s\"\n",text);
 }
 
 

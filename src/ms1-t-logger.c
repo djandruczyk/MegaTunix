@@ -217,6 +217,9 @@ void _crunch_trigtooth_data(gint page)
 	}
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
+	/*
+	printf("min %i, max %i\n",min,max);
+	*/
 	/* Ratio of min to max,  may not work for complex wheel
 	 * patterns
 	 */
@@ -266,7 +269,7 @@ void _crunch_trigtooth_data(gint page)
 		printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
 		printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
 		*/
-		suggested_sample_time = 186000/((1.0/(((float)min*ttm_data->units)/1000000.0)));
+		suggested_sample_time = 186000.0/((1.0/(((float)min*ttm_data->units)/1000000.0)));
 		if (suggested_sample_time < 0)
 			suggested_sample_time = 0;
 		min_sampling_time = 500; /* milliseconds */
@@ -462,6 +465,7 @@ void update_trigtooth_display(gint page)
 
 EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 {
+	GtkWidget *tmpwidget = NULL;
 	gint handler = (GINT)OBJ_GET(widget, "handler");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
@@ -470,22 +474,30 @@ EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 		{
 
 			case START_TOOTHMON_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
+				tmpwidget = lookup_widget("triggerlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				start_tickler(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
+				tmpwidget = lookup_widget("toothlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
 			case STOP_TOOTHMON_LOGGER:
 				stop_tickler(TOOTHMON_TICKLER);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),TRUE);
+				tmpwidget = lookup_widget("triggerlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
 				stop_tickler(TRIGMON_TICKLER);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),TRUE);
+				tmpwidget = lookup_widget("toothlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			default:
 				break;

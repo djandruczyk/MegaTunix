@@ -145,6 +145,7 @@ EcuState detect_ecu(gint fd)
 	{
 		message = g_strndup(((gchar *)buf),total_read);
 		/* Check for "what" or "Boot" */
+		printf("detect ecu, message \"%s\"\n",message);
 		if (g_strrstr_len(message,total_read, "what"))
 		{
 			g_free(message);
