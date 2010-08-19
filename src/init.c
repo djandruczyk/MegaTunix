@@ -106,7 +106,7 @@ void init(void)
 	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
 	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(25));
-	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(20));
+	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
 	OBJ_SET(global_data,"hidden_list",hidden_list);
@@ -121,7 +121,7 @@ void init(void)
 	cleanup(OBJ_GET(global_data,"potential_ports"));
 #ifdef __WIN32__
 	OBJ_SET(global_data,"override_port",g_strdup("COM1"));
-	OBJ_SET(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9"));
+	OBJ_SET(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"));
 #else
 	OBJ_SET(global_data,"override_port",g_strdup("/dev/ttyS0"));
 	 OBJ_SET(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"));

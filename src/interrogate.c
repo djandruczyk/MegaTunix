@@ -1384,7 +1384,7 @@ void update_interrogation_gui_pf()
 		if (firmware->capabilities & MS1)
 		{
 			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));
-			min *= 1.2; /* Add 10% buffer */
+			min *= 1.2; /* Add 20% buffer */
 		}
 		else if (firmware->capabilities & PIS)
 		{
@@ -1394,18 +1394,20 @@ void update_interrogation_gui_pf()
 		else
 		{
 			min = 1000.0*(1.0/(11520.0/(firmware->rtvars_size+5.0)));
-			min *= 1.1; /* Add 10% buffer */
+			min *= 1.2; /* Add 20% buffer */
 			if (min < 30)
 				min = 30;
 		}
 
-		//printf("current %f, new %f\n",val,min);
-		if (val < min)
+		if (val <= min)
 		{
-			val = min+3;
+			/* Safety net */
+			val = min + 10;
 			serial_params->read_wait = (gint)val;
 		}
-		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget),min,adj->upper);
+		adj->lower = min;
+		adj->value = val;
+		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(widget),adj);
 	}
 	gdk_threads_leave();
 	if (firmware->TextVerVia)
