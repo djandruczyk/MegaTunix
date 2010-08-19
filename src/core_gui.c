@@ -72,7 +72,7 @@ int setup_gui()
 	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
 	{
-		printf(_("ERROR! Could NOT locate file %s"),fname);
+		printf(_("ERROR! Could NOT locate file %s.\n - Did you forget to run \"sudo make install\" ?\n"),fname);
 		g_free(fname);
 		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i> ??\n\n"));
 

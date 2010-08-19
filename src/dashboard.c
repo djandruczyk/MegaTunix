@@ -1147,6 +1147,7 @@ gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 	gchar *tmpbuf = NULL;
 	Dash_Gauge *d_gauge = NULL;
 
+	g_static_mutex_lock(&dash_mutex);
 	tmpbuf = g_strdup_printf("dash_%i",(GINT)user_data);
 	if (g_strrstr((gchar *)key,tmpbuf) != NULL)
 	{
@@ -1155,12 +1156,16 @@ gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 		d_gauge = (Dash_Gauge *)value;
 		g_free(d_gauge->source);
 		if (GTK_IS_WIDGET(d_gauge->dash))
+		{
 			gtk_widget_destroy(gtk_widget_get_toplevel(d_gauge->dash));
+			g_static_mutex_unlock(&dash_mutex);
+		}
 		return TRUE;
 	}
 	else
 		g_free(tmpbuf);
 
+	g_static_mutex_unlock(&dash_mutex);
 	return FALSE;
 }
 

@@ -31,7 +31,7 @@ void load_comm_xml(gchar *filename)
 
 	if (filename == NULL)
 	{
-		printf(_("comm xml filename is NULL!\n"));
+		dbg_func(CRITICAL,g_strdup(_("comm xml filename is NULL!\n")));
 		return;
 	}
 
@@ -42,7 +42,7 @@ void load_comm_xml(gchar *filename)
 
 	if (doc == NULL)
 	{
-		printf(_("error: could not parse file %s\n"),filename);
+		dbg_func(CRITICAL,g_strdup_printf(_("error: could not parse file %s\n"),filename));
 		return;
 	}
 
@@ -87,7 +87,7 @@ void load_potential_args(GHashTable *arguments, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, get_potential_arg_name, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, get_potential_arg_name, xml node is empty!!\n")));
 		return;
 	}
 	cur_node = node->children;
@@ -115,7 +115,7 @@ void load_commands(GHashTable *commands_hash, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, get_potential_arg_name, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, load_commands, xml node is empty!!\n")));
 		return;
 	}
 	cur_node = node->children;
@@ -145,7 +145,7 @@ void load_arg_details(PotentialArg *arg, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, load_arg_details, xml node is empty!!\n")));
 		return;
 	}
 	cur_node = node->children;
@@ -198,7 +198,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, load_command_section, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, load_cmd_details, xml node is empty!!\n")));
 		return;
 	}
 	cur_node = node->children;
@@ -276,7 +276,7 @@ void load_cmd_args(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, load_cmd_arguments, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, load_cmd_args, xml node is empty!!\n")));
 		return;
 	}
 	cur_node = node->children;
@@ -305,7 +305,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		printf(_("ERROR, load_cmd_post_functions, xml node is empty!!\n"));
+		dbg_func(CRITICAL,g_strdup(_("ERROR, load_cmd_post_functions, xml node is empty!!\n")));
 		return;
 	}
 
@@ -322,7 +322,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,pf->name,(void *)&pf->function);
 				if (!(pf->function))
-					printf(_("ERROR Post Function %s is NULL\n"),pf->name);
+					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function \"%s\" is NULL!!\n"),pf->name));
 				pf->w_arg = FALSE;
 				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
@@ -335,7 +335,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				if (module)
 					g_module_symbol(module,pf->name,(void *)&pf->function_w_arg);
 				if (!(pf->function_w_arg))
-					printf(_("ERROR Post Function w/arg %s is NULL\n"),pf->name);
+					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function w/arg \"%s\" is NULL!!\n"),pf->name));
 				pf->w_arg = TRUE;
 				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);

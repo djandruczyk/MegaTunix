@@ -1402,7 +1402,7 @@ void update_interrogation_gui_pf()
 		//printf("current %f, new %f\n",val,min);
 		if (val < min)
 		{
-			val = min;
+			val = min+3;
 			serial_params->read_wait = (gint)val;
 		}
 		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget),min,adj->upper);
