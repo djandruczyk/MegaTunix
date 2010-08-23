@@ -77,23 +77,23 @@ bind_to_list=ign
 
 [rotary_mode_table]
 keys=bind_to_list
-bind_to_list=rotary
+bind_to_list=rotary,ign
 
 [import_export_frame]
 keys=bind_to_list
-bind_to_list=rotary
+bind_to_list=rotary,ign
 
 [tracking_frame]
 keys=bind_to_list
-bind_to_list=rotary
+bind_to_list=rotary,ign
 
 [gauge_table]
 keys=bind_to_list
-bind_to_list=rotary
+bind_to_list=rotary,ign
 
 [basetable]
 keys=bind_to_list
-bind_to_list=rotary
+bind_to_list=rotary,ign
 
 #----- Labels ----------------------------------------------------------------
 
