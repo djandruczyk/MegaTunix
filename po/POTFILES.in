@@ -36,12 +36,14 @@ Gui/ms2-e-ignition.glade
 Gui/ms2-e-nitrous_staging_orfc.glade
 Gui/ms2-e-noise_lag.glade
 Gui/ms2-e-rotary-split.glade
+Gui/ms2-e-runtime.glade
 Gui/ms2-e-toothtrigger.glade
 Gui/ms2-globals.glade
 Gui/ms2-idle_ego_rev.glade
 Gui/ms2-ignition.glade
 Gui/ms2-knock_dwell.glade
 Gui/ms2-misc-fuel.glade
+Gui/ms2-runtime.glade
 Gui/ms2-user_outputs.glade
 Gui/ms2-warmup.glade
 Gui/ms2-xtau.glade
@@ -182,12 +184,10 @@ widgets/gauge-demo.c
 widgets/gauge-private.c
 widgets/gauge-xml.c
 widgets/pie-demo.c
-widgets/piedemo.c
 widgets/piegauge.c
 widgets/piegauge-private.c
 widgets/progress.c
 widgets/progress-demo.c
-widgets/progressdemo.c
 widgets/progress-private.c
 widgets/stripchart.c
 widgets/stripchart-demo.c
