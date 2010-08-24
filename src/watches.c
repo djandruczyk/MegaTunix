@@ -32,12 +32,12 @@ static GHashTable *watch_hash;
  */
 EXPORT void fire_off_rtv_watches_pf()
 {
-	gdk_threads_enter();
 	if (watch_hash)
 	{
+		gdk_threads_enter();
 		g_hash_table_foreach(watch_hash,process_watches,NULL);
+		gdk_threads_leave();
 	}
-	gdk_threads_leave();
 }
 
 guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean one_shot,gchar *fname, gpointer user_data)

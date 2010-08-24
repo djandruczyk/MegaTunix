@@ -128,8 +128,13 @@ gint main(gint argc, gchar ** argv)
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
+//	Debugging tool to monitor how busy the dispatcher timeout gets
+//	g_thread_create(clock_watcher,
+//			NULL, /* Thread args */
+//			TRUE, /* Joinable */
+//			NULL); /*GError Pointer */
 
-	pf_dispatcher_id = g_timeout_add(20,(GSourceFunc)pf_dispatcher,NULL);
+	pf_dispatcher_id = g_timeout_add(12,(GSourceFunc)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */

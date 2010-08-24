@@ -19,6 +19,7 @@
 /* Prototypes */
 gboolean pf_dispatcher(gpointer);
 gboolean gui_dispatcher(gpointer);
+void *clock_watcher(gpointer);
 /* Prototypes */
 
 #endif

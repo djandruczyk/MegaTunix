@@ -367,7 +367,6 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	extern gboolean force_page_change;
 	extern volatile gboolean offline;
 
-
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
 

@@ -54,7 +54,7 @@ extern GAsyncQueue *gui_dispatch_queue;
 extern GObject *global_data;
 extern GCond *pf_dispatch_cond;
 extern GCond *gui_dispatch_cond;
-
+static GTimer *ticker;
 
 /*!
  \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second checking
@@ -69,19 +69,21 @@ gboolean pf_dispatcher(gpointer data)
 	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;
-	gint count = 0;
 	Io_Message *message = NULL;
 	extern volatile gboolean leaving;
 	extern volatile gboolean might_be_leaving;
 	GTimeVal time;
-	GTimer *clock;
+
+	if (!ticker)
+		ticker = g_timer_new();
+	else	
+		g_timer_start(ticker);
 
 	if (!pf_dispatch_queue) /*queue not built yet... */
 	{
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-trypop:
 	if (might_be_leaving)
 		return TRUE;
 	if (leaving)
@@ -89,10 +91,11 @@ trypop:
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-		
+
 	g_get_current_time(&time);
-	g_time_val_add(&time,10000);
-	message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
+	g_time_val_add(&time,5000);
+	//message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
+	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
@@ -108,8 +111,7 @@ trypop:
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-	
-	clock = g_timer_new();
+
 	if (message->command->post_functions != NULL)
 	{
 		len = message->command->post_functions->len;
@@ -124,7 +126,6 @@ trypop:
 
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			/*printf("dispatching post function %s\n",pf->name);*/
-			g_timer_start(clock);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -144,36 +145,24 @@ trypop:
 				else
 					pf->function();
 			}
-			/*printf("PF execution time %f\n",g_timer_elapsed(clock, NULL));*/
 
 		}
-			g_timer_start(clock);
-			gdk_threads_enter();
-			while (gtk_events_pending())
-			{
-				if (leaving)
-				{
-					gdk_threads_leave();
-					goto dealloc;
-				}
-				gtk_main_iteration();
-			}
-			gdk_flush();
-			gdk_threads_leave();
-			//printf("PF Pending loop execution time %f\n",g_timer_elapsed(clock, NULL));
 	}
-dealloc:
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
-	count++;
-	/* try to handle up to 15 messages at a time.  If this is 
-	 * set too high, we can cause the timeout to hog the gui if it's
-	 * too low, things can fall behind. 
-	 * */
-/*	printf("PF Execution time for %i functions %f\n",len,g_timer_elapsed(clock, NULL));*/
-	if((count < 8) && (!leaving))
-		goto trypop;
+
+	gdk_threads_enter();
+	while (gtk_events_pending())
+	{
+		if (leaving)
+			goto fast_exit;
+		gtk_main_iteration();
+	}
+	//gdk_flush();
+fast_exit:
+	gdk_threads_leave();
 	g_cond_signal(pf_dispatch_cond);
+	g_timer_stop(ticker);
 	return TRUE;
 }
 
@@ -337,4 +326,15 @@ dealloc:
 	/*printf("returning\n");*/
 	g_cond_signal(gui_dispatch_cond);
 	return TRUE;
+}
+
+
+void *clock_watcher(gpointer data)
+{
+	while(TRUE)
+	{
+		g_usleep(500000);
+		printf ("Dispatcher time consumed over 0.5 seconds %.2f %%\n",100.0*(g_timer_elapsed(ticker,NULL)/0.5));
+		g_timer_reset(ticker);
+	}
 }
