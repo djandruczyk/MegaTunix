@@ -237,7 +237,7 @@ void * signal_read_rtvars_thread(gpointer data)
 		/* Auto-throttling if gui gets sluggish */
 		while (( g_async_queue_length(io_data_queue) > 2) || 
 				(g_async_queue_length(pf_dispatch_queue) > 8))
-			g_usleep(10000);
+			g_usleep(5000);
 
 
 		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
