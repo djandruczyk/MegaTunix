@@ -1,16 +1,16 @@
 # Spanish translations for megatunix package.
 # Copyright (C) 2010 THE megatunix'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the megatunix package.
-# David Andruczyk <djandruczyk@yahoo.com>, 2010.
 # 
+# David Andruczyk <djandruczyk@yahoo.com>, 2010., 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-20 17:33-0400\n"
-"PO-Revision-Date: 2010-05-12 17:34-0400\n"
+"PO-Revision-Date: 2010-08-31 15:20-0400\n"
 "Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
-"Language-Team: Spanish\n"
+"Language-Team: Spanish <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,6 +29,15 @@ msgid ""
 "red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape "
 "will cancel an edit and return to the previous value."
 msgstr ""
+"El AFR entradas de control de la cantidad de combustible se inyecta en el "
+"motor. Se refieren a la eficiencia volumétrica del motor. Si la variable se "
+"ha dimensionado adecuadamente Req_Fuel el motor debe estar al 100% en AFR "
+"par máximo. Estas entradas son todas relativas y se puede escalar hacia "
+"arriba una Req_Fuel baja o hacia abajo con un Req_Fuel alta. La edición es "
+"realizada por cualquiera de + / -, Re Pág / Av Pág, o escribiendo un valor "
+"por encima del valor actual. El valor se pondrá rojo durante una edición y "
+"no se enviará hasta que pulse intro. Golpear a escapar, se cancelará una "
+"edición y volver al valor anterior."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:3
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:3
@@ -44,6 +53,16 @@ msgid ""
 "during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape "
 "will cancel an edit and return to the previous value."
 msgstr ""
+"La carga (ya se trate de MAP o TPS) contenedores en combinación con los "
+"cubos de RPM en la parte inferior de la AFRtable definir los vértices "
+"(puntos en el mapa AFR). La ECU interpolar entre vértices proporcionan una "
+"transición suave entre los vértices en el mapa. La vista 3D muestra esto "
+"gráficamente. NOTA: La ECU NO extrapolar más allá del borde de la mesa. Los "
+"valores se sujetan en las fronteras. La edición es realizada por cualquiera "
+"de + / -, Re Pág / Av Pág, o escribiendo un valor por encima del valor "
+"actual. El valor se pondrá rojo durante una edición y no se enviará hasta "
+"que pulse intro. Golpear a escapar, se cancelará una edición y volver al "
+"valor anterior."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:4
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:4
@@ -58,6 +77,15 @@ msgid ""
 "WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit "
 "and return to the previous value."
 msgstr ""
+"Los contenedores RPM en combinación con los cubos de carga en el lado "
+"izquierdo de la AFRtable definir los vértices (puntos en el mapa AFR). La "
+"ECU interpolar entre vértices proporcionar una transición suave entre los "
+"puntos de la AFRmap. La vista 3D muestra esto gráficamente. NOTA: el ECU NO "
+"extrapolar más allá del borde de la mesa. Los valores se sujetan en las "
+"fronteras. La edición es realizada por cualquiera de + / -, Re Pág / Av Pág, "
+"o escribiendo un valor por encima del valor actual. El valor se pondrá rojo "
+"durante una edición y no se enviará hasta que pulse intro. Golpear a "
+"escapar, se cancelará una edición y volver al valor anterior."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:5
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:5
@@ -67,6 +95,8 @@ msgid ""
 "This button retrieves the AFR/Constants block of data (all pages) and "
 "updates all controls with the current values."
 msgstr ""
+"Lla botón recupera el AFR / Constantes bloque de datos (todas las páginas) y "
+"las actualizaciones de todos los controles con los valores actuales."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:6
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:6
@@ -112,6 +142,10 @@ msgid ""
 "needs to be burnt to flash for permanent storage.  By clicking this it will "
 "burn the ram to flash and the button will turn back to black."
 msgstr ""
+"Este botón se vuelve rojo cuando un valor se cambia en la memoria RAM del "
+"ECU pero hay que estar quemado a flash para el almacenamiento permanente. "
+"Haciendo clic en este se quemará el carnero a parpadear y el botón se "
+"encenderá de nuevo al negro."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:7
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:7
@@ -125,12 +159,20 @@ msgid ""
 "will rotate the display.  Using the middle mouse button will strafe (slide) "
 "and the right mouse button will zoom."
 msgstr ""
+"Esto hace aparecer una vista en 3 dimensiones de la actual AFR-Tabla. "
+"Edición de la tabla en la vista 3D es compatible con los botones + / - y Re "
+"Pág / Av Pág claves (fino / grueso edit) y las flechas navegar. Un punto "
+"rojo muestra la posición de edición actual al igual que los indicadores en "
+"el lado derecho de la ventana debajo de los botones. Una sujeción del ratón "
+"botón izquierdo y arrastre el ratón en la vista 3D rotará la pantalla. Con "
+"el botón central del ratón se ametrallar (transparencia) y el botón derecho "
+"del ratón se captura."
 
 #: afrtable_12x12x2-MS-II.datamap.in.h:8
 #: afrtable_12x12x2-MS-II-Extra.datamap.in.h:8
 #: afrtable_8x8x2-029x.datamap.in.h:7 Gui/main.glade:266
 msgid "_AFR Tables"
-msgstr ""
+msgstr "_AFR Tablas"
 
 #: afrtable_8x8x2-029x.datamap.in.h:1
 msgid ""
@@ -146,6 +188,19 @@ msgid ""
 "value will turn red during an edit and WILL NOT BE SENT until you hit "
 "enter.  Hitting escape will cancel an edit and return to the previous value."
 msgstr ""
+"Las entradas AFR son los valores de combustible del aire de Radio que el ECU "
+"debe de destino. Los valores están en VOLTIOS sensor de O2, no en sí como a "
+"los AFR AFR lectura depende en gran medida con la tabla de consulta adecuado "
+"seleccionados, fue elegido para mostrar los valores en voltios en lugar de "
+"que elimina la ambigüedad de \"¿Tengo el derecho de consulta tabla "
+"seleccionada? \". La ECU utilizará estos valores después de varias "
+"condiciones se han cumplido como mínimo RPM, temperatura del refrigerante, "
+"etc tiempo de ejecución del motor. El ecu tratará de mantener la mezcla de "
+"modo que el O2 se queda leyendo en el valor de destino. La edición es "
+"realizada por cualquiera de + / -, Re Pág / Av Pág, o escribiendo un valor "
+"por encima del valor actual. El valor se pondrá rojo durante una edición y "
+"no se enviará hasta que pulse intro. Golpear a escapar, se cancelará una "
+"edición y volver al valor anterior."
 
 #: afrtable_8x8x2-029x.datamap.in.h:3
 msgid ""
@@ -159,6 +214,15 @@ msgid ""
 "NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and "
 "return to the previous value."
 msgstr ""
+"Los contenedores RPM en combinación con los cubos de carga en el lado "
+"izquierdo de la AFR-Cuadro definir los vértices (puntos en el mapa AFR). La "
+"ECU interpolar entre vértices proporcionan una transición suave entre los "
+"puntos en el mapa AFR. La vista 3D muestra esto gráficamente. NOTA: el ECU "
+"NO extrapolar más allá del borde de la mesa. Los valores se sujetan en las "
+"fronteras. La edición es realizada por cualquiera de + / -, Re Pág / Av Pág, "
+"o escribiendo un valor por encima del valor actual. El valor se pondrá rojo "
+"durante una edición y no se enviará hasta que pulse intro. Golpear a "
+"escapar, se cancelará una edición y volver al valor anterior."
 
 #: afrtable_8x8x2-029x.datamap.in.h:4 boost_6x6x3-029x.datamap.in.h:4
 #: ms2-alpha-n_6x6x1.datamap.in.h:4
@@ -194,6 +258,8 @@ msgid ""
 "This button retrieves the VE/Constants block of data (all pages) and updates "
 "all controls with the current values."
 msgstr ""
+"Este botón recupera el VE / Constantes bloque de datos (todas las páginas) y "
+"actualiza todos los controles con los valores corrientes."
 
 #: B_and_G_1.x.prof.in.h:1 B_and_G_2.0-3.01.prof.in.h:1
 #: BnG-Std.rtv_map.in.h:71 DT-Std.rtv_map.in.h:72 Dualtable-1.02.prof.in.h:1
@@ -210,20 +276,20 @@ msgstr ""
 #: SquirtnSpark-Extra-HR-029x.prof.in.h:14 Gui/dt-params.glade:1100
 #: Gui/dt-params.glade:1212 Gui/msns-e-features.glade:1267
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: B_and_G_1.x.prof.in.h:2 B_and_G_2.0-3.01.prof.in.h:2
 #: Dualtable-1.02.prof.in.h:2
 msgid "TPS ADC,KPa,KPa"
-msgstr ""
+msgstr "ADC TPS, KPa, KPa"
 
 #: B_and_G_1.x.prof.in.h:3
 msgid "VE-Table 0, B&G 1.x"
-msgstr ""
+msgstr "VE-Tabla 0, B & G 1.x"
 
 #: B_and_G_2.0-3.01.prof.in.h:3
 msgid "VE-Table 0, B&G 2.0-3.01"
-msgstr ""
+msgstr "VE-Tabla 0, B & G 2.0-3.01"
 
 #: B_n_G_constants.datamap.in.h:1
 msgid "Enables or Disables barometer correction."
@@ -250,10 +316,8 @@ msgid "Sets the Injector firing pattern"
 msgstr "Define el patron de disparo de los inyectores"
 
 #: B_n_G_constants.datamap.in.h:6
-#, fuzzy
 msgid "Sets the MAP sensor to 115KPa or 25KPa (forced induction capable)"
-msgstr ""
-"Define si el sensor de MAP es de 115KPa (Aspirado) o 250KPa (Turbo/Charger)"
+msgstr "Establece el sensor MAP para 115KPa o 25KPa (inducción forzada capaz)"
 
 #: B_n_G_constants.datamap.in.h:7 Dualtable-constants.datamap.in.h:7
 msgid "Sets the O2 sensor type"
@@ -269,7 +333,7 @@ msgstr "Vitales del Motor"
 
 #: BnG-Std.rtv_map.in.h:1
 msgid "\" Dcycle\\\" is the injector Duty cycle."
-msgstr ""
+msgstr "\"Dcycle \\\" es el ciclo de inyección de impuestos."
 
 #: BnG-Std.rtv_map.in.h:2
 msgid ""
@@ -278,6 +342,11 @@ msgid ""
 "the proper lookuptable in the Interrogation Profile and selected the right "
 "sensor type in the Enrichments Tab. "
 msgstr ""
+"\"AFR\" Es la relación de aire y combustible que el motor está funcionando "
+"a. Este cálculo se realiza una lookuptable, si esta lectura parece mal "
+"asegúrese de que ha especificado el lookuptable adecuada en el perfil de "
+"Interrogación y seleccionado el tipo de sensor de la derecha en la Ficha de "
+"enriquecimientos."
 
 #: BnG-Std.rtv_map.in.h:3 DT-Std.rtv_map.in.h:2 MSnS-Extra-029x.rtv_map.in.h:2
 #: MSnS-Extra-HR-011d.rtv_map.in.h:2 MSnS-Extra-HR-029x.rtv_map.in.h:2
@@ -286,6 +355,10 @@ msgid ""
 "a percentage, 100 being NO enrichment, anything over 100 causes additional "
 "fuel to be added, less than 100 means less fuel."
 msgstr ""
+"\"AIRcorr\" es la temperatura del aire factor de corrección. Esto se expresa "
+"en porcentaje, siendo 100 NO enriquecimiento, algo más de 100 causas de "
+"combustible adicionales que se añadirán, combustible inferior a 100 "
+"significa menos."
 
 #: BnG-Std.rtv_map.in.h:4 DT-Std.rtv_map.in.h:3 MSnS-Extra-029x.rtv_map.in.h:3
 #: MSnS-Extra-HR-011d.rtv_map.in.h:3 MSnS-Extra-HR-029x.rtv_map.in.h:3
@@ -294,6 +367,9 @@ msgid ""
 "sensor when read at ECU powerup for Baro correction. Range is 0-255 counts, "
 "resolution of 1 counts"
 msgstr ""
+"\"Baro ADC\" es la prima cuenta ADC del sensor de presión absoluta del "
+"múltiple cuando se lee en el momento del encendido de ecus para la "
+"corrección de Baro. El rango es 0-255 cuenta, la resolución de una cuenta"
 
 #: BnG-Std.rtv_map.in.h:5 DT-Std.rtv_map.in.h:4 MSnS-Extra-029x.rtv_map.in.h:4
 #: MSnS-Extra-HR-011d.rtv_map.in.h:4 MSnS-Extra-HR-029x.rtv_map.in.h:4
@@ -302,6 +378,9 @@ msgid ""
 "the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA "
 "is atmospheric pressure at sea level."
 msgstr ""
+"\"Baro KPa\" es la presión Presión atmosférica en kPa (kilopascales) Este es "
+"leído por el sensor MAP en el momento del encendido ecu y nosotros para la "
+"corrección del Barómetro, 100 kPa es la presión atmosférica a nivel del mar."
 
 #: BnG-Std.rtv_map.in.h:6 DT-Std.rtv_map.in.h:5 MSnS-Extra-029x.rtv_map.in.h:5
 #: MSnS-Extra-HR-011d.rtv_map.in.h:5 MSnS-Extra-HR-029x.rtv_map.in.h:5
@@ -310,6 +389,10 @@ msgid ""
 "ECU powerup, used for barometer correction. The value is converted to volts. "
 "Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)"
 msgstr ""
+"\"BARO Volts\" es la lectura del Sensor de presión absoluta del múltiple Al "
+"momento del encendido de ecus, para la corrección del barómetro. El valor se "
+"convierte en voltios. El rango es 0-5 voltios, la resolución de 19,6 "
+"milivoltios (8 bits)"
 
 #: BnG-Std.rtv_map.in.h:7 DT-Std.rtv_map.in.h:6 MSnS-Extra-029x.rtv_map.in.h:6
 #: MSnS-Extra-HR-011d.rtv_map.in.h:6 MSnS-Extra-HR-029x.rtv_map.in.h:6
@@ -318,6 +401,10 @@ msgid ""
 "percentage, 100 being NO enrichment, anything over 100 causes additional "
 "fuel to be added, less than 100 means less fuel."
 msgstr ""
+"\"BAROcorr\" es el factor de corrección del Barómetro. Esto se expresa en "
+"porcentaje, siendo 100 NO enriquecimiento, algo más de 100 causas de "
+"combustible adicionales que se añadirán, combustible inferior a 100 "
+"significa menos."
 
 #: BnG-Std.rtv_map.in.h:8 DT-Std.rtv_map.in.h:7 MSnS-Extra-029x.rtv_map.in.h:7
 #: MSnS-Extra-HR-011d.rtv_map.in.h:7 MSnS-Extra-HR-029x.rtv_map.in.h:7
@@ -325,11 +412,13 @@ msgid ""
 "\"BATT ADC\" is the raw ADC counts for the Battery Voltage input, Range 0-"
 "255, resolution 1 adc"
 msgstr ""
+"\"BATT ADC\" es la cuenta ADC primas para la entrada de voltaje de la "
+"batería, rango 0-255, resolución 1 adc"
 
 #: BnG-Std.rtv_map.in.h:9 DT-Std.rtv_map.in.h:8 MSnS-Extra-029x.rtv_map.in.h:8
 #: MSnS-Extra-HR-011d.rtv_map.in.h:8 MSnS-Extra-HR-029x.rtv_map.in.h:8
 msgid "\"BATT Volts\" is the Battery voltage in DC volts."
-msgstr ""
+msgstr "\"BATT Volts\" es el voltaje de la batería en voltios DC."
 
 #: BnG-Std.rtv_map.in.h:10
 msgid ""
@@ -338,6 +427,11 @@ msgid ""
 "communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
 msgstr ""
+"\"BSPOT2\" es uno de los tres puntos en blanco regresó en las variables de "
+"tiempo de ejecución para el estándar de ecus MegaSquirt. Algunas de las "
+"variantes menos conocidas de MS utilizarlos para comunicarse de nuevo datos "
+"adicionales. Estos son sólo para este loggable motivos. Las unidades son 0-"
+"255, la resolución de 1."
 
 #: BnG-Std.rtv_map.in.h:11
 msgid ""
@@ -346,6 +440,11 @@ msgid ""
 "communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
 msgstr ""
+"\"BSPOT3\" es uno de los tres puntos en blanco regresó en las variables de "
+"tiempo de ejecución para el estándar de ecus MegaSquirt. Algunas de las "
+"variantes menos conocidas de MS utilizarlos para comunicarse de nuevo datos "
+"adicionales. Estos son sólo para este loggable motivos. Las unidades son 0-"
+"255, la resolución de 1."
 
 #: BnG-Std.rtv_map.in.h:12
 msgid ""
@@ -354,6 +453,11 @@ msgid ""
 "to communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
 msgstr ""
+"\"BSPOT \\\" es uno de los tres puntos en blanco regresó en las variables de "
+"tiempo de ejecución para el estándar de ecus MegaSquirt. Algunas de las "
+"variantes menos conocidas de MS utilizarlos para comunicarse de nuevo datos "
+"adicionales. Estos son sólo para este loggable motivos. Las unidades son 0-"
+"255, la resolución de 1."
 
 #: BnG-Std.rtv_map.in.h:13 DT-Std.rtv_map.in.h:9
 #: MSnS-Extra-029x.rtv_map.in.h:10 MSnS-Extra-HR-011d.rtv_map.in.h:10
@@ -363,6 +467,9 @@ msgid ""
 "thermal units (centigrade or fahrenheit depending on what you've set in the "
 "General Tab)"
 msgstr ""
+"\"CLT (\\302\\260)\" es la temperatura del refrigerante en unidades "
+"convencionales térmica (centígrados o Fahrenheit, según lo que hemos "
+"propuesto en la ficha General)"
 
 #: BnG-Std.rtv_map.in.h:14 DT-Std.rtv_map.in.h:10
 #: MSnS-Extra-029x.rtv_map.in.h:11 MSnS-Extra-HR-011d.rtv_map.in.h:11
@@ -371,6 +478,9 @@ msgid ""
 "\"CLT ADC\" is the raw ADC counts from the Engine Coolant Temperature sensor "
 "reading. Range is 0-255 counts, resolution of 1 counts"
 msgstr ""
+"\"CLT ADC\" es la prima de la ADC cuenta la temperatura del refrigerante del "
+"motor sensor de la lectura. El rango es 0-255 cuenta, la resolución de una "
+"cuenta"
 
 #: BnG-Std.rtv_map.in.h:15 DT-Std.rtv_map.in.h:11
 #: MSnS-Extra-029x.rtv_map.in.h:13 MSnS-Extra-HR-011d.rtv_map.in.h:13
@@ -380,6 +490,9 @@ msgid ""
 "converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 "
 "bits)"
 msgstr ""
+"\"CLT Volts\" es la lectura de la temperatura del refrigerante del motor "
+"sensor convierte en voltios. El rango es 0-5 voltios, la resolución de 19,6 "
+"milivoltios (8 bits)"
 
 #: BnG-Std.rtv_map.in.h:16 DT-Std.rtv_map.in.h:14
 #: MSnS-Extra-029x.rtv_map.in.h:17 MSnS-Extra-HR-011d.rtv_map.in.h:17
@@ -390,6 +503,11 @@ msgid ""
 "fuel to be added, less than 100 means less fuel. The EGO Feedback settings "
 "on the Enrichments tab have the most effect on this parameter."
 msgstr ""
+"\"EGOcorr\" es el gas de escape Factor de corrección. Esto se expresa en "
+"porcentaje, siendo 100 NO enriquecimiento, algo más de 100 causas de "
+"combustible adicionales que se añadirán, combustible inferior a 100 "
+"significa menos. Los ajustes del EGO de votos en la ficha enriquecimientos "
+"tienen el mayor efecto sobre este parámetro."
 
 #: BnG-Std.rtv_map.in.h:17 DT-Std.rtv_map.in.h:15
 #: MS2-Extra-2.0.x.rtv_map.in.h:25 MS2-Extra-2.1.0.rtv_map.in.h:25
@@ -401,6 +519,10 @@ msgid ""
 "running, accel enrich, decel mode and warmup enrichment.  It require "
 "decoding, use the information in unions.h for the \\\"engine\\\" union."
 msgstr ""
+"\"EngineBits\" es un campo de bits que contienen información como arranque / "
+"funcionamiento, enriquecer aceleración, desaceleración y el enriquecimiento "
+"modo de calentamiento. Se requieren decodificación, utilizar la información "
+"en unions.h para el \\ \\ engine \"sindicato."
 
 #: BnG-Std.rtv_map.in.h:18 DT-Std.rtv_map.in.h:16
 #: MSnS-Extra-029x.rtv_map.in.h:21 MSnS-Extra-HR-011d.rtv_map.in.h:21
@@ -409,6 +531,8 @@ msgid ""
 "\"GammaE\" is the summation of ALL enrichments (temp enrich,accel enrich, "
 "warmup enrich, etc..) in the MegaSquirt ECU."
 msgstr ""
+"\"GammaE\" es la suma de enriquecimientos ALL (temp enriquecen, enriquecen "
+"aceleración, calentamiento enriquecer, etc.) En la unidad de MegaSquirt."
 
 #: BnG-Std.rtv_map.in.h:19 DT-Std.rtv_map.in.h:17
 #: MS2-Extra-2.0.x.rtv_map.in.h:31 MS2-Extra-2.1.0.rtv_map.in.h:30
@@ -419,6 +543,8 @@ msgid ""
 "\"HR Clock\" is a High resolution clock recorded to the logfile by this pc "
 "when data arrives, resolution of 1 millisecond."
 msgstr ""
+"\"HR Clock\" es un reloj de alta resolución registrada al archivo de "
+"registro por esta pc cuando los datos llegan, la resolución de 1 milisegundo."
 
 #: BnG-Std.rtv_map.in.h:20 DT-Std.rtv_map.in.h:19
 #: MSnS-Extra-029x.rtv_map.in.h:25 MSnS-Extra-HR-011d.rtv_map.in.h:25
@@ -428,6 +554,9 @@ msgid ""
 "stoichiometric combustion (AFR 14.7:1), less than 1 is a \"rich\" mixture "
 "and greater than 1 is a \"lean\" mixture"
 msgstr ""
+"\"Lambda\" es una representación de AFR (Air Fuel Ratio). 1,0 es la "
+"combustión estequiométrica (AFR 14.7:1), menos de 1 es una mezcla rica y "
+"mayor que 1 es un \"pobre\" mezcla"
 
 #: BnG-Std.rtv_map.in.h:21 DT-Std.rtv_map.in.h:20
 #: MSnS-Extra-029x.rtv_map.in.h:26 MSnS-Extra-HR-011d.rtv_map.in.h:26
@@ -436,6 +565,8 @@ msgid ""
 "\"MAP ADC\" is the raw ADC counts from the Manifold Absolute Pressure sensor "
 "reading. Range is 0-255 counts, resolution of 1 counts"
 msgstr ""
+"\"MAP ADC\" es la prima de la cuenta ADC de presión absoluta del múltiple de "
+"sensores de lectura. El rango es 0-255 cuenta, la resolución de una cuenta"
 
 #: BnG-Std.rtv_map.in.h:22 DT-Std.rtv_map.in.h:21
 #: MSnS-Extra-029x.rtv_map.in.h:27 MSnS-Extra-HR-011d.rtv_map.in.h:27
@@ -444,6 +575,8 @@ msgid ""
 "\"MAP KPA\" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA "
 "is atmospheric pressure at sea level."
 msgstr ""
+"\"MAP KPa\" es la presión absoluta del múltiple en el Ejército Popular de "
+"Corea (kilopascales), 100 kPa es la presión atmosférica a nivel del mar."
 
 #: BnG-Std.rtv_map.in.h:23 DT-Std.rtv_map.in.h:22
 #: MSnS-Extra-029x.rtv_map.in.h:28 MSnS-Extra-HR-011d.rtv_map.in.h:28
@@ -453,6 +586,9 @@ msgid ""
 "converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 "
 "bits)"
 msgstr ""
+"\"MAP Volts\" es la lectura del sensor de presión absoluta del múltiple "
+"convierte en voltios. El rango es 0-5 voltios, la resolución de 19,6 "
+"milivoltios (8 bits)"
 
 #: BnG-Std.rtv_map.in.h:24 DT-Std.rtv_map.in.h:23
 #: MSnS-Extra-029x.rtv_map.in.h:29 MSnS-Extra-HR-011d.rtv_map.in.h:29
@@ -462,6 +598,9 @@ msgid ""
 "units (centigrade or fahrenheit depending on what you've set in the General "
 "Tab)"
 msgstr ""
+"\"MAT (\\302\\260)\" es la temperatura del aire en el colector de unidades "
+"térmicas convencionales (centígrados o Fahrenheit, según lo que hemos "
+"propuesto en la ficha General)"
 
 #: BnG-Std.rtv_map.in.h:25 DT-Std.rtv_map.in.h:24
 #: MSnS-Extra-029x.rtv_map.in.h:30 MSnS-Extra-HR-011d.rtv_map.in.h:30
@@ -470,6 +609,8 @@ msgid ""
 "\"MAT ADC\" is the raw ADC counts from the Manifold Air Temperature sensor "
 "reading. Range is 0-255 counts, resolution of 1 counts"
 msgstr ""
+"\"MAT ADC\" es la prima de la ADC cuenta la temperatura del aire del sensor "
+"múltiple de la lectura. El rango es 0-255 cuenta, la resolución de una cuenta"
 
 #: BnG-Std.rtv_map.in.h:26 DT-Std.rtv_map.in.h:25
 #: MSnS-Extra-029x.rtv_map.in.h:31 MSnS-Extra-HR-011d.rtv_map.in.h:31
@@ -479,6 +620,9 @@ msgid ""
 "converted to volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 "
 "bits)"
 msgstr ""
+"\"MAT Volts\" es la lectura de la temperatura del sensor múltiple de aire "
+"convierte en voltios. El rango es 0-5 voltios, la resolución de 19,6 "
+"milivoltios (8 bits)"
 
 #: BnG-Std.rtv_map.in.h:27 DT-Std.rtv_map.in.h:26
 #: MSnS-Extra-029x.rtv_map.in.h:32 MSnS-Extra-HR-011d.rtv_map.in.h:32
@@ -487,6 +631,8 @@ msgid ""
 "\"MS Clock\" is the MegaSquirt clock returned by the ECU, this runs from 0-"
 "255 and recylcles indefinitely, resolution 1 second."
 msgstr ""
+"\"MS clock\" es el reloj MegaSquirt devuelto por la ECU, esto va desde 0 "
+"hasta 255 y recylcles indefinidamente, la resolución de 1 segundo."
 
 #: BnG-Std.rtv_map.in.h:28 DT-Std.rtv_map.in.h:27
 #: MSnS-Extra-029x.rtv_map.in.h:33 MSnS-Extra-HR-011d.rtv_map.in.h:33
@@ -495,28 +641,36 @@ msgid ""
 "\"O2 ADC\" is the raw ADC counts for the Exhaust Gas Oxygen reading, Range 0-"
 "255, resolution 1 adc"
 msgstr ""
+"\"O2 ADC\" es la cuenta ADC primas para la lectura de gases de escape de "
+"oxígeno, rango 0-255, resolución 1 adc"
 
 #: BnG-Std.rtv_map.in.h:29
 msgid ""
 "\"O2 Volts\" is the Exhaust Oxygen Sensor voltage. Range 0-5 Volts, "
 "resolution 19.6 mv"
 msgstr ""
+"\"O2 Volts\" es el escape de oxígeno del sensor de voltaje. Rango de 0-5 "
+"voltios, la resolución de 19,6 mv"
 
 #: BnG-Std.rtv_map.in.h:30
 msgid "\"PW\" is the pulsewidth in milliseconds for the injectors."
-msgstr ""
+msgstr "\"PW\" es la amplitud de pulso en milisegundos para los inyectores."
 
 #: BnG-Std.rtv_map.in.h:31 DT-Std.rtv_map.in.h:31
 #: MSnS-Extra-029x.rtv_map.in.h:41 MSnS-Extra-HR-011d.rtv_map.in.h:41
 #: MSnS-Extra-HR-029x.rtv_map.in.h:41
 msgid "\"RAW RPM\" Is the engine RPM, as sent from the ECU in units of rpm/100"
 msgstr ""
+"\"RAW RPM\" ¿Es el RPM del motor, como enviado de la ECU en unidades de "
+"rpm/100"
 
 #: BnG-Std.rtv_map.in.h:32 DT-Std.rtv_map.in.h:32
 msgid ""
 "\"RPM\" is the Engine RPM in more common units (actual RPM, not rpm/100), "
 "resolution of 100rpm with the this firmware. "
 msgstr ""
+"\"RPM\" es el RPM del motor en más unidades comunes (RPM real no rpm/100,), "
+"la resolución de 100rpm con el firmware esto."
 
 #: BnG-Std.rtv_map.in.h:34 DT-Std.rtv_map.in.h:34
 #: MSnS-Extra-029x.rtv_map.in.h:47 MSnS-Extra-HR-011d.rtv_map.in.h:47
@@ -526,6 +680,8 @@ msgid ""
 "\"TPS %\" is the Throttle Position in percentage of open (based on counts, a "
 "adc of 255 is equal to 100% open)."
 msgstr ""
+"\"TPS %\" es la posición de aceleración en el porcentaje de apertura (basado "
+"en el recuento, un ADC de 255 es igual al 100% abierta)."
 
 #: BnG-Std.rtv_map.in.h:35 DT-Std.rtv_map.in.h:35
 #: MSnS-Extra-029x.rtv_map.in.h:48 MSnS-Extra-HR-011d.rtv_map.in.h:48
@@ -534,6 +690,8 @@ msgid ""
 "\"TPS ADC\" is the raw ADC counts from the Throttle Position sensor reading. "
 "Range is 0-255 counts, resolution of 1 counts"
 msgstr ""
+"\"TPS ADC\" es la prima de la cuenta ADC sensor de posición del acelerador "
+"de lectura. El rango es 0-255 cuenta, la resolución de una cuenta"
 
 #: BnG-Std.rtv_map.in.h:36 DT-Std.rtv_map.in.h:36
 #: MSnS-Extra-029x.rtv_map.in.h:50 MSnS-Extra-HR-011d.rtv_map.in.h:50
@@ -542,6 +700,9 @@ msgid ""
 "\"TPS Volts\" is the reading from the Throttle Position sensor converted to "
 "volts. Range is 0-5 volts, resolution of 19.6 millivolts (8 bits)"
 msgstr ""
+"\"TPS Volts\" es la lectura del sensor de posición del acelerador convierte "
+"en voltios. El rango es 0-5 voltios, la resolución de 19,6 milivoltios (8 "
+"bits)"
 
 #: BnG-Std.rtv_map.in.h:37 DT-Std.rtv_map.in.h:37
 #: MSnS-Extra-029x.rtv_map.in.h:51 MSnS-Extra-HR-011d.rtv_map.in.h:51
@@ -550,12 +711,17 @@ msgid ""
 "\"TPSaccel\\\" is the amount of Acceleration enrichment being dispensed. "
 "Units are in milliseconds x10, so 10 ms shows upa as 100 in the log"
 msgstr ""
+"\"TPSaccel\" es la cantidad de enriquecimiento de aceleración de ser "
+"despachado. Las unidades son en milisegundos x10, por lo que 10 ms muestra "
+"upa como 100 en el registro de"
 
 #: BnG-Std.rtv_map.in.h:38
 msgid ""
 "\"VE\" is the instantaneous volumetric efficiency that the MS is calculating "
 "fuel for."
 msgstr ""
+"\"VE\" es la eficiencia volumétrica instantánea que la EM es el cálculo del "
+"combustible para."
 
 #: BnG-Std.rtv_map.in.h:39 DT-Std.rtv_map.in.h:40
 #: MSnS-Extra-029x.rtv_map.in.h:54 MSnS-Extra-HR-011d.rtv_map.in.h:54
@@ -566,103 +732,109 @@ msgid ""
 "tab.  This is expressed as a percentage, 100 being NO enrichment, anything "
 "over 100 causes additional fuel to be added, less than 100 means less fuel."
 msgstr ""
+"\"WARMcorr\" es el factor de corrección de calentamiento. Esta influenciada "
+"por la entrada del sensor de temperatura y refrigeración los contenedores de "
+"calentamiento de enriquecimiento en la ficha enriquecimientos. Esto se "
+"expresa en porcentaje, siendo 100 NO enriquecimiento, algo más de 100 causas "
+"de combustible adicionales que se añadirán, combustible inferior a 100 "
+"significa menos."
 
 #: BnG-Std.rtv_map.in.h:40 DT-Std.rtv_map.in.h:41
 #: MSnS-Extra-029x.rtv_map.in.h:58 MSnS-Extra-HR-011d.rtv_map.in.h:59
 #: MSnS-Extra-HR-029x.rtv_map.in.h:59 Gui/main.glade:4675
 msgid "AFR"
-msgstr ""
+msgstr "AFR"
 
 #: BnG-Std.rtv_map.in.h:41 DT-Std.rtv_map.in.h:42
 #: MSnS-Extra-029x.rtv_map.in.h:59 MSnS-Extra-HR-011d.rtv_map.in.h:60
 #: MSnS-Extra-HR-029x.rtv_map.in.h:60
 msgid "AIRCorr"
-msgstr ""
+msgstr "AIRCorr"
 
 #: BnG-Std.rtv_map.in.h:42 DT-Std.rtv_map.in.h:43
 #: MSnS-Extra-029x.rtv_map.in.h:60 MSnS-Extra-HR-011d.rtv_map.in.h:61
 #: MSnS-Extra-HR-029x.rtv_map.in.h:61
 msgid "BARO ADC"
-msgstr ""
+msgstr "BARO ADC"
 
 #: BnG-Std.rtv_map.in.h:43 DT-Std.rtv_map.in.h:44
 #: MSnS-Extra-029x.rtv_map.in.h:61 MSnS-Extra-HR-011d.rtv_map.in.h:62
 #: MSnS-Extra-HR-029x.rtv_map.in.h:62
 msgid "BARO Volts"
-msgstr ""
+msgstr "BARO Volts"
 
 #: BnG-Std.rtv_map.in.h:44 DT-Std.rtv_map.in.h:45
 #: MSnS-Extra-029x.rtv_map.in.h:62 MSnS-Extra-HR-011d.rtv_map.in.h:63
 #: MSnS-Extra-HR-029x.rtv_map.in.h:63
 msgid "BARO kPa"
-msgstr ""
+msgstr "BARO kPa"
 
 #: BnG-Std.rtv_map.in.h:45 DT-Std.rtv_map.in.h:46
 #: MSnS-Extra-029x.rtv_map.in.h:63 MSnS-Extra-HR-011d.rtv_map.in.h:64
 #: MSnS-Extra-HR-029x.rtv_map.in.h:64
 msgid "BAROCorr"
-msgstr ""
+msgstr "BAROCorr"
 
 #: BnG-Std.rtv_map.in.h:46 DT-Std.rtv_map.in.h:47
 #: MSnS-Extra-029x.rtv_map.in.h:64 MSnS-Extra-HR-011d.rtv_map.in.h:65
 #: MSnS-Extra-HR-029x.rtv_map.in.h:65
 msgid "BATT ADC"
-msgstr ""
+msgstr "BATT ADC"
 
 #: BnG-Std.rtv_map.in.h:47 DT-Std.rtv_map.in.h:48
 #: MSnS-Extra-029x.rtv_map.in.h:65 MSnS-Extra-HR-011d.rtv_map.in.h:66
 #: MSnS-Extra-HR-029x.rtv_map.in.h:66
 msgid "BATT Volts"
-msgstr ""
+msgstr "BATT Volts"
 
 #: BnG-Std.rtv_map.in.h:48
 msgid "BSpot 1"
-msgstr ""
+msgstr "BSpot 1"
 
 #: BnG-Std.rtv_map.in.h:49
 msgid "BSpot 2"
-msgstr ""
+msgstr "BSpot 2"
 
 #: BnG-Std.rtv_map.in.h:50
 msgid "BSpot 3"
-msgstr ""
+msgstr "BSpot 3"
 
 #: BnG-Std.rtv_map.in.h:51 DT-Std.rtv_map.in.h:49
 #: MSnS-Extra-029x.rtv_map.in.h:67 MSnS-Extra-HR-011d.rtv_map.in.h:68
 #: MSnS-Extra-HR-029x.rtv_map.in.h:68
 msgid "CLT (\\302\\260)"
-msgstr ""
+msgstr "CLT (\\302\\260)"
 
 #: BnG-Std.rtv_map.in.h:52 DT-Std.rtv_map.in.h:50
 #: MSnS-Extra-029x.rtv_map.in.h:68 MSnS-Extra-HR-011d.rtv_map.in.h:69
 #: MSnS-Extra-HR-029x.rtv_map.in.h:69
 msgid "CLT ADC"
-msgstr ""
+msgstr "CLT ADC"
 
 #: BnG-Std.rtv_map.in.h:53 DT-Std.rtv_map.in.h:51
 #: MSnS-Extra-029x.rtv_map.in.h:70 MSnS-Extra-HR-011d.rtv_map.in.h:71
 #: MSnS-Extra-HR-029x.rtv_map.in.h:71
 msgid "CLT Volts"
-msgstr ""
+msgstr "CLT Volts"
 
 #: BnG-Std.rtv_map.in.h:54 DT-Std.rtv_map.in.h:52
 #: MS2-Extra-2.0.x.rtv_map.in.h:111 MS2-Extra-2.1.0.rtv_map.in.h:108
 #: MS2-Std.rtv_map.in.h:78
 msgid "Dutycycle 1"
-msgstr ""
+msgstr "Dutycycle 1"
 
 #: BnG-Std.rtv_map.in.h:55 DT-Std.rtv_map.in.h:54
 #: MSnS-Extra-029x.rtv_map.in.h:74 MSnS-Extra-HR-011d.rtv_map.in.h:75
 #: MSnS-Extra-HR-029x.rtv_map.in.h:75
 msgid "EGOCorr"
-msgstr ""
+msgstr "EGOCorr"
 
 #: BnG-Std.rtv_map.in.h:56 DT-Std.rtv_map.in.h:55
 #: MS2-Extra-2.0.x.rtv_map.in.h:118 MS2-Extra-2.1.0.rtv_map.in.h:116
 #: MS2-Std.rtv_map.in.h:83 MSnS-Extra-029x.rtv_map.in.h:76
 #: MSnS-Extra-HR-011d.rtv_map.in.h:77 MSnS-Extra-HR-029x.rtv_map.in.h:77
 msgid "EngineBits"
-msgstr ""
+msgstr "EngineBits"
 
 #: BnG-Std.rtv_map.in.h:57 DT-Std.rtv_map.in.h:56
 #: MS2-Extra-2.0.x.rtv_map.in.h:122 MS2-Extra-2.1.0.rtv_map.in.h:119
@@ -670,7 +842,7 @@ msgstr ""
 #: MSnS-Extra-HR-011d.rtv_map.in.h:79 MSnS-Extra-HR-029x.rtv_map.in.h:79
 #: Gui/dt-params.glade:1463
 msgid "GammaE"
-msgstr ""
+msgstr "GammaE"
 
 #: BnG-Std.rtv_map.in.h:58 DT-Std.rtv_map.in.h:57
 #: MS2-Extra-2.0.x.rtv_map.in.h:123 MS2-Extra-2.1.0.rtv_map.in.h:120
@@ -678,82 +850,82 @@ msgstr ""
 #: MSnS-Extra-HR-011d.rtv_map.in.h:80 MSnS-Extra-HR-029x.rtv_map.in.h:80
 #: PIS_V1_00-firmware.rtv_map.in.h:132
 msgid "HR Clock"
-msgstr ""
+msgstr "HR Clock"
 
 #: BnG-Std.rtv_map.in.h:59 DT-Std.rtv_map.in.h:59
 #: MSnS-Extra-029x.rtv_map.in.h:82 MSnS-Extra-HR-011d.rtv_map.in.h:83
 #: MSnS-Extra-HR-029x.rtv_map.in.h:83 PIS_V1_00-firmware.rtv_map.in.h:149
 msgid "Lambda"
-msgstr ""
+msgstr "Lambda"
 
 #: BnG-Std.rtv_map.in.h:60 DT-Std.rtv_map.in.h:60
 #: MS2-Extra-2.0.x.rtv_map.in.h:130 MS2-Extra-2.1.0.rtv_map.in.h:127
 #: MS2-Std.rtv_map.in.h:95 MSnS-Extra-029x.rtv_map.in.h:83
 #: MSnS-Extra-HR-011d.rtv_map.in.h:84 MSnS-Extra-HR-029x.rtv_map.in.h:84
 msgid "MAP (kPa)"
-msgstr ""
+msgstr "MAP (kPa)"
 
 #: BnG-Std.rtv_map.in.h:61 DT-Std.rtv_map.in.h:61
 #: MSnS-Extra-029x.rtv_map.in.h:84 MSnS-Extra-HR-011d.rtv_map.in.h:85
 #: MSnS-Extra-HR-029x.rtv_map.in.h:85
 msgid "MAP ADC"
-msgstr ""
+msgstr "MAP ADC"
 
 #: BnG-Std.rtv_map.in.h:62 DT-Std.rtv_map.in.h:62
 #: MSnS-Extra-029x.rtv_map.in.h:85 MSnS-Extra-HR-011d.rtv_map.in.h:86
 #: MSnS-Extra-HR-029x.rtv_map.in.h:86
 msgid "MAP Volts"
-msgstr ""
+msgstr "MAP Volts"
 
 #: BnG-Std.rtv_map.in.h:63 DT-Std.rtv_map.in.h:63
 #: MSnS-Extra-029x.rtv_map.in.h:86 MSnS-Extra-HR-011d.rtv_map.in.h:87
 #: MSnS-Extra-HR-029x.rtv_map.in.h:87
 msgid "MAT (\\302\\260)"
-msgstr ""
+msgstr "MAT (\\302\\260)"
 
 #: BnG-Std.rtv_map.in.h:64 DT-Std.rtv_map.in.h:64
 #: MSnS-Extra-029x.rtv_map.in.h:87 MSnS-Extra-HR-011d.rtv_map.in.h:88
 #: MSnS-Extra-HR-029x.rtv_map.in.h:88
 msgid "MAT ADC"
-msgstr ""
+msgstr "MAT ADC"
 
 #: BnG-Std.rtv_map.in.h:65 DT-Std.rtv_map.in.h:65
 #: MSnS-Extra-029x.rtv_map.in.h:88 MSnS-Extra-HR-011d.rtv_map.in.h:89
 #: MSnS-Extra-HR-029x.rtv_map.in.h:89
 msgid "MAT Volts"
-msgstr ""
+msgstr "MAT Volts"
 
 #: BnG-Std.rtv_map.in.h:66 DT-Std.rtv_map.in.h:66
 #: MSnS-Extra-029x.rtv_map.in.h:89 MSnS-Extra-HR-011d.rtv_map.in.h:90
 #: MSnS-Extra-HR-029x.rtv_map.in.h:90
 msgid "MS Clock"
-msgstr ""
+msgstr "MS Clock"
 
 #: BnG-Std.rtv_map.in.h:67 DT-Std.rtv_map.in.h:67
 #: MSnS-Extra-029x.rtv_map.in.h:90 MSnS-Extra-HR-011d.rtv_map.in.h:91
 #: MSnS-Extra-HR-029x.rtv_map.in.h:91
 msgid "O<sub>2</sub> ADC"
-msgstr ""
+msgstr "O<sub>2</sub> ADC"
 
 #: BnG-Std.rtv_map.in.h:68 DT-Std.rtv_map.in.h:68
 #: MS2-Extra-2.0.x.rtv_map.in.h:135 MS2-Extra-2.1.0.rtv_map.in.h:130
 #: MS2-Std.rtv_map.in.h:100 MSnS-Extra-029x.rtv_map.in.h:91
 #: MSnS-Extra-HR-011d.rtv_map.in.h:92 MSnS-Extra-HR-029x.rtv_map.in.h:92
 msgid "O<sub>2</sub> Volts 1"
-msgstr ""
+msgstr "O<sub>2</sub> Volts 1"
 
 #: BnG-Std.rtv_map.in.h:69 DT-Std.rtv_map.in.h:69
 #: MS2-Extra-2.0.x.rtv_map.in.h:137 MS2-Std.rtv_map.in.h:102
 #: MSnS-Extra-029x.rtv_map.in.h:92 MSnS-Extra-HR-011d.rtv_map.in.h:93
 #: MSnS-Extra-HR-029x.rtv_map.in.h:93
 msgid "PW 1"
-msgstr ""
+msgstr "PW 1"
 
 #: BnG-Std.rtv_map.in.h:70 DT-Std.rtv_map.in.h:71
 #: MSnS-Extra-029x.rtv_map.in.h:98 MSnS-Extra-HR-011d.rtv_map.in.h:99
 #: MSnS-Extra-HR-029x.rtv_map.in.h:99
 msgid "RAW RPM"
-msgstr ""
+msgstr "RAW RPM"
 
 #: BnG-Std.rtv_map.in.h:73 DT-Std.rtv_map.in.h:74
 #: MS-II-Extra_3.0.x.prof.in.h:108 MS-II.prof.in.h:62
@@ -769,38 +941,38 @@ msgstr ""
 #: Gui/ms2-e-boost_8x8x2.glade:5760
 #, no-c-format
 msgid "TPS %"
-msgstr ""
+msgstr "TPS %"
 
 #: BnG-Std.rtv_map.in.h:74 DT-Std.rtv_map.in.h:75 MS2-Std.rtv_map.in.h:111
 #: MSnS-Extra-029x.rtv_map.in.h:105 MSnS-Extra-HR-011d.rtv_map.in.h:106
 #: MSnS-Extra-HR-029x.rtv_map.in.h:106
 msgid "TPS ADC"
-msgstr ""
+msgstr "TPS ADC"
 
 #: BnG-Std.rtv_map.in.h:75 DT-Std.rtv_map.in.h:76
 #: MSnS-Extra-029x.rtv_map.in.h:107 MSnS-Extra-HR-011d.rtv_map.in.h:108
 #: MSnS-Extra-HR-029x.rtv_map.in.h:108
 msgid "TPS Volts"
-msgstr ""
+msgstr "TPS Volts"
 
 #: BnG-Std.rtv_map.in.h:76 DT-Std.rtv_map.in.h:77
 #: MSnS-Extra-029x.rtv_map.in.h:108 MSnS-Extra-HR-011d.rtv_map.in.h:109
 #: MSnS-Extra-HR-029x.rtv_map.in.h:109
 msgid "TPSAccel"
-msgstr ""
+msgstr "TPSAccel"
 
 #: BnG-Std.rtv_map.in.h:77 DT-Std.rtv_map.in.h:78
 #: MS2-Extra-2.0.x.rtv_map.in.h:149 MS2-Extra-2.1.0.rtv_map.in.h:140
 #: MS2-Std.rtv_map.in.h:114 MSnS-Extra-029x.rtv_map.in.h:109
 #: MSnS-Extra-HR-011d.rtv_map.in.h:110 MSnS-Extra-HR-029x.rtv_map.in.h:110
 msgid "VE 1"
-msgstr ""
+msgstr "VE 1"
 
 #: BnG-Std.rtv_map.in.h:78 DT-Std.rtv_map.in.h:80
 #: MSnS-Extra-029x.rtv_map.in.h:111 MSnS-Extra-HR-011d.rtv_map.in.h:112
 #: MSnS-Extra-HR-029x.rtv_map.in.h:112
 msgid "WARMCorr"
-msgstr ""
+msgstr "WARMCorr"
 
 #: boost_6x6x3-029x.datamap.in.h:1 ms2-e-boost_8x8x2.datamap.in.h:1
 msgid ""
@@ -810,6 +982,12 @@ msgid ""
 "and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an "
 "edit and return to the previous value."
 msgstr ""
+"Las entradas Boost son los valores de Boost en que el Ejército Popular de "
+"Corea ecus debe tratar de mantener. La edición es realizada por cualquiera "
+"de + / -, Re Pág / Av Pág, o escribiendo un valor por encima del valor "
+"actual. El valor se pondrá rojo durante una edición y no se enviará hasta "
+"que pulse intro. Golpear a escapar, se cancelará una edición y volver al "
+"valor anterior."
 
 #: boost_6x6x3-029x.datamap.in.h:2 ms2-e-boost_8x8x2.datamap.in.h:3
 msgid ""
@@ -823,6 +1001,15 @@ msgid ""
 "WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit "
 "and return to the previous value."
 msgstr ""
+"La carga (TPS) contenedores en combinación con las cajas RPM en la parte "
+"inferior de la tabla Alza definir los vértices (puntos en el mapa Boost). La "
+"ECU interpolar entre vértices proporcionan una transición suave entre los "
+"vértices en el mapa. La vista 3D muestra esto gráficamente. NOTA: La ECU NO "
+"extrapolar más allá del borde de la mesa. Los valores se sujetan en las "
+"fronteras. La edición es realizada por cualquiera de + / -, Re Pág / Av Pág, "
+"o escribiendo un valor por encima del valor actual. El valor se pondrá rojo "
+"durante una edición y no se enviará hasta que pulse intro. Golpear a "
+"escapar, se cancelará una edición y volver al valor anterior."
 
 #: boost_6x6x3-029x.datamap.in.h:3 ms2-e-boost_8x8x2.datamap.in.h:4
 msgid ""
@@ -836,6 +1023,15 @@ msgid ""
 "WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit "
 "and return to the previous value."
 msgstr ""
+"Los contenedores RPM en combinación con los cubos de carga en el lado "
+"izquierdo de la tabla Boost-definir los vértices (puntos en el mapa Boost). "
+"La ECU interpolar entre vértices proporcionan una transición suave entre los "
+"puntos en el mapa. La vista 3D muestra esto gráficamente. NOTA: el ECU NO "
+"extrapolar más allá del borde de la mesa. Los valores se sujetan en las "
+"fronteras. La edición es realizada por cualquiera de + / -, Re Pág / Av Pág, "
+"o escribiendo un valor por encima del valor actual. El valor se pondrá rojo "
+"durante una edición y no se enviará hasta que pulse intro. Golpear a "
+"escapar, se cancelará una edición y volver al valor anterior."
 
 #: boost_6x6x3-029x.datamap.in.h:6 ms2-alpha-n_6x6x1.datamap.in.h:6
 #: ms2-e-3.x-nitrous_staging_orfc.datamap.in.h:10
@@ -849,6 +1045,14 @@ msgid ""
 "will rotate the display.  Using the middle mouse button will strafe (slide) "
 "and the right mouse button will zoom."
 msgstr ""
+"Esto hace aparecer una vista en 3 dimensiones de la actual alza de Mesa. "
+"Edición de la tabla en la vista 3D es compatible con los botones + / - y Re "
+"Pág / Av Pág claves (fino / grueso edit) y las flechas navegar. Un punto "
+"rojo muestra la posición de edición actual al igual que los indicadores en "
+"el lado derecho de la ventana debajo de los botones. Una sujeción del ratón "
+"botón izquierdo y arrastre el ratón en la vista 3D rotará la pantalla. Con "
+"el botón central del ratón se ametrallar (transparencia) y el botón derecho "
+"del ratón se captura."
 
 #: boost_6x6x3-029x.datamap.in.h:7 ms2-e-boost_8x8x2.datamap.in.h:8
 #: Gui/main.glade:289
@@ -863,6 +1067,12 @@ msgid ""
 "logfile of ALL variables.  It can be loaded in megatunix's logviewer for "
 "playback if desired... "
 msgstr ""
+"\"Escribir registro interno en el disco\" es una nueva característica. Por "
+"defecto megatunix registrará todas las variables mientras el lector lee "
+"Tiempo de ejecución está en marcha, incluso si usted no tiene registro de "
+"datos habilitado. Este botón que vuelca en el disco como un archivo de "
+"registro de todas las variables std. Se puede cargar en logviewer megatunix "
+"para la reproducción, si lo desea ..."
 
 #: datalogging.datamap.in.h:2
 msgid "_DataLogging"
@@ -907,22 +1117,31 @@ msgid ""
 "the proper lookuptable in the Interrogation Profile and selected the right "
 "sensor type in the Enrichments Tab."
 msgstr ""
+"\"AFR\" Es la relación de aire y combustible que el motor está funcionando "
+"a. Este cálculo se realiza una lookuptable, si esta lectura parece mal "
+"asegúrese de que ha especificado el lookuptable adecuada en el perfil de "
+"Interrogación y seleccionado el tipo de sensor de la derecha en la Ficha de "
+"enriquecimientos."
 
 #: DT-Std.rtv_map.in.h:12
 msgid ""
 "\"DC 1\\\" is the injector Duty cycle for injectors connected to injector "
 "channel 1."
 msgstr ""
+"\"DC 1 \\\" es el ciclo de inyector para inyectores de servicio conectado al "
+"canal 1 inyector."
 
 #: DT-Std.rtv_map.in.h:13
 msgid ""
 "\"DC 2\\\" is the injector Duty cycle for injectors connected to injector "
 "channel 2."
 msgstr ""
+"\"DC 2 \\\" es el ciclo de inyector para inyectores de servicio conectado al "
+"canal 1 inyector."
 
 #: DT-Std.rtv_map.in.h:18
 msgid "\"IdleDC\" is the duty cycle for the PWM Idle control "
-msgstr ""
+msgstr "\"IdleDC\" es el ciclo de trabajo para el reposo de control PWM"
 
 #: DT-Std.rtv_map.in.h:28 MSnS-Extra-029x.rtv_map.in.h:34
 #: MSnS-Extra-HR-011d.rtv_map.in.h:34 MSnS-Extra-HR-029x.rtv_map.in.h:34
@@ -930,6 +1149,8 @@ msgid ""
 "\"O2 Volts\" is the Exhaust Oxygen Sensor voltage. Range 0-5 Volts, "
 "resolution 19.6 mv."
 msgstr ""
+"\"Voltios O2\" es el escape de oxígeno del sensor de voltaje. Rango de 0-5 "
+"voltios, la resolución de 19,6 mv."
 
 #: DT-Std.rtv_map.in.h:29 MSnS-Extra-029x.rtv_map.in.h:39
 #: MSnS-Extra-HR-011d.rtv_map.in.h:39 MSnS-Extra-HR-029x.rtv_map.in.h:39
@@ -937,6 +1158,8 @@ msgid ""
 "\"PW 1\" is the pulsewidth in milliseconds for the injectors tied to "
 "injector channel 1."
 msgstr ""
+"\"PW 1\" es la amplitud de pulso en milisegundos para los inyectores atado a "
+"un canal de inyección."
 
 #: DT-Std.rtv_map.in.h:30 MSnS-Extra-HR-011d.rtv_map.in.h:40
 #: MSnS-Extra-HR-029x.rtv_map.in.h:40
@@ -944,52 +1167,58 @@ msgid ""
 "\"PW 2\" is the pulsewidth in milliseconds for the injectors tied to "
 "injector channel 2."
 msgstr ""
+"\"PW 2\" es la amplitud de pulso en milisegundos para los inyectores atado a "
+"canal 2 de inyección."
 
 #: DT-Std.rtv_map.in.h:38
 msgid ""
 "\"VE 1\" is the instantaneous volumetric efficiency for table 1 that the MS "
 "is calculating fuel for."
 msgstr ""
+"\"VE 1\" es la eficiencia volumétrica instantánea para la tabla 1 que la EM "
+"es el cálculo del combustible para."
 
 #: DT-Std.rtv_map.in.h:39
 msgid ""
 "\"VE 2\" is the instantaneous volumetric efficiency for table 2 that the MS "
 "is calculating fuel for."
 msgstr ""
+"\"VE 2\" es la eficiencia volumétrica instantánea para la tabla 2 que la EM "
+"es el cálculo del combustible para."
 
 #: DT-Std.rtv_map.in.h:53 MS2-Extra-2.0.x.rtv_map.in.h:112
 #: MS2-Extra-2.1.0.rtv_map.in.h:109 MS2-Std.rtv_map.in.h:79
 #: MSnS-Extra-029x.rtv_map.in.h:72 MSnS-Extra-HR-011d.rtv_map.in.h:73
 #: MSnS-Extra-HR-029x.rtv_map.in.h:73
 msgid "Dutycycle 2"
-msgstr ""
+msgstr "Dutycycle 2"
 
 #: DT-Std.rtv_map.in.h:58 MS2-Extra-2.1.0.rtv_map.in.h:122
 #: MSnS-Extra-029x.rtv_map.in.h:80 MSnS-Extra-HR-011d.rtv_map.in.h:81
 #: MSnS-Extra-HR-029x.rtv_map.in.h:81
 msgid "Idle DC"
-msgstr ""
+msgstr "Idle DC"
 
 #: DT-Std.rtv_map.in.h:70 MS2-Extra-2.0.x.rtv_map.in.h:138
 #: MS2-Std.rtv_map.in.h:103 MSnS-Extra-029x.rtv_map.in.h:93
 #: MSnS-Extra-HR-011d.rtv_map.in.h:94 MSnS-Extra-HR-029x.rtv_map.in.h:94
 msgid "PW 2"
-msgstr ""
+msgstr "PW 2"
 
 #: DT-Std.rtv_map.in.h:79 MS2-Extra-2.0.x.rtv_map.in.h:150
 #: MS2-Extra-2.1.0.rtv_map.in.h:141 MS2-Std.rtv_map.in.h:115
 #: MSnS-Extra-029x.rtv_map.in.h:110 MSnS-Extra-HR-011d.rtv_map.in.h:111
 #: MSnS-Extra-HR-029x.rtv_map.in.h:111
 msgid "VE 2"
-msgstr ""
+msgstr "VE 2"
 
 #: Dualtable-1.02.prof.in.h:3
 msgid "VE-Table 0, Dualtable v1.02"
-msgstr ""
+msgstr "VE-Tabla 0, Dualtable v1.02"
 
 #: Dualtable-1.02.prof.in.h:4
 msgid "VE-Table 1, Dualtable v1.02"
-msgstr ""
+msgstr "VE-Tabla 1, Dualtable v1.02"
 
 #: Dualtable-constants.datamap.in.h:1
 msgid "Enables or Disables BARO Correction"
@@ -1032,6 +1261,15 @@ msgid ""
 "(like nitrous and water injection,  both can NOT be used at the same time as "
 "they use the same output pin)"
 msgstr ""
+"Este botón se enviará el \"!!X\" cadena a la ECU para entrar en el gestor de "
+"arranque y luego reiniciar el sistema. Se dará lugar a una lectura a "
+"colación el mensaje de la ECU y lo mostrará en el cuadro de abajo. Si no "
+"sale nada nuevo que significa que no hay problemas. Esto se va a utilizar "
+"cuando la ECU se está ejecutando la bomba de combustible una vez por segundo "
+"ya que es así MSNS-E señala una condición de error. Estos problemas pueden "
+"ocurrir al establecer dos características que entran en conflicto entre sí. "
+"(Como la inyección de nitrógeno y agua, tanto NO pueden ser utilizados al "
+"mismo tiempo, ya que utilizan el mismo pin de salida)"
 
 #: error_status.datamap.in.h:2
 msgid "_Error Status"
@@ -1045,6 +1283,12 @@ msgid ""
 "log is reached.  Scrolling to any point of the log is allowed even during "
 "runtime."
 msgstr ""
+"Activado Modo de reproducción para la logviewer. Debe seleccionar un archivo "
+"de registro y, a continuación los parámetros que desea ver. Hittings Inicio "
+"de la reproducción se iniciará la reproducción del registro y la "
+"reproducción se detendrá poco después del final del registro que se llegó. "
+"Desplazamiento a cualquier punto de la sesión se permite incluso en tiempo "
+"de ejecución."
 
 #: logviewer.datamap.in.h:2
 msgid ""
@@ -1052,20 +1296,27 @@ msgid ""
 "stripchart view allwing viewing of signals from the ECU live, with the added "
 "ability to scroll back in time (to the point where RT vars were started from)"
 msgstr ""
+"Activa el modo Tiempo de ejecución para la logviewer. El logviewer actuará "
+"como una vista stripchart allwing visualización de las señales de la ECU en "
+"vivo, con la capacidad adicional para retroceder en el tiempo (hasta el "
+"punto de VAR RT se iniciaron a partir de)"
 
 #: logviewer.datamap.in.h:3
 msgid ""
 "Starts datalog playback from the specified logfile. Playback will stop "
 "automatically at jsut after the end of the logfile.."
 msgstr ""
+"Inicia la reproducción desde el registro de datos archivo de registro "
+"especificado. La reproducción se detiene automáticamente a justo después del "
+"final del archivo de registro .."
 
 #: logviewer.datamap.in.h:4
 msgid "Stops datalog playback"
-msgstr ""
+msgstr "Detiene la reproducción de registro de datos"
 
 #: logviewer.datamap.in.h:5
 msgid "Stops the Runtime Data display and the log."
-msgstr ""
+msgstr "Detiene la ejecución de visualización de datos y el registro."
 
 #: logviewer.datamap.in.h:6
 msgid ""
@@ -1073,6 +1324,9 @@ msgid ""
 "data from the ECU.  You can use the slider above to move back to see past "
 "data even while the log s running."
 msgstr ""
+"Esto empieza a leer las variables RT y actualiza el logviewer con los datos "
+"en vivo desde la ECU. Puede utilizar el control deslizante de arriba para "
+"volver a ver los datos del pasado aun cuando el registro de s en ejecución."
 
 #: logviewer.datamap.in.h:7
 msgid ""
@@ -1080,14 +1334,18 @@ msgid ""
 "either the Runtime view or Logfile for playback.  Traces can be selected/"
 "removed while the log is playing as well."
 msgstr ""
+"Esto popup una ventana donde puede seleccionar los campos que desea ver ya "
+"sea en la vista Tiempo de ejecución o de archivo de registro para la "
+"reproducción. Huellas se pueden seleccionar / eliminado, mientras que el "
+"registro está jugando tan bien."
 
 #: logviewer.datamap.in.h:8
 msgid "_Logviewer"
-msgstr ""
+msgstr "_Logvisor"
 
 #: memviewer.datamap.in.h:1
 msgid "_Memory Viewer"
-msgstr ""
+msgstr "_Memory Visor"
 
 #: MS1-Std-firmware.status_conf.in.h:1 MS2-Extra-firmware.status_conf.in.h:1
 #: MS2-Std-firmware.status_conf.in.h:1 MSnS-Extra-firmware.status_conf.in.h:1
@@ -1098,19 +1356,19 @@ msgstr ""
 #: Gui/PIS-settings.glade:3595 Gui/runtime.glade:326
 #: Gui/warmupwizard.glade:259
 msgid "ACCEL"
-msgstr ""
+msgstr "ACCEL"
 
 #: MS1-Std-firmware.status_conf.in.h:2 MS2-Extra-firmware.status_conf.in.h:2
 #: MS2-Std-firmware.status_conf.in.h:2 MSnS-Extra-firmware.status_conf.in.h:2
 #: Gui/runtime.glade:291 Gui/warmupwizard.glade:224
 msgid "AS_ENRICH"
-msgstr ""
+msgstr "AS_ENRICH"
 
 #: MS1-Std-firmware.status_conf.in.h:3 MS2-Extra-firmware.status_conf.in.h:5
 #: MS2-Std-firmware.status_conf.in.h:3 MSnS-Extra-firmware.status_conf.in.h:4
 #: PIS_V1_00-firmware.status_conf.in.h:6 Gui/warmupwizard.glade:84
 msgid "CONNECTED"
-msgstr ""
+msgstr "CONECTADO"
 
 #: MS1-Std-firmware.status_conf.in.h:4 MS2-Extra-firmware.status_conf.in.h:6
 #: MS2-Std-firmware.status_conf.in.h:4 MSnS-Extra-firmware.status_conf.in.h:5
@@ -1121,7 +1379,7 @@ msgstr ""
 #: Gui/PIS-runtime.glade:616 Gui/PIS-settings.glade:3490 Gui/runtime.glade:186
 #: Gui/warmupwizard.glade:119
 msgid "CRANKING"
-msgstr ""
+msgstr "ARRANQUE"
 
 #: MS1-Std-firmware.status_conf.in.h:5 MS2-Extra-firmware.status_conf.in.h:7
 #: MS2-Std-firmware.status_conf.in.h:5 MSnS-Extra-firmware.status_conf.in.h:6
@@ -1132,7 +1390,7 @@ msgstr ""
 #: Gui/PIS-settings.glade:3630 Gui/runtime.glade:361
 #: Gui/warmupwizard.glade:294
 msgid "DECEL"
-msgstr ""
+msgstr "DESACEL"
 
 #: MS1-Std-firmware.status_conf.in.h:6 MS2-Extra-firmware.status_conf.in.h:9
 #: MS2-Std-firmware.status_conf.in.h:6 MSnS-Extra-firmware.status_conf.in.h:18
@@ -1143,18 +1401,18 @@ msgstr ""
 #: Gui/PIS-runtime.glade:651 Gui/PIS-settings.glade:3525 Gui/runtime.glade:221
 #: Gui/warmupwizard.glade:154
 msgid "RUNNING"
-msgstr ""
+msgstr "CORRER"
 
 #: MS1-Std-firmware.status_conf.in.h:7 MS2-Extra-firmware.status_conf.in.h:10
 #: MS2-Std-firmware.status_conf.in.h:7 MSnS-Extra-firmware.status_conf.in.h:19
 #: Gui/runtime.glade:256 Gui/warmupwizard.glade:189
 msgid "WARMUP"
-msgstr ""
+msgstr "WARMUP"
 
 #: ms2-accel.datamap.in.h:1 ms2-e-3.x-accel.datamap.in.h:1
 #: ms2-e-accel.datamap.in.h:1
 msgid "Accel enrichment taper time."
-msgstr ""
+msgstr "enriquecimiento de Accel cono tiempo."
 
 #: ms2-accel.datamap.in.h:2 ms2-e-3.x-accel.datamap.in.h:2
 #: ms2-e-accel.datamap.in.h:2
@@ -1174,24 +1432,32 @@ msgstr ""
 #: ms2-accel.datamap.in.h:4 ms2-e-3.x-accel.datamap.in.h:10
 #: ms2-e-accel.datamap.in.h:10
 msgid "End pulsewidth and end of taper time"
-msgstr ""
+msgstr "amplitud de pulso final y al final del cono de tiempo"
 
 #: ms2-accel.datamap.in.h:5 ms2-e-3.x-accel.datamap.in.h:11
 #: ms2-e-accel.datamap.in.h:11
 msgid "Mapdot threshold in KPA/second for map based accel enrich"
 msgstr ""
+"Ejército Popular de Corea en el umbral de Mapdot / segundo para el mapa de "
+"aceleración basado en enriquecer"
 
 #: ms2-accel.datamap.in.h:6 ms2-globals.datamap.in.h:10
 msgid ""
 "Sets ECU xTau Enrichment scheme to be off, Used only during Accel/Decel, or "
 "during warmup and Accel/Decel"
 msgstr ""
+"Juegos de ecus xTau régimen de enriquecimiento que se fuera, usado sólo "
+"durante la aceleración / deceleración, o durante el calentamiento y Accel "
+"deceleración /\n"
+"Listen\n"
+"Read phonetically"
 
 #: ms2-accel.datamap.in.h:8 ms2-e-3.x-accel.datamap.in.h:14
 #: ms2-e-accel.datamap.in.h:14
 #, no-c-format
 msgid "TPSDot threshold in %/second for tps based accel enrich"
 msgstr ""
+"TPSDot umbral en% / segundo para el TPS aceleración basado en enriquecer"
 
 #: ms2-accel.datamap.in.h:9 ms2-warmup.datamap.in.h:11 ms2-xtau.datamap.in.h:1
 msgid ""
