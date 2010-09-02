@@ -635,21 +635,21 @@ void mem_dealloc()
 	g_static_mutex_unlock(&serio_mutex);
 
 	/* Firmware datastructure.... */
-	for (i=0;i<firmware->total_pages;i++)
-	{
-		if (ve_widgets[i])
-		{
-			for (j=0;j<firmware->page_params[i]->length;j++)
-			{
-				g_list_foreach(ve_widgets[i][j],dealloc_widget,NULL);
-				g_list_free(ve_widgets[i][j]);
-			}
-
-		}
-		cleanup(ve_widgets[i]);
-	}
 	if (firmware)
 	{
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			if (ve_widgets[i])
+			{
+				for (j=0;j<firmware->page_params[i]->length;j++)
+				{
+					g_list_foreach(ve_widgets[i][j],dealloc_widget,NULL);
+					g_list_free(ve_widgets[i][j]);
+				}
+
+			}
+			cleanup(ve_widgets[i]);
+		}
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
 		cleanup (firmware->actual_signature);

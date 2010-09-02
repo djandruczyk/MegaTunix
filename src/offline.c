@@ -278,44 +278,49 @@ gchar * present_firmware_choices()
 	dialog = gtk_dialog_new_with_buttons("Select Firmware",
 			GTK_WINDOW(dialog_window),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
+			"Abort",
+			GTK_RESPONSE_CANCEL,
 			"Load",
 			GTK_RESPONSE_OK,
 			NULL);
 
-	vbox = gtk_vbox_new(TRUE,5);
+	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
-	label = gtk_label_new("Custom (personal) Profiles");
-	gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
-
-	group = NULL;
-	/* Cycle list for PERSONAL interogation files */
-	for (i=0;i<g_list_length(p_list);i++)
+	if (g_list_length(p_list) > 0)
 	{
-		element = g_list_nth_data(p_list,i);
+		label = gtk_label_new("Custom (personal) Profiles");
+		gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 
-		ebox = gtk_event_box_new();
-		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
-		hbox = gtk_hbox_new(FALSE,10);
-		gtk_container_add(GTK_CONTAINER(ebox),hbox);
-		label = gtk_label_new(g_strdup(element->name));
-		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
-		button = gtk_radio_button_new(group);
-		g_free(OBJ_GET(button,"filename"));
-		OBJ_SET(button,"filename",g_strdup(element->filename));
-		OBJ_SET(button,"handler",
-				GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
-		g_signal_connect(button,
-				"toggled",
-				G_CALLBACK(toggle_button_handler),
-				NULL);
-		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
-		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		group = NULL;
+		/* Cycle list for PERSONAL interogation files */
+		for (i=0;i<g_list_length(p_list);i++)
+		{
+			element = g_list_nth_data(p_list,i);
+
+			ebox = gtk_event_box_new();
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
+			hbox = gtk_hbox_new(FALSE,10);
+			gtk_container_add(GTK_CONTAINER(ebox),hbox);
+			label = gtk_label_new(g_strdup(element->name));
+			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
+			button = gtk_radio_button_new(group);
+			g_free(OBJ_GET(button,"filename"));
+			OBJ_SET(button,"filename",g_strdup(element->filename));
+			OBJ_SET(button,"handler",
+					GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
+			g_signal_connect(button,
+					"toggled",
+					G_CALLBACK(toggle_button_handler),
+					NULL);
+			gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
+			group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		}
+
+		sep = gtk_hseparator_new();
+		gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,TRUE,0);
 	}
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,TRUE,0);
-	label = gtk_label_new("System Wide Profiles");
+	label = gtk_label_new("System Wide ECU Profiles");
 	gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 	/* Cycle list for System interogation files */
 	for (i=0;i<g_list_length(s_list);i++)
@@ -365,7 +370,7 @@ gchar * present_firmware_choices()
 		default:
 			return NULL;
 	}
-
+	return NULL;
 }
 
 gint ptr_sort(gconstpointer a, gconstpointer b)
