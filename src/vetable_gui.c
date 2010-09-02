@@ -172,6 +172,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	gint offset = 0;
 	DataSize size = 0;
 	GtkWidget *tmpwidget = NULL;
+	GtkWidget *label = NULL;
 	gchar * tmpbuf = NULL;
 	gfloat percentage = 0.0;
 	gint mult = 0;
@@ -221,6 +222,14 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	vector = g_strsplit(tmpbuf,",",-1);
 	if (!vector)
 		return;
+
+	if  (NULL != (label = lookup_widget("info_label")))
+		gtk_label_set_text(GTK_LABEL(label),"Rescaling Table, Please wait...");
+	while (gtk_events_pending())
+	{
+		gtk_main_iteration();
+	}
+
 
 	for (x=0;x<g_strv_length(vector);x++)
 	{

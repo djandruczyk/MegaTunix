@@ -225,7 +225,8 @@ data=VE16_VE3_rescale_entry,VE16_VE3_rescale_combo
 #----- Spinners -------------------------------------------------------------
 
 [VE1_curr_reqfuel_entry]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+keys=page,offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+page=0
 offset=608
 size=_U16_
 precision=3
@@ -250,7 +251,8 @@ alternate_offset=611
 alternate_bitmask=1
 
 [VE2_curr_reqfuel_entry]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+keys=page,offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+page=0
 offset=608
 size=_U16_
 table_num=4
@@ -275,7 +277,8 @@ alternate_offset=611
 alternate_bitmask=1
 
 [VE3_curr_reqfuel_entry]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+keys=page,offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision
+page=0
 offset=608
 size=_U16_
 table_num=5

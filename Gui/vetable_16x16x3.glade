@@ -9130,12 +9130,12 @@ most &quot;Weight&quot;</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">False</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
@@ -9154,12 +9154,12 @@ most &quot;Weight&quot;</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
@@ -18741,12 +18741,12 @@ maintain same PW</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">False</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
@@ -18765,12 +18765,12 @@ maintain same PW</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
@@ -28257,12 +28257,12 @@ most &quot;Weight&quot;</property>
 					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
@@ -28280,12 +28280,12 @@ most &quot;Weight&quot;</property>
 					      <property name="can_focus">True</property>
 					      <property name="editable">False</property>
 					      <property name="visibility">True</property>
-					      <property name="max_length">5</property>
+					      <property name="max_length">6</property>
 					      <property name="text" translatable="yes">0</property>
 					      <property name="has_frame">True</property>
 					      <property name="invisible_char">*</property>
 					      <property name="activates_default">False</property>
-					      <property name="width_chars">4</property>
+					      <property name="width_chars">6</property>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>

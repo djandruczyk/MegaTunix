@@ -216,6 +216,7 @@ EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
+		/*printf("queue update!\n");*/
 		paused_handlers = TRUE;
 		for (i=0;i<firmware->total_tables;i++)
 		{
@@ -234,7 +235,10 @@ EXPORT void update_write_status(void *data)
 
 		gdk_threads_enter();
 		for (z=offset;z<offset+length;z++)
+		{
+			/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
 			refresh_widgets_at_offset(page,z);
+		}
 		gdk_threads_leave();
 
 		paused_handlers = FALSE;

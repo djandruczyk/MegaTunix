@@ -49,7 +49,7 @@ void set_widget_active(gpointer widget, gpointer state)
 
 
 /*!
- \brief drain_hashtable() is called to send all the dat from a hashtable to
+ \brief drain_hashtable() is called to send all the data from a hashtable to
  the ECU
  \param offset (gpointer) offset in ecu_data this value goes to
  \param value (gpointer) pointer to OutputData Struct

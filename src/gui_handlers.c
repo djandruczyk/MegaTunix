@@ -1006,6 +1006,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			rescale_table(widget);
 			break;
 		case REQFUEL_RESCALE_TABLE:
+
+			printf("reqfuel rescale table!\n");
 			reqfuel_rescale_table(widget);
 			break;
 		case INTERROGATE_ECU:
@@ -2111,7 +2113,6 @@ gboolean force_update_table(gpointer data)
 void update_widget(gpointer object, gpointer user_data)
 {
 	GtkWidget * widget = object;
-	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
 	gboolean use_color = FALSE;
 	gboolean changed = FALSE;
@@ -2170,7 +2171,7 @@ void update_widget(gpointer object, gpointer user_data)
 		return;
 
 	upd_count++;
-	if ((upd_count%64) == 0)
+	if ((upd_count%96) == 0)
 	{
 		while (gtk_events_pending())
 		{
@@ -2190,7 +2191,7 @@ void update_widget(gpointer object, gpointer user_data)
 	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
 		return;
 
-	dl_type = (GINT)OBJ_GET(widget,"dl_type");
+	/*printf("called widget update for %s\n",widget->name);*/
 	page = (GINT)OBJ_GET(widget,"page");
 	offset = (GINT)OBJ_GET(widget,"offset");
 	canID = (GINT)OBJ_GET(widget,"canID");
