@@ -1344,7 +1344,7 @@ void *network_repair_thread(gpointer data)
 		}
 		if (open_network(args->network_host,args->network_port))
 		{
-			g_usleep(200000); /* Sleep 200ms */
+	//		g_usleep(200000); /* Sleep 200ms */
 			if (comms_test())
 			{
 				network_is_open = TRUE;
