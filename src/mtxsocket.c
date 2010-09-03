@@ -1296,6 +1296,10 @@ void *network_repair_thread(gpointer data)
 	static gboolean network_is_open = FALSE; /* Assume never opened */
 	extern volatile gboolean offline;
 	extern GAsyncQueue *io_repair_queue;
+	volatile gboolean autodetect = TRUE;
+	gchar * host = NULL;
+	gint port = 0;
+	gchar ** vector = NULL;
 	CmdLineArgs *args = NULL;
 	gint i = 0;
 
@@ -1342,32 +1346,57 @@ void *network_repair_thread(gpointer data)
 			g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 			g_thread_exit(0);
 		}
-		if (open_network(args->network_host,args->network_port))
+		autodetect = (GBOOLEAN) OBJ_GET(global_data,"autodetect_port");
+		if (!autodetect)
 		{
-	//		g_usleep(200000); /* Sleep 200ms */
+			vector = g_strsplit((gchar *)OBJ_GET(global_data, "override_port"),":",2);
+			if (g_strv_length(vector) == 2)
+			{
+				host = vector[0];
+				port = strtol(vector[1],NULL,10);
+			}
+			else
+			{
+				host = args->network_host;
+				port = args->network_port;
+			}
+		}
+		else
+		{
+			host = args->network_host;
+			port = args->network_port;
+		}
+		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open host:port %s:%i\n"),host,port),FALSE,FALSE);
+		if (open_network(host,port))
+		{
+			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
 			if (comms_test())
 			{
 				network_is_open = TRUE;
-				open_control_socket(args->network_host,MTX_SOCKET_CONTROL_PORT);
+				thread_update_logbar("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
+				open_control_socket(host,MTX_SOCKET_CONTROL_PORT);
+				cleanup(vector);
 				break;
 			}
 			else
 			{
+				thread_update_logbar("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
 				close_network();
 				close_control_socket();
+				cleanup(vector);
+				g_usleep(200000); /* Sleep 200ms */
 				continue;
 			}
-
 		}
 		else
 		{
-			printf (_("Unable to open network port, sleeping 500 ms to see if it resolves\n"));
+			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Failed to open network connection to %s:%i, sleeping...\n"),host,port),FALSE,FALSE);
 			g_usleep(500000); /* Sleep 500ms */
 		}
 	}
 	if (network_is_open)
 	{
-		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",args->network_host,args->network_port));
+		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
 	}
 	g_thread_exit(0);
 	return NULL;

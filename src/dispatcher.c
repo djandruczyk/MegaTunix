@@ -307,6 +307,7 @@ trypop:
 					goto dealloc;
 				gtk_main_iteration();
 			}
+			gdk_flush();
 			gdk_threads_leave();
 		}
 	}
