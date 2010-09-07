@@ -5,7 +5,7 @@ snapshots_files = 	\
 		       	Bowling_and_Grippo_v301.ecu \
 		       	MegaSquirtnSpark-Extra_029-series.ecu \
 		       	MegaSquirtnSpark-Extra_029y-series.ecu \
-			MegaSquirtnSpark-Extra_Highres_011x-series.ecu \
+			MegaSquirtnSpark-Extra_Highres_011[ab]-series.ecu \
 			MegaSquirtnSpark-Extra_Highres_011d-series.ecu \
 			MegaSquirtnSpark-Extra_Highres_010x-series.ecu \
 			MS-II_V2.8x-series.ecu \
