@@ -19,11 +19,13 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
+gboolean close_demo(GtkWidget *, gpointer );
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *gauge = NULL;
+	gint timeout = 0;
 
 	gtk_init (&argc, &argv);
 
@@ -55,7 +57,7 @@ int main (int argc, char **argv)
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
-	g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
@@ -63,8 +65,10 @@ int main (int argc, char **argv)
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	mtx_gauge_face_set_show_drag_border (MTX_GAUGE_FACE (gauge), TRUE);
 
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (window, "delete_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
+	g_signal_connect (window, "destroy_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
 	gtk_main ();
 	return 0;
@@ -102,4 +106,12 @@ gboolean key_event_handler(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	printf("Key event\n");
 	return FALSE;
+}
+
+gboolean close_demo(GtkWidget *widget, gpointer data)
+{
+	g_source_remove((gint)data);
+	gtk_widget_destroy(widget);
+	gtk_main_quit();
+	return TRUE;
 }

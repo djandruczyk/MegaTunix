@@ -88,8 +88,195 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	/* Motion event not needed, as unused currently */
 	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
 	widget_class->size_request = mtx_gauge_face_size_request;
+	obj_class->finalize = mtx_gauge_face_finalize;
 
 	g_type_class_add_private (class_name, sizeof (MtxGaugeFacePrivate));
+}
+
+
+
+/*!
+ \brief Initializes the gauge attributes to sane defaults
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_finalize (GObject *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	if (priv->bitmap)
+		g_object_unref(priv->bitmap);
+	if (priv->pixmap)
+		g_object_unref(priv->pixmap);
+	if (priv->bg_pixmap)
+		g_object_unref(priv->bg_pixmap);
+	if (priv->tmp_pixmap)
+		g_object_unref(priv->tmp_pixmap);
+	if (priv->bm_gc)
+		g_object_unref(priv->bm_gc);
+	if (priv->gc)
+		g_object_unref(priv->gc);
+	if (priv->colormap)
+		g_object_unref(priv->colormap);
+	if (priv->cr)
+		cairo_destroy(priv->cr);
+	if (priv->font_options)
+		cairo_font_options_destroy(priv->font_options);
+	if (priv->layout)
+		g_object_unref(priv->layout);
+	if (priv->font_desc)
+		g_object_unref(priv->font_desc);
+	if (priv->value_font)
+		g_free(priv->value_font);
+	if (priv->xmlfunc_array)
+		g_array_unref(priv->xmlfunc_array);
+	if (priv->xmlfunc_hash)
+		g_hash_table_destroy(priv->xmlfunc_hash);
+	if (priv->xml_filename)
+		g_free(priv->xml_filename);
+	if (priv->t_blocks)
+		mtx_gauge_face_cleanup_text_blocks(priv->t_blocks);
+	if (priv->w_ranges)
+		mtx_gauge_face_cleanup_warning_ranges(priv->w_ranges);
+	if (priv->a_ranges)
+		mtx_gauge_face_cleanup_alert_ranges(priv->a_ranges);
+	if (priv->tick_groups)
+		mtx_gauge_face_cleanup_tick_groups(priv->tick_groups);
+	if (priv->polygons)
+		mtx_gauge_face_cleanup_polygons(priv->polygons);
+}
+
+
+/*!
+ \brief Frees up memory for tblocks array of structures
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_cleanup_text_blocks(GArray *array)
+{
+	gint i = 0;
+	MtxTextBlock *tblock = NULL;
+	for (i=0;i<array->len;i++)
+	{
+		tblock = g_array_index(array,MtxTextBlock *, i);
+		if (tblock->font)
+			g_free(tblock->font);
+		if (tblock->text)
+			g_free(tblock->text);
+		if (tblock)
+			g_free(tblock);
+	}
+	g_array_free(array,TRUE);
+}
+
+
+/*!
+ \brief Frees up memory for tgroups array of structures
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_cleanup_tick_groups(GArray *array)
+{
+	gint i = 0;
+	MtxTickGroup *tgroup = NULL;
+	for (i=0;i<array->len;i++)
+	{
+		tgroup = g_array_index(array,MtxTickGroup *, i);
+		if (tgroup->font)
+			g_free(tgroup->font);
+		if (tgroup->text)
+			g_free(tgroup->text);
+		if (tgroup)
+			g_free(tgroup);
+	}
+	g_array_free(array,TRUE);
+}
+
+
+/*!
+ \brief Frees up memory for w_ranges array of structures
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
+{
+	gint i = 0;
+	MtxWarningRange *range = NULL;
+	for (i=0;i<array->len;i++)
+	{
+		range = g_array_index(array,MtxWarningRange *, i);
+		if (range)
+			g_free(range);
+	}
+	g_array_free(array,TRUE);
+}
+
+
+/*!
+ \brief Frees up memory for a_ranges array of structures
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
+{
+	gint i = 0;
+	MtxAlertRange *range = NULL;
+	for (i=0;i<array->len;i++)
+	{
+		range = g_array_index(array,MtxAlertRange *, i);
+		if (range)
+			g_free(range);
+	}
+	g_array_free(array,TRUE);
+}
+
+
+/*!
+ \brief Frees up memory for polygons array of structures
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_cleanup_polygons(GArray *array)
+{
+	gint i = 0;
+	MtxPolygon *poly = NULL;
+	MtxPolyType type;
+	MtxCircle *circle = NULL;
+	MtxArc *arc = NULL;
+	MtxRectangle *rect = NULL;
+	MtxGenPoly *genpoly = NULL;
+	for (i=0;i<array->len;i++)
+	{
+		poly = g_array_index(array,MtxPolygon *, i);
+		if (poly)
+		{
+			switch (poly->type)
+			{
+				case MTX_CIRCLE:
+					circle = (MtxCircle *)poly->data;
+					if (circle)
+						g_free(circle);
+					break;
+				case MTX_ARC:
+					arc = (MtxArc *)poly->data;
+					if (arc)
+						g_free(arc);
+					break;
+				case MTX_RECTANGLE:
+					rect = (MtxRectangle *)poly->data;
+					if (rect)
+						g_free(rect);
+					break;
+				case MTX_GENPOLY:
+					genpoly = (MtxGenPoly *)poly->data;
+					if (genpoly)
+					{
+						if (genpoly->points)
+							g_free(genpoly->points);
+						g_free(genpoly);
+					}
+					break;
+				default:
+					break;
+			}
+
+			g_free(poly);
+		}
+	}
+	g_array_free(array,TRUE);
 }
 
 

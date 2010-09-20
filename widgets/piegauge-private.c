@@ -80,9 +80,8 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
  \brief Frees up private data
  \param gauge (MtxPieGauge *) pointer to the gauge object
  */
-void mtx_pie_gauge_finalize (MtxPieGauge *gauge)
+void mtx_pie_gauge_finalize (GObject *gauge)
 {
-	printf("finalize!!!\n");
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);

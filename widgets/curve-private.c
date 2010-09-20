@@ -59,10 +59,10 @@ GType mtx_curve_get_type(void)
  */
 void mtx_curve_class_init (MtxCurveClass *klass)
 {
-	GObjectClass *gobject_class;
+	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
 
-	gobject_class = G_OBJECT_CLASS (klass);
+	obj_class = G_OBJECT_CLASS (klass);
 	widget_class = GTK_WIDGET_CLASS (klass);
 
 	/* GtkWidget signals */
@@ -75,6 +75,7 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 	/* Motion event not needed, as unused currently */
 	widget_class->motion_notify_event = mtx_curve_motion_event; 
 	widget_class->size_request = mtx_curve_size_request;
+	obj_class->finalize = mtx_curve_finalize;
 
 	g_type_class_add_private (klass, sizeof (MtxCurvePrivate)); 
 	mtx_curve_signals[CHANGED_SIGNAL] = 
@@ -92,6 +93,44 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		G_STRUCT_OFFSET (MtxCurveClass, marker_proximity),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+}
+
+
+/*!
+ \brief Finalizes the curve object on destruction
+ \param curve (GObject *) pointer to the curve object
+ */
+void mtx_curve_finalize (GObject *curve)
+{
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	if (priv->pixmap)
+		g_object_unref(priv->pixmap);
+	if (priv->bg_pixmap)
+		g_object_unref(priv->bg_pixmap);
+	if (priv->coords)
+		g_free(priv->coords);
+	if (priv->points)
+		g_free(priv->points);
+	if (priv->gc)
+		g_object_unref(priv->gc);
+	if (priv->cr)
+		cairo_destroy(priv->cr);
+	if (priv->font_options)
+		cairo_font_options_destroy(priv->font_options);
+	if (priv->pos_str)
+		g_free(priv->pos_str);
+	if (priv->font)
+		g_free(priv->font);
+	if (priv->axis_font)
+		g_free(priv->axis_font);
+	if (priv->title)
+		g_free(priv->title);
+	if (priv->x_axis_label)
+		g_free(priv->x_axis_label);
+	if (priv->y_axis_label)
+		g_free(priv->y_axis_label);
+	if (priv->colormap)
+		g_object_unref(priv->colormap);
 }
 
 

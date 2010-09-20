@@ -113,6 +113,12 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);
 void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *);
 void calc_bounding_box(MtxPoint *, gint, GdkRectangle *);
+void mtx_gauge_face_finalize (GObject *gauge);
+void mtx_gauge_face_cleanup_alert_ranges(GArray *);
+void mtx_gauge_face_cleanup_warning_ranges(GArray *);
+void mtx_gauge_face_cleanup_tick_groups(GArray *);
+void mtx_gauge_face_cleanup_text_blocks(GArray *);
+void mtx_gauge_face_cleanup_polygons(GArray *);
 
 
 #endif

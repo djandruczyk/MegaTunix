@@ -23,12 +23,14 @@ void coords_changed(MtxCurve *, gpointer);
 void vertex_proximity(MtxCurve *, gpointer);
 void marker_proximity(MtxCurve *, gpointer);
 gboolean update_curve_marker(gpointer );
+gboolean close_demo(GtkWidget *, gpointer);
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *curve = NULL;
 	MtxCurveCoord points[11];
+	gint timeout = 0;
 	gint i = 0;
 
 	gtk_init (&argc, &argv);
@@ -41,8 +43,8 @@ int main (int argc, char **argv)
 	gtk_container_add (GTK_CONTAINER (window), curve);
 	for (i=0;i<11;i++)
 	{
-		//points[i].x=i*1000;
-		//points[i].y=(i*1000)-5000;
+		/*points[i].x=i*1000;
+		points[i].y=(i*1000)-5000;*/
 		points[i].x=i-6;
 		points[i].y=powf(2.0,(gfloat)i);
 		/*points[i].y=exp(i/2.0);*/
@@ -57,7 +59,7 @@ int main (int argc, char **argv)
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),"X Axis");
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"This is the Y Axis");
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),-7.0,7.0,0.0,1200.0);
-	//mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,12000.0,-6000.0,7000.0);
+	/*mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,12000.0,-6000.0,7000.0);*/
 	mtx_curve_set_x_precision(MTX_CURVE(curve),2);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),2);
 	g_signal_connect(G_OBJECT(curve), "coords-changed",
@@ -67,13 +69,15 @@ int main (int argc, char **argv)
 	g_signal_connect(G_OBJECT(curve), "marker-proximity",
 			G_CALLBACK(marker_proximity),NULL);
 
-	g_timeout_add(40,(GSourceFunc)update_curve_marker,(gpointer)curve);
+	timeout = g_timeout_add(40,(GSourceFunc)update_curve_marker,(gpointer)curve);
 
 	gtk_widget_show_all (window);
 
 
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (window, "delete_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
+	g_signal_connect (window, "destroy_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
 	gtk_main ();
 	return 0;
@@ -106,10 +110,10 @@ gboolean update_curve_marker(gpointer data)
 	GtkWidget *curve = data;
 	gfloat min = -8.0;
 	gfloat max = 8.0;
-	//gfloat min = -5000.0;
-	//gfloat max = 8000.0;
+	/*gfloat min = -5000.0;
+	gfloat max = 8000.0;*/
 	static gfloat step = 0.125;
-	//static gfloat step = 125;
+	/*static gfloat step = 125;*/
 	static gboolean rising = TRUE;
 	static gfloat value = 0;
 
@@ -125,5 +129,13 @@ gboolean update_curve_marker(gpointer data)
 /*	printf("Setting x marker to %f\n",value); */
 /*	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value); */
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
+	return TRUE;
+}
+
+gboolean close_demo(GtkWidget *widget, gpointer data)
+{
+	g_source_remove((gint)data);
+	gtk_widget_destroy(widget);
+	gtk_main_quit();
 	return TRUE;
 }

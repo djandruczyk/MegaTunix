@@ -130,6 +130,7 @@ gboolean auto_rescale(gpointer );
 gboolean delay_turnoff_vertexes(gpointer);
 gboolean proximity_test (GtkWidget *, GdkEventMotion *);
 gboolean get_intersection(gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat *, gfloat *);
+void mtx_curve_finalize(GObject *);
 
 
 
