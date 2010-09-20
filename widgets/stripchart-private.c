@@ -85,8 +85,56 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 	widget_class->leave_notify_event = mtx_stripchart_enter_leave_event; 
 	widget_class->motion_notify_event = mtx_stripchart_motion_event; 
 	widget_class->size_request = mtx_stripchart_size_request;
+	obj_class->finalize = mtx_stripchart_finalize;
 
 	g_type_class_add_private (class_name, sizeof (MtxStripChartPrivate)); 
+}
+
+
+/*!
+ \brief Finalizes the chart object
+ \param chart (MtxStripChart *) pointer to the chart object
+ */
+void mtx_stripchart_finalize (GObject *chart)
+{
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	if (priv->bg_pixmap);
+		g_object_unref(priv->bg_pixmap);
+	if (priv->trace_pixmap);
+		g_object_unref(priv->trace_pixmap);
+	if (priv->grat_pixmap);
+		g_object_unref(priv->grat_pixmap);
+	if (priv->font);
+		g_free(priv->font);
+	if (priv->gc);
+		g_object_unref(priv->gc);
+	if (priv->colormap);
+		g_object_unref(priv->colormap);
+	if (priv->cr);
+		cairo_destroy(priv->cr);
+	if (priv->traces);
+		mtx_stripchart_cleanup_traces(priv->traces);
+}
+
+
+/*!
+ \brief cleans up each trace object
+ \param chart (MtxStripChart *) pointer to the chart object
+ */
+void mtx_stripchart_cleanup_traces (GArray *traces)
+{
+	gint i=0;
+	MtxStripChartTrace *trace = NULL;
+	for(i=0;i<traces->len;i++)
+	{
+		trace = g_array_index(traces,MtxStripChartTrace *,i);
+		if (trace->name)
+			g_free(trace->name);
+		if (trace->history)
+			g_array_free(trace->history,TRUE);
+		g_free(trace);
+	}
+	g_array_free(traces,TRUE);
 }
 
 

@@ -81,6 +81,9 @@ void update_stripchart_position (MtxStripChart *);
 void render_marker(MtxStripChart *);
 void mtx_stripchart_init_colors(MtxStripChart *);
 void mtx_stripchart_redraw (MtxStripChart *gauge);
+void mtx_stripchart_finalize (GObject *);
+void mtx_stripchart_cleanup_traces (GArray *);
+
 
 
 

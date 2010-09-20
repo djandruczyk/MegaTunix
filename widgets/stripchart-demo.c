@@ -21,6 +21,7 @@
 
 gboolean update_stripchart(gpointer data);
 gboolean remove_trace(gpointer data);
+gboolean close_demo(GtkWidget *, gpointer);
 GtkWidget *chart = NULL;
 
 int main (int argc, char **argv)
@@ -33,6 +34,7 @@ int main (int argc, char **argv)
 	gint trace2 = 0;
 	gint trace3 = 0;
 	gfloat data[3] = {0.1,1.1,2.2};
+	gint timeout = 0;
 
 	gtk_init (&argc, &argv);
 
@@ -61,14 +63,16 @@ int main (int argc, char **argv)
 	/*mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);*/
 	
 
-	g_timeout_add(40,(GSourceFunc)update_stripchart,(gpointer)chart);
+	timeout = g_timeout_add(40,(GSourceFunc)update_stripchart,(gpointer)chart);
 /*	g_timeout_add(4000,(GSourceFunc)remove_trace,GINT_TO_POINTER(trace2));*/
 
 	gtk_widget_show_all (window);
 
 
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (window, "delete_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
+	g_signal_connect (window, "destroy_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
 	gtk_main ();
 	return 0;
@@ -92,4 +96,13 @@ gboolean remove_trace(gpointer data)
 {
 	mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),(GINT)data);
 	return FALSE;
+}
+
+
+gboolean close_demo(GtkWidget *widget, gpointer data)
+{
+	g_source_remove((gint)data);
+	gtk_widget_destroy(widget);
+	gtk_main_quit();
+	return TRUE;
 }
