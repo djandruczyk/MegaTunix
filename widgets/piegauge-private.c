@@ -70,10 +70,31 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 	/* Motion event not needed, as unused currently */
 	/*widget_class->motion_notify_event = mtx_pie_gauge_motion_event; */
 	widget_class->size_request = mtx_pie_gauge_size_request;
+	obj_class->finalize = mtx_pie_gauge_finalize;
 
 	g_type_class_add_private (class_name, sizeof (MtxPieGaugePrivate)); 
 }
 
+
+/*!
+ \brief Frees up private data
+ \param gauge (MtxPieGauge *) pointer to the gauge object
+ */
+void mtx_pie_gauge_finalize (MtxPieGauge *gauge)
+{
+	printf("finalize!!!\n");
+	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	if (priv->pixmap)
+		g_object_unref(priv->pixmap);
+	if (priv->bg_pixmap)
+		g_object_unref(priv->bg_pixmap);
+	if (priv->value_font)
+		g_free(priv->value_font);
+	if (priv->valname)
+		g_free(priv->valname);
+	if (priv->cr)
+		cairo_destroy(priv->cr);
+}
 
 /*!
  \brief Initializes the gauge attributes to sane defaults

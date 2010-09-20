@@ -19,11 +19,13 @@
 #include <math.h>
 
 gboolean update_pbar(gpointer );
+gboolean close_demo(GtkWidget *,gpointer );
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *pbar = NULL;
+	gint timeout = 0;
 
 	gtk_init (&argc, &argv);
 
@@ -33,15 +35,16 @@ int main (int argc, char **argv)
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			                        GTK_PROGRESS_BOTTOM_TO_TOP);
 
-
 	gtk_container_add (GTK_CONTAINER (window), pbar);
 	/*gtk_widget_realize(pbar);*/
 	gtk_widget_show_all (window);
 
-	g_timeout_add(30,(GSourceFunc)update_pbar,(gpointer)pbar);
+	timeout = g_timeout_add(30,(GSourceFunc)update_pbar,(gpointer)pbar);
 
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (window, "delete_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
+	g_signal_connect (window, "destroy_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
 	gtk_main ();
 	return 0;
@@ -78,4 +81,12 @@ gboolean update_pbar(gpointer data)
 	mtx_progress_bar_set_fraction (MTX_PROGRESS_BAR (pbar),cur_val);
 	return TRUE;
 
+}
+
+gboolean close_demo(GtkWidget * widget, gpointer data)
+{
+	g_source_remove((gint)data);
+	gtk_widget_destroy(widget);
+	gtk_main_quit();
+	return TRUE;
 }

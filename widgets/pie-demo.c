@@ -19,11 +19,13 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
+gboolean close_demo(GtkWidget *, gpointer );
 
 int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *gauge = NULL;
+	gint timeout = 0;
 
 	gtk_init (&argc, &argv);
 
@@ -37,10 +39,12 @@ int main (int argc, char **argv)
 	/*mtx_pie_gauge_set_value(MTX_PIE_GAUGE(gauge), 0.0);*/
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),LBOUND, 0.0);*/
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),UBOUND, 8000.0);*/
-	g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (window, "delete_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
+	g_signal_connect (window, "destroy_event",
+			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
 	gtk_main ();
 	return 0;
@@ -73,3 +77,12 @@ gboolean update_gauge(gpointer data)
 	return TRUE;
 
 }
+
+gboolean close_demo(GtkWidget *widget, gpointer data)
+{
+	g_source_remove((gint)data);
+	gtk_widget_destroy(widget);
+	gtk_main_quit();
+	return TRUE;
+}
+

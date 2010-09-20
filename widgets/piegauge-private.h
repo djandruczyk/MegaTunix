@@ -67,6 +67,8 @@ void generate_pie_gauge_background(MtxPieGauge *);
 void update_pie_gauge_position (MtxPieGauge *);
 void mtx_pie_gauge_init_colors(MtxPieGauge *);
 void mtx_pie_gauge_redraw (MtxPieGauge *gauge);
+void mtx_pie_gauge_finalize (MtxPieGauge *gauge);
+
 
 
 #endif

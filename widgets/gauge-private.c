@@ -67,7 +67,7 @@ GType mtx_gauge_face_get_type(void)
 
 
 /*!
- \brief Initializesthe mtx gauge face class and links in the primary
+ \brief Initializes the mtx gauge face class and links in the primary
  signal handlers for config event, expose event, and button press/release
  \param class_name (MtxGaugeFaceClass *) pointer to the class
  */
