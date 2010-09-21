@@ -46,7 +46,7 @@ gboolean force_page_change;
 extern gboolean connected;			/* valid connection with MS */
 extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
-extern GObject *global_data;
+extern GData *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 volatile gint last_page = -1;
 
@@ -69,7 +69,7 @@ void io_cmd(gchar *io_cmd_name, void *data)
 	Command *command = NULL;
 	extern GAsyncQueue *io_data_queue;
 
-	commands_hash = OBJ_GET(global_data,"commands_hash");
+	commands_hash = DATA_GET(&global_data,"commands_hash");
 
 	/* Fringe case for FUNC_CALL helpers that need to trigger 
 	 * post_functions AFTER all their subhandlers have ran.  We
@@ -132,7 +132,7 @@ void *thread_dispatcher(gpointer data)
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
-	args = OBJ_GET(global_data,"args");
+	args = DATA_GET(&global_data,"args");
 	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
@@ -278,14 +278,14 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 			printf(_("ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
 	}
 	output = initialize_outputdata();
-	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
-	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
-	OBJ_SET(output->object,"value", GINT_TO_POINTER(value));
-	OBJ_SET(output->object,"size", GINT_TO_POINTER(size));
-	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(get_multiplier(size)));
-	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+	DATA_SET(&output->data,"canID", GINT_TO_POINTER(canID));
+	DATA_SET(&output->data,"page", GINT_TO_POINTER(page));
+	DATA_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	DATA_SET(&output->data,"offset", GINT_TO_POINTER(offset));
+	DATA_SET(&output->data,"value", GINT_TO_POINTER(value));
+	DATA_SET(&output->data,"size", GINT_TO_POINTER(size));
+	DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(get_multiplier(size)));
+	DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
 	/* SPECIAL case for MS2,  as it's write always assume a "datablock"
 	 * and it doesn't have a simple easy write api due to it's use of 
 	 * different sized vars,  hence the extra complexity.
@@ -330,7 +330,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 			default:
 				break;
 		}
-		OBJ_SET(output->object,"data", (gpointer)data);
+		DATA_SET(&output->data,"data", (gpointer)data);
 	}
 
 	/* Set it here otherwise there's a risk of a missed burn due to 
@@ -429,9 +429,9 @@ void queue_ms1_page_change(gint page)
 		return;
 
 	output = initialize_outputdata();
-	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+	DATA_SET(&output->data,"page", GINT_TO_POINTER(page));
+	DATA_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->page_command,output);
 	last_page = page;
 	return;
@@ -457,13 +457,13 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 
 	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
 	output = initialize_outputdata();
-	OBJ_SET(output->object,"canID", GINT_TO_POINTER(canID));
-	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(output->object,"offset", GINT_TO_POINTER(offset));
-	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
-	OBJ_SET(output->object,"data", (gpointer)data);
-	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+	DATA_SET(&output->data,"canID", GINT_TO_POINTER(canID));
+	DATA_SET(&output->data,"page", GINT_TO_POINTER(page));
+	DATA_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	DATA_SET(&output->data,"offset", GINT_TO_POINTER(offset));
+	DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
+	DATA_SET(&output->data,"data", (gpointer)data);
+	DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
  	 * race condition
@@ -497,11 +497,11 @@ void table_write(gint page, gint num_bytes, guint8 * data)
 	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
 
 	output = initialize_outputdata();
-	OBJ_SET(output->object,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->object,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(output->object,"num_bytes", GINT_TO_POINTER(num_bytes));
-	OBJ_SET(output->object,"data", (gpointer)data);
-	OBJ_SET(output->object,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+	DATA_SET(&output->data,"page", GINT_TO_POINTER(page));
+	DATA_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
+	DATA_SET(&output->data,"data", (gpointer)data);
+	DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
@@ -773,7 +773,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_CHAR:
 				/*printf("8 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (GINT)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)DATA_GET(&output->data,arg->internal_name);
 				/*printf("value %i\n",v);*/
 				block->data = g_new0(guint8,1);
 				block->data[0] = (guint8)v;
@@ -783,7 +783,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_S16:
 				/*printf("16 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (GINT)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)DATA_GET(&output->data,arg->internal_name);
 				/*printf("value %i\n",v);*/
 				block->data = g_new0(guint8,2);
 				block->data[0] = (v & 0xff00) >> 8;
@@ -794,7 +794,7 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 			case MTX_S32:
 /*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
-				v = (GINT)OBJ_GET(output->object,arg->internal_name);
+				v = (GINT)DATA_GET(&output->data,arg->internal_name);
 /*				printf("value %i\n",v); */
 				block->data = g_new0(guint8,4);
 				block->data[0] = (v & 0xff000000) >> 24;
@@ -808,8 +808,8 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 				block->type = DATA;
 				if (!arg->internal_name)
 					printf(_("ERROR, MTX_UNDEF, donno what to do!!\n"));
-				sent_data = (guint8 *)OBJ_GET(output->object,arg->internal_name);
-				len = (GINT)OBJ_GET(output->object,"num_bytes");
+				sent_data = (guint8 *)DATA_GET(&output->data,arg->internal_name);
+				len = (GINT)DATA_GET(&output->data,"num_bytes");
 				block->data = g_memdup(sent_data,len);
 				block->len = len;
 				/*

@@ -34,7 +34,6 @@
 #include <widgetmgmt.h>
 
 
-extern GObject *global_data;
 /*!
  \brief rescale_table() is called to rescale a subset of a Table (doesn't
  matter what kind of table). 

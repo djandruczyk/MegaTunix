@@ -19,7 +19,6 @@
 
 
 
-extern GObject *global_data;
 /*!
  \brief Sets the file API to version passed by major/minor
  \param major  major api version number

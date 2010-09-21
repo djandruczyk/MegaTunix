@@ -32,7 +32,6 @@
 
 
 
-extern GObject *global_data;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget

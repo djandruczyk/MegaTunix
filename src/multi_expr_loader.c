@@ -27,7 +27,6 @@
 
 
 
-extern GObject *global_data;
 /*!
  \brief multi_exprt_loader() is called when a "multi_expr_keys" key is found in
  a realtimemap, and triggers the loading of al lthe keys/values that

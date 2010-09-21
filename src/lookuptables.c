@@ -29,7 +29,6 @@
 static gboolean ltc_visible = FALSE;
 
 GHashTable *lookuptables = NULL;
-extern GObject *global_data;
 
 enum
 {

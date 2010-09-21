@@ -26,7 +26,6 @@
 
 
 
-extern GObject *global_data;
 
 /*!
  \brief load_tags() loads tags from the datamap file in reference to a 

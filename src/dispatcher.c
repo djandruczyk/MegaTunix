@@ -51,7 +51,6 @@
 
 extern GAsyncQueue *pf_dispatch_queue;
 extern GAsyncQueue *gui_dispatch_queue;
-extern GObject *global_data;
 extern GCond *pf_dispatch_cond;
 extern GCond *gui_dispatch_cond;
 static GTimer *ticker;
@@ -186,6 +185,7 @@ gboolean gui_dispatcher(gpointer data)
 	Text_Message *t_message = NULL;
 	Widget_Update *w_update = NULL;
 	QFunction *qfunc = NULL;
+	extern GData *global_data;
 	extern volatile gboolean leaving;
 	extern volatile gboolean might_be_leaving;
 	/*extern gint mem_view_style[];*/
@@ -291,7 +291,7 @@ trypop:
 					message->payload = NULL;
 					break;
 					gdk_threads_enter();
-					reset_temps(OBJ_GET(global_data,"temp_units"));
+					reset_temps(DATA_GET(&global_data,"temp_units"));
 					gdk_threads_leave();
 					/*
 					   case UPD_RAW_MEMORY:

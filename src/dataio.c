@@ -43,7 +43,7 @@ gint ms_ve_goodread_count;
 gint just_starting;
 extern gint dbg_lvl;
 extern GStaticMutex serio_mutex;
-extern GObject *global_data;
+extern GData *global_data;
 
 /* Cause OS-X sucks.... */
 #ifndef MSG_NOSIGNAL
@@ -193,7 +193,6 @@ gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 	extern Serial_Params * serial_params;
 	gint res = 0;
 	fd_set rd;
-	extern GObject *global_data;
 	struct timeval timeout;
 
 	FD_ZERO(&rd);
@@ -201,7 +200,7 @@ gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 
 	*len = 0;
 	timeout.tv_sec = 0;
-	timeout.tv_usec = OBJ_GET(global_data, "read_timeout") == NULL ? 500000:(GINT)OBJ_GET(global_data, "read_timeout")*1000;
+	timeout.tv_usec = DATA_GET(&global_data, "read_timeout") == NULL ? 500000:(GINT)DATA_GET(&global_data, "read_timeout")*1000;
 	/* Network mode requires select to see if data is ready, otherwise
 	 * connection will block.  Serial is configured with timeout if no
 	 * data is avail,  hence we simulate that with select.. Setting this

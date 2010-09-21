@@ -21,7 +21,6 @@
 #include <widgetmgmt.h>
 
 GArray *raw_editor_widgets = NULL;
-extern GObject *global_data;
 
 
 /*!

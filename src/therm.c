@@ -26,9 +26,6 @@
 #include <widgetmgmt.h>
 
 
-extern GObject *global_data;
-
-
 
 EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 {

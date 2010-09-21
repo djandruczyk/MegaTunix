@@ -22,7 +22,6 @@
 #include <gui_handlers.h>
 
 
-extern GObject *global_data;
 /*!
  \brief check_dependancies() extracts the dependancy information from the 
  object and checks each one in turn until one evauates to false, in that

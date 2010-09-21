@@ -41,7 +41,7 @@ Logview_Data *lv_data = NULL;
 gboolean playback_mode = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 extern Log_Info *log_info;
-extern GObject *global_data;
+extern GData *global_data;
 
 
 /*!
@@ -963,7 +963,7 @@ void trace_update(gboolean redraw_all)
 
 	pixmap = lv_data->pixmap;
 
-	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
 	/*
 	if (sig_id == 0)
 		sig_id = g_signal_handler_find(lookup_widget("logviewer_log_position_hscale"),G_SIGNAL_MATCH_FUNC,0,0,NULL,(gpointer)logviewer_log_position_change,NULL);
@@ -1185,7 +1185,7 @@ void scroll_logviewer_traces()
 	if (!pixmap)
 		return;
 
-	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 	start = end + lv_zoom;
@@ -1423,7 +1423,7 @@ EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
 
-	lv_zoom = (GINT)OBJ_GET(global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
 
 	lv_data = g_new0(Logview_Data,1);
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
@@ -1458,7 +1458,6 @@ void write_logviewer_defaults(ConfigFile *cfgfile)
 	gint i = 0;
 	gchar * name = NULL;
 	GString *string = NULL;
-	extern GObject *global_data;
 
 	list = get_list("logviewer_defaults");
 	if (list)

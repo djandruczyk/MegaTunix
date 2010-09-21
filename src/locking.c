@@ -33,12 +33,11 @@
 #endif
 
 
-extern GObject *global_data;
-
+extern GData *global_data;
 
 void create_mtx_lock()
 {
-	CmdLineArgs * args = OBJ_GET(global_data,"args");
+	CmdLineArgs * args = DATA_GET(&global_data,"args");
 	if (args->network_mode)
 		return;
 #ifdef __WIN32__
@@ -85,7 +84,7 @@ void unix_create_mtx_lock()
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_object_unref(global_data);
+			g_datalist_clear(&global_data);
 		exit(-1);
 	}
 #endif
@@ -110,7 +109,7 @@ void win32_create_mtx_lock(void)
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_object_unref(global_data);
+			g_datalist_clear(&global_data);
 		exit(-1);
 	}
 	return;
@@ -121,8 +120,7 @@ void win32_create_mtx_lock(void)
 void unlock_serial()
 {
 #ifndef __WIN32__
-	extern GObject *global_data;
-	gchar *fname = OBJ_GET(global_data,"serial_lockfile");
+	gchar *fname = DATA_GET(&global_data,"serial_lockfile");
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (fname)
@@ -131,7 +129,7 @@ void unlock_serial()
 		{
 			g_remove(fname);
 			g_free(fname);
-			OBJ_SET(global_data,"serial_lockfile", NULL);
+			DATA_SET(&global_data,"serial_lockfile", NULL);
 		}
 	}
 #endif
@@ -141,7 +139,6 @@ void unlock_serial()
 gboolean lock_serial(gchar * name)
 {
 #ifndef __WIN32__
-	extern GObject *global_data;
 	gchar *tmpbuf = NULL;
 	gchar *lock = NULL;
 	gchar **vector = NULL;
@@ -197,7 +194,7 @@ gboolean lock_serial(gchar * name)
 	if (res)
 	{
 
-		OBJ_SET(global_data,"serial_lockfile",(gpointer)lock);
+		DATA_SET(&global_data,"serial_lockfile",(gpointer)lock);
 		return TRUE;
 	}
 	else

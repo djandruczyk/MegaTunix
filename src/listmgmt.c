@@ -16,7 +16,6 @@
 #include <listmgmt.h>
 
 static GHashTable *lists_hash = NULL;
-extern GObject *global_data;
 
 /*!
  \brief get_list returns the list referenced by name

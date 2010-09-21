@@ -37,7 +37,7 @@
 
 
 extern GStaticMutex rtv_mutex;
-extern GObject *global_data;
+extern GData *global_data;
 /*!
  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
  complex function so read the sourcecode.. ;)
@@ -78,7 +78,7 @@ void process_rt_vars(void *incoming)
 	/* Backup current rtv copy */
 	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
 	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
-	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
 	if (rtv_map->ts_array->len%250 == 0)

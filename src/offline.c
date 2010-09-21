@@ -40,7 +40,6 @@
 
 gchar * offline_firmware_choice = NULL;
 volatile gboolean offline = FALSE;
-extern GObject *global_data;
 
 
 /*!

@@ -36,7 +36,7 @@
 #include <widgetmgmt.h>
 
 gboolean tabs_loaded = FALSE;
-extern GObject *global_data;
+extern GData *global_data;
 
 
 /*!
@@ -82,7 +82,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	bindgroup = g_new0(BindGroup,1);
 	notebook = lookup_widget("toplevel_notebook");
-	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+	hidden_list = (gboolean *)DATA_GET(&global_data,"hidden_list");
 
 	while (firmware->tab_list[i])
 	{
@@ -382,7 +382,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 				OBJ_SET(widget,group->keys[i],GINT_TO_POINTER(tmpi));
 				if (strstr(group->keys[i], "temp_dep"))
 				{
-					OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
+					OBJ_SET(widget,"widget_temp",DATA_GET(&global_data,"temp_units"));
 				}
 				break;
 			case MTX_STRING:
@@ -609,7 +609,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	*/
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
-		OBJ_SET(widget,"widget_temp",OBJ_GET(global_data,"temp_units"));
+		OBJ_SET(widget,"widget_temp",DATA_GET(&global_data,"temp_units"));
 		g_free(tmpbuf);
 	}
 
@@ -634,14 +634,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		switch (widget_type)
 		{
 			case MTX_RANGE:
-				gtk_range_set_value(GTK_RANGE(widget),(GINT)OBJ_GET(global_data,initializer));
+				gtk_range_set_value(GTK_RANGE(widget),(GINT)DATA_GET(&global_data,initializer));
 				break;
 
 			case MTX_SPINBUTTON:
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,initializer));
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,initializer));
 				break;
 			case MTX_ENTRY:
-				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)OBJ_GET(global_data,initializer));
+				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)DATA_GET(&global_data,initializer));
 
 			default:
 				break;

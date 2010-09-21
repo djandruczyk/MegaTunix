@@ -52,6 +52,11 @@
 #define OBJ_GET(object, name) g_object_get_data(G_OBJECT(object),name)
 #define OBJ_SET(object, name, data) g_object_set_data(G_OBJECT(object),name,data)
 
+/* g_datalist_get/set macros */
+
+#define DATA_GET(datalist, name) g_datalist_get_data(datalist,name)
+#define DATA_SET(datalist, name, data) g_datalist_set_data(datalist,name,data)
+
 /* Download modes */
 #define IMMEDIATE		0x10
 #define DEFERRED		0x11

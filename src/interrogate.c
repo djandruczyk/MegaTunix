@@ -48,7 +48,6 @@ extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
-extern GObject *global_data;
 Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 

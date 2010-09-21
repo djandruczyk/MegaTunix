@@ -22,7 +22,7 @@
 #include <xmlbase.h>
 
 
-extern GObject *global_data;
+extern GData *global_data;
 
 void load_comm_xml(gchar *filename)
 {
@@ -51,7 +51,7 @@ void load_comm_xml(gchar *filename)
 	load_xmlcomm_elements(root_element);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-	/*g_hash_table_foreach((GHashTable *)OBJ_GET(global_data,"commands_hash"),xmlcomm_dump_commands,NULL);*/
+	/*g_hash_table_foreach((GHashTable *)DATA_GET(&global_data,"commands_hash"),xmlcomm_dump_commands,NULL);*/
 
 }
 
@@ -62,9 +62,9 @@ void load_xmlcomm_elements(xmlNode *a_node)
 	xmlNode *cur_node = NULL;
 
 	if (!arguments)
-		arguments = (GHashTable *)OBJ_GET(global_data,"potential_arguments");
+		arguments = (GHashTable *)DATA_GET(&global_data,"potential_arguments");
 	if (!commands)
-		commands = (GHashTable *)OBJ_GET(global_data,"commands_hash");
+		commands = (GHashTable *)DATA_GET(&global_data,"commands_hash");
 
 	/* Iterate though all nodes... */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
@@ -287,7 +287,7 @@ void load_cmd_args(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"arg") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				arg = g_hash_table_lookup(OBJ_GET(global_data,"potential_arguments"),tmpbuf);
+				arg = g_hash_table_lookup(DATA_GET(&global_data,"potential_arguments"),tmpbuf);
 				cmd->args = g_array_append_val(cmd->args,arg);
 				g_free(tmpbuf);
 				tmpbuf = NULL;

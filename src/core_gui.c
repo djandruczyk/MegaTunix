@@ -40,7 +40,7 @@ static gint def_height=400;
 gint width = 0;
 gint height = 0;
 GtkTooltips *tip = NULL;
-extern GObject *global_data;
+extern GData *global_data;
 
 
 /*!
@@ -66,7 +66,7 @@ int setup_gui()
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
-	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	CmdLineArgs *args = DATA_GET(&global_data,"args");
 
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
 	filename = get_file(g_strdup(fname),NULL);
@@ -82,7 +82,7 @@ int setup_gui()
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_object_unref(global_data);
+			g_datalist_clear(&global_data);
 		exit(-1);
 	}
 	else
@@ -92,7 +92,7 @@ int setup_gui()
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	register_widget("main_window",window);
-	OBJ_SET(global_data,"font_size",GINT_TO_POINTER(PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc))));
+	DATA_SET(&global_data,"font_size",GINT_TO_POINTER(PANGO_PIXELS(pango_font_description_get_size(GTK_WIDGET(window)->style->font_desc))));
 	g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
@@ -102,14 +102,14 @@ int setup_gui()
 	gtk_container_add(GTK_CONTAINER(window),top_box);
 
 	glade_xml_signal_autoconnect(xml);
-	OBJ_SET(global_data,"main_xml",xml);
+	DATA_SET(&global_data,"main_xml",xml);
 
 	tip = gtk_tooltips_new();
-	x = (GINT)OBJ_GET(global_data,"main_x_origin");
-	y = (GINT)OBJ_GET(global_data,"main_y_origin");
-	w = (GINT)OBJ_GET(global_data,"width");
-	h = (GINT)OBJ_GET(global_data,"height");
-	tips_in_use = (GBOOLEAN)OBJ_GET(global_data,"tips_in_use");
+	x = (GINT)DATA_GET(&global_data,"main_x_origin");
+	y = (GINT)DATA_GET(&global_data,"main_y_origin");
+	w = (GINT)DATA_GET(&global_data,"width");
+	h = (GINT)DATA_GET(&global_data,"height");
+	tips_in_use = (GBOOLEAN)DATA_GET(&global_data,"tips_in_use");
 	gtk_window_move((GtkWindow *)window, x, y);
 	gtk_widget_set_size_request(window,def_width,def_height);
 	gtk_window_resize(GTK_WINDOW(window),w,h);
@@ -127,7 +127,7 @@ int setup_gui()
 	/* Tabs that should be hidden.... */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");
 	tabcount = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
-	hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+	hidden_list = (gboolean *)DATA_GET(&global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)
 	{
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
@@ -165,9 +165,9 @@ void finalize_core_gui(GladeXML * xml)
 	gchar * tmpbuf = NULL;
 	gint temp_units;
 	extern Serial_Params *serial_params;
-	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	CmdLineArgs *args = DATA_GET(&global_data,"args");
 
-	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
@@ -196,7 +196,7 @@ void finalize_core_gui(GladeXML * xml)
 	/* General Tab, Tooltips */
 	button = glade_xml_get_widget(xml,"tooltips_cbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOOLTIPS_STATE));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)OBJ_GET(global_data,"tips_in_use"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(&global_data,"tips_in_use"));
 
 	/* General Tab, Temp Scales */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
@@ -218,7 +218,7 @@ void finalize_core_gui(GladeXML * xml)
 	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
 	register_widget("dash1_cbutton",cbutton);
 	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
-	tmpbuf = (gchar *)OBJ_GET(global_data,"dash_1_name");
+	tmpbuf = (gchar *)DATA_GET(&global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0))
 	{
 		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
@@ -245,7 +245,7 @@ void finalize_core_gui(GladeXML * xml)
 	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
 	register_widget("dash2_cbutton",cbutton);
 	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
-	tmpbuf = (gchar *)OBJ_GET(global_data,"dash_2_name");
+	tmpbuf = (gchar *)DATA_GET(&global_data,"dash_2_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0))
 	{
 		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
@@ -326,7 +326,7 @@ void finalize_core_gui(GladeXML * xml)
 	
 	/* Read Timeout threshold spinner */
 	widget = glade_xml_get_widget(xml,"read_timeout_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"read_timeout"));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,"read_timeout"));
 
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_READ_TIMEOUT));
 	
@@ -338,11 +338,11 @@ void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"serial_autodetect_cbutton");
 	register_widget("serial_autodetect_cbutton",widget);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(COMM_AUTODETECT));
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)OBJ_GET(global_data,"autodetect_port"));
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)DATA_GET(&global_data,"autodetect_port"));
 
 	/* Fill in comm port entry if in manual mode */
-	if (!(GBOOLEAN)OBJ_GET(global_data,"autodetect_port"))
-		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),OBJ_GET(global_data,"override_port"));
+	if (!(GBOOLEAN)DATA_GET(&global_data,"autodetect_port"))
+		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),DATA_GET(&global_data,"override_port"));
 
 	/* COMMS Tab Read delay subtable */
 	ebox = glade_xml_get_widget(xml,"rates_ebox");
@@ -354,19 +354,19 @@ void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
 
 	widget = glade_xml_get_widget(xml,"rtslider_fps_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"rtslider_fps"));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,"rtslider_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTSLIDER_FPS));
 
 	widget = glade_xml_get_widget(xml,"rttext_fps_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"rttext_fps"));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,"rttext_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(RTTEXT_FPS));
 
 	widget = glade_xml_get_widget(xml,"dashboard_fps_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"dashboard_fps"));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,"dashboard_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(DASHBOARD_FPS));
 
 	widget = glade_xml_get_widget(xml,"ve3d_fps_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)OBJ_GET(global_data,"ve3d_fps"));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,"ve3d_fps"));
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(VE3D_FPS));
 
 	/* COMMS Tab Network ctrls */
@@ -379,7 +379,7 @@ void finalize_core_gui(GladeXML * xml)
 
 	button = glade_xml_get_widget(xml,"allow_net_checkbutton");
 	register_widget("allow_net_checkbutton",button);
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)OBJ_GET(global_data,"network_access"));
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(&global_data,"network_access"));
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 
 	widget = glade_xml_get_widget(xml,"netaccess_table");

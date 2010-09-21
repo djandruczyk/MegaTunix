@@ -25,7 +25,6 @@
 
 
 gint dbg_lvl = 0;
-extern GObject *global_data;
 
 GIOChannel * dbg_channel = NULL;
 GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
@@ -53,7 +52,7 @@ static DebugLevel dbglevels[] =
  */
 void open_debug()
 {
-	extern GObject *global_data;
+	extern GData *global_data;
 	CmdLineArgs * args = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
@@ -63,7 +62,7 @@ void open_debug()
 	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
-	args = OBJ_GET(global_data,"args");
+	args = DATA_GET(&global_data,"args");
 
 	if(!dbg_channel)
 	{

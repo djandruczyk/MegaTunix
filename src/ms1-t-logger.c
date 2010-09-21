@@ -30,7 +30,6 @@
 
 
 TTMon_Data *ttm_data;
-extern GObject *global_data;
 
 #define CTR 187
 #define UNITS 188

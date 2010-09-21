@@ -35,7 +35,6 @@
 #include <widgetmgmt.h>
 
 gchar *vex_comment;
-extern GObject *global_data;
 
 /*!
  \brief import_handlers structure is used to hold the list of string 

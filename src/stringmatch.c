@@ -22,7 +22,6 @@
 
 
 static GHashTable *str_2_enum = NULL;
-extern GObject *global_data;
 
 
 /*!

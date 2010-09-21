@@ -23,7 +23,6 @@
 
 
 extern Logview_Data *lv_data;
-extern GObject *global_data;
 
 
 /*! 

@@ -61,7 +61,7 @@ GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
 GtkWidget **te_windows = NULL;
-extern GObject *global_data;
+extern GData *global_data;
 gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
@@ -90,41 +90,41 @@ void init(void)
 	for (i=0;i<100;i++)
 		hidden_list[i]=FALSE;
 
-	OBJ_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));	/* Don't make dash fullscreen by default */
-	OBJ_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	OBJ_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	OBJ_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	OBJ_SET(global_data,"rtt_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
-	OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
-	OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
-	OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
-	OBJ_SET(global_data,"status_width",GINT_TO_POINTER(130));
-	OBJ_SET(global_data,"status_height",GINT_TO_POINTER(386));
-	OBJ_SET(global_data,"width",GINT_TO_POINTER(800));
-	OBJ_SET(global_data,"height",GINT_TO_POINTER(600));
-	OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
-	OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
-	OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(25));
-	OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
-	OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
-	OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
-	OBJ_SET(global_data,"hidden_list",hidden_list);
-	OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
+	DATA_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));	/* Don't make dash fullscreen by default */
+	DATA_SET(&global_data,"gui_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	DATA_SET(&global_data,"main_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	DATA_SET(&global_data,"status_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	DATA_SET(&global_data,"rtt_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+	DATA_SET(&global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
+	DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
+	DATA_SET(&global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
+	DATA_SET(&global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
+	DATA_SET(&global_data,"status_width",GINT_TO_POINTER(130));
+	DATA_SET(&global_data,"status_height",GINT_TO_POINTER(386));
+	DATA_SET(&global_data,"width",GINT_TO_POINTER(800));
+	DATA_SET(&global_data,"height",GINT_TO_POINTER(600));
+	DATA_SET(&global_data,"main_x_origin",GINT_TO_POINTER(160));
+	DATA_SET(&global_data,"main_y_origin",GINT_TO_POINTER(120));
+	DATA_SET(&global_data,"rtslider_fps",GINT_TO_POINTER(25));
+	DATA_SET(&global_data,"rttext_fps",GINT_TO_POINTER(15));
+	DATA_SET(&global_data,"dashboard_fps",GINT_TO_POINTER(30));
+	DATA_SET(&global_data,"ve3d_fps",GINT_TO_POINTER(20));
+	DATA_SET(&global_data,"hidden_list",hidden_list);
+	DATA_SET(&global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);
-	OBJ_SET(global_data,"potential_arguments",table);
+	DATA_SET(&global_data,"potential_arguments",table);
 	commands = g_hash_table_new(g_str_hash,g_str_equal);
-	OBJ_SET(global_data,"commands_hash",commands);
+	DATA_SET(&global_data,"commands_hash",commands);
 
 	/* initialize all global variables to known states */
-	OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
-	cleanup(OBJ_GET(global_data,"potential_ports"));
+	DATA_SET(&global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
+	cleanup(DATA_GET(&global_data,"potential_ports"));
 #ifdef __WIN32__
-	OBJ_SET(global_data,"override_port",g_strdup("COM1"));
-	OBJ_SET(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"));
+	DATA_SET(&global_data,"override_port",g_strdup("COM1"));
+	DATA_SET(&global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"));
 #else
-	OBJ_SET(global_data,"override_port",g_strdup("/dev/ttyS0"));
-	 OBJ_SET(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"));
+	DATA_SET(&global_data,"override_port",g_strdup("/dev/ttyS0"));
+	 DATA_SET(&global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"));
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
@@ -166,80 +166,80 @@ gboolean read_config(void)
 	CmdLineArgs *args = NULL;
 
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
-	args = OBJ_GET(global_data,"args");
+	args = DATA_GET(&global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
-			OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
 //		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
-//			OBJ_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
+//			DATA_SET(&global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
-			OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
-			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTText_FPS", &tmpi))
-			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "Dashboard_FPS", &tmpi))
-			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
-			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			cleanup(OBJ_GET(global_data,"dash_1_name"));
-			OBJ_SET(global_data,"dash_1_name",g_strdup(tmpbuf));
+			cleanup(DATA_GET(&global_data,"dash_1_name"));
+			DATA_SET(&global_data,"dash_1_name",g_strdup(tmpbuf));
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &tmpi))
-			OBJ_SET(global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dash_1_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &tmpi))
-			OBJ_SET(global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_1_size_ratio", &tmpf))
-			OBJ_SET(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+			DATA_SET(&global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			cleanup(OBJ_GET(global_data,"dash_2_name"));
-			OBJ_SET(global_data,"dash_2_name",g_strdup(tmpbuf));
+			cleanup(DATA_GET(&global_data,"dash_2_name"));
+			DATA_SET(&global_data,"dash_2_name",g_strdup(tmpbuf));
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
-			OBJ_SET(global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dash_2_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &tmpi))
-			OBJ_SET(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
-			OBJ_SET(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+			DATA_SET(&global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		if (args->network_mode)
-			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
+			DATA_SET(&global_data,"read_timeout",GINT_TO_POINTER(250));
 		else
 		{
 			if (cfg_read_int(cfgfile, "Serial", "read_timeout", &tmpi))
-				OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER(tmpi));
+				DATA_SET(&global_data,"read_timeout",GINT_TO_POINTER(tmpi));
 		}
 		if (cfg_read_int(cfgfile, "Window", "status_width", &tmpi))
-			OBJ_SET(global_data,"status_width",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"status_width",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_height", &tmpi))
-			OBJ_SET(global_data,"status_height",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"status_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_x_origin", &tmpi))
-			OBJ_SET(global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"status_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "status_y_origin", &tmpi))
-			OBJ_SET(global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"status_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_x_origin", &tmpi))
-			OBJ_SET(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_y_origin", &tmpi))
-			OBJ_SET(global_data,"rtt_y_origin",GINT_TO_POINTER(tmpi));
-		if(cfg_read_int(cfgfile, "Window", "width", &tmpi))
-			OBJ_SET(global_data,"width",GINT_TO_POINTER(tmpi));
-		if(cfg_read_int(cfgfile, "Window", "height", &tmpi))
-			OBJ_SET(global_data,"height",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rtt_y_origin",GINT_TO_POINTER(tmpi));
+		if (cfg_read_int(cfgfile, "Window", "width", &tmpi))
+			DATA_SET(&global_data,"width",GINT_TO_POINTER(tmpi));
+		if (cfg_read_int(cfgfile, "Window", "height", &tmpi))
+			DATA_SET(&global_data,"height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_x_origin", &tmpi))
-			OBJ_SET(global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_y_origin", &tmpi))
-			OBJ_SET(global_data,"main_y_origin",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"main_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_string(cfgfile, "Window", "hidden_tabs_list", &tmpbuf))
 		{
-			hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+			hidden_list = (gboolean *)DATA_GET(&global_data,"hidden_list");
 			vector = g_strsplit(tmpbuf,",",-1);
 			for (i=0;i<g_strv_length(vector);i++)
 				hidden_list[atoi(vector[i])] = TRUE;
@@ -249,33 +249,33 @@ gboolean read_config(void)
 
 		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
 		{
-			cleanup(OBJ_GET(global_data,"potential_ports"));
-			OBJ_SET(global_data,"potential_ports",g_strdup(tmpbuf));
+			cleanup(DATA_GET(&global_data,"potential_ports"));
+			DATA_SET(&global_data,"potential_ports",g_strdup(tmpbuf));
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
 		{
-			cleanup(OBJ_GET(global_data,"override_port"));
-			OBJ_SET(global_data,"override_port",g_strdup(tmpbuf));
+			cleanup(DATA_GET(&global_data,"override_port"));
+			DATA_SET(&global_data,"override_port",g_strdup(tmpbuf));
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
-			OBJ_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
 
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
 		if (cfg_read_int(cfgfile, "Serial", "baudrate", &tmpi))
-			OBJ_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
-			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
 		read_logviewer_defaults(cfgfile);
 
-		if ((GINT)OBJ_GET(global_data,"lv_zoom") < 1)
-			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(1));
+		if ((GINT)DATA_GET(&global_data,"lv_zoom") < 1)
+			DATA_SET(&global_data,"lv_zoom",GINT_TO_POINTER(1));
 		if(cfg_read_int(cfgfile, "Logviewer", "scroll_delay", &tmpi))
-			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
-		if ((GINT)OBJ_GET(global_data,"lv_scroll_delay") < 40)
-			OBJ_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
+			DATA_SET(&global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
+		if ((GINT)DATA_GET(&global_data,"lv_scroll_delay") < 40)
+			DATA_SET(&global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
@@ -337,17 +337,17 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
-	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)OBJ_GET(global_data,"tips_in_use"));
-	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)OBJ_GET(global_data,"network_access"));
+	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)DATA_GET(&global_data,"tips_in_use"));
+	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(&global_data,"network_access"));
 		
-	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)OBJ_GET(global_data,"temp_units"));
-	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)OBJ_GET(global_data,"rtslider_fps"));
-	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)OBJ_GET(global_data,"rttext_fps"));
-	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)OBJ_GET(global_data,"dashboard_fps"));
-	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)OBJ_GET(global_data,"ve3d_fps"));
+	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(&global_data,"temp_units"));
+	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)DATA_GET(&global_data,"rtslider_fps"));
+	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(&global_data,"rttext_fps"));
+	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(&global_data,"dashboard_fps"));
+	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)DATA_GET(&global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
-	cfg_write_int(cfgfile, "Serial", "read_timeout", (GINT)OBJ_GET(global_data,"read_timeout"));
-	tmpbuf = OBJ_GET(global_data,"dash_1_name");
+	cfg_write_int(cfgfile, "Serial", "read_timeout", (GINT)DATA_GET(&global_data,"read_timeout"));
+	tmpbuf = DATA_GET(&global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
@@ -376,7 +376,7 @@ void save_config(void)
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_y_origin");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_size_ratio");
 	}
-	tmpbuf = OBJ_GET(global_data,"dash_2_name");
+	tmpbuf = DATA_GET(&global_data,"dash_2_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
@@ -451,7 +451,7 @@ void save_config(void)
 		}
 		widget = lookup_widget("toplevel_notebook");
 		total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
-		hidden_list = (gboolean *)OBJ_GET(global_data,"hidden_list");
+		hidden_list = (gboolean *)DATA_GET(&global_data,"hidden_list");
 		string = g_string_new(NULL);
 		for (i=0;i<total;i++)
 		{
@@ -473,15 +473,15 @@ void save_config(void)
 		cfg_write_string(cfgfile, "Serial", "override_port", 
 				serial_params->port_name);
 	cfg_write_string(cfgfile, "Serial", "potential_ports", 
-				(gchar *)OBJ_GET(global_data,"potential_ports"));
+				(gchar *)DATA_GET(&global_data,"potential_ports"));
 	cfg_write_boolean(cfgfile, "Serial", "autodetect_port", 
-				(GBOOLEAN)OBJ_GET(global_data,"autodetect_port"));
+				(GBOOLEAN)DATA_GET(&global_data,"autodetect_port"));
 	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
-	cfg_write_int(cfgfile, "Serial", "baudrate", (GINT)OBJ_GET(global_data,"baudrate"));
+	cfg_write_int(cfgfile, "Serial", "baudrate", (GINT)DATA_GET(&global_data,"baudrate"));
 			
-	cfg_write_int(cfgfile, "Logviewer", "zoom", (GINT)OBJ_GET(global_data,"lv_zoom"));
-	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) OBJ_GET(global_data,"lv_scroll_delay"));
+	cfg_write_int(cfgfile, "Logviewer", "zoom", (GINT)DATA_GET(&global_data,"lv_zoom"));
+	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) DATA_GET(&global_data,"lv_scroll_delay"));
 	write_logviewer_defaults(cfgfile);
 
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
@@ -735,21 +735,21 @@ void mem_dealloc()
 	}
 	/* Runtime Text*/
 	g_static_mutex_lock(&rtt_mutex);
-	store = OBJ_GET(global_data,"rtt_model");
+	store = DATA_GET(&global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
-	hash = OBJ_GET(global_data,"rtt_hash");
+	hash = DATA_GET(&global_data,"rtt_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
 	g_static_mutex_unlock(&rtt_mutex);
 	/* Runtime Sliders */
-	hash = OBJ_GET(global_data,"ww_sliders");
+	hash = DATA_GET(&global_data,"ww_sliders");
 	if (hash)
 		g_hash_table_destroy(hash);
-	hash = OBJ_GET(global_data,"rt_sliders");
+	hash = DATA_GET(&global_data,"rt_sliders");
 	if (hash)
 		g_hash_table_destroy(hash);
-	hash = OBJ_GET(global_data,"enr_sliders");
+	hash = DATA_GET(&global_data,"enr_sliders");
 	if (hash)
 		g_hash_table_destroy(hash);
 	/* Dynamic widgets master hash  */
@@ -785,9 +785,7 @@ OutputData * initialize_outputdata()
 	OutputData *output = NULL;
 
 	output = g_new0(OutputData, 1);
-	output->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref(output->object);
-	gtk_object_sink(GTK_OBJECT(output->object));
+	g_datalist_init(&output->data);
 	return output;
 }
 
@@ -942,7 +940,7 @@ void dealloc_client_data(MtxSocketClient *client)
  */
 void dealloc_message(Io_Message * message)
 {
-	OutputData *data;
+	OutputData *payload;
 	/*printf("dealloc_message\n");*/
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
@@ -957,9 +955,9 @@ void dealloc_message(Io_Message * message)
 	message->command = NULL;
         if (message->payload)
 	{
-		data = (OutputData *)message->payload;
-		if (G_IS_OBJECT(data->object))
-			g_object_unref(data->object);
+		payload = (OutputData *)message->payload;
+		if (payload->data)
+			g_datalist_clear(&payload->data);
                 cleanup(message->payload);
 	}
         cleanup(message);

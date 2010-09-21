@@ -75,7 +75,7 @@ extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern Serial_Params *serial_params;
 extern gint dbg_lvl;
-extern GObject *global_data;
+extern GData *global_data;
 
 gint active_page = -1;
 gint active_table = -1;
@@ -118,7 +118,7 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
-	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	CmdLineArgs *args = DATA_GET(&global_data,"args");
 	GMutex *mutex = g_mutex_new();
 	extern GCond *pf_dispatch_cond;
 	extern GCond *gui_dispatch_cond;
@@ -262,8 +262,8 @@ gboolean comm_port_override(GtkEditable *editable)
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
-	g_free(OBJ_GET(global_data,"override_port"));
-	OBJ_SET(global_data,"override_port",g_strdup(port));
+	g_free(DATA_GET(&global_data,"override_port"));
+	DATA_SET(&global_data,"override_port",g_strdup(port));
 	g_free(port);
 	close_serial();
 	unlock_serial();
@@ -305,11 +305,11 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		switch ((ToggleButton)handler)
 		{
 			case TOGGLE_NETMODE:
-				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
+				DATA_SET(&global_data,"network_access",GINT_TO_POINTER(TRUE));
 				open_tcpip_sockets();
 				break;
 			case COMM_AUTODETECT:
-				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
+				DATA_SET(&global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
@@ -323,15 +323,15 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
-				OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
+				DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
 				break;
 			case FAHRENHEIT:
-				OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));
+				DATA_SET(&global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
 				forced_update = TRUE;
 				break;
 			case CELSIUS:
-				OBJ_SET(global_data,"temp_units",GINT_TO_POINTER(CELSIUS));
+				DATA_SET(&global_data,"temp_units",GINT_TO_POINTER(CELSIUS));
 				reset_temps(GINT_TO_POINTER(CELSIUS));
 				forced_update = TRUE;
 				break;
@@ -369,12 +369,12 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		switch ((ToggleButton)handler)
 		{
 			case TOGGLE_NETMODE:
-				OBJ_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
+				DATA_SET(&global_data,"network_access",GINT_TO_POINTER(FALSE));
 				break;
 			case COMM_AUTODETECT:
-				OBJ_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
+				DATA_SET(&global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
-				gtk_entry_set_text(GTK_ENTRY(lookup_widget("active_port_entry")),OBJ_GET(global_data,"override_port"));
+				gtk_entry_set_text(GTK_ENTRY(lookup_widget("active_port_entry")),DATA_GET(&global_data,"override_port"));
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -382,7 +382,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_disable(tip);
-				OBJ_SET(global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
+				DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
 				break;
 			default:
 				break;
@@ -689,7 +689,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
 	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -1520,7 +1520,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	size = (DataSize) OBJ_GET(widget,"size");
 	bitmask = (GINT) OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift(bitmask);
-	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
 	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
@@ -1533,39 +1533,39 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			serial_params->read_wait = (gint)value;
 			break;
 		case SER_READ_TIMEOUT:
-			OBJ_SET(global_data,"read_timeout",GINT_TO_POINTER((gint)value));
+			DATA_SET(&global_data,"read_timeout",GINT_TO_POINTER((gint)value));
 			break;
 		case RTSLIDER_FPS:
-			OBJ_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
-			source = (GINT)OBJ_GET(global_data,"rtslider_id");
+			DATA_SET(&global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
+			source = (GINT)DATA_GET(&global_data,"rtslider_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
-			OBJ_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
 			break;
 		case RTTEXT_FPS:
-			OBJ_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
-			source = (GINT)OBJ_GET(global_data,"rttext_id");
+			DATA_SET(&global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
+			source = (GINT)DATA_GET(&global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
-			OBJ_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:
-			OBJ_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
-			source = (GINT)OBJ_GET(global_data,"dashboard_id");
+			DATA_SET(&global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
+			source = (GINT)DATA_GET(&global_data,"dashboard_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
-			OBJ_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
 		case VE3D_FPS:
-			OBJ_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
-			source = (GINT)OBJ_GET(global_data,"ve3d_id");
+			DATA_SET(&global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
+			source = (GINT)DATA_GET(&global_data,"ve3d_id");
 			if (source)
 				g_source_remove(source);
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
-			OBJ_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;
@@ -1604,7 +1604,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case LOGVIEW_ZOOM:
-			OBJ_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
+			DATA_SET(&global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
 			tmpwidget = lookup_widget("logviewer_trace_darea");	
 			if (tmpwidget)
 				lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
@@ -2232,7 +2232,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 	if (temp_dep)
 	{
-		if ((GINT)OBJ_GET(global_data,"temp_units") == CELSIUS)
+		if ((GINT)DATA_GET(&global_data,"temp_units") == CELSIUS)
 			value = (value-32)*(5.0/9.0);
 	}
 
@@ -3174,7 +3174,7 @@ void switch_labels(gpointer key, gpointer data)
 	gboolean state = (GBOOLEAN) data;
 	gint temp_units;
 
-	temp_units = (GINT)OBJ_GET(global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
 	if (GTK_IS_WIDGET(widget))
 	{
 		if ((GBOOLEAN)OBJ_GET(widget,"temp_dep") == TRUE)

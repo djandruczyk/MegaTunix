@@ -31,7 +31,6 @@
 
 
 MS2_TTMon_Data *ttm_data;
-extern GObject *global_data;
 
 
 EXPORT void ms2_ttm_reset_zoom()

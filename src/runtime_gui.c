@@ -42,7 +42,7 @@ extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
-extern GObject *global_data;
+extern GData *global_data;
 
 gboolean forced_update = TRUE;
 gboolean rt_forced_update = TRUE;
@@ -281,24 +281,24 @@ gboolean update_rtsliders(gpointer data)
 	GHashTable **ve3d_sliders;
 	GHashTable *hash;
 	extern Firmware_Details *firmware;
-	ve3d_sliders = OBJ_GET(global_data,"ve3d_sliders");
+	ve3d_sliders = DATA_GET(&global_data,"ve3d_sliders");
 	extern volatile gboolean leaving;
 	if (leaving)
 		return FALSE;
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
-		if ((hash = OBJ_GET(global_data,"rt_sliders")))
+		if ((hash = DATA_GET(&global_data,"rt_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
-		if ((hash = OBJ_GET(global_data,"enr_sliders")))
+		if ((hash = DATA_GET(&global_data,"enr_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ACCEL_WIZ_TAB)	/* Enrichments display is up */
-		if ((hash = OBJ_GET(global_data,"aw_sliders")))
+		if ((hash = DATA_GET(&global_data,"aw_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
 	{
-		if ((hash = OBJ_GET(global_data,"ww_sliders")))
+		if ((hash = DATA_GET(&global_data,"ww_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
@@ -325,10 +325,10 @@ gboolean update_rttext(gpointer data)
 	if (leaving)
 		return FALSE;
 	g_static_mutex_lock(&rtt_mutex);
-	if (OBJ_GET(global_data,"rtt_model"))
-		gtk_tree_model_foreach(GTK_TREE_MODEL(OBJ_GET(global_data,"rtt_model")),rtt_foreach,NULL);
-	if (OBJ_GET(global_data,"rtt_hash"))
-		g_hash_table_foreach(OBJ_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
+	if (DATA_GET(&global_data,"rtt_model"))
+		gtk_tree_model_foreach(GTK_TREE_MODEL(DATA_GET(&global_data,"rtt_model")),rtt_foreach,NULL);
+	if (DATA_GET(&global_data,"rtt_hash"))
+		g_hash_table_foreach(DATA_GET(&global_data,"rtt_hash"),rtt_update_values,NULL);
 	g_static_mutex_unlock(&rtt_mutex);
 	return TRUE;
 }
@@ -342,8 +342,8 @@ gboolean update_dashboards(gpointer data)
 	extern GStaticMutex dash_mutex;
 
 	g_static_mutex_lock(&dash_mutex);
-	if (OBJ_GET(global_data,"dash_hash"))
-		g_hash_table_foreach(OBJ_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
+	if (DATA_GET(&global_data,"dash_hash"))
+		g_hash_table_foreach(DATA_GET(&global_data,"dash_hash"),update_dash_gauge,NULL);
 	g_static_mutex_unlock(&dash_mutex);
 	return TRUE;
 }

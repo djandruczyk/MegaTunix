@@ -51,7 +51,7 @@ GCond *gui_dispatch_cond = NULL;
 GCond *pf_dispatch_cond = NULL;
 GCond *statuscounts_cond = NULL;
 GCond *rtv_thread_cond = NULL;
-GObject *global_data = NULL;
+GData *global_data = NULL;
 
 /*!
  \brief main() is the typical main function in a C program, it performs
@@ -92,9 +92,7 @@ gint main(gint argc, gchar ** argv)
 	printf(_("Hello World!\n"));
 	*/
 
-	global_data = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref(global_data);
-	gtk_object_sink(GTK_OBJECT(global_data));
+	g_datalist_init(&global_data);
 	handle_args(argc,argv);
 
 	/* This will exit mtx if the locking fails! */

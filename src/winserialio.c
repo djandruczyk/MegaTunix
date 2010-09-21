@@ -22,7 +22,6 @@
 #endif
 
 extern Serial_Params *serial_params;
-extern GObject *global_data;
 
 /*!
  \brief win32_setup_serial_params() sets up the serial port attributes for win32

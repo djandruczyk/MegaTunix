@@ -30,7 +30,6 @@
 #include <tag_loader.h>
 
 GHashTable *dynamic_widgets = NULL;
-extern GObject *global_data;
 
 /*!
  \brief populate_master() stores a pointer to all of the glade loaded 

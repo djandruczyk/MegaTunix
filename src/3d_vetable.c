@@ -67,7 +67,6 @@
 #define ONE_SECOND 	 1	/* one second */
 
 static GLuint font_list_base;
-extern GObject *global_data;
 
 
 #define DEFAULT_WIDTH  640

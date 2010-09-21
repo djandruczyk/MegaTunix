@@ -42,7 +42,7 @@ gboolean begin = TRUE;
 /* External global vars */
 extern gint ready;
 extern Rtv_Map *rtv_map;
-extern GObject *global_data;
+extern GData *global_data;
 
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
@@ -518,7 +518,7 @@ gboolean autolog_dump(gpointer data)
 	gchar * tmpbuf = NULL;
 	static gint dlog_index = 0;
 
-	args = (CmdLineArgs *)OBJ_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(&global_data,"args");
 
 	filename = g_strdup_printf("%s%s%s_%.3i.log",args->autolog_dump_dir,PSEP,args->autolog_basename,dlog_index);
 		

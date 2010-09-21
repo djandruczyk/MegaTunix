@@ -35,7 +35,7 @@
 
 
 
-extern GObject *global_data;
+extern GData *global_data;
 
 /*!
  \brief load_status_pf() is called to create the ECU status window, load the 
@@ -56,7 +56,7 @@ EXPORT void load_status_pf(void)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
-	CmdLineArgs *args = OBJ_GET(global_data,"args");
+	CmdLineArgs *args = DATA_GET(&global_data,"args");
 	extern gboolean interrogated;
 
 
@@ -78,17 +78,17 @@ EXPORT void load_status_pf(void)
 		gdk_threads_leave();
 		return;
 	}
-	main_xml = (GladeXML *)OBJ_GET(global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
 	xml = glade_xml_new(main_xml->filename,"status_window",NULL);
 	window = glade_xml_get_widget(xml,"status_window");
 	register_widget("status_window",window);
 	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	gtk_window_set_title(GTK_WINDOW(window),_("ECU Status"));
-	x = (GINT)OBJ_GET(global_data,"status_x_origin");
-	y = (GINT)OBJ_GET(global_data,"status_y_origin");
+	x = (GINT)DATA_GET(&global_data,"status_x_origin");
+	y = (GINT)DATA_GET(&global_data,"status_y_origin");
 	gtk_window_move(GTK_WINDOW(window),x,y);
-	w = (GINT)OBJ_GET(global_data,"status_width");
-	h = (GINT)OBJ_GET(global_data,"status_height");
+	w = (GINT)DATA_GET(&global_data,"status_width");
+	h = (GINT)DATA_GET(&global_data,"status_height");
 	gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 	gtk_window_resize(GTK_WINDOW(window),w,h);
 //	gtk_window_set_default_size(GTK_WINDOW(window),1,1);

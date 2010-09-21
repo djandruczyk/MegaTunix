@@ -20,7 +20,6 @@
 #include <post_process.h>
 
 static GArray * raw_memory_data;
-extern GObject *global_data;
 
 
 /*!

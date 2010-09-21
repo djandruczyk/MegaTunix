@@ -27,7 +27,6 @@
 
 
 
-extern GObject *global_data;
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
  a datamap or realtimemap, and triggers the loading of al lthe keys/values that

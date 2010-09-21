@@ -39,7 +39,6 @@
 
 Rtv_Map *rtv_map = NULL;
 gboolean rtvars_loaded = FALSE;
-extern GObject *global_data;
 
 
 /*!
@@ -77,6 +76,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	extern gboolean interrogated;
 	extern gboolean connected;
 	extern volatile gboolean offline;
+	extern GData *global_data;
 
 	rtvars_loaded = FALSE;
 
@@ -98,7 +98,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_object_unref(global_data);
+			g_datalist_clear(&global_data);
 		exit(-1);
 	}
 	cfgfile = cfg_open_file(filename);

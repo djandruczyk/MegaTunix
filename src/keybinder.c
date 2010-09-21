@@ -24,7 +24,6 @@
 #include <widgetmgmt.h>
 
 
-extern GObject *global_data;
 
 
 void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)

@@ -32,7 +32,6 @@ extern Serial_Params *serial_params;
 extern GdkColor white;
 extern GdkColor red;
 extern GdkColor black;
-extern GObject *global_data;
 
 
 /*!

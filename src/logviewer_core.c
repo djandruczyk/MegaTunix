@@ -32,7 +32,6 @@
 #include <widgetmgmt.h>
 
 Log_Info *log_info = NULL;
-extern GObject *global_data;
 
 
 EXPORT void create_stripchart(GtkWidget *parent)
@@ -413,9 +412,10 @@ EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
 	extern gint playback_id;
+	extern GData *global_data;
 
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
-	OBJ_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
+	DATA_SET(&global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
 	if (playback_id > 0)
 	{
 		stop_tickler(LV_PLAYBACK_TICKLER);

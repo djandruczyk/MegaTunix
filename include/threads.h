@@ -58,7 +58,7 @@ struct _Widget_Update
  */
 struct _OutputData
 {
-	GObject *object;	/*! Opaque object for data storage */
+	GData *data;	/*! Opaque object for data storage */
 	gboolean need_page_change;	/*! Set to true to force page change */
 	gboolean queue_update;	/*! If true queues a member widget update */
 };
