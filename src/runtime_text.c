@@ -112,7 +112,7 @@ EXPORT void load_rt_text_pf()
 
 	/*Get the root element node */
 	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
-	DATA_SET(&global_data,"rtt_model",store);
+	DATA_SET_FULL(&global_data,"rtt_model",store,(GDestroyNotify)gtk_list_store_clear);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
 	setup_rtt_treeview(treeview);
@@ -263,7 +263,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	}
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-	if (!G_IS_OBJECT(object))
+	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
 		return NULL;
@@ -331,7 +331,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	if (!rtt_hash)
 	{
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_rtt);
-		DATA_SET(&global_data,"rtt_hash",(gpointer)rtt_hash);
+		DATA_SET_FULL(&global_data,"rtt_hash",(gpointer)rtt_hash,(GDestroyNotify)g_hash_table_destroy);
 	}
 
 	if ((rtt_hash) && (ctrl_name) && (source))
@@ -380,8 +380,8 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
-	history = (GArray *)OBJ_GET(rtt->object,"history");
-	precision = (GINT)OBJ_GET(rtt->object,"precision");
+	history = (GArray *)DATA_GET(&rtt->object,"history");
+	precision = (GINT)DATA_GET(&rtt->object,"precision");
 
 	if (!history)
 		return;
@@ -472,10 +472,10 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 			COL_RTT_LAST, &previous,
 			-1);
 
-	if (!G_IS_OBJECT(rtt->object))
+	if (!(rtt->object))
 		return FALSE;
-	history = (GArray *)OBJ_GET(rtt->object,"history");
-	precision = (GINT)OBJ_GET(rtt->object,"precision");
+	history = (GArray *)DATA_GET(&rtt->object,"history");
+	precision = (GINT)DATA_GET(&rtt->object,"precision");
 
 	if (!history)
 		return FALSE;

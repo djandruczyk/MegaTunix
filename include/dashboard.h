@@ -28,7 +28,7 @@ typedef struct _Dash_Gauge Dash_Gauge;
  */
 struct _Dash_Gauge
 {
-	GObject *object;		/* Data storage object for RT vars */
+	GData *object;			/* Data storage object for RT vars */
 	gchar * source;			/* Data Source name */
 	GtkWidget *gauge;		/* pointer to gauge itself */
 	GtkWidget *dash;		/* pointer to gauge parent */

@@ -109,22 +109,22 @@ void init(void)
 	DATA_SET(&global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(&global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(&global_data,"ve3d_fps",GINT_TO_POINTER(20));
-	DATA_SET(&global_data,"hidden_list",hidden_list);
+	DATA_SET_FULL(&global_data,"hidden_list",hidden_list,g_free);
 	DATA_SET(&global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new(g_str_hash,g_str_equal);
-	DATA_SET(&global_data,"potential_arguments",table);
+	DATA_SET_FULL(&global_data,"potential_arguments",(gpointer)table,(GDestroyNotify)g_hash_table_destroy);
 	commands = g_hash_table_new(g_str_hash,g_str_equal);
-	DATA_SET(&global_data,"commands_hash",commands);
+	DATA_SET_FULL(&global_data,"commands_hash",commands,(GDestroyNotify)g_hash_table_destroy);
 
 	/* initialize all global variables to known states */
 	DATA_SET(&global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
 	cleanup(DATA_GET(&global_data,"potential_ports"));
 #ifdef __WIN32__
-	DATA_SET(&global_data,"override_port",g_strdup("COM1"));
-	DATA_SET(&global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"));
+	DATA_SET_FULL(&global_data,"override_port",g_strdup("COM1"),g_free);
+	DATA_SET_FULL(&global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"),g_free);
 #else
-	DATA_SET(&global_data,"override_port",g_strdup("/dev/ttyS0"));
-	 DATA_SET(&global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"));
+	DATA_SET_FULL(&global_data,"override_port",g_strdup("/dev/ttyS0"),g_free);
+	 DATA_SET_FULL(&global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"),g_free);
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
@@ -188,7 +188,7 @@ gboolean read_config(void)
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
 			cleanup(DATA_GET(&global_data,"dash_1_name"));
-			DATA_SET(&global_data,"dash_1_name",g_strdup(tmpbuf));
+			DATA_SET_FULL(&global_data,"dash_1_name",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &tmpi))
@@ -196,11 +196,11 @@ gboolean read_config(void)
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &tmpi))
 			DATA_SET(&global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_1_size_ratio", &tmpf))
-			DATA_SET(&global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+			DATA_SET_FULL(&global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),g_free);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
 			cleanup(DATA_GET(&global_data,"dash_2_name"));
-			DATA_SET(&global_data,"dash_2_name",g_strdup(tmpbuf));
+			DATA_SET_FULL(&global_data,"dash_2_name",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
@@ -208,7 +208,7 @@ gboolean read_config(void)
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &tmpi))
 			DATA_SET(&global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
-			DATA_SET(&global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)));
+			DATA_SET_FULL(&global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),g_free);
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		if (args->network_mode)
 			DATA_SET(&global_data,"read_timeout",GINT_TO_POINTER(250));
@@ -249,14 +249,12 @@ gboolean read_config(void)
 
 		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
 		{
-			cleanup(DATA_GET(&global_data,"potential_ports"));
-			DATA_SET(&global_data,"potential_ports",g_strdup(tmpbuf));
+			DATA_SET_FULL(&global_data,"potential_ports",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
 		{
-			cleanup(DATA_GET(&global_data,"override_port"));
-			DATA_SET(&global_data,"override_port",g_strdup(tmpbuf));
+			DATA_SET_FULL(&global_data,"override_port",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
@@ -1113,7 +1111,7 @@ void dealloc_table_params(Table_Params * table_params)
 /*!
  \brief dealloc_dep_object() deallocates the dependancy object used 
  for dependancy management
- \param object (GObject *) pointer to object to deallocate
+ \param object (GData *) pointer to object to deallocate
  */
 void dealloc_dep_object(GData *object)
 {
@@ -1129,53 +1127,16 @@ void dealloc_dep_object(GData *object)
 /*!
  \brief dealloc_rtvp_object() deallocates the rtv object used 
  for runtime vars data
- \param object (GObject *) pointer to object to deallocate
+ \param object (GData *) pointer to object to deallocate
  */
-void dealloc_rtv_object(gpointer data)
+void dealloc_rtv_object(GData *object)
 {
-	gchar **keys = NULL;
-	void * eval = NULL;
-	DataType keytype = 0;
-	gint i = 0;
-	/*static gint count = 0;*/
-	GObject * object = (GObject *) data;
-
-	if (!G_IS_OBJECT(object))
+	if (!(object))
 		return;
 	/*printf("object %i, pointer %p, names \"%s\" \"%s\" \"%s\"\n",count++,(void *)object,(gchar *)OBJ_GET(object,"dlog_gui_name"),(gchar *)OBJ_GET(object,"dlog_field_name"),(gchar *)OBJ_GET(object,"internal_names"));*/
-	if (!(GBOOLEAN)OBJ_GET(object,"history"))
-		g_array_free(OBJ_GET(object,"history"),TRUE);
-	keys = (gchar **)OBJ_GET(object,"keys");
-	if (!keys)
-	{
-		g_object_unref(object);
-		return;
-	}
-	for (i=0;i<g_strv_length(keys);i++)
-	{
-		keytype = translate_string(keys[i]);
-		switch ((DataType)keytype)
-		{
-			case MTX_INT:
-			case MTX_ENUM:
-			case MTX_BOOL:
-				OBJ_SET(object,keys[i],NULL);
-				break;
-			case MTX_STRING:
-			case MTX_FLOAT:
-				cleanup(OBJ_GET(object,keys[i]));
-				OBJ_SET(object,keys[i],NULL);
-				break;
-		}
-	}
-	g_strfreev(keys);
-	cleanup(OBJ_GET(object,"internal_names"));
-	if ((eval = OBJ_GET(object,"ul_evaluator")))
-		evaluator_destroy(eval);
-	eval = NULL;
-	if ((eval = OBJ_GET(object,"dl_evaluator")))
-		evaluator_destroy(eval);
-	g_object_unref(object);
+	if (!(GBOOLEAN)DATA_GET(&object,"history"))
+		g_array_free(DATA_GET(&object,"history"),TRUE);
+	g_datalist_clear(&object);
 }
 /*!
  \brief dealloc_te_params() deallocates the structure used for firmware

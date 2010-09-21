@@ -85,7 +85,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET(&global_data,"ascii_socket",socket);
+		DATA_SET_FULL(&global_data,"ascii_socket",socket,g_free);
 		fail1 = FALSE;
 	}
 	else
@@ -104,7 +104,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET(&global_data,"binary_socket",socket);
+		DATA_SET_FULL(&global_data,"binary_socket",socket,g_free);
 		fail2 = FALSE;
 	}
 	else
@@ -123,7 +123,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET(&global_data,"control_socket",socket);
+		DATA_SET_FULL(&global_data,"control_socket",socket,g_free);
 		fail3 = FALSE;
 	}
 	else
@@ -1061,7 +1061,7 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	guint j = 0;
-	GObject * object = NULL;
+	GData * object = NULL;
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
 	GString *output;
@@ -1074,9 +1074,9 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 		{
 			for (j=0;j<rtv_map->rtv_list->len;j++)
 			{
-				object = g_array_index(rtv_map->rtv_list,GObject *, j);
-				lookup_current_value((gchar *)OBJ_GET(object,"internal_names"),&tmpf);
-				lookup_precision((gchar *)OBJ_GET(object,"internal_names"),&tmpi);
+				object = g_array_index(rtv_map->rtv_list,GData *, j);
+				lookup_current_value((gchar *)DATA_GET(&object,"internal_names"),&tmpf);
+				lookup_precision((gchar *)DATA_GET(&object,"internal_names"),&tmpi);
 				if (j < (rtv_map->rtv_list->len-1))
 					g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 				else
@@ -1107,15 +1107,15 @@ void socket_get_rtv_list(gint fd)
 	gint res = 0;
 	gint len = 0;
 	gchar * tmpbuf = NULL;
-	GObject * object = NULL;
+	GData * object = NULL;
 
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		object = g_array_index(rtv_map->rtv_list,GData *, i);
 		if (i < rtv_map->rtv_list->len-1)
-			tmpbuf = g_strdup_printf("%s ",(gchar *)OBJ_GET(object,"internal_names"));
+			tmpbuf = g_strdup_printf("%s ",(gchar *)DATA_GET(&object,"internal_names"));
 		else
-			tmpbuf = g_strdup_printf("%s",(gchar *)OBJ_GET(object,"internal_names"));
+			tmpbuf = g_strdup_printf("%s",(gchar *)DATA_GET(&object,"internal_names"));
 		if (tmpbuf)
 		{
 			len = strlen(tmpbuf);

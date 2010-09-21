@@ -40,7 +40,7 @@ EXPORT void create_stripchart(GtkWidget *parent)
 	gchar ** sources = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
-	GObject *object = NULL;
+	GData *object = NULL;
 	gint min = 0;
 	gint max = 0;
 	gint precision = 0;
@@ -57,20 +57,22 @@ EXPORT void create_stripchart(GtkWidget *parent)
 	for (i=0;i<g_strv_length(sources);i++)
 	{
 		object = g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
-		if (!G_IS_OBJECT(object))
+		if (!(object))
 			continue;
-		if (OBJ_GET(object,"dlog_gui_name"))
-			name = OBJ_GET(object,"dlog_gui_name");
-		if (OBJ_GET(object,"real_lower"))
-			min = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+		if ((gchar *)DATA_GET(&object,"dlog_gui_name"))
+			name = (gchar *)DATA_GET(&object,"dlog_gui_name");
+		else
+			name = g_strdup("undefined!\n");
+		if (DATA_GET(&object,"real_lower"))
+			min = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
-		if (OBJ_GET(object,"real_upper"))
-			max = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+		if (DATA_GET(&object,"real_upper"))
+			max = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
-		if (OBJ_GET(object,"precision"))
-			precision = (GINT)OBJ_GET(object,"precision");
+		if (DATA_GET(&object,"precision"))
+			precision = (GINT)DATA_GET(&object,"precision");
 		else
 			precision = 0;
 		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);
@@ -166,7 +168,7 @@ Log_Info * initialize_log_info(void)
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->signature = NULL;
-	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GObject *));
+	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GData *));
 	return log_info;
 }
 
@@ -184,7 +186,7 @@ void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	gchar **fields = NULL;
 	gint num_fields = 0;
 	GArray *array = NULL;
-	GObject *object = NULL;
+	GData *object = NULL;
 	gint i = 0;
 	extern gboolean offline;
 	extern Rtv_Map *rtv_map;
@@ -242,9 +244,9 @@ read_again:
 			g_object_ref(object);
 			gtk_object_sink(GTK_OBJECT(object));
 			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-			OBJ_SET(object,"data_array",(gpointer)array);
-			g_free(OBJ_GET(object,"lview_name"));
-			OBJ_SET(object,"lview_name",g_strdup(g_strstrip(fields[i])));
+			OBJ_SET(&object,"data_array",(gpointer)array);
+			g_free(DATA_GET(&object,"lview_name"));
+			OBJ_SET(&object,"lview_name",g_strdup(g_strstrip(fields[i])));
 			g_array_append_val(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
@@ -266,7 +268,7 @@ void populate_limits(Log_Info *log_info)
 {
 	guint i = 0;
 	gint j = 0;
-	GObject * object = NULL;
+	GData * object = NULL;
 	GArray *array = NULL;
 	gfloat val = 0.0;
 	gfloat lower = 0.0;
@@ -282,8 +284,8 @@ void populate_limits(Log_Info *log_info)
 		upper = 0.0;
 		tmpi = 0;
 		len = 0;
-		object = g_array_index(log_info->log_list,GObject *, i);
-		array = (GArray *)OBJ_GET(object,"data_array");
+		object = g_array_index(log_info->log_list,GData *, i);
+		array = (GArray *)DATA_GET(&object,"data_array");
 		len = array->len;
 		for (j=0;j<len;j++)
 		{
@@ -295,9 +297,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(&object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(&object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }
@@ -319,7 +321,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 	gchar ** vector = NULL;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
-	GObject *object = NULL;
+	GData *object = NULL;
 
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
@@ -348,8 +350,8 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 
 		for (i=0;i<(log_info->field_count);i++)
 		{
-			object = g_array_index(log_info->log_list,GObject *, i);
-			tmp_array = (GArray *)OBJ_GET(object,"data_array");
+			object = g_array_index(log_info->log_list,GData *, i);
+			tmp_array = (GArray *)DATA_GET(&object,"data_array");
 			val = (gfloat)g_ascii_strtod(g_strdelimit(data[i],",.",'.'),NULL);
 			g_array_append_val(tmp_array,val);
 
@@ -361,7 +363,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 					vector = g_strsplit(data[i],".",-1);
 					precision = strlen(vector[1]);
 					g_strfreev(vector);
-					OBJ_SET(object,"precision",GINT_TO_POINTER(precision));
+					OBJ_SET(&object,"precision",GINT_TO_POINTER(precision));
 				}
 			}
 
@@ -379,7 +381,7 @@ void free_log_info()
 {
 	extern Log_Info *log_info;
 	guint i = 0;
-	GObject *object = NULL;
+	GData *object = NULL;
 	GArray *array = NULL;
 	
 	if (!log_info)
@@ -388,11 +390,11 @@ void free_log_info()
 	for (i=0;i<log_info->field_count;i++)
 	{
 		object = NULL;
-		object = g_array_index(log_info->log_list,GObject *,i);
+		object = g_array_index(log_info->log_list,GData *,i);
 		if (!object)
 			continue;
-		array = (GArray *)OBJ_GET(object,"data_array");
-		g_free(OBJ_GET(object,"lview_name"));
+		array = (GArray *)DATA_GET(&object,"data_array");
+		g_free(DATA_GET(&object,"lview_name"));
 		if (array)
 			g_array_free(array,TRUE);
 	}

@@ -334,3 +334,13 @@ gboolean check_size(DataSize size)
 	return FALSE;
 }
 
+void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
+{
+	const gchar * key = NULL;
+	key = g_quark_to_string(key_id);
+	printf("key to be checked: %s\n",key);
+	if (translate_string((char *)key) == MTX_STRING)
+		printf("key %s, %s\n",key,(gchar *) data);
+	if (translate_string((char *)key) == MTX_INT)
+		printf("key %s, %i\n",key,(gint)data);
+}

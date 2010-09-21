@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
+#include <widgetmgmt.h>
 #include <unistd.h>
 
 Rtv_Map *rtv_map = NULL;
@@ -161,7 +162,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		g_free(tmpbuf);
 	}
 	rtv_map->offset_hash = g_hash_table_new(g_direct_hash,g_direct_equal);
-	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GObject *));
+	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GData *));
 	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_map->rtvars_size = firmware->rtvars_size;
 	rtv_map->derived_total = derived_total;
@@ -200,7 +201,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* Assume default size of 8 bit unsigned */
 		DATA_SET(&object,"size",GINT_TO_POINTER(MTX_U08));
-		/* bind hostory array to object for future retrieval */
+		/* bind history array to object for future retrieval */
 		DATA_SET(&object,"history",(gpointer)history);
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
@@ -260,18 +261,30 @@ EXPORT gboolean load_realtime_map_pf(void )
 					{
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
 						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
-							DATA_SET(&object,
+						{
+							DATA_SET_FULL(&object,
 									keys[j],
-									g_strdup(_(tmpbuf)));
+									g_strdup(_(tmpbuf)),
+									g_free);
+						//	printf("setting rtv string value %s of %s\n",keys[j],_(tmpbuf));
+						}
 						else
-							DATA_SET(&object,
+						{
+							DATA_SET_FULL(&object,
 									keys[j],
-									g_strdup(tmpbuf));
+									g_strdup(tmpbuf),
+									g_free);
+						//	printf("setting rtv string value %s of %s\n",keys[j],tmpbuf);
+						}
+						//printf("looking for %s on object , value %s\n",keys[j],DATA_GET(&object,keys[j]));
 						if (strstr(keys[j],"internal_names") != NULL)
 						{
 							vector = g_strsplit(tmpbuf,",",-1); 
 							for(k=0;k<g_strv_length(vector);k++) 
+							{
 								g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
+								printf("inserted object for var %s into hash %p, obj ptr %p\n",vector[k],rtv_map->rtv_hash,object);
+							}
 							g_strfreev(vector);
 						}
 						g_free(tmpbuf);
@@ -286,6 +299,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		}
 		if (!DATA_GET(&object,"real_lower"))
 		{
+			printf("no real_lower!\n");
 			size = (DataSize)DATA_GET(&object,"size");
 			tmp = get_extreme_from_size(size,LOWER);
 			eval = (void *)DATA_GET(&object,"ul_evaluator");
@@ -303,10 +317,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(eval);
-				DATA_SET(&object,"ul_evaluator",eval);
+				DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
 			}
 			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
-			DATA_SET(&object,"real_lower",g_strdup_printf("%i",tmpi));
+			DATA_SET_FULL(&object,"real_lower",g_strdup_printf("%i",tmpi),g_free);
 
 		}
 		eval = NULL;
@@ -331,13 +345,13 @@ EXPORT gboolean load_realtime_map_pf(void )
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(eval);
-				DATA_SET(&object,"ul_evaluator",eval);
+				DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
 			}
 			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
-			DATA_SET(&object,"real_upper",g_strdup_printf("%i",tmpi));
+			DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
-		DATA_SET(&object,"keys",g_strdupv(keys));
+		DATA_SET_FULL(&object,"keys",g_strdupv(keys),(GDestroyNotify)g_strfreev);
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_replace(rtv_map->offset_hash,GINT_TO_POINTER(offset),list);
@@ -346,6 +360,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		g_free(section);
 
 		g_strfreev(keys);
+		g_datalist_foreach(&object,dump_datalist,NULL);
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
@@ -401,12 +416,12 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 	{
 		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tNumber of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n\n",total_symbols,total_symtypes));
 		g_free(expr_types);
-		g_free(expr_symbols);
+		g_strfreev(expr_symbols);
 		return;
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
-	DATA_SET(&object,"expr_types",(gpointer)expr_types);
-	DATA_SET(&object,"expr_symbols",(gpointer)expr_symbols);
+	DATA_SET_FULL(&object,"expr_types",(gpointer)expr_types,g_free);
+	DATA_SET_FULL(&object,"expr_symbols",(gpointer)expr_symbols,(GDestroyNotify)g_strfreev);
 	DATA_SET(&object,"total_symbols",GINT_TO_POINTER(total_symbols));
 	for (i=0;i<total_symbols;i++)
 	{

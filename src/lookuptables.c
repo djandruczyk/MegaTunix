@@ -150,7 +150,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
  be tricked by multiple SINGLE values. in that case it'll take the last one.
- \param object (GObject *) pointer to object.
+ \param object (GData *) pointer to object.
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
@@ -280,7 +280,7 @@ gint direct_reverse_lookup(gchar *table, gint value)
 /*!
  \brief lookup_data() returns the value represented by the lookuptable 
  associated with the passed object and offset
- \param object (GObject *) container of parameters we need to do the lookup
+ \param object (GData *) container of parameters we need to do the lookup
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
@@ -298,7 +298,7 @@ gfloat lookup_data(GData *object, gint offset)
 	dep_obj = (GData *)DATA_GET(&object,"dep_object");
 	
 	/*
-	   if (GTK_IS_OBJECT(dep_obj))
+	   if (dep_obj)
 	   printf("checking dependancy %s\n",DATA_GET(&object,"internal_names"));
 	   else
 	   printf("no dependancy\n");

@@ -31,6 +31,7 @@ void set_widget_labels(gchar *);
 EXPORT void lock_entry(GtkWidget *);
 gint get_multiplier(DataSize );
 gboolean check_size(DataSize );
+void dump_datalist(GQuark, gpointer, gpointer);
 /* Prototypes */
 
 #endif

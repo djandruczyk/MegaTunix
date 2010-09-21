@@ -82,8 +82,8 @@ EXPORT void load_sliders_pf()
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET(&global_data,"rt_sliders",rt_sliders);
-	DATA_SET(&global_data,"ww_sliders",ww_sliders);
+	DATA_SET_FULL(&global_data,"rt_sliders",rt_sliders,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"ww_sliders",ww_sliders,(GDestroyNotify)g_hash_table_destroy);
 
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
@@ -207,7 +207,7 @@ EXPORT void load_ve3d_sliders(gint table_num)
 	ve3d_sliders = DATA_GET(&global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
-	DATA_SET(&global_data,"ve3d_sliders",ve3d_sliders);
+	DATA_SET_FULL(&global_data,"ve3d_sliders",ve3d_sliders,(GDestroyNotify)g_hash_table_destroy);
 
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -259,6 +259,8 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	printf("Dumping attrs for object %p assoicated with %s\n",object,source);
+	g_datalist_foreach(&object,dump_datalist,NULL);
 	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
@@ -293,11 +295,11 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
-	if (DATA_GET(&object,"real_lower"))
+	if ((gchar *)DATA_GET(&object,"real_lower"))
 		slider->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
-	if (DATA_GET(&object,"real_upper"))
+	if ((gchar *)DATA_GET(&object,"real_upper"))
 		slider->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
@@ -390,12 +392,12 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!enr_sliders)
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET(&global_data,"rt_sliders",rt_sliders);
-	DATA_SET(&global_data,"aw_sliders",aw_sliders);
-	DATA_SET(&global_data,"ww_sliders",ww_sliders);
-	DATA_SET(&global_data,"enr_sliders",enr_sliders);
+	DATA_SET_FULL(&global_data,"rt_sliders",rt_sliders,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"aw_sliders",aw_sliders,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"ww_sliders",ww_sliders,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"enr_sliders",enr_sliders,(GDestroyNotify)g_hash_table_destroy);
 	
-	if  (!G_IS_OBJECT(object))
+	if  (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,glade_get_widget_name(widget)));
 		return;
@@ -406,11 +408,11 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) DATA_GET(&object,"history");
 	slider->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
-	if (DATA_GET(&object,"real_lower"))
+	if ((gchar *)DATA_GET(&object,"real_lower"))
 		slider->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
-	if (DATA_GET(&object,"real_upper"))
+	if ((gchar *)DATA_GET(&object,"real_upper"))
 		slider->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
@@ -467,18 +469,9 @@ EXPORT void register_rt_range(GtkWidget * widget)
  */
 gboolean free_ve3d_sliders(gint table_num)
 {
-	GHashTable **ve3d_sliders;
 	gchar * widget = NULL;
 
-	ve3d_sliders = DATA_GET(&global_data,"ve3d_sliders");
-	if (ve3d_sliders)
-	{
-		if (ve3d_sliders[table_num])
-		{
-			g_hash_table_destroy(ve3d_sliders[table_num]);
-			ve3d_sliders[table_num] = NULL;
-		}
-	}
+	DATA_SET_FULL(&global_data,"ve3d_sliders",NULL,NULL);
 
 	widget = g_strdup_printf("ve3d_rt_table0_%i",table_num);
 	deregister_widget(widget);
@@ -527,3 +520,4 @@ EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
 	return FALSE;
 
 }
+

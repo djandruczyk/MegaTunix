@@ -141,7 +141,7 @@ void process_rt_vars(void *incoming)
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(evaluator);
-				DATA_SET(&object,"ul_evaluator",evaluator);
+				DATA_SET_FULL(&object,"ul_evaluator",evaluator,evaluator_destroy);
 			}
 			else
 				assert(evaluator);
@@ -325,7 +325,7 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 		if (!evaluator)
 		{
 			evaluator = evaluator_create(DATA_GET(&object,"ul_conv_expr"));
-			DATA_SET(&object,"ul_evaluator",evaluator);
+			DATA_SET_FULL(&object,"ul_evaluator",evaluator,evaluator_destroy);
 
 		}
 	}
@@ -335,7 +335,7 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 		if (!evaluator)
 		{
 			evaluator = evaluator_create(DATA_GET(&object,"dl_conv_expr"));
-			DATA_SET(&object,"dl_evaluator",evaluator);
+			DATA_SET_FULL(&object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else
@@ -382,7 +382,7 @@ gfloat handle_multi_expression(GData *object,guchar* raw_realtime,GHashTable *ha
 	gchar *hash_key = NULL;
 	extern GHashTable *sources_hash;
 
-	if (!GTK_IS_OBJECT(object))
+	if (!(object))
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression object is NULL!\n"));
 		return 0.0;
@@ -724,7 +724,7 @@ void flush_rt_arrays()
 		for (j=0;j<g_list_length(list);j++)
 		{
 			object=(GData *)g_list_nth_data(list,j);
-			if (!GTK_IS_OBJECT(object))
+			if (!(object))
 				continue;
 			g_static_mutex_lock(&rtv_mutex);
 			history = (GArray *)DATA_GET(&object,"history");

@@ -102,7 +102,7 @@ int setup_gui()
 	gtk_container_add(GTK_CONTAINER(window),top_box);
 
 	glade_xml_signal_autoconnect(xml);
-	DATA_SET(&global_data,"main_xml",xml);
+	DATA_SET_FULL(&global_data,"main_xml",xml,g_free);
 
 	tip = gtk_tooltips_new();
 	x = (GINT)DATA_GET(&global_data,"main_x_origin");

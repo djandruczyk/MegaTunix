@@ -367,7 +367,7 @@ void cell_edited(GtkCellRendererText *cell,
 			if (!evaluator)
 			{
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(&object,"dl_conv_expr")));
-				DATA_SET(&object,"dl_evaluator",(gpointer)evaluator);
+				DATA_SET_FULL(&object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
 			}
 		}
 		/* First conver to fahrenheit temp scale if temp dependant */
@@ -573,7 +573,7 @@ void update_model_from_view(GtkWidget * widget)
 					if (!evaluator)
 					{
 						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						DATA_SET(&object,"ul_evaluator",evaluator);
+						DATA_SET_FULL(&object,"ul_evaluator",evaluator,evaluator_destroy);
 					}
 					assert(evaluator);
 

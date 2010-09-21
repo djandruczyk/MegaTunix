@@ -179,7 +179,7 @@ void handle_args(gint argc, gchar * argv[])
 			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
 		exit(0);
 	}
-	DATA_SET(&global_data,"args",args);
+	DATA_SET_FULL(&global_data,"args",args,g_free);
 	g_option_context_free(context);
 }
 

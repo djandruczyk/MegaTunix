@@ -333,7 +333,7 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	GList *children = NULL;
 	gint len = 0;
 	gint i = 0;
-	GObject * rtv_obj = NULL;
+	GData * rtv_obj = NULL;
 	gchar * source = NULL;
 	GHashTable *dash_hash;
 	extern Rtv_Map *rtv_map;
@@ -361,7 +361,7 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		if (!(rtv_map->rtv_hash))
 			return;
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
-		if (!G_IS_OBJECT(rtv_obj))
+		if (!(rtv_obj))
 		{
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": link_dash_datasources\n\tBad things man!, object doesn't exist for %s\n",source));
 			continue ;
@@ -389,7 +389,7 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	
 	gauge = d_gauge->gauge;
 
-	history = (GArray *)OBJ_GET(d_gauge->object,"history");
+	history = (GArray *)DATA_GET(&d_gauge->object,"history");
 	if ((gint)history->len-1 <= 0)
 		return;
 	g_static_mutex_lock(&rtv_mutex);

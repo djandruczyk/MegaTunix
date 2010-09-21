@@ -128,7 +128,6 @@ void unlock_serial()
 		if (g_file_test(fname,G_FILE_TEST_IS_REGULAR))
 		{
 			g_remove(fname);
-			g_free(fname);
 			DATA_SET(&global_data,"serial_lockfile", NULL);
 		}
 	}
@@ -193,8 +192,7 @@ gboolean lock_serial(gchar * name)
 	g_free(contents);
 	if (res)
 	{
-
-		DATA_SET(&global_data,"serial_lockfile",(gpointer)lock);
+		DATA_SET_FULL(&global_data,"serial_lockfile",(gpointer)lock,g_free);
 		return TRUE;
 	}
 	else

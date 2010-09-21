@@ -511,7 +511,7 @@ EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 			ports = (gchar *)DATA_GET(&global_data,"potential_ports");
 			for (i=0;i<g_list_length(found);i++)
 				ports = g_strconcat(ports,",/dev/",g_list_nth_data(found,i),NULL);
-			DATA_SET(&global_data,"potential_ports",ports);
+			DATA_SET_FULL(&global_data,"potential_ports",ports,g_free);
 		}
 	}
 	for (i=0;i<g_list_length(found);i++)

@@ -56,6 +56,7 @@
 
 #define DATA_GET(datalist, name) g_datalist_get_data(datalist,name)
 #define DATA_SET(datalist, name, data) g_datalist_set_data(datalist,name,data)
+#define DATA_SET_FULL(datalist, name, data, func) g_datalist_set_data_full(datalist,name,data,func)
 
 /* Download modes */
 #define IMMEDIATE		0x10
