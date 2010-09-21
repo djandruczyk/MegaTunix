@@ -118,7 +118,7 @@ void rt_update_status(gpointer key, gpointer data)
 	gint value = 0;
 	gfloat tmpf = 0.0;
 	gint previous_value = 0;
-	static GObject *object = NULL;
+	static GData *object = NULL;
 	static GArray * history = NULL;
 	static gchar * source = NULL;
 	static gchar * last_source = "";
@@ -133,10 +133,10 @@ void rt_update_status(gpointer key, gpointer data)
 	if ((g_strcasecmp(source,last_source) != 0))
 	{
 		object = NULL;
-		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,source);
+		object = (GData *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!object)
 			return;
-		history = (GArray *)OBJ_GET(object,"history");
+		history = (GArray *)DATA_GET(&object,"history");
 		if (!history)
 			return;
 	}
@@ -202,12 +202,12 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 
 	if (!rand)
 		rand = g_rand_new();
-	history = (GArray *)OBJ_GET(slider->object,"history");
+	history = (GArray *)DATA_GET(&slider->object,"history");
 	if (!history)
 		return;
 	if ((gint)history->len-1 <= 0)
 		return;
-	precision = (GINT)OBJ_GET(slider->object,"precision");
+	precision = (GINT)DATA_GET(&slider->object,"precision");
 	g_static_mutex_lock(&rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
 	current = g_array_index(history, gfloat, history->len-1);

@@ -213,7 +213,7 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
 	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
+	GData *object = NULL;
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -223,7 +223,7 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 		return NULL;
 	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-	if (!G_IS_OBJECT(object))
+	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": create_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
 		return NULL;
@@ -231,7 +231,7 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
-	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
 	rtt->object = object;
 
 	return rtt;
@@ -252,7 +252,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
+	GData *object = NULL;
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -271,7 +271,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
-	rtt->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+	rtt->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
 	rtt->markup = (GBOOLEAN)OBJ_GET(parent,"markup");
 	rtt->label_prefix = OBJ_GET(parent,"label_prefix");
 	rtt->label_suffix = OBJ_GET(parent,"label_suffix");

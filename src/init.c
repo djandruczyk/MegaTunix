@@ -855,17 +855,9 @@ Table_Params * initialize_table_params(void)
 	table_params->y_dl_eval = NULL;
 	table_params->z_dl_eval = NULL;
 	/* X lookuptable container */
-	table_params->x_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-        g_object_ref(G_OBJECT(table_params->x_object));
-        gtk_object_sink(GTK_OBJECT(table_params->x_object));
-	/* Y lookuptable container */
-	table_params->y_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-        g_object_ref(G_OBJECT(table_params->y_object));
-        gtk_object_sink(GTK_OBJECT(table_params->y_object));
-	/* Z lookuptable container */
-	table_params->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-        g_object_ref(G_OBJECT(table_params->z_object));
-        gtk_object_sink(GTK_OBJECT(table_params->z_object));
+	g_datalist_init(&table_params->x_object);
+	g_datalist_init(&table_params->y_object);
+	g_datalist_init(&table_params->z_object);
 
 	return table_params;
 }
@@ -1123,26 +1115,13 @@ void dealloc_table_params(Table_Params * table_params)
  for dependancy management
  \param object (GObject *) pointer to object to deallocate
  */
-void dealloc_dep_object(GObject *object)
+void dealloc_dep_object(GData *object)
 {
-	GObject *dep_obj = NULL;
 	gchar * deps = NULL;
 
-	/*printf("dealloc_dep_object\n");*/
-	if (!G_IS_OBJECT(object))
-		return;
-	dep_obj = OBJ_GET(object,"dep_object");
-	if (!G_IS_OBJECT(dep_obj))
-	{
-		g_object_unref(object);
-		return;
-	}
-	deps = OBJ_GET(dep_obj,"deps");
+	deps = DATA_GET(&object,"deps");
 	cleanup(deps);
-	OBJ_SET(dep_obj,"deps",NULL);
-	OBJ_SET(dep_obj,"num_deps",NULL);
-	g_object_unref(dep_obj);
-	g_object_unref(object);
+	g_datalist_clear(&object);
 	return;
 }
 

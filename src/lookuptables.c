@@ -154,7 +154,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup(GObject *object, gint value)
+gint reverse_lookup(GData *object, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -164,16 +164,16 @@ gint reverse_lookup(GObject *object, gint value)
 	gint weight[255];
 
 	extern GHashTable *lookuptables;
-	GObject *dep_obj = NULL;
+	GData *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
 
-	table = (gchar *)OBJ_GET(object,"lookuptable");
-	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
-	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
+	table = (gchar *)DATA_GET(&object,"lookuptable");
+	alt_table = (gchar *)DATA_GET(&object,"alt_lookuptable");
+	dep_obj = (GData *)DATA_GET(&object,"dep_object");
 	if (dep_obj)
 		state = check_dependancies(dep_obj);
 	if (state)
@@ -284,22 +284,22 @@ gint direct_reverse_lookup(gchar *table, gint value)
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
-gfloat lookup_data(GObject *object, gint offset)
+gfloat lookup_data(GData *object, gint offset)
 {
 	extern GHashTable *lookuptables;
-	GObject *dep_obj = NULL;
+	GData *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
 
-	table = (gchar *)OBJ_GET(object,"lookuptable");
-	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
-	dep_obj = (GObject *)OBJ_GET(object,"dep_object");
+	table = (gchar *)DATA_GET(&object,"lookuptable");
+	alt_table = (gchar *)DATA_GET(&object,"alt_lookuptable");
+	dep_obj = (GData *)DATA_GET(&object,"dep_object");
 	
 	/*
 	   if (GTK_IS_OBJECT(dep_obj))
-	   printf("checking dependancy %s\n",OBJ_GET(object,"internal_names"));
+	   printf("checking dependancy %s\n",DATA_GET(&object,"internal_names"));
 	   else
 	   printf("no dependancy\n");
 	   */
@@ -321,7 +321,7 @@ gfloat lookup_data(GObject *object, gint offset)
 
 	if (!lookuptable)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) OBJ_GET(object,"internal_names")));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) DATA_GET(&object,"internal_names")));
 		return 0.0;
 	}
 	return lookuptable->array[offset];

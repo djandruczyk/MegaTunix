@@ -34,7 +34,7 @@ void dealloc_te_params(TE_Params * );
 void dealloc_qfunction(QFunction * );
 void dealloc_array(GArray *, ArrayType );
 void dealloc_client_data(MtxSocketClient *);
-void dealloc_dep_object(GObject *object);
+void dealloc_dep_object(GData *object);
 void dealloc_rtv_object(gpointer);
 gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
 void dealloc_rtt(gpointer);

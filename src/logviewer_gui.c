@@ -61,7 +61,7 @@ void present_viewer_choices(void)
 	GtkWidget *sep = NULL;
 	GtkWidget *darea = NULL;
 	GList *list = NULL;
-	GObject * object = NULL;
+	GData * object = NULL;
 	extern GtkTooltips *tip;
 	gint i = 0;
 	gint j = 0;
@@ -144,9 +144,9 @@ void present_viewer_choices(void)
 	for (i=0;i<max_viewables;i++)
 	{
 		if (playback_mode)
-			list = g_list_prepend(list,(gpointer)g_array_index(log_info->log_list,GObject *,i));
+			list = g_list_prepend(list,(gpointer)g_array_index(log_info->log_list,GData *,i));
 		else
-			list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GObject *,i));
+			list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GData *,i));
 	}
 	if (playback_mode)
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
@@ -163,14 +163,14 @@ void present_viewer_choices(void)
 
 		if (playback_mode)
 		{
-			//object =  g_array_index(log_info->log_list,GObject *,i);
-			name = g_strdup(OBJ_GET(object,"lview_name"));
+			//object =  g_array_index(log_info->log_list,GData *,i);
+			name = g_strdup(DATA_GET(&object,"lview_name"));
 		}
 		else
 		{
-			//object =  g_array_index(rtv_map->rtv_list,GObject *,i);
-			name = g_strdup(OBJ_GET(object,"dlog_gui_name"));
-			tooltip = g_strdup(OBJ_GET(object,"tooltip"));
+			//object =  g_array_index(rtv_map->rtv_list,GData *,i);
+			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
+			tooltip = g_strdup(DATA_GET(&object,"tooltip"));
 		}
 
 		button = gtk_check_button_new();
@@ -186,8 +186,8 @@ void present_viewer_choices(void)
 		{
 			OBJ_SET(button,"object",(gpointer)object);
 			/* so we can set the state from elsewhere...*/
-			OBJ_SET(object,"lview_button",(gpointer)button);
-			if ((GBOOLEAN)OBJ_GET(object,"being_viewed"))
+			DATA_SET(&object,"lview_button",(gpointer)button);
+			if ((GBOOLEAN)DATA_GET(&object,"being_viewed"))
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		}
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -255,7 +255,7 @@ gboolean save_default_choices(GtkWidget *widget)
 	GtkWidget *tmpwidget = NULL;
 	GList * list = NULL;
 	GList * defaults = NULL;
-	GObject *object = NULL;
+	GData *object = NULL;
 	gchar *name = NULL;
 	gint i = 0;
 
@@ -272,12 +272,12 @@ gboolean save_default_choices(GtkWidget *widget)
 	{
 		tmpwidget = g_list_nth_data(list,i);
 		object = OBJ_GET(tmpwidget,"object");
-		if ((gboolean)OBJ_GET(object,"being_viewed"))
+		if ((gboolean)DATA_GET(&object,"being_viewed"))
 		{
 			if (playback_mode)
-				name = OBJ_GET(object,"lview_name");
+				name = DATA_GET(&object,"lview_name");
 			else
-				name = OBJ_GET(object,"dlog_gui_name");
+				name = DATA_GET(&object,"dlog_gui_name");
 
 			defaults = g_list_append(defaults,g_strdup(name));
 		}
@@ -295,19 +295,19 @@ gboolean save_default_choices(GtkWidget *widget)
  */
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
-	GObject *object = NULL;
+	GData *object = NULL;
 	gboolean state = FALSE;
 
 
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
 	/* get object from widget */
-	object = (GObject *)OBJ_GET(widget,"object");
+	object = (GData *)OBJ_GET(widget,"object");
 	if (!object)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
 	}
-	OBJ_SET(object,"being_viewed",GINT_TO_POINTER(state));
+	DATA_SET(&object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
 	return FALSE;
 }
@@ -325,7 +325,7 @@ void populate_viewer()
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
 	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
+	GData *object = NULL;
 
 	g_static_mutex_lock(&update_mutex);
 
@@ -356,20 +356,20 @@ void populate_viewer()
 		name = NULL;
 		if (playback_mode)
 		{
-			object = g_array_index(log_info->log_list,GObject *, i);        
-			name = OBJ_GET(object,"lview_name");
+			object = g_array_index(log_info->log_list,GData *, i);        
+			name = DATA_GET(&object,"lview_name");
 		}
 		else
 		{
-			object = g_array_index(rtv_map->rtv_list,GObject *, i); 
-			name = g_strdup(OBJ_GET(object,"dlog_gui_name"));
+			object = g_array_index(rtv_map->rtv_list,GData *, i); 
+			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
 		}
 		if (!name)
 			dbg_func(CRITICAL,g_strdup("ERROR, name is NULL\n"));
 		if (!object)
 			dbg_func(CRITICAL,g_strdup("ERROR, object is NULL\n"));
 
-		being_viewed = (GBOOLEAN)OBJ_GET(object,"being_viewed");
+		being_viewed = (GBOOLEAN)DATA_GET(&object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
 		if (g_hash_table_lookup(lv_data->traces,name)==NULL)
 		{
@@ -453,7 +453,7 @@ void reset_logviewer_state()
 	extern Rtv_Map *rtv_map;
 	extern Log_Info *log_info;
 	guint i = 0 ;
-	GObject * object = NULL;
+	GData * object = NULL;
 
 	if (playback_mode)
 	{
@@ -462,9 +462,9 @@ void reset_logviewer_state()
 		for (i=0;i<log_info->field_count;i++)
 		{
 			object = NULL;
-			object = g_array_index(log_info->log_list,GObject *,i);
+			object = g_array_index(log_info->log_list,GData *,i);
 			if (object)
-				OBJ_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
+				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	else
@@ -474,9 +474,9 @@ void reset_logviewer_state()
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
 			object = NULL;
-			object = g_array_index(rtv_map->rtv_list,GObject *,i);
+			object = g_array_index(rtv_map->rtv_list,GData *,i);
 			if (object)
-				OBJ_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
+				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	populate_viewer();
@@ -487,10 +487,10 @@ void reset_logviewer_state()
 /*!
  \brief build_v_value() allocates a viewable_value structure and populates
  it with sane defaults and returns it to the caller
- \param object (GObject *) objet to get soem of the data from
+ \param object (GData *) objet to get soem of the data from
  \returns a newly allocated and populated Viewable_Value structure
  */
-Viewable_Value * build_v_value(GObject *object)
+Viewable_Value * build_v_value(GData *object)
 {
 	Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
@@ -504,7 +504,7 @@ Viewable_Value * build_v_value(GObject *object)
 	if (playback_mode)
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(OBJ_GET(object,"lview_name"));
+		v_value->vname = g_strdup(DATA_GET(&object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
@@ -513,7 +513,7 @@ Viewable_Value * build_v_value(GObject *object)
 	else
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(OBJ_GET(object,"dlog_gui_name"));
+		v_value->vname = g_strdup(DATA_GET(&object,"dlog_gui_name"));
 		/* Array to keep history for resize/redraw and export 
 		 * to datalog we use the _sized_ version to give a big 
 		 * enough size to prevent reallocating memory too often. 
@@ -525,9 +525,9 @@ Viewable_Value * build_v_value(GObject *object)
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->object = object;
 	/* IS it a floating point value? */
-	v_value->precision = (GINT)OBJ_GET(object,"precision");
-	v_value->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
-	v_value->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+	v_value->precision = (GINT)DATA_GET(&object,"precision");
+	v_value->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
+	v_value->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -1263,7 +1263,7 @@ void set_default_lview_choices_state(void)
 	gint j = 0;
 	gchar * name;
 	gchar * potential;
-	GObject *object;
+	GData *object;
 
 	defaults = get_list("logviewer_defaults");
 	list = get_list("viewables");
@@ -1275,9 +1275,9 @@ void set_default_lview_choices_state(void)
 			widget = g_list_nth_data(list,j);
 			object = OBJ_GET(widget,"object");
 			if (playback_mode)
-				potential = OBJ_GET(object,"lview_name");
+				potential = DATA_GET(&object,"lview_name");
 			else
-				potential = OBJ_GET(object,"dlog_gui_name");
+				potential = DATA_GET(&object,"dlog_gui_name");
 			if (g_strcasecmp(name,potential) == 0)
 
 				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));

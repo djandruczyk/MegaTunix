@@ -44,7 +44,7 @@ struct _Rt_Text
 	gchar *friendly_name;	/*! text for Label above */
 	gchar *label_prefix;	/*! markup strings */
 	gchar *label_suffix;	/*! markup strings */
-	GObject *object;	/*! object of obsession.... */
+	GData *object;  	/*! object of obsession.... */
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */
 	gint last_upd;		/*! used to making sure things update */

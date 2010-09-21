@@ -38,9 +38,9 @@
  \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+void load_dependancies(GData *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
-	GObject *dep_obj = NULL;
+	GData *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar ** deps = NULL;
@@ -63,12 +63,10 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 		g_free(tmpbuf);
 	}
 	/* Store list of deps.... */
-	dep_obj = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref(G_OBJECT(dep_obj));
-	gtk_object_sink(GTK_OBJECT(dep_obj));
+	g_datalist_init(&dep_obj);
 
-	OBJ_SET(dep_obj,"deps",deps);
-	OBJ_SET(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
+	DATA_SET(&dep_obj,"deps",deps);
+	DATA_SET(&dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
 	for (i=0;i<num_deps;i++)
 	{
@@ -92,7 +90,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 		g_free(key);
 		type = translate_string(vector[DEP_TYPE]);
 		key = g_strdup_printf("%s_type",deps[i]);
-		OBJ_SET(dep_obj,key,GINT_TO_POINTER(type));
+		DATA_SET(&dep_obj,key,GINT_TO_POINTER(type));
 		g_free(key);
 		if (type == VE_EMB_BIT)
 		{
@@ -101,10 +99,10 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 			if (!check_size(tmpi))
 			{
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n",vector[DEP_SIZE],section));
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);
@@ -115,7 +113,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_offset",deps[i]);
@@ -126,7 +124,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_bitmask",deps[i]);
@@ -137,7 +135,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_bitshift",deps[i]);
@@ -148,7 +146,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_bitval",deps[i]);
@@ -159,7 +157,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 		}
@@ -170,10 +168,10 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 			if (!check_size(tmpi))
 			{
 				dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n",vector[DEP_SIZE],section));
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);
@@ -184,7 +182,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 			key = g_strdup_printf("%s_offset",deps[i]);
@@ -195,13 +193,13 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section, gch
 				exit (-4);
 			}
 			else
-				OBJ_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(&dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 		}
 		g_strfreev(vector);
-			
+
 	}
-	OBJ_SET(object,"dep_object",(gpointer)dep_obj);
+	DATA_SET(&object,"dep_object",(gpointer)dep_obj);
 
 }

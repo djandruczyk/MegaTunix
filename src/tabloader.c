@@ -314,7 +314,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(G_OBJECT(group->object),cfgfile,section,"depend_on");
+			load_dependancies(G_OBJECT(group->object)->qdata,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -326,7 +326,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			group->page = tmpi;
 
 		/* Binds the rest of the settings, overriding any defaults */
-		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
+		bind_keys(G_OBJECT(group->object),cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
@@ -577,7 +577,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies(G_OBJECT(widget),cfgfile,section,"depend_on");
+		load_dependancies(G_OBJECT(widget)->qdata,cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 

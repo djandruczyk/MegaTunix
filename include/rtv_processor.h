@@ -26,9 +26,9 @@ gboolean lookup_previous_value(gchar *, gfloat *);
 gboolean lookup_previous_nth_value(gchar *, gint, gfloat *);
 gboolean lookup_previous_n_values(gchar *, gint, gfloat *);
 gboolean lookup_previous_n_skip_x_values(gchar *, gint, gint, gfloat *);
-gfloat handle_complex_expr(GObject *, void *,ConvType);
-gfloat handle_special(GObject *,gchar *);
-gfloat handle_multi_expression(GObject *, guchar *, GHashTable *);
+gfloat handle_complex_expr(GData *, void *,ConvType);
+gfloat handle_special(GData *,gchar *);
+gfloat handle_multi_expression(GData *, guchar *, GHashTable *);
 void flush_rt_arrays(void);
 /* Prototypes */
 

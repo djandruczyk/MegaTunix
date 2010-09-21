@@ -111,7 +111,7 @@ GtkTreeModel * create_model(void)
 	gint lower = 0;
 	gint upper = 0;
 	gchar * range = NULL;
-	GObject * object = NULL;
+	GData * object = NULL;
 	extern Rtv_Map *rtv_map;
 
 	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
@@ -122,20 +122,20 @@ GtkTreeModel * create_model(void)
 		i++;
 		object = NULL;
 		name = NULL;
-		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
+		object = (GData *)g_hash_table_lookup(rtv_map->rtv_hash,data);
 		if (!object)
 			continue;
-		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+		name = (gchar *) DATA_GET(&object,"dlog_gui_name");
 		if (!name)
 			continue;
-		if (OBJ_GET(object,"real_lower"))
-			lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+		if (DATA_GET(&object,"real_lower"))
+			lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
-		if (OBJ_GET(object,"real_upper"))
-			upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+			lower = get_extreme_from_size((DataSize)DATA_GET(&object,"size"),LOWER);
+		if (DATA_GET(&object,"real_upper"))
+			upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
+			upper = get_extreme_from_size((DataSize)DATA_GET(&object,"size"),UPPER);
 		range = g_strdup_printf("%i-%i",lower,upper);
 
 		gtk_list_store_append (model, &iter);
@@ -270,7 +270,7 @@ void cell_edited(GtkCellRendererText *cell,
 	gint upper = 0;
 	gfloat new = 0;
 	gint column = 0;
-	GObject *object = NULL;
+	GData *object = NULL;
 	gint src_offset = -1;
 	gint lim_offset = -1;
 	gint rt_offset = -1;
@@ -302,13 +302,13 @@ void cell_edited(GtkCellRendererText *cell,
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
-	rt_offset = (GINT) OBJ_GET(object,"offset");
-	precision = (GINT) OBJ_GET(object,"precision");
+	rt_offset = (GINT) DATA_GET(&object,"offset");
+	precision = (GINT) DATA_GET(&object,"precision");
 	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
-	if (OBJ_GET(object,"multi_expr_hash"))
+	if (DATA_GET(&object,"multi_expr_hash"))
 	{
-		hash = OBJ_GET(object,"multi_expr_hash");
-		key = (gchar *)OBJ_GET(object,"source_key");
+		hash = DATA_GET(&object,"multi_expr_hash");
+		key = (gchar *)DATA_GET(&object,"source_key");
 		if (key)
 		{
 			hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
@@ -343,16 +343,16 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 	{
 
-		if (OBJ_GET(object,"real_lower"))
-			lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+		if (DATA_GET(&object,"real_lower"))
+			lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),LOWER);
-		if (OBJ_GET(object,"real_upper"))
-			upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+			lower = get_extreme_from_size((DataSize)DATA_GET(&object,"size"),LOWER);
+		if (DATA_GET(&object,"real_upper"))
+			upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size((DataSize)OBJ_GET(object,"size"),UPPER);
-		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
-		temp_dep = (GBOOLEAN)OBJ_GET(object,"temp_dep");
+			upper = get_extreme_from_size((DataSize)DATA_GET(&object,"size"),UPPER);
+		evaluator = (void *)DATA_GET(&object,"dl_evaluator");
+		temp_dep = (GBOOLEAN)DATA_GET(&object,"temp_dep");
 
 		if (new < lower)
 			new = lower;
@@ -363,11 +363,11 @@ void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(OBJ_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create(DATA_GET(&object,"dl_conv_expr"));
 			if (!evaluator)
 			{
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)OBJ_GET(object,"dl_conv_expr")));
-				OBJ_SET(object,"dl_evaluator",(gpointer)evaluator);
+				dbg_func(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(&object,"dl_conv_expr")));
+				DATA_SET(&object,"dl_evaluator",(gpointer)evaluator);
 			}
 		}
 		/* First conver to fahrenheit temp scale if temp dependant */
@@ -385,7 +385,7 @@ void cell_edited(GtkCellRendererText *cell,
 		/* Then if it used a lookuptable,  reverse map it if possible
 		 * to determine the ADC reading we need to send to ECU
 		 */
-		if (OBJ_GET(object,"lookuptable"))
+		if (DATA_GET(&object,"lookuptable"))
 			result = reverse_lookup(object,(gint)tmpf);
 		else
 			result = (gint)tmpf;
@@ -420,7 +420,7 @@ void update_model_from_view(GtkWidget * widget)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
 	GtkTreeIter    iter;
-	GObject *object = NULL;
+	GData *object = NULL;
 	GtkTreePath *treepath = NULL;
 	gint src_offset = 0;
 	gint lim_offset = 0;
@@ -467,14 +467,14 @@ void update_model_from_view(GtkWidget * widget)
 	while (looptest)
 	{
 		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
-		if (offset == (GINT)OBJ_GET(object,"offset"))
+		if (offset == (GINT)DATA_GET(&object,"offset"))
 		{
-			precision =(GINT)OBJ_GET(object,"precision");
-			temp_dep =(GBOOLEAN)OBJ_GET(object,"temp_dep");
-			if (OBJ_GET(object,"multi_expr_hash"))
+			precision =(GINT)DATA_GET(&object,"precision");
+			temp_dep =(GBOOLEAN)DATA_GET(&object,"temp_dep");
+			if (DATA_GET(&object,"multi_expr_hash"))
 			{
-				hash = OBJ_GET(object,"multi_expr_hash");
-				key = (gchar *)OBJ_GET(object,"source_key");
+				hash = DATA_GET(&object,"multi_expr_hash");
+				key = (gchar *)DATA_GET(&object,"source_key");
 				if (key)
 				{
 					hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
@@ -560,20 +560,20 @@ void update_model_from_view(GtkWidget * widget)
 
 			else /* Non multi-expression variable */
 			{
-				evaluator =(void *)OBJ_GET(object,"ul_evaluator");
+				evaluator =(void *)DATA_GET(&object,"ul_evaluator");
 				if (!evaluator) /* Not created yet */
 				{
-					expr = OBJ_GET(object,"ul_conv_expr");
+					expr = DATA_GET(&object,"ul_conv_expr");
 					if (expr == NULL)
 					{
-						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)OBJ_GET(object,"internal_name")));
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(&object,"internal_name")));
 						exit (-3);
 					}
 					evaluator = evaluator_create(expr);
 					if (!evaluator)
 					{
 						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						OBJ_SET(object,"ul_evaluator",evaluator);
+						DATA_SET(&object,"ul_evaluator",evaluator);
 					}
 					assert(evaluator);
 
@@ -582,7 +582,7 @@ void update_model_from_view(GtkWidget * widget)
 					assert(evaluator);
 
 				/* TEXT ENTRY part */
-				if (OBJ_GET(object,"lookuptable"))
+				if (DATA_GET(&object,"lookuptable"))
 					x = lookup_data(object,cur_val);
 				else
 					x = cur_val;
@@ -604,7 +604,7 @@ void update_model_from_view(GtkWidget * widget)
 				/* HYSTERESIS VALUE */
 				if (OBJ_GET(model,"hys_offset") != NULL)
 				{
-					if (OBJ_GET(object,"lookuptable"))
+					if (DATA_GET(&object,"lookuptable"))
 						x = lookup_data(object,hys_val);
 					else
 						x = hys_val;
@@ -627,7 +627,7 @@ void update_model_from_view(GtkWidget * widget)
 				/* UPPER LIMIT VALUE */
 				if (OBJ_GET(model,"ulimit_offset") != NULL)
 				{
-					if (OBJ_GET(object,"lookuptable"))
+					if (DATA_GET(&object,"lookuptable"))
 						x = lookup_data(object,ulimit_val);
 					else
 						x = ulimit_val;
@@ -654,7 +654,7 @@ void update_model_from_view(GtkWidget * widget)
 			gtk_tree_path_free(treepath);
 
 
-			/*printf("offset matched for object %s\n",(gchar *)OBJ_GET(object,"dlog_gui_name"));*/
+			/*printf("offset matched for object %s\n",(gchar *)DATA_GET(&object,"dlog_gui_name"));*/
 
 		}
 		else
@@ -690,7 +690,7 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gint width = 0;
 	DataSize size = MTX_U08;
 	gint precision = 0;
-	GObject * object = NULL;
+	GData * object = NULL;
 	gchar * data = NULL;
 	gchar * name = NULL;
 	gchar *regex = NULL;
@@ -711,22 +711,22 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		i++;
 		object = NULL;
 		name = NULL;
-		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
+		object = (GData *)g_hash_table_lookup(rtv_map->rtv_hash,data);
 		if (!object)
 		{
 			printf("couldn't find Raw RTV var with int name %s\n",data);
 			continue;
 		}
-		name = (gchar *) OBJ_GET(object,"dlog_gui_name");
+		name = (gchar *) DATA_GET(&object,"dlog_gui_name");
 		if (!name)
 			continue;
-		size = (DataSize)OBJ_GET(object,"size");
-		lower = OBJ_GET(object,"real_lower");
-		upper = OBJ_GET(object,"real_upper");
-		dl_conv = OBJ_GET(object,"dl_conv_expr");
-		ul_conv = OBJ_GET(object,"ul_conv_expr");
-		precision = (GINT) OBJ_GET(object,"precision");
-		bitval = (GINT) OBJ_GET(object,"offset");
+		size = (DataSize)DATA_GET(&object,"size");
+		lower = DATA_GET(&object,"real_lower");
+		upper = DATA_GET(&object,"real_upper");
+		dl_conv = DATA_GET(&object,"dl_conv_expr");
+		ul_conv = DATA_GET(&object,"ul_conv_expr");
+		precision = (GINT) DATA_GET(&object,"precision");
+		bitval = (GINT) DATA_GET(&object,"offset");
 		if ((!lower) && (!upper))
 			range = g_strdup_printf("Valid Range: undefined");
 		else

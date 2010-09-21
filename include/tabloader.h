@@ -30,7 +30,7 @@ struct _Group
 {
 	gchar **keys;		/*! String array for key names */
 	gint *keytypes;		/*! Int array of key types... */
-	GObject *object;	/*! To hold the data cleanly */
+	GData *object;		/*! To hold the data cleanly */
 	gint num_keys;		/* How many keys we hold */
 	gint num_keytypes;	/* How many keytypes we hold */
 	gint page;		/* page of this group of data */

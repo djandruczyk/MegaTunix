@@ -30,7 +30,7 @@ struct _Viewable_Value
 	GdkGC *trace_gc;		/*! GC used for the trace */
 	PangoRectangle *log_rect;	/*! Logcial rectangle around text */
 	PangoRectangle *ink_rect;	/*! Ink rectangle around text */
-	GObject *object;		/*! object */
+	GData *object;			/*! object */
 	gchar *vname;			/*! Name of widget being logged */
 	gint precision;			/*! number of digits */
 	gboolean force_update;		/*! flag to force update on addition */
@@ -56,7 +56,7 @@ void reset_logviewer_state(void);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean set_all_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
-Viewable_Value * build_v_value(GObject * );
+Viewable_Value * build_v_value(GData * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
 void draw_infotext();

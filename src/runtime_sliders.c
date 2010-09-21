@@ -255,11 +255,11 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
 	extern Rtv_Map *rtv_map;
-	GObject *object = NULL;
+	GData *object = NULL;
 
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-	if (!G_IS_OBJECT(object))
+	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
 		return NULL;
@@ -292,16 +292,16 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	slider->row = row;
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
-	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(object,"real_lower"))
-		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+	slider->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
+	if (DATA_GET(&object,"real_lower"))
+		slider->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
-	if (OBJ_GET(object,"real_upper"))
-		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+	if (DATA_GET(&object,"real_upper"))
+		slider->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
-	slider->history = (GArray *) OBJ_GET(object,"history");
+	slider->history = (GArray *) DATA_GET(&object,"history");
 	slider->object = object;
 	hbox = gtk_hbox_new(FALSE,5);
 
@@ -362,7 +362,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
  */
 EXPORT void register_rt_range(GtkWidget * widget)
 {
-	GObject * object = NULL;
+	GData * object = NULL;
 	extern Rtv_Map *rtv_map;
 	GtkWidget *parent = NULL;
 	GtkProgressBarOrientation orient;
@@ -404,14 +404,14 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;
-	slider->history = (GArray *) OBJ_GET(object,"history");
-	slider->friendly_name = (gchar *) OBJ_GET(object,"dlog_gui_name");
-	if (OBJ_GET(object,"real_lower"))
-		slider->lower = (gint)strtol(OBJ_GET(object,"real_lower"),NULL,10);
+	slider->history = (GArray *) DATA_GET(&object,"history");
+	slider->friendly_name = (gchar *) DATA_GET(&object,"dlog_gui_name");
+	if (DATA_GET(&object,"real_lower"))
+		slider->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
-	if (OBJ_GET(object,"real_upper"))
-		slider->upper = (gint)strtol(OBJ_GET(object,"real_upper"),NULL,10);
+	if (DATA_GET(&object,"real_upper"))
+		slider->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	slider->object = object;

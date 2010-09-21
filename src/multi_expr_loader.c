@@ -32,12 +32,12 @@
  a realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a special variable that requires handling of
  multiple circumstances
- \param object (GObject *) place to store the retrieved data
+ \param object (GData *) place to store the retrieved data
  \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
  \param section (gchar *) sectio nto read the data from
  \see check_dependancies
  */
-void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section)
+void load_multi_expressions(GData *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** keys = NULL;
@@ -140,15 +140,15 @@ void load_multi_expressions(GObject *object, ConfigFile *cfgfile,gchar * section
 		multi->ul_eval = evaluator_create(multi->ul_conv_expr);
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
-	OBJ_SET(object,"real_lower",g_strdup_printf("%i",lowest));
-	OBJ_SET(object,"real_upper",g_strdup_printf("%i",highest));
+	DATA_SET(&object,"real_lower",g_strdup_printf("%i",lowest));
+	DATA_SET(&object,"real_upper",g_strdup_printf("%i",highest));
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
 	g_strfreev(ltables);
 	g_strfreev(dl_exprs);
 	g_strfreev(ul_exprs);
 	g_strfreev(keys);
-	OBJ_SET(object,"multi_expr_hash",hash);
+	DATA_SET(&object,"multi_expr_hash",hash);
 
 }
 

@@ -56,10 +56,10 @@ gint list_sort(gconstpointer a, gconstpointer b)
 
 gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
-	GObject *a1 = (GObject *)a;
-	GObject *b1 = (GObject *)b;
+	GObject *a1 = (GData *)a;
+	GObject *b1 = (GData *)b;
 	const gchar *key = (const gchar *)data;
-	return g_ascii_strcasecmp((gchar *)OBJ_GET(a1,key),(gchar *)OBJ_GET(b1,key));
+	return g_ascii_strcasecmp((gchar *)DATA_GET(&a1,key),(gchar *)DATA_GET(&b1,key));
 }
 
 

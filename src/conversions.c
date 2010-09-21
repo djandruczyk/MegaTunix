@@ -195,7 +195,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	tmpi = return_value;
 	 if (OBJ_GET(widget,"lookuptable"))
-		return_value = (gint)reverse_lookup(G_OBJECT(widget),tmpi);
+		return_value = (gint)reverse_lookup(G_OBJECT(widget)->qdata,tmpi);
 
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
@@ -241,7 +241,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	{
 		g_static_mutex_unlock(&mutex);
 		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
-		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
+		return handle_complex_expr(G_OBJECT(widget)->qdata,NULL,UPLOAD);
 	}
 
 	page = (GINT)OBJ_GET(widget,"page");
@@ -327,7 +327,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
+		tmpi = lookup_data(G_OBJECT(widget)->qdata,get_ecu_data(canID,page,offset,size));
 	else
 	{
 		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
@@ -361,7 +361,7 @@ gfloat convert_after_upload(GtkWidget * widget)
  */
 void convert_temps(gpointer widget, gpointer units)
 {
-	GObject *dep_obj = NULL;
+	GData *dep_obj = NULL;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
@@ -378,10 +378,10 @@ void convert_temps(gpointer widget, gpointer units)
 	 */
 	if ((!widget) || (leaving))
 		return;
-	dep_obj = (GObject *)OBJ_GET(widget,"dep_object");
+	dep_obj = (GData *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	if (dep_obj)
-		state = check_dependancies(G_OBJECT(dep_obj));
+		state = check_dependancies(dep_obj);
 
 	if ((GINT)units == FAHRENHEIT) 
 	{
