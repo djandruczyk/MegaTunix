@@ -245,7 +245,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view;
 	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
-	extern GtkTooltips *tip;
 	gint table_num =  -1;
 	extern gboolean forced_update;
 
@@ -501,7 +500,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			NULL);
-	gtk_tooltips_set_tip(tip,button,"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
+	gtk_widget_set_tooltip_text(button,"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI");
 
 	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
@@ -516,7 +515,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->burn_but = button;
 	store_list("burners",g_list_prepend(get_list("burners"),(gpointer)button));
 
-	gtk_tooltips_set_tip(tip,button,"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
+	gtk_widget_set_tooltip_text(button,"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.");
 
 	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 

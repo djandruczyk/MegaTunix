@@ -356,7 +356,6 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 	gint i = 0;
 	gint tmpi = 0;
 	Group *group = NULL;
-	extern GtkTooltips *tip;
 	DataType keytype = MTX_STRING;
 
 	group = g_hash_table_lookup(groups,groupname);
@@ -388,7 +387,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 			case MTX_STRING:
 				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
 				if (OBJ_GET(widget,"tooltip") != NULL)
-					gtk_tooltips_set_tip(tip,widget,(gchar *)_(OBJ_GET(widget,"tooltip")),NULL);
+					gtk_widget_set_tooltip_text(widget,(gchar *)_(OBJ_GET(widget,"tooltip")));
 				if (OBJ_GET(group->object, "bind_to_list"))
 					bind_to_lists(widget,(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
@@ -495,7 +494,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint result = 0;
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
-	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
@@ -593,7 +591,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget  has "tooltip" set the tip on the widget */
 	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
 	{
-		gtk_tooltips_set_tip(tip,widget,_(tmpbuf),NULL);
+		gtk_widget_set_tooltip_text(widget,_(tmpbuf));
 		g_free(tmpbuf);
 	}
 

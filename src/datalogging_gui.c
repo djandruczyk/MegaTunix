@@ -67,7 +67,6 @@ EXPORT void populate_dlog_choices_pf()
 	GData * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
-	extern GtkTooltips *tip;
 	extern gint preferred_delimiter;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
@@ -137,11 +136,9 @@ EXPORT void populate_dlog_choices_pf()
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
 		gtk_container_add(GTK_CONTAINER(button),label);
-		tooltip = g_strdup(DATA_GET(&object,"tooltip"));
+		tooltip = (gchar *)(DATA_GET(&object,"tooltip"));
 		if (tooltip)
-			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
-		g_free(tooltip);
-
+			gtk_widget_set_tooltip_text(button,tooltip);
 		/* Bind button to the object, Done so that we can set the state
 		 * of the buttons from elsewhere... 
 		 */

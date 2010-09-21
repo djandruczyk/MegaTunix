@@ -62,7 +62,6 @@ void present_viewer_choices(void)
 	GtkWidget *darea = NULL;
 	GList *list = NULL;
 	GData * object = NULL;
-	extern GtkTooltips *tip;
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
@@ -180,7 +179,7 @@ void present_viewer_choices(void)
 		store_list("viewables",g_list_prepend(
 					get_list("viewables"),(gpointer)button));
 		if (tooltip)
-			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
+			gtk_widget_set_tooltip_text(button,tooltip);
 
 		if (object)
 		{

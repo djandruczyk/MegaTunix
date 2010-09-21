@@ -283,7 +283,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 							for(k=0;k<g_strv_length(vector);k++) 
 							{
 								g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
-								printf("inserted object for var %s into hash %p, obj ptr %p\n",vector[k],rtv_map->rtv_hash,object);
+					//			printf("inserted object for var %s into hash %p, obj ptr %p\n",vector[k],rtv_map->rtv_hash,object);
 							}
 							g_strfreev(vector);
 						}
@@ -292,6 +292,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 					else
 						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					break;
+				case MTX_UNKNOWN:
+					dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_UNKNWON: key \"%s\" DON'T KNOW HOW TO HANDLE, missing stringmatch association!\n",keys[j]));
+					break;
+
 				default:
 					break;
 
@@ -360,7 +364,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 		g_free(section);
 
 		g_strfreev(keys);
-		g_datalist_foreach(&object,dump_datalist,NULL);
+		//g_datalist_foreach(&object,dump_datalist,NULL);
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));

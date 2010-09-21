@@ -290,6 +290,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	extern gchar *offline_firmware_choice;
 	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
+	static GtkSettings *settings = NULL;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -322,7 +323,9 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = TRUE;
 				break;
 			case TOOLTIPS_STATE:
-				gtk_tooltips_enable(tip);
+				if (!settings)
+					settings = gtk_settings_get_default();
+				g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
 				DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
 				break;
 			case FAHRENHEIT:
@@ -381,7 +384,9 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = FALSE;
 				break;
 			case TOOLTIPS_STATE:
-				gtk_tooltips_disable(tip);
+				if (!settings)
+					settings = gtk_settings_get_default();
+				g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 				DATA_SET(&global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
 				break;
 			default:

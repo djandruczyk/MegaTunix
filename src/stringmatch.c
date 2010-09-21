@@ -504,6 +504,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"precision",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"real_lower",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"real_upper",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"raw_lower",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"raw_upper",
@@ -614,7 +618,7 @@ gint translate_string(gchar *string)
 	if (value == NULL)
 	{
 		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
-		return (MTX_STRING);
+		return (MTX_UNKNOWN);
 	}
 	else
 		return (GINT)value;

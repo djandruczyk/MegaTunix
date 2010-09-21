@@ -617,7 +617,6 @@ void mem_dealloc()
 	gint i = 0;
 	gint j = 0;
 	gpointer data;
-	GHashTable *hash = NULL;
 	GtkListStore *store = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern GHashTable *lookuptables;
@@ -736,20 +735,8 @@ void mem_dealloc()
 	store = DATA_GET(&global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
-	hash = DATA_GET(&global_data,"rtt_hash");
-	if (hash)
-		g_hash_table_destroy(hash);
-	g_static_mutex_unlock(&rtt_mutex);
-	/* Runtime Sliders */
-	hash = DATA_GET(&global_data,"ww_sliders");
-	if (hash)
-		g_hash_table_destroy(hash);
-	hash = DATA_GET(&global_data,"rt_sliders");
-	if (hash)
-		g_hash_table_destroy(hash);
-	hash = DATA_GET(&global_data,"enr_sliders");
-	if (hash)
-		g_hash_table_destroy(hash);
+	/* Free all global data and structures */
+	g_datalist_clear(&global_data);
 	/* Dynamic widgets master hash  */
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
@@ -1131,11 +1118,18 @@ void dealloc_dep_object(GData *object)
  */
 void dealloc_rtv_object(GData *object)
 {
+	GArray * array = NULL;
 	if (!(object))
 		return;
-	/*printf("object %i, pointer %p, names \"%s\" \"%s\" \"%s\"\n",count++,(void *)object,(gchar *)OBJ_GET(object,"dlog_gui_name"),(gchar *)OBJ_GET(object,"dlog_field_name"),(gchar *)OBJ_GET(object,"internal_names"));*/
-	if (!(GBOOLEAN)DATA_GET(&object,"history"))
+	g_datalist_foreach(&object,dump_datalist,NULL);
+	array = (GArray *)DATA_GET(&object, "history");
+	if (array)
+	{
+		printf("deallocing history array\n");
 		g_array_free(DATA_GET(&object,"history"),TRUE);
+	}
+	else
+		printf("couldn't find history object!\n");
 	g_datalist_clear(&object);
 }
 /*!

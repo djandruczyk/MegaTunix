@@ -338,9 +338,16 @@ void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
 	const gchar * key = NULL;
 	key = g_quark_to_string(key_id);
-	printf("key to be checked: %s\n",key);
-	if (translate_string((char *)key) == MTX_STRING)
-		printf("key %s, %s\n",key,(gchar *) data);
-	if (translate_string((char *)key) == MTX_INT)
-		printf("key %s, %i\n",key,(gint)data);
+	switch (translate_string((char *)key))
+	{
+		case MTX_STRING:
+			printf("key %s, %s\n",key,(gchar *) data);
+			break;
+		case MTX_INT:
+			printf("key %s, %i\n",key,(gint)data);
+			break;
+		default:
+			printf("Key %s isn't a type I can show you\n",key);
+			break;
+	}
 }

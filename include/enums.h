@@ -78,7 +78,8 @@ typedef enum
 	MTX_ENUM,
 	MTX_BOOL,
 	MTX_FLOAT,
-	MTX_STRING
+	MTX_STRING,
+	MTX_UNKNOWN
 }DataType;
 
 typedef enum
