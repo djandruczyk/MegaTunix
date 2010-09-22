@@ -188,7 +188,7 @@ EXPORT gboolean interrogate_ecu()
 			if ((!res) || (len == 0))
 				zerocount++;
 
-			if (zerocount > 2)
+			if (zerocount > 1)
 				break;
 		}
 		dbg_func(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));

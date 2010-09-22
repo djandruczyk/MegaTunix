@@ -297,11 +297,11 @@ EXPORT gboolean load_realtime_map_pf(void )
 		expr = NULL;
 		if (DATA_GET(&object,"ul_conv_expr") && !(DATA_GET(&object,"ul_evaluator")))
 		{
-			expr = DATA_GET(&object,"ul_conv_expr");
+			expr = (gchar *)DATA_GET(&object,"ul_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
-				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for rtvar %s function \"%s\" FAILED!!!\n\n",section,expr));
 			}
 			assert(eval);
 			DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
@@ -310,11 +310,11 @@ EXPORT gboolean load_realtime_map_pf(void )
 		expr = NULL;
 		if (DATA_GET(&object,"dl_conv_expr") && !(DATA_GET(&object,"dl_evaluator")))
 		{
-			expr = DATA_GET(&object,"dl_conv_expr");
+			expr = (gchar *)DATA_GET(&object,"dl_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
-				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for rtvar %s function \"%s\" FAILED!!!\n\n",section,expr));
 			}
 			assert(eval);
 			DATA_SET_FULL(&object,"dl_evaluator",eval,evaluator_destroy);
