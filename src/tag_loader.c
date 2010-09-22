@@ -92,7 +92,7 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 					dbg_func(CRITICAL,g_strdup(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n"));
 
 			}
-			DATA_SET_FULL(&global_data,section,tag,g_object_unref);
+			//DATA_SET_FULL(&global_data,section,tag,g_object_unref);
 
 			g_strfreev(attrs);
 		}

@@ -26,7 +26,7 @@
 
 
 
-void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
+void bind_keys(GData **object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {
 	gint i = 0;
 	gint tmpi = 0;
@@ -43,7 +43,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
 					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					OBJ_SET(object,
+					DATA_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 				}
@@ -55,7 +55,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					tmpi = translate_string(tmpbuf);
 					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					OBJ_SET(object,
+					DATA_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
@@ -66,12 +66,14 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
+					if (tmpi == 0)
+						tmpi = -1;
 					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					OBJ_SET(object,
+					DATA_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					if (strstr(keys[i],"ul_complex"))
-						load_complex_params(&object->qdata,cfgfile,section);
+						load_complex_params(object,cfgfile,section);
 				}
 				else
 					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n",keys[i],section,cfgfile->filename));
@@ -80,21 +82,21 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section));
-					tmpstr = OBJ_GET(object,keys[i]);
+					tmpstr = DATA_GET(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */
 					if ((tmpstr) && (g_strrstr(keys[i],"bind_to_list")!= NULL))
 					{
 						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);
-						g_free(OBJ_GET(object,keys[i]));
-						OBJ_SET_FULL(object,
+						g_free(DATA_GET(object,keys[i]));
+						DATA_SET_FULL(object,
 								keys[i],
 								g_strdup(tmpstr),
 								g_free);
 						g_free(tmpstr);
 					}
 					else
-						OBJ_SET_FULL(object,keys[i],g_strdup(tmpbuf),g_free);
+						DATA_SET_FULL(object,keys[i],g_strdup(tmpbuf),g_free);
 								
 					g_free(tmpbuf);
 				}
