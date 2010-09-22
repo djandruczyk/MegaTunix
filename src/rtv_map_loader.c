@@ -161,7 +161,8 @@ EXPORT gboolean load_realtime_map_pf(void )
 		rtv_map->raw_list = parse_keys(tmpbuf,&num_keys,",");
 		g_free(tmpbuf);
 	}
-	rtv_map->offset_hash = g_hash_table_new(g_direct_hash,g_direct_equal);
+	/* This should free to values with g_list_free, but it causes a fault*/
+	rtv_map->offset_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,NULL);
 	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GData *));
 	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_map->rtvars_size = firmware->rtvars_size;
@@ -408,6 +409,7 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
 	{
 		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n\n",section));
+		g_strfreev(expr_symbols);
 		g_free(tmpbuf);
 		return;
 	}
@@ -535,8 +537,6 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 
 			default:
 				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"));
-
 		}
 	}
-
 }

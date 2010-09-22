@@ -128,12 +128,12 @@ void *thread_dispatcher(gpointer data)
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
-	GTimer *clock;
+//	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	args = DATA_GET(&global_data,"args");
-	clock = g_timer_new();
+//	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
 	{
@@ -198,7 +198,7 @@ void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
-				g_timer_start(clock);
+//				g_timer_start(clock);
 				message->status = write_data(message);
 				//		printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));
 				gdk_threads_enter();

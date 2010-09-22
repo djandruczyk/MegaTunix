@@ -137,7 +137,7 @@ void present_viewer_choices(void)
 	if(get_list("viewables"))
 	{
 		g_list_free(get_list("viewables"));
-		store_list("viewables",NULL);
+		remove_list("viewables");
 	}
 
 	for (i=0;i<max_viewables;i++)
@@ -264,7 +264,7 @@ gboolean save_default_choices(GtkWidget *widget)
 		g_list_foreach(defaults,(GFunc)g_free,NULL);
 		g_list_free(defaults);
 		defaults = NULL;
-		store_list("logviewer_defaults",NULL);
+		remove_list("logviewer_defaults");
 	}
 	list = get_list("viewables");
 	for (i=0;i<g_list_length(list);i++)
@@ -1489,6 +1489,7 @@ void read_logviewer_defaults(ConfigFile *cfgfile)
 		return;
 	
 	vector = g_strsplit(tmpbuf,",",-1);
+	g_free(tmpbuf);
 	for (i=0;i<g_strv_length(vector);i++)
 		defaults = g_list_append(defaults,g_strdup(vector[i]));
 	g_strfreev(vector);

@@ -16,6 +16,7 @@
 #include <listmgmt.h>
 
 static GHashTable *lists_hash = NULL;
+extern GData *global_data;
 
 /*!
  \brief get_list returns the list referenced by name
@@ -26,7 +27,10 @@ static GHashTable *lists_hash = NULL;
 GList * get_list(gchar * key)
 {
 	if (!lists_hash)
-		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	{
+		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,(GDestroyNotify)g_list_free);
+		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,(GDestroyNotify)g_hash_table_destroy);
+	}
 	return (GList *)g_hash_table_lookup(lists_hash,key);
 }
 
@@ -40,9 +44,25 @@ GList * get_list(gchar * key)
 void store_list(gchar * key, GList * list)
 {
 	if (!lists_hash)
-		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-	g_hash_table_insert(lists_hash,g_strdup(key),(gpointer)list);
+	{
+		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,(GDestroyNotify)g_list_free);
+		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,(GDestroyNotify)g_hash_table_destroy);
+	}
+	g_hash_table_replace(lists_hash,g_strdup(key),(gpointer)list);
 	return;
+}
+
+
+/*!
+ \brief remove_list removes a list from the hashtable
+ \param key Text name of list to store
+ \see get_list
+ */
+void remove_list(gchar *key)
+{
+	if (!lists_hash)
+		return;
+	g_hash_table_remove(lists_hash,key);
 }
 
 

@@ -265,7 +265,7 @@ EXPORT gboolean interrogate_ecu()
 
 gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 {
-
+	gboolean retval = TRUE;
 	gint i = 0;
 	Detection_Test *test = NULL;
 	gint num_tests = tests->len;
@@ -314,7 +314,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
 		update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
-		return FALSE;
+		retval = FALSE;
 	}
 	else
 	{
@@ -322,16 +322,17 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 			firmware = g_new0(Firmware_Details,1);
 
 		if (!load_firmware_details(firmware,filename))
-			return FALSE;
-		return TRUE;
+			retval = FALSE;
 	}
+	g_free(filename);
+	return(retval);
 }
 
 
 /* !brief loads up all firmware details from the passed filename (interrogation
  * profile), and configures megatunix for use.
  */
-gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
+gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filename)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;
@@ -903,8 +904,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	}
 
 	cfg_free(cfgfile);
-	g_free(filename);
-
 
 	/* Allocate RAM for the Req_Fuel_Params structures.*/
 	firmware->rf_params = g_new0(Req_Fuel_Params *,firmware->total_tables);
@@ -959,7 +958,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		else
 		{
 			firmware->table_params[i]->x_ul_eval = evaluator_create(firmware->table_params[i]->x_ul_conv_expr);
+			g_assert(firmware->table_params[i]->x_ul_eval);
 			firmware->table_params[i]->x_dl_eval = evaluator_create(firmware->table_params[i]->x_dl_conv_expr);
+			g_assert(firmware->table_params[i]->x_dl_eval);
 		}
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)

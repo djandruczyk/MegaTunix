@@ -23,7 +23,7 @@ void set_reqfuel_color(GuiColor, gint );
 void set_widget_color(gpointer, gpointer );
 void update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean,gboolean);
 void no_ms_connection(void);
-void warn_user(gchar *);
+void warn_user(const gchar *);
 void set_title(gchar *);
 void conn_warning(void);
 void kill_conn_warning(void);

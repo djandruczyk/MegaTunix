@@ -22,6 +22,7 @@
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <init.h>
+#include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <lookuptables.h>
@@ -463,6 +464,7 @@ void save_config(void)
 			count++;
 		}
 		tmpbuf = g_strndup(string->str,string->len);
+		g_string_free(string,TRUE);
 		cfg_write_string(cfgfile, "Window", "hidden_tabs_list", tmpbuf);
 		cleanup(tmpbuf);
 
@@ -619,6 +621,7 @@ void mem_dealloc()
 	gint j = 0;
 	gpointer data;
 	GtkListStore *store = NULL;
+	GList *defaults = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern GHashTable *lookuptables;
 	extern Rtv_Map *rtv_map;
@@ -736,13 +739,24 @@ void mem_dealloc()
 	store = DATA_GET(&global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+
+	/* Logviewer settings */
+	defaults = get_list("logviewer_defaults");
+	if (defaults)
+	{
+		g_list_foreach(defaults,(GFunc)g_free,NULL);
+		g_list_free(defaults);
+		remove_list("logviewer_defaults");
+	}
 	/* Free all global data and structures */
 	//g_datalist_clear(&global_data);
-	g_datalist_foreach(&global_data,datalist_dealloc,NULL);
+		g_datalist_foreach(&global_data,datalist_dealloc,NULL);
 	/* Dynamic widgets master hash  */
+
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
 }
+
 
 void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
@@ -751,6 +765,7 @@ void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 	g_datalist_remove_data(&global_data,g_quark_to_string(key_id));
 	/* This should trigger a bug at some point */
 }
+
 
 
 /*!
@@ -955,12 +970,25 @@ void dealloc_array(GArray *array, ArrayType type)
 {
 	DBlock *db = NULL;
 	PotentialArg *arg = NULL;
+	PostFunction *post = NULL;
 	guint i = 0;
 
 	/*printf("dealloc_array\n");*/
 	switch (type)
 	{
 		case FUNCTIONS:
+			g_array_free(array,TRUE);
+			break;
+		case POST_FUNCTIONS:
+			for (i=0;i<array->len;i++)
+			{
+				post = NULL;
+				post = g_array_index(array,PostFunction *,i);
+				if (!post)
+					continue;
+				cleanup(post->name);
+				cleanup(post);
+			}
 			g_array_free(array,TRUE);
 			break;
 		case SEQUENCE:
@@ -1127,7 +1155,7 @@ void dealloc_dep_object(GData *object)
 
 
 /*!
- \brief dealloc_rtvp_object() deallocates the rtv object used 
+ \brief dealloc_rtv_object() deallocates the rtv object used 
  for runtime vars data
  \param object (GData *) pointer to object to deallocate
  */
@@ -1139,14 +1167,13 @@ void dealloc_rtv_object(GData *object)
 	g_datalist_foreach(&object,dump_datalist,NULL);
 	array = (GArray *)DATA_GET(&object, "history");
 	if (array)
-	{
-		printf("deallocing history array\n");
 		g_array_free(DATA_GET(&object,"history"),TRUE);
-	}
-	else
-		printf("couldn't find history object!\n");
-	g_datalist_clear(&object);
+	/* This should release everything else bound via a DATA_SET_FULL */
+	g_datalist_foreach(&object,datalist_dealloc,NULL);
+	//g_datalist_clear(&object);
 }
+
+
 /*!
  \brief dealloc_te_params() deallocates the structure used for firmware
  te parameters
@@ -1281,13 +1308,12 @@ void xml_cmd_free(gpointer data)
 {
 	Command *cmd = NULL;
 	cmd = (Command *)data;
-	printf("xml_cmd_free name %s\n",cmd->name);
 	cleanup(cmd->name);
 	cleanup(cmd->desc);
 	cleanup(cmd->base);
 	cleanup(cmd->helper_func_name);
 	cleanup(cmd->func_call_name);
-	dealloc_array(cmd->post_functions,FUNCTIONS);
+	dealloc_array(cmd->post_functions,POST_FUNCTIONS);
 	cleanup(cmd);
 }
 

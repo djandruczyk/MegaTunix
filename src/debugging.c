@@ -92,7 +92,10 @@ void close_debug()
 {
 	g_static_mutex_lock(&dbg_mutex);
 	if (dbg_channel)
-		g_io_channel_close(dbg_channel);
+	{
+		g_io_channel_shutdown(dbg_channel,TRUE,NULL);
+		g_io_channel_unref(dbg_channel);
+	}
 	g_static_mutex_unlock(&dbg_mutex);
 }
 

@@ -248,6 +248,7 @@ typedef enum
 typedef enum
 {
 	FUNCTIONS=0x2D0,
+	POST_FUNCTIONS,
 	SEQUENCE,
 	ARGS
 }ArrayType;

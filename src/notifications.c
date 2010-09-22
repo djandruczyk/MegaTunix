@@ -210,7 +210,7 @@ void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
-		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
+		gtk_text_buffer_insert(textbuffer,&iter,(const gchar *)message,-1);
 	}
 	else
 	{
@@ -219,7 +219,7 @@ void  update_logbar(
 					&iter,tmpbuf,-1,tagname,NULL);
 
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
-				message,-1,tagname,NULL);
+				(const gchar *)message,-1,tagname,NULL);
 	}
 
 	/* Get it's parent (the scrolled window) and slide it to the
@@ -246,14 +246,11 @@ void  update_logbar(
  */
 EXPORT void conn_warning(void)
 {
-	gchar *buff = NULL;
 	CmdLineArgs *args = DATA_GET(&global_data,"args");
 
 	if ((args->be_quiet) || (warning_present))
 		return;
-	buff = g_strdup(_("The ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. MegaTunix couldn't determine the correct comm port to use\n   2. The serial link is not plugged in\n   3. The ECU does not have adequate power.\n   4. The ECU is in bootloader mode.\n\nTry power cycling your ECU and verifying all connections are in order."));
-	warn_user(buff);
-	g_free(buff);
+	warn_user(_("The ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. MegaTunix couldn't determine the correct comm port to use\n   2. The serial link is not plugged in\n   3. The ECU does not have adequate power.\n   4. The ECU is in bootloader mode.\n\nTry power cycling your ECU and verifying all connections are in order."));
 }
 
 
@@ -274,7 +271,7 @@ EXPORT void kill_conn_warning()
  \brief warn_user() displays a warning message on the screen as a error dialog
  \param message (gchar *) the text to display
  */
-void warn_user(gchar *message)
+void warn_user(const gchar *message)
 {
 	extern gboolean interrogated;
 	CmdLineArgs *args = DATA_GET(&global_data,"args");
@@ -284,7 +281,7 @@ void warn_user(gchar *message)
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 			
 	if (!interrogated)
-		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"Go to Offline mode", GTK_RESPONSE_ACCEPT,"_Close", GTK_RESPONSE_CLOSE,NULL);
+		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,(const gchar *)"_Close", GTK_RESPONSE_CLOSE,NULL);
 	else
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CLOSE,NULL);
 			
@@ -324,7 +321,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 gboolean close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
-	gdk_threads_add_timeout(2000,set_warning_flag,NULL);
+	gdk_threads_add_timeout(1500,set_warning_flag,NULL);
 	warning_dialog = NULL;
 	return TRUE;
 }
@@ -386,7 +383,7 @@ void set_title(gchar * text)
 	{
 		if (GTK_IS_WIDGET(info_label))
 		{
-			tmpbuf = g_markup_printf_escaped("<big>%s</big>",text);
+			tmpbuf = g_markup_printf_escaped("<big><b>%s</b></big>",text);
 			gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
 			g_free(tmpbuf);
 		}
