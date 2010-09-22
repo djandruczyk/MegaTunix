@@ -103,10 +103,10 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern gint gui_dispatcher_id;
 	extern gint statuscounts_id;
 	/*
-	extern GThread * ascii_socket_id;
-	extern GThread * binary_socket_id;
-	extern GThread * control_socket_id;
-	*/
+	   extern GThread * ascii_socket_id;
+	   extern GThread * binary_socket_id;
+	   extern GThread * control_socket_id;
+	 */
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
@@ -208,16 +208,16 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 * connection for some reason, so had to go back to blocking mode, thus
 	 * the threads sit permanently blocked and can't catch the notify.
 	 *
-	if (ascii_socket_id)
-		g_thread_join(ascii_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
-	if (binary_socket_id)
-		g_thread_join(binary_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
-	if (control_socket_id)
-		g_thread_join(control_socket_id);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
-	*/
+	 if (ascii_socket_id)
+	 g_thread_join(ascii_socket_id);
+	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
+	 if (binary_socket_id)
+	 g_thread_join(binary_socket_id);
+	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
+	 if (control_socket_id)
+	 g_thread_join(control_socket_id);
+	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
+	 */
 
 	if (lookup_widget("dlog_select_log_button"))
 		iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
@@ -237,14 +237,14 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	unlock_serial();
 
 	/* Grab and release all mutexes to get them to relinquish
-	*/
+	 */
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
-	gtk_main_quit();
+	exit(0);
 	return TRUE;
 }
 
@@ -340,14 +340,14 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
-				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Comma\"\n"),FALSE,FALSE);
+				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Comma\"\n"),FALSE,FALSE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
 				preferred_delimiter = TAB;
-				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Tab\"\n"),FALSE,FALSE);
+				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Tab\"\n"),FALSE,FALSE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
@@ -1017,7 +1017,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case INTERROGATE_ECU:
 			set_title(g_strdup(_("User initiated interrogation...")));
-			update_logbar("interr_view","warning",_("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",_("USER Initiated ECU interrogation...\n"),FALSE,FALSE,FALSE);
 			widget = lookup_widget("interrogate_button");
 			if (GTK_IS_WIDGET(widget))
 				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);

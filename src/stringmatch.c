@@ -31,7 +31,8 @@ static GHashTable *str_2_enum = NULL;
  */
 void build_string_2_enum_table()
 {
-	str_2_enum = g_hash_table_new(g_str_hash,g_str_equal);
+	extern GData *global_data;
+	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
 
 	/* Firmware capabilities */
 	g_hash_table_insert(str_2_enum,"_PIS_",
@@ -589,6 +590,7 @@ void build_string_2_enum_table()
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
+	DATA_SET_FULL(&global_data,"str2_enum",str_2_enum,(GDestroyNotify)g_hash_table_destroy);
 }
 
 

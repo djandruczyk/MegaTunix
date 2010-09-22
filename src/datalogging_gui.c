@@ -192,7 +192,7 @@ void start_datalogging(void)
 
 	header_needed = TRUE;
 	logging_active = TRUE;
-	update_logbar("dlog_view",NULL,_("DataLogging Started...\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("DataLogging Started...\n"),FALSE,FALSE,FALSE);
 
 	if (!offline)
 		start_tickler(RTV_TICKLER);
@@ -226,7 +226,7 @@ void stop_datalogging()
 	gtk_label_set_text(GTK_LABEL(lookup_widget("dlog_file_label")),"No Log Selected Yet");
 
 
-	update_logbar("dlog_view",NULL,_("DataLogging Stopped...\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("DataLogging Stopped...\n"),FALSE,FALSE,FALSE);
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (iochannel)
 	{
@@ -485,14 +485,14 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("dlog_view","warning",_("NO FILE opened for normal datalogging!\n"),FALSE,FALSE);
+		update_logbar("dlog_view","warning",_("NO FILE opened for normal datalogging!\n"),FALSE,FALSE,FALSE);
 		return FALSE;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "a+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("dlog_view","warning",_("File open FAILURE!\n"),FALSE,FALSE);
+		update_logbar("dlog_view","warning",_("File open FAILURE!\n"),FALSE,FALSE,FALSE);
 		return FALSE;
 	}
 
@@ -500,7 +500,7 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(lookup_widget("dlog_start_logging_button"),TRUE);
 	OBJ_SET(lookup_widget("dlog_select_log_button"),"data",(gpointer)iochannel);
 	gtk_label_set_text(GTK_LABEL(lookup_widget("dlog_file_label")),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
-	update_logbar("dlog_view",NULL,_("DataLog File Opened\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("DataLog File Opened\n"),FALSE,FALSE,FALSE);
 
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -557,17 +557,17 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("dlog_view","warning",_("NO FILE opened for internal log export, aborting dump!\n"),FALSE,FALSE);
+		update_logbar("dlog_view","warning",_("NO FILE opened for internal log export, aborting dump!\n"),FALSE,FALSE,FALSE);
 		return FALSE;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "a+",NULL);
 	if (iochannel)
-		update_logbar("dlog_view",NULL,_("File opened successfully for internal log dump\n"),FALSE,FALSE);
+		update_logbar("dlog_view",NULL,_("File opened successfully for internal log dump\n"),FALSE,FALSE,FALSE);
 	dump_log_to_disk(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	g_io_channel_unref(iochannel);
-	update_logbar("dlog_view",NULL,_("Internal datalog successfully dumped to disk\n"),FALSE,FALSE);
+	update_logbar("dlog_view",NULL,_("Internal datalog successfully dumped to disk\n"),FALSE,FALSE,FALSE);
 	free_mtxfileio(fileio);
 	g_free(filename);
 	return TRUE;

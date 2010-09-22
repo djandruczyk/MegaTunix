@@ -161,9 +161,10 @@ void set_widget_color(gpointer widget, gpointer color)
 void  update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
-		const gchar * message,
+		gchar * message,
 		gboolean count,
-		gboolean clear)
+		gboolean clear,
+		gboolean free)
 {
 	GtkTextIter iter;
 	GtkTextBuffer * textbuffer = NULL;
@@ -233,6 +234,8 @@ void  update_logbar(
 
 	if (tmpbuf)
 		g_free(tmpbuf);
+	if (free)
+		g_free(message);
 	return;	
 }
 

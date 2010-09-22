@@ -66,6 +66,7 @@ gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
 
+void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 /*!
  * init()
  * \brief Sets sane values to global variables for a clean startup of 
@@ -111,9 +112,9 @@ void init(void)
 	DATA_SET(&global_data,"ve3d_fps",GINT_TO_POINTER(20));
 	DATA_SET_FULL(&global_data,"hidden_list",hidden_list,g_free);
 	DATA_SET(&global_data,"baudrate",GINT_TO_POINTER(9600));
-	table = g_hash_table_new(g_str_hash,g_str_equal);
+	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
 	DATA_SET_FULL(&global_data,"potential_arguments",(gpointer)table,(GDestroyNotify)g_hash_table_destroy);
-	commands = g_hash_table_new(g_str_hash,g_str_equal);
+	commands = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_cmd_free);
 	DATA_SET_FULL(&global_data,"commands_hash",commands,(GDestroyNotify)g_hash_table_destroy);
 
 	/* initialize all global variables to known states */
@@ -736,10 +737,19 @@ void mem_dealloc()
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
 	/* Free all global data and structures */
-	g_datalist_clear(&global_data);
+	//g_datalist_clear(&global_data);
+	g_datalist_foreach(&global_data,datalist_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
+}
+
+void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+{
+
+	printf("going to free %s\n",g_quark_to_string(key_id));
+	g_datalist_remove_data(&global_data,g_quark_to_string(key_id));
+	/* This should trigger a bug at some point */
 }
 
 
@@ -956,6 +966,7 @@ void dealloc_array(GArray *array, ArrayType type)
 		case SEQUENCE:
 			for (i=0;i<array->len;i++)
 			{
+				db = NULL;
 				db = g_array_index(array,DBlock *,i);
 				if (!db)
 					continue;
@@ -967,11 +978,15 @@ void dealloc_array(GArray *array, ArrayType type)
 		case ARGS:
 			for (i=0;i<array->len;i++)
 			{
+				arg = NULL;
 				arg = g_array_index(array,PotentialArg *,i);
 				if (!arg)
 					continue;
+				printf ("arg->name :%s\n",arg->name);
 				cleanup (arg->name);
+				printf ("arg->desc :%s\n",arg->desc);
 				cleanup (arg->desc);
+				printf ("arg->internal_name :%s\n",arg->internal_name);
 				cleanup (arg->internal_name);
 				cleanup (arg->static_string);
 				cleanup(arg);
@@ -1245,12 +1260,7 @@ void dealloc_rtt(gpointer data)
 	cleanup(rtt->ctrl_name);
 	cleanup(rtt->label_prefix);
 	cleanup(rtt->label_suffix);
-	rtt->object = NULL;
 	cleanup(rtt);
-	/* Don't free object as it is just a ptr to the actual
-	 * data in the rtv object and that gets freed elsewhere
-	 */
-
 }
 
 
@@ -1264,6 +1274,32 @@ void dealloc_slider(gpointer data)
 	 */
 	cleanup(slider);
 	return;
+}
+
+
+void xml_cmd_free(gpointer data)
+{
+	Command *cmd = NULL;
+	cmd = (Command *)data;
+	printf("xml_cmd_free name %s\n",cmd->name);
+	cleanup(cmd->name);
+	cleanup(cmd->desc);
+	cleanup(cmd->base);
+	cleanup(cmd->helper_func_name);
+	cleanup(cmd->func_call_name);
+	dealloc_array(cmd->post_functions,FUNCTIONS);
+	cleanup(cmd);
+}
+
+void xml_arg_free(gpointer data)
+{
+	PotentialArg *arg = NULL;
+	arg = (PotentialArg *)data;
+	cleanup(arg->name);
+	cleanup(arg->desc);
+	cleanup(arg->internal_name);
+	cleanup(arg->static_string);
+	cleanup(arg);
 }
 
 

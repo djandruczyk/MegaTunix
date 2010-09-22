@@ -739,6 +739,6 @@ void flush_rt_arrays()
 		}
 
 	}
-	update_logbar("dlog_view","warning",_("Realtime Variables History buffers flushed...\n"),FALSE,FALSE);
+	update_logbar("dlog_view","warning",_("Realtime Variables History buffers flushed...\n"),FALSE,FALSE,FALSE);
 
 }

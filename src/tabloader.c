@@ -91,29 +91,23 @@ EXPORT gboolean load_gui_tabs_pf(void)
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
-			update_logbar("interr_view","warning",_("Glade File: "),FALSE,FALSE);
-			tmpbuf = g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]);
-			update_logbar("interr_view","info",tmpbuf,FALSE,FALSE);
-			g_free(tmpbuf);
-			update_logbar("interr_view","warning",_("  is MISSING!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",_("Glade File: "),FALSE,FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","warning",_("  is MISSING!\n"),FALSE,FALSE,FALSE);
 			i++;
 			continue;
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_confs[i]));
-			update_logbar("interr_view","warning",_("Datamap File: "),FALSE,FALSE);
-			tmpbuf = g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]);
-			update_logbar("interr_view","info",tmpbuf,FALSE,FALSE);
-			g_free(tmpbuf);
-			update_logbar("interr_view","warning",_("  is MISSING!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",_("Datamap File: "),FALSE,FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","warning",_("  is MISSING!\n"),FALSE,FALSE,FALSE);
 			i++;
 			continue;
 		}
-		update_logbar("interr_view",NULL,_("Load of tab: "),FALSE,FALSE);
-		tmpbuf = g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]);
-		update_logbar("interr_view","info",tmpbuf,FALSE,FALSE);
-		g_free(tmpbuf);
+		update_logbar("interr_view",NULL,_("Load of tab: "),FALSE,FALSE,FALSE);
+		update_logbar("interr_view","info", g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE,TRUE);
 		xml = glade_xml_new(glade_file,"topframe",NULL);
 		cfgfile = cfg_open_file(map_file);
 		if (cfgfile)
@@ -187,14 +181,13 @@ EXPORT gboolean load_gui_tabs_pf(void)
 #ifndef DEBUG
 			g_object_unref(xml);
 #endif
-			update_logbar("interr_view",NULL,_(" completed.\n"),FALSE,FALSE);
+			update_logbar("interr_view",NULL,_(" completed.\n"),FALSE,FALSE,FALSE);
 		}
 		else
 		{
-			update_logbar("interr_view","warning",_("\nDatamap File: "),FALSE,FALSE);
-			tmpbuf = g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]);
-			update_logbar("interr_view","info",tmpbuf,FALSE,FALSE);
-			update_logbar("interr_view","warning",_(" Could not be processed!\n"),FALSE,FALSE);
+			update_logbar("interr_view","warning",_("\nDatamap File: "),FALSE,FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","warning",_(" Could not be processed!\n"),FALSE,FALSE,FALSE);
 		}
 		g_free(map_file);
 		g_free(glade_file);
@@ -218,7 +211,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 
 
 	}
-	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE);
+	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
 	tabs_loaded = TRUE;
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);

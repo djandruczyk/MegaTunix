@@ -41,6 +41,8 @@ void dealloc_rtt(gpointer);
 void dealloc_slider(gpointer);
 void dealloc_lookuptable(gpointer data);
 void dealloc_widget(gpointer, gpointer);
+void xml_cmd_free(gpointer);
+void xml_arg_free(gpointer);
 void cleanup(void *);
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);

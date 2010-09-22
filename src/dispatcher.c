@@ -233,7 +233,7 @@ trypop:
 					/*printf("logbar update\n");*/
 					t_message = (Text_Message *)message->payload;
 					gdk_threads_enter();
-					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
+					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
 					gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
