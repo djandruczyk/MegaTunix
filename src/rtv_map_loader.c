@@ -196,6 +196,8 @@ EXPORT gboolean load_realtime_map_pf(void )
 			gdk_threads_leave();
 			return FALSE;
 		}
+		object = NULL;
+		history = NULL;
 		/* Create object to hold all the data. (dynamically)*/
 		g_datalist_init(&object);
 		/* Assume default size of 8 bit unsigned */
@@ -269,7 +271,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 									keys[j],
 									g_strdup(_(tmpbuf)),
 									g_free);
-						//	printf("setting rtv string value %s of %s\n",keys[j],_(tmpbuf));
 						}
 						else
 						{
@@ -277,18 +278,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 									keys[j],
 									g_strdup(tmpbuf),
 									g_free);
-						//	printf("setting rtv string value %s of %s\n",keys[j],tmpbuf);
-						}
-						//printf("looking for %s on object , value %s\n",keys[j],DATA_GET(&object,keys[j]));
-						if (strstr(keys[j],"internal_names") != NULL)
-						{
-							vector = g_strsplit(tmpbuf,",",-1); 
-							for(k=0;k<g_strv_length(vector);k++) 
-							{
-								g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
-					//			printf("inserted object for var %s into hash %p, obj ptr %p\n",vector[k],rtv_map->rtv_hash,object);
-							}
-							g_strfreev(vector);
 						}
 						g_free(tmpbuf);
 					}
@@ -304,6 +293,33 @@ EXPORT gboolean load_realtime_map_pf(void )
 
 			}
 		}
+		eval = NULL;
+		expr = NULL;
+		if (DATA_GET(&object,"ul_conv_expr") && !(DATA_GET(&object,"ul_evaluator")))
+		{
+			expr = DATA_GET(&object,"ul_conv_expr");
+			eval = evaluator_create(expr);
+			if (!eval)
+			{
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+			}
+			assert(eval);
+			DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
+		}
+		eval = NULL;
+		expr = NULL;
+		if (DATA_GET(&object,"dl_conv_expr") && !(DATA_GET(&object,"dl_evaluator")))
+		{
+			expr = DATA_GET(&object,"dl_conv_expr");
+			eval = evaluator_create(expr);
+			if (!eval)
+			{
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+			}
+			assert(eval);
+			DATA_SET_FULL(&object,"dl_evaluator",eval,evaluator_destroy);
+		}
+
 		if (!DATA_GET(&object,"real_lower"))
 		{
 			size = (DataSize)DATA_GET(&object,"size");
@@ -357,16 +373,21 @@ EXPORT gboolean load_realtime_map_pf(void )
 			DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
+		if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
+		{
+			vector = g_strsplit(tmpbuf,",",-1); 
+			for(k=0;k<g_strv_length(vector);k++) 
+				g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
+			g_strfreev(vector);
+		}
 		//DATA_SET_FULL(&object,"keys",g_strdupv(keys),g_strfreev);
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
-		list = g_list_prepend(list,(gpointer)&object);
+		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_insert(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 		g_array_append_val(rtv_map->rtv_list,object);
-
 		g_free(section);
-
 		g_strfreev(keys);
-		//g_datalist_foreach(&object,dump_datalist,NULL);
+		/*g_datalist_foreach(&object,dump_datalist,NULL);*/
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));

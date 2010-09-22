@@ -258,9 +258,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	GData *object = NULL;
 
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-//	printf("Dumping attrs for object %p assoicated with %s\n",object,source);
-//	g_datalist_foreach(&object,dump_datalist,NULL);
+	object = (GData *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
@@ -298,11 +296,11 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	if ((gchar *)DATA_GET(&object,"real_lower"))
 		slider->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
 	else
-		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
+		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
 	if ((gchar *)DATA_GET(&object,"real_upper"))
 		slider->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
 	else
-		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
+		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
 	slider->history = (GArray *) DATA_GET(&object,"history");
 	slider->object = object;
 	hbox = gtk_hbox_new(FALSE,5);

@@ -307,7 +307,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(G_OBJECT(group->object)->qdata,cfgfile,section,"depend_on");
+			load_dependancies(&G_OBJECT(group->object)->qdata,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -424,10 +424,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	for (i=0;i<bind_num_keys;i++)
 	{
 		dest_list = get_list(tmpvector[i]);
-		if (!dest_list)
-			dest_list = g_list_prepend(dest_list,(gpointer)widget);
-		else if (!g_list_find(dest_list,(gpointer)widget))
-			dest_list = g_list_prepend(dest_list,(gpointer)widget);
+		dest_list = g_list_prepend(dest_list,(gpointer)widget);
 
 		store_list(tmpvector[i],dest_list);
 	}
@@ -568,7 +565,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies(G_OBJECT(widget)->qdata,cfgfile,section,"depend_on");
+		load_dependancies(&G_OBJECT(widget)->qdata,cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 

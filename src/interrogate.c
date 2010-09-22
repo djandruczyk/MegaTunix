@@ -356,7 +356,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
 	gint len6 = 0;
 	gint j = 0;
 
-	cfgfile = cfg_open_file(filename);
+	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
 	get_file_api(cfgfile,&major,&minor);
@@ -792,7 +792,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
 				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
 			{
-				load_dependancies(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
+				load_dependancies(&firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
 					dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else

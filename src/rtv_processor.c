@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>
+#include <widgetmgmt.h>
 
 
 extern GStaticMutex rtv_mutex;
@@ -108,6 +109,9 @@ void process_rt_vars(void *incoming)
 			special = NULL;
 			hash = NULL;
 			object=(GData *)g_list_nth_data(list,j);
+/*			printf("Dumping datalist for objects\n");
+			 g_datalist_foreach(&object,dump_datalist,NULL);
+			 */
 			if (!object)
 			{
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i));

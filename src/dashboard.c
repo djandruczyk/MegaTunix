@@ -126,7 +126,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	prefix = g_strdup_printf("dash_%i",(GINT)data);
 	key = g_strdup_printf("%s_name",prefix);
 	g_free(DATA_GET(&global_data,key));
-	OBJ_SET(&global_data,key, g_strdup(filename));
+	DATA_SET(&global_data,key, g_strdup(filename));
 	g_free(key);
 	/* retrieve coord info from global store */
 	key = g_strdup_printf("%s_x_origin",prefix);
@@ -329,22 +329,25 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
 	Dash_Gauge *d_gauge = NULL;
-	GtkFixedChild *child;
+	GtkFixedChild *child = NULL;
 	GList *children = NULL;
 	gint len = 0;
 	gint i = 0;
 	GData * rtv_obj = NULL;
 	gchar * source = NULL;
-	GHashTable *dash_hash;
+	GHashTable *dash_hash = NULL;
 	extern Rtv_Map *rtv_map;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	dash_hash = DATA_GET(&global_data,"dash_hash");
+	dash_hash = (GHashTable *)DATA_GET(&global_data,"dash_hash");
 	if (!dash_hash)
-		dash_hash = g_hash_table_new(g_str_hash,g_str_equal);
-	OBJ_SET(&global_data,"dash_hash",dash_hash);
+	{
+		printf("no dash_hash, making one!\n");
+		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(&global_data,"dash_hash",dash_hash,(GDestroyNotify)g_hash_table_destroy);
+	}
 
 	children = GTK_FIXED(dash)->children;
 	len = g_list_length(children);
@@ -372,7 +375,6 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		d_gauge->gauge = child->widget;
 		d_gauge->dash = dash;
 		g_hash_table_insert(dash_hash,g_strdup_printf("dash_%i_gauge_%i",(GINT)data,i),(gpointer)d_gauge);
-
 	}
 }
 
@@ -587,7 +589,7 @@ void toggle_status_visible()
 	if (GTK_WIDGET_VISIBLE(tmpwidget))
 	{
 		gtk_widget_hide_all (tmpwidget);
-		OBJ_SET(&global_data,"status_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(&global_data,"status_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
@@ -595,7 +597,7 @@ void toggle_status_visible()
 		y = (GINT)DATA_GET(&global_data,"status_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-		OBJ_SET(&global_data,"status_visible",GINT_TO_POINTER(TRUE));
+		DATA_SET(&global_data,"status_visible",GINT_TO_POINTER(TRUE));
 	}
 }
 
@@ -610,7 +612,7 @@ void toggle_rtt_visible()
 	if (GTK_WIDGET_VISIBLE(tmpwidget))
 	{
 		gtk_widget_hide_all (tmpwidget);
-		OBJ_SET(&global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(&global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
@@ -618,7 +620,7 @@ void toggle_rtt_visible()
 		y = (GINT)DATA_GET(&global_data,"rtt_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-		OBJ_SET(&global_data,"rtt_visible",GINT_TO_POINTER(TRUE));
+		DATA_SET(&global_data,"rtt_visible",GINT_TO_POINTER(TRUE));
 	}
 }
 
@@ -632,7 +634,7 @@ void toggle_main_visible()
 	if (GTK_WIDGET_VISIBLE(tmpwidget))
 	{
 		gtk_widget_hide_all (tmpwidget);
-		OBJ_SET(&global_data,"main_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(&global_data,"main_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
@@ -640,7 +642,7 @@ void toggle_main_visible()
 		y = (GINT)DATA_GET(&global_data,"main_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
-		OBJ_SET(&global_data,"main_visible",GINT_TO_POINTER(TRUE));
+		DATA_SET(&global_data,"main_visible",GINT_TO_POINTER(TRUE));
 	}
 }
 
@@ -807,7 +809,7 @@ gboolean close_dash(GtkWidget *widget, gpointer data)
 
 	if (!(gboolean)DATA_GET(&global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
-        OBJ_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
+        DATA_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
 	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
 	cbutton = lookup_widget(tmpbuf);
@@ -1126,13 +1128,13 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 		if ((GINT)data == 1)
 		{
 			g_free(DATA_GET(&global_data,"dash_1_name"));
-			OBJ_SET(&global_data,"dash_1_name",NULL);
+			DATA_SET(&global_data,"dash_1_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),FALSE);
 		}
 		if ((GINT)data == 2)
 		{
 			g_free(DATA_GET(&global_data,"dash_2_name"));
-			OBJ_SET(&global_data,"dash_2_name",NULL);
+			DATA_SET(&global_data,"dash_2_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),FALSE);
 		}
 	}
@@ -1255,7 +1257,7 @@ void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 
 	if ((gboolean)DATA_GET(&global_data,"dash_fullscreen"))
 	{
-        	OBJ_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
+        	DATA_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
@@ -1263,7 +1265,7 @@ void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-        	OBJ_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(TRUE));
+        	DATA_SET(&global_data,"dash_fullscreen",GINT_TO_POINTER(TRUE));
 		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
@@ -1300,7 +1302,7 @@ void toggle_gui_visible(GtkWidget *widget, gpointer data)
 			toggle_status_visible();
 		if (DATA_GET(&global_data,"rtt_visible"))
 			toggle_rtt_visible();
-		OBJ_SET(&global_data,"gui_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(&global_data,"gui_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
@@ -1310,7 +1312,7 @@ void toggle_gui_visible(GtkWidget *widget, gpointer data)
 			toggle_status_visible();
 		if (!DATA_GET(&global_data,"rtt_visible"))
 			toggle_rtt_visible();
-		OBJ_SET(&global_data,"gui_visible",GINT_TO_POINTER(TRUE));
+		DATA_SET(&global_data,"gui_visible",GINT_TO_POINTER(TRUE));
 	}
 			
 }

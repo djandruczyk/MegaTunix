@@ -745,8 +745,8 @@ void mem_dealloc()
 	if (defaults)
 		g_list_foreach(defaults,(GFunc)g_free,NULL);
 	/* Free all global data and structures */
-	//g_datalist_clear(&global_data);
-		g_datalist_foreach(&global_data,datalist_dealloc,NULL);
+	g_datalist_clear(&global_data);
+	//g_datalist_foreach(&global_data,datalist_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
 	if (dynamic_widgets)
@@ -757,7 +757,7 @@ void mem_dealloc()
 void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 
-//	printf("going to free %s\n",g_quark_to_string(key_id));
+	printf("going to free %s\n",g_quark_to_string(key_id));
 	g_datalist_remove_data(&global_data,g_quark_to_string(key_id));
 	/* This should trigger a bug at some point */
 }
@@ -1160,14 +1160,13 @@ void dealloc_rtv_object(GData *object)
 	GArray * array = NULL;
 	if (!(object))
 		return;
-	g_datalist_foreach(&object,dump_datalist,NULL);
-	printf("\n");
+//	g_datalist_foreach(&object,dump_datalist,NULL);
 	array = (GArray *)DATA_GET(&object, "history");
 	if (array)
 		g_array_free(DATA_GET(&object,"history"),TRUE);
 	/* This should release everything else bound via a DATA_SET_FULL */
-	g_datalist_foreach(&object,datalist_dealloc,NULL);
-	//g_datalist_clear(&object);
+	//g_datalist_foreach(&object,datalist_dealloc,NULL);
+	g_datalist_clear(&object);
 }
 
 
@@ -1324,6 +1323,19 @@ void xml_arg_free(gpointer data)
 	cleanup(arg->internal_name);
 	cleanup(arg->static_string);
 	cleanup(arg);
+}
+
+
+void dealloc_lists_hash(gpointer data)
+{
+	g_hash_table_foreach((GHashTable *)data,(GHFunc)dealloc_list,NULL);
+	g_hash_table_destroy((GHashTable *)data);
+}
+
+
+void dealloc_list(gpointer key, gpointer value, gpointer user_data)
+{
+	g_list_free((GList *)value);
 }
 
 

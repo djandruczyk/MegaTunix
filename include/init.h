@@ -36,6 +36,9 @@ void dealloc_array(GArray *, ArrayType );
 void dealloc_client_data(MtxSocketClient *);
 void dealloc_dep_object(GData *);
 void dealloc_rtv_object(GData *);
+void dealloc_lists_hash(gpointer);
+void dealloc_list(gpointer, gpointer, gpointer);
+
 gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
 void dealloc_rtt(gpointer);
 void dealloc_slider(gpointer);

@@ -316,3 +316,36 @@
 	...
 	fun:_dl_init
 }
+{
+	mtx rtt treeview
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gtk_tree*
+	...
+	fun:load_rt_text_pf
+	...
+	fun:main
+}
+{
+	mtx rtt liststore
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gtk_list*
+	...
+	fun:load_rt_text_pf
+	...
+	fun:main
+}
+{
+	mtx warn_user
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gtk_message*
+	...
+	fun:warn_user*
+	...
+	fun:main
+}
