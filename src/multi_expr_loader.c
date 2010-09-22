@@ -148,7 +148,7 @@ void load_multi_expressions(GData *object, ConfigFile *cfgfile,gchar * section)
 	g_strfreev(dl_exprs);
 	g_strfreev(ul_exprs);
 	g_strfreev(keys);
-	DATA_SET_FULL(&object,"multi_expr_hash",hash,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&object,"multi_expr_hash",hash,g_hash_table_destroy);
 
 }
 

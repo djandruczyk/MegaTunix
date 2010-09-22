@@ -65,7 +65,7 @@ void load_dependancies(GData *object, ConfigFile *cfgfile,gchar * section, gchar
 	/* Store list of deps.... */
 	g_datalist_init(&dep_obj);
 
-	DATA_SET_FULL(&dep_obj,"deps",deps,(GDestroyNotify)g_strfreev);
+	DATA_SET_FULL(&dep_obj,"deps",deps,g_strfreev);
 	DATA_SET(&dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
 	for (i=0;i<num_deps;i++)

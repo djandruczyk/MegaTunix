@@ -356,10 +356,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 			DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
-		DATA_SET_FULL(&object,"keys",g_strdupv(keys),(GDestroyNotify)g_strfreev);
+		DATA_SET_FULL(&object,"keys",g_strdupv(keys),g_strfreev);
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
-		g_hash_table_replace(rtv_map->offset_hash,GINT_TO_POINTER(offset),list);
+		g_hash_table_insert(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 		g_array_append_val(rtv_map->rtv_list,object);
 
 		g_free(section);
@@ -427,7 +427,7 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
 	DATA_SET_FULL(&object,"expr_types",(gpointer)expr_types,g_free);
-	DATA_SET_FULL(&object,"expr_symbols",(gpointer)expr_symbols,(GDestroyNotify)g_strfreev);
+	DATA_SET_FULL(&object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	DATA_SET(&object,"total_symbols",GINT_TO_POINTER(total_symbols));
 	for (i=0;i<total_symbols;i++)
 	{

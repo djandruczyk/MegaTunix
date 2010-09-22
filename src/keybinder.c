@@ -87,13 +87,14 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 					{
 						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);
 						g_free(OBJ_GET(object,keys[i]));
-						OBJ_SET(object,
+						OBJ_SET_FULL(object,
 								keys[i],
-								g_strdup(tmpstr));
+								g_strdup(tmpstr),
+								g_free);
 						g_free(tmpstr);
 					}
 					else
-						OBJ_SET(object,keys[i],g_strdup(tmpbuf));
+						OBJ_SET_FULL(object,keys[i],g_strdup(tmpbuf),g_free);
 								
 					g_free(tmpbuf);
 				}

@@ -29,7 +29,7 @@ GList * get_list(gchar * key)
 	if (!lists_hash)
 	{
 		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,(GDestroyNotify)g_list_free);
-		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,(GDestroyNotify)g_hash_table_destroy);
+		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,g_hash_table_destroy);
 	}
 	return (GList *)g_hash_table_lookup(lists_hash,key);
 }
@@ -46,7 +46,7 @@ void store_list(gchar * key, GList * list)
 	if (!lists_hash)
 	{
 		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,(GDestroyNotify)g_list_free);
-		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,(GDestroyNotify)g_hash_table_destroy);
+		DATA_SET_FULL(&global_data,"lists_hash",lists_hash,g_hash_table_destroy);
 	}
 	g_hash_table_replace(lists_hash,g_strdup(key),(gpointer)list);
 	return;

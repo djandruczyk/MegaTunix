@@ -114,9 +114,9 @@ void init(void)
 	DATA_SET_FULL(&global_data,"hidden_list",hidden_list,g_free);
 	DATA_SET(&global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
-	DATA_SET_FULL(&global_data,"potential_arguments",(gpointer)table,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
 	commands = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_cmd_free);
-	DATA_SET_FULL(&global_data,"commands_hash",commands,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"commands_hash",commands,g_hash_table_destroy);
 
 	/* initialize all global variables to known states */
 	DATA_SET(&global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
@@ -743,11 +743,7 @@ void mem_dealloc()
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
-	{
 		g_list_foreach(defaults,(GFunc)g_free,NULL);
-		g_list_free(defaults);
-		remove_list("logviewer_defaults");
-	}
 	/* Free all global data and structures */
 	//g_datalist_clear(&global_data);
 		g_datalist_foreach(&global_data,datalist_dealloc,NULL);

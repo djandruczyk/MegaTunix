@@ -123,7 +123,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			if (cfg_read_string(cfgfile,"global","bind_to_list",&tmpbuf))
 			{
-				OBJ_SET(label,"bind_to_list",g_strdup(tmpbuf));
+				OBJ_SET_FULL(label,"bind_to_list",g_strdup(tmpbuf),g_free);
 				bind_to_lists(label,tmpbuf);
 				g_free(tmpbuf);
 			}
@@ -378,7 +378,7 @@ gint bind_group_data(ConfigFile *cfg, GtkWidget *widget, GHashTable *groups, gch
 				}
 				break;
 			case MTX_STRING:
-				OBJ_SET(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])));
+				OBJ_SET_FULL(widget,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
 				if (OBJ_GET(widget,"tooltip") != NULL)
 					gtk_widget_set_tooltip_text(widget,(gchar *)_(OBJ_GET(widget,"tooltip")));
 				if (OBJ_GET(group->object, "bind_to_list"))

@@ -112,7 +112,7 @@ EXPORT void load_rt_text_pf()
 
 	/*Get the root element node */
 	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
-	DATA_SET_FULL(&global_data,"rtt_model",store,(GDestroyNotify)gtk_list_store_clear);
+	DATA_SET_FULL(&global_data,"rtt_model",store,gtk_list_store_clear);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
 	setup_rtt_treeview(treeview);
@@ -331,7 +331,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	if (!rtt_hash)
 	{
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_rtt);
-		DATA_SET_FULL(&global_data,"rtt_hash",(gpointer)rtt_hash,(GDestroyNotify)g_hash_table_destroy);
+		DATA_SET_FULL(&global_data,"rtt_hash",(gpointer)rtt_hash,g_hash_table_destroy);
 	}
 
 	if ((rtt_hash) && (ctrl_name) && (source))

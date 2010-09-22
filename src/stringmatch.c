@@ -590,7 +590,7 @@ void build_string_2_enum_table()
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-	DATA_SET_FULL(&global_data,"str2_enum",str_2_enum,(GDestroyNotify)g_hash_table_destroy);
+	DATA_SET_FULL(&global_data,"str2_enum",str_2_enum,g_hash_table_destroy);
 }
 
 
