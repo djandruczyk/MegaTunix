@@ -71,7 +71,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					if (strstr(keys[i],"ul_complex"))
-						load_complex_params(object->qdata,cfgfile,section);
+						load_complex_params(&object->qdata,cfgfile,section);
 				}
 				else
 					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n",keys[i],section,cfgfile->filename));

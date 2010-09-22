@@ -198,21 +198,21 @@ EXPORT gboolean load_realtime_map_pf(void )
 		}
 		/* Create object to hold all the data. (dynamically)*/
 		g_datalist_init(&object);
-		/* History Array */
-		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* Assume default size of 8 bit unsigned */
 		DATA_SET(&object,"size",GINT_TO_POINTER(MTX_U08));
+		/* History Array */
+		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
 		DATA_SET(&object,"history",(gpointer)history);
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(object,cfgfile,section,"depend_on");
+			load_dependancies(&object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
 		{
-			load_multi_expressions(object,cfgfile,section);
+			load_multi_expressions(&object,cfgfile,section);
 			g_free(tmpbuf);
 		}
 		for (j=0;j<num_keys;j++)
@@ -247,12 +247,14 @@ EXPORT gboolean load_realtime_map_pf(void )
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
+						if (tmpi == 0)
+							tmpi = 1;
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
 						DATA_SET(&object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 						if (strstr(keys[j],"complex_expr") != NULL)
-							load_complex_params(object,cfgfile,section);
+							load_complex_params(&object,cfgfile,section);
 					}
 					else
 						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
@@ -304,7 +306,6 @@ EXPORT gboolean load_realtime_map_pf(void )
 		}
 		if (!DATA_GET(&object,"real_lower"))
 		{
-			printf("no real_lower!\n");
 			size = (DataSize)DATA_GET(&object,"size");
 			tmp = get_extreme_from_size(size,LOWER);
 			eval = (void *)DATA_GET(&object,"ul_evaluator");
@@ -356,9 +357,9 @@ EXPORT gboolean load_realtime_map_pf(void )
 			DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
-		DATA_SET_FULL(&object,"keys",g_strdupv(keys),g_strfreev);
+		//DATA_SET_FULL(&object,"keys",g_strdupv(keys),g_strfreev);
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
-		list = g_list_prepend(list,(gpointer)object);
+		list = g_list_prepend(list,(gpointer)&object);
 		g_hash_table_insert(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 		g_array_append_val(rtv_map->rtv_list,object);
 
@@ -383,7 +384,7 @@ EXPORT gboolean load_realtime_map_pf(void )
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
+void load_complex_params(GData **object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -426,9 +427,9 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 		return;
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
-	DATA_SET_FULL(&object,"expr_types",(gpointer)expr_types,g_free);
-	DATA_SET_FULL(&object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
-	DATA_SET(&object,"total_symbols",GINT_TO_POINTER(total_symbols));
+	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
+	DATA_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
+	DATA_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
 	for (i=0;i<total_symbols;i++)
 	{
 		switch ((ComplexExprType)expr_types[i])
@@ -439,25 +440,25 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_canID",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					tmpi = firmware->canID;
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;
@@ -467,20 +468,20 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_canID",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					tmpi = firmware->canID;
 
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_size",expr_symbols[i]);
@@ -491,7 +492,7 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 					tmpi = translate_string(tmpbuf);
 					g_free(tmpbuf);
 				}
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;
@@ -501,7 +502,7 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_size",expr_symbols[i]);
@@ -515,8 +516,9 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 					tmpi = translate_string(tmpbuf);
 					g_free(tmpbuf);
 				}
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
+				name=NULL;
 				break;
 			case RAW_EMB_BIT:
 				/* RAW data embedded bitfield 2 params */
@@ -524,13 +526,13 @@ void load_complex_params(GData *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(&object,name,GINT_TO_POINTER(tmpi));
+				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;

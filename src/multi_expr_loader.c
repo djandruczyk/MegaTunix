@@ -37,7 +37,7 @@
  \param section (gchar *) sectio nto read the data from
  \see check_dependancies
  */
-void load_multi_expressions(GData *object, ConfigFile *cfgfile,gchar * section)
+void load_multi_expressions(GData **object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** keys = NULL;
@@ -140,16 +140,15 @@ void load_multi_expressions(GData *object, ConfigFile *cfgfile,gchar * section)
 		multi->ul_eval = evaluator_create(multi->ul_conv_expr);
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
-	DATA_SET_FULL(&object,"real_lower",g_strdup_printf("%i",lowest),g_free);
-	DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",highest),g_free);
+	DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",lowest),g_free);
+	DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",highest),g_free);
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
 	g_strfreev(ltables);
 	g_strfreev(dl_exprs);
 	g_strfreev(ul_exprs);
 	g_strfreev(keys);
-	DATA_SET_FULL(&object,"multi_expr_hash",hash,g_hash_table_destroy);
-
+	DATA_SET_FULL(object,"multi_expr_hash",hash,g_hash_table_destroy);
 }
 
 void free_multi_expr(gpointer data)

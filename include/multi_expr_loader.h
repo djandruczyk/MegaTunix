@@ -57,7 +57,7 @@ struct _MultiSource
 
 
 /* Prototypes */
-void load_multi_expressions(GData * ,ConfigFile * ,gchar * );
+void load_multi_expressions(GData **,ConfigFile * ,gchar * );
 void free_multi_expr(gpointer);
 void free_multi_source(gpointer);
 

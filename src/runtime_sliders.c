@@ -259,8 +259,8 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
-	printf("Dumping attrs for object %p assoicated with %s\n",object,source);
-	g_datalist_foreach(&object,dump_datalist,NULL);
+//	printf("Dumping attrs for object %p assoicated with %s\n",object,source);
+//	g_datalist_foreach(&object,dump_datalist,NULL);
 	if (!(object))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));

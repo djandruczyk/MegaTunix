@@ -726,12 +726,12 @@ void mem_dealloc()
 		g_array_free(rtv_map->ts_array,TRUE);
 		for(i=0;i<rtv_map->rtv_list->len;i++)
 		{
-			data = g_array_index(rtv_map->rtv_list,gpointer,i);
+			data = g_array_index(rtv_map->rtv_list,GData *,i);
 			dealloc_rtv_object(data);
 		}
-		g_array_free(rtv_map->rtv_list,TRUE);
 		g_hash_table_destroy(rtv_map->rtv_hash);
 		g_hash_table_destroy(rtv_map->offset_hash);
+		g_array_free(rtv_map->rtv_list,TRUE);
 		cleanup(rtv_map);
 	}
 	/* Runtime Text*/
@@ -757,7 +757,7 @@ void mem_dealloc()
 void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 
-	printf("going to free %s\n",g_quark_to_string(key_id));
+//	printf("going to free %s\n",g_quark_to_string(key_id));
 	g_datalist_remove_data(&global_data,g_quark_to_string(key_id));
 	/* This should trigger a bug at some point */
 }
@@ -1161,6 +1161,7 @@ void dealloc_rtv_object(GData *object)
 	if (!(object))
 		return;
 	g_datalist_foreach(&object,dump_datalist,NULL);
+	printf("\n");
 	array = (GArray *)DATA_GET(&object, "history");
 	if (array)
 		g_array_free(DATA_GET(&object,"history"),TRUE);
@@ -1310,6 +1311,7 @@ void xml_cmd_free(gpointer data)
 	cleanup(cmd->helper_func_name);
 	cleanup(cmd->func_call_name);
 	dealloc_array(cmd->post_functions,POST_FUNCTIONS);
+	g_array_free(cmd->args,TRUE);
 	cleanup(cmd);
 }
 

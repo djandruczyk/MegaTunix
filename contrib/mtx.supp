@@ -290,3 +290,29 @@
 	...
 	fun:gtk_widget_propagate*
 }
+{
+	threads
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:pthread_*
+	...
+	fun:main*
+}
+{
+	g_idle
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:*process_updates*
+	...
+	fun:main*
+}
+{
+	delim
+	Memcheck:Leak
+	fun:*alloc
+	fun:getdelim*
+	...
+	fun:_dl_init
+}

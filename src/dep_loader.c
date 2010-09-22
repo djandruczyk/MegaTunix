@@ -38,7 +38,7 @@
  \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies(GData *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+void load_dependancies(GData **object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
 	GData *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -200,6 +200,6 @@ void load_dependancies(GData *object, ConfigFile *cfgfile,gchar * section, gchar
 		g_strfreev(vector);
 
 	}
-	DATA_SET(&object,"dep_object",(gpointer)dep_obj);
+	DATA_SET(object,"dep_object",(gpointer)dep_obj);
 
 }
