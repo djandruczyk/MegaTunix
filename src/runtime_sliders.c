@@ -207,7 +207,7 @@ EXPORT void load_ve3d_sliders(gint table_num)
 	ve3d_sliders = DATA_GET(&global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
-	DATA_SET_FULL(&global_data,"ve3d_sliders",ve3d_sliders,g_hash_table_destroy);
+	DATA_SET(&global_data,"ve3d_sliders",ve3d_sliders);
 
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -468,8 +468,11 @@ EXPORT void register_rt_range(GtkWidget * widget)
 gboolean free_ve3d_sliders(gint table_num)
 {
 	gchar * widget = NULL;
+	GHashTable **tables = NULL;
 
-	DATA_SET_FULL(&global_data,"ve3d_sliders",NULL,NULL);
+	tables = DATA_GET(&global_data,"ve3d_sliders");
+	g_hash_table_destroy(tables[table_num]);
+	tables[table_num] = NULL;
 
 	widget = g_strdup_printf("ve3d_rt_table0_%i",table_num);
 	deregister_widget(widget);
