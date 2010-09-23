@@ -183,6 +183,7 @@ typedef enum
 	MTX_CMD_WRITE
 }WriteMode;
 
+
 typedef enum
 {
 	MTX_CHAR=0x250,
@@ -298,5 +299,16 @@ typedef enum
 	OR=0x450,
 	AND
 }MatchType;
+
+typedef enum
+{
+	MTX_DATA_CHANGED=0x460,
+	MTX_STATUS_CHANGED
+}SlaveMsgType;
+
+typedef enum
+{
+	GROUP_SET_COLOR=0x01,
+}RemoteAction;
 
 #endif

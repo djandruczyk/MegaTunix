@@ -32,6 +32,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #endif
+#include <notifications.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <serialio.h>
@@ -55,6 +56,7 @@
 static GPtrArray *slave_list = NULL;
 static gint controlsocket = 0;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
+static const guint8 SLAVE_STATUS_UPDATE=0xBF;
 GThread *ascii_socket_id = NULL;
 GThread *binary_socket_id = NULL;
 GThread *control_socket_id = NULL;
@@ -492,7 +494,7 @@ close_binary:
 						if (firmware->capabilities & MS2)
 						{
 							state = GET_TABLE_ID;
-							next_state = GET_DATABYTE;
+							next_state = GET_DATABLOCK;
 							substate = RECV_LOOKUPTABLE;
 						}
 						continue;
@@ -758,7 +760,7 @@ close_binary:
 				state = next_state;
 				if (substate == GET_VAR_DATA)
 				{
-					state = GET_DATABYTE;
+					state = GET_DATABLOCK;
 					buffer = g_new0(guint8, count);
 					index = 0;
 				}
@@ -773,7 +775,7 @@ close_binary:
 					}
 				}
 				continue;
-			case GET_DATABYTE:
+			case GET_DATABLOCK:
 				/*				printf("get_databyte\n");*/
 				buffer[index] = (guint8)buf;
 				index++;
@@ -792,11 +794,8 @@ close_binary:
 						{
 							if (find_mtx_page(tableID,&mtx_page))
 							{
-								printf("updating local ms2 chunk buffer\n");
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
-								printf("memcpy ok, trying chunk write\n");
 								chunk_write(canID,mtx_page,offset,count,buffer);
-								printf("chunk write submitted\n");
 							}
 						}
 					}
@@ -809,7 +808,7 @@ close_binary:
 					state = WAITING_FOR_CMD;
 				}
 				else
-					state = GET_DATABYTE;
+					state = GET_DATABLOCK;
 				continue;
 			case GET_MS1_PAGE:
 				/*				printf("get_ms1_page\n");*/
@@ -830,7 +829,7 @@ close_binary:
 				index = 0;
 				buffer = g_new0(guint8, count);
 				/*				printf ("Passed count %i\n",count);*/
-				state = GET_DATABYTE;
+				state = GET_DATABLOCK;
 				continue;
 			case GET_MS1_BYTE:
 				/*				printf("get_ms1_byte\n");*/
@@ -1637,29 +1636,40 @@ void *notify_slaves_thread(gpointer data)
 			 * if so, DO NOT send the same thing back to that 
 			 * slave as he already knows....
 			 */
-			if (msg->mode == MTX_SIMPLE_WRITE)
-			{
-				if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
-					continue;
-			}
-			if (msg->mode == MTX_CHUNK_WRITE)
-			{
-				if (memcmp (cli_data->ecu_data[msg->page]+msg->offset,firmware->ecu_data[msg->page]+msg->offset,msg->length) == 0)
-					continue;
-			}
-
-			buffer = build_netmsg(SLAVE_MEMORY_UPDATE,msg,&len);
-			res = net_send(fd,(guint8 *)buffer,len,0);
-			if (res == len)
+			if (msg->type == MTX_DATA_CHANGED)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
-					_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value);
-				else if (msg->mode == MTX_CHUNK_WRITE)
-					memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
+				{
+					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+						continue;
+				}
+				if (msg->mode == MTX_CHUNK_WRITE)
+				{
+					if (memcmp (cli_data->ecu_data[msg->page]+msg->offset,firmware->ecu_data[msg->page]+msg->offset,msg->length) == 0)
+						continue;
+				}
+
+				buffer = build_netmsg(SLAVE_MEMORY_UPDATE,msg,&len);
+				res = net_send(fd,(guint8 *)buffer,len,0);
+				if (res == len)
+				{
+					if (msg->mode == MTX_SIMPLE_WRITE)
+						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value);
+					else if (msg->mode == MTX_CHUNK_WRITE)
+						memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
+				}
+				else
+					printf(_("Peer update WRITE ERROR!\n"));
+				g_free(buffer);
 			}
-			else
-				printf(_("Peer update WRITE ERROR!\n"));
-			g_free(buffer);
+			if (msg->type == MTX_STATUS_CHANGED)
+			{
+				buffer = build_status_update(SLAVE_STATUS_UPDATE,msg,&len);
+				res = net_send(fd,(guint8 *)buffer,len,0);
+				if (res != len)
+					printf(_("Peer update WRITE ERROR!\n"));
+				g_free(buffer);
+			}
 
 			if (res == -1)
 				to_be_closed[i] = TRUE;
@@ -1718,6 +1728,9 @@ void *control_socket_client(gpointer data)
 	gint count_h = 0;
 	gint count_l = 0;
 	gint index = 0;
+	RemoteAction action = 0;
+	GuiColor color;
+	gchar *string = NULL;
 	guint8 *buffer = NULL;
 	State state;
 	SubState substate;
@@ -1747,7 +1760,7 @@ close_control:
 		/*
 		   printf("controlsocket Data arrived!\n");
 		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
-		   */
+		 */
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
@@ -1757,14 +1770,30 @@ close_control:
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 				}
-				else
+				else if (buf == SLAVE_STATUS_UPDATE)
 				{
+					/*printf("slave status update!\n");*/
+					state = GET_ACTION;
 					/* Put in handlers here to pickup
 					   status messages and other stuff
 					   from master, i.e. burn notify, 
 					   closing, chat, etc
-					   */
+					 */
 				}
+				continue;
+			case GET_ACTION:
+				action = (guint8)buf;
+				/*printf("Got action message!\n");*/
+				if (action == GROUP_SET_COLOR)
+					state = GET_COLOR;
+				else
+					state = WAITING_FOR_CMD;
+				continue;
+			case GET_COLOR:
+				/*printf("got color\n");*/
+				color = (GuiColor)buf;
+				state = GET_HIGH_COUNT;
+				substate = GET_STRING;
 				continue;
 			case GET_CAN_ID:
 				/*				printf("get_canid block\n");*/
@@ -1804,12 +1833,37 @@ close_control:
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
-					state = GET_DATABYTE;
+					state = GET_DATABLOCK;
 					buffer = g_new0(guint8, count);
 					index = 0;
 				}
+				if (substate == GET_STRING)
+				{
+					state = GET_STRING;
+					string = g_new0(gchar, count);
+					index = 0;
+					substate = SET_COLOR;
+				}
 				continue;
-			case GET_DATABYTE:
+			case GET_STRING:
+				string[index] = (gchar)buf;
+				index++;
+				if (index >= count)
+				{
+					state = WAITING_FOR_CMD;
+					if (substate == SET_COLOR)
+					{
+						gdk_threads_enter();
+						set_group_color(color,string);
+						gdk_threads_leave();
+					}
+					g_free(string);
+					index = 0;
+				}
+				else
+					state = GET_STRING;
+				continue;
+			case GET_DATABLOCK:
 				/*				printf("get_databyte\n");*/
 				buffer[index] = (guint8)buf;
 				index++;
@@ -1825,9 +1879,10 @@ close_control:
 						refresh_widgets_at_offset(page,i);
 					gdk_threads_leave();
 					g_free(buffer);
+					index = 0;
 				}
 				else
-					state = GET_DATABYTE;
+					state = GET_DATABLOCK;
 				continue;
 			default:
 				printf(_("Case not handled, bug in state machine!\n"));
@@ -1948,15 +2003,36 @@ guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 	buffer[2] = msg->page;
 	buffer[3] = (msg->offset >> 8) & 0xff; /* Highbyte of offset */
 	buffer[4] = msg->offset & 0xff; /* Highbyte of offset */
-	buffer[5] = (msg->length >> 8) & 0xff; /* Highbyte of offset */
-	buffer[6] = msg->length & 0xff; /* Highbyte of offset */
+	buffer[5] = (msg->length >> 8) & 0xff; /* Highbyte of length */
+	buffer[6] = msg->length & 0xff; /* Highbyte of length */
 	if (msg->mode == MTX_SIMPLE_WRITE)
-		g_memmove(buffer+7,&msg->value,msg->length);
+		g_memmove(buffer+headerlen,&msg->value,msg->length);
 	if (msg->mode == MTX_CHUNK_WRITE)
-		g_memmove(buffer+7,msg->data,msg->length);
+		g_memmove(buffer+headerlen,msg->data,msg->length);
 	
 	*msg_len = buflen;
 	return buffer;
 }
 
+
+guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
+{
+	guint8 *buffer = NULL;
+	gint buflen = 0;
+	const gint headerlen = 5;
+
+	buflen = headerlen + msg->length;
+
+	buffer = g_new0(guint8,buflen);	
+	buffer[0] = update_type;
+	buffer[1] = msg->action;
+	buffer[2] = (guint8)msg->value;
+	buffer[3] = (msg->length >> 8) & 0xff; /* Highbyte of length */
+	buffer[4] = msg->length & 0xff; /* Highbyte of length */
+	g_memmove(buffer+headerlen, msg->data,msg->length);
+
+	
+	*msg_len = buflen;
+	return buffer;
+}
 

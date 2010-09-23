@@ -47,13 +47,17 @@ typedef enum
 	GET_LOW_OFFSET,
 	GET_HIGH_COUNT,
 	GET_LOW_COUNT,
-	GET_DATABYTE,
+	GET_DATABLOCK,
 	GET_SINGLE_BYTE,
 	GET_MTX_PAGE,
 	GET_MS1_PAGE,
 	GET_MS1_OFFSET,
 	GET_MS1_BYTE,
-	GET_MS1_COUNT
+	GET_MS1_COUNT,
+	GET_COLOR,
+	GET_ACTION,
+	GET_STRING,
+	SET_COLOR
 }State;
 
 typedef enum
@@ -126,8 +130,11 @@ struct _SlaveMessage
 	guint16 length;
 	DataSize size;
 	gint value;
-	guint8 * data;
+	//guint8 * data;
+	void * data;
 	WriteMode mode;
+	SlaveMsgType type;
+	RemoteAction action;
 };
 
 /* Prototypes */
@@ -157,6 +164,7 @@ gint socket_get_more_data(gint, void *, gint, gint);
 gboolean open_control_socket(gchar *, gint);
 void notify_slave(gpointer, gpointer);
 guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
+guint8 * build_status_update(guint8,SlaveMessage *,gint *);
 gint net_send(gint, guint8 *, gint, gint);
 /* Prototypes */
 

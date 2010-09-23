@@ -22,6 +22,7 @@
 gint comms_test(void);			/* new check_ecu_comms function */
 void update_comms_status(void);
 void send_to_slaves(void *);		/* Notify slaves via asyncqueue */
+void slaves_set_color(GuiColor,const gchar *);		/* Notify slaves via asyncqueue */
 void update_write_status(void *);	/* gui updater for write status */
 void readfrom_ecu(Io_Message *);	/* Function to get data FROM ecu */
 void writeto_ecu(Io_Message *);		/* Func to send data to the ECU */

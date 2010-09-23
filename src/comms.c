@@ -148,6 +148,7 @@ EXPORT void send_to_slaves(void *data)
 	msg->length = (guint16)(GINT)DATA_GET(output->data,"num_bytes");
 	msg->size = (DataSize)DATA_GET(output->data,"size");
 	msg->mode = (WriteMode)DATA_GET(output->data,"mode");
+	msg->type = MTX_DATA_CHANGED;
 	if (msg->mode == MTX_CHUNK_WRITE)
 		msg->data = g_memdup(DATA_GET(output->data,"data"), msg->length);
 	else if (msg->mode == MTX_SIMPLE_WRITE)
@@ -161,8 +162,31 @@ EXPORT void send_to_slaves(void *data)
 
 	/*	printf("Sending message to peer(s)\n");*/
 	g_async_queue_ref(slave_msg_queue);
-        g_async_queue_push(slave_msg_queue,(gpointer)msg);
-        g_async_queue_unref(slave_msg_queue);
+	g_async_queue_push(slave_msg_queue,(gpointer)msg);
+	g_async_queue_unref(slave_msg_queue);
+	return;
+}
+
+
+EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
+{
+	extern GAsyncQueue *slave_msg_queue;
+	SlaveMessage *msg = NULL;
+
+	if (!(gboolean)DATA_GET(global_data,"network_access"))
+		return;
+
+	msg = g_new0(SlaveMessage, 1);
+	msg->type = MTX_STATUS_CHANGED;
+	msg->action = GROUP_SET_COLOR;
+	msg->value = (guint8)clr;
+	msg->data = g_strdup(groupname);
+	msg->length = (guint16)(GINT)strlen(groupname);
+
+	/*	printf("Sending message to peer(s)\n");*/
+	g_async_queue_ref(slave_msg_queue);
+	g_async_queue_push(slave_msg_queue,(gpointer)msg);
+	g_async_queue_unref(slave_msg_queue);
 	return;
 }
 
@@ -185,7 +209,6 @@ EXPORT void update_write_status(void *data)
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
-	guint8 *sent_data = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	extern gboolean paused_handlers;
@@ -254,6 +277,7 @@ red_or_black:
 		{
 			gdk_threads_enter();
 			set_group_color(RED,"burners");
+			slaves_set_color(RED,"burners");
 			gdk_threads_leave();
 			outstanding_data = TRUE;
 			return;
@@ -262,6 +286,7 @@ red_or_black:
 	outstanding_data = FALSE;
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
+	slaves_set_color(BLACK,"burners");
 	gdk_threads_leave();
 	return;
 }

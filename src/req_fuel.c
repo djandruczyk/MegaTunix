@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <comms.h>
 #include <configfile.h>
 #include <conversions.h>
 #include <datamgmt.h>
@@ -626,10 +627,14 @@ void check_req_fuel_limits(gint table_num)
 	/* Throw warning if an issue */
 	g_name = g_strdup_printf("interdep_%i_ctrl",table_num);
 	if (lim_flag)
+	{
 		set_group_color(RED,g_name);
+		slaves_set_color(RED,g_name);
+	}
 	else
 	{
 		set_group_color(BLACK,g_name);
+		slaves_set_color(BLACK,g_name);
 		/* Required Fuel per SQUIRT */
 		name = g_strdup_printf("req_fuel_per_squirt_%i_spin",table_num);
 		widget = lookup_widget(name);

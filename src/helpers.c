@@ -311,6 +311,7 @@ EXPORT void set_store_black_pf(void)
 
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
+	slaves_set_color(BLACK,"burners");
 	for (j=0;j<firmware->total_tables;j++)
 		set_reqfuel_color(BLACK,j);
 	gdk_threads_leave();
