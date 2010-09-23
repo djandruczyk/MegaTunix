@@ -33,11 +33,11 @@
 #endif
 
 
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 void create_mtx_lock()
 {
-	CmdLineArgs * args = DATA_GET(&global_data,"args");
+	CmdLineArgs * args = DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
 #ifdef __WIN32__
@@ -84,7 +84,10 @@ void unix_create_mtx_lock()
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_datalist_clear(&global_data);
+		{
+			g_dataset_destroy(global_data);
+			g_free(global_data);
+		}
 		exit(-1);
 	}
 #endif
@@ -109,7 +112,7 @@ void win32_create_mtx_lock(void)
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_datalist_clear(&global_data);
+			g_datalist_clear(global_data);
 		exit(-1);
 	}
 	return;
@@ -120,7 +123,7 @@ void win32_create_mtx_lock(void)
 void unlock_serial()
 {
 #ifndef __WIN32__
-	gchar *fname = DATA_GET(&global_data,"serial_lockfile");
+	gchar *fname = DATA_GET(global_data,"serial_lockfile");
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (fname)
@@ -128,7 +131,7 @@ void unlock_serial()
 		if (g_file_test(fname,G_FILE_TEST_IS_REGULAR))
 		{
 			g_remove(fname);
-			DATA_SET(&global_data,"serial_lockfile", NULL);
+			DATA_SET(global_data,"serial_lockfile", NULL);
 		}
 	}
 #endif
@@ -192,7 +195,7 @@ gboolean lock_serial(gchar * name)
 	g_free(contents);
 	if (res)
 	{
-		DATA_SET_FULL(&global_data,"serial_lockfile",(gpointer)lock,g_free);
+		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,g_free);
 		return TRUE;
 	}
 	else

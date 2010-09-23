@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean check_dependancies(GData *);
+gboolean check_dependancies(gconstpointer *);
 /* Prototypes */
 
 #endif

@@ -30,7 +30,7 @@ struct _Group
 {
 	gchar **keys;		/*! String array for key names */
 	gint *keytypes;		/*! Int array of key types... */
-	GData *object;		/*! To hold the data cleanly */
+	GObject *object;		/*! To hold the data cleanly */
 	gint num_keys;		/* How many keys we hold */
 	gint num_keytypes;	/* How many keytypes we hold */
 	gint page;		/* page of this group of data */
@@ -55,7 +55,7 @@ gboolean load_gui_tabs_pf(void);
 void group_free(gpointer );
 GHashTable * load_groups(ConfigFile *);
 void bind_data(GtkWidget *, gpointer);
-gint bind_group_data(ConfigFile *,GData **, GHashTable *, gchar *);
+gint bind_group_data(ConfigFile *,GObject *, GHashTable *, gchar *);
 void bind_to_lists(GtkWidget * , gchar * );
 void run_post_functions_with_arg(const gchar *, GtkWidget *);
 void run_post_functions(const gchar * );

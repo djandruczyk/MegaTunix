@@ -195,7 +195,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	tmpi = return_value;
 	 if (OBJ_GET(widget,"lookuptable"))
-		return_value = (gint)reverse_lookup(G_OBJECT(widget)->qdata,tmpi);
+		return_value = (gint)reverse_lookup_obj(G_OBJECT(widget),tmpi);
 
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
@@ -241,7 +241,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	{
 		g_static_mutex_unlock(&mutex);
 		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
-		return handle_complex_expr(G_OBJECT(widget)->qdata,NULL,UPLOAD);
+		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
 	page = (GINT)OBJ_GET(widget,"page");
@@ -327,7 +327,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data(G_OBJECT(widget)->qdata,get_ecu_data(canID,page,offset,size));
+		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
 	else
 	{
 		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/

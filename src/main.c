@@ -92,7 +92,7 @@ gint main(gint argc, gchar ** argv)
 	printf(_("Hello World!\n"));
 	*/
 
-	global_data = g_new0(gconstpointer 1);
+	global_data = g_new0(gconstpointer, 1);
 	handle_args(argc,argv);
 
 	/* This will exit mtx if the locking fails! */

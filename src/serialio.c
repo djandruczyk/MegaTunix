@@ -50,7 +50,7 @@ gboolean connected = FALSE;
 gboolean port_open = FALSE;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
 GAsyncQueue *io_repair_queue = NULL;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 /*!
  \brief open_serial() called to open the serial port, updates textviews on the
@@ -370,15 +370,15 @@ void *serial_repair_thread(gpointer data)
 	while (!serial_is_open) 	
 	{
 		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
-		autodetect = (GBOOLEAN) DATA_GET(&global_data,"autodetect_port");
+		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */
 		{
-			potential_ports = (gchar *)DATA_GET(&global_data, "override_port");
+			potential_ports = (gchar *)DATA_GET(global_data, "override_port");
 			if (potential_ports == NULL)
-				potential_ports = (gchar *)DATA_GET(&global_data,"potential_ports");
+				potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
 		}
 		else	/* Auto mode */
-			potential_ports = (gchar *)DATA_GET(&global_data,"potential_ports");
+			potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
 		vector = g_strsplit(potential_ports,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{

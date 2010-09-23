@@ -41,7 +41,7 @@ Logview_Data *lv_data = NULL;
 gboolean playback_mode = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 extern Log_Info *log_info;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 
 /*!
@@ -160,11 +160,11 @@ void present_viewer_choices(void)
 		object = g_list_nth_data(list,i);
 
 		if (playback_mode)
-			name = g_strdup(DATA_GET(&object,"lview_name"));
+			name = g_strdup(DATA_GET(object,"lview_name"));
 		else
 		{
-			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
-			tooltip = g_strdup(DATA_GET(&object,"tooltip"));
+			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
+			tooltip = g_strdup(DATA_GET(object,"tooltip"));
 		}
 
 		button = gtk_check_button_new();
@@ -180,8 +180,8 @@ void present_viewer_choices(void)
 		{
 			OBJ_SET(button,"object",(gpointer)object);
 			/* so we can set the state from elsewhere...*/
-			DATA_SET(&object,"lview_button",(gpointer)button);
-			if ((GBOOLEAN)DATA_GET(&object,"being_viewed"))
+			DATA_SET(object,"lview_button",(gpointer)button);
+			if ((GBOOLEAN)DATA_GET(object,"being_viewed"))
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		}
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -266,12 +266,12 @@ gboolean save_default_choices(GtkWidget *widget)
 	{
 		tmpwidget = g_list_nth_data(list,i);
 		object = OBJ_GET(tmpwidget,"object");
-		if ((gboolean)DATA_GET(&object,"being_viewed"))
+		if ((gboolean)DATA_GET(object,"being_viewed"))
 		{
 			if (playback_mode)
-				name = DATA_GET(&object,"lview_name");
+				name = DATA_GET(object,"lview_name");
 			else
-				name = DATA_GET(&object,"dlog_gui_name");
+				name = DATA_GET(object,"dlog_gui_name");
 
 			defaults = g_list_append(defaults,g_strdup(name));
 		}
@@ -301,7 +301,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
 	}
-	DATA_SET(&object,"being_viewed",GINT_TO_POINTER(state));
+	DATA_SET(object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
 	return FALSE;
 }
@@ -351,19 +351,19 @@ void populate_viewer()
 		if (playback_mode)
 		{
 			object = g_ptr_array_index(log_info->log_list,i);        
-			name = DATA_GET(&object,"lview_name");
+			name = DATA_GET(object,"lview_name");
 		}
 		else
 		{
 			object = g_ptr_array_index(rtv_map->rtv_list,i); 
-			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
+			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
 		}
 		if (!name)
 			dbg_func(CRITICAL,g_strdup("ERROR, name is NULL\n"));
 		if (!object)
 			dbg_func(CRITICAL,g_strdup("ERROR, object is NULL\n"));
 
-		being_viewed = (GBOOLEAN)DATA_GET(&object,"being_viewed");
+		being_viewed = (GBOOLEAN)DATA_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
 		if (g_hash_table_lookup(lv_data->traces,name)==NULL)
 		{
@@ -458,7 +458,7 @@ void reset_logviewer_state()
 			object = NULL;
 			object = g_ptr_array_index(log_info->log_list,i);
 			if (object)
-				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
+				DATA_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	else
@@ -470,7 +470,7 @@ void reset_logviewer_state()
 			object = NULL;
 			object = g_ptr_array_index(rtv_map->rtv_list,i);
 			if (object)
-				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
+				DATA_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	populate_viewer();
@@ -498,7 +498,7 @@ Viewable_Value * build_v_value(gconstpointer *object)
 	if (playback_mode)
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(DATA_GET(&object,"lview_name"));
+		v_value->vname = g_strdup(DATA_GET(object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
@@ -507,7 +507,7 @@ Viewable_Value * build_v_value(gconstpointer *object)
 	else
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(DATA_GET(&object,"dlog_gui_name"));
+		v_value->vname = g_strdup(DATA_GET(object,"dlog_gui_name"));
 		/* Array to keep history for resize/redraw and export 
 		 * to datalog we use the _sized_ version to give a big 
 		 * enough size to prevent reallocating memory too often. 
@@ -519,9 +519,9 @@ Viewable_Value * build_v_value(gconstpointer *object)
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->object = object;
 	/* IS it a floating point value? */
-	v_value->precision = (GINT)DATA_GET(&object,"precision");
-	v_value->lower = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
-	v_value->upper = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
+	v_value->precision = (GINT)DATA_GET(object,"precision");
+	v_value->lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+	v_value->upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -957,7 +957,7 @@ void trace_update(gboolean redraw_all)
 
 	pixmap = lv_data->pixmap;
 
-	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
 	/*
 	if (sig_id == 0)
 		sig_id = g_signal_handler_find(lookup_widget("logviewer_log_position_hscale"),G_SIGNAL_MATCH_FUNC,0,0,NULL,(gpointer)logviewer_log_position_change,NULL);
@@ -1179,7 +1179,7 @@ void scroll_logviewer_traces()
 	if (!pixmap)
 		return;
 
-	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 	start = end + lv_zoom;
@@ -1269,9 +1269,9 @@ void set_default_lview_choices_state(void)
 			widget = g_list_nth_data(list,j);
 			object = OBJ_GET(widget,"object");
 			if (playback_mode)
-				potential = DATA_GET(&object,"lview_name");
+				potential = DATA_GET(object,"lview_name");
 			else
-				potential = DATA_GET(&object,"dlog_gui_name");
+				potential = DATA_GET(object,"dlog_gui_name");
 			if (g_strcasecmp(name,potential) == 0)
 
 				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));
@@ -1417,7 +1417,7 @@ EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
 
-	lv_zoom = (GINT)DATA_GET(&global_data,"lv_zoom");
+	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
 
 	lv_data = g_new0(Logview_Data,1);
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);

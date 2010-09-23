@@ -38,7 +38,7 @@
 
 
 extern gint dbg_lvl;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 EXPORT void start_statuscounts_pf(void)
 {
@@ -59,7 +59,7 @@ EXPORT void startup_tcpip_sockets_pf(void)
         extern volatile gboolean offline;
 	CmdLineArgs *args = NULL;
 
-	args = DATA_GET(&global_data,"args");
+	args = DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
 	if ((interrogated) && (!offline))
@@ -104,10 +104,10 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 		{
 	/*		printf("paged burn\n");*/
 			output = initialize_outputdata();
-			DATA_SET(&output->data,"page",GINT_TO_POINTER(last_page));
-			DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
-			DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-			DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+			DATA_SET(output->data,"page",GINT_TO_POINTER(last_page));
+			DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
+			DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+			DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 			io_cmd(firmware->burn_command,output);
 		}
 		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_E)))
@@ -118,10 +118,10 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 				if (!firmware->page_params[i]->dl_by_default)
 					continue;
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(i));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
-				DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(i));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
+				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->burn_command,output);
 			}
 		}
@@ -156,9 +156,9 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 						continue;
 					queue_ms1_page_change(i);
 					output = initialize_outputdata();
-					DATA_SET(&output->data,"page",GINT_TO_POINTER(i));
-					DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
-					DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+					DATA_SET(output->data,"page",GINT_TO_POINTER(i));
+					DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
+					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					io_cmd(firmware->ve_command,output);
 				}
 			}
@@ -176,12 +176,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
 					output = initialize_outputdata();
-					DATA_SET(&output->data,"page",GINT_TO_POINTER(i));
-					DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
-					DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-					DATA_SET(&output->data,"offset", GINT_TO_POINTER(0));
-					DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
-					DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+					DATA_SET(output->data,"page",GINT_TO_POINTER(i));
+					DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
+					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
+					DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
+					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					io_cmd(firmware->ve_command,output);
 				}
 			}
@@ -194,12 +194,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(firmware->compositemon_page));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
-				DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-				DATA_SET(&output->data,"offset", GINT_TO_POINTER(0));
-				DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->compositemon_page));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
+				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
+				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 			}
 			command = (Command *)data;
@@ -211,12 +211,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
-				DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-				DATA_SET(&output->data,"offset", GINT_TO_POINTER(0));
-				DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
+				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
+				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 			}
 			command = (Command *)data;
@@ -228,12 +228,12 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
-				DATA_SET(&output->data,"canID",GINT_TO_POINTER(firmware->canID));
-				DATA_SET(&output->data,"offset", GINT_TO_POINTER(0));
-				DATA_SET(&output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->length));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
+				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
+				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->length));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 			}
 			command = (Command *)data;
@@ -246,9 +246,9 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -261,9 +261,9 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata();
-				DATA_SET(&output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
-				DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
-				DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
+				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd(firmware->ve_command,output);
 				command = (Command *)data;
 				io_cmd(NULL,command->post_functions);
@@ -335,7 +335,7 @@ EXPORT void reset_temps_pf(void)
 {
 	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
-	reset_temps(DATA_GET(&global_data,"temp_units"));
+	reset_temps(DATA_GET(global_data,"temp_units"));
 	gdk_threads_leave();
 }
 
@@ -419,8 +419,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:
-			page = (GINT)DATA_GET(&output->data,"page");
-			canID = (GINT)DATA_GET(&output->data,"canID");
+			page = (GINT)DATA_GET(output->data,"page");
+			canID = (GINT)DATA_GET(output->data,"canID");
 			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
@@ -462,8 +462,8 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			process_rt_vars((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
-			page = (GINT)DATA_GET(&output->data,"page");
-			canID = (GINT)DATA_GET(&output->data,"canID");
+			page = (GINT)DATA_GET(output->data,"page");
+			canID = (GINT)DATA_GET(output->data,"canID");
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
@@ -559,7 +559,7 @@ EXPORT void post_single_burn_pf(void *data)
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
 	extern Firmware_Details * firmware;
-	gint page = (GINT)DATA_GET(&output->data,"page");
+	gint page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */
 	if (!firmware->page_params[page]->dl_by_default)
@@ -580,20 +580,20 @@ EXPORT void startup_default_timeouts_pf()
 	gdk_threads_enter();
 	set_title(g_strdup(_("Starting up data renderers...")));
 	gdk_threads_leave();
-	rate = (GINT)DATA_GET(&global_data,"rtslider_fps");
+	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL);
-	DATA_SET(&global_data,"rtslider_id", GINT_TO_POINTER(source));
+	DATA_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
-	rate = (GINT)DATA_GET(&global_data,"rttext_fps");
+	rate = (GINT)DATA_GET(global_data,"rttext_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL);
-	DATA_SET(&global_data,"rttext_id", GINT_TO_POINTER(source));
+	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
-	rate = (GINT)DATA_GET(&global_data,"dashboard_fps");
+	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL);
-	DATA_SET(&global_data,"dashboard_id", GINT_TO_POINTER(source));
+	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
-	rate = (GINT)DATA_GET(&global_data,"ve3d_fps");
+	rate = (GINT)DATA_GET(global_data,"ve3d_fps");
 	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
-	DATA_SET(&global_data,"ve3d_id", GINT_TO_POINTER(source));
+	DATA_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
 }
 

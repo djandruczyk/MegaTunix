@@ -19,6 +19,7 @@
 
 /* Prototypes */
 void load_dependancies(gconstpointer *,ConfigFile * ,gchar *, gchar *);
+void load_dependancies_obj(GObject *,ConfigFile * ,gchar *, gchar *);
 /* Prototypes */
 
 #endif

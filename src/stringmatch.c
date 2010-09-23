@@ -31,7 +31,7 @@ static GHashTable *str_2_enum = NULL;
  */
 void build_string_2_enum_table()
 {
-	extern GData *global_data;
+	extern gconstpointer *global_data;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
 
 	/* Firmware capabilities */
@@ -592,7 +592,7 @@ void build_string_2_enum_table()
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-	DATA_SET_FULL(&global_data,"str2_enum",str_2_enum,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"str2_enum",str_2_enum,g_hash_table_destroy);
 }
 
 

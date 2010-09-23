@@ -59,7 +59,7 @@ GThread *ascii_socket_id = NULL;
 GThread *binary_socket_id = NULL;
 GThread *control_socket_id = NULL;
 GThread *notify_slaves_id = NULL;
-extern GData *global_data;
+extern gconstpointer *global_data;
 extern volatile gboolean leaving;
 
 
@@ -85,7 +85,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(&global_data,"ascii_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"ascii_socket",socket,g_free);
 		fail1 = FALSE;
 	}
 	else
@@ -104,7 +104,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(&global_data,"binary_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"binary_socket",socket,g_free);
 		fail2 = FALSE;
 	}
 	else
@@ -123,7 +123,7 @@ void open_tcpip_sockets()
 				(gpointer)socket, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(&global_data,"control_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"control_socket",socket,g_free);
 		fail3 = FALSE;
 	}
 	else
@@ -246,7 +246,7 @@ void *socket_thread_manager(gpointer data)
 			g_free(socket);
 			g_thread_exit(0);
 		}
-		if (!(GBOOLEAN)DATA_GET(&global_data,"network_access"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		{
 			close(socket->fd);
 			g_free(socket);
@@ -350,7 +350,7 @@ void *ascii_socket_server(gpointer data)
 	{
 		if (leaving)
 			goto close_ascii;
-		if (!(GBOOLEAN)DATA_GET(&global_data,"network_access"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_ascii;
 
 		FD_ZERO(&rd);
@@ -444,7 +444,7 @@ void *binary_socket_server(gpointer data)
 		/* Condition handling */
 		if (leaving)
 			goto close_binary;
-		if (!(GBOOLEAN)DATA_GET(&global_data,"network_access"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_binary;
 		res = recv(fd,&buf,1,0);
 		if (res <= 0)
@@ -719,10 +719,10 @@ close_binary:
 					{
 						/*						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);*/
 						output = initialize_outputdata();
-						DATA_SET(&output->data,"page",GINT_TO_POINTER(mtx_page));
-						DATA_SET(&output->data,"phys_ecu_page",GINT_TO_POINTER(tableID));
-						DATA_SET(&output->data,"canID",GINT_TO_POINTER(canID));
-						DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+						DATA_SET(output->data,"page",GINT_TO_POINTER(mtx_page));
+						DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(tableID));
+						DATA_SET(output->data,"canID",GINT_TO_POINTER(canID));
+						DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 						io_cmd(firmware->burn_command,output);
 					}
 
@@ -1075,8 +1075,8 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 			for (j=0;j<rtv_map->rtv_list->len;j++)
 			{
 				object = g_ptr_array_index(rtv_map->rtv_list,j);
-				lookup_current_value((gchar *)DATA_GET(&object,"internal_names"),&tmpf);
-				lookup_precision((gchar *)DATA_GET(&object,"internal_names"),&tmpi);
+				lookup_current_value((gchar *)DATA_GET(object,"internal_names"),&tmpf);
+				lookup_precision((gchar *)DATA_GET(object,"internal_names"),&tmpi);
 				if (j < (rtv_map->rtv_list->len-1))
 					g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 				else
@@ -1113,9 +1113,9 @@ void socket_get_rtv_list(gint fd)
 	{
 		object = g_ptr_array_index(rtv_map->rtv_list,i);
 		if (i < rtv_map->rtv_list->len-1)
-			tmpbuf = g_strdup_printf("%s ",(gchar *)DATA_GET(&object,"internal_names"));
+			tmpbuf = g_strdup_printf("%s ",(gchar *)DATA_GET(object,"internal_names"));
 		else
-			tmpbuf = g_strdup_printf("%s",(gchar *)DATA_GET(&object,"internal_names"));
+			tmpbuf = g_strdup_printf("%s",(gchar *)DATA_GET(object,"internal_names"));
 		if (tmpbuf)
 		{
 			len = strlen(tmpbuf);
@@ -1303,7 +1303,7 @@ void *network_repair_thread(gpointer data)
 	CmdLineArgs *args = NULL;
 	gint i = 0;
 
-	args = DATA_GET(&global_data,"args");
+	args = DATA_GET(global_data,"args");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (offline)
@@ -1346,10 +1346,10 @@ void *network_repair_thread(gpointer data)
 			g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 			g_thread_exit(0);
 		}
-		autodetect = (GBOOLEAN) DATA_GET(&global_data,"autodetect_port");
+		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
 		if (!autodetect)
 		{
-			vector = g_strsplit((gchar *)DATA_GET(&global_data, "override_port"),":",2);
+			vector = g_strsplit((gchar *)DATA_GET(global_data, "override_port"),":",2);
 			if (g_strv_length(vector) == 2)
 			{
 				host = vector[0];
@@ -1595,7 +1595,7 @@ void *notify_slaves_thread(gpointer data)
 		if (!slave_list) /* List not created yet.. */
 			continue;
 
-		if ((leaving) || (!(GBOOLEAN)DATA_GET(&global_data,"network_access")))
+		if ((leaving) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(slave_msg_queue) != NULL)

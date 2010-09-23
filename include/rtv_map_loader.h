@@ -44,6 +44,7 @@ struct _Rtv_Map
 /* Prototypes */
 gboolean load_realtime_map_pf(void );
 void load_complex_params(gconstpointer *, ConfigFile *, gchar * );
+void load_complex_params_obj(GObject *, ConfigFile *, gchar * );
 /* Prototypes */
 
 #endif

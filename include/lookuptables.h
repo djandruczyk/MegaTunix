@@ -37,8 +37,10 @@ struct _LookupTable
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
 gint reverse_lookup(gconstpointer *, gint );
+gint reverse_lookup_obj(GObject *, gint );
 gint direct_reverse_lookup(gchar *, gint );
 gfloat lookup_data(gconstpointer *, gint );
+gfloat lookup_data_obj(GObject *, gint );
 gfloat direct_lookup_data(gchar *, gint );
 gboolean lookuptables_configurator(GtkWidget *, gpointer );
 gboolean lookuptables_configurator_hide(GtkWidget *, gpointer );

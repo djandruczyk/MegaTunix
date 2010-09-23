@@ -46,7 +46,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 	GtkTreeIter iter;
 	GtkEntryCompletion *completion = NULL;
 	GtkWidget *entry = NULL;
-	extern GData *global_data;
+	extern gconstpointer *global_data;
 
 	cfg_read_string(cfgfile,section,"choices",&tmpbuf);
 
@@ -102,7 +102,7 @@ void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 		else
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
 
-		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(GINT)DATA_GET(&global_data,"font_size")));
+		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(GINT)DATA_GET(global_data,"font_size")));
 
 		gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
 		gtk_container_add (GTK_CONTAINER (object), entry);

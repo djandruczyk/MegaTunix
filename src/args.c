@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 
-extern GData *global_data;
+extern gconstpointer *global_data;
 /*!
  \brief handle_args() handles parsing of cmd line arguments to megatunix
  \param argc (gint) count of command line arguments
@@ -148,11 +148,11 @@ void handle_args(gint argc, gchar * argv[])
 		printf(_("Should do listen mode\n"));
 	}
 	if (args->hide_rttext)
-		DATA_SET(&global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
 	if (args->hide_status)
-		DATA_SET(&global_data,"status_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
 	if (args->hide_maingui)
-		DATA_SET(&global_data,"main_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
 	if (args->debug)
 	{
 		printf(_("debug option \"%i\"\n"),args->debug);
@@ -179,7 +179,7 @@ void handle_args(gint argc, gchar * argv[])
 			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
 		exit(0);
 	}
-	DATA_SET_FULL(&global_data,"args",args,g_free);
+	DATA_SET_FULL(global_data,"args",args,g_free);
 	g_option_context_free(context);
 }
 

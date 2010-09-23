@@ -29,7 +29,7 @@
 #include <mtxmatheval.h>
 #include <datamgmt.h>
 
-extern GData *global_data;
+extern gconstpointer *global_data;
 static struct 
 {
 	const gchar *item;
@@ -66,7 +66,7 @@ EXPORT void setup_menu_handlers_pf()
 	extern volatile gboolean leaving;
 
 
-	xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!xml) || (leaving))
 		return;
 	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
@@ -225,7 +225,7 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 
@@ -339,7 +339,7 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 
@@ -431,7 +431,7 @@ EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 
@@ -495,7 +495,7 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 
@@ -673,7 +673,7 @@ EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 
@@ -767,7 +767,7 @@ EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data
 	GList *spark_tables = NULL;
 	gint t;
 
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return TRUE;
 

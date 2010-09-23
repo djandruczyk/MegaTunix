@@ -34,7 +34,7 @@
 #include <widgetmgmt.h>
 
 extern GStaticMutex serio_mutex;
-extern GData *global_data;
+extern gconstpointer *global_data;
 volatile gboolean outstanding_data = FALSE;
 
 /*!
@@ -139,19 +139,19 @@ EXPORT void send_to_slaves(void *data)
 
 	if (!output) /* If no data, don't bother the slaves */
 		return;
-	if (!(gboolean)DATA_GET(&global_data,"network_access"))
+	if (!(gboolean)DATA_GET(global_data,"network_access"))
 		return;
 
 	msg = g_new0(SlaveMessage, 1);
-	msg->page = (guint8)(GINT)DATA_GET(&output->data,"page");
-	msg->offset = (guint16)(GINT)DATA_GET(&output->data,"offset");
-	msg->length = (guint16)(GINT)DATA_GET(&output->data,"num_bytes");
-	msg->size = (DataSize)DATA_GET(&output->data,"size");
-	msg->mode = (WriteMode)DATA_GET(&output->data,"mode");
+	msg->page = (guint8)(GINT)DATA_GET(output->data,"page");
+	msg->offset = (guint16)(GINT)DATA_GET(output->data,"offset");
+	msg->length = (guint16)(GINT)DATA_GET(output->data,"num_bytes");
+	msg->size = (DataSize)DATA_GET(output->data,"size");
+	msg->mode = (WriteMode)DATA_GET(output->data,"mode");
 	if (msg->mode == MTX_CHUNK_WRITE)
-		msg->data = g_memdup(DATA_GET(&output->data,"data"), msg->length);
+		msg->data = g_memdup(DATA_GET(output->data,"data"), msg->length);
 	else if (msg->mode == MTX_SIMPLE_WRITE)
-		msg->value = (GINT)DATA_GET(&output->data,"value");
+		msg->value = (GINT)DATA_GET(output->data,"value");
 	else
 	{
 		printf(_("Non simple/chunk write command, not notifying peers\n"));
@@ -195,11 +195,11 @@ EXPORT void update_write_status(void *data)
 		goto red_or_black;
 	else
 	{
-		canID = (GINT)DATA_GET(&output->data,"canID");
-		page = (GINT)DATA_GET(&output->data,"page");
-		offset = (GINT)DATA_GET(&output->data,"offset");
-		length = (GINT)DATA_GET(&output->data,"num_bytes");
-		mode = (WriteMode)DATA_GET(&output->data,"mode");
+		canID = (GINT)DATA_GET(output->data,"canID");
+		page = (GINT)DATA_GET(output->data,"page");
+		offset = (GINT)DATA_GET(output->data,"offset");
+		length = (GINT)DATA_GET(output->data,"num_bytes");
+		mode = (WriteMode)DATA_GET(output->data,"mode");
 
 		if (!message->status) /* Bad write! */
 		{
@@ -209,7 +209,7 @@ EXPORT void update_write_status(void *data)
 	}
 	if (mode == MTX_CHUNK_WRITE)
 	{
-		sent_data = (guint8 *)DATA_GET(&output->data,"data");
+		sent_data = (guint8 *)DATA_GET(output->data,"data");
 		if (sent_data)
 			g_free(sent_data);
 	}
@@ -288,10 +288,10 @@ void queue_burn_ecu_flash(gint page)
 		return;
 
 	output = initialize_outputdata();
-	OBJ_SET(&output->data,"canID", GINT_TO_POINTER(firmware->canID));
-	OBJ_SET(&output->data,"page", GINT_TO_POINTER(page));
-	OBJ_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+	OBJ_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
+	OBJ_SET(output->data,"page", GINT_TO_POINTER(page));
+	OBJ_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	OBJ_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
 	last_page = page;
 }
@@ -333,14 +333,14 @@ gboolean write_data(Io_Message *message)
 
 	if (output)
 	{
-		canID = (GINT)DATA_GET(&output->data,"canID");
-		page = (GINT)DATA_GET(&output->data,"page");
-		offset = (GINT)DATA_GET(&output->data,"offset");
-		value = (GINT)DATA_GET(&output->data,"value");
-		num_bytes = (GINT)DATA_GET(&output->data,"num_bytes");
-		size = (DataSize)DATA_GET(&output->data,"size");
-		data = (guint8 *)DATA_GET(&output->data,"data");
-		mode = (WriteMode)DATA_GET(&output->data,"mode");
+		canID = (GINT)DATA_GET(output->data,"canID");
+		page = (GINT)DATA_GET(output->data,"page");
+		offset = (GINT)DATA_GET(output->data,"offset");
+		value = (GINT)DATA_GET(output->data,"value");
+		num_bytes = (GINT)DATA_GET(output->data,"num_bytes");
+		size = (DataSize)DATA_GET(output->data,"size");
+		data = (guint8 *)DATA_GET(output->data,"data");
+		mode = (WriteMode)DATA_GET(output->data,"mode");
 	}
 	if (offline)
 	{
@@ -508,10 +508,10 @@ EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 		gtk_widget_destroy (dialog);
 		if (result == GTK_RESPONSE_YES)
 		{
-			ports = (gchar *)DATA_GET(&global_data,"potential_ports");
+			ports = (gchar *)DATA_GET(global_data,"potential_ports");
 			for (i=0;i<g_list_length(found);i++)
 				ports = g_strconcat(ports,",/dev/",g_list_nth_data(found,i),NULL);
-			DATA_SET_FULL(&global_data,"potential_ports",ports,g_free);
+			DATA_SET_FULL(global_data,"potential_ports",ports,g_free);
 		}
 	}
 	for (i=0;i<g_list_length(found);i++)

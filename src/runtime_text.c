@@ -35,7 +35,7 @@
 #include <widgetmgmt.h>
 #include <xmlbase.h>
 
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 /*!
  \brief load_rt_text_pf() is called to load up the runtime text configurations
@@ -54,7 +54,7 @@ EXPORT void load_rt_text_pf()
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	gboolean xml_result = FALSE;
-	CmdLineArgs *args = DATA_GET(&global_data,"args");
+	CmdLineArgs *args = DATA_GET(global_data,"args");
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	extern volatile gboolean leaving;
@@ -66,7 +66,7 @@ EXPORT void load_rt_text_pf()
 		return;
 	if (!(interrogated))
 		return;
-	main_xml = (GladeXML *)DATA_GET(&global_data,"main_xml");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return;
 
@@ -91,8 +91,8 @@ EXPORT void load_rt_text_pf()
 	xml = glade_xml_new(main_xml->filename,"rtt_window",NULL);
 	window = glade_xml_get_widget(xml,"rtt_window");
 	register_widget("rtt_window",window);
-	x = (GINT)DATA_GET(&global_data,"rtt_x_origin");
-	y = (GINT)DATA_GET(&global_data,"rtt_y_origin");
+	x = (GINT)DATA_GET(global_data,"rtt_x_origin");
+	y = (GINT)DATA_GET(global_data,"rtt_y_origin");
 	gtk_window_move(GTK_WINDOW(window),x,y);
 	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
 	g_object_set(window, "resizable", FALSE, NULL);
@@ -112,7 +112,7 @@ EXPORT void load_rt_text_pf()
 
 	/*Get the root element node */
 	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
-	DATA_SET_FULL(&global_data,"rtt_model",store,gtk_list_store_clear);
+	DATA_SET_FULL(global_data,"rtt_model",store,gtk_list_store_clear);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
 	setup_rtt_treeview(treeview);
@@ -323,7 +323,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	Rt_Text *rt_text = NULL;
 	gboolean show_prefix = FALSE;
 
-	rtt_hash = DATA_GET(&global_data,"rtt_hash");
+	rtt_hash = DATA_GET(global_data,"rtt_hash");
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
 	source = OBJ_GET(widget,"source");
 	show_prefix = (GBOOLEAN)OBJ_GET(widget,"show_prefix");
@@ -331,7 +331,7 @@ EXPORT void add_additional_rtt(GtkWidget *widget)
 	if (!rtt_hash)
 	{
 		rtt_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_rtt);
-		DATA_SET_FULL(&global_data,"rtt_hash",(gpointer)rtt_hash,g_hash_table_destroy);
+		DATA_SET_FULL(global_data,"rtt_hash",(gpointer)rtt_hash,g_hash_table_destroy);
 	}
 
 	if ((rtt_hash) && (ctrl_name) && (source))
@@ -380,8 +380,8 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
-	history = (GArray *)DATA_GET(&rtt->object,"history");
-	precision = (GINT)DATA_GET(&rtt->object,"precision");
+	history = (GArray *)DATA_GET(rtt->object,"history");
+	precision = (GINT)DATA_GET(rtt->object,"precision");
 
 	if (!history)
 		return;

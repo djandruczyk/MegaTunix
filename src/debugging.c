@@ -52,7 +52,7 @@ static DebugLevel dbglevels[] =
  */
 void open_debug()
 {
-	extern GData *global_data;
+	extern gconstpointer *global_data;
 	CmdLineArgs * args = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
@@ -62,7 +62,7 @@ void open_debug()
 	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
-	args = DATA_GET(&global_data,"args");
+	args = DATA_GET(global_data,"args");
 
 	if(!dbg_channel)
 	{

@@ -49,7 +49,7 @@ void start_tickler(TicklerType type)
 	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GCond *rtv_thread_cond;
-	extern GData *global_data;
+	extern gconstpointer *global_data;
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -78,7 +78,7 @@ void start_tickler(TicklerType type)
 			break;
 		case LV_PLAYBACK_TICKLER:
 			if (playback_id == 0)
-				playback_id = gdk_threads_add_timeout((GINT)DATA_GET(&global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				playback_id = gdk_threads_add_timeout((GINT)DATA_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
@@ -269,10 +269,10 @@ void signal_read_rtvars(void)
 		gdk_threads_enter();
 		output = initialize_outputdata();
 		gdk_threads_leave();
-		DATA_SET(&output->data,"canID", GINT_TO_POINTER(firmware->canID));
-		DATA_SET(&output->data,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
-		DATA_SET(&output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
-		DATA_SET(&output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+		DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
+		DATA_SET(output->data,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
+		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
+		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 		io_cmd(firmware->rt_command,output);			
 	}
 	else

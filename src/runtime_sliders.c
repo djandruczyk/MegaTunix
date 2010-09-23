@@ -36,7 +36,7 @@
 
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 
 /*!
@@ -76,14 +76,14 @@ EXPORT void load_sliders_pf()
 	}
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Sliders...")));
-	rt_sliders = DATA_GET(&global_data,"rt_sliders");
-	ww_sliders = DATA_GET(&global_data,"ww_sliders");
+	rt_sliders = DATA_GET(global_data,"rt_sliders");
+	ww_sliders = DATA_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET_FULL(&global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(&global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
 
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
@@ -204,10 +204,10 @@ EXPORT void load_ve3d_sliders(gint table_num)
 		return;
 	}
 
-	ve3d_sliders = DATA_GET(&global_data,"ve3d_sliders");
+	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
-	DATA_SET(&global_data,"ve3d_sliders",ve3d_sliders);
+	DATA_SET(global_data,"ve3d_sliders",ve3d_sliders);
 
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -378,10 +378,10 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		return;
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
-	rt_sliders = DATA_GET(&global_data,"rt_sliders");
-	aw_sliders = DATA_GET(&global_data,"aw_sliders");
-	ww_sliders = DATA_GET(&global_data,"ww_sliders");
-	enr_sliders = DATA_GET(&global_data,"enr_sliders");
+	rt_sliders = DATA_GET(global_data,"rt_sliders");
+	aw_sliders = DATA_GET(global_data,"aw_sliders");
+	ww_sliders = DATA_GET(global_data,"ww_sliders");
+	enr_sliders = DATA_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!aw_sliders)
@@ -390,10 +390,10 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 	if (!enr_sliders)
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET_FULL(&global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(&global_data,"aw_sliders",aw_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(&global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(&global_data,"enr_sliders",enr_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"aw_sliders",aw_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"enr_sliders",enr_sliders,g_hash_table_destroy);
 	
 	if  (!(object))
 	{
@@ -471,7 +471,7 @@ gboolean free_ve3d_sliders(gint table_num)
 	gchar * widget = NULL;
 	GHashTable **tables = NULL;
 
-	tables = DATA_GET(&global_data,"ve3d_sliders");
+	tables = DATA_GET(global_data,"ve3d_sliders");
 	g_hash_table_destroy(tables[table_num]);
 	tables[table_num] = NULL;
 

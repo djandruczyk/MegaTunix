@@ -45,7 +45,7 @@ enum
 } ;
 
 static GList *views = NULL;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 gboolean force_view_recompute()
 {
@@ -373,7 +373,7 @@ void cell_edited(GtkCellRendererText *cell,
 		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
 		{
-			if ((GINT)DATA_GET(&global_data,"temp_units") == CELSIUS)
+			if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
 				x = (new*9.0/5.0)+32;
 			else
 				x = new;
@@ -450,7 +450,7 @@ void update_model_from_view(GtkWidget * widget)
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
-	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(global_data,"temp_units");
 	src_offset = (GINT)OBJ_GET(model,"src_offset");
 	lim_offset = (GINT)OBJ_GET(model,"lim_offset");
 	hys_offset = (GINT)OBJ_GET(model,"hys_offset");
@@ -759,7 +759,7 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		else
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),12);
 
-		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(GINT)DATA_GET(&global_data,"font_size")));
+		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(GINT)DATA_GET(global_data,"font_size")));
 
 		gtk_container_remove (GTK_CONTAINER (widget), GTK_BIN (widget)->child);
 		gtk_container_add (GTK_CONTAINER (widget), entry);

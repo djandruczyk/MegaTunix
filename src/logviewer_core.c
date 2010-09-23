@@ -59,20 +59,20 @@ EXPORT void create_stripchart(GtkWidget *parent)
 		object = g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
 		if (!(object))
 			continue;
-		if ((gchar *)DATA_GET(&object,"dlog_gui_name"))
-			name = (gchar *)DATA_GET(&object,"dlog_gui_name");
+		if ((gchar *)DATA_GET(object,"dlog_gui_name"))
+			name = (gchar *)DATA_GET(object,"dlog_gui_name");
 		else
 			name = g_strdup("undefined!\n");
-		if (DATA_GET(&object,"real_lower"))
-			min = (gint)strtol(DATA_GET(&object,"real_lower"),NULL,10);
+		if (DATA_GET(object,"real_lower"))
+			min = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
-		if (DATA_GET(&object,"real_upper"))
-			max = (gint)strtol(DATA_GET(&object,"real_upper"),NULL,10);
+		if (DATA_GET(object,"real_upper"))
+			max = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
-		if (DATA_GET(&object,"precision"))
-			precision = (GINT)DATA_GET(&object,"precision");
+		if (DATA_GET(object,"precision"))
+			precision = (GINT)DATA_GET(object,"precision");
 		else
 			precision = 0;
 		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);
@@ -244,9 +244,9 @@ read_again:
 			g_object_ref(object);
 			gtk_object_sink(GTK_OBJECT(object));
 			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-			OBJ_SET(&object,"data_array",(gpointer)array);
-			g_free(DATA_GET(&object,"lview_name"));
-			OBJ_SET(&object,"lview_name",g_strdup(g_strstrip(fields[i])));
+			OBJ_SET(object,"data_array",(gpointer)array);
+			g_free(DATA_GET(object,"lview_name"));
+			OBJ_SET(object,"lview_name",g_strdup(g_strstrip(fields[i])));
 			g_ptr_array_add(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
@@ -285,7 +285,7 @@ void populate_limits(Log_Info *log_info)
 		tmpi = 0;
 		len = 0;
 		object = g_ptr_array_index(log_info->log_list, i);
-		array = (GArray *)DATA_GET(&object,"data_array");
+		array = (GArray *)DATA_GET(object,"data_array");
 		len = array->len;
 		for (j=0;j<len;j++)
 		{
@@ -297,9 +297,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(&object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(&object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
+		OBJ_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }
@@ -351,7 +351,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 		for (i=0;i<(log_info->field_count);i++)
 		{
 			object = g_ptr_array_index(log_info->log_list, i);
-			tmp_array = (GArray *)DATA_GET(&object,"data_array");
+			tmp_array = (GArray *)DATA_GET(object,"data_array");
 			val = (gfloat)g_ascii_strtod(g_strdelimit(data[i],",.",'.'),NULL);
 			g_array_append_val(tmp_array,val);
 
@@ -363,7 +363,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 					vector = g_strsplit(data[i],".",-1);
 					precision = strlen(vector[1]);
 					g_strfreev(vector);
-					OBJ_SET(&object,"precision",GINT_TO_POINTER(precision));
+					OBJ_SET(object,"precision",GINT_TO_POINTER(precision));
 				}
 			}
 
@@ -393,8 +393,8 @@ void free_log_info()
 		object = g_ptr_array_index(log_info->log_list,i);
 		if (!object)
 			continue;
-		array = (GArray *)DATA_GET(&object,"data_array");
-		g_free(DATA_GET(&object,"lview_name"));
+		array = (GArray *)DATA_GET(object,"data_array");
+		g_free(DATA_GET(object,"lview_name"));
 		if (array)
 			g_array_free(array,TRUE);
 	}
@@ -414,10 +414,10 @@ EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
 	extern gint playback_id;
-	extern GData *global_data;
+	extern gconstpointer *global_data;
 
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
-	DATA_SET(&global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
+	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
 	if (playback_id > 0)
 	{
 		stop_tickler(LV_PLAYBACK_TICKLER);

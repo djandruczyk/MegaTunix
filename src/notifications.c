@@ -29,7 +29,7 @@ extern GdkColor black;
 extern GdkColor green;
 static volatile gboolean warning_present = FALSE;
 static GtkWidget *warning_dialog;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 
 
@@ -246,7 +246,7 @@ void  update_logbar(
  */
 EXPORT void conn_warning(void)
 {
-	CmdLineArgs *args = DATA_GET(&global_data,"args");
+	CmdLineArgs *args = DATA_GET(global_data,"args");
 
 	if ((args->be_quiet) || (warning_present))
 		return;
@@ -274,7 +274,7 @@ EXPORT void kill_conn_warning()
 void warn_user(const gchar *message)
 {
 	extern gboolean interrogated;
-	CmdLineArgs *args = DATA_GET(&global_data,"args");
+	CmdLineArgs *args = DATA_GET(global_data,"args");
 	if ((args->be_quiet))
 		return;
 

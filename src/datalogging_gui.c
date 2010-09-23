@@ -42,7 +42,7 @@ gboolean begin = TRUE;
 /* External global vars */
 extern gint ready;
 extern Rtv_Map *rtv_map;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
@@ -64,7 +64,6 @@ EXPORT void populate_dlog_choices_pf()
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
 	gint table_rows = 0;
-	gint index = 0;
 	gconstpointer * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
@@ -145,7 +144,7 @@ EXPORT void populate_dlog_choices_pf()
 		/* Bind button to the object, Done so that we can set the state
 		 * of the buttons from elsewhere... 
 		 */
-		DATA_SET(&object,"dlog_button",(gpointer)button);
+		DATA_SET(object,"dlog_button",(gpointer)button);
 		printf("object ptr %p after binding button obj, for %s\n",object,dlog_name);
 
 		/* Bind object to the button */
@@ -268,7 +267,7 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
                 
 	/* get object from widget */
 	object = (gconstpointer *)OBJ_GET(widget,"object");
-	DATA_SET(&object,"being_logged",GINT_TO_POINTER(state));
+	DATA_SET(object,"being_logged",GINT_TO_POINTER(state));
 
 	return TRUE;
 }
@@ -540,7 +539,7 @@ gboolean autolog_dump(gpointer data)
 	gchar * tmpbuf = NULL;
 	static gint dlog_index = 0;
 
-	args = (CmdLineArgs *)DATA_GET(&global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	filename = g_strdup_printf("%s%s%s_%.3i.log",args->autolog_dump_dir,PSEP,args->autolog_basename,dlog_index);
 		

@@ -36,7 +36,7 @@
 #include <widgetmgmt.h>
 
 gboolean tabs_loaded = FALSE;
-extern GData *global_data;
+extern gconstpointer *global_data;
 
 
 /*!
@@ -82,7 +82,7 @@ EXPORT gboolean load_gui_tabs_pf(void)
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	bindgroup = g_new0(BindGroup,1);
 	notebook = lookup_widget("toplevel_notebook");
-	hidden_list = (gboolean *)DATA_GET(&global_data,"hidden_list");
+	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 
 	while (firmware->tab_list[i])
 	{
@@ -236,9 +236,8 @@ void group_free(gpointer value)
 	for (i=0;i<group->num_keys;i++)
 	{
 		keytype = translate_string(group->keys[i]);
-		DATA_SET(&group->object,group->keys[i],NULL);
+		OBJ_SET(group->object,group->keys[i],NULL);
 	}
-	g_datalist_clear(&group->object);
 	g_strfreev(group->keys);
 	g_free(group);
 }
@@ -295,8 +294,9 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			continue;
 		}
 
-
-		g_datalist_init(&group->object);
+		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		g_object_ref(group->object);
+		gtk_object_sink(GTK_OBJECT(group->object));
 
 		/* If this widget has a "depend_on" tag we need to 
 		 * load the dependency information and store it for 
@@ -304,19 +304,19 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(&group->object,cfgfile,section,"depend_on");
+			load_dependancies_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
 		/* Adds on "default" options to any other groups */
 		if (g_strcasecmp(section,"defaults") != 0)
-			group->page = bind_group_data(cfgfile, &group->object, groups, "defaults");
+			group->page = bind_group_data(cfgfile, group->object, groups, "defaults");
 
 		if (cfg_read_int(cfgfile,section,"page",&tmpi))
 			group->page = tmpi;
 
 		/* Binds the rest of the settings, overriding any defaults */
-		bind_keys(&group->object,cfgfile,section,group->keys,group->num_keys);
+		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
@@ -335,13 +335,13 @@ GHashTable * load_groups(ConfigFile *cfgfile)
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
  \param cfgfile
- \param object (GData **) the widget to bind the data to
+ \param object (GObject *) the widget to bind the data to
  \param groups (GHashTable *) the hashtable that holds the  group common data
  \param groupname (gchar *) textual name of the group to get the data for to
  be bound to the widget
  \returns the page of the group
  */
-gint bind_group_data(ConfigFile *cfg, GData **object, GHashTable *groups, gchar *groupname)
+gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
@@ -356,8 +356,8 @@ gint bind_group_data(ConfigFile *cfg, GData **object, GHashTable *groups, gchar 
 	}
 	/* Copy data from the group object to the */
 	/* Grab hidden data if it exists */
-	if (DATA_GET(&group->object, "dep_object"))
-		DATA_SET(object,"dep_object",DATA_GET(&group->object, "dep_object"));
+	if (OBJ_GET(group->object, "dep_object"))
+		OBJ_SET(object,"dep_object",OBJ_GET(group->object, "dep_object"));
 
 	for (i=0;i<group->num_keys;i++)
 	{
@@ -367,19 +367,19 @@ gint bind_group_data(ConfigFile *cfg, GData **object, GHashTable *groups, gchar 
 			case MTX_INT:
 			case MTX_BOOL:
 			case MTX_ENUM:
-				tmpi = (GINT)DATA_GET(&group->object,group->keys[i]);
-				DATA_SET(object,group->keys[i],GINT_TO_POINTER(tmpi));
+				tmpi = (GINT)OBJ_GET(group->object,group->keys[i]);
+				OBJ_SET(object,group->keys[i],GINT_TO_POINTER(tmpi));
 				if (strstr(group->keys[i], "temp_dep"))
 				{
-					DATA_SET(object,"widget_temp",DATA_GET(&global_data,"temp_units"));
+					OBJ_SET(object,"widget_temp",OBJ_GET(global_data,"temp_units"));
 				}
 				break;
 			case MTX_STRING:
-				DATA_SET_FULL(object,group->keys[i],g_strdup(DATA_GET(&group->object,group->keys[i])),g_free);
-				if (DATA_GET(object,"tooltip") != NULL)
-					gtk_widget_set_tooltip_text(DATA_GET(object,"self"),(gchar *)_(DATA_GET(object,"tooltip")));
-				if (DATA_GET(&group->object, "bind_to_list"))
-					bind_to_lists(DATA_GET(object,"self"),(gchar *)DATA_GET(&group->object, "bind_to_list"));
+				OBJ_SET_FULL(object,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
+				if (OBJ_GET(object,"tooltip") != NULL)
+					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)_(OBJ_GET(object,"tooltip")));
+				if (OBJ_GET(group->object, "bind_to_list"))
+					bind_to_lists(OBJ_GET(object,"self"),(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
 			default:
 				break;
@@ -523,11 +523,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	/* Bind the data in the "defaults" group per tab to EVERY var in that
 	 * tab
 	 */
-	page = bind_group_data(cfgfile, &G_OBJECT(widget)->qdata, groups, "defaults");
+	page = bind_group_data(cfgfile, G_OBJECT(widget), groups, "defaults");
 
 	if(cfg_read_string(cfgfile, section, "group", &tmpbuf))
 	{
-		page = bind_group_data(cfgfile,&G_OBJECT(widget)->qdata,groups,tmpbuf);
+		page = bind_group_data(cfgfile,G_OBJECT(widget),groups,tmpbuf);
 		g_free(tmpbuf);
 	}
 
@@ -564,7 +564,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies(&G_OBJECT(widget)->qdata,cfgfile,section,"depend_on");
+		load_dependancies_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 
@@ -596,7 +596,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	*/
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
-		OBJ_SET(widget,"widget_temp",DATA_GET(&global_data,"temp_units"));
+		OBJ_SET(widget,"widget_temp",DATA_GET(global_data,"temp_units"));
 		g_free(tmpbuf);
 	}
 
@@ -621,14 +621,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		switch (widget_type)
 		{
 			case MTX_RANGE:
-				gtk_range_set_value(GTK_RANGE(widget),(GINT)DATA_GET(&global_data,initializer));
+				gtk_range_set_value(GTK_RANGE(widget),(GINT)DATA_GET(global_data,initializer));
 				break;
 
 			case MTX_SPINBUTTON:
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(&global_data,initializer));
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(global_data,initializer));
 				break;
 			case MTX_ENTRY:
-				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)DATA_GET(&global_data,initializer));
+				gtk_entry_set_text(GTK_ENTRY(widget),(gchar *)DATA_GET(global_data,initializer));
 
 			default:
 				break;
@@ -696,7 +696,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 * redundant keys all throughout the file...
 	 */
 
-	bind_keys(&G_OBJECT(widget)->qdata, cfgfile, section, keys, num_keys);
+	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/

@@ -38,7 +38,7 @@
 
 
 extern GStaticMutex rtv_mutex;
-extern GData *global_data;
+extern gconstpointer *global_data;
 /*!
  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
  complex function so read the sourcecode.. ;)
@@ -79,7 +79,7 @@ void process_rt_vars(void *incoming)
 	/* Backup current rtv copy */
 	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
 	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
-	temp_units = (GINT)DATA_GET(&global_data,"temp_units");
+	temp_units = (GINT)DATA_GET(global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
 	if (rtv_map->ts_array->len%250 == 0)
@@ -271,8 +271,8 @@ gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
 				/*
-				  printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
-				 printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
+				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
@@ -340,6 +340,181 @@ gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 		{
 			evaluator = evaluator_create(DATA_GET(object,"dl_conv_expr"));
 			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
+		}
+	}
+	else
+	{
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+	}
+	if (!evaluator)
+	{
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		exit (-1);
+	}
+
+	assert(evaluator);
+
+	result = evaluator_evaluate(evaluator,total_symbols,names,values);
+	if (result < lower_limit)
+		result = lower_limit;
+	if (result > upper_limit)
+		result = upper_limit;
+	for (i=0;i<total_symbols;i++)
+	{
+		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));
+		g_free(names[i]);
+	}
+	dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\texpression is %s\n",evaluator_get_string(evaluator)));
+	g_free(names);
+	g_free(values);
+	return result;
+}
+
+
+
+/*!
+ \brief handle_complex_expr_obj() handles a complex mathematcial expression for
+ an variable represented by a gconstpointer.
+ \param object (gconstpointer *) pointer to the object containing the conversion 
+ expression and other relevant data
+ \param incoming (void *) pointer to the raw data
+ \param type (ConvType) enumeration stating if this is an upload or
+ download conversion
+ \returns a float of the result of the mathematical expression
+ */
+gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
+{
+	gchar **symbols = NULL;
+	gint *expr_types = NULL;
+	guchar *raw_data = incoming;
+	gint total_symbols = 0;
+	gint i = 0;
+	gint page = 0;
+	DataSize size = MTX_U08;
+	gint offset = 0;
+	guint bitmask = 0;
+	guint bitshift = 0;
+	gint canID = 0;
+	void * evaluator = NULL;
+	gchar **names = NULL;
+	gdouble * values = NULL;
+	gchar * tmpbuf = NULL;
+	gdouble lower_limit = 0;
+	gdouble upper_limit = 0;
+	gdouble result = 0.0;
+
+
+	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
+	expr_types = (gint *)OBJ_GET(object,"expr_types");
+	total_symbols = (GINT)OBJ_GET(object,"total_symbols");
+	if (OBJ_GET(object,"real_lower"))
+		lower_limit = strtod(OBJ_GET(object,"real_lower"),NULL);
+	else
+		lower_limit = -G_MAXDOUBLE;
+	if (OBJ_GET(object,"real_upper"))
+		upper_limit = strtod(OBJ_GET(object,"real_upper"),NULL);
+	else
+		upper_limit = G_MAXDOUBLE;
+
+	names = g_new0(gchar *, total_symbols);
+	values = g_new0(gdouble, total_symbols);
+
+	for (i=0;i<total_symbols;i++)
+	{
+		page = 0;
+		offset = 0;
+		bitmask = 0;
+		bitshift = 0;
+		switch ((ComplexExprType)expr_types[i])
+		{
+			case VE_EMB_BIT:
+				size = MTX_U08;
+
+				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
+				page = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
+				canID = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
+				bitmask = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				bitshift = get_bitshift(bitmask);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
+				/*
+				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
+				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				 */
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
+				break;
+			case VE_VAR:
+				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
+				page = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
+				canID = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
+				size = (DataSize) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)get_ecu_data(canID,page,offset,size);
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
+				break;
+			case RAW_VAR:
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
+				size = (DataSize) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
+				break;
+			case RAW_EMB_BIT:
+				size = MTX_U08;
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
+				bitmask = (GINT) OBJ_GET(object,tmpbuf);
+				g_free(tmpbuf);
+				bitshift = get_bitshift(bitmask);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size)) & bitmask) >> bitshift);
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
+				break;
+			default:
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));
+				break;
+		}
+
+	}
+	if (type == UPLOAD)
+	{
+		evaluator = (void *)OBJ_GET(object,"ul_evaluator");
+		if (!evaluator)
+		{
+			evaluator = evaluator_create(OBJ_GET(object,"ul_conv_expr"));
+			OBJ_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
+
+		}
+	}
+	else if (type == DOWNLOAD)
+	{
+		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
+		if (!evaluator)
+		{
+			evaluator = evaluator_create(OBJ_GET(object,"dl_conv_expr"));
+			OBJ_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else

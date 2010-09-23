@@ -220,6 +220,89 @@ gint reverse_lookup(gconstpointer *object, gint value)
 	return closest_index;
 }
 
+
+
+/*!
+ \brief reverse_lookup_obj() looks for the INDEX of this value in the specified
+ lookuptable.  This does an interesting weighted search in an attempt to handle
+ lookuptables that contain the same value in multiple places.  When it finds
+ a match it begins counting for sequential matches,  if so it increases the 
+ "weight" of that match at the startpoint.  Following the weighted search, 
+ another iteration of the weight array to find the biggest one, and then
+ choose the midpoint of that span. (i.e. if there are 11 sequential target
+ values, we choose the middle one (6th).  This algorithm can STILL however
+ be tricked by multiple SINGLE values. in that case it'll take the last one.
+ \param object (GObject *) pointer to object.
+ \param value (gint ) value to be reverse looked up
+ \returns the index closest to that data
+ */
+gint reverse_lookup_obj(GObject *object, gint value)
+{
+	gint i = 0;
+	gint j = 0;
+	gint closest_index = 0;
+	gint min = 0;
+	gint len = 0;
+	gint weight[255];
+
+	extern GHashTable *lookuptables;
+	gconstpointer *dep_obj = NULL;
+	LookupTable *lookuptable = NULL;
+	gint *array = NULL;
+	gchar *table = NULL;
+	gchar *alt_table = NULL;
+	gboolean state = FALSE;
+
+	table = (gchar *)OBJ_GET(object,"lookuptable");
+	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
+	dep_obj = (gconstpointer *)OBJ_GET(object,"dep_object");
+	if (dep_obj)
+		state = check_dependancies(dep_obj);
+	if (state)
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+	else
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+
+	array = lookuptable->array;
+	len=255;
+	for (i=0;i<len;i++)
+		weight[i]=0;
+
+	for (i=0;i<len;i++)
+	{
+		/*printf("counter is %i\n",i);*/
+		if (array[i] == value)
+		{
+			/*printf("match at %i\n",i);*/
+			j = i;
+			while (array[j] == value)
+			{
+				/*printf("searching for dups to upp the weight\n");*/
+				weight[i]++;
+				if (j+1 == len)
+					break;
+				else
+					j++;
+			}
+			i=j;
+		}
+	}
+	for (i=0;i<len;i++)
+	{
+		if (weight[i] > min)
+		{
+			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
+			min = weight[i];
+			closest_index=i+(min/2);
+		}
+	}
+
+	/*printf("closest index is %i\n",closest_index);*/
+
+	return closest_index;
+}
+
+
 gint direct_reverse_lookup(gchar *table, gint value)
 {
 	gint i = 0;
@@ -296,18 +379,60 @@ gfloat lookup_data(gconstpointer *object, gint offset)
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)DATA_GET(object,"dep_object");
-	
+
 	/*
 	   if (dep_obj)
 	   printf("checking dependancy %s\n",DATA_GET(object,"internal_names"));
 	   else
 	   printf("no dependancy\n");
-	   */
+	 */
 
 	if (dep_obj)
 	{
 		state = check_dependancies(dep_obj);
 	}
+	if (state)
+	{
+		/*printf("ALTERNATE\n");*/
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+	}
+	else
+	{
+		/*printf("NORMAL\n");*/
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+	}
+
+	if (!lookuptable)
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) DATA_GET(object,"internal_names")));
+		return 0.0;
+	}
+	return lookuptable->array[offset];
+}
+
+
+/*!
+ \brief lookup_data_obj() returns the value represented by the lookuptable 
+ associated with the passed object and offset
+ \param object (GObject *) container of parameters we need to do the lookup
+ \param offset (gint) offset into lookuptable
+ \returns the value at that offset of the lookuptable
+ */
+gfloat lookup_data_obj(GObject *object, gint offset)
+{
+	extern GHashTable *lookuptables;
+	gconstpointer *dep_obj = NULL;
+	LookupTable *lookuptable = NULL;
+	gchar *table = NULL;
+	gchar *alt_table = NULL;
+	gboolean state = FALSE;
+
+	table = (gchar *)OBJ_GET(object,"lookuptable");
+	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
+	dep_obj = (gconstpointer *)OBJ_GET(object,"dep_object");
+
+	if (dep_obj)
+		state = check_dependancies(dep_obj);
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
