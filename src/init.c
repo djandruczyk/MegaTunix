@@ -67,7 +67,7 @@ gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
 
-void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data);
+void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 /*!
  * init()
  * \brief Sets sane values to global variables for a clean startup of 
@@ -726,12 +726,12 @@ void mem_dealloc()
 		g_array_free(rtv_map->ts_array,TRUE);
 		for(i=0;i<rtv_map->rtv_list->len;i++)
 		{
-			data = g_array_index(rtv_map->rtv_list,GData *,i);
+			data = g_ptr_array_index(rtv_map->rtv_list,i);
 			dealloc_rtv_object(data);
 		}
 		g_hash_table_destroy(rtv_map->rtv_hash);
 		g_hash_table_destroy(rtv_map->offset_hash);
-		g_array_free(rtv_map->rtv_list,TRUE);
+		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		cleanup(rtv_map);
 	}
 	/* Runtime Text*/
@@ -754,7 +754,7 @@ void mem_dealloc()
 }
 
 
-void datalist_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 
 	printf("going to free %s\n",g_quark_to_string(key_id));
@@ -791,7 +791,7 @@ OutputData * initialize_outputdata()
 	OutputData *output = NULL;
 
 	output = g_new0(OutputData, 1);
-	g_datalist_init(&output->data);
+	output->data = g_new0(gconstpointer, 1);
 	return output;
 }
 
@@ -860,10 +860,6 @@ Table_Params * initialize_table_params(void)
 	table_params->x_dl_eval = NULL;
 	table_params->y_dl_eval = NULL;
 	table_params->z_dl_eval = NULL;
-	/* X lookuptable container */
-	g_datalist_init(&table_params->x_object);
-	g_datalist_init(&table_params->y_object);
-	g_datalist_init(&table_params->z_object);
 
 	return table_params;
 }
@@ -955,7 +951,10 @@ void dealloc_message(Io_Message * message)
 	{
 		payload = (OutputData *)message->payload;
 		if (payload->data)
-			g_datalist_clear(&payload->data);
+		{
+			g_dataset_destroy(payload->data);
+			g_free(payload->data);
+		}
                 cleanup(message->payload);
 	}
         cleanup(message);
@@ -1139,13 +1138,13 @@ void dealloc_table_params(Table_Params * table_params)
  for dependancy management
  \param object (GData *) pointer to object to deallocate
  */
-void dealloc_dep_object(GData *object)
+void dealloc_dep_object(gconstpointer *object)
 {
 	gchar * deps = NULL;
 
-	deps = DATA_GET(&object,"deps");
+	deps = DATA_GET(object,"deps");
 	cleanup(deps);
-	g_datalist_clear(&object);
+	g_dataset_destroy(object);
 	return;
 }
 
@@ -1155,18 +1154,18 @@ void dealloc_dep_object(GData *object)
  for runtime vars data
  \param object (GData *) pointer to object to deallocate
  */
-void dealloc_rtv_object(GData *object)
+void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
 	if (!(object))
 		return;
-//	g_datalist_foreach(&object,dump_datalist,NULL);
-	array = (GArray *)DATA_GET(&object, "history");
+//	g_dataset_foreach(object,dump_dataset,NULL);
+	array = (GArray *)DATA_GET(object, "history");
 	if (array)
-		g_array_free(DATA_GET(&object,"history"),TRUE);
+		g_array_free(DATA_GET(object,"history"),TRUE);
 	/* This should release everything else bound via a DATA_SET_FULL */
-	//g_datalist_foreach(&object,datalist_dealloc,NULL);
-	g_datalist_clear(&object);
+	//g_dataset_foreach(object,dataset_dealloc,NULL);
+	g_dataset_destroy(object);
 }
 
 

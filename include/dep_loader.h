@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_dependancies(GData **,ConfigFile * ,gchar *, gchar *);
+void load_dependancies(gconstpointer *,ConfigFile * ,gchar *, gchar *);
 /* Prototypes */
 
 #endif

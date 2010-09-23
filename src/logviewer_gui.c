@@ -61,7 +61,7 @@ void present_viewer_choices(void)
 	GtkWidget *sep = NULL;
 	GtkWidget *darea = NULL;
 	GList *list = NULL;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
@@ -140,17 +140,16 @@ void present_viewer_choices(void)
 		remove_list("viewables");
 	}
 
-	for (i=0;i<max_viewables;i++)
-	{
-		if (playback_mode)
-			list = g_list_prepend(list,(gpointer)g_array_index(log_info->log_list,GData *,i));
-		else
-			list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GData *,i));
-	}
 	if (playback_mode)
+	{
+		list = g_list_prepend(list,(gpointer)g_ptr_array_index(log_info->log_list,i));
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
+	}
 	else
+	{
+		list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
+	}
 
 	for (i=0;i<max_viewables;i++)
 	{
@@ -161,13 +160,9 @@ void present_viewer_choices(void)
 		object = g_list_nth_data(list,i);
 
 		if (playback_mode)
-		{
-			//object =  g_array_index(log_info->log_list,GData *,i);
 			name = g_strdup(DATA_GET(&object,"lview_name"));
-		}
 		else
 		{
-			//object =  g_array_index(rtv_map->rtv_list,GData *,i);
 			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
 			tooltip = g_strdup(DATA_GET(&object,"tooltip"));
 		}
@@ -254,7 +249,7 @@ gboolean save_default_choices(GtkWidget *widget)
 	GtkWidget *tmpwidget = NULL;
 	GList * list = NULL;
 	GList * defaults = NULL;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gchar *name = NULL;
 	gint i = 0;
 
@@ -294,14 +289,14 @@ gboolean save_default_choices(GtkWidget *widget)
  */
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gboolean state = FALSE;
 
 
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
 	/* get object from widget */
-	object = (GData *)OBJ_GET(widget,"object");
+	object = (gconstpointer *)OBJ_GET(widget,"object");
 	if (!object)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
@@ -324,7 +319,7 @@ void populate_viewer()
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
 	extern Rtv_Map *rtv_map;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 
 	g_static_mutex_lock(&update_mutex);
 
@@ -355,12 +350,12 @@ void populate_viewer()
 		name = NULL;
 		if (playback_mode)
 		{
-			object = g_array_index(log_info->log_list,GData *, i);        
+			object = g_ptr_array_index(log_info->log_list,i);        
 			name = DATA_GET(&object,"lview_name");
 		}
 		else
 		{
-			object = g_array_index(rtv_map->rtv_list,GData *, i); 
+			object = g_ptr_array_index(rtv_map->rtv_list,i); 
 			name = g_strdup(DATA_GET(&object,"dlog_gui_name"));
 		}
 		if (!name)
@@ -452,7 +447,7 @@ void reset_logviewer_state()
 	extern Rtv_Map *rtv_map;
 	extern Log_Info *log_info;
 	guint i = 0 ;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 
 	if (playback_mode)
 	{
@@ -461,7 +456,7 @@ void reset_logviewer_state()
 		for (i=0;i<log_info->field_count;i++)
 		{
 			object = NULL;
-			object = g_array_index(log_info->log_list,GData *,i);
+			object = g_ptr_array_index(log_info->log_list,i);
 			if (object)
 				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
@@ -473,7 +468,7 @@ void reset_logviewer_state()
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
 			object = NULL;
-			object = g_array_index(rtv_map->rtv_list,GData *,i);
+			object = g_ptr_array_index(rtv_map->rtv_list,i);
 			if (object)
 				DATA_SET(&object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
@@ -486,10 +481,10 @@ void reset_logviewer_state()
 /*!
  \brief build_v_value() allocates a viewable_value structure and populates
  it with sane defaults and returns it to the caller
- \param object (GData *) objet to get soem of the data from
+ \param object (gconstpointer *) objet to get soem of the data from
  \returns a newly allocated and populated Viewable_Value structure
  */
-Viewable_Value * build_v_value(GData *object)
+Viewable_Value * build_v_value(gconstpointer *object)
 {
 	Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
@@ -1262,7 +1257,7 @@ void set_default_lview_choices_state(void)
 	gint j = 0;
 	gchar * name;
 	gchar * potential;
-	GData *object;
+	gconstpointer *object;
 
 	defaults = get_list("logviewer_defaults");
 	list = get_list("viewables");

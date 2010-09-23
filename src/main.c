@@ -51,7 +51,7 @@ GCond *gui_dispatch_cond = NULL;
 GCond *pf_dispatch_cond = NULL;
 GCond *statuscounts_cond = NULL;
 GCond *rtv_thread_cond = NULL;
-GData *global_data = NULL;
+gconstpointer *global_data = NULL;
 
 /*!
  \brief main() is the typical main function in a C program, it performs
@@ -92,7 +92,7 @@ gint main(gint argc, gchar ** argv)
 	printf(_("Hello World!\n"));
 	*/
 
-	g_datalist_init(&global_data);
+	global_data = g_new0(gconstpointer 1);
 	handle_args(argc,argv);
 
 	/* This will exit mtx if the locking fails! */

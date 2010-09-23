@@ -471,6 +471,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"inactive_fg",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"index",
+			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"initializer",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"internal_names",

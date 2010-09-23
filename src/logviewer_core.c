@@ -40,7 +40,7 @@ EXPORT void create_stripchart(GtkWidget *parent)
 	gchar ** sources = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gint min = 0;
 	gint max = 0;
 	gint precision = 0;
@@ -168,7 +168,7 @@ Log_Info * initialize_log_info(void)
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->signature = NULL;
-	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GData *));
+	log_info->log_list = g_ptr_array_new();
 	return log_info;
 }
 
@@ -186,7 +186,7 @@ void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	gchar **fields = NULL;
 	gint num_fields = 0;
 	GArray *array = NULL;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gint i = 0;
 	extern gboolean offline;
 	extern Rtv_Map *rtv_map;
@@ -247,7 +247,7 @@ read_again:
 			OBJ_SET(&object,"data_array",(gpointer)array);
 			g_free(DATA_GET(&object,"lview_name"));
 			OBJ_SET(&object,"lview_name",g_strdup(g_strstrip(fields[i])));
-			g_array_append_val(log_info->log_list,object);
+			g_ptr_array_add(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), TRUE);
@@ -268,7 +268,7 @@ void populate_limits(Log_Info *log_info)
 {
 	guint i = 0;
 	gint j = 0;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray *array = NULL;
 	gfloat val = 0.0;
 	gfloat lower = 0.0;
@@ -284,7 +284,7 @@ void populate_limits(Log_Info *log_info)
 		upper = 0.0;
 		tmpi = 0;
 		len = 0;
-		object = g_array_index(log_info->log_list,GData *, i);
+		object = g_ptr_array_index(log_info->log_list, i);
 		array = (GArray *)DATA_GET(&object,"data_array");
 		len = array->len;
 		for (j=0;j<len;j++)
@@ -321,7 +321,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 	gchar ** vector = NULL;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
@@ -350,7 +350,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 
 		for (i=0;i<(log_info->field_count);i++)
 		{
-			object = g_array_index(log_info->log_list,GData *, i);
+			object = g_ptr_array_index(log_info->log_list, i);
 			tmp_array = (GArray *)DATA_GET(&object,"data_array");
 			val = (gfloat)g_ascii_strtod(g_strdelimit(data[i],",.",'.'),NULL);
 			g_array_append_val(tmp_array,val);
@@ -381,7 +381,7 @@ void free_log_info()
 {
 	extern Log_Info *log_info;
 	guint i = 0;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	GArray *array = NULL;
 	
 	if (!log_info)
@@ -390,7 +390,7 @@ void free_log_info()
 	for (i=0;i<log_info->field_count;i++)
 	{
 		object = NULL;
-		object = g_array_index(log_info->log_list,GData *,i);
+		object = g_ptr_array_index(log_info->log_list,i);
 		if (!object)
 			continue;
 		array = (GArray *)DATA_GET(&object,"data_array");

@@ -36,9 +36,9 @@ struct _LookupTable
 /* Prototypes */
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
-gint reverse_lookup(GData *, gint );
+gint reverse_lookup(gconstpointer *, gint );
 gint direct_reverse_lookup(gchar *, gint );
-gfloat lookup_data(GData *, gint );
+gfloat lookup_data(gconstpointer *, gint );
 gfloat direct_lookup_data(gchar *, gint );
 gboolean lookuptables_configurator(GtkWidget *, gpointer );
 gboolean lookuptables_configurator_hide(GtkWidget *, gpointer );

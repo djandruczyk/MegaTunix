@@ -26,7 +26,7 @@
 
 
 
-void bind_keys(GData **object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
+void bind_keys(gconstpointer *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {
 	gint i = 0;
 	gint tmpi = 0;

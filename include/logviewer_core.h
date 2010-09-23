@@ -56,7 +56,7 @@ struct _Log_Info
 	guint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
 	gchar *signature;	/*! ECU signature of log */
-	GArray *log_list;	/*! List of objects */
+	GPtrArray *log_list;	/*! List of objects */
 };
 
 

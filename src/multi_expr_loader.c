@@ -32,12 +32,12 @@
  a realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a special variable that requires handling of
  multiple circumstances
- \param object (GData *) place to store the retrieved data
+ \param object (gconstpointer *) place to store the retrieved data
  \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
  \param section (gchar *) sectio nto read the data from
  \see check_dependancies
  */
-void load_multi_expressions(GData **object, ConfigFile *cfgfile,gchar * section)
+void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** keys = NULL;

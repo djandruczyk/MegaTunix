@@ -32,13 +32,13 @@
  a datamap or realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a dependancy (or multiple deps) on other
  variables
- \param object (GData *) place to store the retrieved data
+ \param object (gconstpointer *) place to store the retrieved data
  \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
  \param section (gchar *) section to read the data from
  \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies(GData **object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+void load_dependancies(gconstpointer *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
 	GData *dep_obj = NULL;
 	gchar *tmpbuf = NULL;

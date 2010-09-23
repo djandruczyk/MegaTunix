@@ -361,7 +361,7 @@ gfloat convert_after_upload(GtkWidget * widget)
  */
 void convert_temps(gpointer widget, gpointer units)
 {
-	GData *dep_obj = NULL;
+	gconstpointer *dep_obj = NULL;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
@@ -378,7 +378,7 @@ void convert_temps(gpointer widget, gpointer units)
 	 */
 	if ((!widget) || (leaving))
 		return;
-	dep_obj = (GData *)OBJ_GET(widget,"dep_object");
+	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	if (dep_obj)
 		state = check_dependancies(dep_obj);

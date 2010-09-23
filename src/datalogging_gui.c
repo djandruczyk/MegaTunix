@@ -64,7 +64,8 @@ EXPORT void populate_dlog_choices_pf()
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
 	gint table_rows = 0;
-	GData * object = NULL;
+	gint index = 0;
+	gconstpointer * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
 	extern gint preferred_delimiter;
@@ -122,35 +123,40 @@ EXPORT void populate_dlog_choices_pf()
 	k = 0;
 	/* Put into GList and sort it */
 	for (i=0;i<rtv_map->derived_total;i++)
-		list = g_list_prepend(list,(gpointer)g_array_index(rtv_map->rtv_list,GData *,i));
+		list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 	list = g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
+	printf("laying out datalogging, obj ptrs following!\n");
 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		tooltip = NULL;
 		dlog_name = NULL;
-		//object = g_array_index(rtv_map->rtv_list,GData *,i);
+		//object = g_ptr_array_index(rtv_map->rtv_list,i);
 		object = g_list_nth_data(list,i);
-		dlog_name = DATA_GET(&object,"dlog_gui_name");
+		dlog_name = DATA_GET(object,"dlog_gui_name");
+		printf("object ptr %p, for %s\n",object,dlog_name);
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
 		gtk_container_add(GTK_CONTAINER(button),label);
-		tooltip = (gchar *)(DATA_GET(&object,"tooltip"));
+		tooltip = (gchar *)(DATA_GET(object,"tooltip"));
 		if (tooltip)
 			gtk_widget_set_tooltip_text(button,tooltip);
 		/* Bind button to the object, Done so that we can set the state
 		 * of the buttons from elsewhere... 
 		 */
 		DATA_SET(&object,"dlog_button",(gpointer)button);
+		printf("object ptr %p after binding button obj, for %s\n",object,dlog_name);
 
 		/* Bind object to the button */
 		OBJ_SET(button,"object",(gpointer)object);
+//		g_datalist_foreach(&object,dump_datalist,NULL);
+//		printf("\n\n");
 
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
-		if ((GBOOLEAN)DATA_GET(&object,"log_by_default")==TRUE)
+		if ((GINT)DATA_GET(object,"log_by_default") == 1)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL|GTK_SHRINK),
@@ -163,6 +169,14 @@ EXPORT void populate_dlog_choices_pf()
 			k++;
 			j = 0;
 		} 
+		//object = g_list_nth_data(list,i);
+		/*
+		index = (gint)DATA_GET(object,"index");
+		printf("Index for this control %s is %i\n",dlog_name,index);
+		printf("orig %p, new %p\n",orig_object,object);
+		g_ptr_array_remove(rtv_map->rtv_list,orig_object);
+		g_ptr_array_add(rtv_map->rtv_list,object);
+		*/
 	}
 	g_list_free(list);
 	gtk_widget_show_all(vbox);
@@ -247,13 +261,13 @@ void stop_datalogging()
  */
 gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gboolean state = FALSE;
 
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
                 
 	/* get object from widget */
-	object = (GData *)OBJ_GET(widget,"object");
+	object = (gconstpointer *)OBJ_GET(widget,"object");
 	DATA_SET(&object,"being_logged",GINT_TO_POINTER(state));
 
 	return TRUE;
@@ -273,7 +287,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	gint total_logables = 0;
 	gsize count = 0;
 	GString *output;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	gchar * string = NULL;
 	extern gint preferred_delimiter;
 	extern Firmware_Details *firmware;
@@ -285,8 +299,8 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	/* Count total logable variables */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *,i);
-		if((override) || ((GBOOLEAN)DATA_GET(&object,"being_logged")))
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
 			total_logables++;
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
@@ -295,11 +309,11 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	output = g_string_append(output,string); 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *,i);
-		if((override) || ((GBOOLEAN)DATA_GET(&object,"being_logged")))
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
 		{
 			/* If space delimited, QUOTE the header names */
-			string = (gchar *)DATA_GET(&object,"dlog_field_name");
+			string = (gchar *)DATA_GET(object,"dlog_field_name");
 			output = g_string_append(output,string); 
 
 			j++;
@@ -326,7 +340,7 @@ EXPORT void run_datalog_pf(void)
 	gint total_logables = 0;
 	GString *output;
 	GIOChannel *iochannel = NULL;
-	GData *object = NULL;
+	gconstpointer *object = NULL;
 	gfloat value = 0.0;
 	GArray *history = NULL;
 	gint precision = 0;
@@ -349,8 +363,8 @@ EXPORT void run_datalog_pf(void)
 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *,i);
-		if((GBOOLEAN)DATA_GET(&object,"being_logged"))
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		if((GBOOLEAN)DATA_GET(object,"being_logged"))
 			total_logables++;
 	}
 
@@ -365,12 +379,12 @@ EXPORT void run_datalog_pf(void)
 	j = 0;
 	for(i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *,i);
-		if (!((GBOOLEAN)DATA_GET(&object,"being_logged")))
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		if (!((GBOOLEAN)DATA_GET(object,"being_logged")))
 			continue;
 
-		history = (GArray *)DATA_GET(&object,"history");
-		precision = (GINT)DATA_GET(&object,"precision");
+		history = (GArray *)DATA_GET(object,"history");
+		precision = (GINT)DATA_GET(object,"precision");
 		if ((gint)history->len-1 <= 0)
 			value = 0.0;
 		else
@@ -399,7 +413,7 @@ EXPORT void run_datalog_pf(void)
 void dlog_select_all()
 {
 	guint i = 0;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GtkWidget *button = NULL;
 
 	/* Check all logable choices */
@@ -407,8 +421,8 @@ void dlog_select_all()
 	{
 		object = NULL;
 		button = NULL;
-		object = g_array_index(rtv_map->rtv_list,GData *, i);
-		button = (GtkWidget *)DATA_GET(&object,"dlog_button");
+		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		button = (GtkWidget *)DATA_GET(object,"dlog_button");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 	}
 }
@@ -421,16 +435,25 @@ void dlog_deselect_all(void)
 {
 	guint i = 0;
 	GtkWidget * button = NULL;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
 		button = NULL;
-		object = g_array_index(rtv_map->rtv_list,GData *, i);
-		button = (GtkWidget *)DATA_GET(&object,"dlog_button");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		button = (GtkWidget *)DATA_GET(object,"dlog_button");
+		printf("object ptr %p, button ptr %p\n",object,button);
+//		printf("object data:\n");
+//		g_datalist_foreach(&object,dump_datalist,NULL);
+		if (GTK_IS_TOGGLE_BUTTON(button))
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+		else
+		{
+			printf("bad object!\n");
+			g_dataset_foreach(&object,dump_datalist,NULL);
+		}
 	}
 }
 
@@ -442,7 +465,7 @@ void dlog_select_defaults(void)
 {
 	guint i = 0;
 	GtkWidget * button = NULL;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	gboolean state=FALSE;
 
 	/* Uncheck all logable choices */
@@ -451,9 +474,11 @@ void dlog_select_defaults(void)
 		object = NULL;
 		button = NULL;
 		state = FALSE;
-		object = g_array_index(rtv_map->rtv_list,GData *, i);
-		button = (GtkWidget *)DATA_GET(&object,"dlog_button");
-		state = (GBOOLEAN)DATA_GET(&object,"log_by_default");
+		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		button = (GtkWidget *)DATA_GET(object,"dlog_button");
+		state = (GINT)DATA_GET(object,"log_by_default");
+		if (state == -1)
+			state = 0;
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),state);
 	}
 }
@@ -587,7 +612,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	gboolean notifies = FALSE;
 	gsize count = 0;
 	GString *output;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray **histories = NULL;
 	gint *precisions = NULL;
 	gchar *tmpbuf = NULL;
@@ -615,9 +640,9 @@ void dump_log_to_disk(GIOChannel *iochannel)
 
 	for(i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *,i);
-		histories[i] = (GArray *)DATA_GET(&object,"history");
-		precisions[i] = (GINT)DATA_GET(&object,"precision");
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		histories[i] = (GArray *)DATA_GET(object,"history");
+		precisions[i] = (GINT)DATA_GET(object,"precision");
 	}
 
 	for (x=0;x<rtv_map->ts_array->len;x++)

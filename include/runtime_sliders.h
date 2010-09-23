@@ -42,7 +42,7 @@ struct _Rt_Slider
 	gint upper;		/*! Upper limit */
 	GArray *history;	/*! where the data is from */
 	gfloat last_percentage;	/*! last percentage of on screen slider */
-	GData *object;		/*! object of obsession.... */
+	gconstpointer *object;		/*! object of obsession.... */
 	gboolean enabled;	/*! Pretty obvious */
 	gint count;		/*! used to making sure things update */
 	gint rate;		/*! used to making sure things update */

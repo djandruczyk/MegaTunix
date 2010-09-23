@@ -186,7 +186,7 @@ struct _Table_Params
 	void *x_ul_eval;	/*! evaluator for x variable */
 	void *x_dl_eval;	/*! evaluator for x variable */
 	gint x_precision;	/*! how many decimal places */
-	GData *x_object;	/*! Container for lookuptable deps */
+	gconstpointer *x_object;	/*! Container for lookuptable deps */
 
 	gint y_page;		/*! what page the load (Y axis) resides in */
 	gint y_base;		/*! where load table starts  (Y Axis) */
@@ -210,7 +210,7 @@ struct _Table_Params
 	void *y_ul_eval;	/*! evaluator for y variable */
 	void *y_dl_eval;	/*! evaluator for y variable */
 	gint y_precision;	/*! how many decimal places */
-	GData *y_object;	/*! Container for lookuptable deps */
+	gconstpointer *y_object;	/*! Container for lookuptable deps */
 
 	gint z_page;		/*! what page the vetable resides in */
 	gint z_base;		/*! where the vetable starts */
@@ -234,7 +234,7 @@ struct _Table_Params
 	void *z_dl_eval;	/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
 	gchar * z_depend_on;	/*! Z axis dependancy string name */
-	GData *z_object;	/*! Container for lookuptable deps */
+	gconstpointer *z_object;	/*! Container for lookuptable deps */
 	gint last_z_minval;	/*! Last Minimum value for color scaling */
 	gint last_z_maxval;	/*! Last Maximum value for color scaling */
 	gboolean color_update;	/*! Flag to issue color reset.. */

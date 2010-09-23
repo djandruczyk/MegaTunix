@@ -50,7 +50,7 @@ void process_rt_vars(void *incoming)
 	extern Firmware_Details *firmware;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	gchar * expr = NULL;
 	GList * list= NULL;
 	guint i = 0;
@@ -108,35 +108,35 @@ void process_rt_vars(void *incoming)
 			history = NULL;
 			special = NULL;
 			hash = NULL;
-			object=(GData *)g_list_nth_data(list,j);
+			object=(gconstpointer *)g_list_nth_data(list,j);
 /*			printf("Dumping datalist for objects\n");
-			 g_datalist_foreach(&object,dump_datalist,NULL);
+			 g_datalist_foreach(object,dump_datalist,NULL);
 			 */
 			if (!object)
 			{
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i));
 				continue;
 			}
-			special = (gchar *)DATA_GET(&object,"special");
+			special = (gchar *)DATA_GET(object,"special");
 			if (special)
 			{
 				tmpf = handle_special(object,special);
 				goto store_it;
 			}
-			temp_dep = (GBOOLEAN)DATA_GET(&object,"temp_dep");
-			hash = (GHashTable *)DATA_GET(&object,"multi_expr_hash");
+			temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
+			hash = (GHashTable *)DATA_GET(object,"multi_expr_hash");
 			if (hash)
 			{
 				tmpf = handle_multi_expression(object,raw_realtime,hash);
 				goto store_it;
 			}
-			evaluator = (void *)DATA_GET(&object,"ul_evaluator");
+			evaluator = (void *)DATA_GET(object,"ul_evaluator");
 			if (!evaluator)
 			{
-				expr = DATA_GET(&object,"ul_conv_expr");
+				expr = DATA_GET(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(&object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				evaluator = evaluator_create(expr);
@@ -145,19 +145,19 @@ void process_rt_vars(void *incoming)
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(evaluator);
-				DATA_SET_FULL(&object,"ul_evaluator",evaluator,evaluator_destroy);
+				DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 			}
 			else
 				assert(evaluator);
-			offset = (GINT)DATA_GET(&object,"offset");
-			size = (DataSize)DATA_GET(&object,"size");
-			if (DATA_GET(&object,"complex_expr"))
+			offset = (GINT)DATA_GET(object,"offset");
+			size = (DataSize)DATA_GET(object,"size");
+			if (DATA_GET(object,"complex_expr"))
 			{
 				tmpf = handle_complex_expr(object,incoming,UPLOAD);
 				goto store_it;
 			}
 
-			if (DATA_GET(&object,"lookuptable"))
+			if (DATA_GET(object,"lookuptable"))
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));*/
 				x = lookup_data(object,raw_realtime[offset]);
@@ -182,14 +182,14 @@ store_it:
 			else
 				result = tmpf;
 			/* Get history array and current index point */
-			history = (GArray *)DATA_GET(&object,"history");
+			history = (GArray *)DATA_GET(object,"history");
 			/* Store data in history buffer */
 			g_static_mutex_lock(&rtv_mutex);
 			g_array_append_val(history,result);
 			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,history->len-1,result,g_array_index(history, gfloat, history->len-1),g_array_index(history, gfloat, history->len-2));*/
 			g_static_mutex_unlock(&rtv_mutex);
 
-			/*printf("Result of %s is %f\n",(gchar *)DATA_GET(&object,"internal_names"),result);*/
+			/*printf("Result of %s is %f\n",(gchar *)DATA_GET(object,"internal_names"),result);*/
 
 		}
 	}
@@ -199,15 +199,15 @@ store_it:
 
 /*!
  \brief handle_complex_expr() handles a complex mathematcial expression for
- an variable represented by a GData.
- \param object (GData *) pointer to the object containing the conversion 
+ an variable represented by a gconstpointer.
+ \param object (gconstpointer *) pointer to the object containing the conversion 
  expression and other relevant data
  \param incoming (void *) pointer to the raw data
  \param type (ConvType) enumeration stating if this is an upload or
  download conversion
  \returns a float of the result of the mathematical expression
  */
-gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
+gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
@@ -229,15 +229,15 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 	gdouble result = 0.0;
 
 
-	symbols = (gchar **)DATA_GET(&object,"expr_symbols");
-	expr_types = (gint *)DATA_GET(&object,"expr_types");
-	total_symbols = (GINT)DATA_GET(&object,"total_symbols");
-	if (DATA_GET(&object,"real_lower"))
-		lower_limit = strtod(DATA_GET(&object,"real_lower"),NULL);
+	symbols = (gchar **)DATA_GET(object,"expr_symbols");
+	expr_types = (gint *)DATA_GET(object,"expr_types");
+	total_symbols = (GINT)DATA_GET(object,"total_symbols");
+	if (DATA_GET(object,"real_lower"))
+		lower_limit = strtod(DATA_GET(object,"real_lower"),NULL);
 	else
 		lower_limit = -G_MAXDOUBLE;
-	if (DATA_GET(&object,"real_upper"))
-		upper_limit = strtod(DATA_GET(&object,"real_upper"),NULL);
+	if (DATA_GET(object,"real_upper"))
+		upper_limit = strtod(DATA_GET(object,"real_upper"),NULL);
 	else
 		upper_limit = G_MAXDOUBLE;
 
@@ -256,16 +256,16 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 				size = MTX_U08;
 
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) DATA_GET(&object,tmpbuf);
+				page = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(&object,tmpbuf);
+				offset = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) DATA_GET(&object,tmpbuf);
+				canID = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (GINT) DATA_GET(&object,tmpbuf);
+				bitmask = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
@@ -278,16 +278,16 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 				break;
 			case VE_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) DATA_GET(&object,tmpbuf);
+				page = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(&object,tmpbuf);
+				offset = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) DATA_GET(&object,tmpbuf);
+				canID = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) DATA_GET(&object,tmpbuf);
+				size = (DataSize) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)get_ecu_data(canID,page,offset,size);
@@ -295,10 +295,10 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 				break;
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(&object,tmpbuf);
+				offset = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) DATA_GET(&object,tmpbuf);
+				size = (DataSize) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
@@ -307,10 +307,10 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 			case RAW_EMB_BIT:
 				size = MTX_U08;
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(&object,tmpbuf);
+				offset = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (GINT) DATA_GET(&object,tmpbuf);
+				bitmask = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
@@ -325,21 +325,21 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 	}
 	if (type == UPLOAD)
 	{
-		evaluator = (void *)DATA_GET(&object,"ul_evaluator");
+		evaluator = (void *)DATA_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(&object,"ul_conv_expr"));
-			DATA_SET_FULL(&object,"ul_evaluator",evaluator,evaluator_destroy);
+			evaluator = evaluator_create(DATA_GET(object,"ul_conv_expr"));
+			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 
 		}
 	}
 	else if (type == DOWNLOAD)
 	{
-		evaluator = (void *)DATA_GET(&object,"dl_evaluator");
+		evaluator = (void *)DATA_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(&object,"dl_conv_expr"));
-			DATA_SET_FULL(&object,"dl_evaluator",evaluator,evaluator_destroy);
+			evaluator = evaluator_create(DATA_GET(object,"dl_conv_expr"));
+			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else
@@ -373,10 +373,10 @@ gfloat handle_complex_expr(GData *object, void * incoming,ConvType type)
 /*!
  \brief handle_multi_expression() is used to handle RT Vars that take
  multiple possible conversions based on ECU state
- \param object (GData *) object representing this derived variable
+ \param object (gconstpointer *) object representing this derived variable
  \param handler_name (gchar *) string name of special handler case to be done
  */
-gfloat handle_multi_expression(GData *object,guchar* raw_realtime,GHashTable *hash)
+gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashTable *hash)
 {
 	MultiExpr *multi = NULL;
 	gint offset = 0;
@@ -391,7 +391,7 @@ gfloat handle_multi_expression(GData *object,guchar* raw_realtime,GHashTable *ha
 		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression object is NULL!\n"));
 		return 0.0;
 	}
-	key = (gchar *)DATA_GET(&object,"source_key");
+	key = (gchar *)DATA_GET(object,"source_key");
 	if (!key)
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression source key is NULL!\n"));
@@ -411,7 +411,7 @@ gfloat handle_multi_expression(GData *object,guchar* raw_realtime,GHashTable *ha
 		return 0.0;
 	}
 
-	offset = (GINT)DATA_GET(&object,"offset");
+	offset = (GINT)DATA_GET(object,"offset");
 	if (multi->lookuptable)
 		x = direct_lookup_data(multi->lookuptable,raw_realtime[offset]);
 	else
@@ -429,10 +429,10 @@ gfloat handle_multi_expression(GData *object,guchar* raw_realtime,GHashTable *ha
  \brief handle_special() is used to handle special derived variables that
  DO NOT use any data fromthe realtime variables.  In this case it's only to
  create the high resoluation clock variable.
- \param object (GData *) object representing this derived variable
+ \param object (gconstpointer *) object representing this derived variable
  \param handler_name (gchar *) string name of special handler case to be done
  */
-gfloat handle_special(GData *object,gchar *handler_name)
+gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
 	static GTimeVal now;
 	static GTimeVal last;
@@ -478,7 +478,7 @@ gfloat handle_special(GData *object,gchar *handler_name)
 gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	
 	*value = 0.0;
@@ -489,7 +489,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	if (!object)
 		return FALSE;
 
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
 		return FALSE;
 
@@ -513,7 +513,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray * history = NULL;
 
 	*value = 0.0;
@@ -524,7 +524,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	if (!object)
 		return FALSE;
 
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
 		return FALSE;
 
@@ -549,7 +549,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 
@@ -561,7 +561,7 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 	if (!object)
 		return FALSE;
 
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
 		return FALSE;
 
@@ -573,7 +573,7 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 		index -= n;  /* get PREVIOUS nth one */
 	*value = g_array_index(history,gfloat,index);
 	g_static_mutex_unlock(&rtv_mutex);
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	return TRUE;
 }
 
@@ -589,7 +589,7 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
 gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 	gint i = 0;
@@ -604,7 +604,7 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 	if (!object)
 		return FALSE;
 
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
 		return FALSE;
 
@@ -637,7 +637,7 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
 gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 	gint i = 0;
@@ -651,7 +651,7 @@ gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip
 	if (!object)
 		return FALSE;
 
-	history = (GArray *)DATA_GET(&object,"history");
+	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
 		return FALSE;
 
@@ -683,7 +683,7 @@ gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip
 gboolean lookup_precision(gchar *internal_name, gint *precision)
 {
 	extern Rtv_Map *rtv_map;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 
 	if (!internal_name)
 	{
@@ -696,7 +696,7 @@ gboolean lookup_precision(gchar *internal_name, gint *precision)
 		*precision = 0;
 		return FALSE;
 	}
-	*precision = (GINT)DATA_GET(&object,"precision");
+	*precision = (GINT)DATA_GET(object,"precision");
 	return TRUE;
 }
 
@@ -711,7 +711,7 @@ void flush_rt_arrays()
 	GArray *history = NULL;
 	guint i = 0;
 	guint j = 0;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	GList *list = NULL;
 
 	/* Flush and recreate the timestamp array */
@@ -727,17 +727,17 @@ void flush_rt_arrays()
 		list = g_list_first(list);
 		for (j=0;j<g_list_length(list);j++)
 		{
-			object=(GData *)g_list_nth_data(list,j);
+			object=(gconstpointer *)g_list_nth_data(list,j);
 			if (!(object))
 				continue;
 			g_static_mutex_lock(&rtv_mutex);
-			history = (GArray *)DATA_GET(&object,"history");
+			history = (GArray *)DATA_GET(object,"history");
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-			DATA_SET(&object,"history",(gpointer)history);
+			DATA_SET(object,"history",(gpointer)history);
 			g_static_mutex_unlock(&rtv_mutex);
 	                /* bind history array to object for future retrieval */
 		}

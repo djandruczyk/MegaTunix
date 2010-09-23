@@ -77,10 +77,8 @@ gint list_sort(gconstpointer a, gconstpointer b)
 
 gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
-	GData *a1 = (GData *)a;
-	GData *b1 = (GData *)b;
 	const gchar *key = (const gchar *)data;
-	return g_ascii_strcasecmp((gchar *)DATA_GET(&a1,key),(gchar *)DATA_GET(&b1,key));
+	return g_ascii_strcasecmp((gchar *)DATA_GET(a,key),(gchar *)DATA_GET(b,key));
 }
 
 

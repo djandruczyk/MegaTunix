@@ -26,11 +26,11 @@
  \brief check_dependancies() extracts the dependancy information from the 
  object and checks each one in turn until one evauates to false, in that
  case it returns FALSE, otherwise if all deps succeed it'll return TRUE
- \param object (GData *) object containing dependacy information
+ \param object (gconstpointer *) object containing dependacy information
  \returns TRUE if dependancy evaluates to TRUE, FALSE on any dep in the chain 
  evaluating to FALSE.
  */
-gboolean check_dependancies(GData *object )
+gboolean check_dependancies(gconstpointer *object )
 {
 	gint i = 0;
 	gint page = 0;
@@ -45,47 +45,47 @@ gboolean check_dependancies(GData *object )
 	gint type = 0;
 	gint num_deps = 0;
 
-	num_deps = (GINT)DATA_GET(&object,"num_deps");
-	deps = DATA_GET(&object,"deps");
+	num_deps = (GINT)DATA_GET(object,"num_deps");
+	deps = DATA_GET(object,"deps");
 	/*printf("number of deps %i, %i\n",num_deps,g_strv_length(deps));*/
 	for (i=0;i<num_deps;i++)
 	{
 		/*printf("dep name %s\n",deps[i]);*/
 		tmpbuf = g_strdup_printf("%s_type",deps[i]);
-		type = (GINT)DATA_GET(&object,tmpbuf);
+		type = (GINT)DATA_GET(object,tmpbuf);
 		g_free(tmpbuf);
 		switch (type)
 		{
 			case VE_EMB_BIT:
 				/*printf("VE_EMB_BIT\n");*/
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
-				page = (GINT)DATA_GET(&object,tmpbuf);
+				page = (GINT)DATA_GET(object,tmpbuf);
 				/*printf("page %i\n",page);*/
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-				offset = (GINT)DATA_GET(&object,tmpbuf);
+				offset = (GINT)DATA_GET(object,tmpbuf);
 				/*printf("offset %i\n",offset);*/
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_canID",deps[i]);
-				canID = (GINT)DATA_GET(&object,tmpbuf);
+				canID = (GINT)DATA_GET(object,tmpbuf);
 				/*printf("canID %i\n",canID);*/
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_size",deps[i]);
-				size = (DataSize)DATA_GET(&object,tmpbuf);
+				size = (DataSize)DATA_GET(object,tmpbuf);
 				/*printf("size %i\n",size); */
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
-				bitmask = (GINT)DATA_GET(&object,tmpbuf);
+				bitmask = (GINT)DATA_GET(object,tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				/*printf("bitmask %i\n",bitmask); */
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
-				bitval = (GINT)DATA_GET(&object,tmpbuf);
+				bitval = (GINT)DATA_GET(object,tmpbuf);
 				/*printf("bitval %i\n",bitval); */
 				g_free(tmpbuf);
 
@@ -98,11 +98,11 @@ gboolean check_dependancies(GData *object )
 			case VE_VAR:
 
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
-				page = (GINT)DATA_GET(&object,g_strdup_printf("%s_page",deps[i]));
+				page = (GINT)DATA_GET(object,g_strdup_printf("%s_page",deps[i]));
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_offset",deps[i]);
-				offset = (GINT)DATA_GET(&object,g_strdup_printf("%s_offset",deps[i]));
+				offset = (GINT)DATA_GET(object,g_strdup_printf("%s_offset",deps[i]));
 				g_free(tmpbuf);
 				break;
 			default:

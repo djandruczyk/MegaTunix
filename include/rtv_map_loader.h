@@ -35,7 +35,7 @@ struct _Rtv_Map
 	GHashTable *offset_hash;/*! Hashtable of rtv dervied values indexed by
 				  it's raw offset in the RTV block */
 	GArray *ts_array;	/*! Timestamp array */
-	GArray *rtv_list;	/*! List of derived vars IN ORDER */
+	GPtrArray *rtv_list;	/*! List of derived vars IN ORDER */
 	GHashTable *rtv_hash;	/*! Hashtable of rtv derived values indexed by
 				 * it's internal name */
 };
@@ -43,7 +43,7 @@ struct _Rtv_Map
 
 /* Prototypes */
 gboolean load_realtime_map_pf(void );
-void load_complex_params(GData **, ConfigFile *, gchar * );
+void load_complex_params(gconstpointer *, ConfigFile *, gchar * );
 /* Prototypes */
 
 #endif

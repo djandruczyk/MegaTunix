@@ -1074,7 +1074,7 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 		{
 			for (j=0;j<rtv_map->rtv_list->len;j++)
 			{
-				object = g_array_index(rtv_map->rtv_list,GData *, j);
+				object = g_ptr_array_index(rtv_map->rtv_list,j);
 				lookup_current_value((gchar *)DATA_GET(&object,"internal_names"),&tmpf);
 				lookup_precision((gchar *)DATA_GET(&object,"internal_names"),&tmpi);
 				if (j < (rtv_map->rtv_list->len-1))
@@ -1111,7 +1111,7 @@ void socket_get_rtv_list(gint fd)
 
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
-		object = g_array_index(rtv_map->rtv_list,GData *, i);
+		object = g_ptr_array_index(rtv_map->rtv_list,i);
 		if (i < rtv_map->rtv_list->len-1)
 			tmpbuf = g_strdup_printf("%s ",(gchar *)DATA_GET(&object,"internal_names"));
 		else

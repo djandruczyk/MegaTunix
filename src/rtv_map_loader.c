@@ -68,7 +68,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	gint minor = 0;
 	gint offset = 0;
 	gchar * section = NULL;
-	GData * object = NULL;
+	gconstpointer *object = NULL;
 	GList * list = NULL;
 	GArray *history = NULL;
 	DataSize size = MTX_U08;
@@ -163,7 +163,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 	}
 	/* This should free to values with g_list_free, but it causes a fault*/
 	rtv_map->offset_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,NULL);
-	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GData *));
+	rtv_map->rtv_list = g_ptr_array_new();
 	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_map->rtvars_size = firmware->rtvars_size;
 	rtv_map->derived_total = derived_total;
@@ -196,25 +196,26 @@ EXPORT gboolean load_realtime_map_pf(void )
 			gdk_threads_leave();
 			return FALSE;
 		}
-		object = NULL;
+		object = g_new0(gconstpointer, 1);
 		history = NULL;
 		/* Create object to hold all the data. (dynamically)*/
-		g_datalist_init(&object);
 		/* Assume default size of 8 bit unsigned */
-		DATA_SET(&object,"size",GINT_TO_POINTER(MTX_U08));
+		DATA_SET(object,"size",GINT_TO_POINTER(MTX_U08));
+		/* Index */
+		DATA_SET(object,"index",GINT_TO_POINTER(i));
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
-		DATA_SET(&object,"history",(gpointer)history);
+		DATA_SET(object,"history",(gpointer)history);
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(&object,cfgfile,section,"depend_on");
+			load_dependancies(object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
 		{
-			load_multi_expressions(&object,cfgfile,section);
+			load_multi_expressions(object,cfgfile,section);
 			g_free(tmpbuf);
 		}
 		for (j=0;j<num_keys;j++)
@@ -226,7 +227,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
 					{
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
-						DATA_SET(&object,
+						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 					}
@@ -238,7 +239,7 @@ EXPORT gboolean load_realtime_map_pf(void )
 					{
 						tmpi = translate_string(tmpbuf);
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
-						DATA_SET(&object,
+						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 						g_free(tmpbuf);
@@ -250,13 +251,13 @@ EXPORT gboolean load_realtime_map_pf(void )
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
 						if (tmpi == 0)
-							tmpi = 1;
+							tmpi = -1;
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
-						DATA_SET(&object,
+						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 						if (strstr(keys[j],"complex_expr") != NULL)
-							load_complex_params(&object,cfgfile,section);
+							load_complex_params(object,cfgfile,section);
 					}
 					else
 						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
@@ -267,14 +268,14 @@ EXPORT gboolean load_realtime_map_pf(void )
 						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
 						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
 						{
-							DATA_SET_FULL(&object,
+							DATA_SET_FULL(object,
 									keys[j],
 									g_strdup(_(tmpbuf)),
 									g_free);
 						}
 						else
 						{
-							DATA_SET_FULL(&object,
+							DATA_SET_FULL(object,
 									keys[j],
 									g_strdup(tmpbuf),
 									g_free);
@@ -295,42 +296,43 @@ EXPORT gboolean load_realtime_map_pf(void )
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(&object,"ul_conv_expr") && !(DATA_GET(&object,"ul_evaluator")))
+		if (DATA_GET(object,"ul_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(&object,"ul_conv_expr");
+			expr = (gchar *)DATA_GET(object,"ul_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for rtvar %s function \"%s\" FAILED!!!\n\n",section,expr));
 			}
 			assert(eval);
-			DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
+			DATA_SET_FULL(object,"ul_evaluator",eval,evaluator_destroy);
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(&object,"dl_conv_expr") && !(DATA_GET(&object,"dl_evaluator")))
+		if (DATA_GET(object,"dl_conv_expr") && !(DATA_GET(object,"dl_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(&object,"dl_conv_expr");
+			expr = (gchar *)DATA_GET(object,"dl_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for rtvar %s function \"%s\" FAILED!!!\n\n",section,expr));
 			}
 			assert(eval);
-			DATA_SET_FULL(&object,"dl_evaluator",eval,evaluator_destroy);
+			DATA_SET_FULL(object,"dl_evaluator",eval,evaluator_destroy);
 		}
-
-		if (!DATA_GET(&object,"real_lower"))
+		eval = NULL;
+		expr = NULL;
+		if (!DATA_GET(object,"real_lower"))
 		{
-			size = (DataSize)DATA_GET(&object,"size");
+			size = (DataSize)DATA_GET(object,"size");
 			tmp = get_extreme_from_size(size,LOWER);
-			eval = (void *)DATA_GET(&object,"ul_evaluator");
+			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(&object,"ul_conv_expr");
+				expr = DATA_GET(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(&object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);
@@ -339,26 +341,26 @@ EXPORT gboolean load_realtime_map_pf(void )
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(eval);
-				DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
+				DATA_SET_FULL(object,"ul_evaluator",eval,evaluator_destroy);
 			}
 			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
-			DATA_SET_FULL(&object,"real_lower",g_strdup_printf("%i",tmpi),g_free);
+			DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",tmpi),g_free);
 
 		}
 		eval = NULL;
 		expr = NULL;
 		size = MTX_U08;
-		if (!DATA_GET(&object,"real_upper"))
+		if (!DATA_GET(object,"real_upper"))
 		{
-			size = (DataSize)DATA_GET(&object,"size");
+			size = (DataSize)DATA_GET(object,"size");
 			tmp = get_extreme_from_size(size,UPPER);
-			eval = (void *)DATA_GET(&object,"ul_evaluator");
+			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(&object,"ul_conv_expr");
+				expr = DATA_GET(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(&object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);
@@ -367,10 +369,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
 				}
 				assert(eval);
-				DATA_SET_FULL(&object,"ul_evaluator",eval,evaluator_destroy);
+				DATA_SET_FULL(object,"ul_evaluator",eval,evaluator_destroy);
 			}
 			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
-			DATA_SET_FULL(&object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
+			DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
 		if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
@@ -380,14 +382,15 @@ EXPORT gboolean load_realtime_map_pf(void )
 				g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
 			g_strfreev(vector);
 		}
-		//DATA_SET_FULL(&object,"keys",g_strdupv(keys),g_strfreev);
+		//DATA_SET_FULL(object,"keys",g_strdupv(keys),g_strfreev);
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_insert(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
-		g_array_append_val(rtv_map->rtv_list,object);
+		printf("Storing obj ptr %p, for value %s\n",object,(gchar *)DATA_GET(object,"dlog_gui_name"));
+		g_ptr_array_add(rtv_map->rtv_list,object);
 		g_free(section);
 		g_strfreev(keys);
-		/*g_datalist_foreach(&object,dump_datalist,NULL);*/
+		/*g_datalist_foreach(object,dump_datalist,NULL);*/
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
@@ -405,7 +408,7 @@ EXPORT gboolean load_realtime_map_pf(void )
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params(GData **object, ConfigFile *cfgfile, gchar * section)
+void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;

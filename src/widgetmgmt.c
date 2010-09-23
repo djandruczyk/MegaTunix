@@ -343,11 +343,13 @@ void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 		case MTX_STRING:
 			printf("key %s, %s\n",key,(gchar *) data);
 			break;
+		case MTX_BOOL:
+		case MTX_ENUM:
 		case MTX_INT:
 			printf("key %s, %i\n",key,(gint)data);
 			break;
 		default:
-			printf("Key %s isn't a type I can show you\n",key);
+			printf("Key %s is complex, ptr %p\n",key,data);
 			break;
 	}
 }
