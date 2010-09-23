@@ -792,9 +792,11 @@ close_binary:
 						{
 							if (find_mtx_page(tableID,&mtx_page))
 							{
-								/*printf("updating local ms2 chunk buffer\n");*/
+								printf("updating local ms2 chunk buffer\n");
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
+								printf("memcpy ok, trying chunk write\n");
 								chunk_write(canID,mtx_page,offset,count,buffer);
+								printf("chunk write submitted\n");
 							}
 						}
 					}
@@ -1061,7 +1063,7 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	guint j = 0;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
 	GString *output;
@@ -1107,7 +1109,7 @@ void socket_get_rtv_list(gint fd)
 	gint res = 0;
 	gint len = 0;
 	gchar * tmpbuf = NULL;
-	GData * object = NULL;
+	gconstpointer * object = NULL;
 
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
@@ -1366,7 +1368,7 @@ void *network_repair_thread(gpointer data)
 			host = args->network_host;
 			port = args->network_port;
 		}
-		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open host:port %s:%i\n"),host,port),FALSE,FALSE);
+		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
 		if (open_network(host,port))
 		{
 			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
@@ -1754,10 +1756,16 @@ close_control:
 					/*printf("Slave chunk update received\n");*/
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
-					continue;
 				}
 				else
-					continue;
+				{
+					/* Put in handlers here to pickup
+					   status messages and other stuff
+					   from master, i.e. burn notify, 
+					   closing, chat, etc
+					   */
+				}
+				continue;
 			case GET_CAN_ID:
 				/*				printf("get_canid block\n");*/
 				canID = (guint8)buf;

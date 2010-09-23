@@ -330,7 +330,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 			default:
 				break;
 		}
-		DATA_SET_FULL(&output->data,"data", (gpointer)data,g_free);
+		DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
 	}
 
 	/* Set it here otherwise there's a risk of a missed burn due to 
@@ -462,7 +462,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET_FULL(&output->data,"data", (gpointer)data, g_free);
+	DATA_SET_FULL(output->data,"data", (gpointer)data, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
@@ -500,7 +500,7 @@ void table_write(gint page, gint num_bytes, guint8 * data)
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET_FULL(&output->data,"data", (gpointer)data,g_free);
+	DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential

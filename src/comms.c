@@ -207,12 +207,6 @@ EXPORT void update_write_status(void *data)
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
 	}
-	if (mode == MTX_CHUNK_WRITE)
-	{
-		sent_data = (guint8 *)DATA_GET(output->data,"data");
-		if (sent_data)
-			g_free(sent_data);
-	}
 
 	if (output->queue_update)
 	{

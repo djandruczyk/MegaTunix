@@ -745,9 +745,9 @@ void mem_dealloc()
 	if (defaults)
 		g_list_foreach(defaults,(GFunc)g_free,NULL);
 	/* Free all global data and structures */
-	g_dataset_destroy(global_data);
+	//g_dataset_destroy(global_data);
 	g_free(global_data);
-	//g_dataset_foreach(global_data,datalist_dealloc,NULL);
+	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
 	if (dynamic_widgets)
@@ -954,7 +954,7 @@ void dealloc_message(Io_Message * message)
 		if (payload->data)
 		{
 			g_dataset_destroy(payload->data);
-			g_free(payload->data);
+			cleanup(payload->data);
 		}
                 cleanup(message->payload);
 	}

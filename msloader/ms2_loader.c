@@ -85,7 +85,6 @@ int debug = 3;
 4 = + the s19 file as parsed
 5 = + comments
 */
-gboolean check_status(gint );
 
 void do_ms2_load(gint port_fd, gint file_fd)
 {
@@ -200,6 +199,7 @@ gboolean wakeup_S12(gint port_fd)
 {
 	guchar c;
 	guchar prompt;
+	gboolean abort = FALSE;
 	gint res = 0;
 	int i;
 
@@ -221,8 +221,14 @@ gboolean wakeup_S12(gint port_fd)
 		}
 
 		g_usleep(LONG_DELAY);
-		if (check_status(port_fd))
+		if (check_status(port_fd,&abort))
 			break;
+		if (abort)
+		{
+			output("Serial Read failure, try unplugging\nand replugging your Serial adapter/cable\n",FALSE);
+			return FALSE;
+		}
+
 	}
 
 #ifndef __WIN32__
@@ -236,7 +242,7 @@ gboolean wakeup_S12(gint port_fd)
 	return TRUE;
 }
    
-gboolean check_status(gint port_fd)
+gboolean check_status(gint port_fd,gint *abort)
 {
 	guchar errorCode = 0;
 	guchar statusCode = 0;
@@ -245,6 +251,11 @@ gboolean check_status(gint port_fd)
 	gboolean retval = TRUE;
 
 	res = read(port_fd, &errorCode, 1);
+	if (res == -1)
+	{
+		*abort = TRUE;
+		return FALSE;
+	}
 	if (res != 1)
 		output("error reading errorCode\n",FALSE);
 	res = read(port_fd, &statusCode, 1);
@@ -342,6 +353,7 @@ gboolean check_status(gint port_fd)
 void sendPPAGE(gint port_fd, guint a, guchar erasing)
 {
 	guchar c;
+	gboolean abort = FALSE;
 	static guchar page = 0;
 	guchar command [4];
 	gint res = 0;
@@ -362,7 +374,7 @@ void sendPPAGE(gint port_fd, guint a, guchar erasing)
 			output(g_strdup_printf("TX: %02x %02x %02x %02x\n", command[0], command[1], command[2], command[3] ),TRUE);
 		}
 		g_usleep(LONG_DELAY);
-		check_status(port_fd);
+		check_status(port_fd,&abort);
 
 		c = C_ERASE_PAGE;
 		if (erasing) {
@@ -372,7 +384,7 @@ void sendPPAGE(gint port_fd, guint a, guchar erasing)
 				output(g_strdup_printf("sendPPAGE():(erasing) SHORT WRITE %i of 1",res),TRUE);
 			g_usleep(5*LONG_DELAY);
 			output(g_strdup_printf("Page 0x%02x erased...\n",page),TRUE);
-			check_status(port_fd);
+			check_status(port_fd,&abort);
 		}
 
 	}
@@ -381,6 +393,7 @@ void sendPPAGE(gint port_fd, guint a, guchar erasing)
 void send_block(gint port_fd, guint a, guchar *b, guint n)
 {
 	guchar command[4];
+	gboolean abort = FALSE;
 	guchar i;
 	guint res = 0;
 
@@ -420,12 +433,13 @@ void send_block(gint port_fd, guint a, guchar *b, guint n)
 	if (res != n)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
 	total_bytes += n;
-	check_status(port_fd);
+	check_status(port_fd,&abort);
 }
 
 void erase_S12(gint port_fd)
 {
 	guchar c;
+	gboolean abort = FALSE;
 	gint res = 0;
 
 	if (debug) {
@@ -437,7 +451,7 @@ void erase_S12(gint port_fd)
 		output(g_strdup_printf("erase_S12(): SHORT WRITE %i of 1",res),TRUE);
 	output( "Main Flash Erased...\n",FALSE);
 	g_usleep(5*LONG_DELAY);
-	check_status(port_fd);
+	check_status(port_fd,&abort);
 }
 void send_S12(gint port_fd, guint count)
 {
