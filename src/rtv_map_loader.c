@@ -385,11 +385,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 				g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
 			g_strfreev(vector);
 		}
-		//DATA_SET_FULL(object,"keys",g_strdupv(keys),g_strfreev);
+		/*DATA_SET_FULL(object,"keys",g_strdupv(keys),g_strfreev);*/
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_insert(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
-		printf("Storing obj ptr %p, for value %s\n",object,(gchar *)DATA_GET(object,"dlog_gui_name"));
 		g_ptr_array_add(rtv_map->rtv_list,object);
 		g_free(section);
 		g_strfreev(keys);

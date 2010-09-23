@@ -371,7 +371,7 @@ gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar
 				OBJ_SET(object,group->keys[i],GINT_TO_POINTER(tmpi));
 				if (strstr(group->keys[i], "temp_dep"))
 				{
-					OBJ_SET(object,"widget_temp",OBJ_GET(global_data,"temp_units"));
+					OBJ_SET(object,"widget_temp",DATA_GET(global_data,"temp_units"));
 				}
 				break;
 			case MTX_STRING:

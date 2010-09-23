@@ -140,16 +140,17 @@ void present_viewer_choices(void)
 		remove_list("viewables");
 	}
 
+	for (i=0;i<max_viewables;i++)
+	{
+		if (playback_mode)
+			list = g_list_prepend(list,(gpointer)g_ptr_array_index(log_info->log_list,i));
+		else
+			list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
+	}
 	if (playback_mode)
-	{
-		list = g_list_prepend(list,(gpointer)g_ptr_array_index(log_info->log_list,i));
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
-	}
 	else
-	{
-		list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
-	}
 
 	for (i=0;i<max_viewables;i++)
 	{
@@ -158,6 +159,7 @@ void present_viewer_choices(void)
 		tooltip = NULL;
 
 		object = g_list_nth_data(list,i);
+		printf("obj ptr %p\n",object);
 
 		if (playback_mode)
 			name = g_strdup(DATA_GET(object,"lview_name"));
@@ -166,6 +168,8 @@ void present_viewer_choices(void)
 			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
 			tooltip = g_strdup(DATA_GET(object,"tooltip"));
 		}
+
+		printf("name %s\n",name);
 
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
@@ -365,7 +369,7 @@ void populate_viewer()
 
 		being_viewed = (GBOOLEAN)DATA_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
-		if (g_hash_table_lookup(lv_data->traces,name)==NULL)
+		if (!(g_hash_table_lookup(lv_data->traces,name)))
 		{
 			if (being_viewed)	/* Marked viewable widget */
 			{
@@ -838,7 +842,7 @@ void draw_valtext(gboolean force_draw)
 		val_y = info_ctr + 1;
 
 		last_index = v_value->last_index;
-		array = OBJ_GET(v_value->object,v_value->data_source);
+		array = DATA_GET(v_value->object,v_value->data_source);
 		val = g_array_index(array,gfloat,last_index);
 		if (array->len > 1)
 			last_val = g_array_index(array,gfloat,last_index-1);
@@ -977,7 +981,7 @@ void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-			array = OBJ_GET(v_value->object,v_value->data_source);
+			array = DATA_GET(v_value->object,v_value->data_source);
 			len = array->len;
 			if (len == 0)	/* If empty */
 			{
@@ -1038,7 +1042,7 @@ void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-			array = OBJ_GET(v_value->object,v_value->data_source);
+			array = DATA_GET(v_value->object,v_value->data_source);
 			last_index = v_value->last_index;
 			if(last_index >= array->len)
 				return;
@@ -1092,7 +1096,7 @@ void trace_update(gboolean redraw_all)
 	for (i=0;i<g_list_length(lv_data->tlist);i++)
 	{
 		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-		array = OBJ_GET(v_value->object,v_value->data_source);
+		array = DATA_GET(v_value->object,v_value->data_source);
 		val = g_array_index(array,gfloat, array->len-1);
 
 		if (val > (v_value->max))

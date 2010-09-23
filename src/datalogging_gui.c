@@ -124,7 +124,6 @@ EXPORT void populate_dlog_choices_pf()
 	for (i=0;i<rtv_map->derived_total;i++)
 		list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 	list = g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
-	printf("laying out datalogging, obj ptrs following!\n");
 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
@@ -133,7 +132,6 @@ EXPORT void populate_dlog_choices_pf()
 		//object = g_ptr_array_index(rtv_map->rtv_list,i);
 		object = g_list_nth_data(list,i);
 		dlog_name = DATA_GET(object,"dlog_gui_name");
-		printf("object ptr %p, for %s\n",object,dlog_name);
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
@@ -145,12 +143,9 @@ EXPORT void populate_dlog_choices_pf()
 		 * of the buttons from elsewhere... 
 		 */
 		DATA_SET(object,"dlog_button",(gpointer)button);
-		printf("object ptr %p after binding button obj, for %s\n",object,dlog_name);
 
 		/* Bind object to the button */
 		OBJ_SET(button,"object",(gpointer)object);
-//		g_datalist_foreach(&object,dump_datalist,NULL);
-//		printf("\n\n");
 
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
@@ -168,14 +163,6 @@ EXPORT void populate_dlog_choices_pf()
 			k++;
 			j = 0;
 		} 
-		//object = g_list_nth_data(list,i);
-		/*
-		index = (gint)DATA_GET(object,"index");
-		printf("Index for this control %s is %i\n",dlog_name,index);
-		printf("orig %p, new %p\n",orig_object,object);
-		g_ptr_array_remove(rtv_map->rtv_list,orig_object);
-		g_ptr_array_add(rtv_map->rtv_list,object);
-		*/
 	}
 	g_list_free(list);
 	gtk_widget_show_all(vbox);
@@ -443,16 +430,15 @@ void dlog_deselect_all(void)
 		button = NULL;
 		object = g_ptr_array_index(rtv_map->rtv_list, i);
 		button = (GtkWidget *)DATA_GET(object,"dlog_button");
-		printf("object ptr %p, button ptr %p\n",object,button);
-//		printf("object data:\n");
-//		g_datalist_foreach(&object,dump_datalist,NULL);
 		if (GTK_IS_TOGGLE_BUTTON(button))
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+		/*
 		else
 		{
 			printf("bad object!\n");
 			g_dataset_foreach(&object,dump_datalist,NULL);
 		}
+		*/
 	}
 }
 

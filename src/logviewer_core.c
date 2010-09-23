@@ -239,14 +239,11 @@ read_again:
 		for (i=0;i<num_fields;i++)
 		{
 			array = NULL;
-			object = NULL;
-			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-			g_object_ref(object);
-			gtk_object_sink(GTK_OBJECT(object));
+			object = g_new0(gconstpointer, 1);
 			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-			OBJ_SET(object,"data_array",(gpointer)array);
+			DATA_SET(object,"data_array",(gpointer)array);
 			g_free(DATA_GET(object,"lview_name"));
-			OBJ_SET(object,"lview_name",g_strdup(g_strstrip(fields[i])));
+			DATA_SET(object,"lview_name",g_strdup(g_strstrip(fields[i])));
 			g_ptr_array_add(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
@@ -297,9 +294,9 @@ void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		OBJ_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
+		DATA_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
 		tmpi = ceil(upper) + 1.0;
-		OBJ_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
+		DATA_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
 
 	}
 }
@@ -363,7 +360,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 					vector = g_strsplit(data[i],".",-1);
 					precision = strlen(vector[1]);
 					g_strfreev(vector);
-					OBJ_SET(object,"precision",GINT_TO_POINTER(precision));
+					DATA_SET(object,"precision",GINT_TO_POINTER(precision));
 				}
 			}
 
