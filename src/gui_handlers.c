@@ -2121,19 +2121,15 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean temp_dep = FALSE;
 	gboolean use_color = FALSE;
 	gboolean changed = FALSE;
+	gboolean force_color_update = FALSE;
+	gboolean valid = FALSE;
+	gboolean cur_state = FALSE;
+	gboolean new_state = FALSE;
 	guint i = 0;
 	gint j = 0;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
-	DataSize size = 0;
-	gint canID = 0;
-	gdouble value = 0.0;
-	gboolean valid = FALSE;
-	guchar t_bitval = -1;
-	guchar bitval = -1;
-	guchar bitshift = -1;
-	guchar bitmask = -1;
 	gint table_num = -1;
 	gint base = -1;
 	gint precision = -1;
@@ -2141,11 +2137,18 @@ void update_widget(gpointer object, gpointer user_data)
 	gint oddfire_bit_offset = 0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
-	gfloat scaler = 0.0;
-	gboolean cur_state = FALSE;
-	gboolean new_state = FALSE;
 	gint algo = 0;
 	gint total = 0;
+	gint canID = 0;
+	gfloat scaler = 0.0;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
+	gdouble spin_value = 0.0; 
+	gdouble value = 0.0;
+	guchar t_bitval = -1;
+	guchar bitval = -1;
+	guchar bitshift = -1;
+	guchar bitmask = -1;
 	gchar * range = NULL;
 	gchar * toggle_labels = NULL;
 	gchar * toggle_groups = NULL;
@@ -2159,13 +2162,11 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar * upper = NULL;
 	gchar * dl_conv = NULL;
 	gchar * ul_conv = NULL;
+	DataSize size = 0;
 	GtkWidget *tmpwidget = NULL;
-	gfloat tmpf = 0.0;
-	gfloat tmpf2 = 0.0;
 	void *eval = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
-	gdouble spin_value = 0.0; 
 	GdkColor color;
 	extern Firmware_Details *firmware;
 	extern gint *algorithm;
@@ -2225,6 +2226,7 @@ void update_widget(gpointer object, gpointer user_data)
 	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	use_color = (GBOOLEAN)OBJ_GET(widget,"use_color");
+	force_color_update = (GBOOLEAN)OBJ_GET(widget,"force_color_update");
 	if (use_color)
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -2328,7 +2330,7 @@ void update_widget(gpointer object, gpointer user_data)
 				}
 				else
 				{
-					if ((changed) || (value == 0))
+					if ((changed) || (value == 0) || (force_color_update))
 					{
 						color = get_colors_from_hue(((gfloat)(get_ecu_data(canID,page,offset,size)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
 						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	

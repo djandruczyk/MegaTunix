@@ -6,4 +6,4 @@ DRIVE=L
 
 SUFFIX=`grep SUFFIX "${GITDIR}"/MegaTunix.iss |cut -f2 -d= |tr -d [:cntrl:]`
 wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe "${DRIVE}":/"${ISS_FILE}"
-mv "${GITDIR}"/Output/setup.exe "${GITDIR}"/../MTX_Builds/Output/windows/megatunix-"${SUFFIX}"-setup.exe
+mv "${GITDIR}"/Output/setup.exe "${GITDIR}"/../MTX_Builds/Output/Windows/megatunix-"${SUFFIX}"-setup.exe
