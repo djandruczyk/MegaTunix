@@ -127,7 +127,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
 	if (priv->value_font)
 		g_free(priv->value_font);
 	if (priv->xmlfunc_array)
-		g_array_unref(priv->xmlfunc_array);
+		g_array_free(priv->xmlfunc_array,TRUE);
 	if (priv->xmlfunc_hash)
 		g_hash_table_destroy(priv->xmlfunc_hash);
 	if (priv->xml_filename)

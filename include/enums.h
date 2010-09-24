@@ -308,7 +308,7 @@ typedef enum
 
 typedef enum
 {
-	GROUP_SET_COLOR=0x01,
+	GROUP_SET_COLOR=0x01
 }RemoteAction;
 
 #endif
