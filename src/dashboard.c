@@ -125,8 +125,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	/* Store global info about this dash */
 	prefix = g_strdup_printf("dash_%i",(GINT)data);
 	key = g_strdup_printf("%s_name",prefix);
-	g_free(DATA_GET(global_data,key));
-	DATA_SET(global_data,key, g_strdup(filename));
+	DATA_SET_FULL(global_data,key, g_strdup(filename),g_free);
 	g_free(key);
 	/* retrieve coord info from global store */
 	key = g_strdup_printf("%s_x_origin",prefix);
@@ -1127,13 +1126,11 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 		gtk_label_set_text(GTK_LABEL(label),"Choose a Dashboard File");
 		if ((GINT)data == 1)
 		{
-			g_free(DATA_GET(global_data,"dash_1_name"));
 			DATA_SET(global_data,"dash_1_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),FALSE);
 		}
 		if ((GINT)data == 2)
 		{
-			g_free(DATA_GET(global_data,"dash_2_name"));
 			DATA_SET(global_data,"dash_2_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),FALSE);
 		}
