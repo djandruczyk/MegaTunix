@@ -189,7 +189,6 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			cleanup(DATA_GET(global_data,"dash_1_name"));
 			DATA_SET_FULL(global_data,"dash_1_name",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
@@ -201,7 +200,6 @@ gboolean read_config(void)
 			DATA_SET_FULL(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),g_free);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			cleanup(DATA_GET(global_data,"dash_2_name"));
 			DATA_SET_FULL(global_data,"dash_2_name",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
