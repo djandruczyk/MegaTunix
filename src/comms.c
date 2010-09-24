@@ -307,10 +307,10 @@ void queue_burn_ecu_flash(gint page)
 		return;
 
 	output = initialize_outputdata();
-	OBJ_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
-	OBJ_SET(output->data,"page", GINT_TO_POINTER(page));
-	OBJ_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	OBJ_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+	DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
+	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
+	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
 	last_page = page;
 }
