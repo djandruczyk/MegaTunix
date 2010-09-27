@@ -27,8 +27,8 @@
 #include <timeout_handlers.h>
 
 static gboolean ltc_visible = FALSE;
+extern gconstpointer *global_data;
 
-GHashTable *lookuptables = NULL;
 
 enum
 {
@@ -86,6 +86,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	GIOStatus status;
 	GIOChannel *iochannel;
 	gboolean done = FALSE;
+	GHashTable *lookuptables = NULL;
 	gchar * str = NULL;
 	gchar * tmp = NULL;
 	gchar * end = NULL;
@@ -109,7 +110,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 			done = TRUE;
 		else
 		{
-		/*	str = g_strchug(g_strdup(a_line->str));*/
+			/*	str = g_strchug(g_strdup(a_line->str));*/
 			str = g_strchug(a_line->str);
 			if (g_str_has_prefix(str,"DB"))
 			{
@@ -131,10 +132,14 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	lookuptable->array = g_memdup(&tmparray,i*sizeof(gint));
 	lookuptable->filename = g_strdup(vector[g_strv_length(vector)-1]);
 	g_strfreev(vector);
+	lookuptables = DATA_GET(global_data,"lookuptables");
 	if (!lookuptables)
+	{
 		lookuptables = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_lookuptable);
-	g_hash_table_insert(lookuptables,g_strdup(table_name),lookuptable);
-	/*g_hash_table_foreach(lookuptables,dump_lookuptables,NULL);*/
+		DATA_SET_FULL(global_data,"lookuptables",lookuptables,g_hash_table_destroy);
+	}
+	g_hash_table_replace(DATA_GET(global_data,"lookuptables"),g_strdup(table_name),lookuptable);
+	/*g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),dump_lookuptables,NULL);*/
 
 	return TRUE;
 }
@@ -163,7 +168,6 @@ gint reverse_lookup(gconstpointer *object, gint value)
 	gint len = 0;
 	gint weight[255];
 
-	extern GHashTable *lookuptables;
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
@@ -177,9 +181,9 @@ gint reverse_lookup(gconstpointer *object, gint value)
 	if (dep_obj)
 		state = check_dependancies(dep_obj);
 	if (state)
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 
 	array = lookuptable->array;
 	len=255;
@@ -245,7 +249,6 @@ gint reverse_lookup_obj(GObject *object, gint value)
 	gint len = 0;
 	gint weight[255];
 
-	extern GHashTable *lookuptables;
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
@@ -259,9 +262,9 @@ gint reverse_lookup_obj(GObject *object, gint value)
 	if (dep_obj)
 		state = check_dependancies(dep_obj);
 	if (state)
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 
 	array = lookuptable->array;
 	len=255;
@@ -312,11 +315,10 @@ gint direct_reverse_lookup(gchar *table, gint value)
 	gint len = 0;
 	gint weight[255];
 
-	extern GHashTable *lookuptables;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
 
-	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	if (!lookuptable)
 		return value;
 	array = lookuptable->array;
@@ -369,7 +371,6 @@ gint direct_reverse_lookup(gchar *table, gint value)
  */
 gfloat lookup_data(gconstpointer *object, gint offset)
 {
-	extern GHashTable *lookuptables;
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
@@ -394,12 +395,12 @@ gfloat lookup_data(gconstpointer *object, gint offset)
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	}
 
 	if (!lookuptable)
@@ -420,7 +421,6 @@ gfloat lookup_data(gconstpointer *object, gint offset)
  */
 gfloat lookup_data_obj(GObject *object, gint offset)
 {
-	extern GHashTable *lookuptables;
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
@@ -436,12 +436,12 @@ gfloat lookup_data_obj(GObject *object, gint offset)
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	}
 
 	if (!lookuptable)
@@ -456,7 +456,6 @@ gfloat lookup_data_obj(GObject *object, gint offset)
 
 gfloat direct_lookup_data(gchar *table, gint offset)
 {
-	extern GHashTable *lookuptables;
 	LookupTable *lookuptable = NULL;
 
 	if (!table)
@@ -465,7 +464,7 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 		assert(table);
 	}
 
-	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	if (!lookuptable)
 	{
 		printf(_("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"),table);
@@ -648,11 +647,9 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gchar ** vector = NULL;
 	gboolean restart_tickler = FALSE;
 	extern gint realtime_id;
-	extern GHashTable *lookuptables;
 	extern GAsyncQueue *io_data_queue;
 	extern Firmware_Details *firmware;
 	gint count = 0;
-	LookupTable *lookuptable = NULL;
 
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
@@ -679,12 +676,6 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		}
 
 	}
-	lookuptable = (LookupTable *)g_hash_table_lookup(lookuptables,int_name);
-	if (!lookuptable)
-		printf(_("No lookuptable found! expect a crash!!\n"));
-	g_free(lookuptable->array); /* Free the old one */
-	g_free(lookuptable->filename); /* Free the old one */
-	g_free(lookuptable); /* Free the old one */
 	get_table(int_name,new_text,NULL); /* Load the new one in it's place */
 	gtk_list_store_set(GTK_LIST_STORE(model),&iter, FILENAME_COL, new_text,-1);
 	if (restart_tickler)
@@ -693,7 +684,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		cfgfile = cfg_open_file(firmware->profile_filename);
 		if (!cfgfile)
 			return FALSE;
-		g_hash_table_foreach(lookuptables,update_lt_config,cfgfile);
+		g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
 	if (g_strrstr(firmware->profile_filename,".MegaTunix"))
 		cfg_write_file(cfgfile, firmware->profile_filename);
 	else

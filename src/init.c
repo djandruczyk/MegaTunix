@@ -621,7 +621,6 @@ void mem_dealloc()
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern GHashTable *lookuptables;
 	extern Rtv_Map *rtv_map;
 	extern Firmware_Details *firmware;
 	extern GStaticMutex serio_mutex;
@@ -710,8 +709,6 @@ void mem_dealloc()
 		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
 	}
-	if (lookuptables)
-		g_hash_table_destroy(lookuptables);
 	if(widget_group_states)
 		g_hash_table_destroy(widget_group_states);
 	if(sources_hash)
@@ -1120,32 +1117,17 @@ void dealloc_table_params(Table_Params * table_params)
 	if(table_params->z_dl_eval)
 		evaluator_destroy(table_params->z_dl_eval);
 	if(table_params->x_object)
-		dealloc_dep_object(table_params->x_object);
+		g_object_unref(table_params->x_object);
 	if(table_params->y_object)
-		dealloc_dep_object(table_params->y_object);
+		g_object_unref(table_params->y_object);
 	if(table_params->z_object)
-		dealloc_dep_object(table_params->z_object);
+		g_object_unref(table_params->z_object);
 	g_array_free(table_params->table,TRUE);
 
 	g_free(table_params);
 	return;
 }
 
-
-/*!
- \brief dealloc_dep_object() deallocates the dependancy object used 
- for dependancy management
- \param object (GData *) pointer to object to deallocate
- */
-void dealloc_dep_object(gconstpointer *object)
-{
-	gchar * deps = NULL;
-
-	deps = DATA_GET(object,"deps");
-	cleanup(deps);
-	g_dataset_destroy(object);
-	return;
-}
 
 
 /*!

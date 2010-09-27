@@ -378,5 +378,5 @@ void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,gchar * section,
 		g_strfreev(vector);
 
 	}
-	OBJ_SET(object,"dep_object",(gpointer)dep_obj);
+	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }

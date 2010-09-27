@@ -137,7 +137,6 @@ GtkTreeModel * create_model(void)
 		else
 			upper = get_extreme_from_size((DataSize)DATA_GET(object,"size"),UPPER);
 		range = g_strdup_printf("%i-%i",lower,upper);
-
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
 				COL_OBJECT, object,
@@ -300,7 +299,7 @@ void cell_edited(GtkCellRendererText *cell,
 	ulimit_offset = (GINT) OBJ_GET(model,"ulimit_offset");
 
 	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter, COL_OBJECT, object, -1);
+	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
 	rt_offset = (GINT) DATA_GET(object,"offset");
 	precision = (GINT) DATA_GET(object,"precision");
@@ -466,7 +465,7 @@ void update_model_from_view(GtkWidget * widget)
 	looptest = TRUE;
 	while (looptest)
 	{
-		gtk_tree_model_get (model, &iter, COL_OBJECT, object, -1);
+		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 		if (offset == (GINT)DATA_GET(object,"offset"))
 		{
 			precision =(GINT)DATA_GET(object,"precision");

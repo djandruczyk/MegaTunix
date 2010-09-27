@@ -79,11 +79,15 @@ EXPORT void load_sliders_pf()
 	rt_sliders = DATA_GET(global_data,"rt_sliders");
 	ww_sliders = DATA_GET(global_data,"ww_sliders");
 	if (!rt_sliders)
+	{
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
+		DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
+	}
 	if (!ww_sliders)
+	{
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
+		DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
+	}
 
 
 	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
@@ -114,7 +118,7 @@ EXPORT void load_sliders_pf()
 	return;
 }
 
-gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash,gint table_num, TabIdent tab_id)
+gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	xmlNode *cur_node = NULL;
 
@@ -383,17 +387,25 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	ww_sliders = DATA_GET(global_data,"ww_sliders");
 	enr_sliders = DATA_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
+	{
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
+		DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
+	}
 	if (!aw_sliders)
+	{
 		aw_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
+		DATA_SET_FULL(global_data,"aw_sliders",aw_sliders,g_hash_table_destroy);
+	}
 	if (!ww_sliders)
+	{
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
+		DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
+	}
 	if (!enr_sliders)
+	{
 		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-	DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(global_data,"aw_sliders",aw_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
-	DATA_SET_FULL(global_data,"enr_sliders",enr_sliders,g_hash_table_destroy);
+		DATA_SET_FULL(global_data,"enr_sliders",enr_sliders,g_hash_table_destroy);
+	}
 	
 	if  (!(object))
 	{
