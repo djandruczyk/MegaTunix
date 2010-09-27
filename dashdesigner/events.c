@@ -863,7 +863,7 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 }
 
 
-gboolean dummy(GtkWidget *widget, gpointer data)
+EXPORT gboolean dummy(GtkWidget *widget, gpointer data)
 {
 	return TRUE;
 }
