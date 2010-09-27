@@ -267,7 +267,7 @@ trypop:
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
-							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+							gtk_label_set_markup(GTK_LABEL(widget),w_update->msg);
 							gdk_threads_leave();
 							break;
 						case MTX_TITLE:

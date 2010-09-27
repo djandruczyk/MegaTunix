@@ -66,7 +66,6 @@ void start_tickler(TicklerType type)
 			{
 				flush_rt_arrays();
 
-				//realtime_id = g_timeout_add(serial_params->read_wait,(GSourceFunc)signal_read_rtvars,NULL);
 				realtime_id = g_thread_create(signal_read_rtvars_thread,
 						NULL, /* Thread args */
 						TRUE, /* Joinable */
@@ -158,7 +157,6 @@ void stop_tickler(TicklerType type)
 		case RTV_TICKLER:
 			if (realtime_id)
 			{
-//				g_source_remove(realtime_id);
 				g_cond_signal(rtv_thread_cond);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE,FALSE);
 				realtime_id = NULL;

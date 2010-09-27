@@ -448,14 +448,13 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	drawing_area = gtk_drawing_area_new();
+	gl_config = get_gl_config();
+	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+			TRUE, GDK_GL_RGBA_TYPE);
 
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
 	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
-
-	gl_config = get_gl_config();
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
-			TRUE, GDK_GL_RGBA_TYPE);
 
 	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
 
@@ -465,6 +464,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_KEY_PRESS_MASK      |
 			GDK_KEY_RELEASE_MASK    |
 			GDK_VISIBILITY_NOTIFY_MASK);
+
 
 	/* Connect signal handlers to the drawing area */
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",

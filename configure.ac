@@ -6,8 +6,8 @@ AC_CONFIG_MACRO_DIR([m4])
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=22
-MTX_VER_SUFFIX=
+MTX_MICRO_VERSION=23
+MTX_VER_SUFFIX=rc1
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
@@ -72,6 +72,7 @@ AC_SUBST(MTXLOCALEDIR)
 dnl Checks for header files.
 dnl AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+AC_CHECK_FUNCS(bzero memset)
 dnl check paths for necessary files
 
 dnl MACRO definition to determine if running GTK>2.12 or not for use of cairo
@@ -152,9 +153,11 @@ if test "$cross_compiling" = yes ; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	WIN32_RESOURCES="resources.o "
 	if test "$enable_debug" = yes ; then
-		EXTRA_LIBS=" -lgw32c -luuid -lole32 -lws2_32"
+		dnl EXTRA_LIBS=" -lgw32c -luuid -lole32 -lws2_32"
+		EXTRA_LIBS=" -luuid -lole32 -lws2_32"
 	else
-		EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32 -lws2_32"
+		dnl EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32 -lws2_32"
+		EXTRA_LIBS=" -mwindows -luuid -lole32 -lws2_32"
 	fi
 else
 	EXTRA_LIBS=" -lm"

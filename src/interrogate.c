@@ -1369,7 +1369,7 @@ void interrogate_error(gchar *text, gint num)
 /* !brief updates the interrogation gui with the text revision, signature
  * and ecu numerical revision
  */
-void update_interrogation_gui_pf()
+EXPORT void update_interrogation_gui_pf()
 {
 	GtkWidget *widget = NULL;
 	gfloat min = 0.0;

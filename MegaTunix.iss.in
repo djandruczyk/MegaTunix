@@ -21,6 +21,7 @@ LicenseFile=.\LICENSE
 InfoBeforeFile=.\WIN_NOTES.txt
 
 [Files]
+Source: "z:\home\dave\git\win-libs\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\git\MegaTunix\src\megatunix.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\git\MegaTunix\widgets\gaugedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
 Source: "z:\home\dave\git\MegaTunix\widgets\piedemo.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion

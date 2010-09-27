@@ -112,7 +112,7 @@ void win32_create_mtx_lock(void)
 		gtk_widget_show_all(dialog);
 		gtk_main();
 		if (global_data)
-			g_datalist_clear(global_data);
+			g_dataset_destroy(global_data);
 		exit(-1);
 	}
 	return;

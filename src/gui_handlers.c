@@ -2030,7 +2030,7 @@ EXPORT void update_ve_const_pf()
 			return;
 		if (!firmware->page_params[page]->dl_by_default)
 			continue;
-		thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Updating Controls on Page %i"),page));
+		thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<big><b>Updating Controls on Page %i</b></big>"),page));
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
 			if ((leaving) || (!firmware))
@@ -2044,7 +2044,7 @@ EXPORT void update_ve_const_pf()
 		firmware->table_params[i]->color_update = FALSE;
 
 	paused_handlers = FALSE;
-	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
+//	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
 	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 	return;
