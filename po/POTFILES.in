@@ -163,7 +163,9 @@ dashdesigner/loadsave.c
 dashdesigner/main.c
 dashdesigner/rtv_parser.c
 dashdesigner/xml.c
-dashdesigner/dashdesigner.glade
+dashdesigner/main.glade
+dashdesigner/preview.glade
+dashdesigner/propeditor.glade
 gaugedesigner/alerts.c
 gaugedesigner/events.c
 gaugedesigner/gd_init.c
@@ -174,7 +176,13 @@ gaugedesigner/polygons.c
 gaugedesigner/tblocks.c
 gaugedesigner/tgroups.c
 gaugedesigner/warnings.c
+gaugedesigner/a_range.glade
 gaugedesigner/gaugedesigner.glade
+gaugedesigner/main.glade
+gaugedesigner/polygon.glade
+gaugedesigner/tblock.glade
+gaugedesigner/tgroup.glade
+gaugedesigner/w_range.glade
 widgets/apifix.c
 widgets/curve.c
 widgets/curve-demo.c
