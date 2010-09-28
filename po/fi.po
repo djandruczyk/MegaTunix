@@ -6110,8 +6110,8 @@ msgid "Temperature"
 msgstr "Lämpötila"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:1
-msgid "\" Dcycle\\" is the injector Duty cycle."
-msgstr "\"Dcycle \\" on injektorin Käyttömäärä."
+msgid "\" Dcycle\" is the injector Duty cycle."
+msgstr "\"Dcycle \" on injektorin Käyttömäärä."
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:2
 msgid ""
@@ -6198,11 +6198,11 @@ msgstr "\"BSPOT3\" on yksi kolmesta tyhjä paikoista palautetaan runtime muuttuj
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:12
 msgid ""
-"\"BSPOT\\" is one of three blank spots returned in the runtime variables "
+"\"BSPOT\" is one of three blank spots returned in the runtime variables "
 "for standard MegaSquirt ECUs. Some of the less known MS variants use these "
 "to communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
-msgstr "\"BSPOT \\" on yksi kolmesta tyhjä paikoista palautetaan runtime muuttujien standardin MegaSquirt ecua. Jotkut vähemmän tunnetut MS muunnelmat käyttävät näitä toimittamaan takaisin lisätietoja. Nämä ovat loggable juuri näistä syistä. Yksiköt ovat 0-255, päätöslauselma 1."
+msgstr "\"BSPOT \" on yksi kolmesta tyhjä paikoista palautetaan runtime muuttujien standardin MegaSquirt ecua. Jotkut vähemmän tunnetut MS muunnelmat käyttävät näitä toimittamaan takaisin lisätietoja. Nämä ovat loggable juuri näistä syistä. Yksiköt ovat 0-255, päätöslauselma 1."
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:13 RealtimeMaps/DT-Std.rtv_map.in.h:9
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:10
@@ -6249,8 +6249,8 @@ msgstr "\"EGOcorr\" on pakokaasujen Korjauskerroin. Tämä ilmaistaan prosenttei
 msgid ""
 "\"EngineBits\" is a bitfield containing information such as cranking/"
 "running, accel enrich, decel mode and warmup enrichment.  It require "
-"decoding, use the information in unions.h for the \\"engine\\" union."
-msgstr "\"EngineBits\" on bitfield sisältää tietoja, kuten cranking / juoksu, Accel rikastuttaa, decel tila ja WarmUp etu. Se edellyttää dekoodaus käyttää tietoja unions.h varten \ \"moottori \\" liitto."
+"decoding, use the information in unions.h for the \"engine\" union."
+msgstr "\"EngineBits\" on bitfield sisältää tietoja, kuten cranking / juoksu, Accel rikastuttaa, decel tila ja WarmUp etu. Se edellyttää dekoodaus käyttää tietoja unions.h varten \"moottori \" liitto."
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:18 RealtimeMaps/DT-Std.rtv_map.in.h:16
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:21
@@ -6399,9 +6399,9 @@ msgstr "\"TPS volttia\" on lukemisen asento anturi muuntaa volttia. Range on 0-5
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:51
 #: RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in.h:51
 msgid ""
-"\"TPSaccel\\" is the amount of Acceleration enrichment being dispensed. "
+"\"TPSaccel\" is the amount of Acceleration enrichment being dispensed. "
 "Units are in milliseconds x10, so 10 ms shows upa as 100 in the log"
-msgstr "\"TPSaccel \\" on määrä Acceleration edun valumisen. Yksiköt millisekunteina x10, niin 10 ms osoittaa UPA on 100 log"
+msgstr "\"TPSaccel \" on määrä Acceleration edun valumisen. Yksiköt millisekunteina x10, niin 10 ms osoittaa UPA on 100 log"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:38
 msgid ""
@@ -6665,15 +6665,15 @@ msgstr "\"AFR\" Onko lentopolttonesteille suhde moottorin käydessä. Tämä on 
 
 #: RealtimeMaps/DT-Std.rtv_map.in.h:12
 msgid ""
-"\"DC 1\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 1\" is the injector Duty cycle for injectors connected to injector "
 "channel 1."
-msgstr "\"DC 1 \\" on injektorin Käyttömäärä varten suonensisäisesti kytketty suutin kanava 1."
+msgstr "\"DC 1\" on injektorin Käyttömäärä varten suonensisäisesti kytketty suutin kanava 1."
 
 #: RealtimeMaps/DT-Std.rtv_map.in.h:13
 msgid ""
-"\"DC 2\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 2\" is the injector Duty cycle for injectors connected to injector "
 "channel 2."
-msgstr "\"DC 2 \\" on injektorin Käyttömäärä varten suonensisäisesti kytketty suutin kanava 2."
+msgstr "\"DC 2\" on injektorin Käyttömäärä varten suonensisäisesti kytketty suutin kanava 2."
 
 #: RealtimeMaps/DT-Std.rtv_map.in.h:18
 msgid "\"IdleDC\" is the duty cycle for the PWM Idle control "

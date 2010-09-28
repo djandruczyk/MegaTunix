@@ -332,8 +332,8 @@ msgid "_Engine Vitals"
 msgstr "Vitales del Motor"
 
 #: BnG-Std.rtv_map.in.h:1
-msgid "\" Dcycle\\" is the injector Duty cycle."
-msgstr "\"Dcycle \\" es el ciclo de inyección de impuestos."
+msgid "\" Dcycle\" is the injector Duty cycle."
+msgstr "\"Dcycle \" es el ciclo de inyección de impuestos."
 
 #: BnG-Std.rtv_map.in.h:2
 msgid ""
@@ -448,12 +448,12 @@ msgstr ""
 
 #: BnG-Std.rtv_map.in.h:12
 msgid ""
-"\"BSPOT\\" is one of three blank spots returned in the runtime variables "
+"\"BSPOT\" is one of three blank spots returned in the runtime variables "
 "for standard MegaSquirt ECUs. Some of the less known MS variants use these "
 "to communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
 msgstr ""
-"\"BSPOT \\" es uno de los tres puntos en blanco regresó en las variables de "
+"\"BSPOT \" es uno de los tres puntos en blanco regresó en las variables de "
 "tiempo de ejecución para el estándar de ecus MegaSquirt. Algunas de las "
 "variantes menos conocidas de MS utilizarlos para comunicarse de nuevo datos "
 "adicionales. Estos son sólo para este loggable motivos. Las unidades son 0-"
@@ -517,12 +517,12 @@ msgstr ""
 msgid ""
 "\"EngineBits\" is a bitfield containing information such as cranking/"
 "running, accel enrich, decel mode and warmup enrichment.  It require "
-"decoding, use the information in unions.h for the \\"engine\\" union."
+"decoding, use the information in unions.h for the \"engine\" union."
 msgstr ""
 "\"EngineBits\" es un campo de bits que contienen información como arranque / "
 "funcionamiento, enriquecer aceleración, desaceleración y el enriquecimiento "
 "modo de calentamiento. Se requieren decodificación, utilizar la información "
-"en unions.h para el \ \ engine \"sindicato."
+"en unions.h para el \"engine\" sindicato."
 
 #: BnG-Std.rtv_map.in.h:18 DT-Std.rtv_map.in.h:16
 #: MSnS-Extra-029x.rtv_map.in.h:21 MSnS-Extra-HR-011d.rtv_map.in.h:21
@@ -708,7 +708,7 @@ msgstr ""
 #: MSnS-Extra-029x.rtv_map.in.h:51 MSnS-Extra-HR-011d.rtv_map.in.h:51
 #: MSnS-Extra-HR-029x.rtv_map.in.h:51
 msgid ""
-"\"TPSaccel\\" is the amount of Acceleration enrichment being dispensed. "
+"\"TPSaccel\" is the amount of Acceleration enrichment being dispensed. "
 "Units are in milliseconds x10, so 10 ms shows upa as 100 in the log"
 msgstr ""
 "\"TPSaccel\" es la cantidad de enriquecimiento de aceleración de ser "
@@ -1125,18 +1125,18 @@ msgstr ""
 
 #: DT-Std.rtv_map.in.h:12
 msgid ""
-"\"DC 1\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 1\" is the injector Duty cycle for injectors connected to injector "
 "channel 1."
 msgstr ""
-"\"DC 1 \\" es el ciclo de inyector para inyectores de servicio conectado al "
+"\"DC 1\" es el ciclo de inyector para inyectores de servicio conectado al "
 "canal 1 inyector."
 
 #: DT-Std.rtv_map.in.h:13
 msgid ""
-"\"DC 2\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 2\" is the injector Duty cycle for injectors connected to injector "
 "channel 2."
 msgstr ""
-"\"DC 2 \\" es el ciclo de inyector para inyectores de servicio conectado al "
+"\"DC 2\" es el ciclo de inyector para inyectores de servicio conectado al "
 "canal 1 inyector."
 
 #: DT-Std.rtv_map.in.h:18
@@ -7447,7 +7447,7 @@ msgid ""
 "11\n Trig return pos A: 16\n Trig pos B: 29\n Trig return pos B: 34\n "
 "NGC Wheel set to NGC\nSpark Settings:\n Trigger Angle: 62\n To run a V8 "
 "or V6, these settings may have to be modified."
-msgstr "Para utilizar la rueda de NGC neón, NGC Seleccionar y utilizar estos ajustes en el decodificador de la rueda: \ n rueda de dientes descodificadores: 36 \ n Falta de dientes: -2 \ n Trigonometría pos A: 11 \ n retorno Trigonometría pos A: 16 \ n Trigonometría pos B: 29 \ n Trigonometría pos de retorno B: 34 \ n NGC rueda en su configuración de NGC nSpark \: \ n ángulo de disparo: 62 \ n Para ejecutar un V8 o V6, estos valores pueden tener que ser modificada."
+msgstr "Para utilizar la rueda de NGC neón, NGC Seleccionar y utilizar estos ajustes en el decodificador de la rueda: \n rueda de dientes descodificadores: 36 \n Falta de dientes: -2 \n Trigonometría pos A: 11 \n retorno Trigonometría pos A: 16 \n Trigonometría pos B: 29 \n Trigonometría pos de retorno B: 34 \n NGC rueda en su configuración de NGC nSpark \n ángulo de disparo: 62 \n Para ejecutar un V8 o V6, estos valores pueden tener que ser modificada."
 
 #: MSnS-Extra-029x.rtv_map.in.h:9 MSnS-Extra-HR-011d.rtv_map.in.h:9
 #: MSnS-Extra-HR-029x.rtv_map.in.h:9
@@ -13348,37 +13348,43 @@ msgstr "Calentamiento Papeleras enriquecimiento (%)"
 
 #: Gui/enrichments.glade:1175
 msgid "EGO Active RPM\n"
-msgstr "EGO Active RPM"
+msgstr "EGO Active RPM\n"
 
 #: Gui/enrichments.glade:1204
 msgid ""
 "EGO Active Temp\n"
-"(deg F.)"
-msgstr "EGO Active Temp (° F)"
+"(deg F)"
+msgstr "EGO Active Temp\n"
+"(° F)"
 
 #: Gui/enrichments.glade:1309
 msgid ""
 "EGO Switching\n"
 "Voltage"
-msgstr "EGO Voltaje de la conmutación"
+msgstr ""
+"EGO Voltaje de\n"
+"la conmutación"
 
 #: Gui/enrichments.glade:1338
 msgid ""
 "EGO Step\n"
 "(Percent)"
-msgstr "Paso EGO (Porcentaje)"
+msgstr "Paso EGO\n"
+"(Porcentaje)"
 
 #: Gui/enrichments.glade:1443
 msgid ""
 "# of Ignition Events\n"
 "Between Steps"
-msgstr "# De eventos de encendido Entre Pasos"
+msgstr "# De eventos de\n"
+"encendido Entre Pasos"
 
 #: Gui/enrichments.glade:1472
 msgid ""
 "EGO +/- Limit\n"
 "(Percent)"
-msgstr "EGO + / - Límite (Porcentaje)"
+msgstr "EGO + / - Límite\n"
+"(Porcentaje)"
 
 #: Gui/enrichments.glade:1570 Gui/msns-e-ego.glade:1432
 msgid "Exhaust O<sub>2</sub> Feedback Settings"
@@ -13389,27 +13395,37 @@ msgstr "O Escape <sub>2</sub> votos Configuración"
 msgid ""
 "Accel Enrich\n"
 "Duration (sec)"
-msgstr "Enriquecimiento por Aceleracion"
+msgstr ""
+"Enriquecimiento\n"
+"por Aceleracion"
 
 #: Gui/enrichments.glade:1654
 msgid ""
-"TPS Trigger Threshold \n"
+"TPS Trigger Threshold\n"
 "(V/sec)"
-msgstr "TPS umbral de disparo (V / s)"
+msgstr ""
+"TPS umbral de disparo\n"
+"(V / s)"
 
 #: Gui/enrichments.glade:1759
 #, fuzzy
 msgid ""
 "Cold Accel Enrich\n"
 "Add-on (ms)"
-msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
+msgstr ""
+"Enriquecimiento en\n"
+"milisegundos por\n"
+"Aceleracion en Frio"
 
 #: Gui/enrichments.glade:1788
 #, fuzzy
 msgid ""
 "Cold Accel Enrich\n"
 "Multiplier (%)"
-msgstr "Enriquecimiento en milisegundos por Aceleracion en Frio"
+msgstr ""
+"Enriquecimiento en\n"
+"milisegundos por Aceleracion\n"
+"en Frio"
 
 #: Gui/enrichments.glade:1911
 #, fuzzy
@@ -14381,7 +14397,7 @@ msgstr "Ajustes mapDOT"
 
 #: Gui/ms2-accel.glade:2245 Gui/ms2-xtau.glade:1495
 msgid "RPM\n"
-msgstr "RPM"
+msgstr "RPM\n"
 
 #: Gui/ms2-accel.glade:2386 Gui/ms2-xtau.glade:1636
 msgid "<small> </small>"
@@ -20655,23 +20671,23 @@ msgstr "2D Table Editor del Grupo"
 #: src/2d_table_editor.c:846
 #, c-format
 msgid "ERROR in update_2d_curve()!!!\n"
-msgstr "ERROR en update_2d_curve ()!!!"
+msgstr "ERROR en update_2d_curve ()!!!\n"
 
 #: src/2d_table_editor.c:1156
 #, c-format
 msgid "widget isn't visible or sensitive\n"
-msgstr "widget no es visible o sensible"
+msgstr "widget no es visible o sensible\n"
 
 #. Copy the frames per second into a string to display in the window
 #: src/3d_vetable.c:102
 #, c-format
 msgid "Current Frames Per Second: %i"
-msgstr "Marcos actual por segundo:% i"
+msgstr "Marcos actual por segundo: %i"
 
 #: src/about_gui.c:49 src/core_gui.c:175
 #, c-format
 msgid "MegaTunix %s Tuning Software for Unix-class OS's"
-msgstr "% S MegaTunix optimización de software para Unix-clase OS"
+msgstr "%s MegaTunix optimización de software para Unix-clase OS"
 
 #: src/afr_calibrate.c:318
 #, c-format
@@ -20681,109 +20697,109 @@ msgstr "caso por defecto, no debería haber llegado hasta aquí. afr_enum es% i"
 #: src/args.c:77
 #, c-format
 msgid "ERROR OCCURRED\n"
-msgstr "Ha ocurrido un error"
+msgstr "Ha ocurrido un error\n"
 
 #: src/args.c:90
 #, c-format
 msgid "not sure what the error is\n"
-msgstr "no sabe cuál es el error es"
+msgstr "no sabe cuál es el error es\n"
 
 #: src/args.c:100
 #, c-format
 msgid "Network info provided is invalid!\n"
-msgstr "Red de información proporcionada no es válido!"
+msgstr "Red de información proporcionada no es válido!\n"
 
 #: src/args.c:148
 #, c-format
 msgid "Should do listen mode\n"
-msgstr "Si escuchan el modo de"
+msgstr "Si escuchan el modo de\n"
 
 #: src/args.c:152
 #, c-format
 msgid "debug option \"%i\"\n"
-msgstr "opción de depuración \"% i\""
+msgstr "opción de depuración \"%i\"\n"
 
 #: src/args.c:153
 #, c-format
 msgid "Global debug filename\"%s\"\n"
-msgstr "Nombre de archivo de depuración global \"%s\""
+msgstr "Nombre de archivo de depuración global \"%s\"\n"
 
 #: src/args.c:154
 #, c-format
 msgid "version option \"%i\"\n"
-msgstr "opción de versión \"% i\""
+msgstr "opción de versión \"%i\"\n"
 
 #: src/args.c:155
 #, c-format
 msgid "quiet option \"%i\"\n"
-msgstr "opción tranquila \"% i\""
+msgstr "opción tranquila \"%i\"\n"
 
 #: src/args.c:156
 #, c-format
 msgid "no rttext option \"%i\"\n"
-msgstr "ninguna opción rttext \"% i\""
+msgstr "ninguna opción rttext \"%i\"\n"
 
 #: src/args.c:157
 #, c-format
 msgid "no status option \"%i\"\n"
-msgstr "sin opción de estado \"% i\""
+msgstr "sin opción de estado \"%i\"\n"
 
 #: src/args.c:158
 #, c-format
 msgid "no maingui option \"%i\"\n"
-msgstr "ninguna opción maingui \"% i\""
+msgstr "ninguna opción maingui \"%i\"\n"
 
 #: src/args.c:159
 #, c-format
 msgid "autolog_dump \"%i\"\n"
-msgstr "autolog_dump \"% i\""
+msgstr "autolog_dump \"%i\"\n"
 
 #: src/args.c:160
 #, c-format
 msgid "autolog_minutes \"%i\"\n"
-msgstr "autolog_minutes \"% i\""
+msgstr "autolog_minutes \"%i\"\n"
 
 #: src/args.c:161
 #, c-format
 msgid "autolog_dump_dir \"%s\"\n"
-msgstr "autolog_dump_dir \"%s\""
+msgstr "autolog_dump_dir \"%s\"\n"
 
 #: src/args.c:162
 #, fuzzy, c-format
 msgid "autolog_basename \"%s\"\n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/args.c:163
 #, c-format
 msgid "listen mode \"%i\"\n"
-msgstr "modo de escucha \"% i\""
+msgstr "modo de escucha \"%i\"\n"
 
 #: src/args.c:164
 #, c-format
 msgid "network mode \"%i\"\n"
-msgstr "modo de red \"% i\""
+msgstr "modo de red \"%i\"\n"
 
 #: src/args.c:165
 #, c-format
 msgid "network host \"%s\"\n"
-msgstr "host de la red \"%s\""
+msgstr "host de la red \"%s\"\n"
 
 #: src/args.c:166
 #, c-format
 msgid "network port \"%i\"\n"
-msgstr "puerto de red \"% i\""
+msgstr "puerto de red \"%i\"\n"
 
 #: src/comms.c:86
 #, c-format
 msgid "Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"
-msgstr "Error al escribir \"C\" a la ecu, ERROR \"%s\" comms_test en ()"
+msgstr "Error al escribir \"C\" a la ecu, ERROR \"%s\" comms_test en ()\n"
 
 #: src/comms.c:100
 #, c-format
 msgid ""
 "Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test"
 "()\n"
-msgstr "Error al escribir \"c\" (prueba de MS-II reloj) para el ecu, ERROR \"%s\" comms_test en ()"
+msgstr "Error al escribir \"c\" (prueba de MS-II reloj) para el ecu, ERROR \"%s\" comms_test en ()\n"
 
 #: src/comms.c:112
 msgid "ECU Connected..."
@@ -20792,7 +20808,7 @@ msgstr "Conectado ecus ..."
 #: src/comms.c:113
 #, c-format
 msgid "ECU Comms Test Successfull\n"
-msgstr "Comms ecus exitosa prueba"
+msgstr "Comms ecus exitosa prueba\n"
 
 #: src/comms.c:123
 #, c-format
@@ -20802,17 +20818,17 @@ msgstr "COMMS CUESTIONES: COMMS Compruebe ficha"
 #: src/comms.c:125
 #, c-format
 msgid "I/O with ECU Timeout\n"
-msgstr "E / S con el ECU de tiempo de espera"
+msgstr "E / S con el ECU de tiempo de espera\n"
 
 #: src/comms.c:159
 #, c-format
 msgid "Non simple/chunk write command, not notifying peers\n"
-msgstr "simple no / trozo comando de escritura no notificar compañeros"
+msgstr "simple no / trozo comando de escritura no notificar compañeros\n"
 
 #: src/comms.c:389
 #, c-format
 msgid "Sending %i of %i bytes"
-msgstr "El envío de% i% i bytes"
+msgstr "El envío de %i da %i bytes"
 
 #: src/conversions.c:78
 msgid ""
@@ -20826,17 +20842,17 @@ msgstr "compensar"
 #: src/conversions.c:113 src/conversions.c:285
 #, c-format
 msgid "big problem, source key is undefined!!\n"
-msgstr "gran problema, de fuentes esenciales es indefinido!"
+msgstr "gran problema, de fuentes esenciales es indefinido!\n"
 
 #: src/conversions.c:261
 #, c-format
 msgid "BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"
-msgstr "GRAN PROBLEMA, tamaño indefinido! en la página% i,% i compensado,%s widget"
+msgstr "GRAN PROBLEMA, tamaño indefinido! en la página% i,% i compensado,%s widget\n"
 
 #: src/core_gui.c:75
 #, c-format
 msgid "ERROR! Could NOT locate file %s"
-msgstr "ERROR! No se pudo encontrar el archivo%s"
+msgstr "ERROR! No se pudo encontrar el archivo %s"
 
 #: src/core_gui.c:77
 msgid ""
@@ -20845,7 +20861,12 @@ msgid ""
 "\n"
 "Did you forget to run <i>\"sudo make install\"</i> ??\n"
 "\n"
-msgstr "<b>MegaTunix</b> no parece estar instalado correctamente! Te has olvidado de ejecutar <i>\"sudo make install\"?</i>"
+msgstr ""
+"\n"
+"<b>MegaTunix</b> no parece estar instalado correctamente!\n"
+"\n"
+"Te has olvidado de ejecutar <i>\"sudo make install\"</i>??\n"
+"\n"
 
 #: src/dashboard.c:76
 #, c-format
@@ -20859,27 +20880,27 @@ msgstr "Dash clúster"
 #: src/dashboard.c:249
 #, c-format
 msgid "ERROR, load_geometry, xml node is empty!!\n"
-msgstr "ERROR, load_geometry, el nodo XML está vacía!"
+msgstr "ERROR, load_geometry, el nodo XML está vacía!\n"
 
 #: src/dashboard.c:288
 #, c-format
 msgid "ERROR, load_gauge, xml node is empty!!\n"
-msgstr "ERROR, load_gauge, el nodo XML está vacía!"
+msgstr "ERROR, load_gauge, el nodo XML está vacía!\n"
 
 #: src/dashboard.c:637
 #, c-format
 msgid "dashboard widget is null cannot set attribute(s)!\n"
-msgstr "widget de Dashboard es nula no puede establecer el atributo (s)!"
+msgstr "widget de Dashboard es nula no puede establecer el atributo (s)!\n"
 
 #: src/dashboard.c:860
 #, c-format
 msgid "dashboard widget is null cannot reset tattletale!\n"
-msgstr "widget de Dashboard es nula no puede restablecer chismosa!"
+msgstr "widget de Dashboard es nula no puede restablecer chismosa!\n"
 
 #: src/dataio.c:257
 #, c-format
 msgid "Write error! \"%s\"\n"
-msgstr "Error de escritura! \"% S\""
+msgstr "Error de escritura! \"%s\"\n"
 
 #: src/datalogging_gui.c:86
 msgid "Populating Datalogger..."
@@ -20888,47 +20909,47 @@ msgstr "Rellenar Datalogger ..."
 #: src/datalogging_gui.c:91
 #, c-format
 msgid "datalogger windows not present, returning\n"
-msgstr "ventanas registrador de datos no está presente, volviendo"
+msgstr "ventanas registrador de datos no está presente, volviendo\n"
 
 #: src/datalogging_gui.c:524
 #, c-format
 msgid "Autolog dump (log number %i) successfully completed.\n"
-msgstr "Autolog volcado (registro número% i) completado con éxito."
+msgstr "Autolog volcado (registro número %i) completado con éxito.\n"
 
 #: src/datamgmt.c:207
 #, c-format
 msgid "ERROR! attempted set of data with NO SIZE defined\n"
-msgstr "ERROR! intento conjunto de datos con Ningún monto fijado"
+msgstr "ERROR! intento conjunto de datos con Ningún monto fijado\n"
 
 #: src/debugging.c:83
 #, c-format
 msgid "Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"
-msgstr "Archivo de registro abierto para consignar el% i-i-0.2%% i% a 0.2 i:% .2 i"
+msgstr "Archivo de registro abierto para consignar el %i-%.2i-%i  a %.2i:%.2i \n"
 
 #: src/dep_processor.c:110
 #, c-format
 msgid "CASE NOT HANDLED, dep_processor BUG!\n"
-msgstr "CASO no se manejan, dep_processor ERROR!"
+msgstr "CASO no se manejan, dep_processor ERROR!\n"
 
 #: src/dispatcher.c:114
 #, c-format
 msgid "ERROR postfunction was NULL, continuing\n"
-msgstr "postfunction ERROR era NULL, continuando"
+msgstr "postfunction ERROR era NULL, continuando\n"
 
 #: src/dispatcher.c:120
 #, c-format
 msgid "ERROR, couldn't find function with arg \"%s\"\n"
-msgstr "ERROR, no pudo encontrar la función con arg \"%s\""
+msgstr "ERROR, no pudo encontrar la función con arg \"%s\"\n"
 
 #: src/dispatcher.c:127
 #, c-format
 msgid "ERROR, couldn't find function \"%s\"\n"
-msgstr "ERROR, no pudo encontrar la función \"%s\""
+msgstr "ERROR, no pudo encontrar la función \"%s\"\n"
 
 #: src/fileio.c:163
 #, c-format
 msgid "Full Backup Complete...\n"
-msgstr "Lleno Copia de seguridad completa ..."
+msgstr "Lleno Copia de seguridad completa ...\n"
 
 #: src/fileio.c:207
 #, c-format
@@ -20936,7 +20957,9 @@ msgid ""
 ":restore_all_ecu_settings()\n"
 "	API MAJOR version mismatch: \"%i\" != \"%i\"\n"
 " can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () API de conflicto de versiones principales: \"% i\"! = \"% I\" no puede cargar este archivo para la restauración"
+msgstr ": Restore_all_ecu_settings ()\n"
+"	API de conflicto de versiones principales: \"%i\" != \"%i\"\n"
+" no puede cargar este archivo para la restauración\n"
 
 #: src/fileio.c:211
 #, c-format
@@ -20944,7 +20967,9 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "	API MINOR version mismatch: \"%i\" != \"%i\"\n"
 " can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () API de conflicto de versiones MENORES: \"% i\"! = \"% I\" no puede cargar este archivo para la restauración"
+msgstr ": Restore_all_ecu_settings ()\n"
+"	API de conflicto de versiones MENORES: \"%i\" != \"%i\"\n"
+" no puede cargar este archivo para la restauración\n"
 
 #: src/fileio.c:217
 #, c-format
@@ -20952,7 +20977,10 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "Firmware name mismatch: \"%s\" != \"%s\"\n"
 "can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () no coincide el nombre del firmware: \"%s\"! = \"% S\" no se puede cargar este archivo para la restauración"
+msgstr ""
+": Restore_all_ecu_settings ()\n"
+"no coincide el nombre del firmware: \"%s\" != \"%s\"\n"
+"no se puede cargar este archivo para la restauración\n"
 
 #: src/fileio.c:223
 msgid "Restoring ECU settings from File"
@@ -20965,7 +20993,10 @@ msgid ""
 "	Number of variables in backup \"%i\" and firmware specification \"%i\" do "
 "NOT match,\n"
 "	corruption SHOULD be expected\n"
-msgstr ": Restore_all_ecu_settings () Número de variables en copia de seguridad \"% i\" y la especificación de firmware \"% i\" no coinciden, la corrupción se debe esperar"
+msgstr ""
+": Restore_all_ecu_settings ()\n"
+"	Número de variables en copia de seguridad \"%i\" y la especificación de firmware \"%i\" no coinciden\n"
+"la corrupción se debe esperar\n"
 
 #: src/fileio.c:246
 #, c-format
@@ -20973,7 +21004,10 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "	Number of variables in this backup \"%i\" does NOT match the length of the "
 "table \"%i\", expect a crash!!!\n"
-msgstr ": Restore_all_ecu_settings () Número de variables en esta copia de seguridad \"% i\" no se corresponde con la longitud de la tabla \"% i\", le espera un choque!"
+msgstr ""
+": Restore_all_ecu_settings ()\n"
+"	Número de variables en esta copia de seguridad \"%i\" no se corresponde con la longitud de la tabla \"%i\"\n"
+"le espera un choque!!!\n"
 
 #: src/gui_handlers.c:1015
 msgid "User initiated interrogation..."
@@ -20990,7 +21024,7 @@ msgstr "Modo sin conexión ..."
 #: src/gui_handlers.c:1422
 #, c-format
 msgid "std_combo_handler, default case!!! wrong wrong wrong!!\n"
-msgstr "std_combo_handler, por defecto el caso! mal mal mal!!"
+msgstr "std_combo_handler, por defecto el caso! mal mal mal!!\n"
 
 #: src/gui_handlers.c:1865
 msgid "Updating Controls..."
@@ -20999,7 +21033,7 @@ msgstr "Controles Actualizando ..."
 #: src/gui_handlers.c:2028
 #, c-format
 msgid "Updating Controls on Page %i"
-msgstr "Actualización de controles en la página% i"
+msgstr "Actualización de controles en la página %i"
 
 #: src/gui_handlers.c:2042 src/gui_handlers.c:2043 src/helpers.c:329
 #, c-format
@@ -21011,7 +21045,9 @@ msgstr "Listo ..."
 msgid ""
 "ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, "
 "value %i\n"
-msgstr "ERROR ningún modelo de combinados en la página% i,% i compensado, máscara de bits% i,% i BitShift, valor i%"
+msgstr ""
+"ERROR ningún modelo de combinados en la page %i, offset %i, bitmask %i, bitshift %i, "
+"value %i\n"
 
 #: src/gui_handlers.c:3227
 msgid "Save internal log, yes/no ?"
@@ -21021,7 +21057,8 @@ msgstr "Guardar registro interno, sí / no?"
 msgid ""
 "Would you like to save the internal datalog for this session to disk?  It is "
 "a complete log and useful for playback/analysis at a future point in time"
-msgstr "¿Desea guardar el registro de datos interna para dicho período de sesiones en el disco? Se trata de un registro completo y útil para la reproducción y el análisis en un punto futuro en el tiempo"
+msgstr ""
+"¿Desea guardar el registro de datos interna para dicho período de sesiones en el disco? Se trata de un registro completo y útil para la reproducción y el análisis en un punto futuro en el tiempo"
 
 #: src/gui_handlers.c:3252
 msgid "Save ECU settings to file?"
@@ -21031,7 +21068,8 @@ msgstr "Guardar las opciones de ecus a presentar?"
 msgid ""
 "Would you like to save the ECU settings to a file so that they can be "
 "restored at a future time?"
-msgstr "¿Desea guardar los ajustes de ecus a un archivo para que puedan ser restaurados en un tiempo futuro?"
+msgstr ""
+"¿Desea guardar los ajustes de ecus a un archivo para que puedan ser restaurados en un tiempo futuro?"
 
 #: src/gui_handlers.c:3289
 msgid "Quit MegaTunix, yes/no ?"
@@ -21046,17 +21084,18 @@ msgstr "¿Estás seguro de que desea dejar de fumar?"
 msgid ""
 "toggle_groups_linked, numeber of choices is out of range, it should be 2, it "
 "is %i"
-msgstr "numeber toggle_groups_linked, de opciones está fuera de alcance, debe ser de 2, es% i"
+msgstr ""
+"toggle_groups_linked, numeber de opciones está fuera de alcance, debe ser de 2, es %i"
 
 #: src/gui_handlers.c:3411
 #, c-format
 msgid "active is %i, num_choices is %i\n"
-msgstr "activo es% i,% i es num_choices"
+msgstr "activo es %i, %i es num_choices\n"
 
 #: src/gui_handlers.c:3412
 #, c-format
 msgid "active is out of bounds for widget %s\n"
-msgstr "activa está fuera de límites para%s widget"
+msgstr "activa está fuera de límites para %s widget\n"
 
 #: src/helpers.c:73
 msgid "Queuing read of all ECU data..."
@@ -21069,41 +21108,41 @@ msgstr "Ajuste de las unidades locales de Temp ..."
 #: src/helpers.c:360
 #, c-format
 msgid "MS2_WRITE_VERIFY not written yet\n"
-msgstr "MS2_WRITE_VERIFY no está escrito aún"
+msgstr "MS2_WRITE_VERIFY no está escrito aún\n"
 
 #: src/helpers.c:363
 #, c-format
 msgid "MS2_MISMATCH_COUNT not written yet\n"
-msgstr "MS2_MISMATCH_COUNT no está escrito aún"
+msgstr "MS2_MISMATCH_COUNT no está escrito aún\n"
 
 #: src/helpers.c:366
 #, c-format
 msgid "MS1_CLOCK not written yet\n"
-msgstr "MS1_CLOCK no está escrito aún"
+msgstr "MS1_CLOCK no está escrito aún\n"
 
 #: src/helpers.c:369
 #, c-format
 msgid "MS2_CLOCK not written yet\n"
-msgstr "MS2_CLOCK no está escrito aún"
+msgstr "MS2_CLOCK no está escrito aún\n"
 
 #: src/helpers.c:436
 #, c-format
 msgid "MS1 Reset detected!, lastcount %i, current %i\n"
-msgstr "MS1 Perdí detectado!, Lastcount% i,% actual i"
+msgstr "MS1 Perdí detectado!, Lastcount %i, actual %i\n"
 
 #: src/helpers.c:476
 #, c-format
 msgid "MS2 rtvars reset detected, lastcount is %i, current %i"
-msgstr "MS2 rtvars restablecer detectado, lastcount es% i,% actual i"
+msgstr "MS2 rtvars restablecer detectado, lastcount es %i, actual %i"
 
 #: src/helpers.c:489
 #, c-format
 msgid "MS2_BOOTLOADER not written yet\n"
-msgstr "MS2_BOOTLOADER no está escrito aún"
+msgstr "MS2_BOOTLOADER no está escrito aún\n"
 
 #: src/helpers.c:497
 msgid "No ECU Errors were reported....\n"
-msgstr "No se informó de ecus errores ...."
+msgstr "No se informó de ecus errores ....\n"
 
 #: src/helpers.c:564
 msgid "Starting up data renderers..."
@@ -21117,96 +21156,105 @@ msgstr "Comando \"%s\" (%s), regresó %i bytes (%s)\n"
 #: src/interrogate.c:214
 #, c-format
 msgid "Command \"%s\" (%s), returned %i bytes\n"
-msgstr "Comando \"%s\" (%s),regresó %i bytes\n"
+msgstr "Comando \"%s\" (%s), regresó %i bytes\n"
 
 #: src/interrogate.c:369 src/interrogate.c:1197 src/offline.c:215
 #, c-format
 msgid ""
 "Interrogation profile API mismatch (%i.%i != %i.%i):\n"
 "	File %s will be skipped\n"
-msgstr "API desajuste (perfil% Interrogatorio i.% i! =% I% i): El archivo%s se saltará"
+msgstr ""
+"API desajuste (perfil Interrogatorio %i.%i ! = %i.%i):\n"
+"	El archivo %s se saltará\n"
 
 #: src/interrogate.c:928
 #, c-format
 msgid "X multi_sources length mismatch!\n"
-msgstr "X multi_sources falta de coincidencia de longitud!"
+msgstr "X multi_sources falta de coincidencia de longitud!\n"
 
 #: src/interrogate.c:962
 #, c-format
 msgid "Y multi_sources length mismatch!\n"
-msgstr "Y multi_sources falta de coincidencia de longitud!"
+msgstr "Y multi_sources falta de coincidencia de longitud!\n"
 
 #: src/interrogate.c:997
 #, c-format
 msgid "Z multi_sources length mismatch!\n"
-msgstr "Z multi_sources falta de coincidencia de longitud!"
+msgstr "Z multi_sources falta de coincidencia de longitud!\n"
 
 #: src/interrogate.c:1024
 #, c-format
 msgid "Detected Firmware: %s\n"
-msgstr "Detectado Firmware:%s"
+msgstr "Detectado Firmware: %s\n"
 
 #: src/interrogate.c:1025
 #, c-format
 msgid "Loading Settings from: \"%s\"\n"
-msgstr "Cargando Configuración de: \"%s\""
+msgstr "Cargando Configuración de: \"%s\"\n"
 
 #: src/interrogate.c:1064
 #, c-format
 msgid ""
 "Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
 "	File %s.\n"
-msgstr "Interrogatorio pruebas de perfil de desajuste de la API (% i% i! =% I% i): El archivo%s."
+msgstr ""
+"Interrogatorio pruebas de perfil de desajuste de la API (%i.%i ! = %i.%i):\n"
+"	El archivo %s.\n"
 
 #: src/interrogate.c:1203
 #, c-format
 msgid "ERROR:!! \"match_on\" key missing from interrogation profile\n"
-msgstr "ERROR:! \"Match_on\" clave que falta desde el perfil de interrogatorio"
+msgstr "ERROR:! \"Match_on\" clave que falta desde el perfil de interrogatorio\n"
 
 #: src/interrogate.c:1214
 #, c-format
 msgid "ERROR test data not found for test \"%s\"\n"
-msgstr "ERROR datos de los ensayos no encontró pruebas de \"%s\""
+msgstr "ERROR datos de los ensayos no encontró pruebas de \"%s\"\n"
 
 #: src/interrogate.c:1234
 #, c-format
 msgid ""
 "ERROR interrogation check_for match vector does NOT have two args it has %i\n"
-msgstr "ERROR check_for interrogatorio vector partido NO tiene dos argumentos que tiene% i"
+msgstr ""
+"ERROR check_for interrogatorio vector partido NO tiene dos argumentos que tiene %i\n"
 
 #: src/locking.c:79
 #, c-format
 msgid ""
 "ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network "
 "socket mode (see -n option)!\n"
-msgstr "ERROR! Múltiples instancias MegaTunix no se permiten a menos que en el modo de red toma (véase la opción-n)!"
+msgstr ""
+"ERROR! Múltiples instancias MegaTunix no se permiten a menos que en el modo de red toma (véase la opción-n)!\n"
 
 #: src/locking.c:80
 msgid ""
 "<b>MegaTunix</b> is already Running!\n"
 "Multiple instances are <b><u>NOT</u></b> allowed unless running\n"
 "in network socket mode, see the -n option!\n"
-msgstr "<b>MegaTunix</b> ya se está ejecutando! Varias instancias <u><b>NO</b></u> se permiten a menos que se ejecuta en modo de toma de red, vea la opción-n el!"
+msgstr ""
+"<b>MegaTunix</b> ya se está ejecutando!\n"
+"Varias instancias <u><b>NO</b></u> se permiten a menos\n"
+"que se ejecuta en modo de toma de red, vea la opción-n el!\n"
 
 #: src/locking.c:197
 #, c-format
 msgid "Error setting serial lock %s\n"
-msgstr "Error al establecer el bloqueo%s de serie"
+msgstr "Error al establecer el bloqueo %s de serie\n"
 
 #: src/logviewer_core.c:208
 #, c-format
 msgid "LOG signature is \"%s\"\n"
-msgstr "LOG firma es \"%s\""
+msgstr "LOG firma es \"%s\"\n"
 
 #: src/logviewer_core.c:213
 #, c-format
 msgid "Good this firmware is compatible with the firmware we're using\n"
-msgstr "Bueno este firmware es compatible con el firmware que estamos usando"
+msgstr "Bueno este firmware es compatible con el firmware que estamos usando\n"
 
 #: src/logviewer_core.c:215
 #, c-format
 msgid "mismatch between datalog and current firmware\n"
-msgstr "desajuste entre el firmware de registro de datos y la corriente"
+msgstr "desajuste entre el firmware de registro de datos y la corriente\n"
 
 #. Should insert some sort of marker at this index
 #. * in the data arrays...
@@ -21214,19 +21262,21 @@ msgstr "desajuste entre el firmware de registro de datos y la corriente"
 #: src/logviewer_core.c:329
 #, c-format
 msgid "MARK found in logfile. MTX doesn't do anything with these yet...!\n"
-msgstr "MARK encuentra en archivo de registro. MTX no hace nada con estos todavía ...!"
+msgstr "MARK encuentra en archivo de registro. MTX no hace nada con estos todavía ...!\n"
 
 #: src/logviewer_core.c:335
 #, c-format
 msgid "non numerical line detected\n"
-msgstr "la línea numérica, no detectado"
+msgstr "la línea numérica, no detectado\n"
 
 #: src/logviewer_core.c:342
 #, c-format
 msgid ""
 "Datalog error, field count assertion failure\n"
 "Expected %i fields, got %i instead\n"
-msgstr "error de registro de datos, el recuento de campo previsto error de aserción% de campos i,% i tiene lugar"
+msgstr ""
+"error de registro de datos, el recuento de campo previsto error de aserción\n"
+"de campos %i,%i tiene lugar\n"
 
 #: src/logviewer_gui.c:90
 msgid "Playback Mode: Logviewer Choices"
@@ -21247,17 +21297,17 @@ msgstr "Seleccione las variables en tiempo real para ver la lista de abajo ..."
 #: src/lookuptables.c:339
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, table parameter is null\n"
-msgstr "Fatal_error: direct_lookup_data, parámetro de tabla es null"
+msgstr "FATAL ERROR: direct_lookup_data, parámetro de tabla es null\n"
 
 #: src/lookuptables.c:346
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"
-msgstr "Fatal_error: direct_lookup_data, la tabla \"%s\" es nula"
+msgstr "FATAL ERROR: direct_lookup_data, la tabla \"%s\" es nula\n"
 
 #: src/lookuptables.c:351
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, %s->array is null\n"
-msgstr "Fatal_error: direct_lookup_data, array%s-> es nulo"
+msgstr "FATAL ERROR: direct_lookup_data, %s->array es nulo\n"
 
 #: src/lookuptables.c:393
 msgid "MegaTunix LookupTables"
@@ -21266,14 +21316,16 @@ msgstr "MegaTunix lookuptables"
 #: src/lookuptables.c:559
 #, c-format
 msgid "No lookuptable found! expect a crash!!\n"
-msgstr "No lookuptable encontrado! esperan un accidente!"
+msgstr "No lookuptable encontrado! esperan un accidente!\n"
 
 #: src/lookuptables.c:612
 #, c-format
 msgid ""
 ": dump_hash()\n"
 "	Key %s, Value %p, %s\n"
-msgstr ": Dump_hash ()%s Key, p% del valor,%s"
+msgstr ""
+": Dump_hash ()\n"
+"	Key %s, Value %p, %s\n"
 
 #: src/ms1-t-logger.c:422
 msgid "Tooth times in usec."
@@ -21294,29 +21346,31 @@ msgstr "Trigger veces en mseg."
 #: src/ms1-t-logger.c:438 src/ms2-t-logger.c:336
 #, c-format
 msgid "Engine RPM:  %.1f"
-msgstr "RPM del motor: 0,1% f"
+msgstr "RPM del motor: 0,1%f"
 
 #: src/ms1-t-logger.c:445 src/ms2-t-logger.c:343
 #, c-format
 msgid "Sample Time: %i ms."
-msgstr "ms de tiempo de la muestra: i%."
+msgstr "ms de tiempo de la muestra: %i"
 
 #: src/mtxsocket.c:158
 #, c-format
 msgid "WSAStartup failed: %d\n"
-msgstr "WSAStartup ha fallado:% d"
+msgstr "WSAStartup ha fallado: %d\n"
 
 #: src/mtxsocket.c:343
 #, c-format
 msgid ""
 "Welcome to MegaTunix %s, ASCII mode enabled\n"
 "Enter 'help' for assistance\n"
-msgstr "Bienvenido a%s MegaTunix, modo ASCII activado Enter &#39;help&#39; para la asistencia"
+msgstr ""
+"Bienvenido a%s MegaTunix, modo ASCII activado\n"
+"Enter 'help' para la asistencia\n"
 
 #: src/mtxsocket.c:579
 #, c-format
 msgid "text_revision undefined!\n"
-msgstr "text_revision indefinido!"
+msgstr "text_revision indefinido!\n"
 
 #: src/mtxsocket.c:982 src/mtxsocket.c:994
 msgid "Not Connected yet"
@@ -21333,71 +21387,39 @@ msgstr "El modo sin conexión, ninguna revisión"
 #: src/mtxsocket.c:1121 src/mtxsocket.c:1129 src/mtxsocket.c:1167
 #, c-format
 msgid "SHORT WRITE!\n"
-msgstr "BREVE ESCRIBIR!"
+msgstr "BREVE ESCRIBIR!\n"
 
 #: src/mtxsocket.c:1359
 #, c-format
 msgid "Unable to open network port, sleeping 500 ms to see if it resolves\n"
-msgstr "No se puede abrir un puerto de red, para dormir de 500 ms para ver si se resuelve"
+msgstr "No se puede abrir un puerto de red, para dormir de 500 ms para ver si se resuelve\n"
 
 #: src/mtxsocket.c:1624
 #, c-format
 msgid "Peer update WRITE ERROR!\n"
-msgstr "Intercambio de actualización Error de escritura!"
+msgstr "Intercambio de actualización Error de escritura!\n"
 
 #: src/mtxsocket.c:1787
 #, c-format
 msgid "Case not handled, bug in state machine!\n"
-msgstr "El asunto no se maneja, error de máquina de estados!"
-
-#: src/notifications.c:263
-msgid ""
-"The MegaSquirt ECU appears to be currently disconnected.  This means that "
-"either one of the following occurred:\n"
-"   1. Wrong Comm port is selected on the Communications Tab\n"
-"   2. The MegaSquirt serial link is not plugged in\n"
-"   3. The MegaSquirt ECU does not have adequate power.\n"
-"   4. The MegaSquirt ECU is in bootloader mode.\n"
-"\n"
-"Suggest checking the serial settings on the Communications page first, and "
-"then check the Serial Status log at the bottom of that page. If the Serial "
-"Status log says \"I/O with MegaSquirt Timeout\", it means one of a few "
-"possible problems:\n"
-"   1. You selected the wrong COM port (older systems came with two, most "
-"newer ones only have one, try the other one...)\n"
-"   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 "
-"Male/Female cable)\n"
-"   3. The cable is OK, but the MS doesn't have adequate power.\n"
-"   4. If you have the ECU in bootloader mode, none of the lights lite up, "
-"and a terminal program will show a \"Boot>\" prompt Disconnect the Boot "
-"jumper and power cycle the ECU.\n"
-"\n"
-"If it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this "
-"can mean one of two things:\n"
-"   1. The COM port doesn't exist on your computer,\n"
-"					OR\n"
-"   2. You don't have permission to open the port. (/dev/ttySx).\n"
-"UNIX ONLY: Change the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/"
-"ttyS*\" as root), NOTE: This has potential security implications. Check the "
-"Unix/Linux system documentation regarding \"security\" for more "
-"information...\n"
-msgstr "El ECU MegaSquirt parece ser actualmente desconectado. Esto significa que cualquiera de las siguientes circunstancias: 1. Mal de Puerto de comunicación se ha seleccionado en la pestaña Comunicaciones 2. El enlace serie MegaSquirt no está enchufado en 3. El ECU MegaSquirt no tiene un peso adecuado. 4. El ECU MegaSquirt está en modo de gestor de arranque. Sugerir comprobar la configuración de serie en la página de Comunicaciones, y luego comprobar el estado de serie de registro en la parte inferior de esa página. Si la serie de registro de estado dice \"I / O con MegaSquirt Tiempo de espera\", que significa uno de los problemas posibles: 1. Ha seleccionado el puerto COM incorrecto (sistemas más antiguos vino con dos, la mayoría de las más recientes sólo tienen uno, probar el otro ...) 2. Defectuoso por cable a la unidad MegaSquirt. (Debe ser un hombre recto a través de DB9 o por cable Mujer) 3. El cable está bien, pero los Estados miembros no tiene un peso adecuado. 4. Si usted tiene la ECU en modo bootloader, ninguna de las luces lite, y un programa de terminal mostrará un \"Boot>\" pronta Desconecte el puente de arranque y de ciclo de la ECU. Si dice \"Puerto serie no se abre, no se puede comprobar Comunicaciones ECU \", esto puede significar una de dos cosas: 1. El puerto COM no existe en su equipo, O 2. Usted no tiene permiso para abrir el puerto. (/ Dev / ttySx). UNIX: Cambiar los permisos en / dev / ttyS * para 666 (\"chmod 666 / dev / ttyS *\" como root), NOTA: Esto tiene implicaciones de seguridad potenciales. Verifica en Unix / Linux con respecto a la documentación del sistema de \"seguridad\" para saber más ..."
+msgstr "El asunto no se maneja, error de máquina de estados!\n"
 
 #: src/raweditor.c:71
 #, c-format
 msgid "Page %i"
-msgstr "Page% i"
+msgstr "Page %i"
 
 #: src/raweditor.c:74
 #, c-format
 msgid "Page %i RAW ECU data (in HEX)"
-msgstr "% I Page RAW ecus de datos (en hexadecimal)"
+msgstr "%i Page RAW ecus de datos (en hexadecimal)"
 
 #: src/req_fuel.c:123
 #, c-format
 msgid ""
 "Serious Error, table_num not defined for reqfuel calc, contact author!\n"
-msgstr "Grave error, table_num no definido para calc reqfuel, autor de contacto!"
+msgstr ""
+"Grave error, table_num no definido para calc reqfuel, autor de contacto!\n"
 
 #: src/req_fuel.c:156
 msgid "Required Fuel Calculator"
@@ -21425,7 +21447,13 @@ msgid ""
 "Did you forget to run <i>\"sudo make install\"</i>??\n"
 " You should notify the author of this bug\n"
 "\n"
-msgstr "<b>MegaTunix</b> variable mapa en tiempo real \"s.rtv_map%\" para este firmware no parece estar instalado correctamente! Te has olvidado de ejecutar <i>\"sudo make install\"??</i> Usted debe notificar al autor de este error"
+msgstr ""
+"\n"
+"<b>MegaTunix</b> variable mapa en tiempo real \"%s.rtv_map\" para este firmware"
+"no parece estar instalado correctamente!\n"
+"Te has olvidado de ejecutar <i>\"sudo make install\"</i>??\n"
+"Usted debe notificar al autor de este error\n"
+"\n"
 
 #: src/rtv_map_loader.c:102
 msgid "ERROR RT Map file could NOT be opened!!!"
@@ -21458,23 +21486,24 @@ msgstr "RT Mapa cargada ..."
 #: src/rtv_processor.c:75
 #, c-format
 msgid "ERROR, INPUT IS NULL!!!!\n"
-msgstr "ERROR, ENTRADA ES NULO!!"
+msgstr "ERROR, ENTRADA ES NULO!!\n"
 
 #: src/rtv_processor.c:95
 #, c-format
 msgid ""
 "Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n"
-msgstr "Actualmente% de las muestras almacenadas i, Total conectados hora (HH: MM: SS) (% 02i:% 02i:% 02i)"
+msgstr ""
+"Actualmente de las muestras almacenadas %i, Total conectados hora (HH: MM: SS) (%02i:%02i:%02i)\n"
 
 #: src/rtv_processor.c:404
 #, c-format
 msgid ": ERROR: multi_expression hash key is NULL!\n"
-msgstr ": ERROR: clave multi_expression hash es NULL!"
+msgstr ": ERROR: clave multi_expression hash es NULL!\n"
 
 #: src/runtime_gui.c:385 src/runtime_gui.c:424 src/runtime_gui.c:463
 #, c-format
 msgid "multi is null!!\n"
-msgstr "múltiples es nulo!"
+msgstr "múltiples es nulo!\n"
 
 #: src/runtime_sliders.c:81
 msgid "Loading RT Sliders..."
@@ -21491,12 +21520,12 @@ msgstr "Deslizadores RT Cargado ..."
 #: src/runtime_sliders.c:304 src/runtime_sliders.c:437
 #, c-format
 msgid "No \"real_lower\" value defined for control name %s, datasource %s\n"
-msgstr "No real_lower \"valor definido para el control%s nombre, fuente de datos%s"
+msgstr "No \"real_lower\" valor definido para el control %s nombre, fuente de datos %s\n"
 
 #: src/runtime_sliders.c:308 src/runtime_sliders.c:441
 #, c-format
 msgid "No \"real_upper\" value defined for control name %s, datasource %s\n"
-msgstr "No real_upper \"valor definido para el control%s nombre, fuente de datos%s"
+msgstr "No \"real_upper\" valor definido para el control %s nombre, fuente de datos %s\n"
 
 #: src/runtime_status.c:77
 msgid "Loading RT Status..."
@@ -21534,7 +21563,7 @@ msgstr "ERROR RunTimeText Mapa archivo XML NO EXISTE!"
 #: src/runtime_text.c:109 src/xmlcomm.c:45
 #, c-format
 msgid "error: could not parse file %s\n"
-msgstr "error: no pudo analizar el archivo%s"
+msgstr "error: no pudo analizar el archivo%s\n"
 
 #: src/runtime_text.c:130
 msgid "RT Text Loaded..."
@@ -21543,12 +21572,12 @@ msgstr "Texto RT Cargado ..."
 #: src/runtime_text.c:170 src/xmlcomm.c:148
 #, c-format
 msgid "ERROR, load_potential_args, xml node is empty!!\n"
-msgstr "ERROR, load_potential_args, el nodo XML está vacía!"
+msgstr "ERROR, load_potential_args, el nodo XML está vacía!\n"
 
 #: src/serialio.c:83
 #, c-format
 msgid "%s Opened Successfully\n"
-msgstr "% S abrió sus puertas con éxito"
+msgstr "%s abrió sus puertas con éxito\n"
 
 #: src/serialio.c:99
 #, c-format
@@ -21557,33 +21586,33 @@ msgstr "Error al abrir \"%s\", Código de error: \"%s\""
 
 #: src/serialio.c:101
 #, c-format
-msgid "Error Opening \"%s\", Error Code: %s \n"
-msgstr "Error al abrir \"%s\", Código de error:%s"
+msgid "Error Opening \"%s\", Error Code: %s\n"
+msgstr "Error al abrir \"%s\", Código de error: %s\n"
 
 #: src/serialio.c:279
 #, c-format
 msgid "Serial Port Closed\n"
-msgstr "Cerrado puerto serie"
+msgstr "Cerrado puerto serie\n"
 
 #: src/serialio.c:373
 #, c-format
 msgid "Attempting to open port %s\n"
-msgstr "Si intenta abrir el puerto%s"
+msgstr "Si intenta abrir el puerto%s\n"
 
 #: src/serialio.c:381
 #, c-format
 msgid "Trying 8192 Baud for ECU link\n"
-msgstr "Tratando de 8192 baudios para el enlace de ecus"
+msgstr "Tratando de 8192 baudios para el enlace de ecus\n"
 
 #: src/serialio.c:385
 #, c-format
 msgid "Trying 9600 Baud for ECU link\n"
-msgstr "Tratando de 9600 baudios para el enlace de ecus"
+msgstr "Tratando de 9600 baudios para el enlace de ecus\n"
 
 #: src/serialio.c:392
 #, c-format
 msgid "Searching for ECU\n"
-msgstr "La búsqueda de ecus"
+msgstr "La búsqueda de ecus\n"
 
 #. We have a winner !!  Abort loop
 #. We have a winner !!
@@ -21591,12 +21620,12 @@ msgstr "La búsqueda de ecus"
 #: src/serialio.c:396 src/serialio.c:421
 #, c-format
 msgid "Search successfull\n"
-msgstr "éxito de la búsqueda"
+msgstr "éxito de la búsqueda\n"
 
 #: src/serialio.c:417
 #, c-format
 msgid "Trying 115200 Baud for ECU link\n"
-msgstr "Tratando de 115200 baudios para el enlace de ecus"
+msgstr "Tratando de 115200 baudios para el enlace de ecus\n"
 
 #: src/tabloader.c:80
 msgid "Loading Gui Tabs..."
@@ -21610,7 +21639,7 @@ msgstr "Glade del archivo:"
 #: src/tabloader.c:94 src/tabloader.c:103
 #, c-format
 msgid "  is MISSING!\n"
-msgstr "que falta!"
+msgstr "que falta!\n"
 
 #: src/tabloader.c:101
 #, c-format
@@ -21629,19 +21658,21 @@ msgstr "ERROR aquí Gui XML problema!"
 #: src/tabloader.c:181
 #, c-format
 msgid " completed.\n"
-msgstr "completado."
+msgstr "completado.\n"
 
 #: src/tabloader.c:185
 #, c-format
 msgid ""
 "\n"
 "Datamap File: "
-msgstr "Datamap del archivo:"
+msgstr ""
+"\n"
+"Datamap del archivo: "
 
 #: src/tabloader.c:187
 #, c-format
 msgid " Could not be processed!\n"
-msgstr "No se pudo procesar!"
+msgstr "No se pudo procesar!\n"
 
 #: src/tabloader.c:208
 #, c-format
@@ -21655,49 +21686,49 @@ msgstr "Cargado aquí Gui ..."
 #: src/tabloader.c:405
 #, c-format
 msgid "Error, bind_to_lists(), lists is NULL\n"
-msgstr "Error, bind_to_lists (), de las listas es NULL"
+msgstr "Error, bind_to_lists (), de las listas es NULL\n"
 
 #: src/therm.c:173
 #, c-format
 msgid "Serious ERROR!, tabletype is not CTS or MAT\n"
-msgstr "Grave ERROR!, TableType no es CTS o MAT"
+msgstr "Grave ERROR!, TableType no es CTS o MAT\n"
 
 #: src/threads.c:93
 #, c-format
 msgid "Command %s is INVALID, aborting call\n"
-msgstr "s Comando inválido en el%, cerrando una llamada"
+msgstr "%s Comando inválido en el, cerrando una llamada\n"
 
 #: src/threads.c:177
 #, c-format
 msgid "CRITICAL ERROR, function \"%s()\" is not found!!\n"
-msgstr "CRÍTICAS DE ERROR, la función \"%s ()\" no se encuentra!"
+msgstr "CRÍTICAS DE ERROR, la función \"%s()\" no se encuentra!\n"
 
 #: src/threads.c:263
 #, c-format
 msgid "ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"
-msgstr "ERROR! Tamaño de la variable definida en el cánido% i,% i la página, que se compensan% i"
+msgstr "ERROR! Tamaño de la variable definida en el cánido %i,%i la página, que se compensan %i\n"
 
 #: src/threads.c:648
 #, c-format
 msgid ""
 "There are %i pending I/O transactions waiting to get to the ECU, please be "
 "patient.\n"
-msgstr "Hay% i me espera / O transacciones a la espera de llegar a la ECU, por favor, sea paciente."
+msgstr "Hay %i me espera / O transacciones a la espera de llegar a la ECU, por favor, sea paciente.\n"
 
 #: src/threads.c:655
 #, c-format
 msgid "Approximately %i Transactions remaining, please wait\n"
-msgstr "Aproximadamente% restante transacciones que, por favor espere"
+msgstr "Aproximadamente %i restante transacciones que, por favor espere\n"
 
 #: src/threads.c:660
 #, c-format
 msgid "All Transactions complete\n"
-msgstr "Todas las transacciones en completa"
+msgstr "Todas las transacciones en completa\n"
 
 #: src/threads.c:758
 #, c-format
 msgid "ERROR, MTX_UNDEF, donno what to do!!\n"
-msgstr "ERROR, MTX_UNDEF, donno qué hacer!"
+msgstr "ERROR, MTX_UNDEF, donno qué hacer!\n"
 
 #: src/timeout_handlers.c:305
 msgid "Initiating background ECU interrogation..."
@@ -21706,81 +21737,83 @@ msgstr "Iniciando el interrogatorio de antecedentes de ecus ..."
 #: src/vetable_gui.c:143
 #, c-format
 msgid "!!! ERROR !!!, rescaler passed invalid enum\n"
-msgstr "! ERROR!, Rescaler pasado enumeración no válido"
+msgstr "! ERROR!, Rescaler pasado enumeración no válido\n"
 
 #: src/vetable_gui.c:194
 #, c-format
 msgid "applicable tables not defined!!!\n"
-msgstr "tablas que se aplican no definido!"
+msgstr "tablas que se aplican no definido!\n"
 
 #: src/vetable_gui.c:199
 #, c-format
 msgid "table_num not defined!!!\n"
-msgstr "table_num no definido!"
+msgstr "table_num no definido!\n"
 
 #: src/vex_support.c:762
 #, c-format
 msgid "VEX Header: EVEME %s"
-msgstr "Encabezado VEX:%s EVEME"
+msgstr "Encabezado VEX: %s EVEME"
 
 #: src/vex_support.c:766
 #, c-format
 msgid "VEX Header: Revision %s"
-msgstr "Encabezado VEX:%s Revisión"
+msgstr "Encabezado VEX: %s Revisión"
 
 #: src/vex_support.c:770
 #, c-format
 msgid "VEX Header: UserComment: %s"
-msgstr "Encabezado VEX: usercomment:%s"
+msgstr "Encabezado VEX: UserComment: %s"
 
 #: src/vex_support.c:774
 #, c-format
 msgid "VEX Header: Date %s"
-msgstr "Encabezado VEX:%s Fecha"
+msgstr "Encabezado VEX: %s Fecha"
 
 #: src/vex_support.c:778
 #, c-format
 msgid "VEX Header: Time %s"
-msgstr "Encabezado VEX:%s Tiempo"
+msgstr "Encabezado VEX: %s Tiempo"
 
 #: src/vex_support.c:814
 #, c-format
 msgid "VEX Import: Page %i out of range <---ERROR\n"
-msgstr "VEX de las importaciones: i% Page fuera de la serie <--- ERROR"
+msgstr "VEX de las importaciones: %i Page fuera de la serie <--- ERROR\n"
 
 #: src/vex_support.c:822
 #, c-format
 msgid "VEX Import: Page %i\n"
-msgstr "Importación VEX:% i Page"
+msgstr "Importación VEX: %i Page\n"
 
 #: src/vex_support.c:868
 #, c-format
 msgid "VEX Import: Table %i\n"
-msgstr "Importación VEX:% i Tabla"
+msgstr "Importación VEX: %i Tabla\n"
 
 #: src/vex_support.c:1091
 #, c-format
 msgid "VEX Import: VE-Table loaded successfully\n"
-msgstr "VEX Importación: VE-Cuadro cargado con éxito"
+msgstr "VEX Importación: VE-Cuadro cargado con éxito\n"
 
 #: src/vex_support.c:1184
 #, c-format
 msgid ""
 "VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!="
 "%i), aborting!!!\n"
-msgstr "VEX Importación: número de contenedores en el interior VEXfile RPM y el firmware no coinciden (% i! =% I), abortar!"
+msgstr ""
+"VEX Importación: número de contenedores en el interior VEXfile RPM y el firmware no coinciden (%i != %i), abortar!!!\n"
 
 #: src/vex_support.c:1191
 #, c-format
 msgid ""
 "VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!"
 "=%i), aborting!!!\n"
-msgstr "VEX Importación: número de contenedores de carga dentro VEXfile y el firmware no coinciden (% i! =% I), abortar!"
+msgstr ""
+"VEX Importación: número de contenedores de carga dentro VEXfile y el firmware no coinciden (%i != %i), abortar!!!\n"
 
 #: src/vex_support.c:1321
 #, c-format
 msgid "VEX Import: VEtable on page %i updated with data from the VEX file\n"
-msgstr "VEX Importación: VEtable en la página% i actualizado con datos del archivo VEX"
+msgstr "VEX Importación: VEtable en la página %i actualizado con datos del archivo VEX\n"
 
 #: src/visibility.c:53
 msgid "Tab Visibility"
@@ -21789,102 +21822,102 @@ msgstr "Ficha Visibilidad"
 #: src/visibility.c:62
 #, c-format
 msgid "ERROR, glade element not found!\n"
-msgstr "ERROR, elemento claro que no se encuentra!"
+msgstr "ERROR, elemento claro que no se encuentra!\n"
 
 #: src/widgetmgmt.c:171
 #, c-format
 msgid "Error with widget %s, bind_to_list is null\n"
-msgstr "Error con s widget%, bind_to_list es nulo"
+msgstr "Error con %s widget, bind_to_list es nulo\n"
 
 #: src/xmlcomm.c:34
 #, c-format
 msgid "comm xml filename is NULL!\n"
-msgstr "Nombre de archivo xml comm es NULL!"
+msgstr "Nombre de archivo xml comm es NULL!\n"
 
 #: src/xmlcomm.c:90 src/xmlcomm.c:118
 #, c-format
 msgid "ERROR, get_potential_arg_name, xml node is empty!!\n"
-msgstr "ERROR, get_potential_arg_name, el nodo XML está vacía!"
+msgstr "ERROR, get_potential_arg_name, el nodo XML está vacía!\n"
 
 #: src/xmlcomm.c:201
 #, c-format
 msgid "ERROR, load_command_section, xml node is empty!!\n"
-msgstr "ERROR, load_command_section, el nodo XML está vacía!"
+msgstr "ERROR, load_command_section, el nodo XML está vacía!\n"
 
 #: src/xmlcomm.c:227
 #, c-format
 msgid "ERROR Function %s is NULL\n"
-msgstr "Función ERROR%s es NULL"
+msgstr "Función ERROR%s es NULL\n"
 
 #: src/xmlcomm.c:250
 #, c-format
 msgid "ERROR Helper Function %s is NULL\n"
-msgstr "Ayuda ERROR función%s es NULL"
+msgstr "Ayuda ERROR función%s es NULL\n"
 
 #: src/xmlcomm.c:279
 #, c-format
 msgid "ERROR, load_cmd_arguments, xml node is empty!!\n"
-msgstr "ERROR, load_cmd_arguments, el nodo XML está vacía!"
+msgstr "ERROR, load_cmd_arguments, el nodo XML está vacía!\n"
 
 #: src/xmlcomm.c:308
 #, c-format
 msgid "ERROR, load_cmd_post_functions, xml node is empty!!\n"
-msgstr "ERROR, load_cmd_post_functions, el nodo XML está vacía!"
+msgstr "ERROR, load_cmd_post_functions, el nodo XML está vacía!\n"
 
 #: src/xmlcomm.c:325
 #, c-format
 msgid "ERROR Post Function %s is NULL\n"
-msgstr "Post ERROR función%s es NULL"
+msgstr "Post ERROR función%s es NULL\n"
 
 #: src/xmlcomm.c:338
 #, c-format
 msgid "ERROR Post Function w/arg %s is NULL\n"
-msgstr "Post ERROR función w / s arg% es NULL"
+msgstr "Post ERROR función w /arg %s es NULL\n"
 
 #: src/xmlcomm.c:357
 #, fuzzy, c-format
 msgid "Command key \"%s\"\n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:358
 #, fuzzy, c-format
 msgid "Command name \"%s\"\n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:359
 #, fuzzy, c-format
 msgid "Command desc \"%s\"\n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:361
 #, fuzzy, c-format
 msgid "Command base \"%s\"\n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:363
 #, c-format
 msgid "Helper function \"%s\"\n"
-msgstr "Ayudante de la función \"%s\""
+msgstr "Ayudante de la función \"%s\"\n"
 
 #: src/xmlcomm.c:366
 #, fuzzy, c-format
 msgid "Command args (%i): \n"
-msgstr "	Enviado comando \"%s\"\n"
+msgstr "Enviado comando \"%s\"\n"
 
 #: src/xmlcomm.c:375
 #, c-format
 msgid "Defer Post Functions (%i): \n"
-msgstr "Aplazar funciones inherentes al puesto (% i):"
+msgstr "Aplazar funciones inherentes al puesto (%i): \n"
 
 #: src/xmlcomm.c:376
 #, c-format
 msgid "Post Functions (%i): \n"
-msgstr "Post Funciones (% i):"
+msgstr "Post Funciones (%i): \n"
 
 #: src/xmlcomm.c:389
 #, c-format
 msgid "Function call %s (%p)\n"
-msgstr "llamada de función%s (% p)"
+msgstr "llamada de función %s (%p)\n"
 
 #: dashdesigner/dashdesigner.glade:8
 msgid "MegaTunix Dashboard Designer"
@@ -22544,7 +22577,9 @@ msgstr "Lleno"
 msgid ""
 "Solid\n"
 "On Off Dash\n"
-msgstr "Continuo: Dash Off"
+msgstr ""
+"Continuo\n"
+"On Off Dash\n"
 
 #: gaugedesigner/gaugedesigner.glade:6026
 msgid "Line Width"

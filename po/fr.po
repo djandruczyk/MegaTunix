@@ -261,8 +261,8 @@ msgid "_Engine Vitals"
 msgstr "Vitals _Engine"
 
 #: BnG-Std.rtv_map.in.h:1
-msgid "\" Dcycle\\" is the injector Duty cycle."
-msgstr "\"DCYCle \\" est le cycle d&#39;injection de service."
+msgid "\" Dcycle\" is the injector Duty cycle."
+msgstr "\"DCYCle\" est le cycle d&#39;injection de service."
 
 #: BnG-Std.rtv_map.in.h:2
 msgid ""
@@ -342,11 +342,11 @@ msgstr "\"BSPOT3\" est l&#39;un des trois taches blanches retournées dans les v
 
 #: BnG-Std.rtv_map.in.h:12
 msgid ""
-"\"BSPOT\\" is one of three blank spots returned in the runtime variables "
+"\"BSPOT\" is one of three blank spots returned in the runtime variables "
 "for standard MegaSquirt ECUs. Some of the less known MS variants use these "
 "to communicate back additional data.  These are loggable just for this "
 "reasons.  Units are 0-255, resolution of 1."
-msgstr "\"BSPOT \\" est l&#39;un des trois taches blanches retournées dans les variables d&#39;exécution pour les calculateurs standard MegaSquirt. Certaines des variantes moins connues MS utiliser pour communiquer ces données supplémentaires. Ce sont loggable juste pour cette raisons. Les unités sont 0-255, résolution de 1."
+msgstr "\"BSPOT\" est l&#39;un des trois taches blanches retournées dans les variables d&#39;exécution pour les calculateurs standard MegaSquirt. Certaines des variantes moins connues MS utiliser pour communiquer ces données supplémentaires. Ce sont loggable juste pour cette raisons. Les unités sont 0-255, résolution de 1."
 
 #: BnG-Std.rtv_map.in.h:13 DT-Std.rtv_map.in.h:9
 #: MSnS-Extra-029x.rtv_map.in.h:10 MSnS-Extra-HR-011d.rtv_map.in.h:10
@@ -355,7 +355,8 @@ msgid ""
 "\"CLT (\302\260)\" is the Engine Coolant Temperature in conventional "
 "thermal units (centigrade or fahrenheit depending on what you've set in the "
 "General Tab)"
-msgstr "\"CLT (\ 302 \ 260) est le moteur de liquide de refroidissement dans les centrales thermiques classiques (centigrades ou Fahrenheit en fonction de ce que vous avez défini dans l&#39;onglet Général)"
+msgstr ""
+"\"CLT (\302\260) est le moteur de liquide de refroidissement dans les centrales thermiques classiques (centigrades ou Fahrenheit en fonction de ce que vous avez défini dans l&#39;onglet Général)"
 
 #: BnG-Std.rtv_map.in.h:14 DT-Std.rtv_map.in.h:10
 #: MSnS-Extra-029x.rtv_map.in.h:11 MSnS-Extra-HR-011d.rtv_map.in.h:11
@@ -391,8 +392,8 @@ msgstr "\"EGOcorr\" est le facteur de correction des gaz d&#39;échappement. Cel
 msgid ""
 "\"EngineBits\" is a bitfield containing information such as cranking/"
 "running, accel enrich, decel mode and warmup enrichment.  It require "
-"decoding, use the information in unions.h for the \\"engine\\" union."
-msgstr "\"EngineBits\" est un champ de bits contenant des informations telles que démarrage / en cours d&#39;exécution, Accel enrichir, le mode de décélération et l&#39;enrichissement de réchauffement. Il nécessite le décodage, l&#39;utilisation des informations contenues dans unions.h pour le \ \"moteur \\" union."
+"decoding, use the information in unions.h for the \"engine\" union."
+msgstr "\"EngineBits\" est un champ de bits contenant des informations telles que démarrage / en cours d&#39;exécution, Accel enrichir, le mode de décélération et l&#39;enrichissement de réchauffement. Il nécessite le décodage, l&#39;utilisation des informations contenues dans unions.h pour le \"moteur \" union."
 
 #: BnG-Std.rtv_map.in.h:18 DT-Std.rtv_map.in.h:16
 #: MSnS-Extra-029x.rtv_map.in.h:21 MSnS-Extra-HR-011d.rtv_map.in.h:21
@@ -453,7 +454,8 @@ msgid ""
 "\"MAT (\302\260)\" is the Manifold Air Temperature in conventional thermal "
 "units (centigrade or fahrenheit depending on what you've set in the General "
 "Tab)"
-msgstr "\"MAT (\ 302 \ 260) est le collecteur Température de l&#39;air dans les centrales thermiques classiques (centigrades ou Fahrenheit en fonction de ce que vous avez défini dans l&#39;onglet Général)"
+msgstr ""
+"\"MAT (\302\260) est le collecteur Température de l&#39;air dans les centrales thermiques classiques (centigrades ou Fahrenheit en fonction de ce que vous avez défini dans l&#39;onglet Général)"
 
 #: BnG-Std.rtv_map.in.h:25 DT-Std.rtv_map.in.h:24
 #: MSnS-Extra-029x.rtv_map.in.h:30 MSnS-Extra-HR-011d.rtv_map.in.h:30
@@ -539,9 +541,9 @@ msgstr "\"TPS Volts\" est la lecture de la sonde de position de papillon convert
 #: MSnS-Extra-029x.rtv_map.in.h:51 MSnS-Extra-HR-011d.rtv_map.in.h:51
 #: MSnS-Extra-HR-029x.rtv_map.in.h:51
 msgid ""
-"\"TPSaccel\\" is the amount of Acceleration enrichment being dispensed. "
+"\"TPSaccel\" is the amount of Acceleration enrichment being dispensed. "
 "Units are in milliseconds x10, so 10 ms shows upa as 100 in the log"
-msgstr "\"TPSaccel \\" est le montant de l&#39;enrichissement d&#39;accélération en cours de distribution. Les unités sont en millisecondes x10, donc 10 ms montre UPA de 100 dans le journal"
+msgstr "\"TPSaccel\" est le montant de l&#39;enrichissement d&#39;accélération en cours de distribution. Les unités sont en millisecondes x10, donc 10 ms montre UPA de 100 dans le journal"
 
 #: BnG-Std.rtv_map.in.h:38
 msgid ""
@@ -623,7 +625,7 @@ msgstr "BSpot 3"
 #: MSnS-Extra-029x.rtv_map.in.h:67 MSnS-Extra-HR-011d.rtv_map.in.h:68
 #: MSnS-Extra-HR-029x.rtv_map.in.h:68
 msgid "CLT (\302\260)"
-msgstr "CLT (\ 302 \ 260)"
+msgstr "CLT (\302\260)"
 
 #: BnG-Std.rtv_map.in.h:52 DT-Std.rtv_map.in.h:50
 #: MSnS-Extra-029x.rtv_map.in.h:68 MSnS-Extra-HR-011d.rtv_map.in.h:69
@@ -698,7 +700,7 @@ msgstr "MAP Volts"
 #: MSnS-Extra-029x.rtv_map.in.h:86 MSnS-Extra-HR-011d.rtv_map.in.h:87
 #: MSnS-Extra-HR-029x.rtv_map.in.h:87
 msgid "MAT (\302\260)"
-msgstr "MAT (\ 302 \ 260)"
+msgstr "MAT (\302\260)"
 
 #: BnG-Std.rtv_map.in.h:64 DT-Std.rtv_map.in.h:64
 #: MSnS-Extra-029x.rtv_map.in.h:87 MSnS-Extra-HR-011d.rtv_map.in.h:88
@@ -895,15 +897,15 @@ msgstr "\"AFR est le ratio de carburant Air le moteur tourne à. Il est calculé
 
 #: DT-Std.rtv_map.in.h:12
 msgid ""
-"\"DC 1\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 1\" is the injector Duty cycle for injectors connected to injector "
 "channel 1."
-msgstr "\"DC 1 \\" est le cycle d&#39;injection pour les injecteurs de service relié à 1 canal de l&#39;injecteur."
+msgstr "\"DC 1\" est le cycle d&#39;injection pour les injecteurs de service relié à 1 canal de l&#39;injecteur."
 
 #: DT-Std.rtv_map.in.h:13
 msgid ""
-"\"DC 2\\" is the injector Duty cycle for injectors connected to injector "
+"\"DC 2\" is the injector Duty cycle for injectors connected to injector "
 "channel 2."
-msgstr "\"DC 2 \\" est le cycle d&#39;injection pour les injecteurs de service relié à 2 canaux d&#39;injection."
+msgstr "\"DC 2\" est le cycle d&#39;injection pour les injecteurs de service relié à 2 canaux d&#39;injection."
 
 #: DT-Std.rtv_map.in.h:18
 msgid "\"IdleDC\" is the duty cycle for the PWM Idle control "
@@ -6948,7 +6950,8 @@ msgid ""
 "11\n Trig return pos A: 16\n Trig pos B: 29\n Trig return pos B: 34\n "
 "NGC Wheel set to NGC\nSpark Settings:\n Trigger Angle: 62\n To run a V8 "
 "or V6, these settings may have to be modified."
-msgstr "Pour utiliser la roue sur NGC néon, Sélectionnez NGC et de l&#39;utilisation de ces paramètres dans le décodeur de roue: \ n dents Empattement Decoder: 36 \ n Les dents manquantes: -2 \ n Trig pos A: 11 \ n retour Trig pos A: 16 \ n Trig POS B: 29 \ n Trig pos retour B: 34 \ n NGC Wheel mis sur Paramètres NGC nSpark \: \ n Trigger Angle: 62 \ n Pour exécuter un V8 ou V6, ces paramètres peuvent être modifiés."
+msgstr ""
+"Pour utiliser la roue sur NGC néon, Sélectionnez NGC et de l&#39;utilisation de ces paramètres dans le décodeur de roue: \n dents Empattement Decoder: 36 \n Les dents manquantes: -2 \n Trig pos A: 11 \n retour Trig pos A: 16 \n Trig POS B: 29 \n Trig pos retour B: 34 \n NGC Wheel mis sur Paramètres NGC nSpark \n Trigger Angle: 62 \n Pour exécuter un V8 ou V6, ces paramètres peuvent être modifiés."
 
 #: MSnS-Extra-029x.rtv_map.in.h:9 MSnS-Extra-HR-011d.rtv_map.in.h:9
 #: MSnS-Extra-HR-029x.rtv_map.in.h:9
@@ -12695,37 +12698,47 @@ msgstr "Bacs enrichissement Warmup (%)"
 
 #: Gui/enrichments.glade:1175
 msgid "EGO Active RPM\n"
-msgstr "EGO RPM Active"
+msgstr "EGO RPM Active\n"
 
 #: Gui/enrichments.glade:1204
 msgid ""
 "EGO Active Temp\n"
 "(deg F.)"
-msgstr "EGO Temp Active (deg F.)"
+msgstr ""
+"EGO Temp Active\n"
+"(deg F.)"
 
 #: Gui/enrichments.glade:1309
 msgid ""
 "EGO Switching\n"
 "Voltage"
-msgstr "EGO Tension de commutation"
+msgstr ""
+"EGO Tension\n"
+"de commutation"
 
 #: Gui/enrichments.glade:1338
 msgid ""
 "EGO Step\n"
 "(Percent)"
-msgstr "Étape EGO (en pourcentage)"
+msgstr ""
+"Étape EGO\n"
+"(en pourcentage)"
 
 #: Gui/enrichments.glade:1443
 msgid ""
 "# of Ignition Events\n"
 "Between Steps"
-msgstr "# D&#39;événements d&#39;allumage entre étapes"
+msgstr ""
+"# D&#39;événements d&#39;\n"
+"allumage entre étapes"
 
 #: Gui/enrichments.glade:1472
 msgid ""
 "EGO +/- Limit\n"
 "(Percent)"
-msgstr "EGO + / - Limite (en pourcentage)"
+msgstr ""
+"EGO + / - Limite\n"
+"(en pourcentage)"
 
 #: Gui/enrichments.glade:1570 Gui/msns-e-ego.glade:1432
 msgid "Exhaust O<sub>2</sub> Feedback Settings"
@@ -12735,25 +12748,33 @@ msgstr "O échappement Paramètres <sub>2</sub> Commentaires"
 msgid ""
 "Accel Enrich\n"
 "Duration (sec)"
-msgstr "Accel Enrichir Durée (sec)"
+msgstr ""
+"Accel Enrichir\n"
+"Durée (sec)"
 
 #: Gui/enrichments.glade:1654
 msgid ""
 "TPS Trigger Threshold \n"
 "(V/sec)"
-msgstr "Seuil de déclenchement TPS (V / sec)"
+msgstr ""
+"Seuil de déclenchement TPS\n"
+"(V / sec)"
 
 #: Gui/enrichments.glade:1759
 msgid ""
 "Cold Accel Enrich\n"
 "Add-on (ms)"
-msgstr "Accel froide Enrichir Add-on (ms)"
+msgstr ""
+"Accel froide Enrichir\n"
+"Add-on (ms)"
 
 #: Gui/enrichments.glade:1788
 msgid ""
 "Cold Accel Enrich\n"
 "Multiplier (%)"
-msgstr "Accel froide Enrichir multiplicateur (%)"
+msgstr ""
+"Accel froide Enrichir\n"
+"multiplicateur (%)"
 
 #: Gui/enrichments.glade:1911
 msgid "Acceleration Enrichment Bins (ms)"
@@ -13685,7 +13706,7 @@ msgstr "mapDOT Paramètres"
 
 #: Gui/ms2-accel.glade:2245 Gui/ms2-xtau.glade:1495
 msgid "RPM\n"
-msgstr "RPM"
+msgstr "RPM\n"
 
 #: Gui/ms2-accel.glade:2386 Gui/ms2-xtau.glade:1636
 msgid "<small> </small>"
@@ -13696,7 +13717,9 @@ msgstr "<small> </small>"
 msgid ""
 "X (Puddling)\n"
 "Factors"
-msgstr "X (en traîne) Facteurs"
+msgstr ""
+"X (en traîne)\n"
+"Facteurs"
 
 #: Gui/ms2-accel.glade:2613 Gui/ms2-accel.glade:2908 Gui/ms2-accel.glade:3245
 #: Gui/ms2-accel.glade:3540 Gui/ms2-accel.glade:4420 Gui/ms2-accel.glade:4910
@@ -13766,7 +13789,9 @@ msgstr "<small>(Décél)</small>"
 msgid ""
 "Tau (Time)\n"
 "Factors"
-msgstr "Tau (Time) Facteurs"
+msgstr ""
+"Tau (Time)\n"
+"Facteurs"
 
 #: Gui/ms2-accel.glade:3646 Gui/ms2-accel.glade:4099
 #: Gui/ms2-e-3.x-crank_idle_warmup.glade:3623
@@ -20017,135 +20042,135 @@ msgstr "Sous la direction de Groupe tableau 2D"
 #: src/2d_table_editor.c:848
 #, c-format
 msgid "ERROR in update_2d_curve()!!!\n"
-msgstr "()!!! ERREUR dans update_2d_curve"
+msgstr "()!!! ERREUR dans update_2d_curve\n"
 
 #: src/2d_table_editor.c:1158
 #, c-format
 msgid "widget isn't visible or sensitive\n"
-msgstr "widget n&#39;est pas visible ou sensible"
+msgstr "widget n&#39;est pas visible ou sensible\n"
 
 #. Copy the frames per second into a string to display in the window
 #: src/3d_vetable.c:102
 #, c-format
 msgid "Current Frames Per Second: %i"
-msgstr "Cadres courant par seconde:% i"
+msgstr "Cadres courant par seconde: %i"
 
 #: src/about_gui.c:49 src/core_gui.c:175
 #, c-format
 msgid "MegaTunix %s Tuning Software for Unix-class OS's"
-msgstr "% S MegaTunix Tuning Logiciel pour Unix classe OS"
+msgstr "MegaTunix %s Tuning Logiciel pour Unix classe OS"
 
 #: src/afr_calibrate.c:318
 #, c-format
 msgid "default case, shouldn't have gotten here. afr_enum is %i"
-msgstr "cas par défaut, ne devrait pas avoir obtenu ici. afr_enum est% i"
+msgstr "cas par défaut, ne devrait pas avoir obtenu ici. afr_enum est %i"
 
 #: src/args.c:77
 #, c-format
 msgid "ERROR OCCURRED\n"
-msgstr "Une erreur s&#39;est produite"
+msgstr "Une erreur s&#39;est produite\n"
 
 #: src/args.c:90
 #, c-format
 msgid "not sure what the error is\n"
-msgstr "pas sûr de ce que l&#39;erreur est"
+msgstr "pas sûr de ce que l&#39;erreur est\n"
 
 #: src/args.c:100
 #, c-format
 msgid "Network info provided is invalid!\n"
-msgstr "Réseau info fournie n&#39;est pas valide!"
+msgstr "Réseau info fournie n&#39;est pas valide!\n"
 
 #: src/args.c:148
 #, c-format
 msgid "Should do listen mode\n"
-msgstr "Devrait faire mode d&#39;écoute"
+msgstr "Devrait faire mode d&#39;écoute\n"
 
 #: src/args.c:158
 #, c-format
 msgid "debug option \"%i\"\n"
-msgstr "option de débogage \"% i\""
+msgstr "option de débogage \"%i\"\n"
 
 #: src/args.c:159
 #, c-format
 msgid "Global debug filename\"%s\"\n"
-msgstr "Nom de fichier de debug mondial \"%s\""
+msgstr "Nom de fichier de debug mondial \"%s\"\n"
 
 #: src/args.c:160
 #, c-format
 msgid "version option \"%i\"\n"
-msgstr "option version \"% i\""
+msgstr "option version \"%i\"\n"
 
 #: src/args.c:161
 #, c-format
 msgid "quiet option \"%i\"\n"
-msgstr "option tranquille \"% i\""
+msgstr "option tranquille \"%i\"\n"
 
 #: src/args.c:162
 #, c-format
 msgid "no rttext option \"%i\"\n"
-msgstr "aucune option rttext \"% i\""
+msgstr "aucune option rttext \"%i\"\n"
 
 #: src/args.c:163
 #, c-format
 msgid "no status option \"%i\"\n"
-msgstr "pas d&#39;option du statut \"% i\""
+msgstr "pas d&#39;option du statut \"%i\"\n"
 
 #: src/args.c:164
 #, c-format
 msgid "no maingui option \"%i\"\n"
-msgstr "aucune option maingui \"% i\""
+msgstr "aucune option maingui \"%i\"\n"
 
 #: src/args.c:165
 #, c-format
 msgid "autolog_dump \"%i\"\n"
-msgstr "autolog_dump \"% i\""
+msgstr "autolog_dump \"%i\"\n"
 
 #: src/args.c:166
 #, c-format
 msgid "autolog_minutes \"%i\"\n"
-msgstr "autolog_minutes \"% i\""
+msgstr "autolog_minutes \"%i\"\n"
 
 #: src/args.c:167
 #, c-format
 msgid "autolog_dump_dir \"%s\"\n"
-msgstr "autolog_dump_dir \"%s\""
+msgstr "autolog_dump_dir \"%s\"\n"
 
 #: src/args.c:168
 #, c-format
 msgid "autolog_basename \"%s\"\n"
-msgstr "autolog_basename \"%s\""
+msgstr "autolog_basename \"%s\"\n"
 
 #: src/args.c:169
 #, c-format
 msgid "listen mode \"%i\"\n"
-msgstr "mode d&#39;écoute \"% i\""
+msgstr "mode d&#39;écoute \"%i\"\n"
 
 #: src/args.c:170
 #, c-format
 msgid "network mode \"%i\"\n"
-msgstr "de réseau en mode \"% i\""
+msgstr "de réseau en mode \"%i\"\n"
 
 #: src/args.c:171
 #, c-format
 msgid "network host \"%s\"\n"
-msgstr "hôte du réseau \"%s\""
+msgstr "hôte du réseau \"%s\"\n"
 
 #: src/args.c:172
 #, c-format
 msgid "network port \"%i\"\n"
-msgstr "port réseau \"% i\""
+msgstr "port réseau \"%i\"\n"
 
 #: src/comms.c:84
 #, c-format
 msgid "Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"
-msgstr "Erreur d&#39;écriture \"C\" à l&#39;écu, ERROR \"%s\" dans comms_test ()"
+msgstr "Erreur d&#39;écriture \"C\" à l&#39;écu, ERROR \"%s\" dans comms_test ()\n"
 
 #: src/comms.c:96
 #, c-format
 msgid ""
 "Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test"
 "()\n"
-msgstr "Erreur d&#39;écriture \"c\" (test d&#39;horloge MS-II) à l&#39;écu, ERROR \"%s\" dans comms_test ()"
+msgstr "Erreur d&#39;écriture \"c\" (test d&#39;horloge MS-II) à l&#39;écu, ERROR \"%s\" dans comms_test ()\n"
 
 #: src/comms.c:108
 msgid "ECU Connected..."
@@ -20154,7 +20179,7 @@ msgstr "Écus connectés ..."
 #: src/comms.c:109
 #, c-format
 msgid "ECU Comms Test Successfull\n"
-msgstr "Comms ECU Test réussi"
+msgstr "Comms ECU Test réussi\n"
 
 #: src/comms.c:119
 #, c-format
@@ -20164,22 +20189,23 @@ msgstr "QUESTIONS COMMS: COMMS Vérifiez l&#39;onglet"
 #: src/comms.c:121
 #, c-format
 msgid "I/O with ECU Timeout\n"
-msgstr "I / O avec l&#39;ECU Timeout"
+msgstr "I / O avec l&#39;ECU Timeout\n"
 
 #: src/comms.c:157
 #, c-format
 msgid "Non simple/chunk write command, not notifying peers\n"
-msgstr "simple non-bloc commande d&#39;écriture, ne communiquant pas ses pairs"
+msgstr "simple non-bloc commande d&#39;écriture, ne communiquant pas ses pairs\n"
 
 #: src/comms.c:393
 #, c-format
 msgid "Sending %i of %i bytes"
-msgstr "Envoi% i de% i octets"
+msgstr "Envoi %i de %i octets"
 
 #: src/conversions.c:76
 msgid ""
 ": convert_before_download, FATAL ERROR, size undefined for widget at page"
-msgstr ": Convert_before_download, FATAL ERROR, taille indéfinie de widget à la page"
+msgstr ""
+": Convert_before_download, FATAL ERROR, taille indéfinie de widget à la page"
 
 #: src/conversions.c:76
 msgid "offset"
@@ -20188,19 +20214,21 @@ msgstr "offset"
 #: src/conversions.c:111 src/conversions.c:277
 #, c-format
 msgid "big problem, source key is undefined!!\n"
-msgstr "gros problème, clé source n&#39;est pas définie!"
+msgstr "gros problème, clé source n&#39;est pas définie!\n"
 
 #: src/conversions.c:253
 #, c-format
 msgid "BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"
-msgstr "Gros problème, taille indéfinie! à la page% i,% i offset,%s widget"
+msgstr "Gros problème, taille indéfinie! à la page %i, offset %i ,widget %s\n"
 
 #: src/core_gui.c:75
 #, c-format
 msgid ""
 "ERROR! Could NOT locate file %s.\n"
 " - Did you forget to run \"sudo make install\" ?\n"
-msgstr "ERREUR! Impossible de localiser le fichier%s. - Avez-vous oublié de lancer \"sudo make install\"?"
+msgstr ""
+"ERREUR! Impossible de localiser le fichier%s.\n"
+" - Avez-vous oublié de lancer \"sudo make install\" ?\n"
 
 #: src/core_gui.c:77
 msgid ""
@@ -20209,7 +20237,12 @@ msgid ""
 "\n"
 "Did you forget to run <i>\"sudo make install\"</i> ??\n"
 "\n"
-msgstr "<b>MegaTunix</b> ne semble pas être installé correctement! Avez-vous oublié de lancer <i>\"sudo make install\"??</i>"
+msgstr ""
+"\n"
+"<b>MegaTunix</b> ne semble pas être installé correctement!\n"
+"\n"
+"Avez-vous oublié de lancer <i>\"sudo make install\"</i>??\n"
+"\n"
 
 #: src/dashboard.c:74
 #, c-format

@@ -119,7 +119,7 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
+_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the "engine" union.
 log_by_default=TRUE
 
 [derived_8]

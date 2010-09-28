@@ -69,7 +69,7 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the \"engine\" union.
+_tooltip="EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the "engine" union.
 log_by_default=TRUE
 
 [derived_5]
@@ -450,7 +450,7 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="TPSaccel\" is the amount of Acceleration enrichment being dispensed. Units are in milliseconds x10, so 10 ms shows upa as 100 in the log
+_tooltip="TPSaccel" is the amount of Acceleration enrichment being dispensed. Units are in milliseconds x10, so 10 ms shows upa as 100 in the log
 log_by_default=TRUE
 
 [derived_32]
@@ -509,7 +509,7 @@ stroke_bitmask=4
 raw_rpm_offset=13
 raw_rpm_size=_U08_
 precision=1
-_tooltip=" Dcycle\" is the injector Duty cycle.
+_tooltip=" Dcycle" is the injector Duty cycle.
 log_by_default=TRUE
 
 [derived_35]
@@ -522,7 +522,7 @@ real_lower=0
 real_upper=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="BSPOT\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1.
+_tooltip="BSPOT" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1.
 log_by_default=FALSE
 
 [derived_36]
