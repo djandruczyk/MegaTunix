@@ -6,7 +6,6 @@
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <handlers.h>
 
 
@@ -14,18 +13,20 @@ extern GtkWidget * gauge;
 extern GdkColor black;
 extern GdkColor white;
 extern gboolean changed;
+extern GtkBuilder *toplevel;
+extern GtkBuilder *tgroups;
 
 EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *dummy = NULL;
 	MtxTickGroup *tgroup = NULL;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gfloat tmp1 = 0.0;
 	gfloat tmp2 = 0.0;
 	gint result = 0;
 	MtxGaugeFace *g = NULL;
+	GError *error = NULL;
 
 	if (GTK_IS_WIDGET(gauge))
 		g = MTX_GAUGE_FACE(gauge);
@@ -33,10 +34,16 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tgroup.glade",NULL),NULL);
 	if (filename)
 	{
-		xml = glade_xml_new(filename, "tgroup_dialog", NULL);
+		tgroups = gtk_builder_new();
+		if(!gtk_builder_add_from_file(tgroups,filename, &error))
+		{
+			g_warning ("Couldn't load builder file: %s", error->message);
+			g_error_free(error);
+			exit(-1);
+		}
 		g_free(filename);
 	}
 	else
@@ -45,33 +52,33 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 		exit(-1);
 	}
 
-	glade_xml_signal_autoconnect(xml);
-	dialog = glade_xml_get_widget(xml,"tgroup_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_day_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_nite_colorbutton")),&black);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_day_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_nite_colorbutton")),&black);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_day_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_nite_colorbutton")),&black);
-	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"high_angle",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_start_angle_spin")),"spin_handler", GINT_TO_POINTER(ADJ_LOW_UNIT_PARTNER));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"low_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"spin_handler", GINT_TO_POINTER(ADJ_HIGH_UNIT_PARTNER));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_lowpoint_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_start_angle_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_lowpoint_spin")),"spin_handler", GINT_TO_POINTER(ADJ_START_ANGLE_PARTNER));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_highpoint_spin")),"highpartner",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_highpoint_spin")),"start_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
-	OBJ_SET((glade_xml_get_widget(xml,"tg_highpoint_spin")),"spin_handler", GINT_TO_POINTER(ADJ_SWEEP_ANGLE_PARTNER));
+	gtk_builder_connect_signals(tgroups,NULL);
+	dialog = GTK_WIDGET (gtk_builder_get_object(tgroups,"tgroup_dialog"));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_text_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_text_nite_colorbutton")),&black);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_nite_colorbutton")),&black);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_nite_colorbutton")),&black);
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_start_angle_spin")),"lowpartner",gtk_builder_get_object(tgroups,"tg_lowpoint_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_start_angle_spin")),"highpartner",gtk_builder_get_object(tgroups,"tg_highpoint_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_start_angle_spin")),"high_angle",gtk_builder_get_object(tgroups,"tg_sweep_angle_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_start_angle_spin")),"spin_handler", GINT_TO_POINTER(ADJ_LOW_UNIT_PARTNER));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_sweep_angle_spin")),"highpartner",gtk_builder_get_object(tgroups,"tg_highpoint_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_sweep_angle_spin")),"low_angle",gtk_builder_get_object(tgroups,"tg_start_angle_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_sweep_angle_spin")),"spin_handler", GINT_TO_POINTER(ADJ_HIGH_UNIT_PARTNER));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_lowpoint_spin")),"lowpartner",gtk_builder_get_object(tgroups,"tg_start_angle_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_lowpoint_spin")),"spin_handler", GINT_TO_POINTER(ADJ_START_ANGLE_PARTNER));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_highpoint_spin")),"highpartner",gtk_builder_get_object(tgroups,"tg_sweep_angle_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_highpoint_spin")),"start_angle",gtk_builder_get_object(tgroups,"tg_start_angle_spin"));
+	OBJ_SET((gtk_builder_get_object(tgroups,"tg_highpoint_spin")),"spin_handler", GINT_TO_POINTER(ADJ_SWEEP_ANGLE_PARTNER));
 	if (MTX_IS_GAUGE_FACE(g))
 	{
 		mtx_gauge_face_get_attribute(g,START_ANGLE,&tmp1);
 		mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&tmp2);
-		dummy = glade_xml_get_widget(xml,"tg_start_angle_spin");
+		dummy = GTK_WIDGET(gtk_builder_get_object(tgroups,"tg_start_angle_spin"));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp1);
-		dummy = glade_xml_get_widget(xml,"tg_sweep_angle_spin");
+		dummy = GTK_WIDGET(gtk_builder_get_object(tgroups,"tg_sweep_angle_spin"));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp2);
 	}
 
@@ -86,27 +93,27 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 	{
 		case GTK_RESPONSE_APPLY:
 			tgroup = g_new0(MtxTickGroup, 1);
-			tgroup->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tg_tick_fontbutton")));
+			tgroup->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(gtk_builder_get_object(tgroups,"tg_tick_fontbutton")));
 			tgroup->font = g_strchomp(g_strdelimit(tgroup->font,"0123456789",' '));
-			tgroup->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tg_tick_textentry")),0,-1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_day_colorbutton")),&tgroup->text_color[MTX_DAY]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_nite_colorbutton")),&tgroup->text_color[MTX_NITE]);
-			tgroup->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_font_scale_spin")));
-			tgroup->text_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_text_inset_spin")));
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_day_colorbutton")),&tgroup->maj_tick_color[MTX_DAY]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_nite_colorbutton")),&tgroup->maj_tick_color[MTX_NITE]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_day_colorbutton")),&tgroup->min_tick_color[MTX_DAY]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_nite_colorbutton")),&tgroup->min_tick_color[MTX_NITE]);
-			tgroup->maj_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_inset_spin")));
-			tgroup->min_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_inset_spin")));
-			tgroup->maj_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_width_spin")));
-			tgroup->min_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_width_spin")));
-			tgroup->maj_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_length_spin")));
-			tgroup->min_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_length_spin")));
-			tgroup->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_start_angle_spin")));
-			tgroup->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_sweep_angle_spin")));
-			tgroup->num_maj_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_maj_ticks_spin")));
-			tgroup->num_min_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_min_ticks_spin")));
+			tgroup->text = gtk_editable_get_chars(GTK_EDITABLE(gtk_builder_get_object(tgroups,"tg_tick_textentry")),0,-1);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_text_day_colorbutton")),&tgroup->text_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_text_nite_colorbutton")),&tgroup->text_color[MTX_NITE]);
+			tgroup->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_font_scale_spin")));
+			tgroup->text_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_text_inset_spin")));
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_day_colorbutton")),&tgroup->maj_tick_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_nite_colorbutton")),&tgroup->maj_tick_color[MTX_NITE]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_day_colorbutton")),&tgroup->min_tick_color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_nite_colorbutton")),&tgroup->min_tick_color[MTX_NITE]);
+			tgroup->maj_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_inset_spin")));
+			tgroup->min_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_inset_spin")));
+			tgroup->maj_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_width_spin")));
+			tgroup->min_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_width_spin")));
+			tgroup->maj_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_maj_tick_length_spin")));
+			tgroup->min_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_min_tick_length_spin")));
+			tgroup->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_start_angle_spin")));
+			tgroup->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_sweep_angle_spin")));
+			tgroup->num_maj_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_num_maj_ticks_spin")));
+			tgroup->num_min_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tgroups,"tg_num_min_ticks_spin")));
 
 			changed = TRUE;
 			mtx_gauge_face_set_tick_group_struct(MTX_GAUGE_FACE(gauge),tgroup);
@@ -135,14 +142,13 @@ void update_onscreen_tgroups()
 	MtxTickGroup *tgroup = NULL;
 	GArray * array = NULL;
 	GtkAdjustment *adj = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml) || (!gauge))
+	if ((!toplevel) || (!gauge))
 		return;
 
 	array = mtx_gauge_face_get_tick_groups(MTX_GAUGE_FACE(gauge));
 
-	toptable = glade_xml_get_widget(topxml,"tick_groups_layout_table");
+	toptable = GTK_WIDGET(gtk_builder_get_object(toplevel,"tick_groups_layout_table"));
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -167,7 +173,7 @@ void update_onscreen_tgroups()
 
 	}
 	/* Scroll to end */
-	dummy = glade_xml_get_widget(topxml,"tgroup_swin");
+	dummy = GTK_WIDGET(gtk_builder_get_object(toplevel,"tgroup_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
 	adj->value = adj->upper;
 	gtk_widget_show_all(toptable);
@@ -178,11 +184,10 @@ void reset_onscreen_tgroups()
 {
 	GtkWidget *toptable = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml))
+	if ((!toplevel))
 		return;
-	toptable = glade_xml_get_widget(topxml,"tick_groups_layout_table");
+	toptable = GTK_WIDGET (gtk_builder_get_object(toplevel,"tick_groups_layout_table"));
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");

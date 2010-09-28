@@ -4,33 +4,43 @@
 #include <gauge.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <warnings.h>
 
 extern GtkWidget * gauge;
 extern GdkColor black;
 extern GdkColor white;
 extern gboolean changed;
+extern GtkBuilder *toplevel;
+
 
 EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
 {
+	GtkBuilder *warnings;
 	GtkWidget *dialog = NULL;
 	GtkWidget *spinner = NULL;
+	GtkWidget *tmpwidget = NULL;
 	GtkWidget *cbutton = NULL;
 	MtxWarningRange *range = NULL;
 	gfloat lbound = 0.0;
 	gfloat ubound = 0.0;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gint result = 0;
+	GError *error = NULL;
+
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"w_range.glade",NULL),NULL);
 	if (filename)
 	{
-		xml = glade_xml_new(filename, "w_range_dialog", NULL);
+		warnings = gtk_builder_new();
+		if(!gtk_builder_add_from_file(warnings,filename,&error))
+		{
+			g_warning ("Couldn't load builder file: %s", error->message);
+			g_error_free(error);
+			exit(-1);
+		}
 		g_free(filename);
 	}
 	else
@@ -39,11 +49,11 @@ EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
 		exit(-1);
 	}
 
-	glade_xml_signal_autoconnect(xml);
-	dialog = glade_xml_get_widget(xml,"w_range_dialog");
-	cbutton = glade_xml_get_widget(xml,"range_day_colorbutton");
+	gtk_builder_connect_signals(warnings,NULL);
+	dialog = GTK_WIDGET (gtk_builder_get_object(warnings,"w_range_dialog"));
+	cbutton = GTK_WIDGET (gtk_builder_get_object(warnings,"range_day_colorbutton"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
-	cbutton = glade_xml_get_widget(xml,"range_nite_colorbutton");
+	cbutton = GTK_WIDGET (gtk_builder_get_object(warnings,"range_nite_colorbutton"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&black);
 	if (!GTK_IS_WIDGET(dialog))
 	{
@@ -53,10 +63,12 @@ EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
 	/* Set the controls to sane ranges corresponding to the gauge */
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lbound);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &ubound);
-	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
+	spinner = GTK_WIDGET (gtk_builder_get_object(warnings,"range_lowpoint_spin"));
+	OBJ_SET(spinner,"builder",warnings);
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),(ubound-lbound)/2.0);
-	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
+	spinner = GTK_WIDGET (gtk_builder_get_object(warnings,"range_highpoint_spin"));
+	OBJ_SET(spinner,"builder",warnings);
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),ubound);
 
@@ -65,12 +77,12 @@ EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
 	{
 		case GTK_RESPONSE_APPLY:
 			range = g_new0(MtxWarningRange, 1);
-			range->lowpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lowpoint_spin")));
-			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
-			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
-			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_day_colorbutton")),&range->color[MTX_DAY]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_nite_colorbutton")),&range->color[MTX_NITE]);
+			range->lowpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(warnings,"range_lowpoint_spin")));
+			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(warnings,"range_highpoint_spin")));
+			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(warnings,"range_inset_spin")));
+			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(warnings,"range_lwidth_spin")));
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(warnings,"range_day_colorbutton")),&range->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(warnings,"range_nite_colorbutton")),&range->color[MTX_NITE]);
 			changed = TRUE;
 			mtx_gauge_face_set_warning_range_struct(MTX_GAUGE_FACE(gauge),range);
 			g_free(range);
@@ -102,12 +114,11 @@ void update_onscreen_w_ranges()
 	gfloat high = 0.0;
 	MtxWarningRange *range = NULL;
 	GArray * array = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml) || (!GTK_IS_WIDGET(gauge)))
+	if ((!toplevel) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_warning_ranges(MTX_GAUGE_FACE(gauge));
-	container = glade_xml_get_widget(topxml,"warning_range_viewport");
+	container = GTK_WIDGET (gtk_builder_get_object(toplevel,"warning_range_viewport"));
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");
@@ -185,7 +196,7 @@ void update_onscreen_w_ranges()
 		y++;
 	}
 	/* Scroll to end */
-	dummy = glade_xml_get_widget(topxml,"crange_swin");
+	dummy = GTK_WIDGET (gtk_builder_get_object(toplevel,"crange_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
 	adj->value = adj->upper;
 	gtk_widget_show_all(container);
@@ -196,11 +207,10 @@ void reset_onscreen_w_ranges()
 {
 	GtkWidget *container = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml))
+	if ((!toplevel))
 		return;
-	container = glade_xml_get_widget(topxml,"warning_range_viewport");
+	container = GTK_WIDGET (gtk_builder_get_object(toplevel,"warning_range_viewport"));
 	if (!GTK_IS_WIDGET(container))
 	{
 		printf("color range viewport invalid!!\n");

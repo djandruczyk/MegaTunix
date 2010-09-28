@@ -8,7 +8,6 @@
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <polygons.h>
 #include <tblocks.h>
 #include <tgroups.h>
@@ -23,14 +22,14 @@ extern gboolean direct_path;
 extern gboolean changed;
 extern gboolean gauge_loaded;
 extern GtkWidget *main_window;
+extern GtkBuilder *toplevel;
 
 
 
 EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *tmp = NULL;
-	GladeXML *xml = glade_get_widget_tree(widget);
-	GtkWidget *parent = glade_xml_get_widget(xml,"gauge_frame");
+
 	gauge = mtx_gauge_face_new();
 	gtk_widget_set_events(gauge,GDK_POINTER_MOTION_HINT_MASK
 			| GDK_POINTER_MOTION_MASK
@@ -38,23 +37,24 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 			| GDK_BUTTON_RELEASE_MASK);
 	g_signal_connect(GTK_WIDGET(gauge),"motion_notify_event",G_CALLBACK(gauge_motion),NULL);
 	g_signal_connect(GTK_WIDGET(gauge),"button_press_event",G_CALLBACK(gauge_button),NULL);
-	gtk_container_add(GTK_CONTAINER(parent),gauge);
-	gtk_widget_show_all(parent);
+	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"gauge_frame"));
+	gtk_container_add(GTK_CONTAINER(tmp),gauge);
+	gtk_widget_show_all(tmp);
 	mtx_gauge_face_redraw_canvas(MTX_GAUGE_FACE(gauge));
 	gauge_loaded = TRUE;
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"tab_notebook"),TRUE);
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"animate_frame"),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"tab_notebook")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame")),TRUE);
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"new_gauge_menuitem"),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"new_gauge_menuitem")),FALSE);
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"close_gauge_menuitem"),TRUE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"close_gauge_menuitem")),TRUE);
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"load_gauge_menuitem"),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"load_gauge_menuitem")),FALSE);
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"save_gauge_menuitem"),TRUE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"save_gauge_menuitem")),TRUE);
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(xml,"save_as_menuitem"),TRUE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"save_as_menuitem")),TRUE);
 
 	update_attributes();
 	return (TRUE);
@@ -65,44 +65,34 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *tmp = NULL;
-	GladeXML *xml = glade_get_widget_tree(widget);
-	GtkWidget *parent = glade_xml_get_widget(xml,"gauge_frame");
 
 	if (GTK_IS_WIDGET(gauge))
 	{
 		if (changed)
 			prompt_to_save();
 		gtk_widget_destroy(gauge);
-		gtk_widget_set_sensitive(glade_xml_get_widget(xml,"tab_notebook"),FALSE);
+		gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"tab_notebook")),FALSE);
 		gauge_loaded = FALSE;
 		changed = FALSE;
 	}
 	gauge = NULL;
 
-	tmp = glade_xml_get_widget(xml,"animate_frame");
+	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame"));
 	gtk_widget_set_sensitive(tmp,FALSE);
 
-	tmp = glade_xml_get_widget(xml,"new_gauge_menuitem");
-	gtk_widget_set_sensitive(tmp,TRUE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"new_gauge_menuitem")),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"load_gauge_menuitem")),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"close_gauge_menuitem")),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"save_gauge_menuitem")),FALSE);
+	gtk_action_set_sensitive(GTK_ACTION (gtk_builder_get_object(toplevel,"save_as_menuitem")),FALSE);
 
-	tmp = glade_xml_get_widget(xml,"load_gauge_menuitem");
-	gtk_widget_set_sensitive(tmp,TRUE);
-
-	tmp = glade_xml_get_widget(xml,"close_gauge_menuitem");
-	gtk_widget_set_sensitive(tmp,FALSE);
-
-	tmp = glade_xml_get_widget(xml,"save_gauge_menuitem");
-	gtk_widget_set_sensitive(tmp,FALSE);
-
-	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
-	gtk_widget_set_sensitive(tmp,FALSE);
-
-	tmp = glade_xml_get_widget(xml,"animate_button");
+	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_button"));
 	gtk_widget_set_sensitive(tmp,TRUE);
 
 	reset_onscreen_controls();
 	direct_path = FALSE;
-	gtk_widget_show_all(parent);
+	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"gauge_frame"));
+	gtk_widget_show_all(tmp);
 	return (TRUE);
 }
 
@@ -183,16 +173,28 @@ EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 {
-	GladeXML *xml = glade_get_widget_tree(widget);
 	GtkAdjustment *adj = NULL;
-	GtkWidget *upper_spin = glade_xml_get_widget(xml,"range_highpoint_spin");
+	GtkWidget *upper_spin = NULL;
+	GtkBuilder * builder = OBJ_GET(widget,"builder");
+	if (builder)
+	{
 
-	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(upper_spin));
-	adj->lower = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-	if (adj->value < adj->lower)
-		adj->value = adj->lower;
-	gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(upper_spin),adj);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(upper_spin),adj->value);
+		upper_spin = GTK_WIDGET(gtk_builder_get_object(builder,"range_highpoint_spin"));
+		if (GTK_IS_WIDGET(upper_spin))
+		{
+
+		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(upper_spin));
+		adj->lower = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+		if (adj->value < adj->lower)
+			adj->value = adj->lower;
+		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(upper_spin),adj);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(upper_spin),adj->value);
+		}
+		else
+			printf("upper_spin widget undefined, not found in builder\n");
+	}
+	else
+		printf("link_range_spiners, builder was undefined!\n");
 	return FALSE;
 }
 
@@ -221,7 +223,6 @@ gboolean sweep_gauge(gpointer data)
 	static gfloat upper = 0.0;
 	gfloat interval = 0.0;
 	gfloat cur_val = 0.0;
-	GladeXML *xml = NULL;
 	GtkWidget *button = NULL;
 	static gboolean rising = TRUE;
 	GtkWidget * gauge = NULL;
@@ -251,8 +252,7 @@ gboolean sweep_gauge(gpointer data)
 		/* This cancels the timeout once one full complete sweep
 		 * of the gauge
 		 */
-		xml = glade_get_widget_tree(gauge->parent);
-		button = glade_xml_get_widget(xml,"animate_button");
+		button = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_button"));
 		gtk_widget_set_sensitive(button,TRUE);
 		mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),lower);
 		return FALSE;
@@ -267,8 +267,13 @@ EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer data)
 {
 	gdouble x = 0.0;
 	gdouble y = 0.0;
-	gtk_widget_set_sensitive(OBJ_GET(widget,"x_spin"),FALSE);
-	gtk_widget_set_sensitive(OBJ_GET(widget,"y_spin"),FALSE);
+	GtkWidget *tmp = NULL;
+	tmp = OBJ_GET(widget,"x_spin");
+	if (GTK_IS_WIDGET(tmp))
+		gtk_widget_set_sensitive(tmp,FALSE);
+	tmp = OBJ_GET(widget,"y_spin");
+	if (GTK_IS_WIDGET(tmp))
+		gtk_widget_set_sensitive(tmp,FALSE);
 	gtk_widget_set_sensitive(widget,FALSE);
 	OBJ_SET(gauge,"x_spin",OBJ_GET(widget,"x_spin"));
 	OBJ_SET(gauge,"y_spin",OBJ_GET(widget,"y_spin"));

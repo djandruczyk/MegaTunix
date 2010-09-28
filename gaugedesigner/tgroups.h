@@ -16,7 +16,6 @@
 
 #include <defines.h>
 #include <gauge.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 

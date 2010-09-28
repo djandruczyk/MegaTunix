@@ -28,7 +28,12 @@ bin_PROGRAMS = \
 	       gaugedesigner
 
 glade_files = \
-	      gaugedesigner.glade
+	      main.glade \
+	      a_range.glade \
+	      polygon.glade \
+	      tblock.glade \
+	      tgroup.glade \
+	      w_range.glade
 
 #xml_files = 
 

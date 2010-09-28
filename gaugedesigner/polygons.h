@@ -16,11 +16,11 @@
 
 #include <defines.h>
 #include <gauge.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
 EXPORT gboolean create_polygon_event(GtkWidget *, gpointer );
+EXPORT gboolean new_poly_response(GtkDialog *, gint, gpointer);
 void reset_onscreen_polygons(void);
 void update_onscreen_polygons(void);
 gboolean alter_polygon_data(GtkWidget *, gpointer );

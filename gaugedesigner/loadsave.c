@@ -7,7 +7,6 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

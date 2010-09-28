@@ -7,9 +7,8 @@
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
-extern GladeXML *topxml;
+extern GtkBuilder *toplevel;
 extern GdkColor black;
 extern GdkColor white;
 extern GtkWidget *gauge;
@@ -23,7 +22,7 @@ EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),TEXTBLOCK_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),TEXTBLOCK_TAB);
 
 	return TRUE;
 }
@@ -34,7 +33,7 @@ EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),TICKGROUP_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),TICKGROUP_TAB);
 	return TRUE;
 }
 
@@ -44,7 +43,7 @@ EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),POLYGON_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),POLYGON_TAB);
 	return TRUE;
 }
 
@@ -64,42 +63,42 @@ void update_text_controls()
 	else 
 		return;
 
-	if (!topxml)
+	if (!toplevel)
 		return;
 
 	hold_handlers = TRUE;
 
-	widget = glade_xml_get_widget(topxml,"precision_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"precision_spin"));
 	mtx_gauge_face_get_attribute(g, PRECISION, &tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gint)tmp1);
 
 	mtx_gauge_face_get_attribute(g, VALUE_FONTSCALE, &tmp1);
-	widget = glade_xml_get_widget(topxml,"value_font_scale_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_font_scale_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	mtx_gauge_face_get_attribute(g, VALUE_XPOS, &tmp1);
 	mtx_gauge_face_get_attribute(g, VALUE_YPOS, &tmp2);
-	widget = glade_xml_get_widget(topxml,"value_xpos_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_xpos_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
-	widget = glade_xml_get_widget(topxml,"value_ypos_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_ypos_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	widget = glade_xml_get_widget(topxml,"value_font_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_font_button"));
 	tmpbuf0 = mtx_gauge_face_get_value_font(g);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
 	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
-	widget = glade_xml_get_widget(topxml,"show_value_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"show_value_check"));
 	mtx_gauge_face_get_attribute(g, SHOW_VALUE, &tmp1);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
-	widget = glade_xml_get_widget(topxml,"value_color_day_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_color_day_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_DAY, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"value_color_nite_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_color_nite_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
@@ -111,30 +110,30 @@ void reset_text_controls()
 {
 	GtkWidget * widget = NULL;
 
-	if ((!topxml) || (!gauge))
+	if ((!toplevel) || (!gauge))
 		return;
 
 	hold_handlers = TRUE;
 
-	widget = glade_xml_get_widget(topxml,"precision_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"precision_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"value_font_scale_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_font_scale_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"value_xpos_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_xpos_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"value_ypos_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_ypos_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"value_font_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_font_button"));
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup(""));
 
-	widget = glade_xml_get_widget(topxml,"show_value_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"show_value_check"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
-	widget = glade_xml_get_widget(topxml,"value_color_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"value_color_button"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
 
 	hold_handlers = FALSE;
@@ -147,7 +146,7 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),GENERAL_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),GENERAL_TAB);
 	return TRUE;
 }
 
@@ -164,101 +163,101 @@ void update_general_controls()
 	else 
 		return;
 
-	if (!topxml)
+	if (!toplevel)
 		return;
 
 	hold_handlers = TRUE;
 
 	mtx_gauge_face_get_attribute(g,ROTATION,&tmp1);
 	if (tmp1 == MTX_ROT_CW)
-		widget = glade_xml_get_widget(topxml,"cw_rbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"cw_rbutton"));
 	else if (tmp1 == MTX_ROT_CCW)
-		widget = glade_xml_get_widget(topxml,"ccw_rbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"ccw_rbutton"));
 	else
-		widget = glade_xml_get_widget(topxml,"cw_rbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"cw_rbutton"));
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
 
 	mtx_gauge_face_get_attribute(g,ANTIALIAS,&tmp1);
-	widget = glade_xml_get_widget(topxml,"antialiased_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"antialiased_check"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
 	mtx_gauge_face_get_attribute(g,TATTLETALE,&tmp1);
-	widget = glade_xml_get_widget(topxml,"tattletale_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"tattletale_check"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gint)tmp1);
 
-	widget = glade_xml_get_widget(topxml,"tattletale_alpha_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"tattletale_alpha_spin"));
 	mtx_gauge_face_get_attribute(g,TATTLETALE_ALPHA,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"needle_length_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_length_spin"));
 	mtx_gauge_face_get_attribute(g,NEEDLE_LENGTH,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"needle_width_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_width_spin"));
 	mtx_gauge_face_get_attribute(g,NEEDLE_WIDTH,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"needle_tip_width_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_tip_width_spin"));
 	mtx_gauge_face_get_attribute(g,NEEDLE_TIP_WIDTH,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"needle_tail_width_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_tail_width_spin"));
 	mtx_gauge_face_get_attribute(g,NEEDLE_TAIL_WIDTH,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"needle_tail_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_tail_spin"));
 	mtx_gauge_face_get_attribute(g,NEEDLE_TAIL,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"start_angle_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"start_angle_spin"));
 	mtx_gauge_face_get_attribute(g,START_ANGLE,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"sweep_angle_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"sweep_angle_spin"));
 	mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"lbound_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"lbound_spin"));
 	mtx_gauge_face_get_attribute(g,LBOUND,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"ubound_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"ubound_spin"));
 	mtx_gauge_face_get_attribute(g,UBOUND,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(topxml,"background_color_day_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"background_color_day_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_BG_DAY, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"background_color_nite_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"background_color_nite_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_BG_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"needle_color_day_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_color_day_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_DAY, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"needle_color_nite_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_color_nite_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_NEEDLE_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"gradient_begin_color_day_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_begin_color_day_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_DAY, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 	
-	widget = glade_xml_get_widget(topxml,"gradient_begin_color_nite_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_begin_color_nite_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_BEGIN_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 	
-	widget = glade_xml_get_widget(topxml,"gradient_end_color_day_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_end_color_day_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_DAY, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"gradient_end_color_nite_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_end_color_nite_button"));
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_GRADIENT_END_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = glade_xml_get_widget(topxml,"daytime_radiobutton");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"daytime_radiobutton"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_daytime_mode(g));
 	hold_handlers = FALSE;
 }
@@ -268,54 +267,54 @@ void reset_general_controls()
 {
 	GtkWidget * widget = NULL;
 
-	if ((!topxml) || (!gauge))
+	if ((!toplevel) || (!gauge))
 		return;
 
 	hold_handlers = TRUE;
 
-	widget = glade_xml_get_widget(topxml,"cw_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"cw_button"));
 	gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),TRUE);
 
-	widget = glade_xml_get_widget(topxml,"ccw_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"ccw_button"));
 	gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),TRUE);
 
-	widget = glade_xml_get_widget(topxml,"antialiased_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"antialiased_check"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
-	widget = glade_xml_get_widget(topxml,"tattletale_check");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"tattletale_check"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 
-	widget = glade_xml_get_widget(topxml,"tattletale_alpha_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"tattletale_alpha_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"needle_width_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_width_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"needle_tail_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_tail_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"start_angle_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"start_angle_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"sweep_angle_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"sweep_angle_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"lbound_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"lbound_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"ubound_spin");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"ubound_spin"));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(topxml,"background_color_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"background_color_button"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);
 
-	widget = glade_xml_get_widget(topxml,"needle_color_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"needle_color_button"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
 
-	widget = glade_xml_get_widget(topxml,"gradient_begin_color_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_begin_color_button"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
 
-	widget = glade_xml_get_widget(topxml,"gradient_end_color_button");
+	widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"gradient_end_color_button"));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);
 
 
@@ -328,7 +327,7 @@ EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),WARNING_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),WARNING_TAB);
 	return TRUE;
 }
 
@@ -338,7 +337,7 @@ EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 	
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(glade_xml_get_widget(topxml,"tab_notebook")),ALERT_TAB);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(gtk_builder_get_object(toplevel,"tab_notebook")),ALERT_TAB);
 	return TRUE;
 }
 
@@ -384,7 +383,7 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	if (!OBJ_GET((widget),"handler"))
 	{
-		printf("control %s has no handler\n",(gchar *)glade_get_widget_name(widget));
+		printf("control %s has no handler\n",(gchar *)gtk_widget_get_name(widget));
 		return FALSE;
 	}
 	handler = (GINT)OBJ_GET((widget),"handler");

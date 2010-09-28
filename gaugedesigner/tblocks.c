@@ -6,29 +6,36 @@
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 extern GtkWidget * gauge;
 extern GdkColor black;
 extern GdkColor white;
 extern gboolean changed;
+extern GtkBuilder *toplevel;
 
 
 EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 {
+	GtkBuilder *tblocks = NULL;
 	GtkWidget *dialog = NULL;
 	MtxTextBlock *tblock = NULL;
-	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gint result = 0;
+	GError *error = NULL;
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tblock.glade",NULL),NULL);
 	if (filename)
 	{
-		xml = glade_xml_new(filename, "tblock_dialog", NULL);
+		tblocks = gtk_builder_new();
+		if (!gtk_builder_add_from_file(tblocks,filename,&error))
+		{
+			g_warning ("Couldn't load builder file: %s", error->message);
+			g_error_free(error);
+			exit (-1);
+		}
 		g_free(filename);
 	}
 	else
@@ -37,10 +44,10 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 		exit(-1);
 	}
 
-	glade_xml_signal_autoconnect(xml);
-	dialog = glade_xml_get_widget(xml,"tblock_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_day_colorbutton")),&white);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&black);
+	gtk_builder_connect_signals(tblocks,NULL);
+	dialog = GTK_WIDGET (gtk_builder_get_object(tblocks,"tblock_dialog"));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tblocks,"tblock_day_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tblocks,"tblock_nite_colorbutton")),&black);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -51,13 +58,13 @@ EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 	{
 		case GTK_RESPONSE_APPLY:
 			tblock = g_new0(MtxTextBlock, 1);
-			tblock->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_font_scale_spin")));
-			tblock->x_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_xpos_spin")));
-			tblock->y_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_ypos_spin")));
-			tblock->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tblock_text_entry")),0,-1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_day_colorbutton")),&tblock->color[MTX_DAY]);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_nite_colorbutton")),&tblock->color[MTX_NITE]);
-			tblock->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tblock_fontbutton")));
+			tblock->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tblocks,"tblock_font_scale_spin")));
+			tblock->x_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tblocks,"tblock_xpos_spin")));
+			tblock->y_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(tblocks,"tblock_ypos_spin")));
+			tblock->text = gtk_editable_get_chars(GTK_EDITABLE(gtk_builder_get_object(tblocks,"tblock_text_entry")),0,-1);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tblocks,"tblock_day_colorbutton")),&tblock->color[MTX_DAY]);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(gtk_builder_get_object(tblocks,"tblock_nite_colorbutton")),&tblock->color[MTX_NITE]);
+			tblock->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(gtk_builder_get_object(tblocks,"tblock_fontbutton")));
 			tblock->font = g_strchomp(g_strdelimit(tblock->font,"0123456789",' '));
 			changed = TRUE;
 			mtx_gauge_face_set_text_block_struct(MTX_GAUGE_FACE(gauge),tblock);
@@ -87,13 +94,12 @@ void update_onscreen_tblocks()
 	MtxTextBlock *tblock = NULL;
 	GtkAdjustment *adj = NULL;
 	GArray * array = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml) || (!gauge))
+	if ((!toplevel) || (!gauge))
 		return;
 
 	array = mtx_gauge_face_get_text_blocks(MTX_GAUGE_FACE(gauge));
-	toptable = glade_xml_get_widget(topxml,"text_blocks_layout_table");
+	toptable = GTK_WIDGET (gtk_builder_get_object(toplevel,"text_blocks_layout_table"));
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -117,7 +123,7 @@ void update_onscreen_tblocks()
 		y+=1;
 	}
 	/* Scroll to end */
-	dummy = glade_xml_get_widget(topxml,"tblock_swin");
+	dummy = GTK_WIDGET (gtk_builder_get_object(toplevel,"tblock_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
 	adj->value = adj->upper;
 
@@ -129,11 +135,10 @@ void reset_onscreen_tblocks()
 {
 	GtkWidget *toptable = NULL;
 	GtkWidget *widget = NULL;
-	extern GladeXML *topxml;
 
-	if ((!topxml))
+	if ((!toplevel))
 		return;
-	toptable = glade_xml_get_widget(topxml,"text_blocks_layout_table");
+	toptable = GTK_WIDGET (gtk_builder_get_object(toplevel,"text_blocks_layout_table"));
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");

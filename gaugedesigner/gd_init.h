@@ -15,12 +15,11 @@
 #define __GD_INIT_H__
 
 #include <defines.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean init_text_attributes(GladeXML *);
-EXPORT gboolean init_general_attributes(GladeXML *);
+EXPORT gboolean init_text_attributes(GtkBuilder *);
+EXPORT gboolean init_general_attributes(GtkBuilder *);
 
 /* Prototypes */
 
