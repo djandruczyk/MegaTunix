@@ -1,8 +1,9 @@
 [API]
 major=1
-minor=2
+minor=3
 
 [realtime_map]
+persona=MS
 applicable_firmwares=MS-II V2.8x
 applicable_signatures=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
 derived_total=70
@@ -83,7 +84,7 @@ log_by_default=TRUE
 [derived_5]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=sparkangle
-_dlog_gui_name=Advance (deg)
+_dlog_gui_name=Advance (\302\260)
 dlog_field_name=SparkAdv
 offset=8
 size=_S16_
@@ -208,7 +209,7 @@ log_by_default=TRUE
 [derived_14]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=matdeg
-_dlog_gui_name=MAT (deg)
+_dlog_gui_name=MAT (\302\260)
 dlog_field_name=IAT
 offset=20
 size=_S16_
@@ -218,13 +219,13 @@ real_upper=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-_tooltip="MAT (deg)" is the manifold air temperature reading in degrees.
+_tooltip="MAT (\302\260)" is the manifold air temperature reading in degrees.
 log_by_default=TRUE
 
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,temp_dep,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=cltdeg
-_dlog_gui_name=CLT (deg)
+_dlog_gui_name=CLT (\302\260)
 dlog_field_name=CLT
 offset=22
 size=_S16_
@@ -234,7 +235,7 @@ real_upper=255
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-_tooltip="CLT (deg)" is the coolant temperature reading in degrees.
+_tooltip="CLT (\302\260)" is the coolant temperature reading in degrees.
 log_by_default=TRUE
 
 [derived_16]
@@ -500,7 +501,7 @@ log_by_default=TRUE
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=coldadv
-_dlog_gui_name=Cold Adv (deg)
+_dlog_gui_name=Cold Adv (\302\260)
 dlog_field_name=ColdAdv
 offset=56
 size=_S16_
@@ -509,7 +510,7 @@ real_upper=100
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 precision=1
-_tooltip="Cold Adv (deg)" is the current Cold spark advance addon.
+_tooltip="Cold Adv (\302\260)" is the current Cold spark advance addon.
 log_by_default=TRUE
 
 [derived_35]

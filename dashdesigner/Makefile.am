@@ -28,7 +28,7 @@ resources.o:
 
 bin_PROGRAMS = dashdesigner 
 
-glade_files = dashdesigner.glade 
+glade_files = main.glade preview.glade propeditor.glade
 
 dash_DATA = $(glade_files)
 

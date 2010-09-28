@@ -2,15 +2,14 @@
 #include <getfiles.h>
 #include <glib.h>
 #include <stdio.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <math.h>
 #include <rtv_parser.h>
 #include <xml.h>
 
-GladeXML *main_xml = NULL;
 GtkWidget *main_window = NULL;
 gchar *cwd = NULL;
+GtkBuilder *toplevel = NULL;
 
 int main (int argc, char ** argv )
 {
@@ -18,33 +17,35 @@ int main (int argc, char ** argv )
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar *dirname = NULL;
+	GError *error = NULL;
 
 	gtk_init (&argc, &argv);
 
-	main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(main_window),"destroy_event",
-			G_CALLBACK(gtk_main_quit),NULL);
-	g_signal_connect(G_OBJECT(main_window),"delete_event",
-			G_CALLBACK(gtk_main_quit),NULL);
-	gtk_window_set_resizable(GTK_WINDOW(main_window),TRUE);
-
-	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"dashdesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"main.glade",NULL),NULL);
 	if (filename)
-		main_xml = glade_xml_new(filename, "main_vbox", NULL);
+	{
+		toplevel = gtk_builder_new();
+		if(!gtk_builder_add_from_file(toplevel,filename,&error))
+		{
+			g_warning ("Couldn't load builder file: %s", error->message);
+			g_error_free(error);
+			exit(-1);
+		}
+		g_free(filename);
+	}
 	else
 	{
 		printf("Can't locate primary glade file!!!!\n");
 		exit(-1);
 	}
-	g_free(filename);
 	
-	glade_xml_signal_autoconnect(main_xml);
-	vbox = glade_xml_get_widget(main_xml, "main_vbox");
+	gtk_builder_connect_signals(toplevel,NULL);
+	main_window = GTK_WIDGET (gtk_builder_get_object(toplevel,"main_window"));
+	gtk_window_set_resizable(GTK_WINDOW(main_window),TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),FALSE);
 
-	/* Bind the appropriate handlers */
-
-	gtk_container_add(GTK_CONTAINER(main_window),vbox);
-	gtk_widget_show_all(vbox);
 
 	retrieve_rt_vars();
 	gtk_widget_show_all(main_window);
@@ -57,7 +58,6 @@ int main (int argc, char ** argv )
 		g_free(dirname);
 		if (g_file_test(argv[1],G_FILE_TEST_IS_REGULAR))
 			import_dash_xml(argv[1]);
-
 	}
 
 	gtk_main();

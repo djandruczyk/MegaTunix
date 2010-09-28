@@ -1,8 +1,9 @@
 [API]
 major=1
-minor=2
+minor=3
 
 [realtime_map]
+persona=MS
 applicable_firmwares=MegaSquirtnSpark-Extra 029x,MegaSquirtnSpark-Extra 029yx
 applicable_signatures=MSnS-extra format 029q *********,MS1/Extra format 029y3 *********
 derived_total=56
@@ -237,7 +238,7 @@ log_by_default=FALSE
 [derived_16]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpspercent
-_dlog_gui_name=TPS %
+_dlog_gui_name=TPS (%)
 dlog_field_name=TPSpercent
 offset=7
 real_lower=0
@@ -245,7 +246,7 @@ real_upper=100
 dl_conv_expr=(x/100)*255
 ul_conv_expr=(x/255)*100
 precision=1
-_tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a adc of 255 is equal to 100% open).
+_tooltip="TPS (%) is the Throttle Position in percentage of open (based on counts, a adc of 255 is equal to 100(%) open).
 log_by_default=TRUE
 
 [derived_17]

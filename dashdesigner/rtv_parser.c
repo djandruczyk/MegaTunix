@@ -6,7 +6,6 @@
 #include <gauge.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <rtv_parser.h>
 #include <string.h>
 
@@ -78,7 +77,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 						}
 						else
 						{
-							/*printf("inserting var %s with value %i\n",int_name,1);*/
+							/*printf("inserting var %s with value %i\n",vector[k],1);*/
 							g_hash_table_insert(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
 							g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
 							rtv_data->rtv_list = g_list_prepend(rtv_data->rtv_list,g_strdup(dlog_name));
@@ -98,7 +97,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
 	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
 	len = g_list_length(rtv_data->rtv_list);
-	/*printf("list length is %i\n",len);*/
+	/*printf("Total number of uniq vars is %i\n",len);*/
 	for (i=0;i<len;i++)
 	{
 		element = g_list_nth_data(rtv_data->rtv_list,i);
@@ -112,6 +111,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(int_name),-1);
 		else
 			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (FW Specific)", DATASOURCE_COL,g_strdup(int_name),-1);
+	
 	}
 }
 

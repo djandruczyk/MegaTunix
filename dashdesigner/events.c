@@ -19,7 +19,6 @@
 #include <gauge.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <loadsave.h>
 #include <rtv_parser.h>
 #include <xml.h>
@@ -33,8 +32,10 @@ static gboolean grabbed = FALSE;
 static gboolean resizing = FALSE;
 static gboolean moving = FALSE;
 static gint corner = -1;
-static GladeXML *prop_xml = NULL;
+static GtkBuilder *properties = NULL;
+static GtkBuilder *previews = NULL;
 static GtkWidget *grabbed_widget = NULL;
+extern GtkBuilder *toplevel;
 static struct T
 {
 	gint child_x_origin;
@@ -82,7 +83,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 
 	static gboolean created = FALSE;
 	static gboolean prop_created = FALSE;
-	static GladeXML *preview_xml = NULL;
 	GtkWidget * gauge = NULL;
 	GtkWidget * table = NULL;
 	GtkWidget * window = NULL;
@@ -93,46 +93,65 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GtkWidget * vbox = NULL;
 	GArray *classes = NULL;
 	gchar ** files = NULL;
+	gchar * filename = NULL;
 	gchar * path = NULL;
 	GDir *dir = NULL;
 	gchar *d_name = NULL;
 	gint t_num = -1;
-	extern GladeXML *main_xml;
 	GHashTable *list = NULL;
 	GdkColor white = { 0, 65535, 65535, 65535};
 	GdkColor home_color = {0, 62000, 59000, 65535};
 	GList *p_list = NULL;
 	GList *s_list = NULL;
 	guint i = 0;
+	GError *error = NULL;
 
 	if (created)
 	{
-		window = glade_xml_get_widget(preview_xml,"preview_window");
+		window = GTK_WIDGET(gtk_builder_get_object(previews,"preview_window"));
 		if (GTK_IS_WIDGET(window))
 			gtk_widget_show_all(window);
 	}
 	else
 	{
-		preview_xml = glade_xml_new(main_xml->filename, "preview_window", NULL);
-		glade_xml_signal_autoconnect(preview_xml);
+	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.glade",NULL),NULL);
+		if (filename)
+		{
+			previews = gtk_builder_new();
+			if(!gtk_builder_add_from_file(previews,filename,&error))
+			{
+				g_warning ("Couldn't load builder file: %s", error->message);
+				g_error_free(error);
+			}
+			gtk_builder_connect_signals(previews,NULL);
+		}
 	}
 
 	if (prop_created)
 	{
-		window = glade_xml_get_widget(prop_xml,"property_editor_window");
+		window = GTK_WIDGET(gtk_builder_get_object(properties,"property_editor_window"));
 		if (GTK_IS_WIDGET(window))
 			gtk_widget_show_all(window);
 	}
 	else
 	{
-		prop_xml = glade_xml_new(main_xml->filename, "property_editor_window", NULL);
-		glade_xml_signal_autoconnect(prop_xml);
+	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.glade",NULL),NULL);
+		if (filename)
+		{
+			properties = gtk_builder_new();
+			if(!gtk_builder_add_from_file(properties,filename,&error))
+			{
+				g_warning ("Couldn't load builder file: %s", error->message);
+				g_error_free(error);
+			}
+			gtk_builder_connect_signals(properties,NULL);
+		}
 	}
 	if (created && prop_created)
 		return TRUE;
 
 
-	notebook = glade_xml_get_widget(preview_xml,"preview_notebook");
+	notebook = GTK_WIDGET(gtk_builder_get_object(previews,"preview_notebook"));
 	if (!notebook)
 	{
 		printf("critical error, notbook not found, EXITING!\n");
@@ -434,7 +453,6 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	GtkTableChild *child = NULL;
 	gchar * filename = NULL;
 	gint row = 0;
-	extern GladeXML *main_xml;
 
 	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
 	gdk_drawable_get_size(widget->window,&width,&height);
@@ -463,7 +481,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 					filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gtk_bin_get_child(GTK_BIN(child->widget))));
 			}
 		}
-		dash =  glade_xml_get_widget(main_xml,"dashboard");
+		dash =  GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
 		if (!filename)
@@ -473,6 +491,9 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		g_free(filename);
 		update_properties(gauge,GAUGE_ADD);
 		changed = TRUE;
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 	}
 
 	/*printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);*/
@@ -555,6 +576,9 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 			}
 		}
 		changed =  TRUE;
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 	}
 
 	return TRUE;
@@ -625,6 +649,9 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 				update_properties(grabbed_widget,GAUGE_REMOVE);
 				gtk_widget_destroy(grabbed_widget);
 				changed =  TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 			}
 			if (event->button == 1)
 			{
@@ -748,7 +775,6 @@ void update_properties(GtkWidget * widget, Choice choice)
 {
 	extern GtkListStore *store;
 	GtkCellRenderer *renderer;
-	extern GladeXML *prop_xml;
 	GtkWidget * combo_box = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *table = NULL;
@@ -800,7 +826,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 		if (OBJ_GET((widget),"datasource"))
 			set_combo_to_source(combo_box,OBJ_GET((widget),"datasource"));
 
-		vbox = glade_xml_get_widget(prop_xml,"prop_top_vbox");
+		vbox = GTK_WIDGET(gtk_builder_get_object(properties,"prop_top_vbox"));
 		OBJ_SET((widget),"prop_table",table);
 		gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,TRUE,0);
 		gtk_widget_show_all(vbox);
@@ -812,6 +838,9 @@ void update_properties(GtkWidget * widget, Choice choice)
 		table = OBJ_GET((widget),"prop_table");
 		gtk_widget_destroy(table);
 	}
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 
 	/*printf("update_properties\n");*/
 }
@@ -839,18 +868,20 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 
 	}
 	changed =  TRUE;
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 }
 
 
 EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 {
-	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
 	GtkWidget *topwidget = NULL;
 	GList *children = NULL;
 	GtkWidget * dialog = NULL;
 	gint result = 0;
-	dash = glade_xml_get_widget(main_xml,"dashboard");
+	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
 	children = GTK_FIXED(dash)->children;
 	if ((changed) && (g_list_length(children) > 0))
@@ -859,6 +890,10 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
 	gtk_window_resize(GTK_WINDOW(topwidget),320,200);
 	changed = FALSE;
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"load_dash_menuitem")),TRUE);
 	return TRUE;
 }
 
@@ -885,7 +920,6 @@ void free_element(gpointer data, gpointer user_data)
 
 EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 {
-	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
 	GtkWidget *g = NULL;
 	GtkWidget *topwidget = NULL;
@@ -900,7 +934,7 @@ EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 	gint x_shrink = 0;
 	gint y_shrink = 0;
 	GtkFixedChild *child = NULL;
-	dash = glade_xml_get_widget(main_xml,"dashboard");
+	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
 	w = dash->allocation.width;
 	h = dash->allocation.height;
@@ -933,6 +967,9 @@ EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
 	gtk_window_resize(GTK_WINDOW(topwidget),topwidget->allocation.width-x_shrink,topwidget->allocation.height-y_shrink);
 	changed = TRUE;
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
 
 	return TRUE;
 }

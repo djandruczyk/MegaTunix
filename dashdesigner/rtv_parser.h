@@ -15,7 +15,6 @@
 #define __DASH_RTV_PARSER_H__
 
 #include <defines.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 

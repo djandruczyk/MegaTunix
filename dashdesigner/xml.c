@@ -4,7 +4,6 @@
 #include <gauge.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <xml.h>
@@ -13,17 +12,17 @@
 
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
+extern GtkBuilder *toplevel;
 
 void import_dash_xml(gchar * filename)
 {
-	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
 	GList *children = NULL;
 	GtkWidget * dialog = NULL;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gint result = 0;
-	dash = glade_xml_get_widget(main_xml,"dashboard");
+	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
 	children = GTK_FIXED(dash)->children;
 	if (g_list_length(children) > 0)
@@ -192,7 +191,6 @@ void clear_dashboard(GtkWidget *widget)
 
 void export_dash_xml(gchar * filename)
 {
-	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
 	GList *children = NULL;
 	GtkFixedChild *child = NULL;
@@ -216,7 +214,7 @@ void export_dash_xml(gchar * filename)
 	 */
 	dtd = xmlCreateIntSubset(doc, BAD_CAST "dashboard", NULL, BAD_CAST "mtxdashboard.dtd");
 
-	dash = glade_xml_get_widget(main_xml,"dashboard");
+	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
 	node = xmlNewChild(root_node,NULL,BAD_CAST "dash_geometry", NULL);
 	generic_xml_gint_export(node,"width",&dash->allocation.width);

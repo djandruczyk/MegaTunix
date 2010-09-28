@@ -15,7 +15,6 @@
 #define __DASH_EVENTS_H__
 
 #include <defines.h>
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 

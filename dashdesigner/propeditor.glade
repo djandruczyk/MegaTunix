@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="property_editor_window">
+    <property name="width_request">275</property>
+    <property name="height_request">320</property>
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Gauge DataSources</property>
+    <signal name="destroy_event" handler="dummy"/>
+    <signal name="delete_event" handler="dummy"/>
+    <child>
+      <object class="GtkScrolledWindow" id="prop_swin">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">automatic</property>
+        <property name="vscrollbar_policy">automatic</property>
+        <property name="shadow_type">etched-in</property>
+        <child>
+          <object class="GtkViewport" id="viewport2">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkVBox" id="prop_top_vbox">
+                <property name="visible">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

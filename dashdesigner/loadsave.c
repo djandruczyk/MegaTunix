@@ -5,7 +5,6 @@
 #include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <xml.h>
 
 extern GtkWidget *main_window;
@@ -38,6 +37,7 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
+	extern GtkBuilder *toplevel;
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
@@ -53,6 +53,10 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		import_dash_xml(filename);
 		g_free (filename);
 		changed = FALSE;
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"load_dash_menuitem")),FALSE);
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -68,13 +72,13 @@ EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer data)
 EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
-	extern GladeXML *main_xml;
 	gchar *filename = NULL;
 	gboolean result = FALSE;
 	GtkWidget *dash;
+	extern GtkBuilder *toplevel;
 
 
-	dash = glade_xml_get_widget(main_xml,"dashboard");
+	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 	result = check_datasources_set(dash);
 	if (!result)
 		return FALSE;
@@ -98,6 +102,10 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 		export_dash_xml(filename);
 		g_free (filename);
 		changed = FALSE;
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),FALSE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),FALSE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"load_dash_menuitem")),TRUE);
 	}
 	free_mtxfileio(fileio);
 	return TRUE;

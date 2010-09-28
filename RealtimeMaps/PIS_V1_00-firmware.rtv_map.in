@@ -1,8 +1,9 @@
 [API]
 major=1
-minor=2
+minor=3
 
 [realtime_map]
+persona=PIS
 applicable_firmwares=Delco P.I.S V1_00
 applicable_signatures=PIS firmware (C) 2010 Jason Roughley. pis.controller@gmail.com
 derived_total=80
@@ -39,8 +40,8 @@ log_by_default=TRUE
 [derived_2]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_irq_tics
-_dlog_gui_name=Milliseconds
-dlog_field_name=Milliseconds
+_dlog_gui_name=irq_ticks
+dlog_field_name=irq_ticks
 offset=2
 size=_U16_
 real_lower=0
@@ -220,7 +221,7 @@ log_by_default=TRUE
 
 [derived_15]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
-internal_names=status_rpm_rpm
+internal_names=status_rpm_rpm,rpm
 _dlog_gui_name=RPM
 dlog_field_name=RPM
 offset=24
@@ -306,22 +307,22 @@ log_by_default=TRUE
 [derived_21]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_kelvin
-_dlog_gui_name=CTS (deg K)
-dlog_field_name=CTS (deg K)
+_dlog_gui_name=CTS (\302\260 K)
+dlog_field_name=CTS (\302\260 K)
 offset=36
 size=_U16_
 real_lower=0
 real_upper=600
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="status.cts.kelvin" Coolant Temperate Sender (deg K).
+_tooltip="status.cts.kelvin" Coolant Temperate Sender (\302\260 K).
 log_by_default=TRUE
 
 [derived_22]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_cts_correction
-_dlog_gui_name=CTS %
-dlog_field_name=CTS %
+_dlog_gui_name=CTS (%)
+dlog_field_name=CTS (%)
 offset=38
 size=_U16_
 real_lower=0
@@ -329,7 +330,7 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.cts.correction" % of BPW to add to final PW based on Coolant Temperate Sender (deg)
+_tooltip="status.cts.correction" (%) of BPW to add to final PW based on Coolant Temperate Sender (\302\260)
 log_by_default=TRUE
 
 [derived_23]
@@ -344,7 +345,7 @@ real_upper=5
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-_tooltip="status.cts.pw" (status.cts.correction) % of BPW converted to milliseconds
+_tooltip="status.cts.pw" (status.cts.correction) (%) of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_24]
@@ -365,22 +366,22 @@ log_by_default=TRUE
 [derived_25]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_kelvin
-_dlog_gui_name=MAT (deg K)
-dlog_field_name=MAT (deg K)
+_dlog_gui_name=MAT (\302\260 K)
+dlog_field_name=MAT (\302\260 K)
 offset=44
 size=_U16_
 real_lower=0
 real_upper=600
 dl_conv_expr=x/1
 ul_conv_expr=x*1
-_tooltip="status.mat.kelvin" Manifold Air Temperature (deg K).
+_tooltip="status.mat.kelvin" Manifold Air Temperature (\302\260 K).
 log_by_default=TRUE
 
 [derived_26]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_mat_correction
-_dlog_gui_name=MAT %
-dlog_field_name=MAT %
+_dlog_gui_name=MATcorr (%)
+dlog_field_name=MATcorr (%)
 offset=46
 size=_U16_
 real_lower=0
@@ -388,7 +389,7 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.mat.correction" % of BPW to add to final PW based on Manifold Air Temperature.
+_tooltip="status.mat.correction" (%) of BPW to add to final PW based on Manifold Air Temperature.
 log_by_default=TRUE
 
 [derived_27]
@@ -403,14 +404,14 @@ real_upper=5
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-_tooltip="status.mat.pw" (status.mat.correction) % of BPW converted to milliseconds
+_tooltip="status.mat.pw" (status.mat.correction) (%) of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_28]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_base_correction
-_dlog_gui_name=ASC Base %
-dlog_field_name=ASC Base %
+_dlog_gui_name=ASC Base (%)
+dlog_field_name=ASC Base (%)
 offset=50
 size=_U16_
 real_lower=0
@@ -418,7 +419,7 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.asc.base_correction" After Start Correction, initial % of BPW
+_tooltip="status.asc.base_correction" After Start Correction, initial (%) of BPW
 log_by_default=TRUE
 
 [derived_29]
@@ -432,14 +433,14 @@ real_lower=0
 real_upper=1000
 dl_conv_expr=x*1
 ul_conv_expr=x/1
-_tooltip="status.asc.durtation" Number of injection cycles over which the base % will be tappered to nothing.
+_tooltip="status.asc.durtation" Number of injection cycles over which the base (%) will be tappered to nothing.
 log_by_default=TRUE
 
 [derived_30]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_asc_applied_correction
-_dlog_gui_name=ASC Applied %
-dlog_field_name=ASC Applied %
+_dlog_gui_name=ASC Applied (%)
+dlog_field_name=ASC Applied (%)
 offset=54
 size=_U16_
 real_lower=0
@@ -447,7 +448,7 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.asc.applied_correction" % of BPW currently being applied.
+_tooltip="status.asc.applied_correction" (%) of BPW currently being applied.
 log_by_default=TRUE
 
 [derived_31]
@@ -462,14 +463,14 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-_tooltip="status.asc.pw" (status.asc.applied_correction) % of BPW converted to milliseconds
+_tooltip="status.asc.pw" (status.asc.applied_correction) (%) of BPW converted to milliseconds
 log_by_default=TRUE
 
 [derived_32]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_tps
-_dlog_gui_name=TPS %
-dlog_field_name=TPS %
+_dlog_gui_name=TPS (%)
+dlog_field_name=TPS (%)
 offset=58
 size=_U16_
 real_lower=0
@@ -483,8 +484,8 @@ log_by_default=TRUE
 [derived_33]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_last
-_dlog_gui_name=TPS Last %
-dlog_field_name=TPS Last %
+_dlog_gui_name=TPS Last (%)
+dlog_field_name=TPS Last (%)
 offset=60
 size=_U16_
 real_lower=0
@@ -492,14 +493,14 @@ real_upper=100
 precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
-_tooltip="status.tps.last" last Throttle Position Sensor % during TPS ROC update (100ms).
+_tooltip="status.tps.last" last Throttle Position Sensor (%) during TPS ROC update (100ms).
 log_by_default=TRUE
 
 [derived_34]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_tps_roc
-_dlog_gui_name=TPS ROC %
-dlog_field_name=TPS ROC %
+_dlog_gui_name=TPS ROC (%)
+dlog_field_name=TPS ROC (%)
 offset=62
 size=_S16_
 real_lower=-100
@@ -641,8 +642,8 @@ log_by_default=TRUE
 [derived_44]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ego_correction
-_dlog_gui_name=Lambda Correction %
-dlog_field_name=Lambda Correction %
+_dlog_gui_name=Lambda Correction (%)
+dlog_field_name=Lambda Correction (%)
 offset=82
 size=_U16_
 real_lower=0
@@ -713,8 +714,8 @@ log_by_default=TRUE
 [derived_49]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_cts_factor
-_dlog_gui_name=AE CTS %
-dlog_field_name=AE CTS %
+_dlog_gui_name=AE CTS (%)
+dlog_field_name=AE CTS (%)
 offset=92
 size=_U16_
 real_lower=0
@@ -722,14 +723,14 @@ real_upper=20
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.ae.cts_factor" % of Acceleration Enrichment that will be used due to the engine's coolant temperature.
+_tooltip="status.ae.cts_factor" (%) of Acceleration Enrichment that will be used due to the engine's coolant temperature.
 log_by_default=TRUE
 
 [derived_50]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,precision,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=status_ae_roc_factor
-_dlog_gui_name=AE ROC %
-dlog_field_name=AE ROC %
+_dlog_gui_name=AE ROC (%)
+dlog_field_name=AE ROC (%)
 offset=94
 size=_U16_
 real_lower=0
@@ -737,7 +738,7 @@ real_upper=200
 precision=2
 dl_conv_expr=x*(32768/100)
 ul_conv_expr=x/(32768/100)
-_tooltip="status.ae.roc_factor" % of Acceleration Enrichment that will be used due to the TPS ROC.
+_tooltip="status.ae.roc_factor" (%) of Acceleration Enrichment that will be used due to the TPS ROC.
 log_by_default=TRUE
 
 [derived_51]
@@ -752,7 +753,7 @@ real_upper=10
 precision=2
 dl_conv_expr=x*66
 ul_conv_expr=x/66
-_tooltip="status.ae.BPW" This is the AE base pulse width BPW. It is chosen from a table that considers your current RPM vs current TPS. This value is then % adjusted depending upon the actual TPS ROC/50ms. The final result is then % adjusted according to the CTS.
+_tooltip="status.ae.BPW" This is the AE base pulse width BPW. It is chosen from a table that considers your current RPM vs current TPS. This value is then (%) adjusted depending upon the actual TPS ROC/50ms. The final result is then (%) adjusted according to the CTS.
 log_by_default=TRUE
 
 [derived_52]
@@ -1114,7 +1115,7 @@ log_by_default=TRUE
 [derived_77]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=duty_cycle
-_dlog_gui_name=Dutycycle
+_dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle
 offset=2
 real_lower=0
@@ -1143,8 +1144,8 @@ log_by_default=TRUE
 [derived_78]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default,temp_dep
 internal_names=cts_temp
-_dlog_gui_name=CTS (deg)
-dlog_field_name=CTS (deg)
+_dlog_gui_name=CLT (\302\260)
+dlog_field_name=CLT (\302\260)
 offset=36
 size=_U16_
 real_lower=0
@@ -1158,8 +1159,8 @@ temp_dep=TRUE
 [derived_79]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default,temp_dep
 internal_names=mat_temp
-_dlog_gui_name=MAT (deg)
-dlog_field_name=MAT (deg)
+_dlog_gui_name=MAT (\302\260)
+dlog_field_name=MAT (\302\260)
 offset=44
 size=_U16_
 real_lower=0
