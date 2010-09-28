@@ -6,7 +6,6 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <glib/gstring.h>
-#include <glade/glade.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
 #include <ms2_loader.h>
@@ -16,7 +15,7 @@
 #include <unistd.h>
 
 
-GladeXML *xml = NULL;
+GtkBuilder *builder = NULL;
 GtkWidget *main_window = NULL;
 
 int main (int argc, char *argv[])
@@ -24,6 +23,8 @@ int main (int argc, char *argv[])
 	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
 	gchar * fname = NULL;
+	GError *error = NULL;
+
 	gtk_init (&argc, &argv);
 	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
 	filename = get_file(g_strdup(fname),NULL);
@@ -40,12 +41,20 @@ int main (int argc, char *argv[])
 		gtk_main();
 		exit(-1);
 	}
-
+	else
+	{
+		builder = gtk_builder_new();
+		if(!gtk_builder_add_from_file(builder,filename,&error))
+		{
+			g_warning ("Couldn't load builder file: %s", error->message);
+			g_error_free(error);
+			exit(-1);
+		}
+	}
 	g_free(fname);
-	xml = glade_xml_new (filename, "main_window", NULL);
 	g_free(filename);
-	main_window = glade_xml_get_widget (xml, "main_window");
-	glade_xml_signal_autoconnect (xml);
+	main_window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
+	gtk_builder_connect_signals (builder,NULL);
 	load_defaults();
 	gtk_widget_show_all (main_window);
 	gtk_main ();
@@ -63,7 +72,7 @@ void output (gchar *line, gboolean free_it)
 	GtkWidget *parent = NULL;
 	GtkAdjustment * adj = NULL;
 
-	textview = glade_xml_get_widget (xml, "textview");
+	textview = GTK_WIDGET(gtk_builder_get_object(builder, "textview"));
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
 	gtk_text_buffer_insert(textbuffer,&iter,line,-1);
@@ -87,7 +96,7 @@ EXPORT gboolean get_signature (GtkButton *button)
 	gchar * port = NULL;
 	gint port_fd = 0;
 
-	widget = glade_xml_get_widget (xml, "port_entry");
+	widget = GTK_WIDGET(gtk_builder_get_object(builder, "port_entry"));
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 	if (g_utf8_strlen(port, -1) == 0)
 		return FALSE;
@@ -122,9 +131,9 @@ EXPORT gboolean load_firmware (GtkButton *button)
 	gint file_fd = 0;
 	FirmwareType type = MS1;
 
-	widget = glade_xml_get_widget (xml, "port_entry");
+	widget = GTK_WIDGET(gtk_builder_get_object(builder, "port_entry"));
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	widget = glade_xml_get_widget (xml, "filechooser_button");
+	widget = GTK_WIDGET(gtk_builder_get_object (builder, "filechooser_button"));
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
 	if (g_utf8_strlen(port, -1) == 0)
@@ -226,16 +235,16 @@ void load_defaults()
 	{
 		if(cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
 		{
-			gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget (xml, "port_entry")),tmpbuf);
+			gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object (builder, "port_entry")),tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(cfg_read_string(cfgfile, "MTXLoader", "last_file", &tmpbuf))
 		{
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")),tmpbuf);
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (builder, "filechooser_button")),tmpbuf);
 			filter = gtk_file_filter_new();
 			gtk_file_filter_add_pattern(filter,"*.s19");
 			gtk_file_filter_add_pattern(filter,"*.S19");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")),filter);
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(gtk_builder_get_object (builder, "filechooser_button")),filter);
 
 			g_free(tmpbuf);
 		}
@@ -254,7 +263,7 @@ void save_defaults()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(glade_xml_get_widget (xml, "filechooser_button")));
+		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (builder, "filechooser_button")));
 		if (tmpbuf)
 			cfg_write_string(cfgfile, "MTXLoader", "last_file", tmpbuf);
 		g_free(tmpbuf);

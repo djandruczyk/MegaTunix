@@ -6,10 +6,10 @@ INCLUDES = \
         -I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \
-        @LIBGLADE_CFLAGS@ \
+	@LIBXML2_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
-gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@
+gaugedesigner_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

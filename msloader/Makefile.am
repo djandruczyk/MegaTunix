@@ -2,12 +2,11 @@ INCLUDES = \
         -I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \
-	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
 msloader_LDADD = @GTK_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
-mtxloader_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+mtxloader_LDADD = @GTK_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

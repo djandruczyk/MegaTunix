@@ -6,11 +6,11 @@ INCLUDES = \
         -I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \
-        @LIBGLADE_CFLAGS@ \
+	@LIBXML2_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
-dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la 
+dashdesigner_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@ @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
