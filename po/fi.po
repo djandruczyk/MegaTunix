@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the MegaTunix package.
 # David J. Andruczyk <djandruczyk@yahoo.com>, 2010.
 #
-#, fuzzy
+##, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 17:51-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2010-06-20 17:33-0400\n"
+"PO-Revision-Date: 2010-09-28 15:20-0400\n"
+"Last-Translator: David Andruczyk <djandruczyk@yahoo.com>\n"
+"Language-Team: David Andruczyk <djandruczyk@yahoo.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -437,7 +437,7 @@ msgstr "Sarjat ecua xTau Enrichment järjestelmä on pois päältä, käyttää 
 #: Gui/ms2-accel.datamap.in.h:8 Gui/ms2-e-accel.datamap.in.h:14
 #, no-c-format
 msgid "TPSDot threshold in %/second for tps based accel enrich"
-msgstr "TPSDot kynnysarvo%sekunnissa TPS perustuu accel rikastuttaa"
+msgstr "TPSDot kynnysarvo %sekunnissa TPS perustuu accel rikastuttaa"
 
 #: Gui/ms2-accel.datamap.in.h:9 Gui/ms2-warmup.datamap.in.h:11
 #: Gui/ms2-xtau.datamap.in.h:1
@@ -741,7 +741,7 @@ msgstr "Idle Advance TPS kynnys"
 #: Gui/ms2-e-corrections_misc.datamap.in.h:14
 #, no-c-format
 msgid "Idle Advance Timing (FuelLoad %)"
-msgstr "Idle Advance Ajoitus (FuelLoad%)"
+msgstr "Idle Advance Ajoitus (FuelLoad %)"
 
 #: Gui/ms2-e-corrections_misc.datamap.in.h:15
 msgid "Idle Advance Timing (degrees)"
@@ -1269,7 +1269,7 @@ msgstr "Tämä asettaa PWM Time Threshold, kun suutin on tästä määrästä, n
 #: Gui/ms2-e-globals.datamap.in.h:35 Gui/ms2-globals.datamap.in.h:31
 #, no-c-format
 msgid "This sets the PWM current limit DutyCycle %, 100 being no limit."
-msgstr "Tämä asettaa PWM nykyinen raja DutyCycle%, 100 on mitään rajaa."
+msgstr "Tämä asettaa PWM nykyinen raja DutyCycle %, 100 on mitään rajaa."
 
 #: Gui/ms2-e-globals.datamap.in.h:36 Gui/ms2-globals.datamap.in.h:32
 msgid ""
@@ -1310,7 +1310,7 @@ msgstr "Cranking asua ms"
 #: Gui/ms2-e-ignition.datamap.in.h:5
 #, no-c-format
 msgid "Dwell Dutycycle in %"
-msgstr "Asua Dutycycle in%"
+msgstr "Asua Dutycycle in %"
 
 #: Gui/ms2-e-ignition.datamap.in.h:6
 msgid "Dwell Max spark duration in ms."
@@ -2162,7 +2162,7 @@ msgid ""
 "This is the % of AMC correction to be applied when RAM VE is updated. A "
 "typical value is 10%, which limits how far autocorrection can deviate from "
 "the basic table."
-msgstr "Tämä on% AMC tehtävien korjausten kun RAM VE päivitetään. Tyypillinen arvo on 10%, mikä rajoittaa kuinka paljon Automaattikorjaus voi poiketa perus-taulukosta."
+msgstr "Tämä on % AMC tehtävien korjausten kun RAM VE päivitetään. Tyypillinen arvo on 10%, mikä rajoittaa kuinka paljon Automaattikorjaus voi poiketa perus-taulukosta."
 
 #: Gui/ms2-misc-fuel.datamap.in.h:20
 msgid ""
@@ -2302,7 +2302,7 @@ msgstr "Crank Pulse roskakorit määrä MS on pistänyt polttoainetta per kampi 
 msgid ""
 "The IAC PWM bins are the dutycycle of the PWM Idle valve (DC %) at the "
 "specified temp (far left column)"
-msgstr "IAC PWM roskakorit dutycycle ja PWM Idle venttiili (DC%) määrätyssä lämpötila (äärimmäisenä vasemmalla sarake)"
+msgstr "IAC PWM roskakorit dutycycle ja PWM Idle venttiili (DC %) määrätyssä lämpötila (äärimmäisenä vasemmalla sarake)"
 
 #: Gui/ms2-warmup.datamap.in.h:9
 msgid ""
@@ -4387,7 +4387,7 @@ msgid ""
 "in a value over the existing value.  The value will turn red during an edit "
 "and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an "
 "edit and return to the previous value."
-msgstr "Käynnistyksen jälkeen korjaus% on Tilapäistyyppisten polttoaine oikaisu vakauttaa moottoria. Editointi on suoritettu joko + / -, PgUp / PgDn, tai kirjoittamalla arvo yli nykyisen arvon. Arvo muuttuu punaiseksi aikana muokata eikä sitä lähetetä, ennen kuin painaa enteriä. Lyöminen paeta peruuttaa muokata ja palata edelliseen arvoon."
+msgstr "Käynnistyksen jälkeen korjaus % on Tilapäistyyppisten polttoaine oikaisu vakauttaa moottoria. Editointi on suoritettu joko + / -, PgUp / PgDn, tai kirjoittamalla arvo yli nykyisen arvon. Arvo muuttuu punaiseksi aikana muokata eikä sitä lähetetä, ennen kuin painaa enteriä. Lyöminen paeta peruuttaa muokata ja palata edelliseen arvoon."
 
 #: Gui/PIS-corrections.datamap.in.h:4
 msgid ""
@@ -4647,7 +4647,7 @@ msgid ""
 "PgDn, or by typing in a value over the existing value.  The value will turn "
 "red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape "
 "will cancel an edit and return to the previous value."
-msgstr "Lambda merkinnät ovat suljetun tavoitteita. Polttoaineen korjaus% mukautetaan saavuttaa tavoitteensa. Editointi on suoritettu joko + / -, PgUp / PgDn, tai kirjoittamalla arvo yli nykyisen arvon. Arvo muuttuu punaiseksi aikana muokata eikä sitä lähetetä, ennen kuin painaa enteriä. Lyöminen paeta peruuttaa muokata ja palata edelliseen arvoon."
+msgstr "Lambda merkinnät ovat suljetun tavoitteita. Polttoaineen korjaus % mukautetaan saavuttaa tavoitteensa. Editointi on suoritettu joko + / -, PgUp / PgDn, tai kirjoittamalla arvo yli nykyisen arvon. Arvo muuttuu punaiseksi aikana muokata eikä sitä lähetetä, ennen kuin painaa enteriä. Lyöminen paeta peruuttaa muokata ja palata edelliseen arvoon."
 
 #: Gui/PIS-ego_16x16.datamap.in.h:3
 msgid ""
@@ -5509,12 +5509,12 @@ msgstr "Määrä"
 #: Interrogator/Profiles/MS-II.prof.in.h:57
 #, no-c-format
 msgid "Rate (TPS %/s)"
-msgstr "Hinta (TPS% / s)"
+msgstr "Hinta (TPS %/s)"
 
 #: Interrogator/Profiles/MS-II-Extra_2.1.0.prof.in.h:85
 #: Interrogator/Profiles/MS-II.prof.in.h:58 Gui/msns-e-accelwizard.glade:124
 msgid "Rate (kPa/s)"
-msgstr "Hinta (kPa / s)"
+msgstr "Hinta (kPa/s)"
 
 #: Interrogator/Profiles/MS-II-Extra_2.1.0.prof.in.h:86
 msgid "Retard"
@@ -5546,7 +5546,7 @@ msgstr "Steps"
 #: Interrogator/Profiles/MS-II.prof.in.h:64
 #, no-c-format
 msgid "TPS %/s"
-msgstr "TPS% / s"
+msgstr "TPS %/s"
 
 #: Interrogator/Profiles/MS-II-Extra_2.1.0.prof.in.h:97
 #: Interrogator/Profiles/MS-II.prof.in.h:65
@@ -5619,7 +5619,7 @@ msgstr "ASE"
 #: Interrogator/Profiles/MS-II.prof.in.h:12
 #, no-c-format
 msgid "ASE % vs. Temp"
-msgstr "ASE% vs. Temp"
+msgstr "ASE % vs. Temp"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:13
 msgid "ASE Taper"
@@ -5674,12 +5674,12 @@ msgstr "Cycles"
 #: Interrogator/Profiles/MS-II.prof.in.h:32
 #, no-c-format
 msgid "Idle PWM %"
-msgstr "Idle PWM%"
+msgstr "Idle PWM %"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:34
 #, no-c-format
 msgid "Idle PWM % vs. Temp"
-msgstr "Idle PWM% vs. Temp"
+msgstr "Idle PWM % vs. Temp"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:36
 #, no-c-format
@@ -5725,7 +5725,7 @@ msgstr "Offset"
 #: Interrogator/Profiles/MS-II.prof.in.h:50
 #, no-c-format
 msgid "PWM %"
-msgstr "PWM%"
+msgstr "PWM %"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:51
 msgid "Pr. Pulse"
@@ -5758,7 +5758,7 @@ msgstr "Spark Advance Taulukko 1, MS-II STD"
 #: Gui/ms2-e-boost_8x8x2.glade:5760
 #, no-c-format
 msgid "TPS %"
-msgstr "TPS%"
+msgstr "TPS %"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:66
 msgid "Tau (Time) Factor Correction"
@@ -5811,7 +5811,7 @@ msgstr "X <small>(Puddling)</small>"
 #: Interrogator/Profiles/MS-II.prof.in.h:79
 #, no-c-format
 msgid "corr %"
-msgstr "Corr%"
+msgstr "Corr %"
 
 #: Interrogator/Profiles/MS-II.prof.in.h:81
 msgid "kPa,kPa"
@@ -5846,12 +5846,12 @@ msgstr "Kiihtyvyyden *"
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:8
 #, no-c-format
 msgid "After Start Correction %"
-msgstr "Käynnistyksen jälkeen korjaus%"
+msgstr "Käynnistyksen jälkeen korjaus %"
 
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:10
 #, no-c-format
 msgid "After Start Correction % vs. Temp"
-msgstr "Käynnistyksen jälkeen korjaus% vs. Temp"
+msgstr "Käynnistyksen jälkeen korjaus % vs. Temp"
 
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:11
 msgid "After Start Correction Duration"
@@ -5864,7 +5864,7 @@ msgstr "Kun Aloita Kesto (jaksot) vs. Temp"
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:14
 #, no-c-format
 msgid "BPW Correction %"
-msgstr "BPW korjaus%"
+msgstr "BPW korjaus %"
 
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:15
 msgid "BPW vs MAT"
@@ -5890,7 +5890,7 @@ msgstr "CTS (astetta)"
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:21
 #, no-c-format
 msgid "CTS BPW %"
-msgstr "CTS BPW%"
+msgstr "CTS BPW %"
 
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:22
 msgid "CTS Factor *"
@@ -5944,7 +5944,7 @@ msgstr "MAP vs. RPM (BPW)"
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:38
 #, no-c-format
 msgid "MAT BPW %"
-msgstr "MAT BPW%"
+msgstr "MAT BPW %"
 
 #: Interrogator/Profiles/PIS_V1_00.prof.in.h:39
 msgid "Open Delay vs Volts"
@@ -6211,7 +6211,7 @@ msgid ""
 "\"CLT (\302\260)\" is the Engine Coolant Temperature in conventional "
 "thermal units (centigrade or fahrenheit depending on what you've set in the "
 "General Tab)"
-msgstr "\"CLT (\ 302 \ 260) on moottorin jäähdytysnesteen lämpötila on tavanomaisen lämpöenergian yksikköä (Celsius tai Fahrenheit riippuen siitä, mitä olet asettanut Yleiset-välilehti)"
+msgstr "\"CLT (\302\260) on moottorin jäähdytysnesteen lämpötila on tavanomaisen lämpöenergian yksikköä (Celsius tai Fahrenheit riippuen siitä, mitä olet asettanut Yleiset-välilehti)"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:14 RealtimeMaps/DT-Std.rtv_map.in.h:10
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:11
@@ -6313,7 +6313,7 @@ msgid ""
 "\"MAT (\302\260)\" is the Manifold Air Temperature in conventional thermal "
 "units (centigrade or fahrenheit depending on what you've set in the General "
 "Tab)"
-msgstr "\"MAT (\ 302 \ 260)\" on imusarjan Lämpötila tavanomaisen lämpöenergian yksikköä (Celsius tai Fahrenheit riippuen siitä, mitä olet asettanut Yleiset-välilehti)"
+msgstr "\"MAT (\302\260)\" on imusarjan Lämpötila tavanomaisen lämpöenergian yksikköä (Celsius tai Fahrenheit riippuen siitä, mitä olet asettanut Yleiset-välilehti)"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:25 RealtimeMaps/DT-Std.rtv_map.in.h:24
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:30
@@ -6377,7 +6377,7 @@ msgstr "\"RPM\" on moottorin kierrosluku on yleisempää yksiköissä (RPM, ei r
 msgid ""
 "\"TPS %\" is the Throttle Position in percentage of open (based on counts, a "
 "adc of 255 is equal to 100% open)."
-msgstr "\"TPS%\" on asento prosentteina auki (joka perustuu laskee, ADC ja 255 on 100% auki)."
+msgstr "\"TPS %\" on asento prosentteina auki (joka perustuu laskee, ADC ja 255 on 100% auki)."
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:35 RealtimeMaps/DT-Std.rtv_map.in.h:35
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:48
@@ -6483,7 +6483,7 @@ msgstr "BSpot 3"
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:67
 #: RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in.h:68
 msgid "CLT (\302\260)"
-msgstr "CLT (\ 302 \ 260)"
+msgstr "CLT (\302\260)"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:52 RealtimeMaps/DT-Std.rtv_map.in.h:50
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:68
@@ -6570,7 +6570,7 @@ msgstr "MAP volttia"
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:86
 #: RealtimeMaps/MSnS-Extra-HR-029x.rtv_map.in.h:87
 msgid "MAT (\302\260)"
-msgstr "MAT (\ 302 \ 260)"
+msgstr "MAT (\302\260)"
 
 #: RealtimeMaps/BnG-Std.rtv_map.in.h:64 RealtimeMaps/DT-Std.rtv_map.in.h:64
 #: RealtimeMaps/MSnS-Extra-029x.rtv_map.in.h:87
@@ -6862,7 +6862,7 @@ msgstr "\"Dwell\" on sytytyskelan latausaika (Ms)"
 #, no-c-format
 msgid ""
 "\"EAEFuelCorr1\" is the amount of fuel correction in % by the EAE algorithm"
-msgstr "\"EAEFuelCorr1\" on polttoaineen määrän korjausta% vuoteen êáé algoritmin"
+msgstr "\"EAEFuelCorr1\" on polttoaineen määrän korjausta % vuoteen êáé algoritmin"
 
 #: RealtimeMaps/MS2-Extra-2.0.x.rtv_map.in.h:21
 #: RealtimeMaps/MS2-Extra-2.1.0.rtv_map.in.h:19
@@ -7893,7 +7893,7 @@ msgstr "syncreason"
 #: RealtimeMaps/MS2-Extra-2.1.0.rtv_map.in.h:182
 #, no-c-format
 msgid "tpsDOT (%/s)"
-msgstr "tpsDOT (% / s)"
+msgstr "tpsDOT (%/s)"
 
 #: RealtimeMaps/MS2-Extra-2.1.0.rtv_map.in.h:183
 msgid "user0"
@@ -8211,21 +8211,21 @@ msgid ""
 "table that considers your current RPM vs current TPS. This value is then % "
 "adjusted depending upon the actual TPS ROC/50ms. The final result is then % "
 "adjusted according to the CTS."
-msgstr "\"Status.ae.BPW\" Tämä on AE pohjan pulssileveys BPW. Se valitaan taulukon pitää nykyisen RPM vs nykyinen TPS. Tämä arvo on sitten% mukautetaan riippuen todellinen TPS ROC/50ms. Lopputuloksena on sitten% mukautetaan CTS."
+msgstr "\"Status.ae.BPW\" Tämä on AE pohjan pulssileveys BPW. Se valitaan taulukon pitää nykyisen RPM vs nykyinen TPS. Tämä arvo on sitten % mukautetaan riippuen todellinen TPS ROC/50ms. Lopputuloksena on sitten % mukautetaan CTS."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:20
 #, no-c-format
 msgid ""
 "\"status.ae.cts_factor\" % of Acceleration Enrichment that will be used due "
 "to the engine's coolant temperature."
-msgstr "\"Status.ae.cts_factor\"% kiihtyvyys rikastus, joita käytetään, koska moottorin jäähdytysnesteen lämpötila."
+msgstr "\"Status.ae.cts_factor\" % kiihtyvyys rikastus, joita käytetään, koska moottorin jäähdytysnesteen lämpötila."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:22
 #, no-c-format
 msgid ""
 "\"status.ae.roc_factor\" % of Acceleration Enrichment that will be used due "
 "to the TPS ROC."
-msgstr "\"Status.ae.roc_factor\"% kiihtyvyys rikastus, joita käytetään, koska TPS ROC."
+msgstr "\"Status.ae.roc_factor\" % kiihtyvyys rikastus, joita käytetään, koska TPS ROC."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:23
 msgid ""
@@ -8236,19 +8236,19 @@ msgstr "\"Status.ae_clk\" laskee alas määrä ms kiihtyvyys Enrichment async pu
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:25
 #, no-c-format
 msgid "\"status.asc.applied_correction\" % of BPW currently being applied."
-msgstr "\"Status.asc.applied_correction\"% ja BPW parhaillaan sovelletaan."
+msgstr "\"Status.asc.applied_correction\" % ja BPW parhaillaan sovelletaan."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:27
 #, no-c-format
 msgid "\"status.asc.base_correction\" After Start Correction, initial % of BPW"
-msgstr "\"Status.asc.base_correction\" Käynnistyksen jälkeen korjauksen alkuperäinen% ja BPW"
+msgstr "\"Status.asc.base_correction\" Käynnistyksen jälkeen korjauksen alkuperäinen % ja BPW"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:29
 #, no-c-format
 msgid ""
 "\"status.asc.durtation\" Number of injection cycles over which the base % "
 "will be tappered to nothing."
-msgstr "\"Status.asc.durtation\" lukumäärä injektio jaksoa, jonka aikana pohja% on tappered juuri mitään."
+msgstr "\"Status.asc.durtation\" lukumäärä injektio jaksoa, jonka aikana pohja % on tappered juuri mitään."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:31
 #, no-c-format
@@ -8493,7 +8493,7 @@ msgstr "\"Status.seconds\" on PIS kello palauttaa ecua tämä toimii 0-65535 ja 
 msgid ""
 "\"status.tps.last\" last Throttle Position Sensor % during TPS ROC update "
 "(100ms)."
-msgstr "\"Status.tps.last\" viimeinen Throttle Position Sensor% aikana TPS ROC päivitys (100ms)."
+msgstr "\"Status.tps.last\" viimeinen Throttle Position Sensor % aikana TPS ROC päivitys (100ms)."
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:83
 msgid "\"status.tps.roc\" the rate of change over the last (50ms)"
@@ -8567,7 +8567,7 @@ msgstr "AE BPW"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:100
 #, no-c-format
 msgid "AE CTS %"
-msgstr "AE CTS%"
+msgstr "AE CTS %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:101
 msgid "AE Clock"
@@ -8576,7 +8576,7 @@ msgstr "AE Kello"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:103
 #, no-c-format
 msgid "AE ROC %"
-msgstr "AE ROC%"
+msgstr "AE ROC %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:104
 msgid "AIAR"
@@ -8589,12 +8589,12 @@ msgstr "APW"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:107
 #, no-c-format
 msgid "ASC Applied %"
-msgstr "ASC Applied%"
+msgstr "ASC Applied %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:109
 #, no-c-format
 msgid "ASC Base %"
-msgstr "ASC Base%"
+msgstr "ASC Base %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:110
 msgid "ASC Clock"
@@ -8607,7 +8607,7 @@ msgstr "ASC PW"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:114
 #, no-c-format
 msgid "CTS %"
-msgstr "CTS%"
+msgstr "CTS %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:115
 msgid "CTS (deg K)"
@@ -8732,7 +8732,7 @@ msgstr "INJ Kello"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:151
 #, no-c-format
 msgid "Lambda Correction %"
-msgstr "Lambda korjaus%"
+msgstr "Lambda korjaus %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:152
 msgid "Lambda Target"
@@ -8749,7 +8749,7 @@ msgstr "MAP Limit"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:157
 #, no-c-format
 msgid "MAT %"
-msgstr "MAT%"
+msgstr "MAT %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:158
 msgid "MAT (deg K)"
@@ -8795,12 +8795,12 @@ msgstr "Sekunnit"
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:173
 #, no-c-format
 msgid "TPS Last %"
-msgstr "TPS Viimeisin%"
+msgstr "TPS Viimeisin %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:175
 #, no-c-format
 msgid "TPS ROC %"
-msgstr "TPS ROC%"
+msgstr "TPS ROC %"
 
 #: RealtimeMaps/PIS_V1_00-firmware.rtv_map.in.h:176
 msgid "current ego lambda reading"
@@ -9060,135 +9060,135 @@ msgstr "2D Taulukko Editor"
 #: src/2d_table_editor.c:835
 #, c-format
 msgid "ERROR in update_2d_curve()!!!\n"
-msgstr "Virhe update_2d_curve ()!!!"
+msgstr "Virhe update_2d_curve ()!!!\n"
 
 #: src/2d_table_editor.c:1145
 #, c-format
 msgid "widget isn't visible or sensitive\n"
-msgstr "vekotin ei näy tai herkkiä"
+msgstr "vekotin ei näy tai herkkiä\n"
 
 #. Copy the frames per second into a string to display in the window
 #: src/3d_vetable.c:104
 #, c-format
 msgid "Current Frames Per Second: %i"
-msgstr "Nykyinen kuvaa sekunnissa:% i"
+msgstr "Nykyinen kuvaa sekunnissa: %i"
 
 #: src/about_gui.c:49 src/core_gui.c:175
 #, c-format
 msgid "MegaTunix %s Tuning Software for Unix-class OS's"
-msgstr "MegaTunix%s Tuning Software Unix-luokan OS: n"
+msgstr "MegaTunix %s Tuning Software Unix-luokan OS: n"
 
 #: src/afr_calibrate.c:317
 #, c-format
 msgid "default case, shouldn't have gotten here. afr_enum is %i"
-msgstr "default tapauksessa ei olisi saanut täällä. afr_enum on% i"
+msgstr "default tapauksessa ei olisi saanut täällä. afr_enum on %i"
 
 #: src/args.c:77
 #, c-format
 msgid "ERROR OCCURRED\n"
-msgstr "Tapahtui virhe"
+msgstr "Tapahtui virhe\n"
 
 #: src/args.c:90
 #, c-format
 msgid "not sure what the error is\n"
-msgstr "ole varma, mikä virhe on"
+msgstr "ole varma, mikä virhe on\n"
 
 #: src/args.c:100
 #, c-format
 msgid "Network info provided is invalid!\n"
-msgstr "Verkko info ei kelpaa!"
+msgstr "Verkko info ei kelpaa!\n"
 
 #: src/args.c:148
 #, c-format
 msgid "Should do listen mode\n"
-msgstr "Jos ei kuuntele tila"
+msgstr "Jos ei kuuntele tila\n"
 
 #: src/args.c:152
 #, c-format
 msgid "debug option \"%i\"\n"
-msgstr "debug vaihtoehto \"% i\""
+msgstr "debug vaihtoehto \"%i\"\n"
 
 #: src/args.c:153
 #, c-format
 msgid "Global debug filename\"%s\"\n"
-msgstr "Global debug tiedostonimi \"%s\""
+msgstr "Global debug tiedostonimi \"%s\"\n"
 
 #: src/args.c:154
 #, c-format
 msgid "version option \"%i\"\n"
-msgstr "version vaihtoehto \"% i\""
+msgstr "version vaihtoehto \"%i\"\n"
 
 #: src/args.c:155
 #, c-format
 msgid "quiet option \"%i\"\n"
-msgstr "hiljainen vaihtoehto \"% i\""
+msgstr "hiljainen vaihtoehto \"%i\"\n"
 
 #: src/args.c:156
 #, c-format
 msgid "no rttext option \"%i\"\n"
-msgstr "no rttext vaihtoehto \"% i\""
+msgstr "no rttext vaihtoehto \"%i\"\n"
 
 #: src/args.c:157
 #, c-format
 msgid "no status option \"%i\"\n"
-msgstr "no tila vaihtoehto \"% i\""
+msgstr "no tila vaihtoehto \"%i\"\n"
 
 #: src/args.c:158
 #, c-format
 msgid "no maingui option \"%i\"\n"
-msgstr "no maingui vaihtoehto \"% i\""
+msgstr "no maingui vaihtoehto \"%i\"\n"
 
 #: src/args.c:159
 #, c-format
 msgid "autolog_dump \"%i\"\n"
-msgstr "autolog_dump \"% i\""
+msgstr "autolog_dump \"%i\"\n"
 
 #: src/args.c:160
 #, c-format
 msgid "autolog_minutes \"%i\"\n"
-msgstr "autolog_minutes \"% i\""
+msgstr "autolog_minutes \"%i\"\n"
 
 #: src/args.c:161
 #, c-format
 msgid "autolog_dump_dir \"%s\"\n"
-msgstr "autolog_dump_dir \"%s\""
+msgstr "autolog_dump_dir \"%s\"\n"
 
 #: src/args.c:162
 #, c-format
 msgid "autolog_basename \"%s\"\n"
-msgstr "autolog_basename \"%s\""
+msgstr "autolog_basename \"%s\"\n"
 
 #: src/args.c:163
 #, c-format
 msgid "listen mode \"%i\"\n"
-msgstr "kuunnella mode \"% i\""
+msgstr "kuunnella mode \"%i\"\n"
 
 #: src/args.c:164
 #, c-format
 msgid "network mode \"%i\"\n"
-msgstr "verkon tila \"% i\""
+msgstr "verkon tila \"%i\"\n"
 
 #: src/args.c:165
 #, c-format
 msgid "network host \"%s\"\n"
-msgstr "verkko isäntä \"%s\""
+msgstr "verkko isäntä \"%s\"\n"
 
 #: src/args.c:166
 #, c-format
 msgid "network port \"%i\"\n"
-msgstr "verkkoporttia \"% i\""
+msgstr "verkkoporttia \"%i\"\n"
 
 #: src/comms.c:86
 #, c-format
 msgid "Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"
-msgstr "Virhe kirjoitettaessa \"C\" ecu, ERROR \"%s\" comms_test ()"
+msgstr "Virhe kirjoitettaessa \"C\" ecu, ERROR \"%s\" comms_test ()\n"
 
 #: src/comms.c:100
 #, c-format
 msgid ""
 "Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test"
 "()\n"
-msgstr "Virhe kirjoitettaessa \"c\" (MS-II kello testi) ecuun, ERROR \"%s\" comms_test ()"
+msgstr "Virhe kirjoitettaessa \"c\" (MS-II kello testi) ecuun, ERROR \"%s\" comms_test ()\n"
 
 #: src/comms.c:112
 msgid "ECU Connected..."
@@ -9197,7 +9197,7 @@ msgstr "Ecua Connected ..."
 #: src/comms.c:113
 #, c-format
 msgid "ECU Comms Test Successfull\n"
-msgstr "Ecua Comms Test onnistunut"
+msgstr "Ecua Comms Test onnistunut\n"
 
 #: src/comms.c:123
 #, c-format
@@ -9207,22 +9207,23 @@ msgstr "COMMS asiat: Tarkista COMMS välilehti"
 #: src/comms.c:125
 #, c-format
 msgid "I/O with ECU Timeout\n"
-msgstr "I / O ecua aikakatkaisu"
+msgstr "I / O ecua aikakatkaisu\n"
 
 #: src/comms.c:159
 #, c-format
 msgid "Non simple/chunk write command, not notifying peers\n"
-msgstr "Ei pelkkä / pala kirjoittaa komento, ei ole ilmoittanut ikäisensä"
+msgstr "Ei pelkkä / pala kirjoittaa komento, ei ole ilmoittanut ikäisensä\n"
 
 #: src/comms.c:389
 #, c-format
 msgid "Sending %i of %i bytes"
-msgstr "Lähetetään% i on% i tavua"
+msgstr "Lähetetään %i on %i tavua"
 
 #: src/conversions.c:78
 msgid ""
 ": convert_before_download, FATAL ERROR, size undefined for widget at page"
-msgstr ": Convert_before_download, Fatal Error, koko undefined varten vekotin sivulta"
+msgstr ""
+": Convert_before_download, Fatal Error, koko undefined varten vekotin sivulta"
 
 #: src/conversions.c:78
 msgid "offset"
@@ -9231,17 +9232,17 @@ msgstr "offset"
 #: src/conversions.c:113 src/conversions.c:285
 #, c-format
 msgid "big problem, source key is undefined!!\n"
-msgstr "iso ongelma, lähde avain on määritelty!"
+msgstr "iso ongelma, lähde avain on määritelty!\n"
 
 #: src/conversions.c:261
 #, c-format
 msgid "BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"
-msgstr "Suuri ongelma, koko määrittelemättömiä! sivulla% i, offset% i, widget%s"
+msgstr "Suuri ongelma, koko määrittelemättömiä! sivulla %i, offset %i, widget %s\n"
 
 #: src/core_gui.c:75
 #, c-format
 msgid "ERROR! Could NOT locate file %s"
-msgstr "ERROR! Voitu paikallistaa tiedosto%s"
+msgstr "ERROR! Voitu paikallistaa tiedosto %s"
 
 #: src/core_gui.c:77
 msgid ""
@@ -9250,12 +9251,17 @@ msgid ""
 "\n"
 "Did you forget to run <i>\"sudo make install\"</i> ??\n"
 "\n"
-msgstr "<b>MegaTunix</b> ei näytä olevan oikein asennettu! Unohtuiko ajaa <i>\"sudo make install\"?</i>"
+msgstr ""
+"\n"
+"<b>MegaTunix</b> ei näytä olevan oikein asennettu!\n"
+"\n"
+"Unohtuiko ajaa <i>\"sudo make install\"</i> ??\n"
+"\n"
 
 #: src/dashboard.c:76
 #, c-format
 msgid "Error: could not parse dashboard XML file %s"
-msgstr "Virhe: ei voitu jäsentää kojelauta XML-tiedoston%s"
+msgstr "Virhe: ei voitu jäsentää kojelauta XML-tiedoston %s"
 
 #: src/dashboard.c:81
 msgid "Dash Cluster"
@@ -9264,27 +9270,27 @@ msgstr "Dash Cluster"
 #: src/dashboard.c:249
 #, c-format
 msgid "ERROR, load_geometry, xml node is empty!!\n"
-msgstr "VIRHE, load_geometry, xml solmu on tyhjä!"
+msgstr "VIRHE, load_geometry, xml solmu on tyhjä!\n"
 
 #: src/dashboard.c:288
 #, c-format
 msgid "ERROR, load_gauge, xml node is empty!!\n"
-msgstr "VIRHE, load_gauge, xml solmu on tyhjä!"
+msgstr "VIRHE, load_gauge, xml solmu on tyhjä!\n"
 
 #: src/dashboard.c:637
 #, c-format
 msgid "dashboard widget is null cannot set attribute(s)!\n"
-msgstr "Dashboard widget on nolla ei voi asettaa määrite (s)!"
+msgstr "Dashboard widget on nolla ei voi asettaa määrite (s)!\n"
 
 #: src/dashboard.c:859
 #, c-format
 msgid "dashboard widget is null cannot reset tattletale!\n"
-msgstr "Dashboard widget on nolla ei voi palauttaa tattletale!"
+msgstr "Dashboard widget on nolla ei voi palauttaa tattletale!\n"
 
 #: src/dataio.c:257
 #, c-format
 msgid "Write error! \"%s\"\n"
-msgstr "Kirjoita virhe! \"% S\""
+msgstr "Kirjoita virhe! \"%s\"\n"
 
 #: src/datalogging_gui.c:86
 msgid "Populating Datalogger..."
@@ -9293,47 +9299,47 @@ msgstr "Asuttavat Datalogger ..."
 #: src/datalogging_gui.c:91
 #, c-format
 msgid "datalogger windows not present, returning\n"
-msgstr "dataloggerilla ikkunat ei ole, palaa"
+msgstr "dataloggerilla ikkunat ei ole, palaa\n"
 
 #: src/datalogging_gui.c:524
 #, c-format
 msgid "Autolog dump (log number %i) successfully completed.\n"
-msgstr "AutoLog kaatopaikan (log numero% i) menestyksekkäästi päätökseen."
+msgstr "AutoLog kaatopaikan (log numero %i) menestyksekkäästi päätökseen.\n"
 
 #: src/datamgmt.c:207
 #, c-format
 msgid "ERROR! attempted set of data with NO SIZE defined\n"
-msgstr "ERROR! yrittänyt joukko tietojen kokoa ei määritelty"
+msgstr "ERROR! yrittänyt joukko tietojen kokoa ei määritelty\n"
 
 #: src/debugging.c:83
 #, c-format
 msgid "Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"
-msgstr "Lokitiedosto avattiin liitä on% i-% 0,2 i-% i on% 0,2 i:% 0,2 i"
+msgstr "Lokitiedosto avattiin liitä on %i-%.2i-%i on %.2i:%.2i \n"
 
 #: src/dep_processor.c:110
 #, c-format
 msgid "CASE NOT HANDLED, dep_processor BUG!\n"
-msgstr "CASE ei käsitellä, dep_processor virhe!"
+msgstr "CASE ei käsitellä, dep_processor virhe!\n"
 
 #: src/dispatcher.c:114
 #, c-format
 msgid "ERROR postfunction was NULL, continuing\n"
-msgstr "ERROR postfunction oli NULL, jatkuvat"
+msgstr "ERROR postfunction oli NULL, jatkuvat\n"
 
 #: src/dispatcher.c:120
 #, c-format
 msgid "ERROR, couldn't find function with arg \"%s\"\n"
-msgstr "VIRHE, ei löytänyt toimintoa arg \"%s\""
+msgstr "VIRHE, ei löytänyt toimintoa arg \"%s\"\n"
 
 #: src/dispatcher.c:127
 #, c-format
 msgid "ERROR, couldn't find function \"%s\"\n"
-msgstr "VIRHE, ei löytänyt toimia \"%s\""
+msgstr "VIRHE, ei löytänyt toimia \"%s\"\n"
 
 #: src/fileio.c:163
 #, c-format
 msgid "Full Backup Complete...\n"
-msgstr "Koko Backup Täydellinen ..."
+msgstr "Koko Backup Täydellinen ...\n"
 
 #: src/fileio.c:207
 #, c-format
@@ -9341,7 +9347,10 @@ msgid ""
 ":restore_all_ecu_settings()\n"
 "	API MAJOR version mismatch: \"%i\" != \"%i\"\n"
 " can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () API pääversion täsmää: \"% i\"! = \"% I\" ei voi ladata tämän tiedoston palauttaminen"
+msgstr ""
+": restore_all_ecu_settings()\n"
+"API pääversion täsmää: \"%i\" != \"%i\"\n"
+"ei voi ladata tämän tiedoston palauttaminen\n"
 
 #: src/fileio.c:211
 #, c-format
@@ -9349,7 +9358,10 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "	API MINOR version mismatch: \"%i\" != \"%i\"\n"
 " can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () API väliversion täsmää: \"% i\"! = \"% I\" ei voi ladata tämän tiedoston palauttaminen"
+msgstr ""
+": restore_all_ecu_settings()\n"
+"API väliversion täsmää: \"%i\" != \"%i\"\n"
+"ei voi ladata tämän tiedoston palauttaminen\n"
 
 #: src/fileio.c:217
 #, c-format
@@ -9357,7 +9369,10 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "Firmware name mismatch: \"%s\" != \"%s\"\n"
 "can not load this file for restoration\n"
-msgstr ": Restore_all_ecu_settings () Firmware nimi täsmää: \"%s\"! = \"% S\" ei voi ladata tämän tiedoston palauttaminen"
+msgstr ""
+": restore_all_ecu_settings()\n"
+"Firmware nimi täsmää: \"%s\" != \"%s\"\n"
+"ei voi ladata tämän tiedoston palauttaminen\n"
 
 #: src/fileio.c:223
 msgid "Restoring ECU settings from File"
@@ -9370,7 +9385,10 @@ msgid ""
 "	Number of variables in backup \"%i\" and firmware specification \"%i\" do "
 "NOT match,\n"
 "	corruption SHOULD be expected\n"
-msgstr ": Restore_all_ecu_settings () lukumäärä muuttujien varmuuskopio \"% i\" ja firmware eritelmällä \"% i\" eivät täsmää, korruptio on odotettavissa"
+msgstr ""
+": restore_all_ecu_settings ()\n"
+"lukumäärä muuttujien varmuuskopio \"%i\" ja firmware eritelmällä \"%i\" eivät\n"
+"täsmää, korruptio on odotettavissa\n"
 
 #: src/fileio.c:246
 #, c-format
@@ -9378,7 +9396,10 @@ msgid ""
 ": restore_all_ecu_settings()\n"
 "	Number of variables in this backup \"%i\" does NOT match the length of the "
 "table \"%i\", expect a crash!!!\n"
-msgstr ": Restore_all_ecu_settings () määrä muuttujia tässä varmuuskopio \"% i\" ei vastaa pituus taulukon \"% i\", odottaa kaatua!"
+msgstr ""
+": restore_all_ecu_settings()\n"
+"määrä muuttujia tässä varmuuskopio \"%i\" ei vastaa pituus taulukon \"%i\",\n"
+"odottaa kaatua!\n"
 
 #: src/gui_handlers.c:1016
 msgid "User initiated interrogation..."
@@ -9395,7 +9416,7 @@ msgstr "Offline-tila ..."
 #: src/gui_handlers.c:1423
 #, c-format
 msgid "std_combo_handler, default case!!! wrong wrong wrong!!\n"
-msgstr "std_combo_handler, default asia! väärin väärin väärin!"
+msgstr "std_combo_handler, default asia! väärin väärin väärin!\n"
 
 #: src/gui_handlers.c:1867
 msgid "Updating Controls..."
@@ -9410,7 +9431,8 @@ msgstr "Valmiina ..."
 msgid ""
 "ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, "
 "value %i\n"
-msgstr "ERROR ei mallia Combo sivulla% i, offset% i, bitmask% i, bitshift% i, arvo% i"
+msgstr ""
+"ERROR ei mallia Combo sivulla %i, offset %i, bitmask %i, bitshift %i, arvo %i\n"
 
 #: src/gui_handlers.c:3212
 msgid "Save internal log, yes/no ?"
@@ -9445,17 +9467,17 @@ msgstr "Oletko varma että haluat lopettaa?"
 msgid ""
 "toggle_groups_linked, numeber of choices is out of range, it should be 2, it "
 "is %i"
-msgstr "toggle_groups_linked, numeber valintoja rajojen ulkopuolella, se on 2, se on% i"
+msgstr "toggle_groups_linked, numeber valintoja rajojen ulkopuolella, se on 2, se on %i"
 
 #: src/gui_handlers.c:3396
 #, c-format
 msgid "active is %i, num_choices is %i\n"
-msgstr "aktiivinen on% i, num_choices on% i"
+msgstr "aktiivinen on %i, num_choices on %i\n"
 
 #: src/gui_handlers.c:3397
 #, c-format
 msgid "active is out of bounds for widget %s\n"
-msgstr "aktiivinen on rajojen varten vekotin%s"
+msgstr "aktiivinen on rajojen varten vekotin %s\n"
 
 #: src/helpers.c:73
 msgid "Queuing read of all ECU data..."
@@ -9468,41 +9490,41 @@ msgstr "Säätäminen paikallisten Temp yksiköt ..."
 #: src/helpers.c:360
 #, c-format
 msgid "MS2_WRITE_VERIFY not written yet\n"
-msgstr "MS2_WRITE_VERIFY ei kirjoitettu vielä"
+msgstr "MS2_WRITE_VERIFY ei kirjoitettu vielä\n"
 
 #: src/helpers.c:363
 #, c-format
 msgid "MS2_MISMATCH_COUNT not written yet\n"
-msgstr "MS2_MISMATCH_COUNT ei kirjoitettu vielä"
+msgstr "MS2_MISMATCH_COUNT ei kirjoitettu vielä\n"
 
 #: src/helpers.c:366
 #, c-format
 msgid "MS1_CLOCK not written yet\n"
-msgstr "MS1_CLOCK ei kirjoitettu vielä"
+msgstr "MS1_CLOCK ei kirjoitettu vielä\n"
 
 #: src/helpers.c:369
 #, c-format
 msgid "MS2_CLOCK not written yet\n"
-msgstr "MS2_CLOCK ei kirjoitettu vielä"
+msgstr "MS2_CLOCK ei kirjoitettu vielä\n"
 
 #: src/helpers.c:436
 #, c-format
 msgid "MS1 Reset detected!, lastcount %i, current %i\n"
-msgstr "MS1 Nollaa havaittu!, Lastcount% i, nykyinen% i"
+msgstr "MS1 Nollaa havaittu!, Lastcount %i, nykyinen %i\n"
 
 #: src/helpers.c:476
 #, c-format
 msgid "MS2 rtvars reset detected, lastcount is %i, current %i"
-msgstr "MS2 rtvars palauttaa havaitaan, lastcount on% i, nykyinen% i"
+msgstr "MS2 rtvars palauttaa havaitaan, lastcount on %i, nykyinen %i"
 
 #: src/helpers.c:489
 #, c-format
 msgid "MS2_BOOTLOADER not written yet\n"
-msgstr "MS2_BOOTLOADER ei kirjoitettu vielä"
+msgstr "MS2_BOOTLOADER ei kirjoitettu vielä\n"
 
 #: src/helpers.c:497
 msgid "No ECU Errors were reported....\n"
-msgstr "Ei ecua virheitä raportoitu ...."
+msgstr "Ei ecua virheitä raportoitu ....\n"
 
 #: src/helpers.c:564
 msgid "Starting up data renderers..."
@@ -9511,106 +9533,114 @@ msgstr "Käyttöönotto tiedot renderointilaitokset ..."
 #: src/interrogate.c:212
 #, c-format
 msgid "Command \"%s\" (%s), returned %i bytes (%s)\n"
-msgstr "Komento \"%s\" (%s), palasi% i tavua (%s)"
+msgstr "Komento \"%s\" (%s), palasi %i tavua (%s)\n"
 
 #: src/interrogate.c:214
 #, c-format
 msgid "Command \"%s\" (%s), returned %i bytes\n"
-msgstr "Komento \"%s\" (%s), palasi% i tavua"
+msgstr "Komento \"%s\" (%s), palasi %i tavua\n"
 
 #: src/interrogate.c:369 src/interrogate.c:1188 src/offline.c:215
 #, c-format
 msgid ""
 "Interrogation profile API mismatch (%i.%i != %i.%i):\n"
 "	File %s will be skipped\n"
-msgstr "Kuulustelua profiili API ei täsmää (% i.% i! =% I.% i): Tiedosto%s ohitetaan"
+msgstr ""
+"Kuulustelua profiili API ei täsmää (%i.%i != %i.%i):\n"
+" Tiedosto %s ohitetaan\n"
 
 #: src/interrogate.c:821
 #, c-format
-msgid "NO \"[cf]_gauge\" key found in te_table%i\n"
-msgstr "NO \"[vrt] _gauge\" avain löytyy te_table% i"
+msgid "NO \"[cf]_gauge\" key found in te_table %i\n"
+msgstr "NO \"[cf]_gauge\" avain löytyy te_table %i\n"
 
 #: src/interrogate.c:919
 #, c-format
 msgid "X multi_sources length mismatch!\n"
-msgstr "X multi_sources pituus täsmää!"
+msgstr "X multi_sources pituus täsmää!\n"
 
 #: src/interrogate.c:953
 #, c-format
 msgid "Y multi_sources length mismatch!\n"
-msgstr "Y multi_sources pituus täsmää!"
+msgstr "Y multi_sources pituus täsmää!\n"
 
 #: src/interrogate.c:988
 #, c-format
 msgid "Z multi_sources length mismatch!\n"
-msgstr "Z multi_sources pituus täsmää!"
+msgstr "Z multi_sources pituus täsmää!\n"
 
 #: src/interrogate.c:1015
 #, c-format
 msgid "Detected Firmware: %s\n"
-msgstr "Havaittu Firmware:%s"
+msgstr "Havaittu Firmware: %s\n"
 
 #: src/interrogate.c:1016
 #, c-format
 msgid "Loading Settings from: \"%s\"\n"
-msgstr "Loading Asetukset: \"%s\""
+msgstr "Loading Asetukset: \"%s\"\n"
 
 #: src/interrogate.c:1055
 #, c-format
 msgid ""
 "Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
 "	File %s.\n"
-msgstr "Kuulustelua profiili testit API ei täsmää (% i.% i! =% I.% i): Tiedosto%s"
+msgstr ""
+"Kuulustelua profiili testit API ei täsmää (%i.%i != %i.%i):\n"
+"	Tiedosto %s.\n"
 
 #: src/interrogate.c:1194
 #, c-format
 msgid "ERROR:!! \"match_on\" key missing from interrogation profile\n"
-msgstr "VIRHE:! \"Match_on\" avain puuttuu haussa profiili"
+msgstr "VIRHE:! \"Match_on\" avain puuttuu haussa profiili\n"
 
 #: src/interrogate.c:1205
 #, c-format
 msgid "ERROR test data not found for test \"%s\"\n"
-msgstr "VIRHE testituloksia ei löytynyt testi \"%s\""
+msgstr "VIRHE testituloksia ei löytynyt testi \"%s\"\n"
 
 #: src/interrogate.c:1225
 #, c-format
 msgid ""
 "ERROR interrogation check_for match vector does NOT have two args it has %i\n"
-msgstr "ERROR kuulustelut check_for ottelu vektori ei ole kahta args on% i"
+msgstr "ERROR kuulustelut check_for ottelu vektori ei ole kahta args on %i\n"
 
 #: src/locking.c:79
 #, c-format
 msgid ""
 "ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network "
 "socket mode (see -n option)!\n"
-msgstr "ERROR! Useita MegaTunix tapauksissa ei sallita, elleivät verkkopistoke (katso-N)!"
+msgstr ""
+"ERROR! Useita MegaTunix tapauksissa ei sallita, elleivät verkkopistoke "
+"(katso-N)!\n"
 
 #: src/locking.c:80
 msgid ""
 "<b>MegaTunix</b> is already Running!\n"
 "Multiple instances are <b><u>NOT</u></b> allowed unless running\n"
 "in network socket mode, see the -n option!\n"
-msgstr "<b>MegaTunix</b> on jo käynnissä! Useiden <u><b>ei</b></u> sallita, jollei käynnissä Verkkovastakeyhteyden tilassa, katso-n!"
+msgstr ""
+"<b>MegaTunix</b> on jo käynnissä!\n"
+"Useiden <u><b>ei</b></u> sallita, jollei käynnissä Verkkovastakeyhteyden tilassa, katso-n!\n"
 
 #: src/locking.c:197
 #, c-format
 msgid "Error setting serial lock %s\n"
-msgstr "Virhe asetettaessa sarja lukko%s"
+msgstr "Virhe asetettaessa sarja lukko %s\n"
 
 #: src/logviewer_core.c:208
 #, c-format
 msgid "LOG signature is \"%s\"\n"
-msgstr "LOG allekirjoitus \"%s\""
+msgstr "LOG allekirjoitus \"%s\"\n"
 
 #: src/logviewer_core.c:213
 #, c-format
 msgid "Good this firmware is compatible with the firmware we're using\n"
-msgstr "Hyvä tämä firmware on yhteensopiva firmware käytämme"
+msgstr "Hyvä tämä firmware on yhteensopiva firmware käytämme\n"
 
 #: src/logviewer_core.c:215
 #, c-format
 msgid "mismatch between datalog and current firmware\n"
-msgstr "yhteensopimattomuus datalog ja nykyinen firmware"
+msgstr "yhteensopimattomuus datalog ja nykyinen firmware\n"
 
 #. Should insert some sort of marker at this index
 #. * in the data arrays...
@@ -9618,19 +9648,20 @@ msgstr "yhteensopimattomuus datalog ja nykyinen firmware"
 #: src/logviewer_core.c:329
 #, c-format
 msgid "MARK found in logfile. MTX doesn't do anything with these yet...!\n"
-msgstr "MARK löytyy lokitiedostoon. MTX ei tee mitään näistä vielä ...!"
+msgstr "MARK löytyy lokitiedostoon. MTX ei tee mitään näistä vielä ...!\n"
 
 #: src/logviewer_core.c:335
 #, c-format
 msgid "non numerical line detected\n"
-msgstr "kuin numeerinen linja havaittu"
+msgstr "kuin numeerinen linja havaittu\n"
 
 #: src/logviewer_core.c:342
 #, c-format
 msgid ""
 "Datalog error, field count assertion failure\n"
 "Expected %i fields, got %i instead\n"
-msgstr "Datalog virhe, alan laskea väite ei ole Odotettu% i aloilla, mutta% i sijaan"
+msgstr ""
+"Datalog virhe, alan laskea väite ei ole Odotettu %i aloilla, mutta %i sijaan\n"
 
 #: src/logviewer_gui.c:90
 msgid "Playback Mode: Logviewer Choices"
@@ -9651,17 +9682,17 @@ msgstr "Valitse Realtime muuttujien tarkastella alla olevasta listasta ..."
 #: src/lookuptables.c:339
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, table parameter is null\n"
-msgstr "Fatal_error: direct_lookup_data, taulukko parametri on null"
+msgstr "Fatal_error: direct_lookup_data, taulukko parametri on null\n"
 
 #: src/lookuptables.c:346
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"
-msgstr "Fatal_error: direct_lookup_data, taulukko \"%s\" on tyhjä"
+msgstr "Fatal_error: direct_lookup_data, taulukko \"%s\" on tyhjä\n"
 
 #: src/lookuptables.c:351
 #, c-format
 msgid "FATAL_ERROR: direct_lookup_data, %s->array is null\n"
-msgstr "Fatal_error: direct_lookup_data,%s-> array on tyhjä"
+msgstr "Fatal_error: direct_lookup_data,%s-> array on tyhjä\n"
 
 #: src/lookuptables.c:393
 msgid "MegaTunix LookupTables"
@@ -9670,14 +9701,16 @@ msgstr "MegaTunix lookuptables"
 #: src/lookuptables.c:559
 #, c-format
 msgid "No lookuptable found! expect a crash!!\n"
-msgstr "Ei lookuptable löytynyt! odottaa kaatua!"
+msgstr "Ei lookuptable löytynyt! odottaa kaatua!\n"
 
 #: src/lookuptables.c:612
 #, c-format
 msgid ""
 ": dump_hash()\n"
 "	Key %s, Value %p, %s\n"
-msgstr ": Dump_hash () Keskeiset%s, Arvo% p%s"
+msgstr ""
+": Dump_hash ()\n"
+"Keskeiset %s, Arvo %p, %s\n"
 
 #: src/ms1-t-logger.c:422
 msgid "Tooth times in usec."
@@ -9698,29 +9731,31 @@ msgstr "Trigger kertaa ms."
 #: src/ms1-t-logger.c:438 src/ms2-t-logger.c:334
 #, c-format
 msgid "Engine RPM:  %.1f"
-msgstr "Moottorin RPM:% .1 f"
+msgstr "Moottorin RPM: %.1f"
 
 #: src/ms1-t-logger.c:445 src/ms2-t-logger.c:341
 #, c-format
 msgid "Sample Time: %i ms."
-msgstr "Näyte Aika:% i ms."
+msgstr "Näyte Aika: %i ms."
 
 #: src/mtxsocket.c:158
 #, c-format
 msgid "WSAStartup failed: %d\n"
-msgstr "WSAStartup epäonnistui:% d"
+msgstr "WSAStartup epäonnistui: %d\n"
 
 #: src/mtxsocket.c:343
 #, c-format
 msgid ""
 "Welcome to MegaTunix %s, ASCII mode enabled\n"
 "Enter 'help' for assistance\n"
-msgstr "Tervetuloa MegaTunix%s, ASCII tila käytössä Kirjoita &#39;help&#39; apua"
+msgstr ""
+"Tervetuloa MegaTunix %s, ASCII tila käytössä\n"
+"Kirjoita &#39;help&#39; apua\n"
 
 #: src/mtxsocket.c:579
 #, c-format
 msgid "text_revision undefined!\n"
-msgstr "text_revision undefined!"
+msgstr "text_revision undefined!\n"
 
 #: src/mtxsocket.c:982 src/mtxsocket.c:994
 msgid "Not Connected yet"
@@ -9737,71 +9772,38 @@ msgstr "Offline-tilassa, ei tarkisteta"
 #: src/mtxsocket.c:1121 src/mtxsocket.c:1129 src/mtxsocket.c:1167
 #, c-format
 msgid "SHORT WRITE!\n"
-msgstr "LYHYT kirjoittaa!"
+msgstr "LYHYT kirjoittaa!\n"
 
 #: src/mtxsocket.c:1359
 #, c-format
 msgid "Unable to open network port, sleeping 500 ms to see if it resolves\n"
-msgstr "Ei voida avata verkon satamaan, nukkuva 500 ms nähdä, jos se päättää"
+msgstr "Ei voida avata verkon satamaan, nukkuva 500 ms nähdä, jos se päättää\n"
 
 #: src/mtxsocket.c:1624
 #, c-format
 msgid "Peer update WRITE ERROR!\n"
-msgstr "Peer päivitys WRITE ERROR!"
+msgstr "Peer päivitys WRITE ERROR!\n"
 
 #: src/mtxsocket.c:1787
 #, c-format
 msgid "Case not handled, bug in state machine!\n"
-msgstr "Asia ei käsitellä, vian tilakone!"
-
-#: src/notifications.c:263
-msgid ""
-"The MegaSquirt ECU appears to be currently disconnected.  This means that "
-"either one of the following occurred:\n"
-"   1. Wrong Comm port is selected on the Communications Tab\n"
-"   2. The MegaSquirt serial link is not plugged in\n"
-"   3. The MegaSquirt ECU does not have adequate power.\n"
-"   4. The MegaSquirt ECU is in bootloader mode.\n"
-"\n"
-"Suggest checking the serial settings on the Communications page first, and "
-"then check the Serial Status log at the bottom of that page. If the Serial "
-"Status log says \"I/O with MegaSquirt Timeout\", it means one of a few "
-"possible problems:\n"
-"   1. You selected the wrong COM port (older systems came with two, most "
-"newer ones only have one, try the other one...)\n"
-"   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 "
-"Male/Female cable)\n"
-"   3. The cable is OK, but the MS doesn't have adequate power.\n"
-"   4. If you have the ECU in bootloader mode, none of the lights lite up, "
-"and a terminal program will show a \"Boot>\" prompt Disconnect the Boot "
-"jumper and power cycle the ECU.\n"
-"\n"
-"If it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this "
-"can mean one of two things:\n"
-"   1. The COM port doesn't exist on your computer,\n"
-"					OR\n"
-"   2. You don't have permission to open the port. (/dev/ttySx).\n"
-"UNIX ONLY: Change the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/"
-"ttyS*\" as root), NOTE: This has potential security implications. Check the "
-"Unix/Linux system documentation regarding \"security\" for more "
-"information...\n"
-msgstr "MegaSquirt ecua näyttää tällä hetkellä irti. Tämä tarkoittaa sitä, että jompikumpi seuraavista on tapahtunut: 1. Väärä Comm portti on valittu Communications Tab 2. MegaSquirt sarjaliitäntää ei ole kytketty 3. MegaSquirt ecua ei ole riittävästi virtaa. 4. MegaSquirt ecua on bootloader tilaan. Ehdota tarkkailun sarja asetukset Communications sivu ensin, ja sitten tarkistaa Serial tila loki alareunassa sivun. Jos sarja Tila loki sanoo \"I / O MegaSquirt aika\", se tarkoittaa yhtä muutamia mahdollisia ongelmia: 1. Olet valinnut väärän COM-portti (vanhat koneet mukana kaksi eniten uusilla vain yksi, kokeile toinen ...) 2. Viallinen kaapeli MegaSquirt yksikkö. (Pitäisi olla suora DB9 uros / naaras-kaapeli) 3. Kaapeli on OK, mutta MS ei ole riittävästi virtaa. 4. Jos olet ecua bootloader tilassa ei mikään palaa lite ylös, ja terminaali ohjelma näyttää \"Boot>\" nopea Katkaise Boot hyppy ja virran katkaisemisen ecua. Jos siinä lukee \"Serial Port ei avata, voi testata ecua Communications \", tämä voi tarkoittaa kahta asiaa: 1. COM-portti ei ole tietokoneessa, tai 2. Sinulla ei ole oikeutta avata portti. (/ Dev / ttySx). UNIX VAIN: Vaihda käyttöoikeuksia / dev / ttyS * 666 (\"chmod 666 / dev / ttyS *\" root), HUOM: Tämä on mahdollisuuksia vaikuttaa turvallisuuteen. Tarkista Unix / Linux-järjestelmän dokumentaatio \"turvallisuus\" lisätietoja ..."
+msgstr "Asia ei käsitellä, vian tilakone!\n"
 
 #: src/raweditor.c:71
 #, c-format
 msgid "Page %i"
-msgstr "Page% i"
+msgstr "Page %i"
 
 #: src/raweditor.c:74
 #, c-format
 msgid "Page %i RAW ECU data (in HEX)"
-msgstr "Page% i RAW ecua tiedot (HEX)"
+msgstr "Page %i RAW ecua tiedot (HEX)"
 
 #: src/req_fuel.c:123
 #, c-format
 msgid ""
 "Serious Error, table_num not defined for reqfuel calc, contact author!\n"
-msgstr "Vakava virhe, table_num ei määritelty reqfuel calc, ota kirjailija!"
+msgstr "Vakava virhe, table_num ei määritelty reqfuel calc, ota kirjailija!\n"
 
 #: src/req_fuel.c:156
 msgid "Required Fuel Calculator"
@@ -9829,7 +9831,13 @@ msgid ""
 "Did you forget to run <i>\"sudo make install\"</i>??\n"
 " You should notify the author of this bug\n"
 "\n"
-msgstr "<b>MegaTunix</b> Realtime Variable kartta \"%s.rtv_map\" tämän firmware ei näytä olevan oikein asennettu! Unohtuiko ajaa <i>\"sudo make install\"?</i> Sinun tulisi ilmoittaa laatijan vika"
+msgstr ""
+"\n"
+"<b>MegaTunix</b> Realtime Variable kartta \"%s.rtv_map\" tämän firmware "
+"\n"
+"ei näytä olevan oikein asennettu! Unohtuiko ajaa <i>\"sudo make install\"</i>\n"
+"Sinun tulisi ilmoittaa laatijan vika\n"
+"\n"
 
 #: src/rtv_map_loader.c:102
 msgid "ERROR RT Map file could NOT be opened!!!"
@@ -9862,23 +9870,23 @@ msgstr "RT Kartta ladattu ..."
 #: src/rtv_processor.c:75
 #, c-format
 msgid "ERROR, INPUT IS NULL!!!!\n"
-msgstr "VIRHE, panos on NULL!!"
+msgstr "VIRHE, panos on NULL!!\n"
 
 #: src/rtv_processor.c:95
 #, c-format
 msgid ""
 "Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n"
-msgstr "Nykyisin% i näytteet varastoidaan, yhteensä Logged Time (HH: MM: SS) (% 02i:% 02i:% 02i)"
+msgstr "Nykyisin %i näytteet varastoidaan, yhteensä Logged Time (HH: MM: SS) (% 02i:%02i:%02i)\n"
 
 #: src/rtv_processor.c:404
 #, c-format
 msgid ": ERROR: multi_expression hash key is NULL!\n"
-msgstr ": VIRHE: multi_expression Ruutunäppäin on NULL!"
+msgstr ": VIRHE: multi_expression Ruutunäppäin on NULL!\n"
 
 #: src/runtime_gui.c:385 src/runtime_gui.c:424 src/runtime_gui.c:463
 #, c-format
 msgid "multi is null!!\n"
-msgstr "moni on tyhjä!"
+msgstr "moni on tyhjä!\n"
 
 #: src/runtime_sliders.c:81
 msgid "Loading RT Sliders..."
@@ -9895,12 +9903,12 @@ msgstr "RT Liukusäätimet Loaded ..."
 #: src/runtime_sliders.c:304 src/runtime_sliders.c:437
 #, c-format
 msgid "No \"real_lower\" value defined for control name %s, datasource %s\n"
-msgstr "Ei \"real_lower\" arvo määritellään ohjaus nimi%s, tietolähteen%s"
+msgstr "Ei \"real_lower\" arvo määritellään ohjaus nimi %s, tietolähteen %s\n"
 
 #: src/runtime_sliders.c:308 src/runtime_sliders.c:441
 #, c-format
 msgid "No \"real_upper\" value defined for control name %s, datasource %s\n"
-msgstr "Ei \"real_upper\" arvo määritellään ohjaus nimi%s, tietolähteen%s"
+msgstr "Ei \"real_upper\" arvo määritellään ohjaus nimi %s, tietolähteen %s\n"
 
 #: src/runtime_status.c:77
 msgid "Loading RT Status..."
@@ -9937,7 +9945,7 @@ msgstr "ERROR RunTimeText Kartta XML kuvaa ei löydy!"
 #: src/runtime_text.c:109 src/xmlcomm.c:45
 #, c-format
 msgid "error: could not parse file %s\n"
-msgstr "virhe: ei voitu jäsentää tiedostoa%s"
+msgstr "virhe: ei voitu jäsentää tiedostoa %s\n"
 
 #: src/runtime_text.c:130
 msgid "RT Text Loaded..."
@@ -9946,12 +9954,12 @@ msgstr "RT Teksti Loaded ..."
 #: src/runtime_text.c:170 src/xmlcomm.c:148
 #, c-format
 msgid "ERROR, load_potential_args, xml node is empty!!\n"
-msgstr "VIRHE, load_potential_args, xml solmu on tyhjä!"
+msgstr "VIRHE, load_potential_args, xml solmu on tyhjä!\n"
 
 #: src/serialio.c:83
 #, c-format
 msgid "%s Opened Successfully\n"
-msgstr "% S avattu onnistuneesti"
+msgstr "%s avattu onnistuneesti\n"
 
 #: src/serialio.c:99
 #, c-format
@@ -9961,32 +9969,32 @@ msgstr "Virhe avaaminen \"%s\", virhekoodi: \"%s\""
 #: src/serialio.c:101
 #, c-format
 msgid "Error Opening \"%s\", Error Code: %s \n"
-msgstr "Virhe avaaminen \"%s\", virhekoodi:%s"
+msgstr "Virhe avaaminen \"%s\", virhekoodi: %s \n"
 
 #: src/serialio.c:279
 #, c-format
 msgid "Serial Port Closed\n"
-msgstr "Serial Port Suljettu"
+msgstr "Serial Port Suljettu\n"
 
 #: src/serialio.c:373
 #, c-format
 msgid "Attempting to open port %s\n"
-msgstr "Yritetään avata portti%s"
+msgstr "Yritetään avata portti %s\n"
 
 #: src/serialio.c:381
 #, c-format
 msgid "Trying 8192 Baud for ECU link\n"
-msgstr "Yritetään 8192 Baud ecua linkki"
+msgstr "Yritetään 8192 Baud ecua linkki\n"
 
 #: src/serialio.c:385
 #, c-format
 msgid "Trying 9600 Baud for ECU link\n"
-msgstr "Yritetään 9600 Baud ecua linkki"
+msgstr "Yritetään 9600 Baud ecua linkki\n"
 
 #: src/serialio.c:392
 #, c-format
 msgid "Searching for ECU\n"
-msgstr "Haku ecua"
+msgstr "Haku ecua\n"
 
 #. We have a winner !!  Abort loop
 #. We have a winner !!
@@ -9994,12 +10002,12 @@ msgstr "Haku ecua"
 #: src/serialio.c:396 src/serialio.c:421
 #, c-format
 msgid "Search successfull\n"
-msgstr "Etsi onnistunut"
+msgstr "Etsi onnistunut\n"
 
 #: src/serialio.c:417
 #, c-format
 msgid "Trying 115200 Baud for ECU link\n"
-msgstr "Yritetään 115200 Baud ecua linkki"
+msgstr "Yritetään 115200 Baud ecua linkki\n"
 
 #: src/tabloader.c:80
 msgid "Loading Gui Tabs..."
@@ -10013,7 +10021,7 @@ msgstr "Glade Tiedosto:"
 #: src/tabloader.c:94 src/tabloader.c:103
 #, c-format
 msgid "  is MISSING!\n"
-msgstr "puuttuu!"
+msgstr "puuttuu!\n"
 
 #: src/tabloader.c:101
 #, c-format
@@ -10032,19 +10040,21 @@ msgstr "ERROR Gui Välilehdet XML ongelma!"
 #: src/tabloader.c:181
 #, c-format
 msgid " completed.\n"
-msgstr "päätökseen."
+msgstr "päätökseen.\n"
 
 #: src/tabloader.c:185
 #, c-format
 msgid ""
 "\n"
 "Datamap File: "
-msgstr "Datamap Tiedosto:"
+msgstr ""
+"\n"
+"Datamap Tiedosto: "
 
 #: src/tabloader.c:187
 #, c-format
 msgid " Could not be processed!\n"
-msgstr "Ei voitu käsitellä!"
+msgstr "Ei voitu käsitellä!\n"
 
 #: src/tabloader.c:208
 #, c-format
@@ -10058,49 +10068,49 @@ msgstr "Gui Tabs Loaded ..."
 #: src/tabloader.c:405
 #, c-format
 msgid "Error, bind_to_lists(), lists is NULL\n"
-msgstr "Virhe, bind_to_lists (), luetteloista on NULL"
+msgstr "Virhe, bind_to_lists (), luetteloista on NULL\n"
 
 #: src/therm.c:172
 #, c-format
 msgid "Serious ERROR!, tabletype is not CTS or MAT\n"
-msgstr "Vakava virhe!, Tabletype ei CTS tai MAT"
+msgstr "Vakava virhe!, Tabletype ei CTS tai MAT\n"
 
 #: src/threads.c:93
 #, c-format
 msgid "Command %s is INVALID, aborting call\n"
-msgstr "Komento%s ei kelpaa, saaliin soittaa"
+msgstr "Komento %s ei kelpaa, saaliin soittaa\n"
 
 #: src/threads.c:177
 #, c-format
 msgid "CRITICAL ERROR, function \"%s()\" is not found!!\n"
-msgstr "Kriittinen virhe, funktio \"%s ()\" ei löydy!"
+msgstr "Kriittinen virhe, funktio \"%s()\" ei löydy!\n"
 
 #: src/threads.c:263
 #, c-format
 msgid "ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"
-msgstr "ERROR! Koko undefined muuttujan klo canID% i, sivu% i, offset% i"
+msgstr "ERROR! Koko undefined muuttujan klo canID %i, sivu %i, offset %i\n"
 
 #: src/threads.c:648
 #, c-format
 msgid ""
 "There are %i pending I/O transactions waiting to get to the ECU, please be "
 "patient.\n"
-msgstr "On% i vireillä I / O liiketoimia odottamassa ECUun, ole kärsivällinen."
+msgstr "On %i vireillä I / O liiketoimia odottamassa ECUun, ole kärsivällinen.\n"
 
 #: src/threads.c:655
 #, c-format
 msgid "Approximately %i Transactions remaining, please wait\n"
-msgstr "Noin% i jääneistä liiketoimista, odota"
+msgstr "Noin %i jääneistä liiketoimista, odota\n"
 
 #: src/threads.c:660
 #, c-format
 msgid "All Transactions complete\n"
-msgstr "Kaikki tapahtumat täydellinen"
+msgstr "Kaikki tapahtumat täydellinen\n"
 
 #: src/threads.c:758
 #, c-format
 msgid "ERROR, MTX_UNDEF, donno what to do!!\n"
-msgstr "VIRHE, MTX_UNDEF, donno mitä tehdä!"
+msgstr "VIRHE, MTX_UNDEF, donno mitä tehdä!\n"
 
 #: src/timeout_handlers.c:305
 msgid "Initiating background ECU interrogation..."
@@ -10109,81 +10119,81 @@ msgstr "Käynnistetään tausta ecua haussa ..."
 #: src/vetable_gui.c:143
 #, c-format
 msgid "!!! ERROR !!!, rescaler passed invalid enum\n"
-msgstr "! ERROR!, Rescaler kulunut kelpaa enum"
+msgstr "! ERROR!, Rescaler kulunut kelpaa enum\n"
 
 #: src/vetable_gui.c:194
 #, c-format
 msgid "applicable tables not defined!!!\n"
-msgstr "sovelletaan taulukoissa ei ole määritelty!"
+msgstr "sovelletaan taulukoissa ei ole määritelty!\n"
 
 #: src/vetable_gui.c:199
 #, c-format
 msgid "table_num not defined!!!\n"
-msgstr "table_num ole määritelty!"
+msgstr "table_num ole määritelty!\n"
 
 #: src/vex_support.c:762
 #, c-format
 msgid "VEX Header: EVEME %s"
-msgstr "VEX Otsikko: EVEME%s"
+msgstr "VEX Otsikko: EVEME %s"
 
 #: src/vex_support.c:766
 #, c-format
 msgid "VEX Header: Revision %s"
-msgstr "VEX Otsikko: Versio%s"
+msgstr "VEX Otsikko: Versio %s"
 
 #: src/vex_support.c:770
 #, c-format
 msgid "VEX Header: UserComment: %s"
-msgstr "VEX Otsikko: USERCOMMENT:%s"
+msgstr "VEX Otsikko: USERCOMMENT: %s"
 
 #: src/vex_support.c:774
 #, c-format
 msgid "VEX Header: Date %s"
-msgstr "VEX Otsikko: Päivämäärä%s"
+msgstr "VEX Otsikko: Päivämäärä %s"
 
 #: src/vex_support.c:778
 #, c-format
 msgid "VEX Header: Time %s"
-msgstr "VEX Otsikko: Aika%s"
+msgstr "VEX Otsikko: Aika %s"
 
 #: src/vex_support.c:814
 #, c-format
 msgid "VEX Import: Page %i out of range <---ERROR\n"
-msgstr "VEX Tuo Page% i alueen ulkopuolella <--- ERROR"
+msgstr "VEX Tuo Page %i alueen ulkopuolella <--- ERROR\n"
 
 #: src/vex_support.c:822
 #, c-format
 msgid "VEX Import: Page %i\n"
-msgstr "VEX Tuo Page% i"
+msgstr "VEX Tuo Page %i\n"
 
 #: src/vex_support.c:868
 #, c-format
 msgid "VEX Import: Table %i\n"
-msgstr "VEX Tuo Taulukko% i"
+msgstr "VEX Tuo Taulukko %i\n"
 
 #: src/vex_support.c:1091
 #, c-format
 msgid "VEX Import: VE-Table loaded successfully\n"
-msgstr "VEX Import: VE-taulukko ladattu onnistuneesti"
+msgstr "VEX Import: VE-taulukko ladattu onnistuneesti\n"
 
 #: src/vex_support.c:1184
 #, c-format
 msgid ""
 "VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!="
 "%i), aborting!!!\n"
-msgstr "VEX tuonti: lukumäärä RPM siilojen sisällä VEXfile ja firmware eivät täsmää (% i! =% I) saaliin!"
+msgstr "VEX tuonti: lukumäärä RPM siilojen sisällä VEXfile ja firmware eivät täsmää (%i != %i) saaliin!\n"
 
 #: src/vex_support.c:1191
 #, c-format
 msgid ""
 "VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!"
 "=%i), aborting!!!\n"
-msgstr "VEX tuonti: lukumäärä LOAD siilojen sisällä VEXfile ja firmware eivät täsmää (% i! =% I) saaliin!"
+msgstr "VEX tuonti: lukumäärä LOAD siilojen sisällä VEXfile ja firmware eivät täsmää (%i != %i) saaliin!\n"
 
 #: src/vex_support.c:1321
 #, c-format
 msgid "VEX Import: VEtable on page %i updated with data from the VEX file\n"
-msgstr "VEX Import: VEtable sivulla% i päivitetty tiedot VEX tiedosto"
+msgstr "VEX Import: VEtable sivulla %i päivitetty tiedot VEX tiedosto\n"
 
 #: src/visibility.c:53
 msgid "Tab Visibility"
@@ -10192,102 +10202,102 @@ msgstr "Tab Näkyvyys"
 #: src/visibility.c:62
 #, c-format
 msgid "ERROR, glade element not found!\n"
-msgstr "VIRHE, glade elementti ei löytynyt!"
+msgstr "VIRHE, glade elementti ei löytynyt!\n"
 
 #: src/widgetmgmt.c:170
 #, c-format
 msgid "Error with widget %s, bind_to_list is null\n"
-msgstr "Virhe vekotin%s, bind_to_list on tyhjä"
+msgstr "Virhe vekotin %s, bind_to_list on tyhjä\n"
 
 #: src/xmlcomm.c:34
 #, c-format
 msgid "comm xml filename is NULL!\n"
-msgstr "comm xml tiedostonimi on NULL!"
+msgstr "comm xml tiedostonimi on NULL!\n"
 
 #: src/xmlcomm.c:90 src/xmlcomm.c:118
 #, c-format
 msgid "ERROR, get_potential_arg_name, xml node is empty!!\n"
-msgstr "VIRHE, get_potential_arg_name, xml solmu on tyhjä!"
+msgstr "VIRHE, get_potential_arg_name, xml solmu on tyhjä!\n"
 
 #: src/xmlcomm.c:201
 #, c-format
 msgid "ERROR, load_command_section, xml node is empty!!\n"
-msgstr "VIRHE, load_command_section, xml solmu on tyhjä!"
+msgstr "VIRHE, load_command_section, xml solmu on tyhjä!\n"
 
 #: src/xmlcomm.c:227
 #, c-format
 msgid "ERROR Function %s is NULL\n"
-msgstr "Virhefunktio%s on NULL"
+msgstr "Virhefunktio %s on NULL\n"
 
 #: src/xmlcomm.c:250
 #, c-format
 msgid "ERROR Helper Function %s is NULL\n"
-msgstr "ERROR Helper Tehtävä%s on NULL"
+msgstr "ERROR Helper Tehtävä%s on NULL\n"
 
 #: src/xmlcomm.c:279
 #, c-format
 msgid "ERROR, load_cmd_arguments, xml node is empty!!\n"
-msgstr "VIRHE, load_cmd_arguments, xml solmu on tyhjä!"
+msgstr "VIRHE, load_cmd_arguments, xml solmu on tyhjä!\n"
 
 #: src/xmlcomm.c:308
 #, c-format
 msgid "ERROR, load_cmd_post_functions, xml node is empty!!\n"
-msgstr "VIRHE, load_cmd_post_functions, xml solmu on tyhjä!"
+msgstr "VIRHE, load_cmd_post_functions, xml solmu on tyhjä!\n"
 
 #: src/xmlcomm.c:325
 #, c-format
 msgid "ERROR Post Function %s is NULL\n"
-msgstr "ERROR Post Tehtävä%s on NULL"
+msgstr "ERROR Post Tehtävä %s on NULL\n"
 
 #: src/xmlcomm.c:338
 #, c-format
 msgid "ERROR Post Function w/arg %s is NULL\n"
-msgstr "ERROR Post Tehtävä w / arg%s on NULL"
+msgstr "ERROR Post Tehtävä w / arg %s on NULL\n"
 
 #: src/xmlcomm.c:357
 #, c-format
 msgid "Command key \"%s\"\n"
-msgstr "Komento-näppäin \"%s\""
+msgstr "Komento-näppäin \"%s\"\n"
 
 #: src/xmlcomm.c:358
 #, c-format
 msgid "Command name \"%s\"\n"
-msgstr "Komento nimi \"%s\""
+msgstr "Komento nimi \"%s\"\n"
 
 #: src/xmlcomm.c:359
 #, c-format
 msgid "Command desc \"%s\"\n"
-msgstr "Komento desc \"%s\""
+msgstr "Komento desc \"%s\"\n"
 
 #: src/xmlcomm.c:361
 #, c-format
 msgid "Command base \"%s\"\n"
-msgstr "Komento base \"%s\""
+msgstr "Komento base \"%s\"\n"
 
 #: src/xmlcomm.c:363
 #, c-format
 msgid "Helper function \"%s\"\n"
-msgstr "Helper toiminto \"%s\""
+msgstr "Helper toiminto \"%s\"\n"
 
 #: src/xmlcomm.c:366
 #, c-format
 msgid "Command args (%i): \n"
-msgstr "Komento args (% i):"
+msgstr "Komento args (%i): \n"
 
 #: src/xmlcomm.c:375
 #, c-format
 msgid "Defer Post Functions (%i): \n"
-msgstr "Lykkää Post toiminnot (% i):"
+msgstr "Lykkää Post toiminnot (%i): \n"
 
 #: src/xmlcomm.c:376
 #, c-format
 msgid "Post Functions (%i): \n"
-msgstr "Post toiminnot (% i):"
+msgstr "Post toiminnot (%i): \n"
 
 #: src/xmlcomm.c:389
 #, c-format
 msgid "Function call %s (%p)\n"
-msgstr "Toiminto soittaa%s (% p)"
+msgstr "Toiminto soittaa %s (%p)\n"
 
 #: gaugedesigner/gaugedesigner.glade:8
 msgid "Warning Range Creator"
@@ -10942,7 +10952,9 @@ msgstr "Täynnä"
 msgid ""
 "Solid\n"
 "On Off Dash\n"
-msgstr "Solid Pois Dash"
+msgstr ""
+"Solid\n"
+"Pois Dash\n"
 
 #: gaugedesigner/gaugedesigner.glade:6026
 msgid "Line Width"
@@ -13573,13 +13585,13 @@ msgstr "Boost Controller Taulukot"
 #: Gui/boost_6x6x3.glade:1499 Gui/boost_6x6x3.glade:3693
 #: Gui/boost_6x6x3.glade:5887 Gui/ms2-e-boost_8x8x2.glade:5547
 msgid "Boost Controller, KPA Target, TPS % vs. RPM"
-msgstr "Boost Controller, KPA Target, TPS% vs. RPM"
+msgstr "Boost Controller, KPA Target, TPS % vs. RPM"
 
 #: Gui/boost_6x6x3.glade:1776 Gui/boost_6x6x3.glade:3970
 #: Gui/boost_6x6x3.glade:6164 Gui/ms2-alpha-n_6x6x1.glade:1765
 #: Gui/ms2-e-boost_8x8x2.glade:2732 Gui/ms2-e-boost_8x8x2.glade:5876
 msgid "TPS % Bins"
-msgstr "TPS% Bins"
+msgstr "TPS % Bins"
 
 #: Gui/boost_6x6x3.glade:2234
 msgid "Boost Table 1 (KPA Target)"
@@ -13824,7 +13836,7 @@ msgstr "# Jaksojen"
 
 #: Gui/enrichments.glade:116
 msgid "Enrich %"
-msgstr "Enrich%"
+msgstr "Enrich %"
 
 #: Gui/enrichments.glade:206 Gui/warmupwizard.glade:1134
 msgid "Afterstart Enrichment"
@@ -13856,37 +13868,46 @@ msgstr "Lämmittelyn Enrichment Bin (%)"
 
 #: Gui/enrichments.glade:1175
 msgid "EGO Active RPM\n"
-msgstr "EGO Aktiivinen RPM"
+msgstr "EGO Aktiivinen RPM\n"
 
 #: Gui/enrichments.glade:1204
 msgid ""
 "EGO Active Temp\n"
 "(deg F.)"
-msgstr "EGO Active Temp (astetta F.)"
+msgstr ""
+"EGO Active Temp\n"
+"(astetta F.)"
 
 #: Gui/enrichments.glade:1309
 msgid ""
 "EGO Switching\n"
 "Voltage"
-msgstr "EGO Kytkentäjännite"
+msgstr ""
+"EGO Kytkentäjännite"
 
 #: Gui/enrichments.glade:1338
 msgid ""
 "EGO Step\n"
 "(Percent)"
-msgstr "EGO Step (Prosentti)"
+msgstr ""
+"EGO Step\n"
+"(Prosentti)"
 
 #: Gui/enrichments.glade:1443
 msgid ""
 "# of Ignition Events\n"
 "Between Steps"
-msgstr "# Syttymisen Tapahtumat portaiden välillä"
+msgstr ""
+"# Syttymisen Tapahtumat\n"
+"portaiden välillä"
 
 #: Gui/enrichments.glade:1472
 msgid ""
 "EGO +/- Limit\n"
 "(Percent)"
-msgstr "EGO + / - Raja (Prosentti)"
+msgstr ""
+"EGO + / - Raja\n"
+"(Prosentti)"
 
 #: Gui/enrichments.glade:1570 Gui/msns-e-ego.glade:1432
 msgid "Exhaust O<sub>2</sub> Feedback Settings"
@@ -13896,25 +13917,33 @@ msgstr "Pakokaasun O <sub>2</sub> Palaute Asetukset"
 msgid ""
 "Accel Enrich\n"
 "Duration (sec)"
-msgstr "Accel Enrich Kesto (s)"
+msgstr ""
+"Accel Enrich\n"
+"Kesto (s)"
 
 #: Gui/enrichments.glade:1654
 msgid ""
 "TPS Trigger Threshold \n"
 "(V/sec)"
-msgstr "TPS Trigger Threshold (V / s)"
+msgstr ""
+"TPS Trigger Threshold\n"
+"(V / s)"
 
 #: Gui/enrichments.glade:1759
 msgid ""
 "Cold Accel Enrich\n"
 "Add-on (ms)"
-msgstr "Cold Accel Enrich Add-on (ms)"
+msgstr ""
+"Cold Accel Enrich\n"
+"Add-on (ms)"
 
 #: Gui/enrichments.glade:1788
 msgid ""
 "Cold Accel Enrich\n"
 "Multiplier (%)"
-msgstr "Cold Accel Enrich Kerroin (%)"
+msgstr ""
+"Cold Accel Enrich\n"
+"Kerroin (%)"
 
 #: Gui/enrichments.glade:1911
 msgid "Acceleration Enrichment Bins (ms)"
@@ -14821,7 +14850,7 @@ msgstr "mapDOT Asetukset"
 
 #: Gui/ms2-accel.glade:2245 Gui/ms2-xtau.glade:1495
 msgid "RPM\n"
-msgstr "RPM"
+msgstr "RPM\n"
 
 #: Gui/ms2-accel.glade:2386 Gui/ms2-xtau.glade:1636
 msgid "<small> </small>"
@@ -14877,7 +14906,7 @@ msgstr "<small>X (Puddling)</small>"
 
 #: Gui/ms2-accel.glade:4351 Gui/ms2-warmup.glade:4910 Gui/ms2-xtau.glade:785
 msgid "(Corr %)"
-msgstr "(Corr%)"
+msgstr "(Corr %)"
 
 #: Gui/ms2-accel.glade:4813 Gui/ms2-warmup.glade:5316 Gui/ms2-xtau.glade:1191
 msgid "<small>Tau (Time)</small>"
@@ -15006,7 +15035,7 @@ msgstr "MS2/2-Extra Kiihtyvyys rikastusta"
 
 #: Gui/ms2-e-boost_8x8x2.glade:2397
 msgid "Boost Controller,Duty Target, TPS % vs. RPM"
-msgstr "Boost Controller Duty Target, TPS% vs. RPM"
+msgstr "Boost Controller Duty Target, TPS % vs. RPM"
 
 #: Gui/ms2-e-boost_8x8x2.glade:3190
 msgid "Boost Table 1 (Duty Target)"
@@ -15435,8 +15464,8 @@ msgid "RPM when in TPS bypass (RPM)"
 msgstr "RPM kun TPS ohitustie (RPM)"
 
 #: Gui/ms2-e-corrections_misc.glade:5851
-msgid "RevLimit TPS bypass (TPS%)"
-msgstr "RevLimit TPS ohitustie (TPS%)"
+msgid "RevLimit TPS bypass (TPS %)"
+msgstr "RevLimit TPS ohitustie (TPS %)"
 
 #: Gui/ms2-e-corrections_misc.glade:5878
 msgid "RevLimit Adder (RPM)"
@@ -15750,7 +15779,7 @@ msgstr "Idle Valve Suljettu tulli (%)"
 
 #: Gui/ms2-e-crank_idle_warmup.glade:8251
 msgid "Dashpot Adder (duty %)"
-msgstr "Iskunvaimennin Kyy (tulli%)"
+msgstr "Iskunvaimennin Kyy (tulli %)"
 
 #: Gui/ms2-e-crank_idle_warmup.glade:8280
 msgid "PWM Closed Loop Settings"
@@ -17818,7 +17847,7 @@ msgstr "Tulvien Tyhjennä TPS"
 
 #: Gui/msns-e-crank-ase.glade:483
 msgid "Xtra fuel %"
-msgstr "Xtra polttoaine%"
+msgstr "Xtra polttoaine %"
 
 #: Gui/msns-e-crank-ase.glade:593
 msgid ""
@@ -18986,7 +19015,7 @@ msgstr "IAR"
 
 #: Gui/PIS-corrections.glade:1122 Gui/PIS-corrections.glade:3631
 msgid "BPW %"
-msgstr "BPW%"
+msgstr "BPW %"
 
 #: Gui/PIS-corrections.glade:1818
 msgid "Duration"
@@ -18994,7 +19023,7 @@ msgstr "Kesto"
 
 #: Gui/PIS-corrections.glade:2166
 msgid "ASC %"
-msgstr "ASC%"
+msgstr "ASC %"
 
 #: Gui/PIS-corrections.glade:2514
 msgid "Crank PW"
@@ -19070,7 +19099,7 @@ msgstr "ROC *"
 
 #: Gui/PIS-corrections.glade:6243
 msgid "ROC %"
-msgstr "ROC%"
+msgstr "ROC %"
 
 #: Gui/PIS-corrections.glade:6391
 msgid "Min ROC"
@@ -19226,7 +19255,7 @@ msgstr "Max RPM ROC"
 
 #: Gui/PIS-settings.glade:1705 Gui/PIS-settings.glade:2573
 msgid "Max TPS %"
-msgstr "Max TPS%"
+msgstr "Max TPS %"
 
 #: Gui/PIS-settings.glade:1732
 msgid "Control Delay"
@@ -19254,7 +19283,7 @@ msgstr "RPM"
 
 #: Gui/PIS-settings.glade:2546
 msgid "Min TPS %"
-msgstr "Min TPS%"
+msgstr "Min TPS %"
 
 #: Gui/PIS-settings.glade:2600
 msgid "Uptime (s)"
@@ -19266,11 +19295,11 @@ msgstr "Min CTS (astetta)"
 
 #: Gui/PIS-settings.glade:2654
 msgid "Min BPW %"
-msgstr "Min BPW%"
+msgstr "Min BPW %"
 
 #: Gui/PIS-settings.glade:2681
 msgid "Max BPW %"
-msgstr "Max BPW%"
+msgstr "Max BPW %"
 
 #: Gui/PIS-settings.glade:2708
 msgid "Transient (ms)"
@@ -19278,11 +19307,11 @@ msgstr "Ohimenevä (ms)"
 
 #: Gui/PIS-settings.glade:2735
 msgid "Proportional %"
-msgstr "Suhteellinen%"
+msgstr "Suhteellinen %"
 
 #: Gui/PIS-settings.glade:2762
 msgid "Integral %"
-msgstr "Integral%"
+msgstr "Integral %"
 
 #: Gui/PIS-settings.glade:3139
 msgid "Closed Loop EGO"
@@ -20063,7 +20092,7 @@ msgstr "Rescales Taulukko säilyttää sama PW"
 
 #: Gui/warmupwizard.glade:953
 msgid "Warmup Enrichment %"
-msgstr "Lämmittelyn Väkevöiminen%"
+msgstr "Lämmittelyn Väkevöiminen %"
 
 #: Gui/warmupwizard.glade:1020
 msgid "Enrichment (%)"
