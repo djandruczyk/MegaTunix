@@ -208,7 +208,6 @@ void *socket_thread_manager(gpointer data)
 	GTimeVal cur;
 	GSocketAddress *sockaddr = NULL;
 	static MtxSocketClient *last_bin_client = NULL;
-	gint fd = -1;
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
 	while (TRUE)
@@ -419,6 +418,8 @@ void *binary_socket_server(gpointer data)
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_binary;
 
+		if (res < 0)
+			goto close_binary2;
 		res = g_socket_receive(client->socket,&buf,1,NULL,&error);
 		if (res < 0)
 		{
@@ -426,6 +427,7 @@ close_binary:
 			dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
+close_binary2:
 			g_socket_close(client->socket,NULL);
 			g_object_unref(client->socket);
 
@@ -1468,6 +1470,7 @@ gboolean close_network(void)
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 	/*	printf("Closing network port!\n");*/
+	g_socket_shutdown(serial_params->socket,TRUE,TRUE,NULL);
 	g_socket_close(serial_params->socket,NULL);
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
@@ -1519,10 +1522,7 @@ void *notify_slaves_thread(gpointer data)
 		msg = g_async_queue_timed_pop(slave_msg_queue,&cur);
 
 		if (!slave_list) /* List not created yet.. */
-		{
-			printf("no slaves to notify\n");
 			continue;
-		}
 
 		if ((leaving) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
@@ -1678,7 +1678,6 @@ close_control:
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		printf("control socket client data arrived!\n");
 		/*
 		   printf("controlsocket Data arrived!\n");
 		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
@@ -1871,10 +1870,10 @@ gboolean open_control_socket(gchar * host, gint port)
 
 gint net_send(GSocket *socket, guint8 *buf, gint len)
 {
-	int total = 0;        /* how many bytes we've sent*/
-	int bytesleft = len; /* how many we have left to senda*/
-	int n = 0;
-	GError *error;
+	gint total = 0;        /* how many bytes we've sent*/
+	gint bytesleft = len; /* how many we have left to senda*/
+	gint n = 0;
+	GError *error = NULL;
 
 	if (!buf)
 		return -1;
