@@ -15,6 +15,7 @@
 #define __MTXSOCKET_H__
 
 #include <enums.h>
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 
 
@@ -101,6 +102,8 @@ struct _MtxSocketClient
 	gchar *ip;
 	guint16 port;
 	guint8 ** ecu_data;
+	GSocket *socket;
+	GSocket *control_socket;
 	gint fd;
 	gint control_fd;
 	SocketType type;
@@ -118,6 +121,7 @@ struct _MtxSocketData
 
 struct _MtxSocket
 {
+	GSocket *socket;
 	gint fd;
 	SocketType type;
 };
@@ -140,16 +144,16 @@ struct _SlaveMessage
 /* Prototypes */
 void open_tcpip_sockets(void);
 void close_tcpip_sockets(void);
-gboolean setup_socket(gint);
+GSocket * setup_socket(gint);
 void *socket_thread_manager(gpointer);
 void * ascii_socket_server(gpointer );
 void * binary_socket_server(gpointer );
 void * control_socket_client(gpointer );
 void * notify_slaves_thread(gpointer );
 gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
-void return_socket_error(gint);
-void socket_get_rt_vars(gint, gchar *);
-void socket_get_rtv_list(gint);
+void return_socket_error(GSocket *);
+void socket_get_rt_vars(GSocket *, gchar *);
+void socket_get_rtv_list(GSocket *);
 void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void socket_get_ecu_vars(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
@@ -165,7 +169,7 @@ gboolean open_control_socket(gchar *, gint);
 void notify_slave(gpointer, gpointer);
 guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
 guint8 * build_status_update(guint8,SlaveMessage *,gint *);
-gint net_send(gint, guint8 *, gint, gint);
+gint net_send(GSocket *, guint8 *, gint);
 /* Prototypes */
 
 #endif

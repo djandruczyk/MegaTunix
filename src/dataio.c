@@ -231,12 +231,19 @@ gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
 	extern Serial_Params * serial_params;
 	gint res = 0;
+	GError *error = NULL;
 
 /*	printf("write_wrapper\n"); */
 	if (serial_params->net_mode)
 	{
 /*		printf("net mode write\n"); */
-		res = send(fd,buf,count,MSG_NOSIGNAL);
+		//res = send(fd,buf,count,MSG_NOSIGNAL);
+		res = g_socket_send(serial_params->socket,buf,(gsize)count,NULL,&error);
+		if (res == -1)
+		{
+			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf("\n"__FILE__": write_wrapper()\n\tg_socket_send_error \"%s\"\n\n",error->message));
+			g_error_free(error);
+		}
 	}
 	else
 	{

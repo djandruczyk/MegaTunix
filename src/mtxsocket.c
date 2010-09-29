@@ -25,13 +25,9 @@
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <glib.h>
+#include <gio/gio.h>
 #include <init.h>
 #include <mtxsocket.h>
-#ifndef __WIN32__
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#endif
 #include <notifications.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
@@ -41,20 +37,16 @@
 #include <stringmatch.h>
 #include <threads.h>
 #include <widgetmgmt.h>
-#ifdef __WIN32__
-#include <winsock2.h>
-#else
 #include <poll.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#endif
 #include <unistd.h>
 
 #define ERR_MSG "Bad Request: "
 
 static GPtrArray *slave_list = NULL;
-static gint controlsocket = 0;
+static GSocket * controlsocket = NULL;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
 static const guint8 SLAVE_STATUS_UPDATE=0xBF;
 GThread *ascii_socket_id = NULL;
@@ -71,67 +63,70 @@ extern volatile gboolean leaving;
  */
 void open_tcpip_sockets()
 {
-	MtxSocket *socket = NULL;
+	MtxSocket *mtxsock = NULL;
 	gboolean fail1,fail2,fail3;
 
 	/* Open The three sockets,  ASCII interface, binary interface
 	 * and control socket for telling other instances to update 
 	 * stuff..
 	 */
-	socket = g_new0(MtxSocket,1);
-	socket->fd = setup_socket(MTX_SOCKET_ASCII_PORT);
-	socket->type = MTX_SOCKET_ASCII;
-	if (socket->fd)
+	mtxsock = g_new0(MtxSocket,1);
+	mtxsock->socket = setup_socket(MTX_SOCKET_ASCII_PORT);
+	mtxsock->fd = g_socket_get_fd(mtxsock->socket);
+	mtxsock->type = MTX_SOCKET_ASCII;
+	if (mtxsock->fd)
 	{
 		ascii_socket_id = g_thread_create(socket_thread_manager,
-				(gpointer)socket, /* Thread args */
+				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"ascii_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"ascii_socket",mtxsock,g_free);
 		fail1 = FALSE;
 	}
 	else
 	{
 		fail1 = TRUE;
-		g_free(socket);
+		g_free(mtxsock);
 		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
 	}
 
-	socket = g_new0(MtxSocket,1);
-	socket->fd = setup_socket(MTX_SOCKET_BINARY_PORT);
-	socket->type = MTX_SOCKET_BINARY;
-	if (socket->fd)
+	mtxsock = g_new0(MtxSocket,1);
+	mtxsock->socket = setup_socket(MTX_SOCKET_BINARY_PORT);
+	mtxsock->fd = g_socket_get_fd(mtxsock->socket);
+	mtxsock->type = MTX_SOCKET_BINARY;
+	if (mtxsock->fd)
 	{
 		binary_socket_id = g_thread_create(socket_thread_manager,
-				(gpointer)socket, /* Thread args */
+				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"binary_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"binary_socket",mtxsock,g_free);
 		fail2 = FALSE;
 	}
 	else
 	{
 		fail2 = TRUE;
-		g_free(socket);
+		g_free(mtxsock);
 		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
 	}
 
-	socket = g_new0(MtxSocket,1);
-	socket->fd = setup_socket(MTX_SOCKET_CONTROL_PORT);
-	socket->type = MTX_SOCKET_CONTROL;
-	if (socket->fd)
+	mtxsock = g_new0(MtxSocket,1);
+	mtxsock->socket = setup_socket(MTX_SOCKET_CONTROL_PORT);
+	mtxsock->fd = g_socket_get_fd(mtxsock->socket);
+	mtxsock->type = MTX_SOCKET_CONTROL;
+	if (mtxsock->fd)
 	{
 		control_socket_id = g_thread_create(socket_thread_manager,
-				(gpointer)socket, /* Thread args */
+				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"control_socket",socket,g_free);
+		DATA_SET_FULL(global_data,"control_socket",mtxsock,g_free);
 		fail3 = FALSE;
 	}
 	else
 	{
 		fail3 = TRUE;
-		g_free(socket);
+		g_free(mtxsock);
 		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
 	}
 
@@ -146,72 +141,51 @@ void open_tcpip_sockets()
 /*!
  * \brief Sets up incoming sockets (master mode only)
  */
-gboolean setup_socket(gint port)
+GSocket *setup_socket(gint port)
 {
-	int sock = 0;
-	struct sockaddr_in server_address;
-	int reuse_addr = 1;
-	int res = 0;
-#ifdef __WIN32__
-	WSADATA wsaData;
-	res = WSAStartup(MAKEWORD(2,2), &wsaData);
-	if (res != 0)
-	{
-		printf(_("WSAStartup failed: %d\n"),res);
-		return FALSE;
-	}
-#endif
+	GSocket *sock = NULL;
+	GError *error = NULL;
+	GInetAddress *inetaddr = NULL;
+	GSocketAddress *sockaddr = NULL;
 
-	sock = socket(PF_INET, SOCK_STREAM, 0);
+	sock = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (sock < 0)
 	{
-		perror("Socket!");
-#ifdef __WIN32__
-		WSACleanup();
-#endif
-		return FALSE;
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setup_socket()\n\tSocket creation error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
+		return NULL;
 
 	}
-	/* So that we can re-bind to it without TIME_WAIT problems */
-#ifdef __WIN32__
-	res = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse_addr, sizeof(reuse_addr));
-#else
-	res = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr));
-#endif
-	if (res == -1)
-		perror("setsockopt(...,SO_REUSEADDR,...)");
-
-	memset((char *) &server_address, 0, sizeof(server_address));
-	server_address.sin_family = AF_INET;
-	server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-	server_address.sin_port = htons(port);
-	if (bind(sock, (struct sockaddr *) &server_address,sizeof(server_address)) < 0 ) {
-		perror("bind");
-#ifdef __WIN32__
-		closesocket(sock);
-		WSACleanup();
-#else
-		close(sock);
-#endif
-		return FALSE;
-	}
-
-	/* Set up queue for incoming connections. */
-	if((listen(sock,5))<0)
+	g_socket_set_blocking(sock,TRUE);
+	inetaddr = g_inet_address_new_any(G_SOCKET_FAMILY_IPV4);
+	sockaddr = g_inet_socket_address_new(inetaddr,port);
+	if(!g_socket_bind(sock,sockaddr,TRUE,&error))
 	{
-		perror("listen");
-#ifdef __WIN32__
-		closesocket(sock);
-		WSACleanup();
-#else
-		close(sock);
-#endif
-		return FALSE;
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket bind error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
+		g_socket_close(sock,NULL);
+		return NULL;
+	}
+	g_object_unref(sockaddr);
+	g_object_unref(inetaddr);
+
+	/* Max 5 clients outstanding */
+	g_socket_set_listen_backlog (sock,5);
+	if (!g_socket_listen(sock,&error))
+	{
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket listen error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
+		g_socket_close(sock,NULL);
+		return NULL;
 	}
 
-/*	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));*/
-	return sock;
+	/*	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));*/
+	return (sock);
 }
+
 
 /*!
  \brief socket_thread_manager()'s sole purpose in life is to wait for socket
@@ -227,15 +201,12 @@ void *socket_thread_manager(gpointer data)
 	fd_set rd;
 	gint res = 0;
 	gint i = 0;
-	struct sockaddr_in client;
-#ifdef __WIN32__
-	int length = sizeof(client);
-#else
-	socklen_t length = sizeof(client);
-#endif
-	MtxSocket *socket = (MtxSocket *)data;
+	GSocket *socket = NULL;
+	GError *error = NULL;
+	MtxSocket *mtxsock = (MtxSocket *)data;
 	MtxSocketClient * cli_data = NULL;
 	GTimeVal cur;
+	GSocketAddress *sockaddr = NULL;
 	static MtxSocketClient *last_bin_client = NULL;
 	gint fd = -1;
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
@@ -244,60 +215,65 @@ void *socket_thread_manager(gpointer data)
 	{
 		if (leaving) /* MTX shutting down */
 		{
-			close(socket->fd);
-			g_free(socket);
+			g_socket_close(mtxsock->socket,NULL);
+			g_free(mtxsock);
 			g_thread_exit(0);
 		}
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		{
-			close(socket->fd);
-			g_free(socket);
+			g_socket_close(mtxsock->socket,NULL);
+			g_free(mtxsock);
 			g_thread_exit(0);
 		}
 
 		cur.tv_sec = 1;
 		cur.tv_usec = 0;
 		FD_ZERO(&rd);
-		FD_SET(socket->fd,&rd);
-		res = select(socket->fd+1,&rd,NULL,NULL,(struct timeval *)&cur);
+		FD_SET(mtxsock->fd,&rd);
+		res = select(mtxsock->fd+1,&rd,NULL,NULL,(struct timeval *)&cur);
 		if (res < 0) /* Error, FD closed, abort */
 		{
-			close(socket->fd);
-			g_free(socket);
+			/*printf("poll error, closing socket!\n");*/
+			g_socket_close(mtxsock->socket,NULL);
+			g_free(mtxsock);
 			g_thread_exit(0);
 		}
 		if (res == 0) /* Timeout, loop around */
 		{
+			/*printf("poll timeout, looping...\n");*/
 			continue;
 		}
-		fd = accept(socket->fd,(struct sockaddr *)&client, &length);
-		if (((socket->type == MTX_SOCKET_ASCII) || (socket->type == MTX_SOCKET_BINARY)) && (firmware))
+		socket = g_socket_accept(mtxsock->socket,NULL,&error);
+		if (((mtxsock->type == MTX_SOCKET_ASCII) || (mtxsock->type == MTX_SOCKET_BINARY)) && (firmware))
 		{
+			sockaddr = g_socket_get_remote_address(socket,NULL);
+
 			cli_data = g_new0(MtxSocketClient, 1);
-			cli_data->ip = g_strdup(inet_ntoa(client.sin_addr));
-			cli_data->port = ntohs(client.sin_port);
-			cli_data->fd = fd;
-			cli_data->type = socket->type;
+			cli_data->ip = g_inet_address_to_string(g_inet_socket_address_get_address((GInetSocketAddress *)sockaddr));
+			cli_data->socket = socket;
+			cli_data->fd = g_socket_get_fd(socket);
+			cli_data->type = mtxsock->type;
 			cli_data->ecu_data = g_new0(guint8 *, firmware->total_pages);
-/*			printf ("created slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);*/
+			g_object_unref(sockaddr);
+			/*			printf ("created slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);*/
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				cli_data->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
-/*				printf ("created slave %p, ecu_data[%i] %p\n",cli_data,i,cli_data->ecu_data[i]);*/
+				/*				printf ("created slave %p, ecu_data[%i] %p\n",cli_data,i,cli_data->ecu_data[i]);*/
 				if (firmware->ecu_data[i])
 					memcpy (cli_data->ecu_data[i],firmware->ecu_data[i],firmware->page_params[i]->length);
 
 			}
 		}
 
-		if (socket->type == MTX_SOCKET_ASCII)
+		if (mtxsock->type == MTX_SOCKET_ASCII)
 		{
 			g_thread_create(ascii_socket_server,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
 					NULL);  /* GError pointer */
 		}
-		if (socket->type == MTX_SOCKET_BINARY)
+		if (mtxsock->type == MTX_SOCKET_BINARY)
 		{
 			last_bin_client = cli_data;
 			g_thread_create(binary_socket_server,
@@ -305,12 +281,12 @@ void *socket_thread_manager(gpointer data)
 					TRUE,   /* Joinable */
 					NULL);  /* GError pointer */
 		}
-		if (socket->type == MTX_SOCKET_CONTROL)
+		if (mtxsock->type == MTX_SOCKET_CONTROL)
 		{
-/*			printf("Connected slave pointer is %p\n",last_bin_client);*/
+			/*			printf("Connected slave pointer is %p\n",last_bin_client);*/
 			if (!slave_list)
 				slave_list = g_ptr_array_new();
-			last_bin_client->control_fd = fd;
+			last_bin_client->control_socket = socket;
 			last_bin_client->container = (gpointer)slave_list;
 			g_ptr_array_add(slave_list,last_bin_client);
 			last_bin_client = NULL; /* to prevent adding it to multiple clients by mistake. The next binary client will regenerated it */
@@ -325,11 +301,9 @@ void *socket_thread_manager(gpointer data)
 
 
 /*!
- \brief socket_client is a thread that is spawned for each remote connection
- to megatunix.  It's purpose in life it to answer remote requests.  If the
- remote side is closed down, it sees a zero byte read and exits, killing off
- the thread..
- \param data  gpointer representation of the socket filedescriptor
+ \brief ascii_socket_server, answers simple requests for data on port
+ 12764
+ \param data gpointer representation of the socket filedescriptor
  */
 void *ascii_socket_server(gpointer data)
 {
@@ -341,11 +315,12 @@ void *ascii_socket_server(gpointer data)
 	gchar * tmpbuf = NULL;
 	fd_set rd;
 	gint res = 0;
+	GError *error = NULL;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
 
 	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
-	net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
+	net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
 	g_free(tmpbuf);
 
 	while (TRUE)
@@ -363,24 +338,22 @@ void *ascii_socket_server(gpointer data)
 		if (res < 0) /* Error, socket closed, abort */
 		{
 close_ascii:
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
+			g_socket_close(client->socket,NULL);
+			g_object_unref(client->socket);
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
 		if (res > 0) /* Data Arrived */
 		{
-			res = recv(fd,(char *)&buf,4096,0);
-			if (res <= 0)
+			res = g_socket_receive(client->socket,buf,4096,NULL,&error);
+			if (res < 0)
 			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
+
+				dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": ascii_socket_server()\n\trecv error \"%s\"\n",error->message));
+				g_error_free(error);
+				error = NULL;
+				g_socket_close(client->socket,NULL);
+				g_object_unref(client->socket);
 				dealloc_client_data(client);
 				g_thread_exit(0);
 			}
@@ -394,11 +367,8 @@ close_ascii:
 			g_free(cbuf);
 			if (!res)
 			{
-#ifdef __WIN32__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
+				g_socket_close(client->socket,NULL);
+				g_object_unref(client->socket);
 				dealloc_client_data(client);
 				g_thread_exit(0);
 			}
@@ -411,7 +381,6 @@ void *binary_socket_server(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	MtxSocketClient *client = (MtxSocketClient *) data;
-	gint fd = client->fd;
 	gchar buf;
 	gchar *tmpbuf = NULL;
 	gint res = 0;
@@ -433,6 +402,7 @@ void *binary_socket_server(gpointer data)
 	State state;
 	State next_state;
 	SubState substate;
+	GError *error = NULL;
 	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 
@@ -448,15 +418,17 @@ void *binary_socket_server(gpointer data)
 			goto close_binary;
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_binary;
-		res = recv(fd,&buf,1,0);
-		if (res <= 0)
+
+		res = g_socket_receive(client->socket,&buf,1,NULL,&error);
+		if (res < 0)
 		{
 close_binary:
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
+			dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
+			g_error_free(error);
+			error = NULL;
+			g_socket_close(client->socket,NULL);
+			g_object_unref(client->socket);
+
 			if (slave_list)
 			{
 				g_ptr_array_remove(slave_list,client);
@@ -473,6 +445,7 @@ close_binary:
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
+
 				switch (buf)
 				{
 					case '!': /* Potential reinit/reboot */
@@ -501,9 +474,9 @@ close_binary:
 					case 'A':/* MS1 RTvars */
 						/*						printf("'A' received\n");*/
 						if (firmware->capabilities & MSNS_E)
-							res = net_send (fd,(guint8 *)firmware->rt_data,22,0);
+							res = net_send (client->socket,(guint8 *)firmware->rt_data,22);
 						else 
-							res = net_send (fd,(guint8 *)firmware->rt_data,firmware->rtvars_size,0);
+							res = net_send (client->socket,(guint8 *)firmware->rt_data,firmware->rtvars_size);
 						/*						printf("MS1 rtvars sent, %i bytes delivered\n",res);*/
 						continue;
 					case 'b':/* MS2 burn */
@@ -545,7 +518,7 @@ close_binary:
 							state = WAITING_FOR_CMD;
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint16)tmpf;
-							res = net_send(fd,(guint8 *)&tmpi,2,0);
+							res = net_send(client->socket,(guint8 *)&tmpi,2);
 							/*							printf("MS2 clock sent, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -555,7 +528,7 @@ close_binary:
 							/*							printf("'C' received\n");*/
 							lookup_current_value("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
-							res = net_send(fd,(guint8 *)&tmpi,1,0);
+							res = net_send(client->socket,(guint8 *)&tmpi,1);
 							/*							printf("MS1 clock sent, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -576,10 +549,10 @@ close_binary:
 						{
 							/*							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");*/
 							if (firmware->capabilities & MS1)
-								res = net_send(fd,(guint8 *)&(firmware->ecu_revision),1,0);
+								res = net_send(client->socket,(guint8 *)&(firmware->ecu_revision),1);
 							else
 								if (firmware->text_revision)
-									res = net_send(fd,(guint8 *)firmware->text_revision,firmware->txt_rev_len,0);
+									res = net_send(client->socket,(guint8 *)firmware->text_revision,firmware->txt_rev_len);
 								else
 									printf(_("text_revision undefined!\n"));
 						}
@@ -589,7 +562,7 @@ close_binary:
 						if (firmware->capabilities & MSNS_E)
 						{
 							/*							printf ("'R' (MS1 extra RTvars)\n");*/
-							res = net_send (fd,(guint8 *)firmware->rt_data,firmware->rtvars_size,0);
+							res = net_send (client->socket,(guint8 *)firmware->rt_data,firmware->rtvars_size);
 							/*							printf("MSnS-E rtvars, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -599,7 +572,7 @@ close_binary:
 							/*							printf ("'T' (MS1 text revision)\n");*/
 							if (firmware->text_revision)
 							{
-								res = net_send(fd,(guint8 *)firmware->text_revision,strlen(firmware->text_revision),0);
+								res = net_send(client->socket,(guint8 *)firmware->text_revision,strlen(firmware->text_revision));
 								/*								printf("MS1 textrev, %i bytes delivered\n",res);*/
 							}
 						}
@@ -610,7 +583,7 @@ close_binary:
 						if (firmware)
 						{
 							if (firmware->actual_signature)
-								res = net_send(fd,(guint8 *)firmware->actual_signature,firmware->signature_len,0);
+								res = net_send(client->socket,(guint8 *)firmware->actual_signature,firmware->signature_len);
 							/*printf("MS signature, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -620,7 +593,7 @@ close_binary:
 							/*							printf("'V' received (MS1 VEtable)\n");*/
 							if (last_page < 0)
 								last_page = 0;
-							res = net_send (fd,(guint8 *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+							res = net_send (client->socket,(guint8 *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length);
 							/*							printf("MS1 VEtable, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -697,7 +670,7 @@ close_binary:
 					{
 						if (firmware->ecu_data[mtx_page])
 						{
-							res = net_send(fd,(guint8 *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length,0);
+							res = net_send(client->socket,(guint8 *)firmware->ecu_data[mtx_page],firmware->page_params[mtx_page]->length);
 							/*							printf("Full table sent, %i bytes\n",res);*/
 						}
 					}
@@ -770,7 +743,7 @@ close_binary:
 					if (find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
-							res = net_send(fd,(guint8 *)firmware->ecu_data[mtx_page]+offset,count,0);
+							res = net_send(client->socket,(guint8 *)firmware->ecu_data[mtx_page]+offset,count);
 						/*						printf("MS2 partial table, %i bytes delivered\n",res);*/
 					}
 				}
@@ -861,7 +834,6 @@ close_binary:
  */
 gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
-	gint fd = client->fd;
 	extern Firmware_Details *firmware;
 	extern gboolean connected;
 	gchar ** vector = NULL;
@@ -892,88 +864,88 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 	{
 		case GET_RT_VARS:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
-				socket_get_rt_vars(fd, arg2);
+				socket_get_rt_vars(client->socket, arg2);
 			break;
 		case GET_RTV_LIST:
-			socket_get_rtv_list(fd);
+			socket_get_rtv_list(client->socket);
 			break;
 		case GET_ECU_VARS:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_vars(client,arg2);
 			break;
 		case GET_ECU_VAR_U08:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_U08);
 			break;
 		case GET_ECU_VAR_S08:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_S08);
 			break;
 		case GET_ECU_VAR_U16:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_U16);
 			break;
 		case GET_ECU_VAR_S16:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_S16);
 			break;
 		case GET_ECU_VAR_U32:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_U32);
 			break;
 		case GET_ECU_VAR_S32:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_get_ecu_var(client,arg2,MTX_S32);
 			break;
 		case SET_ECU_VAR_U08:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_U08);
 			break;
 		case SET_ECU_VAR_S08:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_S08);
 			break;
 		case SET_ECU_VAR_U16:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_U16);
 			break;
 		case SET_ECU_VAR_S16:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_S16);
 			break;
 		case SET_ECU_VAR_U32:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_U32);
 			break;
 		case SET_ECU_VAR_S32:
 			if  (args != 2) 
-				return_socket_error(fd);
+				return_socket_error(client->socket);
 			else
 				socket_set_ecu_var(client,arg2,MTX_S32);
 			break;
@@ -983,79 +955,79 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			break;
 		case GET_SIGNATURE:
 			if (!firmware)
-				net_send(fd,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")),0);
+				net_send(client->socket,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")));
 			else
 			{
 				if (firmware->actual_signature)
-					net_send(fd,(guint8 *)firmware->actual_signature,strlen(firmware->actual_signature),0);
+					net_send(client->socket,(guint8 *)firmware->actual_signature,strlen(firmware->actual_signature));
 				else
-					net_send(fd,(guint8 *)_("Offline mode, no signature"),strlen(_("Offline mode, no signature")),0);
+					net_send(client->socket,(guint8 *)_("Offline mode, no signature"),strlen(_("Offline mode, no signature")));
 			}
-			res = net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
+			res = net_send(client->socket,(guint8 *)"\n\r",strlen("\n\r"));
 			break;
 		case GET_REVISION:
 			if (!firmware)
-				net_send(fd,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")),0);
+				net_send(client->socket,(guint8 *)_("Not Connected yet"),strlen(_("Not Connected yet")));
 			else
 			{
 				if (firmware->text_revision)
-					net_send(fd,(guint8 *)firmware->text_revision,strlen(firmware->text_revision),0);
+					net_send(client->socket,(guint8 *)firmware->text_revision,strlen(firmware->text_revision));
 				else
-					net_send(fd,(guint8 *)_("Offline mode, no revision"),strlen(_("Offline mode, no revision")),0);
+					net_send(client->socket,(guint8 *)_("Offline mode, no revision"),strlen(_("Offline mode, no revision")));
 			}
-			res = net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
+			res = net_send(client->socket,(guint8 *)"\n\r",strlen("\n\r"));
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\n\
-Supported Calls:\n\r\
-help\n\r\
-quit\n\r\
-get_signature <-- Returns ECU Signature\n\r\
-get_revision <-- Returns ECU Textual Revision\n\r\
-get_rtv_list <-- returns runtime variable listing\n\r\
-get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
-get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
-			net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
+					Supported Calls:\n\r\
+					help\n\r\
+					quit\n\r\
+					get_signature <-- Returns ECU Signature\n\r\
+					get_revision <-- Returns ECU Textual Revision\n\r\
+					get_rtv_list <-- returns runtime variable listing\n\r\
+					get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
+					get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+					set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+					burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
+			net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
 			g_free(tmpbuf);
 			send_rescode = TRUE;
 			break;
 		case QUIT:
 			tmpbuf = g_strdup("\rBuh Bye...\n\r");
-			net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
+			net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
 			g_free(tmpbuf);
 			retval = FALSE;
 			send_rescode = FALSE;
 			break;
 		default:
-			return_socket_error(fd);
+			return_socket_error(client->socket);
 			break;
 	}
 	/* Send result code*/
 	if (send_rescode)
 	{
 		if (!connected)
-			net_send(fd,(guint8 *)"NOT CONNECTED,",strlen("NOT CONNECTED,"),0);
+			net_send(client->socket,(guint8 *)"NOT CONNECTED,",strlen("NOT CONNECTED,"));
 		if (check_for_changes(client))
-			net_send(fd,(guint8 *)"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
-		net_send(fd,(guint8 *)"OK",strlen("OK"),0);
+			net_send(client->socket,(guint8 *)"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"));
+		net_send(client->socket,(guint8 *)"OK",strlen("OK"));
 
-		net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
+		net_send(client->socket,(guint8 *)"\n\r",strlen("\n\r"));
 	}
 	g_free(arg2);
 	return retval;
 }
 
 
-void return_socket_error(gint fd)
+void return_socket_error(GSocket *socket)
 {
-	net_send(fd,(guint8 *)ERR_MSG,strlen(ERR_MSG),0);
-	net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
+	net_send(socket,(guint8 *)ERR_MSG,strlen(ERR_MSG));
+	net_send(socket,(guint8 *)"\n\r",strlen("\n\r"));
 }
 
 
-void socket_get_rt_vars(gint fd, gchar *arg2)
+void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 {
 	gint res = 0;
 	gchar **vars = NULL;
@@ -1095,13 +1067,13 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 				g_string_append_printf(output,"%1$.*2$f\n\r",tmpf,tmpi);
 		}
 	}
-	res = net_send(fd,(guint8 *)output->str,output->len,0);
+	res = net_send(socket,(guint8 *)output->str,output->len);
 	g_string_free(output,TRUE);
 	g_strfreev(vars);
 }
 
 
-void socket_get_rtv_list(gint fd)
+void socket_get_rtv_list(GSocket *socket)
 {
 	extern Rtv_Map *rtv_map;
 	guint i = 0;
@@ -1120,7 +1092,7 @@ void socket_get_rtv_list(gint fd)
 		if (tmpbuf)
 		{
 			len = strlen(tmpbuf);
-			res = net_send(fd,(guint8 *)tmpbuf,len,0);
+			res = net_send(socket,(guint8 *)tmpbuf,len);
 			if (res != len)
 				printf(_("SHORT WRITE!\n"));
 			g_free(tmpbuf);
@@ -1128,7 +1100,7 @@ void socket_get_rtv_list(gint fd)
 	}
 	tmpbuf = g_strdup("\r\n");
 	len = strlen(tmpbuf);
-	res = net_send(fd,(guint8 *)tmpbuf,len,0);
+	res = net_send(socket,(guint8 *)tmpbuf,len);
 	if (len != res)
 		printf(_("SHORT WRITE!\n"));
 	g_free(tmpbuf);
@@ -1137,7 +1109,6 @@ void socket_get_rtv_list(gint fd)
 
 void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
-	gint fd = client->fd;
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
@@ -1154,7 +1125,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 	vars = g_strsplit(arg2,",",-1);
 	if (g_strv_length(vars) != 3)
 	{
-		return_socket_error(fd);
+		return_socket_error(client->socket);
 		g_strfreev(vars); 
 	}
 	else
@@ -1166,7 +1137,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		_set_sized_data(client->ecu_data[page],offset,size,tmpi);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
-		res = net_send(fd,(guint8 *)tmpbuf,len,0);
+		res = net_send(client->socket,(guint8 *)tmpbuf,len);
 		if (len != res)
 			printf(_("SHORT WRITE!\n"));
 		g_free(tmpbuf);
@@ -1178,7 +1149,6 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 {
 	extern Firmware_Details *firmware;
-	gint fd = client->fd;
 	gint canID = 0;
 	gint page = 0;
 	gint tmpi = 0;
@@ -1194,7 +1164,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 	vars = g_strsplit(arg2,",",-1);
 	if (g_strv_length(vars) != 2)
 	{
-		return_socket_error(fd);
+		return_socket_error(client->socket);
 		g_strfreev(vars); 
 	}
 	else
@@ -1213,7 +1183,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 				g_string_append_printf(output,"%i\n\r",tmpi);
 		}
 		g_strfreev(vars); 
-		net_send(fd,(guint8 *)output->str,output->len,0);
+		net_send(client->socket,(guint8 *)output->str,output->len);
 		g_string_free(output,TRUE);
 	}
 }
@@ -1221,7 +1191,6 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 
 void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
-	int fd = client->fd;
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
@@ -1235,7 +1204,7 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 	vars = g_strsplit(arg2,",",-1);
 	if (g_strv_length(vars) != 4)
 	{
-		return_socket_error(fd);
+		return_socket_error(client->socket);
 		g_strfreev(vars); 
 	}
 	else
@@ -1281,7 +1250,7 @@ gint * convert_socket_data(gchar *buf, gint len)
 	for (i=0;i<len;i++)
 	{
 		memcpy (&res[i],&buf[i],1);
-/*		printf("data[%i] is %i\n",i,res[i]);*/
+		/*		printf("data[%i] is %i\n",i,res[i]);*/
 	}
 	return res;
 }
@@ -1406,62 +1375,42 @@ void *network_repair_thread(gpointer data)
 
 gboolean open_network(gchar * host, gint port)
 {
-	int clientsocket = 0;
+	GSocket *clientsocket = NULL;
 	gint status = 0;
-	struct hostent *hostptr = NULL;
-	struct sockaddr_in servername;
+	GSocketAddress *sockaddr = NULL;
+	GError *error = NULL;
+	GResolver *resolver = NULL;
+	GList *list = NULL;
 	extern Serial_Params *serial_params;
-#ifdef __WIN32__
-	struct WSAData wsadata;
-	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
-	if (status != 0)
-	{
-		/* Tell the user that we could not find a usable */
-		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
-		return FALSE;
-	}
-#endif
 
-	/*	printf ("Trying to open network port!\n");*/
-	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+
+	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
-	/*	printf("Socket created!\n");*/
-	hostptr = gethostbyname(host);
-	if (hostptr == NULL)
+
+	resolver = g_resolver_get_default();
+	list = g_resolver_lookup_by_name(resolver,host,NULL,NULL);
+	sockaddr = g_inet_socket_address_new(g_list_nth_data(list,0),port);
+	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
+	if (!status)
 	{
-		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
-		if (hostptr == NULL)
-		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tError resolving server address: \"%s\"\n",host));
-#ifdef __WIN32__
-			WSACleanup();
-#endif
-			return FALSE;
-		}
-	}
-	/*	printf("host resolved!\n");*/
-	servername.sin_family = AF_INET;
-	servername.sin_port = htons(port);
-	memcpy(&servername.sin_addr,hostptr->h_addr,hostptr->h_length);
-	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
-	if (status == -1)
-	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
+	g_resolver_free_addresses(list);
+	g_object_unref(resolver);
+	g_object_unref(sockaddr);
+
 	/*	printf("connected!!\n");*/
-	serial_params->fd = clientsocket;
+	serial_params->fd = g_socket_get_fd(clientsocket);
+	serial_params->socket = clientsocket;
 	serial_params->net_mode = TRUE;
 	serial_params->open = TRUE;
 
@@ -1471,60 +1420,41 @@ gboolean open_network(gchar * host, gint port)
 
 gboolean open_notification_link(gchar * host, gint port)
 {
-	int clientsocket = 0;
+	GSocket *clientsocket = NULL;
 	gint status = 0;
-	struct hostent *hostptr = NULL;
-	struct sockaddr_in servername;
+	GResolver *resolver = NULL;
+	GSocketAddress *sockaddr = NULL;
+	GError *error = NULL;
+	GList *list = NULL;
 	extern Serial_Params *serial_params;
-#ifdef __WIN32__
-	struct WSAData wsadata;
-	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
-	if (status != 0)
-	{
-		/* Tell the user that we could not find a usable */
-		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
-		return FALSE;
-	}
-#endif
+
 
 	/*	printf ("Trying to open network port!\n");*/
-	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket open error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
-	/*	printf("Socket created!\n");*/
-	hostptr = gethostbyname(host);
-	if (hostptr == NULL)
-	{
-		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
-		if (hostptr == NULL)
-		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
-#ifdef __WIN32__
-			WSACleanup();
-#endif
-			return FALSE;
-		}
-	}
-	/*	printf("host resolved!\n");*/
-	servername.sin_family = AF_INET;
-	servername.sin_port = htons(port);
-	memcpy(&servername.sin_addr,hostptr->h_addr,hostptr->h_length);
-	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
+
+	resolver = g_resolver_get_default();
+	list = g_resolver_lookup_by_name(resolver,host,NULL,NULL);
+	sockaddr = g_inet_socket_address_new(g_list_nth_data(list,0),port);
+	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket connect error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
+
+	g_resolver_free_addresses(list);
+	g_object_unref(resolver);
+	g_object_unref(sockaddr);
+
 	/*	printf("connected!!\n");*/
 	/* Should startup thread now to listen for notification messages
 	 */
@@ -1538,14 +1468,11 @@ gboolean close_network(void)
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
 	/*	printf("Closing network port!\n");*/
-	close(serial_params->fd);
+	g_socket_close(serial_params->socket,NULL);
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
 	connected = FALSE;
 
-#ifdef __WIN32__
-	WSACleanup();
-#endif
 	return TRUE;
 }
 
@@ -1553,11 +1480,9 @@ gboolean close_network(void)
 gboolean close_control_socket(void)
 {
 	extern gboolean connected;
-	close(controlsocket);
+	extern Serial_Params *serial_params;
+	g_socket_close(serial_params->socket,NULL);
 
-#ifdef __WIN32__
-	WSACleanup();
-#endif
 	return TRUE;
 }
 
@@ -1594,7 +1519,10 @@ void *notify_slaves_thread(gpointer data)
 		msg = g_async_queue_timed_pop(slave_msg_queue,&cur);
 
 		if (!slave_list) /* List not created yet.. */
+		{
+			printf("no slaves to notify\n");
 			continue;
+		}
 
 		if ((leaving) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
@@ -1617,21 +1545,21 @@ void *notify_slaves_thread(gpointer data)
 				to_be_closed[i] = TRUE;
 				continue;
 			}
-			fd = cli_data->control_fd;
+			fd = g_socket_get_fd(cli_data->control_socket);
 
 			FD_ZERO(&wr);
 			FD_SET(fd,&wr);
 			res = select(fd+1,NULL,&wr,NULL,NULL); 
 			if (res <= 0)
 			{
-/*				printf("Select error!, closing this socket\n");*/
+				/*				printf("Select error!, closing this socket\n");*/
 				to_be_closed[i] = TRUE;
 				continue;
 			}
 			/*
-			printf("sending chunk update\n");
-			printf("notify slaves, slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);
-			*/
+			   printf("sending chunk update\n");
+			   printf("notify slaves, slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);
+			 */
 			/* We need to check if this slave sent the update,  
 			 * if so, DO NOT send the same thing back to that 
 			 * slave as he already knows....
@@ -1650,7 +1578,7 @@ void *notify_slaves_thread(gpointer data)
 				}
 
 				buffer = build_netmsg(SLAVE_MEMORY_UPDATE,msg,&len);
-				res = net_send(fd,(guint8 *)buffer,len,0);
+				res = net_send(cli_data->control_socket,(guint8 *)buffer,len);
 				if (res == len)
 				{
 					if (msg->mode == MTX_SIMPLE_WRITE)
@@ -1665,7 +1593,7 @@ void *notify_slaves_thread(gpointer data)
 			if (msg->type == MTX_STATUS_CHANGED)
 			{
 				buffer = build_status_update(SLAVE_STATUS_UPDATE,msg,&len);
-				res = net_send(fd,(guint8 *)buffer,len,0);
+				res = net_send(cli_data->control_socket,(guint8 *)buffer,len);
 				if (res != len)
 					printf(_("Peer update WRITE ERROR!\n"));
 				g_free(buffer);
@@ -1680,12 +1608,7 @@ void *notify_slaves_thread(gpointer data)
 			{
 				cli_data = g_ptr_array_index(slave_list,i);
 
-/*				printf("socket dropped, closing client pointer %p\n",cli_data); */
-#ifdef __WIN32__
-				closesocket(cli_data->fd);
-#else
-				close(cli_data->fd);
-#endif
+				g_socket_close(cli_data->control_socket,NULL);
 				if (slave_list)
 				{
 					g_ptr_array_remove(slave_list,cli_data);
@@ -1710,12 +1633,9 @@ void *notify_slaves_thread(gpointer data)
 }
 
 
-
-
 void *control_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
-	gint fd = client->fd;
 	guint8 buf;
 	gint i = 0;
 	gint res = 0;
@@ -1734,6 +1654,7 @@ void *control_socket_client(gpointer data)
 	guint8 *buffer = NULL;
 	State state;
 	SubState substate;
+	GError *error = NULL;
 	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 	extern volatile gint leaving;
@@ -1745,18 +1666,19 @@ void *control_socket_client(gpointer data)
 	{
 		if (leaving)
 			goto close_control;
-		res = recv(fd,(char *)&buf,1,0);
+		res = g_socket_receive(client->socket,(gchar *)&buf,1,NULL,&error);
 		if (res <= 0)
 		{
 close_control:
-#ifdef __WIN32__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
+			dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error \"%s\"\n",error->message));
+			g_error_free(error);
+			error = NULL;
+
+			g_socket_close(controlsocket,NULL);
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
+		printf("control socket client data arrived!\n");
 		/*
 		   printf("controlsocket Data arrived!\n");
 		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
@@ -1895,92 +1817,78 @@ close_control:
 
 gboolean open_control_socket(gchar * host, gint port)
 {
-	int clientsocket = 0;
+	GSocket *clientsocket = NULL;
 	gint status = 0;
-	struct hostent *hostptr = NULL;
-	struct sockaddr_in servername;
+	GResolver *resolver = NULL;
+	GList *list = NULL;
+	GSocketAddress *sockaddr = NULL;
 	MtxSocketClient * cli_data = NULL;
-#ifdef __WIN32__
-	struct WSAData wsadata;
-	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
-	if (status != 0)
-	{
-		/* Tell the user that we could not find a usable */
-		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
-		return FALSE;
-	}
-#endif
+	GError *error = NULL;
 
 	/*	printf ("Trying to open network port!\n");*/
-	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket open error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
-	/*	printf("Socket created!\n");*/
-	hostptr = gethostbyname(host);
-	if (hostptr == NULL)
-	{
-		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
-		if (hostptr == NULL)
-		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
-#ifdef __WIN32__
-			WSACleanup();
-#endif
-			return FALSE;
-		}
-	}
-	/*	printf("host resolved!\n");*/
-	servername.sin_family = AF_INET;
-	servername.sin_port = htons(port);
-	memcpy(&servername.sin_addr,hostptr->h_addr,hostptr->h_length);
-	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
+
+	resolver = g_resolver_get_default();
+	list = g_resolver_lookup_by_name(resolver,host,NULL,NULL);
+	sockaddr = g_inet_socket_address_new(g_list_nth_data(list,0),port);
+	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
+		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket connect error: %s\n",error->message));
+		g_error_free(error);
+		error = NULL;
 		return FALSE;
 	}
+	/*	printf("connected!!\n");*/
+	/* Should startup thread now to listen for notification messages
+	 */
+
 	controlsocket = clientsocket;
 	cli_data = g_new0(MtxSocketClient, 1);
-	cli_data->ip = g_strdup(inet_ntoa(servername.sin_addr));
-	cli_data->port = ntohs(servername.sin_port);
-	cli_data->fd = clientsocket;
+	cli_data->ip = g_inet_address_to_string(g_inet_socket_address_get_address((GInetSocketAddress *)sockaddr));
+	cli_data->socket = clientsocket;
+	cli_data->fd = g_socket_get_fd(clientsocket);
 	cli_data->type = MTX_SOCKET_CONTROL;
+
+	g_resolver_free_addresses(list);
+	g_object_unref(resolver);
+	g_object_unref(sockaddr);
+
 	g_thread_create(control_socket_client,
 			cli_data, /* Thread args */
 			TRUE,   /* Joinable */
 			NULL);  /* GError pointer */
-
 	return TRUE;
 }
 
 
-gint net_send(gint fd, guint8 *buf, gint len, gint flags)
+gint net_send(GSocket *socket, guint8 *buf, gint len)
 {
 	int total = 0;        /* how many bytes we've sent*/
 	int bytesleft = len; /* how many we have left to senda*/
 	int n = 0;
+	GError *error;
 
 	if (!buf)
 		return -1;
 
 	while (total < len) 
 	{
-#ifdef __WIN32__
-		n = send(fd, (const char *)buf+total, bytesleft, flags);
-#else
-		n = send(fd, buf+total, bytesleft, flags);
-#endif
-		if (n == -1) { return -1; }
+		n = g_socket_send(socket,(gchar *)buf+total,(gsize)bytesleft,NULL,&error);
+		if (n == -1) 
+		{ 
+			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__" net_send()\n\tSocket send error: \"%s\"\n",error->message));
+			g_error_free(error);
+			error = NULL;
+			return -1; 
+		}
 		total += n;
 		bytesleft -= n;
 	}
@@ -2009,7 +1917,7 @@ guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 		g_memmove(buffer+headerlen,&msg->value,msg->length);
 	if (msg->mode == MTX_CHUNK_WRITE)
 		g_memmove(buffer+headerlen,msg->data,msg->length);
-	
+
 	*msg_len = buflen;
 	return buffer;
 }
@@ -2031,7 +1939,7 @@ guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 	buffer[4] = msg->length & 0xff; /* Highbyte of length */
 	g_memmove(buffer+headerlen, msg->data,msg->length);
 
-	
+
 	*msg_len = buflen;
 	return buffer;
 }

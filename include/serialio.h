@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 #include <config.h>
 #include <defines.h>
+#include <gio/gio.h>
 #include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
@@ -43,6 +44,7 @@ struct _Serial_Params
 #else
 struct _Serial_Params
 {
+	GSocket *socket;	/*! Network mode socket */
 	gint fd;		/*! File descriptor */
 	gchar *port_name;	/*! textual name of comm port */
 	gboolean open;		/*! flag, TRUE for open FALSE for closed */
