@@ -56,7 +56,7 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 	g_free(input);
 
 	/* Personal files first */
-	path = g_build_filename(HOME(), ".MegaTunix",pathstub,NULL);
+	path = g_build_filename(get_home(), ".MegaTunix",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -99,7 +99,7 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 
 syspath:
 #ifdef __WIN32__
-	parent = g_build_path(PSEP,HOME(),"dist",NULL);
+	parent = g_build_path(PSEP,get_home(),"dist",NULL);
 #else
 	parent = g_strdup(DATA_DIR);
 #endif
@@ -180,7 +180,7 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 
 	g_free(ext);
 
-	filename = g_build_filename(HOME(), ".MegaTunix",file,NULL);
+	filename = g_build_filename(get_home(), ".MegaTunix",file,NULL);
 	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 	{
 		g_free(pathstub);
@@ -192,7 +192,7 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 	{
 		g_free(filename);
 #ifdef __WIN32__
-		dir = g_build_path(PSEP,HOME(),"dist",NULL);
+		dir = g_build_path(PSEP,get_home(),"dist",NULL);
 #else
 		dir = g_strdup(DATA_DIR);
 #endif
@@ -259,7 +259,7 @@ gchar * choose_file(MtxFileIO *data)
 		else if (data->default_path)
 		{
 #ifdef __WIN32__	/* Disallows modifying distributed files */
-			path = g_build_path(PSEP,HOME(),"dist",data->default_path,NULL);
+			path = g_build_path(PSEP,get_home(),"dist",data->default_path,NULL);
 #else
 			path = g_build_path(PSEP,DATA_DIR,data->default_path,NULL);
 #endif
@@ -280,7 +280,7 @@ gchar * choose_file(MtxFileIO *data)
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
-		defdir = g_build_path(PSEP,HOME(), ".MegaTunix",data->default_path, NULL);
+		defdir = g_build_path(PSEP,get_home(), ".MegaTunix",data->default_path, NULL);
 		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
 			g_mkdir(defdir,0755);
 		/* If filename passed check/adj path */
@@ -322,13 +322,13 @@ gchar * choose_file(MtxFileIO *data)
 		{
 			/* For differences in system path between win32/unix */
 #ifdef __WIN32__
-			path = g_build_path(PSEP,HOME(),"dist",vector[i],NULL);
+			path = g_build_path(PSEP,get_home(),"dist",vector[i],NULL);
 #else
 			path = g_build_path(PSEP,DATA_DIR,vector[i],NULL);
 #endif
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
-			path = g_build_path(PSEP,HOME(),".MegaTunix",vector[i],NULL);
+			path = g_build_path(PSEP,get_home(),".MegaTunix",vector[i],NULL);
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
 		}
@@ -337,7 +337,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* If default path switch to that place */
 	if ((data->external_path) && (!(data->default_path)))
 	{
-		path = g_build_path(PSEP,HOME(),data->external_path,NULL);
+		path = g_build_path(PSEP,get_home(),data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
 		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
@@ -489,4 +489,23 @@ void getfiles_errmsg(const gchar * text)
 			text);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
+}
+
+gchar * get_home()
+{
+#ifdef __WIN32__
+	gchar *fullpath = NULL;
+	gchar *dir = NULL;
+	fullpath = g_find_program_in_path("megatunix.exe");
+	if (fullpath)
+	{
+		dir = g_path_get_dirname(fullpath);
+		g_free(fullpath);
+		return(dir);
+	}
+	else
+		return (g_get_current_dir());
+#else
+	return(g_get_home_dir());
+#endif
 }

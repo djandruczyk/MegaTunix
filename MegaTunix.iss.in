@@ -43,10 +43,14 @@ Name: "{group}\MtxLoader"; Filename: "{app}\mtxloader.exe"; WorkingDir: "{app}"
 Name: "{userdesktop}\MegaTunix @VERSION@"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 
-;[Registry]
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\megatunix.exe"; Flags: uninsdeletekey
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\gaugedesigner.exe"; Flags: uninsdeletekey
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\dashdesigner.exe"; Flags: uninsdeletekey
-;Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
+[Registry]
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\megatunix.exe"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\gaugedesigner.exe"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\dashdesigner.exe"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\mtxloader.exe"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\msloader.exe"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}"; Flags: uninsdeletekey
