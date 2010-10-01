@@ -1,19 +1,9 @@
 #!/bin/sh
 
-NEW_GTK=2.12.9
-
 . cross
 
-rm /target/etc 
-rm /target/lib
-rm /target/include
-rm /target/share
-ln -sf /target/etc-$NEW_GTK /target/etc
-ln -sf /target/lib-$NEW_GTK /target/lib
-ln -sf /target/include-$NEW_GTK /target/include
-ln -sf /target/share-$NEW_GTK /target/share 
 make distclean
-cross-configure --disable-shared $* && \
+cross-configure ./configure --disable-shared $* && \
 	make -j5  && \
 	./contrib/builder && \
 . uncross && \

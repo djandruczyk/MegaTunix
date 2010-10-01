@@ -37,10 +37,15 @@
 #include <stringmatch.h>
 #include <threads.h>
 #include <widgetmgmt.h>
+#ifndef __WIN32__
 #include <poll.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#endif
+#ifdef __WIN32__
+#include <winsock2.h>
+#endif
 #include <unistd.h>
 
 #define ERR_MSG "Bad Request: "
@@ -1649,7 +1654,7 @@ void *control_socket_client(gpointer data)
 	gint count_l = 0;
 	gint index = 0;
 	RemoteAction action = 0;
-	GuiColor color;
+	GuiColor color = BLACK;
 	gchar *string = NULL;
 	guint8 *buffer = NULL;
 	State state;
