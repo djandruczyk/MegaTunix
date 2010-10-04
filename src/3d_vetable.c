@@ -225,7 +225,7 @@ RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
  widget, it creates the datastructures, creates the window, initializes 
  OpenGL and binds all the handlers to the window that are needed.
  */
-EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
+EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window;
 	GtkWidget *frame;
@@ -444,7 +444,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-	frame = gtk_frame_new("VE/Spark Table 3D display");
+	frame = gtk_frame_new("3D Table display");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	drawing_area = gtk_drawing_area_new();
@@ -627,7 +627,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
  *with gtk_widget_destroy
  * 
  */
-gint free_ve3d_view(GtkWidget *widget)
+gboolean free_ve3d_view(GtkWidget *widget)
 {
 	Ve_View_3D *ve_view;
 	gchar * tmpbuf = NULL;

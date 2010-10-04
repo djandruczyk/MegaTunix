@@ -6,5 +6,5 @@ make distclean
 cross-configure ./configure --disable-shared $* && \
 	make -j5  && \
 	./contrib/builder && \
-. uncross && \
-make distclean
+. uncross 
+# make distclean

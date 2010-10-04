@@ -238,6 +238,7 @@ void group_free(gpointer value)
 		keytype = translate_string(group->keys[i]);
 		OBJ_SET(group->object,group->keys[i],NULL);
 	}
+	g_object_unref(group->object);
 	g_strfreev(group->keys);
 	g_free(group);
 }
