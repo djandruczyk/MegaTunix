@@ -888,6 +888,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				2*(priv->radius),
 				0,        /* angle 1 */
 				360*64);  /* angle 2: full circle */
+		g_object_unref(gc);
 
 	}
 	if (priv->radius > 0)

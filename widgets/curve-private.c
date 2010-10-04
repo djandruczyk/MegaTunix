@@ -718,6 +718,7 @@ void generate_static_curve(MtxCurve *curve)
 		{
 			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision==0?1:priv->y_precision);
 			cairo_text_extents (cr, message, &extents);
+			g_free(message);
 			if (extents.width > longest)
 				longest = extents.width;
 		}
@@ -825,6 +826,7 @@ void generate_static_curve(MtxCurve *curve)
 		g_free(message);
 	}
 	cairo_stroke (cr);
+	cairo_destroy(cr);
 }
 
 
