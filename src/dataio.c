@@ -237,8 +237,11 @@ gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 	if (serial_params->net_mode)
 	{
 /*		printf("net mode write\n"); */
-		//res = send(fd,buf,count,MSG_NOSIGNAL);
+#if GTK_MINOR_VERSION >= 18
 		res = g_socket_send(serial_params->socket,buf,(gsize)count,NULL,&error);
+#else
+		res = send(fd,buf,count,MSG_NOSIGNAL);
+#endif
 		if (res == -1)
 		{
 			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf("\n"__FILE__": write_wrapper()\n\tg_socket_send_error \"%s\"\n\n",error->message));

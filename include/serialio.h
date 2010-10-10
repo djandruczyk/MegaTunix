@@ -34,7 +34,9 @@ typedef struct _Serial_Params Serial_Params;
 #ifdef __WIN32__
 struct _Serial_Params
 {
+#if GTK_MINOR_VERSION >= 18
 	GSocket *socket;	/*! Network mode socket */
+#endif
 	gint fd;		/*! File descriptor */
 	gchar *port_name;	/*! textual name of comm port */
 	gboolean open;		/*! flag, TRUE for open FALSE for closed */
@@ -45,7 +47,9 @@ struct _Serial_Params
 #else
 struct _Serial_Params
 {
+#if GTK_MINOR_VERSION >= 18
 	GSocket *socket;	/*! Network mode socket */
+#endif
 	gint fd;		/*! File descriptor */
 	gchar *port_name;	/*! textual name of comm port */
 	gboolean open;		/*! flag, TRUE for open FALSE for closed */

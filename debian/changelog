@@ -1,3 +1,9 @@
+megatunix (0.9.23) stable; urgency=low
+  * Numerous memory leaks fixed
+  * converted to GDataSet from GObject for many internal data storage sections
+  * port to GtkBuilder format from glade for gauge/dashdesigners
+
+ -- David Andruczyk <djandruczyk@yahoo.com>  Sat, 16 Oct 2010 12:02:08 -0500
 megatunix (0.9.22) stable; urgency=low
   * Dash issues resolver,  3.03u seq injector issue fixed, 3.03 alpha TTM
   fixed up
@@ -9,6 +15,7 @@ megatunix (0.9.22) stable; urgency=low
   * Live temp displayed on tabs where there a temperature grouped controls.
 
  -- David Andruczyk <djandruczyk@yahoo.com>  Tue, 06 Jul 2010 16:11:30 -0500
+
 megatunix (0.9.21) stable; urgency=low
   * 0.9.21 OS-X compile fixes.  po Makefile issues fixed. segfault issues with
   table rescaling fixed. Added support for MSns-HighRes-Extra 011d
