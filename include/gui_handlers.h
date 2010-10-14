@@ -165,6 +165,8 @@ void recalc_table_limits(gint, gint);
 gboolean update_multi_expression(gpointer);
 void refocus_cell(GtkWidget *, Direction);
 void set_widget_label_from_array(gpointer, gpointer);
+void insert_text_handler(GtkEntry *, const gchar *, gint, gint *, gpointer);
+
 
 
 /* Prototypes */

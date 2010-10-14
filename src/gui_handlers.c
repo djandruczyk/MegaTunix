@@ -16,6 +16,7 @@
 #include <3d_vetable.h>
 #include <args.h>
 #include <config.h>
+#include <ctype.h>
 #include <combo_loader.h>
 #include <conversions.h>
 #include <datamgmt.h>
@@ -2302,6 +2303,7 @@ void update_widget(gpointer object, gpointer user_data)
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					printf("changing entry text!\n");
 					changed = TRUE;
 				}
 				g_free(tmpbuf);
@@ -2796,6 +2798,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		*/
 		return FALSE;
 	}
+	printf("Key event!\n");
 
 	switch (event->keyval)
 	{
@@ -2952,17 +2955,50 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			retval = TRUE;
 			break;
 		case GDK_Escape:
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			refresh_widgets_at_offset(page,offset);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			retval = FALSE;
+			break;
+		case GDK_Return:
+		case GDK_KP_Enter:
+			std_entry_handler(widget,NULL);
 			retval = FALSE;
 			break;
 		default:	
 			retval = FALSE;
+			break;
 	}
 	if (send)
 		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
-
 	return retval;
+}
+
+
+void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
+{
+	gint count = 0;
+	gint i = 0;
+	GtkEditable *editable = GTK_EDITABLE(entry);
+	gchar *result = g_new (gchar, len);
+	for (i=0; i < len; i++) 
+	{
+		if (isalpha(text[i]))
+			continue;
+		result[count++] = text[i];
+	}
+	if (count > 0)
+	{
+		g_signal_handlers_block_by_func (G_OBJECT (editable),
+				G_CALLBACK (insert_text_handler),
+				data);
+		gtk_editable_insert_text (editable, result, count, pos);
+		g_signal_handlers_unblock_by_func (G_OBJECT (editable),
+				G_CALLBACK (insert_text_handler),
+				data);
+	}
+	g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+	g_free (result);
 }
 
 
@@ -3624,7 +3660,7 @@ void refresh_widgets_at_offset(gint page, gint offset)
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
-	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
+	printf("Refresh widget at page %i, offset %i\n",page,offset);
 
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)

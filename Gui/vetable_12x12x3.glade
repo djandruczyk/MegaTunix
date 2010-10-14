@@ -114,6 +114,7 @@
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">0</property>
