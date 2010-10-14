@@ -2979,9 +2979,8 @@ void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos
 	gchar *result = g_new (gchar, len);
 	for (i=0; i < len; i++) 
 	{
-		if (isalpha(text[i]))
-			continue;
-		result[count++] = text[i];
+		if ((g_ascii_isdigit(text[i])) || g_ascii_ispunct(text[i]))
+			result[count++] = text[i];
 	}
 	if (count > 0)
 	{

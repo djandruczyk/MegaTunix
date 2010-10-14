@@ -1,1165 +1,1087 @@
-<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<?xml version="1.0" standalone="no"?>
+<!--*- mode: xml -*-->
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
-
 <glade-interface>
-
-<widget class="GtkWindow" id="window1">
-  <property name="visible">True</property>
-  <property name="title" translatable="yes">window1</property>
-  <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">False</property>
-  <property name="resizable">True</property>
-  <property name="destroy_with_parent">False</property>
-  <property name="decorated">True</property>
-  <property name="skip_taskbar_hint">False</property>
-  <property name="skip_pager_hint">False</property>
-  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
-  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
-
-  <child>
-    <widget class="GtkFrame" id="topframe">
-      <property name="visible">True</property>
-      <property name="label_xalign">0</property>
-      <property name="label_yalign">0.5</property>
-      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-      <child>
-	<widget class="GtkScrolledWindow" id="mem_scrolledwindow1">
-	  <property name="visible">True</property>
-	  <property name="can_focus">True</property>
-	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	  <property name="shadow_type">GTK_SHADOW_NONE</property>
-	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-	  <child>
-	    <widget class="GtkViewport" id="mem_viewport1">
-	      <property name="visible">True</property>
-	      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-	      <child>
-		<widget class="GtkHBox" id="mem_hbox1">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
-
-		  <child>
-		    <widget class="GtkVBox" id="memviewer_top_vbox1">
-		      <property name="border_width">5</property>
-		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
-
-		      <child>
-			<widget class="GtkHBox" id="hbox2">
-			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
-
-			  <child>
-			    <widget class="GtkNotebook" id="memviewer_notebook">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="show_tabs">True</property>
-			      <property name="show_border">True</property>
-			      <property name="tab_pos">GTK_POS_TOP</property>
-			      <property name="scrollable">True</property>
-			      <property name="enable_popup">False</property>
-
-			      <child>
-				<widget class="GtkFrame" id="memviewer_mem0-255_frame">
-				  <property name="visible">True</property>
-				  <property name="label_xalign">0</property>
-				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-				  <child>
-				    <widget class="GtkVBox" id="memviewer_tab0_vbox1">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">0</property>
-
-				      <child>
-					<widget class="GtkScrolledWindow" id="memviewer_tab0_sw">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="shadow_type">GTK_SHADOW_NONE</property>
-					  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-					  <child>
-					    <widget class="GtkViewport" id="memviewer_tab0_viewport">
-					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-					      <child>
-						<widget class="GtkHBox" id="memviewer_tab0_vp_hbox1">
-						  <property name="visible">True</property>
-						  <property name="homogeneous">False</property>
-						  <property name="spacing">0</property>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab0_row_lbl_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">1</property>
-						      <property name="homogeneous">False</property>
-						      <property name="row_spacing">0</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">5</property>
-						      <property name="expand">False</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab0_data_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">8</property>
-						      <property name="homogeneous">True</property>
-						      <property name="row_spacing">1</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">0</property>
-						      <property name="expand">True</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-						</widget>
-					      </child>
-					    </widget>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">True</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-
-				      <child>
-					<widget class="GtkFrame" id="memviewer_tab0_settings_frame">
-					  <property name="border_width">5</property>
-					  <property name="visible">True</property>
-					  <property name="label_xalign">0</property>
-					  <property name="label_yalign">0.5</property>
-					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-					  <child>
-					    <widget class="GtkHBox" id="memviewer_tab0_settings_hbox1">
-					      <property name="border_width">5</property>
-					      <property name="visible">True</property>
-					      <property name="homogeneous">False</property>
-					      <property name="spacing">10</property>
-
-					      <child>
-						<widget class="GtkButton" id="memviewer_tab0_read_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Read Memory from 0x0000-0x00FF</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab0_hex_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Hex</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab0_binary_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Binary</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab0_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab0_decimal_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Decimal</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab0_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<placeholder/>
-					      </child>
-					    </widget>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="memviewer_tab0_settings_frame_title">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="type">label_item</property>
-					    </packing>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="memviewer_tab0_frame_title">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">256 bytes from address 0x0000-0x00FF</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="type">label_item</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="tab_expand">False</property>
-				  <property name="tab_fill">True</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="memviewer_notebook_tab0_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">0x0000-0x00FF</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="type">tab</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkFrame" id="memviewer_mem256-511_frame">
-				  <property name="visible">True</property>
-				  <property name="label_xalign">0</property>
-				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-				  <child>
-				    <widget class="GtkVBox" id="memviewer_tab1_vbox1">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">0</property>
-
-				      <child>
-					<widget class="GtkScrolledWindow" id="memviewer_tab1_sw">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="shadow_type">GTK_SHADOW_NONE</property>
-					  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-					  <child>
-					    <widget class="GtkViewport" id="memviewer_tab1_viewport">
-					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-					      <child>
-						<widget class="GtkHBox" id="memviewer_tab1_vp_hbox1">
-						  <property name="visible">True</property>
-						  <property name="homogeneous">False</property>
-						  <property name="spacing">0</property>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab1_row_lbl_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">1</property>
-						      <property name="homogeneous">False</property>
-						      <property name="row_spacing">0</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">5</property>
-						      <property name="expand">False</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab1_data_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">8</property>
-						      <property name="homogeneous">True</property>
-						      <property name="row_spacing">1</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">0</property>
-						      <property name="expand">True</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-						</widget>
-					      </child>
-					    </widget>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">True</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-
-				      <child>
-					<widget class="GtkFrame" id="memviewer_tab1_settings_frame">
-					  <property name="border_width">5</property>
-					  <property name="visible">True</property>
-					  <property name="label_xalign">0</property>
-					  <property name="label_yalign">0.5</property>
-					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-					  <child>
-					    <widget class="GtkHBox" id="memviewer_tab1_settings_hbox1">
-					      <property name="border_width">5</property>
-					      <property name="visible">True</property>
-					      <property name="homogeneous">False</property>
-					      <property name="spacing">10</property>
-
-					      <child>
-						<widget class="GtkButton" id="memviewer_tab1_read_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Read Memory from 0x0100-0x01FF</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab1_hex_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Hex</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab1_binary_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Binary</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab1_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab1_decimal_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Decimal</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab1_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<placeholder/>
-					      </child>
-					    </widget>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="memviewer_tab1_settings_frame_title">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="type">label_item</property>
-					    </packing>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="memviewer_tab1_frame_title">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">256 bytes from address 0x0100-0x01FF</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="type">label_item</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="tab_expand">False</property>
-				  <property name="tab_fill">True</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="memviewer_notebook_tab1_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">0x0100-0x01FF</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="type">tab</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkFrame" id="memviewer_mem512-767_frame">
-				  <property name="visible">True</property>
-				  <property name="label_xalign">0</property>
-				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-				  <child>
-				    <widget class="GtkVBox" id="memviewer_tab2_vbox1">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">0</property>
-
-				      <child>
-					<widget class="GtkScrolledWindow" id="memviewer_tab2_sw">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="shadow_type">GTK_SHADOW_NONE</property>
-					  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-					  <child>
-					    <widget class="GtkViewport" id="memviewer_tab2_viewport">
-					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-					      <child>
-						<widget class="GtkHBox" id="memviewer_tab2_vp_hbox1">
-						  <property name="visible">True</property>
-						  <property name="homogeneous">False</property>
-						  <property name="spacing">0</property>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab2_row_lbl_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">1</property>
-						      <property name="homogeneous">False</property>
-						      <property name="row_spacing">0</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">5</property>
-						      <property name="expand">False</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab2_data_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">8</property>
-						      <property name="homogeneous">True</property>
-						      <property name="row_spacing">1</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">0</property>
-						      <property name="expand">True</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-						</widget>
-					      </child>
-					    </widget>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">True</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-
-				      <child>
-					<widget class="GtkFrame" id="memviewer_tab2_settings_frame">
-					  <property name="border_width">5</property>
-					  <property name="visible">True</property>
-					  <property name="label_xalign">0</property>
-					  <property name="label_yalign">0.5</property>
-					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-					  <child>
-					    <widget class="GtkHBox" id="memviewer_tab2_settings_hbox1">
-					      <property name="border_width">5</property>
-					      <property name="visible">True</property>
-					      <property name="homogeneous">False</property>
-					      <property name="spacing">10</property>
-
-					      <child>
-						<widget class="GtkButton" id="memviewer_tab2_read_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Read Memory from 0x0200-0x02FF</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab2_hex_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Hex</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab2_binary_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Binary</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab2_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab2_decimal_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Decimal</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab2_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<placeholder/>
-					      </child>
-					    </widget>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="memviewer_tab2_settings_frame_title">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="type">label_item</property>
-					    </packing>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="memviewer_tab2_frame_title">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">256 bytes from address 0x0200-0x02FF</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="type">label_item</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="tab_expand">False</property>
-				  <property name="tab_fill">True</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="memviewer_notebook_tab2_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">0x0200-0x2FF</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="type">tab</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkFrame" id="memviewer_mem768-1023_frame">
-				  <property name="visible">True</property>
-				  <property name="label_xalign">0</property>
-				  <property name="label_yalign">0.5</property>
-				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-				  <child>
-				    <widget class="GtkVBox" id="memviewer_tab3_vbox1">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">0</property>
-
-				      <child>
-					<widget class="GtkScrolledWindow" id="memviewer_tab3_sw">
-					  <property name="visible">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-					  <property name="shadow_type">GTK_SHADOW_NONE</property>
-					  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
-
-					  <child>
-					    <widget class="GtkViewport" id="memviewer_tab3_viewport">
-					      <property name="visible">True</property>
-					      <property name="shadow_type">GTK_SHADOW_NONE</property>
-
-					      <child>
-						<widget class="GtkHBox" id="memviewer_tab3_vp_hbox1">
-						  <property name="visible">True</property>
-						  <property name="homogeneous">False</property>
-						  <property name="spacing">0</property>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab3_row_lbl_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">1</property>
-						      <property name="homogeneous">False</property>
-						      <property name="row_spacing">0</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">5</property>
-						      <property name="expand">False</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-
-						  <child>
-						    <widget class="GtkTable" id="memviewer_tab3_data_table">
-						      <property name="visible">True</property>
-						      <property name="n_rows">32</property>
-						      <property name="n_columns">8</property>
-						      <property name="homogeneous">True</property>
-						      <property name="row_spacing">1</property>
-						      <property name="column_spacing">0</property>
-						    </widget>
-						    <packing>
-						      <property name="padding">0</property>
-						      <property name="expand">True</property>
-						      <property name="fill">True</property>
-						    </packing>
-						  </child>
-						</widget>
-					      </child>
-					    </widget>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">True</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-
-				      <child>
-					<widget class="GtkFrame" id="memviewer_tab3_settings_frame">
-					  <property name="border_width">5</property>
-					  <property name="visible">True</property>
-					  <property name="label_xalign">0</property>
-					  <property name="label_yalign">0.5</property>
-					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-					  <child>
-					    <widget class="GtkHBox" id="memviewer_tab3_settings_hbox1">
-					      <property name="border_width">5</property>
-					      <property name="visible">True</property>
-					      <property name="homogeneous">False</property>
-					      <property name="spacing">10</property>
-
-					      <child>
-						<widget class="GtkButton" id="memviewer_tab3_read_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Read Memory from 0x0300-0x03FF</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab3_hex_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Hex</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab3_binary_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Binary</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab3_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkRadioButton" id="memviewer_tab3_decimal_radio_button">
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="label" translatable="yes">Decimal</property>
-						  <property name="use_underline">True</property>
-						  <property name="relief">GTK_RELIEF_NORMAL</property>
-						  <property name="focus_on_click">True</property>
-						  <property name="active">False</property>
-						  <property name="inconsistent">False</property>
-						  <property name="draw_indicator">True</property>
-						  <property name="group">memviewer_tab3_hex_radio_button</property>
-						  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
-						</widget>
-						<packing>
-						  <property name="padding">0</property>
-						  <property name="expand">False</property>
-						  <property name="fill">True</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<placeholder/>
-					      </child>
-					    </widget>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="memviewer_tab3_settings_frame_title">
-					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
-					      <property name="use_underline">False</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="type">label_item</property>
-					    </packing>
-					  </child>
-					</widget>
-					<packing>
-					  <property name="padding">0</property>
-					  <property name="expand">False</property>
-					  <property name="fill">True</property>
-					</packing>
-				      </child>
-				    </widget>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="memviewer_tab3_frame_title">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">256 bytes from address 0x0300-0x03FF</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				      <property name="width_chars">-1</property>
-				      <property name="single_line_mode">False</property>
-				      <property name="angle">0</property>
-				    </widget>
-				    <packing>
-				      <property name="type">label_item</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="tab_expand">False</property>
-				  <property name="tab_fill">True</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="memviewer_notebook_tab3_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">0x300-0x3FF</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="type">tab</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">True</property>
-			      <property name="fill">True</property>
-			    </packing>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">True</property>
-			  <property name="fill">True</property>
-			</packing>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-	</widget>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="topframe_title">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MegaSquirt Raw Memory Viewer</property>
-	  <property name="use_underline">False</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_LEFT</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	  <property name="width_chars">-1</property>
-	  <property name="single_line_mode">False</property>
-	  <property name="angle">0</property>
-	</widget>
-	<packing>
-	  <property name="type">label_item</property>
-	</packing>
-      </child>
-    </widget>
-  </child>
-</widget>
-
+  <widget class="GtkWindow" id="window1">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">window1</property>
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_NONE</property>
+    <property name="modal">False</property>
+    <property name="resizable">True</property>
+    <property name="destroy_with_parent">False</property>
+    <property name="decorated">True</property>
+    <property name="skip_taskbar_hint">False</property>
+    <property name="skip_pager_hint">False</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+    <property name="focus_on_map">True</property>
+    <property name="urgency_hint">False</property>
+    <child>
+      <widget class="GtkFrame" id="topframe">
+        <property name="visible">True</property>
+        <property name="label_xalign">0</property>
+        <property name="label_yalign">0.5</property>
+        <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+        <child>
+          <widget class="GtkScrolledWindow" id="mem_scrolledwindow1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="shadow_type">GTK_SHADOW_NONE</property>
+            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+            <child>
+              <widget class="GtkViewport" id="mem_viewport1">
+                <property name="visible">True</property>
+                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                <child>
+                  <widget class="GtkHBox" id="mem_hbox1">
+                    <property name="visible">True</property>
+                    <property name="homogeneous">False</property>
+                    <property name="spacing">0</property>
+                    <child>
+                      <widget class="GtkVBox" id="memviewer_top_vbox1">
+                        <property name="border_width">5</property>
+                        <property name="visible">True</property>
+                        <property name="homogeneous">False</property>
+                        <property name="spacing">0</property>
+                        <child>
+                          <widget class="GtkHBox" id="hbox2">
+                            <property name="visible">True</property>
+                            <property name="homogeneous">False</property>
+                            <property name="spacing">0</property>
+                            <child>
+                              <widget class="GtkNotebook" id="memviewer_notebook">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="show_tabs">True</property>
+                                <property name="show_border">True</property>
+                                <property name="tab_pos">GTK_POS_TOP</property>
+                                <property name="scrollable">True</property>
+                                <property name="enable_popup">False</property>
+                                <child>
+                                  <widget class="GtkFrame" id="memviewer_mem0-255_frame">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="label_yalign">0.5</property>
+                                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                    <child>
+                                      <widget class="GtkVBox" id="memviewer_tab0_vbox1">
+                                        <property name="visible">True</property>
+                                        <property name="homogeneous">False</property>
+                                        <property name="spacing">0</property>
+                                        <child>
+                                          <widget class="GtkScrolledWindow" id="memviewer_tab0_sw">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                                            <child>
+                                              <widget class="GtkViewport" id="memviewer_tab0_viewport">
+                                                <property name="visible">True</property>
+                                                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                                <child>
+                                                  <widget class="GtkHBox" id="memviewer_tab0_vp_hbox1">
+                                                    <property name="visible">True</property>
+                                                    <property name="homogeneous">False</property>
+                                                    <property name="spacing">0</property>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab0_row_lbl_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">1</property>
+                                                        <property name="homogeneous">False</property>
+                                                        <property name="row_spacing">0</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">5</property>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab0_data_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">8</property>
+                                                        <property name="homogeneous">True</property>
+                                                        <property name="row_spacing">1</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">0</property>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkFrame" id="memviewer_tab0_settings_frame">
+                                            <property name="border_width">5</property>
+                                            <property name="visible">True</property>
+                                            <property name="label_xalign">0</property>
+                                            <property name="label_yalign">0.5</property>
+                                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                            <child>
+                                              <widget class="GtkHBox" id="memviewer_tab0_settings_hbox1">
+                                                <property name="border_width">5</property>
+                                                <property name="visible">True</property>
+                                                <property name="homogeneous">False</property>
+                                                <property name="spacing">10</property>
+                                                <child>
+                                                  <widget class="GtkButton" id="memviewer_tab0_read_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Read Memory from 0x0000-0x00FF</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab0_hex_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Hex</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab0_binary_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Binary</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab0_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab0_decimal_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Decimal</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab0_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="memviewer_tab0_settings_frame_title">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
+                                                <property name="use_underline">False</property>
+                                                <property name="use_markup">False</property>
+                                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                                <property name="wrap">False</property>
+                                                <property name="selectable">False</property>
+                                                <property name="xalign">0.5</property>
+                                                <property name="yalign">0.5</property>
+                                                <property name="xpad">0</property>
+                                                <property name="ypad">0</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                                <property name="width_chars">-1</property>
+                                                <property name="single_line_mode">False</property>
+                                                <property name="angle">0</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="type">label_item</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="memviewer_tab0_frame_title">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">256 bytes from address 0x0000-0x00FF</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">False</property>
+                                        <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="tab_expand">False</property>
+                                    <property name="tab_fill">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="memviewer_notebook_tab0_label">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">0x0000-0x00FF</property>
+                                    <property name="use_underline">False</property>
+                                    <property name="use_markup">False</property>
+                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                    <property name="wrap">False</property>
+                                    <property name="selectable">False</property>
+                                    <property name="xalign">0.5</property>
+                                    <property name="yalign">0.5</property>
+                                    <property name="xpad">0</property>
+                                    <property name="ypad">0</property>
+                                    <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                    <property name="width_chars">-1</property>
+                                    <property name="single_line_mode">False</property>
+                                    <property name="angle">0</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="type">tab</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkFrame" id="memviewer_mem256-511_frame">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="label_yalign">0.5</property>
+                                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                    <child>
+                                      <widget class="GtkVBox" id="memviewer_tab1_vbox1">
+                                        <property name="visible">True</property>
+                                        <property name="homogeneous">False</property>
+                                        <property name="spacing">0</property>
+                                        <child>
+                                          <widget class="GtkScrolledWindow" id="memviewer_tab1_sw">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                                            <child>
+                                              <widget class="GtkViewport" id="memviewer_tab1_viewport">
+                                                <property name="visible">True</property>
+                                                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                                <child>
+                                                  <widget class="GtkHBox" id="memviewer_tab1_vp_hbox1">
+                                                    <property name="visible">True</property>
+                                                    <property name="homogeneous">False</property>
+                                                    <property name="spacing">0</property>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab1_row_lbl_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">1</property>
+                                                        <property name="homogeneous">False</property>
+                                                        <property name="row_spacing">0</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">5</property>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab1_data_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">8</property>
+                                                        <property name="homogeneous">True</property>
+                                                        <property name="row_spacing">1</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">0</property>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkFrame" id="memviewer_tab1_settings_frame">
+                                            <property name="border_width">5</property>
+                                            <property name="visible">True</property>
+                                            <property name="label_xalign">0</property>
+                                            <property name="label_yalign">0.5</property>
+                                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                            <child>
+                                              <widget class="GtkHBox" id="memviewer_tab1_settings_hbox1">
+                                                <property name="border_width">5</property>
+                                                <property name="visible">True</property>
+                                                <property name="homogeneous">False</property>
+                                                <property name="spacing">10</property>
+                                                <child>
+                                                  <widget class="GtkButton" id="memviewer_tab1_read_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Read Memory from 0x0100-0x01FF</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab1_hex_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Hex</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab1_binary_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Binary</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab1_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab1_decimal_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Decimal</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab1_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="memviewer_tab1_settings_frame_title">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
+                                                <property name="use_underline">False</property>
+                                                <property name="use_markup">False</property>
+                                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                                <property name="wrap">False</property>
+                                                <property name="selectable">False</property>
+                                                <property name="xalign">0.5</property>
+                                                <property name="yalign">0.5</property>
+                                                <property name="xpad">0</property>
+                                                <property name="ypad">0</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                                <property name="width_chars">-1</property>
+                                                <property name="single_line_mode">False</property>
+                                                <property name="angle">0</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="type">label_item</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="memviewer_tab1_frame_title">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">256 bytes from address 0x0100-0x01FF</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">False</property>
+                                        <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="tab_expand">False</property>
+                                    <property name="tab_fill">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="memviewer_notebook_tab1_label">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">0x0100-0x01FF</property>
+                                    <property name="use_underline">False</property>
+                                    <property name="use_markup">False</property>
+                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                    <property name="wrap">False</property>
+                                    <property name="selectable">False</property>
+                                    <property name="xalign">0.5</property>
+                                    <property name="yalign">0.5</property>
+                                    <property name="xpad">0</property>
+                                    <property name="ypad">0</property>
+                                    <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                    <property name="width_chars">-1</property>
+                                    <property name="single_line_mode">False</property>
+                                    <property name="angle">0</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="type">tab</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkFrame" id="memviewer_mem512-767_frame">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="label_yalign">0.5</property>
+                                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                    <child>
+                                      <widget class="GtkVBox" id="memviewer_tab2_vbox1">
+                                        <property name="visible">True</property>
+                                        <property name="homogeneous">False</property>
+                                        <property name="spacing">0</property>
+                                        <child>
+                                          <widget class="GtkScrolledWindow" id="memviewer_tab2_sw">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                                            <child>
+                                              <widget class="GtkViewport" id="memviewer_tab2_viewport">
+                                                <property name="visible">True</property>
+                                                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                                <child>
+                                                  <widget class="GtkHBox" id="memviewer_tab2_vp_hbox1">
+                                                    <property name="visible">True</property>
+                                                    <property name="homogeneous">False</property>
+                                                    <property name="spacing">0</property>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab2_row_lbl_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">1</property>
+                                                        <property name="homogeneous">False</property>
+                                                        <property name="row_spacing">0</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">5</property>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab2_data_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">8</property>
+                                                        <property name="homogeneous">True</property>
+                                                        <property name="row_spacing">1</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">0</property>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkFrame" id="memviewer_tab2_settings_frame">
+                                            <property name="border_width">5</property>
+                                            <property name="visible">True</property>
+                                            <property name="label_xalign">0</property>
+                                            <property name="label_yalign">0.5</property>
+                                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                            <child>
+                                              <widget class="GtkHBox" id="memviewer_tab2_settings_hbox1">
+                                                <property name="border_width">5</property>
+                                                <property name="visible">True</property>
+                                                <property name="homogeneous">False</property>
+                                                <property name="spacing">10</property>
+                                                <child>
+                                                  <widget class="GtkButton" id="memviewer_tab2_read_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Read Memory from 0x0200-0x02FF</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab2_hex_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Hex</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab2_binary_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Binary</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab2_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab2_decimal_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Decimal</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab2_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="memviewer_tab2_settings_frame_title">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
+                                                <property name="use_underline">False</property>
+                                                <property name="use_markup">False</property>
+                                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                                <property name="wrap">False</property>
+                                                <property name="selectable">False</property>
+                                                <property name="xalign">0.5</property>
+                                                <property name="yalign">0.5</property>
+                                                <property name="xpad">0</property>
+                                                <property name="ypad">0</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                                <property name="width_chars">-1</property>
+                                                <property name="single_line_mode">False</property>
+                                                <property name="angle">0</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="type">label_item</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="memviewer_tab2_frame_title">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">256 bytes from address 0x0200-0x02FF</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">False</property>
+                                        <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="tab_expand">False</property>
+                                    <property name="tab_fill">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="memviewer_notebook_tab2_label">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">0x0200-0x2FF</property>
+                                    <property name="use_underline">False</property>
+                                    <property name="use_markup">False</property>
+                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                    <property name="wrap">False</property>
+                                    <property name="selectable">False</property>
+                                    <property name="xalign">0.5</property>
+                                    <property name="yalign">0.5</property>
+                                    <property name="xpad">0</property>
+                                    <property name="ypad">0</property>
+                                    <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                    <property name="width_chars">-1</property>
+                                    <property name="single_line_mode">False</property>
+                                    <property name="angle">0</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="type">tab</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkFrame" id="memviewer_mem768-1023_frame">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="label_yalign">0.5</property>
+                                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                    <child>
+                                      <widget class="GtkVBox" id="memviewer_tab3_vbox1">
+                                        <property name="visible">True</property>
+                                        <property name="homogeneous">False</property>
+                                        <property name="spacing">0</property>
+                                        <child>
+                                          <widget class="GtkScrolledWindow" id="memviewer_tab3_sw">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                                            <child>
+                                              <widget class="GtkViewport" id="memviewer_tab3_viewport">
+                                                <property name="visible">True</property>
+                                                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                                                <child>
+                                                  <widget class="GtkHBox" id="memviewer_tab3_vp_hbox1">
+                                                    <property name="visible">True</property>
+                                                    <property name="homogeneous">False</property>
+                                                    <property name="spacing">0</property>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab3_row_lbl_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">1</property>
+                                                        <property name="homogeneous">False</property>
+                                                        <property name="row_spacing">0</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">5</property>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkTable" id="memviewer_tab3_data_table">
+                                                        <property name="visible">True</property>
+                                                        <property name="n_rows">32</property>
+                                                        <property name="n_columns">8</property>
+                                                        <property name="homogeneous">True</property>
+                                                        <property name="row_spacing">1</property>
+                                                        <property name="column_spacing">0</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="padding">0</property>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkFrame" id="memviewer_tab3_settings_frame">
+                                            <property name="border_width">5</property>
+                                            <property name="visible">True</property>
+                                            <property name="label_xalign">0</property>
+                                            <property name="label_yalign">0.5</property>
+                                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                                            <child>
+                                              <widget class="GtkHBox" id="memviewer_tab3_settings_hbox1">
+                                                <property name="border_width">5</property>
+                                                <property name="visible">True</property>
+                                                <property name="homogeneous">False</property>
+                                                <property name="spacing">10</property>
+                                                <child>
+                                                  <widget class="GtkButton" id="memviewer_tab3_read_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Read Memory from 0x0300-0x03FF</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 29 Nov 2004 18:35:59 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab3_hex_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Hex</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab3_binary_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Binary</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab3_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkRadioButton" id="memviewer_tab3_decimal_radio_button">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="label" translatable="yes">Decimal</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                                                    <property name="focus_on_click">True</property>
+                                                    <property name="active">False</property>
+                                                    <property name="inconsistent">False</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <property name="group">memviewer_tab3_hex_radio_button</property>
+                                                    <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="padding">0</property>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="memviewer_tab3_settings_frame_title">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Raw Memory Viewer Settings</property>
+                                                <property name="use_underline">False</property>
+                                                <property name="use_markup">False</property>
+                                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                                <property name="wrap">False</property>
+                                                <property name="selectable">False</property>
+                                                <property name="xalign">0.5</property>
+                                                <property name="yalign">0.5</property>
+                                                <property name="xpad">0</property>
+                                                <property name="ypad">0</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                                <property name="width_chars">-1</property>
+                                                <property name="single_line_mode">False</property>
+                                                <property name="angle">0</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="type">label_item</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="memviewer_tab3_frame_title">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">256 bytes from address 0x0300-0x03FF</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">False</property>
+                                        <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="type">label_item</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="tab_expand">False</property>
+                                    <property name="tab_fill">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="memviewer_notebook_tab3_label">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">0x300-0x3FF</property>
+                                    <property name="use_underline">False</property>
+                                    <property name="use_markup">False</property>
+                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                    <property name="wrap">False</property>
+                                    <property name="selectable">False</property>
+                                    <property name="xalign">0.5</property>
+                                    <property name="yalign">0.5</property>
+                                    <property name="xpad">0</property>
+                                    <property name="ypad">0</property>
+                                    <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                    <property name="width_chars">-1</property>
+                                    <property name="single_line_mode">False</property>
+                                    <property name="angle">0</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="type">tab</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="padding">0</property>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="padding">0</property>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="padding">0</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="topframe_title">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">MegaSquirt Raw Memory Viewer</property>
+            <property name="use_underline">False</property>
+            <property name="use_markup">False</property>
+            <property name="justify">GTK_JUSTIFY_LEFT</property>
+            <property name="wrap">False</property>
+            <property name="selectable">False</property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
+            <property name="xpad">0</property>
+            <property name="ypad">0</property>
+            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+            <property name="width_chars">-1</property>
+            <property name="single_line_mode">False</property>
+            <property name="angle">0</property>
+          </widget>
+          <packing>
+            <property name="type">label_item</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>
