@@ -150,6 +150,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -178,6 +179,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -234,6 +236,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -323,6 +326,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -350,6 +354,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -377,6 +382,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -404,6 +410,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -431,6 +438,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -458,6 +466,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -485,6 +494,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -512,6 +522,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -539,6 +550,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -566,6 +578,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -593,6 +606,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -640,6 +654,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -859,6 +874,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -886,6 +902,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -913,6 +930,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -940,6 +958,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -967,6 +986,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -994,6 +1014,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1021,6 +1042,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1048,6 +1070,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1075,6 +1098,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1102,6 +1126,7 @@
 				      <property name="width_chars">7</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1288,6 +1313,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1316,6 +1342,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1344,6 +1371,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1372,6 +1400,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1400,6 +1429,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1428,6 +1458,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1456,6 +1487,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1484,6 +1516,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1512,6 +1545,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1540,6 +1574,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -1568,6 +1603,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>
@@ -2022,6 +2058,7 @@
 					      <property name="width_chars">7</property>
 					      <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 19 Aug 2009 01:15:47 GMT"/>
 					      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Wed, 19 Aug 2009 01:15:27 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:18 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 19 Aug 2009 01:15:13 GMT"/>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 19 Aug 2009 01:15:35 GMT"/>

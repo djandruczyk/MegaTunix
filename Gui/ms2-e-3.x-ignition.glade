@@ -106,6 +106,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -134,6 +135,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -216,6 +218,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -511,6 +514,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -539,6 +543,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -754,6 +759,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -1243,6 +1249,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1366,6 +1373,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1716,6 +1724,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1744,6 +1753,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1772,6 +1782,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1800,6 +1811,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1856,6 +1868,7 @@
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 				      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 				    </widget>
@@ -1975,6 +1988,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -2003,6 +2017,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>
@@ -2031,6 +2046,7 @@
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 17 Aug 2009 17:13:35 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 17 Aug 2009 17:13:51 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Mon, 17 Aug 2009 17:14:06 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:19 GMT"/>
 					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 17 Aug 2009 17:14:31 GMT"/>
 					</widget>

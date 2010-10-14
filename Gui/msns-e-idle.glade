@@ -546,6 +546,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -576,6 +577,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -606,6 +608,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -636,6 +639,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -666,6 +670,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -696,6 +701,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -726,6 +732,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -756,6 +763,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -786,6 +794,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -816,6 +825,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -846,6 +856,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -876,6 +887,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -906,6 +918,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -936,6 +949,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -966,6 +980,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1207,6 +1222,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1237,6 +1253,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1267,6 +1284,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1297,6 +1315,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1327,6 +1346,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1465,6 +1485,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1495,6 +1516,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1553,6 +1575,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1618,6 +1641,7 @@
 					  <property name="width_chars">7</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 12 Jul 2006 01:54:14 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 12 Jul 2006 01:54:32 GMT"/>
 					  <signal name="button_press_event" handler="widget_grab" last_modification_time="Wed, 12 Jul 2006 01:54:47 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 12 Jul 2006 01:55:01 GMT"/>
@@ -1822,6 +1846,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1852,6 +1877,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1882,6 +1908,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1912,6 +1939,7 @@
 				      <property name="width_chars">5</property>
 				      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2137,6 +2165,7 @@ during which modes?</property>
 					  <property name="width_chars">5</property>
 					  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 					  <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 					  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>

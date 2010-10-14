@@ -347,6 +347,7 @@
 				      <property name="width_chars">50</property>
 				      <signal name="activate" handler="vex_comment_parse" last_modification_time="Sat, 27 Nov 2004 20:23:22 GMT"/>
 				      <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                      <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>

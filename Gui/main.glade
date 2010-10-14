@@ -2351,6 +2351,7 @@
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -2388,6 +2389,7 @@
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3319,6 +3321,7 @@ Air Temperature</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3354,6 +3357,7 @@ Air Temperature</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3375,6 +3379,7 @@ Air Temperature</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3396,6 +3401,7 @@ Air Temperature</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3656,6 +3662,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
+                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3858,6 +3865,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -3917,6 +3925,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -3953,6 +3962,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4013,6 +4023,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4035,6 +4046,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4105,6 +4117,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4153,6 +4166,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4175,6 +4189,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4197,6 +4212,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4281,6 +4297,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
+                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>

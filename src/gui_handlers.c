@@ -2303,7 +2303,6 @@ void update_widget(gpointer object, gpointer user_data)
 				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 				{
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-					printf("changing entry text!\n");
 					changed = TRUE;
 				}
 				g_free(tmpbuf);
@@ -2798,8 +2797,6 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		*/
 		return FALSE;
 	}
-	printf("Key event!\n");
-
 	switch (event->keyval)
 	{
 		case GDK_Page_Up:
@@ -3660,7 +3657,7 @@ void refresh_widgets_at_offset(gint page, gint offset)
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
-	printf("Refresh widget at page %i, offset %i\n",page,offset);
+	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
 
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
