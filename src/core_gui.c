@@ -65,6 +65,7 @@ int setup_gui()
 	gint y = 0;
 	gint w = 0;
 	gint h = 0;
+	GtkSettings *settings = gtk_settings_get_default();
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
@@ -111,6 +112,10 @@ int setup_gui()
 	w = (GINT)DATA_GET(global_data,"width");
 	h = (GINT)DATA_GET(global_data,"height");
 	tips_in_use = (GBOOLEAN)DATA_GET(global_data,"tips_in_use");
+	if (tips_in_use)
+		g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
+	else
+		g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 	gtk_window_move((GtkWindow *)window, x, y);
 	gtk_widget_set_size_request(window,def_width,def_height);
 	gtk_window_resize(GTK_WINDOW(window),w,h);
