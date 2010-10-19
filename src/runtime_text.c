@@ -293,7 +293,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
 	/* Value label */
 	label = gtk_label_new(NULL);
 
-	set_fixed_size(label,6);
+	//set_fixed_size(label,6);
 	rtt->textval = label;
 	if (show_prefix)
 		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
