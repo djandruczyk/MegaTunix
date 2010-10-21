@@ -870,7 +870,7 @@
                                                   <packing>
                                                     <property name="right_attach">2</property>
                                                     <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -883,7 +883,7 @@
                                                     <property name="top_attach">1</property>
                                                     <property name="bottom_attach">2</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -910,7 +910,7 @@
                                                     <property name="top_attach">1</property>
                                                     <property name="bottom_attach">2</property>
                                                     <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -923,7 +923,7 @@
                                                     <property name="top_attach">2</property>
                                                     <property name="bottom_attach">3</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -936,7 +936,7 @@
                                                     <property name="top_attach">3</property>
                                                     <property name="bottom_attach">4</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -951,7 +951,7 @@
                                                     <property name="top_attach">2</property>
                                                     <property name="bottom_attach">3</property>
                                                     <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -965,7 +965,7 @@
                                                     <property name="right_attach">2</property>
                                                     <property name="top_attach">3</property>
                                                     <property name="bottom_attach">4</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1122,7 +1122,7 @@
                                                 <property name="top_attach">2</property>
                                                 <property name="bottom_attach">3</property>
                                                 <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1137,7 +1137,7 @@
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">2</property>
                                                 <property name="bottom_attach">3</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1152,7 +1152,7 @@
                                                     <property name="label" translatable="yes">Serial/Network Read Timeout (ms)</property>
                                                   </widget>
                                                   <packing>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1168,8 +1168,8 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="right_attach">2</property>
-                                                    <property name="x_options"/>
-                                                    <property name="y_options"/>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                               </widget>
@@ -1195,7 +1195,7 @@
                                                   </widget>
                                                   <packing>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1210,7 +1210,7 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="right_attach">2</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                               </widget>
@@ -1243,7 +1243,7 @@
                                                 <signal name="toggled" handler="toggle_button_handler"/>
                                               </widget>
                                               <packing>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1256,8 +1256,8 @@
                                               <packing>
                                                 <property name="left_attach">2</property>
                                                 <property name="right_attach">3</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1270,7 +1270,7 @@
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
                                                 <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                           </widget>
@@ -1297,7 +1297,7 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1312,7 +1312,7 @@
                                               </widget>
                                               <packing>
                                                 <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                           </widget>
@@ -1379,8 +1379,8 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="right_attach">2</property>
-                                                    <property name="x_options"/>
-                                                    <property name="y_options"/>
+                                                    <property name="x_options"></property>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1399,7 +1399,7 @@
                                                     <property name="top_attach">1</property>
                                                     <property name="bottom_attach">2</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1418,7 +1418,7 @@
                                                     <property name="top_attach">2</property>
                                                     <property name="bottom_attach">3</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1437,7 +1437,7 @@
                                                     <property name="top_attach">3</property>
                                                     <property name="bottom_attach">4</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1493,7 +1493,7 @@
                                                     <property name="top_attach">4</property>
                                                     <property name="bottom_attach">5</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -1512,7 +1512,7 @@
                                                     <property name="top_attach">4</property>
                                                     <property name="bottom_attach">5</property>
                                                     <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"/>
+                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                               </widget>
@@ -1581,7 +1581,7 @@
                                                 <property name="ellipsize">end</property>
                                               </widget>
                                               <packing>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1594,7 +1594,7 @@
                                               <packing>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1607,8 +1607,8 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1623,8 +1623,8 @@
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                           </widget>
@@ -1647,7 +1647,7 @@
                                                 <property name="ellipsize">end</property>
                                               </widget>
                                               <packing>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1660,7 +1660,7 @@
                                               <packing>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1673,8 +1673,8 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1689,8 +1689,8 @@
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                           </widget>
@@ -1712,7 +1712,7 @@
                                                 <property name="ellipsize">end</property>
                                               </widget>
                                               <packing>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1725,7 +1725,7 @@
                                               <packing>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="y_options"/>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1739,8 +1739,8 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1756,8 +1756,8 @@
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
-                                                <property name="x_options"/>
-                                                <property name="y_options"/>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
                                               </packing>
                                             </child>
                                           </widget>
@@ -1973,7 +1973,7 @@
                           </widget>
                           <packing>
                             <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -1987,7 +1987,7 @@
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
                             <property name="x_options">GTK_EXPAND</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -2105,7 +2105,7 @@
                           </widget>
                           <packing>
                             <property name="x_options">GTK_EXPAND</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -2118,7 +2118,7 @@
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_EXPAND</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -2133,7 +2133,7 @@
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_EXPAND</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -2146,7 +2146,7 @@
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
                             <property name="x_options">GTK_EXPAND</property>
-                            <property name="y_options"/>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
@@ -2161,7 +2161,7 @@
                           <packing>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
-                            <property name="x_options"/>
+                            <property name="x_options"></property>
                             <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
@@ -2194,7 +2194,7 @@
                             <property name="right_attach">2</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
-                            <property name="x_options"/>
+                            <property name="x_options"></property>
                             <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
@@ -2210,6 +2210,7 @@
                 <child>
                   <widget class="GtkFrame" id="te_right_frame">
                     <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">etched-out</property>
                     <child>
@@ -2326,7 +2327,7 @@
               </widget>
               <packing>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2339,7 +2340,7 @@
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2350,16 +2351,16 @@
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2377,7 +2378,7 @@
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2388,8 +2389,8 @@
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -2398,8 +2399,8 @@
                 <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2414,7 +2415,7 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="right_attach">3</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2466,7 +2467,7 @@
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2517,7 +2518,7 @@
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
           </widget>
@@ -2574,7 +2575,7 @@ Air Temperature</property>
                 <property name="label" translatable="yes">Sensor Table</property>
               </widget>
               <packing>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -2589,7 +2590,7 @@ Air Temperature</property>
                     <property name="label" translatable="yes">Bias Resistor Value (Ohms)</property>
                   </widget>
                   <packing>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -2604,8 +2605,8 @@ Air Temperature</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -2643,8 +2644,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2661,8 +2662,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2679,8 +2680,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2695,8 +2696,8 @@ Air Temperature</property>
                       <packing>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2711,8 +2712,8 @@ Air Temperature</property>
                       <packing>
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2727,8 +2728,8 @@ Air Temperature</property>
                       <packing>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2740,8 +2741,8 @@ Air Temperature</property>
                       <packing>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2755,8 +2756,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2771,7 +2772,7 @@ Air Temperature</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2786,7 +2787,7 @@ Air Temperature</property>
                       <packing>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2801,7 +2802,7 @@ Air Temperature</property>
                         <signal name="toggled" handler="flip_table_gen_temp_label"/>
                       </widget>
                       <packing>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -2895,7 +2896,7 @@ Air Temperature</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -2910,7 +2911,7 @@ Air Temperature</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -2973,7 +2974,7 @@ Air Temperature</property>
                 <property name="label" translatable="yes">EGO Sensor Type</property>
               </widget>
               <packing>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3002,7 +3003,7 @@ Air Temperature</property>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                         <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3015,7 +3016,7 @@ Air Temperature</property>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
                         <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3028,7 +3029,7 @@ Air Temperature</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3041,7 +3042,7 @@ Air Temperature</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3058,8 +3059,8 @@ Air Temperature</property>
                         <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3076,8 +3077,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3094,8 +3095,8 @@ Air Temperature</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3112,8 +3113,8 @@ Air Temperature</property>
                         <property name="right_attach">2</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options"/>
-                        <property name="y_options"/>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -3137,7 +3138,7 @@ Air Temperature</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3189,7 +3190,7 @@ Air Temperature</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3204,7 +3205,7 @@ Air Temperature</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -3259,7 +3260,7 @@ Air Temperature</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3272,7 +3273,7 @@ Air Temperature</property>
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3285,7 +3286,7 @@ Air Temperature</property>
                 <property name="top_attach">5</property>
                 <property name="bottom_attach">6</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3297,7 +3298,7 @@ Air Temperature</property>
               </widget>
               <packing>
                 <property name="right_attach">2</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3309,7 +3310,7 @@ Air Temperature</property>
               <packing>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3320,8 +3321,8 @@ Air Temperature</property>
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3330,8 +3331,8 @@ Air Temperature</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3345,7 +3346,7 @@ Air Temperature</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3356,8 +3357,8 @@ Air Temperature</property>
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3366,8 +3367,8 @@ Air Temperature</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3378,8 +3379,8 @@ Air Temperature</property>
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3388,8 +3389,8 @@ Air Temperature</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">4</property>
                 <property name="bottom_attach">5</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3400,8 +3401,8 @@ Air Temperature</property>
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3410,8 +3411,8 @@ Air Temperature</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">5</property>
                 <property name="bottom_attach">6</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3431,7 +3432,7 @@ Air Temperature</property>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="right_attach">4</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3445,7 +3446,7 @@ Air Temperature</property>
                     <accelerator key="F1" signal="clicked"/>
                   </widget>
                   <packing>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3591,7 +3592,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3613,7 +3614,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="left_attach">3</property>
                     <property name="right_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3627,7 +3628,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">3</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -3649,8 +3650,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="x_options"/>
-                <property name="y_options"/>
+                <property name="x_options"></property>
+                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -3661,8 +3662,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                 <property name="width_chars">7</property>
                 <signal name="changed" handler="entry_changed_handler"/>
                 <signal name="key_press_event" handler="key_event"/>
+                <signal name="insert_text" handler="insert_text_handler"/>
                 <signal name="focus_out_event" handler="focus_out_handler"/>
-                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                 <signal name="activate" handler="std_entry_handler"/>
                 <signal name="key_release_event" handler="key_event"/>
               </widget>
@@ -3671,7 +3672,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
-                <property name="y_options"/>
+                <property name="y_options"></property>
               </packing>
             </child>
           </widget>
@@ -3687,6 +3688,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
     <property name="height_request">0</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Runtime Vars</property>
+    <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
     <signal name="destroy_event" handler="gtk_widget_hide" object="rtt_window"/>
     <signal name="delete_event" handler="gtk_widget_hide" object="rtt_window"/>
     <child>
@@ -3791,7 +3794,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3838,7 +3841,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -3864,8 +3867,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">20.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -3874,8 +3877,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3887,7 +3890,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3899,7 +3902,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3912,7 +3915,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3924,8 +3927,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">115.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -3934,8 +3937,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -3961,8 +3964,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">5.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -3971,8 +3974,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3984,7 +3987,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -3996,7 +3999,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -4022,8 +4025,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">100.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4032,8 +4035,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4045,8 +4048,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">30.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4055,8 +4058,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4068,7 +4071,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4080,7 +4083,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4092,7 +4095,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4104,7 +4107,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4116,8 +4119,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">3500</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4126,8 +4129,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -4153,7 +4156,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4165,8 +4168,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">15.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4175,8 +4178,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4188,8 +4191,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">850</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4198,8 +4201,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4211,8 +4214,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">40.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4221,8 +4224,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4234,7 +4237,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4246,7 +4249,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4258,7 +4261,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -4284,7 +4287,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </widget>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4296,8 +4299,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="text" translatable="yes">5.0</property>
                     <signal name="changed" handler="entry_changed_handler"/>
                     <signal name="key_press_event" handler="key_event"/>
+                    <signal name="insert_text" handler="insert_text_handler"/>
                     <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
                     <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
@@ -4306,8 +4309,8 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"/>
-                    <property name="y_options"/>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
@@ -4319,7 +4322,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"/>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </widget>
@@ -4351,6 +4354,10 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
   </widget>
   <widget class="GtkWindow" id="status_window">
     <property name="title" translatable="yes">ECU Status</property>
+    <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
+    <signal name="destroy_event" handler="gtk_widget_hide"/>
+    <signal name="delete_event" handler="gtk_widget_hide" object="status_window"/>
     <child>
       <widget class="GtkVBox" id="vbox">
         <property name="visible">True</property>

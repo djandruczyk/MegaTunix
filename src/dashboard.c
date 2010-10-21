@@ -343,7 +343,6 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
 	if (!dash_hash)
 	{
-		printf("no dash_hash, making one!\n");
 		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		DATA_SET_FULL(global_data,"dash_hash",dash_hash,(GDestroyNotify)g_hash_table_destroy);
 	}

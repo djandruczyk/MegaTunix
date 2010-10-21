@@ -72,7 +72,6 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 	widget_class->button_release_event = mtx_curve_button_event;
 	widget_class->enter_notify_event = mtx_curve_focus_event;
 	widget_class->leave_notify_event = mtx_curve_focus_event;
-	/* Motion event not needed, as unused currently */
 	widget_class->motion_notify_event = mtx_curve_motion_event; 
 	widget_class->size_request = mtx_curve_size_request;
 	obj_class->finalize = mtx_curve_finalize;
@@ -141,9 +140,7 @@ void mtx_curve_finalize (GObject *curve)
 void mtx_curve_init (MtxCurve *curve)
 {
 	/* The events the curve receives
-	* Need events for button press/release AND motion EVEN THOUGH
-	* we don't have a motion handler defined.  It's required for the 
-	* dash designer to do drag and move placement 
+	* Need events for button press/release AND motion AND enter/leave
 	*/ 
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gtk_widget_add_events (GTK_WIDGET (curve),GDK_BUTTON_PRESS_MASK
@@ -855,6 +852,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 			priv->active_coord = -1;
 			mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 		}
+		gdk_event_request_motions(event);
 		return TRUE;
 	}
 
@@ -918,6 +916,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 		recalc_extremes(priv);
 	priv->coord_changed = TRUE;
 	mtx_curve_redraw(MTX_CURVE(curve), TRUE);
+	gdk_event_request_motions(event);
 	return TRUE;
 }
 					       
