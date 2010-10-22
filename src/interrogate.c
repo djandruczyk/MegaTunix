@@ -108,6 +108,7 @@ EXPORT gboolean interrogate_ecu()
 	if ((!tests) || (tests->len < 1))
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
+		update_logbar("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
@@ -274,8 +275,9 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	gchar * filename = NULL;
 	gchar ** filenames = NULL;
 	GArray *classes = NULL;
+	extern gconstpointer *global_data;
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"),&classes);	
+	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"));
@@ -1102,9 +1104,12 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	gint i = 0;
 	gint j = 0;
 
-	filename = get_file(g_build_filename(DATA_GET(global_data,"ecu_dirname"),"tests.cfg",NULL),NULL);
+	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL),NULL);
 	if (!filename)
+	{
+		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
 		return NULL;
+	}
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)

@@ -77,17 +77,20 @@ gint comms_test()
 		return FALSE;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-	if (!write_wrapper(serial_params->fd,"C",1,&len))
-	{
-		err_text = (gchar *)g_strerror(errno);
-		dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
-		thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
-		connected = FALSE;
-		return connected;
-	}
 
-	result = read_data(1,NULL,FALSE);
-	if (!result) /* Failure,  Attempt MS-II method */
+	if ((GINT)DATA_GET(global_data,"ecu_baud") < 11920)
+	{
+		if (!write_wrapper(serial_params->fd,"C",1,&len))
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
+			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
+			connected = FALSE;
+			return connected;
+		}
+		result = read_data(-1,NULL,FALSE);
+	}
+	else
 	{
 		if (!write_wrapper(serial_params->fd,"c",1,&len))
 		{
@@ -97,7 +100,7 @@ gint comms_test()
 			connected = FALSE;
 			return connected;
 		}
-		result = read_data(2,NULL,FALSE);
+		result = read_data(-1,NULL,FALSE);
 	}
 	if (result)	/* Success */
 	{

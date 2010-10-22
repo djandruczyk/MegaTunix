@@ -893,8 +893,7 @@ phys_ecu_page=6
 length=112
 
 [interrogation]
-match_on=MS-II_Clock,MS_Signature
-MS-II_Clock=_COUNT_,2
+match_on=MS_Signature
 MS_Signature=_SUBMATCH_,V2.8
 
 [gui]

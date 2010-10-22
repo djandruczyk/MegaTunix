@@ -116,7 +116,7 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 		}
 		if (len == 0) /* Short read!*/
 			zerocount++;
-		if ((len == 0) && (zerocount > 1))  /* Too many Short reads! */
+		if ((len == 0) && (zerocount > 3))  /* Too many Short reads! */
 		{
 			bad_read = TRUE;
 			break;
