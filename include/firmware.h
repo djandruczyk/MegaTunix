@@ -31,7 +31,9 @@ typedef enum
 	MS2_STD		= 1<<5,
 	MS2_E		= 1<<6,
 	MS2_E_COMPMON	= 1<<7,
-	PIS		= 1<<8
+	PIS		= 1<<8,
+	SECU_3		= 1<<9,
+	FREE_EMS	= 1<<10
 }Capability;
 
 
