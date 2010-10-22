@@ -30,9 +30,11 @@ gui_glade_files = 	\
 		ms2-e-3.x-corrections_misc.glade \
 		ms2-e-3.x-crank_idle_warmup.glade \
 		ms2-e-3.x-debugging.glade \
+		ms2-e-3.0.3v-ego_rev.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
 		ms2-e-3.x-nitrous_staging_orfc.glade \
+		ms2-e-3.0.3v-nitrous_staging_orfc.glade \
 		ms2-e-3.x-noise_lag.glade \
 		ms2-e-3.x-remote_outputs.glade \
 		ms2-e-3.x-sequential.glade \
@@ -125,9 +127,12 @@ gui_in_files = 	\
 		ms2-e-3.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.x-debugging.datamap.in \
 		ms2-e-3.x-ego_rev.datamap.in \
+		ms2-e-3.0.3v-ego_rev.datamap.in \
 		ms2-e-3.x-globals.datamap.in \
 		ms2-e-3.x-ignition.datamap.in \
+		ms2-e-3.0.3v-ignition.datamap.in \
 		ms2-e-3.x-inj_timing_6x6x3.datamap.in \
+		ms2-e-3.0.3v-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.x-local_outputs.datamap.in \
 		ms2-e-3.x-nitrous_staging_orfc.datamap.in \
 		ms2-e-3.x-noise_lag.datamap.in \

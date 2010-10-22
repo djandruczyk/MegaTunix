@@ -499,6 +499,14 @@ raw_upper=10
 bind_to_list=ego_ctrl
 _tooltip=See MS-2 Extra Manuals
 
+[orfc_rpm_lower_entry]
+keys=page,size,offset,raw_upper,tooltip
+page=1
+size=_U16_
+offset=849
+raw_upper=15000
+_tooltip=See MS-2 Extra Manuals
+
 [no2_enable_above_rpm_entry]
 keys=offset,size,raw_lower,raw_upper,tooltip
 size=_U16_

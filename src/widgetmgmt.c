@@ -160,7 +160,7 @@ void alter_widget_state(gpointer key, gpointer data)
 	gchar ** groups = NULL;
 	gint num_groups = 0;
 	gint i = 0;
-	gpointer value = 0;
+	gboolean value = FALSE;
 	gboolean state = FALSE;
 	MatchType type = AND;
 	extern GHashTable *widget_group_states;
@@ -183,10 +183,15 @@ void alter_widget_state(gpointer key, gpointer data)
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/
 	for (i=0;i<num_groups;i++)
 	{
-		value = g_hash_table_lookup(widget_group_states,groups[i]);
+//		if (groups[i][0] == '!')
+//		{
+//			value = !(GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]+1);
+//		}
+//		else
+			value = (GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]);
 		if (type == AND)
 		{
-			if ((GBOOLEAN)value == FALSE)
+			if (value == FALSE)
 			{
 				state = FALSE;
 				break;
@@ -194,7 +199,7 @@ void alter_widget_state(gpointer key, gpointer data)
 		}
 		else if (type == OR)
 		{
-			if ((GBOOLEAN)value == TRUE)
+			if (value == TRUE)
 			{
 				state = TRUE;
 				break;

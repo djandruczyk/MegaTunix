@@ -3426,6 +3426,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	gchar **choices = NULL;
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
+	gchar * tmpbuf = NULL;
 	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
@@ -3446,7 +3447,12 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	state = FALSE;
 	for (i=0;i<num_groups;i++)
 	{
-/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[i]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
+
 		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
@@ -3457,7 +3463,11 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	state = new_state;
 	for (i=0;i<num_groups;i++)
 	{
-/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		/*		printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[i]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
 		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 	}
@@ -3488,6 +3498,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	gchar **choices = NULL;
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
+	gchar * tmpbuf = NULL;
 	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
@@ -3517,6 +3528,10 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 		for (j=0;j<num_groups;j++)
 		{
 			/*printf("setting all widgets in group %s to state %i\n\n",groups[j],state);*/
+			tmpbuf = g_strdup_printf("!%s",groups[j]);
+			g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+			g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+			g_free(tmpbuf);
 			g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 			g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 		}
@@ -3529,6 +3544,10 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	for (j=0;j<num_groups;j++)
 	{
 		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[j]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
 		g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
 		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
 	}
