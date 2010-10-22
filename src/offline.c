@@ -38,8 +38,8 @@
 #include <widgetmgmt.h>
 
 
-gchar * offline_firmware_choice = NULL;
 volatile gboolean offline = FALSE;
+extern gconstpointer *global_data;
 
 
 /*!
@@ -221,11 +221,11 @@ gchar * present_firmware_choices()
 	gint minor = 0;
 	guint i = 0;
 	gint result = 0;
+	extern gconstpointer *global_data;
 
-	extern gchar * offline_firmware_choice;
 
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"),&classes);
+	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
@@ -347,7 +347,7 @@ gchar * present_firmware_choices()
 		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
 	else
 		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
-	
+
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
 
@@ -364,7 +364,7 @@ gchar * present_firmware_choices()
 	{
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-			return offline_firmware_choice;
+			return DATA_GET(global_data,"offline_firmware_choice");
 			break;
 		default:
 			return NULL;

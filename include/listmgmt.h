@@ -15,12 +15,15 @@
 #define __LISTMGMT_H__
 
 #include <gtk/gtk.h>
+#include <firmware.h>
 
 typedef struct _ListElement ListElement;
 struct _ListElement 
 {
-	gchar *filename;	/* Filename  of interrogation profile */
+	gchar *filename;	/* Filename */
+	gchar *dirname;		/* Dirname */
 	gchar *name;		/* Shortname in choice box */
+	gint baud;		/* Random data */
 };
 
 /* Prototypes */

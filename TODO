@@ -1,4 +1,21 @@
 
+Personality chooser:
+
+MS-1 (9600 baud) 
+MS-2 (115200 baud)
+FreeEMS (??? baud)
+Other (??? baud)
+
+Choice determine's serial port speed, interrogation tests, and
+comm.xml choice
+
+port speed and interrogation tests are critical, comm.xml could in theory
+be picked up from the interrogation result in the case of same family
+but semi-conflicting API's
+
+
+
+
 Add full MS-II support including CAN submodules (requires internal core 
 modifications to handle the arrays for CAN controls.
  - Update: feb '08  

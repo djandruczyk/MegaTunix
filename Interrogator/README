@@ -1,6 +1,9 @@
 This README describes the contents of this dir and their file structure.
 
-Last Edited, Feb 27th 2005
+The comm.xml and test files have been moved to Per ECU family dirs under
+the Profiles dir
+
+Last Edited, Oct 2010
 
 	Inside this dir "Interrogator", contains two files, this README
 and a "tests" file.  The tests file is laid out in .ini file format using 

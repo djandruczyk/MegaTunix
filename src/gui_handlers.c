@@ -288,7 +288,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0; 
 	gchar * tmpbuf = NULL;
 	extern gint preferred_delimiter;
-	extern gchar *offline_firmware_choice;
 	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
 	static GtkSettings *settings = NULL;
@@ -315,9 +314,12 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
-				if(offline_firmware_choice)
-					g_free(offline_firmware_choice);
-				offline_firmware_choice = g_strdup(OBJ_GET(widget,"filename"));	
+				DATA_SET(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")));
+				break;
+			case ECU_PERSONA:
+				DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(((ListElement *)OBJ_GET(widget,"ecu_persona"))->baud));
+				DATA_SET(global_data,"ecu_dirname", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->dirname));
+				DATA_SET(global_data,"ecu_family", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->filename));
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");

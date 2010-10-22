@@ -173,6 +173,7 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 {
 	gchar *pathstub = NULL;
 	gchar *path = NULL;
+	gchar *dirpath = NULL;
 	gchar *parent = NULL;
 	gchar *list = NULL;
 	gchar * filename = NULL;
@@ -199,11 +200,14 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
-		if (!g_file_test(filename,G_FILE_TEST_IS_DIR))
+		dirpath = g_build_filename(path,filename,NULL);
+		if (!g_file_test(dirpath,G_FILE_TEST_IS_DIR))
 		{
 			filename = (gchar *)g_dir_read_name(dir);
+			g_free(dirpath);
 			continue;
 		}
+		g_free(dirpath);
 
 		/* Create name of file and store temporarily */
 		if (!list)
@@ -247,11 +251,14 @@ syspath:
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
-		if (!g_file_test(filename,G_FILE_TEST_IS_DIR))
+		dirpath = g_build_filename(path,filename,NULL);
+		if (!g_file_test(dirpath,G_FILE_TEST_IS_DIR))
 		{
 			filename = (gchar *)g_dir_read_name(dir);
+			g_free(dirpath);
 			continue;
 		}
+		g_free(dirpath);
 
 		/* Create name of file and store temporarily */
 		if (!list)

@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <init.h>
 #include <interrogate.h>
+#include <listmgmt.h>
 #include <lookuptables.h>
 #include <mode_select.h>
 #include <mtxmatheval.h>
@@ -1086,6 +1087,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
  */
 GArray * validate_and_load_tests(GHashTable **tests_hash)
 {
+	extern gconstpointer *global_data;
 	ConfigFile *cfgfile;
 	GArray * tests = NULL;
 	Detection_Test *test = NULL;
@@ -1100,7 +1102,7 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
 	gint i = 0;
 	gint j = 0;
 
-	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"tests",NULL),NULL);
+	filename = get_file(g_build_filename(DATA_GET(global_data,"ecu_dirname"),"tests.cfg",NULL),NULL);
 	if (!filename)
 		return NULL;
 

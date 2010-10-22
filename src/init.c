@@ -112,7 +112,6 @@ void init(void)
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,g_free);
-	DATA_SET(global_data,"baudrate",GINT_TO_POINTER(9600));
 	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
 	DATA_SET_FULL(global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
 	commands = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_cmd_free);
@@ -262,8 +261,6 @@ gboolean read_config(void)
 
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
-		if (cfg_read_int(cfgfile, "Serial", "baudrate", &tmpi))
-			DATA_SET(global_data,"baudrate",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Logviewer", "zoom", &tmpi))
 			DATA_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
 		read_logviewer_defaults(cfgfile);
@@ -477,7 +474,6 @@ void save_config(void)
 				(GBOOLEAN)DATA_GET(global_data,"autodetect_port"));
 	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
-	cfg_write_int(cfgfile, "Serial", "baudrate", (GINT)DATA_GET(global_data,"baudrate"));
 			
 	cfg_write_int(cfgfile, "Logviewer", "zoom", (GINT)DATA_GET(global_data,"lv_zoom"));
 	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) DATA_GET(global_data,"lv_scroll_delay"));

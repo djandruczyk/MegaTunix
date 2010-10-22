@@ -107,10 +107,6 @@ gint main(gint argc, gchar ** argv)
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
 
-	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"comm.xml",NULL),NULL);
-	load_comm_xml(filename);
-	g_free(filename);
-
 	/* Create Queue to listen for commands */
 	io_data_queue = g_async_queue_new();
 	slave_msg_queue = g_async_queue_new();
@@ -136,7 +132,7 @@ gint main(gint argc, gchar ** argv)
 	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
-	gdk_threads_add_timeout(500,(GSourceFunc)early_interrogation,NULL);
+	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
 	ready = TRUE;
 	gtk_main();
