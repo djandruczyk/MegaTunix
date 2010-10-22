@@ -32,7 +32,7 @@
  the list as a vector char array. (free with g_strfreev)
  \param pathstub (gchar *) partial path to search for files
  \param extension (gchar *) extension to search for 
- \param class (FileClass) enumeration pointer to array or classes for each
+ \param class (FileClass) enumeration pointer to array of classes for each
  file found
  \returns vector char array of filenames or NULL if none found
  */
@@ -89,7 +89,7 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 		}
 		else
 			g_array_append_val(*classes,tmp);
-	
+
 
 		filename = (gchar *)g_dir_read_name(dir);
 
@@ -147,6 +147,138 @@ syspath:
 finish:
 	g_free(pathstub);
 	g_free(extension);
+	if (!list)
+	{
+		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
+		return NULL;
+	}
+	vector = g_strsplit(list,",",0);
+	g_free(list);
+	return (vector);
+}
+
+
+/*!
+ \brief get_dirs() returns a list of dirs located at the pathstub passed
+ this function will first search starting from ~/.MegaTunix+pathstub and
+ then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
+ the list as a vector char array. (free with g_strfreev)
+ \param pathstub (gchar *) partial path to search for files
+ \param extension (gchar *) extension to search for 
+ \param class (FileClass) enumeration pointer to array of classes for each
+ file found
+ \returns vector char array of filenames or NULL if none found
+ */
+gchar ** get_dirs(gchar *input, GArray **classes)
+{
+	gchar *pathstub = NULL;
+	gchar *path = NULL;
+	gchar *parent = NULL;
+	gchar *list = NULL;
+	gchar * filename = NULL;
+	gchar **vector = NULL;
+	gchar * tmpbuf = NULL;
+	FileClass tmp = PERSONAL;
+	GDir *dir = NULL;
+
+
+	if (!g_str_has_suffix(input, PSEP))
+		pathstub = g_strconcat(input,PSEP,NULL);
+	else
+		pathstub = g_strdup(input);
+	g_free(input);
+
+	/* Personal files first */
+	path = g_build_filename(get_home(), ".MegaTunix",pathstub,NULL);
+	dir = g_dir_open(path,0,NULL);
+	if (!dir)
+	{
+		g_free(path);
+		goto syspath;
+	}
+	filename = (gchar *)g_dir_read_name(dir);
+	while (filename != NULL)
+	{
+		if (!g_file_test(filename,G_FILE_TEST_IS_DIR))
+		{
+			filename = (gchar *)g_dir_read_name(dir);
+			continue;
+		}
+
+		/* Create name of file and store temporarily */
+		if (!list)
+			list = g_strdup_printf("%s%s",path,filename);
+		else
+		{
+			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			g_free(list);
+			list = tmpbuf;
+		}
+		tmp = PERSONAL;
+		if (!*classes)
+		{
+			*classes = g_array_new(FALSE,TRUE,sizeof(FileClass));
+			g_array_append_val(*classes,tmp);
+		}
+		else
+			g_array_append_val(*classes,tmp);
+
+
+		filename = (gchar *)g_dir_read_name(dir);
+
+	}
+	g_free(path);
+	g_dir_close(dir);
+
+syspath:
+#ifdef __WIN32__
+	parent = g_build_path(PSEP,get_home(),"dist",NULL);
+#else
+	parent = g_strdup(DATA_DIR);
+#endif
+	path = g_build_filename(parent,pathstub,NULL);
+	g_free(parent);
+	dir = g_dir_open(path,0,NULL);
+	if (!dir)
+	{
+		g_free(path);
+		goto finish;
+	}
+	filename = (gchar *)g_dir_read_name(dir);
+	while (filename != NULL)
+	{
+		if (!g_file_test(filename,G_FILE_TEST_IS_DIR))
+		{
+			filename = (gchar *)g_dir_read_name(dir);
+			continue;
+		}
+
+		/* Create name of file and store temporarily */
+		if (!list)
+			list = g_strdup_printf("%s%s",path,filename);
+		else
+		{
+			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			g_free(list);
+			list = tmpbuf;
+		}
+		tmp = SYSTEM;
+		if (!*classes)
+		{
+			*classes = g_array_new(FALSE,TRUE,sizeof(FileClass));
+			g_array_append_val(*classes,tmp);
+		}
+		else
+			g_array_append_val(*classes,tmp);
+
+
+		filename = (gchar *)g_dir_read_name(dir);
+	}
+	g_free(path);
+	g_dir_close(dir);
+
+finish:
+	g_free(pathstub);
 	if (!list)
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
@@ -506,6 +638,6 @@ gchar * get_home()
 	else
 		return (g_get_current_dir());
 #else
-	return(g_get_home_dir());
+	return((gchar *)g_get_home_dir());
 #endif
 }
