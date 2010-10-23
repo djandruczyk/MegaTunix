@@ -4,7 +4,7 @@ profiles_in = \
 	B_and_G_1.x.prof.in \
 	B_and_G_2.0-3.01.prof.in \
 	Dualtable-1.02.prof.in \
-	SquirtnSpark-Extra-HR-029x.prof.in \
+	SquirtnSpark-Extra-HR-08x.prof.in \
 	SquirtnSpark-Extra-HR-010a.prof.in \
 	SquirtnSpark-Extra-HR-011x.prof.in \
 	SquirtnSpark-Extra-HR-011d.prof.in \

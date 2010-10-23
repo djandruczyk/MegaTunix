@@ -3,7 +3,7 @@ major=1
 minor=6
 
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra Highres 029x
+name=MegaSquirtnSpark-Extra_Highres_08x
 
 [parameters]
 SignatureVia=get_signature
@@ -553,7 +553,7 @@ MS-I_VEconst=_COUNT_,189
 MS_Signature=_SUBMATCH_,format hr_0
 
 [gui]
-RealtimeMapFile=MSnS-Extra-HR-029x
+RealtimeMapFile=MSnS-Extra-HR-08x
 SliderMapFile=MSnS-Extra-firmware
 RuntimeTextMapFile=MSnS-Extra-firmware
 StatusMapFile=MSnS-Extra-firmware
