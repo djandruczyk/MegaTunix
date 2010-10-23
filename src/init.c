@@ -111,6 +111,7 @@ void init(void)
 	DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
+	DATA_SET(global_data,"previous_ecu_family",g_strdup("MS-1"));
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,g_free);
 	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
 	DATA_SET_FULL(global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
@@ -175,6 +176,11 @@ gboolean read_config(void)
 			DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
 //		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
 //			DATA_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
+		if(cfg_read_string(cfgfile, "Global", "Previous_ECU_Family", &tmpbuf))
+		{
+			DATA_SET(global_data,"previous_ecu_family",g_strdup(tmpbuf));
+			cleanup(tmpbuf);
+		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
 			DATA_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
@@ -336,6 +342,7 @@ void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"temp_units"));
+	cfg_write_string(cfgfile, "Global", "Previous_ECU_Family",DATA_GET(global_data,"ecu_family"));
 	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)DATA_GET(global_data,"rtslider_fps"));
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));

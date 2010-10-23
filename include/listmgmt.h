@@ -24,6 +24,7 @@ struct _ListElement
 	gchar *dirname;		/* Dirname */
 	gchar *name;		/* Shortname in choice box */
 	gint baud;		/* Random data */
+	gboolean def;		/* Default choice */
 };
 
 /* Prototypes */

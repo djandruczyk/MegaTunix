@@ -380,6 +380,8 @@ gboolean personality_choice()
 		cfg_read_int(cfgfile,"Family","baud",&element->baud);
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
+		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"previous_ecu_family")) == 0)
+			element->def = TRUE;
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 			p_list = g_list_append(p_list,(gpointer)element);
@@ -443,6 +445,11 @@ gboolean personality_choice()
 					G_CALLBACK(toggle_button_handler),
 					NULL);
 			gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
+			if (element->def)
+			{
+				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+				gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
+			}
 		}
 
 		sep = gtk_hseparator_new();
@@ -478,6 +485,11 @@ gboolean personality_choice()
 				G_CALLBACK(toggle_button_handler),
 				NULL);
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
+		if (element->def)
+		{
+			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
+		}
 	}
 
 	g_strfreev(dirs);
@@ -496,13 +508,14 @@ gboolean personality_choice()
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-			filename = g_build_filename(DATA_GET(global_data,"ecu_dirname"),"comm.xml",NULL);
+			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
+			printf("filename to load is %s\n",filename);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
 			break;
 		default:
-			filename = g_build_filename(DATA_GET(global_data,"ecu_dirname"),"comm.xml",NULL);
+			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
                         g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);

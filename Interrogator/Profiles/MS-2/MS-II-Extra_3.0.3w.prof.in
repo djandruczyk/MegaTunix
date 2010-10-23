@@ -3,7 +3,7 @@ major=1
 minor=6
 
 [interrogation_profile]
-name=MS-II-Extra V3.0.3v series
+name=MS-II-Extra V3.0.3w series
 
 [parameters]
 InterCharDelay=1
@@ -1950,10 +1950,10 @@ length=1024
 
 [interrogation]
 match_on=MS_VerNum
-MS_VerNum=_REGEX_,MS2Extra Serial303v
+MS_VerNum=_REGEX_,MS2Extra Serial303[vw]
 
 [gui]
-RealtimeMapFile=MS2-Extra-3.0.3v
+RealtimeMapFile=MS2-Extra-3.0.3w
 SliderMapFile=MS2-Extra-firmware
 RuntimeTextMapFile=MS2-Extra-firmware
 StatusMapFile=MS2-Extra-firmware
