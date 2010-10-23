@@ -337,6 +337,7 @@ EXPORT void reset_temps_pf(void)
 	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(DATA_GET(global_data,"temp_units"));
+	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 }
 
