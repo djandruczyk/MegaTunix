@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <comms_gui.h>
 #include <debugging.h>
@@ -21,6 +22,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <offline.h>
 #include <runtime_gui.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
@@ -29,6 +31,7 @@
 #include <stringmatch.h>
 #include <timeout_handlers.h>
 #include <threads.h>
+#include <widgetmgmt.h>
 
 GThread *realtime_id = NULL;
 gint playback_id = 0;
@@ -37,6 +40,7 @@ gint statuscounts_id = 0;
 static gint trigmon_id = 0;
 static gboolean restart_realtime = FALSE;
 
+static gboolean check_for_files(const gchar * path, const gchar *ext);
 
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
@@ -333,7 +337,6 @@ gboolean early_interrogation()
 gboolean personality_choice()
 {
 	GtkWidget *dialog = NULL;
-	GtkWidget *win = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *hbox = NULL;
 	GtkWidget *ebox = NULL;
@@ -353,6 +356,7 @@ gboolean personality_choice()
 	guint i = 0;
 	gint result = 0;
 	extern gconstpointer *global_data;
+	CmdLineArgs *args = DATA_GET(global_data,"args");
 
 	dirs = get_dirs(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),&classes);
 	if (!dirs)
@@ -393,13 +397,14 @@ gboolean personality_choice()
 	set_title(g_strdup(_("Choose an ECU family?")));
 	update_logbar("interr_view","warning",_("Prompting user for ECU family to interrogate...\n"),FALSE,FALSE,FALSE);
 
-	win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	dialog = gtk_dialog_new_with_buttons("Select ECU Personality",
-			GTK_WINDOW(win),
+			GTK_WINDOW(lookup_widget("main_window")),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
+			"Exit MegaTunix",
+			GTK_RESPONSE_CLOSE,
 			"Go Offline",
 			GTK_RESPONSE_CANCEL,
-			"Interrogate",
+			"Find my ECU",
 			GTK_RESPONSE_OK,
 			NULL);
 	vbox = gtk_vbox_new(TRUE,2);
@@ -423,6 +428,8 @@ gboolean personality_choice()
 			label = gtk_label_new(g_strdup(element->name));
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			button = gtk_radio_button_new(group);
+			if (!check_for_files (element->dirname,"prof"))
+				gtk_widget_set_sensitive(ebox,FALSE);
 			OBJ_SET(button,"ecu_persona",element);
 			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(ECU_PERSONA));
@@ -450,6 +457,8 @@ gboolean personality_choice()
 		label = gtk_label_new(g_strdup(element->name));
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
+		if (!check_for_files (element->dirname,"prof"))
+			gtk_widget_set_sensitive(ebox,FALSE);
 		OBJ_SET(button,"ecu_persona",element);
 		OBJ_SET(button,"handler",
 				GINT_TO_POINTER(ECU_PERSONA));
@@ -472,13 +481,16 @@ gboolean personality_choice()
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-	gtk_widget_destroy(win);
 	g_list_foreach(p_list,free_element,NULL);
 	g_list_foreach(s_list,free_element,NULL);
 	g_list_free(p_list);
 	g_list_free(s_list);
 	switch (result)
 	{
+		case GTK_RESPONSE_CLOSE:
+			args->be_quiet = TRUE;
+			leave(NULL,NULL);
+			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
 			filename = g_build_filename(DATA_GET(global_data,"ecu_dirname"),"comm.xml",NULL);
@@ -487,8 +499,33 @@ gboolean personality_choice()
 			io_cmd("interrogation",NULL);
 			break;
 		default:
+			filename = g_build_filename(DATA_GET(global_data,"ecu_dirname"),"comm.xml",NULL);
+			load_comm_xml(filename);
+			g_free(filename);
+                        g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 			return FALSE;
 	}
 
+	return FALSE;
+}
+
+
+gboolean check_for_files(const gchar * path, const gchar *ext)
+{
+	GDir * dir = NULL;
+	const gchar * file = NULL;
+
+	dir=g_dir_open(path,0,NULL);
+	if (!dir)
+		return FALSE;
+	while ((file = g_dir_read_name(dir)))
+	{
+		if (g_str_has_suffix(file,ext))
+		{
+			g_dir_close(dir);
+			return TRUE;
+		}
+	}
+	g_dir_close(dir);
 	return FALSE;
 }

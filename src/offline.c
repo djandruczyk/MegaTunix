@@ -202,7 +202,6 @@ gboolean set_offline_mode(void)
 gchar * present_firmware_choices()
 {
 	gchar ** filenames = NULL;
-	GtkWidget *dialog_window = NULL;
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *hbox = NULL;
@@ -225,7 +224,7 @@ gchar * present_firmware_choices()
 
 
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
+	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
@@ -272,10 +271,8 @@ gchar * present_firmware_choices()
 	s_list = g_list_sort(s_list,list_sort);
 
 
-	dialog_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
 	dialog = gtk_dialog_new_with_buttons("Select Firmware",
-			GTK_WINDOW(dialog_window),
+			GTK_WINDOW(lookup_widget("main_window")),
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			"Abort",
 			GTK_RESPONSE_CANCEL,
@@ -355,7 +352,6 @@ gchar * present_firmware_choices()
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-	gtk_widget_destroy(dialog_window);
 	g_list_foreach(p_list,free_element,NULL);
 	g_list_foreach(s_list,free_element,NULL);
 	g_list_free(p_list);
