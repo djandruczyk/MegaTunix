@@ -425,7 +425,7 @@ void *serial_repair_thread(gpointer data)
 					}
 					else
 					{  
-						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed for both baud rates,  not ECU found, closing port %s.\n",vector[i]));
+						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed, no ECU found, closing port %s.\n",vector[i]));
 						close_serial();
 						unlock_serial();
 						/*g_usleep(100000);*/

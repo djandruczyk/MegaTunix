@@ -129,7 +129,9 @@ EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	if (leaving)
 		return TRUE;
 
-	if (!args->be_quiet)
+	printf("interrogated %i\n",interrogated);
+
+	if ((!args->be_quiet) && (interrogated))
 	{
 		might_be_leaving = TRUE;
 		if(!prompt_r_u_sure())

@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <args.h>
 #include <config.h>
 #include <comms_gui.h>
 #include <debugging.h>
@@ -356,7 +355,6 @@ gboolean personality_choice()
 	guint i = 0;
 	gint result = 0;
 	extern gconstpointer *global_data;
-	CmdLineArgs *args = DATA_GET(global_data,"args");
 
 	dirs = get_dirs(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),&classes);
 	if (!dirs)
@@ -427,9 +425,16 @@ gboolean personality_choice()
 			gtk_container_add(GTK_CONTAINER(ebox),hbox);
 			label = gtk_label_new(g_strdup(element->name));
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
-			button = gtk_radio_button_new(group);
 			if (!check_for_files (element->dirname,"prof"))
+			{
 				gtk_widget_set_sensitive(ebox,FALSE);
+				button = gtk_radio_button_new(NULL);
+			}
+			else
+			{
+				button = gtk_radio_button_new(group);
+				group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+			}
 			OBJ_SET(button,"ecu_persona",element);
 			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(ECU_PERSONA));
@@ -438,7 +443,6 @@ gboolean personality_choice()
 					G_CALLBACK(toggle_button_handler),
 					NULL);
 			gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
-			group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 		}
 
 		sep = gtk_hseparator_new();
@@ -456,9 +460,16 @@ gboolean personality_choice()
 		gtk_container_add(GTK_CONTAINER(ebox),hbox);
 		label = gtk_label_new(g_strdup(element->name));
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
-		button = gtk_radio_button_new(group);
 		if (!check_for_files (element->dirname,"prof"))
+		{
 			gtk_widget_set_sensitive(ebox,FALSE);
+			button = gtk_radio_button_new(NULL);
+		}
+		else
+		{
+			button = gtk_radio_button_new(group);
+			group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		}
 		OBJ_SET(button,"ecu_persona",element);
 		OBJ_SET(button,"handler",
 				GINT_TO_POINTER(ECU_PERSONA));
@@ -467,18 +478,11 @@ gboolean personality_choice()
 				G_CALLBACK(toggle_button_handler),
 				NULL);
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
-		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	}
-	if (i==1)
-		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
-	else
-		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	g_strfreev(dirs);
 	g_array_free(classes,TRUE);
-
 	gtk_widget_show_all(dialog);
-
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 	g_list_foreach(p_list,free_element,NULL);
@@ -488,7 +492,6 @@ gboolean personality_choice()
 	switch (result)
 	{
 		case GTK_RESPONSE_CLOSE:
-			args->be_quiet = TRUE;
 			leave(NULL,NULL);
 			break;
 		case GTK_RESPONSE_ACCEPT:

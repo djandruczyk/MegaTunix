@@ -80,6 +80,7 @@ gint comms_test()
 
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 11920)
 	{
+		/*printf("MS-1 comms test\n");*/
 		if (!write_wrapper(serial_params->fd,"C",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
@@ -88,10 +89,11 @@ gint comms_test()
 			connected = FALSE;
 			return connected;
 		}
-		result = read_data(-1,NULL,FALSE);
+		result = read_data(1,NULL,FALSE);
 	}
 	else
 	{
+		/*printf("MS-2 comms test\n");*/
 		if (!write_wrapper(serial_params->fd,"c",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);

@@ -281,9 +281,9 @@ void warn_user(const gchar *message)
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 			
 	if (!interrogated)
-		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,(const gchar *)"_Close", GTK_RESPONSE_CLOSE,NULL);
+		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
 	else
-		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CLOSE,NULL);
+		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CANCEL,NULL);
 			
 
 	g_signal_connect (G_OBJECT(warning_dialog),
@@ -306,6 +306,8 @@ gboolean get_response(GtkWidget *widget, gpointer data)
 		g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (response == GTK_RESPONSE_CLOSE)
+		leave(NULL,NULL);
+	if (response == GTK_RESPONSE_CANCEL)
 		close_dialog(widget,NULL);
 	return TRUE;
 }
