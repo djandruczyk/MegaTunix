@@ -2049,7 +2049,7 @@ EXPORT void update_ve_const_pf()
 		firmware->table_params[i]->color_update = FALSE;
 
 	paused_handlers = FALSE;
-//	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
+	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
 	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 	return;
