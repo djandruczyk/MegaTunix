@@ -3,7 +3,7 @@ major=1
 minor=6
 
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra_Highres_08x
+name=MegaSquirtnSpark-Extra Highres 08x
 
 [parameters]
 SignatureVia=get_signature
