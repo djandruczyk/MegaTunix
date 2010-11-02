@@ -39,7 +39,6 @@ gint statuscounts_id = 0;
 static gint trigmon_id = 0;
 static gboolean restart_realtime = FALSE;
 
-static gboolean check_for_files(const gchar * path, const gchar *ext);
 
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
@@ -509,7 +508,6 @@ gboolean personality_choice()
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
-			printf("filename to load is %s\n",filename);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
@@ -525,23 +523,3 @@ gboolean personality_choice()
 	return FALSE;
 }
 
-
-gboolean check_for_files(const gchar * path, const gchar *ext)
-{
-	GDir * dir = NULL;
-	const gchar * file = NULL;
-
-	dir=g_dir_open(path,0,NULL);
-	if (!dir)
-		return FALSE;
-	while ((file = g_dir_read_name(dir)))
-	{
-		if (g_str_has_suffix(file,ext))
-		{
-			g_dir_close(dir);
-			return TRUE;
-		}
-	}
-	g_dir_close(dir);
-	return FALSE;
-}

@@ -648,3 +648,24 @@ gchar * get_home()
 	return((gchar *)g_get_home_dir());
 #endif
 }
+
+gboolean check_for_files(const gchar * path, const gchar *ext)
+{
+	GDir * dir = NULL;
+	const gchar * file = NULL;
+
+	dir=g_dir_open(path,0,NULL);
+	if (!dir)
+		return FALSE;
+	while ((file = g_dir_read_name(dir)))
+	{
+		if (g_str_has_suffix(file,ext))
+		{
+			g_dir_close(dir);
+			return TRUE;
+		}
+	}
+	g_dir_close(dir);
+	return FALSE;
+}
+

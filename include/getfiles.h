@@ -55,6 +55,8 @@ gchar * get_file(gchar *, gchar *);
 gchar * choose_file(MtxFileIO *);
 void free_mtxfileio(MtxFileIO *);
 void getfiles_errmsg(const gchar * );
+gboolean check_for_files(const gchar *, const gchar *);
+
 /* Prototypes */
 
 #endif
