@@ -95,7 +95,7 @@ EXPORT void load_rt_text_pf()
 	y = (GINT)DATA_GET(global_data,"rtt_y_origin");
 	gtk_window_move(GTK_WINDOW(window),x,y);
 	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
-	g_object_set(window, "resizable", FALSE, NULL);
+	g_object_set(window, "resizable", TRUE, NULL);
 	parent = glade_xml_get_widget(xml,"rtt_vbox");
 	glade_xml_signal_autoconnect(xml);
 
@@ -436,13 +436,13 @@ void setup_rtt_treeview(GtkWidget *treeview)
 	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
-	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
+//	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
-	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
+//	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "markup", COL_RTT_DATA,  NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
