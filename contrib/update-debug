@@ -1,0 +1,8 @@
+#!/bin/bash
+
+git pull && ./autogen.sh --enable-debug && make clean && make -j2 
+
+sudo make install
+
+echo "To get valid debug info, cd src gdb ./megatunix"
+echo "Type \"run --g-fatal-warnings\""
