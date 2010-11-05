@@ -2447,7 +2447,7 @@
                         <child>
                           <widget class="GtkLabel" id="label41">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Cancel</property>
+                            <property name="label" translatable="yes">Close</property>
                             <property name="use_underline">True</property>
                           </widget>
                           <packing>
@@ -3776,7 +3776,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                             <child>
                               <widget class="GtkLabel" id="label96">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Cancel</property>
+                                <property name="label" translatable="yes">Close</property>
                                 <property name="use_underline">True</property>
                               </widget>
                               <packing>

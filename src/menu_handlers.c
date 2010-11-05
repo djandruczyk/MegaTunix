@@ -13,6 +13,8 @@
 #include <config.h>
 #include <defines.h>
 #include <afr_calibrate.h>
+#include <datamgmt.h>
+#include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
 #include <fileio.h>
@@ -25,9 +27,7 @@
 #include <threads.h>
 #include <vex_support.h>
 #include <widgetmgmt.h>
-#include <debugging.h>
 #include <mtxmatheval.h>
-#include <datamgmt.h>
 
 extern gconstpointer *global_data;
 static struct 
@@ -69,10 +69,15 @@ EXPORT void setup_menu_handlers_pf()
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!xml) || (leaving))
 		return;
-	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
 	gdk_threads_enter();
+	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
 	gtk_widget_set_sensitive(item,TRUE);
 	
+	if (firmware->capabilities & MS1)
+	{
+		item = glade_xml_get_widget(xml,"lookuptables_setup_menuitem");
+		gtk_widget_set_sensitive(item,TRUE);
+	}
 	if (firmware->capabilities & MS2)
 	{
 		item = glade_xml_get_widget(xml,"show_table_generator_menuitem");
@@ -316,6 +321,7 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 		else
 			OBJ_SET(item,"source",g_strdup("tpsADC"));
 		OBJ_SET(item,"dest_widget",g_strdup("tpsMax_entry"));
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
@@ -407,6 +413,7 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 		register_widget("thermister_celsius_radiobutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),FALSE);
 		g_signal_emit_by_name(item,"toggled",NULL);
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
@@ -471,6 +478,7 @@ EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"raw_upper",g_strdup("99"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
@@ -619,6 +627,7 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
 		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
 		bind_to_lists(item,"burners");
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 
 		return TRUE;
@@ -653,6 +662,7 @@ EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
 
 
 	g_free(text);
+	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 	gtk_widget_show_all(window);
 
 
@@ -725,6 +735,7 @@ EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
 		bind_to_lists(item,"burners");
 		/* Force them to update */
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
@@ -794,6 +805,7 @@ EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data
 			return TRUE;	// panic
 		}
 
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}

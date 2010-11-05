@@ -25,6 +25,7 @@
 #include <lookuptables.h>
 #include <stdlib.h>
 #include <timeout_handlers.h>
+#include <widgetmgmt.h>
 
 static gboolean ltc_visible = FALSE;
 extern gconstpointer *global_data;
@@ -620,6 +621,7 @@ EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 		*/
+		gtk_window_set_transient_for(GTK_WINDOW(lookuptables_config_window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
 		return TRUE;
