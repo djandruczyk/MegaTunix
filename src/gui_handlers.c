@@ -2973,7 +2973,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
+EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
 {
 	gint count = 0;
 	gint i = 0;

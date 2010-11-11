@@ -13,6 +13,8 @@ Gui/main.glade
 Gui/memviewer.glade
 Gui/ms2-accel.glade
 Gui/ms2-alpha-n_6x6x1.glade
+Gui/ms2-e-3.0.3v-ego_rev.glade
+Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade
 Gui/ms2-e-3.x-boost_knock_launch.glade
 Gui/ms2-e-3.x-can.glade
 Gui/ms2-e-3.x-corrections_misc.glade
@@ -46,7 +48,6 @@ Gui/ms2-misc-fuel.glade
 Gui/ms2-runtime.glade
 Gui/ms2-user_outputs.glade
 Gui/ms2-warmup.glade
-Gui/ms2-xtau.glade
 Gui/msns-e-accelwizard.glade
 Gui/msns-e-advanced.glade
 Gui/msns-e-boost-knock.glade
@@ -177,7 +178,6 @@ gaugedesigner/tblocks.c
 gaugedesigner/tgroups.c
 gaugedesigner/warnings.c
 gaugedesigner/a_range.glade
-gaugedesigner/gaugedesigner.glade
 gaugedesigner/main.glade
 gaugedesigner/polygon.glade
 gaugedesigner/tblock.glade
@@ -205,5 +205,4 @@ msloader/main.c
 msloader/ms1_loader.c
 msloader/ms2_loader.c
 msloader/mtxloader.c
-msloader/thermistor.c
 msloader/winserialio.c

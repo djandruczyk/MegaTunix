@@ -237,8 +237,8 @@ EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *label;
 	GtkWidget *scale;
 	GtkWidget *drawing_area;
-	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
+	GtkObject * object = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -448,15 +448,15 @@ EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	drawing_area = gtk_drawing_area_new();
+	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
+	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
+	gtk_widget_show(drawing_area);
+
 	gl_config = get_gl_config();
 	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
 			TRUE, GDK_GL_RGBA_TYPE);
-
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
-	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
-
-	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
 
 	gtk_widget_add_events (drawing_area,
 			GDK_BUTTON_MOTION_MASK	|
@@ -464,6 +464,7 @@ EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_KEY_PRESS_MASK      |
 			GDK_KEY_RELEASE_MASK    |
 			GDK_VISIBILITY_NOTIFY_MASK);
+
 
 
 	/* Connect signal handlers to the drawing area */
@@ -687,9 +688,16 @@ GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
+#ifdef __WIN32__
+	/* GtkGLEXT Win32 is broken, this Sort of makes it work */
+	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
+			GDK_GL_MODE_DEPTH |
+			GDK_GL_MODE_SINGLE);
+#else
 	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_DEPTH |
 			GDK_GL_MODE_DOUBLE);
+#endif
 	if (gl_config == NULL)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));

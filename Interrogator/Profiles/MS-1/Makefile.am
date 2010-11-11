@@ -18,6 +18,6 @@ profiles_DATA = details.cfg \
 		$(profiles_in:.prof.in=.prof)
 @INTLTOOL_PROF_RULE@
 
-EXTRA_DIST = details.cfg tests.cfg comm.xml $(profiles_in) README
+EXTRA_DIST = details.cfg tests.cfg comm.xml $(profiles_in)
 
 CLEANFILES = *.h *.prof

@@ -86,7 +86,8 @@ gint main(gint argc, gchar ** argv)
 	gtk_init(&argc, &argv);
 	glade_init();
 
-	gl_ability = gdk_gl_init_check(&argc, &argv);
+	gdk_gl_init_check(&argc, &argv);
+	gl_ability = gtk_gl_init_check(&argc, &argv);
 
 	/* For testing if gettext works
 	printf(_("Hello World!\n"));

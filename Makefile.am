@@ -27,7 +27,9 @@ check-gettext:
 	"'checking whether to use NLS... yes'!" ; exit 1 ; fi
 
 update-po: check-gettext
-	(rm $(srcdir)/po/POTFILES.in.2 ; \
+	(if [ -f $(srcdir)/po/POTFILES.in.2 ] ; then \
+	 	rm -f $(srcdir)/po/POTFILES.in.2 ; \
+	 fi ; \
 	  for dir in $$(echo Gui src dashdesigner gaugedesigner widgets msloader); do \
 		find $$dir -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 		find $$dir -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \

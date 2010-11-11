@@ -76,7 +76,7 @@ EXPORT void setup_menu_handlers_pf()
 	if (firmware->capabilities & MS1)
 	{
 		item = glade_xml_get_widget(xml,"lookuptables_setup_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
+//		gtk_widget_set_sensitive(item,TRUE);
 	}
 	if (firmware->capabilities & MS2)
 	{

@@ -3,7 +3,7 @@ megatunix (0.9.23) stable; urgency=low
   * converted to GDataSet from GObject for many internal data storage sections
   * port to GtkBuilder format from glade for gauge/dashdesigners
 
- -- David Andruczyk <djandruczyk@yahoo.com>  Sat, 16 Oct 2010 12:02:08 -0500
+ -- David Andruczyk <djandruczyk@yahoo.com>  Sun, 07 Nov 2010 14:02:08 -0500
 megatunix (0.9.22) stable; urgency=low
   * Dash issues resolver,  3.03u seq injector issue fixed, 3.03 alpha TTM
   fixed up

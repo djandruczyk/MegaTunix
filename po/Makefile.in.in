@@ -272,12 +272,13 @@ POTFILES: POTFILES.in
 	    && chmod a-w $@-t \
 	    && mv $@-t $@ )
 SPECIALS: SPECIALS.in
-	( rm -f $@-t $@ \
+	(rm -f $@-t $@ \
 	&& for i in `cat $(srcdir)/$@.in`; do \
 		intltool-extract --local --type="gettext/ini" "$(srcdir)/../$$i" ; done \
 	&& ls tmp >> $@-t \
 	&& chmod a-w $@-t \
-	&& mv $@-t $@ )
+	&& mv $@-t $@ \
+        && chmod 644 $@	)
 
 Makefile: Makefile.in.in ../config.status POTFILES
 	cd .. \
