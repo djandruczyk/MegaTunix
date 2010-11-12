@@ -161,7 +161,7 @@
                                             <property name="max_length">7</property>
                                             <property name="invisible_char">&#x25CF;</property>
                                             <property name="width_chars">7</property>
-                                            <signal name="changed" handler="entr_changed_handler"/>
+                                            <signal name="changed" handler="entry_changed_handler"/>
                                             <signal name="key_press_event" handler="key_event"/>
                                             <signal name="insert_text" handler="insert_text_handler"/>
                                             <signal name="focus_out_event" handler="focus_out_handler"/>

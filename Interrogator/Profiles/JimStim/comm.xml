@@ -114,7 +114,7 @@
 			<type>_WRITE_CMD_</type>
 			<base>Q</base>
 			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_NUM_REV_</helper_func_arg>
+			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>jimstim_veconst</name>
