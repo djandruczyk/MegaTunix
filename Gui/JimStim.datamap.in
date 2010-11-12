@@ -70,7 +70,8 @@ tooltip=Baud rate the JimStim will use on next powerup after burn,  NOTE, anythi
 #----- Entries ---------------------------------------------------------------
 
 [rpm_entry]
-keys=offset,size,tooltip
+keys=offset,size,raw_upper,tooltip
 offset=1
 size=_U16_
+raw_upper=65535
 tooltip=Commanded RPM
