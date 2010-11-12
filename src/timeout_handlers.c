@@ -519,7 +519,6 @@ gboolean personality_choice()
                         g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 			return FALSE;
 	}
-
 	return FALSE;
 }
 

@@ -81,7 +81,10 @@ EXPORT gboolean load_realtime_map_pf(void )
 
 	rtvars_loaded = FALSE;
 
-	if (!((interrogated) && ((connected) || (offline))))
+	if (offline)
+		return FALSE;
+
+	if ((!interrogated) && (connected))
 		return FALSE;
 
 	gdk_threads_enter();
