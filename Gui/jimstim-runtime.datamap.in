@@ -1,0 +1,84 @@
+[global]
+description=Object data map for JimStim Runtime Display
+_tab_name=_Runtime Display
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size
+page=0
+size=_U08_
+
+#----- Buttons ---------------------------------------------------------------
+
+[runtime_start_realtime_button]
+keys=handler
+handler=_START_REALTIME_
+
+[runtime_stop_realtime_button]
+keys=handler
+handler=_STOP_REALTIME_
+
+#------ Gui objects ---------------------------------------------------------
+
+[topframe]
+keys=tab_ident
+tab_ident=_RUNTIME_TAB_
+
+#------- Runtime Status Indicators ------------------------------------------
+
+#[runtime_cranking_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+#bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=2
+#
+#[runtime_running_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+#bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=1
+#
+#[runtime_warmup_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+#bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=8
+#
+#[runtime_ase_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+#bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=4
+#
+#[runtime_accel_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+#bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=16
+#
+#[runtime_decel_label]
+#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+#active_fg=red
+#inactive_fg=dim grey
+##bind_to_list=runtime_status
+#source=enginebit
+#bitval=1
+#bitmask=32
+

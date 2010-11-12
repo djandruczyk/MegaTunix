@@ -6,8 +6,8 @@ minor=6
 name=JimStim v2.x
 
 [parameters]
-TextVerVia=jimstim_get_textrev
-NumVerVia=get_numrev
+TextVerVia=get_textrev
+SignatureVia=get_signature
 RT_Command=jimstim_std_rtvars
 RT_total_bytes=22
 Get_All_Command=jimstim_read_all
@@ -37,8 +37,8 @@ SliderMapFile=JimStim-2.x-firmware
 RuntimeTextMapFile=JimStim-2.x-firmware
 StatusMapFile=JimStim-2.x-firmware
 
-LoadTabs=runtime,datalogging,logviewer,JimStim
-TabConfs=runtime,datalogging,logviewer,JimStim
+LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim
+TabConfs=jimstim-runtime,datalogging,logviewer,JimStim
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

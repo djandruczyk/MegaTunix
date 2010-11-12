@@ -109,7 +109,7 @@
 			<helper_func_arg>_SIGNATURE_</helper_func_arg>
 		</cmd>
 		<cmd>
-			<name>get_numrev</name>
+			<name>get_textrev</name>
 			<desc>Triggers the ecu to echo back it's version number</desc>
 			<type>_WRITE_CMD_</type>
 			<base>Q</base>

@@ -20,6 +20,7 @@ gui_glade_files = 	\
 		enrichments.glade \
 		error_status.glade \
 		inj_timing_6x6x3.glade \
+		jimstim-runtime.glade \
 		logviewer.glade \
 		main.glade \
 		memviewer.glade \
@@ -116,6 +117,7 @@ gui_in_files = 	\
 		dt-params.datamap.in \
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
+		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \
 		ms2-accel.datamap.in \

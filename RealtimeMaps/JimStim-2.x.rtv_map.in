@@ -7,6 +7,13 @@ persona=MS
 applicable_firmwares=JimStim-2.x
 derived_total=8
 
+[defaults]
+keys=real_lower,real_upper,dl_conv_expr,ul_conv_expr
+real_lower=0
+real_upper=255
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=hr_clock
