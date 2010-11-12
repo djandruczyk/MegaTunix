@@ -261,6 +261,7 @@ Interrogator/Profiles/MS-2/Makefile
 Interrogator/Profiles/FreeEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
 Interrogator/Profiles/SECU-3/Makefile
+Interrogator/Profiles/JimStim/Makefile
 Gui/Makefile
 menu/Makefile
 desktop/Makefile

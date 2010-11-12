@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<comms>
+	<potential_args>
+		<arg>
+			<name>JIMSTIM_NUM_BYTES</name>
+			<desc>Length of data to transfer (read or write)</desc>
+			<type>_DATA_</type>
+			<internal_name>num_bytes</internal_name>
+			<size>_U08_</size>
+		</arg>
+		<arg>
+			<name>JIMSTIM_PAGE</name>
+			<desc>Page inside ECU firmware</desc>
+			<type>_DATA_</type>
+			<internal_name>phys_ecu_page</internal_name>
+			<size>_U08_</size>
+		</arg>
+		<arg>
+			<name>JIMSTIM_OFFSET</name>
+			<desc>Offset from the beginning of the page.</desc>
+			<type>_DATA_</type>
+			<internal_name>offset</internal_name>
+			<size>_U08_</size>
+		</arg>
+		<arg>
+			<name>JIMSTIM_BYTE</name>
+			<desc>byte to transfer to ECU, length is 1 byte </desc>
+			<type>_DATA_</type>
+			<internal_name>value</internal_name>
+			<size>_U08_</size>
+		</arg>
+		<arg>
+			<name>PAUSE_100MS</name>
+			<desc>Pause for 100ms.</desc>
+			<type>_ACTION_</type>
+			<action>_SLEEP_</action>
+			<action_arg>100000</action_arg>
+		</arg>
+		<arg>
+			<name>PAUSE_500MS</name>
+			<desc>Pause for 500ms.</desc>
+			<type>_ACTION_</type>
+			<action>_SLEEP_</action>
+			<action_arg>500000</action_arg>
+		</arg>
+	</potential_args>
+	<commands>
+		<cmd>
+			<name>jimstim_std_rtvars</name>
+			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
+			<type>_WRITE_CMD_</type>
+			<base>A</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+				<function>fire_off_rtv_watches_pf</function>
+				<function>run_datalog_pf</function>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>jimstim_generic_write</name>
+			<desc>Generic write function, sets data to any page and offset</desc>
+			<type>_WRITE_CMD_</type>
+			<base>W</base>
+			<args>
+				<arg>JIMSTIM_OFFSET</arg>
+				<arg>JIMSTIM_BYTE</arg>
+			</args>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function_w_arg>send_to_slaves</function_w_arg>
+				<function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>jimstim_burn</name>
+			<desc>burns the current page flash</desc>
+			<type>_WRITE_CMD_</type>
+			<base>B</base>
+			<args>
+				<arg>PAUSE_500MS</arg>
+			</args>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function_w_arg>post_single_burn_pf</function_w_arg>
+				<function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>jimstim_burn_all</name>
+			<desc>Calls a function to burn ALL applicable jimstim pages to flash</desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>burn_all_helper</func_call_name>
+			<func_call_arg>_MS1_</func_call_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
+			<post_functions>
+				<function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>get_signature</name>
+			<desc>Triggers the ecu to echo back it's api signature</desc>
+			<type>_WRITE_CMD_</type>
+			<base>S</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_SIGNATURE_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>get_numrev</name>
+			<desc>Triggers the ecu to echo back it's version number</desc>
+			<type>_WRITE_CMD_</type>
+			<base>Q</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_NUM_REV_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>jimstim_veconst</name>
+			<desc>Triggers the MS1 to return the VE/Constants for the previously set page</desc>
+			<type>_WRITE_CMD_</type>
+			<base>V</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_MS1_VECONST_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>interrogation</name>
+			<desc>Interrogates ECU to determine what it is</desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>interrogate_ecu</func_call_name>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function>update_interrogation_gui_pf</function>
+				<function>load_realtime_map_pf</function>
+				<function>initialize_dashboards_pf</function>
+				<function>load_status_pf</function>
+				<function>load_rt_text_pf</function>
+				<function>load_gui_tabs_pf</function>
+				<function>load_sliders_pf</function>
+				<function>start_statuscounts_pf</function>
+				<function>populate_dlog_choices_pf</function>
+				<function>spawn_read_ve_const_pf</function>
+				<function>reset_temps_pf</function>
+				<function>startup_default_timeouts_pf</function>
+				<function>ready_msg_pf</function>
+
+			</post_functions>
+		</cmd>
+		<cmd>
+			<name>jimstim_read_all</name>
+			<desc>Reads ALL ecu vars for ALL modules </desc>
+			<type>_FUNC_CALL_</type>
+			<func_call_name>read_ve_const</func_call_name>
+			<func_call_arg>_MS1_VECONST_</func_call_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
+			<post_functions>
+				<function>update_ve_const_pf</function>
+				<function>setup_menu_handlers_pf</function>
+				<function>enable_3d_buttons_pf</function>
+				<function>set_store_black_pf</function>
+				<function>enable_get_data_buttons_pf</function>
+				<function>enable_ttm_buttons_pf</function>
+				<function>conditional_start_rtv_tickler_pf</function>
+			</post_functions>
+		</cmd>
+	</commands>
+</comms>

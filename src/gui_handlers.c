@@ -320,6 +320,8 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(((ListElement *)OBJ_GET(widget,"ecu_persona"))->baud));
 				DATA_SET(global_data,"ecu_dirname", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->dirname));
 				DATA_SET(global_data,"ecu_family", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->filename));
+				printf("ecu persona: %s\n",  g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->filename));
+				printf("ecu dirname: %s\n",  g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->dirname));
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");

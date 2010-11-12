@@ -1,0 +1,104 @@
+[API]
+major=1
+minor=3
+
+[realtime_map]
+persona=MS
+applicable_firmwares=JimStim-2.x
+derived_total=8
+
+[derived_0]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
+internal_names=hr_clock
+_dlog_gui_name=HR Clock
+dlog_field_name=Time
+offset=0
+real_lower=0
+real_upper=2147483648
+precision=3
+special=hr_clock
+_tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
+log_by_default=TRUE
+
+[derived_1]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
+internal_names=raw_secl
+_dlog_gui_name=JimStim Clock
+dlog_field_name=SecL
+offset=0
+real_lower=0
+real_upper=255
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+_tooltip="JimStim Clock" is the  clock returned by the Stim, this runs from 0-255 and recylcles indefinitely, resolution 1 second.
+log_by_default=TRUE
+
+[derived_2]
+keys=internal_names,size,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,log_by_default
+internal_names=rpm
+_dlog_gui_name=RPM
+dlog_field_name=RPM
+size=_U16_
+offset=1
+real_lower=0
+real_upper=25500
+_tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of 1rpm with this firmware. 
+log_by_default=TRUE
+
+[derived_3]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,log_by_default
+internal_names=rtmode
+_dlog_gui_name=Mode
+dlog_field_name=Mode
+offset=3
+_tooltip="Mode" is a bitfield containing unknown information
+log_by_default=TRUE
+
+[derived_4]
+keys=internal_names,dlog_gui_name,dlog_field_name,size,offset,tooltip,log_by_default
+internal_names=rtscale
+_dlog_gui_name=Scaling
+dlog_field_name=Scaling
+size=_U16_
+offset=4
+_tooltip="Scaling" is unknown
+log_by_default=TRUE
+
+[derived_5]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,log_by_default
+internal_names=rtcoarse
+_dlog_gui_name=CoarseADC
+dlog_field_name=CoarseADC
+offset=6
+real_lower=0
+real_upper=255
+_tooltip="CoarseADC" is the reading from the coarse RPM ADC pot in ADC counts
+log_by_default=TRUE
+
+[derived_6]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,log_by_default
+internal_names=rtfine
+_dlog_gui_name=FineADC
+dlog_field_name=FineADC
+offset=7
+real_lower=0
+real_upper=255
+_tooltip="FineADC" is the reading from the fine RPM ADC pot in ADC counts
+log_by_default=TRUE
+
+[derived_7]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,tooltip,log_by_default
+internal_names=myrpm
+_dlog_gui_name=My RPM
+dlog_field_name=CommandedRPM
+offset=6
+ul_conv_expr=(((rtcoarse/4.0)*256.0) + (2*rtfine))
+expr_symbols=rtcoarse,rtfine
+expr_types=_RAW_VAR_,_RAW_VAR_
+rtcoarse_offset=6
+rtcoarse_size=_U08_
+rtfine_offset=7
+rtfine_size=_U08_
+_tooltip="My RPM" is the commanded RPM via the coarse/fine pots on the stim
+log_by_default=TRUE
+
