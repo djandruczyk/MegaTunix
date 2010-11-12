@@ -111,7 +111,8 @@ void init(void)
 	DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
-	DATA_SET(global_data,"previous_ecu_family",g_strdup("MS-1"));
+	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),g_free);
+	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),g_free);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,g_free);
 	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
 	DATA_SET_FULL(global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
@@ -178,7 +179,7 @@ gboolean read_config(void)
 //			DATA_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_string(cfgfile, "Global", "Previous_ECU_Family", &tmpbuf))
 		{
-			DATA_SET(global_data,"previous_ecu_family",g_strdup(tmpbuf));
+			DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
