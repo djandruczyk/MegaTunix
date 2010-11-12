@@ -4,9 +4,8 @@ minor=3
 
 [realtime_map]
 persona=MS
-applicable_firmwares=JimStim-2.x
+applicable_firmwares=JimStim v2.x
 applicable_signatures=JimStim (c)JSM,JB 29Mar2009****
-
 derived_total=8
 
 [defaults]

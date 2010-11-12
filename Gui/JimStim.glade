@@ -58,6 +58,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="wheel_mode_combo">
                                             <property name="visible">True</property>
+                                            <signal name="changed" handler="std_combo_handler"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -88,6 +89,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="invert_tach_combo">
                                             <property name="visible">True</property>
+                                            <signal name="changed" handler="std_combo_handler"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -120,6 +122,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="invert_2nd_combo">
                                             <property name="visible">True</property>
+                                            <signal name="changed" handler="std_combo_handler"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -158,6 +161,12 @@
                                             <property name="max_length">7</property>
                                             <property name="invisible_char">&#x25CF;</property>
                                             <property name="width_chars">7</property>
+                                            <signal name="changed" handler="entr_changed_handler"/>
+                                            <signal name="key_press_event" handler="key_event"/>
+                                            <signal name="insert_text" handler="insert_text_handler"/>
+                                            <signal name="focus_out_event" handler="focus_out_handler"/>
+                                            <signal name="activate" handler="std_entry_handler"/>
+                                            <signal name="key_release_event" handler="key_event"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -202,6 +211,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="baud_combo">
                                             <property name="visible">True</property>
+                                            <signal name="changed" handler="std_combo_handler"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
