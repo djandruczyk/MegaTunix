@@ -29,7 +29,7 @@ length=64
 
 [interrogation]
 match_on=MS_VerNum
-MS_VerNum=_REGEX_,JimStim formatV2.0
+MS_VerNum=_REGEX_,JimStim format V2.0
 
 [gui]
 RealtimeMapFile=JimStim-2.x
