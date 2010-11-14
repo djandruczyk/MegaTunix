@@ -26,7 +26,7 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTER
  \brief gets called when a user wants a new mask entry
  \returns a pointer to a newly created mask entry widget
  */
-GtkWidget *mask_entry_new ()
+GtkWidget *mask_entry_new (void)
 {
         return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
 }

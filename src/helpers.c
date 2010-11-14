@@ -457,7 +457,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			else
 				ms_goodread_count++;
 			lastcount = ptr8[0];
-			/* Feed raw buffer over to post_process()
+			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
@@ -497,7 +497,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			else
 				ms_goodread_count++;
 			lastcount = curcount;
-			/* Feed raw buffer over to post_process()
+			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
@@ -537,7 +537,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 /*!
  \brief post_burn_pf() handles post burn ecu data mgmt
  */
-EXPORT void post_burn_pf()
+EXPORT void post_burn_pf(void)
 {
 	gint i = 0;
 	extern Firmware_Details * firmware;
@@ -574,7 +574,7 @@ EXPORT void post_single_burn_pf(void *data)
 }
 
 
-EXPORT void startup_default_timeouts_pf()
+EXPORT void startup_default_timeouts_pf(void)
 {
 	gint source = 0;
 	gint rate = 0;

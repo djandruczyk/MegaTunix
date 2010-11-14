@@ -54,7 +54,7 @@ EXPORT gboolean reset_errcounts(GtkWidget *widget)
  current statistical error and i/O counters
  \returns TRUE
  */
-gboolean update_errcounts()
+gboolean update_errcounts(void)
 {
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;

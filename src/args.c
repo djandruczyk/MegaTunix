@@ -185,7 +185,7 @@ void handle_args(gint argc, gchar * argv[])
 }
 
 
-CmdLineArgs * init_args()
+CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
 	args = g_new0(CmdLineArgs, 1);

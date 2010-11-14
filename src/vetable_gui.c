@@ -325,7 +325,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 }
 
 
-void draw_ve_marker()
+void draw_ve_marker(void)
 {
 	static gfloat *prev_x_source;
 	static gfloat *prev_y_source;

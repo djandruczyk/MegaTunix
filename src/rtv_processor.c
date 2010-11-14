@@ -880,7 +880,7 @@ gboolean lookup_precision(gchar *internal_name, gint *precision)
  \brief flush_rt_arrays() flushed the history buffers for all the realtime
  variables
  */
-void flush_rt_arrays()
+void flush_rt_arrays(void)
 {
 	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;

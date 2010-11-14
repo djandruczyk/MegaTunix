@@ -577,7 +577,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-void toggle_status_visible()
+void toggle_status_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -600,7 +600,7 @@ void toggle_status_visible()
 }
 
 
-void toggle_rtt_visible()
+void toggle_rtt_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -622,7 +622,7 @@ void toggle_rtt_visible()
 	}
 }
 
-void toggle_main_visible()
+void toggle_main_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -1001,7 +1001,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 }
 
 
-EXPORT void initialize_dashboards_pf()
+EXPORT void initialize_dashboards_pf(void)
 {
 	GtkWidget * label = NULL;
 	gboolean retval = FALSE;
@@ -1194,7 +1194,7 @@ EXPORT void create_gauge(GtkWidget *widget)
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
 }
 
-void update_tab_gauges()
+void update_tab_gauges(void)
 {
 	extern gint active_table;
 	extern GList **tab_gauges;

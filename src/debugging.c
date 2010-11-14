@@ -50,7 +50,7 @@ static DebugLevel dbglevels[] =
  \brief open_debug() opens the channel to the debugging information log.
  The path defaults to the current working directory.
  */
-void open_debug()
+void open_debug(void)
 {
 	extern gconstpointer *global_data;
 	CmdLineArgs * args = NULL;
@@ -88,7 +88,7 @@ void open_debug()
 }
 
 
-void close_debug()
+void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
 	if (dbg_channel)

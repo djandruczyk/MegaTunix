@@ -1297,7 +1297,7 @@ void feed_import_data_to_ecu(Vex_Import *vex)
  \brief revert_to_previous_data() reverts the VEX import by using the backup
  of the internal datastructures.
  */
-void revert_to_previous_data()
+void revert_to_previous_data(void)
 {
 	gint canID=0;
 	gint page=0;

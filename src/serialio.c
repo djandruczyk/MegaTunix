@@ -272,7 +272,7 @@ void setup_serial_params(gint baudrate)
  \brief close_serial() closes the serial port, and sets several gui widgets
  to reflect the port closing (textview/connected indicator)
  */
-void close_serial()
+void close_serial(void)
 {
 	extern volatile gboolean leaving;
 	if (!serial_params)

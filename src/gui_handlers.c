@@ -1839,7 +1839,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
  data from the ECU.  It takes care of updating evey control that relates to
  an ECU variable on screen
  */
-EXPORT void update_ve_const_pf()
+EXPORT void update_ve_const_pf(void)
 {
 	gint canID = 0;  
 	gint page = 0;

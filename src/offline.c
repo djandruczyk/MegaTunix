@@ -227,7 +227,7 @@ gboolean set_offline_mode(void)
  choices.
  \returns the name of the chosen firmware
  */
-gchar * present_firmware_choices()
+gchar * present_firmware_choices(void)
 {
 	gchar ** filenames = NULL;
 	GtkWidget *dialog = NULL;

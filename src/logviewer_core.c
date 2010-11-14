@@ -232,7 +232,7 @@ read_again:
 		log_info->delimiter = g_strdup(delimiter);
 		/* Store field names as well... 
 		 * log_info->fields is a string vector (char **)
-		 * that is NULL terminated thanks to g_strsplit()
+		 * that is NULL terminated thanks to g_strsplit(void)
 		 */
 		fields = parse_keys(a_line->str,&num_fields,delimiter);
 
@@ -376,7 +376,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
  */
-void free_log_info()
+void free_log_info(void)
 {
 	extern Log_Info *log_info;
 	guint i = 0;

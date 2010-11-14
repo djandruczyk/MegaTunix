@@ -259,7 +259,7 @@ EXPORT void conn_warning(void)
  \brief kill_conn_warning() removes the no connection warning message.
   Takes no parameters.
  */
-EXPORT void kill_conn_warning()
+EXPORT void kill_conn_warning(void)
 {
 	if (!warning_present)
 		return;

@@ -33,7 +33,7 @@
 MS2_TTMon_Data *ttm_data;
 
 
-EXPORT void ms2_ttm_reset_zoom()
+EXPORT void ms2_ttm_reset_zoom(void)
 {
 	GtkWidget *widget = NULL;
 	widget = lookup_widget("ttm_zoom");

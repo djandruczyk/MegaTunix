@@ -54,7 +54,7 @@ GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
  \brief update_runtime_vars_pf() updates all of the runtime sliders on all
  visible portions of the gui
  */
-EXPORT gboolean update_runtime_vars_pf()
+EXPORT gboolean update_runtime_vars_pf(void)
 {
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
@@ -94,7 +94,7 @@ EXPORT gboolean update_runtime_vars_pf()
  \brief reset_runtime_statue() sets all of the status indicators to OFF
  to reset the display
  */
-void reset_runtime_status()
+void reset_runtime_status(void)
 {
 	/* Runtime screen */
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));

@@ -69,7 +69,7 @@ gboolean *tracking_focus = NULL;
 
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 /*!
- * init()
+ * init(void)
  * \brief Sets sane values to global variables for a clean startup of 
  * MegaTunix
  */
@@ -150,11 +150,11 @@ void init(void)
 
 
 /*!
- * read_config()
+ * read_config(void)
  * \brief Reads state of various control variables, like window position
  * size, serial port and parameters and other user defaults from the default
  * config file located at ~/.MegaTunix/config
- * \see save_config()
+ * \see save_config(void)
  */
 gboolean read_config(void)
 {
@@ -299,10 +299,10 @@ gboolean read_config(void)
 
 
 /*!
- * save_config()
+ * save_config(void)
  * \brief Saves state of various control variables, like window position
  * size, serial port and parameters and other user defaults
- * \see read_config()
+ * \see read_config(void)
  */
 void save_config(void)
 {
@@ -500,7 +500,7 @@ void save_config(void)
 
 
 /*!
- * make_megasquirt_dirs()
+ * make_megasquirt_dirs(void)
  * \brief Creates the directories for user modified config files in the
  * users home directory under ~/.MegaTunix
  */
@@ -545,11 +545,11 @@ void make_megasquirt_dirs(void)
 
 
 /*!
- * mem_alloc()
+ * mem_alloc(void)
  * \brief Allocates memory allocated, to be deallocated at close by mem_dalloc
  * \see mem_dealloc
  */
-void mem_alloc()
+void mem_alloc(void)
 {
 	gint i=0;
 	gint j=0;
@@ -613,11 +613,11 @@ void mem_alloc()
 
 
 /*!
- * mem_dealloc()
+ * mem_dealloc(void)
  * \brief Deallocates memory allocated with mem_alloc
  * \see mem_alloc
  */
-void mem_dealloc()
+void mem_dealloc(void)
 {
 	gint i = 0;
 	gint j = 0;
@@ -770,7 +770,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
  across the GAsyncQueue's between the threads and the main context
  \returns a allocated and initialized pointer to a single structure
  */
-Io_Message * initialize_io_message()
+Io_Message * initialize_io_message(void)
 {
 	Io_Message *message = NULL;
 
@@ -786,7 +786,7 @@ Io_Message * initialize_io_message()
 }
 
 
-OutputData * initialize_outputdata()
+OutputData * initialize_outputdata(void)
 {
 	OutputData *output = NULL;
 

@@ -315,7 +315,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
  \brief populate_viewer() creates/removes the list of viewable values from
  the objects in use (playback list or realtime vars list)
  */
-void populate_viewer()
+void populate_viewer(void)
 {
 	gint i = 0;
 	gint total = 0;
@@ -446,7 +446,7 @@ void populate_viewer()
  slider.  This function is called when switching from playback to rt mode
  and back
  */
-void reset_logviewer_state()
+void reset_logviewer_state(void)
 {
 	extern Rtv_Map *rtv_map;
 	extern Log_Info *log_info;
@@ -739,7 +739,7 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
  \brief draw_infotext() draws the static textual data for the trace on 
  the left hand side of the logviewer
  */
-void draw_infotext()
+void draw_infotext(void)
 {
 	/* Draws the textual (static) info on the left side of the window..*/
 
@@ -1163,7 +1163,7 @@ void trace_update(gboolean redraw_all)
 /*!
  \brief scroll_logviewer_traces() scrolls the traces to the left
  */
-void scroll_logviewer_traces()
+void scroll_logviewer_traces(void)
 {
 	gint start = lv_data->info_width;
 	gint end = lv_data->info_width;

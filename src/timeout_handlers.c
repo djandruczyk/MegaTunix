@@ -319,7 +319,7 @@ gboolean signal_toothtrig_read(TicklerType type)
  in order to start the interrogation process as soon as the gui is up and 
  running.
  */
-gboolean early_interrogation()
+gboolean early_interrogation(void)
 {
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
 	update_logbar("interr_view","warning",_("Initiating background ECU interrogation...\n"),FALSE,FALSE,FALSE);
@@ -332,7 +332,7 @@ gboolean early_interrogation()
  in order to open the window to ask the user what ECU family to deal with
  running.
  */
-gboolean personality_choice()
+gboolean personality_choice(void)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;

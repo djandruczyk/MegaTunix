@@ -41,7 +41,7 @@ enum
 
 /*!
  \brief get_table() gets a valid filehandle of the lookuptable from 
- get_file and passes it to load_table()
+ get_file and passes it to load_table(void)
  \see load_table
  \see get_File
  \param table_name (gpointer) textual name of the table to use as the key

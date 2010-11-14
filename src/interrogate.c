@@ -61,7 +61,7 @@ gboolean interrogated = FALSE;
  those tests in turn, reading the responses and them comparing the group of
  responses against a list of interrogation profiles until it finds a match.
  */
-EXPORT gboolean interrogate_ecu()
+EXPORT gboolean interrogate_ecu(void)
 {
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
@@ -1376,7 +1376,7 @@ void interrogate_error(gchar *text, gint num)
 /* !brief updates the interrogation gui with the text revision, signature
  * and ecu numerical revision
  */
-EXPORT void update_interrogation_gui_pf()
+EXPORT void update_interrogation_gui_pf(void)
 {
 	GtkWidget *widget = NULL;
 	gfloat min = 0.0;

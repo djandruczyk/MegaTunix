@@ -39,7 +39,7 @@ extern gconstpointer *global_data;
 #endif
 
 
-void remove_mtx_lock()
+void remove_mtx_lock(void)
 {
 	CmdLineArgs * args = DATA_GET(global_data,"args");
 	if (args->network_mode)
@@ -52,7 +52,7 @@ void remove_mtx_lock()
 }
 
 
-void create_mtx_lock()
+void create_mtx_lock(void)
 {
 	CmdLineArgs * args = DATA_GET(global_data,"args");
 	if (args->network_mode)
@@ -65,7 +65,7 @@ void create_mtx_lock()
 }
 
 
-void unix_create_mtx_lock()
+void unix_create_mtx_lock(void)
 {
 #ifndef __WIN32__
 	GtkWidget *dialog = NULL;
@@ -169,7 +169,7 @@ void win32_remove_mtx_lock(void)
 }
 
 
-void unlock_serial()
+void unlock_serial(void)
 {
 #ifndef __WIN32__
 	gchar *fname = DATA_GET(global_data,"serial_lockfile");

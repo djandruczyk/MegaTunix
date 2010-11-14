@@ -44,7 +44,7 @@ void bind_ttm_to_page(gint page)
 }
 
 
-EXPORT void reset_ttm_buttons()
+EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
 	widget = lookup_widget("toothlogger_disable_radio_button");
@@ -136,7 +136,7 @@ EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *
 }
 
 
-EXPORT void crunch_trigtooth_data_pf()
+EXPORT void crunch_trigtooth_data_pf(void)
 {
 	_crunch_trigtooth_data(ttm_data->page);
 }
@@ -325,7 +325,7 @@ void _crunch_trigtooth_data(gint page)
 }
 
 
-EXPORT void update_trigtooth_display_pf()
+EXPORT void update_trigtooth_display_pf(void)
 {
 	gdk_threads_enter();
 	update_trigtooth_display(ttm_data->page);

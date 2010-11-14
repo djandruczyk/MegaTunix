@@ -55,7 +55,7 @@ static gboolean header_needed = FALSE;
  processed.  All of the logable variables are then placed here for user 
  selecting during datalogging.
  */
-EXPORT void populate_dlog_choices_pf()
+EXPORT void populate_dlog_choices_pf(void)
 {
 	guint i,j,k;
 	GList *list = NULL;
@@ -205,7 +205,7 @@ void start_datalogging(void)
  \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
  variable readback though
  */
-void stop_datalogging()
+void stop_datalogging(void)
 {
 	GIOChannel *iochannel = NULL;
 	if (!logging_active)
@@ -396,7 +396,7 @@ EXPORT void run_datalog_pf(void)
 /*!
  \brief dlog_select_all() selects all variables for logging
  */
-void dlog_select_all()
+void dlog_select_all(void)
 {
 	guint i = 0;
 	gconstpointer * object = NULL;

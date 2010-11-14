@@ -19,12 +19,12 @@
  * Ben Pierre 05/21/08
  * - wrote standard float rgb_from_hue() returns float triplet
  * - RGB3f color;
- * - uses rgb_from_hue()
+ * - uses rgb_from_hue(void)
  * - uses glColor3f() openGL native float color function
- * - uses rgb_from_hue()
+ * - uses rgb_from_hue(void)
  * - uses glColor3f() openGL native float color function
- * - set_shading_mode()
- * - drawFrameRate()
+ * - set_shading_mode(void)
+ * - drawFrameRate(void)
  *
  * David Andruczyk 6/24/08
  *  - drawFrameRate change to drawOrthoText
@@ -77,7 +77,7 @@ GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 
 /* let's get what we need and calculate FPS */
 
-void CalculateFrameRate()
+void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
 	static long lastTime = 0;		/* This will hold the time from the last frame*/
@@ -2005,7 +2005,7 @@ intialize it's
  datastructure for use.  
  \see Ve_View
  */
-Ve_View_3D * initialize_ve3d_view()
+Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 	ve_view= g_new0(Ve_View_3D,1);

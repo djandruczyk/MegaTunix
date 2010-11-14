@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
  */
-EXPORT void load_sliders_pf()
+EXPORT void load_sliders_pf(void)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;

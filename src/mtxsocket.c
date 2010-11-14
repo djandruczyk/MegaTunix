@@ -70,7 +70,7 @@ extern volatile gboolean leaving;
  *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
  interrogated.
  */
-void open_tcpip_sockets()
+void open_tcpip_sockets(void)
 {
 	MtxSocket *mtxsock = NULL;
 	gboolean fail1,fail2,fail3;
@@ -2012,7 +2012,7 @@ extern volatile gboolean leaving;
    *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
     interrogated.
      */
-void open_tcpip_sockets()
+void open_tcpip_sockets(void)
 {
 	MtxSocket *socket = NULL;
 	gboolean fail1,fail2,fail3;

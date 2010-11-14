@@ -63,7 +63,7 @@ void update_comms_status(void)
  \see update_comms_status
  */
 
-gint comms_test()
+gint comms_test(void)
 {
 	gboolean result = FALSE;
 	gchar * err_text = NULL;

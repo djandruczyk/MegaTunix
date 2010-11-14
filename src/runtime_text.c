@@ -42,7 +42,7 @@ extern gconstpointer *global_data;
  from the file specified in the firmware's interrogation profile, and populate
  a new window with the runtiem vars text value box.
  */
-EXPORT void load_rt_text_pf()
+EXPORT void load_rt_text_pf(void)
 {
 	GtkWidget *treeview = NULL; 
 	GtkWidget *window = NULL;
