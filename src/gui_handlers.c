@@ -890,7 +890,16 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		 * and wasting time.
 		 */
 		if (dload_val != get_ecu_data(canID,page,offset,size))
-			send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+		{
+			/* special case for the ODD MS-1 variants and the very rare 167 bit variables */
+			if ((firmware->capabilities & MS1) && ((size == MTX_U16) || (size == MTX_S16)))
+			{
+				send_to_ecu(canID, page, offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
+				send_to_ecu(canID, page, offset, MTX_U08, (dload_val &0x00ff), TRUE);
+			}
+			else
+				send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+		}
 	}
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
