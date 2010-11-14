@@ -41,7 +41,7 @@ gint get_ecu_data(gint canID, gint page, gint offset, DataSize size)
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
 
-	return _get_sized_data(firmware->ecu_data[page],page,offset,size);
+	return _get_sized_data(firmware->ecu_data[page],page,offset,size,firmware->bigendian);
 }
 
 
@@ -63,7 +63,7 @@ gint get_ecu_data_last(gint canID, gint page, gint offset, DataSize size)
 		return 0;
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
-	return _get_sized_data(firmware->ecu_data_last[page],page,offset,size);
+	return _get_sized_data(firmware->ecu_data_last[page],page,offset,size,firmware->bigendian);
 }
 
 
@@ -85,7 +85,7 @@ gint get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size)
 		return 0;
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
-	return _get_sized_data(firmware->ecu_data_backup[page],page,offset,size);
+	return _get_sized_data(firmware->ecu_data_backup[page],page,offset,size,firmware->bigendian);
 }
 
 /*!
@@ -96,7 +96,7 @@ gint get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size)
  \param offset (RAW BYTE offset)
  \param size (size to be returned...
  */
-gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size) 
+gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size, gboolean bigendian) 
 {
 	/* canID unused currently */
 	extern Firmware_Details *firmware;
@@ -125,24 +125,36 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 			break;
 		case MTX_U16:
 			u16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
-			result = GUINT16_FROM_BE(u16);
+			if (bigendian)
+				result = GUINT16_FROM_BE(u16);
+			else
+				result = GUINT16_FROM_LE(u16);
 /*			printf("U16 bit, returning %i\n",result);*/
 			return (guint16)result;
 			break;
 		case MTX_S16:
 			s16 = ((guint8)data[offset] +((guint8)data[offset+1] << 8));
-			result = GINT16_FROM_BE(s16);
+			if (bigendian)
+				result = GINT16_FROM_BE(s16);
+			else
+				result = GINT16_FROM_LE(s16);
 			return (gint16)result;
 /*			printf("S16 bit, returning %i\n",result);*/
 			break;
 		case MTX_U32:
 			u32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
-			result = GUINT_FROM_BE(u32);
+			if (bigendian)
+				result = GUINT_FROM_BE(u32);
+			else
+				result = GUINT_FROM_LE(u32);
 			return (guint32)result;
 			break;
 		case MTX_S32:
 			s32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
-			result = GINT_FROM_BE(u32);
+			if (bigendian)
+				result = GINT_FROM_BE(u32);
+			else
+				result = GINT_FROM_LE(u32);
 			return (gint32)result;
 			break;
 		default:
@@ -155,11 +167,11 @@ gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size)
 void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
 {
 	extern Firmware_Details *firmware;
-	_set_sized_data(firmware->ecu_data[page],offset,size,new);
+	_set_sized_data(firmware->ecu_data[page],offset,size,new,firmware->bigendian);
 }
 
 
-void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new) 
+void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian) 
 {
 	/* canID unused currently */
 	guint16 u16 = 0;
@@ -179,24 +191,36 @@ void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new)
 			data[offset] = (gint8)new;
 			break;
 		case MTX_U16:
-			u16 = GUINT16_TO_BE((guint16)new);
+			if (bigendian)
+				u16 = GUINT16_TO_BE((guint16)new);
+			else
+				u16 = GUINT16_TO_LE((guint16)new);
 			data[offset] = (guint8)u16;
 			data[offset+1] = (guint8)((guint16)u16 >> 8);
 			break;
 		case MTX_S16:
-			s16 = GINT16_TO_BE((gint16)new);
+			if (bigendian)
+				s16 = GINT16_TO_BE((gint16)new);
+			else
+				s16 = GINT16_TO_LE((gint16)new);
 			data[offset] = (guint8)s16;
 			data[offset+1] = (guint8)((gint16)s16 >> 8);
 			break;
 		case MTX_U32:
-			u32 = GUINT32_TO_BE((guint32)new);
+			if (bigendian)
+				u32 = GUINT32_TO_BE((guint32)new);
+			else
+				u32 = GUINT32_TO_LE((guint32)new);
 			data[offset] = (guint8)u32;
 			data[offset+1] = (guint8)((guint32)u32 >> 8);
 			data[offset+2] = (guint8)((guint32)u32 >> 16);
 			data[offset+3] = (guint8)((guint32)u32 >> 24);
 			break;
 		case MTX_S32:
-			s32 = GINT32_TO_BE((gint32)new);
+			if (bigendian)
+				s32 = GINT32_TO_BE((gint32)new);
+			else
+				s32 = GINT32_TO_LE((gint32)new);
 			data[offset] = (guint8)s32;
 			data[offset+1] = (guint8)((gint32)s32 >> 8);
 			data[offset+2] = (guint8)((gint32)s32 >> 16);

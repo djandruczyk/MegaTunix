@@ -17,6 +17,7 @@ Burn_All_Command=jimstim_burn_all
 Write_Command=jimstim_generic_write
 Page_Command=jimstim_change_page
 Capabilities=_MS1_,_MS1_STD_
+BigEndian=TRUE
 MultiPage=FALSE
 ChunkWriteSupport=FALSE
 TotalTables=0

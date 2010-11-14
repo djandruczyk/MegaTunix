@@ -148,7 +148,10 @@ EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 		}
 		tt = (gushort)(temp*10);
 		fprintf(f, "   %5d%c // %4d %7.2f  %7.1f  %9.1f\n", tt, adcCount<bins-1?',':' ', adcCount, 5.0*adcCount/(bins-1), Tu(tt/10.0, celsius), res);
-		table[adcCount] = GINT16_TO_BE((gint16)tt);
+		if (firmware->bigendian)
+			table[adcCount] = GINT16_TO_BE((gint16)tt);
+		else
+			table[adcCount] = GINT16_TO_LE((gint16)tt);
 		/*table[adcCount] = tt;*/
 	}
 	fprintf(f, "};\n");

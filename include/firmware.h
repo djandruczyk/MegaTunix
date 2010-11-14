@@ -101,6 +101,7 @@ struct _Firmware_Details
 	gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gint capabilities;	/*! Enum list of capabilities*/
 	gint ecu_revision;	/*! Numeric ECU revision */
+	gboolean bigendian;	/*! ECU use Big Endian byte ordering */
 	gboolean multi_page;	/*! Multi-page firmware */
 	gboolean chunk_support;	/*! Supports Chunk Write */
 	gboolean can_capable;	/*! Supports CAnbus and sub modules */

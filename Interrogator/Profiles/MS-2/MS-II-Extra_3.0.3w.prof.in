@@ -20,6 +20,7 @@ Write_Command=ms2_generic_write
 Chunk_Write_Command=ms2_generic_write
 Table_Write_Command=ms2_table_reflash
 Capabilities=_MS2_,_MS2_E_,_MS2_E_COMPMON_
+BigEndian=TRUE
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 CLT_Table_Page=6

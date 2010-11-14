@@ -1192,13 +1192,23 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 		{
 			ptr16 = (guint16 *)data;
 			for (i=0;i<total;i++)
-				ptr16[i]=GINT16_TO_BE(vex->x_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr16[i]=GINT16_TO_BE(vex->x_bins[i]);
+				else
+					ptr16[i]=GINT16_TO_LE(vex->x_bins[i]);
+			}
 		}
 		if (mult == 4)
 		{
 			ptr32 = (guint32 *)data;
 			for (i=0;i<total;i++)
-				ptr32[i]=GINT_TO_BE(vex->x_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr32[i]=GINT_TO_BE(vex->x_bins[i]);
+				else
+					ptr32[i]=GINT_TO_LE(vex->x_bins[i]);
+			}
 		}
 
 		chunk_write(canID,page,base,(total*mult),data);
@@ -1231,13 +1241,23 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 		{
 			ptr16 = (guint16 *)data;
 			for (i=0;i<total;i++)
-				ptr16[i]=GINT16_TO_BE(vex->y_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr16[i]=GINT16_TO_BE(vex->y_bins[i]);
+				else
+					ptr16[i]=GINT16_TO_LE(vex->y_bins[i]);
+			}
 		}
 		if (mult == 4)
 		{
 			ptr32 = (guint32 *)data;
 			for (i=0;i<total;i++)
-				ptr32[i]=GINT_TO_BE(vex->y_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr32[i]=GINT_TO_BE(vex->y_bins[i]);
+				else
+					ptr32[i]=GINT_TO_LE(vex->y_bins[i]);
+			}
 		}
 		chunk_write(canID,page,base,(total*mult),data);
 	}
@@ -1269,13 +1289,23 @@ void feed_import_data_to_ecu(Vex_Import *vex)
 		{
 			ptr16 = (guint16 *)data;
 			for (i=0;i<total;i++)
-				ptr16[i]=GINT16_TO_BE(vex->tbl_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr16[i]=GINT16_TO_BE(vex->tbl_bins[i]);
+				else
+					ptr16[i]=GINT16_TO_LE(vex->tbl_bins[i]);
+			}
 		}
 		if (mult == 4)
 		{
 			ptr32 = (guint32 *)data;
 			for (i=0;i<total;i++)
-				ptr32[i]=GINT_TO_BE(vex->tbl_bins[i]);
+			{
+				if (firmware->bigendian)
+					ptr32[i]=GINT_TO_BE(vex->tbl_bins[i]);
+				else
+					ptr32[i]=GINT_TO_LE(vex->tbl_bins[i]);
+			}
 		}
 		chunk_write(canID,page,base,(total*mult),data);
 	}

@@ -477,12 +477,25 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			/* Test for MS reset */
 			if (just_starting)
 			{
-				lastcount = GUINT16_TO_BE(ptr16[0]);
-				curcount = GUINT16_TO_BE(ptr16[0]);
+				if (firmware->bigendian)
+				{
+					lastcount = GUINT16_TO_BE(ptr16[0]);
+					curcount = GUINT16_TO_BE(ptr16[0]);
+				}
+				else
+				{
+					lastcount = GUINT16_TO_LE(ptr16[0]);
+					curcount = GUINT16_TO_LE(ptr16[0]);
+				}
 				just_starting = FALSE;
 			}
 			else
-				curcount = GUINT16_TO_BE(ptr16[0]);
+			{
+				if (firmware->bigendian)
+					curcount = GUINT16_TO_BE(ptr16[0]);
+				else
+					curcount = GUINT16_TO_LE(ptr16[0]);
+			}
 			/* Check for clock jump from the MS, a 
 			 * jump in time from the MS clock indicates 
 			 * a reset due to power and/or noise.

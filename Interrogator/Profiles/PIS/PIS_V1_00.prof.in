@@ -20,6 +20,7 @@ Write_Command=pis_generic_write
 Chunk_Write_Command=pis_generic_write
 Table_Write_Command=pis_thermal_calibration
 Capabilities=_PIS_,_MS2_
+BigEndian=TRUE
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 CLT_Table_Page=2

@@ -19,6 +19,7 @@ Write_Command=ms1_generic_write
 Chunk_Write_Command=ms1_chunk_write
 Page_Command=ms1_change_page
 Capabilities=_MS1_,_MSNS_E_
+BigEndian=TRUE
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
 ReadOnlyAbove=8

@@ -21,11 +21,11 @@
 gint get_ecu_data(gint, gint, gint, DataSize); 
 gint get_ecu_data_last(gint, gint, gint, DataSize); 
 gint get_ecu_data_backup(gint, gint, gint, DataSize); 
-gint _get_sized_data(guint8 *, gint, gint, DataSize); 
+gint _get_sized_data(guint8 *, gint, gint, DataSize, gboolean); 
 
 void set_ecu_data(gint, gint, gint, DataSize, gint); 
 void set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
-void _set_sized_data(guint8 *, gint, DataSize, gint); 
+void _set_sized_data(guint8 *, gint, DataSize, gint, gboolean); 
 
 void store_new_block(gint, gint, gint, void *, gint );
 void store_new_block_pending(gint, gint, gint, void *, gint );

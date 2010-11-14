@@ -304,24 +304,36 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 				data[0] = (gint8)value;
 				break;
 			case MTX_U16:
-				u16 = GUINT16_TO_BE((guint16)value);
+				if (firmware->bigendian)
+					u16 = GUINT16_TO_BE((guint16)value);
+				else
+					u16 = GUINT16_TO_LE((guint16)value);
 				data[0] = (guint8)u16;
 				data[1] = (guint8)((guint16)u16 >> 8);
 				break;
 			case MTX_S16:
-				s16 = GINT16_TO_BE((gint16)value);
+				if (firmware->bigendian)
+					s16 = GINT16_TO_BE((gint16)value);
+				else
+					s16 = GINT16_TO_LE((gint16)value);
 				data[0] = (guint8)s16;
 				data[1] = (guint8)((gint16)s16 >> 8);
 				break;
 			case MTX_S32:
-				s32 = GINT32_TO_BE((gint32)value);
+				if (firmware->bigendian)
+					s32 = GINT32_TO_BE((gint32)value);
+				else
+					s32 = GINT32_TO_LE((gint32)value);
 				data[0] = (guint8)s32;
 				data[1] = (guint8)((gint32)s32 >> 8);
 				data[2] = (guint8)((gint32)s32 >> 16);
 				data[3] = (guint8)((gint32)s32 >> 24);
 				break;
 			case MTX_U32:
-				u32 = GUINT32_TO_BE((guint32)value);
+				if (firmware->bigendian)
+					u32 = GUINT32_TO_BE((guint32)value);
+				else
+					u32 = GUINT32_TO_LE((guint32)value);
 				data[0] = (guint8)u32;
 				data[1] = (guint8)((guint32)u32 >> 8);
 				data[2] = (guint8)((guint32)u32 >> 16);

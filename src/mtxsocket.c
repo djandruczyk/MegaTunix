@@ -64,6 +64,7 @@ GThread *control_socket_id = NULL;
 GThread *notify_slaves_id = NULL;
 extern gconstpointer *global_data;
 extern volatile gboolean leaving;
+extern Firmware_Details *firmware;
 
 
 /*!
@@ -205,7 +206,6 @@ GSocket *setup_socket(gint port)
 void *socket_thread_manager(gpointer data)
 {
 	GtkWidget *widget = NULL;
-	extern Firmware_Details *firmware;
 	gchar * tmpbuf = NULL;
 	fd_set rd;
 	gint res = 0;
@@ -411,7 +411,6 @@ void *binary_socket_server(gpointer data)
 	State next_state;
 	SubState substate;
 	GError *error = NULL;
-	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 
 	state = WAITING_FOR_CMD;
@@ -819,7 +818,7 @@ close_binary2:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte);
+				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte,firmware->bigendian);
 				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);*/
@@ -845,7 +844,6 @@ close_binary2:
  */
 gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
-	extern Firmware_Details *firmware;
 	extern gboolean connected;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
@@ -1145,7 +1143,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		tmpi = get_ecu_data(canID,page,offset,size);
-		_set_sized_data(client->ecu_data[page],offset,size,tmpi);
+		_set_sized_data(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
 		res = net_send(client->socket,(guint8 *)tmpbuf,len);
@@ -1159,7 +1157,6 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 
 void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 {
-	extern Firmware_Details *firmware;
 	gint canID = 0;
 	gint page = 0;
 	gint tmpi = 0;
@@ -1187,7 +1184,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		for (i=0;i<len;i++)
 		{
 			tmpi = get_ecu_data(canID,page,i,MTX_U08);
-			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi);
+			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
 			else
@@ -1224,7 +1221,7 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
-		_set_sized_data(client->ecu_data[page],offset,size,data);
+		_set_sized_data(client->ecu_data[page],offset,size,data,firmware->bigendian);
 		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
@@ -1234,7 +1231,6 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
-	extern Firmware_Details *firmware;
 
 	if (!firmware)
 		return FALSE;
@@ -1521,7 +1517,6 @@ void *notify_slaves_thread(gpointer data)
 	gint len = 0;
 	guint8 *buffer = NULL;
 	extern GAsyncQueue *slave_msg_queue;
-	extern Firmware_Details *firmware;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
@@ -1577,7 +1572,7 @@ void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -1591,7 +1586,7 @@ void *notify_slaves_thread(gpointer data)
 				if (res == len)
 				{
 					if (msg->mode == MTX_SIMPLE_WRITE)
-						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value);
+						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
 					else if (msg->mode == MTX_CHUNK_WRITE)
 						memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
 				}
@@ -1664,7 +1659,6 @@ void *control_socket_client(gpointer data)
 	State state;
 	SubState substate;
 	GError *error = NULL;
-	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 	extern volatile gint leaving;
 
@@ -2165,7 +2159,6 @@ gboolean setup_socket(gint port)
 void *socket_thread_manager(gpointer data)
 {
 	GtkWidget *widget = NULL;
-	extern Firmware_Details *firmware;
 	gchar * tmpbuf = NULL;
 	fd_set rd;
 	gint res = 0;
@@ -2376,7 +2369,6 @@ void *binary_socket_server(gpointer data)
 	State state;
 	State next_state;
 	SubState substate;
-	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 
 	state = WAITING_FOR_CMD;
@@ -2778,7 +2770,7 @@ close_binary:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte);
+				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte,firmware->bigendian);
 				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);*/
@@ -2804,7 +2796,6 @@ close_binary:
 gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
 	gint fd = client->fd;
-	extern Firmware_Details *firmware;
 	extern gboolean connected;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
@@ -3105,7 +3096,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		tmpi = get_ecu_data(canID,page,offset,size);
-		_set_sized_data(client->ecu_data[page],offset,size,tmpi);
+		_set_sized_data(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
 		res = net_send(fd,(guint8 *)tmpbuf,len,0);
@@ -3119,7 +3110,6 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 
 void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 {
-	extern Firmware_Details *firmware;
 	gint fd = client->fd;
 	gint canID = 0;
 	gint page = 0;
@@ -3148,7 +3138,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		for (i=0;i<len;i++)
 		{
 			tmpi = get_ecu_data(canID,page,i,MTX_U08);
-			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi);
+			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
 			else
@@ -3186,7 +3176,7 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
-		_set_sized_data(client->ecu_data[page],offset,size,data);
+		_set_sized_data(client->ecu_data[page],offset,size,data,firmware->bigendian);
 		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
@@ -3196,7 +3186,6 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
-	extern Firmware_Details *firmware;
 
 	if (!firmware)
 		return FALSE;
@@ -3526,7 +3515,6 @@ void *notify_slaves_thread(gpointer data)
 	gint len = 0;
 	guint8 *buffer = NULL;
 	extern GAsyncQueue *slave_msg_queue;
-	extern Firmware_Details *firmware;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
@@ -3596,7 +3584,7 @@ void *notify_slaves_thread(gpointer data)
 				if (res == len)
 				{
 					if (msg->mode == MTX_SIMPLE_WRITE)
-						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value);
+						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
 					else if (msg->mode == MTX_CHUNK_WRITE)
 						memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
 				}
@@ -3676,7 +3664,6 @@ void *control_socket_client(gpointer data)
 	guint8 *buffer = NULL;
 	State state;
 	SubState substate;
-	extern Firmware_Details *firmware;
 	extern volatile gint last_page;
 	extern volatile gint leaving;
 

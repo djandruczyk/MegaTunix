@@ -38,7 +38,9 @@
 
 
 extern GStaticMutex rtv_mutex;
+extern Firmware_Details *firmware;
 extern gconstpointer *global_data;
+
 /*!
  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
  complex function so read the sourcecode.. ;)
@@ -47,7 +49,6 @@ extern gconstpointer *global_data;
 void process_rt_vars(void *incoming)
 {
 	extern Rtv_Map *rtv_map;
-	extern Firmware_Details *firmware;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
@@ -165,7 +166,7 @@ void process_rt_vars(void *incoming)
 			else
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
-				x = _get_sized_data((guint8 *)incoming,0,offset,size);
+				x = _get_sized_data((guint8 *)incoming,0,offset,size,firmware->bigendian);
 			}
 
 			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
@@ -301,7 +302,7 @@ gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 				size = (DataSize) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
+				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size,firmware->bigendian);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_EMB_BIT:
@@ -314,7 +315,7 @@ gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
@@ -476,7 +477,7 @@ gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 				size = (DataSize) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size);
+				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size,firmware->bigendian);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_EMB_BIT:
@@ -489,7 +490,7 @@ gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:

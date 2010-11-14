@@ -378,6 +378,11 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
 	cfg_read_string(cfgfile,"parameters","SignatureVia",&firmware->SignatureVia);
 
 	dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": load_profile_details()\n\tfile:%s opened successfully\n",filename));
+	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))
+	{
+		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
+		firmware->bigendian = TRUE;
+	}
 	if(!cfg_read_string(cfgfile,"parameters","Capabilities",
 				&tmpbuf))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
