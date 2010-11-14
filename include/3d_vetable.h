@@ -14,9 +14,9 @@
  * Ben Pierre 05/21/08
  * - define _RGB3f RGB3f rgb float triplet
  * - _RGB3f RGB3f structure
- * - prototype rgb_from_hue()
- * - set_shading_mode()
- * - drawFrameRate()
+ * - prototype rgb_from_hue(void)
+ * - set_shading_mode(void)
+ * - drawFrameRate(void)
  */
 
 #ifndef __3D_VETABLE_H__
@@ -200,7 +200,7 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
 void ve3d_load_font_metrics(GtkWidget *);
 void reset_3d_view(GtkWidget *);
-Ve_View_3D * initialize_ve3d_view();
+Ve_View_3D * initialize_ve3d_view(void);
 void update_ve3d_if_necessary(int , int );
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);

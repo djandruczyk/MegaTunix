@@ -23,6 +23,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <gdk/gdkgl.h>
+#include <gtk/gtkgl.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
@@ -63,8 +64,6 @@ gconstpointer *global_data = NULL;
  */
 gint main(gint argc, gchar ** argv)
 {
-	gchar * filename = NULL;
-
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
 	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");

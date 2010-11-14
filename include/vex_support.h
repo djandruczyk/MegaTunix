@@ -80,7 +80,7 @@ void single_table_export(GIOChannel *, gint );
 void single_table_import(GIOChannel *, gint );
 void select_table_for_export(gint);
 void select_table_for_import(gint);
-GIOStatus process_vex_line();
+GIOStatus process_vex_line(Vex_Import *, GIOChannel *);
 GIOStatus process_vex_range(Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
 GIOStatus process_vex_table(Vex_Import *, gchar *, GIOChannel * );
 GIOStatus read_number_from_line(gint *, GIOChannel *);
@@ -90,7 +90,7 @@ GIOStatus process_table(Vex_Import *);
 GIOStatus handler_dispatch(Vex_Import *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
 void dealloc_vex_struct(Vex_Import *);
 void feed_import_data_to_ecu(Vex_Import *);
-void revert_to_previous_data();
+void revert_to_previous_data(void);
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */
 

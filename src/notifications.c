@@ -18,6 +18,7 @@
 #include <fileio.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
+#include <gui_handlers.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>

@@ -47,7 +47,7 @@ enum
 static GList *views = NULL;
 extern gconstpointer *global_data;
 
-gboolean force_view_recompute()
+gboolean force_view_recompute(gpointer data)
 {
 	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)

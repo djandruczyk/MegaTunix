@@ -19,7 +19,7 @@
 #include <glade/glade.h>
 
 /* Prototypes */
-void setup_menu_handlers_pf();
+void setup_menu_handlers_pf(void);
 EXPORT gboolean jump_to_tab(GtkWidget *, gpointer );
 EXPORT gboolean settings_transfer(GtkWidget *, gpointer );
 gboolean check_tab_existance(TabIdent );

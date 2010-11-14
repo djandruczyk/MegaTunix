@@ -59,7 +59,7 @@ struct _DataWatch
 	gchar ** varnames;	/*! List of Variable names (rtv internal name) to check */
 };
 /* Prototypes */
-EXPORT void fire_off_rtv_watches_pf();
+EXPORT void fire_off_rtv_watches_pf(void);
 guint32 create_single_bit_state_watch(gchar *, gint, gboolean, gboolean, gchar *, gpointer);
 guint32 create_single_bit_change_watch(gchar *, gint, gboolean, gchar *, gpointer);
 guint32 create_value_change_watch(gchar *, gboolean,gchar *, gpointer);

@@ -59,7 +59,7 @@ gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 Viewable_Value * build_v_value(gconstpointer * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
-void draw_infotext();
+void draw_infotext(void);
 void draw_valtext(gboolean);
 gboolean update_logview_traces_pf(gboolean);
 gboolean pb_update_logview_traces(gboolean);

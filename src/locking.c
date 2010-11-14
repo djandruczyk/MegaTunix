@@ -129,7 +129,7 @@ void unix_remove_mtx_lock(void)
 	res = fcntl(tmpfd,F_SETLK,&lock_struct);
 	if (res == -1)
 		printf("Global MTX lock unlock failure!\n");
-	return 0;
+	return;
 }
 
 
