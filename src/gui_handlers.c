@@ -708,7 +708,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
-	printf("U08 is %i, U16 is %i, size is %i\n",MTX_U08,MTX_U16,size);
 	if (OBJ_GET(widget,"raw_lower"))
 		raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
@@ -895,7 +894,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 			if ((firmware->capabilities & MS1) && ((size == MTX_U16) || (size == MTX_S16)))
 			{
 				send_to_ecu(canID, page, offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
-				send_to_ecu(canID, page, offset, MTX_U08, (dload_val &0x00ff), TRUE);
+				send_to_ecu(canID, page, offset+1, MTX_U08, (dload_val &0x00ff), TRUE);
 			}
 			else
 				send_to_ecu(canID, page, offset, size, dload_val, TRUE);

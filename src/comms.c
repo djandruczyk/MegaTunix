@@ -365,7 +365,7 @@ gboolean write_data(Io_Message *message)
 		size = (DataSize)DATA_GET(output->data,"size");
 		data = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)DATA_GET(output->data,"mode");
-		printf("write_data(), canID %i, page %i, offset %i, value %i, num_bytes %i, size %i, data %p, mode %i\n",canID,page,offset,value,num_bytes,size,data,mode);
+		/*printf("write_data(), canID %i, page %i, offset %i, value %i, num_bytes %i, size %i, data %p, mode %i\n",canID,page,offset,value,num_bytes,size,data,mode);*/
 	}
 	if (offline)
 	{
