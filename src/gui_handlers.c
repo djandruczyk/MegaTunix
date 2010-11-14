@@ -708,6 +708,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		size = MTX_U08 ; 	/* default! */
 	else
 		size = (DataSize)OBJ_GET(widget,"size");
+	printf("U08 is %i, U16 is %i, size is %i\n",MTX_U08,MTX_U16,size);
 	if (OBJ_GET(widget,"raw_lower"))
 		raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
