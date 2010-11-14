@@ -34,6 +34,23 @@
 
 
 extern gconstpointer *global_data;
+#ifdef __WIN32__
+	static HANDLE win32_global_lock;
+#endif
+
+
+void remove_mtx_lock()
+{
+	CmdLineArgs * args = DATA_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+#ifdef __WIN32__
+	win32_remove_mtx_lock();
+#else
+	unix_remove_mtx_lock();
+#endif
+}
+
 
 void create_mtx_lock()
 {
@@ -46,6 +63,7 @@ void create_mtx_lock()
 	unix_create_mtx_lock();
 #endif
 }
+
 
 void unix_create_mtx_lock()
 {
@@ -94,16 +112,36 @@ void unix_create_mtx_lock()
 }
 
 
+void unix_remove_mtx_lock(void)
+{
+	gint res = 0;
+	gint tmpfd = 0;
+	gchar * lockfile = NULL;
+	struct flock lock_struct;
+	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
+	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
+	g_free(lockfile);
+
+	lock_struct.l_type=F_UNLCK;
+	lock_struct.l_start=0;
+	lock_struct.l_len=0;
+	lock_struct.l_whence=SEEK_CUR;
+	res = fcntl(tmpfd,F_SETLK,&lock_struct);
+	if (res == -1)
+		printf("Global MTX lock unlock failure!\n");
+	return 0;
+}
+
+
 void win32_create_mtx_lock(void)
 {
 #ifdef __WIN32__
-	HANDLE fd;
 	GtkWidget *dialog = NULL;
 	gchar * file;
 
 	file = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
-	fd = CreateFile(file,(GENERIC_READ | GENERIC_WRITE),0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-	if (fd == INVALID_HANDLE_VALUE)
+	win32_global_lock = CreateFile(file,(GENERIC_READ | GENERIC_WRITE),0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL|FILE_FLAG_DELETE_ON_CLOSE,NULL);
+	if (win32_global_lock == INVALID_HANDLE_VALUE)
 	{
 		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,"<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed!\n");
 		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
@@ -115,6 +153,17 @@ void win32_create_mtx_lock(void)
 			g_dataset_destroy(global_data);
 		exit(-1);
 	}
+	return;
+#endif
+}
+
+void win32_remove_mtx_lock(void)
+{
+#ifdef __WIN32__
+	gchar * file;
+
+	if (win32_global_lock)
+		CloseHandle(win32_global_lock);
 	return;
 #endif
 }
@@ -152,7 +201,7 @@ gboolean lock_serial(gchar * name)
 
 	/*printf("told to lock serial port %s\n",name); */
 	/* If no /proc (i.e. os-X), just fake it and return */
-	if (!g_file_test("/proc",G_FILE_TEST_IS_DIR))
+	if (!g_file_test("/var/lock",G_FILE_TEST_IS_DIR))
 		return TRUE;
 
 	tmpbuf = g_strdup_printf("/var/lock/LCK..");

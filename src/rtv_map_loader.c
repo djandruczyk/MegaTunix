@@ -76,13 +76,9 @@ EXPORT gboolean load_realtime_map_pf(void )
 	gchar * expr = NULL;
 	extern gboolean interrogated;
 	extern gboolean connected;
-	extern volatile gboolean offline;
 	extern gconstpointer *global_data;
 
 	rtvars_loaded = FALSE;
-
-	if (offline)
-		return FALSE;
 
 	if ((!interrogated) && (connected))
 		return FALSE;

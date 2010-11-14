@@ -56,8 +56,10 @@ EXPORT void create_stripchart(GtkWidget *parent)
 	//gtk_widget_realize(chart);
 	for (i=0;i<g_strv_length(sources);i++)
 	{
+		if (!rtv_map)
+			continue;
 		object = g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
-		if (!(object))
+		if (!object)
 			continue;
 		if ((gchar *)DATA_GET(object,"dlog_gui_name"))
 			name = (gchar *)DATA_GET(object,"dlog_gui_name");

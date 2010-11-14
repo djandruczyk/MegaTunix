@@ -16,10 +16,13 @@
 
 /* Prototypes */
 void create_mtx_lock(void);
-void win32_create_mtx_lock(void);
+void remove_mtx_lock(void);
 void unix_create_mtx_lock(void);
-void unlock_serial();
+void unix_remove_mtx_lock(void);
+void win32_create_mtx_lock(void);
+void win32_remove_mtx_lock(void);
 gboolean lock_serial(gchar *);
+void unlock_serial(void);
 /* Prototypes */
 
 #endif

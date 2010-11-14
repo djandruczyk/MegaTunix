@@ -701,6 +701,8 @@ EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	extern Rtv_Map *rtv_map;
 
 
+	if (!rtv_map)
+		return;
 	/* Create the store for the combo, with severla hidden values
 	*/
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);

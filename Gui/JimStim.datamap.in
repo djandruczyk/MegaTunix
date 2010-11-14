@@ -65,7 +65,7 @@ offset=3
 bitmask=3
 bitvals=0,1,2,3
 choices=9600,19200,38400,57600
-tooltip=Baud rate the JimStim will use on next powerup after burn,  NOTE, anything other than 9600 baud may cause issues with wheel modes.
+tooltip=Baud rate the JimStim will use on next powerup after burn,  NOTE, anything other than 9600 baud may cause issues with wheel modes, and will likely screwup megastunix to the point where it can't talk to the unit without manually editing config files.
 
 #----- Entries ---------------------------------------------------------------
 

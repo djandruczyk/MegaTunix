@@ -1000,6 +1000,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 	return FALSE;
 }
 
+
 EXPORT void initialize_dashboards_pf()
 {
 	GtkWidget * label = NULL;
@@ -1054,7 +1055,6 @@ EXPORT void initialize_dashboards_pf()
 			args->be_quiet = TRUE;
 			g_signal_emit_by_name(lookup_widget("main_window"),"destroy_event");
 		}
-
 	}
 	gdk_threads_leave();
 	return;

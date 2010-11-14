@@ -118,7 +118,35 @@ gboolean set_offline_mode(void)
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("load_status_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("load_rt_text_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_gui_tabs_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("load_sliders_pf");
+	if (module)
+		g_module_symbol(module,pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+	
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("start_statuscounts_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;

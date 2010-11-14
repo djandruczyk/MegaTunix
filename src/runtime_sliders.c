@@ -42,7 +42,7 @@ extern gconstpointer *global_data;
 /*!
  \brief load_sliders_pf() is called to load up the runtime slider configurations
  from the file specified in the firmware's interrogation profile, and populate
- the gui wiht the newly created sliders.
+ the gui with the newly created sliders.
  */
 EXPORT void load_sliders_pf()
 {

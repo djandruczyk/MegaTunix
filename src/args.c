@@ -55,6 +55,7 @@ void handle_args(gint argc, gchar * argv[])
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
+		{"port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use This serial port ONLY",NULL},
 		{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Network socket instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},

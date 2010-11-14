@@ -434,6 +434,8 @@ void *serial_repair_thread(gpointer data)
 				}
 				g_usleep(100000);
 			}
+			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s is open by another application\n",vector[i]));
+			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
 		}
 		queue_function("conn_warning");
 	}

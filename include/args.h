@@ -29,6 +29,7 @@ struct _CmdLineArgs
 	gboolean version;	/* Show Version */
 	gboolean be_quiet;	/* No error popups */
 	gboolean autolog_dump;	/* Automatically dump full logs periodically */
+	gboolean force_port;	/* Forced port, no autoscanning */
 	gboolean hide_rttext;	/* Hide Runtime Variable Window */
 	gboolean hide_status;	/* Hide Status Window */
 	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */
@@ -37,7 +38,8 @@ struct _CmdLineArgs
 	gchar *dbglog;		/* Global debug log file name */
 	gchar *autolog_dump_dir;/* What dir to put logs into */
 	gchar *autolog_basename;/* Autolog base filename */
-	gchar * network_host;	/* Network host */
+	gchar *network_host;	/* Network host */
+	gchar *port;		/* Serial port */
 	gint network_port;	/* Network port */
 	gboolean network_mode;	/* Network mode */
 	gboolean listen_mode;	/* Listen mode */

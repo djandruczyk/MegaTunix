@@ -97,7 +97,7 @@ gint main(gint argc, gchar ** argv)
 	handle_args(argc,argv);
 
 	/* This will exit mtx if the locking fails! */
-	create_mtx_lock();
+	//create_mtx_lock();
 
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
