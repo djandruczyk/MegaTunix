@@ -93,7 +93,6 @@ gint main(gint argc, gchar ** argv)
 	*/
 
 	global_data = g_new0(gconstpointer, 1);
-	handle_args(argc,argv);
 
 	/* This will exit mtx if the locking fails! */
 	//create_mtx_lock();
@@ -101,6 +100,7 @@ gint main(gint argc, gchar ** argv)
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
 
+	handle_args(argc,argv);	/* handle CLI arguments */
 	open_debug();		/* Open debug log */
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */

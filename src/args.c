@@ -55,7 +55,7 @@ void handle_args(gint argc, gchar * argv[])
 		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
-		{"Port(s)",'P',0,G_OPTION_ARG_STRING,&args->ports,"Use This list of serial port(s) ONLY",NULL},
+		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
 		{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Network socket instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
@@ -113,6 +113,11 @@ void handle_args(gint argc, gchar * argv[])
 		}
 		g_strfreev(vector);
 	}
+	if (args->port)
+	{
+		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(FALSE));
+		DATA_SET_FULL(global_data,"override_port",g_strdup(args->port),g_free);
+	}
 	if (args->autolog_dump)
 	{
 
@@ -159,6 +164,7 @@ void handle_args(gint argc, gchar * argv[])
 		printf(_("debug option \"%i\"\n"),args->debug);
 		printf(_("Global debug filename\"%s\"\n"),args->dbglog);
 		printf(_("version option \"%i\"\n"),args->version);
+		printf(_("Port option \"%s\"\n"),args->port);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
 		printf(_("no rttext option \"%i\"\n"),args->hide_rttext);
 		printf(_("no status option \"%i\"\n"),args->hide_status);

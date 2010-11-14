@@ -80,9 +80,11 @@ void init(void)
 	GHashTable *commands = NULL;
 	gboolean *hidden_list = NULL;
 	GdkColormap *colormap = NULL;
+	CmdLineArgs *args = NULL;
 	gint i = 0;
 
 	colormap = gdk_colormap_get_system ();
+	args = DATA_GET(global_data,"args");
 	gdk_colormap_alloc_color(colormap,&red,FALSE,TRUE);
 	gdk_colormap_alloc_color(colormap,&green,FALSE,TRUE);
 	gdk_colormap_alloc_color(colormap,&blue,FALSE,TRUE);
@@ -120,14 +122,21 @@ void init(void)
 	DATA_SET_FULL(global_data,"commands_hash",commands,g_hash_table_destroy);
 
 	/* initialize all global variables to known states */
-	DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
 	cleanup(DATA_GET(global_data,"potential_ports"));
 #ifdef __WIN32__
-	DATA_SET_FULL(global_data,"override_port",g_strdup("COM1"),g_free);
+	if (!args->port)
+	{
+		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
+		DATA_SET_FULL(global_data,"override_port",g_strdup("COM1"),g_free);
+	}
 	DATA_SET_FULL(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"),g_free);
 #else
-	DATA_SET_FULL(global_data,"override_port",g_strdup("/dev/ttyS0"),g_free);
-	 DATA_SET_FULL(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"),g_free);
+	if (!args->port)
+	{
+		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
+		DATA_SET_FULL(global_data,"override_port",g_strdup("/dev/ttyS0"),g_free);
+	}
+	DATA_SET_FULL(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"),g_free);
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
@@ -258,13 +267,16 @@ gboolean read_config(void)
 			DATA_SET_FULL(global_data,"potential_ports",g_strdup(tmpbuf),g_free);
 			cleanup(tmpbuf);
 		}
-		if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
+		if (!args->port)
 		{
-			DATA_SET_FULL(global_data,"override_port",g_strdup(tmpbuf),g_free);
-			cleanup(tmpbuf);
+			if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
+			{
+				DATA_SET_FULL(global_data,"override_port",g_strdup(tmpbuf),g_free);
+				cleanup(tmpbuf);
+			}
+			if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
+				DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
 		}
-		if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
-			DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(tmpi));
 
 		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
@@ -475,7 +487,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "override_port", 
-				serial_params->port_name);
+					serial_params->port_name);
 	cfg_write_string(cfgfile, "Serial", "potential_ports", 
 				(gchar *)DATA_GET(global_data,"potential_ports"));
 	cfg_write_boolean(cfgfile, "Serial", "autodetect_port", 
