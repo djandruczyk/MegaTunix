@@ -24,7 +24,6 @@
 
 
 extern gconstpointer *global_data;
-static gint js_sweep_id = 0;
 
 
 EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
@@ -46,9 +45,12 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		jsdata.step_e = lookup_widget("JS_step_rpm_entry");
 	if (!jsdata.sweep_e)
 		jsdata.sweep_e = lookup_widget("JS_sweep_time_entry");
+	if (!jsdata.start_b)
+		jsdata.start_b = lookup_widget("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget("JS_stop_sweep_button");
 
+	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
 	jsdata.start = (gint)strtol(text,NULL,10);
 	g_free(text);
@@ -102,12 +104,19 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	stop_tickler(RTV_TICKLER);
 	g_usleep(10000);
-	io_cmd("jimstim_interactive",NULL);
 	steps = (jsdata.end-jsdata.start)/jsdata.step;
 	interval = (1000*jsdata.sweep)/steps;
 	interval = interval > 10 ? interval:10;
+	jsdata.current = jsdata.start;
 	
-	js_sweep_id = gdk_threads_add_timeout(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
+	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
+	gtk_widget_set_sensitive(jsdata.end_e,FALSE);
+	gtk_widget_set_sensitive(jsdata.step_e,FALSE);
+	gtk_widget_set_sensitive(jsdata.sweep_e,FALSE);
+	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
+	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
+	//io_cmd("jimstim_interactive",NULL);
+	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
 	return TRUE;
 }
@@ -115,7 +124,21 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 {
-	g_source_remove(js_sweep_id);
+	JimStim_Data *jsdata = NULL;
+	jsdata = OBJ_GET(widget,"jsdata");
+	if (jsdata)
+	{
+		g_source_remove(jsdata->sweep_id);
+		gtk_widget_set_sensitive(jsdata->start_e,TRUE);
+		gtk_widget_set_sensitive(jsdata->end_e,TRUE);
+		gtk_widget_set_sensitive(jsdata->step_e,TRUE);
+		gtk_widget_set_sensitive(jsdata->sweep_e,TRUE);
+		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
+		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
+	}
+	/* Reset rpm to 65535 to go back to normal */
+	send_to_ecu(0,0,1,MTX_U08,255,TRUE);
+	send_to_ecu(0,0,2,MTX_U08,255,TRUE);
 	start_tickler(RTV_TICKLER);
 	return TRUE;
 }
@@ -146,5 +169,5 @@ gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	DATA_SET(output->data,"value",GINT_TO_POINTER((jsdata->current &0x00ff)));
 	io_cmd("jimstim_interactive_write",output);
 
-	return FALSE;
+	return TRUE;
 }

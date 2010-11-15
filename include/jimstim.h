@@ -32,6 +32,7 @@ struct _JimStim_Data
 	guint16 step;		/* step value */
 	guint16 sweep;		/* sweep value */
 	guint16 current;	/* Current value */
+	gint sweep_id;		/*! Timeout identifier */
 };
 
 /* Prototypes */
