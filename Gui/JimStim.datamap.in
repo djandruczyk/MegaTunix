@@ -78,28 +78,24 @@ tooltip=Commanded RPM
 
 [start_rpm_entry]
 keys=size,raw_upper,tooltip
-offset=0
 size=_U16_
 raw_upper=65534
 tooltip=Start RPM for RPM sweeping
 
 [end_rpm_entry]
 keys=size,raw_upper,tooltip
-offset=0
 size=_U16_
 raw_upper=65534
 tooltip=End RPM for RPM sweeping
 
 [step_rpm_entry]
 keys=size,raw_upper,tooltip
-offset=0
 size=_U16_
 raw_upper=1000
 tooltip=RPM Step
 
 [sweep_time_entry]
 keys=size,raw_upper,tooltip
-offset=-1
 size=_U16_
 raw_upper=300
 tooltip=How many seconds to go from start RPM to End RPM
