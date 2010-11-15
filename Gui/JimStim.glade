@@ -349,7 +349,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
-                                        <property name="width_chars">7</property>
+                                        <property name="width_chars">5</property>
                                         <signal name="insert_text" handler="insert_text_handler"/>
                                       </widget>
                                       <packing>
@@ -377,8 +377,8 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkButton" id="end_sweep_button">
-                                        <property name="label" translatable="yes">End RPM Sweep</property>
+                                      <widget class="GtkButton" id="stop_sweep_button">
+                                        <property name="label" translatable="yes">Stop RPM Sweep</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>

@@ -16,9 +16,28 @@
 
 #include <gtk/gtk.h>
 
+typedef struct _JimStim_Data JimStim_Data;
+
+
+struct _JimStim_Data
+{
+	GtkWidget *start_e;	/* start entry */
+	GtkWidget *end_e;	/* end entry */
+	GtkWidget *step_e;	/* step entry */
+	GtkWidget *sweep_e;	/* sweep time entry */
+	GtkWidget *start_b;	/* start button */
+	GtkWidget *stop_b;	/* end button */
+	guint16 start;		/* start value */
+	guint16 end;		/* end value */
+	guint16 step;		/* step value */
+	guint16 sweep;		/* sweep value */
+	guint16 current;	/* Current value */
+};
+
 /* Prototypes */
 gboolean jimstim_sweep_start(GtkWidget *, gpointer);
 gboolean jimstim_sweep_end(GtkWidget *, gpointer);
+gboolean jimstim_rpm_sweep(JimStim_Data *);
 /* Prototypes */
 
 #endif

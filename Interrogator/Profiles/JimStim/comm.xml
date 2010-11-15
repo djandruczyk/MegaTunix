@@ -2,20 +2,6 @@
 <comms>
 	<potential_args>
 		<arg>
-			<name>JIMSTIM_NUM_BYTES</name>
-			<desc>Length of data to transfer (read or write)</desc>
-			<type>_DATA_</type>
-			<internal_name>num_bytes</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>JIMSTIM_PAGE</name>
-			<desc>Page inside ECU firmware</desc>
-			<type>_DATA_</type>
-			<internal_name>phys_ecu_page</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
 			<name>JIMSTIM_OFFSET</name>
 			<desc>Offset from the beginning of the page.</desc>
 			<type>_DATA_</type>
@@ -59,6 +45,14 @@
 				<function>fire_off_rtv_watches_pf</function>
 				<function>run_datalog_pf</function>
 			</post_functions>
+		</cmd>
+		<cmd>
+			<name>jimstim_interactive_write</name>
+			<desc>Interactive write function</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>JIMSTIM_BYTE</arg>
+			</args>
 		</cmd>
 		<cmd>
 			<name>jimstim_generic_write</name>
