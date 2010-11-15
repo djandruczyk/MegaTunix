@@ -751,7 +751,10 @@ void build_output_string(Io_Message *message, Command *command, gpointer data)
 	block = g_new0(DBlock, 1);
 	block->type = DATA;
 	block->data = (guint8 *)g_strdup(command->base);
-	block->len = strlen(command->base);
+	if (!command->base)
+		block->len = 0;
+	else
+		block->len = strlen(command->base);
 	g_array_append_val(message->sequence,block);
 
 	/* Arguments */
