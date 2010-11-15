@@ -124,6 +124,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 {
+	OutputData *output = NULL;
 	JimStim_Data *jsdata = NULL;
 	jsdata = OBJ_GET(widget,"jsdata");
 	if (jsdata)
@@ -136,9 +137,17 @@ EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
 	}
-	/* Reset rpm to 65535 to go back to normal */
-	send_to_ecu(0,0,1,MTX_U08,255,TRUE);
-	send_to_ecu(0,0,2,MTX_U08,255,TRUE);
+	/* Send 65535 to disable dynamic mode */
+	/* Highbyte of rpm */
+	output = initialize_outputdata();
+	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
+	DATA_SET(output->data,"value",GINT_TO_POINTER(255));
+	io_cmd("jimstim_interactive_write",output);
+	/* Lowbyte of rpm */
+	output = initialize_outputdata();
+	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
+	DATA_SET(output->data,"value",GINT_TO_POINTER(255));
+	io_cmd("jimstim_interactive_write",output);
 	start_tickler(RTV_TICKLER);
 	return TRUE;
 }
