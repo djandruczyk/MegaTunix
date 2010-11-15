@@ -76,6 +76,12 @@
 			</post_functions>
 		</cmd>
 		<cmd>
+			<name>jimstim_interactive</name>
+			<desc>Enabled interactive RPM control</desc>
+			<type>_WRITE_CMD_</type>
+			<base>i</base>
+		</cmd>
+		<cmd>
 			<name>jimstim_burn</name>
 			<desc>burns the current page flash</desc>
 			<type>_WRITE_CMD_</type>

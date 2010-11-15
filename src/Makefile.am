@@ -37,6 +37,7 @@ megatunix_SOURCES = \
 	helpers.c \
 	init.c \
 	interrogate.c \
+	jimstim.c \
 	keybinder.c \
 	keyparser.c \
 	listmgmt.c \
