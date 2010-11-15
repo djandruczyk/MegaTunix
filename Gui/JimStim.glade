@@ -367,7 +367,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <signal name="activate" handler="jimstim_sweep_start"/>
+                                        <signal name="clicked" handler="jimstim_sweep_start"/>
                                       </widget>
                                       <packing>
                                         <property name="right_attach">2</property>
@@ -382,7 +382,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <signal name="activate" handler="jimstim_sweep_end"/>
+                                        <signal name="clicked" handler="jimstim_sweep_end"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">2</property>
