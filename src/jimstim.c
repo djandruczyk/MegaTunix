@@ -18,6 +18,7 @@
 #include <init.h>
 #include <jimstim.h>
 #include <string.h>
+#include <timeout_handlers.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 
@@ -32,6 +33,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gchar *text = NULL;
 	gint steps;
 	gint interval;
+	gboolean fault = FALSE;
 	extern GdkColor red;
 	extern GdkColor black;
 	
@@ -65,25 +67,44 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 	/* Validate data */
 	if ((jsdata.start < 0) || (jsdata.start > 65534))
+	{
+		fault = TRUE;
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
+	}
 	else
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
 	if ((jsdata.end < 0) || (jsdata.end > 65534))
+	{	
+		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
+	}
 	else
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
 	if ((jsdata.step < 0) || (jsdata.step > 1000))
+	{
+		fault = TRUE;
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
+	}
 	else
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	if ((jsdata.sweep < 0) || (jsdata.sweep > 300))
+	{	
+		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
+	}
 	else
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&black);
 
+	if (fault)
+	{
+		printf("Jimstim parameter issue, please check!\n");
+		return TRUE;
+	}
+	stop_tickler(RTV_TICKLER);
+	g_usleep(10000);
 	io_cmd("jimstim_interactive",NULL);
 	steps = (jsdata.end-jsdata.start)/jsdata.step;
-	interval = (gint)((gfloat)jsdata.sweep/steps);
+	interval = (1000*jsdata.sweep)/steps;
 	interval = interval > 10 ? interval:10;
 	
 	js_sweep_id = gdk_threads_add_timeout(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
@@ -95,7 +116,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 {
 	g_source_remove(js_sweep_id);
-	printf("jimstim sweep end not written yet\n");
+	start_tickler(RTV_TICKLER);
 	return TRUE;
 }
 
