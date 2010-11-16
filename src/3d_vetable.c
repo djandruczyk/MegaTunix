@@ -688,16 +688,9 @@ GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
-#ifdef __WIN32__
-	/* GtkGLEXT Win32 is broken, this Sort of makes it work */
-	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
-			GDK_GL_MODE_DEPTH |
-			GDK_GL_MODE_SINGLE);
-#else
 	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_DEPTH |
 			GDK_GL_MODE_DOUBLE);
-#endif
 	if (gl_config == NULL)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));

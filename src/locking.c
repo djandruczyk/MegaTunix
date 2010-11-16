@@ -114,6 +114,7 @@ void unix_create_mtx_lock(void)
 
 void unix_remove_mtx_lock(void)
 {
+#ifndef __WIN32__
 	gint res = 0;
 	gint tmpfd = 0;
 	gchar * lockfile = NULL;
@@ -130,6 +131,7 @@ void unix_remove_mtx_lock(void)
 	if (res == -1)
 		printf("Global MTX lock unlock failure!\n");
 	return;
+#endif
 }
 
 
