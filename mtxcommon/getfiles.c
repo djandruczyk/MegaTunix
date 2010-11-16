@@ -364,6 +364,7 @@ gchar * choose_file(MtxFileIO *data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	gboolean res = FALSE;
 	guint i = 0;
 
 	if (!GTK_IS_WINDOW(data->parent))
@@ -389,12 +390,8 @@ gchar * choose_file(MtxFileIO *data)
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
-
-
 		if ((data->absolute_path) && (!data->default_path))
-		{
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
-		}
 		else if (data->default_path)
 		{
 #ifdef __WIN32__	/* Disallows modifying distributed files */
@@ -437,7 +434,6 @@ gchar * choose_file(MtxFileIO *data)
 					gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
 					g_strfreev(vector);
 					g_free(tmpbuf);
-
 				}
 				else
 					gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),data->filename);
@@ -502,19 +498,15 @@ gchar * choose_file(MtxFileIO *data)
 	}
 afterfilter:
 	/* Turn on overwriteconfirmation */
-#if GTK_MINOR_VERSION >= 8
-	if (gtk_minor_version >= 8)
-	{
-		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-		g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
-				G_CALLBACK (confirm_overwrite_callback), NULL);
-	}
-#endif
+	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+	g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
+			G_CALLBACK (confirm_overwrite_callback), NULL);
 
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-#endif
+//	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
+
+	if (data->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+		if (data->default_filename)
+			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 	{
