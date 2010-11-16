@@ -202,6 +202,16 @@ gboolean read_config(void)
 		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
 			DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
+		if(cfg_read_string(cfgfile, "Global", "last_offline_profile", &tmpbuf))
+		{
+			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),g_free);
+			cleanup(tmpbuf);
+		}
+		if(cfg_read_string(cfgfile, "Global", "last_offline_filename", &tmpbuf))
+		{
+			DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(tmpbuf),g_free);
+			cleanup(tmpbuf);
+		}
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
 			DATA_SET_FULL(global_data,"dash_1_name",g_strdup(tmpbuf),g_free);
@@ -361,6 +371,10 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));
 	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)DATA_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	if (DATA_GET(global_data,"last_offline_profile"))
+		cfg_write_string(cfgfile, "Global", "last_offline_profile", DATA_GET(global_data,"last_offline_profile"));
+	if (DATA_GET(global_data,"last_offline_filename"))
+		cfg_write_string(cfgfile, "Global", "last_offline_filename", DATA_GET(global_data,"last_offline_filename"));
 	cfg_write_int(cfgfile, "Serial", "read_timeout", (GINT)DATA_GET(global_data,"read_timeout"));
 	tmpbuf = DATA_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))

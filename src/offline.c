@@ -85,6 +85,7 @@ gboolean set_offline_mode(void)
 
 	}
 
+	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(filename),g_free);
 	offline = TRUE;
 	interrogated = TRUE;
 
@@ -244,6 +245,7 @@ gchar * present_firmware_choices(void)
 	GList *p_list = NULL;
 	GList *s_list = NULL;
 	ConfigFile *cfgfile = NULL;
+	const gchar * last_file = NULL;
 	gint major = 0;
 	gint minor = 0;
 	guint i = 0;
@@ -277,11 +279,15 @@ gchar * present_firmware_choices(void)
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
 		cfg_free(cfgfile);
+		last_file = DATA_GET(global_data,"last_offline_profile");
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 		{
 			element = g_new0(ListElement, 1);
 			element->filename = g_strdup(filenames[i]);
+			if (g_strcasecmp(element->filename,last_file) == 0)
+				element->def = TRUE;
+
 			element->name = g_strdup(tmpbuf);
 			p_list = g_list_append(p_list,(gpointer)element);
 		}
@@ -289,6 +295,8 @@ gchar * present_firmware_choices(void)
 		{
 			element = g_new0(ListElement, 1);
 			element->filename = g_strdup(filenames[i]);
+			if (g_strcasecmp(element->filename,last_file) == 0)
+				element->def = TRUE;
 			element->name = g_strdup(tmpbuf);
 			s_list = g_list_append(s_list,(gpointer)element);
 		}
@@ -311,12 +319,15 @@ gchar * present_firmware_choices(void)
 	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
+	group = NULL;
+	/* Dummies */
+	button = gtk_radio_button_new(group);
+	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	if (g_list_length(p_list) > 0)
 	{
 		label = gtk_label_new("Custom (personal) Profiles");
 		gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 
-		group = NULL;
 		/* Cycle list for PERSONAL interogation files */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
@@ -338,6 +349,10 @@ gchar * present_firmware_choices(void)
 					G_CALLBACK(toggle_button_handler),
 					NULL);
 			gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
+			if (element->def)
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+			else
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
 			group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 		}
 
@@ -366,12 +381,18 @@ gchar * present_firmware_choices(void)
 				G_CALLBACK(toggle_button_handler),
 				NULL);
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
+		if (element->def)
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		else
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	}
+	/*
 	if (i==1)
 		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
 	else
 		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+	*/
 
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
@@ -420,11 +441,13 @@ EXPORT void offline_ecu_restore_pf(void)
 	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->shortcut_folders = g_strdup("ecu_snapshots,../MTX_ecu_snapshots");
+	fileio->default_filename = g_strdup(DATA_GET(global_data,"last_offline_filename"));
 
 	gdk_threads_enter();
 	filename = choose_file(fileio);
 	if (filename)
 	{
+		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
 		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
 		restore_all_ecu_settings(filename);
 		g_free(filename);
