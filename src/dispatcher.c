@@ -229,6 +229,16 @@ trypop:
 			/*printf("gui_dispatcher\n");*/
 			switch ((UpdateFunction)val)
 			{
+				case UPD_REFRESH:
+					widget = (GtkWidget *)message->payload;
+					if (GTK_IS_WIDGET(widget))
+					{
+						gdk_threads_enter();
+						update_widget(widget,NULL);
+						gdk_threads_leave();
+						message->payload = NULL;
+					}
+					break;
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/
 					t_message = (Text_Message *)message->payload;

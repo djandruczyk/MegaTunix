@@ -328,7 +328,8 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				if (!settings)
 					settings = gtk_settings_get_default();
-				g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
+				if (gtk_micro_version >= 14)
+					g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
 				break;
 			case FAHRENHEIT:
@@ -389,7 +390,8 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				if (!settings)
 					settings = gtk_settings_get_default();
-				g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
+				if (gtk_micro_version >= 14)
+					g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
 				break;
 			default:
@@ -3680,14 +3682,23 @@ EXPORT void update_misc_gauge(DataWatch *watch)
 		remove_watch(watch->id);
 }
 
-void refresh_widgets_at_offset(gint page, gint offset)
+void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
-	/*printf("Refresh widget at page %i, offset %i\n",page,offset);*/
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+		thread_refresh_widget(g_list_nth_data(ve_widgets[page][offset],i));
+	update_ve3d_if_necessary(page,offset);
+}
 
+
+void refresh_widgets_at_offset(gint page, gint offset)
+{
+	guint i = 0;
+	extern GList ***ve_widgets;
+	extern Firmware_Details *firmware;
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
 		update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);

@@ -1156,8 +1156,6 @@ void highlight_entry(GtkWidget *widget, GdkColor *color)
 		else
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 	}
-	else
-		printf(_("widget isn't visible or sensitive\n"));
 	return;
 #else
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");

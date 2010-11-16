@@ -69,7 +69,8 @@ typedef enum
 	UPD_LOGBAR=0x180,
 	UPD_WIDGET,
 /*	UPD_RAW_MEMORY,*/
-	UPD_RUN_FUNCTION
+	UPD_RUN_FUNCTION,
+	UPD_REFRESH
 }UpdateFunction;
 
 typedef enum

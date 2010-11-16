@@ -1,13 +1,8 @@
 
- MegaTunix v. @VERSION@ NO LONGER requires the GTK+ Runtime.
+ MegaTunix v. @VERSION@ NO LONGER requires a separate GTK+ Runtime.
 
  If you still have it installed from a Previous version of MegaTunix,
  its recommended that you UNINSTALL IT so it doesn't not conflict
- with the integrated one within this installer
-
-
-NOTE: As of MegaTunix 0.9.23 and later , due to limitations in 
-Windows 2000, it is no longer supported.  Pleas consider using 
-Linux (Ubuntu reocmmended), WinXP or newer, or OS-X.
+ with the integrated one within this installer.
 
 

@@ -758,10 +758,10 @@ close_binary2:
 				}
 				continue;
 			case GET_DATABLOCK:
-				/*				printf("get_databyte\n");*/
+				/*				printf("get_datablock\n");*/
 				buffer[index] = (guint8)buf;
 				index++;
-				/*				printf ("Databyte index %i of %i\n",index,count);*/
+				/*				printf ("Datablock index %i of %i\n",index,count);*/
 				if (index >= count)
 				{
 					if (firmware->capabilities & MS2)
@@ -1663,7 +1663,7 @@ void *control_socket_client(gpointer data)
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
+	dbg_func(MTXSOCKET|THREADS,g_strdup(__FILE__ _(": control_socket_client()\n\tThread created!\n")));
 	while(TRUE)
 	{
 		if (leaving)
@@ -1672,7 +1672,7 @@ void *control_socket_client(gpointer data)
 		if (res <= 0)
 		{
 close_control:
-			dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error \"%s\"\n",error->message));
+			dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
 
@@ -1680,22 +1680,20 @@ close_control:
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		/*
-		   printf("controlsocket Data arrived!\n");
-		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
-		 */
+		dbg_func(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
+		dbg_func(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf)); 
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					/*printf("Slave chunk update received\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 				}
 				else if (buf == SLAVE_STATUS_UPDATE)
 				{
-					/*printf("slave status update!\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("slave status update!\n"));
 					state = GET_ACTION;
 					/* Put in handlers here to pickup
 					   status messages and other stuff
@@ -1706,53 +1704,53 @@ close_control:
 				continue;
 			case GET_ACTION:
 				action = (guint8)buf;
-				/*printf("Got action message!\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("Got action message!\n"));
 				if (action == GROUP_SET_COLOR)
 					state = GET_COLOR;
 				else
 					state = WAITING_FOR_CMD;
 				continue;
 			case GET_COLOR:
-				/*printf("got color\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("got color\n"));
 				color = (GuiColor)buf;
 				state = GET_HIGH_COUNT;
 				substate = GET_STRING;
 				continue;
 			case GET_CAN_ID:
-				/*				printf("get_canid block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_canid block\n"));
 				canID = (guint8)buf;
-				/*				printf("canID received is %i\n",canID);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				/*				printf("get_mtx_page block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
 				page = (guint8)buf;
-				/*				printf("page received is %i\n",page);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				/*				printf("get_high_offset block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
 				offset_h = (guint8)buf;
-				/*				printf("high offset received is %i\n",offset_h);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				/*				printf("get_low_offset block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
 				offset_l = (guint8)buf;
-				/*				printf("low offset received is %i\n",offset_l);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				/*				printf("get_high_count block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
 				count_h = (guint8)buf;
-				/*				printf("high count received is %i\n",count_h);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				/*				printf("get_low_count block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
 				count_l = (guint8)buf;
-				/*				printf("low count received is %i\n",count_l);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -1787,13 +1785,13 @@ close_control:
 					state = GET_STRING;
 				continue;
 			case GET_DATABLOCK:
-				/*				printf("get_databyte\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
 				buffer[index] = (guint8)buf;
 				index++;
-				/*				printf ("Databyte index %i of %i\n",index,count);*/
+				dbg_func(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
 				if (index >= count)
 				{
-					/*					printf("Got all needed data, updating gui\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
@@ -1803,12 +1801,13 @@ close_control:
 					gdk_threads_leave();
 					g_free(buffer);
 					index = 0;
+					dbg_func(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
 				}
 				else
 					state = GET_DATABLOCK;
 				continue;
 			default:
-				printf(_("Case not handled, bug in state machine!\n"));
+				dbg_func(SOCKET_CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
 				continue;
 
 		}
@@ -1830,7 +1829,7 @@ gboolean open_control_socket(gchar * host, gint port)
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket open error: %s\n",error->message));
+		dbg_func(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket open error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1842,7 +1841,7 @@ gboolean open_control_socket(gchar * host, gint port)
 	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket connect error: %s\n",error->message));
+		dbg_func(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket connect error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1885,7 +1884,7 @@ gint net_send(GSocket *socket, guint8 *buf, gint len)
 		n = g_socket_send(socket,(gchar *)buf+total,(gsize)bytesleft,NULL,&error);
 		if (n == -1) 
 		{ 
-			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__" net_send()\n\tSocket send error: \"%s\"\n",error->message));
+			dbg_func(MTXSOCKET|CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__" net_send()\n\tSocket send error: \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
 			return -1; 
@@ -2713,10 +2712,10 @@ close_binary:
 				}
 				continue;
 			case GET_DATABLOCK:
-				/*				printf("get_databyte\n");*/
+				/*				printf("get_datablock\n");*/
 				buffer[index] = (guint8)buf;
 				index++;
-				/*				printf ("Databyte index %i of %i\n",index,count);*/
+				/*				printf ("Datablock index %i of %i\n",index,count);*/
 				if (index >= count)
 				{
 					if (firmware->capabilities & MS2)
@@ -3686,6 +3685,8 @@ void *control_socket_client(gpointer data)
 		if (res <= 0)
 		{
 close_control:
+			 dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error\n"));
+
 #ifdef __WIN32__
 			closesocket(fd);
 #else
@@ -3694,22 +3695,20 @@ close_control:
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		/*
-		   printf("controlsocket Data arrived!\n");
-		   printf("data %i, %c\n",(gint)buf,(gchar)buf); 
-		 */
+		dbg_func(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
+                dbg_func(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf));
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					/*printf("Slave chunk update received\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 				}
 				else if (buf == SLAVE_STATUS_UPDATE)
 				{
-					/*printf("slave status update!\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("slave status update!\n"));
 					state = GET_ACTION;
 					/* Put in handlers here to pickup
 					   status messages and other stuff
@@ -3720,53 +3719,53 @@ close_control:
 				continue;
 			case GET_ACTION:
 				action = (guint8)buf;
-				/*printf("Got action message!\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("Got action message!\n"));
 				if (action == GROUP_SET_COLOR)
 					state = GET_COLOR;
 				else
 					state = WAITING_FOR_CMD;
 				continue;
 			case GET_COLOR:
-				/*printf("got color\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("got color\n"));
 				color = (GuiColor)buf;
 				state = GET_HIGH_COUNT;
 				substate = GET_STRING;
 				continue;
 			case GET_CAN_ID:
-				/*				printf("get_canid block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_canid block\n"));
 				canID = (guint8)buf;
-				/*				printf("canID received is %i\n",canID);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				/*				printf("get_mtx_page block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
 				page = (guint8)buf;
-				/*				printf("page received is %i\n",page);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				/*				printf("get_high_offset block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
 				offset_h = (guint8)buf;
-				/*				printf("high offset received is %i\n",offset_h);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				/*				printf("get_low_offset block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
 				offset_l = (guint8)buf;
-				/*				printf("low offset received is %i\n",offset_l);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				/*				printf("get_high_count block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
 				count_h = (guint8)buf;
-				/*				printf("high count received is %i\n",count_h);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				/*				printf("get_low_count block\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
 				count_l = (guint8)buf;
-				/*				printf("low count received is %i\n",count_l);*/
+				dbg_func(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -3801,28 +3800,29 @@ close_control:
 					state = GET_STRING;
 				continue;
 			case GET_DATABLOCK:
-				/*				printf("get_databyte\n");*/
+				dbg_func(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
 				buffer[index] = (guint8)buf;
 				index++;
-				/*				printf ("Databyte index %i of %i\n",index,count);*/
+				dbg_func(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
 				if (index >= count)
 				{
-					/*					printf("Got all needed data, updating gui\n");*/
+					dbg_func(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
 					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)
-						refresh_widgets_at_offset(page,i);
+						thread_refresh_widgets_at_offset(page,i);
 					gdk_threads_leave();
 					g_free(buffer);
 					index = 0;
+					dbg_func(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
 				}
 				else
 					state = GET_DATABLOCK;
 				continue;
 			default:
-				printf(_("Case not handled, bug in state machine!\n"));
+				dbg_func(MTXSOCKET|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
 				continue;
 
 		}

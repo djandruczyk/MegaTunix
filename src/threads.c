@@ -685,6 +685,32 @@ void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 
 
 /*!
+ \brief thread_refresh_widget() is a function to be called from within threads
+ to force a widget rerender
+ \param widget_name (GtkWidget *) widget pointer
+ */
+void thread_refresh_widget(GtkWidget * widget)
+{
+
+	Io_Message *message = NULL;
+	extern GAsyncQueue *gui_dispatch_queue;
+	gint tmp = 0;
+
+	message = initialize_io_message();
+
+	message->payload = (void *)widget;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_REFRESH;
+	g_array_append_val(message->functions,tmp);
+
+	g_async_queue_ref(gui_dispatch_queue);
+	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	g_async_queue_unref(gui_dispatch_queue);
+	return;
+}
+
+
+/*!
  \brief start_restore_monitor kicks off a thread to update the tools view
  during an ECU restore to provide user feedback since this is a time
  consuming operation.  if uses message passing over asyncqueues to send the 
