@@ -103,3 +103,9 @@ raw_upper=300
 precision=1
 tooltip=How many seconds to go from start RPM to End RPM
 
+[commanded_rpm]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=The RPM the Stim is currently synthesizing
+

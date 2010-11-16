@@ -27,6 +27,7 @@ struct _JimStim_Data
 	GtkWidget *sweep_e;	/* sweep time entry */
 	GtkWidget *start_b;	/* start button */
 	GtkWidget *stop_b;	/* end button */
+	GtkWidget *rpm_e;	/* commanded rpm entry */
 	guint16 start;		/* start value */
 	guint16 end;		/* end value */
 	guint16 step;		/* step value */

@@ -30,9 +30,11 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 {
 	static JimStim_Data jsdata;
 	gchar *text = NULL;
-	gfloat steps;
-	gint interval;
+	gfloat steps = 0.0;
+	gfloat newsweep = 0.0;
+	gint interval = 0;
 	gboolean fault = FALSE;
+	gchar * tmpbuf = NULL;
 	extern GdkColor red;
 	extern GdkColor black;
 	
@@ -49,6 +51,9 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		jsdata.start_b = lookup_widget("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget("JS_stop_sweep_button");
+
+	if (!jsdata.rpm_e)
+		jsdata.rpm_e = lookup_widget("JS_commanded_rpm");
 
 	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
@@ -105,8 +110,16 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	stop_tickler(RTV_TICKLER);
 	g_usleep(10000);
 	steps = (jsdata.end-jsdata.start)/jsdata.step;
-	interval = (gint)(1000*jsdata.sweep)/steps;
-	interval = interval > 3 ? interval:3;
+	interval = (1000*jsdata.sweep)/steps;
+	if (interval < 10.0)
+	{
+		newsweep = (10.0*steps)/1000;
+		tmpbuf = g_strdup_printf("%1$.*2$f",newsweep,1);
+		gtk_entry_set_text(GTK_ENTRY(jsdata.sweep_e),tmpbuf);
+		g_free(tmpbuf);
+	}
+	/* Clamp interval at 10 ms, max 100 theoretical updates/sec */
+	interval = interval > 10.0 ? interval:10.0;
 	jsdata.current = jsdata.start;
 	
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
@@ -115,6 +128,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.sweep_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
+	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
 	//io_cmd("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -136,8 +150,10 @@ EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->sweep_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
+		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
 	}
 	/* Send 65535 to disable dynamic mode */
+	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),"");
 	/* Highbyte of rpm */
 	output = initialize_outputdata();
 	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
@@ -155,6 +171,7 @@ EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 {
 	OutputData *output = NULL;
+	gchar *tmpbuf = NULL;
 	static gboolean rising = TRUE;
 
 	if (jsdata->current >= jsdata->end)
@@ -177,6 +194,11 @@ gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
 	DATA_SET(output->data,"value",GINT_TO_POINTER((jsdata->current &0x00ff)));
 	io_cmd("jimstim_interactive_write",output);
+	tmpbuf = g_strdup_printf("%i",jsdata->current);
+	gdk_threads_enter();
+	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),tmpbuf);
+	gdk_threads_leave();
+	g_free(tmpbuf);
 
 	return TRUE;
 }
