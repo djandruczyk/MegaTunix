@@ -3,8 +3,8 @@
 . cross
 
 make distclean
-cross-configure --disable-shared $* && \
-	make -j3  && \
+cross-configure --disable-shared --prefix=/target/dest $* && \
+	make -j3  && rm -rf /target/dest/* && make install \
 	./contrib/builder && \
 . uncross 
 # make distclean
