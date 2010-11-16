@@ -4,7 +4,7 @@
 
 make distclean
 cross-configure --disable-shared --prefix=/target/dest $* && \
-	make -j3  && rm -rf /target/dest/* && make install \
+	make -j3  && rm -rf /target/dest/* && make install && \
 	./contrib/builder && \
 . uncross 
 # make distclean
