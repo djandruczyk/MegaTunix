@@ -94,7 +94,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.sweep < 0.1) || (jsdata.sweep > 300.0))
+	if ((jsdata.sweep < 0.00001) || (jsdata.sweep > 300.0))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
