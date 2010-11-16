@@ -30,7 +30,7 @@ struct _JimStim_Data
 	guint16 start;		/* start value */
 	guint16 end;		/* end value */
 	guint16 step;		/* step value */
-	guint16 sweep;		/* sweep value */
+	gfloat sweep;		/* sweep value */
 	guint16 current;	/* Current value */
 	gint sweep_id;		/*! Timeout identifier */
 };

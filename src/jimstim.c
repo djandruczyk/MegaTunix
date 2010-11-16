@@ -30,7 +30,7 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 {
 	static JimStim_Data jsdata;
 	gchar *text = NULL;
-	gint steps;
+	gfloat steps;
 	gint interval;
 	gboolean fault = FALSE;
 	extern GdkColor red;
@@ -64,32 +64,32 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	g_free(text);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.sweep_e),0,-1); 
-	jsdata.sweep = (gint)strtol(text,NULL,10);
+	jsdata.sweep = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	g_free(text);
 
 	/* Validate data */
-	if ((jsdata.start < 0) || (jsdata.start > 65534))
+	if ((jsdata.start < 60) || (jsdata.start > 65534))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
 	}
 	else
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.end < 0) || (jsdata.end > 65534))
+	if ((jsdata.end < 61) || (jsdata.end > 65534))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
 	}
 	else
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.step < 0) || (jsdata.step > 1000))
+	if ((jsdata.step < 1) || (jsdata.step > 1000))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
 	}
 	else
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.sweep < 0) || (jsdata.sweep > 300))
+	if ((jsdata.sweep < 0.1) || (jsdata.sweep > 300.0))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
@@ -105,8 +105,8 @@ EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	stop_tickler(RTV_TICKLER);
 	g_usleep(10000);
 	steps = (jsdata.end-jsdata.start)/jsdata.step;
-	interval = (1000*jsdata.sweep)/steps;
-	interval = interval > 10 ? interval:10;
+	interval = (gint)(1000*jsdata.sweep)/steps;
+	interval = interval > 3 ? interval:3;
 	jsdata.current = jsdata.start;
 	
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
