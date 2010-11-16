@@ -68,7 +68,11 @@ int setup_gui(void)
 	GtkSettings *settings = gtk_settings_get_default();
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 
+#ifdef __WIN32__
+	fname = g_build_filename(GUI_DATA_DIR,"main_win32.glade",NULL);
+#else
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
+#endif
 	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
 	{
