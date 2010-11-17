@@ -8,8 +8,11 @@ Gui/Dualtable-constants.glade
 Gui/enrichments.glade
 Gui/error_status.glade
 Gui/inj_timing_6x6x3.glade
+Gui/JimStim.glade
+Gui/jimstim-runtime.glade
 Gui/logviewer.glade
 Gui/main.glade
+Gui/main_win32.glade
 Gui/memviewer.glade
 Gui/ms2-accel.glade
 Gui/ms2-alpha-n_6x6x1.glade
@@ -116,6 +119,7 @@ src/gui_handlers.c
 src/helpers.c
 src/init.c
 src/interrogate.c
+src/jimstim.c
 src/keybinder.c
 src/keyparser.c
 src/listmgmt.c
@@ -147,6 +151,7 @@ src/serialio.c
 src/stringmatch.c
 src/tabloader.c
 src/tag_loader.c
+src/template.c
 src/therm.c
 src/threads.c
 src/timeout_handlers.c

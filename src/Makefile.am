@@ -97,5 +97,5 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-EXTRA_DIST = README NEWS TODO AUTHORS mtx.ico
+EXTRA_DIST = README NEWS TODO AUTHORS mtx.ico template.c
 

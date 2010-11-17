@@ -8,6 +8,8 @@
 ./Gui/Dualtable-constants.datamap.in
 ./Gui/enrichments_BnG.datamap.in
 ./Gui/error_status.datamap.in
+./Gui/JimStim.datamap.in
+./Gui/jimstim-runtime.datamap.in
 ./Gui/logviewer.datamap.in
 ./Gui/Makefile.in
 ./Gui/memviewer.datamap.in
@@ -104,6 +106,7 @@
 ./Gui/warmupwizard.datamap.in
 ./RealtimeMaps/BnG-Std.rtv_map.in
 ./RealtimeMaps/DT-Std.rtv_map.in
+./RealtimeMaps/JimStim-2.x.rtv_map.in
 ./RealtimeMaps/MS2-Extra-2.1.0.rtv_map.in
 ./RealtimeMaps/MS2-Extra-3.0.3w.rtv_map.in
 ./RealtimeMaps/MS2-Extra-3.0.x.rtv_map.in
@@ -112,6 +115,7 @@
 ./RealtimeMaps/MSnS-Extra-HR-011d.rtv_map.in
 ./RealtimeMaps/MSnS-Extra-HR-08x.rtv_map.in
 ./RealtimeMaps/PIS_V1_00-firmware.rtv_map.in
+./Interrogator/Profiles/JimStim/JimStim-2.x.prof.in
 ./Interrogator/Profiles/MS-1/B_and_G_1.x.prof.in
 ./Interrogator/Profiles/MS-1/B_and_G_2.0-3.01.prof.in
 ./Interrogator/Profiles/MS-1/Dualtable-1.02.prof.in
