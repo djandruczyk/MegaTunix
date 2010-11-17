@@ -5,10 +5,8 @@
  its recommended that you UNINSTALL IT so it doesn't not conflict
  with the integrated one within this installer.
 
- NOTE: Windows 2000 has been deprecated as of MEgaTunix 0.9.23.  
- Only MegaTunix.exe itself will run, however the other tools will 
- NOT as they require the current 2.20 GK+ version which has an 
- incompatibility iwht Win2k's winsock implementation.  We suggest 
+ NOTE: Windows 2000 will be phased out at some point.  The author
+ strongly recommends moving to a more modern platform. We suggest 
  you use a Linux (Ubuntu recommended) or WinXP machine instead.
  
 
