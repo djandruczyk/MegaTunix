@@ -2,8 +2,12 @@ megatunix (0.9.23) stable; urgency=low
   * Numerous memory leaks fixed
   * converted to GDataSet from GObject for many internal data storage sections
   * port to GtkBuilder format from glade for gauge/dashdesigners
+  * Support for MS2-Extra 3.03 through 3.0.3x
+  * Full support of JimStim 2.x firmware including dynamic RPM ctrl.
+  * Win2k build now fully functional with hybrid dual runtime
+  * Windows network mode deadlocks fixed 
 
- -- David Andruczyk <djandruczyk@yahoo.com>  Sun, 07 Nov 2010 14:02:08 -0500
+ -- David Andruczyk <djandruczyk@yahoo.com>  Wed, 17 Nov 2010 17:02:08 -0500
 megatunix (0.9.22) stable; urgency=low
   * Dash issues resolver,  3.03u seq injector issue fixed, 3.03 alpha TTM
   fixed up
