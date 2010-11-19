@@ -113,12 +113,12 @@ void init(void)
 	DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
-	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),g_free);
-	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),g_free);
-	DATA_SET_FULL(global_data,"hidden_list",hidden_list,g_free);
-	table = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_arg_free);
+	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),cleanup);
+	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),cleanup);
+	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
+	table = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,xml_arg_free);
 	DATA_SET_FULL(global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
-	commands = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,xml_cmd_free);
+	commands = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,xml_cmd_free);
 	DATA_SET_FULL(global_data,"commands_hash",commands,g_hash_table_destroy);
 
 	/* initialize all global variables to known states */
@@ -127,16 +127,16 @@ void init(void)
 	if (!args->port)
 	{
 		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
-		DATA_SET_FULL(global_data,"override_port",g_strdup("COM1"),g_free);
+		DATA_SET_FULL(global_data,"override_port",g_strdup("COM1"),cleanup);
 	}
-	DATA_SET_FULL(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"),g_free);
+	DATA_SET_FULL(global_data,"potential_ports",g_strdup("COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,COM10"),cleanup);
 #else
 	if (!args->port)
 	{
 		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(TRUE));
-		DATA_SET_FULL(global_data,"override_port",g_strdup("/dev/ttyS0"),g_free);
+		DATA_SET_FULL(global_data,"override_port",g_strdup("/dev/ttyS0"),cleanup);
 	}
-	DATA_SET_FULL(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"),g_free);
+	DATA_SET_FULL(global_data,"potential_ports", g_strdup("/dev/ttyUSB0,/dev/ttyS0,/dev/ttyUSB1,/dev/ttyS1,/dev/ttyUSB2,/dev/ttyS2,/dev/ttyUSB3,/dev/ttyS3,/tmp/virtual-serial"),cleanup);
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
@@ -152,7 +152,7 @@ void init(void)
 
 
 	if (!widget_group_states)
-		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,NULL);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
 }
@@ -188,7 +188,7 @@ gboolean read_config(void)
 //			DATA_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_string(cfgfile, "Global", "Previous_ECU_Family", &tmpbuf))
 		{
-			DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
@@ -204,17 +204,17 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		if(cfg_read_string(cfgfile, "Global", "last_offline_profile", &tmpbuf))
 		{
-			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_string(cfgfile, "Global", "last_offline_filename", &tmpbuf))
 		{
-			DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_1_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			DATA_SET_FULL(global_data,"dash_1_name",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"dash_1_name",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &tmpi))
@@ -222,10 +222,10 @@ gboolean read_config(void)
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &tmpi))
 			DATA_SET(global_data,"dash_1_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_1_size_ratio", &tmpf))
-			DATA_SET_FULL(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),g_free);
+			DATA_SET_FULL(global_data,"dash_1_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),cleanup);
 		if ((cfg_read_string(cfgfile, "Dashboards", "dash_2_name", &tmpbuf)) && (strlen(tmpbuf) != 0))
 		{
-			DATA_SET_FULL(global_data,"dash_2_name",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"dash_2_name",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &tmpi))
@@ -233,7 +233,7 @@ gboolean read_config(void)
 		if (cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &tmpi))
 			DATA_SET(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
-			DATA_SET_FULL(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),g_free);
+			DATA_SET_FULL(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),cleanup);
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		if (args->network_mode)
 			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
@@ -274,14 +274,14 @@ gboolean read_config(void)
 
 		if (cfg_read_string(cfgfile, "Serial", "potential_ports", &tmpbuf))
 		{
-			DATA_SET_FULL(global_data,"potential_ports",g_strdup(tmpbuf),g_free);
+			DATA_SET_FULL(global_data,"potential_ports",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if (!args->port)
 		{
 			if (cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
 			{
-				DATA_SET_FULL(global_data,"override_port",g_strdup(tmpbuf),g_free);
+				DATA_SET_FULL(global_data,"override_port",g_strdup(tmpbuf),cleanup);
 				cleanup(tmpbuf);
 			}
 			if(cfg_read_boolean(cfgfile, "Serial", "autodetect_port",&tmpi))
@@ -599,7 +599,7 @@ void mem_alloc(void)
 	if (!tab_gauges)
 		tab_gauges = g_new0(GList *, firmware->total_tables);
 	if (!sources_hash)
-		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
@@ -768,10 +768,10 @@ void mem_dealloc(void)
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
-		g_list_foreach(defaults,(GFunc)g_free,NULL);
+		g_list_foreach(defaults,(GFunc)cleanup,NULL);
 	/* Free all global data and structures */
 	g_dataset_destroy(global_data);
-	g_free(global_data);
+	cleanup(global_data);
 	//g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
@@ -1154,7 +1154,7 @@ void dealloc_table_params(Table_Params * table_params)
 		g_object_unref(table_params->z_object);
 	g_array_free(table_params->table,TRUE);
 
-	g_free(table_params);
+	cleanup(table_params);
 	return;
 }
 

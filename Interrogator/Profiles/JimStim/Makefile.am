@@ -1,6 +1,7 @@
 profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/JimStim
 
 profiles_in = \
+	JimStim-0.x.prof.in \
 	JimStim-2.x.prof.in 
 
 

@@ -3,7 +3,8 @@ guidir = $(datadir)/MegaTunix/$(GUI_DATA_DIR)
 gui_glade_files = 	\
 		B_n_G_constants.glade \
 		Dualtable-constants.glade \
-		JimStim.glade \
+		JimStim-0.x.glade \
+		JimStim-2.x.glade \
 		PIS-alpha_biar_16x10.glade \
 		PIS-alpha_bpw_16x10.glade \
 		PIS-biar_16x16.glade \
@@ -102,7 +103,8 @@ gui_glade_files = 	\
 gui_in_files = 	\
 		B_n_G_constants.datamap.in \
 		Dualtable-constants.datamap.in \
-		JimStim.datamap.in \
+		JimStim-0.x.datamap.in \
+		JimStim-2.x.datamap.in \
 		PIS-alpha_biar_16x10.datamap.in \
 		PIS-alpha_bpw_16x10.datamap.in \
 		PIS-biar_16x16.datamap.in \

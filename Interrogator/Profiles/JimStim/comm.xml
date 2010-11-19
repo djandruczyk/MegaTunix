@@ -117,6 +117,14 @@
 			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
+			<name>legacy_get_textrev</name>
+			<desc>Triggers the ecu to echo back it's version number</desc>
+			<type>_WRITE_CMD_</type>
+			<base>T</base>
+			<helper_func>simple_read_pf</helper_func>
+			<helper_func_arg>_TEXT_REV_</helper_func_arg>
+		</cmd>
+		<cmd>
 			<name>jimstim_veconst</name>
 			<desc>Triggers the MS1 to return the VE/Constants for the previously set page</desc>
 			<type>_WRITE_CMD_</type>

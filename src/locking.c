@@ -15,6 +15,7 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
+#include <init.h>
 #include <locking.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -75,7 +76,7 @@ void unix_create_mtx_lock(void)
 	struct flock lock_struct;
 	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
-	g_free(lockfile);
+	cleanup(lockfile);
 
 	lock_struct.l_type=F_WRLCK;
 	lock_struct.l_start=0;
@@ -104,7 +105,7 @@ void unix_create_mtx_lock(void)
 		if (global_data)
 		{
 			g_dataset_destroy(global_data);
-			g_free(global_data);
+			cleanup(global_data);
 		}
 		exit(-1);
 	}
@@ -121,7 +122,7 @@ void unix_remove_mtx_lock(void)
 	struct flock lock_struct;
 	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
-	g_free(lockfile);
+	cleanup(lockfile);
 
 	lock_struct.l_type=F_UNLCK;
 	lock_struct.l_start=0;
@@ -210,10 +211,10 @@ gboolean lock_serial(gchar * name)
 	vector = g_strsplit(name,PSEP,-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
-		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0))
+		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0) || (g_strcasecmp(vector[i],"tmp") == 0))
 			continue;
 		lock = g_strconcat(tmpbuf,vector[i],NULL);
-		g_free(tmpbuf);
+		cleanup(tmpbuf);
 	}
 	g_strfreev(vector);
 	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
@@ -226,11 +227,11 @@ gboolean lock_serial(gchar * name)
 //			printf("lock had %i fields\n",g_strv_length(vector));
 			pid = (gint)g_ascii_strtoull(vector[0],NULL,10);
 //			printf("pid in lock \"%i\"\n",pid);
-			g_free(contents);
+			cleanup(contents);
 			g_strfreev(vector);
 			tmpbuf = g_strdup_printf("/proc/%i",pid);
 			res = g_file_test(tmpbuf,G_FILE_TEST_IS_DIR);
-			g_free(tmpbuf);
+			cleanup(tmpbuf);
 			if (res)
 			{
 //				printf("process active\n");
@@ -243,10 +244,10 @@ gboolean lock_serial(gchar * name)
 	}
 	contents = g_strdup_printf("     %i",getpid());
 	res = g_file_set_contents(lock,contents,-1,&err);
-	g_free(contents);
+	cleanup(contents);
 	if (res)
 	{
-		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,g_free);
+		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,cleanup);
 		return TRUE;
 	}
 	else

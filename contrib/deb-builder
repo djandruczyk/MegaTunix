@@ -3,18 +3,20 @@
 DEB_RELEASES="lenny hardy jaunty karmic lucid"
 
 trap "{ echo \"ABORT!!\"; exit 255; }" SIGINT SIGTERM
-if [ $# -eq 1 ]; then
-	dist=$1
-	echo "Dist specified on CLI is \"$dist\""
-pdebuild --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist"
+
+if [ $# -gt 1 ]; then
+	dists="$*"
+	echo "Dist(s) specified on CLI is \"$dists\""
 else
-	echo "Building for dists \"$DEB_RELEASES\""
-	for dist in `echo "$DEB_RELEASES"` ; do
-		echo "Building for Distro $dist"
-		pdebuild --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist"
-		if [ $? -ne 0 ] ; then
-			echo "Build failure for dist $dist"
-			exit -1
-		fi
-	done
+	dists="$DEB_RELEASES"
 fi
+
+echo "Building for dists \"$dists\""
+for dist in `echo "$dists"` ; do
+	echo "Building for Distro $dist"
+	pdebuild --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist"
+	if [ $? -ne 0 ] ; then
+		echo "Build failure for dist $dist"
+		exit -1
+	fi
+done
