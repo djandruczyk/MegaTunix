@@ -109,7 +109,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	stop_tickler(RTV_TICKLER);
 	g_usleep(10000);
-	steps = (jsdata.end-jsdata.start)/jsdata.step;
+	steps = abs(jsdata.end-jsdata.start)/jsdata.step;
 	interval = (1000*jsdata.sweep)/steps;
 	if (interval < 10.0)
 	{
@@ -121,6 +121,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	/* Clamp interval at 10 ms, max 100 theoretical updates/sec */
 	interval = interval > 10.0 ? interval:10.0;
 	jsdata.current = jsdata.start;
+	jsdata.reset = TRUE;
 
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.end_e,FALSE);
@@ -144,6 +145,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	if (jsdata)
 	{
 		g_source_remove(jsdata->sweep_id);
+		jsdata->reset = TRUE;
 		gtk_widget_set_sensitive(jsdata->start_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->end_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->step_e,TRUE);
@@ -174,10 +176,30 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	gchar *tmpbuf = NULL;
 	static gboolean rising = TRUE;
 
-	if (jsdata->current >= jsdata->end)
-		rising = FALSE;
-	if (jsdata->current <= jsdata->start)
-		rising = TRUE;
+	if (jsdata->reset)
+	{
+		if (jsdata->end > jsdata->start)
+			rising = TRUE;
+		else
+			rising = FALSE;
+		jsdata->reset = FALSE;
+	}
+	/* Normal start < End  */
+	if (jsdata->end > jsdata->start)
+	{
+		if (jsdata->current > jsdata->end)
+			rising = FALSE;
+		if (jsdata->current < jsdata->start)
+			rising = TRUE;
+	}
+	/* Odd End > start  */
+	if (jsdata->end < jsdata->start)
+	{
+		if (jsdata->current > jsdata->start)
+			rising = FALSE;
+		if (jsdata->current < jsdata->end)
+			rising = TRUE;
+	}
 
 	if (rising)
 		jsdata->current += jsdata->step;

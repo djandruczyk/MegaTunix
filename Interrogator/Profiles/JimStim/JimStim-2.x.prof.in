@@ -36,7 +36,7 @@ MS_VerNum=_REGEX_,JimStim format V2.0
 RealtimeMapFile=JimStim-2.x
 SliderMapFile=JimStim-2.x-firmware
 RuntimeTextMapFile=JimStim-2.x-firmware
-StatusMapFile=JimStim-2.x-firmware
+#StatusMapFile=
 
 LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim-2.x
 TabConfs=jimstim-runtime,datalogging,logviewer,JimStim-2.x

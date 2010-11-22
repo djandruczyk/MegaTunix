@@ -34,6 +34,7 @@ struct _JimStim_Data
 	gfloat sweep;		/* sweep value */
 	guint16 current;	/* Current value */
 	gint sweep_id;		/*! Timeout identifier */
+	gboolean reset;		/*! Reset*/
 };
 
 /* Prototypes */

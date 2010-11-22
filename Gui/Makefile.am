@@ -99,7 +99,6 @@ gui_glade_files = 	\
 		vetrim_16x16x4.glade \
 		warmupwizard.glade 
 
-
 gui_in_files = 	\
 		B_n_G_constants.datamap.in \
 		Dualtable-constants.datamap.in \

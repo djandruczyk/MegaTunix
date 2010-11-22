@@ -64,7 +64,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 		return;
 	if (!firmware->status_map_file)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
+		//dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
 		return;
 	}
 

@@ -66,6 +66,12 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 		return;
 	if (!(interrogated))
 		return;
+	if (!firmware->rtt_map_file)
+	{
+		//dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
+		return;
+	}
+
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (leaving))
 		return;

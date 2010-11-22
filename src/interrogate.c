@@ -528,12 +528,12 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
 	if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
 				&firmware->sliders_map_file))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
-	if(!cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
-				&firmware->rtt_map_file))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));
-	if(!cfg_read_string(cfgfile,"gui","StatusMapFile",
-				&firmware->status_map_file))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
+	cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
+				&firmware->rtt_map_file);
+/*		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+	cfg_read_string(cfgfile,"gui","StatusMapFile",
+				&firmware->status_map_file);
+/*		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
 	if (!cfg_read_string(cfgfile,"lookuptables","tables",
 				&tmpbuf))
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n"));
