@@ -25,6 +25,7 @@
 #include <notifications.h>
 #include <offline.h>
 #include <personalities.h>
+#include <plugin.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 
@@ -47,6 +48,9 @@ gboolean personality_choice(void)
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
 	GModule *module = NULL;
+#ifdef __WIN32__
+	gchar * libname = NULL;
+#endif
 	gchar * libpath = NULL;
 	gchar ** dirs = NULL;
 	gchar * filename = NULL;
@@ -209,21 +213,34 @@ gboolean personality_choice(void)
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-			libpath = g_module_build_path(MTXPLUGINDIR,DATA_GET(global_data,"ecu_library"));
+#ifdef __WIN32__
+			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_library"));
+			libpath = g_module_build_path(MTXPLUGINDIR,libname);
+			g_free(libname);
+#else
+			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_library"));
+#endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
+			plugin_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
 			break;
 		default:
-			libpath = g_module_build_path(MTXPLUGINDIR,DATA_GET(global_data,"ecu_library"));
-			printf("libpath %s\n",libpath);
+#ifdef __WIN32__
+			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_library"));
+			libpath = g_module_build_path(MTXPLUGINDIR,libname);
+			g_free(libname);
+#else
+			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_library"));
+#endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
+			plugin_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);

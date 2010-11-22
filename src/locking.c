@@ -163,8 +163,6 @@ void win32_create_mtx_lock(void)
 void win32_remove_mtx_lock(void)
 {
 #ifdef __WIN32__
-	gchar * file;
-
 	if (win32_global_lock)
 		CloseHandle(win32_global_lock);
 	return;

@@ -812,7 +812,7 @@ Io_Message * initialize_io_message(void)
 }
 
 
-OutputData * initialize_outputdata(void)
+G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 {
 	OutputData *output = NULL;
 

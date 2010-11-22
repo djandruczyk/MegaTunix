@@ -152,18 +152,21 @@ AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 if test "$cross_compiling" = yes ; then
 	AC_CHECK_TOOL(WINDRES, windres)
 	WIN32_RESOURCES="resources.o "
+	MTXPLUGIN_DIR="dist/plugins"
 	if test "$enable_debug" = yes ; then
 		dnl EXTRA_LIBS=" -lgw32c -luuid -lole32 -lws2_32"
-		EXTRA_LIBS=" -luuid -lole32 -lws2_32"
+		dnl EXTRA_LIBS=" -luuid -lole32 -lws2_32"
+		EXTRA_LIBS=" -lole32 -lws2_32"
 	else
 		dnl EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32 -lws2_32"
-		EXTRA_LIBS=" -mwindows -luuid -lole32 -lws2_32"
-		MTXPLUGIN_DIR="dist/MegaTunix/plugins"
+		dnl EXTRA_LIBS=" -mwindows -luuid -lole32 -lws2_32"
+		EXTRA_LIBS=" -mwindows -lole32 -lws2_32"
 	fi
 else
 	EXTRA_LIBS=" -lm"
-	MTXPLUGIN_DIR=$datarootdir/MegaTunix/plugins
+	MTXPLUGIN_DIR="$datarootdir/MegaTunix/plugins"
 fi
+AC_SUBST(MTXPLUGIN_DIR)
 AC_SUBST(WIN32_RESOURCES)
 AC_SUBST(EXTRA_LIBS)
 

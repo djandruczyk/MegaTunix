@@ -257,7 +257,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
  \param editable (GtkEditable *) pointer to editable widget to extract text from
  \returns TRUE
  */
-gboolean comm_port_override(GtkEditable *editable)
+G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 {
 	gchar *port;
 

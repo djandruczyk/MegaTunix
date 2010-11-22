@@ -15,12 +15,16 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <init.h>
 #include <plugin.h>
+#include <threads.h>
+#include <widgetmgmt.h>
+#include <timeout_handlers.h>
 
 
 extern gconstpointer *global_data;
 
-gboolean plugin_function(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 {
 	GModule * module = NULL;
 	gchar * func_name = NULL;
@@ -36,10 +40,32 @@ gboolean plugin_function(GtkWidget *widget, gpointer data)
 		if (g_module_symbol(module,func_name,(void *)&func))
 			OBJ_SET(widget,"function",(gpointer)func);
 		else
-			dbg_func(PLUGINS|CRITICAL,g_strdup_printf(_("ERROR, Cannot locate function \"%s\" within plugin %s\n"),func_name,DATA_GET(global_data,"ecu_library")));
+			dbg_func(PLUGINS|CRITICAL,g_strdup_printf(_("ERROR, Cannot locate function \"%s\" within plugin %s\n"),func_name,(gchar *)DATA_GET(global_data,"ecu_library")));
 	}
 	if(func)
 		res = func(widget,data);
 
 	return res;
+}
+
+
+void plugin_init()
+{
+	void (*plugin_init)(gconstpointer);
+
+	/* THIS IS A FUGLY HACK!!
+	   On linux you can create a shared lib with unresolved symbols,
+	   but you CAN NOT with windows, ALSO a DLL can't call functions outside itself
+	   So we cheat, by assigning the func pointers into our "global container" and
+	   pass that across on init of the plugin so it can call mtx functions and access
+	   global vars (within global_data)
+	   */
+	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
+	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
+	DATA_SET(global_data,"lookup_widget_f",(gpointer)&lookup_widget);
+	DATA_SET(global_data,"start_tickler_f",(gpointer)&start_tickler);
+	DATA_SET(global_data,"stop_tickler_f",(gpointer)&stop_tickler);
+
+	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
+		plugin_init(global_data);
 }
