@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<runtimetext>
+	<api>
+		<major>1</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for JimStim.</description>
+	</info>
+	<rtt>
+		<internal_name>raw_secl</internal_name>
+		<datasource>raw_secl</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>rpm</internal_name>
+		<datasource>rpm</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>rtmode</internal_name>
+		<datasource>rtmode</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>rtscale</internal_name>
+		<datasource>rtscale</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>rtcoarse</internal_name>
+		<datasource>rtcoarse</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>rtfine</internal_name>
+		<datasource>rtfine</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>myrpm</internal_name>
+		<datasource>myrpm</datasource>
+	</rtt>
+</runtimetext>

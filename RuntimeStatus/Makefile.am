@@ -1,6 +1,7 @@
 rtstatusdir = $(datadir)/MegaTunix/$(RTSTATUS_DATA_DIR)
 
 rtstatus_files = \
+		JimStim-2.x-firmware.xml \
 		MS1-Std-firmware.xml \
 		MS2-Std-firmware.xml \
 		MS2-Extra-firmware.xml \
