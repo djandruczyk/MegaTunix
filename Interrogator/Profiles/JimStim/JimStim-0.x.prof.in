@@ -3,7 +3,7 @@ major=1
 minor=6
 
 [interrogation_profile]
-name=JimStim 0.x
+name=JimStim v0.x
 
 [parameters]
 TextVerVia=legacy_get_textrev

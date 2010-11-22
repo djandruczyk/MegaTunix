@@ -3,6 +3,8 @@ snapshotsdir = $(datadir)/MegaTunix/$(SNAPSHOTS_DATA_DIR)
 snapshots_files = 	\
 			Dualtable_v102.ecu \
 		       	Bowling_and_Grippo_v301.ecu \
+			JimStim_v0.x.ecu \
+			JimStim_v2.x.ecu \
 		       	MegaSquirtnSpark-Extra_029-series.ecu \
 		       	MegaSquirtnSpark-Extra_029y-series.ecu \
 			MegaSquirtnSpark-Extra_Highres_011[ab]-series.ecu \

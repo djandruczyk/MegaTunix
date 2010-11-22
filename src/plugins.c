@@ -34,7 +34,7 @@ gboolean plugin_function(GtkWidget *widget, gpointer data)
 	func = (void *)OBJ_GET(widget,"function");
 	printf("func_name %s\n",func_name);
 
-	if ((func_name) && (!func))
+	if ((func_name) && (func == NULL))
 	{
 		printf("search for func_name %s\n",func_name);
 		if (g_module_symbol(module,func_name,(void *)&func))
