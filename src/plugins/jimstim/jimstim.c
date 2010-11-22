@@ -27,6 +27,7 @@ static GdkColor black = { 0, 0, 0, 0};
 static GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
 static void (*io_cmd_f)(const gchar *,void *) = NULL;
 static OutputData *(*initialize_outputdata_f)(void) = NULL;
+static void *(*dbg_func_f)(int,gchar *) = NULL;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
 {
@@ -37,6 +38,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
 	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
 	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
 	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
+	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func");
 }
 
 G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
@@ -130,7 +132,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 	if (fault)
 	{
-		dbg_func(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
+		dbg_func_f(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
 		return TRUE;
 	}
 //	stop_tickler(RTV_TICKLER);

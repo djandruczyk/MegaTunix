@@ -60,6 +60,7 @@ void plugin_init()
 	   pass that across on init of the plugin so it can call mtx functions and access
 	   global vars (within global_data)
 	   */
+	DATA_SET(global_data,"dbg_func_f",(gpointer)&dbg_func);
 	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
 	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
 	DATA_SET(global_data,"lookup_widget_f",(gpointer)&lookup_widget);
