@@ -398,9 +398,6 @@
                                         <property name="n_columns">3</property>
                                         <property name="homogeneous">True</property>
                                         <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
                                           <widget class="GtkLabel" id="label7">
                                             <property name="visible">True</property>
                                             <property name="label" translatable="yes">&lt;b&gt;Commanded RPM:&lt;/b&gt;</property>
@@ -417,7 +414,6 @@
                                             <property name="max_length">7</property>
                                             <property name="invisible_char">&#x25CF;</property>
                                             <property name="width_chars">7</property>
-                                            <property name="shadow_type">none</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -425,6 +421,9 @@
                                             <property name="x_options">GTK_EXPAND</property>
                                             <property name="y_options"></property>
                                           </packing>
+                                        </child>
+                                        <child>
+                                          <placeholder/>
                                         </child>
                                       </widget>
                                       <packing>

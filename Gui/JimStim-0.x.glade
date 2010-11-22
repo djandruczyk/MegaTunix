@@ -337,7 +337,6 @@ All you can do is see the ADC values for the coarse/fine RPM pots
                                             <property name="max_length">7</property>
                                             <property name="invisible_char">&#x25CF;</property>
                                             <property name="width_chars">7</property>
-                                            <property name="shadow_type">none</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
