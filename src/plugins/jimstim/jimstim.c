@@ -78,28 +78,41 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
 	}
-	else
+	else if (!fault)
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
 	if ((jsdata.end < 61) || (jsdata.end > 65534))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
 	}
-	else
+	else if (!fault)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.step < 1) || (jsdata.step > 1000))
+	if (abs(jsdata.end - jsdata.start) < jsdata.step)
+	{	
+		fault = TRUE;
+		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
+	}
+	else if (!fault)
+	{
+		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
+	}
+	if ((jsdata.step < 1) || (jsdata.step > 10000))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
 	}
-	else
+	else if (!fault)
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	if ((jsdata.sweep <= 0) || (jsdata.sweep > 300.0))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
 	}
-	else
+	else if (!fault)
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&black);
 
 	if (fault)
@@ -184,21 +197,24 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 			rising = FALSE;
 		jsdata->reset = FALSE;
 	}
-	/* Normal start < End  */
-	if (jsdata->end > jsdata->start)
+	else
 	{
-		if (jsdata->current > jsdata->end)
-			rising = FALSE;
-		if (jsdata->current < jsdata->start)
-			rising = TRUE;
-	}
-	/* Odd End > start  */
-	if (jsdata->end < jsdata->start)
-	{
-		if (jsdata->current > jsdata->start)
-			rising = FALSE;
-		if (jsdata->current < jsdata->end)
-			rising = TRUE;
+		/* Normal start < End  */
+		if (jsdata->end > jsdata->start)
+		{
+			if (jsdata->current >= jsdata->end)
+				rising = FALSE;
+			if (jsdata->current <= jsdata->start)
+				rising = TRUE;
+		}
+		/* Odd End > start  */
+		if (jsdata->end < jsdata->start)
+		{
+			if (jsdata->current >= jsdata->start)
+				rising = FALSE;
+			if (jsdata->current <= jsdata->end)
+				rising = TRUE;
+		}
 	}
 
 	if (rising)
