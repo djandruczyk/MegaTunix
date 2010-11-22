@@ -11,13 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __PLUGINS_H__
-#define __PLUGINS_H__
+#ifndef __PLUGIN_H__
+#define __PLUGIN_H__
 
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean plugin_function(GtkWidget *widget, gpointer data)
+gboolean plugin_function(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

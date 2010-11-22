@@ -1,0 +1,4 @@
+SUBDIRS = jimstim
+
+EXTRA_DIST = README
+

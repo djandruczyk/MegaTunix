@@ -15,7 +15,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
-#include <template.h>
+#include <plugin.h>
 
 
 extern gconstpointer *global_data;
@@ -27,21 +27,16 @@ gboolean plugin_function(GtkWidget *widget, gpointer data)
 	gboolean (*func)(GtkWidget *, gpointer) =  NULL;
 	gboolean res = FALSE;
 
-	printf ("plugin_function!\n");
 	module = (GModule *)DATA_GET(global_data,"plugin_module");
-	printf("module pointer %p\n",module);
 	func_name = (gchar *)OBJ_GET(widget,"function_name");
 	func = (void *)OBJ_GET(widget,"function");
-	printf("func_name %s\n",func_name);
 
 	if ((func_name) && (func == NULL))
 	{
-		printf("search for func_name %s\n",func_name);
 		if (g_module_symbol(module,func_name,(void *)&func))
-		{
-			printf("found it, storing ptr\n");
-			DATA_SET(widget,"function",(gpointer)&func);
-		}
+			OBJ_SET(widget,"function",(gpointer)func);
+		else
+			dbg_func(PLUGINS|CRITICAL,g_strdup_printf(_("ERROR, Cannot locate function \"%s\" within plugin %s\n"),func_name,DATA_GET(global_data,"ecu_library")));
 	}
 	if(func)
 		res = func(widget,data);

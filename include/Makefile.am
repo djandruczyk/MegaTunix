@@ -57,7 +57,7 @@ headers = \
 	notifications.h \
 	offline.h \
 	personalities.h \
-	plugins.h \
+	plugin.h \
 	post_process.h \
 	raweditor.h \
 	req_fuel.h \

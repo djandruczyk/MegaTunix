@@ -1,4 +1,4 @@
-SUBDIRS = jimstim
+SUBDIRS = plugins
 
 INCLUDES = \
 	-I$(top_srcdir)/include \
@@ -57,7 +57,7 @@ megatunix_SOURCES = \
 	notifications.c \
 	offline.c \
 	personalities.c \
-	plugins.c \
+	plugin.c \
 	post_process.c \
 	raweditor.c \
 	req_fuel.c \

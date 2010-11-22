@@ -229,7 +229,8 @@ include/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
-src/jimstim/Makefile
+src/plugins/Makefile
+src/plugins/jimstim/Makefile
 msloader/Makefile
 msloader/resources.rc
 gaugedesigner/resources.rc
