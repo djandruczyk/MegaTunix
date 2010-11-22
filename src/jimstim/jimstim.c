@@ -37,7 +37,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	extern GdkColor red;
 	extern GdkColor black;
-	
+
 	/* Get widget ptrs */
 	if (!jsdata.start_e)
 		jsdata.start_e = lookup_widget("JS_start_rpm_entry");
@@ -121,7 +121,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	/* Clamp interval at 10 ms, max 100 theoretical updates/sec */
 	interval = interval > 10.0 ? interval:10.0;
 	jsdata.current = jsdata.start;
-	
+
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.end_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.step_e,FALSE);
@@ -129,7 +129,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
-	//io_cmd("jimstim_interactive",NULL);
+	io_cmd("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
 	return TRUE;
@@ -168,7 +168,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
+G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 {
 	OutputData *output = NULL;
 	gchar *tmpbuf = NULL;

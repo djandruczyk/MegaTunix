@@ -18,9 +18,9 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean load_handler(GtkWidget *, gpointer );
-EXPORT gboolean save_handler(GtkWidget *, gpointer );
-EXPORT gboolean save_as_handler(GtkWidget *, gpointer );
+gboolean load_handler(GtkWidget *, gpointer );
+gboolean save_handler(GtkWidget *, gpointer );
+gboolean save_as_handler(GtkWidget *, gpointer );
 void prompt_to_save(void);
 void setup_file_filters(GtkFileChooser *);
 /* Prototypes */

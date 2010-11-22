@@ -19,8 +19,8 @@
 
 
 /* Prototypes */
-EXPORT gboolean internal_datalog_dump(GtkWidget *, gpointer );
-EXPORT gboolean select_datalog_for_export(GtkWidget *, gpointer );
+ gboolean internal_datalog_dump(GtkWidget *, gpointer );
+ gboolean select_datalog_for_export(GtkWidget *, gpointer );
 void populate_dlog_choices_pf(void);
 void start_datalogging(void);
 void stop_datalogging(void);

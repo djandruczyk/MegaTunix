@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean create_warning_span_event(GtkWidget *, gpointer );
+gboolean create_warning_span_event(GtkWidget *, gpointer );
 void reset_onscreen_w_ranges(void);
 void update_onscreen_w_ranges(void);
 gboolean alter_w_range_data(GtkWidget *, gpointer );

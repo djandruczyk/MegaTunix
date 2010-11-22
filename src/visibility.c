@@ -24,7 +24,7 @@
 static GtkWidget *vis_window = NULL;
 extern gconstpointer *global_data;
 
-EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
 {
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;

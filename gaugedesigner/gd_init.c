@@ -10,7 +10,7 @@
 extern GtkWidget *gauge;
 
 
-EXPORT gboolean init_text_attributes(GtkBuilder *builder)
+G_MODULE_EXPORT gboolean init_text_attributes(GtkBuilder *builder)
 {
         extern GdkColor white;
         extern GdkColor black;
@@ -41,7 +41,7 @@ EXPORT gboolean init_text_attributes(GtkBuilder *builder)
 	return TRUE;
 }
 
-EXPORT gboolean init_general_attributes(GtkBuilder *builder)
+G_MODULE_EXPORT gboolean init_general_attributes(GtkBuilder *builder)
 {
 	OBJ_SET((gtk_builder_get_object(builder,"cw_rbutton")),"handler",GINT_TO_POINTER(ROTATION));
 	OBJ_SET((gtk_builder_get_object(builder,"cw_rbutton")),"special_value",GINT_TO_POINTER(MTX_ROT_CW));

@@ -98,7 +98,7 @@ volatile gboolean might_be_leaving = FALSE;
  \param data (gpointer) quiet or not quiet, leave mode .quiet doesn't prompt 
  to save anything
  */
-EXPORT gboolean leave(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
@@ -282,7 +282,7 @@ gboolean comm_port_override(GtkEditable *editable)
  \param data (gpointer) unused in most cases
  \returns TRUE
  */
-EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	void *obj_data = NULL;
 	gint handler = 0; 
@@ -315,11 +315,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
 				DATA_SET(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")));
-				break;
-			case ECU_PERSONA:
-				DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(((ListElement *)OBJ_GET(widget,"ecu_persona"))->baud));
-				DATA_SET(global_data,"ecu_dirname", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->dirname));
-				DATA_SET(global_data,"ecu_family", g_strdup(((ListElement *)OBJ_GET(widget,"ecu_persona"))->filename));
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -411,7 +406,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
  \param data (gpointer) not really used 
  \returns TRUE
  */
-EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint bitshift = -1;
 	gint bitval = -1;
@@ -581,7 +576,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
  \param data (gpointer) not used
  \returns TRUE
  */
-EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -601,7 +596,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
  \param data (gpointer) not used
  \returns FALSE
  */
-EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
+G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
 	if (OBJ_GET(widget,"not_sent"))
 	{
@@ -616,7 +611,7 @@ EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpoin
  * \brief slider_value_changed() handles controls based upon a slider
  * sort of like spinbutton controls
  */
-EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 {
 	gint page = 0;
 	gint offset = 0;
@@ -659,7 +654,7 @@ EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
  \param data (gpointer) not used
  \returns TRUE
  */
-EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
 	gchar *text = NULL;
@@ -940,7 +935,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
  \param data (gpointer) not used
  \returns TRUE
  */
-EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
 	void *obj_data = NULL;
@@ -1145,7 +1140,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
  \param data (gpointer) not used
  \returns TRUE
  */
-EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
@@ -1483,7 +1478,7 @@ combo_download:
  \param data (gpointer) not used
  \returns TRUE
  */
-EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -1850,7 +1845,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
  data from the ECU.  It takes care of updating evey control that relates to
  an ECU variable on screen
  */
-EXPORT void update_ve_const_pf(void)
+G_MODULE_EXPORT void update_ve_const_pf(void)
 {
 	gint canID = 0;  
 	gint page = 0;
@@ -2744,7 +2739,7 @@ noalgo:
  \param event (GdkEventKey) event struct, (contains key that was pressed)
  \param data (gpointer) unused
  */
-EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	gint canID = 0;
 	gint page = 0;
@@ -2984,7 +2979,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
+G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
 {
 	gint count = 0;
 	gint i = 0;
@@ -3020,7 +3015,7 @@ EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gi
  \param data (gpointer) unused
  \returns FALSE to allow other handlers to run
  */
-EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
 	gint page = -1;
@@ -3106,7 +3101,7 @@ testit:
  \param page_no (guint) page number that's now active
  \param data (gpointer) unused
  */
-EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
@@ -3166,7 +3161,7 @@ EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, 
  \param page_no (guint) page number that's now active
  \param data (gpointer) unused
  */
-EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	extern gboolean forced_update;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
@@ -3265,7 +3260,7 @@ void switch_labels(gpointer key, gpointer data)
  \param data (gpointer) unused in most cases
  \returns TRUE if handles
  */
-EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 {
 	gint algo = 0; 
 	gint tmpi = 0;
@@ -3309,7 +3304,7 @@ EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 /*!
  * \brief dummy handler to prevent window closing
  */
-EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 {
 	return TRUE;
 }
@@ -3674,7 +3669,7 @@ guint get_bitshift(guint mask)
 	return 0;
 }
 
-EXPORT void update_misc_gauge(DataWatch *watch)
+G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (MTX_IS_GAUGE_FACE(watch->user_data))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);
@@ -3755,7 +3750,7 @@ glong get_extreme_from_size(DataSize size,Extreme limit)
 
 
 /* Clamps a value to it's limits and updates if needed */
-EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 {
 	gint lower = 0;
 	gint upper = 0;

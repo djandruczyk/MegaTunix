@@ -14,7 +14,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 
 
-EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 {
 	GtkBuilder *tblocks = NULL;
 	GtkWidget *dialog = NULL;

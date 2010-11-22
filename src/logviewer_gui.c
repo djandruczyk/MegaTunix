@@ -877,7 +877,7 @@ void draw_valtext(gboolean force_draw)
  just the new data...
  \returns TRUE
  */
-EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
+G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
 	extern gboolean connected;
 	extern gboolean interrogated;
@@ -1292,7 +1292,7 @@ void set_default_lview_choices_state(void)
  \param data (gpointer) unused
  \returns TRUE
  */
-EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 {
 	gfloat val = 0.0;
 	GtkWidget *darea = NULL;
@@ -1416,7 +1416,7 @@ void set_logviewer_mode(Lv_Mode mode)
  \brief finish_logviewer() sets button default states for the logviewer after
  it is created from it's glade config file
  */
-EXPORT void finish_logviewer(void)
+G_MODULE_EXPORT void finish_logviewer(void)
 {
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
@@ -1443,7 +1443,7 @@ EXPORT void finish_logviewer(void)
 /*!
  \brief slider_ket_press_event() doesn't do anything yet (stub)
  */
-EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	return FALSE;
 }

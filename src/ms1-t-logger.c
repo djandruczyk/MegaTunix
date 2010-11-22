@@ -44,7 +44,7 @@ void bind_ttm_to_page(gint page)
 }
 
 
-EXPORT void reset_ttm_buttons(void)
+G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
 	widget = lookup_widget("toothlogger_disable_radio_button");
@@ -59,7 +59,7 @@ EXPORT void reset_ttm_buttons(void)
 }
 
 
-EXPORT void setup_logger_display(GtkWidget * src_widget)
+G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
 	ttm_data = g_new0(TTMon_Data,1);
 	ttm_data->page = -1;
@@ -82,7 +82,7 @@ EXPORT void setup_logger_display(GtkWidget * src_widget)
 	return;
 }
 
-EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
+G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	gint w = 0;
 	gint h = 0;
@@ -123,7 +123,7 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 	return TRUE;
 }
 
-EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
+G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -136,7 +136,7 @@ EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *
 }
 
 
-EXPORT void crunch_trigtooth_data_pf(void)
+G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
 {
 	_crunch_trigtooth_data(ttm_data->page);
 }
@@ -325,7 +325,7 @@ void _crunch_trigtooth_data(gint page)
 }
 
 
-EXPORT void update_trigtooth_display_pf(void)
+G_MODULE_EXPORT void update_trigtooth_display_pf(void)
 {
 	gdk_threads_enter();
 	update_trigtooth_display(ttm_data->page);
@@ -462,7 +462,7 @@ void update_trigtooth_display(gint page)
 
 }
 
-EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *tmpwidget = NULL;
 	gint handler = (GINT)OBJ_GET(widget, "handler");

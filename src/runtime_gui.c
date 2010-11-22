@@ -54,7 +54,7 @@ GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
  \brief update_runtime_vars_pf() updates all of the runtime sliders on all
  visible portions of the gui
  */
-EXPORT gboolean update_runtime_vars_pf(void)
+G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 {
 	static gint count = 0;
 	static gboolean conn_status = FALSE;

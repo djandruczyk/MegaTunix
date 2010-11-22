@@ -16,7 +16,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 extern GtkBuilder *tgroups;
 
-EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *dummy = NULL;

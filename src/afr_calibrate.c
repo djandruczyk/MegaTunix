@@ -113,7 +113,7 @@ gdouble djWBlinFv (gint adc)
 }
 
 
-EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
+G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 {
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
@@ -136,7 +136,7 @@ EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 }
 
 
-EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 {
 	gboolean state = FALSE;
 	GtkTreeModel *model = NULL;
@@ -158,7 +158,7 @@ EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 
 
 
-EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 {
 	gdouble *Bv = NULL;
 	gdouble *Ba = NULL;

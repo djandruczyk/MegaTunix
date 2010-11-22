@@ -20,7 +20,7 @@
 
 
 /* Prototypes */
-EXPORT gboolean create_tick_group_event(GtkWidget *, gpointer );
+gboolean create_tick_group_event(GtkWidget *, gpointer );
 void reset_onscreen_tgroups(void);
 void update_onscreen_tgroups(void);
 gboolean alter_tgroup_data(GtkWidget *, gpointer );

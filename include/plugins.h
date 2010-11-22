@@ -11,17 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __THERM_H__
-#define __THERM_H__
+#ifndef __PLUGINS_H__
+#define __PLUGINS_H__
 
-#include <defines.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 /* Prototypes */
- gboolean flip_table_gen_temp_label(GtkWidget *, gpointer);
- gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
-
+gboolean plugin_function(GtkWidget *widget, gpointer data)
 /* Prototypes */
 
 #endif

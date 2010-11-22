@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean create_text_block_event(GtkWidget *, gpointer );
+gboolean create_text_block_event(GtkWidget *, gpointer );
 void reset_onscreen_tblocks(void);
 void update_onscreen_tblocks(void);
 gboolean alter_tblock_data(GtkWidget *, gpointer );

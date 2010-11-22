@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
  It's purpose is to load all the glade files and datamaps as specified in the
  interrogation profile of the detected firmware. 
  */
-EXPORT gboolean load_gui_tabs_pf(void)
+G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
 	extern Firmware_Details * firmware;
 	gint i = 0;

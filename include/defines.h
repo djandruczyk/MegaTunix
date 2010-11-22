@@ -24,12 +24,10 @@
 
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__
-#define EXPORT __declspec (dllexport)
 #define DEFAULT_PORT "COM1"
 #define PSEP "\\"
 #define HOME g_get_current_dir
 #else
-#define EXPORT 
 #define DEFAULT_PORT "/dev/ttyS0"
 #define PSEP "/"
 #define HOME g_get_home_dir

@@ -72,8 +72,8 @@ struct _Vex_Import
 
 
 /* Prototypes */
-EXPORT gboolean select_vex_for_import(GtkWidget *, gpointer );
-EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
+gboolean select_vex_for_import(GtkWidget *, gpointer );
+gboolean select_vex_for_export(GtkWidget *, gpointer );
 gboolean all_table_export(GIOChannel *);
 gboolean all_table_import(GIOChannel *);
 void single_table_export(GIOChannel *, gint );

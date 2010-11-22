@@ -1001,7 +1001,7 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 }
 
 
-EXPORT void initialize_dashboards_pf(void)
+G_MODULE_EXPORT void initialize_dashboards_pf(void)
 {
 	GtkWidget * label = NULL;
 	gboolean retval = FALSE;
@@ -1061,7 +1061,7 @@ EXPORT void initialize_dashboards_pf(void)
 }
 
 
-EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -1168,7 +1168,7 @@ gboolean dummy(GtkWidget *widget,gpointer data)
 }
 
 
-EXPORT void create_gauge(GtkWidget *widget)
+G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 {
 	GtkWidget * gauge = NULL;
 	gchar * xml_name = NULL;

@@ -40,20 +40,20 @@
 extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
-EXPORT void start_statuscounts_pf(void)
+G_MODULE_EXPORT void start_statuscounts_pf(void)
 {
 	start_tickler(SCOUNTS_TICKLER);
 }
 
 
-EXPORT void enable_reboot_button_pf(void)
+G_MODULE_EXPORT void enable_reboot_button_pf(void)
 {
 	gdk_threads_enter();
 	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
 	gdk_threads_leave();
 }
 
-EXPORT void startup_tcpip_sockets_pf(void)
+G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
 	extern gboolean interrogated;
         extern volatile gboolean offline;
@@ -66,7 +66,7 @@ EXPORT void startup_tcpip_sockets_pf(void)
 		open_tcpip_sockets();
 }
 
-EXPORT void spawn_read_ve_const_pf(void)
+G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 {
 	extern Firmware_Details *firmware;
 	if (!firmware)
@@ -79,7 +79,7 @@ EXPORT void spawn_read_ve_const_pf(void)
 }
 
 
-EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
+G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -131,7 +131,7 @@ EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	return TRUE;
 }
 
-EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
+G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
@@ -276,7 +276,7 @@ EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 }
 
 
-EXPORT void enable_get_data_buttons_pf(void)
+G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
 {
 	gdk_threads_enter();
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -284,7 +284,7 @@ EXPORT void enable_get_data_buttons_pf(void)
 }
 
 
-EXPORT void enable_ttm_buttons_pf(void)
+G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 {
 	gdk_threads_enter();
 	g_list_foreach(get_list("ttm_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -292,7 +292,7 @@ EXPORT void enable_ttm_buttons_pf(void)
 }
 
 
-EXPORT void conditional_start_rtv_tickler_pf(void)
+G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 {
 	static gboolean just_starting = TRUE;
 
@@ -304,7 +304,7 @@ EXPORT void conditional_start_rtv_tickler_pf(void)
 }
 
 
-EXPORT void set_store_black_pf(void)
+G_MODULE_EXPORT void set_store_black_pf(void)
 {
 	gint j = 0;
 	extern Firmware_Details *firmware;
@@ -317,7 +317,7 @@ EXPORT void set_store_black_pf(void)
 	gdk_threads_leave();
 }
 
-EXPORT void enable_3d_buttons_pf(void)
+G_MODULE_EXPORT void enable_3d_buttons_pf(void)
 {
 	gdk_threads_enter();
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -325,14 +325,14 @@ EXPORT void enable_3d_buttons_pf(void)
 }
 
 
-EXPORT void disable_burner_buttons_pf(void)
+G_MODULE_EXPORT void disable_burner_buttons_pf(void)
 {
 	gdk_threads_enter();
 	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	gdk_threads_leave();
 }
 
-EXPORT void reset_temps_pf(void)
+G_MODULE_EXPORT void reset_temps_pf(void)
 {
 	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
@@ -341,14 +341,14 @@ EXPORT void reset_temps_pf(void)
 	gdk_threads_leave();
 }
 
-EXPORT void ready_msg_pf(void)
+G_MODULE_EXPORT void ready_msg_pf(void)
 {
 	gdk_threads_enter();
 	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 }
 
-EXPORT void simple_read_pf(void * data, XmlCmdType type)
+G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 {
 	Io_Message *message  = NULL;
 	OutputData *output  = NULL;
@@ -550,7 +550,7 @@ EXPORT void simple_read_pf(void * data, XmlCmdType type)
 /*!
  \brief post_burn_pf() handles post burn ecu data mgmt
  */
-EXPORT void post_burn_pf(void)
+G_MODULE_EXPORT void post_burn_pf(void)
 {
 	gint i = 0;
 	extern Firmware_Details * firmware;
@@ -569,7 +569,7 @@ EXPORT void post_burn_pf(void)
 }
 
 
-EXPORT void post_single_burn_pf(void *data)
+G_MODULE_EXPORT void post_single_burn_pf(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
@@ -587,7 +587,7 @@ EXPORT void post_single_burn_pf(void *data)
 }
 
 
-EXPORT void startup_default_timeouts_pf(void)
+G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 {
 	gint source = 0;
 	gint rate = 0;

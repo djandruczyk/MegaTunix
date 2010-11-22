@@ -39,7 +39,7 @@ extern GdkColor black;
  \param widget (GtkWidget *) unused
  \returns TRUE
  */
-EXPORT gboolean reset_errcounts(GtkWidget *widget)
+G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	ms_ve_goodread_count = 0;
 	ms_goodread_count = 0;

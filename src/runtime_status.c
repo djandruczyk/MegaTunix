@@ -41,7 +41,7 @@ extern gconstpointer *global_data;
  \brief load_status_pf() is called to create the ECU status window, load the 
  settings from the StatusMapFile.
  */
-EXPORT void load_status_pf(void)
+G_MODULE_EXPORT void load_status_pf(void)
 {
 	extern Firmware_Details *firmware;
 	gchar *filename = NULL;

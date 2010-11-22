@@ -34,7 +34,7 @@
 Log_Info *log_info = NULL;
 
 
-EXPORT void create_stripchart(GtkWidget *parent)
+G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
 	GtkWidget *chart = NULL;
 	gchar ** sources = NULL;
@@ -96,7 +96,7 @@ void update_stripchart_data(DataWatch* watch)
  \param data  unused
  */
 
-EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -409,7 +409,7 @@ void free_log_info(void)
 /*!
  *\brief changes scroll speed for logviewer playback
  */
-EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
 	extern gint playback_id;

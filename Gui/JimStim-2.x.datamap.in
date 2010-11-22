@@ -31,6 +31,14 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 
 #----- Widgets ---------------------------------------------------------------
 
+[start_sweep_button]
+keys=function_name
+function_name=jimstim_sweep_start
+
+[stop_sweep_button]
+keys=function_name
+function_name=jimstim_sweep_end
+
 #----- Labels ----------------------------------------------------------------
 
 #----- Combos ----------------------------------------------------------------

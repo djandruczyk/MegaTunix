@@ -18,8 +18,8 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean init_text_attributes(GtkBuilder *);
-EXPORT gboolean init_general_attributes(GtkBuilder *);
+gboolean init_text_attributes(GtkBuilder *);
+gboolean init_general_attributes(GtkBuilder *);
 
 /* Prototypes */
 

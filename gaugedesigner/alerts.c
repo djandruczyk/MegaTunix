@@ -12,7 +12,7 @@ extern GdkColor white;
 extern gboolean changed;
 extern GtkBuilder *toplevel;
 
-EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *spinner = NULL;

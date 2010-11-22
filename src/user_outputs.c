@@ -61,7 +61,7 @@ gboolean force_view_recompute(gpointer data)
  \param widget (GtkWidget *) The textview that this model and view is to be
  created for.
  */
-EXPORT void build_model_and_view(GtkWidget * widget)
+G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 {
 	extern gboolean rtvars_loaded;
 	GtkWidget *view = NULL;
@@ -677,7 +677,7 @@ gboolean deferred_model_update(GtkWidget * widget)
 
 /*! \brief sets up and populates the MS2-Extra combo for output choice
  */
-EXPORT void ms2_output_combo_setup(GtkWidget *widget)
+G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 {
 	gint i = 0;
 	gchar * lower = NULL;

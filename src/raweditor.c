@@ -29,7 +29,7 @@ GArray *raw_editor_widgets = NULL;
  firmware via a raw textentry (in hex). The notebook will have a page for each
  page defined in the ECU firmware's interrogation profile
  */
-EXPORT void finish_raweditor(void)
+G_MODULE_EXPORT void finish_raweditor(void)
 {
 	GtkWidget *sw = NULL;
 	GtkWidget *hbox = NULL;

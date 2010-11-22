@@ -19,9 +19,9 @@
 #include <glade/glade.h>
 
 /* Prototypes */
-EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);
-EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *);
-EXPORT void afr_combo_changed(GtkWidget *, gpointer);
+ gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);
+ gboolean populate_afr_calibrator_combo(GtkWidget *);
+ void afr_combo_changed(GtkWidget *, gpointer);
 
 
 /* Prototypes */

@@ -480,7 +480,7 @@ gfloat direct_lookup_data(gchar *table, gint offset)
 }
 
 
-EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 {
 	static gboolean ltc_created = FALSE;
 	static GtkWidget * lookuptables_config_window = NULL;

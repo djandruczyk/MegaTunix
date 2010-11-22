@@ -38,8 +38,8 @@ SliderMapFile=JimStim-2.x-firmware
 RuntimeTextMapFile=JimStim-2.x-firmware
 StatusMapFile=JimStim-2.x-firmware
 
-LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim
-TabConfs=jimstim-runtime,datalogging,logviewer,JimStim
+LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim-2.x
+TabConfs=jimstim-runtime,datalogging,logviewer,JimStim-2.x
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

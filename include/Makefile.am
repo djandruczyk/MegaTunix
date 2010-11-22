@@ -8,19 +8,19 @@ headers = \
 	apicheck.h \
 	args.h \
 	comms.h \
-        comms_gui.h \
-        combo_loader.h \
-        combo_mask.h \
-        configfile.h \
-        conversions.h \
-        core_gui.h \
+	comms_gui.h \
+	combo_loader.h \
+	combo_mask.h \
+	configfile.h \
+	conversions.h \
+	core_gui.h \
 	crx.h \
-        dashboard.h \
-        dataio.h \
+	dashboard.h \
+	dataio.h \
 	datamgmt.h \
-        datalogging_gui.h \
-        debugging.h \
-        defines.h \
+	datalogging_gui.h \
+	debugging.h \
+	defines.h \
 	dep_loader.h \
 	dep_processor.h \
 	dispatcher.h \
@@ -28,53 +28,55 @@ headers = \
 	fileio.h \
 	firmware.h \
 	getfiles.h \
-        gui_handlers.h \
-        helpers.h \
-        init.h \
-        interrogate.h \
+	gui_handlers.h \
+	helpers.h \
+	init.h \
+	interrogate.h \
 	jimstim.h \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
 	loader_common.h \
 	locking.h \
-        logo.h \
-        logviewer_core.h \
-        logviewer_events.h \
-        logviewer_gui.h \
-        lookuptables.h \
-        main.h \
+	logo.h \
+	logviewer_core.h \
+	logviewer_events.h \
+	logviewer_gui.h \
+	lookuptables.h \
+	main.h \
 	menu_handlers.h \
-        memory_gui.h \
-        mode_select.h \
+	memory_gui.h \
+	mode_select.h \
 	ms1_loader.h \
 	ms2_loader.h \
 	ms1-t-logger.h \
 	ms2-t-logger.h \
 	mtxloader.h \
 	mtxsocket.h \
-        multi_expr_loader.h \
-        notifications.h \
+	multi_expr_loader.h \
+	notifications.h \
 	offline.h \
-        post_process.h \
-        raweditor.h \
-        req_fuel.h \
+	personalities.h \
+	plugins.h \
+	post_process.h \
+	raweditor.h \
+	req_fuel.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
-        runtime_gui.h \
-        runtime_sliders.h \
-        runtime_status.h \
-        runtime_text.h \
-        serialio.h \
+	runtime_gui.h \
+	runtime_sliders.h \
+	runtime_status.h \
+	runtime_text.h \
+	serialio.h \
 	stringmatch.h \
-        tabloader.h \
-        tag_loader.h \
-        therm.h \
-        threads.h \
-        timeout_handlers.h \
-        unions.h \
+	tabloader.h \
+	tag_loader.h \
+       	therm.h \
+	threads.h \
+	timeout_handlers.h \
+	unions.h \
 	user_outputs.h \
-        vetable_gui.h \
+	vetable_gui.h \
 	vex_support.h \
 	visibility.h \
 	warmwizard_gui.h \

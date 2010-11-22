@@ -48,7 +48,7 @@ typedef struct
 	gchar * source;
 }CurveData;
 
-EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
+G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 {
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
@@ -388,7 +388,7 @@ EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 }
 
 
-EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
+G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 {
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
@@ -1090,14 +1090,14 @@ void marker_proximity(GtkWidget *curve, gpointer data)
 }
 
 
-EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 {
 	close_2d_editor(OBJ_GET(widget,"window"),NULL);
 	return TRUE;
 }
 
 
-EXPORT void update_curve_marker(DataWatch *watch)
+G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 {
 	CurveData *cdata = (CurveData *)watch->user_data;
 	if (!MTX_IS_CURVE(cdata->curve))
@@ -1128,7 +1128,7 @@ gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean add_2d_table(GtkWidget *widget)
+G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 {
 	gint table_num = 0;
 

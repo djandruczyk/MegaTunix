@@ -68,7 +68,7 @@ void build_about(GtkWidget *frame)
 /*!
  \brief about_popup makes the about tab and presents the MegaTunix logo
  */
-EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)

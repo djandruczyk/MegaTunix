@@ -54,7 +54,7 @@ typedef enum
 	UR
 }CornerType;
 
-EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
@@ -78,7 +78,7 @@ EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 {
 
 	static gboolean created = FALSE;
@@ -437,7 +437,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GtkWidget *table = NULL;
 	gint i = 0;
@@ -502,7 +502,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 }
 
 
-EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 {
 	if (changed)
 		prompt_to_save();
@@ -512,7 +512,7 @@ EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 
 
 
-EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gint x_cur;
 	gint y_cur;
@@ -586,7 +586,7 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 
 
 
-EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GtkWidget * fixed = gtk_bin_get_child(GTK_BIN(widget));
 	GList *list = NULL;
@@ -874,7 +874,7 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 }
 
 
-EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
+G_MODULE_EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 {
 	GtkWidget *dash = NULL;
 	GtkWidget *topwidget = NULL;
@@ -898,7 +898,7 @@ EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 }
 
 
-EXPORT gboolean dummy(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dummy(GtkWidget *widget, gpointer data)
 {
 	return TRUE;
 }
@@ -918,7 +918,7 @@ void free_element(gpointer data, gpointer user_data)
 }
 
 
-EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = NULL;
 	GtkWidget *g = NULL;

@@ -136,7 +136,6 @@ struct _SlaveMessage
 	guint16 length;
 	DataSize size;
 	gint value;
-	//guint8 * data;
 	void * data;
 	WriteMode mode;
 	SlaveMsgType type;
@@ -290,7 +289,6 @@ struct _SlaveMessage
 	guint16 length;
 	DataSize size;
 	gint value;
-	//guint8 * data;
 	void * data;
 	WriteMode mode;
 	SlaveMsgType type;

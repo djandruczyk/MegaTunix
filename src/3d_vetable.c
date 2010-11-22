@@ -225,7 +225,7 @@ RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
  widget, it creates the datastructures, creates the window, initializes 
  OpenGL and binds all the handlers to the window that are needed.
  */
-EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window;
 	GtkWidget *frame;
@@ -1593,7 +1593,7 @@ void ve3d_load_font_metrics(GtkWidget *widget)
  red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value by 10
  units
  */
-EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
+G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
 {
 	gint offset = 0;

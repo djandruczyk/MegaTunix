@@ -33,7 +33,7 @@
 MS2_TTMon_Data *ttm_data;
 
 
-EXPORT void ms2_ttm_reset_zoom(void)
+G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 {
 	GtkWidget *widget = NULL;
 	widget = lookup_widget("ttm_zoom");
@@ -42,7 +42,7 @@ EXPORT void ms2_ttm_reset_zoom(void)
 }
 
 
-EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
+G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
 	ttm_data = g_new0(MS2_TTMon_Data,1);
 	ttm_data->page = -1;
@@ -67,7 +67,7 @@ EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	return;
 }
 
-EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
+G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	gint w = 0;
 	gint h = 0;
@@ -419,7 +419,7 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
  is fired off to take care of updating the MS2 TTM display
  \param data (gpointer) arbritary data passed.
  */
-EXPORT void ms2_ttm_update(DataWatch *watch)
+G_MODULE_EXPORT void ms2_ttm_update(DataWatch *watch)
 {
 	gint page = 0;
 
@@ -432,13 +432,13 @@ EXPORT void ms2_ttm_update(DataWatch *watch)
 }
 
 
-EXPORT void ms2_ttm_watch(void)
+G_MODULE_EXPORT void ms2_ttm_watch(void)
 {
 	create_single_bit_state_watch("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
 }
 
 
-EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 {
 	gint page = 0;
 	if (ttm_data)

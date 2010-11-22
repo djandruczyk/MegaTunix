@@ -27,7 +27,7 @@
 
 
 
-EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *temp_label = lookup_widget("temp_label");
 
@@ -40,7 +40,7 @@ EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 {
 #define CTS 0
 #define MAT 1

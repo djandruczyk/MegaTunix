@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
  */
-EXPORT void load_sliders_pf(void)
+G_MODULE_EXPORT void load_sliders_pf(void)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
@@ -189,7 +189,7 @@ void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
  specific to the 3D Table views. 
  \param table_num (gint) the table number passed to load sliders for
  */
-EXPORT void load_ve3d_sliders(gint table_num)
+G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
@@ -364,7 +364,7 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
  \param widget (GtkWidget *) name of widget defined in Gui datamap file. Used
  to load al lthe necessary attributes to stick the control in the right place.
  */
-EXPORT void register_rt_range(GtkWidget * widget)
+G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
 	gconstpointer * object = NULL;
 	extern Rtv_Map *rtv_map;
@@ -498,19 +498,19 @@ gboolean free_ve3d_sliders(gint table_num)
 }
 
 
-EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	return TRUE;
 }
 
 
-EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	return TRUE;
 }
 
 
-EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
 {
 	gboolean mapae_ctrl_state = FALSE;
 	gboolean tpsae_ctrl_state = FALSE;

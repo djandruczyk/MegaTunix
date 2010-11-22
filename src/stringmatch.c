@@ -465,6 +465,8 @@ void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"f_label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"function_name",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"gaugexml",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"group_2_update",

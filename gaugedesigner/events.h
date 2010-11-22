@@ -46,14 +46,14 @@ typedef enum
 /* Prototypes */
 gboolean gauge_motion(GtkWidget *, GdkEventMotion *, gpointer );
 gboolean gauge_button(GtkWidget *, GdkEventButton *, gpointer );
-EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );
-EXPORT gboolean close_current_gauge(GtkWidget *, gpointer );
-EXPORT gboolean create_polygon_event(GtkWidget *, gpointer );
-EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
-EXPORT gboolean change_font(GtkWidget *, gpointer );
-EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
-EXPORT gboolean toggle_skip_params(GtkWidget *, gpointer );
-EXPORT gboolean link_range_spinners(GtkWidget *, gpointer );
+gboolean create_new_gauge(GtkWidget *, gpointer );
+gboolean close_current_gauge(GtkWidget *, gpointer );
+gboolean create_polygon_event(GtkWidget *, gpointer );
+gboolean set_antialiased_mode(GtkWidget *, gpointer );
+gboolean change_font(GtkWidget *, gpointer );
+gboolean animate_gauge(GtkWidget *, gpointer );
+gboolean toggle_skip_params(GtkWidget *, gpointer );
+gboolean link_range_spinners(GtkWidget *, gpointer );
 void update_attributes(void);
 void reset_onscreen_controls(void);
 void reset_onscreen_polygons(void);

@@ -42,7 +42,7 @@ extern gconstpointer *global_data;
  from the file specified in the firmware's interrogation profile, and populate
  a new window with the runtiem vars text value box.
  */
-EXPORT void load_rt_text_pf(void)
+G_MODULE_EXPORT void load_rt_text_pf(void)
 {
 	GtkWidget *treeview = NULL; 
 	GtkWidget *window = NULL;
@@ -315,7 +315,7 @@ Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean s
  to add an RTT on a normal widget tab. (AE wizard currently)
  \param widget, pointer to widget containing the data needed
  */
-EXPORT void add_additional_rtt(GtkWidget *widget)
+G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 {
 	GHashTable *rtt_hash = NULL;
 	gchar * ctrl_name = NULL;

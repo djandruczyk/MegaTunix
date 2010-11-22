@@ -20,7 +20,7 @@
 
 
 /* Prototypes */
-EXPORT gboolean create_alert_span_event(GtkWidget *, gpointer );
+gboolean create_alert_span_event(GtkWidget *, gpointer );
 void reset_onscreen_a_ranges(void);
 void update_onscreen_a_ranges(void);
 gboolean alter_a_range_data(GtkWidget *, gpointer );

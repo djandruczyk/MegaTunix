@@ -19,7 +19,7 @@
 
 /* Prototypes */
 void build_about(GtkWidget *);
-EXPORT gboolean about_popup(GtkWidget *, gpointer );
+ gboolean about_popup(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif

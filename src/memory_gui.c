@@ -29,7 +29,7 @@ gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
  viewer including populataing the notebook andtabels with GtkLabels so we
  can see the memviewer data
  */
-EXPORT void finish_memviewer(void)
+G_MODULE_EXPORT void finish_memviewer(void)
 {
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;

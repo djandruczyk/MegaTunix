@@ -90,7 +90,7 @@ void output (gchar *line, gboolean free_it)
 
 
 /* Perform a ping operation when the Ping button is clicked. */
-EXPORT gboolean get_signature (GtkButton *button)
+G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
 {
 	GtkWidget *widget =  NULL;
 	gchar * port = NULL;
@@ -122,7 +122,7 @@ EXPORT gboolean get_signature (GtkButton *button)
 }
 
 
-EXPORT gboolean load_firmware (GtkButton *button)
+G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 {
 	GtkWidget *widget = NULL;
 	gchar *port;
@@ -188,7 +188,7 @@ EXPORT gboolean load_firmware (GtkButton *button)
 }
 
 
-EXPORT gboolean leave(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean leave(GtkWidget * widget, gpointer data)
 {
 	save_defaults();
 	gtk_main_quit();
@@ -199,7 +199,7 @@ EXPORT gboolean leave(GtkWidget * widget, gpointer data)
 /*!
  \brief about_popup makes the about tab and presents the MegaTunix logo
  */
-EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)

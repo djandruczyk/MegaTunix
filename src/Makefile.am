@@ -1,3 +1,4 @@
+SUBDIRS = jimstim
 
 INCLUDES = \
 	-I$(top_srcdir)/include \
@@ -37,7 +38,6 @@ megatunix_SOURCES = \
 	helpers.c \
 	init.c \
 	interrogate.c \
-	jimstim.c \
 	keybinder.c \
 	keyparser.c \
 	listmgmt.c \
@@ -56,6 +56,8 @@ megatunix_SOURCES = \
 	multi_expr_loader.c \
 	notifications.c \
 	offline.c \
+	personalities.c \
+	plugins.c \
 	post_process.c \
 	raweditor.c \
 	req_fuel.c \

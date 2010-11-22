@@ -245,7 +245,7 @@ void  update_logbar(
  \brief conn_warning() displays a warning message when connection is 
  either lost or not detected with the ECU
  */
-EXPORT void conn_warning(void)
+G_MODULE_EXPORT void conn_warning(void)
 {
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 
@@ -259,7 +259,7 @@ EXPORT void conn_warning(void)
  \brief kill_conn_warning() removes the no connection warning message.
   Takes no parameters.
  */
-EXPORT void kill_conn_warning(void)
+G_MODULE_EXPORT void kill_conn_warning(void)
 {
 	if (!warning_present)
 		return;

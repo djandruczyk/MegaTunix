@@ -55,7 +55,7 @@ static gboolean header_needed = FALSE;
  processed.  All of the logable variables are then placed here for user 
  selecting during datalogging.
  */
-EXPORT void populate_dlog_choices_pf(void)
+G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 {
 	guint i,j,k;
 	GList *list = NULL;
@@ -318,7 +318,7 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
  \brief run_datalog_pf() gets called each time data arrives after rtvar 
  processing and logs the selected values to the file
  */
-EXPORT void run_datalog_pf(void)
+G_MODULE_EXPORT void run_datalog_pf(void)
 {
 	guint i = 0;
 	gint j = 0;
@@ -469,7 +469,7 @@ void dlog_select_defaults(void)
 }
 
 
-EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -541,7 +541,7 @@ gboolean autolog_dump(gpointer data)
 }
 
 
-EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;

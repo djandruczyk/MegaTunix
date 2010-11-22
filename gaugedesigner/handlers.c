@@ -17,7 +17,7 @@ extern gboolean changed;
 extern gboolean gauge_loaded;
 
 
-EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -28,7 +28,7 @@ EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -38,7 +38,7 @@ EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -141,7 +141,7 @@ void reset_text_controls()
 
 
 
-EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -322,7 +322,7 @@ void reset_general_controls()
 }
 
 
-EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -332,7 +332,7 @@ EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -341,7 +341,7 @@ EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
@@ -365,7 +365,7 @@ EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
 {
 	if ((gauge_loaded) && (changed))
 		prompt_to_save();
@@ -374,7 +374,7 @@ EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
 	MtxGaugeFace *g = NULL;
@@ -403,7 +403,7 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
@@ -492,7 +492,7 @@ EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
 {
 	MtxGaugeFace *g = NULL;
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -510,7 +510,7 @@ EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
 
 
 
-EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gint value = (GINT)OBJ_GET((widget),"special_value");
@@ -532,7 +532,7 @@ EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gint handler = (GINT)OBJ_GET((widget),"handler");

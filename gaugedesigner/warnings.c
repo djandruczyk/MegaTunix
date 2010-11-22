@@ -13,7 +13,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 
 
-EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
 {
 	GtkBuilder *warnings;
 	GtkWidget *dialog = NULL;

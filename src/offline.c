@@ -423,7 +423,7 @@ gint ptr_sort(gconstpointer a, gconstpointer b)
 }
 
 
-EXPORT void offline_ecu_restore_pf(void)
+G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;

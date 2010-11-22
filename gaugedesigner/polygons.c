@@ -19,7 +19,7 @@ extern GtkBuilder *toplevel;
 static gboolean poly_event_active = FALSE;
 
 
-EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
 {
 	GtkBuilder *polygons = NULL;
 	GtkWidget *dialog = NULL;

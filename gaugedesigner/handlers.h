@@ -18,18 +18,18 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean text_attributes_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean tick_groups_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean general_attributes_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean alert_ranges_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean warning_ranges_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean polygon_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
-EXPORT gboolean day_nite_handler(GtkWidget *, gpointer);
-EXPORT gboolean generic_spin_button_handler(GtkWidget *, gpointer );
-EXPORT gboolean tg_spin_button_handler(GtkWidget *, gpointer );
-EXPORT gboolean about_menu_handler(GtkWidget *, gpointer );
-EXPORT gboolean quit_gaugedesigner(GtkWidget *, gpointer );
+gboolean text_attributes_menu_handler(GtkWidget *, gpointer );
+gboolean tick_groups_menu_handler(GtkWidget *, gpointer );
+gboolean general_attributes_menu_handler(GtkWidget *, gpointer );
+gboolean alert_ranges_menu_handler(GtkWidget *, gpointer );
+gboolean warning_ranges_menu_handler(GtkWidget *, gpointer );
+gboolean polygon_menu_handler(GtkWidget *, gpointer );
+gboolean xml_button_handler(GtkWidget *, gpointer );
+gboolean day_nite_handler(GtkWidget *, gpointer);
+gboolean generic_spin_button_handler(GtkWidget *, gpointer );
+gboolean tg_spin_button_handler(GtkWidget *, gpointer );
+gboolean about_menu_handler(GtkWidget *, gpointer );
+gboolean quit_gaugedesigner(GtkWidget *, gpointer );
 void update_text_controls();
 void update_general_controls();
 void reset_text_controls();

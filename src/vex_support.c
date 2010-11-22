@@ -61,7 +61,7 @@ static struct
 };
 
 
-EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -170,7 +170,7 @@ void select_table_for_export(gint table_num)
 }
 
 
-EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -1069,7 +1069,7 @@ GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochann
  \param data (gpointer) unused
  \returns TRUE
  */
-EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 {
 	/* Gets data from VEX comment field in tools gui and stores it 
 	 * so that it gets written to the vex file 

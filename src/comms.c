@@ -135,7 +135,7 @@ gint comms_test(void)
  update other widgets that refer to that Page/Offset
  */
 
-EXPORT void send_to_slaves(void *data)
+G_MODULE_EXPORT void send_to_slaves(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
@@ -173,7 +173,7 @@ EXPORT void send_to_slaves(void *data)
 }
 
 
-EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
+G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 {
 	extern GAsyncQueue *slave_msg_queue;
 	SlaveMessage *msg = NULL;
@@ -202,7 +202,7 @@ EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
  \param data (OutputData *) pointer to data sent to ECU used to
  update other widgets that refer to that Page/Offset
  */
-EXPORT void update_write_status(void *data)
+G_MODULE_EXPORT void update_write_status(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
@@ -456,7 +456,7 @@ gboolean write_data(Io_Message *message)
 }
 
 
-EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
 	gint i = 0;
 	gint result = 0;

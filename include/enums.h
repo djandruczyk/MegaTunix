@@ -28,10 +28,10 @@ typedef enum
 
 typedef enum
 {
-	VE_EXPORT = 0xb0,
+	VE_ = 0xb0,
 	VE_IMPORT,
 	DATALOG_INT_DUMP,
-	DATALOG_EXPORT,
+	DATALOG_,
 	DATALOG_IMPORT,
 	FIRMWARE_LOAD,
 	FULL_BACKUP,
@@ -168,14 +168,6 @@ typedef enum
 	MAF_AN_HYBRID,
 	SD_MAF_HYBRID
 }Algorithm;
-
-typedef enum
-{
-	VEX_IMPORT=0x230,
-	VEX_EXPORT,
-	ECU_BACKUP,
-	ECU_RESTORE
-}FioAction;
 
 typedef enum
 {

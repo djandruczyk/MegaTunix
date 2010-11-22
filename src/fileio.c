@@ -44,7 +44,7 @@
 
 
 
-EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -88,7 +88,7 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 
 
 
-EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;

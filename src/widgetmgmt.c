@@ -278,7 +278,7 @@ void set_fixed_size( GtkWidget *widget, int nchars )
 			geo.height );
 }
 
-EXPORT void lock_entry(GtkWidget *widget)
+G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
 	GtkEntry *entry = NULL;

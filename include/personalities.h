@@ -11,17 +11,25 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __FILEIO_H__
-#define __FILEIO_H__
+#ifndef __PERSONALITIES_H__
+#define __PERSONALITIES_H__
 
 #include <enums.h>
 #include <gtk/gtk.h>
 
+typedef struct _PersonaElement PersonaElement;
+struct _PersonaElement 
+{
+	gchar *filename;	/* Filename */
+	gchar *dirname;		/* Dirname */
+	gchar *name;		/* Shortname in choice box */
+	gchar *library;		/* Library so/dll name */
+	gint baud;		/* Random data */
+	gboolean def;		/* Default choice */
+};
 /* Prototypes */
- gboolean select_file_for_ecu_backup(GtkWidget *, gpointer );
- gboolean select_file_for_ecu_restore(GtkWidget *, gpointer );
-void backup_all_ecu_settings(gchar  *);
-void restore_all_ecu_settings(gchar  *);
+gboolean personality_choice(void);
+gboolean persona_selection(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

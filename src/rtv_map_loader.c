@@ -47,7 +47,7 @@ gboolean rtvars_loaded = FALSE;
  firmware's interrogation profile, and sets up the necessary arrays for storage
  of data coming from the ECU (temporary arrays for the last 50 or so entries)
  */
-EXPORT gboolean load_realtime_map_pf(void )
+G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
 	GtkWidget *dialog = NULL;
 	ConfigFile *cfgfile = NULL;

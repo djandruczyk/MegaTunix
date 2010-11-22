@@ -33,7 +33,7 @@ extern Logview_Data *lv_data;
  \param data (gpointer) unused)
  \returns FALSE
  */
-EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
 	GdkPixmap *pmap = NULL;
@@ -97,7 +97,7 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
  \param data (gpointer) unused
  \returns TRUE
  */
-EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
 	pixmap = lv_data->pixmap;
@@ -123,7 +123,7 @@ EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoint
  \param data (gpointer) unused
  \returns TRUE on handled, FALSE otherwise
  */
-EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gint x = 0;
 	gint y = 0;
@@ -199,7 +199,7 @@ void highlight_tinfo(gint tnum, gboolean state)
 }
 
 
-EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
 	Lv_Handler handler;
 	GtkWidget *tmpwidget = NULL;
@@ -235,7 +235,7 @@ EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint x = 0;
 	gint y = 0;

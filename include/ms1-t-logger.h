@@ -56,11 +56,11 @@ struct _TTMon_Data
 };
 
 /* Prototypes */
-EXPORT void setup_logger_display(GtkWidget *);
-EXPORT void reset_ttm_buttons(void);
-EXPORT gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
-EXPORT gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-EXPORT gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
+ void setup_logger_display(GtkWidget *);
+ void reset_ttm_buttons(void);
+ gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+ gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+ gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
 
 void _crunch_trigtooth_data(gint);
 void crunch_trigtooth_data_pf(void);

@@ -57,7 +57,7 @@ static struct
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
 
-EXPORT void setup_menu_handlers_pf(void)
+G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 {
 	GtkWidget *item = NULL;
 	guint i = 0;
@@ -128,7 +128,7 @@ EXPORT void setup_menu_handlers_pf(void)
 /*!
  \brief switches to tab encoded into the widget
  */
-EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *notebook = NULL;
 	TabIdent target = -1;
@@ -164,7 +164,7 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
  \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
  */
-EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
 	action = (FioAction)OBJ_GET(widget,"fio_action");
@@ -220,7 +220,7 @@ gboolean check_tab_existance(TabIdent target)
 /*!
  \brief General purpose handler to hide/show tps calibrate window
  */
-EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -335,7 +335,7 @@ EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
  */
-EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -428,7 +428,7 @@ EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
  */
-EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -493,7 +493,7 @@ EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
  */
-EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -640,7 +640,7 @@ EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
+G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
 {
 	GtkWidget *window;
 	GtkWidget *view;
@@ -673,7 +673,7 @@ EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
 /*!
  \brief General purpose handler to hide/show trigger offset window
  */
-EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -748,7 +748,7 @@ EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 
 
 /*! \brief tell ms2 to reinitialize */
-EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 {
 	io_cmd("ms2_reinit",NULL);
 	return TRUE;
@@ -756,7 +756,7 @@ EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 
 
 /*! \brief tell ms2 to fully reboot */
-EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 {
 	io_cmd("ms2_reboot",NULL);
 	return TRUE;
@@ -766,7 +766,7 @@ EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
  \ show / hide window
  \ populates the combo box with available spark maps that could be filled out by the generator
   */
-EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	GtkWidget *item = NULL;
@@ -817,7 +817,7 @@ EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data
 	return TRUE;
 }
 
-EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 {
 	GladeXML* xml;
 	GtkWidget* item;

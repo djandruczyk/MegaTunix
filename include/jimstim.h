@@ -37,9 +37,9 @@ struct _JimStim_Data
 };
 
 /* Prototypes */
-gboolean jimstim_sweep_start(GtkWidget *, gpointer);
-gboolean jimstim_sweep_end(GtkWidget *, gpointer);
-gboolean jimstim_rpm_sweep(JimStim_Data *);
+G_MODULE_IMPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
+G_MODULE_IMPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
+G_MODULE_IMPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
 /* Prototypes */
 
 #endif

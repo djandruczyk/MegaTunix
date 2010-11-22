@@ -57,11 +57,11 @@ struct _MS2_TTMon_Data
 };
 
 /* Prototypes */
-EXPORT void ms2_setup_ms2_logger_display(GtkWidget *);
-EXPORT gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
-EXPORT gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
-EXPORT gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
-EXPORT void ms2_ttm_update(DataWatch *);
+ void ms2_setup_ms2_logger_display(GtkWidget *);
+ gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+ gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
+ gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
+ void ms2_ttm_update(DataWatch *);
 void _ms2_crunch_trigtooth_data(gint);
 void ms2_update_trigtooth_display(gint);
 /* Prototypes */
