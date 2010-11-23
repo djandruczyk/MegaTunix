@@ -87,51 +87,10 @@
 	</potential_args>
 	<commands>
 		<cmd>
-			<name>ms1_change_page</name>
-			<desc> Sets the ms1 page to the passed page number</desc>
-			<type>_WRITE_CMD_</type>
-			<base>P</base>
-			<args>
-				<arg>MS1_PAGE</arg>
-				<arg>PAUSE_100MS</arg>
-			</args>
-		</cmd>
-		<cmd>
-			<name>ms1_extra_reboot_get_error</name>
-			<desc>Reboots the ECU and grabs the error string</desc>
-			<type>_WRITE_CMD_</type>
-			<base>!!</base>
-			<args>
-				<arg>PAUSE_100MS</arg>
-				<arg>SEND_X</arg>
-			</args>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS1_GETERROR_</helper_func_arg>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>enable_reboot_button_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
 			<name>ms1_std_rtvars</name>
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>A</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>update_runtime_vars_pf</function>
-				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
-				<function>run_datalog_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>ms1_extra_rtvars</name>
-			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
-			<type>_WRITE_CMD_</type>
-			<base>R</base>
 			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
@@ -173,38 +132,7 @@
 				<arg>MS2_NUM_BYTES</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-		</cmd>
-		<cmd>
-			<name>ms1_generic_write</name>
-			<desc>Generic write function, sets data to any page and offset</desc>
-			<type>_WRITE_CMD_</type>
-			<base>W</base>
-			<args>
-				<arg>MS1_OFFSET</arg>
-				<arg>MS1_BYTE</arg>
-			</args>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function_w_arg>send_to_slaves</function_w_arg>
-				<function_w_arg>update_write_status</function_w_arg>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>ms1_chunk_write</name>
-			<desc>MS1 Chunk write function, sets data to any page and offset</desc>
-			<type>_WRITE_CMD_</type>
-			<base>X</base>
-			<args>
-				<arg>MS1_OFFSET</arg>
-				<arg>MS1_NUM_BYTES</arg>
-				<arg>DATACHUNK</arg>
-				<arg>PAUSE_500MS</arg>
-			</args>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function_w_arg>send_to_slaves</function_w_arg>
-				<function_w_arg>update_write_status</function_w_arg>
-			</post_functions>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>ms2_generic_write</name>
@@ -257,31 +185,6 @@
 			<helper_func_arg>_MISMATCH_COUNT_</helper_func_arg>
 		</cmd>
 		<cmd>
-			<name>ms1_burn</name>
-			<desc>burns the current page flash</desc>
-			<type>_WRITE_CMD_</type>
-			<base>B</base>
-			<args>
-				<arg>PAUSE_500MS</arg>
-			</args>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function_w_arg>post_single_burn_pf</function_w_arg>
-				<function_w_arg>update_write_status</function_w_arg>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>ms1_burn_all</name>
-			<desc>Calls a function to burn ALL applicable ms1 pages to flash</desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>burn_all_helper</func_call_name>
-			<func_call_arg>_MS1_</func_call_arg>
-			<defer_post_functions>TRUE</defer_post_functions>
-			<post_functions>
-				<function_w_arg>update_write_status</function_w_arg>
-			</post_functions>
-		</cmd>
-		<cmd>
 			<name>ms2_burn_all</name>
 			<desc>Calls a function to burn ALL applicable ms2 pages to flash</desc>
 			<type>_FUNC_CALL_</type>
@@ -318,14 +221,7 @@
 				<arg>PAUSE_100MS</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-		</cmd>
-		<cmd>
-			<name>ms1_get_clock</name>
-			<desc>Triggers the ecu to echo back it's 8bit clock</desc>
-			<type>_WRITE_CMD_</type>
-			<base>C</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS1_CLOCK_</helper_func_arg>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>ms2_get_clock</name>
@@ -334,14 +230,6 @@
 			<base>c</base>
 			<helper_func>simple_read_pf</helper_func>
 			<helper_func_arg>_MS2_CLOCK_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>ms1_get_textrev</name>
-			<desc>Triggers the ecu to echo back it's textual revision</desc>
-			<type>_WRITE_CMD_</type>
-			<base>T</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>ms2_get_textrev</name>
@@ -368,14 +256,6 @@
 			<helper_func_arg>_NUM_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
-			<name>ms1_veconst</name>
-			<desc>Triggers the MS1 to return the VE/Constants for the previously set page</desc>
-			<type>_WRITE_CMD_</type>
-			<base>V</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS1_VECONST_</helper_func_arg>
-		</cmd>
-		<cmd>
 			<name>ms2_veconst</name>
 			<desc>Triggers the MS1 to return the VE/Constants for canID and page passed</desc>
 			<type>_WRITE_CMD_</type>
@@ -394,12 +274,14 @@
 			<desc>Triggers the ecu to recompute some soft init variables, required for some variables being modified</desc>
 			<type>_WRITE_CMD_</type>
 			<base>!x</base>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>ms2_reboot</name>
 			<desc>Triggers the ecu to reboot</desc>
 			<type>_WRITE_CMD_</type>
 			<base>!!x</base>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>ms2_goto_bootloader</name>
@@ -450,47 +332,6 @@
 			</post_functions>
 		</cmd>
 		<cmd>
-			<name>ms1_read_all</name>
-			<desc>Reads ALL ecu vars for ALL modules </desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>read_ve_const</func_call_name>
-			<func_call_arg>_MS1_VECONST_</func_call_arg>
-			<defer_post_functions>TRUE</defer_post_functions>
-			<post_functions>
-				<function>update_ve_const_pf</function>
-				<function>setup_menu_handlers_pf</function>
-				<function>enable_3d_buttons_pf</function>
-				<function>set_store_black_pf</function>
-				<function>enable_get_data_buttons_pf</function>
-				<function>enable_ttm_buttons_pf</function>
-				<function>conditional_start_rtv_tickler_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>ms1_e_read_trigmon</name>
-			<desc>Reads trigmon page </desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>read_ve_const</func_call_name>
-			<func_call_arg>_MS1_E_TRIGMON_</func_call_arg>
-			<defer_post_functions>TRUE</defer_post_functions>
-			<post_functions>
-				<function>crunch_trigtooth_data_pf</function>
-				<function>update_trigtooth_display_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>ms1_e_read_toothmon</name>
-			<desc>Reads toothmon page </desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>read_ve_const</func_call_name>
-			<func_call_arg>_MS1_E_TOOTHMON_</func_call_arg>
-			<defer_post_functions>TRUE</defer_post_functions>
-			<post_functions>
-				<function>crunch_trigtooth_data_pf</function>
-				<function>update_trigtooth_display_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
 			<name>ms2_e_read_trigmon</name>
 			<desc>Reads trigmon page </desc>
 			<type>_FUNC_CALL_</type>
@@ -522,75 +363,6 @@
 			<post_functions>
 				<function>ms2_ttm_watch</function>
 			</post_functions>
-		</cmd>
-		<cmd>
-			<name>pis_get_signature</name>
-			<desc>Triggers the ecu to echo back it's api signature</desc>
-			<type>_WRITE_CMD_</type>
-			<base>t</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_SIGNATURE_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>pis_veconst</name>
-			<desc>Triggers the delco to return the VE/Constants</desc>
-			<type>_WRITE_CMD_</type>
-			<base>r</base>
-			<args>
-				<arg>MS2_OFFSET</arg>
-				<arg>MS2_NUM_BYTES</arg>
-			</args>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS2_VECONST_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>pis_generic_write</name>
-			<desc>Generic write function, sets data to any offset and length</desc>
-			<type>_WRITE_CMD_</type>
-			<base>w</base>
-			<args>
-				<arg>MS2_OFFSET</arg>
-				<arg>MS2_NUM_BYTES</arg>
-				<arg>DATACHUNK</arg>
-			</args>
-			<post_functions>
-			<defer_post_functions>FALSE</defer_post_functions>
-				<function_w_arg>send_to_slaves</function_w_arg>
-				<function_w_arg>update_write_status</function_w_arg>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>pis_std_rtvars</name>
-			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
-			<type>_WRITE_CMD_</type>
-			<base>a</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_MS2_RT_VARS_</helper_func_arg>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>update_runtime_vars_pf</function>
-				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
-				<function>run_datalog_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>pis_get_textrev</name>
-			<desc>Triggers the ecu to echo back it's textual revision</desc>
-			<type>_WRITE_CMD_</type>
-			<base>v</base>
-			<helper_func>simple_read_pf</helper_func>
-			<helper_func_arg>_TEXT_REV_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>pis_thermal_calibration</name>
-			<desc>This command expects 256 words (16bit) (MAT,CLT)</desc>
-			<type>_WRITE_CMD_</type>
-			<base>@</base>
-			<args>
-				<arg>MS2_TABLE_INDEX</arg>
-				<arg>DATACHUNK</arg>
-			</args>
 		</cmd>
 	</commands>
 </comms>

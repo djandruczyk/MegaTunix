@@ -20,16 +20,15 @@ handler=_GENERIC_
 [get_data_button]
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_
-bind_to_list=get_data_buttons
+bind_to_list=get_data_buttons,js_controls
 _tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
 handler=_BURN_MS_FLASH_
-bind_to_list=burners
+bind_to_list=burners,js_controls
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
-#----- Widgets ---------------------------------------------------------------
 
 [start_sweep_button]
 keys=function_name
@@ -38,6 +37,12 @@ function_name=jimstim_sweep_start
 [stop_sweep_button]
 keys=function_name
 function_name=jimstim_sweep_end
+
+#----- Widgets ---------------------------------------------------------------
+
+[sweeper_frame]
+keys=post_functions_with_arg
+post_functions_with_arg=jimstim_sweeper_init
 
 #----- Labels ----------------------------------------------------------------
 

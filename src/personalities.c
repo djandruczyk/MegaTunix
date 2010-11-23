@@ -220,6 +220,7 @@ gboolean personality_choice(void)
 			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
 #endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
+			g_free(libpath);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
 			plugin_init();
@@ -237,6 +238,7 @@ gboolean personality_choice(void)
 			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
 #endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
+			g_free(libpath);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
 			plugin_init();

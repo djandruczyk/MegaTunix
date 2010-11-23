@@ -14,12 +14,12 @@ size=_U08_
 
 [runtime_start_realtime_button]
 keys=handler,bind_to_list
-bind_to_list=rtv_buttons
+bind_to_list=js_controls
 handler=_START_REALTIME_
 
 [runtime_stop_realtime_button]
 keys=handler,bind_to_list
-bind_to_list=rtv_buttons
+bind_to_list=js_controls
 handler=_STOP_REALTIME_
 
 #------ Gui objects ---------------------------------------------------------
@@ -27,6 +27,10 @@ handler=_STOP_REALTIME_
 [topframe]
 keys=tab_ident
 tab_ident=_RUNTIME_TAB_
+
+[rtvars_toptable]
+keys=bind_to_list
+bind_to_list=js_controls
 
 #------- Runtime Status Indicators ------------------------------------------
 

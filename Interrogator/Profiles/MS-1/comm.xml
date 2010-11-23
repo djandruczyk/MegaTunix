@@ -67,6 +67,7 @@
 				<arg>MS1_PAGE</arg>
 				<arg>PAUSE_100MS</arg>
 			</args>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>ms1_extra_reboot_get_error</name>

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
@@ -22,6 +23,7 @@
 #include <string.h>
 #include <threads.h>
 
+static gconstpointer global_data;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
 static GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
@@ -33,8 +35,9 @@ static void (*stop_tickler_f)(gint) = NULL;
 static GList *(*get_list_f)(gchar *) = NULL;
 static void (*set_widget_sensitive_f)(gointer, gpinter) = NULL;
 
-G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
+G_MODULE_EXPORT void plugin_init(gconstpointer data)
 {
+	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -168,9 +171,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
 	gtk_widget_set_sensitive(jsdata.frame,FALSE);
-	g_list_foreach(get_list_f("burners"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-	g_list_foreach(get_list_f("rtv_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-	g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
+	g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -195,9 +196,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
 		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
 		gtk_widget_set_sensitive(jsdata->frame,TRUE);
-		g_list_foreach(get_list_f("burners"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
-		g_list_foreach(get_list_f("rtv_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
-		g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
+		g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
 	}
 	/* Send 65535 to disable dynamic mode */
 	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),"");
@@ -271,4 +270,21 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	g_free(tmpbuf);
 
 	return TRUE;
+}
+
+
+void jimstim_sweeper_init(GtkWidget *widget)
+{
+	CmdLineArgs *args = NULL;
+	args = DATA_GET(global_data,"args");
+
+	/* If a network mode slave, we DO NOT allow sweeping as it
+	   uses a non STD API that doesn't mesh with the socket stuff
+	   and requires things that are NOT implemented (passing msgs
+	   UP to the master/host), so it's safer and cleaner to lockout
+	   the ugliness
+	   */
+	if (args)
+		if (args->network_mode)
+			gtk_widget_set_sensitive(widget,FALSE);
 }

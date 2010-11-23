@@ -24,7 +24,7 @@
                     <property name="visible">True</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <widget class="GtkTable" id="table1">
+                      <widget class="GtkTable" id="rtvars_toptable">
                         <property name="visible">True</property>
                         <property name="n_rows">3</property>
                         <child>

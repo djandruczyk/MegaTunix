@@ -247,7 +247,7 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkFrame" id="frame1">
+                              <widget class="GtkFrame" id="sweeper_frame">
                                 <property name="visible">True</property>
                                 <property name="label_xalign">0</property>
                                 <child>
