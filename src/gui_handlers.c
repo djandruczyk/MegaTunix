@@ -323,10 +323,9 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				if (!settings)
 					settings = gtk_settings_get_default();
-				if (gtk_micro_version >= 14)
+				if (gtk_minor_version >= 14)
 					g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
-				printf("turned on tooltips\n");
 				break;
 			case FAHRENHEIT:
 				DATA_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));
@@ -386,10 +385,9 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				if (!settings)
 					settings = gtk_settings_get_default();
-				if (gtk_micro_version >= 14)
+				if (gtk_minor_version >= 14)
 					g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
-				printf("turned off tooltips\n");
 				break;
 			default:
 				break;

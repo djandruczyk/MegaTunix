@@ -116,7 +116,7 @@ int setup_gui(void)
 	w = (GINT)DATA_GET(global_data,"width");
 	h = (GINT)DATA_GET(global_data,"height");
 	tips_in_use = (GBOOLEAN)DATA_GET(global_data,"tips_in_use");
-	if (gtk_micro_version >= 14)
+	if (gtk_minor_version >= 14)
 	{
 		if (tips_in_use)
 			g_object_set(settings,"gtk-enable-tooltips",TRUE,NULL);
