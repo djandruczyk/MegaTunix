@@ -28,6 +28,10 @@ static GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
 static void (*io_cmd_f)(const gchar *,void *) = NULL;
 static OutputData *(*initialize_outputdata_f)(void) = NULL;
 static void *(*dbg_func_f)(int,gchar *) = NULL;
+static void (*start_tickler_f)(gint) = NULL;
+static void (*stop_tickler_f)(gint) = NULL;
+static GList *(*get_list_f)(gchar *) = NULL;
+static void (*set_widget_sensitive_f)(gointer, gpinter) = NULL;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
 {
@@ -38,7 +42,11 @@ G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
 	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
 	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
 	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
-	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func");
+	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func_f");
+	start_tickler_f = (void *)DATA_GET(global_data,"start_tickler_f");
+	stop_tickler_f = (void *)DATA_GET(global_data,"stop_tickler_f");
+	get_list_f = (void *)DATA_GET(global_data,"get_list_f");
+	set_widget_sensitive_f = (void *)DATA_GET(global_data,"set_widget_sensitive_f");
 }
 
 G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
@@ -66,9 +74,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		jsdata.start_b = lookup_widget_f("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget_f("JS_stop_sweep_button");
-
 	if (!jsdata.rpm_e)
 		jsdata.rpm_e = lookup_widget_f("JS_commanded_rpm");
+	if (!jsdata.frame)
+		jsdata.frame = lookup_widget_f("JS_basics_frame");
 
 	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
@@ -135,7 +144,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		dbg_func_f(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
 		return TRUE;
 	}
-//	stop_tickler(RTV_TICKLER);
+	stop_tickler_f(RTV_TICKLER);
 	g_usleep(10000);
 	steps = abs(jsdata.end-jsdata.start)/jsdata.step;
 	interval = (1000*jsdata.sweep)/steps;
@@ -158,6 +167,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
+	gtk_widget_set_sensitive(jsdata.frame,FALSE);
+	g_list_foreach(get_list_f("burners"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
+	g_list_foreach(get_list_f("rtv_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
+	g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -181,6 +194,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
 		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
+		gtk_widget_set_sensitive(jsdata->frame,TRUE);
+		g_list_foreach(get_list_f("burners"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
+		g_list_foreach(get_list_f("rtv_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
+		g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
 	}
 	/* Send 65535 to disable dynamic mode */
 	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),"");
@@ -194,7 +211,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
 	DATA_SET(output->data,"value",GINT_TO_POINTER(255));
 	io_cmd_f("jimstim_interactive_write",output);
-//	start_tickler(RTV_TICKLER);
+	start_tickler_f(RTV_TICKLER);
 	return TRUE;
 }
 

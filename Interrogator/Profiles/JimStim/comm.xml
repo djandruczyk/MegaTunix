@@ -53,6 +53,7 @@
 			<args>
 				<arg>JIMSTIM_BYTE</arg>
 			</args>
+			<defer_post_functions>TRUE</defer_post_functions>
 		</cmd>
 		<cmd>
 			<name>jimstim_generic_write</name>

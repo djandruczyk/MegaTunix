@@ -482,6 +482,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint index = 0;
 	gint count = 0;
 	gint result = 0;
+	gint tmpi = 0;
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
 	extern GList ***ve_widgets;
@@ -546,6 +547,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		bind_to_lists(widget, tmpbuf);
 		g_free(tmpbuf);
+	}
+	if (cfg_read_boolean(cfgfile,section,"ellipsize",&tmpi))
+	{
+		if (tmpi)
+			gtk_label_set_ellipsize(GTK_LABEL(widget),PANGO_ELLIPSIZE_END);
 	}
 
 	/* Color selections */

@@ -8,14 +8,13 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-plugin_LTLIBRARIES = libjimstim.la 
+plugin_LTLIBRARIES = libpis.la 
 
-libjimstim_la_SOURCES = \
+libpis_la_SOURCES = \
 	Makefile \
-	jimstim.h \
-	jimstim.c
+	template.c
 
-libjimstim_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
+libpis_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

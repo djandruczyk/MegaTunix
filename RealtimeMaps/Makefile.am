@@ -2,7 +2,7 @@ rtmapdir = $(datadir)/MegaTunix/$(REALTIME_MAPS_DATA_DIR)
 
 rtmap_in_files = 	\
 		BnG-Std.rtv_map.in \
-		DT-Std.rtv_map.in \
+		DualTable-Std.rtv_map.in \
 		MSnS-Extra-HR-08x.rtv_map.in \
 		MSnS-Extra-HR-011d.rtv_map.in \
 		MSnS-Extra-029x.rtv_map.in \

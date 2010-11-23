@@ -16,8 +16,8 @@
 		<datasource>rpm</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>rtmode</internal_name>
-		<datasource>rtmode</datasource>
+		<internal_name>modebit</internal_name>
+		<datasource>modebit</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>rtscale</internal_name>

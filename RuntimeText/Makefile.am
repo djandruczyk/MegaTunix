@@ -1,13 +1,13 @@
 rttextdir = $(datadir)/MegaTunix/$(RTTEXT_DATA_DIR)
 
 rttext_files = 	\
-		DT-firmware.xml \
-		JimStim-2.x-firmware.xml \
-		MS1-Std-firmware.xml \
-		MS2-Std-firmware.xml \
-		MS2-Extra-firmware.xml \
-		MSnS-Extra-firmware.xml \
-		PIS_V1_00-firmware.xml 
+		DualTable.xml \
+		JimStim-2.x.xml \
+		MS1-Std.xml \
+		MS2-Std.xml \
+		MS2-Extra.xml \
+		MSnS-Extra.xml \
+		PIS_V1_00.xml 
 
 rttext_DATA = $(rttext_files)
 

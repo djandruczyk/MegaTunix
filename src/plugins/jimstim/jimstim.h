@@ -28,6 +28,7 @@ struct _JimStim_Data
 	GtkWidget *start_b;	/* start button */
 	GtkWidget *stop_b;	/* end button */
 	GtkWidget *rpm_e;	/* commanded rpm entry */
+	GtkWidget *frame;	/* JS controls frame */
 	guint16 start;		/* start value */
 	guint16 end;		/* end value */
 	guint16 step;		/* step value */
@@ -38,9 +39,9 @@ struct _JimStim_Data
 };
 
 /* Prototypes */
-G_MODULE_IMPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
-G_MODULE_IMPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
-G_MODULE_IMPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
+G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
+G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
+G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
 /* Prototypes */
 
 #endif

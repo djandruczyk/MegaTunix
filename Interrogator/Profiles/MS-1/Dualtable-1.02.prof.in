@@ -141,10 +141,10 @@ MS_Signature=_SUBMATCH_,v.1.02
 
 
 [gui]
-RealtimeMapFile=DT-Std
-SliderMapFile=DT-firmware
-RuntimeTextMapFile=DT-firmware
-StatusMapFile=MS1-Std-firmware
+RealtimeMapFile=DualTable-Std
+SliderMapFile=DualTable
+RuntimeTextMapFile=DualTable
+StatusMapFile=MS1-Std
 
 LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,warmupwizard
 TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-DT_1,vetable_8x8e-DT_2,tools,warmupwizard

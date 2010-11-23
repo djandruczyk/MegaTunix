@@ -50,13 +50,13 @@ log_by_default=TRUE
 
 [derived_3]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,log_by_default
-internal_names=rtmode
+internal_names=modebit
 _dlog_gui_name=Mode
 dlog_field_name=Mode
 offset=3
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-_tooltip="Mode" is a bitfield containing unknown information
+_tooltip="Mode" is a bitfield designating the active wheel mode
 log_by_default=TRUE
 
 [derived_4]

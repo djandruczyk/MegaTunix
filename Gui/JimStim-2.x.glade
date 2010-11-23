@@ -32,7 +32,7 @@
                             <property name="n_rows">2</property>
                             <property name="n_columns">2</property>
                             <child>
-                              <widget class="GtkFrame" id="js_basics_frame">
+                              <widget class="GtkFrame" id="basics_frame">
                                 <property name="visible">True</property>
                                 <property name="label_xalign">0</property>
                                 <child>
@@ -211,6 +211,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="baud_combo">
                                             <property name="visible">True</property>
+                                            <property name="sensitive">False</property>
                                             <signal name="changed" handler="std_combo_handler"/>
                                           </widget>
                                           <packing>

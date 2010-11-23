@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<runtimestatus>
+	<api>
+		<major>2</major>
+		<minor>0</minor>
+	</api>
+	<info>
+		<description>Runtime Text definitions for JimStim.</description>
+	</info>
+	<status>
+		<label>CONNECTED</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>connected_widgets</bind_to_list>
+	</status>
+	<status>
+		<label>Dist/EDIS</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>0</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>36-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>1</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>60-2</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>2</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>4-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>3</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>24/2 (Nippondenos)</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>4</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>36-1+1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>5</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>36-2-2-2</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>6</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>6-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>7</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Neon/420A</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>8</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>24+rising/falling LS1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>9</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>12-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>10</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Subaru 6/7</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>11</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Trigger Return</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>12</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Oddfire Dizzy</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>13</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Mitsubishi 6G72</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>14</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>CAS 4/1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>16</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>4G63 (Miata)</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>17</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Renix 44-2-2</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>18</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Twin Trigger Even</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>19</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Twin Trigger Odd</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>20</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Suzuki Swift</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>21</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Suzuki Vitara 2.0</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>22</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Daihatsu 3cyl</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>23</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Daihatsu 4cyl</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>24</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Miata 99-00</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>25</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Rover 36-1-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>26</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Rover 36-1-1-1-1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>27</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Rover 36-2-2</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>28</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Honda RC51</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>29</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Chrysler 2.2/2.5</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>30</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>GM 7x native</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>32</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>32-2 Harley</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>33</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>6/1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>34</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>8/1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>35</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>10/1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>36</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Honda VTR1000 12-3</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>37</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>IAW Weber-Marelli</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>38</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Fiat 1.8 16V1</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>39</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Mitsu 360T CAS (6cyl)</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>40</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>Mitsu 360T CAS (8cyl</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>41</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>4.0 Jeep 2000</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>42</bitval>
+                <bitmask>63</bitmask>
+	</status>
+	<status>
+		<label>3.7 Jeep 2002</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>modebit</source>
+                <bitval>43</bitval>
+                <bitmask>63</bitmask>
+	</status>
+</runtimestatus>
