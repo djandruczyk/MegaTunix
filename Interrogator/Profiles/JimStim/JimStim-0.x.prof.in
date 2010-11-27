@@ -34,9 +34,9 @@ MS_Signature=_REGEX_,JimStim format 0001
 
 [gui]
 RealtimeMapFile=JimStim-2.x
-SliderMapFile=JimStim-2.x-firmware
-RuntimeTextMapFile=JimStim-2.x-firmware
-#StatusMapFile=
+SliderMapFile=JimStim-2.x
+RuntimeTextMapFile=JimStim-2.x
+StatusMapFile=JimStim-2.x
 
 LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim-0.x
 TabConfs=jimstim-runtime,datalogging,logviewer,JimStim-0.x

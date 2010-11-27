@@ -613,7 +613,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 		stop_tickler(RTV_TICKLER);
 	}
 
-	output = g_string_sized_new(1024); 
+	output = g_string_sized_new(4096); 
 
 	write_log_header(iochannel, TRUE);
 
@@ -640,6 +640,7 @@ void dump_log_to_disk(GIOChannel *iochannel)
 			tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precisions[i]),",",'.');
 			g_string_append(output,tmpbuf);
 			j++;
+			g_free(tmpbuf);
 
 			/* Print delimiter to log here so there isnt an extra
 			 * char at the end fo the line 

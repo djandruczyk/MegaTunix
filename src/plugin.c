@@ -16,6 +16,9 @@
 #include <defines.h>
 #include <enums.h>
 #include <init.h>
+#include <listmgmt.h>
+#include <mode_select.h>
+#include <notifications.h>
 #include <plugin.h>
 #include <threads.h>
 #include <widgetmgmt.h>
@@ -60,11 +63,15 @@ void plugin_init()
 	   pass that across on init of the plugin so it can call mtx functions and access
 	   global vars (within global_data)
 	   */
+	DATA_SET(global_data,"dbg_func_f",(gpointer)&dbg_func);
 	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
 	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
 	DATA_SET(global_data,"lookup_widget_f",(gpointer)&lookup_widget);
 	DATA_SET(global_data,"start_tickler_f",(gpointer)&start_tickler);
 	DATA_SET(global_data,"stop_tickler_f",(gpointer)&stop_tickler);
+	DATA_SET(global_data,"get_list_f",(gpointer)&get_list);
+	DATA_SET(global_data,"set_widget_sensitive_f",(gpointer)&set_widget_sensitive);
+	DATA_SET(global_data,"update_logbar_f",(gpointer)&update_logbar);
 
 	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);

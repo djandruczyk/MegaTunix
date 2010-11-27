@@ -13,11 +13,13 @@ size=_U08_
 #----- Buttons ---------------------------------------------------------------
 
 [runtime_start_realtime_button]
-keys=handler
+keys=handler,bind_to_list
+bind_to_list=js_controls
 handler=_START_REALTIME_
 
 [runtime_stop_realtime_button]
-keys=handler
+keys=handler,bind_to_list
+bind_to_list=js_controls
 handler=_STOP_REALTIME_
 
 #------ Gui objects ---------------------------------------------------------
@@ -26,59 +28,433 @@ handler=_STOP_REALTIME_
 keys=tab_ident
 tab_ident=_RUNTIME_TAB_
 
+[rtvars_toptable]
+keys=bind_to_list
+bind_to_list=js_controls
+
 #------- Runtime Status Indicators ------------------------------------------
 
-#[runtime_cranking_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-#bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=2
-#
-#[runtime_running_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-#bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=1
-#
-#[runtime_warmup_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-#bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=8
-#
-#[runtime_ase_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-#bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=4
-#
-#[runtime_accel_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-#bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=16
-#
-#[runtime_decel_label]
-#keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
-#active_fg=red
-#inactive_fg=dim grey
-##bind_to_list=runtime_status
-#source=enginebit
-#bitval=1
-#bitmask=32
+[label1]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Dist/EDIS
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=0
+bitmask=63
+
+[label2]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=36-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=1
+bitmask=63
+
+[label3]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=60-2
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=2
+bitmask=63
+
+[label4]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=4-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=3
+bitmask=63
+
+[label5]
+keys=set_label,ellipsize,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=24/2 Nippondenso
+ellipsize=TRUE
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=4
+bitmask=63
+
+[label6]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=36-1+1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=5
+bitmask=63
+
+[label7]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=36-2-2-2
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=6
+bitmask=63
+
+[label8]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=6-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=7
+bitmask=63
+
+[label9]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Neon/420A
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=8
+bitmask=63
+
+[label10]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=LS1+rising/falling
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=9
+bitmask=63
+
+[label11]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=12-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=10
+bitmask=63
+
+[label12]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Subary 6/7
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=11
+bitmask=63
+
+[label13]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Trigger Return
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=12
+bitmask=63
+
+[label14]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Oddfire Dizzy
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=13
+bitmask=63
+
+[label15]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Mitsu. 6G72
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=14
+bitmask=63
+
+[label16]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=4/1 CAS
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=16
+bitmask=63
+
+[label17]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=4G63 (Miata)
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=17
+bitmask=63
+
+[label18]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Renix 44-2-2
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=18
+bitmask=63
+
+[label19]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Twin Trigger Even
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=19
+bitmask=63
+
+[label20]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Twin Trigger Odd
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=20
+bitmask=63
+
+[label21]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Suzuki Swift
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=21
+bitmask=63
+
+[label22]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Suzuki Vitara 2.0
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=22
+bitmask=63
+
+[label23]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Daihatsu 3cyl
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=23
+bitmask=63
+
+[label24]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Daihatsu 4cyl
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=24
+bitmask=63
+
+[label25]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Miata 99-00
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=25
+bitmask=63
+
+[label26]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Rover 36-1-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=26
+bitmask=63
+
+[label27]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Rover 36-1-1-1-1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=27
+bitmask=63
+
+[label28]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Rover 36-2-2
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=28
+bitmask=63
+
+[label29]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Honda RC51
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=29
+bitmask=63
+
+[label30]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Chrysler 2.2/2.5
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=30
+bitmask=63
+
+[label31]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=GM 7x native
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=32
+bitmask=63
+
+[label32]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=32-2 Harley
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=33
+bitmask=63
+
+[label33]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=6/1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=34
+bitmask=63
+
+[label34]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=8/1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=35
+bitmask=63
+
+[label35]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=10/1
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=36
+bitmask=63
+
+[label36]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=VTR1000 12-3
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=37
+bitmask=63
+
+[label37]
+keys=set_label,ellipsize,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=IAW Weber-Marelli
+ellipsize=TRUE
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=38
+bitmask=63
+
+[label38]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Fiat 1.8 16V
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=39
+bitmask=63
+
+[label39]
+keys=set_label,ellipsize,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Mitsu. 360T CAS (6 cyl)
+ellipsize=TRUE
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=40
+bitmask=63
+
+[label40]
+keys=set_label,ellipsize,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=Mitsu. 360T CAS (8 cyl)
+ellipsize=TRUE
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=41
+bitmask=63
+
+[label41]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=4.0 Jeep 2000
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=42
+bitmask=63
+
+[label42]
+keys=set_label,bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
+set_label=3.7 Jeep 2002+
+active_fg=red
+inactive_fg=dim grey
+bind_to_list=runtime_status
+source=modebit
+bitval=43
+bitmask=63
 

@@ -482,6 +482,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint index = 0;
 	gint count = 0;
 	gint result = 0;
+	gint tmpi = 0;
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
 	extern GList ***ve_widgets;
@@ -546,6 +547,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		bind_to_lists(widget, tmpbuf);
 		g_free(tmpbuf);
+	}
+	if (cfg_read_boolean(cfgfile,section,"ellipsize",&tmpi))
+	{
+		if (tmpi)
+			gtk_label_set_ellipsize(GTK_LABEL(widget),PANGO_ELLIPSIZE_END);
 	}
 
 	/* Color selections */
@@ -745,28 +751,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
  */
 void run_post_functions(const gchar * functions)
 {
-	void (*function)(void);
-	gchar ** vector = NULL;
-	guint i = 0;
-	GModule *module = NULL;
-
-	vector = g_strsplit(functions,",",-1);
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (!module)
-	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-		return;
-	}
-	for (i=0;i<g_strv_length(vector);i++)
-	{
-		if (!g_module_symbol(module,vector[i],(void *)&function))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
-		else
-			function();
-	}
-	g_strfreev(vector);
-	if (!g_module_close(module))
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+	run_post_functions_with_arg(functions,NULL);
 }
 
 
@@ -781,26 +766,80 @@ void run_post_functions(const gchar * functions)
  */
 void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
-	void (*function)(GtkWidget *);
+	void (*f_widget)(GtkWidget *);
+	void (*f_void)(void);
 	gchar ** vector = NULL;
 	guint i = 0;
-	GModule *module = NULL;
+	guint j = 0;
+#ifdef __WIN32__
+	gchar * libname = NULL;
+#endif
+	gchar * libpath = NULL;
+	gboolean found = FALSE;
+	GModule **module = NULL;
 
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (!module)
+	/* Mtx common and ecu specific libs */
+	module = g_new0(GModule *, 3);
+	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module[0])
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
+	/* Common library */
+	if (strlen((gchar *)DATA_GET(global_data,"common_lib")) > 1)
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
-		return;
+#ifdef __WIN32__
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
+#else
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		g_free(libpath);
+	}
+	/* ECU Specific library */
+	if (strlen((gchar *)DATA_GET(global_data,"ecu_lib")) > 1)
+	{
+#ifdef __WIN32__
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
+#else
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		g_free(libpath);
 	}
 	vector = g_strsplit(functions,",",-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
-		if (!g_module_symbol(module,vector[i],(void *)&function))
+		for (j=0;j<3;j++)
+		{
+			/* If widget defined, pass to post function */
+			if (widget)
+			{
+				if ((!found) && (g_module_symbol(module[j],vector[i],(void *)&f_widget)))
+				{
+					f_widget(widget);
+					found = TRUE;
+				}
+			}
+			else /* If no widget find funct with no args.. */
+			{
+				if ((!found) && (g_module_symbol(module[j],vector[i],(void *)&f_void)))
+				{
+					f_void();
+					found = TRUE;
+				}
+			}
+		}
+		if (!found)
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
-		else
-			function(widget);
 	}
 	g_strfreev(vector);
-	if (!g_module_close(module))
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+	for (j=0;j<3;j++)
+	{
+		if (!g_module_close(module[j]))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+	}
+	g_free(module);
 }

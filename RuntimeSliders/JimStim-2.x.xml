@@ -17,10 +17,10 @@
 		<source>rpm</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>rtmode</slider_name>
+		<slider_name>modebit</slider_name>
 		<table>0</table>
 		<row>2</row>
-		<source>rtmode</source>
+		<source>modebit</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>rtscale</slider_name>

@@ -16,7 +16,7 @@ Burn_Command=jimstim_burn
 Burn_All_Command=jimstim_burn_all
 Write_Command=jimstim_generic_write
 Page_Command=jimstim_change_page
-Capabilities=_MS1_,_MS1_STD_
+Capabilities=_MS1_,_MS1_STD_,_JIMSTIM_
 BigEndian=TRUE
 MultiPage=FALSE
 ChunkWriteSupport=FALSE
@@ -34,9 +34,9 @@ MS_VerNum=_REGEX_,JimStim format V2.0
 
 [gui]
 RealtimeMapFile=JimStim-2.x
-SliderMapFile=JimStim-2.x-firmware
-RuntimeTextMapFile=JimStim-2.x-firmware
-#StatusMapFile=
+SliderMapFile=JimStim-2.x
+RuntimeTextMapFile=JimStim-2.x
+StatusMapFile=JimStim-2.x
 
 LoadTabs=jimstim-runtime,datalogging,logviewer,JimStim-2.x
 TabConfs=jimstim-runtime,datalogging,logviewer,JimStim-2.x

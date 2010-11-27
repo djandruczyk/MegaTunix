@@ -54,7 +54,7 @@ volatile gint last_page = -1;
 /*!
  \brief io_cmd() is called from all over the gui to kick off a threaded I/O
  command.  A command enumeration and an option block of data is passed and
- this function allocates a Io_Message and shoves it down an GAsyncQueue
+ this function allocates an Io_Message and shoves it down an GAsyncQueue
  to the main thread dispatcher which runs things and then passes any 
  needed information back to the gui via another GAsyncQueue which takes care
  of any post thread GUI updates. (which can NOT be done in a thread context

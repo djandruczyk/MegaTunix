@@ -899,9 +899,9 @@ MS_Signature=_SUBMATCH_,V2.8
 
 [gui]
 RealtimeMapFile=MS2-Std
-SliderMapFile=MS2-Std-firmware
-RuntimeTextMapFile=MS2-Std-firmware
-StatusMapFile=MS2-Std-firmware
+SliderMapFile=MS2-Std
+RuntimeTextMapFile=MS2-Std
+StatusMapFile=MS2-Std
 
 LoadTabs=runtime,datalogging,logviewer,tools,ms2-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-misc-fuel,ms2-alpha-n_6x6x1,vetable_12x12x2,sparktable_12x12x1,afrtable_12x12x2,ms2-user_outputs
 TabConfs=runtime,datalogging,logviewer,tools,ms2-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-misc-fuel,ms2-alpha-n_6x6x1,vetable_12x12x2-MS-II,sparktable_12x12x1-MS-II,afrtable_12x12x2-MS-II,ms2-user_outputs

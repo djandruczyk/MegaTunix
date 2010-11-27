@@ -19,8 +19,6 @@
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <jimstim.h>
-
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
@@ -87,7 +85,8 @@ gboolean personality_choice(void)
 		}
 		element = g_new0(PersonaElement, 1);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);
-		cfg_read_string(cfgfile,"Family","library",&element->library);
+		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
+		cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib);
 		cfg_read_int(cfgfile,"Family","baud",&element->baud);
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
@@ -214,13 +213,14 @@ gboolean personality_choice(void)
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
 #ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_library"));
+			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
 			libpath = g_module_build_path(MTXPLUGINDIR,libname);
 			g_free(libname);
 #else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_library"));
+			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
 #endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
+			g_free(libpath);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
 			plugin_init();
@@ -231,13 +231,14 @@ gboolean personality_choice(void)
 			break;
 		default:
 #ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_library"));
+			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
 			libpath = g_module_build_path(MTXPLUGINDIR,libname);
 			g_free(libname);
 #else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_library"));
+			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
 #endif
 			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
+			g_free(libpath);
 			g_module_make_resident(module);
 			DATA_SET(global_data,"plugin_module",(gpointer)module);
 			plugin_init();
@@ -260,7 +261,8 @@ gboolean persona_selection(GtkWidget *widget, gpointer data)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
 		DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(element->baud));
-		DATA_SET_FULL(global_data,"ecu_library", g_strdup(element->library),cleanup);
+		DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),cleanup);
+		DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),cleanup);
 		DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),cleanup);
 		DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),cleanup);
 	}

@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
@@ -22,14 +23,22 @@
 #include <string.h>
 #include <threads.h>
 
+static gconstpointer global_data;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
 static GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
 static void (*io_cmd_f)(const gchar *,void *) = NULL;
 static OutputData *(*initialize_outputdata_f)(void) = NULL;
+static void *(*dbg_func_f)(int,gchar *) = NULL;
+static void (*start_tickler_f)(gint) = NULL;
+static void (*stop_tickler_f)(gint) = NULL;
+static GList *(*get_list_f)(gchar *) = NULL;
+static void (*set_widget_sensitive_f)(gointer, gpinter) = NULL;
+static void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean) = NULL;
 
-G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
+G_MODULE_EXPORT void plugin_init(gconstpointer data)
 {
+	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -37,6 +46,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer global_data)
 	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
 	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
 	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
+	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func_f");
+	start_tickler_f = (void *)DATA_GET(global_data,"start_tickler_f");
+	stop_tickler_f = (void *)DATA_GET(global_data,"stop_tickler_f");
+	get_list_f = (void *)DATA_GET(global_data,"get_list_f");
+	set_widget_sensitive_f = (void *)DATA_GET(global_data,"set_widget_sensitive_f");
+	update_logbar_f = (void *)DATA_GET(global_data,"update_logbar_f");
 }
 
 G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
@@ -47,6 +62,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gfloat newsweep = 0.0;
 	gint interval = 0;
 	gboolean fault = FALSE;
+	gfloat lower_f = 0.0;
+	gfloat upper_f = 0.0;
+	gint lower = 0;
+	gint upper = 0;
 	gchar * tmpbuf = NULL;
 	extern GdkColor red;
 	extern GdkColor black;
@@ -64,9 +83,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		jsdata.start_b = lookup_widget_f("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget_f("JS_stop_sweep_button");
-
 	if (!jsdata.rpm_e)
 		jsdata.rpm_e = lookup_widget_f("JS_commanded_rpm");
+	if (!jsdata.frame)
+		jsdata.frame = lookup_widget_f("JS_basics_frame");
 
 	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
@@ -86,17 +106,25 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	g_free(text);
 
 	/* Validate data */
-	if ((jsdata.start < 60) || (jsdata.start > 65534))
+	lower = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
+	upper = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
+	printf("start %i, lower %i, upper %i\n",jsdata.start,lower,upper);
+	if ((jsdata.start < lower) || (jsdata.start > upper))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
+		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("Start RPM value (%i) is out of range of %i<->%i\n"),jsdata.start,lower,upper),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.end < 61) || (jsdata.end > 65534))
+	lower = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
+	upper = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
+	printf("end %i, lower %i, upper %i\n",jsdata.end,lower,upper);
+	if ((jsdata.end < lower) || (jsdata.end > upper))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
+		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("End RPM value of (%i) is out of range of %i<->%i\n"),jsdata.end,lower,upper),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
@@ -106,6 +134,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
+		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("End RPM value (%i) is too close to start RPM (%i), or RPM step (%i) is too large\n"),jsdata.end,jsdata.start,jsdata.step),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
 	{
@@ -113,39 +142,47 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	}
-	if ((jsdata.step < 1) || (jsdata.step > 65535))
+	lower = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
+	upper = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
+	printf("step, lower %i, upper %i\n",lower,upper);
+	if ((jsdata.step < lower) || (jsdata.step > upper))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
+		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("RPM step value (%i) is out of range (%i<->%i\n"),jsdata.step,lower,upper),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
-	if ((jsdata.sweep <= 0) || (jsdata.sweep > 300.0))
+	lower_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_lower"),NULL);
+	upper_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_upper"),NULL);
+	printf("sweep, lower %f, upper %f\n",lower_f,upper_f);
+	if ((jsdata.sweep <= lower_f) || (jsdata.sweep > upper_f))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
+		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("RPM sweep time value (%i) is out of range (%f<->%f\n"),jsdata.step,lower_f,upper_f),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&black);
 
 	if (fault)
 	{
-		dbg_func(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
+		dbg_func_f(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
 		return TRUE;
 	}
-//	stop_tickler(RTV_TICKLER);
+	stop_tickler_f(RTV_TICKLER);
 	g_usleep(10000);
 	steps = abs(jsdata.end-jsdata.start)/jsdata.step;
 	interval = (1000*jsdata.sweep)/steps;
-	if (interval < 10.0)
+	if (interval < 5.0)
 	{
-		newsweep = (10.0*steps)/1000;
+		newsweep = (5.0*steps)/1000;
 		tmpbuf = g_strdup_printf("%1$.*2$f",newsweep,1);
 		gtk_entry_set_text(GTK_ENTRY(jsdata.sweep_e),tmpbuf);
 		g_free(tmpbuf);
 	}
-	/* Clamp interval at 10 ms, max 100 theoretical updates/sec */
-	interval = interval > 10.0 ? interval:10.0;
+	/* Clamp interval at 5 ms, max 200 theoretical updates/sec */
+	interval = interval > 5.0 ? interval:5.0;
 	jsdata.current = jsdata.start;
 	jsdata.reset = TRUE;
 
@@ -156,6 +193,9 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
+	gtk_widget_set_sensitive(jsdata.frame,FALSE);
+	g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
+	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM in %iRPM steps in about %.2f seconds\n"),jsdata.start,jsdata.end,jsdata.step,newsweep),FALSE,FALSE,FALSE);
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -170,7 +210,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	jsdata = OBJ_GET(widget,"jsdata");
 	if (jsdata)
 	{
-		g_source_remove(jsdata->sweep_id);
+		if (jsdata->sweep_id)
+			g_source_remove(jsdata->sweep_id);
 		jsdata->reset = TRUE;
 		gtk_widget_set_sensitive(jsdata->start_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->end_e,TRUE);
@@ -179,6 +220,9 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
 		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
+		gtk_widget_set_sensitive(jsdata->frame,TRUE);
+		g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
+		update_logbar_f("jimstim_view",NULL,g_strdup(_("Sweeper disabled, Thanks for playing!\n")),FALSE,FALSE,FALSE);
 	}
 	/* Send 65535 to disable dynamic mode */
 	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),"");
@@ -192,7 +236,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	DATA_SET(output->data,"mode",GINT_TO_POINTER(MTX_CMD_WRITE));
 	DATA_SET(output->data,"value",GINT_TO_POINTER(255));
 	io_cmd_f("jimstim_interactive_write",output);
-//	start_tickler(RTV_TICKLER);
+	start_tickler_f(RTV_TICKLER);
 	return TRUE;
 }
 
@@ -252,4 +296,21 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	g_free(tmpbuf);
 
 	return TRUE;
+}
+
+
+void jimstim_sweeper_init(GtkWidget *widget)
+{
+	CmdLineArgs *args = NULL;
+	args = DATA_GET(global_data,"args");
+
+	/* If a network mode slave, we DO NOT allow sweeping as it
+	   uses a non STD API that doesn't mesh with the socket stuff
+	   and requires things that are NOT implemented (passing msgs
+	   UP to the master/host), so it's safer and cleaner to lockout
+	   the ugliness
+	   */
+	if (args)
+		if (args->network_mode)
+			gtk_widget_set_sensitive(widget,FALSE);
 }

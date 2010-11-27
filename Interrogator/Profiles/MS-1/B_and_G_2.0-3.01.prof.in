@@ -87,9 +87,9 @@ MS-I_VEconst=_COUNT_,125
 
 [gui]
 RealtimeMapFile=BnG-Std
-SliderMapFile=MS1-Std-firmware
-RuntimeTextMapFile=MS1-Std-firmware
-StatusMapFile=MS1-Std-firmware
+SliderMapFile=MS1-Std
+RuntimeTextMapFile=MS1-Std
+StatusMapFile=MS1-Std
 
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,vetable_8x8e,tools,warmupwizard
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8e-BnG,tools,warmupwizard

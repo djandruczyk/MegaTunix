@@ -397,11 +397,11 @@ void *binary_socket_server(gpointer data)
 	gint tableID = 0;
 	gint mtx_page = 0;
 	gint offset = 0;
-	gint offset_h = 0;
-	gint offset_l = 0;
+	guint8 offset_h = 0;
+	guint8 offset_l = 0;
 	gint count = 0;
-	gint count_h = 0;
-	gint count_l = 0;
+	guint8 count_h = 0;
+	guint8 count_l = 0;
 	gint index = 0;
 	guint8 *buffer = NULL;
 	guint8 byte = 0;
@@ -457,7 +457,6 @@ close_binary2:
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
-
 				switch (buf)
 				{
 					case '!': /* Potential reinit/reboot */
@@ -467,7 +466,7 @@ close_binary2:
 					case 'a':/* MS2 table full table read */
 						if (firmware->capabilities & MS2)
 						{
-							/*							printf("'a' received\n");*/
+							/*printf("'a' received\n");*/
 							state = GET_CAN_ID;
 							next_state = WAITING_FOR_CMD;
 							substate = SEND_FULL_TABLE;
@@ -560,7 +559,7 @@ close_binary2:
 						else
 						{
 							/*							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");*/
-							if (firmware->capabilities & MS1)
+							if ((firmware->capabilities & MS1) && (!(firmware->capabilities & JIMSTIM)))
 								res = net_send(client->socket,(guint8 *)&(firmware->ecu_revision),1);
 							else
 								if (firmware->text_revision)
@@ -1654,11 +1653,11 @@ void *control_socket_client(gpointer data)
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint offset_h = 0;
-	gint offset_l = 0;
+	guint8 offset_h = 0;
+	guint8 offset_l = 0;
 	gint count = 0;
-	gint count_h = 0;
-	gint count_l = 0;
+	guint8 count_h = 0;
+	guint8 count_l = 0;
 	gint index = 0;
 	RemoteAction action = 0;
 	GuiColor color = BLACK;
@@ -2364,11 +2363,11 @@ void *binary_socket_server(gpointer data)
 	gint tableID = 0;
 	gint mtx_page = 0;
 	gint offset = 0;
-	gint offset_h = 0;
-	gint offset_l = 0;
+	guint8 offset_h = 0;
+	guint8 offset_l = 0;
 	gint count = 0;
-	gint count_h = 0;
-	gint count_l = 0;
+	guint8 count_h = 0;
+	guint8 count_l = 0;
 	gint index = 0;
 	guint8 *buffer = NULL;
 	guint8 byte = 0;
@@ -2427,7 +2426,7 @@ close_binary:
 					case 'a':/* MS2 table full table read */
 						if (firmware->capabilities & MS2)
 						{
-							/*							printf("'a' received\n");*/
+							/*printf("'a' received\n");*/
 							state = GET_CAN_ID;
 							next_state = WAITING_FOR_CMD;
 							substate = SEND_FULL_TABLE;
@@ -2520,7 +2519,7 @@ close_binary:
 						else
 						{
 							/*							printf ("'Q' (MS1 ecu revision, or ms2 text rev)\n");*/
-							if (firmware->capabilities & MS1)
+							if ((firmware->capabilities & MS1) && (!(firmware->capabilities & JIMSTIM)))
 								res = net_send(fd,(guint8 *)&(firmware->ecu_revision),1,0);
 							else
 								if (firmware->text_revision)
@@ -3668,11 +3667,11 @@ void *control_socket_client(gpointer data)
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint offset_h = 0;
-	gint offset_l = 0;
+	guint8 offset_h = 0;
+	guint8 offset_l = 0;
 	gint count = 0;
-	gint count_h = 0;
-	gint count_l = 0;
+	guint8 count_h = 0;
+	guint8 count_l = 0;
 	gint index = 0;
 	RemoteAction action = 0;
 	GuiColor color = BLACK;

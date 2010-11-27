@@ -550,9 +550,9 @@ MS_Signature=_SUBMATCH_,extra format 029q
 
 [gui]
 RealtimeMapFile=MSnS-Extra-029x
-SliderMapFile=MSnS-Extra-firmware
-RuntimeTextMapFile=MSnS-Extra-firmware
-StatusMapFile=MSnS-Extra-firmware
+SliderMapFile=MSnS-Extra
+RuntimeTextMapFile=MSnS-Extra
+StatusMapFile=MSnS-Extra
 
 LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
 

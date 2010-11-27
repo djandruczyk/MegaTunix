@@ -23,7 +23,8 @@ struct _PersonaElement
 	gchar *filename;	/* Filename */
 	gchar *dirname;		/* Dirname */
 	gchar *name;		/* Shortname in choice box */
-	gchar *library;		/* Library so/dll name */
+	gchar *ecu_lib;		/* ECU specific library */
+	gchar *common_lib;	/* Common Library */
 	gint baud;		/* Random data */
 	gboolean def;		/* Default choice */
 };

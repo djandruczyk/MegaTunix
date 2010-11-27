@@ -55,8 +55,10 @@ void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MS2_E_COMPMON));
 	g_hash_table_insert(str_2_enum,"_SECU_3_",
 			GINT_TO_POINTER(SECU_3));
-	g_hash_table_insert(str_2_enum,"_FREE_EMS_",
-			GINT_TO_POINTER(FREE_EMS));
+	g_hash_table_insert(str_2_enum,"_FREEEMS_",
+			GINT_TO_POINTER(FREEEMS));
+	g_hash_table_insert(str_2_enum,"_JIMSTIM_",
+			GINT_TO_POINTER(JIMSTIM));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",

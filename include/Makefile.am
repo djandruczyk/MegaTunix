@@ -32,7 +32,6 @@ headers = \
 	helpers.h \
 	init.h \
 	interrogate.h \
-	jimstim.h \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \

@@ -660,10 +660,10 @@ MS_Signature=_SUBMATCH_,PIS firmware (C) 2010 Jason Roughley. pis.controller@gma
 MS_VerNum=_SUBMATCH_,V1.00
 
 [gui]
-RealtimeMapFile=PIS_V1_00-firmware
-SliderMapFile=PIS_V1_00-firmware
-RuntimeTextMapFile=PIS_V1_00-firmware
-StatusMapFile=PIS_V1_00-firmware
+RealtimeMapFile=PIS_V1_00
+SliderMapFile=PIS_V1_00
+RuntimeTextMapFile=PIS_V1_00
+StatusMapFile=PIS_V1_00
 
 LoadTabs=PIS-runtime,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10,datalogging,logviewer,tools
 TabConfs=PIS-runtime,PIS-settings,PIS-corrections,PIS-biar_16x16,PIS-bpw_16x16,PIS-ego_16x16,PIS-boost_16x10,PIS-alpha_biar_16x10,PIS-alpha_bpw_16x10,datalogging,logviewer,tools

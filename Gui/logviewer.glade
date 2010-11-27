@@ -248,7 +248,7 @@
                       <widget class="GtkVBox" id="scroll_speed_vbox">
                         <property name="visible">True</property>
                         <child>
-                          <widget class="GtkLabel" id="label1">
+                          <widget class="GtkLabel" id="scroll_speed_label1">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Scroll Speed</property>
                           </widget>
