@@ -12,10 +12,10 @@ plugin_LTLIBRARIES = libjimstim.la
 
 libjimstim_la_SOURCES = \
 	Makefile \
+	jimstim_plugin.c \
 	jimstim_plugin.h \
 	jimstim.h \
-	jimstim.c \
-	init.c
+	jimstim.c 
 
 libjimstim_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

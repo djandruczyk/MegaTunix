@@ -1349,7 +1349,7 @@ void dealloc_list(gpointer key, gpointer value, gpointer user_data)
 }
 
 
-void cleanup(void *data)
+G_MODULE_EXPORT void cleanup(void *data)
 {
 	if (data)
 		g_free(data);

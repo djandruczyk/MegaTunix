@@ -280,12 +280,12 @@ void warn_user(const gchar *message)
 		return;
 
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
-			
+
 	if (!interrogated)
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
 	else
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CANCEL,NULL);
-			
+
 
 	g_signal_connect (G_OBJECT(warning_dialog),
 			"response",
@@ -294,6 +294,34 @@ void warn_user(const gchar *message)
 
 	warning_present = TRUE;
 	gtk_widget_show_all(warning_dialog);
+}
+
+
+
+/*!
+ \brief error_msg() displays a warning message on the screen as a error dialog
+ \param message (gchar *) the text to display
+ */
+void error_msg(const gchar *message)
+{
+	GtkWidget *dialog = NULL;
+	gint result = 0;
+	dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Ignore at my peril!", GTK_RESPONSE_ACCEPT,NULL);
+
+	gtk_widget_show_all(dialog);
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_CLOSE:
+			gtk_widget_destroy(dialog);
+			leave(NULL,NULL);
+			break;
+		case GTK_RESPONSE_ACCEPT:
+			gtk_widget_destroy(dialog);
+	}
+	return;
 }
 
 

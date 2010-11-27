@@ -19,6 +19,7 @@
 
 
 /* Prototypes */
+void (*error_msg_f)(const gchar *);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 void (*io_cmd_f)(const gchar *,void *);
 OutputData *(*initialize_outputdata_f)(void);

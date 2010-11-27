@@ -51,13 +51,13 @@ void bind_ttm_to_page(gint page)
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
-	widget = lookup_widget("toothlogger_disable_radio_button");
+	widget = lookup_widget_f("toothlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	widget = lookup_widget("triggerlogger_disable_radio_button");
+	widget = lookup_widget_f("triggerlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	widget = lookup_widget("compositelogger_disable_radio_button");
+	widget = lookup_widget_f("compositelogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 }
@@ -112,8 +112,8 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 				TRUE, 0,0,
 				w,h);
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
-		ttm_data->axis_gc = initialize_gc(ttm_data->pixmap,TTM_AXIS);
-		ttm_data->trace_gc = initialize_gc(ttm_data->pixmap,TTM_TRACE);
+		ttm_data->axis_gc = initialize_gc_f(ttm_data->pixmap,TTM_AXIS);
+		ttm_data->trace_gc = initialize_gc_f(ttm_data->pixmap,TTM_TRACE);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
@@ -195,8 +195,8 @@ void _crunch_trigtooth_data(gint page)
 
 	for (i=position;i<185;i+=2)
 	{
-		/*total = (get_ecu_data(canID,page,i,size)*256)+get_ecu_data(canID,page,i+1,size);*/
-		total = get_ecu_data(canID,page,i,MTX_U16);
+		/*total = (get_ecu_data_f(canID,page,i,size)*256)+get_ecu_data_f(canID,page,i+1,size);*/
+		total = get_ecu_data_f(canID,page,i,MTX_U16);
 		ttm_data->current[index] = total;
 		index++;
 	}
@@ -204,15 +204,15 @@ void _crunch_trigtooth_data(gint page)
 	{
 		for (i=0;i<position;i+=2)
 		{
-			/*total = (get_ecu_data(canID,page,i,size)*256)+get_ecu_data(canID,page,i+1,size);*/
-			total = get_ecu_data(canID,page,i,MTX_U16);
+			/*total = (get_ecu_data_f(canID,page,i,size)*256)+get_ecu_data_f(canID,page,i+1,size);*/
+			total = get_ecu_data_f(canID,page,i,MTX_U16);
 			ttm_data->current[index] = total;
 			index++;
 		}
 	}
 	/*g_printf("\n");*/
 
-	if (get_ecu_data(canID,page,UNITS,size) == 1)
+	if (get_ecu_data_f(canID,page,UNITS,size) == 1)
 	{
 		/*g_printf("0.1 ms units\n");*/
 		ttm_data->units=100;
@@ -241,7 +241,7 @@ void _crunch_trigtooth_data(gint page)
 	 * patterns
 	 */
 	ratio = (float)max/(float)min;
-	lookup_current_value("rpm",&ttm_data->rpm);
+	lookup_current_value_f("rpm",&ttm_data->rpm);
 /*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (page == 9) /* TOOTH logger, we should search for min/max's */
 	{
@@ -492,14 +492,14 @@ G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer
 		{
 
 			case START_TOOTHMON_LOGGER:
-				tmpwidget = lookup_widget("triggerlogger_buttons_table");
+				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				start(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
-				tmpwidget = lookup_widget("toothlogger_buttons_table");
+				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
@@ -507,13 +507,13 @@ G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer
 				break;
 			case STOP_TOOTHMON_LOGGER:
 				stop(TOOTHMON_TICKLER);
-				tmpwidget = lookup_widget("triggerlogger_buttons_table");
+				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
 				stop(TRIGMON_TICKLER);
-				tmpwidget = lookup_widget("toothlogger_buttons_table");
+				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
@@ -615,7 +615,7 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 	Firmware_Details * firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+	dbg_func_f(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
 	 * Also gets us access to current RPM and other vars for calculating 

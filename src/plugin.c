@@ -18,9 +18,11 @@
 #include <enums.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <logviewer_gui.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <plugin.h>
+#include <rtv_processor.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 #include <timeout_handlers.h>
@@ -64,6 +66,7 @@ void plugin_init()
 	   pass that across on init of the plugin so it can call mtx functions and access
 	   global vars (within global_data)
 	   */
+	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
 	DATA_SET(global_data,"dbg_func_f",(gpointer)&dbg_func);
 	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
 	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
@@ -75,6 +78,8 @@ void plugin_init()
 	DATA_SET(global_data,"update_logbar_f",(gpointer)&update_logbar);
 	DATA_SET(global_data,"signal_read_rtvars_f",(gpointer)&signal_read_rtvars);
 	DATA_SET(global_data,"get_ecu_data_f",(gpointer)&get_ecu_data);
+	DATA_SET(global_data,"initialize_gc_f",(gpointer)&initialize_gc);
+	DATA_SET(global_data,"lookup_current_value_f",(gpointer)&lookup_current_value);
 
 	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);

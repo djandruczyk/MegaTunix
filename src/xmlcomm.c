@@ -17,6 +17,8 @@
 #include <enums.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stringmatch.h>
 #include <xmlcomm.h>
 #include <xmlbase.h>
@@ -194,7 +196,6 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
-	GModule *module = NULL;
 
 	if (!node->children)
 	{
@@ -220,12 +221,8 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_name") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->func_call_name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,cmd->func_call_name,(void *)&cmd->function);
-				if (!(cmd->function))
-					printf(_("ERROR Function %s is NULL\n"),cmd->func_call_name);
-				g_module_close(module);
+				if (!get_symbol(cmd->func_call_name,(void *)&cmd->function))
+					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
 			{
@@ -243,13 +240,8 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->helper_func_name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,cmd->helper_func_name,(void *)&cmd->helper_function);
-				if (!(cmd->helper_function))
-					printf(_("ERROR Helper Function %s is NULL\n"),cmd->helper_func_name);
-				g_module_close(module);
-
+				if (!get_symbol(cmd->helper_func_name,(void *)&cmd->helper_function))
+					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
 			{
@@ -301,7 +293,6 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	PostFunction *pf = NULL;
-	GModule *module = NULL;
 
 	if (!node->children)
 	{
@@ -318,26 +309,18 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,pf->name,(void *)&pf->function);
-				if (!(pf->function))
-					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function \"%s\" is NULL!!\n"),pf->name));
+				if (!get_symbol(pf->name,(void *)&pf->function))
+					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = FALSE;
-				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"function_w_arg") == 0)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,pf->name,(void *)&pf->function_w_arg);
-				if (!(pf->function_w_arg))
-					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function w/arg \"%s\" is NULL!!\n"),pf->name));
+				if (!get_symbol(pf->name,(void *)&pf->function_w_arg))
+					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = TRUE;
-				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
 			}
 		}
@@ -389,4 +372,67 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 		printf(_("Function call %s (%p)\n"),cmd->func_call_name,cmd->function);
 	}
 	printf("\n\n");
+}
+
+
+gboolean get_symbol(const gchar *name, void **function_p)
+{
+	GModule **module = NULL;
+	gint i = 0;
+	gboolean found = FALSE;
+#ifdef __WIN32__
+	gchar * libname = NULL;
+#endif
+	gchar * libpath = NULL;
+	extern gconstpointer *global_data;
+
+	/* Mtx common and ecu specific libs */
+	module = g_new0(GModule *, 3);
+	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module[0])
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
+	/* Common library */
+	if (strlen((gchar *)DATA_GET(global_data,"common_lib")) > 1)
+	{
+#ifdef __WIN32__
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
+#else
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		g_free(libpath);
+	}
+	/* ECU Specific library */
+	if (strlen((gchar *)DATA_GET(global_data,"ecu_lib")) > 1)
+	{
+#ifdef __WIN32__
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
+#else
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		g_free(libpath);
+	}
+
+	for (i=0;i<3;i++)
+	{
+		if ((module[i]) && (!found))
+		{
+			g_module_symbol(module[i],name,function_p);
+			found = TRUE;
+		}
+	}
+	if (!found)
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\", error:\n\t%s\n",name,g_module_error()));
+	for (i=0;i<3;i++)
+	{
+		if (!g_module_close(module[i]))
+			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+	}
+	g_free(module);
+	return found;
 }

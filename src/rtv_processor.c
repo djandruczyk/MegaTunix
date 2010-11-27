@@ -651,7 +651,7 @@ gfloat handle_special(gconstpointer *object,gchar *handler_name)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_current_value(gchar *internal_name, gfloat *value)
+gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -686,7 +686,7 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
+gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -722,7 +722,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
+gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -762,7 +762,7 @@ gboolean lookup_previous_nth_value(gchar *internal_name, gint n, gfloat *value)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
+gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -810,7 +810,7 @@ gboolean lookup_previous_n_values(gchar *internal_name, gint n, gfloat *values)
  \param value (gfloat *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip, gfloat *values)
+gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -856,7 +856,7 @@ gboolean lookup_previous_n_skip_x_values(gchar *internal_name, gint n, gint skip
  \param value (gint *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_precision(gchar *internal_name, gint *precision)
+gboolean lookup_precision(const gchar *internal_name, gint *precision)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
