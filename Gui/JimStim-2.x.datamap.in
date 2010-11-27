@@ -44,6 +44,12 @@ function_name=jimstim_sweep_end
 keys=post_functions_with_arg
 post_functions_with_arg=jimstim_sweeper_init
 
+[jimstim_view]
+keys=create_tags,register_as
+register_as=jimstim_view
+create_tags=warning
+warning=foreground,red
+
 #----- Labels ----------------------------------------------------------------
 
 #----- Combos ----------------------------------------------------------------
@@ -83,42 +89,37 @@ tooltip=Baud rate the JimStim will use on next powerup after burn,  NOTE, anythi
 #----- Entries ---------------------------------------------------------------
 
 [rpm_entry]
-keys=offset,size,raw_upper,tooltip
+keys=offset,size,raw_lower,raw_upper,tooltip
 offset=1
 size=_U16_
+raw_lower=60
 raw_upper=65535
-tooltip=Commanded RPM
+tooltip=Commanded RPM, valid range of 60 to 65534 RPM.  set to 65535 to re-enable the RPM pots on the JimStim itself.
 
 [start_rpm_entry]
 keys=size,raw_lower,raw_upper,tooltip
 size=_U16_
 raw_lower=60
 raw_upper=65534
-tooltip=Start RPM for RPM sweeping
+tooltip=Start RPM for RPM sweeping, 60-65534 range
 
 [end_rpm_entry]
 keys=size,raw_lower,raw_upper,tooltip
 size=_U16_
 raw_lower=61
 raw_upper=65534
-tooltip=End RPM for RPM sweeping
+tooltip=End RPM for RPM sweeping, 60-65534 range
 
 [step_rpm_entry]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=1000
-tooltip=RPM Step
+tooltip=RPM Step, how many RPM to increase or decrese on each update
 
 [sweep_time_entry]
 keys=size,raw_upper,precision,tooltip
 size=_U16_
 raw_upper=300
 precision=1
-tooltip=How many seconds to go from start RPM to End RPM
-
-[commanded_rpm]
-keys=size,raw_upper,tooltip
-size=_U16_
-raw_upper=65535
-tooltip=The RPM the Stim is currently synthesizing
+tooltip=How many seconds to go from start RPM to End RPM. The sweeper performs a linear sweep between start and endpoint continually.
 

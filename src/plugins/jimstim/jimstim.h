@@ -29,11 +29,11 @@ struct _JimStim_Data
 	GtkWidget *stop_b;	/* end button */
 	GtkWidget *rpm_e;	/* commanded rpm entry */
 	GtkWidget *frame;	/* JS controls frame */
-	guint16 start;		/* start value */
-	guint16 end;		/* end value */
-	guint16 step;		/* step value */
+	gint start;		/* start value */
+	gint end;		/* end value */
+	gint step;		/* step value */
 	gfloat sweep;		/* sweep value */
-	guint16 current;	/* Current value */
+	gint current;		/* Current value */
 	gint sweep_id;		/*! Timeout identifier */
 	gboolean reset;		/*! Reset*/
 };

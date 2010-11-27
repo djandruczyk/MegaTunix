@@ -18,6 +18,7 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <mode_select.h>
+#include <notifications.h>
 #include <plugin.h>
 #include <threads.h>
 #include <widgetmgmt.h>
@@ -70,6 +71,7 @@ void plugin_init()
 	DATA_SET(global_data,"stop_tickler_f",(gpointer)&stop_tickler);
 	DATA_SET(global_data,"get_list_f",(gpointer)&get_list);
 	DATA_SET(global_data,"set_widget_sensitive_f",(gpointer)&set_widget_sensitive);
+	DATA_SET(global_data,"update_logbar_f",(gpointer)&update_logbar);
 
 	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);
