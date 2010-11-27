@@ -59,7 +59,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	static JimStim_Data jsdata;
 	gchar *text = NULL;
 	gfloat steps = 0.0;
-	gfloat newsweep = 0.0;
+	gfloat new = 0.0;
 	gint interval = 0;
 	gboolean fault = FALSE;
 	gfloat lower_f = 0.0;
@@ -83,6 +83,10 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		jsdata.start_b = lookup_widget_f("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget_f("JS_stop_sweep_button");
+	if (!jsdata.step_rb)
+		jsdata.step_rb = lookup_widget_f("JS_step_radio");
+	if (!jsdata.sweep_rb)
+		jsdata.sweep_rb = lookup_widget_f("JS_sweep_radio");
 	if (!jsdata.rpm_e)
 		jsdata.rpm_e = lookup_widget_f("JS_commanded_rpm");
 	if (!jsdata.frame)
@@ -108,8 +112,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	/* Validate data */
 	lower = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
 	upper = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
-	printf("start %i, lower %i, upper %i\n",jsdata.start,lower,upper);
-	if ((jsdata.start < lower) || (jsdata.start > upper))
+	if ((jsdata.start <= lower) || (jsdata.start >= upper))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&red);
@@ -119,8 +122,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
 	lower = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
 	upper = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
-	printf("end %i, lower %i, upper %i\n",jsdata.end,lower,upper);
-	if ((jsdata.end < lower) || (jsdata.end > upper))
+	if ((jsdata.end <= lower) || (jsdata.end >= upper))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
@@ -128,7 +130,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
-	if (abs(jsdata.end - jsdata.start) < jsdata.step)
+	if (abs(jsdata.end - jsdata.start) <= jsdata.step)
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&red);
@@ -144,8 +146,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	lower = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
 	upper = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
-	printf("step, lower %i, upper %i\n",lower,upper);
-	if ((jsdata.step < lower) || (jsdata.step > upper))
+	if ((jsdata.step <= lower) || (jsdata.step >= upper))
 	{
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&red);
@@ -155,8 +156,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	lower_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_lower"),NULL);
 	upper_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_upper"),NULL);
-	printf("sweep, lower %f, upper %f\n",lower_f,upper_f);
-	if ((jsdata.sweep <= lower_f) || (jsdata.sweep > upper_f))
+	if ((jsdata.sweep <= lower_f) || (jsdata.sweep >= upper_f))
 	{	
 		fault = TRUE;
 		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
@@ -176,10 +176,20 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	interval = (1000*jsdata.sweep)/steps;
 	if (interval < 5.0)
 	{
-		newsweep = (5.0*steps)/1000;
-		tmpbuf = g_strdup_printf("%1$.*2$f",newsweep,1);
-		gtk_entry_set_text(GTK_ENTRY(jsdata.sweep_e),tmpbuf);
-		g_free(tmpbuf);
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(jsdata.step_rb)))
+		{
+			jsdata.sweep = (5.0*steps)/1000;
+			tmpbuf = g_strdup_printf("%1$.*2$f",jsdata.sweep,1);
+			gtk_entry_set_text(GTK_ENTRY(jsdata.sweep_e),tmpbuf);
+			g_free(tmpbuf);
+		}
+		else
+		{
+			jsdata.step = abs(jsdata.end-jsdata.start)/200;
+			tmpbuf = g_strdup_printf("%i",jsdata.step);
+			gtk_entry_set_text(GTK_ENTRY(jsdata.step_e),tmpbuf);
+			g_free(tmpbuf);
+		}
 	}
 	/* Clamp interval at 5 ms, max 200 theoretical updates/sec */
 	interval = interval > 5.0 ? interval:5.0;
@@ -195,7 +205,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
 	gtk_widget_set_sensitive(jsdata.frame,FALSE);
 	g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM in %iRPM steps in about %.2f seconds\n"),jsdata.start,jsdata.end,jsdata.step,newsweep),FALSE,FALSE,FALSE);
+	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM in %iRPM steps in about %.2f seconds\n"),jsdata.start,jsdata.end,jsdata.step,new),FALSE,FALSE,FALSE);
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 

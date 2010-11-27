@@ -28,6 +28,8 @@ struct _JimStim_Data
 	GtkWidget *start_b;	/* start button */
 	GtkWidget *stop_b;	/* end button */
 	GtkWidget *rpm_e;	/* commanded rpm entry */
+	GtkWidget *step_rb;	/* Favor step radiobutton */
+	GtkWidget *sweep_rb;	/* Favor sweep radiobutton */
 	GtkWidget *frame;	/* JS controls frame */
 	gint start;		/* start value */
 	gint end;		/* end value */
