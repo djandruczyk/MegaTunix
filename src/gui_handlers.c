@@ -45,6 +45,7 @@
 #include <mode_select.h>
 #include <notifications.h>
 #include <post_process.h>
+#include <plugin.h>
 #include <req_fuel.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
@@ -54,7 +55,6 @@
 #include <string.h>
 #include <stringmatch.h>
 #include <tabloader.h>
-#include <ms1-t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <user_outputs.h>
@@ -102,7 +102,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	extern gint pf_dispatcher_id;
 	extern gint gui_dispatcher_id;
-	extern gint statuscounts_id;
 	/*
 	   extern GThread * ascii_socket_id;
 	   extern GThread * binary_socket_id;
@@ -143,12 +142,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	leaving = TRUE;
 	/* Stop timeout functions */
 
+	plugin_shutdown();
 	stop_tickler(RTV_TICKLER);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
-	stop_tickler(TOOTHMON_TICKLER);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_toothmon\n"));
-	stop_tickler(TRIGMON_TICKLER);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_trigmon\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"));
 
@@ -184,9 +180,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
 	/* Statuscounts timeout */
-	if (statuscounts_id)
-		g_source_remove(statuscounts_id);
-	statuscounts_id = 0;
+	if (DATA_GET(global_data,"statuscounts_id"))
+		g_source_remove((gint)DATA_GET(global_data,"statuscounts_id"));
+	DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(0));
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	g_cond_timed_wait(statuscounts_cond,mutex,&now);
@@ -952,7 +948,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern GThread * realtime_id;
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
 	extern Firmware_Details *firmware;
@@ -1055,7 +1050,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case REBOOT_GETERR:
 			if (offline)
 				break;
-			if (realtime_id)
+			if (DATA_GET(global_data,"realtime_id"))
 			{
 				stop_tickler(RTV_TICKLER);
 				restart = TRUE;
@@ -1506,7 +1501,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
-	extern GThread * realtime_id;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;

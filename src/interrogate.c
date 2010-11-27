@@ -322,7 +322,10 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	else
 	{
 		if (!firmware)
+		{
 			firmware = g_new0(Firmware_Details,1);
+			DATA_SET(global_data,"firmware",firmware);
+		}
 
 		if (!load_firmware_details(firmware,filename))
 			retval = FALSE;

@@ -15,7 +15,6 @@
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
-#include <enums.h>
 #include <init.h>
 #include <math.h>
 #include <jimstim.h>
@@ -283,7 +282,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 void jimstim_sweeper_init(GtkWidget *widget)
 {
 	CmdLineArgs *args = NULL;
-	extern gconstpointer global_data;
+	extern gconstpointer *global_data;
 	args = DATA_GET(global_data,"args");
 
 	/* If a network mode slave, we DO NOT allow sweeping as it

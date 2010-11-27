@@ -412,12 +412,11 @@ void free_log_info(void)
 G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
-	extern gint playback_id;
 	extern gconstpointer *global_data;
 
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
-	if (playback_id > 0)
+	if (DATA_GET(global_data,"playback_id"))
 	{
 		stop_tickler(LV_PLAYBACK_TICKLER);
 		start_tickler(LV_PLAYBACK_TICKLER);

@@ -603,11 +603,10 @@ void dump_log_to_disk(GIOChannel *iochannel)
 	gchar *tmpbuf = NULL;
 	gchar *msg = NULL;
 	gfloat value = 0.0;
-	extern gint realtime_id;
 	gboolean restart_tickler = FALSE;
 	GtkWidget * info_label = NULL;
 
-	if (realtime_id)
+	if (DATA_GET(global_data,"realtime_id"))
 	{
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);

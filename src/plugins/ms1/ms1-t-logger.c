@@ -14,13 +14,15 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <math.h>
-#include <ms2-t-logger.h>
+#include <ms1_plugin.h>
 #include <ms1-t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
@@ -33,6 +35,8 @@ TTMon_Data *ttm_data;
 
 #define CTR 187
 #define UNITS 188
+
+static gboolean restart_realtime = FALSE;
 
 /*!
  \brief 
@@ -125,12 +129,21 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
+#if GTK_MINOR_VERSION < 18
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			ttm_data->pixmap,
 			event->area.x, event->area.y,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
+#else
+	gdk_draw_drawable(widget->window,
+			widget->style->fg_gc[gtk_widget_get_state (widget)],
+			ttm_data->pixmap,
+			event->area.x, event->area.y,
+			event->area.x, event->area.y,
+			event->area.width, event->area.height);
+#endif
 
 	return TRUE;
 }
@@ -143,8 +156,7 @@ G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
 
 void _crunch_trigtooth_data(gint page)
 {
-	extern Firmware_Details *firmware;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	DataSize size = MTX_U08;
 	gint i = 0;
 	gint tmp = 0;
@@ -154,12 +166,18 @@ void _crunch_trigtooth_data(gint page)
 	gfloat ratio = 0.0;
 	gfloat suggested_sample_time= 0.0;
 	gint min_sampling_time = 0;
-	extern gint toothmon_id;
 	gint lower = 0;
 	gint upper = 0;
 	gushort total = 0;
-	gint position = get_ecu_data(canID,page,CTR,size);
+	gint position = 0;
 	gint index = 0;
+	gint id = 0;
+	Firmware_Details *firmware = NULL;
+	extern gconstpointer *global_data;
+	firmware = DATA_GET(global_data,"firmware");
+
+	canID = firmware->canID;
+	position = get_ecu_data_f(canID,page,CTR,size);
 
 /*
 	g_printf("Counter position on page %i is %i\n",page,position);
@@ -255,19 +273,19 @@ void _crunch_trigtooth_data(gint page)
 		else 
 			ttm_data->missing = upper - 1;
 		/*
-		for (i=1;i<cap_idx;i++)
-			printf("read %i trigger times followed by %i missing, thus %i-%i wheel\n",ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing,ttm_data->missing+ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing);
-		for (i=0;i<cap_idx;i++)
-			printf("Missing teeth at index %i\n",ttm_data->captures[i]);
-			*/
+		   for (i=1;i<cap_idx;i++)
+		   printf("read %i trigger times followed by %i missing, thus %i-%i wheel\n",ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing,ttm_data->missing+ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing);
+		   for (i=0;i<cap_idx;i++)
+		   printf("Missing teeth at index %i\n",ttm_data->captures[i]);
+		 */
 
 		/*printf("max/min is %f\n ceil %f. floor %f",ratio,ceil(ratio),floor(ratio) );*/
 		/*printf("wheel is a missing %i style\n",ttm_data->missing);*/
 
 		/*
-		printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
-		printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
-		*/
+		   printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
+		   printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
+		 */
 		suggested_sample_time = 186000.0/((1.0/(((float)min*ttm_data->units)/1000000.0)));
 		if (suggested_sample_time < 0)
 			suggested_sample_time = 0;
@@ -276,14 +294,15 @@ void _crunch_trigtooth_data(gint page)
 		ttm_data->sample_time = suggested_sample_time < min_sampling_time ? min_sampling_time : suggested_sample_time;
 
 		/*
-		printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
-		printf("Sampling time set to %i ms.\n",ttm_data->sample_time);
-		*/
+		   printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
+		   printf("Sampling time set to %i ms.\n",ttm_data->sample_time);
+		 */
 
-		if (toothmon_id != 0)
+		if (DATA_GET(global_data,"toothmon_id"))
 		{
-			g_source_remove(toothmon_id);
-			toothmon_id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			g_source_remove((gint)DATA_GET(global_data,"toothmon_id"));
+			id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(id));
 		}
 
 	}
@@ -332,7 +351,7 @@ G_MODULE_EXPORT void update_trigtooth_display_pf(void)
 	gdk_threads_leave();
 }
 
-void update_trigtooth_display(gint page)
+G_MODULE_EXPORT void update_trigtooth_display(gint page)
 {
 	gint w = 0;
 	gint h = 0;
@@ -477,23 +496,23 @@ G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				start_tickler(TOOTHMON_TICKLER);
+				start(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
 				tmpwidget = lookup_widget("toothlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				start_tickler(TRIGMON_TICKLER);
+				start(TRIGMON_TICKLER);
 				break;
 			case STOP_TOOTHMON_LOGGER:
-				stop_tickler(TOOTHMON_TICKLER);
+				stop(TOOTHMON_TICKLER);
 				tmpwidget = lookup_widget("triggerlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
-				stop_tickler(TRIGMON_TICKLER);
+				stop(TRIGMON_TICKLER);
 				tmpwidget = lookup_widget("toothlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
@@ -504,3 +523,118 @@ G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer
 	}
 	return TRUE;
 }
+
+
+void start(EcuPluginTickler type)
+{
+	gint tmpi = 0;
+	extern gconstpointer *global_data;
+	switch (type)
+	{
+		case TOOTHMON_TICKLER:
+			if (DATA_GET(global_data,"offline"))
+				break;
+			if (DATA_GET(global_data,"realtime_id"))
+			{
+				stop_tickler_f(RTV_TICKLER);
+				restart_realtime = TRUE;
+			}
+			if (!DATA_GET(global_data,"toothmon_id"))
+			{
+				signal_toothtrig_read(TOOTHMON_TICKLER);
+				tmpi = g_timeout_add(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(tmpi));
+			}
+			else
+				dbg_func_f(CRITICAL,g_strdup(__FILE__": start()\n\tToothmon tickler already active \n"));
+			break;
+		case TRIGMON_TICKLER:
+			if (DATA_GET(global_data,"offline"))
+				break;
+			if (DATA_GET(global_data,"realtime_id"))
+			{
+				stop_tickler_f(RTV_TICKLER);
+				restart_realtime = TRUE;
+			}
+			if (!DATA_GET(global_data,"trigmon_id"))
+			{
+				signal_toothtrig_read(TRIGMON_TICKLER);
+				tmpi = g_timeout_add(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+				DATA_SET(global_data,"trigmon_id",GINT_TO_POINTER(tmpi));
+			}
+			else
+				dbg_func_f(CRITICAL,g_strdup(__FILE__": start()\n\tTrigmon tickler already active \n"));
+			break;
+	}
+}
+
+
+void stop(EcuPluginTickler type)
+{
+	gint tmpi = 0;
+	extern gconstpointer *global_data;
+	switch (type)
+	{
+		case TOOTHMON_TICKLER:
+			if (DATA_GET(global_data,"toothmon_id"))
+			{
+				g_source_remove((gint)DATA_GET(global_data,"toothmon_id"));
+				DATA_SET(global_data,"toothmon_id",NULL);
+			}
+			if (restart_realtime)
+			{
+				start_tickler_f(RTV_TICKLER);
+				restart_realtime = FALSE;
+			}
+			break;
+		case TRIGMON_TICKLER:
+			if (DATA_GET(global_data,"trigmon_id"))
+			{
+				g_source_remove((gint)DATA_GET(global_data,"trigmon_id"));
+				DATA_SET(global_data,"trigmon_id",NULL);
+			}
+			if (restart_realtime)
+			{
+				start_tickler_f(RTV_TICKLER);
+				restart_realtime = FALSE;
+			}
+			break;
+	}
+}
+
+
+/*!
+   \brief signal_toothtrig_read() is called by a GTK+ timeout on a 
+   periodic basis to get a new set of teeth or ignition trigger data.  
+   It does so by queing messages to a thread which handles I/O.
+   \returns TRUE
+   */
+gboolean signal_toothtrig_read(EcuPluginTickler type)
+{
+	extern gconstpointer *global_data;
+	Firmware_Details * firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+
+	/* Make the gauges stay up to date,  even if rather slowly 
+	 * Also gets us access to current RPM and other vars for calculating 
+	 * data from the TTM results
+	 */
+	signal_read_rtvars_f();
+	switch (type)
+	{
+		case TOOTHMON_TICKLER:
+			if (firmware->capabilities & MSNS_E)
+				io_cmd_f("ms1_e_read_toothmon",NULL);
+			break;
+		case TRIGMON_TICKLER:
+			if (firmware->capabilities & MSNS_E)
+				io_cmd_f("ms1_e_read_trigmon",NULL);
+			break;
+		default:
+			break;
+	}
+	return TRUE;    /* Keep going.... */
+}
+

@@ -44,7 +44,6 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <threads.h>
-#include <ms1-t-logger.h>
 #include <unistd.h>
 #include <widgetmgmt.h>
 

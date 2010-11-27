@@ -13,9 +13,14 @@
 
 #include <config.h>
 #include <defines.h>
-#include <jimstim_plugin.h>
+#include <enums.h>
+#include <ms1_plugin.h>
+#include <ms1-t-logger.h>
+#include <gtk/gtk.h>
+
 
 gconstpointer *global_data;
+
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
@@ -23,14 +28,24 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
-	   */
-	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
-	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
-	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
+	 */
 	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func_f");
+	g_assert(dbg_func_f);
+	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
+	g_assert(io_cmd_f);
 	start_tickler_f = (void *)DATA_GET(global_data,"start_tickler_f");
+	g_assert(start_tickler_f);
 	stop_tickler_f = (void *)DATA_GET(global_data,"stop_tickler_f");
-	get_list_f = (void *)DATA_GET(global_data,"get_list_f");
-	set_widget_sensitive_f = (void *)DATA_GET(global_data,"set_widget_sensitive_f");
-	update_logbar_f = (void *)DATA_GET(global_data,"update_logbar_f");
+	g_assert(stop_tickler_f);
+	signal_read_rtvars_f = (void *)DATA_GET(global_data,"signal_read_rtvars_f");
+	g_assert(signal_read_rtvars_f);
+	get_ecu_data_f = (void *)DATA_GET(global_data,"get_ecu_data_f");
+	g_assert(get_ecu_data_f);
+}
+
+
+G_MODULE_EXPORT void plugin_shutdown()
+{
+	stop(TOOTHMON_TICKLER);
+	stop(TRIGMON_TICKLER);
 }

@@ -12,6 +12,7 @@ plugin_LTLIBRARIES = libjimstim.la
 
 libjimstim_la_SOURCES = \
 	Makefile \
+	jimstim_plugin.h \
 	jimstim.h \
 	jimstim.c \
 	init.c

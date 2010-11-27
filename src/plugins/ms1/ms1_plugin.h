@@ -11,19 +11,20 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __TIMEOUT_HANDLERS_H__
-#define __TIMEOUT_HANDLERS_H__
+#ifndef __MS1_PLUGIN_H__
+#define __MS1_PLUGIN_H__
 
-#include <enums.h>
 #include <gtk/gtk.h>
+#include <defines.h>
+#include <enums.h>
 
 /* Prototypes */
-void start_tickler(TicklerType);
-void stop_tickler(TicklerType);
-void * signal_read_rtvars_thread(gpointer);
-void signal_read_rtvars(void);
-gboolean early_interrogation(void);
-gboolean personality_choice(void);
+void (*io_cmd_f)(const gchar *,void *);
+void *(*dbg_func_f)(int,gchar *);
+void (*start_tickler_f)(gint);
+void (*stop_tickler_f)(gint);
+void (*signal_read_rtvars_f)(void);
+gint (*get_ecu_data_f)(gint,gint,gint,DataSize);
 /* Prototypes */
 
 #endif

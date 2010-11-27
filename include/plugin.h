@@ -19,6 +19,7 @@
 /* Prototypes */
 gboolean plugin_function(GtkWidget *, gpointer);
 void plugin_init(void);
+void plugin_shutdown(void);
 /* Prototypes */
 
 #endif

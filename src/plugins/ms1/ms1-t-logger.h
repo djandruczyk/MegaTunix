@@ -18,6 +18,12 @@
 #include <defines.h>
 
 
+typedef enum {
+	TOOTHMON_TICKLER=0x91,
+	TRIGMON_TICKLER
+}EcuPluginTickler;
+
+
 typedef struct _TTMon_Data TTMon_Data;
 /*!
  * \brief _TTMon_Data struct is a container used to hold private data
@@ -67,6 +73,9 @@ void crunch_trigtooth_data_pf(void);
 void update_trigtooth_display(gint);
 void update_trigtooth_display_pf(void);
 void bind_ttm_to_page(gint page);
+void start(EcuPluginTickler);
+void stop(EcuPluginTickler);
+gboolean signal_toothtrig_read(EcuPluginTickler);
 /* Prototypes */
 
 #endif

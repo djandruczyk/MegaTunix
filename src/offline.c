@@ -98,7 +98,10 @@ gboolean set_offline_mode(void)
 
 	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)
+	{
 		firmware = g_new0(Firmware_Details,1);
+		DATA_SET(global_data,"firmware",firmware);
+	}
 	load_firmware_details(firmware,filename);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);

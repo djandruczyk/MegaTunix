@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <datamgmt.h>
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
@@ -54,7 +55,7 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 
 void plugin_init()
 {
-	void (*plugin_init)(gconstpointer);
+	void (*plugin_init)(gconstpointer *);
 
 	/* THIS IS A FUGLY HACK!!
 	   On linux you can create a shared lib with unresolved symbols,
@@ -72,7 +73,18 @@ void plugin_init()
 	DATA_SET(global_data,"get_list_f",(gpointer)&get_list);
 	DATA_SET(global_data,"set_widget_sensitive_f",(gpointer)&set_widget_sensitive);
 	DATA_SET(global_data,"update_logbar_f",(gpointer)&update_logbar);
+	DATA_SET(global_data,"signal_read_rtvars_f",(gpointer)&signal_read_rtvars);
+	DATA_SET(global_data,"get_ecu_data_f",(gpointer)&get_ecu_data);
 
 	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);
+}
+
+
+void plugin_shutdown()
+{
+	void (*plugin_shutdown)(void);
+
+	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_shutdown",(void *)&plugin_shutdown))
+		plugin_shutdown();
 }

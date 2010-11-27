@@ -191,12 +191,12 @@ void restore_all_ecu_settings(gchar *filename)
 	gint major = 0;
 	gint minor = 0;
 	gboolean restart = FALSE;
-	extern gint realtime_id;
 	gchar *tmpbuf = NULL;
 	guint8 *data = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
+	extern gconstpointer global_data;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -221,7 +221,7 @@ void restore_all_ecu_settings(gchar *filename)
 			return;
 		}
 		set_title(g_strdup(_("Restoring ECU settings from File")));
-		if (realtime_id)
+		if (DATA_GET(global_data,"realtime_id"))
 		{
 			stop_tickler(RTV_TICKLER);
 			restart = TRUE;

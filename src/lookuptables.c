@@ -648,7 +648,6 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gchar * new_name = NULL;
 	gchar ** vector = NULL;
 	gboolean restart_tickler = FALSE;
-	extern gint realtime_id;
 	extern GAsyncQueue *io_data_queue;
 	extern Firmware_Details *firmware;
 	gint count = 0;
@@ -664,7 +663,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		return TRUE;
 	if (g_strcasecmp(new_text,"System") == 0)
 		return TRUE;
-	if (realtime_id)
+	if (DATA_GET(global_data,"realtime_id"))
 	{
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);

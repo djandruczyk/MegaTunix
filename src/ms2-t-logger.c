@@ -20,7 +20,6 @@
 #include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <math.h>
-#include <ms1-t-logger.h>
 #include <ms2-t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
@@ -32,6 +31,11 @@
 
 MS2_TTMon_Data *ttm_data;
 
+static void bind_ttm_to_page(gint page)
+{
+	ttm_data->page = page;
+	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
+}
 
 G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 {
