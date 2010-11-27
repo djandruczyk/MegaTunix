@@ -15,6 +15,17 @@
 #define __JIMSTIM_H__
 
 #include <gtk/gtk.h>
+#include <threads.h>
+
+GtkWidget *(*lookup_widget_f)(const gchar *);
+void (*io_cmd_f)(const gchar *,void *);
+OutputData *(*initialize_outputdata_f)(void);
+void *(*dbg_func_f)(int,gchar *);
+void (*start_tickler_f)(gint);
+void (*stop_tickler_f)(gint);
+GList *(*get_list_f)(gchar *);
+void (*set_widget_sensitive_f)(gpointer, gpointer);
+void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 
 typedef struct _JimStim_Data JimStim_Data;
 

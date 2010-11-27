@@ -23,36 +23,7 @@
 #include <string.h>
 #include <threads.h>
 
-static gconstpointer global_data;
-static GdkColor red = { 0, 65535, 0, 0};
-static GdkColor black = { 0, 0, 0, 0};
-static GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
-static void (*io_cmd_f)(const gchar *,void *) = NULL;
-static OutputData *(*initialize_outputdata_f)(void) = NULL;
-static void *(*dbg_func_f)(int,gchar *) = NULL;
-static void (*start_tickler_f)(gint) = NULL;
-static void (*stop_tickler_f)(gint) = NULL;
-static GList *(*get_list_f)(gchar *) = NULL;
-static void (*set_widget_sensitive_f)(gointer, gpinter) = NULL;
-static void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean) = NULL;
 
-G_MODULE_EXPORT void plugin_init(gconstpointer data)
-{
-	global_data = data;
-	/* Initializes function pointers since on Winblows was can NOT
-	   call functions within the program that loaded this DLL, so
-	   we need to pass pointers over and assign them here.
-	   */
-	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
-	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
-	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
-	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func_f");
-	start_tickler_f = (void *)DATA_GET(global_data,"start_tickler_f");
-	stop_tickler_f = (void *)DATA_GET(global_data,"stop_tickler_f");
-	get_list_f = (void *)DATA_GET(global_data,"get_list_f");
-	set_widget_sensitive_f = (void *)DATA_GET(global_data,"set_widget_sensitive_f");
-	update_logbar_f = (void *)DATA_GET(global_data,"update_logbar_f");
-}
 
 G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 {
@@ -67,8 +38,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gint lower = 0;
 	gint upper = 0;
 	gchar * tmpbuf = NULL;
-	extern GdkColor red;
-	extern GdkColor black;
+	GdkColor red = { 0, 65535, 0, 0};
+	GdkColor black = { 0, 0, 0, 0};
 
 	/* Get widget ptrs */
 	if (!jsdata.start_e)
@@ -312,6 +283,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 void jimstim_sweeper_init(GtkWidget *widget)
 {
 	CmdLineArgs *args = NULL;
+	extern gconstpointer global_data;
 	args = DATA_GET(global_data,"args");
 
 	/* If a network mode slave, we DO NOT allow sweeping as it
