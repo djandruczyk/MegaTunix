@@ -17,6 +17,18 @@
 #include <gtk/gtk.h>
 #include <defines.h>
 
+/* Externs */
+extern void (*error_msg_f)(const gchar *);
+extern void (*io_cmd_f)(const gchar *,void *);
+extern void *(*dbg_func_f)(int,gchar *);
+extern void (*start_tickler_f)(gint);
+extern void (*stop_tickler_f)(gint);
+extern void (*signal_read_rtvars_f)(void);
+extern gint (*get_ecu_data_f)(gint,gint,gint,DataSize);
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
+extern GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
+/* Externs */
 
 typedef enum {
 	TOOTHMON_TICKLER=0x91,
@@ -68,12 +80,11 @@ struct _TTMon_Data
 };
 
 /* Prototypes */
- void setup_logger_display(GtkWidget *);
- void reset_ttm_buttons(void);
- gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
- gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
- gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
-
+void setup_logger_display(GtkWidget *);
+void reset_ttm_buttons(void);
+gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
 void _crunch_trigtooth_data(gint);
 void crunch_trigtooth_data_pf(void);
 void update_trigtooth_display(gint);

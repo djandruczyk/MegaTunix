@@ -14,7 +14,6 @@
 #include <config.h>
 #include <defines.h>
 #include <jimstim_plugin.h>
-#include <jimstim.h>
 
 gconstpointer *global_data;
 

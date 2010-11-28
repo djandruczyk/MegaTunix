@@ -16,7 +16,6 @@
 #include <firmware.h>
 #include <math.h>
 #include <ms2-t-logger.h>
-#include <ms2_plugin.h>
 
 MS2_TTMon_Data *ttm_data;
 
