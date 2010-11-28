@@ -20,6 +20,7 @@
 gboolean plugin_function(GtkWidget *, gpointer);
 void plugin_init(void);
 void plugin_shutdown(void);
+gboolean get_symbol(const gchar *, void **);
 /* Prototypes */
 
 #endif

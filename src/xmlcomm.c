@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <plugin.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -375,64 +376,3 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 }
 
 
-gboolean get_symbol(const gchar *name, void **function_p)
-{
-	GModule **module = NULL;
-	gint i = 0;
-	gboolean found = FALSE;
-#ifdef __WIN32__
-	gchar * libname = NULL;
-#endif
-	gchar * libpath = NULL;
-	extern gconstpointer *global_data;
-
-	/* Mtx common and ecu specific libs */
-	module = g_new0(GModule *, 3);
-	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (!module[0])
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
-	/* Common library */
-	if (strlen((gchar *)DATA_GET(global_data,"common_lib")) > 1)
-	{
-#ifdef __WIN32__
-		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
-		libpath = g_module_build_path(MTXPLUGINDIR,libname);
-		g_free(libname);
-#else
-		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		g_free(libpath);
-	}
-	/* ECU Specific library */
-	if (strlen((gchar *)DATA_GET(global_data,"ecu_lib")) > 1)
-	{
-#ifdef __WIN32__
-		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-		libpath = g_module_build_path(MTXPLUGINDIR,libname);
-		g_free(libname);
-#else
-		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		g_free(libpath);
-	}
-
-	for (i=0;i<3;i++)
-	{
-		if ((module[i]) && (!found))
-		{
-			g_module_symbol(module[i],name,function_p);
-			found = TRUE;
-		}
-	}
-	if (!found)
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\", error:\n\t%s\n",name,g_module_error()));
-	for (i=0;i<3;i++)
-	{
-		if (!g_module_close(module[i]))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
-	}
-	g_free(module);
-	return found;
-}

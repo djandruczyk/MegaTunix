@@ -93,8 +93,6 @@ void load_cmd_details(Command *, xmlNode *);
 void load_cmd_args(Command *, xmlNode *);
 void load_cmd_post_functions(Command *, xmlNode *);
 void xmlcomm_dump_commands(gpointer, gpointer, gpointer);
-gboolean get_symbol(const gchar *, void **);
-
 /* Prototypes */
 
 #endif
