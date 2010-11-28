@@ -5,8 +5,8 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-msloader_LDADD = @GTK_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
-mtxloader_LDADD = @GTK_LIBS@ ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@ 
+msloader_LDADD = ../mtxcommon/libmtxcommon.la @GTK_LIBS@ @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+mtxloader_LDADD = ../mtxcommon/libmtxcommon.la @GTK_LIBS@ @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@ 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

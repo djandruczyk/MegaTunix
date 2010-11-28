@@ -23,6 +23,8 @@
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_processor.h>
+#include <string.h>
+#include <stdlib.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 #include <timeout_handlers.h>
