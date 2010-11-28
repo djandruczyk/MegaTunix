@@ -54,7 +54,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 G_MODULE_EXPORT void plugin_shutdown(void)
 {
 	extern MS2_TTMon_Data *ttm_data;
-	ttm_data->stop = TRUE;
+	if (ttm_data)
+		ttm_data->stop = TRUE;
 }
 
 void register_enums(void)

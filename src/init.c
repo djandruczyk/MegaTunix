@@ -116,6 +116,8 @@ void init(void)
 	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
+	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(""),cleanup);
+	DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(""),cleanup);
 	table = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,xml_arg_free);
 	DATA_SET_FULL(global_data,"potential_arguments",(gpointer)table,g_hash_table_destroy);
 	commands = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,xml_cmd_free);
