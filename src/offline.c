@@ -283,6 +283,8 @@ gchar * present_firmware_choices(void)
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
 		cfg_free(cfgfile);
 		last_file = DATA_GET(global_data,"last_offline_profile");
+		if (!last_file)
+			last_file = g_strdup("");
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 		{
