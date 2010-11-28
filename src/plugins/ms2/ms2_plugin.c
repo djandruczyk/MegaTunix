@@ -13,8 +13,9 @@
 
 #include <config.h>
 #include <defines.h>
-#include <ms1_plugin.h>
-#include <ms1-t-logger.h>
+#include <enums.h>
+#include <ms2_plugin.h>
+#include <ms2-t-logger.h>
 #include <gtk/gtk.h>
 
 
@@ -34,6 +35,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	module = DATA_GET(global_data,"megatunix_module");
 	if (!module)
 		error_msg_f(__FILE__": Plugin ERROR: pointer to megatunix module is invalid!\n\tBUG, contact author!");
+
 	g_module_symbol(module,"dbg_func",(void *)&dbg_func_f);
 	g_module_symbol(module,"lookup_widget",(void *)&lookup_widget_f);
 	g_module_symbol(module,"io_cmd",(void *)&io_cmd_f);
@@ -43,15 +45,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_module_symbol(module,"get_ecu_data",(void *)&get_ecu_data_f);
 	g_module_symbol(module,"initialize_gc",(void *)&initialize_gc_f);
 	g_module_symbol(module,"lookup_current_value",(void *)&lookup_current_value_f);
+	g_module_symbol(module,"create_single_bit_state_watch",(void *)&create_single_bit_state_watch_f);
+
+	register_enums();
 }
 
 
-G_MODULE_EXPORT void plugin_shutdown()
+G_MODULE_EXPORT void plugin_shutdown(void)
 {
-	stop(TOOTHMON_TICKLER);
-	stop(TRIGMON_TICKLER);
+	extern MS2_TTMon_Data *ttm_data;
+	ttm_data->stop = TRUE;
 }
-
 
 void register_enums(void)
 {
@@ -65,10 +69,13 @@ void register_enums(void)
 				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
 		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
 				GINT_TO_POINTER(START_TRIGMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_START_COMPOSITEMON_LOGGER_",
+				GINT_TO_POINTER(START_COMPOSITEMON_LOGGER));
 		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
 				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",
+				GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
 		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
 				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	}
 }
-

@@ -12,7 +12,10 @@ plugin_LTLIBRARIES = libms2.la
 
 libms2_la_SOURCES = \
 	Makefile \
-	template.c
+	ms2_plugin.c \
+	ms2_plugin.h \
+	ms2-t-logger.c \
+	ms2-t-logger.h
 
 libms2_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

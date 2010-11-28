@@ -11,11 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __MS1_PLUGIN_H__
-#define __MS1_PLUGIN_H__
+#ifndef __MS2_PLUGIN_H__
+#define __MS2_PLUGIN_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
+#include <enums.h>
 #include <enums.h>
 
 /* Prototypes */
@@ -24,7 +25,7 @@ void plugin_shutdown(void);
 void register_enums(void);
 /* Prototypes */
 
-/* Function Pointers */
+/* Function pointers */
 void (*error_msg_f)(const gchar *);
 void (*io_cmd_f)(const gchar *,void *);
 void *(*dbg_func_f)(int,gchar *);
@@ -35,6 +36,7 @@ gint (*get_ecu_data_f)(gint,gint,gint,DataSize);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
 GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
-/* Function Pointers */
+void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
+/* Function pointers */
 
 #endif

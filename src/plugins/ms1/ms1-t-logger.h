@@ -23,6 +23,12 @@ typedef enum {
 	TRIGMON_TICKLER
 }EcuPluginTickler;
 
+typedef enum {
+	START_TOOTHMON_LOGGER = 0xff00,
+	START_TRIGMON_LOGGER,
+	STOP_TOOTHMON_LOGGER,
+	STOP_TRIGMON_LOGGER
+}ToggleButton;
 
 typedef struct _TTMon_Data TTMon_Data;
 /*!

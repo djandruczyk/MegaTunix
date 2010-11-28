@@ -18,6 +18,7 @@
 #include <init.h>
 #include <math.h>
 #include <jimstim.h>
+#include <jimstim_plugin.h>
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>
@@ -279,7 +280,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 }
 
 
-void jimstim_sweeper_init(GtkWidget *widget)
+G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *widget)
 {
 	CmdLineArgs *args = NULL;
 	extern gconstpointer *global_data;

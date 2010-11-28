@@ -13,23 +13,13 @@
 
 #include <config.h>
 #include <cairo/cairo.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
-#include <glib.h>
-#include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <gui_handlers.h>
 #include <math.h>
 #include <ms1_plugin.h>
 #include <ms1-t-logger.h>
-#include <threads.h>
-#include <timeout_handlers.h>
-#include <logviewer_gui.h>
-#include <rtv_processor.h>
-#include <widgetmgmt.h>
-
 
 TTMon_Data *ttm_data;
 

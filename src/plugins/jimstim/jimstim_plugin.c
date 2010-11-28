@@ -14,43 +14,44 @@
 #include <config.h>
 #include <defines.h>
 #include <jimstim_plugin.h>
+#include <jimstim.h>
 
 gconstpointer *global_data;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
+	GModule *module = NULL;
 	global_data = data;
+
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
-	   */
+	 */
+
 	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	lookup_widget_f = (void *)DATA_GET(global_data,"lookup_widget_f");
-	if (!lookup_widget_f)
-		error_msg_f("JimStim plugin ERROR: lookup_widget_f pointer is not exported!\n\t BUG!");
-	io_cmd_f = (void *)DATA_GET(global_data,"io_cmd_f");
-	if (!io_cmd_f)
-		error_msg_f("JimStim plugin ERROR: io_cmd_f pointer is not exported!\n\t BUG!");
-	initialize_outputdata_f = (void *)DATA_GET(global_data,"initialize_outputdata_f");
-	if (!initialize_outputdata_f)
-		error_msg_f("JimStim plugin ERROR: initialize_outputdata_f pointer is not exported!\n\t BUG!");
-	dbg_func_f = (void *)DATA_GET(global_data,"dbg_func_f");
-	if (!dbg_func_f)
-		error_msg_f("JimStim plugin ERROR: dbg_func_f pointer is not exported!\n\t BUG!");
-	start_tickler_f = (void *)DATA_GET(global_data,"start_tickler_f");
-	if (!start_tickler_f)
-		error_msg_f("JimStim plugin ERROR: start_tickler_f pointer is not exported!\n\t BUG!");
-	stop_tickler_f = (void *)DATA_GET(global_data,"stop_tickler_f");
-	if (!stop_tickler_f)
-		error_msg_f("JimStim plugin ERROR: stop_tickler_f pointer is not exported!\n\t BUG!");
-	get_list_f = (void *)DATA_GET(global_data,"get_list_f");
-	if (!get_list_f)
-		error_msg_f("JimStim plugin ERROR: get_list_f pointer is not exported!\n\t BUG!");
-	set_widget_sensitive_f = (void *)DATA_GET(global_data,"set_widget_sensitive_f");
-	if (!set_widget_sensitive_f)
-		error_msg_f("JimStim plugin ERROR: set_widget_sensitive_f pointer is not exported!\n\t BUG!");
-	update_logbar_f = (void *)DATA_GET(global_data,"update_logbar_f");
-	if (!update_logbar_f)
-		error_msg_f("JimStim plugin ERROR: update_logbar_f pointer is not exported!\n\t BUG!");
+	module = DATA_GET(global_data,"megatunix_module");
+	if (!module)
+		error_msg_f(__FILE__": Plugin ERROR: pointer to megatunix module is invalid!\n\tBUG, contact author!");
+	g_module_symbol(module,"lookup_widget",(void *)&lookup_widget_f);
+	g_module_symbol(module,"io_cmd",(void *)&io_cmd_f);
+	g_module_symbol(module,"initialize_outputdata",(void *)&initialize_outputdata_f);
+	g_module_symbol(module,"dbg_func",(void *)&dbg_func_f);
+	g_module_symbol(module,"start_tickler",(void *)&start_tickler_f);
+	g_module_symbol(module,"stop_tickler",(void *)&stop_tickler_f);
+	g_module_symbol(module,"get_list",(void *)&get_list_f);
+	g_module_symbol(module,"set_widget_sensitive",(void *)&set_widget_sensitive_f);
+	g_module_symbol(module,"update_logbar",(void *)&update_logbar_f);
+
+}
+
+void plugin_shutdown(void)
+{
+	return;
+}
+
+
+void register_enums(void)
+{
+	return;
 }

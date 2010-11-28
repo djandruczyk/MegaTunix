@@ -48,8 +48,6 @@ headers = \
 	mode_select.h \
 	ms1_loader.h \
 	ms2_loader.h \
-	ms1-t-logger.h \
-	ms2-t-logger.h \
 	mtxloader.h \
 	mtxsocket.h \
 	multi_expr_loader.h \

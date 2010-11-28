@@ -19,6 +19,12 @@
 
 
 /* Prototypes */
+void plugin_init(gconstpointer *data);
+void plugin_shutdown(void);
+void register_enums(void);
+/* Prototypes */
+
+/* Function Pointers */
 void (*error_msg_f)(const gchar *);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 void (*io_cmd_f)(const gchar *,void *);
@@ -29,6 +35,6 @@ void (*stop_tickler_f)(gint);
 GList *(*get_list_f)(gchar *);
 void (*set_widget_sensitive_f)(gpointer, gpointer);
 void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
-/* Prototypes */
+/* Function Pointers */
 
 #endif

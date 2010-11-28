@@ -19,6 +19,15 @@
 #include <watches.h>
 
 
+typedef enum {
+	START_TOOTHMON_LOGGER=0xff00,
+	START_TRIGMON_LOGGER,
+	STOP_TOOTHMON_LOGGER,
+	STOP_TRIGMON_LOGGER,
+	START_COMPOSITEMON_LOGGER,
+	STOP_COMPOSITEMON_LOGGER
+}ToggleButton;
+
 typedef struct _MS2_TTMon_Data MS2_TTMon_Data;
 /*!
  * \brief _MS2_TTMon_Data struct is a container used to hold private data
@@ -57,13 +66,16 @@ struct _MS2_TTMon_Data
 };
 
 /* Prototypes */
- void ms2_setup_ms2_logger_display(GtkWidget *);
- gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
- gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
- gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
- void ms2_ttm_update(DataWatch *);
+void ms2_setup_ms2_logger_display(GtkWidget *);
+gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
+gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
+void ms2_ttm_update(DataWatch *);
 void _ms2_crunch_trigtooth_data(gint);
 void ms2_update_trigtooth_display(gint);
+void reset_ttm_buttons(void);
+
 /* Prototypes */
 
 #endif

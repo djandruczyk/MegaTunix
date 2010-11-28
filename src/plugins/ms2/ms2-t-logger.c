@@ -13,21 +13,10 @@
 
 #include <config.h>
 #include <cairo/cairo.h>
-#include <datamgmt.h>
-#include <enums.h>
 #include <firmware.h>
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <gui_handlers.h>
 #include <math.h>
 #include <ms2-t-logger.h>
-#include <threads.h>
-#include <timeout_handlers.h>
-#include <logviewer_gui.h>
-#include <rtv_processor.h>
-#include <watches.h>
-#include <widgetmgmt.h>
-
+#include <ms2_plugin.h>
 
 MS2_TTMon_Data *ttm_data;
 
@@ -40,7 +29,7 @@ static void bind_ttm_to_page(gint page)
 G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 {
 	GtkWidget *widget = NULL;
-	widget = lookup_widget("ttm_zoom");
+	widget = lookup_widget_f("ttm_zoom");
 	if (GTK_IS_WIDGET(widget))
 		gtk_range_set_value(GTK_RANGE(widget),1.0);
 }
@@ -99,8 +88,8 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 				TRUE, 0,0,
 				w,h);
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
-		ttm_data->axis_gc = initialize_gc(ttm_data->pixmap,TTM_AXIS);
-		ttm_data->trace_gc = initialize_gc(ttm_data->pixmap,TTM_TRACE);
+		ttm_data->axis_gc = initialize_gc_f(ttm_data->pixmap,TTM_AXIS);
+		ttm_data->trace_gc = initialize_gc_f(ttm_data->pixmap,TTM_TRACE);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
@@ -119,8 +108,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 {
 	static GTimeVal last;
 	GTimeVal current;
-	extern Firmware_Details *firmware;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	gint i = 0;
 	guint8 high = 0;
 	guint8 mid = 0;
@@ -132,6 +120,8 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gfloat ratio = 0.0;
 	gint lower = 0;
 	gint upper = 0;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware;
  
 	min = 1048576;
 	max = 1;
@@ -139,12 +129,15 @@ void _ms2_crunch_trigtooth_data(gint page)
 	ttm_data->sample_time = ((current.tv_sec-last.tv_sec)*1000) + ((current.tv_usec-last.tv_usec)/1000.0);
 	last = current;
 
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
+
 	for (i=0;i<341;i++)
 	{
 		ttm_data->last[i] = ttm_data->current[i];
-		high = get_ecu_data(canID,page,(i*3),MTX_U08);
-		mid = get_ecu_data(canID,page,(i*3)+1,MTX_U08);
-		low = get_ecu_data(canID,page,(i*3)+2,MTX_U08);
+		high = get_ecu_data_f(canID,page,(i*3),MTX_U08);
+		mid = get_ecu_data_f(canID,page,(i*3)+1,MTX_U08);
+		low = get_ecu_data_f(canID,page,(i*3)+2,MTX_U08);
 		ttm_data->current[i] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
 		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
 			min = ttm_data->current[i];
@@ -158,7 +151,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 	 * patterns
 	 */
 	ratio = (float)max/(float)min;
-	lookup_current_value("rpm",&ttm_data->rpm);
+	lookup_current_value_f("rpm",&ttm_data->rpm);
 /*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (page == firmware->toothmon_page) /* TOOTH logger, we should search for min/max's */
 	{
@@ -252,7 +245,10 @@ void ms2_update_trigtooth_display(gint page)
 	gchar * message = NULL;
 	cairo_t *cr;
 	cairo_text_extents_t extents;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -357,7 +353,6 @@ void ms2_update_trigtooth_display(gint page)
 	if (!ttm_data->darea->window) 
 		return;
 	gdk_window_clear(ttm_data->darea->window);
-
 }
 
 
@@ -373,41 +368,41 @@ gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 			case START_TOOTHMON_LOGGER:
 				ttm_data->stop = FALSE;
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd("ms2_e_read_toothmon",NULL);
+				io_cmd_f("ms2_e_read_toothmon",NULL);
 				break;
 			case START_TRIGMON_LOGGER:
 				ttm_data->stop = FALSE;
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd("ms2_e_read_trigmon",NULL);
+				io_cmd_f("ms2_e_read_trigmon",NULL);
 				break;
 			case START_COMPOSITEMON_LOGGER:
 				ttm_data->stop = FALSE;
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd("ms2_e_read_compositemon",NULL);
+				io_cmd_f("ms2_e_read_compositemon",NULL);
 				break;
 			case STOP_TOOTHMON_LOGGER:
 				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
 				break;
 			case STOP_TRIGMON_LOGGER:
 				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("compositelogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
 				break;
 			case STOP_COMPOSITEMON_LOGGER:
 				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("triggerlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
 				break;
 			default:
 				break;
@@ -432,13 +427,13 @@ G_MODULE_EXPORT void ms2_ttm_update(DataWatch *watch)
 	ms2_update_trigtooth_display(page);
 	if (ttm_data->stop)
 		return;
-	io_cmd((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
+	io_cmd_f((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
 }
 
 
 G_MODULE_EXPORT void ms2_ttm_watch(void)
 {
-	create_single_bit_state_watch("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
+	create_single_bit_state_watch_f("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
 }
 
 
@@ -456,3 +451,41 @@ G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
+
+G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
+{
+#if GTK_MINOR_VERSION < 18
+	gdk_draw_drawable(widget->window,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			ttm_data->pixmap,
+			event->area.x, event->area.y,
+			event->area.x, event->area.y,
+			event->area.width, event->area.height);
+#else
+	gdk_draw_drawable(widget->window,
+			widget->style->fg_gc[gtk_widget_get_state (widget)],
+			ttm_data->pixmap,
+			event->area.x, event->area.y,
+			event->area.x, event->area.y,
+			event->area.width, event->area.height);
+#endif
+
+	return TRUE;
+}
+
+
+
+G_MODULE_EXPORT void reset_ttm_buttons(void)
+{
+	GtkWidget *widget = NULL;
+	widget = lookup_widget_f("toothlogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	widget = lookup_widget_f("triggerlogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	widget = lookup_widget_f("compositelogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+}
+

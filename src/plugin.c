@@ -57,6 +57,7 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 
 void plugin_init()
 {
+	GModule *module;
 	void (*plugin_init)(gconstpointer *);
 
 	/* THIS IS A FUGLY HACK!!
@@ -66,7 +67,13 @@ void plugin_init()
 	   pass that across on init of the plugin so it can call mtx functions and access
 	   global vars (within global_data)
 	   */
+
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module)
+		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": plugin_init()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
 	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
+	DATA_SET(global_data,"megatunix_module",(gpointer)module);
+	/*
 	DATA_SET(global_data,"dbg_func_f",(gpointer)&dbg_func);
 	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
 	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
@@ -80,6 +87,7 @@ void plugin_init()
 	DATA_SET(global_data,"get_ecu_data_f",(gpointer)&get_ecu_data);
 	DATA_SET(global_data,"initialize_gc_f",(gpointer)&initialize_gc);
 	DATA_SET(global_data,"lookup_current_value_f",(gpointer)&lookup_current_value);
+	*/
 
 	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);

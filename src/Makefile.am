@@ -50,7 +50,6 @@ megatunix_SOURCES = \
 	menu_handlers.c \
 	memory_gui.c \
 	mode_select.c \
-	ms2-t-logger.c \
 	mtxsocket.c \
 	multi_expr_loader.c \
 	notifications.c \
