@@ -41,7 +41,7 @@ extern gconstpointer *global_data;
  \param group (gchar *) textual name of the group of controls to alter color
  \see set_widget_color
  */
-void set_group_color(GuiColor color, gchar *group)
+G_MODULE_EXPORT void set_group_color(GuiColor color, gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
 }
@@ -55,7 +55,7 @@ void set_group_color(GuiColor color, gchar *group)
  controls to change the color on
  \see set_widget_color
  */
-void set_reqfuel_color(GuiColor color, gint table_num)
+G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
 	name = g_strdup_printf("interdep_%i_ctrl",table_num);
@@ -70,7 +70,7 @@ void set_reqfuel_color(GuiColor color, gint table_num)
  \param widget (gpointer) the widget to  change color
  \param color (GuiColor) enumeration of the color to switch to..
  */
-void set_widget_color(gpointer widget, gpointer color)
+G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 {
 	switch ((GuiColor)color)
 	{
@@ -159,7 +159,7 @@ void set_widget_color(gpointer widget, gpointer color)
  \param count (gboolean) flag to show a running count or not
  \param clear (gboolean) if set, clear display before displaying text
  */
-void  update_logbar(
+G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
 		gchar * message,
@@ -272,7 +272,7 @@ G_MODULE_EXPORT void kill_conn_warning(void)
  \brief warn_user() displays a warning message on the screen as a error dialog
  \param message (gchar *) the text to display
  */
-void warn_user(const gchar *message)
+G_MODULE_EXPORT void warn_user(const gchar *message)
 {
 	extern gboolean interrogated;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
@@ -302,7 +302,7 @@ void warn_user(const gchar *message)
  \brief error_msg() displays a warning message on the screen as a error dialog
  \param message (gchar *) the text to display
  */
-void error_msg(const gchar *message)
+G_MODULE_EXPORT void error_msg(const gchar *message)
 {
 	GtkWidget *dialog = NULL;
 	gint result = 0;
@@ -325,7 +325,7 @@ void error_msg(const gchar *message)
 }
 
 
-gboolean get_response(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 {
 	gint response = (GINT)data;
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -349,7 +349,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
  \param widget (GtkWidget *) widget to destroy
  \param data (gpointer) unused
  */
-gboolean close_dialog(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
 	gdk_threads_add_timeout(1500,set_warning_flag,NULL);
@@ -361,7 +361,7 @@ gboolean close_dialog(GtkWidget *widget, gpointer data)
 /*!
  \brief reset_infolabel() resets infolabel text to "Ready"
  */
-gboolean reset_infolabel(gpointer data)
+G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 {
 	static GtkWidget *info_label = NULL;
 	if (!info_label)
@@ -376,7 +376,7 @@ gboolean reset_infolabel(gpointer data)
  give user notifications...
  \param text (gchar *) text to append, dynamic strings only
  */
-void set_title(gchar * text)
+G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;
 	extern volatile gboolean leaving;
@@ -422,7 +422,7 @@ void set_title(gchar * text)
 	g_free(text);
 }
 
-gboolean set_warning_flag(gpointer user_data)
+G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)
 {
 	warning_present = FALSE;
 	return FALSE;

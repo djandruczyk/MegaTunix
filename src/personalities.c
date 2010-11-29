@@ -36,7 +36,7 @@ extern gconstpointer *global_data;
  in order to open the window to ask the user what ECU family to deal with
  running.
  */
-gboolean personality_choice(void)
+G_MODULE_EXPORT gboolean personality_choice(void)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -254,7 +254,7 @@ gboolean personality_choice(void)
 }
 
 
-gboolean persona_selection(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 {
 	PersonaElement *element = (PersonaElement *)data;
 

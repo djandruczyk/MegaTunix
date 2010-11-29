@@ -42,7 +42,7 @@ volatile gboolean outstanding_data = FALSE;
  test.  This is decoupled from the comms_test due to threading constraints.
  \see comms_test
  */
-void update_comms_status(void)
+G_MODULE_EXPORT void update_comms_status(void)
 {
 	extern gboolean connected;
 	GtkWidget *widget = NULL;
@@ -63,7 +63,7 @@ void update_comms_status(void)
  \see update_comms_status
  */
 
-gint comms_test(void)
+G_MODULE_EXPORT gint comms_test(void)
 {
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
@@ -301,7 +301,7 @@ red_or_black:
  \brief queue_burn_ecu_flash() issues the commands to the ECU to burn the contents
  of RAM to flash.
  */
-void queue_burn_ecu_flash(gint page)
+G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 {
 	extern Firmware_Details * firmware;
 	extern volatile gboolean offline;
@@ -325,7 +325,7 @@ void queue_burn_ecu_flash(gint page)
  \brief write_data() physically sends the data to the ECU.
  \param message (Io_Message *) a pointer to a Io_Message
  */
-gboolean write_data(Io_Message *message)
+G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
 	extern gboolean connected;
 	OutputData *output = message->payload;

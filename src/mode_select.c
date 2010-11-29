@@ -28,7 +28,7 @@ gchar *states[] = {"FALSE","TRUE"};
  \param widget (gpointer) pointer to widget to change sensitivity
  \param state (gpointer) the state to set it to
  */
-void set_widget_sensitive(gpointer widget, gpointer state)
+G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
 {
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
 }
@@ -41,7 +41,7 @@ void set_widget_sensitive(gpointer widget, gpointer state)
  \param widget (gpointer) pointer to widget to change sensitivity
  \param state (gpointer) the state to set it to.
  */
-void set_widget_active(gpointer widget, gpointer state)
+G_MODULE_EXPORT void set_widget_active(gpointer widget, gpointer state)
 {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)state);
 }
@@ -54,7 +54,7 @@ void set_widget_active(gpointer widget, gpointer state)
  \param value (gpointer) pointer to OutputData Struct
  \param page (gpointer) unused.
  */
-gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
+G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
 {
 	Deferred_Data *data = (Deferred_Data *)value;
 

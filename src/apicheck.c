@@ -25,7 +25,7 @@
  \param minor  minor api version number
  \returns TRUE on api version setting, FALSE on api version set failure
  */
-gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
+G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 {
 	cfg_write_int(cfg,"API","major",major);
 	cfg_write_int(cfg,"API","minor",minor);
@@ -40,7 +40,7 @@ gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
  \param minor  minor api version number
  \returns TRUE on api version reading, FALSE on api version not readable
  */
-gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
+G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
 {
 	gboolean result = FALSE;
 	gboolean result2 = FALSE;

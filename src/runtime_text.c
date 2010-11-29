@@ -139,7 +139,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 }
 
 
-gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
+G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
@@ -164,7 +164,7 @@ gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *
 }
 
 
-void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
+G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
 	gchar *int_name = NULL;
 	gchar *source = NULL;
@@ -215,7 +215,7 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
+G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
 	extern Rtv_Map *rtv_map;
@@ -252,7 +252,7 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
+G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
@@ -363,7 +363,7 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \param value (gpointer) pointer to Rt_Slider
  \param data (gpointer) unused
  */
-void rtt_update_values(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	Rt_Text *rtt = NULL;
 	gint count = 0;
@@ -432,7 +432,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 }
 
 
-void setup_rtt_treeview(GtkWidget *treeview)
+G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -460,7 +460,7 @@ void setup_rtt_treeview(GtkWidget *treeview)
 }
 
 
-gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
+G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	Rt_Text *rtt = NULL;
 	gint count = 0;

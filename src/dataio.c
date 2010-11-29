@@ -58,7 +58,7 @@ extern gconstpointer *global_data;
  \param buffer, pointer to buffer to stick the data.
  \returns TRUE on success, FALSE on failure 
  */
-gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
+G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
 	gboolean res = 0;
 	gint total_read = 0;
@@ -160,7 +160,7 @@ gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
  \param total_read (gint) total bytesto printout
  \param buf (guchar *) pointer to data to write to console
  */
-void dump_output(gint total_read, guchar *buf)
+G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 {
 	guchar *p = NULL;
 	gchar * tmpbuf = NULL;
@@ -190,7 +190,7 @@ void dump_output(gint total_read, guchar *buf)
 }
 
 
-gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
+G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 {
 	extern Serial_Params * serial_params;
 	gint res = 0;
@@ -227,7 +227,7 @@ gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 	return TRUE;
 }
 
-gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
+G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
 	extern Serial_Params * serial_params;
 	gint res = 0;

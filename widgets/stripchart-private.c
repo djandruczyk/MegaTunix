@@ -477,7 +477,6 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->gc = gdk_gc_new(priv->trace_pixmap);
 	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
-
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
 	priv->font_options = cairo_font_options_create();

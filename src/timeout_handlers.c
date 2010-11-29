@@ -42,7 +42,7 @@ static gboolean restart_realtime = FALSE;
  which timeout to fire up.
  \see signal_read_rtvars_thread signal_read_rtvars
  */
-void start_tickler(TicklerType type)
+G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
 	extern volatile gboolean offline;
 	extern gboolean rtvars_loaded;
@@ -113,7 +113,7 @@ void start_tickler(TicklerType type)
  /param TicklerType an enumeration used to determine which handler to stop.
  \see start_tickler
  */
-void stop_tickler(TicklerType type)
+G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
 	extern volatile gboolean leaving;
 	extern GCond *rtv_thread_cond;
@@ -162,7 +162,7 @@ void stop_tickler(TicklerType type)
  will only aggravate the queue roadblock.
  \returns 0 on signal to exit
  */
-void * signal_read_rtvars_thread(gpointer data)
+G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
 	extern Serial_Params *serial_params;
 	extern GAsyncQueue *io_data_queue;
@@ -200,7 +200,7 @@ void * signal_read_rtvars_thread(gpointer data)
  \brief signal_read_rtvars() sends io message to I/O core to tell ms to send 
  back runtime vars
  */
-void signal_read_rtvars(void)
+G_MODULE_EXPORT void signal_read_rtvars(void)
 {
 	OutputData *output = NULL;
 	extern Firmware_Details *firmware;
@@ -224,7 +224,7 @@ void signal_read_rtvars(void)
  in order to start the interrogation process as soon as the gui is up and 
  running.
  */
-gboolean early_interrogation(void)
+G_MODULE_EXPORT gboolean early_interrogation(void)
 {
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
 	update_logbar("interr_view","warning",_("Initiating background ECU interrogation...\n"),FALSE,FALSE,FALSE);

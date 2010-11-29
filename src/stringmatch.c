@@ -29,7 +29,7 @@ static GHashTable *str_2_enum = NULL;
  name to it's matching enumeration.  It's used for mapping things from all the 
  configuration files so that things just plain look better
  */
-void build_string_2_enum_table(void)
+G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
 	extern gconstpointer *global_data;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
@@ -599,7 +599,7 @@ void build_string_2_enum_table(void)
  \param value (gpointer) value (enumeration value) in the hashtable
  \param user_data (gpointer) unused...
  */
-void dump_hash(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (GINT)value));
 }
@@ -611,7 +611,7 @@ void dump_hash(gpointer key, gpointer value, gpointer user_data)
  \param string (gchar *) string to be translated
  \returns enumeration equivalent
  */
-gint translate_string(gchar *string)
+G_MODULE_EXPORT gint translate_string(gchar *string)
 {
 	gpointer value = 0;
 	value = g_hash_table_lookup(str_2_enum,string);

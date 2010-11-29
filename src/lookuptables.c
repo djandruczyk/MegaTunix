@@ -49,7 +49,7 @@ enum
  \param fname (gpointer) textual name of the filename to load
  \param user_data (gpointer) unused
  */
-void get_table(gpointer table_name, gpointer fname, gpointer user_data)
+G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
 	gchar * filename = NULL;
@@ -82,7 +82,7 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
  \param filename (gchar *) filename to load table data from
  \returns TRUE on success, FALSE on failure
  */
-gboolean load_table(gchar *table_name, gchar *filename)
+G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
 	GIOChannel *iochannel;
@@ -160,7 +160,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup(gconstpointer *object, gint value)
+G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -241,7 +241,7 @@ gint reverse_lookup(gconstpointer *object, gint value)
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup_obj(GObject *object, gint value)
+G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -307,7 +307,7 @@ gint reverse_lookup_obj(GObject *object, gint value)
 }
 
 
-gint direct_reverse_lookup(gchar *table, gint value)
+G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -370,7 +370,7 @@ gint direct_reverse_lookup(gchar *table, gint value)
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
-gfloat lookup_data(gconstpointer *object, gint offset)
+G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 {
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
@@ -420,7 +420,7 @@ gfloat lookup_data(gconstpointer *object, gint offset)
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
-gfloat lookup_data_obj(GObject *object, gint offset)
+G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 {
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
@@ -455,7 +455,7 @@ gfloat lookup_data_obj(GObject *object, gint offset)
 
 
 
-gfloat direct_lookup_data(gchar *table, gint offset)
+G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	LookupTable *lookuptable = NULL;
 
@@ -629,7 +629,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 
 }
 
-gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_hide(widget);
 	ltc_visible = FALSE;
@@ -637,7 +637,7 @@ gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
+G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
 {
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
@@ -705,7 +705,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 
 }
 
-void update_lt_config(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
 	ConfigFile *cfgfile = data;
 	LookupTable *lookuptable = value;
@@ -722,7 +722,7 @@ void update_lt_config(gpointer key, gpointer value, gpointer data)
  \param value (gpointer) value (enumeration value) in the hashtable
  \param user_data (gpointer) unused...
  */
-void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {
 	LookupTable *table;
 	table = (LookupTable *)value;

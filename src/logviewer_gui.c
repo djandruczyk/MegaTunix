@@ -49,7 +49,7 @@ extern gconstpointer *global_data;
  variables from EITHER the realtime vars (if in realtime mode) or from a 
  datalog (playback mode)
  */
-void present_viewer_choices(void)
+G_MODULE_EXPORT void present_viewer_choices(void)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *table = NULL;
@@ -241,14 +241,14 @@ void present_viewer_choices(void)
 }
 
 
-gboolean reenable_select_params_button(GtkWidget *widget)
+G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_params_button")),TRUE);
 	return FALSE;
 
 }
 
-gboolean save_default_choices(GtkWidget *widget)
+G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 {
 	GtkWidget *tmpwidget = NULL;
 	GList * list = NULL;
@@ -291,7 +291,7 @@ gboolean save_default_choices(GtkWidget *widget)
  represents and mark it
  \param data (gpointer) unused
  */
-gboolean view_value_set(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	gconstpointer *object = NULL;
 	gboolean state = FALSE;
@@ -315,7 +315,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
  \brief populate_viewer() creates/removes the list of viewable values from
  the objects in use (playback list or realtime vars list)
  */
-void populate_viewer(void)
+G_MODULE_EXPORT void populate_viewer(void)
 {
 	gint i = 0;
 	gint total = 0;
@@ -446,7 +446,7 @@ void populate_viewer(void)
  slider.  This function is called when switching from playback to rt mode
  and back
  */
-void reset_logviewer_state(void)
+G_MODULE_EXPORT void reset_logviewer_state(void)
 {
 	extern Rtv_Map *rtv_map;
 	extern Log_Info *log_info;
@@ -488,7 +488,7 @@ void reset_logviewer_state(void)
  \param object (gconstpointer *) objet to get soem of the data from
  \returns a newly allocated and populated Viewable_Value structure
  */
-Viewable_Value * build_v_value(gconstpointer *object)
+G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 {
 	Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
@@ -557,7 +557,7 @@ Viewable_Value * build_v_value(gconstpointer *object)
  \param type (GcType) Graphics Context type? (I donno for sure)
  \returns Pointer to a GdkGC *
  */
-GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
+G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 {
 	GdkColor color;
 	GdkGC * gc = NULL;
@@ -658,7 +658,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
  \param val (gfloat) col_val from 0-1.0
  \returns a GdkColor at the hue angle requested
  */
-GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
+G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	static gint count = 0;
 	GdkColor color;
@@ -739,7 +739,7 @@ GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
  \brief draw_infotext() draws the static textual data for the trace on 
  the left hand side of the logviewer
  */
-void draw_infotext(void)
+G_MODULE_EXPORT void draw_infotext(void)
 {
 	/* Draws the textual (static) info on the left side of the window..*/
 
@@ -811,7 +811,7 @@ void draw_infotext(void)
  \param force_draw (gboolean) when true to write the values to screen for
  all controls no matter if hte previous value is the same or not.
  */
-void draw_valtext(gboolean force_draw)
+G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 {
 	gint last_index = 0;
 	gfloat val = 0.0;
@@ -911,7 +911,7 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
  just the new data...
  \returns TRUE
  */
-gboolean pb_update_logview_traces(gboolean force_redraw)
+G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
 {
 
 	if (!playback_mode)
@@ -934,7 +934,7 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
  individual trace (yeah, not very optimized)
  \param redraw_all (gpointer) flag to redraw all or just recent data
  */
-void trace_update(gboolean redraw_all)
+G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 {
 	GdkPixmap * pixmap = NULL;
 	gint w = 0;
@@ -1163,7 +1163,7 @@ void trace_update(gboolean redraw_all)
 /*!
  \brief scroll_logviewer_traces() scrolls the traces to the left
  */
-void scroll_logviewer_traces(void)
+G_MODULE_EXPORT void scroll_logviewer_traces(void)
 {
 	gint start = lv_data->info_width;
 	gint end = lv_data->info_width;
@@ -1239,7 +1239,7 @@ void scroll_logviewer_traces(void)
  \param data (gpointer) state to set the widgets to
  \returns TRUE
  */
-gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
 {
 	gboolean state = (GBOOLEAN)data;
 
@@ -1252,7 +1252,7 @@ gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
 /*!
  \brief set_default_lview_choices_state() sets the default logviewer values
  */
-void set_default_lview_choices_state(void)
+G_MODULE_EXPORT void set_default_lview_choices_state(void)
 {
 	GList *defaults = NULL;
 	GList *list = NULL;
@@ -1321,7 +1321,7 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 /*!
  \brief set_logviewer_mode() sets things up for playback mode
  */
-void set_logviewer_mode(Lv_Mode mode)
+G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 {
 	GtkWidget *widget = NULL;
 	GtkAdjustment *adj = NULL;
@@ -1450,7 +1450,7 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
 
 
 
-void write_logviewer_defaults(ConfigFile *cfgfile)
+G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
 	GList * list = NULL;
 	gint i = 0;
@@ -1476,7 +1476,7 @@ void write_logviewer_defaults(ConfigFile *cfgfile)
 }
 
 
-void read_logviewer_defaults(ConfigFile *cfgfile)
+G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 {
 	gchar *tmpbuf = NULL;
 	GList *defaults = NULL;

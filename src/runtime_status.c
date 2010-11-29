@@ -123,7 +123,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 }
 
 
-gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
+G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
@@ -148,7 +148,7 @@ gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 }
 
 
-void load_status(xmlNode *node,GtkWidget *parent)
+G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 {
 	gchar *txt = NULL;
 	gchar *active_fg = NULL;

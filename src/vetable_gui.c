@@ -43,7 +43,7 @@
  */
 static gboolean color_changed = FALSE;
 
-void rescale_table(GtkWidget *widget)
+G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 {
 	extern GList ***ve_widgets;
 	gint table_num = -1;
@@ -122,7 +122,7 @@ void rescale_table(GtkWidget *widget)
 }
 
 
-gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
+G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 {
 	switch (scaleop)
 	{
@@ -155,7 +155,7 @@ gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
  that was used. From this widget we extract the table number and other 
  needed data to properly do the rescaling.
  */
-void reqfuel_rescale_table(GtkWidget *widget)
+G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 {
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
@@ -325,7 +325,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 }
 
 
-void draw_ve_marker(void)
+G_MODULE_EXPORT void draw_ve_marker(void)
 {
 	static gfloat *prev_x_source;
 	static gfloat *prev_y_source;

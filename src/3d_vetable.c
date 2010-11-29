@@ -77,7 +77,7 @@ GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 
 /* let's get what we need and calculate FPS */
 
-void CalculateFrameRate(void)
+G_MODULE_EXPORT void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
 	static long lastTime = 0;		/* This will hold the time from the last frame*/
@@ -109,7 +109,7 @@ void CalculateFrameRate(void)
 
 /* Draws the current frame rate on screen */
 
-void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
+G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
 	if (!str)
@@ -148,7 +148,7 @@ void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLf
  \param val (gfloat) col_val from 0-1.0
  \returns a RGB3f at the hue angle requested
  */
-RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
+G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	RGB3f color;
 	gint i = 0;
@@ -628,7 +628,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
  *with gtk_widget_destroy
  * 
  */
-gboolean free_ve3d_view(GtkWidget *widget)
+G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 {
 	Ve_View_3D *ve_view;
 	gchar * tmpbuf = NULL;
@@ -659,7 +659,7 @@ gboolean free_ve3d_view(GtkWidget *widget)
  * case the user moves it or places it off the edge of the window and 
  * can't find it...
  */
-void reset_3d_view(GtkWidget * widget)
+G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
 	extern gboolean forced_update;
@@ -684,7 +684,7 @@ void reset_3d_view(GtkWidget * widget)
 /*!
  \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
  */
-GdkGLConfig* get_gl_config(void)
+G_MODULE_EXPORT GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
@@ -714,7 +714,7 @@ GdkGLConfig* get_gl_config(void)
  \brief ve3d_configure_event is called when the window needs to be drawn
  after a resize. 
  */
-gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -750,7 +750,7 @@ we don't
  even need to redraw at all..  :(
  /bug this code is slow, and needs to be optimized or redesigned
  */
-gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
@@ -821,7 +821,7 @@ rotated/scaled/strafed
  depending on which button the user had held down.
  \see ve3d_button_press_event
  */
-gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -865,7 +865,7 @@ order to
  calculate what to change when rerendering
  \see ve3d_motion_notify_event
  */
-gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -891,7 +891,7 @@ main
  OpenGL parameters of the window (this only needs to be done once I 
 think)
  */
-void ve3d_realize (GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -931,7 +931,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 }
 
 
-void ve3d_grey_window(Ve_View_3D *ve_view)
+G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 {
 	GdkPixmap *pmap = NULL;
 	cairo_t * cr = NULL;
@@ -958,7 +958,7 @@ void ve3d_grey_window(Ve_View_3D *ve_view)
  \brief ve3d_calculate_scaling is called during a redraw to recalculate 
  the dimensions for the scales to make thing look pretty
  */
-void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint i=0;
 	gint j=0;
@@ -1027,7 +1027,7 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 VEtable grid 
  in 3D space
  */
-void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern Firmware_Details *firmware;
 	gint x = 0;
@@ -1116,7 +1116,7 @@ the
 user.  
  The user moves this with the arrow keys..
  */
-void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern Firmware_Details *firmware;
 	gfloat bottom = 0.0;
@@ -1220,7 +1220,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 the
  green dot which tells where the engine is running at this instant.
  */
-void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gchar * label = NULL;
 	gfloat tmpf1 = 0.0;
@@ -1448,7 +1448,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \brief ve3d_draw_axis is called during rerender and draws the
  border axis scales around the VEgrid.
  */
-void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
@@ -1538,7 +1538,7 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \brief ve3d_draw_text is called during rerender and draws the
  axis marker text
  */
-void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
+G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
@@ -1558,7 +1558,7 @@ void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
  *  the 
  *   fonts needed by OpenGL for rendering the text
  *    */
-void ve3d_load_font_metrics(GtkWidget *widget)
+G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
@@ -1998,7 +1998,7 @@ intialize it's
  datastructure for use.  
  \see Ve_View
  */
-Ve_View_3D * initialize_ve3d_view(void)
+G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 	ve_view= g_new0(Ve_View_3D,1);
@@ -2060,7 +2060,7 @@ page/offset
 forces
  a redraw of that table. (convoluted and butt ugly, but it works)
  */
-void update_ve3d_if_necessary(int page, int offset)
+G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
 	extern Firmware_Details *firmware;
 	gint total_tables = firmware->total_tables;
@@ -2110,7 +2110,7 @@ void update_ve3d_if_necessary(int page, int offset)
 	}
 }
 
-void queue_ve3d_update(Ve_View_3D *ve_view)
+G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
 	static gint flag;
 
@@ -2126,7 +2126,7 @@ void queue_ve3d_update(Ve_View_3D *ve_view)
 	return;
 }
 
-gboolean sleep_and_reset(gpointer data)
+G_MODULE_EXPORT gboolean sleep_and_reset(gpointer data)
 {
 	gint *flag = (gint *)data;
 	*flag = 0;
@@ -2135,7 +2135,7 @@ gboolean sleep_and_reset(gpointer data)
 
 
 
-void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 {
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
@@ -2324,7 +2324,7 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
  /returns a Cur_Vals structure populted with appropriate fields soem of which
  MUST be freed when done.
  */
-Cur_Vals * get_current_values(Ve_View_3D *ve_view)
+G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 {
 	gfloat x_val = 0.0;
 	gfloat y_val = 0.0;
@@ -2487,7 +2487,7 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 }
 
 
-gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
 	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
@@ -2506,7 +2506,7 @@ gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
 	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
@@ -2522,7 +2522,7 @@ gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
 	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
@@ -2536,7 +2536,7 @@ gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean set_opacity(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
 	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
@@ -2549,7 +2549,7 @@ gboolean set_opacity(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void free_current_values(Cur_Vals *cur_val)
+G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 {
 	if (cur_val->x_edit_text)
 		g_free(cur_val->x_edit_text);
@@ -2567,7 +2567,7 @@ void free_current_values(Cur_Vals *cur_val)
 }
 
 
-gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
+G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 {
 	gfloat tmp1 = 0.0;
 	gfloat tmp2 = 0.0;
@@ -2604,7 +2604,7 @@ gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 }
 
 
-void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	extern Firmware_Details *firmware;
 	gint x = 0;

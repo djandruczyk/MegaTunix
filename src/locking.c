@@ -40,7 +40,7 @@ extern gconstpointer *global_data;
 #endif
 
 
-void remove_mtx_lock(void)
+G_MODULE_EXPORT void remove_mtx_lock(void)
 {
 	CmdLineArgs * args = DATA_GET(global_data,"args");
 	if (args->network_mode)
@@ -53,7 +53,7 @@ void remove_mtx_lock(void)
 }
 
 
-void create_mtx_lock(void)
+G_MODULE_EXPORT void create_mtx_lock(void)
 {
 	CmdLineArgs * args = DATA_GET(global_data,"args");
 	if (args->network_mode)
@@ -66,7 +66,7 @@ void create_mtx_lock(void)
 }
 
 
-void unix_create_mtx_lock(void)
+G_MODULE_EXPORT void unix_create_mtx_lock(void)
 {
 #ifndef __WIN32__
 	GtkWidget *dialog = NULL;
@@ -113,7 +113,7 @@ void unix_create_mtx_lock(void)
 }
 
 
-void unix_remove_mtx_lock(void)
+G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 {
 #ifndef __WIN32__
 	gint res = 0;
@@ -136,7 +136,7 @@ void unix_remove_mtx_lock(void)
 }
 
 
-void win32_create_mtx_lock(void)
+G_MODULE_EXPORT void win32_create_mtx_lock(void)
 {
 #ifdef __WIN32__
 	GtkWidget *dialog = NULL;
@@ -160,7 +160,7 @@ void win32_create_mtx_lock(void)
 #endif
 }
 
-void win32_remove_mtx_lock(void)
+G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 {
 #ifdef __WIN32__
 	if (win32_global_lock)
@@ -170,7 +170,7 @@ void win32_remove_mtx_lock(void)
 }
 
 
-void unlock_serial(void)
+G_MODULE_EXPORT void unlock_serial(void)
 {
 #ifndef __WIN32__
 	gchar *fname = DATA_GET(global_data,"serial_lockfile");
@@ -188,7 +188,7 @@ void unlock_serial(void)
 }
 
 
-gboolean lock_serial(gchar * name)
+G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 {
 #ifndef __WIN32__
 	gchar *tmpbuf = NULL;

@@ -52,7 +52,7 @@ static DebugLevel dbglevels[] =
  \brief open_debug() opens the channel to the debugging information log.
  The path defaults to the current working directory.
  */
-void open_debug(void)
+G_MODULE_EXPORT void open_debug(void)
 {
 	extern gconstpointer *global_data;
 	CmdLineArgs * args = NULL;
@@ -90,7 +90,7 @@ void open_debug(void)
 }
 
 
-void close_debug(void)
+G_MODULE_EXPORT void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
 	if (dbg_channel)
@@ -107,7 +107,7 @@ void close_debug(void)
  \param level (Dbg_Class enumeration) the debug level
  \param str (gchar *) message to print out
  */
-void dbg_func(Dbg_Class level, gchar *str)
+G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
 	GError *error = NULL;
@@ -144,7 +144,7 @@ void dbg_func(Dbg_Class level, gchar *str)
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
-void populate_debugging(GtkWidget *parent)
+G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 {
 	GtkWidget *vbox2 = NULL;
 	GtkWidget *table = NULL;

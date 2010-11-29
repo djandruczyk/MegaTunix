@@ -27,7 +27,7 @@
 
 extern gconstpointer *global_data;
 
-void load_comm_xml(gchar *filename)
+G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
@@ -58,7 +58,7 @@ void load_comm_xml(gchar *filename)
 
 }
 
-void load_xmlcomm_elements(xmlNode *a_node)
+G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 {
 	static GHashTable *arguments = NULL;
 	static GHashTable *commands = NULL;
@@ -83,7 +83,7 @@ void load_xmlcomm_elements(xmlNode *a_node)
 	}
 }
 
-void load_potential_args(GHashTable *arguments, xmlNode *node)
+G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	PotentialArg *arg = NULL;
@@ -111,7 +111,7 @@ void load_potential_args(GHashTable *arguments, xmlNode *node)
 }
 
 
-void load_commands(GHashTable *commands_hash, xmlNode *node)
+G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	Command *cmd = NULL;
@@ -141,7 +141,7 @@ void load_commands(GHashTable *commands_hash, xmlNode *node)
 }
 
 
-void load_arg_details(PotentialArg *arg, xmlNode *node)
+G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
@@ -193,7 +193,7 @@ void load_arg_details(PotentialArg *arg, xmlNode *node)
 }
 
 
-void load_cmd_details(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
@@ -261,7 +261,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 }
 
 
-void load_cmd_args(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar * tmpbuf = NULL;
@@ -290,7 +290,7 @@ void load_cmd_args(Command *cmd, xmlNode *node)
 	}
 }
 
-void load_cmd_post_functions(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	PostFunction *pf = NULL;
@@ -330,7 +330,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 }
 
 
-void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 {
 	Command *cmd = NULL;
 	PostFunction *pf = NULL;

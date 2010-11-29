@@ -73,7 +73,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
  * \brief Sets sane values to global variables for a clean startup of 
  * MegaTunix
  */
-void init(void)
+G_MODULE_EXPORT void init(void)
 {
 	/* defaults */
 	GHashTable *table = NULL;
@@ -167,7 +167,7 @@ void init(void)
  * config file located at ~/.MegaTunix/config
  * \see save_config(void)
  */
-gboolean read_config(void)
+G_MODULE_EXPORT gboolean read_config(void)
 {
 	gint tmpi = 0;
 	guint i = 0;
@@ -328,7 +328,7 @@ gboolean read_config(void)
  * size, serial port and parameters and other user defaults
  * \see read_config(void)
  */
-void save_config(void)
+G_MODULE_EXPORT void save_config(void)
 {
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
@@ -532,7 +532,7 @@ void save_config(void)
  * \brief Creates the directories for user modified config files in the
  * users home directory under ~/.MegaTunix
  */
-void make_megasquirt_dirs(void)
+G_MODULE_EXPORT void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
 	const gchar *mtx = ".MegaTunix";
@@ -577,7 +577,7 @@ void make_megasquirt_dirs(void)
  * \brief Allocates memory allocated, to be deallocated at close by mem_dalloc
  * \see mem_dealloc
  */
-void mem_alloc(void)
+G_MODULE_EXPORT void mem_alloc(void)
 {
 	gint i=0;
 	gint j=0;
@@ -645,7 +645,7 @@ void mem_alloc(void)
  * \brief Deallocates memory allocated with mem_alloc
  * \see mem_alloc
  */
-void mem_dealloc(void)
+G_MODULE_EXPORT void mem_dealloc(void)
 {
 	gint i = 0;
 	gint j = 0;
@@ -782,7 +782,7 @@ void mem_dealloc(void)
 }
 
 
-void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+G_MODULE_EXPORT void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 
 	printf("going to free %s\n",g_quark_to_string(key_id));
@@ -798,7 +798,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
  across the GAsyncQueue's between the threads and the main context
  \returns a allocated and initialized pointer to a single structure
  */
-Io_Message * initialize_io_message(void)
+G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 {
 	Io_Message *message = NULL;
 
@@ -827,7 +827,7 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
  *  \brief initialize_page_params() creates and initializes the page_params
  *   datastructure to sane defaults and returns it
  *    */
-Page_Params * initialize_page_params(void)
+G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
 	Page_Params *page_params = NULL;
 	page_params = g_malloc0(sizeof(Page_Params));
@@ -841,7 +841,7 @@ Page_Params * initialize_page_params(void)
  *  \brief initialize_table_params() creates and initializes the Table_Params
  *   datastructure to sane defaults and returns it
  *    */
-Table_Params * initialize_table_params(void)
+G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
 	table_params = g_malloc0(sizeof(Table_Params));
@@ -897,7 +897,7 @@ Table_Params * initialize_table_params(void)
  *  \brief initialize_te_params() creates and initializes the TE_Params
  *   datastructure to sane defaults and returns it
  *    */
-TE_Params * initialize_te_params(void)
+G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 {
 	TE_Params *te_params = NULL;
 	te_params = g_malloc0(sizeof(TE_Params));
@@ -936,7 +936,7 @@ TE_Params * initialize_te_params(void)
  \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
 sockets
 */
-void dealloc_client_data(MtxSocketClient *client)
+G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {
 	extern Firmware_Details *firmware;
 	gint i = 0;
@@ -960,7 +960,7 @@ void dealloc_client_data(MtxSocketClient *client)
  message from a thread to here..
  \param message (Io_Message *) pointer to message data
  */
-void dealloc_message(Io_Message * message)
+G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 {
 	OutputData *payload;
 	/*printf("dealloc_message\n");*/
@@ -989,7 +989,7 @@ void dealloc_message(Io_Message * message)
 }
 
 
-void dealloc_array(GArray *array, ArrayType type)
+G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 {
 	DBlock *db = NULL;
 	PotentialArg *arg = NULL;
@@ -1053,7 +1053,7 @@ void dealloc_array(GArray *array, ArrayType type)
  widget update message from a thread to here..
  \param w_update (Widget_Update *) pointer to message data
  */
-void dealloc_w_update(Widget_Update * w_update)
+G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
 	/*printf("dealloc_w_update\n");*/
         cleanup (w_update->msg);
@@ -1066,7 +1066,7 @@ void dealloc_w_update(Widget_Update * w_update)
  message from the thread to here..
  \param message (Text_Message *) pointer to message data
  */
-void dealloc_textmessage(Text_Message * message)
+G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
 	/*printf("dealloc_textmessage\n");*/
 	cleanup(message->msg);
@@ -1081,7 +1081,7 @@ void dealloc_textmessage(Text_Message * message)
  message from the thread to here..
  \param qfunc (QFunction *) Queded Function structure to deallocate
  */
-void dealloc_qfunction(QFunction * qfunc)
+G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 {
 	/*printf("dealloc_qfunction\n");*/
 	cleanup (qfunc);
@@ -1093,7 +1093,7 @@ void dealloc_qfunction(QFunction * qfunc)
  table parameters
  \param table_params (Table_Params *) pointer to struct to deallocate
  */
-void dealloc_table_params(Table_Params * table_params)
+G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 {
 	cleanup(table_params->table_name);
 	cleanup(table_params->bind_to_list);
@@ -1167,7 +1167,7 @@ void dealloc_table_params(Table_Params * table_params)
  for runtime vars data
  \param object (GData *) pointer to object to deallocate
  */
-void dealloc_rtv_object(gconstpointer *object)
+G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
 	if (!(object))
@@ -1187,7 +1187,7 @@ void dealloc_rtv_object(gconstpointer *object)
  te parameters
  \param te_params (TE_Params *) pointer to struct to deallocate
  */
-void dealloc_te_params(TE_Params * te_params)
+G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 {
 	/*printf("dealloc_te_params\n");*/
 	cleanup(te_params->title);
@@ -1219,7 +1219,7 @@ void dealloc_te_params(TE_Params * te_params)
 }
 
 
-void dealloc_lookuptable(gpointer data)
+G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 {
 	LookupTable * table = (LookupTable *)data;
 	/*printf("dealloc_lookuptable\n");*/
@@ -1230,7 +1230,7 @@ void dealloc_lookuptable(gpointer data)
 }
 
 
-void dealloc_widget(gpointer data, gpointer user_data)
+G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
 
@@ -1278,7 +1278,7 @@ void dealloc_widget(gpointer data, gpointer user_data)
 }
 
 
-gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
+G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	Rt_Text *rtt = NULL;
 	gtk_tree_model_get (model, iter,
@@ -1288,7 +1288,7 @@ gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *
 	return FALSE;
 }
 
-void dealloc_rtt(gpointer data)
+G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 {
 	Rt_Text *rtt = (Rt_Text *)data;
 	/*printf("dealloc_rtt\n");*/
@@ -1299,7 +1299,7 @@ void dealloc_rtt(gpointer data)
 }
 
 
-void dealloc_slider(gpointer data)
+G_MODULE_EXPORT void dealloc_slider(gpointer data)
 {
 	Rt_Slider *slider = (Rt_Slider *)data;
 	/*printf("dealloc_slider\n");*/
@@ -1312,7 +1312,7 @@ void dealloc_slider(gpointer data)
 }
 
 
-void xml_cmd_free(gpointer data)
+G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 {
 	Command *cmd = NULL;
 	cmd = (Command *)data;
@@ -1326,7 +1326,7 @@ void xml_cmd_free(gpointer data)
 	cleanup(cmd);
 }
 
-void xml_arg_free(gpointer data)
+G_MODULE_EXPORT void xml_arg_free(gpointer data)
 {
 	PotentialArg *arg = NULL;
 	arg = (PotentialArg *)data;
@@ -1338,14 +1338,14 @@ void xml_arg_free(gpointer data)
 }
 
 
-void dealloc_lists_hash(gpointer data)
+G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 {
 	g_hash_table_foreach((GHashTable *)data,(GHFunc)dealloc_list,NULL);
 	g_hash_table_destroy((GHashTable *)data);
 }
 
 
-void dealloc_list(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_data)
 {
 	g_list_free((GList *)value);
 }

@@ -47,7 +47,7 @@ enum
 static GList *views = NULL;
 extern gconstpointer *global_data;
 
-gboolean force_view_recompute(gpointer data)
+G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
 {
 	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)
@@ -101,7 +101,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
  \brief create_model() Creates a TreeModel used by the user outputs treeviews
  \returns a pointer to a newly created GtkTreeModel.
  */
-GtkTreeModel * create_model(void)
+G_MODULE_EXPORT GtkTreeModel * create_model(void)
 {
 	GtkListStore  *model;
 	GtkTreeIter    iter;
@@ -159,7 +159,7 @@ GtkTreeModel * create_model(void)
  \param view (GtkTreeView *) pointer to the Treeview
  \param widget (Gtkwidget) Widget passed to extract the needed info from
  */
-void add_columns(GtkTreeView *view, GtkWidget *widget)
+G_MODULE_EXPORT void add_columns(GtkTreeView *view, GtkWidget *widget)
 {
 	GtkCellRenderer     *renderer;
 	GtkTreeViewColumn *col;
@@ -255,7 +255,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
  \param new_text (const gchar *) new text thatwas entered into the cell
  \param data (gpointer) pointer to the GtkTreeModel
  */
-void cell_edited(GtkCellRendererText *cell, 
+G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell, 
 		const gchar * path_string,
 		const gchar * new_text,
 		gpointer data)
@@ -415,7 +415,7 @@ void cell_edited(GtkCellRendererText *cell,
  \see cell_edited
  \param widget (GtkWidget *) pointer to the TreeView widget.
  */
-void update_model_from_view(GtkWidget * widget)
+G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
 	GtkTreeIter    iter;
@@ -668,7 +668,7 @@ void update_model_from_view(GtkWidget * widget)
 	}
 }
 
-gboolean deferred_model_update(GtkWidget * widget)
+G_MODULE_EXPORT gboolean deferred_model_update(GtkWidget * widget)
 {
 	update_model_from_view(widget);
 	return FALSE;

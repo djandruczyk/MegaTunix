@@ -77,37 +77,37 @@ static struct
 };
 
 #define nADC 1024
-gdouble NBFv (gint adc) 
+G_MODULE_EXPORT gdouble NBFv (gint adc) 
 { 
 	return 100.0 * (1.0 - adc * 5.0/nADC); 
 }
 
 
-gdouble inno12Fv (gint adc) 
+G_MODULE_EXPORT gdouble inno12Fv (gint adc) 
 { 
 	return  adc * 50.0 / (nADC-1.0); 
 }
 
 
-gdouble inno05Fv (gint adc) 
+G_MODULE_EXPORT gdouble inno05Fv (gint adc) 
 {
 	return  10.0 + adc * 10.0 / (nADC-1.0); 
 }
 
 
-gdouble innoLC1Fv (gint adc)
+G_MODULE_EXPORT gdouble innoLC1Fv (gint adc)
 {
 	return  7.35 + adc * 14.7 / (nADC-1.0);
 }
 
 
-gdouble teWBlinFv (gint adc) 
+G_MODULE_EXPORT gdouble teWBlinFv (gint adc) 
 {
 	return   9.0 + adc * 10.0 / (nADC-1.0);
 }
 
 
-gdouble djWBlinFv (gint adc) 
+G_MODULE_EXPORT gdouble djWBlinFv (gint adc) 
 {
 	return  10.0 + adc *  8.0 / (nADC-1.0);
 }

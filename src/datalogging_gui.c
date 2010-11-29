@@ -176,7 +176,7 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
  \brief start_datalogging() enables logging and if RT vars aren't running it
  starts them.
  */
-void start_datalogging(void)
+G_MODULE_EXPORT void start_datalogging(void)
 {
 	extern volatile gboolean offline;
 	extern gboolean forced_update;
@@ -205,7 +205,7 @@ void start_datalogging(void)
  \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
  variable readback though
  */
-void stop_datalogging(void)
+G_MODULE_EXPORT void stop_datalogging(void)
 {
 	GIOChannel *iochannel = NULL;
 	if (!logging_active)
@@ -245,7 +245,7 @@ void stop_datalogging(void)
  \brief log_value_set() gets called when a variable is selected for 
  logging so that it can be marked as being logged
  */
-gboolean log_value_set(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
 	gconstpointer *object = NULL;
 	gboolean state = FALSE;
@@ -266,7 +266,7 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
  \param override (gboolean),  if true ALL variabels are logged, if FALSE
  only selected variabels are logged
  */
-void write_log_header(GIOChannel *iochannel, gboolean override)
+G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 {
 	guint i = 0;
 	gint j = 0;
@@ -396,7 +396,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 /*!
  \brief dlog_select_all() selects all variables for logging
  */
-void dlog_select_all(void)
+G_MODULE_EXPORT void dlog_select_all(void)
 {
 	guint i = 0;
 	gconstpointer * object = NULL;
@@ -417,7 +417,7 @@ void dlog_select_all(void)
 /*!
  \brief dlog_deselect_all() resets the logged choices to having NONE selected
  */
-void dlog_deselect_all(void)
+G_MODULE_EXPORT void dlog_deselect_all(void)
 {
 	guint i = 0;
 	GtkWidget * button = NULL;
@@ -446,7 +446,7 @@ void dlog_deselect_all(void)
  \brief dlog_select_defaults() resets the logged choices to the ones defined 
  in the RealtimeMap file
  */
-void dlog_select_defaults(void)
+G_MODULE_EXPORT void dlog_select_defaults(void)
 {
 	guint i = 0;
 	GtkWidget * button = NULL;
@@ -517,7 +517,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 }
 
 
-gboolean autolog_dump(gpointer data)
+G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 {
 	CmdLineArgs *args = NULL;
 	gchar *filename = NULL;
@@ -588,7 +588,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
  \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
  datalog file
  */
-void dump_log_to_disk(GIOChannel *iochannel)
+G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 {
 	guint i = 0;
 	guint x = 0;

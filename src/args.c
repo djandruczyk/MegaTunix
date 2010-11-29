@@ -35,7 +35,7 @@ extern gconstpointer *global_data;
  \param argv (char **) array of command line args
  \returns void
  */
-void handle_args(gint argc, gchar * argv[])
+G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 {
 	GError *error = NULL;
 	CmdLineArgs *args = NULL;
@@ -191,7 +191,7 @@ void handle_args(gint argc, gchar * argv[])
 }
 
 
-CmdLineArgs * init_args(void)
+G_MODULE_EXPORT CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
 	args = g_new0(CmdLineArgs, 1);

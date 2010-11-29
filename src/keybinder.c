@@ -26,7 +26,7 @@
 
 
 
-void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
+G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {
 	gint i = 0;
 	gint tmpi = 0;

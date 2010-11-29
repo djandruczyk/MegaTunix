@@ -40,7 +40,7 @@ extern GdkColor black;
  the necesary spinbuttons
  \param widget (GtkWidget *) the spinbutton that changed
  */
-void req_fuel_change(GtkWidget *widget)
+G_MODULE_EXPORT void req_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
 	Reqd_Fuel *reqd_fuel = NULL;
@@ -96,7 +96,7 @@ void req_fuel_change(GtkWidget *widget)
  to calculate the amount of fuel needed for 1 cylinder for 1 complete cycle
  \param widget (GtkWidget *) pointer to widget that called this function
  */
-gboolean reqd_fuel_popup(GtkWidget * widget)
+G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 {
 
 	GtkWidget *button;
@@ -373,7 +373,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
  \param data (gpointer) unused
  \returns TRUE
  */
-gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	Reqd_Fuel * reqd_fuel = NULL;
 	extern Firmware_Details *firmware;
@@ -441,7 +441,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
  Reqd_Fuel struct.
  \returns TRUE
  */
-gboolean close_popup(GtkWidget * widget)
+G_MODULE_EXPORT gboolean close_popup(GtkWidget * widget)
 {
 	Reqd_Fuel *reqd_fuel = NULL;
 
@@ -458,7 +458,7 @@ gboolean close_popup(GtkWidget * widget)
  error status on the gui if needed and send the new values to the ECU when 
  appropropriate
  */
-void check_req_fuel_limits(gint table_num)
+G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 {
 	gfloat tmp = 0.0;
 	gfloat rf_per_squirt = 0.0;
@@ -703,7 +703,7 @@ void check_req_fuel_limits(gint table_num)
  \param page (gint) page to create this structure for.
  \returns a pointer to a Reqd_Fuel
  */
-Reqd_Fuel * initialize_reqd_fuel(gint table_num)
+G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 {
 	Reqd_Fuel *reqd_fuel = NULL;
 	ConfigFile * cfgfile;

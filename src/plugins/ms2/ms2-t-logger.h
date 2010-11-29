@@ -18,6 +18,7 @@
 #include <gtk/gtk.h>
 #include <watches.h>
 
+/* Externs */
 extern void (*error_msg_f)(const gchar *);
 extern void (*io_cmd_f)(const gchar *,void *);
 extern void *(*dbg_func_f)(int,gchar *);
@@ -29,7 +30,7 @@ extern GtkWidget *(*lookup_widget_f)(const gchar *);
 extern gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
 extern GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
 extern void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
-
+/* Externs */
 
 typedef enum {
 	START_TOOTHMON_LOGGER=0xff00,

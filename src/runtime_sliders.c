@@ -118,7 +118,7 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	return;
 }
 
-gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
+G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	xmlNode *cur_node = NULL;
 
@@ -142,7 +142,7 @@ gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable 
 	return TRUE;
 }
 
-void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
+G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
 {
 	gchar *slider_name = NULL;
 	gchar *source = NULL;
@@ -250,7 +250,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
  \param ident (TabIdent) enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
  */
-Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
+G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
 	Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
@@ -478,7 +478,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
  \param table_num (gint) the table_number to free the sliders for
  \returns FALSE
  */
-gboolean free_ve3d_sliders(gint table_num)
+G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 {
 	gchar * widget = NULL;
 	GHashTable **tables = NULL;

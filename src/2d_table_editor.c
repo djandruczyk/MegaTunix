@@ -715,11 +715,11 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	evaluator_destroy(evaluator);
 
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
-		firmware->te_params[table_num]->x_2d_lower_limit,
-		firmware->te_params[table_num]->x_2d_upper_limit,
-		firmware->te_params[table_num]->y_2d_lower_limit,
-		firmware->te_params[table_num]->y_2d_upper_limit);
-		
+			firmware->te_params[table_num]->x_2d_lower_limit,
+			firmware->te_params[table_num]->x_2d_upper_limit,
+			firmware->te_params[table_num]->y_2d_lower_limit,
+			firmware->te_params[table_num]->y_2d_upper_limit);
+
 	/* One shot to get marker drawn. */
 	create_value_change_watch(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 	/* continuous to catch changes. */
@@ -744,10 +744,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 }
 
 
-gboolean close_2d_editor(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
 	GList *list = NULL;
-	
+
 	list = OBJ_GET(widget, "widget_list");
 	if (list)
 	{
@@ -774,7 +774,7 @@ gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 }
 
 
-void remove_widget(gpointer widget_ptr, gpointer data)
+G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 {
 	extern GList ***ve_widgets;
 	gint page = -1;
@@ -794,7 +794,7 @@ void remove_widget(gpointer widget_ptr, gpointer data)
 }
 
 
-void gauge_cleanup(gpointer gauge_ptr, gpointer data)
+G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 {
 	gint id = 0;
 	GtkWidget *widget = (GtkWidget *)gauge_ptr;
@@ -806,8 +806,7 @@ void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 }
 
 
-
-void clean_curve(gpointer curve_ptr, gpointer data)
+G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 {
 	GArray *array = NULL;
 	guint32 id = 0;
@@ -828,7 +827,7 @@ void clean_curve(gpointer curve_ptr, gpointer data)
 		remove_watch(id);
 }
 
-gboolean update_2d_curve(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *curve = (GtkWidget *)data;
 	MtxCurveCoord point;
@@ -836,12 +835,12 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	gint index = 0;
 	gchar * text = NULL;
 	gfloat tmpf = 0.0;
-	
+
 	index = (GINT) OBJ_GET(widget,"curve_index");
 	axis = (Axis) OBJ_GET(widget,"curve_axis");
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-        tmpf = (gfloat)strtod(g_strdelimit(text,",.",'.'),NULL);
+	tmpf = (gfloat)strtod(g_strdelimit(text,",.",'.'),NULL);
 	if (axis == _X_)
 		point.x = tmpf;
 	else if (axis == _Y_)
@@ -850,11 +849,11 @@ gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 		printf(_("ERROR in update_2d_curve()!!!\n"));
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
-	
+
 }
 
 
-void coords_changed(GtkWidget *curve, gpointer data)
+G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 {
 	MtxCurveCoord point;
 	gint index = 0;
@@ -892,7 +891,7 @@ void coords_changed(GtkWidget *curve, gpointer data)
 }
 
 
-void vertex_proximity(GtkWidget *curve, gpointer data)
+G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
 	gint last = 0;
@@ -990,7 +989,7 @@ void vertex_proximity(GtkWidget *curve, gpointer data)
 }
 
 
-void marker_proximity(GtkWidget *curve, gpointer data)
+G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
 	gint m_index = 0;
@@ -1112,7 +1111,7 @@ G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 }
 
 
-gboolean set_axis_locking(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 {
 	Axis axis = (Axis)OBJ_GET(widget,"axis");
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1141,7 +1140,7 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 }
 
 
-void highlight_entry(GtkWidget *widget, GdkColor *color)
+G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
 #ifdef __WIN32__
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))

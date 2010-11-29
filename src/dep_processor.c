@@ -30,7 +30,7 @@
  \returns TRUE if dependancy evaluates to TRUE, FALSE on any dep in the chain 
  evaluating to FALSE.
  */
-gboolean check_dependancies(gconstpointer *object )
+G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 {
 	gint i = 0;
 	gint page = 0;

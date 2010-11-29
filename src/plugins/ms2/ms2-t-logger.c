@@ -355,7 +355,7 @@ void ms2_update_trigtooth_display(gint page)
 }
 
 
-gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
 {
 	gint handler = (GINT)OBJ_GET(widget,"handler");
 
@@ -477,6 +477,8 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
+	printf("io_cmd_f %p\n",io_cmd_f);
+	printf("reset_ttm_buttons lookup_widget_f ptr is %p\n",lookup_widget_f);
 	widget = lookup_widget_f("toothlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);

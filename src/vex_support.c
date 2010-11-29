@@ -114,7 +114,7 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void select_table_for_export(gint table_num)
+G_MODULE_EXPORT void select_table_for_export(gint table_num)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -211,7 +211,7 @@ G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 }
 
 
-void select_table_for_import(gint table_num)
+G_MODULE_EXPORT void select_table_for_import(gint table_num)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -269,7 +269,7 @@ void select_table_for_import(gint table_num)
  \see all_table_import
  \returns TRUE on success, FALSE on failure
  */
-gboolean all_table_export(GIOChannel *iochannel)
+G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 {
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -390,7 +390,7 @@ gboolean all_table_export(GIOChannel *iochannel)
  \see single_table_import
  \returns TRUE on success, FALSE on failure
  */
-void single_table_export(GIOChannel *iochannel, gint table_num)
+G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 {
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -509,7 +509,7 @@ void single_table_export(GIOChannel *iochannel, gint table_num)
  \param iochannel pointer to the output channel to read 
  the data from.
  */
-gboolean all_table_import(GIOChannel *iochannel)
+G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
@@ -573,7 +573,7 @@ gboolean all_table_import(GIOChannel *iochannel)
  \param table_num,  table number to import
  the data from.
  */
-void single_table_import(GIOChannel *iochannel, gint table_num)
+G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
@@ -634,7 +634,7 @@ void single_table_import(GIOChannel *iochannel, gint table_num)
  \returns The status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL
  usually
  */
-GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochannel)
+G_MODULE_EXPORT GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochannel)
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
@@ -682,7 +682,7 @@ breakout:
  \returns a GIOStatus of the dispatched function (usually G_IO_STATUS_NORMAL
  or G_IO_STATUS_ERROR)
  */
-GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+G_MODULE_EXPORT GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
@@ -711,7 +711,7 @@ GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc function, ImportPar
  \param string (gchar *) text of the header line to process
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
+G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
 {
 	gchar ** str_array = NULL;
 	gchar *result = NULL;
@@ -762,7 +762,7 @@ GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
  \param string (gchar *) line of VEX file in which to extract the page out of
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_page(Vex_Import *vex, gchar *string)
+G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gchar ** str_array = NULL;
@@ -803,7 +803,7 @@ GIOStatus process_page(Vex_Import *vex, gchar *string)
  \param vex (Vex_Import *) Pointer to the Vex_Import structure
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_table(Vex_Import *vex)
+G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 {
 	gchar **string = NULL;
 	extern Firmware_Details *firmware;
@@ -847,7 +847,7 @@ GIOStatus process_table(Vex_Import *vex)
  VEX file
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
+G_MODULE_EXPORT GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 {
 	GIOStatus status;
 	gchar ** str_array = NULL;
@@ -885,7 +885,7 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
  retrieving additional data.
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+G_MODULE_EXPORT GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gint i = 0;
@@ -972,7 +972,7 @@ GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg, gchar * string
  VEX file for reading more data
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochannel)
+G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIOChannel *iochannel)
 {
 	gint i = 0, j = 0;
 	GString *a_line;
@@ -1086,7 +1086,7 @@ G_MODULE_EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
  \param vex (Vex_Import *) Pointer to the Vex_Import structure 
  to deallocate.
  */
-void dealloc_vex_struct(Vex_Import *vex)
+G_MODULE_EXPORT void dealloc_vex_struct(Vex_Import *vex)
 {
 	if (vex->version)
 		g_free(vex->version);
@@ -1115,7 +1115,7 @@ void dealloc_vex_struct(Vex_Import *vex)
  a page, as the VEX format 1.0 does NOT handle that condition.
  \param vex (Vex_Import *) pointer to the Vex_Impot datastructure.
  */
-void feed_import_data_to_ecu(Vex_Import *vex)
+G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 {
 	gint i = 0;
 	extern Firmware_Details *firmware;
@@ -1327,7 +1327,7 @@ void feed_import_data_to_ecu(Vex_Import *vex)
  \brief revert_to_previous_data() reverts the VEX import by using the backup
  of the internal datastructures.
  */
-void revert_to_previous_data(void)
+G_MODULE_EXPORT void revert_to_previous_data(void)
 {
 	gint canID=0;
 	gint page=0;

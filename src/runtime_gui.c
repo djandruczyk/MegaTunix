@@ -94,7 +94,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
  \brief reset_runtime_statue() sets all of the status indicators to OFF
  to reset the display
  */
-void reset_runtime_status(void)
+G_MODULE_EXPORT void reset_runtime_status(void)
 {
 	/* Runtime screen */
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
@@ -109,7 +109,7 @@ void reset_runtime_status(void)
  \param key (gpointer) pointer to a widget
  \param data (gpointer) unused
  */
-void rt_update_status(gpointer key, gpointer data)
+G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *) key;
 	gint bitval = 0;
@@ -183,7 +183,7 @@ void rt_update_status(gpointer key, gpointer data)
  \param value (gpointer) pointer to Rt_Slider
  \param data (gpointer) unused
  */
-void rt_update_values(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
@@ -275,7 +275,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 }
 
 
-gboolean update_rtsliders(gpointer data)
+G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 {
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
@@ -321,7 +321,7 @@ gboolean update_rtsliders(gpointer data)
 }
 
 
-gboolean update_rttext(gpointer data)
+G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {
 	extern volatile gboolean leaving;
 	if (leaving)
@@ -336,7 +336,7 @@ gboolean update_rttext(gpointer data)
 }
 
 
-gboolean update_dashboards(gpointer data)
+G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 {
 	extern volatile gboolean leaving;
 	if (leaving)
@@ -351,7 +351,7 @@ gboolean update_dashboards(gpointer data)
 }
 
 
-gboolean update_ve3ds(gpointer data)
+G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 {
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;

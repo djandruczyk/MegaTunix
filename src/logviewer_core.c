@@ -85,7 +85,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 
 }
 
-void update_stripchart_data(DataWatch* watch)
+G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
 	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
 }
@@ -143,7 +143,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
  \brief load_logviewer_file() loads a datalog file for playback
  \param iochannel The IO channel representing the source file
  */
-void load_logviewer_file(GIOChannel *iochannel)
+G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
 	if (!iochannel)
 	{
@@ -163,7 +163,7 @@ void load_logviewer_file(GIOChannel *iochannel)
  of the log_info struture
  \returns a pointer to an allocated Log_Info structure
  */
-Log_Info * initialize_log_info(void)
+G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
 	log_info = g_malloc0(sizeof(Log_Info));
@@ -180,7 +180,7 @@ Log_Info * initialize_log_info(void)
  \param iochannel (GIOChannel *) iochannel that represents the input file
  \param log_info (Log_Info *)the Log_Info structure
  */
-void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
+G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
@@ -263,7 +263,7 @@ read_again:
  maximum values based on the span of the data in the file
  \param log_info (Log_Info *) pointer to log info structure
  */
-void populate_limits(Log_Info *log_info)
+G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 {
 	guint i = 0;
 	gint j = 0;
@@ -310,7 +310,7 @@ void populate_limits(Log_Info *log_info)
  \param iochannel (GIOChannel *) data source 
  \param log_info (Log_Info *) pointer to log information struct
  */
-void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
+G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
@@ -376,7 +376,7 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
  */
-void free_log_info(void)
+G_MODULE_EXPORT void free_log_info(void)
 {
 	extern Log_Info *log_info;
 	guint i = 0;

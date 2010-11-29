@@ -19,6 +19,7 @@
 #include <firmware.h>
 #include <math.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
@@ -40,7 +41,7 @@ G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
 	}
 }
 
-guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -60,7 +61,7 @@ guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean 
 	return watch->id;
 }
 
-guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -80,7 +81,7 @@ guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean 
 }
 
 
-guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -99,10 +100,9 @@ guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const
 }
 
 
-guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
-	gint i = 0;
 
 	watch = g_new0(DataWatch,1);
 	watch->style = MULTI_VALUE;
@@ -121,7 +121,7 @@ guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gcha
 }
 
 
-void watch_destroy(gpointer data)
+G_MODULE_EXPORT void watch_destroy(gpointer data)
 {
 	DataWatch *watch = (DataWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
@@ -137,13 +137,13 @@ void watch_destroy(gpointer data)
 }
 
 
-void remove_watch(guint32 watch_id)
+G_MODULE_EXPORT void remove_watch(guint32 watch_id)
 {
 	g_hash_table_remove(watch_hash,GINT_TO_POINTER(watch_id));
 }
 
 
-void process_watches(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
@@ -231,7 +231,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 }
 
 
-gboolean watch_active(guint32 id)
+G_MODULE_EXPORT gboolean watch_active(guint32 id)
 {
 	/*printf("watch_active call for watch %ui\n",id);*/
 	if (g_hash_table_lookup(watch_hash,GINT_TO_POINTER(id)))

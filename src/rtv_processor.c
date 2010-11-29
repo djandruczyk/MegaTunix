@@ -46,7 +46,7 @@ extern gconstpointer *global_data;
  complex function so read the sourcecode.. ;)
  \param incoming (void *) pointer to the raw incoming data
  */
-void process_rt_vars(void *incoming)
+G_MODULE_EXPORT void process_rt_vars(void *incoming)
 {
 	extern Rtv_Map *rtv_map;
 	gint temp_units;
@@ -208,7 +208,7 @@ store_it:
  download conversion
  \returns a float of the result of the mathematical expression
  */
-gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
+G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
@@ -383,7 +383,7 @@ gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
  download conversion
  \returns a float of the result of the mathematical expression
  */
-gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
+G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 {
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
@@ -552,7 +552,7 @@ gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
  \param object (gconstpointer *) object representing this derived variable
  \param handler_name (gchar *) string name of special handler case to be done
  */
-gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashTable *hash)
+G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashTable *hash)
 {
 	MultiExpr *multi = NULL;
 	gint offset = 0;
@@ -608,7 +608,7 @@ gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashT
  \param object (gconstpointer *) object representing this derived variable
  \param handler_name (gchar *) string name of special handler case to be done
  */
-gfloat handle_special(gconstpointer *object,gchar *handler_name)
+G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
 	static GTimeVal now;
 	static GTimeVal last;
@@ -651,7 +651,7 @@ gfloat handle_special(gconstpointer *object,gchar *handler_name)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
+G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -686,7 +686,7 @@ gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
+G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -722,7 +722,7 @@ gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
+G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -762,7 +762,7 @@ gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *v
  \param value (gflaot *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
+G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -810,7 +810,7 @@ gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *va
  \param value (gfloat *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
+G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -856,7 +856,7 @@ gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gin
  \param value (gint *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-gboolean lookup_precision(const gchar *internal_name, gint *precision)
+G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *precision)
 {
 	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
@@ -881,7 +881,7 @@ gboolean lookup_precision(const gchar *internal_name, gint *precision)
  \brief flush_rt_arrays() flushed the history buffers for all the realtime
  variables
  */
-void flush_rt_arrays(void)
+G_MODULE_EXPORT void flush_rt_arrays(void)
 {
 	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;

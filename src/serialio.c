@@ -58,7 +58,7 @@ extern gconstpointer *global_data;
  comms page on success/failure
  \param port_name (gchar *) name of the port to open
  */
-gboolean open_serial(gchar * port_name)
+G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
@@ -120,7 +120,7 @@ gboolean open_serial(gchar * port_name)
  \param fd (gint) filedescriptor to flush
  \param type (gint) how to flush it (enumeration)
  */
-void flush_serial(gint fd, FlushDirection type)
+G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
 	if (serial_params->net_mode)
 		return;
@@ -155,7 +155,7 @@ void flush_serial(gint fd, FlushDirection type)
  calls to initialize the serial port to the proper speed, bits, flow, parity
  etc..
  */
-void setup_serial_params(gint baudrate)
+G_MODULE_EXPORT void setup_serial_params(gint baudrate)
 {
 #ifndef __WIN32__
 	speed_t baud = B9600;
@@ -272,7 +272,7 @@ void setup_serial_params(gint baudrate)
  \brief close_serial() closes the serial port, and sets several gui widgets
  to reflect the port closing (textview/connected indicator)
  */
-void close_serial(void)
+G_MODULE_EXPORT void close_serial(void)
 {
 	extern volatile gboolean leaving;
 	if (!serial_params)
@@ -311,7 +311,7 @@ void close_serial(void)
 }
 
 
-void *serial_repair_thread(gpointer data)
+G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
 	/* We got sent here because of one of the following occurred:
 	 * Serial port isn't opened yet (app just fired up)

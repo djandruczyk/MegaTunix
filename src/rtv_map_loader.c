@@ -409,7 +409,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -576,7 +576,7 @@ void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * sec
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;

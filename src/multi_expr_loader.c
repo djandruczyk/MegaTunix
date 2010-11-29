@@ -37,7 +37,7 @@
  \param section (gchar *) sectio nto read the data from
  \see check_dependancies
  */
-void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
+G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** keys = NULL;
@@ -151,7 +151,7 @@ void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * s
 	DATA_SET_FULL(object,"multi_expr_hash",hash,g_hash_table_destroy);
 }
 
-void free_multi_expr(gpointer data)
+G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
 	if (multi->dl_conv_expr)
@@ -167,7 +167,7 @@ void free_multi_expr(gpointer data)
 }
 
 
-void free_multi_source(gpointer data)
+G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
 	if (multi->source)

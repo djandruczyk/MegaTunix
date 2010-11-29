@@ -165,7 +165,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
  \param event (GdkEvent *) the event type
  \param data (gpointer) unused
  */
-gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
+G_MODULE_EXPORT gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	gint format = 0;
 	gint i = 0;

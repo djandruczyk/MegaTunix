@@ -62,7 +62,7 @@ volatile gint last_page = -1;
  \param cmd (gchar *) and enumerated representation of a command to execute
  \param data (void *) additional data for fringe cases..
  */
-void io_cmd(gchar *io_cmd_name, void *data)
+G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 {
 	Io_Message *message = NULL;
 	GHashTable *commands_hash = NULL;
@@ -117,7 +117,7 @@ void io_cmd(gchar *io_cmd_name, void *data)
  gui handling (for things that can't run in a thread context)
  \param data (gpointer) unused
  */
-void *thread_dispatcher(gpointer data)
+G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
 	extern GAsyncQueue *io_data_queue;
@@ -247,7 +247,7 @@ void *thread_dispatcher(gpointer data)
  \param queue_update (gboolean), if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
-void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
+G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
 {
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
@@ -362,7 +362,7 @@ void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, 
 }
 
 
-void ms_handle_page_change(gint page, gint last)
+G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 {
 	extern Firmware_Details *firmware;
 	guint8 ** ecu_data = firmware->ecu_data;
@@ -431,7 +431,7 @@ void ms_handle_page_change(gint page, gint last)
 }
 
 
-void queue_ms1_page_change(gint page)
+G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 {
 	extern Firmware_Details * firmware;
 	extern volatile gboolean offline;
@@ -462,7 +462,7 @@ void queue_ms1_page_change(gint page)
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
 {
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
@@ -499,7 +499,7 @@ void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * da
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-void table_write(gint page, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
 {
 	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
@@ -544,7 +544,7 @@ void table_write(gint page, gint num_bytes, guint8 * data)
  \param count (gboolean) Flag to display a counter
  \param clear (gboolean) Flag to clear the display before writing the text
  */
-void  thread_update_logbar(
+G_MODULE_EXPORT void  thread_update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
 		gchar * msg,
@@ -586,7 +586,7 @@ void  thread_update_logbar(
  functions (ones that take no params)
  \param name name of function to lookup and run in the main gui context..
  */
-gboolean queue_function(const gchar * name)
+G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
 	Io_Message *message = NULL;
 	QFunction *qfunc = NULL;
@@ -620,7 +620,7 @@ gboolean queue_function(const gchar * name)
  \param type (WidgetType enumeration) type of widget to update
  \param msg (gchar *) the message to be sent (required)
  */
-void  thread_update_widget(
+G_MODULE_EXPORT void  thread_update_widget(
 		const gchar * widget_name,
 		WidgetType type,
 		gchar * msg)
@@ -656,7 +656,7 @@ void  thread_update_widget(
  \param widget_name (gchar *) textual name of the widget to update
  \param stats (gboolean) the state to set
  */
-void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
+G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
 
 	Io_Message *message = NULL;
@@ -689,7 +689,7 @@ void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
  to force a widget rerender
  \param widget_name (GtkWidget *) widget pointer
  */
-void thread_refresh_widget(GtkWidget * widget)
+G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
 
 	Io_Message *message = NULL;
@@ -716,7 +716,7 @@ void thread_refresh_widget(GtkWidget * widget)
  consuming operation.  if uses message passing over asyncqueues to send the 
  gui update messages.
  */
-void start_restore_monitor(void)
+G_MODULE_EXPORT void start_restore_monitor(void)
 {
 	GThread * restore_update_thread = NULL;
 	restore_update_thread = g_thread_create(restore_update,
@@ -726,7 +726,7 @@ void start_restore_monitor(void)
 
 }
 
-void *restore_update(gpointer data)
+G_MODULE_EXPORT void *restore_update(gpointer data)
 {
 	extern GAsyncQueue *io_data_queue;
 	gint max_xfers = g_async_queue_length(io_data_queue);
@@ -758,7 +758,7 @@ void *restore_update(gpointer data)
  \brief build_output_string() is called when doing output to the ECU, to 
  append the needed data together into one nice string for sending
  */
-void build_output_string(Io_Message *message, Command *command, gpointer data)
+G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, gpointer data)
 {
 	guint i = 0;
 	gint v = 0;

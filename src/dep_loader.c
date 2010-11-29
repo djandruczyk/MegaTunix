@@ -38,7 +38,7 @@
  \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies(gconstpointer *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -216,7 +216,7 @@ void load_dependancies(gconstpointer *object, ConfigFile *cfgfile,gchar * sectio
  \param source_key (gchar *) source key in section to read the data from
  \see check_dependancies
  */
-void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;

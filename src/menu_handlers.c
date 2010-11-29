@@ -191,7 +191,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
  \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
  */
-gboolean check_tab_existance(TabIdent target)
+G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {
 	GtkWidget *notebook = NULL;
 	TabIdent c_tab = 0;
@@ -977,7 +977,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 }
 
 /* non extrapolating linear dual line interpolation (3 times fast after 6 beers :-) */
-gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
+G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
 {
 	gdouble slope1, slope2, result;
 	gdouble ratio;

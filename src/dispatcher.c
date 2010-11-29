@@ -62,7 +62,7 @@ static GTimer *ticker;
  \param data (gpointer) unused
  \returns TRUE 
  */
-gboolean pf_dispatcher(gpointer data)
+G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
 	gint len=0;
 	gint i=0;
@@ -173,7 +173,7 @@ fast_exit:
  \param data (gpointer) unused
  \returns TRUE 
  */
-gboolean gui_dispatcher(gpointer data)
+G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	gint len=0;
 	gint i=0;
@@ -339,7 +339,7 @@ dealloc:
 }
 
 
-void *clock_watcher(gpointer data)
+G_MODULE_EXPORT void *clock_watcher(gpointer data)
 {
 	while(TRUE)
 	{

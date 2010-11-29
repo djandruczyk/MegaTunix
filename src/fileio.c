@@ -123,7 +123,7 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
  \brief backup_all_ecu_settings() backs up the ECU to a filename passed
  \param filename (gchar *) filename to backup the ECU to
  */
-void backup_all_ecu_settings(gchar *filename)
+G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 {
 	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
@@ -174,7 +174,7 @@ WARNING:  This function is not yet capable of handling CAN devices, and will
 always restore to can ID ZERO (which can be BAD!!), backup/restore needs to
 be rewritten..
  */
-void restore_all_ecu_settings(gchar *filename)
+G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 {
 	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;

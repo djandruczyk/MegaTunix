@@ -46,7 +46,7 @@ extern gconstpointer *global_data;
  \brief setup_gui() creates the main window, main notebook, and the static
  tabs and populates them with data
  */
-int setup_gui(void)
+G_MODULE_EXPORT int setup_gui(void)
 {
 	gchar *fname = NULL;
 	gchar *filename = NULL;
@@ -156,7 +156,7 @@ int setup_gui(void)
 }
 
 
-void finalize_core_gui(GladeXML * xml)
+G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 {
 	/* Initializes base gui and installs things like the logo and
 	 * other dynamic bits that can't be set via glade statically 

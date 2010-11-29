@@ -230,7 +230,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  \param value (gpointer) pointer to the struct Group to be deallocated
  \see load_groups
  */
-void group_free(gpointer value)
+G_MODULE_EXPORT void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
@@ -256,7 +256,7 @@ void group_free(gpointer value)
  \returns a GHashTable * to a newly created hashtable of the groups that were
  loaded. The groups are indexed in the hashtable by group name.
  */
-GHashTable * load_groups(ConfigFile *cfgfile)
+G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 {
 	gint x = 0;
 	gint tmpi = 0;
@@ -345,7 +345,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
  be bound to the widget
  \returns the page of the group
  */
-gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
+G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
@@ -400,7 +400,7 @@ gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar
  widget into.
  \returns void
  */
-void bind_to_lists(GtkWidget * widget, gchar * lists)
+G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 {
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
@@ -433,7 +433,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 }
 
 
-void remove_from_lists(gchar * lists, gpointer data)
+G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 {
 	gint i = 0;
 	gint bind_num_keys = 0;
@@ -464,7 +464,7 @@ void remove_from_lists(gchar * lists, gpointer data)
  \param widget (GtkWidget *) widget passed to load attributes on
  \param user_data (gpointer) pointer to a BingGroup structure.
  */
-void bind_data(GtkWidget *widget, gpointer user_data)
+G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	BindGroup *bindgroup = user_data;
 	ConfigFile *cfgfile = bindgroup->cfgfile;
@@ -750,7 +750,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
  found execute it
  \param functions (gchar *) CSV list of functions to run
  */
-void run_post_functions(const gchar * functions)
+G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
 	run_post_functions_with_arg(functions,NULL);
 }
@@ -765,7 +765,7 @@ void run_post_functions(const gchar * functions)
  \param functions (gchar *) CSV list of functions to run
  \param widget (GtkWidget *) pointer to widget to be passed to the function
  */
-void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
+G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
 	void (*f_widget)(GtkWidget *) = NULL;
 	void (*f_void)(void) = NULL;

@@ -265,7 +265,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
  \returns TRUE on successfull interrogation, FALSE on no match
  */
 
-gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
+G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 {
 	gboolean retval = TRUE;
 	gint i = 0;
@@ -338,7 +338,7 @@ gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 /* !brief loads up all firmware details from the passed filename (interrogation
  * profile), and configures megatunix for use.
  */
-gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filename)
+G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filename)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;
@@ -1095,7 +1095,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filenam
  command tested against the ECU arestored
  \returns a dynamic GArray for commands
  */
-GArray * validate_and_load_tests(GHashTable **tests_hash)
+G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 {
 	extern gconstpointer *global_data;
 	ConfigFile *cfgfile;
@@ -1199,7 +1199,7 @@ GArray * validate_and_load_tests(GHashTable **tests_hash)
  \param string (gchar *) listing of capabilities in textual format
  \returns an integer mask of the capabilites
  */
-gint translate_capabilities(gchar *string)
+G_MODULE_EXPORT gint translate_capabilities(gchar *string)
 {
 	gchar **vector = NULL;
 	gint i = 0;
@@ -1236,7 +1236,7 @@ gint translate_capabilities(gchar *string)
  \param canidate (Canidate *) Canidate
  \returns TRUE on match, FALSE on failure
  */
-gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
+G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 {
 
 	ConfigFile *cfgfile = NULL;
@@ -1344,7 +1344,7 @@ gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
 
 /*! brief destroys Array holding Detection_Test structures
  */
-void free_tests_array(GArray *tests)
+G_MODULE_EXPORT void free_tests_array(GArray *tests)
 {
 	guint i = 0;
 	Detection_Test *test = NULL;
@@ -1375,7 +1375,7 @@ void free_tests_array(GArray *tests)
 /*! brief interrogate_error,  dumps an error out to the error handling
  * based on passed string and numeric pararms
  */
-void interrogate_error(gchar *text, gint num)
+G_MODULE_EXPORT void interrogate_error(gchar *text, gint num)
 {
 	dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf("\tInterrogation error: \"%s\" data: \"%i\"n",text,num));
 }

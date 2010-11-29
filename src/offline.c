@@ -48,7 +48,7 @@ extern gconstpointer *global_data;
  choices to select one for loading to work in offline mode (no connection to
  an ECU)
  */
-gboolean set_offline_mode(void)
+G_MODULE_EXPORT gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
@@ -231,7 +231,7 @@ gboolean set_offline_mode(void)
  choices.
  \returns the name of the chosen firmware
  */
-gchar * present_firmware_choices(void)
+G_MODULE_EXPORT gchar * present_firmware_choices(void)
 {
 	gchar ** filenames = NULL;
 	GtkWidget *dialog = NULL;
@@ -420,7 +420,7 @@ gchar * present_firmware_choices(void)
 	return NULL;
 }
 
-gint ptr_sort(gconstpointer a, gconstpointer b)
+G_MODULE_EXPORT gint ptr_sort(gconstpointer a, gconstpointer b)
 {
 	return strcmp((gchar *)a, (gchar *) b);
 }

@@ -27,7 +27,7 @@ extern GdkColor red;
  is done ot aid the user for tuning warmup enrichments for their ECU.
  \param temp (float) the temp of the engine's coolant in deg Fahrenheit.
  */
-void warmwizard_update_status(gfloat temp)
+G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 {
 	extern GdkColor red;
 	extern GdkColor black;

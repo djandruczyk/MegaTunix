@@ -40,7 +40,7 @@
  translation to MS-units
  \returns the integere ms-units form after conversion
  */
-gint convert_before_download(GtkWidget *widget, gfloat value)
+G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
 	gint tmpi = 0;
@@ -209,7 +209,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
  the necessary math
  \returns the real world value for the GUI
  */
-gfloat convert_after_upload(GtkWidget * widget)
+G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
@@ -359,7 +359,7 @@ gfloat convert_after_upload(GtkWidget * widget)
  paramaters re temp (Alt label, etc)
  \param units (gpointer) the temp scale selected
  */
-void convert_temps(gpointer widget, gpointer units)
+G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
 	gconstpointer *dep_obj = NULL;
 	gfloat upper = 0.0;
@@ -502,7 +502,7 @@ void convert_temps(gpointer widget, gpointer units)
  the "temperature" list
  \param type (gpointer) the temp scale now selected
  */
-void reset_temps(gpointer type)
+G_MODULE_EXPORT void reset_temps(gpointer type)
 {
 	/* Better way.. :) */
 	g_list_foreach(get_list("temperature"),convert_temps,type);

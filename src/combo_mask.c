@@ -26,7 +26,7 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTER
  \brief gets called when a user wants a new mask entry
  \returns a pointer to a newly created mask entry widget
  */
-GtkWidget *mask_entry_new (void)
+G_MODULE_EXPORT GtkWidget *mask_entry_new (void)
 {
         return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
 }
@@ -36,7 +36,7 @@ GtkWidget *mask_entry_new (void)
  \brief gets called when a user wants a new mask entry
  \returns a pointer to a newly created mask entry widget
  */
-GtkWidget *mask_entry_new_with_mask (gchar *mask)
+G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask (gchar *mask)
 {
 	MaskEntry * widget = g_object_new (TYPE_MASK_ENTRY, NULL);
 	widget->mask = g_strdup(mask);
@@ -44,7 +44,7 @@ GtkWidget *mask_entry_new_with_mask (gchar *mask)
 }
 
 
-void mask_entry_set_background (MaskEntry *entry)
+G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 {
 	gchar *tmpbuf = NULL;
 	gchar *tmpstr = NULL;
@@ -72,7 +72,7 @@ void mask_entry_set_background (MaskEntry *entry)
 
 
 
-void mask_entry_changed (GtkEditable *editable)
+G_MODULE_EXPORT void mask_entry_changed (GtkEditable *editable)
 {
 	mask_entry_set_background (MASK_ENTRY (editable));
 }

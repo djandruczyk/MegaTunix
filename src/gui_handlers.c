@@ -2060,7 +2060,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
  when the ctrl is modified, to prevent a deadlock.
  \param data, string name of list of controls
  */
-gboolean trigger_group_update(gpointer data)
+G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 {
 	extern volatile gboolean leaving;
 	if (leaving)
@@ -2075,7 +2075,7 @@ gboolean trigger_group_update(gpointer data)
  the Z axis widgets) of a table on screen.
  \param table_num, integer number of the table in question
  */
-gboolean force_update_table(gpointer data)
+G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 {
 	gint offset = -1;
 	gint page = -1;
@@ -2118,7 +2118,7 @@ gboolean force_update_table(gpointer data)
  \param user_data (gpointer) pointer to a widget to compare against to 
  prevent a race
  */
-void update_widget(gpointer object, gpointer user_data)
+G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
 	GtkWidget * widget = object;
 	gboolean temp_dep = FALSE;
@@ -3179,7 +3179,7 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
  \param state (gboolean) passed on to subfunction
  the default label
  */
-void swap_labels(gchar * input, gboolean state)
+G_MODULE_EXPORT void swap_labels(gchar * input, gboolean state)
 {
 	GList *list = NULL;
 	GtkWidget *widget = NULL;
@@ -3209,7 +3209,7 @@ void swap_labels(gchar * input, gboolean state)
  we use the alternate label, if FALSE we use
  the default label
  */
-void switch_labels(gpointer key, gpointer data)
+G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
 {
 	GtkWidget * widget = (GtkWidget *) key;
 	gboolean state = (GBOOLEAN) data;
@@ -3307,7 +3307,7 @@ G_MODULE_EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 /*!
  * \brief prompts user to save internal datalog and ecu backup
  */
-void prompt_to_save(void)
+G_MODULE_EXPORT void prompt_to_save(void)
 {
 	gint result = 0;
 	extern volatile gboolean offline;
@@ -3371,7 +3371,7 @@ void prompt_to_save(void)
 /*!
  * \brief prompts user for yes/no to quit
  */
-gboolean prompt_r_u_sure(void)
+G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 {
 	gint result = 0;
 	extern volatile gboolean offline;
@@ -3419,7 +3419,7 @@ gboolean prompt_r_u_sure(void)
  * \param new_state,  new state of the button linking to these groups
  */
  
-void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
+G_MODULE_EXPORT void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 {
 	gint num_choices = 0;
 	gint num_groups = 0;
@@ -3487,7 +3487,7 @@ void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
  * \param widget, combo button
  * \param active, which entry in list was selected
  */
-void combo_toggle_groups_linked(GtkWidget *widget,gint active)
+G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 {
 	gint num_groups = 0;
 	gint num_choices = 0;
@@ -3570,7 +3570,7 @@ void combo_toggle_groups_linked(GtkWidget *widget,gint active)
  * \param widget, combo button
  * \param active, which entry in list was selected
  */
-void combo_toggle_labels_linked(GtkWidget *widget,gint active)
+G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
 {
 	gint num_groups = 0;
 	gint i = 0;
@@ -3595,7 +3595,7 @@ void combo_toggle_labels_linked(GtkWidget *widget,gint active)
 }
 
 
-void set_widget_label_from_array(gpointer key, gpointer data)
+G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 {
 	gchar *labels = NULL;
 	gchar **vector = NULL;
@@ -3617,7 +3617,7 @@ void set_widget_label_from_array(gpointer key, gpointer data)
 
 
 
-gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
+G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 {
 	gchar *choice = NULL;
 	gboolean valid = TRUE;
@@ -3637,7 +3637,7 @@ gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 }
 
 
-gint get_choice_count(GtkTreeModel *model)
+G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 {
 	gchar *choice = NULL;
 	gboolean valid = TRUE;
@@ -3654,7 +3654,7 @@ gint get_choice_count(GtkTreeModel *model)
 	return i;
 }
 
-guint get_bitshift(guint mask)
+G_MODULE_EXPORT guint get_bitshift(guint mask)
 {
 	gint i = 0;
 	for (i=0;i<32;i++)
@@ -3671,7 +3671,7 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 		remove_watch(watch->id);
 }
 
-void thread_refresh_widgets_at_offset(gint page, gint offset)
+G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
@@ -3683,7 +3683,7 @@ void thread_refresh_widgets_at_offset(gint page, gint offset)
 }
 
 
-void refresh_widgets_at_offset(gint page, gint offset)
+G_MODULE_EXPORT void refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
@@ -3695,7 +3695,7 @@ void refresh_widgets_at_offset(gint page, gint offset)
 }
 
 
-glong get_extreme_from_size(DataSize size,Extreme limit)
+G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 {
 	glong lower_limit = 0;
 	glong upper_limit = 0;
@@ -3784,7 +3784,7 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
  \brief recalc_table_limits() Finds the minimum and maximum values for a 
  2D table (this will be deprecated when thevetables are a custom widget)
  */
-void recalc_table_limits(gint canID, gint table_num)
+G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 {
 	extern Firmware_Details *firmware;
 	gint i = 0;
@@ -3831,14 +3831,14 @@ void recalc_table_limits(gint canID, gint table_num)
 }
 
 
-gboolean update_multi_expression(gpointer data)
+G_MODULE_EXPORT gboolean update_multi_expression(gpointer data)
 {
 	g_list_foreach(get_list("multi_expression"),update_widget,NULL);	
 	return FALSE;
 }
 
 
-void refocus_cell(GtkWidget *widget, Direction dir)
+G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 {
 	gchar *widget_name = NULL;
 	GtkWidget *widget_2_focus = NULL;

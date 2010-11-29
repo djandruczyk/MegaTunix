@@ -70,7 +70,7 @@ extern volatile gboolean leaving;
  *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
  interrogated.
  */
-void open_tcpip_sockets(void)
+G_MODULE_EXPORT void open_tcpip_sockets(void)
 {
 	MtxSocket *mtxsock = NULL;
 	gboolean fail1,fail2,fail3;
@@ -150,7 +150,7 @@ void open_tcpip_sockets(void)
 /*!
  * \brief Sets up incoming sockets (master mode only)
  */
-GSocket *setup_socket(gint port)
+G_MODULE_EXPORT GSocket *setup_socket(gint port)
 {
 	GSocket *sock = NULL;
 	GError *error = NULL;
@@ -202,7 +202,7 @@ GSocket *setup_socket(gint port)
  remote megatunix management (logging, dashboards, and other cool things)
  \param data (gpointer) socket descriptor for the open TCP socket.
  **/
-void *socket_thread_manager(gpointer data)
+G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
@@ -314,7 +314,7 @@ void *socket_thread_manager(gpointer data)
  12764
  \param data gpointer representation of the socket filedescriptor
  */
-void *ascii_socket_server(gpointer data)
+G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	GTimeVal cur;
@@ -386,7 +386,7 @@ close_ascii:
 }
 
 
-void *binary_socket_server(gpointer data)
+G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	MtxSocketClient *client = (MtxSocketClient *) data;
@@ -843,7 +843,7 @@ close_binary2:
  \param buf, input buffer
  \param len, length of input buffer
  */
-gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
+G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
 	extern gboolean connected;
 	gchar ** vector = NULL;
@@ -990,16 +990,16 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\n\
-					Supported Calls:\n\r\
-					help\n\r\
-					quit\n\r\
-					get_signature <-- Returns ECU Signature\n\r\
-					get_revision <-- Returns ECU Textual Revision\n\r\
-					get_rtv_list <-- returns runtime variable listing\n\r\
-					get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
-					get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-					set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-					burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
+Supported Calls:\n\r\
+ help\n\r\
+ quit\n\r\
+ get_signature <-- Returns ECU Signature\n\r\
+ get_revision <-- Returns ECU Textual Revision\n\r\
+ get_rtv_list <-- returns runtime variable listing\n\r\
+ get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
+ get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+ set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 			net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
 			g_free(tmpbuf);
 			send_rescode = TRUE;
@@ -1031,14 +1031,14 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 }
 
 
-void return_socket_error(GSocket *socket)
+G_MODULE_EXPORT void return_socket_error(GSocket *socket)
 {
 	net_send(socket,(guint8 *)ERR_MSG,strlen(ERR_MSG));
 	net_send(socket,(guint8 *)"\n\r",strlen("\n\r"));
 }
 
 
-void socket_get_rt_vars(GSocket *socket, gchar *arg2)
+G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 {
 	gint res = 0;
 	gchar **vars = NULL;
@@ -1084,7 +1084,7 @@ void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 }
 
 
-void socket_get_rtv_list(GSocket *socket)
+G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 {
 	extern Rtv_Map *rtv_map;
 	guint i = 0;
@@ -1118,7 +1118,7 @@ void socket_get_rtv_list(GSocket *socket)
 }
 
 
-void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
+G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint canID = 0;
 	gint page = 0;
@@ -1158,7 +1158,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 }
 
 
-void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
+G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 {
 	gint canID = 0;
 	gint page = 0;
@@ -1201,7 +1201,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 }
 
 
-void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
+G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint canID = 0;
 	gint page = 0;
@@ -1233,7 +1233,7 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 }
 
 
-gboolean check_for_changes(MtxSocketClient *client)
+G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
 	extern Firmware_Details *firmware;
@@ -1255,7 +1255,7 @@ gboolean check_for_changes(MtxSocketClient *client)
 }
 
 
-gint * convert_socket_data(gchar *buf, gint len)
+G_MODULE_EXPORT gint * convert_socket_data(gchar *buf, gint len)
 {
 	gint i = 0;
 	gint *res = g_new0(gint,len);
@@ -1269,7 +1269,7 @@ gint * convert_socket_data(gchar *buf, gint len)
 }
 
 
-void *network_repair_thread(gpointer data)
+G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 {
 	/* - DEV code for setting up connection to a network socket
 	 * in place of a serial port,  useful for chaining instances of
@@ -1386,7 +1386,7 @@ void *network_repair_thread(gpointer data)
 }
 
 
-gboolean open_network(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 {
 	GSocket *clientsocket = NULL;
 	gint status = 0;
@@ -1431,7 +1431,7 @@ gboolean open_network(gchar * host, gint port)
 }
 
 
-gboolean open_notification_link(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 {
 	GSocket *clientsocket = NULL;
 	gint status = 0;
@@ -1476,7 +1476,7 @@ gboolean open_notification_link(gchar * host, gint port)
 }
 		
 
-gboolean close_network(void)
+G_MODULE_EXPORT gboolean close_network(void)
 {
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
@@ -1491,7 +1491,7 @@ gboolean close_network(void)
 }
 
 
-gboolean close_control_socket(void)
+G_MODULE_EXPORT gboolean close_control_socket(void)
 {
 	extern gboolean connected;
 	extern Serial_Params *serial_params;
@@ -1508,7 +1508,7 @@ gboolean close_control_socket(void)
  case delete their entry from the slave list.
  \param data (gpointer) unused.
  **/
-void *notify_slaves_thread(gpointer data)
+G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
@@ -1644,7 +1644,7 @@ void *notify_slaves_thread(gpointer data)
 }
 
 
-void *control_socket_client(gpointer data)
+G_MODULE_EXPORT void *control_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	guint8 buf;
@@ -1823,7 +1823,7 @@ close_control:
 }
 
 
-gboolean open_control_socket(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 {
 	GSocket *clientsocket = NULL;
 	gint status = 0;
@@ -1877,7 +1877,7 @@ gboolean open_control_socket(gchar * host, gint port)
 }
 
 
-gint net_send(GSocket *socket, guint8 *buf, gint len)
+G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 {
 	gint total = 0;        /* how many bytes we've sent*/
 	gint bytesleft = len; /* how many we have left to senda*/
@@ -1905,7 +1905,7 @@ gint net_send(GSocket *socket, guint8 *buf, gint len)
 }
 
 
-guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
+G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
 	gint buflen = 0;
@@ -1931,7 +1931,7 @@ guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 }
 
 
-guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
+G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
 	gint buflen = 0;
@@ -2012,7 +2012,7 @@ extern volatile gboolean leaving;
    *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
     interrogated.
      */
-void open_tcpip_sockets(void)
+G_MODULE_EXPORT void open_tcpip_sockets(void)
 {
 	MtxSocket *socket = NULL;
 	gboolean fail1,fail2,fail3;
@@ -2089,7 +2089,7 @@ void open_tcpip_sockets(void)
 /*!
    * \brief Sets up incoming sockets (master mode only)
     */
-gboolean setup_socket(gint port)
+G_MODULE_EXPORT gboolean setup_socket(gint port)
 {
 	int sock = 0;
 	struct sockaddr_in server_address;
@@ -2162,7 +2162,7 @@ gboolean setup_socket(gint port)
      remote megatunix management (logging, dashboards, and other cool things)
       \param data (gpointer) socket descriptor for the open TCP socket.
        **/
-void *socket_thread_manager(gpointer data)
+G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
@@ -2275,7 +2275,7 @@ void *socket_thread_manager(gpointer data)
       the thread..
        \param data  gpointer representation of the socket filedescriptor
         */
-void *ascii_socket_server(gpointer data)
+G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	GTimeVal cur;
@@ -2351,7 +2351,7 @@ close_ascii:
 }
 
 
-void *binary_socket_server(gpointer data)
+G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	MtxSocketClient *client = (MtxSocketClient *) data;
@@ -2802,7 +2802,7 @@ close_binary:
        \param buf, input buffer
         \param len, length of input buffer
 	 */
-gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
+G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
 	gint fd = client->fd;
 	extern gboolean connected;
@@ -2950,16 +2950,16 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 			break;
 		case HELP:
 			tmpbuf = g_strdup("\n\
-					Supported Calls:\n\r\
-					help\n\r\
-					quit\n\r\
-					get_signature <-- Returns ECU Signature\n\r\
-					get_revision <-- Returns ECU Textual Revision\n\r\
-					get_rtv_list <-- returns runtime variable listing\n\r\
-					get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
-					get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-					set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
-					burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
+Supported Calls:\n\r\
+ help\n\r\
+ quit\n\r\
+ get_signature <-- Returns ECU Signature\n\r\
+ get_revision <-- Returns ECU Textual Revision\n\r\
+ get_rtv_list <-- returns runtime variable listing\n\r\
+ get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
+ get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+ set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+ burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 			net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			send_rescode = TRUE;
@@ -2991,14 +2991,14 @@ gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint le
 }
 
 
-void return_socket_error(gint fd)
+G_MODULE_EXPORT void return_socket_error(gint fd)
 {
 	net_send(fd,(guint8 *)ERR_MSG,strlen(ERR_MSG),0);
 	net_send(fd,(guint8 *)"\n\r",strlen("\n\r"),0);
 }
 
 
-void socket_get_rt_vars(gint fd, gchar *arg2)
+G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 {
 	gint res = 0;
 	gchar **vars = NULL;
@@ -3044,7 +3044,7 @@ void socket_get_rt_vars(gint fd, gchar *arg2)
 }
 
 
-void socket_get_rtv_list(gint fd)
+G_MODULE_EXPORT void socket_get_rtv_list(gint fd)
 {
 	extern Rtv_Map *rtv_map;
 	guint i = 0;
@@ -3078,7 +3078,7 @@ void socket_get_rtv_list(gint fd)
 }
 
 
-void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
+G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint fd = client->fd;
 	gint canID = 0;
@@ -3119,7 +3119,7 @@ void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 }
 
 
-void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
+G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 {
 	gint fd = client->fd;
 	gint canID = 0;
@@ -3163,7 +3163,7 @@ void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 }
 
 
-void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
+G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	int fd = client->fd;
 	gint canID = 0;
@@ -3196,7 +3196,7 @@ void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 }
 
 
-gboolean check_for_changes(MtxSocketClient *client)
+G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
 	extern Firmware_Details *firmware;
@@ -3218,7 +3218,7 @@ gboolean check_for_changes(MtxSocketClient *client)
 }
 
 
-gint * convert_socket_data(gchar *buf, gint len)
+G_MODULE_EXPORT gint * convert_socket_data(gchar *buf, gint len)
 {
 	gint i = 0;
 	gint *res = g_new0(gint,len);
@@ -3232,7 +3232,7 @@ gint * convert_socket_data(gchar *buf, gint len)
 }
 
 
-void *network_repair_thread(gpointer data)
+G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 {
 	/* - DEV code for setting up connection to a network socket
 	 * in place of a serial port,  useful for chaining instances of
@@ -3349,7 +3349,7 @@ void *network_repair_thread(gpointer data)
 }
 
 
-gboolean open_network(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 {
 	int clientsocket = 0;
 	gint status = 0;
@@ -3414,7 +3414,7 @@ gboolean open_network(gchar * host, gint port)
 }
 
 
-gboolean open_notification_link(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 {
 	int clientsocket = 0;
 	gint status = 0;
@@ -3478,7 +3478,7 @@ gboolean open_notification_link(gchar * host, gint port)
 }
 
 
-gboolean close_network(void)
+G_MODULE_EXPORT gboolean close_network(void)
 {
 	extern Serial_Params *serial_params;
 	extern gboolean connected;
@@ -3495,7 +3495,7 @@ gboolean close_network(void)
 }
 
 
-gboolean close_control_socket(void)
+G_MODULE_EXPORT gboolean close_control_socket(void)
 {
 	extern gboolean connected;
 	close(controlsocket);
@@ -3514,7 +3514,7 @@ gboolean close_control_socket(void)
       case delete their entry from the slave list.
        \param data (gpointer) unused.
         **/
-void *notify_slaves_thread(gpointer data)
+G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
@@ -3657,7 +3657,7 @@ void *notify_slaves_thread(gpointer data)
 
 
 
-void *control_socket_client(gpointer data)
+G_MODULE_EXPORT void *control_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
 	gint fd = client->fd;
@@ -3838,7 +3838,7 @@ close_control:
 }
 
 
-gboolean open_control_socket(gchar * host, gint port)
+G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 {
 	int clientsocket = 0;
 	gint status = 0;
@@ -3909,7 +3909,7 @@ gboolean open_control_socket(gchar * host, gint port)
 }
 
 
-gint net_send(gint fd, guint8 *buf, gint len, gint flags)
+G_MODULE_EXPORT gint net_send(gint fd, guint8 *buf, gint len, gint flags)
 {
 	int total = 0;        /* how many bytes we've sent*/
 	int bytesleft = len; /* how many we have left to senda*/
@@ -3934,7 +3934,7 @@ gint net_send(gint fd, guint8 *buf, gint len, gint flags)
 }
 
 
-guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
+G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
 	gint buflen = 0;
@@ -3960,7 +3960,7 @@ guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 }
 
 
-guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
+G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
 	gint buflen = 0;
