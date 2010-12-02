@@ -29,6 +29,7 @@
 #include <notifications.h>
 #include <multi_expr_loader.h>
 #include <offline.h>
+#include <personalities.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stdlib.h>
@@ -68,7 +69,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		g_async_queue_push(io_repair_queue,&tmp);
 
 	gdk_threads_enter();
-
 	filename = present_firmware_choices();
 	if (!filename)
 	{
@@ -81,8 +81,10 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		gdk_threads_leave();
-		return FALSE;
+		plugins_shutdown();
+		gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
+		return FALSE;
 	}
 
 	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(filename),g_free);
@@ -391,11 +393,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	}
 	/*
-	if (i==1)
-		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
-	else
-		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
-	*/
+	   if (i==1)
+	   gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
+	   else
+	   gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+	 */
 
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
@@ -414,6 +416,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		case GTK_RESPONSE_OK:
 			return DATA_GET(global_data,"offline_firmware_choice");
 			break;
+		case GTK_RESPONSE_CANCEL:
 		default:
 			return NULL;
 	}

@@ -45,11 +45,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	GtkWidget *sep = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
-	GModule *module = NULL;
-#ifdef __WIN32__
-	gchar * libname = NULL;
-#endif
-	gchar * libpath = NULL;
 	gchar ** dirs = NULL;
 	gchar * filename = NULL;
 	PersonaElement *element = NULL;
@@ -214,36 +209,14 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-#ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-			libpath = g_module_build_path(MTXPLUGINDIR,libname);
-			g_free(libname);
-#else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
-			g_free(libpath);
-			g_module_make_resident(module);
-			DATA_SET(global_data,"plugin_module",(gpointer)module);
-			plugin_init();
+			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
 			break;
 		default:
-#ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-			libpath = g_module_build_path(MTXPLUGINDIR,libname);
-			g_free(libname);
-#else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
-			g_free(libpath);
-			g_module_make_resident(module);
-			DATA_SET(global_data,"plugin_module",(gpointer)module);
-			plugin_init();
+			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
@@ -270,4 +243,3 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
-

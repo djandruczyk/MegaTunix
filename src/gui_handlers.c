@@ -142,7 +142,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	leaving = TRUE;
 	/* Stop timeout functions */
 
-	plugin_shutdown();
+	plugins_shutdown();
 	stop_tickler(RTV_TICKLER);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
