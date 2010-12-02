@@ -29,7 +29,7 @@
 #include <notifications.h>
 #include <multi_expr_loader.h>
 #include <offline.h>
-#include <personalities.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stdlib.h>
