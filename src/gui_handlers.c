@@ -68,7 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern Serial_Params *serial_params;
@@ -415,7 +414,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	extern GHashTable *sources_hash;
 	extern Firmware_Details *firmware;
 
-	if ((paused_handlers) || (!ready))
+	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -562,7 +561,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
  */
 G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
-	if ((paused_handlers) || (!ready))
+	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
@@ -669,7 +668,7 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	GdkColor color;
 	extern Firmware_Details *firmware;
 
-	if ((paused_handlers) || (!ready))
+	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
@@ -1163,7 +1162,7 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
 
-	if ((paused_handlers) || (!ready))
+	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -1491,7 +1490,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
 
-	if ((paused_handlers) || (!ready))
+	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
@@ -3399,10 +3398,9 @@ G_MODULE_EXPORT void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * tmpbuf = NULL;
-	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
-	if (!ready)
+	if (!DATA_GET(global_data,"ready"))
 		return;
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 /*	printf("groups to toggle %s to state %i\n",toggle_groups,new_state);*/
@@ -3471,10 +3469,9 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * tmpbuf = NULL;
-	extern gboolean ready;
 	extern GHashTable *widget_group_states;
 
-	if (!ready)
+	if (!DATA_GET(global_data,"ready"))
 		return;
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	page = (GINT)OBJ_GET(widget,"page");
@@ -3546,9 +3543,8 @@ G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
 	gint i = 0;
 	gchar **groups = NULL;
 	gchar * toggle_labels = NULL;
-	extern gboolean ready;
 
-	if (!ready)
+	if (!DATA_GET(global_data,"ready"))
 		return;
 	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
 

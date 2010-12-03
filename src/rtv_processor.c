@@ -613,16 +613,15 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 	static GTimeVal now;
 	static GTimeVal last;
 	static gfloat cumu = 0.0;
-	extern gboolean begin;
 
 	if (g_strcasecmp(handler_name,"hr_clock")==0)
 	{
-		if (begin == TRUE)
+		if (DATA_GET(global_data,"begin"))
 		{       
 			g_get_current_time(&now);
 			last.tv_sec = now.tv_sec;
 			last.tv_usec = now.tv_usec;
-			begin = FALSE;
+			DATA_SET(global_data,"begin",GINT_TO_POINTER(FALSE));
 			return 0.0;
 		}
 		else

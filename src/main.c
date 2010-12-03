@@ -38,7 +38,6 @@
 #include <xmlcomm.h>
 
 GThread * thread_dispatcher_id = NULL;
-gboolean ready = FALSE;
 gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
@@ -134,8 +133,7 @@ gint main(gint argc, gchar ** argv)
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
-	printf("true is %i, false is %i\n",TRUE,FALSE);
-	ready = TRUE;
+	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));
 	gtk_main();
 	gdk_threads_leave();
 	return (0) ;

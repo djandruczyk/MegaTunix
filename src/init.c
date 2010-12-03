@@ -348,7 +348,6 @@ G_MODULE_EXPORT void save_config(void)
 	gint total = 0;
 	gfloat ratio = 0.0;
 	GtkWidget *dash = NULL;
-	extern gboolean ready;
 	ConfigFile *cfgfile = NULL;
 	gboolean * hidden_list;
 	GString *string = NULL;
@@ -441,7 +440,7 @@ G_MODULE_EXPORT void save_config(void)
 	}
 				
 
-	if (ready)
+	if (DATA_GET(global_data,"ready"))
 	{
 		main_window = lookup_widget("main_window");
 		if (GTK_WIDGET_VISIBLE(main_window))

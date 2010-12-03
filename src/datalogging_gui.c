@@ -35,11 +35,8 @@
 #include <widgetmgmt.h>
 
 
-/* global vars (owned here...) */
-gboolean begin = TRUE;
 
 /* External global vars */
-extern gint ready;
 extern Rtv_Map *rtv_map;
 extern gconstpointer *global_data;
 
@@ -349,7 +346,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	{
 		write_log_header(iochannel, FALSE);
 		header_needed = FALSE;
-		begin = TRUE;
+		DATA_SET(global_data,"begin",GINT_TO_POINTER(TRUE));
 	}
 	j = 0;
 	for(i=0;i<rtv_map->derived_total;i++)
