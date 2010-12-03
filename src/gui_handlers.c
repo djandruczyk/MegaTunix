@@ -68,7 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern Serial_Params *serial_params;
 extern gint dbg_lvl;
