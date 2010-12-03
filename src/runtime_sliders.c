@@ -56,9 +56,8 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	gboolean res = FALSE;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern gboolean interrogated;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
 		return;
@@ -200,7 +199,6 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	GHashTable **ve3d_sliders;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern gboolean interrogated;
 
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{

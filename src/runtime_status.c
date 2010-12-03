@@ -57,10 +57,8 @@ G_MODULE_EXPORT void load_status_pf(void)
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
-	extern gboolean interrogated;
 
-
-	if (!(interrogated))
+	if (!(DATA_GET(global_data,"interrogated")))
 		return;
 	if (!firmware->status_map_file)
 	{

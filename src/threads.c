@@ -43,7 +43,6 @@
 
 
 gboolean force_page_change;
-extern gboolean interrogated;			/* valid connection with MS */
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 

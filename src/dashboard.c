@@ -58,9 +58,8 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	extern GdkColor black;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern gboolean interrogated;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 	if (filename == NULL)
 		return;
@@ -1066,10 +1065,9 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GtkWidget *label = NULL;
-	extern gboolean interrogated;
 	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);

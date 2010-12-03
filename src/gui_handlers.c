@@ -68,7 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern gboolean interrogated;
 extern gboolean playback_mode;
 extern gchar *delimiter;
 extern gint ready;
@@ -109,7 +108,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 */
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
-	extern gboolean interrogated;
 	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
 	gboolean tmp = TRUE;
@@ -126,7 +124,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	if (leaving)
 		return TRUE;
 
-	if ((!args->be_quiet) && (interrogated))
+	if ((!args->be_quiet) && (DATA_GET(global_data,"interrogated")))
 	{
 		might_be_leaving = TRUE;
 		if(!prompt_r_u_sure())
@@ -155,7 +153,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
-	if ((DATA_GET(global_data,"connected")) && (interrogated) && (!DATA_GET(global_data,"offline")))
+	if ((DATA_GET(global_data,"connected")) && 
+			(DATA_GET(global_data,"interrogated")) && 
+			(!DATA_GET(global_data,"offline")))
 		io_cmd(firmware->burn_all_command,NULL);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
@@ -1034,7 +1034,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case START_REALTIME:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			if (!interrogated)
+			if (!DATA_GET(global_data,"interrogated"))
 				io_cmd("interrogation", NULL);
 			start_tickler(RTV_TICKLER);
 			forced_update = TRUE;
@@ -1097,7 +1097,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			revert_to_previous_data();
 			break;
 		case SELECT_PARAMS:
-			if (!interrogated)
+			if (!DATA_GET(global_data,"interrogated"))
 				break;
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_logfile_button")),FALSE);

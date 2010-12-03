@@ -55,13 +55,12 @@ G_MODULE_EXPORT void enable_reboot_button_pf(void)
 
 G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
-	extern gboolean interrogated;
 	CmdLineArgs *args = NULL;
 
 	args = DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
-	if ((interrogated) && (!DATA_GET(global_data,"offline")))
+	if ((DATA_GET(global_data,"interrogated")) && (!DATA_GET(global_data,"offline")))
 		open_tcpip_sockets();
 }
 

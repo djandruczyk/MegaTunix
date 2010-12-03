@@ -274,14 +274,13 @@ G_MODULE_EXPORT void kill_conn_warning(void)
  */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
-	extern gboolean interrogated;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	if ((args->be_quiet))
 		return;
 
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
 	else
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CANCEL,NULL);

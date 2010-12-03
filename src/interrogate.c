@@ -49,7 +49,6 @@ extern GtkWidget *interr_view;
 extern gint dbg_lvl;
 extern Serial_Params *serial_params;
 Firmware_Details *firmware = NULL;
-gboolean interrogated = FALSE;
 
 
 #define BUFSIZE 4096
@@ -62,6 +61,7 @@ gboolean interrogated = FALSE;
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
+	gboolean interrogated = FALSE;
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
 	Detection_Test *test = NULL;
@@ -230,6 +230,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	}
 
 	interrogated = determine_ecu(tests,tests_hash);	
+	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(interrogated));
 	if (interrogated)
 	{
 		thread_widget_set_sensitive("interrogate_button",FALSE);

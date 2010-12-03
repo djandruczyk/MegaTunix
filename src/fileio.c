@@ -48,13 +48,13 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	extern gconstpointer *global_data;
 
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	t = g_malloc(sizeof(time_t));
@@ -92,9 +92,9 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern gboolean interrogated;
+	extern gconstpointer *global_data;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -178,8 +178,10 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 {
 	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
+	/*
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
+	*/
 	gchar * section = NULL;
 	gchar * msgbuf = NULL;
 	gint canID = firmware->canID;
@@ -195,7 +197,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
-	extern gconstpointer global_data;
+	extern gconstpointer *global_data;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

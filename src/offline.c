@@ -59,7 +59,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
 	extern Firmware_Details *firmware;
-	extern gboolean interrogated;
         extern GAsyncQueue *io_repair_queue;
 
 
@@ -72,7 +71,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (!filename)
 	{
 		DATA_SET(global_data,"offline",GINT_TO_POINTER(FALSE));
-		interrogated = FALSE;
+		DATA_SET(global_data,"interrogated",GINT_TO_POINTER(FALSE));
 		widget = lookup_widget("interrogate_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
@@ -88,7 +87,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 
 	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(filename),g_free);
 	DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
-	interrogated = TRUE;
+	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(TRUE));
 
 	/* Disable interrogation button */
 	widget = lookup_widget("interrogate_button");
@@ -432,10 +431,9 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 
 	fileio = g_new0(MtxFileIO ,1);

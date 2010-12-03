@@ -57,7 +57,6 @@ G_MODULE_EXPORT void post_process_raw_memory(void *input, gint offset)
  */
 G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 {
-	extern gboolean interrogated;
 	extern GArray * raw_memory_widgets;
 	extern GArray * raw_memory_data;
 	GtkWidget *entry = NULL;
@@ -67,7 +66,8 @@ G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 	gchar * tmpbuf = NULL;
 	extern gconstpointer *global_data;
 
-	if (!((DATA_GET(global_data,"connected")) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return;
 
 	mem_view_style[page_offset] = (gint)type;

@@ -57,13 +57,12 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 {
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
-	extern gboolean interrogated;
 	extern volatile gboolean leaving;
 
 	if (leaving)
 		return FALSE;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	count++;

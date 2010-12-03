@@ -34,7 +34,8 @@
 #include <threads.h>
 #include <widgetmgmt.h>
 
-gchar *vex_comment;
+static gchar *vex_comment = NULL;
+extern gconstpointer *global_data;
 
 /*!
  \brief import_handlers structure is used to hold the list of string 
@@ -66,12 +67,11 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	t = g_malloc(sizeof(time_t));
@@ -119,18 +119,15 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
         time_t *t = NULL;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 
 	if ((table_num < 0) || (table_num >= firmware->total_tables))
-	{
 		return;
-	}
 	t = g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
@@ -175,9 +172,8 @@ G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern gboolean interrogated;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -216,16 +212,13 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern gboolean interrogated;
 	extern Firmware_Details *firmware;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 
 	if ((table_num < 0) || (table_num >= firmware->total_tables))
-	{
 		return;
-	}
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");

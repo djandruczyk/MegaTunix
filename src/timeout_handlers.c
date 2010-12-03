@@ -45,7 +45,6 @@ static gboolean restart_realtime = FALSE;
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
 	extern gboolean rtvars_loaded;
-	extern gboolean interrogated;
 	extern gconstpointer *global_data;
 	gint id = 0;
 	GThread *realtime_id = NULL;
@@ -88,7 +87,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			if (DATA_GET(global_data,"offline"))
 				break;
 			if (!((DATA_GET(global_data,"connected")) && 
-						(interrogated)))
+						(DATA_GET(global_data,"interrogated"))))
 				break;
 			if (!DATA_GET(global_data,"statuscounts_id"))
 			{

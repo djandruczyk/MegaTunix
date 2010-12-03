@@ -74,12 +74,12 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	DataSize size = MTX_U08;
 	void * eval = NULL;
 	gchar * expr = NULL;
-	extern gboolean interrogated;
 	extern gconstpointer *global_data;
 
 	rtvars_loaded = FALSE;
 
-	if ((!interrogated) && (DATA_GET(global_data,"connected")))
+	if ((!DATA_GET(global_data,"interrogated")) && 
+			(DATA_GET(global_data,"connected")))
 		return FALSE;
 
 	gdk_threads_enter();

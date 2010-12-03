@@ -60,11 +60,10 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	extern volatile gboolean leaving;
 	extern gboolean rtvars_loaded;
 	extern Firmware_Details *firmware;
-	extern gboolean interrogated;
 
 	if (leaving)
 		return;
-	if (!(interrogated))
+	if (!(DATA_GET(global_data,"interrogated")))
 		return;
 	if (!firmware->rtt_map_file)
 	{

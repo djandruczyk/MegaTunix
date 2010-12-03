@@ -2003,9 +2003,9 @@ extern volatile gboolean leaving;
 
 
 /*!
-   *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
-    interrogated.
-     */
+ *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
+ interrogated.
+ */
 G_MODULE_EXPORT void open_tcpip_sockets(void)
 {
 	MtxSocket *socket = NULL;

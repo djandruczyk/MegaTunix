@@ -879,12 +879,11 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
  */
 G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
-	extern gboolean interrogated;
-
 	if (playback_mode)
 		return TRUE;
 
-	if (!((DATA_GET(global_data,"connected")) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return FALSE;
 	
 	if (!lv_data)
