@@ -115,6 +115,8 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(-1));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
+	DATA_SET(global_data,"active_page",GINT_TO_POINTER(-1));
+	DATA_SET(global_data,"active_table",GINT_TO_POINTER(-1));
 	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
