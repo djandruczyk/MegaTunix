@@ -67,10 +67,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	extern GdkColor red;
 	extern volatile gboolean leaving;
 	gboolean * hidden_list = NULL;
-	extern gboolean connected;
-	extern volatile gboolean offline;
 
-	if (!(((connected) || (offline)) && (!tabs_loaded)))
+	if (tabs_loaded)
 		return FALSE;
 	if (!firmware)
 		return FALSE;

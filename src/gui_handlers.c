@@ -113,7 +113,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern gboolean interrogated;
 	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
-	extern volatile gboolean offline;
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
@@ -157,7 +156,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
-	if ((connected) && (interrogated) && (!offline))
+	if ((connected) && (interrogated) && (!DATA_GET(global_data,"offline")))
 		io_cmd(firmware->burn_all_command,NULL);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
@@ -948,7 +947,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern volatile gboolean offline;
 	extern gboolean forced_update;
 	extern Firmware_Details *firmware;
 
@@ -1035,7 +1033,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case START_REALTIME:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			if (!interrogated)
 				io_cmd("interrogation", NULL);
@@ -1043,12 +1041,12 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			forced_update = TRUE;
 			break;
 		case STOP_REALTIME:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			stop_tickler(RTV_TICKLER);
 			break;
 		case REBOOT_GETERR:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			if (DATA_GET(global_data,"realtime_id"))
 			{
@@ -1065,7 +1063,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			io_cmd(firmware->get_all_command, NULL);
 			break;
 		case READ_RAW_MEMORY:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			/*io_cmd(firmware->raw_mem_command,(gpointer)obj_data);*/
 			break;
@@ -1082,17 +1080,17 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			dlog_select_defaults();
 			break;
 		case CLOSE_LOGFILE:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			stop_datalogging();
 			break;
 		case START_DATALOGGING:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			start_datalogging();
 			break;
 		case STOP_DATALOGGING:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			stop_datalogging();
 			break;
@@ -1856,13 +1854,12 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
-	extern volatile gboolean offline;
 	extern gboolean connected;
 	canID = firmware->canID;
 
 	if (leaving)
 		return;
-	if (!((connected) || (offline)))
+	if (!((connected) || (DATA_GET(global_data,"offline"))))
 		return;
 
 	gdk_threads_enter();
@@ -3310,14 +3307,13 @@ G_MODULE_EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT void prompt_to_save(void)
 {
 	gint result = 0;
-	extern volatile gboolean offline;
 	GtkWidget *dialog = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	GtkWidget *image = NULL;
 
-	if (!offline)
+	if (!DATA_GET(global_data,"offline"))
 	{
 		dialog = gtk_dialog_new_with_buttons(_("Save internal log, yes/no ?"),
 				GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -3374,7 +3370,6 @@ G_MODULE_EXPORT void prompt_to_save(void)
 G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 {
 	gint result = 0;
-	extern volatile gboolean offline;
 	GtkWidget *dialog = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;

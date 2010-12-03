@@ -1276,7 +1276,6 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 * disaster...
 	 */
 	static gboolean network_is_open = FALSE; /* Assume never opened */
-	extern volatile gboolean offline;
 	extern GAsyncQueue *io_repair_queue;
 	volatile gboolean autodetect = TRUE;
 	gchar * host = NULL;
@@ -1288,7 +1287,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	args = DATA_GET(global_data,"args");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		g_thread_exit(0);
@@ -3237,7 +3236,6 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 * disaster...
 	 */
 	static gboolean network_is_open = FALSE; /* Assume never opened */
-	extern volatile gboolean offline;
 	extern GAsyncQueue *io_repair_queue;
 	volatile gboolean autodetect = TRUE;
 	gchar * host = NULL;
@@ -3249,7 +3247,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	args = DATA_GET(global_data,"args");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		g_thread_exit(0);

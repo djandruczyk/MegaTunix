@@ -190,8 +190,8 @@ G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	GArray *array = NULL;
 	gconstpointer *object = NULL;
 	gint i = 0;
-	extern gboolean offline;
 	extern Rtv_Map *rtv_map;
+	extern gconstpointer *global_data;
 
 read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -209,7 +209,7 @@ read_again:
 		{
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
 			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 			{
 				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
 				if (rtv_map->applicable_signatures)

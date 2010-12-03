@@ -44,7 +44,6 @@
 
 gboolean force_page_change;
 extern gboolean connected;			/* valid connection with MS */
-extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
@@ -152,9 +151,9 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (!message) /* NULL message */
 			continue;
 
-		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
+		if ((!DATA_GET(global_data,"offline")) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
 		{
-			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);*/
+			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
@@ -167,7 +166,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 			}
 			g_thread_join(repair_thread);
 		}
-		if ((!serial_params->open) && (!offline))
+		if ((!serial_params->open) && (!DATA_GET(global_data,"offline")))
 		{
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
@@ -433,10 +432,9 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 {
 	extern Firmware_Details * firmware;
-	extern volatile gboolean offline;
 	OutputData *output = NULL;
 
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 		return;
 
 	output = initialize_outputdata();

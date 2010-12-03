@@ -329,13 +329,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gint len = 0;
 	gboolean autodetect = FALSE;
 	guchar buf [1024];
-	extern volatile gboolean offline;
 	gchar ** vector = NULL;
 	guint i = 0;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
 
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));

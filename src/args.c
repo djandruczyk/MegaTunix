@@ -45,7 +45,6 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	gint result = 0;
 	gchar ** vector = NULL;
 	gchar * netinfo = NULL;
-	extern volatile gboolean offline;
 
 	args = init_args();
 	GOptionEntry entries[] =
@@ -146,7 +145,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->offline)
 	{
-		offline = TRUE;
+		DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
 		g_timeout_add(1000,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (args->listen_mode)

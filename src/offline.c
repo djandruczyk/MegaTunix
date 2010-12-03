@@ -39,7 +39,6 @@
 #include <widgetmgmt.h>
 
 
-volatile gboolean offline = FALSE;
 extern gconstpointer *global_data;
 
 
@@ -72,7 +71,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	filename = present_firmware_choices();
 	if (!filename)
 	{
-		offline = FALSE;
+		DATA_SET(global_data,"offline",GINT_TO_POINTER(FALSE));
 		interrogated = FALSE;
 		widget = lookup_widget("interrogate_button");
 		if (GTK_IS_WIDGET(widget))
@@ -88,7 +87,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	}
 
 	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(filename),g_free);
-	offline = TRUE;
+	DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
 	interrogated = TRUE;
 
 	/* Disable interrogation button */

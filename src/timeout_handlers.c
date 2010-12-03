@@ -44,7 +44,6 @@ static gboolean restart_realtime = FALSE;
  */
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
-	extern volatile gboolean offline;
 	extern gboolean rtvars_loaded;
 	extern gboolean connected;
 	extern gboolean interrogated;
@@ -54,7 +53,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 	switch (type)
 	{
 		case RTV_TICKLER:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			if (!rtvars_loaded)
 				break;
@@ -87,7 +86,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
 		case SCOUNTS_TICKLER:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			if (!((connected) && (interrogated)))
 				break;

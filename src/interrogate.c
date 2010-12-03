@@ -83,10 +83,10 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guchar buf[BUFSIZE];
 	guchar *ptr = NULL;
 	gchar * message = NULL;
+	extern gconstpointer *global_data;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	extern volatile gboolean offline;
 
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);

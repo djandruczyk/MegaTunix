@@ -134,6 +134,7 @@ gint main(gint argc, gchar ** argv)
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
+	printf("true is %i, false is %i\n",TRUE,FALSE);
 	ready = TRUE;
 	gtk_main();
 	gdk_threads_leave();

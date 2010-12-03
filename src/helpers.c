@@ -56,13 +56,12 @@ G_MODULE_EXPORT void enable_reboot_button_pf(void)
 G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
 	extern gboolean interrogated;
-        extern volatile gboolean offline;
 	CmdLineArgs *args = NULL;
 
 	args = DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
-	if ((interrogated) && (!offline))
+	if ((interrogated) && (!DATA_GET(global_data,"offline")))
 		open_tcpip_sockets();
 }
 
@@ -82,7 +81,6 @@ G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
-	extern volatile gboolean offline;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint i = 0;
@@ -99,7 +97,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	/*printf("burn all helper\n");*/
 	if ((type != MS2) && (type != MS1))
 		return FALSE;
-	if (!offline)
+	if (!DATA_GET(global_data,"offline"))
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
 		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
@@ -136,7 +134,6 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 {
 	extern Firmware_Details *firmware;
-	extern volatile gboolean offline;
 	extern volatile gboolean outstanding_data;
 	gint last_page;
 	OutputData *output = NULL;
@@ -148,7 +145,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 	{
 		case MS1_VECONST:
 
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 				if (outstanding_data)
@@ -169,7 +166,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			io_cmd(NULL,command->post_functions);
 			break;
 		case MS2_VECONST:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
@@ -192,7 +189,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			io_cmd(NULL,command->post_functions);
 			break;
 		case MS2_E_COMPOSITEMON:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
@@ -209,7 +206,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			io_cmd(NULL,command->post_functions);
 			break;
 		case MS2_E_TRIGMON:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
@@ -226,7 +223,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			io_cmd(NULL,command->post_functions);
 			break;
 		case MS2_E_TOOTHMON:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				if ((firmware->capabilities & MS2_E) && (outstanding_data))
 					queue_burn_ecu_flash(last_page);
@@ -243,7 +240,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			io_cmd(NULL,command->post_functions);
 			break;
 		case MS1_E_TRIGMON:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				if (outstanding_data)
 					queue_burn_ecu_flash(last_page);
@@ -258,7 +255,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			}
 			break;
 		case MS1_E_TOOTHMON:
-			if (!offline)
+			if (!DATA_GET(global_data,"offline"))
 			{
 				if (outstanding_data)
 					queue_burn_ecu_flash(last_page);
@@ -370,7 +367,6 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	static gboolean just_starting = TRUE;
 	extern gboolean forced_update;
 	extern gboolean force_page_change;
-	extern volatile gboolean offline;
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
@@ -390,7 +386,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			printf(_("MS2_CLOCK not written yet\n"));
 			break;
 		case NUM_REV:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data(-1,&message->recv_buf,FALSE);
 			ptr8 = (guchar *)message->recv_buf;
@@ -401,7 +397,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				thread_update_widget("ecu_revision_entry",MTX_ENTRY,g_strdup(""));
 			break;
 		case TEXT_REV:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
@@ -412,7 +408,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			}
 			break;
 		case SIGNATURE:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
 			 count = read_data(-1,&message->recv_buf,FALSE);
                          if (count > 0)

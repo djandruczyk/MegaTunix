@@ -178,7 +178,6 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
  */
 G_MODULE_EXPORT void start_datalogging(void)
 {
-	extern volatile gboolean offline;
 	extern gboolean forced_update;
 
 	if (logging_active)
@@ -194,7 +193,7 @@ G_MODULE_EXPORT void start_datalogging(void)
 	logging_active = TRUE;
 	update_logbar("dlog_view",NULL,_("DataLogging Started...\n"),FALSE,FALSE,FALSE);
 
-	if (!offline)
+	if (!DATA_GET(global_data,"offline"))
 		start_tickler(RTV_TICKLER);
 	forced_update=TRUE;
 	return;

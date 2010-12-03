@@ -217,7 +217,6 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	extern gboolean paused_handlers;
-	extern volatile gboolean offline;
 
 	if (!output)
 		goto red_or_black;
@@ -270,7 +269,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	 * avoid unnecessary burns to the FLASH 
 	 */
 
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 		return;
 red_or_black:
 	for (i=0;i<firmware->total_pages;i++)
@@ -304,10 +303,9 @@ red_or_black:
 G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 {
 	extern Firmware_Details * firmware;
-	extern volatile gboolean offline;
 	OutputData *output = NULL;
 
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 		return;
 
 	output = initialize_outputdata();
@@ -348,7 +346,6 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	DBlock *block = NULL;
 	extern Serial_Params *serial_params;
 	extern Firmware_Details *firmware;
-	extern volatile gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -366,7 +363,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		/*printf("write_data(), canID %i, page %i, offset %i, value %i, num_bytes %i, size %i, data %p, mode %i\n",canID,page,offset,value,num_bytes,size,data,mode);*/
 	}
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 	{
 		/*printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value); */
 		switch (mode)
