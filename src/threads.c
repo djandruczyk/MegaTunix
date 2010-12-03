@@ -48,7 +48,6 @@ extern volatile gboolean offline;		/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
-volatile gint last_page = -1;
 
 
 /*!
@@ -353,11 +352,11 @@ G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize si
 	 * burns and/or page changing
 	 */
 	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
+		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
 
 	output->queue_update = queue_update;
 	io_cmd(firmware->write_command,output);
-	last_page = page;
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	return;
 }
 
@@ -445,7 +444,7 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->page_command,output);
-	last_page = page;
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	return;
 }
 
@@ -483,10 +482,10 @@ G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_by
 	store_new_block(canID,page,offset,data,num_bytes);
 
 	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
+		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
 	output->queue_update = TRUE;
 	io_cmd(firmware->chunk_write_command,output);
-	last_page = page;
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	return;
 }
 
@@ -521,7 +520,7 @@ G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
 	store_new_block(0,page,0,data,num_bytes);
 
 	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
+		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
 	output->queue_update = TRUE;
 	io_cmd(firmware->table_write_command,output);
 

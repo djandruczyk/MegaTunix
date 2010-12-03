@@ -85,8 +85,10 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	extern volatile gboolean offline;
 	OutputData *output = NULL;
 	Command *command = NULL;
-	extern volatile gint last_page;
 	gint i = 0;
+	gint last_page = 0;
+
+	last_page = (gint)DATA_GET(global_data,"last_page");
 
 	if (last_page == -1)
 	{
@@ -136,11 +138,12 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 	extern Firmware_Details *firmware;
 	extern volatile gboolean offline;
 	extern volatile gboolean outstanding_data;
-	extern volatile gint last_page;
+	gint last_page;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint i = 0;
 
+	last_page = (gint)DATA_GET(global_data,"last_page");
 	switch (type)
 	{
 		case MS1_VECONST:

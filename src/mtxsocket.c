@@ -412,7 +412,6 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	State next_state;
 	SubState substate;
 	GError *error = NULL;
-	extern volatile gint last_page;
 	extern Firmware_Details *firmware;
 
 	state = WAITING_FOR_CMD;
@@ -602,9 +601,9 @@ close_binary2:
 						if (firmware->capabilities & MS1)
 						{
 							/*							printf("'V' received (MS1 VEtable)\n");*/
-							if (last_page < 0)
-								last_page = 0;
-							res = net_send (client->socket,(guint8 *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length);
+							if ((gint)DATA_GET(global_data,"last_page") < 0)
+								DATA_SET(global_data,"last_page",GINT_TO_POINTER(0));
+							res = net_send (client->socket,(guint8 *)firmware->ecu_data[(gint)DATA_GET(global_data,"last_page")],firmware->page_params[(gint)DATA_GET(global_data,"last_page")]->length);
 							/*							printf("MS1 VEtable, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -786,8 +785,8 @@ close_binary2:
 					else
 					{
 						/*printf("updating local ms1 chunk buffer\n");*/
-						memcpy (client->ecu_data[last_page]+offset,buffer,count);
-						chunk_write(0,last_page,offset,count,buffer);
+						memcpy (client->ecu_data[(gint)DATA_GET(global_data,"last_page")]+offset,buffer,count);
+						chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
 					}
 					state = WAITING_FOR_CMD;
 				}
@@ -798,7 +797,7 @@ close_binary2:
 				/*				printf("get_ms1_page\n");*/
 				tableID = (guint8)buf;
 				/*				printf ("Passed page %i\n",tableID);*/
-				ms_handle_page_change(tableID,last_page);
+				ms_handle_page_change(tableID,(gint)DATA_GET(global_data,"last_page"));
 				state = WAITING_FOR_CMD;
 				continue;
 			case GET_MS1_OFFSET:
@@ -819,10 +818,10 @@ close_binary2:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte,firmware->bigendian);
-				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
+				_set_sized_data (client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
+				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
-				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);*/
+				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
 				state = WAITING_FOR_CMD;
 				continue;
 			default:
@@ -1666,7 +1665,6 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	State state;
 	SubState substate;
 	GError *error = NULL;
-	extern volatile gint last_page;
 	extern volatile gint leaving;
 
 	state = WAITING_FOR_CMD;
@@ -2377,7 +2375,6 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	State state;
 	State next_state;
 	SubState substate;
-	extern volatile gint last_page;
 	extern Firmware_Details *firmware;
 
 	state = WAITING_FOR_CMD;
@@ -2562,9 +2559,9 @@ close_binary:
 						if (firmware->capabilities & MS1)
 						{
 							/*							printf("'V' received (MS1 VEtable)\n");*/
-							if (last_page < 0)
-								last_page = 0;
-							res = net_send (fd,(guint8 *)firmware->ecu_data[last_page],firmware->page_params[last_page]->length,0);
+							if ((gint)DATA_GET(global_data,"last_page") < 0)
+								(gint)DATA_GET(global_data,"last_page") = 0;
+							res = net_send (fd,(guint8 *)firmware->ecu_data[(gint)DATA_GET(global_data,"last_page")],firmware->page_params[(gint)DATA_GET(global_data,"last_page")]->length,0);
 							/*							printf("MS1 VEtable, %i bytes delivered\n",res);*/
 						}
 						continue;
@@ -2746,8 +2743,8 @@ close_binary:
 					else
 					{
 						/*printf("updating local ms1 chunk buffer\n");*/
-						memcpy (client->ecu_data[last_page]+offset,buffer,count);
-						chunk_write(0,last_page,offset,count,buffer);
+						memcpy (client->ecu_data[(gint)DATA_GET(global_data,"last_page")]+offset,buffer,count);
+						chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
 					}
 					state = WAITING_FOR_CMD;
 				}
@@ -2758,7 +2755,7 @@ close_binary:
 				/*				printf("get_ms1_page\n");*/
 				tableID = (guint8)buf;
 				/*				printf ("Passed page %i\n",tableID);*/
-				ms_handle_page_change(tableID,last_page);
+				ms_handle_page_change(tableID,(gint)DATA_GET(global_data,"last_page"));
 				state = WAITING_FOR_CMD;
 				continue;
 			case GET_MS1_OFFSET:
@@ -2779,10 +2776,10 @@ close_binary:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[last_page],offset,MTX_U08,byte,firmware->bigendian);
-				send_to_ecu(0,last_page,offset,MTX_U08,byte,TRUE);
+				_set_sized_data (client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
+				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
-				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,last_page,offset);*/
+				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
 				state = WAITING_FOR_CMD;
 				continue;
 			default:
@@ -3679,7 +3676,6 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	guint8 *buffer = NULL;
 	State state;
 	SubState substate;
-	extern volatile gint last_page;
 	extern volatile gint leaving;
 
 	state = WAITING_FOR_CMD;

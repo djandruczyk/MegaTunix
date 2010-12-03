@@ -305,7 +305,6 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 {
 	extern Firmware_Details * firmware;
 	extern volatile gboolean offline;
-	extern volatile gboolean last_page;
 	OutputData *output = NULL;
 
 	if (offline)
@@ -317,7 +316,7 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd(firmware->burn_command,output);
-	last_page = page;
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 }
 
 

@@ -113,6 +113,7 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(-1));
 	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
