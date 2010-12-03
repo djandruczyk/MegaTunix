@@ -43,7 +43,6 @@
 
 
 gboolean force_page_change;
-extern gboolean connected;			/* valid connection with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
@@ -151,7 +150,10 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (!message) /* NULL message */
 			continue;
 
-		if ((!DATA_GET(global_data,"offline")) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
+		if ((!DATA_GET(global_data,"offline")) && 
+				(((!DATA_GET(global_data,"connected")) && 
+				  (serial_params->open)) || 
+				 (!(serial_params->open))))
 		{
 			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)

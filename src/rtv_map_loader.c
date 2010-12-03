@@ -75,12 +75,11 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	void * eval = NULL;
 	gchar * expr = NULL;
 	extern gboolean interrogated;
-	extern gboolean connected;
 	extern gconstpointer *global_data;
 
 	rtvars_loaded = FALSE;
 
-	if ((!interrogated) && (connected))
+	if ((!interrogated) && (DATA_GET(global_data,"connected")))
 		return FALSE;
 
 	gdk_threads_enter();

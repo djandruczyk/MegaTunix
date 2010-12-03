@@ -44,13 +44,12 @@ volatile gboolean outstanding_data = FALSE;
  */
 G_MODULE_EXPORT void update_comms_status(void)
 {
-	extern gboolean connected;
 	GtkWidget *widget = NULL;
 
 	if (NULL != (widget = lookup_widget("runtime_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
 	if (NULL != (widget = lookup_widget("ww_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
 	return;
 }
 
@@ -70,7 +69,6 @@ G_MODULE_EXPORT gint comms_test(void)
 	gint len = 0;
 	static gint errcount = 0;
 	extern Serial_Params *serial_params;
-	extern gboolean connected;
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
@@ -78,7 +76,7 @@ G_MODULE_EXPORT gint comms_test(void)
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
 
-	if ((GINT)DATA_GET(global_data,"ecu_baud") < 11920)
+	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
 		/*printf("MS-1 comms test\n");*/
 		if (!write_wrapper(serial_params->fd,"C",1,&len))
@@ -86,8 +84,8 @@ G_MODULE_EXPORT gint comms_test(void)
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
-			connected = FALSE;
-			return connected;
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+			return FALSE;
 		}
 		result = read_data(1,NULL,FALSE);
 	}
@@ -99,33 +97,35 @@ G_MODULE_EXPORT gint comms_test(void)
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
-			connected = FALSE;
-			return connected;
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+			return FALSE;
 		}
 		result = read_data(-1,NULL,FALSE);
 	}
 	if (result)	/* Success */
 	{
-		connected = TRUE;
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 		errcount=0;
 		dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
 		queue_function("kill_conn_warning");
 		thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
 		thread_update_logbar("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
+		return TRUE;
 
 	}
 	else
 	{
 		/* An I/O Error occurred with the MegaSquirt ECU  */
-		connected = FALSE;
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 		errcount++;
 		if (errcount > 5 )
 			queue_function("conn_warning");
 		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
 		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
 		thread_update_logbar("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
+		return FALSE;
 	}
-	return connected;
+	return FALSE;
 }
 
 /*!
@@ -324,7 +324,6 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
-	extern gboolean connected;
 	OutputData *output = message->payload;
 
 	gint res = 0;
@@ -381,7 +380,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		g_static_mutex_unlock(&mutex);
 		return TRUE;		/* can't write anything if offline */
 	}
-	if (!connected)
+	if (!DATA_GET(global_data,"connected"))
 	{
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);

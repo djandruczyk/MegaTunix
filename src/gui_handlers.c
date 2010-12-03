@@ -109,7 +109,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 */
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
-	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GAsyncQueue *io_repair_queue;
 	extern Firmware_Details *firmware;
@@ -156,7 +155,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Commits any pending data to ECU flash */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
-	if ((connected) && (interrogated) && (!DATA_GET(global_data,"offline")))
+	if ((DATA_GET(global_data,"connected")) && (interrogated) && (!DATA_GET(global_data,"offline")))
 		io_cmd(firmware->burn_all_command,NULL);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
@@ -1854,12 +1853,12 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
-	extern gboolean connected;
 	canID = firmware->canID;
 
 	if (leaving)
 		return;
-	if (!((connected) || (DATA_GET(global_data,"offline"))))
+	if (!((DATA_GET(global_data,"connected")) || 
+				(DATA_GET(global_data,"offline"))))
 		return;
 
 	gdk_threads_enter();

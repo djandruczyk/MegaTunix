@@ -844,7 +844,6 @@ close_binary2:
  */
 G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
-	extern gboolean connected;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
 	gint args = 0;
@@ -1017,7 +1016,7 @@ Supported Calls:\n\r\
 	/* Send result code*/
 	if (send_rescode)
 	{
-		if (!connected)
+		if (!DATA_GET(global_data,"connected"))
 			net_send(client->socket,(guint8 *)"NOT CONNECTED,",strlen("NOT CONNECTED,"));
 		if (check_for_changes(client))
 			net_send(client->socket,(guint8 *)"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"));
@@ -1477,13 +1476,12 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 G_MODULE_EXPORT gboolean close_network(void)
 {
 	extern Serial_Params *serial_params;
-	extern gboolean connected;
 	/*	printf("Closing network port!\n");*/
 	g_socket_shutdown(serial_params->socket,TRUE,TRUE,NULL);
 	g_socket_close(serial_params->socket,NULL);
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
-	connected = FALSE;
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 
 	return TRUE;
 }
@@ -1491,7 +1489,6 @@ G_MODULE_EXPORT gboolean close_network(void)
 
 G_MODULE_EXPORT gboolean close_control_socket(void)
 {
-	extern gboolean connected;
 	extern Serial_Params *serial_params;
 	g_socket_close(serial_params->socket,NULL);
 
@@ -2801,7 +2798,6 @@ close_binary:
 G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
 	gint fd = client->fd;
-	extern gboolean connected;
 	gchar ** vector = NULL;
 	gchar * arg2 = NULL;
 	gint args = 0;
@@ -2974,7 +2970,7 @@ Supported Calls:\n\r\
 	/* Send result code*/
 	if (send_rescode)
 	{
-		if (!connected)
+		if (!DATA_GET(global_data,"connected"))
 			net_send(fd,(guint8 *)"NOT CONNECTED,",strlen("NOT CONNECTED,"),0);
 		if (check_for_changes(client))
 			net_send(fd,(guint8 *)"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
@@ -3476,12 +3472,11 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 G_MODULE_EXPORT gboolean close_network(void)
 {
 	extern Serial_Params *serial_params;
-	extern gboolean connected;
 	/*	printf("Closing network port!\n");*/
 	close(serial_params->fd);
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
-	connected = FALSE;
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 
 #ifdef __WIN32__
 	WSACleanup();
@@ -3492,7 +3487,6 @@ G_MODULE_EXPORT gboolean close_network(void)
 
 G_MODULE_EXPORT gboolean close_control_socket(void)
 {
-	extern gboolean connected;
 	close(controlsocket);
 
 #ifdef __WIN32__

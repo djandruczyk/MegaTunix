@@ -44,7 +44,6 @@
 #include <unistd.h>
 #include <widgetmgmt.h>
 
-extern gboolean connected;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern gint dbg_lvl;
@@ -92,7 +91,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_static_mutex_lock(&mutex);
 	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
 
-	if (!connected)
+	if (!DATA_GET(global_data,"connected"))
 	{
 		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
 		g_static_mutex_unlock(&mutex);

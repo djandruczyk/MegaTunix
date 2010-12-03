@@ -37,7 +37,6 @@
 #include <warmwizard_gui.h>
 #include <widgetmgmt.h>
 
-extern gboolean connected;
 extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
@@ -68,12 +67,12 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 		return FALSE;
 
 	count++;
-	if (conn_status != connected)
+	if (conn_status != (GBOOLEAN)DATA_GET(global_data,"connected"))
 	{
 		gdk_threads_enter();
-		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(connected));
+		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,DATA_GET(global_data,"connected"));
 		gdk_threads_leave();
-		conn_status = connected;
+		conn_status = (GBOOLEAN)DATA_GET(global_data,"connected");
 		forced_update = TRUE;
 	}
 
@@ -142,7 +141,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 		if (!history)
 			return;
 	}
-	if (!connected)
+	if (!DATA_GET(global_data,"connected"))
 	{
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 		return;

@@ -68,7 +68,6 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	guchar buf[4096];
 	guchar *ptr = buf;
 	gboolean ignore_errors = FALSE;
-	extern gboolean connected;
 	extern Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	static gint failcount = 0;
@@ -111,7 +110,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		{
 			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
-			connected = FALSE;
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			break;
 		}
 		if (len == 0) /* Short read!*/
@@ -137,7 +136,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		failcount++;
 		/* Excessive failures triggers port recheck */
 		if (failcount > 10)
-			connected = FALSE;
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{

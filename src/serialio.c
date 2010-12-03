@@ -47,7 +47,6 @@
 
 
 Serial_Params *serial_params;
-gboolean connected = FALSE;
 gboolean port_open = FALSE;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
 GAsyncQueue *io_repair_queue = NULL;
@@ -299,7 +298,7 @@ G_MODULE_EXPORT void close_serial(void)
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
-	connected = FALSE;
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	port_open = FALSE;
 
 	/* An Closing the comm port */

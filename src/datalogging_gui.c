@@ -70,13 +70,12 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	extern gint preferred_delimiter;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
-	extern gboolean connected;
 	extern gboolean interrogated;
 	extern volatile gboolean leaving;
 
 	if ((!tabs_loaded) || (leaving))
 		return;
-	if (!((connected) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && (interrogated)))
 		return;
 	if (!rtvars_loaded)
 	{
@@ -331,9 +330,8 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
 	extern gboolean interrogated;
-	extern gboolean connected;
 
-	if (!((connected) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && (interrogated)))
 		return;
 
 	if (!logging_active) /* Logging isn't enabled.... */
