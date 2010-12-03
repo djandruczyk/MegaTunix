@@ -36,7 +36,6 @@
 
 
 /* global vars (owned here...) */
-gchar *delimiter;
 gboolean begin = TRUE;
 
 /* External global vars */
@@ -67,7 +66,6 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	gconstpointer * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
-	extern gint preferred_delimiter;
 
 	if ((!DATA_GET(global_data,"tabs_loaded")) || 
 			(DATA_GET(global_data,"leaving")))
@@ -99,7 +97,7 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 
 	/* Update status of the delimiter buttons... */
 
-	switch (preferred_delimiter)
+	switch ((gint)DATA_GET(global_data,"preferred_delimiter"))
 	{
 		case COMMA:
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")),TRUE);
@@ -269,7 +267,6 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	GString *output;
 	gconstpointer * object = NULL;
 	gchar * string = NULL;
-	extern gint preferred_delimiter;
 	extern Firmware_Details *firmware;
 	if (!iochannel)
 	{
@@ -298,7 +295,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 
 			j++;
 			if (j < total_logables)
-				output = g_string_append(output,delimiter);
+				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 		}
 	}
 	output = g_string_append(output,"\r\n");
@@ -376,7 +373,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		 * char at the end fo the line 
 		 */
 		if (j < total_logables)
-			output = g_string_append(output,delimiter);
+			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
@@ -637,7 +634,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			 * char at the end fo the line 
 			 */
 			if (j < rtv_map->derived_total)
-				output = g_string_append(output,delimiter);
+				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 		}
 		output = g_string_append(output,"\r\n");
 		if (notifies && ((x % notif_divisor) == 0))

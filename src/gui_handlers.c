@@ -68,8 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern gboolean playback_mode;
-extern gchar *delimiter;
 extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
@@ -279,7 +277,6 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = 0; 
 	gchar * tmpbuf = NULL;
-	extern gint preferred_delimiter;
 	extern gboolean *tracking_focus;
 	static GtkSettings *settings = NULL;
 
@@ -329,18 +326,14 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
 			case COMMA:
-				preferred_delimiter = COMMA;
+				DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(COMMA));
 				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Comma\"\n"),FALSE,FALSE,FALSE);
-				if (delimiter)
-					g_free(delimiter);
-				delimiter = g_strdup(",");
+				DATA_SET_FULL(global_data,"delimiter",g_strdup(","),cleanup);
 				break;
 			case TAB:
-				preferred_delimiter = TAB;
+				DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(TAB));
 				update_logbar("dlog_view", NULL,_("Setting Log delimiter to a \"Tab\"\n"),FALSE,FALSE,FALSE);
-				if (delimiter)
-					g_free(delimiter);
-				delimiter = g_strdup("\t");
+				DATA_SET_FULL(global_data,"delimiter",g_strdup("\t"),cleanup);
 				break;
 			case REALTIME_VIEW:
 				set_logviewer_mode(LV_REALTIME);

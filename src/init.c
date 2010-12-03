@@ -43,7 +43,6 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-gint preferred_delimiter;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
@@ -153,7 +152,7 @@ G_MODULE_EXPORT void init(void)
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
-	preferred_delimiter = TAB;
+	DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(TAB));
 
 
 	if (!widget_group_states)
@@ -239,7 +238,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			DATA_SET_FULL(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),cleanup);
-		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
+		if (cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &tmpi))
+			DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(tmpi));	
 		if (args->network_mode)
 			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
 		else
@@ -503,7 +503,7 @@ G_MODULE_EXPORT void save_config(void)
 		cleanup(tmpbuf);
 
 	}
-	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
+	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", (gint)DATA_GET(global_data,"preferred_delimiter"));
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "override_port", 
 					serial_params->port_name);
