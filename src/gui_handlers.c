@@ -73,8 +73,6 @@ extern Serial_Params *serial_params;
 extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
-gint active_page = -1;
-gint active_table = -1;
 extern GdkColor red;
 extern GdkColor green;
 extern GdkColor blue;
@@ -2752,6 +2750,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	upper = upper > hardupper ? hardupper:upper;
 	lower = lower < hardlower ? hardlower:lower;
 	value = get_ecu_data(canID,page,offset,size);
+	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
+
 	if (event->keyval == GDK_Control_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
@@ -3076,13 +3076,14 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
+	gint active_table = -1;
 	GtkWidget *sub = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	tab_ident = (TabIdent)OBJ_GET(widget,"tab_ident");
-	active_page = tab_ident;
+	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 
-	if (active_page == RUNTIME_TAB)
+	if (tab_ident == RUNTIME_TAB)
 		DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
 
 	if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
@@ -3112,6 +3113,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 			 
 		}
 	}
+	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return;
 }
@@ -3129,10 +3131,14 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
  */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
+	gint active_table = -1;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	if (OBJ_GET(widget,"table_num"))
+	{
 		active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
+		DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
+	}
 	else
 		return;
 	/*printf("active table changed to %i\n",active_table); */

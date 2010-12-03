@@ -37,7 +37,6 @@
 #include <warmwizard_gui.h>
 #include <widgetmgmt.h>
 
-extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
@@ -281,11 +280,13 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	GHashTable **ve3d_sliders;
 	GHashTable *hash;
 	extern Firmware_Details *firmware;
+	TabIdent active_page;
 	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
+	active_page = (TabIdent)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
 		if ((hash = DATA_GET(global_data,"rt_sliders")))
@@ -350,19 +351,23 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 
 G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 {
+	static gfloat xl,yl,zl = 9999.9;
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
 	GtkWidget * tmpwidget=NULL;
-	extern Firmware_Details *firmware;
 	gfloat x,y,z = 0.0;
-	static gfloat xl,yl,zl = 9999.9;
 	gchar * string = NULL;
 	GHashTable *hash = NULL;
-	extern GHashTable *sources_hash;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
+	TabIdent active_page;
+	extern Firmware_Details *firmware;
+	extern GHashTable *sources_hash;
 	extern gint * algorithm;
+
+	active_page = (TabIdent)DATA_GET(global_data,"active_page");
+	/* Update all the dynamic RT Sliders */
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;

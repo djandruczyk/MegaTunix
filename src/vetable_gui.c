@@ -364,12 +364,12 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gint heaviest = -1;
 	gboolean focus = FALSE;
 	GList *list = NULL;
+	gint active_table;
 	static void **y_eval;
 	static void **x_eval;
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
-	extern gint active_table;
 	extern gboolean *tracking_focus;
 	extern GHashTable *sources_hash;
 	gchar *key = NULL;
@@ -377,6 +377,8 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
+
+	active_table = (gint)DATA_GET(global_data,"active_table");
 
 	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
 		return;

@@ -1194,7 +1194,6 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 
 G_MODULE_EXPORT void update_tab_gauges(void)
 {
-	extern gint active_table;
 	extern GList **tab_gauges;
 	GtkWidget *gauge = NULL;
 	gchar * source = NULL;
@@ -1203,9 +1202,9 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	guint i = 0;
 	GList *list = NULL;
 	
-	if ((!tab_gauges) || (active_table < 0))
+	if ((!tab_gauges) || ((gint)DATA_GET(global_data,"active_table") < 0))
 		return;
-	list = g_list_first(tab_gauges[active_table]);
+	list = g_list_first(tab_gauges[(gint)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
 	{
 		gauge = g_list_nth_data(list,i);
