@@ -39,8 +39,6 @@
 #include <unistd.h>
 
 Rtv_Map *rtv_map = NULL;
-gboolean rtvars_loaded = FALSE;
-
 
 /*!
  \brief load_realtime_map_pf() loads the realtime map specified in the detected
@@ -75,8 +73,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	void * eval = NULL;
 	gchar * expr = NULL;
 	extern gconstpointer *global_data;
-
-	rtvars_loaded = FALSE;
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
 			(DATA_GET(global_data,"connected")))
@@ -394,7 +390,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
-	rtvars_loaded = TRUE;
+	DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	set_title(g_strdup(_("RT Map loaded...")));
 	gdk_threads_leave();
 	return TRUE;

@@ -36,7 +36,6 @@
 #include <tag_loader.h>
 #include <widgetmgmt.h>
 
-gboolean tabs_loaded = FALSE;
 extern gconstpointer *global_data;
 
 
@@ -68,7 +67,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	extern volatile gboolean leaving;
 	gboolean * hidden_list = NULL;
 
-	if (tabs_loaded)
+	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
 	if (!firmware)
 		return FALSE;
@@ -213,7 +212,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
-	tabs_loaded = TRUE;
+	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));

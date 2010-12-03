@@ -43,8 +43,6 @@ extern GdkColor black;
 extern GdkColor red;
 extern gconstpointer *global_data;
 
-gboolean forced_update = TRUE;
-gboolean rt_forced_update = TRUE;
 GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
 GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
 
@@ -72,7 +70,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,DATA_GET(global_data,"connected"));
 		gdk_threads_leave();
 		conn_status = (GBOOLEAN)DATA_GET(global_data,"connected");
-		forced_update = TRUE;
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
 
 	gdk_threads_enter();
@@ -83,7 +81,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 	if (count > 60 )
 		count = 0;
 
-	forced_update = FALSE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(FALSE));
 	return TRUE;
 }
 
@@ -161,7 +159,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 
 	/* if the value hasn't changed, don't bother continuing */
-	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
+	if (((value & bitmask) == (previous_value & bitmask)) && 
+			(!DATA_GET(global_data,"forced_update")))
 		return;	
 
 	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
@@ -219,7 +218,8 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	lower = (gfloat)slider->lower;
 	
 	gdk_threads_enter();
-	if ((current != previous) || (rt_forced_update))
+	if ((current != previous) || 
+			(DATA_GET(global_data,"rt_forced_update")))
 	{
 		percentage = (current-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
@@ -240,9 +240,10 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 
 
 		/* If changed by more than 5% or has been at least 5 
-		 * times withot an update or forced_update is set
+		 * times withot an update or rt_forced_update is set
 		 * */
-		if ((slider->textval) && ((abs(count-last_upd) > 2) || (rt_forced_update)))
+		if ((slider->textval) && ((abs(count-last_upd) > 2) || 
+					(DATA_GET(global_data,"rt_forced_update"))))
 		{
 			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
@@ -303,7 +304,8 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(CRITICAL,g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
-		if ((coolant != last_coolant) || (forced_update))
+		if ((coolant != last_coolant) || 
+				(DATA_GET(global_data,"rt_forced_update")))
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
 	}
@@ -414,7 +416,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->x_source,&x);
 
 				/* Test X values, redraw if needed */
-				if (((fabs(x-xl)/x) > 0.001) || (forced_update))
+				if (((fabs(x-xl)/x) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					xl = x;
 					goto redraw;
@@ -453,7 +455,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->y_source,&y);
 
 				/* Test Y values, redraw if needed */
-				if (((fabs(y-yl)/y) > 0.001) || (forced_update))
+				if (((fabs(y-yl)/y) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					yl = y;
 					goto redraw;
@@ -492,7 +494,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->z_source,&z);
 
 				/* Test Z values, redraw if needed */
-				if (((fabs(z-zl)/z) > 0.001) || (forced_update))
+				if (((fabs(z-zl)/z) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					zl = z;
 					goto redraw;
@@ -517,7 +519,7 @@ breakout:
 			update_tab_gauges();
 	}
 
-	if ((forced_update) || 
+	if ((DATA_GET(global_data,"forced_update")) || 
 			(active_page == VETABLES_TAB) || 
 			(active_page == SPARKTABLES_TAB) || 
 			(active_page == AFRTABLES_TAB) || 

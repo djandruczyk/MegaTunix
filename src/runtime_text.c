@@ -58,7 +58,6 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	extern volatile gboolean leaving;
-	extern gboolean rtvars_loaded;
 	extern Firmware_Details *firmware;
 
 	if (leaving)
@@ -75,7 +74,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	if ((!main_xml) || (leaving))
 		return;
 
-	if (rtvars_loaded == FALSE) 
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -374,7 +373,6 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	gchar * tmpbuf = NULL;
 	gchar * tmpbuf2 = NULL;
 	static GRand *rand = NULL;
-	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
 	rtt = (Rt_Text *)value;
@@ -402,7 +400,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 			return;
 
 	if ((current != previous) 
-			|| (forced_update) 
+			|| (DATA_GET(global_data,"forced_update")) 
 			|| (rtt->textval && ((abs(count-last_upd)%g_rand_int_range(rand,25,50)) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
@@ -469,7 +467,6 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	extern gboolean forced_update;
 	extern GStaticMutex rtv_mutex;
 
 	gtk_tree_model_get (model, iter,
@@ -490,7 +487,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	current = g_array_index(history, gfloat, history->len-1);
 	g_static_mutex_unlock(&rtv_mutex);
 
-	if ((current != previous) || (forced_update))
+	if ((current != previous) || (DATA_GET(global_data,"forced_update")))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 		gdk_threads_enter();

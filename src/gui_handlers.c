@@ -282,7 +282,6 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0; 
 	gchar * tmpbuf = NULL;
 	extern gint preferred_delimiter;
-	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
 	static GtkSettings *settings = NULL;
 
@@ -324,12 +323,12 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case FAHRENHEIT:
 				DATA_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
-				forced_update = TRUE;
+				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
 			case CELSIUS:
 				DATA_SET(global_data,"temp_units",GINT_TO_POINTER(CELSIUS));
 				reset_temps(GINT_TO_POINTER(CELSIUS));
-				forced_update = TRUE;
+				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
@@ -946,7 +945,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern gboolean forced_update;
 	extern Firmware_Details *firmware;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -1037,7 +1035,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (!DATA_GET(global_data,"interrogated"))
 				io_cmd("interrogation", NULL);
 			start_tickler(RTV_TICKLER);
-			forced_update = TRUE;
+			DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 			break;
 		case STOP_REALTIME:
 			if (DATA_GET(global_data,"offline"))
@@ -1499,7 +1497,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
 	Reqd_Fuel *reqd_fuel = NULL;
-	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
 	extern Firmware_Details *firmware;
 
@@ -2078,7 +2075,6 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	gint table_num = -1;
 	extern Firmware_Details *firmware;
 	extern volatile gboolean leaving;
-	extern gboolean forced_update;
 	extern GList ***ve_widgets;
 	gint base = 0;
 	gint length = 0;
@@ -2101,7 +2097,7 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 		if (ve_widgets[page][offset] != NULL)
 			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 	}
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return FALSE;
 }
 
@@ -3095,8 +3091,6 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
-	extern gboolean forced_update;
-	extern gboolean rt_forced_update;
 	GtkWidget *sub = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
@@ -3104,7 +3098,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	active_page = tab_ident;
 
 	if (active_page == RUNTIME_TAB)
-		rt_forced_update = TRUE;
+		DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
 
 	if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
 		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -3133,10 +3127,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 			 
 		}
 	}
-
-
-	forced_update = TRUE;
-
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return;
 }
 
@@ -3153,7 +3144,6 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
  */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
-	extern gboolean forced_update;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	if (OBJ_GET(widget,"table_num"))
@@ -3161,7 +3151,7 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 	else
 		return;
 	/*printf("active table changed to %i\n",active_table); */
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 
 	return;
 }
@@ -3258,7 +3248,6 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 	extern gint *algorithm;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	extern gboolean forced_update;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -3283,7 +3272,7 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 			algorithm[tmpi]=(Algorithm)algo;
 			i++;
 		}
-		forced_update = TRUE;
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
 	g_strfreev(vector);
 	return TRUE;

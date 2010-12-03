@@ -63,12 +63,11 @@ G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
  */
 G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 {
-	extern gboolean rtvars_loaded;
 	GtkWidget *view = NULL;
 	GtkTreeModel *model = NULL;
 
 
-	if (!rtvars_loaded)
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;

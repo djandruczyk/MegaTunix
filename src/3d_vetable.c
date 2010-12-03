@@ -72,7 +72,8 @@ static GLuint font_list_base;
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
 static GHashTable *winstat = NULL;
-GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
+static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
+extern gconstpointer *global_data;
 
 
 /* let's get what we need and calculate FPS */
@@ -246,7 +247,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
 	gint table_num =  -1;
-	extern gboolean forced_update;
 
 	if (!gl_ability)
 	{
@@ -618,7 +618,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	gtk_widget_show_all(window);
 
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
@@ -662,7 +662,6 @@ G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
-	extern gboolean forced_update;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
@@ -675,7 +674,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -0.5;
 	ve_view->v_strafe = -0.5;
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
@@ -1622,7 +1621,6 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
 	extern Firmware_Details *firmware;
-	extern gboolean forced_update;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
@@ -1983,7 +1981,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
 		ve_view->mesh_created=FALSE;
-		forced_update = TRUE;
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
 
@@ -2489,7 +2487,6 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 
 G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
@@ -2501,14 +2498,13 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 		ve_view->active_x = 0;
 		ve_view->active_y = 0;
 	}
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
 
 G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
@@ -2524,28 +2520,26 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 		return FALSE;
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
 
 G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 		return FALSE;
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 

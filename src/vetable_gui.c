@@ -42,6 +42,7 @@
  needed data to properly do the rescaling.
  */
 static gboolean color_changed = FALSE;
+extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 {
@@ -65,7 +66,6 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	gfloat factor = 0.0;
 	gfloat retval = 0.0;
 	ScaleOp scaleop = ADD;
-	extern gboolean forced_update;
 
 	tmpbuf = (gchar *) OBJ_GET(widget,"data");
 	vector = g_strsplit(tmpbuf,",",-1);
@@ -118,7 +118,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 			}
 		}
 	}
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 }
 
 
@@ -187,7 +187,6 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	GdkColor color;
 	extern GdkColor black;
 	gboolean use_color = FALSE;
-	extern gboolean forced_update;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	if (!OBJ_GET(widget,"applicable_tables"))
@@ -321,7 +320,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	}
 	g_strfreev(vector);
 	color_changed = TRUE;
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 }
 
 
@@ -371,7 +370,6 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
 	extern gint active_table;
-	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
 	extern GHashTable *sources_hash;
 	gchar *key = NULL;
@@ -577,7 +575,7 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	 * waste CPU time inside of pango changing the color unnecessarily
 	 * */
 
-	if (forced_update)
+	if (DATA_GET(global_data,"forced_update"))
 		goto redraw;
 	for (i=0;i<4;i++)
 	{

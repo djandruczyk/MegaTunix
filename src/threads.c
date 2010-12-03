@@ -42,7 +42,6 @@
 #include <widgetmgmt.h>
 
 
-gboolean force_page_change;
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 
@@ -375,7 +374,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 		queue_ms1_page_change(page);
 		return;
 	}
-	if ((page == last) && (!force_page_change))
+	if ((page == last) && (!DATA_GET(global_data,"force_page_change")))
 	{
 		/*printf("page == last and force_page_change is not set\n");
  		 */

@@ -68,15 +68,15 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
 	extern gint preferred_delimiter;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
 	extern volatile gboolean leaving;
 
-	if ((!tabs_loaded) || (leaving))
+	if ((!DATA_GET(global_data,"tabs_loaded")) || 
+			(leaving))
 		return;
-	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return;
-	if (!rtvars_loaded)
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -176,8 +176,6 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
  */
 G_MODULE_EXPORT void start_datalogging(void)
 {
-	extern gboolean forced_update;
-
 	if (logging_active)
 		return;   /* Logging already running ... */
 	if (lookup_widget("dlog_logable_vars_vbox1"))
@@ -193,7 +191,7 @@ G_MODULE_EXPORT void start_datalogging(void)
 
 	if (!DATA_GET(global_data,"offline"))
 		start_tickler(RTV_TICKLER);
-	forced_update=TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return;
 }
 

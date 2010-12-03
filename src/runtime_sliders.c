@@ -54,8 +54,6 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
@@ -63,12 +61,14 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 		return;
 	}
 
-	if ((!tabs_loaded) || (leaving))
+	if ((!DATA_GET(global_data,"tabs_loaded")) || 
+			(leaving))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, tabs not loaded or leaving, returning!\n\n"));
 		return;
 	}
-	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
+	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
+			(!DATA_GET(global_data,"tabs_loaded")))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -197,10 +197,9 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
 	GHashTable **ve3d_sliders;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
 
-	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
+	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
+			(!(DATA_GET(global_data,"tabs_loaded"))))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;

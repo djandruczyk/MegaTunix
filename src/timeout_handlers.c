@@ -44,7 +44,6 @@ static gboolean restart_realtime = FALSE;
  */
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
-	extern gboolean rtvars_loaded;
 	extern gconstpointer *global_data;
 	gint id = 0;
 	GThread *realtime_id = NULL;
@@ -53,7 +52,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 		case RTV_TICKLER:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			if (!rtvars_loaded)
+			if (!DATA_GET(global_data,"rtvars_loaded"))
 				break;
 			if (restart_realtime)
 			{

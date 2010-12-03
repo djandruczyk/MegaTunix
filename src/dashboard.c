@@ -382,7 +382,6 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 	GArray *history;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
 
 	GtkWidget *gauge = NULL;
 	
@@ -397,7 +396,8 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 
 	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-	if ((current != previous) || (forced_update))
+	if ((current != previous) || 
+			(DATA_GET(global_data,"forced_update")))
 	{
 		/*printf("updating gauge %s\n",(gchar *)key);*/
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
@@ -1200,7 +1200,6 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	gchar * source = NULL;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
 	guint i = 0;
 	GList *list = NULL;
 	
@@ -1213,7 +1212,8 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 		source = OBJ_GET(gauge,"datasource");
 		lookup_current_value(source,&current);
 		mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-		if ((current != previous) || (forced_update))
+		if ((current != previous) || 
+				(DATA_GET(global_data,"forced_update")))
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}
 

@@ -364,8 +364,6 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	guint8 *ptr8 = NULL;
 	guint16 *ptr16 = NULL;
 	static gboolean just_starting = TRUE;
-	extern gboolean forced_update;
-	extern gboolean force_page_change;
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
@@ -518,8 +516,8 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			printf(_("MS2_BOOTLOADER not written yet\n"));
 			break;
 		case MS1_GETERROR:
-			forced_update = TRUE;
-			force_page_change = TRUE;
+			DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+			DATA_SET(global_data,"force_page_change",GINT_TO_POINTER(TRUE));
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
