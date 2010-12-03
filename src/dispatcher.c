@@ -68,9 +68,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	gint i=0;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
-	extern volatile gboolean leaving;
-	extern volatile gboolean might_be_leaving;
 	GTimeVal time;
+	extern gconstpointer *global_data;
 
 	if (!ticker)
 		ticker = g_timer_new();
@@ -82,9 +81,9 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-	if (might_be_leaving)
+	if (DATA_GET(global_data,"might_be_leaving"))
 		return TRUE;
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
@@ -115,7 +114,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		len = message->command->post_functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				dealloc_message(message);
 				g_cond_signal(pf_dispatch_cond);
@@ -152,7 +151,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	gdk_threads_enter();
 	while (gtk_events_pending())
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto fast_exit;
 		gtk_main_iteration();
 	}
@@ -185,8 +184,6 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	Widget_Update *w_update = NULL;
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
-	extern volatile gboolean leaving;
-	extern volatile gboolean might_be_leaving;
 	/*extern gint mem_view_style[];*/
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
@@ -197,12 +194,12 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
 	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
 	}
-	if (might_be_leaving)
+	if (DATA_GET(global_data,"might_be_leaving"))
 		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
@@ -217,7 +214,7 @@ trypop:
 		len = message->functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				dealloc_message(message);
 				g_cond_signal(gui_dispatch_cond);
@@ -312,7 +309,7 @@ trypop:
 			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
-				if (leaving)
+				if (DATA_GET(global_data,"leaving"))
 					goto dealloc;
 				gtk_main_iteration();
 			}
@@ -328,7 +325,7 @@ dealloc:
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if ((count < 3) && (!leaving))
+	if ((count < 3) && (!DATA_GET(global_data,"leaving")))
 	{
 		/*printf("trying to handle another message\n");*/
 		goto trypop;

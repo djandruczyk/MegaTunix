@@ -63,8 +63,6 @@ GThread *binary_socket_id = NULL;
 GThread *control_socket_id = NULL;
 GThread *notify_slaves_id = NULL;
 extern gconstpointer *global_data;
-extern volatile gboolean leaving;
-
 
 /*!
  *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
@@ -222,7 +220,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 	while (TRUE)
 	{
-		if (leaving) /* MTX shutting down */
+		if (DATA_GET(global_data,"leaving")) /* MTX shutting down */
 		{
 			g_socket_close(mtxsock->socket,NULL);
 			g_free(mtxsock);
@@ -334,7 +332,7 @@ G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 
 	while (TRUE)
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_ascii;
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_ascii;
@@ -422,7 +420,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	while(TRUE)
 	{
 		/* Condition handling */
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_binary;
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_binary;
@@ -1530,7 +1528,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		if (!slave_list) /* List not created yet.. */
 			continue;
 
-		if ((leaving) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
+		if ((DATA_GET(global_data,"leaving")) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(slave_msg_queue) != NULL)
@@ -1661,14 +1659,13 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	State state;
 	SubState substate;
 	GError *error = NULL;
-	extern volatile gint leaving;
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 	dbg_func(MTXSOCKET|THREADS,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
 	while(TRUE)
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_control;
 		res = g_socket_receive(client->socket,(gchar *)&buf,1,NULL,&error);
 		if (res <= 0)
@@ -1999,7 +1996,6 @@ GThread *binary_socket_id = NULL;
 GThread *control_socket_id = NULL;
 GThread *notify_slaves_id = NULL;
 extern gconstpointer *global_data;
-extern volatile gboolean leaving;
 
 
 /*!
@@ -2180,7 +2176,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 	while (TRUE)
 	{
-		if (leaving) /* MTX shutting down */
+		if (DATA_GET(global_data,"leaving")) /* MTX shutting down */
 		{
 			close(socket->fd);
 			g_free(socket);
@@ -2288,7 +2284,7 @@ G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 
 	while (TRUE)
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_ascii;
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_ascii;
@@ -2381,7 +2377,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	while(TRUE)
 	{
 		/* Condition handling */
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_binary;
 		if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 			goto close_binary;
@@ -3530,7 +3526,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		if (!slave_list) /* List not created yet.. */
 			continue;
 
-		if ((leaving) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
+		if ((DATA_GET(global_data,"leaving")) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(slave_msg_queue) != NULL)
@@ -3668,14 +3664,13 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	guint8 *buffer = NULL;
 	State state;
 	SubState substate;
-	extern volatile gint leaving;
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
 	while(TRUE)
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto close_control;
 		res = recv(fd,(char *)&buf,1,0);
 		if (res <= 0)

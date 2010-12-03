@@ -64,7 +64,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *notebook = NULL;
 	GtkWidget *item = NULL;
 	extern GdkColor red;
-	extern volatile gboolean leaving;
 	gboolean * hidden_list = NULL;
 
 	if (DATA_GET(global_data,"tabs_loaded"))
@@ -200,7 +199,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		/* Allow gui to update as it should.... */
 		while (gtk_events_pending())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				gdk_threads_leave();
 				return FALSE;

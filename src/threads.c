@@ -118,7 +118,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern Serial_Params *serial_params;
-	extern volatile gboolean leaving;
 	extern GCond * io_dispatch_cond;
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
@@ -136,7 +135,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(io_data_queue) != NULL)

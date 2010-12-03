@@ -370,13 +370,13 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gboolean state = FALSE;
 	gint widget_temp = -1;
 	extern GdkColor black;
-	extern volatile gboolean leaving;
+	extern gconstpointer *global_data;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
 	 * state, FALSE otherwise...
 	 */
-	if ((!widget) || (leaving))
+	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");

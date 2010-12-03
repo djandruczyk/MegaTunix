@@ -86,8 +86,6 @@ extern GdkColor black;
 extern GdkColor white;
 gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
-volatile gboolean leaving = FALSE;
-volatile gboolean might_be_leaving = FALSE;
 
 
 /*!
@@ -121,21 +119,21 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GCond *io_dispatch_cond;
 	extern GCond *statuscounts_cond;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
 
 	if ((!args->be_quiet) && (DATA_GET(global_data,"interrogated")))
 	{
-		might_be_leaving = TRUE;
+		DATA_SET(global_data,"might_be_leaving",GINT_TO_POINTER(TRUE));
 		if(!prompt_r_u_sure())
 		{
-			might_be_leaving = FALSE;
+			DATA_SET(global_data,"might_be_leaving",GINT_TO_POINTER(FALSE));
 			return TRUE;
 		}
 		prompt_to_save();
 	}
 
-	leaving = TRUE;
+	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
 	/* Stop timeout functions */
 
 	plugins_shutdown();
@@ -1849,10 +1847,9 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	gint mult = 0;
 	
 	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	canID = firmware->canID;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return;
 	if (!((DATA_GET(global_data,"connected")) || 
 				(DATA_GET(global_data,"offline"))))
@@ -2022,14 +2019,14 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	gdk_threads_enter();
 	for (page=0;page<firmware->total_pages;page++)
 	{
-		if ((leaving) || (!firmware))
+		if ((DATA_GET(global_data,"leaving")) || (!firmware))
 			return;
 		if (!firmware->page_params[page]->dl_by_default)
 			continue;
 		thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<big><b>Updating Controls on Page %i</b></big>"),page));
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
-			if ((leaving) || (!firmware))
+			if ((DATA_GET(global_data,"leaving")) || (!firmware))
 				return;
 			if (ve_widgets[page][offset] != NULL)
 				g_list_foreach(ve_widgets[page][offset],
@@ -2055,8 +2052,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
  */
 G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 {
-	extern volatile gboolean leaving;
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
 	g_list_foreach(get_list((gchar *)data),update_widget,NULL);
@@ -2074,12 +2070,11 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	gint page = -1;
 	gint table_num = -1;
 	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 	gint base = 0;
 	gint length = 0;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 	if (page > firmware->total_pages)
 	       return FALSE;
@@ -2092,7 +2087,7 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	page =  firmware->table_params[table_num]->z_page;
 	for (offset=base;offset<base+length;offset++)
 	{
-		if ((leaving) || (!firmware))
+		if ((DATA_GET(global_data,"leaving")) || (!firmware))
 			return FALSE;
 		if (ve_widgets[page][offset] != NULL)
 			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
@@ -2165,10 +2160,9 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	GdkColor color;
 	extern Firmware_Details *firmware;
 	extern gint *algorithm;
-	extern volatile gboolean leaving;
 	extern GHashTable *sources_hash;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return;
 
 	upd_count++;
@@ -2176,7 +2170,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	{
 		while (gtk_events_pending())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				return;
 			}

@@ -68,10 +68,9 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
 	extern gint preferred_delimiter;
-	extern volatile gboolean leaving;
 
 	if ((!DATA_GET(global_data,"tabs_loaded")) || 
-			(leaving))
+			(DATA_GET(global_data,"leaving")))
 		return;
 	if (!((DATA_GET(global_data,"connected")) && 
 				(DATA_GET(global_data,"interrogated"))))

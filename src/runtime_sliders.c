@@ -47,7 +47,6 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void load_sliders_pf(void)
 {
 	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
@@ -62,7 +61,7 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	}
 
 	if ((!DATA_GET(global_data,"tabs_loaded")) || 
-			(leaving))
+			(DATA_GET(global_data,"leaving")))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, tabs not loaded or leaving, returning!\n\n"));
 		return;
@@ -191,7 +190,6 @@ G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabI
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
 	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;

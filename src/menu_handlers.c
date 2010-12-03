@@ -63,11 +63,9 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	guint i = 0;
 	GladeXML *xml = NULL;
 	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
-
 
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!xml) || (leaving))
+	if ((!xml) || (DATA_GET(global_data,"leaving")))
 		return;
 	gdk_threads_enter();
 	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
@@ -226,12 +224,11 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -341,12 +338,11 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -435,11 +431,10 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	GtkWidget *item2 = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -499,12 +494,11 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -680,11 +674,10 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -772,14 +765,13 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
 	extern GList ***ve_widgets;
 	extern Firmware_Details *firmware;
 	GList *spark_tables = NULL;
 	gint t;
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))

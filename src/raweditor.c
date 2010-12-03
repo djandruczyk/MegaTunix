@@ -52,7 +52,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
 	extern GdkColor white;
 	extern Firmware_Details *firmware;
 	extern GList *** ve_widgets;
-	extern volatile gboolean leaving;
+	extern gconstpointer *global_data;
 
 	top = lookup_widget("raweditor_top_vbox1");
 	if (!GTK_IS_WIDGET(top))
@@ -146,7 +146,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
 		}
 		while (gtk_events_pending ())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				return;
 			}

@@ -60,12 +60,12 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
 	static gboolean pf_red = FALSE;
-	extern volatile gboolean leaving;
 	extern GAsyncQueue *pf_dispatch_queue;
         extern GAsyncQueue *gui_dispatch_queue;
 	extern GCond *statuscounts_cond;
+	extern gconstpointer *global_data;
 	
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(statuscounts_cond);
 		return TRUE;

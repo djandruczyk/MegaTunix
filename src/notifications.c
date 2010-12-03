@@ -175,11 +175,10 @@ G_MODULE_EXPORT void  update_logbar(
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
-	extern volatile gboolean leaving;
 
 	widget = (GtkWidget *)lookup_widget(view_name);
 
-	if ((leaving) || (!widget))
+	if ((DATA_GET(global_data,"leaving")) || (!widget))
 		return;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -378,11 +377,10 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;
-	extern volatile gboolean leaving;
 	static GtkWidget *info_label = NULL;
 	extern Firmware_Details *firmware;
 
-	if ((!lookup_widget("main_window")) || (leaving))
+	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");

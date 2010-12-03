@@ -57,10 +57,9 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern volatile gboolean leaving;
 	extern Firmware_Details *firmware;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return;
 	if (!(DATA_GET(global_data,"interrogated")))
 		return;
@@ -71,7 +70,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	}
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return;
 
 	if (!DATA_GET(global_data,"rtvars_loaded"))

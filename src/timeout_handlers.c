@@ -112,7 +112,6 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  */
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
-	extern volatile gboolean leaving;
 	extern GCond *rtv_thread_cond;
 	extern gconstpointer *global_data;
 	switch (type)
@@ -127,7 +126,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 			else
 				update_logbar("comms_view","warning",_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE,FALSE);
 
-			if (!leaving)
+			if (!DATA_GET(global_data,"leaving"))
 				reset_runtime_status();
 			break;
 
