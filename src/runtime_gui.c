@@ -279,8 +279,10 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	gint i = 0;
 	GHashTable **ve3d_sliders;
 	GHashTable *hash;
-	extern Firmware_Details *firmware;
 	TabIdent active_page;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
 
 	if (DATA_GET(global_data,"leaving"))

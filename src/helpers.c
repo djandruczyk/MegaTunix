@@ -66,7 +66,9 @@ G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 
 G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 {
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	if (!firmware)
 		return;
 
@@ -79,11 +81,13 @@ G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 
 G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 {
-	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint i = 0;
 	gint last_page = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	last_page = (gint)DATA_GET(global_data,"last_page");
 
@@ -132,12 +136,14 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 
 G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 {
-	extern Firmware_Details *firmware;
 	extern volatile gboolean outstanding_data;
 	gint last_page;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint i = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	last_page = (gint)DATA_GET(global_data,"last_page");
 	switch (type)
@@ -306,7 +312,9 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 G_MODULE_EXPORT void set_store_black_pf(void)
 {
 	gint j = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
@@ -349,6 +357,8 @@ G_MODULE_EXPORT void ready_msg_pf(void)
 
 G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 {
+	static guint16 lastcount = 0;
+	static gboolean just_starting = TRUE;
 	Io_Message *message  = NULL;
 	OutputData *output  = NULL;
 	gint count = 0;
@@ -356,14 +366,14 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	gint page = -1;
 	gint canID = -1;
 	guint16 curcount = 0;
-	static guint16 lastcount = 0;
-	extern Firmware_Details *firmware;
+	guint8 *ptr8 = NULL;
+	guint16 *ptr16 = NULL;
 	extern gint ms_ve_goodread_count;
 	extern gint ms_reset_count;
 	extern gint ms_goodread_count;
-	guint8 *ptr8 = NULL;
-	guint16 *ptr16 = NULL;
-	static gboolean just_starting = TRUE;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
@@ -549,7 +559,9 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 G_MODULE_EXPORT void post_burn_pf(void)
 {
 	gint i = 0;
-	extern Firmware_Details * firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
@@ -569,8 +581,11 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
-	extern Firmware_Details * firmware;
-	gint page = (GINT)DATA_GET(output->data,"page");
+	Firmware_Details *firmware = NULL;
+	gint page = 0;
+
+	firmware = DATA_GET(global_data,"firmware");
+	page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */
 	if (!firmware->page_params[page]->dl_by_default)

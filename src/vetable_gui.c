@@ -52,7 +52,6 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	gint z_page = -1;
 	gint x_bins = -1;
 	gint y_bins = -1;
-	extern Firmware_Details *firmware;
 	GtkWidget *scaler = NULL;
 	GtkWidget *math_combo = NULL;
 	GtkWidget *tmpwidget = NULL;
@@ -66,6 +65,9 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	gfloat factor = 0.0;
 	gfloat retval = 0.0;
 	ScaleOp scaleop = ADD;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	tmpbuf = (gchar *) OBJ_GET(widget,"data");
 	vector = g_strsplit(tmpbuf,",",-1);
@@ -157,7 +159,6 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
  */
 G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 {
-	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	DataSize z_size = MTX_U08;
 	gint z_base = -1;
@@ -187,6 +188,9 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	GdkColor color;
 	extern GdkColor black;
 	gboolean use_color = FALSE;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	if (!OBJ_GET(widget,"applicable_tables"))
@@ -367,16 +371,19 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gint active_table;
 	static void **y_eval;
 	static void **x_eval;
-	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
 	extern gboolean *tracking_focus;
 	extern GHashTable *sources_hash;
 	gchar *key = NULL;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	active_table = (gint)DATA_GET(global_data,"active_table");
 

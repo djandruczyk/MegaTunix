@@ -26,6 +26,7 @@
 #include <widgetmgmt.h>
 
 
+extern gconstpointer *global_data;
 
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
@@ -50,7 +51,9 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 	gint type = 0;
 	gint i = 0;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
 	{
@@ -228,7 +231,9 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 	gint type = 0;
 	gint i = 0;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
 	{

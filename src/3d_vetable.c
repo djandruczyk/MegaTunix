@@ -244,8 +244,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gint i = 0;
 	gint j = 0;
 	Ve_View_3D *ve_view;
-	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
+	Firmware_Details *firmware = NULL;
 	gint table_num =  -1;
 
 	if (!gl_ability)
@@ -253,6 +253,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		dbg_func(CRITICAL,g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"));
 		return FALSE;
 	}
+	firmware = DATA_GET(global_data,"firmware");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
@@ -961,11 +962,12 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 {
 	gint i=0;
 	gint j=0;
-	extern Firmware_Details *firmware;
 	gfloat min = 0.0;
 	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
 	/*printf("CALC Scaling\n");*/
 
@@ -1028,10 +1030,12 @@ VEtable grid
  */
 G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gint x = 0;
 	gint y = 0;
 	Quad * quad = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
@@ -1117,11 +1121,12 @@ user.
  */
 G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gfloat bottom = 0.0;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 	/*printf("draw edit indicator\n");*/
 	
@@ -1230,9 +1235,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	gfloat tmpf6 = 0.0;
 	gfloat bottom = 0.0;
 	gboolean out_of_bounds = FALSE;
-	extern Firmware_Details *firmware;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 	/*printf("draw runtime indicator\n");*/
@@ -1620,7 +1627,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
@@ -2060,14 +2069,17 @@ forces
  */
 G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
-	extern Firmware_Details *firmware;
-	gint total_tables = firmware->total_tables;
+	gint total_tables = 0;
 	gboolean need_update = FALSE;
 	gint i = 0;
 	gchar * string = NULL;
 	GtkWidget * tmpwidget = NULL;
 	Ve_View_3D *ve_view = NULL;
 	gint count = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	total_tables = firmware->total_tables;
 	gint table_list[total_tables];
 
 	for (i=0;i<total_tables;i++)
@@ -2151,9 +2163,11 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	gfloat right = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
-	extern Firmware_Details *firmware;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/*printf("draw active vertexes marker \n");*/
 	glPointSize(MIN(w,h)/100.0);
@@ -2330,13 +2344,15 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	gfloat tmp = 0.0;
 	extern gint *algorithm;
 	extern GHashTable *sources_hash;
-	extern Firmware_Details *firmware;
 	GHashTable *hash = NULL;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
 	Cur_Vals *cur_val = NULL;
 	cur_val = g_new0(Cur_Vals, 1);
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* X */
 	/* Edit value */
@@ -2600,7 +2616,6 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 
 G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gint x = 0;
 	gint y = 0;
 	gint z_mult = 0;
@@ -2608,8 +2623,12 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint z_base = 0;
 	gint tmpi = 0;
 	gfloat scaler = 0.0;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	Quad * quad = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": generate_quad_mesh() \n"));
 

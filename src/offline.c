@@ -58,8 +58,10 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
-	extern Firmware_Details *firmware;
         extern GAsyncQueue *io_repair_queue;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	/* Cause Serial Searcher thread to abort.... */
@@ -431,7 +433,9 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;

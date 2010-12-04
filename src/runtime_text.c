@@ -57,7 +57,9 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
 		return;

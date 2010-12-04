@@ -48,10 +48,12 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
 	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	if (!DATA_GET(global_data,"interrogated"))
@@ -125,7 +127,6 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
  */
 G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 {
-	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	gchar * section = NULL;
 	gint i = 0;
@@ -133,6 +134,10 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 	gint canID = 0;
 	DataSize size = MTX_U08;	 /* <<<<< BAD BAD BAD >>>>> */
 	GString *string = NULL;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -176,7 +181,6 @@ be rewritten..
  */
 G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 {
-	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	/*
 	GArray *pfuncs = NULL;
@@ -184,7 +188,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	*/
 	gchar * section = NULL;
 	gchar * msgbuf = NULL;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	DataSize size = MTX_U08;
 	gint page = 0;
 	gint offset = 0;
@@ -198,6 +202,10 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	gint num_keys = 0;
 	gint dload_val = 0;
 	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

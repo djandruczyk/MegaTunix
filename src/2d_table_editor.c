@@ -35,7 +35,6 @@
 #include <mtxmatheval.h>
 
 extern gconstpointer *global_data;
-extern Firmware_Details *firmware;
 extern GdkColor green;
 extern GdkColor red;
 extern GdkColor blue;
@@ -87,6 +86,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	guint32 id = 0;
 	gint rows = 0;
 	gint table_num = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
@@ -423,6 +425,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	gint rows = 0;
 	gboolean embedded = FALSE;
 	void *evaluator = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (table_num >= firmware->total_te_tables)
 	{

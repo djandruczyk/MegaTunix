@@ -378,7 +378,9 @@ G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;
 	static GtkWidget *info_label = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
 		return;

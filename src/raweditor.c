@@ -50,9 +50,11 @@ G_MODULE_EXPORT void finish_raweditor(void)
 	gint cols = 8;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
-	extern Firmware_Details *firmware;
 	extern GList *** ve_widgets;
 	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	top = lookup_widget("raweditor_top_vbox1");
 	if (!GTK_IS_WIDGET(top))

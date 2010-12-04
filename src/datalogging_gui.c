@@ -264,7 +264,9 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	GString *output;
 	gconstpointer * object = NULL;
 	gchar * string = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
@@ -460,9 +462,11 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	t = g_malloc(sizeof(time_t));
 	time(t);
@@ -532,9 +536,11 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	t = g_malloc(sizeof(time_t));
 	time(t);

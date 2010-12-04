@@ -246,13 +246,15 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
  */
 G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
 {
-	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
 	guint8 *data = NULL;
 	guint16 u16 = 0;
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
 
@@ -361,9 +363,13 @@ G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize si
 
 G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 {
-	extern Firmware_Details *firmware;
-	guint8 ** ecu_data = firmware->ecu_data;
-	guint8 ** ecu_data_last = firmware->ecu_data_last;
+	guint8 **ecu_data = NULL;
+	guint8 **ecu_data_last = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	ecu_data = firmware->ecu_data;
+	ecu_data_last = firmware->ecu_data_last;
 
 	/*printf("handle page change!, page %i, last %i\n",page,last);
 	 */
@@ -430,8 +436,10 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 
 G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 {
-	extern Firmware_Details * firmware;
 	OutputData *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
 		return;
@@ -460,8 +468,10 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
  */
 G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
 {
-	extern Firmware_Details *firmware;
 	OutputData *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
 	output = initialize_outputdata();
@@ -497,9 +507,11 @@ G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_by
  */
 G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
 {
-	extern Firmware_Details *firmware;
-	OutputData *output = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	OutputData *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	g_static_mutex_lock(&mutex);
 
 	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));

@@ -214,7 +214,9 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 	GTimeVal cur;
 	GSocketAddress *sockaddr = NULL;
 	static MtxSocketClient *last_bin_client = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
@@ -410,7 +412,9 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	State next_state;
 	SubState substate;
 	GError *error = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	state = WAITING_FOR_CMD;
 	next_state = WAITING_FOR_CMD;
@@ -849,8 +853,12 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 	gint cmd = 0;
 	gboolean retval = TRUE;
 	gboolean send_rescode = TRUE;
-	extern Firmware_Details *firmware;
-	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
+	gchar *tmpbuf = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
 	if (!tmpbuf)
 		return TRUE;
 	vector = g_strsplit(tmpbuf,",",2);
@@ -1124,7 +1132,9 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gchar ** vars = NULL;
 	gchar * tmpbuf = NULL;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset
 	 * If firmware in use doesn't have canBUS capability
@@ -1163,7 +1173,9 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 	GString * output = NULL;
 	gint i = 0;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page
 	 * If firmware in use doesn't have canBUS capability
@@ -1204,7 +1216,9 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gint offset = 0;
 	gint data = 0;
 	gchar ** vars = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset, data
 	 * If firmware in use doesn't have canBUS capability
@@ -1232,7 +1246,9 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!firmware)
 		return FALSE;
@@ -1516,7 +1532,9 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint len = 0;
 	guint8 *buffer = NULL;
 	extern GAsyncQueue *slave_msg_queue;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
@@ -2154,6 +2172,7 @@ G_MODULE_EXPORT gboolean setup_socket(gint port)
        **/
 G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 {
+	static MtxSocketClient *last_bin_client = NULL;
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
 	fd_set rd;
@@ -2168,9 +2187,10 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 	MtxSocket *socket = (MtxSocket *)data;
 	MtxSocketClient * cli_data = NULL;
 	GTimeVal cur;
-	static MtxSocketClient *last_bin_client = NULL;
 	gint fd = -1;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
@@ -2367,7 +2387,9 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	State state;
 	State next_state;
 	SubState substate;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	state = WAITING_FOR_CMD;
 	next_state = WAITING_FOR_CMD;
@@ -2801,8 +2823,11 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 	gint cmd = 0;
 	gboolean retval = TRUE;
 	gboolean send_rescode = TRUE;
-	extern Firmware_Details *firmware;
-	gchar *tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
+	gchar *tmpbuf = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
 	if (!tmpbuf)
 		return TRUE;
 	vector = g_strsplit(tmpbuf,",",2);
@@ -3077,7 +3102,9 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gchar ** vars = NULL;
 	gchar * tmpbuf = NULL;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset
 	 * If firmware in use doesn't have canBUS capability
@@ -3117,7 +3144,9 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 	GString * output = NULL;
 	gint i = 0;
 	gint len = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page
 	 * If firmware in use doesn't have canBUS capability
@@ -3159,7 +3188,9 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gint offset = 0;
 	gint data = 0;
 	gchar ** vars = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset, data
 	 * If firmware in use doesn't have canBUS capability
@@ -3187,7 +3218,9 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!firmware)
 		return FALSE;
@@ -3514,7 +3547,9 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint len = 0;
 	guint8 *buffer = NULL;
 	extern GAsyncQueue *slave_msg_queue;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */

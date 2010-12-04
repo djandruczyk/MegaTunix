@@ -199,7 +199,10 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 G_MODULE_EXPORT void signal_read_rtvars(void)
 {
 	OutputData *output = NULL;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (firmware->capabilities & MS2)
 	{

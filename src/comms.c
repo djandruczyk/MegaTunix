@@ -206,9 +206,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
-	extern Firmware_Details *firmware;
-	guint8 **ecu_data = firmware->ecu_data;
-	guint8 **ecu_data_last = firmware->ecu_data_last;
+	guint8 **ecu_data = NULL;
+	guint8 **ecu_data_last = NULL;
 	gint i = 0;
 	gint canID = 0;
 	gint page = 0;
@@ -217,6 +216,11 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	extern gboolean paused_handlers;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	ecu_data = firmware->ecu_data;
+	ecu_data_last = firmware->ecu_data_last;
 
 	if (!output)
 		goto red_or_black;
@@ -302,8 +306,10 @@ red_or_black:
  */
 G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 {
-	extern Firmware_Details * firmware;
 	OutputData *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
 		return;
@@ -344,8 +350,10 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
 	extern Serial_Params *serial_params;
-	extern Firmware_Details *firmware;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&mutex);
 	g_static_mutex_lock(&serio_mutex);

@@ -46,13 +46,15 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void load_sliders_pf(void)
 {
-	extern Firmware_Details *firmware;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
@@ -189,12 +191,14 @@ G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabI
  */
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
-	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
 	GHashTable **ve3d_sliders;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
 			(!(DATA_GET(global_data,"tabs_loaded"))))

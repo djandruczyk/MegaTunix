@@ -43,7 +43,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void load_status_pf(void)
 {
-	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -57,6 +56,9 @@ G_MODULE_EXPORT void load_status_pf(void)
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"interrogated")))
 		return;

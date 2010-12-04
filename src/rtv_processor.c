@@ -38,7 +38,6 @@
 
 
 extern GStaticMutex rtv_mutex;
-extern Firmware_Details *firmware;
 extern gconstpointer *global_data;
 
 /*!
@@ -72,6 +71,9 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 	gint hours = 0;
 	gint minutes = 0;
 	gint seconds = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!incoming)
 		printf(_("ERROR, INPUT IS NULL!!!!\n"));
@@ -228,6 +230,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	symbols = (gchar **)DATA_GET(object,"expr_symbols");
@@ -403,6 +408,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");

@@ -64,7 +64,10 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	gchar * filename = NULL;
 	time_t tim;
 	FILE *f = NULL;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* OK Button pressed,  we need to validate all input and calculate
 	 * and build the tables and send to the ECU

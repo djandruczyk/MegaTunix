@@ -62,7 +62,9 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	GtkWidget *item = NULL;
 	guint i = 0;
 	GladeXML *xml = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!xml) || (DATA_GET(global_data,"leaving")))
@@ -225,7 +227,9 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))

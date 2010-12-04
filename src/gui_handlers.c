@@ -101,7 +101,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtv_mutex;
 	extern GAsyncQueue *io_repair_queue;
-	extern Firmware_Details *firmware;
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
@@ -112,6 +111,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	extern GCond *gui_dispatch_cond;
 	extern GCond *io_dispatch_cond;
 	extern GCond *statuscounts_cond;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
@@ -409,7 +411,9 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	extern gint dbg_lvl;
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 		return TRUE;
@@ -663,7 +667,9 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint raw_lower = 0;
 	gint raw_upper = 0;
 	GdkColor color;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 	{
@@ -932,7 +938,9 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
@@ -1155,9 +1163,11 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
-	extern Firmware_Details *firmware;
 	extern GHashTable **interdep_vars;
 	extern GHashTable *sources_hash;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 		return TRUE;
@@ -1485,7 +1495,9 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable **interdep_vars;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
 	{
@@ -1834,8 +1846,9 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	guint tmpi = 0;
 	guint8 addon = 0;
 	gint mult = 0;
-	
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 	if (DATA_GET(global_data,"leaving"))
@@ -2058,10 +2071,12 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	gint offset = -1;
 	gint page = -1;
 	gint table_num = -1;
-	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	gint base = 0;
 	gint length = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
@@ -2147,9 +2162,11 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	GdkColor color;
-	extern Firmware_Details *firmware;
 	extern gint *algorithm;
 	extern GHashTable *sources_hash;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
 		return;
@@ -2724,9 +2741,11 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean send = FALSE;
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
-	extern Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern gboolean *tracking_focus;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	canID = (GINT) OBJ_GET(widget,"canID");
@@ -3000,7 +3019,9 @@ G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, g
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* Select all chars on click */
 	/*
@@ -3646,7 +3667,9 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
 		thread_refresh_widget(g_list_nth_data(ve_widgets[page][offset],i));
@@ -3658,7 +3681,9 @@ G_MODULE_EXPORT void refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
 		update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
@@ -3757,7 +3782,6 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 {
-	extern Firmware_Details *firmware;
 	gint i = 0;
 	gint x_count = 0;
 	gint y_count = 0;
@@ -3768,6 +3792,9 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	gint tmpi = 0;
 	gint max = 0;
 	gint min = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* Limit check */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
@@ -3822,7 +3849,9 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 	gint col = -1;
 	gint index = -1;
 	gint count = -1;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	widget_name = OBJ_GET(widget,"fullname");

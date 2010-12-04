@@ -67,9 +67,11 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
@@ -119,9 +121,11 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
         time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -212,7 +216,9 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -286,10 +292,13 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 	gint z_mult = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
-	extern Firmware_Details *firmware;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	GIOStatus status;
 	GString *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 
 	/* For Page 0.... */
@@ -406,10 +415,13 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	gint z_mult = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
-	extern Firmware_Details *firmware;
 	GIOStatus status;
 	GString *output = NULL;
-	gint canID = firmware->canID;
+	gint canID = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 
 	/* For Page 0.... */
@@ -760,7 +772,9 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gchar ** str_array = NULL;
 	gint page = -1;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!string)
 	{
@@ -799,7 +813,9 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 {
 	gchar **string = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* Search for out magic semicolon, if missing AND multi-table/page
 	 * firmware, ABORT */
@@ -1111,9 +1127,8 @@ G_MODULE_EXPORT void dealloc_vex_struct(Vex_Import *vex)
 G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 {
 	gint i = 0;
-	extern Firmware_Details *firmware;
-	guint8 **ecu_data = firmware->ecu_data;
-	guint8 **ecu_data_backup = firmware->ecu_data_backup;
+	guint8 **ecu_data = NULL;
+	guint8 **ecu_data_backup = NULL;
 	void *data = NULL;
 	gchar * msgbuf = NULL;
 	guchar *ptr = NULL;
@@ -1126,6 +1141,11 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	DataSize size = 0;
 	gint mult = 0;
 	gint table = -1;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	ecu_data = firmware->ecu_data;
+	ecu_data_backup = firmware->ecu_data_backup;
 
 	/* Since we assume the page is where the table is this can cause
 	 * major problems with some firmwares that use two tables inside
@@ -1330,9 +1350,12 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 	GModule *module = NULL;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
+	guint8 **ecu_data_backup = NULL;
 	/* Called to back out a load of a VEtable from VEX import */
-	extern Firmware_Details *firmware;
-	guint8 **ecu_data_backup = firmware->ecu_data_backup;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	ecu_data_backup = firmware->ecu_data_backup;
 
 	for (page=0;page<firmware->total_pages;page++)
 	{

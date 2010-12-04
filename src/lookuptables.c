@@ -484,7 +484,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 {
 	static gboolean ltc_created = FALSE;
 	static GtkWidget * lookuptables_config_window = NULL;
-	extern Firmware_Details *firmware;
 	GtkListStore *store = NULL;
 	GtkTreeStore *combostore = NULL;
 	GtkTreeIter iter;
@@ -504,6 +503,9 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** tmpvector = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((ltc_created) && (ltc_visible))
 		return TRUE;
@@ -648,9 +650,11 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	gchar * new_name = NULL;
 	gchar ** vector = NULL;
 	gboolean restart_tickler = FALSE;
-	extern GAsyncQueue *io_data_queue;
-	extern Firmware_Details *firmware;
 	gint count = 0;
+	extern GAsyncQueue *io_data_queue;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);

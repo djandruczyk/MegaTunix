@@ -46,7 +46,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
-	extern Firmware_Details * firmware;
 	gint i = 0;
 	gint cur = 0;
 	ConfigFile *cfgfile = NULL;
@@ -65,6 +64,9 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *item = NULL;
 	extern GdkColor red;
 	gboolean * hidden_list = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
@@ -483,7 +485,9 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
 	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	if (GTK_IS_CONTAINER(widget))

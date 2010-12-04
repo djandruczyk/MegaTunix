@@ -32,6 +32,7 @@
 
 extern GdkColor red;
 extern GdkColor black;
+extern gconstpointer *global_data;
 
 
 /*!
@@ -45,7 +46,9 @@ G_MODULE_EXPORT void req_fuel_change(GtkWidget *widget)
 	gfloat tmp1,tmp2;
 	Reqd_Fuel *reqd_fuel = NULL;
 	gfloat limit = 0.0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"reqd_fuel"))
 		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
@@ -114,7 +117,9 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 	gint table_num = -1;
 	gint digits = 1;
 	Reqd_Fuel *reqd_fuel = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"table_num"))
 		table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -376,11 +381,13 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	Reqd_Fuel * reqd_fuel = NULL;
-	extern Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	GtkWidget *tmpwidget = NULL;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 
@@ -491,7 +498,9 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	GtkWidget *widget = NULL;
 	extern gboolean paused_handlers;
 	extern GHashTable ** interdep_vars;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 	/* Dualtable required Fuel calc

@@ -1389,9 +1389,13 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	GtkWidget *widget = NULL;
 	gfloat min = 0.0;
 	gfloat val = 0.0;
-	extern Firmware_Details *firmware;
-	extern Serial_Params *serial_params;
 	GtkAdjustment *adj = NULL;
+	extern Serial_Params *serial_params;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
 	gdk_threads_enter();
 	widget = lookup_widget("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))

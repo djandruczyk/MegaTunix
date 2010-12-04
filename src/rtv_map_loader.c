@@ -49,7 +49,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
 	GtkWidget *dialog = NULL;
 	ConfigFile *cfgfile = NULL;
-	extern Firmware_Details *firmware;
 	gchar * filename = NULL;
 	gchar *tmpbuf = NULL;
 	gint derived_total = 0;
@@ -73,6 +72,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	void * eval = NULL;
 	gchar * expr = NULL;
 	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
 			(DATA_GET(global_data,"connected")))
@@ -414,7 +416,10 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	gchar * name = NULL;
 	gint tmpi;
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
@@ -581,7 +586,10 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	gchar * name = NULL;
 	gint tmpi;
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{

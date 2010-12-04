@@ -585,7 +585,9 @@ G_MODULE_EXPORT void mem_alloc(void)
 {
 	gint i=0;
 	gint j=0;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!firmware->rt_data)
 		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
@@ -658,9 +660,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList *defaults = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern Rtv_Map *rtv_map;
-	extern Firmware_Details *firmware;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&serio_mutex);
 
@@ -942,8 +946,10 @@ sockets
 */
 G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {
-	extern Firmware_Details *firmware;
 	gint i = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	/*printf("dealloc_client_data\n");*/
 	if (client)
 	{
