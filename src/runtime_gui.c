@@ -364,10 +364,11 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
 	TabIdent active_page;
+	gint * algorithm;
 	extern Firmware_Details *firmware;
 	extern GHashTable *sources_hash;
-	extern gint * algorithm;
 
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	active_page = (TabIdent)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
 

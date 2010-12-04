@@ -42,6 +42,7 @@
  */
 G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint return_value = 0;
 	gint tmpi = 0;
 	gchar * conv_expr = NULL;
@@ -61,10 +62,10 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar *tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
+	gint *algorithm = NULL;
 	extern GHashTable *sources_hash;
-	extern gint *algorithm;
-
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern gconstpointer *global_data;
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 
@@ -211,6 +212,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
  */
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
@@ -230,9 +232,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
+	gint *algorithm = NULL;
 	extern GHashTable *sources_hash;
-	extern gint *algorithm;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern gconstpointer *global_data;
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 

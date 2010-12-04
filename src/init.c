@@ -62,7 +62,6 @@ GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
 GtkWidget **te_windows = NULL;
 extern gconstpointer *global_data;
-gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
 
@@ -585,6 +584,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 {
 	gint i=0;
 	gint j=0;
+	gint *algorithm = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -614,7 +614,10 @@ G_MODULE_EXPORT void mem_alloc(void)
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
 	if (!algorithm)
+	{
 		algorithm = g_new0(gint, firmware->total_tables);
+		DATA_SET_FULL(global_data,"algorithm",algorithm,g_free);
+	}
 	if (!tracking_focus)
 		tracking_focus = g_new0(gboolean, firmware->total_tables);
 

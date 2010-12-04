@@ -332,15 +332,18 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 {
 	static gfloat *prev_x_source;
 	static gfloat *prev_y_source;
+	static GtkWidget ***last_widgets = NULL;
+	static gint **last = NULL;
+	static GdkColor ** old_colors = NULL;
+	static GdkColor color = { 0, 0,16384,16384};
+	static void **y_eval;
+	static void **x_eval;
+	static gfloat last_z_weight[4] = {0,0,0,0};
 	gfloat x_source = 0.0;
 	gfloat y_source = 0.0;
 	gfloat x_raw = 0.0;
 	gfloat y_raw = 0.0;
 	GtkWidget *widget = NULL;
-	static GtkWidget ***last_widgets = NULL;
-	static gint **last = NULL;
-	static GdkColor ** old_colors = NULL;
-	static GdkColor color = { 0, 0,16384,16384};
 	GtkRcStyle *style = NULL;
 #ifndef __WIN32__
 	GdkGC *gc = NULL;
@@ -358,7 +361,6 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gfloat right_w = 0.0;
 	gfloat top_w = 0.0;
 	gfloat bottom_w = 0.0;
-	static gfloat last_z_weight[4] = {0,0,0,0};
 	gfloat z_weight[4] = {0,0,0,0};
 	gfloat left = 0.0;
 	gfloat right = 0.0;
@@ -369,21 +371,20 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gboolean focus = FALSE;
 	GList *list = NULL;
 	gint active_table;
-	static void **y_eval;
-	static void **x_eval;
-	extern GList ***ve_widgets;
-	extern gint *algorithm;
-	extern gboolean *tracking_focus;
-	extern GHashTable *sources_hash;
 	gchar *key = NULL;
 	gint canID = 0;
+	gint *algorithm = NULL;
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
 	Firmware_Details *firmware = NULL;
+	extern GList ***ve_widgets;
+	extern gboolean *tracking_focus;
+	extern GHashTable *sources_hash;
 
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	active_table = (gint)DATA_GET(global_data,"active_table");
 

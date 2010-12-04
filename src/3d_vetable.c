@@ -2342,7 +2342,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	gfloat y_val = 0.0;
 	gfloat z_val = 0.0;
 	gfloat tmp = 0.0;
-	extern gint *algorithm;
+	gint *algorithm = NULL;
 	extern GHashTable *sources_hash;
 	GHashTable *hash = NULL;
 	gchar *key = NULL;
@@ -2353,6 +2353,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	/* X */
 	/* Edit value */

@@ -2166,10 +2166,11 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	GdkColor color;
-	extern gint *algorithm;
+	gint *algorithm = NULL;
 	extern GHashTable *sources_hash;
 	Firmware_Details *firmware = NULL;
 
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
@@ -3261,9 +3262,12 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 	gint algo = 0; 
 	gint tmpi = 0;
 	gint i = 0;
-	extern gint *algorithm;
+	gint *algorithm = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	extern gconstpointer *global_data;
+
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	if (GTK_IS_OBJECT(widget))
 	{
