@@ -215,7 +215,6 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint length = 0;
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
-	extern gboolean paused_handlers;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -242,7 +241,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	if (output->queue_update)
 	{
 		/*printf("queue update!\n");*/
-		paused_handlers = TRUE;
+		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			/* This at least only recalcs the limits on one... */
@@ -265,8 +264,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			refresh_widgets_at_offset(page,z);
 		}
 		gdk_threads_leave();
-
-		paused_handlers = FALSE;
+		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	}
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.

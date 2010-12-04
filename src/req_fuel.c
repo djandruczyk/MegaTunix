@@ -496,7 +496,6 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	gchar * g_name = NULL;
 	gchar * name = NULL;
 	GtkWidget *widget = NULL;
-	extern gboolean paused_handlers;
 	extern GHashTable ** interdep_vars;
 	Firmware_Details *firmware = NULL;
 
@@ -661,7 +660,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		 * the offset GList, and clear the array...
 		 */
 
-		if (paused_handlers)
+		if (DATA_GET(global_data,"paused_handlers"))
 			return;
 
 		if (firmware->capabilities & MS2)

@@ -78,7 +78,6 @@ extern GdkColor green;
 extern GdkColor blue;
 extern GdkColor black;
 extern GdkColor white;
-gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
 
 
@@ -415,7 +414,8 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
+	if ((DATA_GET(global_data,"paused_handlers")) || 
+			(!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -562,7 +562,8 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
  */
 G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
-	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
+	if ((DATA_GET(global_data,"paused_handlers")) || 
+			(!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
@@ -671,7 +672,8 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
+	if ((DATA_GET(global_data,"paused_handlers")) || 
+			(!DATA_GET(global_data,"ready")))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
@@ -1169,7 +1171,8 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
+	if ((DATA_GET(global_data,"paused_handlers")) || 
+			(!DATA_GET(global_data,"ready")))
 		return TRUE;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -1499,7 +1502,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if ((paused_handlers) || (!DATA_GET(global_data,"ready")))
+	if ((DATA_GET(global_data,"paused_handlers")) || 
+			(!DATA_GET(global_data,"ready")))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
@@ -1860,7 +1864,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	gdk_threads_enter();
 	set_title(g_strdup(_("Updating Controls...")));
 	gdk_threads_leave();
-	paused_handlers = TRUE;
+	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 
 	/* DualTable Fuel Calculations
 	 * DT code no longer uses the "alternate" firing mode as each table
@@ -2038,7 +2042,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	for (i=0;i<firmware->total_tables;i++)
 		firmware->table_params[i]->color_update = FALSE;
 
-	paused_handlers = FALSE;
+	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Ready...")));
 	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
