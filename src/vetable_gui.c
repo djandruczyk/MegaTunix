@@ -369,6 +369,7 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gfloat max = 0.0;
 	gint heaviest = -1;
 	gboolean focus = FALSE;
+	gboolean *tracking_focus = NULL;
 	GList *list = NULL;
 	gint active_table;
 	gchar *key = NULL;
@@ -379,12 +380,12 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	MultiSource *multi = NULL;
 	Firmware_Details *firmware = NULL;
 	extern GList ***ve_widgets;
-	extern gboolean *tracking_focus;
 	extern GHashTable *sources_hash;
 
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
+	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
 	active_table = (gint)DATA_GET(global_data,"active_table");
 

@@ -271,11 +271,13 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
  */
 G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
+	static GtkSettings *settings = NULL;
 	void *obj_data = NULL;
 	gint handler = 0; 
 	gchar * tmpbuf = NULL;
-	extern gboolean *tracking_focus;
-	static GtkSettings *settings = NULL;
+	gboolean *tracking_focus = NULL;
+	extern gconstpointer * global_data;
+	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -2746,11 +2748,12 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean send = FALSE;
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
+	gboolean *tracking_focus = NULL;
 	extern GList ***ve_widgets;
-	extern gboolean *tracking_focus;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
 
 	canID = (GINT) OBJ_GET(widget,"canID");

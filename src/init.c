@@ -62,7 +62,6 @@ GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
 GtkWidget **te_windows = NULL;
 extern gconstpointer *global_data;
-gboolean *tracking_focus = NULL;
 
 
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
@@ -585,6 +584,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	gint i=0;
 	gint j=0;
 	gint *algorithm = NULL;
+	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -619,7 +619,10 @@ G_MODULE_EXPORT void mem_alloc(void)
 		DATA_SET_FULL(global_data,"algorithm",algorithm,g_free);
 	}
 	if (!tracking_focus)
+	{
 		tracking_focus = g_new0(gboolean, firmware->total_tables);
+		DATA_SET_FULL(global_data,"tracking_focus",tracking_focus,g_free);
+	}
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
