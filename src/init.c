@@ -678,7 +678,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	Firmware_Details *firmware = NULL;
 	Serial_Params *serial_params = NULL;
 	GHashTable **interdep_vars = NULL;
-	extern GHashTable *dynamic_widgets;
+	GHashTable *dynamic_widgets = NULL;
 	extern Rtv_Map *rtv_map;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
@@ -807,6 +807,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	//g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
 }

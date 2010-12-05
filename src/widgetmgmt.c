@@ -29,7 +29,7 @@
 #include <tabloader.h>
 #include <tag_loader.h>
 
-GHashTable *dynamic_widgets = NULL;
+extern gconstpointer *global_data;
 
 /*!
  \brief populate_master() stores a pointer to all of the glade loaded 
@@ -44,6 +44,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
 	gchar *name = NULL;
 	gchar *fullname = NULL;
 	gchar *prefix = NULL;
+	GHashTable *dynamic_widgets = NULL;
 	ConfigFile *cfg = (ConfigFile *) user_data;
 	/* Populates a big master hashtable of all dynamic widgets so that 
 	 * various functions can do a lookup for the widgets name and get it's
@@ -70,8 +71,12 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
 		g_free(prefix);
 		return;
 	}
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
+	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
+	}
 	fullname = g_strdup_printf("%s%s",prefix,name);
 	OBJ_SET(widget,"fullname",g_strdup(fullname));
 	if (!lookup_widget(fullname))
@@ -93,8 +98,14 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
  */
 G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 {
+	GHashTable *dynamic_widgets = NULL;
+
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
+	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
+	}
 	if (lookup_widget(name))
 	{
 		
@@ -115,12 +126,16 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
  */
 G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
 {
+	GHashTable *dynamic_widgets = NULL;
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
 
 G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 {
+	GHashTable *dynamic_widgets = NULL;
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		return (g_hash_table_lookup(dynamic_widgets,name));
 	else
@@ -225,7 +240,6 @@ G_MODULE_EXPORT void set_widget_labels(gchar *input)
 	gint count = 0;
 	gint i = 0;
 	GtkWidget * widget = NULL;
-	extern GHashTable *dynamic_widgets;
 
 	if (!input)
 		return;
