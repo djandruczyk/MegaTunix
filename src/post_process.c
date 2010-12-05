@@ -85,7 +85,7 @@ G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:
-				
+
 				tmpbuf = g_strdup_printf("%.3i",value);
 				break;
 			case HEX_VIEW:

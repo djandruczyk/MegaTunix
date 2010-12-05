@@ -162,7 +162,6 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	Widget_Update *w_update = NULL;
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
-	/*extern gint mem_view_style[];*/
 
 	if (!gui_dispatch_queue) /*queue not built yet... */
 	{
@@ -277,11 +276,6 @@ trypop:
 					gdk_threads_enter();
 					reset_temps(DATA_GET(global_data,"temp_units"));
 					gdk_threads_leave();
-					/*
-					   case UPD_RAW_MEMORY:
-					   update_raw_memory_view(mem_view_style[message->offset],message->offset);
-					   break;
-					 */
 			}
 
 			gdk_threads_enter();

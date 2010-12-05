@@ -43,7 +43,6 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint dbg_lvl;
@@ -306,10 +305,6 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
 		if ((GINT)DATA_GET(global_data,"lv_scroll_delay") < 40)
 			DATA_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
-		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
-		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
-		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
-		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
 		cleanup(filename);
 		return TRUE;
@@ -521,10 +516,6 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) DATA_GET(global_data,"lv_scroll_delay"));
 	write_logviewer_defaults(cfgfile);
 
-	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
-	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
-	cfg_write_int(cfgfile, "MemViewer", "page2_style", mem_view_style[2]);
-	cfg_write_int(cfgfile, "MemViewer", "page3_style", mem_view_style[3]);
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
