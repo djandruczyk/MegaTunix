@@ -69,7 +69,6 @@ static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
 extern GList ***ve_widgets;
-extern Serial_Params *serial_params;
 extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
@@ -1500,9 +1499,11 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable **interdep_vars;
+	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	if ((DATA_GET(global_data,"paused_handlers")) || 
 			(!DATA_GET(global_data,"ready")))

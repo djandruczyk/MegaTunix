@@ -47,7 +47,6 @@
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern gint dbg_lvl;
-extern Serial_Params *serial_params;
 Firmware_Details *firmware = NULL;
 
 
@@ -83,8 +82,10 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guchar *ptr = NULL;
 	gchar * message = NULL;
 	extern gconstpointer *global_data;
+	Serial_Params *serial_params = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	serial_params = DATA_GET(global_data,"serial_params");
 	if (DATA_GET(global_data,"offline"))
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
@@ -1390,10 +1391,11 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	gfloat min = 0.0;
 	gfloat val = 0.0;
 	GtkAdjustment *adj = NULL;
-	extern Serial_Params *serial_params;
-	extern gconstpointer *global_data;
+	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
+	extern gconstpointer *global_data;
 
+	serial_params = DATA_GET(global_data,"serial_params");
 	firmware = DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();

@@ -41,7 +41,6 @@ GThread * thread_dispatcher_id = NULL;
 gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
-Serial_Params *serial_params = NULL;
 GAsyncQueue *io_data_queue = NULL;
 GAsyncQueue *slave_msg_queue = NULL;
 GAsyncQueue *pf_dispatch_queue = NULL;
@@ -63,6 +62,7 @@ gconstpointer *global_data = NULL;
  */
 gint main(gint argc, gchar ** argv)
 {
+	Serial_Params *serial_params = NULL;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
 	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");
@@ -98,6 +98,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Allocate memory  */
 	serial_params = g_malloc0(sizeof(Serial_Params));
+	DATA_SET(global_data,"serial_params",serial_params);
 
 	handle_args(argc,argv);	/* handle CLI arguments */
 	open_debug();		/* Open debug log */

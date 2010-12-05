@@ -160,12 +160,14 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  */
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	GMutex * mutex = g_mutex_new();
+	GTimeVal time;
 	extern GAsyncQueue *io_data_queue;
 	extern GAsyncQueue *pf_dispatch_queue;
 	extern GCond *rtv_thread_cond;
-	GMutex * mutex = g_mutex_new();
-	GTimeVal time;
+	extern gconstpointer *global_data;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_mutex_lock(mutex);
 	while (TRUE)

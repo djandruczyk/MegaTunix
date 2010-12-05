@@ -46,7 +46,6 @@
 #endif
 
 
-Serial_Params *serial_params;
 gboolean port_open = FALSE;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
 GAsyncQueue *io_repair_queue = NULL;
@@ -63,8 +62,10 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
+	Serial_Params *serial_params = NULL;
 	gint fd = -1;
 	gchar * err_text = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_static_mutex_lock(&serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
@@ -121,6 +122,8 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 	if (serial_params->net_mode)
 		return;
 
@@ -156,6 +159,8 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
  */
 G_MODULE_EXPORT void setup_serial_params(gint baudrate)
 {
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 #ifndef __WIN32__
 	speed_t baud = B9600;
 #endif
@@ -273,6 +278,8 @@ G_MODULE_EXPORT void setup_serial_params(gint baudrate)
  */
 G_MODULE_EXPORT void close_serial(void)
 {
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 	if (!serial_params)
 		return;
 	if (serial_params->open == FALSE)
@@ -329,6 +336,8 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	guchar buf [1024];
 	gchar ** vector = NULL;
 	guint i = 0;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
 

@@ -63,11 +63,14 @@ G_MODULE_EXPORT void update_comms_status(void)
 
 G_MODULE_EXPORT gint comms_test(void)
 {
+	static gint errcount = 0;
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
 	gint len = 0;
-	static gint errcount = 0;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params = NULL;
+	extern gconstpointer *global_data;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
@@ -346,11 +349,12 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	gint num_bytes = 0;
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_static_mutex_lock(&mutex);
 	g_static_mutex_lock(&serio_mutex);

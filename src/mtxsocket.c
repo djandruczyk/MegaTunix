@@ -1405,7 +1405,8 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	GError *error = NULL;
 	GResolver *resolver = NULL;
 	GList *list = NULL;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
@@ -1450,7 +1451,8 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	GSocketAddress *sockaddr = NULL;
 	GError *error = NULL;
 	GList *list = NULL;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 
 	/*	printf ("Trying to open network port!\n");*/
@@ -1489,7 +1491,8 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 
 G_MODULE_EXPORT gboolean close_network(void)
 {
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 	/*	printf("Closing network port!\n");*/
 	g_socket_shutdown(serial_params->socket,TRUE,TRUE,NULL);
 	g_socket_close(serial_params->socket,NULL);
@@ -1503,7 +1506,8 @@ G_MODULE_EXPORT gboolean close_network(void)
 
 G_MODULE_EXPORT gboolean close_control_socket(void)
 {
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 	g_socket_close(serial_params->socket,NULL);
 
 	return TRUE;
@@ -3375,7 +3379,8 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	gint status = 0;
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -3440,7 +3445,8 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	gint status = 0;
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername;
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -3500,7 +3506,8 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 
 G_MODULE_EXPORT gboolean close_network(void)
 {
-	extern Serial_Params *serial_params;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 	/*	printf("Closing network port!\n");*/
 	close(serial_params->fd);
 	serial_params->open = FALSE;

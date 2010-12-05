@@ -172,10 +172,13 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GdkPixbuf *pixbuf = NULL;
 	gchar * tmpbuf = NULL;
 	gint temp_units;
-	extern Serial_Params *serial_params;
-	CmdLineArgs *args = DATA_GET(global_data,"args");
+	Serial_Params *serial_params = NULL;
+	CmdLineArgs *args = NULL;;
 
+	serial_params = DATA_GET(global_data,"serial_params");
+	args = DATA_GET(global_data,"args");
 	temp_units = (GINT)DATA_GET(global_data,"temp_units");
+
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */

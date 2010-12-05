@@ -60,6 +60,9 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static gint failcount = 0;
+	static gboolean reset = FALSE;
 	gboolean res = 0;
 	gint total_read = 0;
 	gint zerocount = 0;
@@ -68,10 +71,8 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	guchar buf[4096];
 	guchar *ptr = buf;
 	gboolean ignore_errors = FALSE;
-	extern Serial_Params *serial_params;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	static gint failcount = 0;
-	static gboolean reset = FALSE;
+	Serial_Params *serial_params = NULL;;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_static_mutex_lock(&mutex);
 
@@ -191,10 +192,11 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 
 G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 {
-	extern Serial_Params * serial_params;
 	gint res = 0;
 	fd_set rd;
 	struct timeval timeout;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
@@ -228,9 +230,10 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 
 G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
-	extern Serial_Params * serial_params;
 	gint res = 0;
 	GError *error = NULL;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 /*	printf("write_wrapper\n"); */
 	if (serial_params->net_mode)

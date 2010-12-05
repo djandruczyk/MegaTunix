@@ -48,7 +48,6 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
 extern gint dbg_lvl;
-extern Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
@@ -78,7 +77,10 @@ G_MODULE_EXPORT void init(void)
 	gboolean *hidden_list = NULL;
 	GdkColormap *colormap = NULL;
 	CmdLineArgs *args = NULL;
+	Serial_Params *serial_params = NULL;
 	gint i = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	colormap = gdk_colormap_get_system ();
 	args = DATA_GET(global_data,"args");
@@ -180,6 +182,9 @@ G_MODULE_EXPORT gboolean read_config(void)
 	gchar *filename = NULL;
 	gboolean *hidden_list;
 	CmdLineArgs *args = NULL;
+	Serial_Params *serial_params = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	args = DATA_GET(global_data,"args");
@@ -333,25 +338,28 @@ G_MODULE_EXPORT gboolean read_config(void)
  */
 G_MODULE_EXPORT void save_config(void)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
 	GtkWidget *main_window = NULL;
-	int x = 0;
-	int y = 0;
-	int i = 0;
-	int count = 0;
-	int tmp_width = 0;
-	int tmp_height = 0;
-	int orig_width = 0;
-	int orig_height = 0;
+	gint x = 0;
+	gint y = 0;
+	gint i = 0;
+	gint count = 0;
+	gint tmp_width = 0;
+	gint tmp_height = 0;
+	gint orig_width = 0;
+	gint orig_height = 0;
 	gint total = 0;
 	gfloat ratio = 0.0;
 	GtkWidget *dash = NULL;
 	ConfigFile *cfgfile = NULL;
 	gboolean * hidden_list;
 	GString *string = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	Serial_Params *serial_params = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_static_mutex_lock(&mutex);
 
@@ -664,11 +672,14 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	gpointer data;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
+	Firmware_Details *firmware = NULL;
+	Serial_Params *serial_params = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern Rtv_Map *rtv_map;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
-	Firmware_Details *firmware = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	firmware = DATA_GET(global_data,"firmware");
 

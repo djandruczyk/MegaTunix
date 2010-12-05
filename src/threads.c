@@ -115,18 +115,19 @@ G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
-	extern GAsyncQueue *io_data_queue;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern Serial_Params *serial_params;
-	extern GCond * io_dispatch_cond;
+	Serial_Params *serial_params = NULL;
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
+	extern GAsyncQueue *io_data_queue;
+	extern GAsyncQueue *pf_dispatch_queue;
+	extern GCond * io_dispatch_cond;
 //	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	args = DATA_GET(global_data,"args");
+	serial_params = DATA_GET(global_data,"serial_params");
 //	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)

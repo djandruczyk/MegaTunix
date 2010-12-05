@@ -28,7 +28,6 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
-extern Serial_Params *serial_params;
 extern GdkColor white;
 extern GdkColor red;
 extern GdkColor black;
@@ -41,6 +40,10 @@ extern GdkColor black;
  */
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
+	extern gconstpointer *global_data;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+
 	ms_ve_goodread_count = 0;
 	ms_goodread_count = 0;
 	ms_reset_count = 0;
@@ -56,14 +59,17 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  */
 G_MODULE_EXPORT gboolean update_errcounts(void)
 {
+	static gboolean pf_red = FALSE;
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
-	static gboolean pf_red = FALSE;
+	Serial_Params *serial_params = NULL;
 	extern GAsyncQueue *pf_dispatch_queue;
         extern GAsyncQueue *gui_dispatch_queue;
 	extern GCond *statuscounts_cond;
 	extern gconstpointer *global_data;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 	
 	if (DATA_GET(global_data,"leaving"))
 	{
