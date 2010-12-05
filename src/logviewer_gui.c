@@ -39,7 +39,6 @@ static gfloat col_val = 1.0;
 
 Logview_Data *lv_data = NULL;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
-extern Log_Info *log_info;
 extern gconstpointer *global_data;
 
 
@@ -69,7 +68,9 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
 	Rtv_Map *rtv_map = NULL;
+	Log_Info *log_info;
 
+	log_info = DATA_GET(global_data,"log_info");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
 	lv_data->darea = darea;
@@ -159,7 +160,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 		tooltip = NULL;
 
 		object = g_list_nth_data(list,i);
-		printf("obj ptr %p\n",object);
 
 		if (DATA_GET(global_data,"playback_mode"))
 			name = g_strdup(DATA_GET(object,"lview_name"));
@@ -168,8 +168,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
 			tooltip = g_strdup(DATA_GET(object,"tooltip"));
 		}
-
-		printf("name %s\n",name);
 
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
@@ -324,8 +322,11 @@ G_MODULE_EXPORT void populate_viewer(void)
 	gboolean being_viewed = FALSE;
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+	Log_Info *log_info = NULL;
+
 
 	g_static_mutex_lock(&update_mutex);
+	log_info = DATA_GET(global_data,"log_info");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Checks if hash is created, if not, makes one, allocates data
@@ -452,7 +453,9 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	guint i = 0 ;
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;;
-	extern Log_Info *log_info;
+	Log_Info *log_info;
+
+	log_info = DATA_GET(global_data,"log_info");
 
 	if (DATA_GET(global_data,"playback_mode"))
 	{
@@ -1331,7 +1334,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 	static GtkWidget * playback_controls_window = NULL;
 
 	reset_logviewer_state();
-	free_log_info();
+	free_log_info(DATA_GET(global_data,"log_info"));
 	if (mode == LV_PLAYBACK)
 	{
 		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));

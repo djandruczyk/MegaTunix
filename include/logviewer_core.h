@@ -71,7 +71,7 @@ void read_log_data(GIOChannel *, Log_Info * );
 Log_Info * initialize_log_info(void);
 void allocate_buffers(Log_Info *);
 void populate_limits(Log_Info *);
-void free_log_info(void);
+void free_log_info(Log_Info *);
 
 /* Prototypes */
 

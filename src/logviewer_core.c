@@ -31,7 +31,6 @@
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
-Log_Info *log_info = NULL;
 extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
@@ -104,7 +103,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	GIOChannel *iochannel = NULL;
 
 	reset_logviewer_state();
-	free_log_info();
+	free_log_info(DATA_GET(global_data,"log_info"));
 
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -146,12 +145,14 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
  */
 G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
+	Log_Info *log_info = NULL;
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
 		return;
 	}
 	log_info = initialize_log_info();
+	DATA_SET(global_data,"log_info",log_info);
 	read_log_header(iochannel, log_info);
 	read_log_data(iochannel, log_info);
 	populate_limits(log_info);
@@ -379,9 +380,8 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
  */
-G_MODULE_EXPORT void free_log_info(void)
+G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 {
-	extern Log_Info *log_info;
 	guint i = 0;
 	gconstpointer *object = NULL;
 	GArray *array = NULL;
@@ -404,6 +404,7 @@ G_MODULE_EXPORT void free_log_info(void)
 		g_free(log_info->delimiter);
 	g_free(log_info);
 	log_info = NULL;
+	DATA_SET(global_data,"log_info",NULL);
 
 	return;
 }
