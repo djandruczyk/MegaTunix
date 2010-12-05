@@ -68,7 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern GList ***ve_widgets;
 extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
@@ -1849,7 +1848,9 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	guint8 addon = 0;
 	gint mult = 0;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
 
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
@@ -2073,10 +2074,12 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	gint offset = -1;
 	gint page = -1;
 	gint table_num = -1;
-	extern GList ***ve_widgets;
 	gint base = 0;
 	gint length = 0;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -2745,8 +2748,10 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	gboolean *tracking_focus = NULL;
-	extern GList ***ve_widgets;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
@@ -3673,8 +3678,10 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
-	extern GList ***ve_widgets;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -3687,8 +3694,10 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 G_MODULE_EXPORT void refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
-	extern GList ***ve_widgets;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 

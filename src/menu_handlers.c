@@ -226,9 +226,10 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern GList ***ve_widgets;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
 
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -342,9 +343,9 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern Firmware_Details *firmware;
-	extern GList ***ve_widgets;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -435,7 +436,9 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	GtkWidget *item2 = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern GList ***ve_widgets;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
@@ -498,9 +501,11 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets;
 
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -678,8 +683,9 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern GList ***ve_widgets;
-
+	GList ***ve_widgets = NULL;
+	
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -769,11 +775,11 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
 	GList *spark_tables = NULL;
 	gint t;
 
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -815,29 +821,40 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 
 G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 {
-	GladeXML* xml;
-	GtkWidget* item;
-	gint i, x, y;
-	gint table;
-	gchar *table_title;
-	extern Firmware_Details *firmware;
-	gint canID = firmware->canID;
+	GladeXML* xml = NULL;
+	GtkWidget* item = NULL;
+	gint i = 0;
+	gint x = 0;
+	gint y = 0;
+	gint table=  0;
+	gchar *table_title = NULL;
+	Firmware_Details *firmware = NULL;
+	gint canID = 0;
 	gdouble x_bin[64], y_bin[64];
-	gint page;
-	gint base;
-	DataSize size;
-	gint mult;
-	void *evaluator;
-	gdouble light_advance;
-	gdouble idle_rpm, idle_load, idle_advance;
-	gdouble peak_torque_rpm, peak_torque_load, peak_torque_advance;
-	gdouble advance;
-	gdouble maximum_rpm_advance;
-	gdouble maximum_retard, retard_start_load;
-	extern GList ***ve_widgets;
+	gint page = 0;
+	gint base = 0;
+	DataSize size = MTX_U08;
+	gint mult = 0;
+	void *evaluator = NULL;
+	gdouble light_advance = 0.0;
+	gdouble idle_rpm = 0.0;
+       	gdouble idle_load = 0.0;
+	gdouble idle_advance = 0.0;
+	gdouble peak_torque_rpm = 0.0;
+        gdouble	peak_torque_load = 0.0;
+        gdouble	peak_torque_advance = 0.0;
+	gdouble advance = 0.0;
+	gdouble maximum_rpm_advance = 0.0;
+	gdouble maximum_retard = 0.0;
+       	gdouble retard_start_load = 0.0;
+	GList ***ve_widgets = NULL;
 	GList *list = NULL;
-	gchar * tmpbuf;
-	gint precision;
+	gchar * tmpbuf = NULL;
+	gint precision = 0;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	xml = glade_get_widget_tree (GTK_WIDGET (widget));
 

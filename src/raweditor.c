@@ -50,9 +50,11 @@ G_MODULE_EXPORT void finish_raweditor(void)
 	gint cols = 8;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
-	extern GList *** ve_widgets;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 

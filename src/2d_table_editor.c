@@ -74,7 +74,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar **vector = NULL;
-	extern GList ***ve_widgets;
+	GList ***ve_widgets = NULL;
 	gint num_tabs = 0;
 	gint x_mult = 0;
 	gint y_mult = 0;
@@ -89,6 +89,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
@@ -414,7 +415,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	GList *gauge_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
-	extern GList ***ve_widgets;
+	GList ***ve_widgets = NULL;
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint page = 0;
@@ -428,6 +429,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 
 	if (table_num >= firmware->total_te_tables)
 	{
@@ -781,9 +783,11 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 
 G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 {
-	extern GList ***ve_widgets;
+	GList ***ve_widgets = NULL;
 	gint page = -1;
 	gint offset = -1;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	remove_from_lists(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
 	if (OBJ_GET(widget_ptr,"page"))
 		page = (GINT)OBJ_GET(widget_ptr,"page");

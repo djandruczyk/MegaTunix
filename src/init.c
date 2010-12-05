@@ -54,7 +54,6 @@ GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
-GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
@@ -594,6 +593,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
 	GHashTable **interdep_vars = NULL;
+	GList ***ve_widgets = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -608,10 +608,16 @@ G_MODULE_EXPORT void mem_alloc(void)
 	if (!firmware->ecu_data_backup)
 		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
 	if (!te_windows)
+	{
 		te_windows = g_new0(GtkWidget *, firmware->total_te_tables);
+		DATA_SET(global_data,"te_windows",te_windows);
+	}
 
 	if (!ve_widgets)
+	{
 		ve_widgets = g_new0(GList **, firmware->total_pages);
+		DATA_SET(global_data,"ve_widgets",ve_widgets);
+	}
 	if (!tab_gauges)
 		tab_gauges = g_new0(GList *, firmware->total_tables);
 	if (!sources_hash)
@@ -679,13 +685,14 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	Serial_Params *serial_params = NULL;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *dynamic_widgets = NULL;
-	Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
+	GList ***ve_widgets = NULL;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
-
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&serio_mutex);
