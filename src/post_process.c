@@ -61,7 +61,7 @@ G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 	extern GArray * raw_memory_data;
 	GtkWidget *entry = NULL;
 	guchar value = 0;
-	extern gint mem_view_style[];
+	gint mem_view_style[4];
 	gint i = 0;
 	gchar * tmpbuf = NULL;
 	extern gconstpointer *global_data;
