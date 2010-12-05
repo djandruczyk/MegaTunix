@@ -1174,8 +1174,9 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gint table_num = -1;
-	extern GList **tab_gauges;
+	GList **tab_gauges = NULL;
 
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = OBJ_GET(widget,"gaugexml");
@@ -1195,13 +1196,15 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 
 G_MODULE_EXPORT void update_tab_gauges(void)
 {
-	extern GList **tab_gauges;
 	GtkWidget *gauge = NULL;
 	gchar * source = NULL;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	guint i = 0;
 	GList *list = NULL;
+	GList **tab_gauges = NULL;
+
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	
 	if ((!tab_gauges) || ((gint)DATA_GET(global_data,"active_table") < 0))
 		return;

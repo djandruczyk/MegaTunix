@@ -54,7 +54,6 @@ GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
-GList **tab_gauges = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
 GtkWidget **te_windows = NULL;
@@ -594,6 +593,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	Firmware_Details *firmware = NULL;
 	GHashTable **interdep_vars = NULL;
 	GList ***ve_widgets = NULL;
+	GList **tab_gauges = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -619,9 +619,15 @@ G_MODULE_EXPORT void mem_alloc(void)
 		DATA_SET(global_data,"ve_widgets",ve_widgets);
 	}
 	if (!tab_gauges)
+	{
 		tab_gauges = g_new0(GList *, firmware->total_tables);
+		DATA_SET(global_data,"tab_gauges",tab_gauges);
+	}
 	if (!sources_hash)
+	{
 		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
+		DATA_SET_FULL(global_data,"sources_hash",sources_hash,g_hash_table_destroy);
+	}
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
