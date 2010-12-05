@@ -14,7 +14,6 @@
 #include <apicheck.h>
 #include <api-versions.h>
 #include <config.h>
-#include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
 #include <fileio.h>
@@ -23,19 +22,15 @@
 #include <init.h>
 #include <interrogate.h>
 #include <listmgmt.h>
-#include <lookuptables.h>
-#include <mtxmatheval.h>
 #include <mode_select.h>
 #include <notifications.h>
-#include <multi_expr_loader.h>
 #include <offline.h>
+#include <personalities.h>
 #include <plugin.h>
-#include <rtv_map_loader.h>
 #include <string.h>
 #include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
-#include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
 

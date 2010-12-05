@@ -15,36 +15,14 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
-#include <dashboard.h>
-#include <dataio.h>
-#include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dispatcher.h>
 #include <enums.h>
-#include <gui_handlers.h>
-#include <helpers.h>
 #include <init.h>
-#include <interrogate.h>
-#include <listmgmt.h>
-#include <lookuptables.h>
-#include <logviewer_gui.h>
-#include <menu_handlers.h>
-#include <mode_select.h>
 #include <notifications.h>
-#include <post_process.h>
-#include <runtime_gui.h>
-#include <runtime_sliders.h>
-#include <runtime_text.h>
-#include <runtime_status.h>
-#include <rtv_map_loader.h>
-#include <serialio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <gui_handlers.h>
 #include <tabloader.h>
-#include <timeout_handlers.h>
-#include <threads.h>
-#include <unistd.h>
 #include <widgetmgmt.h>
 
 

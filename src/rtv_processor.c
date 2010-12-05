@@ -47,7 +47,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void process_rt_vars(void *incoming)
 {
-	extern Rtv_Map *rtv_map;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
@@ -71,9 +70,11 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 	gint hours = 0;
 	gint minutes = 0;
 	gint seconds = 0;
+	Rtv_Map *rtv_map = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (!incoming)
 		printf(_("ERROR, INPUT IS NULL!!!!\n"));
@@ -660,9 +661,10 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
  */
 G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	
 	*value = 0.0;
 	if (!internal_name)
@@ -695,9 +697,10 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
  */
 G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
-	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	*value = 0.0;
 	if (!internal_name)
@@ -731,10 +734,11 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
  */
 G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
-	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	*value = 0.0;
 	if (!internal_name)
@@ -771,11 +775,12 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
-	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 	gint i = 0;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Set default in case of failure */
 	for (i=0;i<n;i++)
@@ -819,11 +824,12 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
-	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 	gint i = 0;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
@@ -865,8 +871,9 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
  */
 G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *precision)
 {
-	extern Rtv_Map *rtv_map;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (!internal_name)
 	{
@@ -890,12 +897,13 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
  */
 G_MODULE_EXPORT void flush_rt_arrays(void)
 {
-	extern Rtv_Map *rtv_map;
 	GArray *history = NULL;
 	guint i = 0;
 	guint j = 0;
 	gconstpointer * object = NULL;
 	GList *list = NULL;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Flush and recreate the timestamp array */
 	g_array_free(rtv_map->ts_array,TRUE);

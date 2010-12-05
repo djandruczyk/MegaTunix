@@ -32,7 +32,7 @@
 #include <widgetmgmt.h>
 
 Log_Info *log_info = NULL;
-
+extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
@@ -46,8 +46,9 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	gint precision = 0;
 	gchar * name = NULL;
 	DataSize size = MTX_U08;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	tmpbuf = OBJ_GET(parent,"sources");
 	if (tmpbuf);
 		sources = g_strsplit(tmpbuf,",",-1);
@@ -190,8 +191,10 @@ G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	GArray *array = NULL;
 	gconstpointer *object = NULL;
 	gint i = 0;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map;
 	extern gconstpointer *global_data;
+	
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 

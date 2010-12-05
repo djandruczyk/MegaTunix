@@ -679,11 +679,12 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	Serial_Params *serial_params = NULL;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *dynamic_widgets = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map;
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex rtt_mutex;
 
 	serial_params = DATA_GET(global_data,"serial_params");
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	firmware = DATA_GET(global_data,"firmware");
 

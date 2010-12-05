@@ -68,8 +68,9 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
 	lv_data->darea = darea;
 
@@ -321,10 +322,11 @@ G_MODULE_EXPORT void populate_viewer(void)
 	Viewable_Value *v_value = NULL;
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
 	g_static_mutex_lock(&update_mutex);
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -447,10 +449,10 @@ G_MODULE_EXPORT void populate_viewer(void)
  */
 G_MODULE_EXPORT void reset_logviewer_state(void)
 {
-	extern Rtv_Map *rtv_map;
-	extern Log_Info *log_info;
 	guint i = 0 ;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;;
+	extern Log_Info *log_info;
 
 	if (DATA_GET(global_data,"playback_mode"))
 	{
@@ -466,6 +468,7 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	}
 	else
 	{
+		rtv_map = DATA_GET(global_data,"rtv_map");
 		if (!rtv_map)
 			return;
 		for (i=0;i<rtv_map->derived_total;i++)

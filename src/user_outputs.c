@@ -111,7 +111,9 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 	gint upper = 0;
 	gchar * range = NULL;
 	gconstpointer * object = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
 
@@ -697,8 +699,9 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_map)
 		return;

@@ -105,6 +105,10 @@ G_MODULE_EXPORT void reset_runtime_status(void)
  */
 G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {
+	static gconstpointer *object = NULL;
+	static GArray * history = NULL;
+	static gchar * source = NULL;
+	static gchar * last_source = "";
 	GtkWidget *widget = (GtkWidget *) key;
 	gint bitval = 0;
 	gint bitmask = 0;
@@ -112,11 +116,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	gint value = 0;
 	gfloat tmpf = 0.0;
 	gint previous_value = 0;
-	static gconstpointer *object = NULL;
-	static GArray * history = NULL;
-	static gchar * source = NULL;
-	static gchar * last_source = "";
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"leaving"))
 		return;

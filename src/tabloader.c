@@ -21,14 +21,11 @@
 #include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gmodule.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
-#include <memory_gui.h>
 #include <notifications.h>
 #include <plugin.h>
-#include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>

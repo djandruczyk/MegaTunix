@@ -1046,13 +1046,15 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 {
 	gint res = 0;
 	gchar **vars = NULL;
-	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	guint j = 0;
 	gconstpointer * object = NULL;
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
 	GString *output;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	vars = g_strsplit(arg2,",",-1);
 	output = g_string_sized_new(8);
@@ -1090,13 +1092,14 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 
 G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 {
-	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	gint res = 0;
 	gint len = 0;
 	gchar * tmpbuf = NULL;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
 		object = g_ptr_array_index(rtv_map->rtv_list,i);
@@ -3019,14 +3022,15 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 {
 	gint res = 0;
 	gchar **vars = NULL;
-	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	guint j = 0;
 	gconstpointer * object = NULL;
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
-	GString *output;
+	GString *output = NULL;
+	Rtv_Map *rtv_map = NULL;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	vars = g_strsplit(arg2,",",-1);
 	output = g_string_sized_new(8);
 	for (i=0;i<g_strv_length(vars);i++)
@@ -3063,12 +3067,14 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 
 G_MODULE_EXPORT void socket_get_rtv_list(gint fd)
 {
-	extern Rtv_Map *rtv_map;
 	guint i = 0;
 	gint res = 0;
 	gint len = 0;
 	gchar * tmpbuf = NULL;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{

@@ -257,10 +257,10 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
 	GtkWidget *table = NULL;
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
-
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
@@ -365,17 +365,21 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
  */
 G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
-	gconstpointer * object = NULL;
-	extern Rtv_Map *rtv_map;
+	gconstpointer *object = NULL;
+	Rtv_Map *rtv_map = NULL;
 	GtkWidget *parent = NULL;
 	GtkProgressBarOrientation orient;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *aw_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	GHashTable *enr_sliders = NULL;
+	gchar * source = NULL;
+	TabIdent ident = 0;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
-	gchar * source = (gchar *)OBJ_GET(widget,"source");
-	TabIdent ident = (TabIdent)OBJ_GET(widget,"tab_ident");
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	source = (gchar *)OBJ_GET(widget,"source");
+	ident = (TabIdent)OBJ_GET(widget,"tab_ident");
 		
 	if (!rtv_map)
 		return;

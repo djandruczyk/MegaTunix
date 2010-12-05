@@ -38,7 +38,6 @@
 #include <widgetmgmt.h>
 #include <unistd.h>
 
-Rtv_Map *rtv_map = NULL;
 
 /*!
  \brief load_realtime_map_pf() loads the realtime map specified in the detected
@@ -71,6 +70,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	DataSize size = MTX_U08;
 	void * eval = NULL;
 	gchar * expr = NULL;
+	Rtv_Map *rtv_map = NULL;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
@@ -153,6 +153,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	tmpbuf = NULL;
 	rtv_map = g_new0(Rtv_Map, 1);
+	DATA_SET(global_data,"rtv_map",rtv_map);
 	cfg_read_string(cfgfile,"realtime_map","applicable_signatures",&rtv_map->applicable_signatures);
 	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
 	if (tmpbuf)

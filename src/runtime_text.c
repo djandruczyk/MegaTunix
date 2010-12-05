@@ -217,8 +217,10 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -256,8 +258,10 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *so
 	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 

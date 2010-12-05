@@ -37,7 +37,6 @@
 
 
 /* External global vars */
-extern Rtv_Map *rtv_map;
 extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
@@ -63,6 +62,9 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	gconstpointer * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if ((!DATA_GET(global_data,"tabs_loaded")) || 
 			(DATA_GET(global_data,"leaving")))
@@ -265,7 +267,9 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	gconstpointer * object = NULL;
 	gchar * string = NULL;
 	Firmware_Details *firmware = NULL;
+	Rtv_Map *rtv_map = NULL;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	firmware = DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
@@ -321,6 +325,9 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	GArray *history = NULL;
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
 		return;
@@ -389,6 +396,9 @@ G_MODULE_EXPORT void dlog_select_all(void)
 	guint i = 0;
 	gconstpointer * object = NULL;
 	GtkWidget *button = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Check all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -410,6 +420,9 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 	guint i = 0;
 	GtkWidget * button = NULL;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -440,6 +453,9 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 	GtkWidget * button = NULL;
 	gconstpointer * object = NULL;
 	gboolean state=FALSE;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -597,6 +613,9 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 	gfloat value = 0.0;
 	gboolean restart_tickler = FALSE;
 	GtkWidget * info_label = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"realtime_id"))
 	{

@@ -334,12 +334,13 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 	GData * rtv_obj = NULL;
 	gchar * source = NULL;
 	GHashTable *dash_hash = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	dash_hash = DATA_GET(global_data,"dash_hash");
 	if (!dash_hash)
 	{
 		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);

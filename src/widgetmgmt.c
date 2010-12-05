@@ -16,14 +16,10 @@
 #include <defines.h>
 #include <widgetmgmt.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gmodule.h>
 #include <keyparser.h>
-#include <memory_gui.h>
-#include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
 #include <tabloader.h>
