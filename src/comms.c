@@ -35,7 +35,6 @@
 
 extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;
-volatile gboolean outstanding_data = FALSE;
 
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
@@ -285,11 +284,11 @@ red_or_black:
 			set_group_color(RED,"burners");
 			slaves_set_color(RED,"burners");
 			gdk_threads_leave();
-			outstanding_data = TRUE;
+			DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(TRUE));
 			return;
 		}
 	}
-	outstanding_data = FALSE;
+	DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(FALSE));
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
 	slaves_set_color(BLACK,"burners");

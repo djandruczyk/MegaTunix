@@ -136,7 +136,6 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 
 G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 {
-	extern volatile gboolean outstanding_data;
 	gint last_page;
 	OutputData *output = NULL;
 	Command *command = NULL;
@@ -153,7 +152,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-				if (outstanding_data)
+				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
@@ -174,7 +173,8 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && 
+						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
 				{
@@ -196,7 +196,8 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_COMPOSITEMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && 
+						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->compositemon_page));
@@ -213,7 +214,8 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && 
+						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
@@ -230,7 +232,8 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS2_E_TOOTHMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && (outstanding_data))
+				if ((firmware->capabilities & MS2_E) && 
+						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
 				output = initialize_outputdata();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
@@ -247,7 +250,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS1_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if (outstanding_data)
+				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata();
@@ -262,7 +265,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 		case MS1_E_TOOTHMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if (outstanding_data)
+				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata();
