@@ -46,7 +46,6 @@ gint micro_ver;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
-extern gboolean just_starting;
 extern gint dbg_lvl;
 /* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
@@ -54,9 +53,6 @@ GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
-GHashTable *widget_group_states = NULL;
-GHashTable *sources_hash = NULL;
-GtkWidget **te_windows = NULL;
 extern gconstpointer *global_data;
 
 
@@ -75,6 +71,7 @@ G_MODULE_EXPORT void init(void)
 	GdkColormap *colormap = NULL;
 	CmdLineArgs *args = NULL;
 	Serial_Params *serial_params = NULL;
+	GHashTable *widget_group_states = NULL;
 	gint i = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -148,16 +145,18 @@ G_MODULE_EXPORT void init(void)
 	serial_params->read_wait = 50;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
-	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(TAB));
 
 
 	if (!widget_group_states)
+	{
 		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,NULL);
+		DATA_SET_FULL(global_data,"widget_group_states",widget_group_states,g_hash_table_destroy);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
+	}
 }
 
 
@@ -592,6 +591,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
 	GHashTable **interdep_vars = NULL;
+	GHashTable *sources_hash = NULL;
 	GList ***ve_widgets = NULL;
 	GList **tab_gauges = NULL;
 
@@ -607,11 +607,6 @@ G_MODULE_EXPORT void mem_alloc(void)
 		firmware->ecu_data_last = g_new0(guint8 *, firmware->total_pages);
 	if (!firmware->ecu_data_backup)
 		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
-	if (!te_windows)
-	{
-		te_windows = g_new0(GtkWidget *, firmware->total_te_tables);
-		DATA_SET(global_data,"te_windows",te_windows);
-	}
 
 	if (!ve_widgets)
 	{
@@ -785,10 +780,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
 	}
-	if(widget_group_states)
-		g_hash_table_destroy(widget_group_states);
-	if(sources_hash)
-		g_hash_table_destroy(sources_hash);
 	if (rtv_map)
 	{
 		if (rtv_map->raw_list)

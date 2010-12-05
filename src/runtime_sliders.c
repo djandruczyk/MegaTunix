@@ -517,8 +517,8 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 {
 	gboolean mapae_ctrl_state = FALSE;
 	gboolean tpsae_ctrl_state = FALSE;
-	extern GHashTable *widget_group_states;
-	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
+	GHashTable *widget_group_states = NULL;
+ 	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
 
 	if (value == 0)
 		tpsae_ctrl_state = FALSE;
@@ -530,6 +530,7 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 	else
 		mapae_ctrl_state = TRUE;
 
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),GINT_TO_POINTER(tpsae_ctrl_state));
 	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),GINT_TO_POINTER(mapae_ctrl_state));
 	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);

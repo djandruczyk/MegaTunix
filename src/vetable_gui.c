@@ -381,9 +381,10 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
 	Firmware_Details *firmware = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	GList ***ve_widgets = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;

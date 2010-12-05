@@ -569,8 +569,9 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	gfloat x = 0.0;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	if (!(object))
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf("__FILE__ ERROR: multi_expression object is NULL!\n"));

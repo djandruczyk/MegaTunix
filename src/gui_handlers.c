@@ -408,9 +408,10 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	gchar * group_2_update = NULL;
 	extern gint dbg_lvl;
 	GHashTable **interdep_vars = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	firmware = DATA_GET(global_data,"firmware");
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
 
@@ -1167,9 +1168,10 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
 	GHashTable **interdep_vars = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	firmware = DATA_GET(global_data,"firmware");
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
 
@@ -2168,10 +2170,11 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	GtkTreeModel *model = NULL;
 	GdkColor color;
 	gint *algorithm = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
 
-	algorithm = (gint *)DATA_GET(global_data,"algorithm");
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	algorithm = DATA_GET(global_data,"algorithm");
 	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
@@ -3436,10 +3439,11 @@ G_MODULE_EXPORT void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * tmpbuf = NULL;
-	extern GHashTable *widget_group_states;
+	GHashTable *widget_group_states = NULL;
 
 	if (!DATA_GET(global_data,"ready"))
 		return;
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 /*	printf("groups to toggle %s to state %i\n",toggle_groups,new_state);*/
 
@@ -3507,10 +3511,11 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * tmpbuf = NULL;
-	extern GHashTable *widget_group_states;
+	GHashTable *widget_group_states = NULL;
 
 	if (!DATA_GET(global_data,"ready"))
 		return;
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
 	page = (GINT)OBJ_GET(widget,"page");
 	offset = (GINT)OBJ_GET(widget,"offset");

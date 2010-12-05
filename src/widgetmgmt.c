@@ -174,7 +174,7 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	gboolean value = FALSE;
 	gboolean state = FALSE;
 	MatchType type = AND;
-	extern GHashTable *widget_group_states;
+	GHashTable *widget_group_states = NULL;
 
 	if (!GTK_IS_WIDGET(widget))
 		return;
@@ -187,6 +187,7 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	else
 	        tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
 
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	if (OBJ_GET(widget,"match_type"))
 		type = (MatchType)OBJ_GET(widget,"match_type");
 	groups = parse_keys(tmpbuf,&num_groups,",");

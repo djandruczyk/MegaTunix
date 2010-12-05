@@ -367,8 +367,9 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	TabIdent active_page;
 	gint * algorithm;
 	Firmware_Details *firmware = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	firmware = DATA_GET(global_data,"firmware");
 	algorithm = DATA_GET(global_data,"algorithm");
 	active_page = (TabIdent)DATA_GET(global_data,"active_page");

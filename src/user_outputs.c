@@ -288,8 +288,9 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	DataSize size = 0;
 	MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	column = (GINT) OBJ_GET (cell, "column");
 	canID = (GINT) OBJ_GET(model,"canID");
 	page = (GINT) OBJ_GET(model,"page");
@@ -446,10 +447,11 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	gchar * hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiExpr * multi = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
+	sources_hash = DATA_GET(global_data,"sources_hash");
 	temp_units = (GINT)DATA_GET(global_data,"temp_units");
 	src_offset = (GINT)OBJ_GET(model,"src_offset");
 	lim_offset = (GINT)OBJ_GET(model,"lim_offset");

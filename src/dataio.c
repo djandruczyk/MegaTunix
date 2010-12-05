@@ -40,7 +40,6 @@
 gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
-gint just_starting;
 extern gint dbg_lvl;
 extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;

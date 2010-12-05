@@ -63,9 +63,11 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
 	gint *algorithm = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	extern gconstpointer *global_data;
-	algorithm = (gint *)DATA_GET(global_data,"algorithm");
+
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	algorithm = DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 
@@ -233,9 +235,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
 	gint *algorithm = NULL;
-	extern GHashTable *sources_hash;
+	GHashTable *sources_hash = NULL;
 	extern gconstpointer *global_data;
-	algorithm = (gint *)DATA_GET(global_data,"algorithm");
+
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	algorithm = DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 
