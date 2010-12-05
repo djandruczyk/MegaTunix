@@ -496,10 +496,11 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	gchar * g_name = NULL;
 	gchar * name = NULL;
 	GtkWidget *widget = NULL;
-	extern GHashTable ** interdep_vars;
+	GHashTable ** interdep_vars;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	canID = firmware->canID;
 
 	/* Dualtable required Fuel calc

@@ -56,7 +56,6 @@ GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
 GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
-GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 GHashTable *sources_hash = NULL;
 GtkWidget **te_windows = NULL;
@@ -594,6 +593,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	gint *algorithm = NULL;
 	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
+	GHashTable **interdep_vars = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -620,7 +620,10 @@ G_MODULE_EXPORT void mem_alloc(void)
 	 * download...
 	 */
 	if (!interdep_vars)
+	{
 		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
+		DATA_SET(global_data,"interdep_vars",interdep_vars);
+	}
 	if (!algorithm)
 	{
 		algorithm = g_new0(gint, firmware->total_tables);
@@ -674,6 +677,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList *defaults = NULL;
 	Firmware_Details *firmware = NULL;
 	Serial_Params *serial_params = NULL;
+	GHashTable **interdep_vars = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern Rtv_Map *rtv_map;
 	extern GStaticMutex serio_mutex;
@@ -747,6 +751,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				dealloc_te_params(firmware->te_params[i]);
 		}
 		cleanup(firmware->te_params);
+		interdep_vars = DATA_GET(global_data,"interdep_vars");
 
 		for (i=0;i<firmware->total_tables;i++)
 		{

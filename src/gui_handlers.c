@@ -77,7 +77,6 @@ extern GdkColor green;
 extern GdkColor blue;
 extern GdkColor black;
 extern GdkColor white;
-static gboolean err_flag = FALSE;
 
 
 /*!
@@ -409,11 +408,13 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	gchar * table_2_update = NULL;
 	gchar * group_2_update = NULL;
 	extern gint dbg_lvl;
-	extern GHashTable **interdep_vars;
+	GHashTable **interdep_vars = NULL;
 	extern GHashTable *sources_hash;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	interdep_vars = DATA_GET(global_data,"interdep_vars");
+
 
 	if ((DATA_GET(global_data,"paused_handlers")) || 
 			(!DATA_GET(global_data,"ready")))
@@ -1166,11 +1167,12 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
-	extern GHashTable **interdep_vars;
+	GHashTable **interdep_vars = NULL;
 	extern GHashTable *sources_hash;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	interdep_vars = DATA_GET(global_data,"interdep_vars");
 
 	if ((DATA_GET(global_data,"paused_handlers")) || 
 			(!DATA_GET(global_data,"ready")))
@@ -1498,11 +1500,12 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
 	Reqd_Fuel *reqd_fuel = NULL;
-	extern GHashTable **interdep_vars;
+	GHashTable **interdep_vars = NULL;
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	if ((DATA_GET(global_data,"paused_handlers")) || 
@@ -1629,10 +1632,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 			firmware->rf_params[table_num]->num_squirts = tmpi;
 			if (firmware->rf_params[table_num]->num_cyls % firmware->rf_params[table_num]->num_squirts)
-			{
-				err_flag = TRUE;
 				set_reqfuel_color(RED,table_num);
-			}
 			else
 			{
 				dload_val = (gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
@@ -1647,7 +1647,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(divider_offset),
 						d_data);
-				err_flag = FALSE;
 				set_reqfuel_color(BLACK,table_num);
 				check_req_fuel_limits(table_num);
 			}
@@ -1662,10 +1661,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 			firmware->rf_params[table_num]->num_cyls = tmpi;
 			if (firmware->rf_params[table_num]->num_cyls % firmware->rf_params[table_num]->num_squirts)
-			{
-				err_flag = TRUE;
 				set_reqfuel_color(RED,table_num);	
-			}
 			else
 			{
 				tmp = get_ecu_data(canID,page,offset,size);
@@ -1699,7 +1695,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 
-				err_flag = FALSE;
 				set_reqfuel_color(BLACK,table_num);	
 				check_req_fuel_limits(table_num);
 			}
