@@ -62,7 +62,7 @@ G_MODULE_EXPORT void plugins_init()
 	GModule *module[3];
 #ifdef __WIN32__
 	gchar * libname = NULL;
-#endif __WIN32__
+#endif 
 	gchar * libpath = NULL;
 	void (*plugin_init)(gconstpointer *);
 
@@ -105,6 +105,7 @@ G_MODULE_EXPORT void plugins_init()
 	   by looking up the symbols
 	   */
 	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
+	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
 
 	/* Common module init */
 	if (g_module_symbol(module[2],"plugin_init",(void *)&plugin_init))

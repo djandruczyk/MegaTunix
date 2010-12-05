@@ -26,6 +26,7 @@ void register_enums(void);
 
 /* Function Pointers */
 void (*error_msg_f)(const gchar *);
+gboolean (*get_symbol_f)(const gchar *, void **);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 void (*io_cmd_f)(const gchar *,void *);
 OutputData *(*initialize_outputdata_f)(void);

@@ -19,7 +19,6 @@ gconstpointer *global_data;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
-	GModule *module = NULL;
 	global_data = data;
 
 	/* Initializes function pointers since on Winblows was can NOT
@@ -29,18 +28,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 
 	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	module = DATA_GET(global_data,"megatunix_module");
-	if (!module)
-		error_msg_f(__FILE__": Plugin ERROR: pointer to megatunix module is invalid!\n\tBUG, contact author!");
-	g_module_symbol(module,"lookup_widget",(void *)&lookup_widget_f);
-	g_module_symbol(module,"io_cmd",(void *)&io_cmd_f);
-	g_module_symbol(module,"initialize_outputdata",(void *)&initialize_outputdata_f);
-	g_module_symbol(module,"dbg_func",(void *)&dbg_func_f);
-	g_module_symbol(module,"start_tickler",(void *)&start_tickler_f);
-	g_module_symbol(module,"stop_tickler",(void *)&stop_tickler_f);
-	g_module_symbol(module,"get_list",(void *)&get_list_f);
-	g_module_symbol(module,"set_widget_sensitive",(void *)&set_widget_sensitive_f);
-	g_module_symbol(module,"update_logbar",(void *)&update_logbar_f);
+	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
+	g_assert(get_symbol_f);
+	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("io_cmd",(void *)&io_cmd_f);
+	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
+	get_symbol_f("dbg_func",(void *)&dbg_func_f);
+	get_symbol_f("start_tickler",(void *)&start_tickler_f);
+	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("get_list",(void *)&get_list_f);
+	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
+	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 
 }
 

@@ -23,7 +23,6 @@ gconstpointer *global_data;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
-	GModule *module = NULL;
 	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
@@ -31,18 +30,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	 */
 	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	module = DATA_GET(global_data,"megatunix_module");
-	if (!module)
-		error_msg_f(__FILE__": Plugin ERROR: pointer to megatunix module is invalid!\n\tBUG, contact author!");
-	g_module_symbol(module,"dbg_func",(void *)&dbg_func_f);
-	g_module_symbol(module,"lookup_widget",(void *)&lookup_widget_f);
-	g_module_symbol(module,"io_cmd",(void *)&io_cmd_f);
-	g_module_symbol(module,"start_tickler",(void *)&start_tickler_f);
-	g_module_symbol(module,"stop_tickler",(void *)&stop_tickler_f);
-	g_module_symbol(module,"signal_read_rtvars",(void *)&signal_read_rtvars_f);
-	g_module_symbol(module,"get_ecu_data",(void *)&get_ecu_data_f);
-	g_module_symbol(module,"initialize_gc",(void *)&initialize_gc_f);
-	g_module_symbol(module,"lookup_current_value",(void *)&lookup_current_value_f);
+	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
+	g_assert(get_symbol_f);
+	get_symbol_f("dbg_func",(void *)&dbg_func_f);
+	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("io_cmd",(void *)&io_cmd_f);
+	get_symbol_f("start_tickler",(void *)&start_tickler_f);
+	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("signal_read_rtvars",(void *)&signal_read_rtvars_f);
+	get_symbol_f("get_ecu_data",(void *)&get_ecu_data_f);
+	get_symbol_f("initialize_gc",(void *)&initialize_gc_f);
+	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 }
 
 

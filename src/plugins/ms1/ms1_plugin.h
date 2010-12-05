@@ -26,6 +26,7 @@ void register_enums(void);
 
 /* Function Pointers */
 void (*error_msg_f)(const gchar *);
+gboolean (*get_symbol_f)(const gchar *,void **);
 void (*io_cmd_f)(const gchar *,void *);
 void *(*dbg_func_f)(int,gchar *);
 void (*start_tickler_f)(gint);
