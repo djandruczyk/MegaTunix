@@ -33,7 +33,6 @@
 #include <unistd.h>
 #include <widgetmgmt.h>
 
-extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;
 
 /*!
@@ -139,11 +138,13 @@ G_MODULE_EXPORT gint comms_test(void)
 
 G_MODULE_EXPORT void send_to_slaves(void *data)
 {
+	static GAsyncQueue *slave_msg_queue = NULL;
 	Io_Message *message = (Io_Message *)data;
 	OutputData *output = (OutputData *)message->payload;
-	extern GAsyncQueue *slave_msg_queue;
 	SlaveMessage *msg = NULL;
 
+	if (!slave_msg_queue)
+		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
 	if (!output) /* If no data, don't bother the slaves */
 		return;
 	if (!(gboolean)DATA_GET(global_data,"network_access"))
@@ -177,9 +178,11 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 
 G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 {
-	extern GAsyncQueue *slave_msg_queue;
+	static GAsyncQueue *slave_msg_queue = NULL;
 	SlaveMessage *msg = NULL;
 
+	if (!slave_msg_queue)
+		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
 	if (!(gboolean)DATA_GET(global_data,"network_access"))
 		return;
 
@@ -330,8 +333,8 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
+	static GMutex *serio_mutex = NULL;
 	OutputData *output = message->payload;
-
 	gint res = 0;
 	gchar * err_text = NULL;
 	guint i = 0;
@@ -355,9 +358,11 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 
 	firmware = DATA_GET(global_data,"firmware");
 	serial_params = DATA_GET(global_data,"serial_params");
+	if (!serio_mutex)
+		serio_mutex = DATA_GET(global_data,"serio_mutex");
 
 	g_static_mutex_lock(&mutex);
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	if (output)
 	{
@@ -385,13 +390,13 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			case MTX_CMD_WRITE:
 				break;
 		}
-		g_static_mutex_unlock(&serio_mutex);
+		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!DATA_GET(global_data,"connected"))
 	{
-		g_static_mutex_unlock(&serio_mutex);
+		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;		/* can't write anything if disconnected */
 	}
@@ -454,7 +459,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			store_new_block(canID,page,offset,data,num_bytes);
 	}
 
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	g_static_mutex_unlock(&mutex);
 	return retval;
 }

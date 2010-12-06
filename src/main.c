@@ -22,6 +22,7 @@
 #include <dispatcher.h>
 #include <enums.h>
 #include <errno.h>
+#include <glib.h>
 #include <gdk/gdkgl.h>
 #include <gtk/gtkgl.h>
 #include <getfiles.h>
@@ -41,15 +42,6 @@ GThread * thread_dispatcher_id = NULL;
 gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
-GAsyncQueue *io_data_queue = NULL;
-GAsyncQueue *slave_msg_queue = NULL;
-GAsyncQueue *pf_dispatch_queue = NULL;
-GAsyncQueue *gui_dispatch_queue = NULL;
-GCond *io_dispatch_cond = NULL;
-GCond *gui_dispatch_cond = NULL;
-GCond *pf_dispatch_cond = NULL;
-GCond *statuscounts_cond = NULL;
-GCond *rtv_thread_cond = NULL;
 gconstpointer *global_data = NULL;
 
 /*!
@@ -63,6 +55,9 @@ gconstpointer *global_data = NULL;
 gint main(gint argc, gchar ** argv)
 {
 	Serial_Params *serial_params = NULL;
+	GAsyncQueue *queue = NULL;
+	GCond *cond = NULL;
+	GMutex *mutex = NULL;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
 	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");
@@ -74,12 +69,29 @@ gint main(gint argc, gchar ** argv)
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 	gdk_threads_init();
-	
-	statuscounts_cond = g_cond_new();
-	io_dispatch_cond = g_cond_new();
-	gui_dispatch_cond = g_cond_new();
-	pf_dispatch_cond = g_cond_new();
-	rtv_thread_cond = g_cond_new();
+
+	global_data = g_new0(gconstpointer, 1);
+
+	/* Condition variables */
+	cond = g_cond_new();
+	DATA_SET(global_data,"statuscounts_cond",cond);
+	cond = g_cond_new();
+	DATA_SET(global_data,"io_dispatch_cond",cond);
+	cond = g_cond_new();
+	DATA_SET(global_data,"gui_dispatch_cond",cond);
+	cond = g_cond_new();
+	DATA_SET(global_data,"pf_dispatch_cond",cond);
+	cond = g_cond_new();
+	DATA_SET(global_data,"rtv_thread_cond",cond);
+
+	/* Mutexes */
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"serio_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"rtt_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"rtv_mutex",mutex);
+
 	gdk_threads_enter();
 	gtk_init(&argc, &argv);
 	glade_init();
@@ -88,10 +100,8 @@ gint main(gint argc, gchar ** argv)
 	gl_ability = gtk_gl_init_check(&argc, &argv);
 
 	/* For testing if gettext works
-	printf(_("Hello World!\n"));
-	*/
-
-	global_data = g_new0(gconstpointer, 1);
+	   printf(_("Hello World!\n"));
+	 */
 
 	/* This will exit mtx if the locking fails! */
 	//create_mtx_lock();
@@ -107,11 +117,17 @@ gint main(gint argc, gchar ** argv)
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
 
-	/* Create Queue to listen for commands */
-	io_data_queue = g_async_queue_new();
-	slave_msg_queue = g_async_queue_new();
-	pf_dispatch_queue = g_async_queue_new();
-	gui_dispatch_queue = g_async_queue_new();
+	/* Create Message passing queues */
+	queue = g_async_queue_new();
+	DATA_SET_FULL(global_data,"io_data_queue",queue,g_async_queue_unref);
+	queue = g_async_queue_new();
+	DATA_SET_FULL(global_data,"slave_msg_queue",queue,g_async_queue_unref);
+	queue = g_async_queue_new();
+	DATA_SET_FULL(global_data,"pf_dispatch_queue",queue,g_async_queue_unref);
+	queue = g_async_queue_new();
+	DATA_SET_FULL(global_data,"gui_dispatch_queue",queue,g_async_queue_unref);
+	queue = g_async_queue_new();
+	DATA_SET_FULL(global_data,"io_repair_queue",queue,g_async_queue_unref);
 
 	read_config();
 	setup_gui();		
@@ -122,11 +138,11 @@ gint main(gint argc, gchar ** argv)
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
-//	Debugging tool to monitor how busy the dispatcher timeout gets
-//	g_thread_create(clock_watcher,
-//			NULL, /* Thread args */
-//			TRUE, /* Joinable */
-//			NULL); /*GError Pointer */
+	//	Debugging tool to monitor how busy the dispatcher timeout gets
+	//	g_thread_create(clock_watcher,
+	//			NULL, /* Thread args */
+	//			TRUE, /* Joinable */
+	//			NULL); /*GError Pointer */
 
 	pf_dispatcher_id = g_timeout_add(12,(GSourceFunc)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);

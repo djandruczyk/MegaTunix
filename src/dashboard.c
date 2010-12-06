@@ -379,21 +379,23 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
 	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
-	extern GStaticMutex rtv_mutex;
+	static GMutex *rtv_mutex = NULL;;
 	GArray *history;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-
 	GtkWidget *gauge = NULL;
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)DATA_GET(d_gauge->object,"history");
 	if ((gint)history->len-1 <= 0)
 		return;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);

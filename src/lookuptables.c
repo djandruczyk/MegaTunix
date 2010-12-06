@@ -651,10 +651,11 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	gchar ** vector = NULL;
 	gboolean restart_tickler = FALSE;
 	gint count = 0;
-	extern GAsyncQueue *io_data_queue;
+	GAsyncQueue *io_data_queue = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);

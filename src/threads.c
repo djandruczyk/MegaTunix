@@ -59,12 +59,14 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  */
 G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 {
+	static GAsyncQueue *io_data_queue = NULL;
 	Io_Message *message = NULL;
 	GHashTable *commands_hash = NULL;
 	Command *command = NULL;
-	extern GAsyncQueue *io_data_queue;
 
 	commands_hash = DATA_GET(global_data,"commands_hash");
+	if (!io_data_queue)
+		io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Fringe case for FUNC_CALL helpers that need to trigger 
 	 * post_functions AFTER all their subhandlers have ran.  We
@@ -119,13 +121,16 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
-	extern GAsyncQueue *io_data_queue;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern GCond * io_dispatch_cond;
+	GAsyncQueue *io_data_queue = NULL;
+	GAsyncQueue *pf_dispatch_queue = NULL;
+	GCond * io_dispatch_cond = NULL;
 //	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 //	clock = g_timer_new();
@@ -560,12 +565,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
 		gboolean count,
 		gboolean clear)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Text_Message *t_message = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	t_message = g_new0(Text_Message, 1);
@@ -597,11 +603,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
  */
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	QFunction *qfunc = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	qfunc = g_new0(QFunction, 1);
@@ -634,12 +642,13 @@ G_MODULE_EXPORT void  thread_update_widget(
 		WidgetType type,
 		gchar * msg)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Widget_Update *w_update = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -667,12 +676,13 @@ G_MODULE_EXPORT void  thread_update_widget(
  */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Widget_Update *w_update = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -700,11 +710,12 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
  */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	message->payload = (void *)widget;
@@ -737,10 +748,17 @@ G_MODULE_EXPORT void start_restore_monitor(void)
 
 G_MODULE_EXPORT void *restore_update(gpointer data)
 {
-	extern GAsyncQueue *io_data_queue;
-	gint max_xfers = g_async_queue_length(io_data_queue);
-	gint remaining_xfers = max_xfers;
-	gint last_xferd = max_xfers;
+	static GAsyncQueue *io_data_queue = NULL;
+	gint max_xfers = 0;
+	gint remaining_xfers = 0;
+	gint last_xferd = 0;
+
+	if (!io_data_queue)
+		io_data_queue = DATA_GET(global_data,"io_data_queue");
+
+	max_xfers = g_async_queue_length(io_data_queue);
+	remaining_xfers = max_xfers;
+	last_xferd = max_xfers;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": restore_update()\n\tThread created!\n"));
 	thread_update_logbar("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);

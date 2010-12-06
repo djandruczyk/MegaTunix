@@ -37,7 +37,6 @@
 #include <widgetmgmt.h>
 
 
-extern GStaticMutex rtv_mutex;
 extern gconstpointer *global_data;
 
 /*!
@@ -47,6 +46,7 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void process_rt_vars(void *incoming)
 {
+	static GMutex *rtv_mutex = NULL;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
@@ -75,6 +75,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 
 	firmware = DATA_GET(global_data,"firmware");
 	rtv_map = DATA_GET(global_data,"rtv_map");
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	if (!incoming)
 		printf(_("ERROR, INPUT IS NULL!!!!\n"));
@@ -188,10 +190,10 @@ store_it:
 			/* Get history array and current index point */
 			history = (GArray *)DATA_GET(object,"history");
 			/* Store data in history buffer */
-			g_static_mutex_lock(&rtv_mutex);
+			g_mutex_lock(rtv_mutex);
 			g_array_append_val(history,result);
 			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,history->len-1,result,g_array_index(history, gfloat, history->len-1),g_array_index(history, gfloat, history->len-2));*/
-			g_static_mutex_unlock(&rtv_mutex);
+			g_mutex_unlock(rtv_mutex);
 
 			/*printf("Result of %s is %f\n",(gchar *)DATA_GET(object,"internal_names"),result);*/
 
@@ -662,11 +664,14 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
  */
 G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
+	static GMutex *rtv_mutex = NULL;
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
@@ -682,9 +687,9 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 	if ((gint)history->len-1 <= 0)
 		return TRUE;
 
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	*value = g_array_index(history,gfloat,history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 	return TRUE;
 }
 
@@ -698,11 +703,14 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
  */
 G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
+	static GMutex *rtv_mutex = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
@@ -718,9 +726,9 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 	if ((gint)history->len-2 <= 0)
 		return TRUE;
 
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	*value = g_array_index(history,gfloat,history->len-2);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 	return TRUE;
 }
 
@@ -735,12 +743,15 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
  */
 G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
+	static GMutex *rtv_mutex = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
@@ -756,11 +767,11 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	if ((gint)history->len-n <= 0)
 		return TRUE;
 
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	if (index > n)
 		index -= n;  /* get PREVIOUS nth one */
 	*value = g_array_index(history,gfloat,index);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 	history = (GArray *)DATA_GET(object,"history");
 	return TRUE;
 }
@@ -776,6 +787,7 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
+	static GMutex *rtv_mutex = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
@@ -783,6 +795,8 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	/* Set default in case of failure */
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
@@ -800,7 +814,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	if ((gint)history->len-n <= 0)
 		return TRUE;
 
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	index = history->len-1;
 	if (index > n)
 	{
@@ -810,13 +824,13 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 			values[i] = g_array_index(history,gfloat,index);
 		}
 	}
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 	return TRUE;
 }
 
 
 /*!
- \brief lookup_previous_n_x_m_values() gets previous data
+ \brief lookup_previous_n_skip_xvalues() gets previous data
  \param internal_name (gchar *) name of the variable to get the data for.
  \param n (gint) number of campels we want
  \param skip (gint) number to SKIP between samples
@@ -825,6 +839,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
+	static GMutex *rtv_mutex = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	gint index = 0;
@@ -832,6 +847,8 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
@@ -848,7 +865,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 	if ((gint)history->len-(n*skip) <= 0)
 		return TRUE;
 
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	index = history->len-1;
 	if (index > (n*skip))
 	{
@@ -858,7 +875,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 			values[i] = g_array_index(history,gfloat,index);
 		}
 	}
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 	return TRUE;
 }
 
@@ -898,6 +915,7 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
  */
 G_MODULE_EXPORT void flush_rt_arrays(void)
 {
+	GMutex *rtv_mutex = NULL;
 	GArray *history = NULL;
 	guint i = 0;
 	guint j = 0;
@@ -905,6 +923,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 	GList *list = NULL;
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	/* Flush and recreate the timestamp array */
 	g_array_free(rtv_map->ts_array,TRUE);
@@ -922,7 +941,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 			object=(gconstpointer *)g_list_nth_data(list,j);
 			if (!(object))
 				continue;
-			g_static_mutex_lock(&rtv_mutex);
+			g_mutex_lock(rtv_mutex);
 			history = (GArray *)DATA_GET(object,"history");
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
@@ -930,7 +949,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			DATA_SET(object,"history",(gpointer)history);
-			g_static_mutex_unlock(&rtv_mutex);
+			g_mutex_unlock(rtv_mutex);
 	                /* bind history array to object for future retrieval */
 		}
 

@@ -43,8 +43,6 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-extern gint ms_reset_count;
-extern gint ms_goodread_count;
 /* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
@@ -140,13 +138,10 @@ G_MODULE_EXPORT void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS v1.x and 2.x */
-	serial_params->read_wait = 50;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 50;	/* delay between reads in ms */
 
 	/* Set flags to clean state */
-	ms_reset_count = 0; 	/* Counts MS clock resets */
-	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(TAB));
-
 
 	if (!widget_group_states)
 	{
@@ -688,19 +683,20 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GHashTable *dynamic_widgets = NULL;
 	Rtv_Map *rtv_map = NULL;
 	GList ***ve_widgets = NULL;
-	extern GStaticMutex serio_mutex;
-	extern GStaticMutex rtt_mutex;
+	GMutex *serio_mutex = NULL;
+	GMutex *rtt_mutex = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
 
-	g_static_mutex_lock(&serio_mutex);
-
+	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
 	cleanup(serial_params);
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 
 	/* Firmware datastructure.... */
 	if (firmware)
@@ -797,10 +793,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(rtv_map);
 	}
 	/* Runtime Text*/
-	g_static_mutex_lock(&rtt_mutex);
+	g_mutex_lock(rtt_mutex);
 	store = DATA_GET(global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+	g_mutex_unlock(rtt_mutex);
 
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");

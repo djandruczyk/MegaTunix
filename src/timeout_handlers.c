@@ -112,8 +112,9 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  */
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
-	extern GCond *rtv_thread_cond;
+	GCond *rtv_thread_cond = NULL;
 	extern gconstpointer *global_data;
+	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -163,13 +164,19 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
-	extern GAsyncQueue *io_data_queue;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern GCond *rtv_thread_cond;
+	GAsyncQueue *io_data_queue = NULL;
+	GAsyncQueue *pf_dispatch_queue = NULL;
+	GCond *rtv_thread_cond = NULL;
 	extern gconstpointer *global_data;
+
 	serial_params = DATA_GET(global_data,"serial_params");
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 
 	g_mutex_lock(mutex);
+	g_async_queue_ref(io_data_queue);
+	g_async_queue_ref(pf_dispatch_queue);
 	while (TRUE)
 	{
 
@@ -186,6 +193,9 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		g_time_val_add(&time,serial_params->read_wait*1000);
 		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
 		{
+			printf("rtv_thread_cond signaled, exiting!\n");
+			g_async_queue_unref(io_data_queue);
+			g_async_queue_unref(pf_dispatch_queue);
 			g_mutex_unlock(mutex);
 			g_mutex_free(mutex);
 			g_thread_exit(0);
@@ -205,6 +215,8 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		return;
 
 	if (firmware->capabilities & MS2)
 	{

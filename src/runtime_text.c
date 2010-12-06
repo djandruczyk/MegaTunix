@@ -368,6 +368,8 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  */
 G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
+	static GRand *rand = NULL;
+	static GMutex *rtv_mutex = NULL;
 	Rt_Text *rtt = NULL;
 	gint count = 0;
 	gint last_upd = 0;
@@ -377,14 +379,14 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * tmpbuf2 = NULL;
-	static GRand *rand = NULL;
-	extern GStaticMutex rtv_mutex;
 
 	rtt = (Rt_Text *)value;
 	if (!rtt)
 		return;
 	if (!rand)
 		rand = g_rand_new();
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
@@ -395,10 +397,10 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 		return;
 	if ((gint)history->len-2 <= 0)
 		return;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = g_array_index(history, gfloat, history->len-2);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
 		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
@@ -464,6 +466,7 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 
 G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
+	static GMutex *rtv_mutex = NULL;
 	Rt_Text *rtt = NULL;
 	gint count = 0;
 	gint last_upd = 0;
@@ -472,7 +475,9 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	extern GStaticMutex rtv_mutex;
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
@@ -488,9 +493,9 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 		return FALSE;
 	if ((gint)history->len-1 <= 0)
 		return FALSE;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	if ((current != previous) || (DATA_GET(global_data,"forced_update")))
 	{

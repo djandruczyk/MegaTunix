@@ -362,9 +362,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	guint16 curcount = 0;
 	guint8 *ptr8 = NULL;
 	guint16 *ptr16 = NULL;
-	extern gint ms_ve_goodread_count;
-	extern gint ms_reset_count;
-	extern gint ms_goodread_count;
+	gint tmpi = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -430,7 +428,8 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					message->recv_buf,
 					firmware->page_params[page]->length);
 			backup_current_data(canID,page);
-			ms_ve_goodread_count++;
+			tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
+			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			break;
 		case MS1_RT_VARS:
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
@@ -450,12 +449,16 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if ((lastcount - ptr8[0] > 1) && \
 					(lastcount - ptr8[0] != 255))
 			{
-				ms_reset_count++;
+				tmpi = (GINT)DATA_GET(global_data,"reset_count");
+				DATA_SET(global_data,"reset_count",GINT_TO_POINTER(++tmpi));
 				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
 //				gdk_beep();
 			}
 			else
-				ms_goodread_count++;
+			{
+				tmpi = (GINT)DATA_GET(global_data,"rt_goodread_count");
+				DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(++tmpi));
+			}
 			lastcount = ptr8[0];
 			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new
@@ -503,12 +506,16 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if ((lastcount - curcount > 1) && \
 					(lastcount - curcount != 65535))
 			{
-				ms_reset_count++;
+				tmpi = (GINT)DATA_GET(global_data,"reset_count");
+				DATA_SET(global_data,"reset_count",GINT_TO_POINTER(++tmpi));
 				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
 //				gdk_beep();
 			}
 			else
-				ms_goodread_count++;
+			{
+				tmpi = (GINT)DATA_GET(global_data,"rt_goodread_count");
+				DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(++tmpi));
+			}
 			lastcount = curcount;
 			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new

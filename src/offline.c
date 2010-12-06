@@ -53,11 +53,11 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
-        extern GAsyncQueue *io_repair_queue;
+        GAsyncQueue *io_repair_queue = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-
+	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 
 	/* Cause Serial Searcher thread to abort.... */
 	if (io_repair_queue)

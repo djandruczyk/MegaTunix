@@ -47,8 +47,6 @@
 
 
 gboolean port_open = FALSE;
-GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
-GAsyncQueue *io_repair_queue = NULL;
 extern gconstpointer *global_data;
 
 /*!
@@ -62,12 +60,14 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
+	static GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
 	gint fd = -1;
 	gchar * err_text = NULL;
 	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
@@ -107,7 +107,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	}
 
 	/*printf("open_serial returning\n");*/
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return port_open;
 }
 	
@@ -122,12 +122,14 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
+	GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
 	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	if (serial_params->net_mode)
 		return;
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 #ifdef __WIN32__
 	if (fd)
 		win32_flush_serial(fd, type);
@@ -148,7 +150,7 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 		}
 	}
 #endif	
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 }
 
 
@@ -159,25 +161,27 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
  */
 G_MODULE_EXPORT void setup_serial_params(gint baudrate)
 {
+	GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
 	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 #ifndef __WIN32__
 	speed_t baud = B9600;
 #endif
 	if (serial_params->open == FALSE)
 		return;
 	/*printf("setup_serial_params entered\n");*/
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 #ifdef __WIN32__
 	win32_setup_serial_params(serial_params->fd, baudrate);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
@@ -267,7 +271,7 @@ G_MODULE_EXPORT void setup_serial_params(gint baudrate)
 	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 
 #endif
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return;
 }
 
@@ -278,14 +282,16 @@ G_MODULE_EXPORT void setup_serial_params(gint baudrate)
  */
 G_MODULE_EXPORT void close_serial(void)
 {
+	GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
 	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	if (!serial_params)
 		return;
 	if (serial_params->open == FALSE)
 		return;
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
@@ -311,7 +317,7 @@ G_MODULE_EXPORT void close_serial(void)
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
 	if (!DATA_GET(global_data,"leaving"))
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return;
 }
 
@@ -329,6 +335,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 * Thus we need to handle all possible conditions cleanly
 	 */
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
+	static GAsyncQueue *io_repair_queue = NULL;
 	gint baud = 0;
 	gchar * potential_ports;
 	gint len = 0;
@@ -349,7 +356,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	}
 
 	if (!io_repair_queue)
-		io_repair_queue = g_async_queue_new();
+		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	/* IF serial_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 

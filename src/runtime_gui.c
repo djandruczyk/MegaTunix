@@ -42,9 +42,6 @@ extern GdkColor black;
 extern GdkColor red;
 extern gconstpointer *global_data;
 
-GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
-GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
-
 
 /*!
  \brief update_runtime_vars_pf() updates all of the runtime sliders on all
@@ -181,6 +178,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
  */
 G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
+	static GRand *rand = NULL;
+	static GMutex *rtv_mutex = NULL;
 	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
 	gint last_upd = slider->last_upd;
@@ -193,11 +192,12 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	static GRand *rand = NULL;
 
 	if (DATA_GET(global_data,"leaving"))
 		return;
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	if (!rand)
 		rand = g_rand_new();
 	history = (GArray *)DATA_GET(slider->object,"history");
@@ -206,12 +206,12 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	if ((gint)history->len-1 <= 0)
 		return;
 	precision = (GINT)DATA_GET(slider->object,"precision");
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = slider->last;
 	slider->last = current;
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
@@ -326,14 +326,17 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {
+	static GMutex *rtt_mutex = NULL;
+	if (!rtt_mutex)
+		rtt_mutex = DATA_GET(global_data,"rtt_mutex");
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
-	g_static_mutex_lock(&rtt_mutex);
+	g_mutex_lock(rtt_mutex);
 	if (DATA_GET(global_data,"rtt_model"))
 		gtk_tree_model_foreach(GTK_TREE_MODEL(DATA_GET(global_data,"rtt_model")),rtt_foreach,NULL);
 	if (DATA_GET(global_data,"rtt_hash"))
 		g_hash_table_foreach(DATA_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
-	g_static_mutex_unlock(&rtt_mutex);
+	g_mutex_unlock(rtt_mutex);
 	return TRUE;
 }
 

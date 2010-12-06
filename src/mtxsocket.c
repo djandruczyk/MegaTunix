@@ -1292,7 +1292,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 * disaster...
 	 */
 	static gboolean network_is_open = FALSE; /* Assume never opened */
-	extern GAsyncQueue *io_repair_queue;
+	static GAsyncQueue *io_repair_queue;
 	volatile gboolean autodetect = TRUE;
 	gchar * host = NULL;
 	gint port = 0;
@@ -1310,7 +1310,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	}
 
 	if (!io_repair_queue)
-		io_repair_queue = g_async_queue_new();
+		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	/* IF network_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -1526,7 +1526,8 @@ G_MODULE_EXPORT gboolean close_control_socket(void)
  **/
 G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
-	GtkWidget *widget = NULL;
+	static GAsyncQueue *slave_msg_queue = NULL;
+ 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
 	GTimeVal cur;
 	SlaveMessage *msg = NULL;
@@ -1538,10 +1539,11 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint res = 0;
 	gint len = 0;
 	guint8 *buffer = NULL;
-	extern GAsyncQueue *slave_msg_queue;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	if (!slave_msg_queue)
+		slave_msg_queue = DATA_GET(global_data,"slave_msq_queue");
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
@@ -3271,7 +3273,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 * disaster...
 	 */
 	static gboolean network_is_open = FALSE; /* Assume never opened */
-	extern GAsyncQueue *io_repair_queue;
+	static GAsyncQueue *io_repair_queue = NULL;
 	volatile gboolean autodetect = TRUE;
 	gchar * host = NULL;
 	gint port = 0;
@@ -3287,9 +3289,9 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
 		g_thread_exit(0);
 	}
-
 	if (!io_repair_queue)
-		io_repair_queue = g_async_queue_new();
+		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
+
 	/* IF network_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -3547,6 +3549,7 @@ G_MODULE_EXPORT gboolean close_control_socket(void)
         **/
 G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
+	static GAsyncQueue *slave_msg_queue = NULL;
 	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
 	GTimeVal cur;
@@ -3559,10 +3562,12 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint res = 0;
 	gint len = 0;
 	guint8 *buffer = NULL;
-	extern GAsyncQueue *slave_msg_queue;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	if (!slave_msg_queue)
+		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
+
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */

@@ -37,10 +37,6 @@
 #endif
 
 
-gint ms_reset_count;
-gint ms_goodread_count;
-gint ms_ve_goodread_count;
-extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;
 
 /* Cause OS-X sucks.... */
@@ -58,6 +54,7 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
+	static GMutex *serio_mutex = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	static gint failcount = 0;
 	static gboolean reset = FALSE;
@@ -71,6 +68,9 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	gboolean ignore_errors = FALSE;
 	Serial_Params *serial_params = NULL;;
 	serial_params = DATA_GET(global_data,"serial_params");
+
+	if (!serio_mutex)
+		serio_mutex = DATA_GET(global_data,"serio_mutex");
 
 	g_static_mutex_lock(&mutex);
 
@@ -94,7 +94,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		total_wanted *= 2;
 #endif
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
@@ -122,7 +122,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 
 		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 	}
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
 		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));

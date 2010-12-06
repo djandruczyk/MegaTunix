@@ -93,19 +93,19 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	   extern GThread * binary_socket_id;
 	   extern GThread * control_socket_id;
 	 */
-	extern GStaticMutex serio_mutex;
-	extern GStaticMutex rtv_mutex;
-	extern GAsyncQueue *io_repair_queue;
+	GMutex *serio_mutex = NULL;
+	GMutex *rtv_mutex = NULL;
+	GAsyncQueue *io_repair_queue = NULL;
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	GMutex *mutex = g_mutex_new();
-	extern GCond *pf_dispatch_cond;
-	extern GCond *gui_dispatch_cond;
-	extern GCond *io_dispatch_cond;
-	extern GCond *statuscounts_cond;
+	GCond *pf_dispatch_cond = NULL;
+	GCond *gui_dispatch_cond = NULL;
+	GCond *io_dispatch_cond = NULL;
+	GCond *statuscounts_cond = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -137,6 +137,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	/* Message to trigger serial repair queue to exit immediately */
+	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
@@ -157,6 +158,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* IO dispatch queue */
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
+	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
 
 	/* PF dispatch queue */
@@ -164,6 +166,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_source_remove(pf_dispatcher_id);
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
+	pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
 	/* Statuscounts timeout */
@@ -172,6 +175,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(0));
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
+	statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
 	g_cond_timed_wait(statuscounts_cond,mutex,&now);
 
 	/* GUI Dispatch timeout */
@@ -180,6 +184,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	gui_dispatcher_id = 0;
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
+	gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
 	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
 
 	g_mutex_unlock(mutex);
@@ -213,17 +218,18 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	}
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
-
-	g_static_mutex_lock(&rtv_mutex);  /* <-- this makes us wait */
-	g_static_mutex_unlock(&rtv_mutex); /* now unlock */
+	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+	g_mutex_lock(rtv_mutex);  /* <-- this makes us wait */
+	g_mutex_unlock(rtv_mutex); /* now unlock */
 
 	close_serial();
 	unlock_serial();
 
 	/* Grab and release all mutexes to get them to relinquish
 	 */
-	g_static_mutex_lock(&serio_mutex);
-	g_static_mutex_unlock(&serio_mutex);
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	g_mutex_lock(serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

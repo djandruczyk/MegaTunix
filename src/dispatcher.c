@@ -25,11 +25,6 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
-
-extern GAsyncQueue *pf_dispatch_queue;
-extern GAsyncQueue *gui_dispatch_queue;
-extern GCond *pf_dispatch_cond;
-extern GCond *gui_dispatch_cond;
 static GTimer *ticker;
 
 /*!
@@ -42,13 +37,19 @@ static GTimer *ticker;
  */
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
-	gint len=0;
+	static GAsyncQueue *pf_dispatch_queue = NULL;
+	static GCond *pf_dispatch_cond = NULL;
+ 	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
 	GTimeVal time;
 	extern gconstpointer *global_data;
 
+	if (!pf_dispatch_cond)
+		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
+	if (!pf_dispatch_queue)
+		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	if (!ticker)
 		ticker = g_timer_new();
 	else	
@@ -152,6 +153,8 @@ fast_exit:
  */
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
+	static GAsyncQueue *gui_dispatch_queue = NULL;
+	static GCond *gui_dispatch_cond = NULL;
 	gint len=0;
 	gint i=0;
 	UpdateFunction val = 0;
@@ -163,6 +166,10 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
+	if (!gui_dispatch_cond)
+		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	if (!gui_dispatch_queue) /*queue not built yet... */
 	{
 		g_cond_signal(gui_dispatch_cond);
