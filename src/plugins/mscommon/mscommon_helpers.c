@@ -23,6 +23,7 @@
 #include <firmware.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <mscommon_helpers.h>
 #include <mode_select.h>
 #include <mtxsocket.h>
 #include <notifications.h>
@@ -37,12 +38,14 @@
 #include <widgetmgmt.h>
 
 
+extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void start_statuscounts_pf(void)
 {
 	start_tickler(SCOUNTS_TICKLER);
 }
+
 
 
 G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
@@ -357,6 +360,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	Io_Message *message  = NULL;
 	OutputData *output  = NULL;
 	gint count = 0;
+	gchar *tmpbuf = NULL;
 	gint page = -1;
 	gint canID = -1;
 	guint16 curcount = 0;
@@ -528,7 +532,18 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 				thread_update_logbar("error_status_view",NULL,g_strdup(_("No ECU Errors were reported....\n")),FALSE,FALSE);
 				break;
 			}
-			if (!g_utf8_validate(((gchar *)message->recv_buf)+1,count-1,NULL))
+			if (g_utf8_validate(((gchar *)message->recv_buf)+1,count-1,NULL))
+			{
+				thread_update_logbar("error_status_view",NULL,g_strndup(((gchar *)message->recv_buf+7)+1,count-8),FALSE,FALSE);
+				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
+				{
+					tmpbuf = g_strndup(((gchar *)message->recv_buf)+1,count-1);
+					dbg_func(IO_PROCESS|SERIAL_RD,g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+					g_free(tmpbuf);
+				}
+
+			}
+			else
 				thread_update_logbar("error_status_view",NULL,g_strdup("The data came back as gibberish, please try again...\n"),FALSE,FALSE);
 			break;
 		default:

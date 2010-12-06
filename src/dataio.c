@@ -40,7 +40,6 @@
 gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
-extern gint dbg_lvl;
 extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;
 
@@ -164,6 +163,8 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 	guchar *p = NULL;
 	gchar * tmpbuf = NULL;
 	gint j = 0;
+	gint dbg_lvl = 0;
+	dbg_lvl = (gint)DATA_GET(global_data,"dbg_lvl");
 
 	p = buf;
 	if (total_read > 0)

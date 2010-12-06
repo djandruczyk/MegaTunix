@@ -12,7 +12,8 @@ plugin_LTLIBRARIES = libmscommon.la
 
 libmscommon_la_SOURCES = \
 	Makefile \
-	template.c
+	mscommon_plugin.c \
+	mscommon_plugin.h 
 
 libmscommon_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

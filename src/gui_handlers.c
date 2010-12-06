@@ -68,7 +68,6 @@ gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
-extern gint dbg_lvl;
 extern gconstpointer *global_data;
 
 extern GdkColor red;
@@ -406,7 +405,6 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	gchar * set_labels = NULL;
 	gchar * table_2_update = NULL;
 	gchar * group_2_update = NULL;
-	extern gint dbg_lvl;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
@@ -464,10 +462,10 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 			break;
 		case DEBUG_LEVEL:
 			/* Debugging selection buttons */
-			tmp32 = dbg_lvl;
+			tmp32 = (GINT)DATA_GET(global_data,"dbg_lvl");
 			tmp32 = tmp32 & ~bitmask;
 			tmp32 = tmp32 | (bitval << bitshift);
-			dbg_lvl = tmp32;
+			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmp32));
 			break;
 
 		case ALT_SIMUL:

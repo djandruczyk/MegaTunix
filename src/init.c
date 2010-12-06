@@ -45,7 +45,6 @@ gint minor_ver;
 gint micro_ver;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
-extern gint dbg_lvl;
 /* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
@@ -205,7 +204,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
 			DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
-		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
+		if(cfg_read_int(cfgfile, "Global", "dbg_lvl", &tmpi))
+			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmpi));
 		if(cfg_read_string(cfgfile, "Global", "last_offline_profile", &tmpbuf))
 		{
 			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),cleanup);
@@ -373,7 +373,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));
 	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)DATA_GET(global_data,"ve3d_fps"));
-	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	cfg_write_int(cfgfile, "Global", "dbg_lvl", (GINT)DATA_GET(global_data,"dbg_lvl"));
 	if (DATA_GET(global_data,"last_offline_profile"))
 		cfg_write_string(cfgfile, "Global", "last_offline_profile", DATA_GET(global_data,"last_offline_profile"));
 	if (DATA_GET(global_data,"last_offline_filename"))
@@ -619,18 +619,27 @@ G_MODULE_EXPORT void mem_alloc(void)
 	 */
 	if (!interdep_vars)
 	{
-		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
-		DATA_SET(global_data,"interdep_vars",interdep_vars);
+		if (firmware->total_tables > 0)
+		{
+			interdep_vars = g_new0(GHashTable *,firmware->total_tables);
+			DATA_SET(global_data,"interdep_vars",interdep_vars);
+		}
 	}
 	if (!algorithm)
 	{
-		algorithm = g_new0(gint, firmware->total_tables);
-		DATA_SET_FULL(global_data,"algorithm",algorithm,g_free);
+		if (firmware->total_tables > 0)
+		{
+			algorithm = g_new0(gint, firmware->total_tables);
+			DATA_SET_FULL(global_data,"algorithm",algorithm,cleanup);
+		}
 	}
 	if (!tracking_focus)
 	{
-		tracking_focus = g_new0(gboolean, firmware->total_tables);
-		DATA_SET_FULL(global_data,"tracking_focus",tracking_focus,g_free);
+		if (firmware->total_tables > 0)
+		{
+			tracking_focus = g_new0(gboolean, firmware->total_tables);
+			DATA_SET_FULL(global_data,"tracking_focus",tracking_focus,g_free);
+		}
 	}
 
 	for (i=0;i<firmware->total_tables;i++)

@@ -44,11 +44,7 @@
 #include <unistd.h>
 #include <widgetmgmt.h>
 
-extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
-extern gint dbg_lvl;
-Firmware_Details *firmware = NULL;
-
 
 #define BUFSIZE 4096
 
@@ -210,26 +206,20 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			else if (test->result_type == RESULT_DATA)
 				update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE,TRUE);
 			ptr = buf;
-			if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
-			{
-				dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",test->test_name));
-				message = g_strndup(((gchar *)buf),total_read);
-				dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate.c()\n\tDumping Output string: \"%s\"\n",message));
-				g_free(message);
-				dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("Data is in HEX!!\n"));
-			}
+			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",test->test_name));
+			message = g_strndup(((gchar *)buf),total_read);
+			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate.c()\n\tDumping Output string: \"%s\"\n",message));
+			g_free(message);
+			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("Data is in HEX!!\n"));
 			for (j=0;j<total_read;j++)
 			{
 				dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf("%.2x ", ptr[j]));
 				if (!((j+1)%8)) /* every 8 bytes give a CR */
-				{
 					dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("\n"));
-				}
 			}
 			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("\n\n"));
 		}
 	}
-
 	interrogated = determine_ecu(tests,tests_hash);	
 	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(interrogated));
 	if (interrogated)
@@ -276,6 +266,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	gchar * filename = NULL;
 	gchar ** filenames = NULL;
 	GArray *classes = NULL;
+	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
 
 	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
