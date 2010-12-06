@@ -34,7 +34,6 @@
 static gboolean timer_active = FALSE;
 static volatile gboolean moving = FALSE;
 static volatile gboolean resizing = FALSE;
-GStaticMutex dash_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
 /*!
@@ -413,6 +412,9 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
+	static GdkColormap *colormap = NULL;
+	static GdkColor black;
+	static GdkColor white;
 	GtkFixedChild *child = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -428,15 +430,13 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	GtkRequisition req;
 	gint width = 0;
 	gint height = 0;
-	static GdkColormap *colormap = NULL;
-	static GdkColor black;
-	static GdkColor white;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
 
 	if(!GTK_IS_WIDGET(dash))
 		return;
 	if(!GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 		return;
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 	if (!colormap)
@@ -518,7 +518,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	g_object_unref(colormap);
 	g_object_unref(gc1);
 	g_object_unref(bitmap);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return;
 }
 
@@ -1116,10 +1116,11 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 
 G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
-	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 	GtkWidget *label = NULL;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
+	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 	label = OBJ_GET(widget,"label");
 	if (GTK_IS_WIDGET(label))
 	{
@@ -1137,7 +1138,7 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	}
 	if (dash_hash)
 		g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return TRUE;
 }
 
