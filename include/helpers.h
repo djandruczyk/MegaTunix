@@ -22,7 +22,6 @@ void start_statuscounts_pf(void);
 void spawn_read_ve_const_pf(void);
 void enable_get_data_buttons_pf(void);
 void enable_ttm_buttons_pf(void);
-void enable_reboot_button_pf(void);
 void conditional_start_rtv_tickler_pf(void);
 void set_store_black_pf(void);
 void enable_3d_buttons_pf(void);

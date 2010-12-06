@@ -18,7 +18,7 @@
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
-#include <ms1-t-logger.h>
+#include <ms1_tlogger.h>
 
 TTMon_Data *ttm_data;
 

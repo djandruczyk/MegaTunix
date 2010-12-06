@@ -14,7 +14,7 @@
 #include <config.h>
 #include <defines.h>
 #include <ms1_plugin.h>
-#include <ms1-t-logger.h>
+#include <ms1_tlogger.h>
 #include <gtk/gtk.h>
 
 
