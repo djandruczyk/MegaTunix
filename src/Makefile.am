@@ -16,7 +16,6 @@ megatunix_SOURCES = \
 	2d_table_editor.c \
 	3d_vetable.c \
 	about_gui.c \
-	afr_calibrate.c \
 	apicheck.c \
 	args.c \
 	comms.c \
@@ -26,14 +25,11 @@ megatunix_SOURCES = \
 	conversions.c \
 	core_gui.c \
 	dashboard.c \
-	dataio.c \
-	datamgmt.c \
 	datalogging_gui.c \
 	debugging.c \
 	dep_loader.c \
 	dep_processor.c \
 	dispatcher.c \
-	fileio.c \
 	gui_handlers.c \
 	helpers.c \
 	init.c \
@@ -50,7 +46,6 @@ megatunix_SOURCES = \
 	menu_handlers.c \
 	memory_gui.c \
 	mode_select.c \
-	mtxsocket.c \
 	multi_expr_loader.c \
 	notifications.c \
 	offline.c \
@@ -58,7 +53,6 @@ megatunix_SOURCES = \
 	plugin.c \
 	post_process.c \
 	raweditor.c \
-	req_fuel.c \
 	rtv_map_loader.c \
 	rtv_processor.c \
 	runtime_gui.c \
@@ -69,12 +63,10 @@ megatunix_SOURCES = \
 	stringmatch.c \
 	tabloader.c \
 	tag_loader.c \
-	therm.c \
 	threads.c \
 	timeout_handlers.c \
 	user_outputs.c \
 	vetable_gui.c \
-	vex_support.c \
 	visibility.c \
 	warmwizard_gui.c \
 	watches.c \

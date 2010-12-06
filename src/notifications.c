@@ -15,7 +15,6 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <fileio.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
@@ -41,7 +40,7 @@ extern gconstpointer *global_data;
  \param group (gchar *) textual name of the group of controls to alter color
  \see set_widget_color
  */
-G_MODULE_EXPORT void set_group_color(GuiColor color, gchar *group)
+G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
 }

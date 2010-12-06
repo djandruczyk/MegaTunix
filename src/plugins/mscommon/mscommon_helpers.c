@@ -23,6 +23,7 @@
 #include <firmware.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <mscommon_comms.h>
 #include <mscommon_helpers.h>
 #include <mode_select.h>
 #include <mtxsocket.h>
@@ -38,14 +39,7 @@
 #include <widgetmgmt.h>
 
 
-extern gint dbg_lvl;
 extern gconstpointer *global_data;
-
-G_MODULE_EXPORT void start_statuscounts_pf(void)
-{
-	start_tickler(SCOUNTS_TICKLER);
-}
-
 
 
 G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
@@ -68,9 +62,9 @@ G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 		return;
 
 	gdk_threads_enter();
-	set_title(g_strdup(_("Queuing read of all ECU data...")));
+	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
 	gdk_threads_leave();
-	io_cmd(firmware->get_all_command,NULL);
+	io_cmd_f(firmware->get_all_command,NULL);
 }
 
 
@@ -89,7 +83,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	if (last_page == -1)
 	{
 		command = (Command *)data;
-		io_cmd(NULL,command->post_functions);
+		io_cmd_f(NULL,command->post_functions);
 		return TRUE;
 	}
 	/*printf("burn all helper\n");*/
@@ -101,12 +95,12 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
 		{
 	/*		printf("paged burn\n");*/
-			output = initialize_outputdata();
+			output = initialize_outputdata_f();
 			DATA_SET(output->data,"page",GINT_TO_POINTER(last_page));
 			DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
 			DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 			DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-			io_cmd(firmware->burn_command,output);
+			io_cmd_f(firmware->burn_command,output);
 		}
 		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_E)))
 		{
@@ -115,17 +109,17 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 			{
 				if (!firmware->page_params[i]->dl_by_default)
 					continue;
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(i));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->burn_command,output);
+				io_cmd_f(firmware->burn_command,output);
 			}
 		}
 	}
 	command = (Command *)data;
-	io_cmd(NULL,command->post_functions);
+	io_cmd_f(NULL,command->post_functions);
 	return TRUE;
 }
 
@@ -146,7 +140,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 
 			if (!DATA_GET(global_data,"offline"))
 			{
-				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
 				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				for (i=0;i<firmware->total_pages;i++)
@@ -154,20 +148,20 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
 					queue_ms1_page_change(i);
-					output = initialize_outputdata();
+					output = initialize_outputdata_f();
 					DATA_SET(output->data,"page",GINT_TO_POINTER(i));
 					DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd(firmware->ve_command,output);
+					io_cmd_f(firmware->ve_command,output);
 				}
 			}
 			command = (Command *)data;
-			io_cmd(NULL,command->post_functions);
+			io_cmd_f(NULL,command->post_functions);
 			break;
 		case MS2_VECONST:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
 				if ((firmware->capabilities & MS2_E) && 
 						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
@@ -175,18 +169,18 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					output = initialize_outputdata();
+					output = initialize_outputdata_f();
 					DATA_SET(output->data,"page",GINT_TO_POINTER(i));
 					DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 					DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd(firmware->ve_command,output);
+					io_cmd_f(firmware->ve_command,output);
 				}
 			}
 			command = (Command *)data;
-			io_cmd(NULL,command->post_functions);
+			io_cmd_f(NULL,command->post_functions);
 			break;
 		case MS2_E_COMPOSITEMON:
 			if (!DATA_GET(global_data,"offline"))
@@ -194,17 +188,17 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && 
 						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->compositemon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
 				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->ve_command,output);
+				io_cmd_f(firmware->ve_command,output);
 			}
 			command = (Command *)data;
-			io_cmd(NULL,command->post_functions);
+			io_cmd_f(NULL,command->post_functions);
 			break;
 		case MS2_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
@@ -212,17 +206,17 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && 
 						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->ve_command,output);
+				io_cmd_f(firmware->ve_command,output);
 			}
 			command = (Command *)data;
-			io_cmd(NULL,command->post_functions);
+			io_cmd_f(NULL,command->post_functions);
 			break;
 		case MS2_E_TOOTHMON:
 			if (!DATA_GET(global_data,"offline"))
@@ -230,17 +224,17 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if ((firmware->capabilities & MS2_E) && 
 						(DATA_GET(global_data,"outstanding_data")))
 					queue_burn_ecu_flash(last_page);
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->ve_command,output);
+				io_cmd_f(firmware->ve_command,output);
 			}
 			command = (Command *)data;
-			io_cmd(NULL,command->post_functions);
+			io_cmd_f(NULL,command->post_functions);
 			break;
 		case MS1_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
@@ -248,13 +242,13 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->trigmon_page);
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->ve_command,output);
+				io_cmd_f(firmware->ve_command,output);
 				command = (Command *)data;
-				io_cmd(NULL,command->post_functions);
+				io_cmd_f(NULL,command->post_functions);
 			}
 			break;
 		case MS1_E_TOOTHMON:
@@ -263,13 +257,13 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 				if (DATA_GET(global_data,"outstanding_data"))
 					queue_burn_ecu_flash(last_page);
 				queue_ms1_page_change(firmware->toothmon_page);
-				output = initialize_outputdata();
+				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd(firmware->ve_command,output);
+				io_cmd_f(firmware->ve_command,output);
 				command = (Command *)data;
-				io_cmd(NULL,command->post_functions);
+				io_cmd_f(NULL,command->post_functions);
 			}
 			break;
 		default:
@@ -279,79 +273,13 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
 }
 
 
-G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
-{
-	gdk_threads_enter();
-	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
-	gdk_threads_leave();
-}
-
-
 G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 {
 	gdk_threads_enter();
-	g_list_foreach(get_list("ttm_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	g_list_foreach(get_list_f("ttm_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
 	gdk_threads_leave();
 }
 
-
-G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
-{
-	static gboolean just_starting = TRUE;
-
-	if (just_starting)
-	{
-		start_tickler(RTV_TICKLER);
-		just_starting = FALSE;
-	}
-}
-
-
-G_MODULE_EXPORT void set_store_black_pf(void)
-{
-	gint j = 0;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
-
-	gdk_threads_enter();
-	set_group_color(BLACK,"burners");
-	slaves_set_color(BLACK,"burners");
-	for (j=0;j<firmware->total_tables;j++)
-		set_reqfuel_color(BLACK,j);
-	gdk_threads_leave();
-}
-
-G_MODULE_EXPORT void enable_3d_buttons_pf(void)
-{
-	gdk_threads_enter();
-	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
-	gdk_threads_leave();
-}
-
-
-G_MODULE_EXPORT void disable_burner_buttons_pf(void)
-{
-	gdk_threads_enter();
-	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-	gdk_threads_leave();
-}
-
-G_MODULE_EXPORT void reset_temps_pf(void)
-{
-	gdk_threads_enter();
-	set_title(g_strdup(_("Adjusting for local Temp units...")));
-	reset_temps(DATA_GET(global_data,"temp_units"));
-	set_title(g_strdup(_("Ready...")));
-	gdk_threads_leave();
-}
-
-G_MODULE_EXPORT void ready_msg_pf(void)
-{
-	gdk_threads_enter();
-	set_title(g_strdup(_("Ready...")));
-	gdk_threads_leave();
-}
 
 G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 {
@@ -363,12 +291,10 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 	gchar *tmpbuf = NULL;
 	gint page = -1;
 	gint canID = -1;
+	gint tmpi = 0;
 	guint16 curcount = 0;
 	guint8 *ptr8 = NULL;
 	guint16 *ptr16 = NULL;
-	extern gint ms_ve_goodread_count;
-	extern gint ms_reset_count;
-	extern gint ms_goodread_count;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -397,9 +323,9 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			ptr8 = (guchar *)message->recv_buf;
 			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
-				thread_update_widget("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
+				thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
 			else
-				thread_update_widget("ecu_revision_entry",MTX_ENTRY,g_strdup(""));
+				thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup(""));
 			break;
 		case TEXT_REV:
 			if (DATA_GET(global_data,"offline"))
@@ -407,7 +333,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
+				thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				 firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
 			}
@@ -418,7 +344,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			 count = read_data(-1,&message->recv_buf,FALSE);
                          if (count > 0)
 			 {
-				 thread_update_widget("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
+				 thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				 firmware->signature_len = count;
 				 firmware->actual_signature = g_strndup(message->recv_buf,count);
 			 }
@@ -434,7 +360,8 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 					message->recv_buf,
 					firmware->page_params[page]->length);
 			backup_current_data(canID,page);
-			ms_ve_goodread_count++;
+			tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
+			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			break;
 		case MS1_RT_VARS:
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
@@ -454,18 +381,22 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if ((lastcount - ptr8[0] > 1) && \
 					(lastcount - ptr8[0] != 255))
 			{
-				ms_reset_count++;
+				tmpi = (GINT)DATA_GET(global_data,"reset_count");
+				DATA_SET(global_data,"reset_count",GINT_TO_POINTER(++tmpi));
 				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
-//				gdk_beep();
+				gdk_beep();
 			}
 			else
-				ms_goodread_count++;
+			{
+				tmpi = (GINT)DATA_GET(global_data,"rt_goodread_count");
+				DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(++tmpi));
+			}
 			lastcount = ptr8[0];
 			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars((void *)message->recv_buf);
+			process_rt_vars_f((void *)message->recv_buf);
 			break;
 		case MS2_RT_VARS:
 			page = (GINT)DATA_GET(output->data,"page");
@@ -507,18 +438,22 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			if ((lastcount - curcount > 1) && \
 					(lastcount - curcount != 65535))
 			{
-				ms_reset_count++;
+				tmpi = (GINT)DATA_GET(global_data,"reset_count");
+				DATA_SET(global_data,"reset_count",GINT_TO_POINTER(++tmpi));
 				printf(_("MS2 rtvars reset detected, lastcount is %i, current %i"),lastcount,curcount);
-//				gdk_beep();
+				gdk_beep();
 			}
 			else
-				ms_goodread_count++;
+			{
+				tmpi = (GINT)DATA_GET(global_data,"rt_goodread_count");
+				DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(++tmpi));
+			}
 			lastcount = curcount;
 			/* Feed raw buffer over to post_process(void)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars((void *)message->recv_buf);
+			process_rt_vars_f((void *)message->recv_buf);
 			break;
 		case MS2_BOOTLOADER:
 			printf(_("MS2_BOOTLOADER not written yet\n"));
@@ -529,22 +464,18 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
-				thread_update_logbar("error_status_view",NULL,g_strdup(_("No ECU Errors were reported....\n")),FALSE,FALSE);
+				thread_update_logbar_f("error_status_view",NULL,g_strdup(_("No ECU Errors were reported....\n")),FALSE,FALSE);
 				break;
 			}
 			if (g_utf8_validate(((gchar *)message->recv_buf)+1,count-1,NULL))
 			{
-				thread_update_logbar("error_status_view",NULL,g_strndup(((gchar *)message->recv_buf+7)+1,count-8),FALSE,FALSE);
-				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
-				{
-					tmpbuf = g_strndup(((gchar *)message->recv_buf)+1,count-1);
-					dbg_func(IO_PROCESS|SERIAL_RD,g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
-					g_free(tmpbuf);
-				}
-
+				thread_update_logbar_f("error_status_view",NULL,g_strndup(((gchar *)message->recv_buf+7)+1,count-8),FALSE,FALSE);
+				tmpbuf = g_strndup(((gchar *)message->recv_buf)+1,count-1);
+				dbg_func_f(IO_PROCESS|SERIAL_RD,g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+				g_free(tmpbuf);
 			}
 			else
-				thread_update_logbar("error_status_view",NULL,g_strdup("The data came back as gibberish, please try again...\n"),FALSE,FALSE);
+				thread_update_logbar_f("error_status_view",NULL,g_strdup("The data came back as gibberish, please try again...\n"),FALSE,FALSE);
 			break;
 		default:
 			break;
@@ -569,7 +500,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 		backup_current_data(firmware->canID,i);
 	}
 
-	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
+	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
 }
@@ -590,34 +521,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 		return;
 	backup_current_data(firmware->canID,page);
 
-	dbg_func(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
+	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
 }
-
-
-G_MODULE_EXPORT void startup_default_timeouts_pf(void)
-{
-	gint source = 0;
-	gint rate = 0;
-
-	gdk_threads_enter();
-	set_title(g_strdup(_("Starting up data renderers...")));
-	gdk_threads_leave();
-	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL);
-	DATA_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
-
-	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL);
-	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
-
-	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL);
-	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
-
-	rate = (GINT)DATA_GET(global_data,"ve3d_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
-	DATA_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
-}
-

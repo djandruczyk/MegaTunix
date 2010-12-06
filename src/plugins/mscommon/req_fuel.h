@@ -16,30 +16,30 @@
 
 #include <gtk/gtk.h>
 
-typedef struct _Req_Fuel_Params Req_Fuel_Params;
-typedef struct _Reqd_Fuel Reqd_Fuel;
+/* Externs */
+extern guint (*get_bitshift_f)(guint);
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern void (*set_group_color_f)(GuiColor, const gchar * );
+extern GtkWidget *(*spin_button_handler_f)(GtkWidget *,gpointer);
+extern gint (*get_multiplier_f)(DataSize );
+extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
+extern gfloat (*convert_after_upload_f)(GtkWidget *);
+extern gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer );
+extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
+/* Externs */
 
-/*!
- \brief The _Req_Fuel_Params structure is used to store the current and last
- values of the interdependant required fuel parameters for the function
- that verifies req_fuel status and downloads it.  There is one structure
- allocated PER Table (even if the table's aren't fuel..)
- */
-struct _Req_Fuel_Params
+
+typedef enum
 {
-	gint num_squirts;
-	gint num_cyls;
-	gint num_inj;
-	gint divider;
-	gint alternate;
-	gint last_num_squirts;
-	gint last_num_cyls;
-	gint last_num_inj;
-	gint last_divider;
-	gint last_alternate;
-	gfloat req_fuel_total;
-	gfloat last_req_fuel_total;
-};
+	REQ_FUEL_DISP=0xf80,
+	REQ_FUEL_CYLS,
+	REQ_FUEL_RATED_INJ_FLOW,
+	REQ_FUEL_RATED_PRESSURE,
+	REQ_FUEL_ACTUAL_PRESSURE,
+	REQ_FUEL_AFR
+}RfHandler;
+
+typedef struct _Reqd_Fuel Reqd_Fuel;
 
 /*! 
  Controls for the Required Fuel Calculator... 
@@ -71,6 +71,9 @@ gboolean close_popup(GtkWidget *);
 void req_fuel_change(GtkWidget *);
 void check_req_fuel_limits(gint);
 Reqd_Fuel * initialize_reqd_fuel(gint );
+gboolean drain_hashtable(gpointer, gpointer, gpointer);
+gboolean rf_spin_button_handler(GtkWidget *, gpointer);
+
 /* Prototypes */
 
 #endif

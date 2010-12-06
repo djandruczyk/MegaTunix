@@ -12,7 +12,6 @@
  */
 
 #include <config.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
@@ -161,13 +160,11 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 	for (i=0;i<3;i++)
 	{
 		if ((module[i]) && (!found))
-		{
-			g_module_symbol(module[i],name,function_p);
-			found = TRUE;
-		}
+			if (g_module_symbol(module[i],name,function_p))
+				found = TRUE;
 	}
 	if (!found)
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\", error:\n\t%s\n",name,g_module_error()));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\" in any plugins\n",name));
 
 	return found;
 }

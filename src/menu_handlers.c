@@ -13,19 +13,17 @@
 #include <config.h>
 #include <defines.h>
 #include <afr_calibrate.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
-#include <fileio.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <menu_handlers.h>
+#include <plugin.h>
 #include <runtime_text.h>
 #include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
-#include <vex_support.h>
 #include <widgetmgmt.h>
 #include <mtxmatheval.h>
 
@@ -168,20 +166,28 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
 	action = (FioAction)OBJ_GET(widget,"fio_action");
+	void (*do_backup)(GtkWidget *, gpointer) = NULL;
+	void (*do_restore)(GtkWidget *, gpointer) = NULL;
+	void (*vex_import)(GtkWidget *, gpointer) = NULL;
+	void (*vex_export)(GtkWidget *, gpointer) = NULL;
 
 	switch (action)
 	{
 		case VEX_IMPORT:
-			select_vex_for_import(NULL,NULL);
+			if (get_symbol("select_vex_for_import",(void*)&vex_import))
+				vex_import(NULL,NULL);
 			break;
 		case VEX_EXPORT:
-			select_vex_for_export(NULL,NULL);
+			if (get_symbol("select_vex_for_export",(void*)&vex_export))
+				vex_export(NULL,NULL);
 			break;
 		case ECU_BACKUP:
-			select_file_for_ecu_backup(NULL,NULL);
+			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))
+				do_backup(NULL,NULL);
 			break;
 		case ECU_RESTORE:
-			select_file_for_ecu_restore(NULL,NULL);
+			if (get_symbol("select_file_for_ecu_restore",(void*)&do_restore))
+				do_restore(NULL,NULL);
 			break;
 	}
 	return TRUE;

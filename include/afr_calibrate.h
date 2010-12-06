@@ -16,7 +16,6 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 /* Prototypes */
  gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);

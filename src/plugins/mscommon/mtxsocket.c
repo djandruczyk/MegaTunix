@@ -19,7 +19,6 @@
 #include <args.h>
 #include <config.h>
 #include <configfile.h>
-#include <comms.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -27,7 +26,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <firmware.h>
-#include <gui_handlers.h>
 #include <glib.h>
 #include <gio/gio.h>
 #include <init.h>
@@ -94,7 +92,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail1 = TRUE;
 		g_free(mtxsock);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
 	}
 
 	mtxsock = g_new0(MtxSocket,1);
@@ -114,7 +112,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail2 = TRUE;
 		g_free(mtxsock);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
 	}
 
 	mtxsock = g_new0(MtxSocket,1);
@@ -134,7 +132,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail3 = TRUE;
 		g_free(mtxsock);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
 	}
 
 	if ((!fail1) && (!fail2) &&(!fail3))
@@ -158,7 +156,7 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 	sock = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (sock < 0)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setup_socket()\n\tSocket creation error: %s\n",error->message));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setup_socket()\n\tSocket creation error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return NULL;
@@ -169,7 +167,7 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 	sockaddr = g_inet_socket_address_new(inetaddr,port);
 	if(!g_socket_bind(sock,sockaddr,TRUE,&error))
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket bind error: %s\n",error->message));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket bind error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		g_socket_close(sock,NULL);
@@ -182,7 +180,7 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 	g_socket_set_listen_backlog (sock,5);
 	if (!g_socket_listen(sock,&error))
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket listen error: %s\n",error->message));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setupo_socket()\n\tSocket listen error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		g_socket_close(sock,NULL);
@@ -218,7 +216,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
+	dbg_func_f(MTXSOCKET|THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
 	while (TRUE)
 	{
@@ -299,7 +297,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 			last_bin_client->container = (gpointer)slave_list;
 			g_ptr_array_add(slave_list,last_bin_client);
 			last_bin_client = NULL; /* to prevent adding it to multiple clients by mistake. The next binary client will regenerated it */
-			widget = lookup_widget("connected_clients_entry");
+			widget = lookup_widget_f("connected_clients_entry");
 			tmpbuf = g_strdup_printf("%i",slave_list->len);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
@@ -326,7 +324,7 @@ G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 	gint res = 0;
 	GError *error = NULL;
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
 
 	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
 	net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
@@ -358,7 +356,7 @@ close_ascii:
 			if (res < 0)
 			{
 
-				dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": ascii_socket_server()\n\trecv error \"%s\"\n",error->message));
+				dbg_func_f(THREADS|CRITICAL,g_strdup_printf(__FILE__": ascii_socket_server()\n\trecv error \"%s\"\n",error->message));
 				g_error_free(error);
 				error = NULL;
 				g_socket_close(client->socket,NULL);
@@ -420,7 +418,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	next_state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": binary_socket_server()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": binary_socket_server()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		/* Condition handling */
@@ -435,7 +433,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 		if (res < 0)
 		{
 close_binary:
-			dbg_func(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
+			dbg_func_f(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
 close_binary2:
@@ -447,7 +445,7 @@ close_binary2:
 				g_ptr_array_remove(slave_list,client);
 				dealloc_client_data(client);
 				client = NULL;
-				widget = lookup_widget("connected_clients_entry");
+				widget = lookup_widget_f("connected_clients_entry");
 				tmpbuf = g_strdup_printf("%i",slave_list->len);
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 				g_free(tmpbuf);
@@ -503,7 +501,7 @@ close_binary2:
 					case 'B':/* MS1 burn */
 						/*						printf("'B' received\n");*/
 						if (firmware->capabilities & MS1)
-							io_cmd(firmware->burn_all_command,NULL);
+							io_cmd_f(firmware->burn_all_command,NULL);
 						continue;
 					case 'r':/* MS2 partial table read */
 						if (firmware->capabilities & MS2)
@@ -528,7 +526,7 @@ close_binary2:
 						{
 							/*							printf("'c' received\n");*/
 							state = WAITING_FOR_CMD;
-							lookup_current_value("raw_secl",&tmpf);
+							lookup_current_value_f("raw_secl",&tmpf);
 							tmpi = (guint16)tmpf;
 							res = net_send(client->socket,(guint8 *)&tmpi,2);
 							/*							printf("MS2 clock sent, %i bytes delivered\n",res);*/
@@ -538,7 +536,7 @@ close_binary2:
 						if (firmware->capabilities & MS1)
 						{
 							/*							printf("'C' received\n");*/
-							lookup_current_value("raw_secl",&tmpf);
+							lookup_current_value_f("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
 							res = net_send(client->socket,(guint8 *)&tmpi,1);
 							/*							printf("MS1 clock sent, %i bytes delivered\n",res);*/
@@ -636,21 +634,21 @@ close_binary2:
 					state = GET_MS1_EXTRA_REBOOT;
 				if (buf == 'x')
 				{
-					io_cmd("ms2_reinit",NULL);
+					io_cmd_f("ms2_reinit",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
 			case GET_MS1_EXTRA_REBOOT:
 				if (buf == 'X')
 				{
-					io_cmd("ms1_extra_reboot_get_error",NULL);
+					io_cmd_f("ms1_extra_reboot_get_error",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
 			case GET_MS2_REBOOT:
 				if (buf == 'x')
 				{
-					io_cmd("ms2_reboot",NULL);
+					io_cmd_f("ms2_reboot",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
@@ -705,12 +703,12 @@ close_binary2:
 					if (find_mtx_page(tableID,&mtx_page))
 					{
 						/*						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);*/
-						output = initialize_outputdata();
+						output = initialize_outputdata_f();
 						DATA_SET(output->data,"page",GINT_TO_POINTER(mtx_page));
 						DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(tableID));
 						DATA_SET(output->data,"canID",GINT_TO_POINTER(canID));
 						DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-						io_cmd(firmware->burn_command,output);
+						io_cmd_f(firmware->burn_command,output);
 					}
 
 				}
@@ -872,7 +870,7 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 	tmpbuf = g_ascii_strup(vector[0],-1);
 	arg2 = g_strdup(vector[1]);
 	g_strfreev(vector);
-	cmd = translate_string(tmpbuf);
+	cmd = translate_string_f(tmpbuf);
 	g_free(tmpbuf);
 
 	switch (cmd)
@@ -965,7 +963,7 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 				socket_set_ecu_var(client,arg2,MTX_S32);
 			break;
 		case BURN_FLASH:
-			io_cmd(firmware->burn_all_command,NULL);
+			io_cmd_f(firmware->burn_all_command,NULL);
 
 			break;
 		case GET_SIGNATURE:
@@ -1060,13 +1058,13 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 	output = g_string_sized_new(8);
 	for (i=0;i<g_strv_length(vars);i++)
 	{
-		if (g_strcasecmp(vars[i],"*")==0)
+		if (g_ascii_strcasecmp(vars[i],"*")==0)
 		{
 			for (j=0;j<rtv_map->rtv_list->len;j++)
 			{
 				object = g_ptr_array_index(rtv_map->rtv_list,j);
-				lookup_current_value((gchar *)DATA_GET(object,"internal_names"),&tmpf);
-				lookup_precision((gchar *)DATA_GET(object,"internal_names"),&tmpi);
+				lookup_current_value_f((gchar *)DATA_GET(object,"internal_names"),&tmpf);
+				lookup_precision_f((gchar *)DATA_GET(object,"internal_names"),&tmpi);
 				if (j < (rtv_map->rtv_list->len-1))
 					g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 				else
@@ -1076,8 +1074,8 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 		}
 		else
 		{
-			lookup_current_value(vars[i],&tmpf);
-			lookup_precision(vars[i],&tmpi);
+			lookup_current_value_f(vars[i],&tmpf);
+			lookup_precision_f(vars[i],&tmpi);
 			if (i < (g_strv_length(vars)-1))
 				g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 			else
@@ -1302,13 +1300,12 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 
 	args = DATA_GET(global_data,"args");
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
 		g_thread_exit(0);
 	}
-
 	if (!io_repair_queue)
 		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	/* IF network_is_open is true, then the port was ALREADY opened 
@@ -1318,11 +1315,11 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 */
 	if (network_is_open == TRUE)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Port considered open, but throwing errors\n"));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
 		while (i <= 5)
 		{
-			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
+			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
 				g_thread_exit(0);
@@ -1340,7 +1337,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
+			g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
@@ -1363,37 +1360,37 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 			host = args->network_host;
 			port = args->network_port;
 		}
-		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
+		thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
 		if (open_network(host,port))
 		{
-			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
+			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
 			if (comms_test())
 			{
 				network_is_open = TRUE;
-				thread_update_logbar("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
+				thread_update_logbar_f("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
 				open_control_socket(host,MTX_SOCKET_CONTROL_PORT);
-				cleanup(vector);
+				cleanup_f(vector);
 				break;
 			}
 			else
 			{
-				thread_update_logbar("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
+				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
 				close_network();
 				close_control_socket();
-				cleanup(vector);
+				cleanup_f(vector);
 				g_usleep(200000); /* Sleep 200ms */
 				continue;
 			}
 		}
 		else
 		{
-			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Failed to open network connection to %s:%i, sleeping...\n"),host,port),FALSE,FALSE);
+			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Failed to open network connection to %s:%i, sleeping...\n"),host,port),FALSE,FALSE);
 			g_usleep(500000); /* Sleep 500ms */
 		}
 	}
 	if (network_is_open)
 	{
-		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
+		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
 	}
 	g_thread_exit(0);
 	return NULL;
@@ -1415,7 +1412,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",error->message));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1427,7 +1424,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (!status)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",error->message));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1462,7 +1459,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket open error: %s\n",error->message));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket open error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1474,7 +1471,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket connect error: %s\n",error->message));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket connect error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1545,7 +1542,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	if (!slave_msg_queue)
 		slave_msg_queue = DATA_GET(global_data,"slave_msq_queue");
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
 	{
 		g_get_current_time(&cur);
@@ -1646,7 +1643,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 					dealloc_client_data(cli_data);
 					cli_data = NULL;
 					res = 0;
-					widget = lookup_widget("connected_clients_entry");
+					widget = lookup_widget_f("connected_clients_entry");
 					tmpbuf = g_strdup_printf("%i",slave_list->len);
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
@@ -1689,7 +1686,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
-	dbg_func(MTXSOCKET|THREADS,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
+	dbg_func_f(MTXSOCKET|THREADS,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		if (DATA_GET(global_data,"leaving"))
@@ -1698,7 +1695,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 		if (res <= 0)
 		{
 close_control:
-			dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error \"%s\"\n",error->message));
+			dbg_func_f(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
 
@@ -1706,20 +1703,20 @@ close_control:
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		dbg_func(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
-		dbg_func(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf)); 
+		dbg_func_f(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
+		dbg_func_f(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf)); 
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 				}
 				else if (buf == SLAVE_STATUS_UPDATE)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("slave status update!\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("slave status update!\n"));
 					state = GET_ACTION;
 					/* Put in handlers here to pickup
 					   status messages and other stuff
@@ -1730,53 +1727,53 @@ close_control:
 				continue;
 			case GET_ACTION:
 				action = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("Got action message!\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("Got action message!\n"));
 				if (action == GROUP_SET_COLOR)
 					state = GET_COLOR;
 				else
 					state = WAITING_FOR_CMD;
 				continue;
 			case GET_COLOR:
-				dbg_func(MTXSOCKET,g_strdup_printf("got color\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("got color\n"));
 				color = (GuiColor)buf;
 				state = GET_HIGH_COUNT;
 				substate = GET_STRING;
 				continue;
 			case GET_CAN_ID:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_canid block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_canid block\n"));
 				canID = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
 				page = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
 				offset_h = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
 				offset_l = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
 				count_h = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
 				count_l = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -1801,7 +1798,7 @@ close_control:
 					if (substate == SET_COLOR)
 					{
 						gdk_threads_enter();
-						set_group_color(color,string);
+						set_group_color_f(color,string);
 						gdk_threads_leave();
 					}
 					g_free(string);
@@ -1811,13 +1808,13 @@ close_control:
 					state = GET_STRING;
 				continue;
 			case GET_DATABLOCK:
-				dbg_func(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
+				dbg_func_f(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
 				buffer[index] = (guint8)buf;
 				index++;
-				dbg_func(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
+				dbg_func_f(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
 				if (index >= count)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
@@ -1827,13 +1824,13 @@ close_control:
 					gdk_threads_leave();
 					g_free(buffer);
 					index = 0;
-					dbg_func(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
 				}
 				else
 					state = GET_DATABLOCK;
 				continue;
 			default:
-				dbg_func(MTXSOCKET|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
+				dbg_func_f(MTXSOCKET|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
 				continue;
 
 		}
@@ -1855,7 +1852,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
 	{
-		dbg_func(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket open error: %s\n",error->message));
+		dbg_func_f(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket open error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1867,7 +1864,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
 	if (status == -1)
 	{
-		dbg_func(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket connect error: %s\n",error->message));
+		dbg_func_f(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_control_socket()\n\tSocket connect error: %s\n",error->message));
 		g_error_free(error);
 		error = NULL;
 		return FALSE;
@@ -1910,7 +1907,7 @@ G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 		n = g_socket_send(socket,(gchar *)buf+total,(gsize)bytesleft,NULL,&error);
 		if (n == -1) 
 		{ 
-			dbg_func(MTXSOCKET|CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__" net_send()\n\tSocket send error: \"%s\"\n",error->message));
+			dbg_func_f(MTXSOCKET|CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__" net_send()\n\tSocket send error: \"%s\"\n",error->message));
 			g_error_free(error);
 			error = NULL;
 			return -1; 
@@ -1970,13 +1967,39 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 	return buffer;
 }
 
+
+/*!
+   \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
+   sockets
+   */
+G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
+{
+	gint i = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	/*printf("dealloc_client_data\n");*/
+	if (client)
+	{
+		cleanup_f (client->ip);
+
+		if (client->ecu_data)
+		{
+			for (i=0;i<firmware->total_pages;i++)
+				cleanup_f (client->ecu_data[i]);
+			cleanup_f(client->ecu_data);
+		}
+		cleanup_f(client);
+	}
+}
+
+
 #else
 /* Legacy GTK+ 2.16 and older implementation */
 #include <api-versions.h>
 #include <args.h>
 #include <config.h>
 #include <configfile.h>
-#include <comms.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -1984,7 +2007,6 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 #include <errno.h>
 #include <fcntl.h>
 #include <firmware.h>
-#include <gui_handlers.h>
 #include <glib.h>
 #include <init.h>
 #include <mtxsocket.h>
@@ -2054,7 +2076,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail1 = TRUE;
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up ASCII TCP socket\n"));
 	}
 
 	socket = g_new0(MtxSocket,1);
@@ -2073,7 +2095,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail2 = TRUE;
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up BINARY TCP control socket\n"));
 	}
 
 	socket = g_new0(MtxSocket,1);
@@ -2092,7 +2114,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail3 = TRUE;
 		g_free(socket);
-		dbg_func(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": open_tcpip_sockets()\n\tERROR setting up TCP control socket\n"));
 	}
 
 	if ((!fail1) && (!fail2) &&(!fail3))
@@ -2201,7 +2223,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": socket_thread_manager()\n\tThread created!\n"));
 
 	while (TRUE)
 	{
@@ -2277,7 +2299,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 			last_bin_client->container = (gpointer)slave_list;
 			g_ptr_array_add(slave_list,last_bin_client);
 			last_bin_client = NULL; /* to prevent adding it to multiple clients by mistake. The next binary client will regenerated it */
-			widget = lookup_widget("connected_clients_entry");
+			widget = lookup_widget_f("connected_clients_entry");
 			tmpbuf = g_strdup_printf("%i",slave_list->len);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
@@ -2305,7 +2327,7 @@ G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 	fd_set rd;
 	gint res = 0;
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": ascii_socket_server()\n\tThread created!\n"));
 
 	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
 	net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
@@ -2404,7 +2426,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	next_state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": binary_socket_server()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": binary_socket_server()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		/* Condition handling */
@@ -2426,7 +2448,7 @@ close_binary:
 				g_ptr_array_remove(slave_list,client);
 				dealloc_client_data(client);
 				client = NULL;
-				widget = lookup_widget("connected_clients_entry");
+				widget = lookup_widget_f("connected_clients_entry");
 				tmpbuf = g_strdup_printf("%i",slave_list->len);
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 				g_free(tmpbuf);
@@ -2482,7 +2504,7 @@ close_binary:
 					case 'B':/* MS1 burn */
 						/*						printf("'B' received\n");*/
 						if (firmware->capabilities & MS1)
-							io_cmd(firmware->burn_all_command,NULL);
+							io_cmd_f(firmware->burn_all_command,NULL);
 						continue;
 					case 'r':/* MS2 partial table read */
 						if (firmware->capabilities & MS2)
@@ -2507,7 +2529,7 @@ close_binary:
 						{
 							/*							printf("'c' received\n");*/
 							state = WAITING_FOR_CMD;
-							lookup_current_value("raw_secl",&tmpf);
+							lookup_current_value_f("raw_secl",&tmpf);
 							tmpi = (guint16)tmpf;
 							res = net_send(fd,(guint8 *)&tmpi,2,0);
 							/*							printf("MS2 clock sent, %i bytes delivered\n",res);*/
@@ -2517,7 +2539,7 @@ close_binary:
 						if (firmware->capabilities & MS1)
 						{
 							/*							printf("'C' received\n");*/
-							lookup_current_value("raw_secl",&tmpf);
+							lookup_current_value_f("raw_secl",&tmpf);
 							tmpi = (guint8)tmpf;
 							res = net_send(fd,(guint8 *)&tmpi,1,0);
 							/*							printf("MS1 clock sent, %i bytes delivered\n",res);*/
@@ -2582,8 +2604,8 @@ close_binary:
 						if (firmware->capabilities & MS1)
 						{
 							/*							printf("'V' received (MS1 VEtable)\n");*/
-							if ((gint)DATA_GET(global_data,"last_page") < 0)
-								(gint)DATA_GET(global_data,"last_page") = 0;
+							if ((gint)DATA_GET(global_data,"last_page") < 0) 
+								DATA_SET(global_data,"last_page",GINT_TO_POINTER(0));
 							res = net_send (fd,(guint8 *)firmware->ecu_data[(gint)DATA_GET(global_data,"last_page")],firmware->page_params[(gint)DATA_GET(global_data,"last_page")]->length,0);
 							/*							printf("MS1 VEtable, %i bytes delivered\n",res);*/
 						}
@@ -2615,21 +2637,21 @@ close_binary:
 					state = GET_MS1_EXTRA_REBOOT;
 				if (buf == 'x')
 				{
-					io_cmd("ms2_reinit",NULL);
+					io_cmd_f("ms2_reinit",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
 			case GET_MS1_EXTRA_REBOOT:
 				if (buf == 'X')
 				{
-					io_cmd("ms1_extra_reboot_get_error",NULL);
+					io_cmd_f("ms1_extra_reboot_get_error",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
 			case GET_MS2_REBOOT:
 				if (buf == 'x')
 				{
-					io_cmd("ms2_reboot",NULL);
+					io_cmd_f("ms2_reboot",NULL);
 					state = WAITING_FOR_CMD;
 				}
 				continue;
@@ -2684,12 +2706,12 @@ close_binary:
 					if (find_mtx_page(tableID,&mtx_page))
 					{
 						/*						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);*/
-						output = initialize_outputdata();
+						output = initialize_outputdata_f();
 						DATA_SET(output->data,"page",GINT_TO_POINTER(mtx_page));
 						DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(tableID));
 						DATA_SET(output->data,"canID",GINT_TO_POINTER(canID));
 						DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-						io_cmd(firmware->burn_command,output);
+						io_cmd_f(firmware->burn_command,output);
 					}
 
 				}
@@ -2850,7 +2872,7 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 	tmpbuf = g_ascii_strup(vector[0],-1);
 	arg2 = g_strdup(vector[1]);
 	g_strfreev(vector);
-	cmd = translate_string(tmpbuf);
+	cmd = translate_string_f(tmpbuf);
 	g_free(tmpbuf);
 
 	switch (cmd)
@@ -2943,7 +2965,7 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 				socket_set_ecu_var(client,arg2,MTX_S32);
 			break;
 		case BURN_FLASH:
-			io_cmd(firmware->burn_all_command,NULL);
+			io_cmd_f(firmware->burn_all_command,NULL);
 
 			break;
 		case GET_SIGNATURE:
@@ -3001,7 +3023,7 @@ Supported Calls:\n\r\
 	if (send_rescode)
 	{
 		if (!DATA_GET(global_data,"connected"))
-			net_send(fd,(guint8 *)"NOT CONNECTED,",strlen("NOT CONNECTED,"),0);
+			net_send(fd,(guint8 *)"CONNECTED,",strlen("NOT CONNECTED,"),0);
 		if (check_for_changes(client))
 			net_send(fd,(guint8 *)"ECU_DATA_CHANGED,",strlen("ECU_DATA_CHANGED,"),0);
 		net_send(fd,(guint8 *)"OK",strlen("OK"),0);
@@ -3037,13 +3059,13 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 	output = g_string_sized_new(8);
 	for (i=0;i<g_strv_length(vars);i++)
 	{
-		if (g_strcasecmp(vars[i],"*")==0)
+		if (g_ascii_strcasecmp(vars[i],"*")==0)
 		{
 			for (j=0;j<rtv_map->rtv_list->len;j++)
 			{
 				object = g_ptr_array_index(rtv_map->rtv_list,j);
-				lookup_current_value((gchar *)DATA_GET(object,"internal_names"),&tmpf);
-				lookup_precision((gchar *)DATA_GET(object,"internal_names"),&tmpi);
+				lookup_current_value_f((gchar *)DATA_GET(object,"internal_names"),&tmpf);
+				lookup_precision_f((gchar *)DATA_GET(object,"internal_names"),&tmpi);
 				if (j < (rtv_map->rtv_list->len-1))
 					g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 				else
@@ -3053,8 +3075,8 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 		}
 		else
 		{
-			lookup_current_value(vars[i],&tmpf);
-			lookup_precision(vars[i],&tmpi);
+			lookup_current_value_f(vars[i],&tmpf);
+			lookup_precision_f(vars[i],&tmpi);
 			if (i < (g_strv_length(vars)-1))
 				g_string_append_printf(output,"%1$.*2$f ",tmpf,tmpi);
 			else
@@ -3283,15 +3305,14 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 
 	args = DATA_GET(global_data,"args");
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
 		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
-
 	/* IF network_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -3299,11 +3320,11 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 */
 	if (network_is_open == TRUE)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Port considered open, but throwing errors\n"));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
 		while (i <= 5)
 		{
-			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
+			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" network_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
 			{
 				g_thread_exit(0);
@@ -3321,7 +3342,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
+			g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
@@ -3344,37 +3365,37 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 			host = args->network_host;
 			port = args->network_port;
 		}
-		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
+		thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
 		if (open_network(host,port))
 		{
-			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
+			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
 			if (comms_test())
 			{
 				network_is_open = TRUE;
-				thread_update_logbar("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
+				thread_update_logbar_f("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
 				open_control_socket(host,MTX_SOCKET_CONTROL_PORT);
-				cleanup(vector);
+				cleanup_f(vector);
 				break;
 			}
 			else
 			{
-				thread_update_logbar("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
+				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
 				close_network();
 				close_control_socket();
-				cleanup(vector);
+				cleanup_f(vector);
 				g_usleep(200000); /* Sleep 200ms */
 				continue;
 			}
 		}
 		else
 		{
-			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Failed to open network connection to %s:%i, sleeping...\n"),host,port),FALSE,FALSE);
+			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Failed to open network connection to %s:%i, sleeping...\n"),host,port),FALSE,FALSE);
 			g_usleep(500000); /* Sleep 500ms */
 		}
 	}
 	if (network_is_open)
 	{
-		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
+		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
 	}
 	g_thread_exit(0);
 	return NULL;
@@ -3388,7 +3409,6 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername;
 	Serial_Params *serial_params;
-	serial_params = DATA_GET(global_data,"serial_params");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -3396,7 +3416,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	{
 		/* Tell the user that we could not find a usable */
 		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
 		return FALSE;
 	}
 #endif
@@ -3405,7 +3425,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket open error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -3418,7 +3438,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
 		if (hostptr == NULL)
 		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tError resolving server address: \"%s\"\n",host));
+			dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tError resolving server address: \"%s\"\n",host));
 #ifdef __WIN32__
 			WSACleanup();
 #endif
@@ -3432,13 +3452,14 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_network()\n\tSocket connect error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
 		return FALSE;
 	}
 	/*	printf("connected!!\n");*/
+	serial_params = DATA_GET(global_data,"serial_params");
 	serial_params->fd = clientsocket;
 	serial_params->net_mode = TRUE;
 	serial_params->open = TRUE;
@@ -3453,8 +3474,6 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	gint status = 0;
 	struct hostent *hostptr = NULL;
 	struct sockaddr_in servername;
-	Serial_Params *serial_params;
-	serial_params = DATA_GET(global_data,"serial_params");
 #ifdef __WIN32__
 	struct WSAData wsadata;
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
@@ -3462,7 +3481,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	{
 		/* Tell the user that we could not find a usable */
 		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
 		return FALSE;
 	}
 #endif
@@ -3471,7 +3490,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -3484,7 +3503,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
 		if (hostptr == NULL)
 		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
+			dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
 #ifdef __WIN32__
 			WSACleanup();
 #endif
@@ -3498,7 +3517,7 @@ G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
 	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -3569,7 +3588,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
 
 
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */
 	{
 		g_get_current_time(&cur);
@@ -3675,7 +3694,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 					dealloc_client_data(cli_data);
 					cli_data = NULL;
 					res = 0;
-					widget = lookup_widget("connected_clients_entry");
+					widget = lookup_widget_f("connected_clients_entry");
 					tmpbuf = g_strdup_printf("%i",slave_list->len);
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 					g_free(tmpbuf);
@@ -3720,7 +3739,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": control_socket_client()\n\tThread created!\n"));
 	while(TRUE)
 	{
 		if (DATA_GET(global_data,"leaving"))
@@ -3729,7 +3748,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 		if (res <= 0)
 		{
 close_control:
-			 dbg_func(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error\n"));
+			 dbg_func_f(MTXSOCKET|THREADS|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\trecv error\n"));
 
 #ifdef __WIN32__
 			closesocket(fd);
@@ -3739,20 +3758,20 @@ close_control:
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
-		dbg_func(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
-                dbg_func(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf));
+		dbg_func_f(MTXSOCKET,g_strdup_printf(__FILE__": control_socket_client()\n\tcontrolsocket Data arrived!\n"));
+                dbg_func_f(MTXSOCKET,g_strdup_printf("data %i, %c\n",(gint)buf,(gchar)buf));
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
 				if (buf == SLAVE_MEMORY_UPDATE)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Slave chunk update received\n"));
 					state = GET_CAN_ID;
 					substate = GET_VAR_DATA;
 				}
 				else if (buf == SLAVE_STATUS_UPDATE)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("slave status update!\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("slave status update!\n"));
 					state = GET_ACTION;
 					/* Put in handlers here to pickup
 					   status messages and other stuff
@@ -3763,53 +3782,53 @@ close_control:
 				continue;
 			case GET_ACTION:
 				action = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("Got action message!\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("Got action message!\n"));
 				if (action == GROUP_SET_COLOR)
 					state = GET_COLOR;
 				else
 					state = WAITING_FOR_CMD;
 				continue;
 			case GET_COLOR:
-				dbg_func(MTXSOCKET,g_strdup_printf("got color\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("got color\n"));
 				color = (GuiColor)buf;
 				state = GET_HIGH_COUNT;
 				substate = GET_STRING;
 				continue;
 			case GET_CAN_ID:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_canid block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_canid block\n"));
 				canID = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("canID received is %i\n",canID));
 				state = GET_MTX_PAGE;
 				continue;
 			case GET_MTX_PAGE:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_mtx_page block\n"));
 				page = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("page received is %i\n",page));
 				state = GET_HIGH_OFFSET;
 				continue;
 			case GET_HIGH_OFFSET:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_high_offset block\n"));
 				offset_h = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("high offset received is %i\n",offset_h));
 				state = GET_LOW_OFFSET;
 				continue;
 			case GET_LOW_OFFSET:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_low_offset block\n"));
 				offset_l = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("low offset received is %i\n",offset_l));
 				offset = offset_l + (offset_h << 8);
 				state = GET_HIGH_COUNT;
 				continue;
 			case GET_HIGH_COUNT:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_high_count block\n"));
 				count_h = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("high count received is %i\n",count_h));
 				state = GET_LOW_COUNT;
 				continue;
 			case GET_LOW_COUNT:
-				dbg_func(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("get_low_count block\n"));
 				count_l = (guint8)buf;
-				dbg_func(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
+				dbg_func_f(MTXSOCKET,g_strdup_printf("low count received is %i\n",count_l));
 				count = count_l + (count_h << 8);
 				if (substate == GET_VAR_DATA)
 				{
@@ -3834,7 +3853,7 @@ close_control:
 					if (substate == SET_COLOR)
 					{
 						gdk_threads_enter();
-						set_group_color(color,string);
+						set_group_color_f(color,string);
 						gdk_threads_leave();
 					}
 					g_free(string);
@@ -3844,29 +3863,29 @@ close_control:
 					state = GET_STRING;
 				continue;
 			case GET_DATABLOCK:
-				dbg_func(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
+				dbg_func_f(MTXSOCKET,g_strdup_printf(_("get_datablock\n")));
 				buffer[index] = (guint8)buf;
 				index++;
-				dbg_func(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
+				dbg_func_f(MTXSOCKET,g_strdup_printf(_("Datablock index %i of %i\n"),index,count));
 				if (index >= count)
 				{
-					dbg_func(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
 					store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
 					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)
-						thread_refresh_widgets_at_offset(page,i);
+						thread_refresh_widgets_at_offset_f(page,i);
 					gdk_threads_leave();
 					g_free(buffer);
 					index = 0;
-					dbg_func(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
+					dbg_func_f(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
 				}
 				else
 					state = GET_DATABLOCK;
 				continue;
 			default:
-				dbg_func(MTXSOCKET|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
+				dbg_func_f(MTXSOCKET|CRITICAL,g_strdup_printf(__FILE__": control_socket_client()\n\tCase not handled, bug in state machine!\n"));
 				continue;
 
 		}
@@ -3888,7 +3907,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	{
 		/* Tell the user that we could not find a usable */
 		/* Winsock DLL.                                  */
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
 		return FALSE;
 	}
 #endif
@@ -3897,7 +3916,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 	if (!clientsocket)
 	{
-		dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
+		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -3910,7 +3929,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
 		if (hostptr == NULL)
 		{
-			dbg_func(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
+			dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
 #ifdef __WIN32__
 			WSACleanup();
 #endif
@@ -3924,7 +3943,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
 	if (status == -1)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
 #ifdef __WIN32__
 		WSACleanup();
 #endif
@@ -4015,5 +4034,31 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 
 	*msg_len = buflen;
 	return buffer;
+}
+
+
+/*!
+   \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
+   sockets
+   */
+G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
+{
+	gint i = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	/*printf("dealloc_client_data\n");*/
+	if (client)
+	{
+		cleanup_f (client->ip);
+
+		if (client->ecu_data)
+		{
+			for (i=0;i<firmware->total_pages;i++)
+				cleanup_f (client->ecu_data[i]);
+			cleanup_f(client->ecu_data);
+		}
+		cleanup_f(client);
+	}
 }
 #endif

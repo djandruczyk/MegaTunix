@@ -37,6 +37,8 @@
 #endif
 
 
+/* Externs */
+void (*dbg_func_f)(gint, gchar *);
 extern gconstpointer *global_data;
 
 /* Cause OS-X sucks.... */
@@ -74,7 +76,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 
 	g_static_mutex_lock(&mutex);
 
-	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
+	dbg_func_f(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
 	total_read = 0;
 	zerocount = 0;
@@ -97,7 +99,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	g_mutex_lock(serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
+		dbg_func_f(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
 
 		res = read_wrapper(serial_params->fd,
 				ptr+total_read,
@@ -107,7 +109,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		/* Increment bad read counter.... */
 		if (!res) /* I/O Error Device disappearance or other */
 		{
-			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
+			dbg_func_f(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			break;
@@ -120,12 +122,12 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			break;
 		}
 
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
+		dbg_func_f(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
 	}
 	g_mutex_unlock(serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
-		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
+		dbg_func_f(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
 
 		serial_params->errcount++;
 		if ((reset_on_fail) && (!reset))
@@ -146,7 +148,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	if (buffer)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
-	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
+	dbg_func_f(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
 	g_static_mutex_unlock(&mutex);
 	return total_read;
 }
@@ -172,19 +174,19 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 		p = buf;
 		if (dbg_lvl & SERIAL_RD)
 		{
-			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
+			dbg_func_f(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
 			tmpbuf = g_strndup(((gchar *)buf),total_read);
-			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
+			dbg_func_f(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
 			g_free(tmpbuf);
-			dbg_func(SERIAL_RD,g_strdup_printf("Data is in HEX!!\n"));
+			dbg_func_f(SERIAL_RD,g_strdup_printf("Data is in HEX!!\n"));
 		}
 		for (j=0;j<total_read;j++)
 		{
-			dbg_func(SERIAL_RD,g_strdup_printf("%.2x ", p[j]));
+			dbg_func_f(SERIAL_RD,g_strdup_printf("%.2x ", p[j]));
 			if (!((j+1)%8))
-				dbg_func(SERIAL_RD,g_strdup("\n"));
+				dbg_func_f(SERIAL_RD,g_strdup("\n"));
 		}
-		dbg_func(SERIAL_RD,g_strdup("\n\n"));
+		dbg_func_f(SERIAL_RD,g_strdup("\n\n"));
 	}
 
 }
@@ -246,7 +248,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 #endif
 		if (res == -1)
 		{
-			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf("\n"__FILE__": write_wrapper()\n\tg_socket_send_error \"%s\"\n\n",error->message));
+			dbg_func_f(CRITICAL|SERIAL_WR,g_strdup_printf("\n"__FILE__": write_wrapper()\n\tg_socket_send_error \"%s\"\n\n",error->message));
 			g_error_free(error);
 		}
 	}

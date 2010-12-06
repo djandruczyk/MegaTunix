@@ -20,7 +20,7 @@
 G_MODULE_EXPORT void enable_reboot_button_pf(void)
 {
 	gdk_threads_enter();
-	gtk_widget_set_sensitive(lookup_widget("error_status_reboot_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget_f("error_status_reboot_button"),TRUE);
 	gdk_threads_leave();
 }
 

@@ -19,12 +19,10 @@
 #include <ctype.h>
 #include <combo_loader.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <fileio.h>
 #include <firmware.h>
 #include "../widgets/gauge.h"
 #include <gdk/gdkkeysyms.h>
@@ -46,7 +44,6 @@
 #include <notifications.h>
 #include <post_process.h>
 #include <plugin.h>
-#include <req_fuel.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
 #include <serialio.h>
@@ -59,11 +56,11 @@
 #include <timeout_handlers.h>
 #include <user_outputs.h>
 #include <vetable_gui.h>
-#include <vex_support.h>
 #include <widgetmgmt.h>
 
 
-gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
+extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
+static gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
@@ -275,6 +272,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static GtkSettings *settings = NULL;
 	void *obj_data = NULL;
+	void (*function)(void);
 	gint handler = 0; 
 	gchar * tmpbuf = NULL;
 	gboolean *tracking_focus = NULL;
@@ -296,7 +294,8 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		{
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
-				open_tcpip_sockets();
+				get_symbol("open_tcpip_sockets",(void*)&function);
+				function();
 				break;
 			case COMM_AUTODETECT:
 				DATA_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
@@ -414,6 +413,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
+	void (*check_limits)(gint) = NULL;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
 	firmware = DATA_GET(global_data,"firmware");
@@ -499,7 +499,8 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			else
 			{
@@ -518,7 +519,8 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			break;
 		default:
@@ -947,6 +949,11 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gchar * dest = NULL;
 	gboolean restart = FALSE;
 	Firmware_Details *firmware = NULL;
+	void (*rf_popup)(GtkWidget *) = NULL;
+	void (*rf_change)(GtkWidget *) = NULL;
+	void (*rf_rescale)(GtkWidget *) = NULL;
+	void (*select_for)(gint) = NULL;
+	void (*revert)(void) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -1003,11 +1010,13 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 		case EXPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
-				select_table_for_export((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+				if(get_symbol("select_table_for_export",(void*)&select_for))
+					select_for((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case IMPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
-				select_table_for_import((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+				if(get_symbol("select_table_for_import",(void*)&select_for))
+					select_for((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);
@@ -1015,7 +1024,8 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case REQFUEL_RESCALE_TABLE:
 
 			printf("reqfuel rescale table!\n");
-			reqfuel_rescale_table(widget);
+			if (get_symbol("reqfuel_rescale_table",(void*)&rf_rescale))
+				rf_rescale(widget);
 			break;
 		case INTERROGATE_ECU:
 			set_title(g_strdup(_("User initiated interrogation...")));
@@ -1095,7 +1105,8 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case REVERT_TO_BACKUP:
-			revert_to_previous_data();
+			if (get_symbol("revert_to_previous_data",(void*)&revert))
+				revert();
 			break;
 		case SELECT_PARAMS:
 			if (!DATA_GET(global_data,"interrogated"))
@@ -1105,8 +1116,10 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			present_viewer_choices();
 			break;
 		case REQ_FUEL_POPUP:
-			reqd_fuel_popup(widget);
-			req_fuel_change(widget);
+			if (get_symbol("reqd_fuel_popup",(void *)&rf_popup))
+				rf_popup(widget);
+			if (get_symbol("reqd_fuel_change",(void *)&rf_change))
+				rf_change(widget);
 			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
@@ -1174,6 +1187,7 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 	Firmware_Details *firmware = NULL;
+	void (*check_limits)(gint) = NULL;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
 	firmware = DATA_GET(global_data,"firmware");
@@ -1264,7 +1278,8 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			else
 			{
@@ -1285,7 +1300,8 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 				g_hash_table_replace(interdep_vars[table_num],
 						GINT_TO_POINTER(offset),
 						d_data);
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			break;
 		case MS2_USER_OUTPUTS:
@@ -1504,10 +1520,10 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
-	Reqd_Fuel *reqd_fuel = NULL;
 	GHashTable **interdep_vars = NULL;
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
+	void (*check_limits)(gint) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -1526,8 +1542,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 
-	reqd_fuel = (Reqd_Fuel *)OBJ_GET(
-			widget,"reqd_fuel");
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	canID = (GINT) OBJ_GET(widget,"canID");
@@ -1583,36 +1597,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
 			DATA_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
-		case REQ_FUEL_DISP:
-			reqd_fuel->disp = (gint)value;
-			req_fuel_change(widget);
-			break;
-		case REQ_FUEL_CYLS:
-			reqd_fuel->cyls = (gint)value;
-			req_fuel_change(widget);
-			break;
-		case REQ_FUEL_RATED_INJ_FLOW:
-			reqd_fuel->rated_inj_flow = (gfloat)value;
-			req_fuel_change(widget);
-			break;
-		case REQ_FUEL_RATED_PRESSURE:
-			reqd_fuel->rated_pressure = (gfloat)value;
-			req_fuel_change(widget);
-			break;
-		case REQ_FUEL_ACTUAL_PRESSURE:
-			reqd_fuel->actual_pressure = (gfloat)value;
-			req_fuel_change(widget);
-			break;
-		case REQ_FUEL_AFR:
-			reqd_fuel->target_afr = value;
-			req_fuel_change(widget);
-			break;
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
 			firmware->rf_params[table_num]->req_fuel_total = value;
-			check_req_fuel_limits(table_num);
+			if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+				check_limits(table_num);
 			break;
 		case LOCKED_REQ_FUEL:
 			table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -1653,7 +1644,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(divider_offset),
 						d_data);
 				set_reqfuel_color(BLACK,table_num);
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			break;
 		case NUM_CYLINDERS_1:
@@ -1701,7 +1693,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						d_data);
 
 				set_reqfuel_color(BLACK,table_num);	
-				check_req_fuel_limits(table_num);
+				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+					check_limits(table_num);
 			}
 			break;
 		case NUM_INJECTORS_1:
@@ -1729,7 +1722,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 					GINT_TO_POINTER(offset),
 					d_data);
 
-			check_req_fuel_limits(table_num);
+			if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
+				check_limits(table_num);
 			break;
 		case TRIGGER_ANGLE:
 			spconfig_offset = (GINT)OBJ_GET(widget,"spconfig_offset");
@@ -3331,9 +3325,11 @@ G_MODULE_EXPORT void prompt_to_save(void)
 	GtkWidget *hbox = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	GtkWidget *image = NULL;
+	void (*do_ecu_backup)(GtkWidget *, gpointer) = NULL;
 
-	if (!DATA_GET(global_data,"offline"))
-	{
+
+	if (DATA_GET(global_data,"offline"))
+		return;
 		dialog = gtk_dialog_new_with_buttons(_("Save internal log, yes/no ?"),
 				GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_YES,GTK_RESPONSE_YES,
@@ -3357,7 +3353,6 @@ G_MODULE_EXPORT void prompt_to_save(void)
 			internal_datalog_dump(NULL,NULL);
 		gtk_widget_destroy (dialog);
 
-	}
 
 	dialog = gtk_dialog_new_with_buttons(_("Save ECU settings to file?"),
 			GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -3377,7 +3372,10 @@ G_MODULE_EXPORT void prompt_to_save(void)
 	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	if (result == GTK_RESPONSE_YES)
-		select_file_for_ecu_backup(NULL,NULL);
+	{
+		get_symbol("select_file_for_ecu_backup",(void *)&do_ecu_backup);
+		do_ecu_backup(NULL,NULL);
+	}
 	gtk_widget_destroy (dialog);
 
 }
@@ -3630,7 +3628,7 @@ G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 
 
 
-G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
+gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 {
 	gchar *choice = NULL;
 	gboolean valid = TRUE;

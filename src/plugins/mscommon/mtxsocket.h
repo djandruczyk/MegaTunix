@@ -16,14 +16,28 @@
 
 #include <gtk/gtk.h>
 #include <enums.h>
+#include <mscommon_comms.h>
+#include <threads.h>
+
+/* Externs */
+extern void (*io_cmd_f)(const gchar *,void *);
+extern void (*dbg_func_f)(gint, gchar *);
+extern void (*cleanup_f)(void *);
+extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
+extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
+extern gboolean (*queue_function_f)(const gchar * );
+extern gboolean (*lookup_precision_f)(const gchar *, gint *);
+extern gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
+extern gint (*translate_string_f)(const gchar *);
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern void (*set_group_color_f)(GuiColor, const gchar * );
+extern OutputData *(*initialize_outputdata_f)(void);
+extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
+/* Externs */
+
 
 #if GTK_MINOR_VERSION >= 18
 #include <gio/gio.h>
-
-
-#define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
-#define MTX_SOCKET_BINARY_PORT 12765
-#define MTX_SOCKET_CONTROL_PORT 12766
 
 
 typedef struct _MtxSocketClient MtxSocketClient;
@@ -160,6 +174,7 @@ void socket_get_rtv_list(GSocket *);
 void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void socket_get_ecu_vars(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
+void dealloc_client_data(MtxSocketClient *);
 gboolean check_for_changes(MtxSocketClient *);
 gint * convert_socket_data(gchar *, gint);
 void *network_repair_thread(gpointer);
@@ -178,10 +193,6 @@ gint net_send(GSocket *, guint8 *, gint);
 #else
 
 /* Legacy GTK+ less than 2.18.x which doesn't have GSocket */
-
-#define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
-#define MTX_SOCKET_BINARY_PORT 12765
-#define MTX_SOCKET_CONTROL_PORT 12766
 
 
 typedef struct _MtxSocketClient MtxSocketClient;
@@ -313,6 +324,7 @@ void socket_get_rtv_list(gint);
 void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void socket_get_ecu_vars(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
+void dealloc_client_data(MtxSocketClient *);
 gboolean check_for_changes(MtxSocketClient *);
 gint * convert_socket_data(gchar *, gint);
 void *network_repair_thread(gpointer);

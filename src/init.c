@@ -40,10 +40,6 @@
 #include <widgetmgmt.h>
 #include <unistd.h>
 
-gint major_ver;
-gint minor_ver;
-gint micro_ver;
-/* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
@@ -965,30 +961,6 @@ G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 }
 
 
-/*!
- \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
-sockets
-*/
-G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
-{
-	gint i = 0;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
-	/*printf("dealloc_client_data\n");*/
-	if (client)
-	{
-		cleanup (client->ip);
-
-		if (client->ecu_data)
-		{
-			for (i=0;i<firmware->total_pages;i++)
-				cleanup (client->ecu_data[i]);
-			cleanup(client->ecu_data);
-		}
-		cleanup(client);
-	}
-}
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O

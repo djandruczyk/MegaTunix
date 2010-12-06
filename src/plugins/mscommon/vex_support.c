@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <3d_vetable.h>
 #include <config.h>
 #include <comms.h>
 #include <datamgmt.h>
@@ -20,10 +19,12 @@
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
-#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
+#include <mscommon_comms.h>
+
 #include <notifications.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <string.h>
 #include <stdio.h>
@@ -85,7 +86,7 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = lookup_widget("main_window");
+	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.vex");
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
@@ -95,20 +96,20 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("tools_view","warning",_("NO FILE chosen for VEX export\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("NO FILE chosen for VEX export\n"),FALSE,FALSE);
 		return FALSE;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "a+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE);
 		return FALSE;
 	}
 	if (vex_comment == NULL)
-		update_logbar("tools_view",NULL,_("VEX File Opened. VEX Comment undefined, exporting without one.\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view",NULL,_("VEX File Opened. VEX Comment undefined, exporting without one.\n"),FALSE,FALSE);
 	else
-		update_logbar("tools_view",NULL,_("VEX File Opened. VEX Comment already stored.\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view",NULL,_("VEX File Opened. VEX Comment already stored.\n"),FALSE,FALSE);
 	all_table_export(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	g_io_channel_unref(iochannel);
@@ -140,7 +141,7 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
-	fileio->parent = lookup_widget("main_window");
+	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("vex");
@@ -149,20 +150,20 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("tools_view","warning",_("NO FILE chosen for VEX export\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("NO FILE chosen for VEX export\n"),FALSE,FALSE);
 		return;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "a+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE);
 		return;
 	}
 	if (vex_comment == NULL)
-		update_logbar("tools_view",NULL,_("VEX File Opened. VEX Comment undefined, exporting without one.\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view",NULL,_("VEX File Opened. VEX Comment undefined, exporting without one.\n"),FALSE,FALSE);
 	else
-		update_logbar("tools_view",NULL,_("VEX File Opened. VEX Comment already stored.\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view",NULL,_("VEX File Opened. VEX Comment already stored.\n"),FALSE,FALSE);
 	single_table_export(iochannel,table_num);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	g_io_channel_unref(iochannel);
@@ -183,25 +184,25 @@ G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
-	fileio->parent = lookup_widget("main_window");
+	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE);
 		return FALSE;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "r+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE);
 		return FALSE;
 	}
-	update_logbar("tools_view",NULL,_("VEX File Closed\n"),FALSE,FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
+	thread_update_logbar_f("tools_view",NULL,_("VEX File Closed\n"),FALSE,FALSE);
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget_f("tools_vex_comment_entry")),"");
 
 	all_table_import(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -228,7 +229,7 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
-	fileio->parent = lookup_widget("main_window");
+	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -236,18 +237,18 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 	filename = choose_file(fileio);
 	if (filename == NULL)
 	{
-		update_logbar("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE);
 		return;
 	}
 
 	iochannel = g_io_channel_new_file(filename, "r+",NULL);
 	if (!iochannel)
 	{
-		update_logbar("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("File open FAILURE! \n"),FALSE,FALSE);
 		return;
 	}
-	update_logbar("tools_view",NULL,_("VEX File Closed\n"),FALSE,FALSE,FALSE);
-	gtk_entry_set_text(GTK_ENTRY(lookup_widget("tools_vex_comment_entry")),"");
+	thread_update_logbar_f("tools_view",NULL,_("VEX File Closed\n"),FALSE,FALSE);
+	gtk_entry_set_text(GTK_ENTRY(lookup_widget_f("tools_vex_comment_entry")),"");
 
 	single_table_import(iochannel,table_num);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
@@ -316,9 +317,9 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 		x_size = firmware->table_params[table]->x_size;
 		z_size = firmware->table_params[table]->z_size;
 		y_size = firmware->table_params[table]->y_size;
-		x_mult = get_multiplier(x_size);
-		y_mult = get_multiplier(y_size);
-		z_mult = get_multiplier(z_size);
+		x_mult = get_multiplier_f(x_size);
+		y_mult = get_multiplier_f(y_size);
+		z_mult = get_multiplier_f(z_size);
 		y_bincount = firmware->table_params[table]->y_bincount;
 		x_bincount = firmware->table_params[table]->x_bincount;
 
@@ -372,10 +373,10 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 	status = g_io_channel_write_chars(
 			iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
 	g_string_free(output,TRUE);
 
-	update_logbar("tools_view",NULL,_("VE-Table(s) Exported Successfully\n"),FALSE,FALSE,FALSE);
+	thread_update_logbar_f("tools_view",NULL,_("VE-Table(s) Exported Successfully\n"),FALSE,FALSE);
 
 	if (vex_comment)
 		g_free(vex_comment);
@@ -437,9 +438,9 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	x_size = firmware->table_params[table]->x_size;
 	y_size = firmware->table_params[table]->y_size;
 	z_size = firmware->table_params[table]->z_size;
-	x_mult = get_multiplier(x_size);
-	y_mult = get_multiplier(y_size);
-	z_mult = get_multiplier(z_size);
+	x_mult = get_multiplier_f(x_size);
+	y_mult = get_multiplier_f(y_size);
+	z_mult = get_multiplier_f(z_size);
 	x_bincount = firmware->table_params[table]->x_bincount;
 	y_bincount = firmware->table_params[table]->y_bincount;
 
@@ -493,11 +494,11 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 			iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
 	}
 	g_string_free(output,TRUE);
 
-	update_logbar("tools_view",NULL,_("VE-Table(s) Exported Successfully\n"),FALSE,FALSE,FALSE);
+	thread_update_logbar_f("tools_view",NULL,_("VE-Table(s) Exported Successfully\n"),FALSE,FALSE);
 
 	if (vex_comment)
 		g_free(vex_comment);
@@ -522,7 +523,7 @@ G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 
 	if (!iochannel)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return FALSE;
 	}
 	vex = g_new0(Vex_Import, 1);
@@ -531,7 +532,7 @@ G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 	/*reset_import_flags();*/
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tError seeking to beginning of the file\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": all_table_import()\n\tError seeking to beginning of the file\n"));
 	/* process lines while we can */
 	while (go)
 	{
@@ -558,11 +559,11 @@ G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget_f("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": all_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+		dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": all_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return FALSE;
 	}
 	return TRUE;
@@ -586,7 +587,7 @@ G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
 
 	if (!iochannel)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return;
 	}
 	vex = g_new0(Vex_Import, 1);
@@ -595,7 +596,7 @@ G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
 	/*reset_import_flags();*/
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tError seeking to beginning of the file\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": single_table_import()\n\tError seeking to beginning of the file\n"));
 	/* process lines while we can */
 	while (go)
 	{
@@ -620,11 +621,11 @@ G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget_f("tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": single_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+		dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": single_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return;
 	}
 	return;
@@ -655,7 +656,7 @@ G_MODULE_EXPORT GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochann
 				status = handler_dispatch(vex, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
 				{
-					dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"));
+					dbg_func_f(CRITICAL,g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"));
 					return status;
 				}
 				goto breakout;
@@ -720,10 +721,11 @@ G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, g
 {
 	gchar ** str_array = NULL;
 	gchar *result = NULL;
+	gchar *tmpbuf = NULL;
 
 	if (!string)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);
@@ -733,23 +735,33 @@ G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, g
 	{
 		case VEX_EVEME:
 			vex->version = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: EVEME %s"),result),FALSE,FALSE,TRUE);
+			tmpbuf = g_strdup_printf(_("VEX Header: EVEME %s"),result);
+			thread_update_logbar_f("tools_view", NULL, tmpbuf,FALSE,FALSE);
+			g_free(tmpbuf);
 			break;
 		case VEX_USER_REV:	
 			vex->revision = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Revision %s"),result),FALSE,FALSE,TRUE);
+			tmpbuf = g_strdup_printf(_("VEX Header: Revision %s"),result);
+			thread_update_logbar_f("tools_view", NULL, tmpbuf,FALSE,FALSE);
+			g_free(tmpbuf);
 			break;
 		case VEX_USER_COMMENT:	
 			vex->comment = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: UserComment: %s"),result),FALSE,FALSE,TRUE);
+			tmpbuf = g_strdup_printf(_("VEX Header: UserComment: %s"),result);
+			thread_update_logbar_f("tools_view", NULL,tmpbuf,FALSE,FALSE);
+			g_free(tmpbuf);
 			break;
 		case VEX_DATE:	
 			vex->date = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Date %s"),result),FALSE,FALSE,TRUE);
+			tmpbuf = g_strdup_printf(_("VEX Header: Date %s"),result);
+			thread_update_logbar_f("tools_view", NULL,tmpbuf,FALSE,FALSE);
+			g_free(tmpbuf);
 			break;
 		case VEX_TIME:	
 			vex->time = g_strdup(result);
-			update_logbar("tools_view", NULL, g_strdup_printf(_("VEX Header: Time %s"),result),FALSE,FALSE,TRUE);
+			tmpbuf =  g_strdup_printf(_("VEX Header: Time %s"),result);
+			thread_update_logbar_f("tools_view", NULL, tmpbuf,FALSE,FALSE);
+			g_free(tmpbuf);
 			break;
 		default:
 			break;
@@ -770,6 +782,7 @@ G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, g
 G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
+	gchar *tmpbuf = NULL;
 	gchar ** str_array = NULL;
 	gint page = -1;
 	Firmware_Details *firmware = NULL;
@@ -778,7 +791,7 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 
 	if (!string)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);	
@@ -787,7 +800,9 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 	if ((page < 0 ) || (page > firmware->total_pages))
 	{
 		status =  G_IO_STATUS_ERROR;
-		update_logbar("tools_view","warning",g_strdup_printf(_("VEX Import: Page %i out of range <---ERROR\n"),page),FALSE,FALSE,TRUE);
+		tmpbuf = g_strdup_printf(_("VEX Import: Page %i out of range <---ERROR\n"),page);
+		thread_update_logbar_f("tools_view","warning",tmpbuf,FALSE,FALSE);
+		g_free(tmpbuf);
 		return status;
 	}
 	else
@@ -795,7 +810,9 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 		status = G_IO_STATUS_NORMAL;
 		vex->page = page;
 		vex->got_page = TRUE;
-		update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: Page %i\n"),page),FALSE,FALSE,TRUE);
+		tmpbuf = g_strdup_printf(_("VEX Import: Page %i\n"),page);
+		thread_update_logbar_f("tools_view",NULL,tmpbuf,FALSE,FALSE);
+		g_free(tmpbuf);
 
 	}
 
@@ -813,6 +830,7 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 {
 	gchar **string = NULL;
+	gchar *tmpbuf = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -823,14 +841,14 @@ G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 	{
 		if ((!g_strrstr(vex->comment,";")) && (firmware->total_tables == firmware->total_tables))
 		{
-			update_logbar("tools_view","warning",_("VEX Import: Multi Table per page firmware,\nbut Table number is not defined in comment field, load aborted!!!\n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view","warning",_("VEX Import: Multi Table per page firmware,\nbut Table number is not defined in comment field, load aborted!!!\n"),FALSE,FALSE);
 			return G_IO_STATUS_ERROR;
 		}
 
 		string = g_strsplit(vex->comment,";",-1);
 		if ((string[0] == NULL) || (!g_strrstr(string[0],"Table")))
 		{
-			update_logbar("tools_view","warning",_("VEX Import: Multi Table per page firmware,\n\tbut Table number is not defined in comment field, load aborted!!!\n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view","warning",_("VEX Import: Multi Table per page firmware,\n\tbut Table number is not defined in comment field, load aborted!!!\n"),FALSE,FALSE);
 			vex->table = -1;
 			g_strfreev(string);
 			return G_IO_STATUS_ERROR;
@@ -843,7 +861,9 @@ G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 		}
 	}
 
-	update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: Table %i\n"),vex->table),FALSE,FALSE,TRUE);
+	tmpbuf = g_strdup_printf(_("VEX Import: Table %i\n"),vex->table);
+	thread_update_logbar_f("tools_view",NULL,tmpbuf,FALSE,FALSE);
+	g_free(tmpbuf);
 	return G_IO_STATUS_NORMAL;
 }
 
@@ -905,7 +925,7 @@ G_MODULE_EXPORT GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg
 
 	if (!string)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, "[", 2);
@@ -937,36 +957,27 @@ G_MODULE_EXPORT GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg
 		status = read_number_from_line(&value,iochannel);
 		if (status != G_IO_STATUS_NORMAL) 
 		{
-			update_logbar("tools_view","warning",_("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view","warning",_("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 			break;
 		}
-		/*
-		if ((value < 0) || (value > 255))
+		switch (arg)
 		{
-			status = G_IO_STATUS_ERROR;
-			update_logbar("tools_view","warning",g_strdup_printf("VEX Import: RPM/Load bin %i value %i out of bounds <---ERROR\n",i,value),FALSE,FALSE,TRUE);
-			break;
+			case VEX_RPM_RANGE:
+				vex->x_bins[i] = value;
+				break;
+			case VEX_LOAD_RANGE:
+				vex->y_bins[i] = value;
+				break;
+			default:
+				break;
 		}
-		else
-		*/
-			switch (arg)
-			{
-				case VEX_RPM_RANGE:
-					vex->x_bins[i] = value;
-					break;
-				case VEX_LOAD_RANGE:
-					vex->y_bins[i] = value;
-					break;
-				default:
-					break;
-			}
 	}
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		if (arg == VEX_RPM_RANGE)
-			update_logbar("tools_view",NULL,_("VEX Import: RPM bins loaded successfully \n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view",NULL,_("VEX Import: RPM bins loaded successfully \n"),FALSE,FALSE);
 		if (arg == VEX_LOAD_RANGE)
-			update_logbar("tools_view",NULL,_("VEX Import: LOAD bins loaded successfully \n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view",NULL,_("VEX Import: LOAD bins loaded successfully \n"),FALSE,FALSE);
 	}
 	return status;
 }
@@ -997,7 +1008,7 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 
 	if (!string)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	/* Get first number of [  x][  y] in the string line */
@@ -1025,7 +1036,7 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 	if (status != G_IO_STATUS_NORMAL) 
 	{
 		g_string_free(a_line, TRUE);
-		update_logbar("tools_view","warning",_("VEX Import: VE-Table I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view","warning",_("VEX Import: VE-Table I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 		return status;
 	}
 	g_string_free(a_line, TRUE);
@@ -1037,7 +1048,7 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 		if (status != G_IO_STATUS_NORMAL) 
 		{
 			g_string_free(a_line, TRUE);
-			update_logbar("tools_view","warning", _("VEX Import: VE-Table I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE,FALSE);
+			thread_update_logbar_f("tools_view","warning", _("VEX Import: VE-Table I/O Read problem, file may be incomplete <---ERROR\n"),FALSE,FALSE);
 			break;
 		}
 		pos = g_strrstr(a_line->str,"=\0");
@@ -1047,24 +1058,14 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-			/*
-			if ((value < 0) || (value > 255))
-			{
-				status = G_IO_STATUS_ERROR;
-				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table value %i at row %i column %i  is out of range. <---ERROR\n",value,i,j),FALSE,FALSE,TRUE);
-				goto breakout;
-			}
-			else
-			*/
-				vex->tbl_bins[j+(i*x_bins)] = value;
+			vex->tbl_bins[j+(i*x_bins)] = value;
 		}		
 		g_string_free(a_line, TRUE);
 	}
-/*breakout:*/
 	if (status == G_IO_STATUS_NORMAL)
 	{
 		vex->got_ve = TRUE;
-		update_logbar("tools_view",NULL,_("VEX Import: VE-Table loaded successfully\n"),FALSE,FALSE,FALSE);
+		thread_update_logbar_f("tools_view",NULL,_("VEX Import: VE-Table loaded successfully\n"),FALSE,FALSE);
 	}
 	return status;
 }
@@ -1084,7 +1085,7 @@ G_MODULE_EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 	 * so that it gets written to the vex file 
 	 */
 	vex_comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-	update_logbar("tools_view",NULL,_("VEX Comment Stored\n"),FALSE,FALSE,FALSE);
+	thread_update_logbar_f("tools_view",NULL,_("VEX Comment Stored\n"),FALSE,FALSE);
 	return TRUE;
 }
 
@@ -1127,6 +1128,7 @@ G_MODULE_EXPORT void dealloc_vex_struct(Vex_Import *vex)
 G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 {
 	gint i = 0;
+	gchar *tmpbuf = NULL;
 	guint8 **ecu_data = NULL;
 	guint8 **ecu_data_backup = NULL;
 	void *data = NULL;
@@ -1144,6 +1146,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+
 	ecu_data = firmware->ecu_data;
 	ecu_data_backup = firmware->ecu_data_backup;
 
@@ -1155,7 +1158,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	table = vex->table;
 	if ((table < 0) || (table >= firmware->total_tables))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": feed_import_data_to_ecu()\n\ttable passed (%i) is out of range(%i)\n",table,firmware->total_tables));
+		dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": feed_import_data_to_ecu()\n\ttable passed (%i) is out of range(%i)\n",table,firmware->total_tables));
 		return;
 	}
 
@@ -1163,16 +1166,16 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	if (firmware->table_params[table]->x_bincount != vex->total_x_bins)
 	{
 		msgbuf = g_strdup_printf(_("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n"),firmware->table_params[table]->x_bincount,vex->total_x_bins);
-		update_logbar("tools_view","warning",msgbuf,FALSE,FALSE,TRUE);
-		dbg_func(CRITICAL,g_strdup(msgbuf));
+		thread_update_logbar_f("tools_view","warning",msgbuf,FALSE,FALSE);
+		dbg_func_f(CRITICAL,g_strdup(msgbuf));
 		g_free(msgbuf);
 		return;
 	}
 	if (firmware->table_params[table]->y_bincount != vex->total_y_bins)
 	{
 		msgbuf = g_strdup_printf(_("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n"),firmware->table_params[table]->y_bincount,vex->total_y_bins);
-		update_logbar("tools_view","warning",msgbuf,FALSE,FALSE,FALSE);
-		dbg_func(CRITICAL,g_strdup(msgbuf));
+		thread_update_logbar_f("tools_view","warning",msgbuf,FALSE,FALSE);
+		dbg_func_f(CRITICAL,g_strdup(msgbuf));
 		g_free(msgbuf);
 		return;
 	}
@@ -1190,7 +1193,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->x_page;
 	base = firmware->table_params[table]->x_base;
 	size = firmware->table_params[table]->x_size;
-	mult = get_multiplier(size);
+	mult = get_multiplier_f(size);
 	if (firmware->chunk_support)
 	{
 		total = vex->total_x_bins;
@@ -1223,7 +1226,6 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 					ptr32[i]=GINT_TO_LE(vex->x_bins[i]);
 			}
 		}
-
 		chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
@@ -1239,7 +1241,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->y_page;
 	base = firmware->table_params[table]->y_base;
 	size = firmware->table_params[table]->y_size;
-	mult = get_multiplier(size);
+	mult = get_multiplier_f(size);
 	if (firmware->chunk_support)
 	{
 		total = vex->total_y_bins;
@@ -1287,7 +1289,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	page = firmware->table_params[table]->z_page;
 	base = firmware->table_params[table]->z_base;
 	size = firmware->table_params[table]->z_size;
-	mult = get_multiplier(size);
+	mult = get_multiplier_f(size);
 	if (firmware->chunk_support)
 	{
 		total = (vex->total_y_bins)*(vex->total_x_bins);
@@ -1330,9 +1332,11 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 				send_to_ecu(canID,page,base+(i*mult),size,vex->tbl_bins[i], TRUE);
 		}
 	}
-	io_cmd(firmware->burn_all_command,NULL);
+	io_cmd_f(firmware->burn_all_command,NULL);
 
-	update_logbar("tools_view",NULL,g_strdup_printf(_("VEX Import: VEtable on page %i updated with data from the VEX file\n"),vex->page),FALSE,FALSE,TRUE);
+	tmpbuf = g_strdup_printf(_("VEX Import: VEtable on page %i updated with data from the VEX file\n"),vex->page);
+	thread_update_logbar_f("tools_view",NULL,tmpbuf,FALSE,FALSE);
+	g_free(tmpbuf);
 }
 
 
@@ -1391,9 +1395,9 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	g_module_close(module);
-	io_cmd(NULL,pfuncs);
+	io_cmd_f(NULL,pfuncs);
 
-	gtk_widget_set_sensitive(lookup_widget("tools_undo_vex_button"),FALSE);
-	update_logbar("tools_view","warning",_("Reverting to previous settings....\n"),FALSE,FALSE,FALSE);
-	io_cmd(firmware->burn_all_command,NULL);
+	gtk_widget_set_sensitive(lookup_widget_f("tools_undo_vex_button"),FALSE);
+	thread_update_logbar_f("tools_view","warning",_("Reverting to previous settings....\n"),FALSE,FALSE);
+	io_cmd_f(firmware->burn_all_command,NULL);
 }

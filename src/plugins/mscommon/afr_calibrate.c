@@ -21,10 +21,12 @@
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <mscommon_comms.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 
 
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
 static gint afr_enum;
 static const gchar * afr_name;
 typedef enum
@@ -310,10 +312,10 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 			USE_TABLE(zeitronix);
 			break;
 		case genericWB:
-			genericBv[1] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("voltage1_entry"))),NULL);
-			genericBv[2] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("voltage2_entry"))),NULL);
-			genericBa[1] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("afr1_entry"))),NULL);
-			genericBa[2] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("afr2_entry"))),NULL);
+			genericBv[1] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("voltage1_entry"))),NULL);
+			genericBv[2] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("voltage2_entry"))),NULL);
+			genericBa[1] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("afr1_entry"))),NULL);
+			genericBa[2] = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("afr2_entry"))),NULL);
 			USE_TABLE(generic);
 			break;
 		default:

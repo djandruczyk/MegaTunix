@@ -14,7 +14,6 @@
 #include <assert.h>
 #include <config.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_processor.h>

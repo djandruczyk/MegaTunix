@@ -18,7 +18,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
-#include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <glib.h>

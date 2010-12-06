@@ -35,7 +35,6 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_processor.h>
@@ -54,6 +53,7 @@
 #include <multi_expr_loader.h>
 #include <notifications.h>
 #include <pango/pango-font.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
@@ -1628,8 +1628,16 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
+	static gint (*get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
+	static void (*send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
+
+	if (!send_to_ecu_f)
+		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
@@ -1675,9 +1683,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
 				max = (gint)pow(2,y_mult*8) -step;
-				if (get_ecu_data(canID,y_page,offset,y_size) <= max)
+				if (get_ecu_data_f(canID,y_page,offset,y_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) + step;
+					dload_val = get_ecu_data_f(canID,y_page,offset,y_size) + step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1699,9 +1707,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				if (get_ecu_data(canID,y_page,offset,y_size) > step)
+				if (get_ecu_data_f(canID,y_page,offset,y_size) > step)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) - step;
+					dload_val = get_ecu_data_f(canID,y_page,offset,y_size) - step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1724,9 +1732,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				if (get_ecu_data(canID,x_page,offset,x_size) > step)
+				if (get_ecu_data_f(canID,x_page,offset,x_size) > step)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) - step;
+					dload_val = get_ecu_data_f(canID,x_page,offset,x_size) - step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1748,9 +1756,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
 				max = (gint)pow(2,x_mult*8) -step;
-				if (get_ecu_data(canID,x_page,offset,x_size) <= max)
+				if (get_ecu_data_f(canID,x_page,offset,x_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) + step;
+					dload_val = get_ecu_data_f(canID,x_page,offset,x_size) + step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1772,12 +1780,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1789,12 +1797,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1804,9 +1812,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+				if (get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+					dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1827,12 +1835,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1844,12 +1852,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1858,11 +1866,11 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) < max)
+				if (get_ecu_data_f(canID,z_page,offset,z_size) < max)
 				{
 					page = z_page;
 					size = z_size;
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+					dload_val = get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 					update_widgets = TRUE;
 				}
 			}
@@ -1876,12 +1884,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1893,12 +1901,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1907,9 +1915,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+				if (get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+					dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1928,12 +1936,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1945,12 +1953,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+					if (get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+						dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1960,9 +1968,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+				if (get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+					dload_val = get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1988,7 +1996,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	{
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
-		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+		send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 		ve_view->mesh_created=FALSE;
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
@@ -2628,6 +2636,10 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint canID = 0;
 	Quad * quad = NULL;
 	Firmware_Details *firmware = NULL;
+	static gint (*get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
+
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
 
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
@@ -2643,7 +2655,7 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
 	{
-		tmpi = get_ecu_data(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
+		tmpi = get_ecu_data_f(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
 		if (tmpi >ve_view->z_maxval)
 			ve_view->z_maxval = tmpi;
 		if (tmpi < ve_view->z_minval)
@@ -2666,22 +2678,22 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 			else
 			{
@@ -2689,22 +2701,22 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 		}
 	}

@@ -14,7 +14,6 @@
 #include <3d_vetable.h>
 #include <config.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -25,7 +24,6 @@
 #include <logviewer_gui.h>
 #include <math.h>
 #include <multi_expr_loader.h>
-#include <req_fuel.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -151,183 +149,6 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 	return 0;
 }
 
-/*!
- \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
- newly sent reqfuel variable.
- \param widget_name is the widget of the scaler widget 
- that was used. From this widget we extract the table number and other 
- needed data to properly do the rescaling.
- */
-G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
-{
-	DataSize z_size = MTX_U08;
-	gint z_base = -1;
-	gint z_page = -1;
-	gint x_bins = -1;
-	gint y_bins = -1;
-	gint table_num = -1;
-	gint old = 0;
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
-	DataSize size = 0;
-	GtkWidget *tmpwidget = NULL;
-	GtkWidget *label = NULL;
-	gchar * tmpbuf = NULL;
-	gfloat percentage = 0.0;
-	gint mult = 0;
-	gint i = 0;
-	guint x = 0;
-	gchar **vector = NULL;
-	guint8 *data = NULL;
-	gint raw_lower = 0;
-	gint raw_upper = 255;
-	gfloat value = 0.0;
-	gfloat real_value = 0.0;
-	gfloat new_reqfuel = 0.0;
-	GdkColor color;
-	extern GdkColor black;
-	gboolean use_color = FALSE;
-	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
-
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
-	firmware = DATA_GET(global_data,"firmware");
-
-	g_return_if_fail(GTK_IS_WIDGET(widget));
-	if (!OBJ_GET(widget,"applicable_tables"))
-	{
-		printf(_("applicable tables not defined!!!\n"));
-		return;
-	}
-	if (!OBJ_GET(widget,"table_num"))
-	{
-		printf(_("table_num not defined!!!\n"));
-		return;
-	}
-	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
-
-	tmpbuf = (gchar *)OBJ_GET(widget,"data");
-	tmpwidget = lookup_widget(tmpbuf);
-	g_return_if_fail(GTK_IS_WIDGET(tmpwidget));
-	/*new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));*/
-	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
-	new_reqfuel = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
-	if (new_reqfuel < 0.5)
-		return;
-	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
-
-	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
-	firmware->rf_params[table_num]->req_fuel_total = new_reqfuel;
-	check_req_fuel_limits(table_num);
-
-	tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
-	vector = g_strsplit(tmpbuf,",",-1);
-	if (!vector)
-		return;
-
-	if  (NULL != (label = lookup_widget("info_label")))
-		gtk_label_set_text(GTK_LABEL(label),"Rescaling Table, Please wait...");
-	while (gtk_events_pending())
-	{
-		gtk_main_iteration();
-	}
-
-
-	for (x=0;x<g_strv_length(vector);x++)
-	{
-		table_num = (gint)strtol(vector[x],NULL,10);
-
-		z_size = firmware->table_params[table_num]->z_size;
-		mult = get_multiplier(z_size);
-		z_base = firmware->table_params[table_num]->z_base;
-		x_bins = firmware->table_params[table_num]->x_bincount;
-		y_bins = firmware->table_params[table_num]->y_bincount;
-		z_page = firmware->table_params[table_num]->z_page;
-		canID = firmware->canID;
-		data = g_new0(guint8, x_bins*y_bins*mult);
-
-		for (i=0;i<firmware->table_params[table_num]->table->len;i++)
-		{
-			tmpwidget = g_array_index(firmware->table_params[table_num]->table,GtkWidget *, i);
-			if (GTK_IS_ENTRY(tmpwidget))
-			{
-				canID = (GINT)OBJ_GET(tmpwidget,"canID");
-				page = (GINT)OBJ_GET(tmpwidget,"page");
-				offset = (GINT)OBJ_GET(tmpwidget,"offset");
-				size = (DataSize)OBJ_GET(tmpwidget,"size");
-				use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
-				if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-					raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
-				else
-					raw_lower = get_extreme_from_size(size,LOWER);
-				if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-					raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
-				else
-					raw_upper = get_extreme_from_size(size,UPPER);
-				value = get_ecu_data(canID,page,offset,size);
-				value *= percentage;
-				if (value < raw_lower)
-					value = raw_lower;
-				if (value > raw_upper)
-					value = raw_upper;
-
-				/* What we are doing is doing the 
-				 * forware/reverse conversion which
-				 * will give us an exact value if the 
-				 * user inputs something in
-				 * between,  thus we can reset the 
-				 * display to a sane value...
-				 */
-				old = get_ecu_data(canID,page,offset,size);
-				set_ecu_data(canID,page,offset,size,value);
-
-				real_value = convert_after_upload(tmpwidget);
-				set_ecu_data(canID,page,offset,size,old);
-
-				tmpbuf = g_strdup_printf("%i",(gint)real_value);
-				g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-						(gpointer)entry_changed_handler,
-						NULL);
-				gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
-				g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-						(gpointer)entry_changed_handler,
-						NULL);
-				g_free(tmpbuf);
-
-				if (!firmware->chunk_support)
-					send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
-				if (mult == 1)
-					data[offset] = (guint8)value;
-				else if (mult == 2)
-				{
-					data[offset*2] = ((gint32)value & 0x00ff);
-					data[(offset*2)+1] = ((gint32)value & 0xff00) >> 8;
-				}
-				else if (mult == 4)
-				{
-					data[offset*4] = ((gint32)value & 0x00ff);
-					data[(offset*4)+1] = ((gint32)value & 0xff00) >> 8;
-					data[(offset*4)+2] = ((gint32)value & 0xff0000) >> 16;
-					data[(offset*4)+3] = ((gint32)value & 0xff000000) >> 24;
-				}
-
-				gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
-				if (use_color)
-				{
-					color = get_colors_from_hue(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
-					gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
-				}
-			}
-		}
-		if (firmware->chunk_support)
-			chunk_write(canID,z_page,z_base,x_bins*y_bins*mult,data);
-	}
-	g_strfreev(vector);
-	color_changed = TRUE;
-	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-}
 
 
 G_MODULE_EXPORT void draw_ve_marker(void)

@@ -18,8 +18,6 @@
 #include <config.h>
 #include <configfile.h>
 #include <crx.h>
-#include <dataio.h>
-#include <defines.h>
 #include <debugging.h>
 #include <dep_loader.h>
 #include <enums.h>

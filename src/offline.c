@@ -16,7 +16,6 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -428,6 +427,7 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
+	void (*restore_all_f)(const gchar *);
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -451,7 +451,8 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	{
 		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
 		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
-		restore_all_ecu_settings(filename);
+		get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
+		restore_all_f(filename);
 		g_free(filename);
 	}
 	else

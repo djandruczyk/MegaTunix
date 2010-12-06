@@ -25,7 +25,7 @@ extern gconstpointer *global_data;
  \returns pointer to GList
  \see store_list
  */
-G_MODULE_EXPORT GList * get_list(gchar * key)
+G_MODULE_EXPORT GList * get_list(const gchar * key)
 {
 	if (!lists_hash)
 	{
@@ -42,7 +42,7 @@ G_MODULE_EXPORT GList * get_list(gchar * key)
  \param list pointer to list to store
  \see get_list
  */
-G_MODULE_EXPORT void store_list(gchar * key, GList * list)
+G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 {
 	if (!lists_hash)
 	{
@@ -59,7 +59,7 @@ G_MODULE_EXPORT void store_list(gchar * key, GList * list)
  \param key Text name of list to store
  \see get_list
  */
-G_MODULE_EXPORT void remove_list(gchar *key)
+G_MODULE_EXPORT void remove_list(const gchar *key)
 {
 	if (!lists_hash)
 		return;

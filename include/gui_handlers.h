@@ -15,6 +15,7 @@
 #define __GUI_HANDLERS_H__
 
 #include <defines.h>
+#include <enums.h>
 #include <gtk/gtk.h>
 #include <watches.h>
 
@@ -96,12 +97,6 @@ typedef enum
 /* spinbuttons... */
 typedef enum
 {
-	REQ_FUEL_DISP=0x80,
-	REQ_FUEL_CYLS,
-	REQ_FUEL_RATED_INJ_FLOW,
-	REQ_FUEL_RATED_PRESSURE,
-	REQ_FUEL_ACTUAL_PRESSURE,
-	REQ_FUEL_AFR,
 	LOCKED_REQ_FUEL,
 	REQ_FUEL_1,
 	REQ_FUEL_2,

@@ -17,7 +17,6 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
-#include <mtxsocket.h>
 #include <stringmatch.h>
 
 
@@ -339,52 +338,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
 
-	/* TCP Socket Commands */
-	g_hash_table_insert(str_2_enum,"HELP",
-			GINT_TO_POINTER(HELP));
-	g_hash_table_insert(str_2_enum,"QUIT",
-			GINT_TO_POINTER(QUIT));
-	g_hash_table_insert(str_2_enum,"GET_REVISION",
-			GINT_TO_POINTER(GET_REVISION));
-	g_hash_table_insert(str_2_enum,"GET_SIGNATURE",
-			GINT_TO_POINTER(GET_SIGNATURE));
-	g_hash_table_insert(str_2_enum,"GET_RT_VARS",
-			GINT_TO_POINTER(GET_RT_VARS));
-	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
-			GINT_TO_POINTER(GET_RTV_LIST));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VARS",
-			GINT_TO_POINTER(GET_ECU_VARS));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U08",
-			GINT_TO_POINTER(GET_ECU_VAR_U08));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S08",
-			GINT_TO_POINTER(GET_ECU_VAR_S08));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U16",
-			GINT_TO_POINTER(GET_ECU_VAR_U16));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S16",
-			GINT_TO_POINTER(GET_ECU_VAR_S16));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U32",
-			GINT_TO_POINTER(GET_ECU_VAR_U32));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S32",
-			GINT_TO_POINTER(GET_ECU_VAR_S32));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U08",
-			GINT_TO_POINTER(SET_ECU_VAR_U08));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S08",
-			GINT_TO_POINTER(SET_ECU_VAR_S08));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U16",
-			GINT_TO_POINTER(SET_ECU_VAR_U16));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S16",
-			GINT_TO_POINTER(SET_ECU_VAR_S16));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U32",
-			GINT_TO_POINTER(SET_ECU_VAR_U32));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S32",
-			GINT_TO_POINTER(SET_ECU_VAR_S32));
-	g_hash_table_insert(str_2_enum,"BURN_FLASH",
-			GINT_TO_POINTER(BURN_FLASH));
-	g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
-			GINT_TO_POINTER(GET_RAW_ECU));
-	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
-			GINT_TO_POINTER(SET_RAW_ECU));
-
 	/* Interrogation Test Results */
 	g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
 			GINT_TO_POINTER(RESULT_DATA));
@@ -611,7 +564,7 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
  \param string (gchar *) string to be translated
  \returns enumeration equivalent
  */
-G_MODULE_EXPORT gint translate_string(gchar *string)
+G_MODULE_EXPORT gint translate_string(const gchar *string)
 {
 	gpointer value = 0;
 	value = g_hash_table_lookup(str_2_enum,string);

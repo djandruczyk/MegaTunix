@@ -14,7 +14,6 @@
 #include <assert.h>
 #include <config.h>
 #include <configfile.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
@@ -112,8 +111,8 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint page, gint offset, DataS
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
-	assert(offset >= 0);
 	Firmware_Details *firmware = NULL;
+	assert(offset >= 0);
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -246,9 +245,9 @@ G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, g
 G_MODULE_EXPORT void store_new_block(gint canID, gint page, gint offset, void * buf, gint count)
 {
 	Firmware_Details *firmware = NULL;
+	guint8 ** ecu_data = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	guint8 ** ecu_data = NULL;
 
 	if (!firmware)
 		return;
@@ -297,9 +296,9 @@ G_MODULE_EXPORT void backup_current_data(gint canID, gint page)
 G_MODULE_EXPORT gboolean find_mtx_page(gint tableID,gint *mtx_page)
 {
 	Firmware_Details *firmware = NULL;
+	gint i = 0;
 
 	firmware = DATA_GET(global_data,"firmware");
-	gint i = 0;
 
 	if (!firmware)
 		return FALSE;

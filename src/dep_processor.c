@@ -15,7 +15,6 @@
 
 #include <config.h>
 #include <configfile.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>

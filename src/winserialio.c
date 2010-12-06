@@ -29,6 +29,7 @@
 G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud)
 {
 #ifdef __WIN32__
+	extern gconstpointer *global_data;
 	Serial_Params *serial_params;
 	serial_params = DATA_GET(global_data,"serial_params");
 	DCB dcb;

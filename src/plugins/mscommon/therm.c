@@ -18,18 +18,16 @@
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
-#include <gui_handlers.h>
+#include <mscommon_comms.h>
 #include <math.h>
 #include <therm.h>
-#include <threads.h>
-#include <vex_support.h>
-#include <widgetmgmt.h>
+
 
 
 
 G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *temp_label = lookup_widget("temp_label");
+	GtkWidget *temp_label = lookup_widget_f("temp_label");
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) /* Deg C */
 		gtk_label_set_text(GTK_LABEL(temp_label),OBJ_GET(temp_label,"c_label"));
@@ -73,19 +71,19 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	 * and build the tables and send to the ECU
 	 */
 
-	tabletype = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget("thermister_sensor_combo")));
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget("thermister_celsius_radiobutton"))))
+	tabletype = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget_f("thermister_sensor_combo")));
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("thermister_celsius_radiobutton"))))
 		celsius = TRUE;
 	else
 		celsius = FALSE;
 
-	bias = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("bias_entry"))),NULL);
-	t[0] = temp1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("temp1_entry"))),NULL);
-	t[1] = temp2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("temp2_entry"))),NULL);
-	t[2] = temp3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("temp3_entry"))),NULL);
-	res1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("resistance1_entry"))),NULL);
-	res2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("resistance2_entry"))),NULL);
-	res3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget("resistance3_entry"))),NULL);
+	bias = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("bias_entry"))),NULL);
+	t[0] = temp1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp1_entry"))),NULL);
+	t[1] = temp2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp2_entry"))),NULL);
+	t[2] = temp3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp3_entry"))),NULL);
+	res1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance1_entry"))),NULL);
+	res2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance2_entry"))),NULL);
+	res3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance3_entry"))),NULL);
 	/* If Not celsius,  convert to celsius, then to kelvin */
 	for (i = 0; i < 3; i++) {
 		if (!celsius) 

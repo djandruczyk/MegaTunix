@@ -17,7 +17,6 @@
 #include "../widgets/curve.h"
 #include <defines.h>
 #include <enums.h>
-#include <fileio.h>
 #include <firmware.h>
 #include "../widgets/gauge.h"
 #include <getfiles.h>

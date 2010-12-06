@@ -19,7 +19,6 @@
 #include <defines.h>
 #include <errno.h>
 #include <glib.h>
-#include <mtxsocket.h>
 #include <offline.h>
 #include <stdlib.h>
 #include <sys/stat.h>

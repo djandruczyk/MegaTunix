@@ -16,7 +16,6 @@
 #include <assert.h>
 #include <config.h>
 #include <combo_mask.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_processor.h>
@@ -42,8 +41,9 @@ enum
 	COL_MODE,
 	COL_EDITABLE,
 	NUM_COLS
-} ;
+};
 
+extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
 static GList *views = NULL;
 extern gconstpointer *global_data;
 

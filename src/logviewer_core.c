@@ -15,7 +15,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
