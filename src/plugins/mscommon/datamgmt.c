@@ -45,7 +45,7 @@ G_MODULE_EXPORT gint get_ecu_data(gint canID, gint page, gint offset, DataSize s
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
 
-	return _get_sized_data(firmware->ecu_data[page],page,offset,size,firmware->bigendian);
+	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
 
 
@@ -69,7 +69,7 @@ G_MODULE_EXPORT gint get_ecu_data_last(gint canID, gint page, gint offset, DataS
 		return 0;
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
-	return _get_sized_data(firmware->ecu_data_last[page],page,offset,size,firmware->bigendian);
+	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
 }
 
 
@@ -93,36 +93,26 @@ G_MODULE_EXPORT gint get_ecu_data_backup(gint canID, gint page, gint offset, Dat
 		return 0;
 	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
 		return 0;
-	return _get_sized_data(firmware->ecu_data_backup[page],page,offset,size,firmware->bigendian);
+	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
 /*!
  \brief _get_sized_data() is a func to return the data requested.
  The data is casted to the passed type.
  \param data array of data to pull from.
- \param page ( ecu firmware page)
  \param offset (RAW BYTE offset)
  \param size (size to be returned...
+ \param bigendian (Flag to flip bytes or not)
  */
-G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint page, gint offset, DataSize size, gboolean bigendian) 
+G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, gboolean bigendian) 
 {
-	/* canID unused currently */
 	gint result = 0;
 	guint16 u16 = 0;
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
-	Firmware_Details *firmware = NULL;
 	assert(offset >= 0);
 
-	firmware = DATA_GET(global_data,"firmware");
-
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
 	switch (size)
 	{
 		case MTX_CHAR:

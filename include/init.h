@@ -47,9 +47,6 @@ void cleanup(void *);
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);
-Page_Params * initialize_page_params(void);
-Table_Params * initialize_table_params(void);
-TE_Params * initialize_te_params(void);
 /* Prototypes */
 
 #endif

@@ -18,6 +18,23 @@
 #include <gtk/gtk.h>
 #include <firmware.h>
 
+/* Externs */
+extern void (*dbg_func_f)(gint, gchar *);
+extern void (*io_cmd_f)(const gchar *,void *);
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
+extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean,gboolean);
+extern gboolean (*get_file_api_f)(ConfigFile *, gint *, gint *);
+extern gint (*translate_string_f)(const gchar *);
+extern void (*mem_alloc_f)(void);
+extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
+extern void *(*evaluator_create_f)(char *);
+extern void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
+extern void (*get_table_f)(gpointer, gpointer, gpointer);
+extern void (*free_multi_source_f)(gpointer);
+extern void (*load_dependancies_obj_f)(GObject *,ConfigFile * ,gchar *, gchar *);
+extern void (*flush_serial_f)(gint, gint);
+/* Externs */
 
 typedef enum
 {
@@ -66,6 +83,9 @@ void interrogate_error(gchar *, gint);
 gint translate_capabilities(gchar *);
 gboolean load_firmware_details(Firmware_Details *, const gchar * );
 void update_interrogation_gui_pf(void);
+Page_Params * initialize_page_params(void);
+Table_Params * initialize_table_params(void);
+TE_Params * initialize_te_params(void);
 /* Prototypes */
 
 #endif

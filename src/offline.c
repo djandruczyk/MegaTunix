@@ -45,14 +45,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
-	GArray *tests = NULL;
-	GHashTable *tests_hash = NULL;
 	gboolean tmp = TRUE;
 	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
         GAsyncQueue *io_repair_queue = NULL;
 	Firmware_Details *firmware = NULL;
+	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
@@ -91,13 +90,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 
 	queue_function("kill_conn_warning");
 
-	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)
 	{
 		firmware = g_new0(Firmware_Details,1);
 		DATA_SET(global_data,"firmware",firmware);
 	}
-	load_firmware_details(firmware,filename);
+	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
+		load_firmware_details(firmware,filename);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
@@ -201,8 +200,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-
-	free_tests_array(tests);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));

@@ -1597,7 +1597,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -3644,7 +3644,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->page,msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)

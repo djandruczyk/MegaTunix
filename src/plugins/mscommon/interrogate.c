@@ -86,15 +86,15 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
-	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
+	dbg_func_f(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() ENTERED\n\n"));
 
 	if (!DATA_GET(global_data,"connected"))
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n"));
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
-	thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
+	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
 	//set_title(g_strdup(_("Interrogating ECU...")));
 
 	/* Load tests from config files */
@@ -103,19 +103,19 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	if ((!tests) || (tests->len < 1))
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
-		update_logbar("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
+		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
-	thread_widget_set_sensitive("offline_button",FALSE);
-	thread_widget_set_sensitive("interrogate_button",FALSE);
+	thread_widget_set_sensitive_f("offline_button",FALSE);
+	thread_widget_set_sensitive_f("interrogate_button",FALSE);
 	/* how many tests.... */
 	tests_to_run = tests->len;
 
 	for (i=0;i<tests_to_run;i++)
 	{
-		flush_serial(serial_params->fd,BOTH);
+		flush_serial_f(serial_params->fd,BOTH);
 		count = 0;
 		test = g_array_index(tests,Detection_Test *, i);
 
@@ -132,7 +132,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 				res = write_wrapper(serial_params->fd,string,1,&len);
 				if (!res)
 					interrogate_error("String Write error",j);
-				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%s\"\n",string));
+				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%s\"\n",string));
 				g_free(string);
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U08)
@@ -141,7 +141,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 				res = write_wrapper(serial_params->fd,&uint8,1,&len);
 				if (!res)
 					interrogate_error("U08 Write error",j);
-				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
+				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U16)
 			{
@@ -149,7 +149,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 				res = write_wrapper(serial_params->fd,&uint16,2,&len);
 				if (!res)
 					interrogate_error("U16 Write error",j);
-				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
+				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S08)
 			{
@@ -157,7 +157,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 				res = write_wrapper(serial_params->fd,&sint8,1,&len);
 				if (!res)
 					interrogate_error("S08 Write error",j);
-				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
+				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
 			}
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S16)
 			{
@@ -165,7 +165,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 				res = write_wrapper(serial_params->fd,&sint16,2,&len);
 				if (!res)
 					interrogate_error("S16 Write error",j);
-				dbg_func(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
+				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
 			}
 		}
 
@@ -174,14 +174,14 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		zerocount = 0;
 		while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
 		{
-			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",test->test_name,total_wanted-total_read));
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",test->test_name,total_wanted-total_read));
 
 			res = read_wrapper(serial_params->fd,
 					ptr+total_read,
 					total_wanted-total_read,&len);
 			total_read += len;
 
-			dbg_func(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",test->test_name,len,total_read));
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",test->test_name,len,total_read));
 			/* If we get nothing back (i.e. timeout, inc counter)*/
 			if ((!res) || (len == 0))
 				zerocount++;
@@ -189,7 +189,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (zerocount > 1)
 				break;
 		}
-		dbg_func(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));
+		dbg_func_f(INTERROGATOR,g_strdup_printf("\tReceived %i bytes\n",total_read));
 		ptr = buf;
 
 		/* copy data from tmp buffer to struct pointer */
@@ -202,30 +202,30 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		if (total_read > 0)
 		{
 			if (test->result_type == RESULT_TEXT)
-				update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE,TRUE);
+				update_logbar_f("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE,TRUE);
 			else if (test->result_type == RESULT_DATA)
-				update_logbar("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE,TRUE);
+				update_logbar_f("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE,TRUE);
 			ptr = buf;
-			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",test->test_name));
+			dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",test->test_name));
 			message = g_strndup(((gchar *)buf),total_read);
-			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate.c()\n\tDumping Output string: \"%s\"\n",message));
+			dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup_printf(__FILE__": interrogate.c()\n\tDumping Output string: \"%s\"\n",message));
 			g_free(message);
-			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("Data is in HEX!!\n"));
+			dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup("Data is in HEX!!\n"));
 			for (j=0;j<total_read;j++)
 			{
-				dbg_func(SERIAL_RD|INTERROGATOR,g_strdup_printf("%.2x ", ptr[j]));
+				dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup_printf("%.2x ", ptr[j]));
 				if (!((j+1)%8)) /* every 8 bytes give a CR */
-					dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("\n"));
+					dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup("\n"));
 			}
-			dbg_func(SERIAL_RD|INTERROGATOR,g_strdup("\n\n"));
+			dbg_func_f(SERIAL_RD|INTERROGATOR,g_strdup("\n\n"));
 		}
 	}
 	interrogated = determine_ecu(tests,tests_hash);	
 	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(interrogated));
 	if (interrogated)
 	{
-		thread_widget_set_sensitive("interrogate_button",FALSE);
-		thread_widget_set_sensitive("offline_button",FALSE);
+		thread_widget_set_sensitive_f("interrogate_button",FALSE);
+		thread_widget_set_sensitive_f("offline_button",FALSE);
 	}
 
 	free_tests_array(tests);
@@ -233,13 +233,13 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	if (!interrogated)
 	{
-		thread_widget_set_sensitive("interrogate_button",TRUE);
-		thread_widget_set_sensitive("offline_button",TRUE);
+		thread_widget_set_sensitive_f("interrogate_button",TRUE);
+		thread_widget_set_sensitive_f("offline_button",TRUE);
 	}
 
 	g_static_mutex_unlock(&mutex);
-	dbg_func(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
-	thread_update_widget("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	dbg_func_f(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
+	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
 	//set_title(g_strdup(_("Interrogation Complete...")));
 	return interrogated;
 }
@@ -272,7 +272,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"));
 		return FALSE;
 	}
 
@@ -294,21 +294,21 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	{
 		test = g_array_index(tests,Detection_Test *,i);
 		if (test->result_type == RESULT_TEXT)
-			dbg_func(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes (%s)\n",
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes (%s)\n",
 						test->actual_test,
 						test->test_desc,
 						test->num_bytes,
 						test->result_str));
 		else if (test->result_type == RESULT_DATA)
-			dbg_func(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
 						test->actual_test,
 						test->test_desc,
 						test->num_bytes));
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
-		update_logbar("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
+		update_logbar_f("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
 		retval = FALSE;
 	}
 	else
@@ -356,11 +356,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 
 	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
-	get_file_api(cfgfile,&major,&minor);
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
+	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -372,15 +372,15 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	cfg_read_string(cfgfile,"parameters","NumVerVia",&firmware->NumVerVia);
 	cfg_read_string(cfgfile,"parameters","SignatureVia",&firmware->SignatureVia);
 
-	dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": load_profile_details()\n\tfile:%s opened successfully\n",filename));
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_profile_details()\n\tfile:%s opened successfully\n",filename));
 	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
 		firmware->bigendian = TRUE;
 	}
 	if(!cfg_read_string(cfgfile,"parameters","Capabilities",
 				&tmpbuf))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->capabilities = translate_capabilities(tmpbuf);
@@ -407,103 +407,103 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
 	if (firmware->capabilities & PIS)
 	{
 		if(!cfg_read_int(cfgfile,"parameters","CLT_Table_Page",
 					&firmware->clt_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","MAT_Table_Page",
 					&firmware->mat_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 	}
 	if (firmware->capabilities & MS2)
 	{
 		if(!cfg_read_int(cfgfile,"parameters","MS2_RT_Page",
 					&firmware->ms2_rt_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MS2_RT_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MS2_RT_Page\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","InterCharDelay",
 					&firmware->interchardelay))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"InterCharDelay\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"InterCharDelay\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","CLT_Table_Page",
 					&firmware->clt_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CLT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","MAT_Table_Page",
 					&firmware->mat_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAT_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","EGO_Table_Page",
 					&firmware->ego_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"EGO_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"EGO_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","MAF_Table_Page",
 					&firmware->maf_table_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAF_Table_Page\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MAF_Table_Page\" variable not found in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_int(cfgfile,"parameters","RT_total_bytes",
 				&firmware->rtvars_size))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
 				&firmware->get_all_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","VE_Command",
 				&firmware->ve_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"VE_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"VE_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Write_Command",
 				&firmware->write_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Burn_All_Command",
 				&firmware->burn_all_command))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 				&firmware->multi_page))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in parameters section in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	if ((firmware->multi_page) && (!(firmware->capabilities & MS2)))
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Page_Command",
 					&firmware->page_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Page_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Page_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
 				&firmware->chunk_support))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	if (firmware->chunk_support)
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Chunk_Write_Command",
 					&firmware->chunk_write_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if (firmware->capabilities & MS2)
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Table_Write_Command",
 					&firmware->table_write_command))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Table_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Table_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 	if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 				&firmware->total_pages))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n"));
 	cfg_read_int(cfgfile,"parameters","ReadOnlyAbove",&firmware->ro_above);
 	if(!cfg_read_int(cfgfile,"parameters","TotalTables",
 				&firmware->total_tables))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
 	cfg_read_int(cfgfile,"parameters","TotalTETables",
 			&firmware->total_te_tables);
 	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&firmware->toothmon_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"));
 		if (firmware->capabilities & MS2_E_COMPMON)
 		{
 			if(!cfg_read_int(cfgfile,"parameters","CompositemonPage",&firmware->compositemon_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompositemonPage\" value not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"CompositemonPage\" value not found in interrogation profile, ERROR\n"));
 		}
 	}
 	if(!cfg_read_string(cfgfile,"gui","LoadTabs",
 				&tmpbuf))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"LoadTabs\" list not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"LoadTabs\" list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->tab_list = g_strsplit(tmpbuf,",",0);
@@ -511,7 +511,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	}
 	if(!cfg_read_string(cfgfile,"gui","TabConfs",
 				&tmpbuf))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TabConfs\" list not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"TabConfs\" list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->tab_confs = g_strsplit(tmpbuf,",",0);
@@ -519,19 +519,19 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	}
 	if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 				&firmware->rtv_map_file))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
 				&firmware->sliders_map_file))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
 	cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
 				&firmware->rtt_map_file);
-/*		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
 	cfg_read_string(cfgfile,"gui","StatusMapFile",
 				&firmware->status_map_file);
-/*		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
 	if (!cfg_read_string(cfgfile,"lookuptables","tables",
 				&tmpbuf))
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n"));
 	else
 	{
 		list = g_strsplit(tmpbuf,",",0);
@@ -540,11 +540,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		while (list[i] != NULL)
 		{	
 			if (!cfg_read_string(cfgfile,"lookuptables",list[i],&tmpbuf))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"%s\" key name not found in \"[lookuptables]\"\n\t section of interrogation profile, ERROR\n",list[i]));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"%s\" key name not found in \"[lookuptables]\"\n\t section of interrogation profile, ERROR\n",list[i]));
 			else
 			{
-				dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": load_profile_details()\n\t \"[lookuptables]\"\n\t section loading table %s, file %s\n",list[i],tmpbuf));
-				get_table(list[i],tmpbuf,NULL);
+				dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_profile_details()\n\t \"[lookuptables]\"\n\t section loading table %s, file %s\n",list[i],tmpbuf));
+				get_table_f(list[i],tmpbuf,NULL);
 				g_free(tmpbuf);
 			}
 			i++;
@@ -561,14 +561,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 
 		if (firmware->multi_page)
 			if(!cfg_read_int(cfgfile,section,"phys_ecu_page",&firmware->page_params[i]->phys_ecu_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"phys_ecu_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"phys_ecu_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_boolean(cfgfile,section,"dl_by_default",&firmware->page_params[i]->dl_by_default))
 		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dl_by_default\" flag not found in \"%s\" section in interrogation profile, assuming TRUE\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dl_by_default\" flag not found in \"%s\" section in interrogation profile, assuming TRUE\n",section));
 			firmware->page_params[i]->dl_by_default = TRUE;
 		}
 		if(!cfg_read_int(cfgfile,section,"length",&firmware->page_params[i]->length))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"length\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"length\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		g_free(section);
 	}
 
@@ -582,7 +582,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->table_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
 		{
-			firmware->table_params[i]->match_type = translate_string(tmpbuf);
+			firmware->table_params[i]->match_type = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		cfg_read_boolean(cfgfile,section,"is_spark",&firmware->table_params[i]->is_spark);
@@ -590,99 +590,99 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		if ((firmware->table_params[i]->is_fuel) && !(firmware->capabilities & PIS))
 		{
 			if(!cfg_read_int(cfgfile,section,"divider_page",&firmware->table_params[i]->divider_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"divider_offset",&firmware->table_params[i]->divider_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"reqfuel_page",&firmware->table_params[i]->reqfuel_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&firmware->table_params[i]->reqfuel_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_string(cfgfile,section,"reqfuel_size",&tmpbuf))
 				firmware->table_params[i]->reqfuel_size = MTX_U08;
 			else
 			{
-				firmware->table_params[i]->reqfuel_size = translate_string(tmpbuf);
+				firmware->table_params[i]->reqfuel_size = translate_string_f(tmpbuf);
 				g_free(tmpbuf);
 			}
 			if(!cfg_read_int(cfgfile,section,"stroke_page",&firmware->table_params[i]->stroke_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"stroke_offset",&firmware->table_params[i]->stroke_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"stroke_mask",&firmware->table_params[i]->stroke_mask))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"stroke_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_cyl_page",&firmware->table_params[i]->num_cyl_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_cyl_offset",&firmware->table_params[i]->num_cyl_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_cyl_mask",&firmware->table_params[i]->num_cyl_mask))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_cyl_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_inj_page",&firmware->table_params[i]->num_inj_page))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_inj_offset",&firmware->table_params[i]->num_inj_offset))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if(!cfg_read_int(cfgfile,section,"num_inj_mask",&firmware->table_params[i]->num_inj_mask))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"num_inj_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			if (!(firmware->capabilities & MS2))
 			{
 				if(!cfg_read_int(cfgfile,section,"rpmk_page",&firmware->table_params[i]->rpmk_page))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"rpmk_offset",&firmware->table_params[i]->rpmk_offset))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
 			if (!(firmware->capabilities & MS1_DT))
 			{
 				if(!cfg_read_int(cfgfile,section,"alternate_page",&firmware->table_params[i]->alternate_page))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"alternate_offset",&firmware->table_params[i]->alternate_offset))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
 			if (firmware->capabilities & MSNS_E)
 			{
 				if(!cfg_read_int(cfgfile,section,"dtmode_offset",&firmware->table_params[i]->dtmode_offset))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"dtmode_page",&firmware->table_params[i]->dtmode_page))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 				if(!cfg_read_int(cfgfile,section,"dtmode_mask",&firmware->table_params[i]->dtmode_mask))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"dtmode_mask\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
 		}
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->table_params[i]->x_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"y_page",&firmware->table_params[i]->y_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"z_page",&firmware->table_params[i]->z_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"x_base_offset",&firmware->table_params[i]->x_base))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_base_offset\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"y_base_offset",&firmware->table_params[i]->y_base))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_base_offset\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"z_base_offset",&firmware->table_params[i]->z_base))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_base_offset\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"x_bincount",&firmware->table_params[i]->x_bincount))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_bincount\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_bincount\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_size",&tmpbuf))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->x_size = translate_string(tmpbuf);
+			firmware->table_params[i]->x_size = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"y_size",&tmpbuf))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->y_size = translate_string(tmpbuf);
+			firmware->table_params[i]->y_size = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"z_size",&tmpbuf))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_size\" enumeration not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->z_size = translate_string(tmpbuf);
+			firmware->table_params[i]->z_size = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_int(cfgfile,section,"y_bincount",&firmware->table_params[i]->y_bincount))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_bincount\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_bincount\" variable not found in interrogation profile, ERROR\n"));
 		cfg_read_boolean(cfgfile,section,"x_multi_source",&firmware->table_params[i]->x_multi_source);
 		if (firmware->table_params[i]->x_multi_source)
 		{
@@ -691,34 +691,34 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			 * over to the firmware struct
 			 */
 			if(!cfg_read_string(cfgfile,section,"x_multi_expr_keys",&firmware->table_params[i]->x_multi_expr_keys))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_source_key",&firmware->table_params[i]->x_source_key))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source_key\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source_key\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_sources",&firmware->table_params[i]->x_sources))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_sources\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffixes",&firmware->table_params[i]->x_suffixes))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffixes\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffixes\" variable not found in interrogation profile, ERROR\n"));
 			cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr);
 			cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"x_ul_conv_exprs",&firmware->table_params[i]->x_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_dl_conv_exprs",&firmware->table_params[i]->x_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
 		}
 		else
 		{
 			if(!cfg_read_string(cfgfile,section,"x_source",&firmware->table_params[i]->x_source))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffix",&firmware->table_params[i]->x_suffix))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->table_params[i]->x_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->table_params[i]->x_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
 		cfg_read_boolean(cfgfile,section,"y_multi_source",&firmware->table_params[i]->y_multi_source);
 		if (firmware->table_params[i]->y_multi_source)
@@ -728,35 +728,35 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			 * over to the firmware struct
 			 */
 			if(!cfg_read_string(cfgfile,section,"y_multi_expr_keys",&firmware->table_params[i]->y_multi_expr_keys))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_source_key",&firmware->table_params[i]->y_source_key))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_source_key\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_source_key\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_sources",&firmware->table_params[i]->y_sources))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_sources\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffixes",&firmware->table_params[i]->y_suffixes))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
 			cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr);
 			cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"y_ul_conv_exprs",&firmware->table_params[i]->y_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_dl_conv_exprs",&firmware->table_params[i]->y_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
 
 		}
 		else
 		{
 			if(!cfg_read_string(cfgfile,section,"y_source",&firmware->table_params[i]->y_source))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_source\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffix",&firmware->table_params[i]->y_suffix))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->table_params[i]->y_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->table_params[i]->y_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, table, %i ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, table, %i ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
 		cfg_read_boolean(cfgfile,section,"z_multi_source",&firmware->table_params[i]->z_multi_source);
 		if(firmware->table_params[i]->z_multi_source)
@@ -766,48 +766,48 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			 * over to the firmware struct
 			 */
 			if(!cfg_read_string(cfgfile,section,"z_multi_expr_keys",&firmware->table_params[i]->z_multi_expr_keys))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_source_key",&firmware->table_params[i]->z_source_key))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_source_key\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_source_key\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_sources",&firmware->table_params[i]->z_sources))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_sources\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffixes",&firmware->table_params[i]->z_suffixes))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffixes\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffixes\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_ul_conv_exprs",&firmware->table_params[i]->z_ul_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_dl_conv_exprs",&firmware->table_params[i]->z_dl_conv_exprs))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_precisions",&firmware->table_params[i]->z_precisions))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
 
 		}
 		else
 		{
 			if(!cfg_read_string(cfgfile,section,"z_source",&firmware->table_params[i]->z_source))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_source\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffix",&firmware->table_params[i]->z_suffix))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_ul_conv_expr",&firmware->table_params[i]->z_ul_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_ul_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_dl_conv_expr",&firmware->table_params[i]->z_dl_conv_expr))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_dl_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))
-				dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
 			{
 				firmware->table_params[i]->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 				g_object_ref(firmware->table_params[i]->z_object);
 				gtk_object_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
-				load_dependancies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
+				load_dependancies_obj_f(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else
 				{
 					OBJ_SET(firmware->table_params[i]->z_object,"alt_lookuptable",g_strdup(tmpbuf));
 					g_free(tmpbuf);
 				}
 				if(!cfg_read_string(cfgfile,section,"z_lookuptable",&tmpbuf))
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else
 				{
 					OBJ_SET(firmware->table_params[i]->z_object,"lookuptable",g_strdup(tmpbuf));
@@ -816,7 +816,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			}
 		}
 		if(!cfg_read_string(cfgfile,section,"table_name",&firmware->table_params[i]->table_name))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"table_name\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"table_name\" variable not found in interrogation profile, ERROR\n"));
 		g_free(section);
 	}
 
@@ -833,7 +833,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
 		{
-			firmware->te_params[i]->match_type = translate_string(tmpbuf);
+			firmware->te_params[i]->match_type = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep);
@@ -847,65 +847,65 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		cfg_read_boolean(cfgfile,section,"x_temp_dep",&firmware->te_params[i]->x_temp_dep);
 		cfg_read_boolean(cfgfile,section,"y_temp_dep",&firmware->te_params[i]->y_temp_dep);
 		if(!cfg_read_string(cfgfile,section,"x_axis_label",&firmware->te_params[i]->x_axis_label))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_string(cfgfile,section,"y_axis_label",&firmware->te_params[i]->y_axis_label))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_axis_label\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"x_page",&firmware->te_params[i]->x_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"y_page",&firmware->te_params[i]->y_page))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_page\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 		if(!cfg_read_int(cfgfile,section,"x_base_offset",&firmware->te_params[i]->x_base))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_base_offset\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"y_base_offset",&firmware->te_params[i]->y_base))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_base_offset\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"bincount",&firmware->te_params[i]->bincount))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_bincount\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_bincount\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_size",&tmpbuf))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->te_params[i]->x_size = translate_string(tmpbuf);
+			firmware->te_params[i]->x_size = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"y_size",&tmpbuf))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->te_params[i]->y_size = translate_string(tmpbuf);
+			firmware->te_params[i]->y_size = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"x_source",&firmware->te_params[i]->x_source))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_units",&firmware->te_params[i]->x_units))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_units\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_name",&firmware->te_params[i]->x_name))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_name\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"x_name\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_ul_conv_expr",&firmware->te_params[i]->x_ul_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_string(cfgfile,section,"x_dl_conv_expr",&firmware->te_params[i]->x_dl_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_raw_lower",&firmware->te_params[i]->x_raw_lower))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_raw_upper",&firmware->te_params[i]->x_raw_upper))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_raw_upper\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_raw_upper\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->te_params[i]->x_precision))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_string(cfgfile,section,"y_units",&firmware->te_params[i]->y_units))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_units\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"y_name",&firmware->te_params[i]->y_name))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_name\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"y_name\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"y_ul_conv_expr",&firmware->te_params[i]->y_ul_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_ul_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_string(cfgfile,section,"y_dl_conv_expr",&firmware->te_params[i]->y_dl_conv_expr))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_dl_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_raw_lower",&firmware->te_params[i]->y_raw_lower))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_raw_upper",&firmware->te_params[i]->y_raw_upper))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_raw_upper\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_raw_upper\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->te_params[i]->y_precision))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_string(cfgfile,section,"title",&firmware->te_params[i]->title))
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"title\" variable not found in interrogation profile, ERROR\n"));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"title\" variable not found in interrogation profile, ERROR\n"));
 		g_free(section);
 	}
 
@@ -921,7 +921,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->x_multi_source)
 		{
-			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
@@ -943,13 +943,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX ul_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX dl_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -963,15 +963,15 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->x_ul_eval = evaluator_create(firmware->table_params[i]->x_ul_conv_expr);
+			firmware->table_params[i]->x_ul_eval = evaluator_create_f(firmware->table_params[i]->x_ul_conv_expr);
 			g_assert(firmware->table_params[i]->x_ul_eval);
-			firmware->table_params[i]->x_dl_eval = evaluator_create(firmware->table_params[i]->x_dl_conv_expr);
+			firmware->table_params[i]->x_dl_eval = evaluator_create_f(firmware->table_params[i]->x_dl_conv_expr);
 			g_assert(firmware->table_params[i]->x_dl_eval);
 		}
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)
 		{
-			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
@@ -993,13 +993,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY ul_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY dl_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1013,14 +1013,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->y_ul_eval = evaluator_create(firmware->table_params[i]->y_ul_conv_expr);
-			firmware->table_params[i]->y_dl_eval = evaluator_create(firmware->table_params[i]->y_dl_conv_expr);
+			firmware->table_params[i]->y_ul_eval = evaluator_create_f(firmware->table_params[i]->y_ul_conv_expr);
+			firmware->table_params[i]->y_dl_eval = evaluator_create_f(firmware->table_params[i]->y_dl_conv_expr);
 		}
 
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->z_multi_source)
 		{
-			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
@@ -1042,13 +1042,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ ul_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
-					dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ dl_conv_exprs is NULL for table %i\n",i));
+					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1062,19 +1062,19 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->z_ul_eval = evaluator_create(firmware->table_params[i]->z_ul_conv_expr);
-			firmware->table_params[i]->z_dl_eval = evaluator_create(firmware->table_params[i]->z_dl_conv_expr);
+			firmware->table_params[i]->z_ul_eval = evaluator_create_f(firmware->table_params[i]->z_ul_conv_expr);
+			firmware->table_params[i]->z_dl_eval = evaluator_create_f(firmware->table_params[i]->z_dl_conv_expr);
 		}
 
 	}
 
-	mem_alloc();
+	mem_alloc_f();
 
 	/* Display firmware version in the window... */
 
-	dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
-	update_logbar("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE,TRUE);
-	update_logbar("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE,TRUE);
+	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
+	update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE,TRUE);
+	update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE,TRUE);
 
 	return TRUE;
 
@@ -1107,23 +1107,23 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL),NULL);
 	if (!filename)
 	{
-		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
 		return NULL;
 	}
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		return NULL;
-	get_file_api(cfgfile,&major,&minor);
+	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		return NULL;
 	}
 
 	*tests_hash = g_hash_table_new(g_str_hash,g_str_equal);
 
-	dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": validate_and_load_tests()\n\tfile %s, opened successfully\n",filename));
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": validate_and_load_tests()\n\tfile %s, opened successfully\n",filename));
 	tests = g_array_new(FALSE,TRUE,sizeof(Detection_Test *));
 	cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 	for (i=0;i<total_tests;i++)
@@ -1132,30 +1132,30 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 		section = g_strdup_printf("test_%.2i",i);
 		if (!cfg_read_string(cfgfile,section,"test_name",&test->test_name))
 		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_name for %s is NULL\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_name for %s is NULL\n",section));
 			g_free(section);
 			break;
 		}
 		if (!cfg_read_string(cfgfile,section,"test_result_type",&tmpbuf))
 		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_result_type for %s is NULL\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_result_type for %s is NULL\n",section));
 			g_free(section);
 			break;
 		}
 		else
 		{
-			test->result_type=translate_string(tmpbuf);
+			test->result_type=translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if (!cfg_read_string(cfgfile,section,"actual_test",&test->actual_test))
 		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\tactual_test for %s is NULL\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\tactual_test for %s is NULL\n",section));
 			g_free(section);
 			break;
 		}
 		if (!cfg_read_string(cfgfile,section,"test_arg_types",&tmpbuf))
 		{
-			dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_arg_types for %s is NULL\n",section));
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": validate_and_load_tests(),\n\ttest_arg_types for %s is NULL\n",section));
 			g_free(section);
 			break;
 		}
@@ -1170,7 +1170,7 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 		g_free(tmpbuf);
 		for (j=0;j<test->test_arg_count;j++)
 		{
-			result = translate_string(vector[j]);
+			result = translate_string_f(vector[j]);
 			g_array_insert_val(test->test_arg_types,j,result);
 		}
 		g_strfreev(vector);
@@ -1200,17 +1200,17 @@ G_MODULE_EXPORT gint translate_capabilities(gchar *string)
 
 	if (!string)
 	{
-		dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is NULLs\n"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is NULLs\n"));
 		return -1;
 	}
 
 	vector = g_strsplit(string,",",0);
-	dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is %s\n",string));
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is %s\n",string));
 	while (vector[i] != NULL)
 	{
-		dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTrying to translate %s\n",vector[i]));
-		value += translate_string(vector[i]);
-		dbg_func(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTranslated value of %s is %i\n",vector[i],value));
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTrying to translate %s\n",vector[i]));
+		value += translate_string_f(vector[i]);
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTranslated value of %s is %i\n",vector[i],value));
 		i++;
 	}
 
@@ -1247,10 +1247,10 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	if (!cfgfile)
 		return FALSE;
 
-	get_file_api(cfgfile,&major,&minor);
+	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -1276,7 +1276,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		 */
 		if (!cfg_read_string(cfgfile,"interrogation",test->test_name,&tmpbuf))
 		{
-			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			cfg_free(cfgfile);
 			g_strfreev(match_on);
 			return FALSE;
@@ -1288,7 +1288,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		 */
 		if (g_strv_length(vector) != 2)
 			printf(_("ERROR interrogation check_for match vector does NOT have two args it has %i\n"),g_strv_length(vector));
-		class = translate_string(vector[0]);
+		class = translate_string_f(vector[0]);
 		/*printf("potential data is %s\n",vector[1]);*/
 		switch (class)
 		{
@@ -1320,7 +1320,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			continue;
 		else
 		{
-			dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
 			g_strfreev(match_on);
 			cfg_free(cfgfile);
 			return FALSE;
@@ -1328,7 +1328,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 
 	}
 	g_strfreev(match_on);
-	dbg_func(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\t\"%s\" is a match for all conditions ...\n\n",filename));
+	dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\t\"%s\" is a match for all conditions ...\n\n",filename));
 	cfg_free(cfgfile);
 	return TRUE;
 }
@@ -1369,7 +1369,7 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
  */
 G_MODULE_EXPORT void interrogate_error(gchar *text, gint num)
 {
-	dbg_func(INTERROGATOR|CRITICAL,g_strdup_printf("\tInterrogation error: \"%s\" data: \"%i\"n",text,num));
+	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf("\tInterrogation error: \"%s\" data: \"%i\"n",text,num));
 }
 
 
@@ -1390,7 +1390,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	firmware = DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
-	widget = lookup_widget("read_wait_spin");
+	widget = lookup_widget_f("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
@@ -1426,9 +1426,119 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	}
 	gdk_threads_leave();
 	if (firmware->TextVerVia)
-		io_cmd(firmware->TextVerVia,NULL);
+		io_cmd_f(firmware->TextVerVia,NULL);
 	if (firmware->NumVerVia)
-		io_cmd(firmware->NumVerVia,NULL);
+		io_cmd_f(firmware->NumVerVia,NULL);
 	if (firmware->SignatureVia)
-		io_cmd(firmware->SignatureVia,NULL);
+		io_cmd_f(firmware->SignatureVia,NULL);
 }
+
+
+/*!
+ \brief initialize_page_params() creates and initializes the page_params
+ datastructure to sane defaults and returns it
+ */
+G_MODULE_EXPORT Page_Params * initialize_page_params(void)
+{
+	Page_Params *page_params = NULL;
+	page_params = g_malloc0(sizeof(Page_Params));
+	page_params->length = 0;
+	page_params->spconfig_offset = -1;
+	return page_params;
+}
+
+
+/*!
+ \brief initialize_table_params() creates and initializes the Table_Params
+ datastructure to sane defaults and returns it
+ */
+G_MODULE_EXPORT Table_Params * initialize_table_params(void)
+{
+	Table_Params *table_params = NULL;
+	table_params = g_malloc0(sizeof(Table_Params));
+	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
+	table_params->is_fuel = FALSE;
+	table_params->alternate_offset = -1;
+	table_params->divider_offset = -1;
+	table_params->rpmk_offset = -1;
+	table_params->reqfuel_offset = -1;
+	table_params->x_page = -1;
+	table_params->y_page = -1;
+	table_params->z_page = -1;
+	table_params->x_base = -1;
+	table_params->y_base = -1;
+	table_params->z_base = -1;
+	table_params->x_bincount = -1;
+	table_params->y_bincount = -1;
+	table_params->x_precision = 0;
+	table_params->y_precision = 0;
+	table_params->z_precision = 0;
+	table_params->bind_to_list = NULL;
+	table_params->x_suffix = NULL;
+	table_params->y_suffix = NULL;
+	table_params->z_suffix = NULL;
+	table_params->x_ul_conv_expr = NULL;
+	table_params->x_dl_conv_expr = NULL;
+	table_params->y_ul_conv_expr = NULL;
+	table_params->y_dl_conv_expr = NULL;
+	table_params->z_ul_conv_expr = NULL;
+	table_params->z_dl_conv_expr = NULL;
+	table_params->x_ul_conv_exprs = NULL;
+	table_params->x_dl_conv_exprs = NULL;
+	table_params->y_ul_conv_exprs = NULL;
+	table_params->y_dl_conv_exprs = NULL;
+	table_params->z_ul_conv_exprs = NULL;
+	table_params->z_dl_conv_exprs = NULL;
+	table_params->x_source_key = NULL;
+	table_params->y_source_key = NULL;
+	table_params->z_source_key = NULL;
+	table_params->table_name = NULL;
+	table_params->x_ul_eval = NULL;
+	table_params->y_ul_eval = NULL;
+	table_params->z_ul_eval = NULL;
+	table_params->x_dl_eval = NULL;
+	table_params->y_dl_eval = NULL;
+	table_params->z_dl_eval = NULL;
+
+	return table_params;
+}
+
+
+/*!
+ \brief initialize_te_params() creates and initializes the TE_Params
+ datastructure to sane defaults and returns it
+ */
+G_MODULE_EXPORT TE_Params * initialize_te_params(void)
+{
+	TE_Params *te_params = NULL;
+	te_params = g_malloc0(sizeof(TE_Params));
+	te_params->x_lock = FALSE;
+	te_params->y_lock = FALSE;
+	te_params->x_use_color = FALSE;
+	te_params->y_use_color = FALSE;
+	te_params->x_temp_dep = FALSE;
+	te_params->y_temp_dep = FALSE;
+	te_params->x_page = -1;
+	te_params->y_page = -1;
+	te_params->x_base = -1;
+	te_params->y_base = -1;
+	te_params->reversed = FALSE;
+	te_params->bincount = -1;
+	te_params->x_precision = 0;
+	te_params->y_precision = 0;
+	te_params->x_axis_label = NULL;
+	te_params->y_axis_label = NULL;
+	te_params->x_name = NULL;
+	te_params->y_name = NULL;
+	te_params->x_units = NULL;
+	te_params->y_units = NULL;
+	te_params->x_dl_conv_expr = NULL;
+	te_params->x_ul_conv_expr = NULL;
+	te_params->y_dl_conv_expr = NULL;
+	te_params->y_ul_conv_expr = NULL;
+	te_params->gauge_temp_dep = FALSE;
+	te_params->title = NULL;
+
+	return te_params;
+}
+

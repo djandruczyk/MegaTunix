@@ -21,7 +21,7 @@
 gint get_ecu_data(gint, gint, gint, DataSize); 
 gint get_ecu_data_last(gint, gint, gint, DataSize); 
 gint get_ecu_data_backup(gint, gint, gint, DataSize); 
-gint _get_sized_data(guint8 *, gint, gint, DataSize, gboolean); 
+gint _get_sized_data(guint8 *, gint, DataSize, gboolean); 
 
 void set_ecu_data(gint, gint, gint, DataSize, gint); 
 void set_ecu_data_pending(gint, gint, gint, DataSize, gint); 

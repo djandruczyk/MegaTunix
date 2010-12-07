@@ -170,7 +170,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 			else
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
-				x = _get_sized_data((guint8 *)incoming,0,offset,size,firmware->bigendian);
+				x = _get_sized_data((guint8 *)incoming,offset,size,firmware->bigendian);
 			}
 
 			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
@@ -309,7 +309,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				size = (DataSize) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size,firmware->bigendian);
+				values[i]=(gdouble)_get_sized_data(raw_data,offset,size,firmware->bigendian);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_EMB_BIT:
@@ -322,7 +322,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
@@ -487,7 +487,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				size = (DataSize) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)_get_sized_data(raw_data,0,offset,size,firmware->bigendian);
+				values[i]=(gdouble)_get_sized_data(raw_data,offset,size,firmware->bigendian);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_EMB_BIT:
@@ -500,7 +500,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((_get_sized_data(raw_data,0,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((_get_sized_data(raw_data,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:

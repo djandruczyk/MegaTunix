@@ -41,6 +41,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_title",(void *)&set_title_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
+	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
@@ -65,6 +66,13 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
+	get_symbol_f("mem_alloc",(void *)&mem_alloc_f);
+	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
+	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
+	get_symbol_f("get_table",(void *)&get_table_f);
+	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);
+	get_symbol_f("load_dependancies_obj",(void *)&load_dependancies_obj_f);
+	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 }
 
 

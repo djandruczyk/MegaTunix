@@ -93,7 +93,11 @@ G_MODULE_EXPORT gint comms_test(void)
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
 	gint len = 0;
-	int errno = 0;
+#ifdef __WIN32__
+	extern int errno;
+#else
+	int errno;
+#endif
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 

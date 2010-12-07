@@ -37,6 +37,7 @@ OutputData *(*initialize_outputdata_f)(void);
 void (*set_title_f)(const gchar *);
 void (*set_widget_sensitive_f)(gpointer, gpointer);
 void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
+void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 void (*process_rt_vars_f)(void * );
 void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
 gboolean (*queue_function_f)(const gchar * );
@@ -61,8 +62,13 @@ glong (*get_extreme_from_size_f)(DataSize, Extreme);
 gfloat (*convert_after_upload_f)(GtkWidget *);
 gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer );
 GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
-
-
+void (*mem_alloc_f)(void);
+void *(*evaluator_create_f)(char *);
+void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
+void (*get_table_f)(gpointer, gpointer, gpointer);
+void (*free_multi_source_f)(gpointer);
+void (*load_dependancies_obj_f)(GObject *,ConfigFile * ,gchar *, gchar *);
+void (*flush_serial_f)(gint, gint);
 
 /* Function Pointers */
 
