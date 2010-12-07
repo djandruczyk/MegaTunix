@@ -43,6 +43,7 @@ megatunix_SOURCES = \
 	lookuptables.c \
 	main.c \
 	menu_handlers.c \
+	mem_mgmt.c \
 	memory_gui.c \
 	mode_select.c \
 	multi_expr_loader.c \

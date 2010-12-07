@@ -73,6 +73,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);
 	get_symbol_f("load_dependancies_obj",(void *)&load_dependancies_obj_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
+	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
+	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
 }
 
 

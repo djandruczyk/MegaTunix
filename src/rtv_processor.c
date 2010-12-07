@@ -25,6 +25,7 @@
 #include <gui_handlers.h>
 #include <lookuptables.h>
 #include <math.h>
+#include <mem_mgmt.h>
 #include <mtxmatheval.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>

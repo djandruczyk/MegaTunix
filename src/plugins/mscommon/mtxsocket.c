@@ -819,7 +819,7 @@ close_binary2:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
+				_set_sized_data_f(client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
 				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
@@ -1154,7 +1154,7 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		tmpi = get_ecu_data(canID,page,offset,size);
-		_set_sized_data(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
+		_set_sized_data_f(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
 		res = net_send(client->socket,(guint8 *)tmpbuf,len);
@@ -1198,7 +1198,7 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		for (i=0;i<len;i++)
 		{
 			tmpi = get_ecu_data(canID,page,i,MTX_U08);
-			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
+			_set_sized_data_f(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
 			else
@@ -1238,7 +1238,7 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
-		_set_sized_data(client->ecu_data[page],offset,size,data,firmware->bigendian);
+		_set_sized_data_f(client->ecu_data[page],offset,size,data,firmware->bigendian);
 		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
@@ -1597,7 +1597,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -1611,7 +1611,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 				if (res == len)
 				{
 					if (msg->mode == MTX_SIMPLE_WRITE)
-						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
+						_set_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
 					else if (msg->mode == MTX_CHUNK_WRITE)
 						memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
 				}
@@ -2823,7 +2823,7 @@ close_binary:
 				/*				printf("get_ms1_byte\n");*/
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
-				_set_sized_data (client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
+				_set_sized_data_f(client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
 				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
@@ -3158,7 +3158,7 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		tmpi = get_ecu_data(canID,page,offset,size);
-		_set_sized_data(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
+		_set_sized_data_f(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
 		res = net_send(fd,(guint8 *)tmpbuf,len,0);
@@ -3203,7 +3203,7 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		for (i=0;i<len;i++)
 		{
 			tmpi = get_ecu_data(canID,page,i,MTX_U08);
-			_set_sized_data(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
+			_set_sized_data_f(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
 			else
@@ -3244,7 +3244,7 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
-		_set_sized_data(client->ecu_data[page],offset,size,data,firmware->bigendian);
+		_set_sized_data_f(client->ecu_data[page],offset,size,data,firmware->bigendian);
 		send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
@@ -3644,7 +3644,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -3658,7 +3658,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 				if (res == len)
 				{
 					if (msg->mode == MTX_SIMPLE_WRITE)
-						_set_sized_data(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
+						_set_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,msg->size,msg->value,firmware->bigendian);
 					else if (msg->mode == MTX_CHUNK_WRITE)
 						memcpy (cli_data->ecu_data[msg->page],&msg->value,msg->length);
 				}
