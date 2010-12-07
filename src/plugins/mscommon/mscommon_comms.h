@@ -28,6 +28,7 @@ extern gint (*get_multiplier_f)(DataSize);
 extern gboolean (*queue_function_f)(const gchar * );
 extern void (*recalc_table_limits_f)(gint, gint);
 extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
+extern void (*get_symbol_f)(const gchar *, void **);
 
 
 /* Prototypes */

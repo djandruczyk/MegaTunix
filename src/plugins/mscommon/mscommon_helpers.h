@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __HELPERS_H__
-#define __HELPERS_H__
+#ifndef __MSCOMMON_HELPERS_H__
+#define __MSCOMMON_HELPERS_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>

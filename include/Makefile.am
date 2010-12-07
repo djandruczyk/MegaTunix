@@ -28,7 +28,6 @@ headers = \
 	gui_handlers.h \
 	helpers.h \
 	init.h \
-	interrogate.h \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \

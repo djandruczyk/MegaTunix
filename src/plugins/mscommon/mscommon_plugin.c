@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <mscommon_plugin.h>
 #include <mscommon_helpers.h>
+#include <interrogate.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>
 
@@ -126,6 +127,48 @@ void register_enums(void)
 				GINT_TO_POINTER(GET_RAW_ECU));
 		g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
 				GINT_TO_POINTER(SET_RAW_ECU));
+		/* Firmware capabilities */
+		g_hash_table_insert(str_2_enum,"_PIS_",
+				GINT_TO_POINTER(PIS));
+		g_hash_table_insert(str_2_enum,"_MS1_",
+				GINT_TO_POINTER(MS1));
+		g_hash_table_insert(str_2_enum,"_MS1_STD_",
+				GINT_TO_POINTER(MS1_STD));
+		g_hash_table_insert(str_2_enum,"_MS1_DT_",
+				GINT_TO_POINTER(MS1_DT));
+		g_hash_table_insert(str_2_enum,"_MSNS_E_",
+				GINT_TO_POINTER(MSNS_E));
+		g_hash_table_insert(str_2_enum,"_MS2_",
+				GINT_TO_POINTER(MS2));
+		g_hash_table_insert(str_2_enum,"_MS2_STD_",
+				GINT_TO_POINTER(MS2_STD));
+		g_hash_table_insert(str_2_enum,"_MS2_E_",
+				GINT_TO_POINTER(MS2_E));
+		g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
+				GINT_TO_POINTER(MS2_E_COMPMON));
+		g_hash_table_insert(str_2_enum,"_SECU_3_",
+				GINT_TO_POINTER(SECU_3));
+		g_hash_table_insert(str_2_enum,"_FREEEMS_",
+				GINT_TO_POINTER(FREEEMS));
+		g_hash_table_insert(str_2_enum,"_JIMSTIM_",
+				GINT_TO_POINTER(JIMSTIM));
+
+		g_hash_table_insert(str_2_enum,"_COUNT_",
+				GINT_TO_POINTER(COUNT));
+		g_hash_table_insert(str_2_enum,"_SUBMATCH_",
+				GINT_TO_POINTER(SUBMATCH));
+		g_hash_table_insert(str_2_enum,"_NUMMATCH_",
+				GINT_TO_POINTER(NUMMATCH));
+		g_hash_table_insert(str_2_enum,"_FULLMATCH_",
+				GINT_TO_POINTER(FULLMATCH));
+		g_hash_table_insert(str_2_enum,"_REGEX_",
+				GINT_TO_POINTER(REGEX));
+		/* Interrogation Test Results */
+		g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
+				GINT_TO_POINTER(RESULT_DATA));
+		g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
+				GINT_TO_POINTER(RESULT_TEXT));
+
 	}
 }
 

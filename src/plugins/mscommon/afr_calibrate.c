@@ -26,7 +26,6 @@
 #include <widgetmgmt.h>
 
 
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
 static gint afr_enum;
 static const gchar * afr_name;
 typedef enum
@@ -162,26 +161,6 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 {
-	gdouble *Bv = NULL;
-	gdouble *Ba = NULL;
-	gdouble voltage = 0.0;
-	gdouble deltaVoltage = 0.0;
-	gdouble vPct = 0.0;
-	gint nB = 0;
-	gint iV = 0;
-	gint adcCount = 0;
-	gchar * filename = NULL;
-	gdouble afr = 0.0;
-	gdouble (*Fv)(gint adc) = NULL;
-	gboolean NB = FALSE;
-	guint8 table[nADC];
-	time_t tim;
-	FILE *f = NULL;
-	extern gconstpointer *global_data;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
-
 	static gdouble diywbBv[] = { 0.00, 1.40, 1.45, 1.50, 1.55, 1.60, 
 		1.65, 1.70, 1.75, 1.80, 1.85, 1.90, 1.95, 2.00, 2.05, 2.10,
 		2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.45, 2.50, 2.55, 2.60,
@@ -191,17 +170,15 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 		12.60, 12.83, 13.07, 13.31, 13.57, 13.84, 14.11, 14.40, 14.70,
 		15.25, 15.84, 16.48, 17.18, 17.93, 18.76, 19.66, 20.66, 40.00,
 		60.00 };
-
 	static gdouble lbwbBv[] = {0.00,  2.05,  4.21,  4.98,  5.01};
 	static gdouble lbwbBa[] = {1.00, 11.00, 14.70, 16.00, 99.00};
-
 	static gdouble teSVoutBv[] = { 1.024, 1.076, 1.126, 1.177, 1.227,
-	       	1.278, 1.330, 1.380, 1.431, 1.481, 1.532, 1.581,
+		1.278, 1.330, 1.380, 1.431, 1.481, 1.532, 1.581,
 		1.626, 1.672, 1.717, 1.761, 1.802, 1.842, 1.883,
-	       	1.926, 1.971, 2.015, 2.053, 2.104, 2.150, 2.192,
-	       	2.231, 2.267, 2.305, 2.347, 2.398, 2.455, 2.514,
-	       	2.556, 2.602, 2.650, 2.698, 2.748, 2.797, 2.846,
-	       	2.900, 2.945, 2.991, 3.037, 3.083, 3.129, 3.175,
+		1.926, 1.971, 2.015, 2.053, 2.104, 2.150, 2.192,
+		2.231, 2.267, 2.305, 2.347, 2.398, 2.455, 2.514,
+		2.556, 2.602, 2.650, 2.698, 2.748, 2.797, 2.846,
+		2.900, 2.945, 2.991, 3.037, 3.083, 3.129, 3.175,
 		3.221, 3.266, 3.313, 3.359, 3.404, 3.451, 3.496,
 		3.542, 3.587, 3.634, 3.680, 3.725, 3.772, 3.817,
 		3.863, 3.910, 3.955, 4.001 };
@@ -224,7 +201,6 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 		13.73, 14.01, 14.35, 14.64, 14.93, 15.27, 15.56, 15.84,
 		16.18, 16.47, 16.81, 17.10, 17.39, 17.73, 18.01, 18.36,
 		18.64, 18.93, 19.27, 19.56, 99.00 };
-
 	static gdouble aemNonBv[] = { 0.00, 0.16, 0.31, 0.47, 0.62, 0.78,
 		0.94, 1.09, 1.25, 1.40, 1.56, 1.72, 1.87, 2.03, 2.18,
 		2.34, 2.50, 2.65, 2.81, 2.96, 3.12, 3.27, 3.43, 3.59,
@@ -236,7 +212,7 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 		12.92, 13.27, 13.67, 14.13, 14.64, 15.21, 15.84, 16.53,
 		17.27, 18.19, 19.44, 99.00 };
 	static gdouble fjoBv[] = { 0.000, 0.811, 0.816, 1.256, 1.325,
-	       	1.408, 1.447, 1.667, 1.784, 1.804, 1.872, 1.984, 2.023,
+		1.408, 1.447, 1.667, 1.784, 1.804, 1.872, 1.984, 2.023,
 		2.126, 2.209, 2.268, 2.414, 2.454, 2.473, 2.502, 2.522,
 		2.581, 2.610, 2.717, 2.766, 2.820, 2.908, 2.933, 2.977,
 		3.021, 3.079, 3.099, 3.104, 5.000 };
@@ -256,6 +232,25 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 		16.900, 18.500, 18.800, 19.900, 21.200, 99.000 };
 	static gdouble genericBv[4] = { 0.0, 1.0,  4.0, 5.01 };
 	static gdouble genericBa[4] = { 0.0, 9.7, 19.7, 99.0 };
+	gdouble *Bv = NULL;
+	gdouble *Ba = NULL;
+	gdouble voltage = 0.0;
+	gdouble deltaVoltage = 0.0;
+	gdouble vPct = 0.0;
+	gint nB = 0;
+	gint iV = 0;
+	gint adcCount = 0;
+	gchar * filename = NULL;
+	gdouble afr = 0.0;
+	gdouble (*Fv)(gint adc) = NULL;
+	gboolean NB = FALSE;
+	guint8 table[nADC];
+	time_t tim;
+	FILE *f = NULL;
+	Firmware_Details *firmware = NULL;
+	extern gconstpointer *global_data;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 #define USE_TABLE(prefix) \
 	Bv = prefix ## Bv; \
@@ -380,7 +375,7 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 
 	table_write(firmware->ego_table_page,
 			firmware->page_params[firmware->ego_table_page]->length,
-		       	(guint8 *)table);
+			(guint8 *)table);
 
 	return TRUE;
 }

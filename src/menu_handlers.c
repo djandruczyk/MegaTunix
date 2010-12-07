@@ -12,7 +12,6 @@
  */
 #include <config.h>
 #include <defines.h>
-#include <afr_calibrate.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
@@ -443,6 +442,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
+	gboolean (*populate_afr_calibrator_combo_f)(GtkWidget *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -458,7 +458,8 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 		item = glade_xml_get_widget(xml,"ego_sensor_combo");
 		register_widget("afr_calibrate_ego_sensor_combo",item);
-		populate_afr_calibrator_combo(item);
+		if (get_symbol("populate_afr_calibrator_combo",(void *)&populate_afr_calibrator_combo_f))
+			populate_afr_calibrator_combo_f(item);
 		item2 = glade_xml_get_widget(xml,"generic_wideband_frame");
 		OBJ_SET(item,"generic_controls",item2);
 

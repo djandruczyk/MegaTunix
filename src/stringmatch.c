@@ -16,7 +16,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
-#include <interrogate.h>
 #include <stringmatch.h>
 
 
@@ -32,32 +31,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
 	extern gconstpointer *global_data;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
-
-	/* Firmware capabilities */
-	g_hash_table_insert(str_2_enum,"_PIS_",
-			GINT_TO_POINTER(PIS));
-	g_hash_table_insert(str_2_enum,"_MS1_",
-			GINT_TO_POINTER(MS1));
-	g_hash_table_insert(str_2_enum,"_MS1_STD_",
-			GINT_TO_POINTER(MS1_STD));
-	g_hash_table_insert(str_2_enum,"_MS1_DT_",
-			GINT_TO_POINTER(MS1_DT));
-	g_hash_table_insert(str_2_enum,"_MSNS_E_",
-			GINT_TO_POINTER(MSNS_E));
-	g_hash_table_insert(str_2_enum,"_MS2_",
-			GINT_TO_POINTER(MS2));
-	g_hash_table_insert(str_2_enum,"_MS2_STD_",
-			GINT_TO_POINTER(MS2_STD));
-	g_hash_table_insert(str_2_enum,"_MS2_E_",
-			GINT_TO_POINTER(MS2_E));
-	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
-			GINT_TO_POINTER(MS2_E_COMPMON));
-	g_hash_table_insert(str_2_enum,"_SECU_3_",
-			GINT_TO_POINTER(SECU_3));
-	g_hash_table_insert(str_2_enum,"_FREEEMS_",
-			GINT_TO_POINTER(FREEEMS));
-	g_hash_table_insert(str_2_enum,"_JIMSTIM_",
-			GINT_TO_POINTER(JIMSTIM));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -76,16 +49,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_S32));
 	g_hash_table_insert(str_2_enum,"_UNDEF_",
 			GINT_TO_POINTER(MTX_UNDEF));
-	g_hash_table_insert(str_2_enum,"_COUNT_",
-			GINT_TO_POINTER(COUNT));
-	g_hash_table_insert(str_2_enum,"_SUBMATCH_",
-			GINT_TO_POINTER(SUBMATCH));
-	g_hash_table_insert(str_2_enum,"_NUMMATCH_",
-			GINT_TO_POINTER(NUMMATCH));
-	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
-			GINT_TO_POINTER(FULLMATCH));
-	g_hash_table_insert(str_2_enum,"_REGEX_",
-			GINT_TO_POINTER(REGEX));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",
@@ -337,12 +300,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
-
-	/* Interrogation Test Results */
-	g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
-			GINT_TO_POINTER(RESULT_DATA));
-	g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
-			GINT_TO_POINTER(RESULT_TEXT));
 
 	/* XMLcomm processing */
 	g_hash_table_insert(str_2_enum,"_DATA_",

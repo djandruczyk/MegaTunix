@@ -16,7 +16,6 @@
 
 #include <gtk/gtk.h>
 #include <enums.h>
-#include <mscommon_comms.h>
 #include <threads.h>
 
 /* Externs */

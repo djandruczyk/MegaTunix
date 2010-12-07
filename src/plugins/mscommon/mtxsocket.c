@@ -29,6 +29,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <init.h>
+#include <mscommon_comms.h>
 #include <mtxsocket.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
@@ -154,7 +155,7 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 	GSocketAddress *sockaddr = NULL;
 
 	sock = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
-	if (sock < 0)
+	if (!sock)
 	{
 		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" setup_socket()\n\tSocket creation error: %s\n",error->message));
 		g_error_free(error);
@@ -1820,7 +1821,7 @@ close_control:
 					/* Update gui with changes */
 					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)
-						refresh_widgets_at_offset(page,i);
+						thread_refresh_widgets_at_offset_f(page,i);
 					gdk_threads_leave();
 					g_free(buffer);
 					index = 0;
@@ -2009,6 +2010,7 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 #include <firmware.h>
 #include <glib.h>
 #include <init.h>
+#include <mscommon_comms.h>
 #include <mtxsocket.h>
 #ifndef __WIN32__
 #include <arpa/inet.h>
@@ -2145,7 +2147,7 @@ G_MODULE_EXPORT gboolean setup_socket(gint port)
 #endif
 
 	sock = socket(PF_INET, SOCK_STREAM, 0);
-	if (sock < 0)
+	if (!sock)
 	{
 		perror("Socket!");
 #ifdef __WIN32__

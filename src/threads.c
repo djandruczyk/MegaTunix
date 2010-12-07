@@ -24,7 +24,6 @@
 #include <errno.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
@@ -123,6 +122,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond * io_dispatch_cond = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
+	void *(*serial_repair_thread)(gpointer data) = NULL;
 //	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
@@ -133,6 +133,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	get_symbol("network_repair_thread",(void*)&network_repair_thread);
+	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
 //	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)

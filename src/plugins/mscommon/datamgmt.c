@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <config.h>
 #include <configfile.h>
+#include <datamgmt.h>
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>

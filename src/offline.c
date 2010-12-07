@@ -19,7 +19,6 @@
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
 #include <mode_select.h>
 #include <notifications.h>

@@ -22,7 +22,6 @@
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <lookuptables.h>

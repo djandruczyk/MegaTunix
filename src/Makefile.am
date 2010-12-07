@@ -33,7 +33,6 @@ megatunix_SOURCES = \
 	gui_handlers.c \
 	helpers.c \
 	init.c \
-	interrogate.c \
 	keybinder.c \
 	keyparser.c \
 	listmgmt.c \
