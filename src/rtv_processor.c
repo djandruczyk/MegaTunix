@@ -18,7 +18,6 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
 #include <glade/glade.h>

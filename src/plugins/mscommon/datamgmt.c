@@ -24,13 +24,13 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief get_ecu_data() is a func to return the data requested.
+ \brief ms_get_ecu_data() is a func to return the data requested.
  \param canID, CAN Identifier (currently unused)
  \param page, (ecu firmware page)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
@@ -54,13 +54,13 @@ G_MODULE_EXPORT gint get_ecu_data(gint canID, gint page, gint offset, DataSize s
 
 
 /*!
- \brief get_ecu_data_last() is a func to return the data requested.
+ \brief ms_get_ecu_data_last() is a func to return the data requested.
  \param canID, CAN Identifier (currently unused)
  \param page, (ecu firmware page)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
@@ -82,13 +82,13 @@ G_MODULE_EXPORT gint get_ecu_data_last(gint canID, gint page, gint offset, DataS
 
 
 /*!
- \brief get_ecu_data_backup() is a func to return the data requested.
+ \brief ms_get_ecu_data_backup() is a func to return the data requested.
  \param canID, canIdentifier (currently unused)
  \param page ( ecu firmware page)
  \param offset (RAW BYTE offset)
  \param size (size to be returned...
  */
-G_MODULE_EXPORT gint get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
@@ -109,20 +109,73 @@ G_MODULE_EXPORT gint get_ecu_data_backup(gint canID, gint page, gint offset, Dat
 }
 
 
-G_MODULE_EXPORT void set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
+G_MODULE_EXPORT void set_ecu_data(gconstpointer *data)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	DataSize size = MTX_U08;
+	gint value = 0 ;
+	Firmware_Details *firmware = NULL;
+	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
+	if (!_set_sized_data)
+		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = (GINT)DATA_GET(data,"canID");
+	page = (GINT)DATA_GET(data,"page");
+	offset = (GINT)DATA_GET(data,"offset");
+	value = (GINT)DATA_GET(data,"value");                
+	size = (DataSize)DATA_GET(data,"size");
+
+	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
+}
+
+
+G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
- 
+
 
 	firmware = DATA_GET(global_data,"firmware");
 	_set_sized_data(firmware->ecu_data[page],offset,size,new,firmware->bigendian);
 }
 
 
-G_MODULE_EXPORT void store_new_block(gint canID, gint page, gint offset, void * buf, gint count)
+G_MODULE_EXPORT void store_new_block(gconstpointer *block)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint count = 0;
+	guint8 *data = NULL;
+	Firmware_Details *firmware = NULL;
+	guint8 ** ecu_data = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (!firmware)
+		return;
+	if (!firmware->ecu_data)
+		return;
+	if (!firmware->ecu_data[page])
+		return;
+
+	ecu_data = firmware->ecu_data;
+
+	canID = (GINT)DATA_GET(block,"canID");
+	page = (GINT)DATA_GET(block,"page");
+	offset = (GINT)DATA_GET(block,"offset");
+	data = (guint8 *)DATA_GET(block,"data");
+
+	memcpy (ecu_data[page]+offset,data,count);
+}
+
+
+G_MODULE_EXPORT void ms_store_new_block(gint canID, gint page, gint offset, void * buf, gint count)
 {
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
@@ -141,7 +194,7 @@ G_MODULE_EXPORT void store_new_block(gint canID, gint page, gint offset, void * 
 }
 
 
-G_MODULE_EXPORT void backup_current_data(gint canID, gint page)
+G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 {
 	guint8 ** ecu_data = NULL;
 	guint8 ** ecu_data_last = NULL;
@@ -173,7 +226,7 @@ G_MODULE_EXPORT void backup_current_data(gint canID, gint page)
  nature of the page layout in certain MS firmwares
  \returns true on success, false on failure
  */
-G_MODULE_EXPORT gboolean find_mtx_page(gint tableID,gint *mtx_page)
+G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 {
 	Firmware_Details *firmware = NULL;
 	gint i = 0;

@@ -15,6 +15,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib.h>
 #include <mem_mgmt.h>
 
 
@@ -36,7 +37,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
-	assert(offset >= 0);
+	g_assert(offset >= 0);
 
 	switch (size)
 	{

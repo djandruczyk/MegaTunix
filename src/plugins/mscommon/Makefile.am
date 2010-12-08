@@ -19,6 +19,10 @@ libmscommon_la_SOURCES = \
 	dataio.h \
 	datamgmt.c \
 	datamgmt.h \
+	dep_loader.c \
+	dep_loader.h \
+	dep_processor.c \
+	dep_processor.h \
 	fileio.c \
 	fileio.h \
 	interrogate.c \

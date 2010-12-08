@@ -677,7 +677,7 @@ close_binary2:
 				state = next_state;
 				if (substate == SEND_FULL_TABLE)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
 						{
@@ -701,7 +701,7 @@ close_binary2:
 				}
 				else if (substate == BURN_MS2_FLASH)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						/*						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);*/
 						output = initialize_outputdata_f();
@@ -751,7 +751,7 @@ close_binary2:
 
 				if (substate == SEND_PARTIAL_TABLE)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
 							res = net_send(client->socket,(guint8 *)firmware->ecu_data[mtx_page]+offset,count);
@@ -771,12 +771,12 @@ close_binary2:
 						if (substate == RECV_LOOKUPTABLE)
 						{
 							/*							printf("Received lookuptable from slave, sending to ECU\n");*/
-							if (find_mtx_page(tableID,&mtx_page))
+							if (ms_find_mtx_page(tableID,&mtx_page))
 								table_write(mtx_page,count,(guint8 *) buffer);
 						}
 						else
 						{
-							if (find_mtx_page(tableID,&mtx_page))
+							if (ms_find_mtx_page(tableID,&mtx_page))
 							{
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
 								chunk_write(canID,mtx_page,offset,count,buffer);
@@ -1153,7 +1153,7 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		canID = atoi(vars[0]);
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
-		tmpi = get_ecu_data(canID,page,offset,size);
+		tmpi = ms_get_ecu_data(canID,page,offset,size);
 		_set_sized_data_f(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
@@ -1197,7 +1197,7 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		output = g_string_sized_new(8);
 		for (i=0;i<len;i++)
 		{
-			tmpi = get_ecu_data(canID,page,i,MTX_U08);
+			tmpi = ms_get_ecu_data(canID,page,i,MTX_U08);
 			_set_sized_data_f(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
@@ -1597,7 +1597,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == ms_get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -1817,7 +1817,7 @@ close_control:
 				{
 					dbg_func_f(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
-					store_new_block(canID,page,offset,buffer,count);
+					ms_store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
 					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)
@@ -2681,7 +2681,7 @@ close_binary:
 				state = next_state;
 				if (substate == SEND_FULL_TABLE)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
 						{
@@ -2705,7 +2705,7 @@ close_binary:
 				}
 				else if (substate == BURN_MS2_FLASH)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						/*						printf("MS2 burn: Can ID is %i, tableID %i mtx_page %i\n",canID,tableID,mtx_page);*/
 						output = initialize_outputdata_f();
@@ -2755,7 +2755,7 @@ close_binary:
 
 				if (substate == SEND_PARTIAL_TABLE)
 				{
-					if (find_mtx_page(tableID,&mtx_page))
+					if (ms_find_mtx_page(tableID,&mtx_page))
 					{
 						if (firmware->ecu_data[mtx_page])
 							res = net_send(fd,(guint8 *)firmware->ecu_data[mtx_page]+offset,count,0);
@@ -2775,12 +2775,12 @@ close_binary:
 						if (substate == RECV_LOOKUPTABLE)
 						{
 							/*							printf("Received lookuptable from slave, sending to ECU\n");*/
-							if (find_mtx_page(tableID,&mtx_page))
+							if (ms_find_mtx_page(tableID,&mtx_page))
 								table_write(mtx_page,count,(guint8 *) buffer);
 						}
 						else
 						{
-							if (find_mtx_page(tableID,&mtx_page))
+							if (ms_find_mtx_page(tableID,&mtx_page))
 							{
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
 								chunk_write(canID,mtx_page,offset,count,buffer);
@@ -3157,7 +3157,7 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		canID = atoi(vars[0]);
 		page = atoi(vars[1]);
 		offset = atoi(vars[2]);
-		tmpi = get_ecu_data(canID,page,offset,size);
+		tmpi = ms_get_ecu_data(canID,page,offset,size);
 		_set_sized_data_f(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
 		len = strlen(tmpbuf);
@@ -3202,7 +3202,7 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 		output = g_string_sized_new(8);
 		for (i=0;i<len;i++)
 		{
-			tmpi = get_ecu_data(canID,page,i,MTX_U08);
+			tmpi = ms_get_ecu_data(canID,page,i,MTX_U08);
 			_set_sized_data_f(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
 			if (i < (len -1))
 				g_string_append_printf(output,"%i,",tmpi);
@@ -3644,7 +3644,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			{
 				if (msg->mode == MTX_SIMPLE_WRITE)
 				{
-					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == get_ecu_data(0,msg->page,msg->offset,MTX_U08))
+					if (_get_sized_data_f(cli_data->ecu_data[msg->page],msg->offset,MTX_U08,firmware->bigendian) == ms_get_ecu_data(0,msg->page,msg->offset,MTX_U08))
 						continue;
 				}
 				if (msg->mode == MTX_CHUNK_WRITE)
@@ -3873,7 +3873,7 @@ close_control:
 				{
 					dbg_func_f(MTXSOCKET,g_strdup_printf("Got all needed data, updating gui\n"));
 					state = WAITING_FOR_CMD;
-					store_new_block(canID,page,offset,buffer,count);
+					ms_store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
 					gdk_threads_enter();
 					for (i=offset;i<(offset+count);i++)

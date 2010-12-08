@@ -191,7 +191,7 @@ G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */
-	store_new_block(0,page,0,data,num_bytes);
+	ms_store_new_block(0,page,0,data,num_bytes);
 
 	if (firmware->multi_page)
 		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
@@ -307,7 +307,7 @@ G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_by
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */
-	store_new_block(canID,page,offset,data,num_bytes);
+	ms_store_new_block(canID,page,offset,data,num_bytes);
 
 	if (firmware->multi_page)
 		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
@@ -435,7 +435,7 @@ G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize si
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	set_ecu_data(canID,page,offset,size,value);
+	ms_set_ecu_data(canID,page,offset,size,value);
 	/* If the ecu is multi-page, run the handler to take care of queing
 	 * burns and/or page changing
 	 */

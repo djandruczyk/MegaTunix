@@ -17,7 +17,6 @@
 #include <dashboard.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
 #include <gui_handlers.h>

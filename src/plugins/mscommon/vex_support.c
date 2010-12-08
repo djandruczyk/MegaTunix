@@ -340,11 +340,11 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 		g_string_append_printf(output, "VE Table RPM Range              [%2i]\n",x_bincount);
 
 		for (i=0;i<x_bincount;i++)
-			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
+			g_string_append_printf(output,"   [%3d] = %3d\n",i,ms_get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
 
 		g_string_append_printf(output, "VE Table Load Range (MAP)       [%2i]\n",y_bincount);
 		for (i=0;i<y_bincount;i++)
-			g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
+			g_string_append_printf(output,"   [%3d] = %3d\n",i,ms_get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
 
 		g_string_append_printf(output,"VE Table                        [%3i][%3i]\n",x_bincount,y_bincount);
 		g_string_append_printf(output, "           ");
@@ -362,9 +362,9 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 			for (j=0;j<y_bincount;j++)
 			{
 				if (j == 0)
-					g_string_append_printf (output,"  %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
+					g_string_append_printf (output,"  %3d",ms_get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 				else
-					g_string_append_printf (output,"   %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
+					g_string_append_printf (output,"   %3d",ms_get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 				index++;
 			}
 			g_string_append_printf(output,"\n");
@@ -461,11 +461,11 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	g_string_append_printf(output, "VE Table RPM Range              [%2i]\n",x_bincount);
 
 	for (i=0;i<x_bincount;i++)
-		g_string_append_printf(output,"   [%3d] = %3d\n",i,get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
+		g_string_append_printf(output,"   [%3d] = %3d\n",i,ms_get_ecu_data(canID,x_page,x_base+(i*x_mult),x_size));
 
 	g_string_append_printf(output, "VE Table Load Range (MAP)       [%2i]\n",y_bincount);
 	for (i=0;i<y_bincount;i++)
-		g_string_append_printf(output, "   [%3d] = %3d\n",i,get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
+		g_string_append_printf(output, "   [%3d] = %3d\n",i,ms_get_ecu_data(canID,y_page,y_base+(i*y_mult),y_size));
 
 	g_string_append_printf(output, "VE Table                        [%3i][%3i]\n",x_bincount,y_bincount);
 	g_string_append_printf(output, "           ");
@@ -483,9 +483,9 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 		for (j=0;j<y_bincount;j++)
 		{
 			if (j == 0)
-				g_string_append_printf (output, "  %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
+				g_string_append_printf (output, "  %3d",ms_get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 			else
-				g_string_append_printf (output, "   %3d",get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
+				g_string_append_printf (output, "   %3d",ms_get_ecu_data(canID,z_page,z_base+(index*z_mult),z_size));
 			index++;
 		}
 		g_string_append_printf(output,"\n");
@@ -1232,7 +1232,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	{
 		for (i=0;i<vex->total_x_bins;i++)
 		{
-			if (vex->x_bins[i] != get_ecu_data_last(canID,page,base+(i*mult),size))
+			if (vex->x_bins[i] != ms_get_ecu_data_last(canID,page,base+(i*mult),size))
 				send_to_ecu(canID,page,base+i,size, vex->x_bins[i], TRUE);
 		}
 	}
@@ -1280,7 +1280,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	{
 		for (i=0;i<vex->total_y_bins;i++)
 		{
-			if (vex->y_bins[i] != get_ecu_data_last(canID,page,base+i,size))
+			if (vex->y_bins[i] != ms_get_ecu_data_last(canID,page,base+i,size))
 				send_to_ecu(canID,page,base+(i*mult),size,vex->y_bins[i], TRUE);
 		}
 	}
@@ -1328,7 +1328,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	{
 		for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
 		{
-			if (vex->tbl_bins[i] != get_ecu_data_last(canID,page,base+i,size))
+			if (vex->tbl_bins[i] != ms_get_ecu_data_last(canID,page,base+i,size))
 				send_to_ecu(canID,page,base+(i*mult),size,vex->tbl_bins[i], TRUE);
 		}
 	}
@@ -1370,7 +1370,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 			total = firmware->page_params[page]->length;
 			data = g_new0(guchar,total);
 			for (offset=0;offset<total;offset++)
-				data[offset]=get_ecu_data_backup(canID,page,offset,MTX_U08);
+				data[offset]=ms_get_ecu_data_backup(canID,page,offset,MTX_U08);
 			chunk_write(canID,page,0,total,data);
 
 		}
@@ -1378,7 +1378,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 		{
 			for (offset = 0;offset<firmware->page_params[page]->length;offset++)
 			{
-				if (get_ecu_data_backup(canID,page,offset,MTX_U08) != get_ecu_data(canID,page,offset,MTX_U08))
+				if (ms_get_ecu_data_backup(canID,page,offset,MTX_U08) != ms_get_ecu_data(canID,page,offset,MTX_U08))
 				{
 					send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
 				}

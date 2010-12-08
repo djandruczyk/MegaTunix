@@ -19,8 +19,6 @@ headers = \
 	datalogging_gui.h \
 	debugging.h \
 	defines.h \
-	dep_loader.h \
-	dep_processor.h \
 	dispatcher.h \
 	enums.h \
 	firmware.h \

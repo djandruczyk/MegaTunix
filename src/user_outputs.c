@@ -18,7 +18,6 @@
 #include <combo_mask.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <keyparser.h>
 #include <gui_handlers.h>

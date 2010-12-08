@@ -161,7 +161,7 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 		cfg_write_int(cfgfile,section,"num_variables",firmware->page_params[i]->length);
 		for(x=0;x<firmware->page_params[i]->length;x++)
 		{
-			g_string_append_printf(string,"%i",get_ecu_data(canID,i,x,size));
+			g_string_append_printf(string,"%i",ms_get_ecu_data(canID,i,x,size));
 			if (x < (firmware->page_params[i]->length-1))
 				string = g_string_append(string,",");
 		}
@@ -287,7 +287,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 					for (offset=0;offset<num_keys;offset++)
 					{
 						dload_val = atoi(keys[offset]);
-						if (dload_val != get_ecu_data_last(canID,page,offset,size))
+						if (dload_val != ms_get_ecu_data_last(canID,page,offset,size))
 						{
 							/*printf("writing data for page %i, offset %i\n",page,offset);*/
 							send_to_ecu(canID,page,offset,size,dload_val, FALSE);

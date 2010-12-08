@@ -21,7 +21,6 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <multi_expr_loader.h>
 #include <enums.h>
 #include <firmware.h>
@@ -31,6 +30,7 @@
 #include <keyparser.h>
 #include <notifications.h>
 #include <mtxmatheval.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,12 +73,16 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	Rtv_Map *rtv_map = NULL;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
+	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
 			(DATA_GET(global_data,"connected")))
 		return FALSE;
+
+	if (!load_deps)
+		get_symbol("load_dependancies",(void *)&load_deps);
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
@@ -210,7 +214,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(object,cfgfile,section,"depend_on");
+			if (load_deps)
+				load_deps(object,cfgfile,section,"depend_on");
+			else
+				dbg_func(CRITICAL|RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tfunction pointer for \"load_dependancies\" could NOT be found in plugins, BUG!\n"));
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))

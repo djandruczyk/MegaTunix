@@ -15,6 +15,7 @@
 #include <config.h>
 #include <defines.h>
 #include <widgetmgmt.h>
+#include <ms1_helpers.h>
 
 
 G_MODULE_EXPORT void enable_reboot_button_pf(void)

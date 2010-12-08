@@ -16,6 +16,10 @@
 
 #include <gtk/gtk.h>
 
+/* Externs */
+extern guint (*get_bitshift_f)(guint);
+/* Externs */
+
 /* Prototypes */
 gboolean check_dependancies(gconstpointer *);
 /* Prototypes */

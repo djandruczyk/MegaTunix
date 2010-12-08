@@ -67,7 +67,6 @@ void *(*evaluator_create_f)(char *);
 void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
 void (*get_table_f)(gpointer, gpointer, gpointer);
 void (*free_multi_source_f)(gpointer);
-void (*load_dependancies_obj_f)(GObject *,ConfigFile * ,gchar *, gchar *);
 void (*flush_serial_f)(gint, gint);
 void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);

@@ -15,6 +15,7 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -79,7 +80,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 
 				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
 				bitmask = (GINT)DATA_GET(object,tmpbuf);
-				bitshift = get_bitshift(bitmask);
+				bitshift = get_bitshift_f(bitmask);
 				/*printf("bitmask %i\n",bitmask); */
 				g_free(tmpbuf);
 
@@ -88,7 +89,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 				/*printf("bitval %i\n",bitval); */
 				g_free(tmpbuf);
 
-				if (!(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift) == bitval)	
+				if (!(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift) == bitval)	
 				{
 					/*printf("dep_proc returning FALSE\n");*/
 					return FALSE;

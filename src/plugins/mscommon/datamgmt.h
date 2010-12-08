@@ -22,15 +22,17 @@ extern void (*get_symbol_f)(const gchar *, void **);
 /* Externs */
 
 /* Prototypes */
-gint get_ecu_data(gint, gint, gint, DataSize); 
-gint get_ecu_data_last(gint, gint, gint, DataSize); 
-gint get_ecu_data_backup(gint, gint, gint, DataSize); 
-void set_ecu_data(gint, gint, gint, DataSize, gint); 
-void set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
-void store_new_block(gint, gint, gint, void *, gint );
-void store_new_block_pending(gint, gint, gint, void *, gint );
-void backup_current_data(gint, gint );
-gboolean find_mtx_page(gint,gint *);
+gint ms_get_ecu_data(gint, gint, gint, DataSize); 
+gint ms_get_ecu_data_last(gint, gint, gint, DataSize); 
+gint ms_get_ecu_data_backup(gint, gint, gint, DataSize); 
+void ms_set_ecu_data(gint, gint, gint, DataSize, gint); 
+void ms_set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
+void ms_store_new_block_pending(gint, gint, gint, void *, gint );
+void ms_store_new_blocs(gint, gint, gint, void *, gint );
+void ms_backup_current_data(gint, gint );
+gboolean ms_find_mtx_page(gint,gint *);
+void set_ecu_data(gconstpointer *);
+void store_new_block(gconstpointer *);
 /* Prototypes */
 
 #endif

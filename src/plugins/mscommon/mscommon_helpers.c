@@ -356,10 +356,10 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
-			store_new_block(canID,page,0,
+			ms_store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
-			backup_current_data(canID,page);
+			ms_backup_current_data(canID,page);
 			tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			break;
@@ -404,10 +404,10 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
-			store_new_block(canID,page,0,
+			ms_store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
-			backup_current_data(canID,page);
+			ms_backup_current_data(canID,page);
 			ptr16 = (guint16 *)message->recv_buf;
 			/* Test for MS reset */
 			if (just_starting)
@@ -497,7 +497,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 	{
 		if (!firmware->page_params[i]->dl_by_default)
 			continue;
-		backup_current_data(firmware->canID,i);
+		ms_backup_current_data(firmware->canID,i);
 	}
 
 	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
@@ -519,7 +519,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	/* sync temp buffer with current burned settings */
 	if (!firmware->page_params[page]->dl_by_default)
 		return;
-	backup_current_data(firmware->canID,page);
+	ms_backup_current_data(firmware->canID,page);
 
 	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 

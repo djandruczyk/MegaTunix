@@ -591,7 +591,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	else if (firmware->capabilities & MSNS_E)
 	{	
 		shift = get_bitshift_f(firmware->table_params[table_num]->dtmode_mask);
-		if ((get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & firmware->table_params[table_num]->dtmode_mask) >> shift) 
+		if ((ms_get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & firmware->table_params[table_num]->dtmode_mask) >> shift) 
 		{
 			/*
 			 * printf ("msns-E with DT enabled\n");
@@ -671,7 +671,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		{
 			/* Send rpmk value as it's needed for rpm calc on 
 			 * spark firmwares... */
-			tmpi = get_ecu_data(canID,firmware->table_params[table_num]->stroke_page,firmware->table_params[table_num]->stroke_offset,size);
+			tmpi = ms_get_ecu_data(canID,firmware->table_params[table_num]->stroke_page,firmware->table_params[table_num]->stroke_offset,size);
 			mask = firmware->table_params[table_num]->stroke_mask;
 			shift = get_bitshift_f(firmware->table_params[table_num]->stroke_mask);
 			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
@@ -927,7 +927,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 					raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
 				else
 					raw_upper = get_extreme_from_size_f(size,UPPER);
-				value = get_ecu_data(canID,page,offset,size);
+				value = ms_get_ecu_data(canID,page,offset,size);
 				value *= percentage;
 				if (value < raw_lower)
 					value = raw_lower;
@@ -941,11 +941,11 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 				 * between,  thus we can reset the 
 				 * display to a sane value...
 				 */
-				old = get_ecu_data(canID,page,offset,size);
-				set_ecu_data(canID,page,offset,size,value);
+				old = ms_get_ecu_data(canID,page,offset,size);
+				ms_set_ecu_data(canID,page,offset,size,value);
 
 				real_value = convert_after_upload_f(tmpwidget);
-				set_ecu_data(canID,page,offset,size,old);
+				ms_set_ecu_data(canID,page,offset,size,old);
 
 				tmpbuf = g_strdup_printf("%i",(gint)real_value);
 				g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),

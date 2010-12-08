@@ -798,7 +798,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				firmware->table_params[i]->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 				g_object_ref(firmware->table_params[i]->z_object);
 				gtk_object_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
-				load_dependancies_obj_f(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
+				load_dependancies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else

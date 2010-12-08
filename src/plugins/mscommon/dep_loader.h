@@ -15,11 +15,19 @@
 #define __DEP_LOADER_H__
 
 #include <configfile.h>
+#include <enums.h>
 #include <gtk/gtk.h>
+
+/* Externs */
+extern void (*dbg_func_f)(gint, gchar *);
+extern gchar **(*parse_keys_f)(gchar *, gint *, gchar * );
+extern gint (*translate_string_f)(const gchar *);
+/* Externs */
 
 /* Prototypes */
 void load_dependancies(gconstpointer *,ConfigFile * ,gchar *, gchar *);
 void load_dependancies_obj(GObject *,ConfigFile * ,gchar *, gchar *);
+gboolean check_size(DataSize );
 /* Prototypes */
 
 #endif

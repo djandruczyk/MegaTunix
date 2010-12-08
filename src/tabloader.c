@@ -16,7 +16,6 @@
 #include <combo_loader.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
@@ -261,6 +260,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	gint num_groups = 0;
 	Group *group = NULL;
 	GHashTable *groups = NULL;
+	void (*load_dep_obj)(GObject *,ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
@@ -303,7 +303,8 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies_obj(group->object,cfgfile,section,"depend_on");
+			if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+				load_dep_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -483,6 +484,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gboolean indexed = FALSE;
 	Firmware_Details *firmware = NULL;
 	GList ***ve_widgets = NULL;
+	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
@@ -572,7 +574,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
+		if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+			load_dep_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 
@@ -646,7 +649,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	offset = -1;
 	cfg_read_int(cfgfile,section, "offset", &offset);
-	if (offset >=0 && indexed)
+	if (offset >= 0 && indexed)
 	{
 		/*printf("indexed widget %s\n",widget->name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))

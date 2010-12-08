@@ -330,26 +330,6 @@ G_MODULE_EXPORT gint get_multiplier(DataSize size)
 }
 
 
-G_MODULE_EXPORT gboolean check_size(DataSize size)
-{
-	switch (size)
-	{
-		case MTX_CHAR:
-		case MTX_U08:
-		case MTX_S08:
-		case MTX_U16:
-		case MTX_S16:
-		case MTX_U32:
-		case MTX_S32:
-			return TRUE;
-			break;
-		default:
-			return FALSE;
-			break;
-	}
-	return FALSE;
-}
-
 G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
 	const gchar * key = NULL;

@@ -16,7 +16,6 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
@@ -24,6 +23,7 @@
 #include <lookuptables.h>
 #include <notifications.h>
 #include <mtxmatheval.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -377,6 +377,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gint widget_temp = -1;
 	extern GdkColor black;
 	extern gconstpointer *global_data;
+	static gboolean (*check_deps)(gconstpointer *) = NULL;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
@@ -384,10 +385,14 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	 */
 	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
+	if (!check_deps)
+		get_symbol("check_dependancies",(void *)&check_deps);
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
-	if (dep_obj)
-		state = check_dependancies(dep_obj);
+	if ((dep_obj) && (check_deps))
+		state = check_deps(dep_obj);
+	else
+		dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
 
 	if ((GINT)units == FAHRENHEIT) 
 	{
