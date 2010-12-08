@@ -18,8 +18,7 @@
 #include <mode_select.h>
 #include <threads.h>
 
-static gchar *states[] = {"FALSE","TRUE"};
-
+/*ostatic gchar *states[] = {"FALSE","TRUE"};*/
 
 /*!
  \brief set_widget_sensitive() is used to set a widgets state.  This function

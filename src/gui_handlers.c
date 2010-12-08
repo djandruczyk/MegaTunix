@@ -54,7 +54,6 @@
 #include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
-#include <user_outputs.h>
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
 

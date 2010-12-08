@@ -19,7 +19,7 @@ apifix_SOURCES = apifix.c gauge.h
 
 noinst_PROGRAMS = gaugedemo piedemo apifix curvedemo progressdemo stripchartdemo
 
-noinst_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la libmtxstripchart.la
+noinst_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la libmtxstripchart.la libmtxcombo_mask.la
 
 libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h
 
@@ -30,12 +30,14 @@ libmtxpie_la_SOURCES = piegauge.c piegauge.h piegauge-private.c piegauge-private
 libmtxprogress_la_SOURCES = progress.c progress.h progress-private.c progress-private.h
 
 libmtxstripchart_la_SOURCES = stripchart.c stripchart.h stripchart-private.c stripchart-private.h
+libmtxcombo_mask_la_SOURCES = combo_mask.c ../include/combo_mask.h
 
 libmtxgauge_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 libmtxcurve_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 libmtxpie_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 libmtxprogress_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 libmtxstripchart_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxcombo_mask_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ 
 
 gaugedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
