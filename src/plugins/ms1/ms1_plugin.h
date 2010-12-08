@@ -28,14 +28,21 @@ void register_enums(void);
 void (*error_msg_f)(const gchar *);
 gboolean (*get_symbol_f)(const gchar *,void **);
 void (*io_cmd_f)(const gchar *,void *);
-void *(*dbg_func_f)(int,gchar *);
+void (*dbg_func_f)(int,gchar *);
 void (*start_tickler_f)(gint);
 void (*stop_tickler_f)(gint);
 void (*signal_read_rtvars_f)(void);
-gint (*get_ecu_data_f)(gint,gint,gint,DataSize);
+gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
+void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
 GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
+gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
+gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
+void (*recalc_table_limits_f)(gint, gint);
+glong (*get_extreme_from_size_f)(DataSize, Extreme);
+GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
+gint (*convert_before_download_f)(GtkWidget *, gfloat);
 /* Function Pointers */
 
 #endif

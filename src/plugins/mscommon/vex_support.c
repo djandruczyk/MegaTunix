@@ -1226,14 +1226,14 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 					ptr32[i]=GINT_TO_LE(vex->x_bins[i]);
 			}
 		}
-		chunk_write(canID,page,base,(total*mult),data);
+		ms_chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
 		for (i=0;i<vex->total_x_bins;i++)
 		{
 			if (vex->x_bins[i] != ms_get_ecu_data_last(canID,page,base+(i*mult),size))
-				send_to_ecu(canID,page,base+i,size, vex->x_bins[i], TRUE);
+				ms_send_to_ecu(canID,page,base+i,size, vex->x_bins[i], TRUE);
 		}
 	}
 
@@ -1274,14 +1274,14 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 					ptr32[i]=GINT_TO_LE(vex->y_bins[i]);
 			}
 		}
-		chunk_write(canID,page,base,(total*mult),data);
+		ms_chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
 		for (i=0;i<vex->total_y_bins;i++)
 		{
 			if (vex->y_bins[i] != ms_get_ecu_data_last(canID,page,base+i,size))
-				send_to_ecu(canID,page,base+(i*mult),size,vex->y_bins[i], TRUE);
+				ms_send_to_ecu(canID,page,base+(i*mult),size,vex->y_bins[i], TRUE);
 		}
 	}
 
@@ -1322,14 +1322,14 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 					ptr32[i]=GINT_TO_LE(vex->tbl_bins[i]);
 			}
 		}
-		chunk_write(canID,page,base,(total*mult),data);
+		ms_chunk_write(canID,page,base,(total*mult),data);
 	}
 	else
 	{
 		for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
 		{
 			if (vex->tbl_bins[i] != ms_get_ecu_data_last(canID,page,base+i,size))
-				send_to_ecu(canID,page,base+(i*mult),size,vex->tbl_bins[i], TRUE);
+				ms_send_to_ecu(canID,page,base+(i*mult),size,vex->tbl_bins[i], TRUE);
 		}
 	}
 	io_cmd_f(firmware->burn_all_command,NULL);
@@ -1371,7 +1371,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 			data = g_new0(guchar,total);
 			for (offset=0;offset<total;offset++)
 				data[offset]=ms_get_ecu_data_backup(canID,page,offset,MTX_U08);
-			chunk_write(canID,page,0,total,data);
+			ms_chunk_write(canID,page,0,total,data);
 
 		}
 		else
@@ -1380,7 +1380,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 			{
 				if (ms_get_ecu_data_backup(canID,page,offset,MTX_U08) != ms_get_ecu_data(canID,page,offset,MTX_U08))
 				{
-					send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
+					ms_send_to_ecu(canID,page,offset,MTX_U08,ecu_data_backup[page][offset], FALSE);
 				}
 			}
 		}

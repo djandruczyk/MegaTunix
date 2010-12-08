@@ -279,7 +279,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 					data = g_new0(guint8, firmware->page_params[page]->length);
 					for (offset=0;offset<num_keys;offset++)
 						data[offset]=(guint8)atoi(keys[offset]);
-					chunk_write(canID,page,0,num_keys,data);
+					ms_chunk_write(canID,page,0,num_keys,data);
 
 				}
 				else
@@ -290,7 +290,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 						if (dload_val != ms_get_ecu_data_last(canID,page,offset,size))
 						{
 							/*printf("writing data for page %i, offset %i\n",page,offset);*/
-							send_to_ecu(canID,page,offset,size,dload_val, FALSE);
+							ms_send_to_ecu(canID,page,offset,size,dload_val, FALSE);
 						}
 					}
 				}

@@ -163,11 +163,11 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	fclose(f);
 
 	if (tabletype == CTS)
-		table_write(firmware->clt_table_page,
+		ms_table_write(firmware->clt_table_page,
 			firmware->page_params[firmware->clt_table_page]->length,
 		       	(guint8 *)table);
 	else if (tabletype == MAT)
-		table_write(firmware->mat_table_page,
+		ms_table_write(firmware->mat_table_page,
 			firmware->page_params[firmware->mat_table_page]->length,
 		       	(guint8 *)table);
 	else

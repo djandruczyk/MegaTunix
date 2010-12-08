@@ -163,14 +163,14 @@ G_MODULE_EXPORT gint comms_test(void)
 
 
 /*!
- \brief table_write() gets called to send a block of lookuptable values to the ECU
+ \brief ms_table_write() gets called to send a block of lookuptable values to the ECU
  \param page (tableID) (gint) page in which the value refers to.
  \param len (gint) length of block to sent
  \param data (guint8) the block of data to be sent which better damn well be
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	OutputData *output = NULL;
@@ -179,7 +179,7 @@ G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
 	firmware = DATA_GET(global_data,"firmware");
 	g_static_mutex_lock(&mutex);
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
 
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
@@ -277,7 +277,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 
 
 /*!
- \brief chunk_write() gets called to send a block of values to the ECU.
+ \brief ms_chunk_write() gets called to send a block of values to the ECU.
  \param canID (gint) can identifier (0-14)
  \param page (gint) page in which the value refers to.
  \param offset (gint) offset from the beginning of the page that this data
@@ -287,14 +287,14 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
 {
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
@@ -319,7 +319,7 @@ G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_by
 
 
 /*!
- \brief send_to_ecu() gets called to send a value to the ECU.  This function
+ \brief ms_send_to_ecu() gets called to send a value to the ECU.  This function
  will check if the value sent is NOT the reqfuel_offset (that has special
  interdependancy issues) and then will check if there are more than 1 widgets
  that are associated with this page/offset and update those widgets before
@@ -332,7 +332,7 @@ G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_by
  \param queue_update (gboolean), if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
+G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
 {
 	OutputData *output = NULL;
 	guint8 *data = NULL;
@@ -344,7 +344,7 @@ G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize si
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
 
 	switch (size)
 	{

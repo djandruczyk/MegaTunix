@@ -373,7 +373,7 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 	fprintf(f, "//------------------------------------------------------------------------------\n");
 	fclose(f);
 
-	table_write(firmware->ego_table_page,
+	ms_table_write(firmware->ego_table_page,
 			firmware->page_params[firmware->ego_table_page]->length,
 			(guint8 *)table);
 

@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ *
+ * Linux Megasquirt tuning software
+ * 
+ * 
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute, etc. this as long as all the source code
+ * is made available for FREE.
+ * 
+ * No warranty is made or implied. You use this program at your own risk.
+ */
+
+#ifndef __MS1_GUI_HANDLERS_H__
+#define __MS1_GUI_HANDLERS_H__
+
+#include <enums.h>
+#include <gtk/gtk.h>
+
+/* Externs */
+extern void (*dbg_func_f)(int,gchar *);
+extern gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
+extern gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
+extern gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
+extern void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
+extern void (*recalc_table_limits_f)(gint, gint);
+extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
+extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
+extern gint (*convert_before_download_f)(GtkWidget *, gfloat);
+/* Externs */
+
+/* Prototypes */
+gboolean ecu_entry_handler(GtkWidget *, gpointer);
+/* Prototypes */
+#endif

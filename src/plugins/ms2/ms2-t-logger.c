@@ -134,9 +134,9 @@ void _ms2_crunch_trigtooth_data(gint page)
 	for (i=0;i<341;i++)
 	{
 		ttm_data->last[i] = ttm_data->current[i];
-		high = get_ecu_data_f(canID,page,(i*3),MTX_U08);
-		mid = get_ecu_data_f(canID,page,(i*3)+1,MTX_U08);
-		low = get_ecu_data_f(canID,page,(i*3)+2,MTX_U08);
+		high = ms_get_ecu_data_f(canID,page,(i*3),MTX_U08);
+		mid = ms_get_ecu_data_f(canID,page,(i*3)+1,MTX_U08);
+		low = ms_get_ecu_data_f(canID,page,(i*3)+2,MTX_U08);
 		ttm_data->current[i] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
 		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
 			min = ttm_data->current[i];

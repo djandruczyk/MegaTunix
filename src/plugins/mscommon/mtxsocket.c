@@ -772,14 +772,14 @@ close_binary2:
 						{
 							/*							printf("Received lookuptable from slave, sending to ECU\n");*/
 							if (ms_find_mtx_page(tableID,&mtx_page))
-								table_write(mtx_page,count,(guint8 *) buffer);
+								ms_table_write(mtx_page,count,(guint8 *) buffer);
 						}
 						else
 						{
 							if (ms_find_mtx_page(tableID,&mtx_page))
 							{
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
-								chunk_write(canID,mtx_page,offset,count,buffer);
+								ms_chunk_write(canID,mtx_page,offset,count,buffer);
 							}
 						}
 					}
@@ -787,7 +787,7 @@ close_binary2:
 					{
 						/*printf("updating local ms1 chunk buffer\n");*/
 						memcpy (client->ecu_data[(gint)DATA_GET(global_data,"last_page")]+offset,buffer,count);
-						chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
+						ms_chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
 					}
 					state = WAITING_FOR_CMD;
 				}
@@ -820,7 +820,7 @@ close_binary2:
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
 				_set_sized_data_f(client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
-				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
+				ms_send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
 				state = WAITING_FOR_CMD;
@@ -1239,7 +1239,7 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
 		_set_sized_data_f(client->ecu_data[page],offset,size,data,firmware->bigendian);
-		send_to_ecu(canID,page,offset,size,data,TRUE);
+		ms_send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
 }
@@ -2776,14 +2776,14 @@ close_binary:
 						{
 							/*							printf("Received lookuptable from slave, sending to ECU\n");*/
 							if (ms_find_mtx_page(tableID,&mtx_page))
-								table_write(mtx_page,count,(guint8 *) buffer);
+								ms_table_write(mtx_page,count,(guint8 *) buffer);
 						}
 						else
 						{
 							if (ms_find_mtx_page(tableID,&mtx_page))
 							{
 								memcpy (client->ecu_data[mtx_page]+offset,buffer,count);
-								chunk_write(canID,mtx_page,offset,count,buffer);
+								ms_chunk_write(canID,mtx_page,offset,count,buffer);
 							}
 						}
 					}
@@ -2791,7 +2791,7 @@ close_binary:
 					{
 						/*printf("updating local ms1 chunk buffer\n");*/
 						memcpy (client->ecu_data[(gint)DATA_GET(global_data,"last_page")]+offset,buffer,count);
-						chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
+						ms_chunk_write(0,(gint)DATA_GET(global_data,"last_page"),offset,count,buffer);
 					}
 					state = WAITING_FOR_CMD;
 				}
@@ -2824,7 +2824,7 @@ close_binary:
 				byte = (guint8)buf;
 				/*				printf ("Passed byte %i\n",byte);*/
 				_set_sized_data_f(client->ecu_data[(gint)DATA_GET(global_data,"last_page")],offset,MTX_U08,byte,firmware->bigendian);
-				send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
+				ms_send_to_ecu(0,(gint)DATA_GET(global_data,"last_page"),offset,MTX_U08,byte,TRUE);
 
 				/*				printf("Writing byte %i to ecu on page %i, offset %i\n",byte,(gint)DATA_GET(global_data,"last_page"),offset);*/
 				state = WAITING_FOR_CMD;
@@ -3245,7 +3245,7 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		offset = atoi(vars[2]);
 		data = atoi(vars[3]);
 		_set_sized_data_f(client->ecu_data[page],offset,size,data,firmware->bigendian);
-		send_to_ecu(canID,page,offset,size,data,TRUE);
+		ms_send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
 }

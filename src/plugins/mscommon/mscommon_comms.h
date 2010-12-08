@@ -28,7 +28,7 @@ extern gint (*get_multiplier_f)(DataSize);
 extern gboolean (*queue_function_f)(const gchar * );
 extern void (*recalc_table_limits_f)(gint, gint);
 extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
-extern void (*get_symbol_f)(const gchar *, void **);
+extern gboolean (*get_symbol_f)(const gchar *, void **);
 
 
 /* Prototypes */
@@ -36,9 +36,9 @@ void queue_burn_ecu_flash(gint);
 void queue_ms1_page_change(gint);
 gint comms_test(void);
 void ms_handle_page_change(gint , gint );
-void table_write(gint, gint, guint8 *);
-void send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
-void chunk_write(gint, gint, gint, gint, guint8 *);
+void ms_table_write(gint, gint, guint8 *);
+void ms_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
+void ms_chunk_write(gint, gint, gint, gint, guint8 *);
 void send_to_slaves(void *);
 void slaves_set_color(GuiColor,const gchar *);
 void update_write_status(void *);

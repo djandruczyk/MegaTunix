@@ -65,7 +65,7 @@ gchar **(*parse_keys_f)(gchar *, gint *, gchar * );
 gint (*get_multiplier_f)(DataSize );
 glong (*get_extreme_from_size_f)(DataSize, Extreme);
 gfloat (*convert_after_upload_f)(GtkWidget *);
-gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer );
+gint (*convert_before_download_f)(GtkWidget *, gfloat);
 GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 void (*mem_alloc_f)(void);
 void *(*evaluator_create_f)(char *);
@@ -77,6 +77,9 @@ void (*free_multi_source_f)(gpointer);
 void (*flush_serial_f)(gint, gint);
 void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
+gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
+gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
+
 
 /* Function Pointers */
 

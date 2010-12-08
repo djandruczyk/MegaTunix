@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Externs */
-extern void (*get_symbol_f)(const gchar *, void **);
+extern gboolean (*get_symbol_f)(const gchar *, void **);
 /* Externs */
 
 /* Prototypes */
@@ -28,7 +28,7 @@ gint ms_get_ecu_data_backup(gint, gint, gint, DataSize);
 void ms_set_ecu_data(gint, gint, gint, DataSize, gint); 
 void ms_set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
 void ms_store_new_block_pending(gint, gint, gint, void *, gint );
-void ms_store_new_blocs(gint, gint, gint, void *, gint );
+void ms_store_new_block(gint, gint, gint, void *, gint );
 void ms_backup_current_data(gint, gint );
 gboolean ms_find_mtx_page(gint,gint *);
 void set_ecu_data(gconstpointer *);

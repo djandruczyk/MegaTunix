@@ -20,11 +20,11 @@
 /* Externs */
 extern void (*error_msg_f)(const gchar *);
 extern void (*io_cmd_f)(const gchar *,void *);
-extern void *(*dbg_func_f)(int,gchar *);
+extern void (*dbg_func_f)(int,gchar *);
 extern void (*start_tickler_f)(gint);
 extern void (*stop_tickler_f)(gint);
 extern void (*signal_read_rtvars_f)(void);
-extern gint (*get_ecu_data_f)(gint,gint,gint,DataSize);
+extern gint (*ms_get_ecu_data_f)(gint,gint,gint,DataSize);
 extern GtkWidget *(*lookup_widget_f)(const gchar *);
 extern gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
 extern GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
@@ -34,13 +34,6 @@ typedef enum {
 	TOOTHMON_TICKLER=0x91,
 	TRIGMON_TICKLER
 }EcuPluginTickler;
-
-typedef enum {
-	START_TOOTHMON_LOGGER = 0xff00,
-	START_TRIGMON_LOGGER,
-	STOP_TOOTHMON_LOGGER,
-	STOP_TRIGMON_LOGGER
-}ToggleButton;
 
 typedef struct _TTMon_Data TTMon_Data;
 /*!

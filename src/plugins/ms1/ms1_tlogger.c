@@ -166,7 +166,7 @@ void _crunch_trigtooth_data(gint page)
 	firmware = DATA_GET(global_data,"firmware");
 
 	canID = firmware->canID;
-	position = get_ecu_data_f(canID,page,CTR,size);
+	position = ms_get_ecu_data_f(canID,page,CTR,size);
 
 /*
 	g_printf("Counter position on page %i is %i\n",page,position);
@@ -184,8 +184,8 @@ void _crunch_trigtooth_data(gint page)
 
 	for (i=position;i<185;i+=2)
 	{
-		/*total = (get_ecu_data_f(canID,page,i,size)*256)+get_ecu_data_f(canID,page,i+1,size);*/
-		total = get_ecu_data_f(canID,page,i,MTX_U16);
+		/*total = (ms_get_ecu_data_f(canID,page,i,size)*256)+ms_get_ecu_data_f(canID,page,i+1,size);*/
+		total = ms_get_ecu_data_f(canID,page,i,MTX_U16);
 		ttm_data->current[index] = total;
 		index++;
 	}
@@ -193,15 +193,15 @@ void _crunch_trigtooth_data(gint page)
 	{
 		for (i=0;i<position;i+=2)
 		{
-			/*total = (get_ecu_data_f(canID,page,i,size)*256)+get_ecu_data_f(canID,page,i+1,size);*/
-			total = get_ecu_data_f(canID,page,i,MTX_U16);
+			/*total = (ms_get_ecu_data_f(canID,page,i,size)*256)+ms_get_ecu_data_f(canID,page,i+1,size);*/
+			total = ms_get_ecu_data_f(canID,page,i,MTX_U16);
 			ttm_data->current[index] = total;
 			index++;
 		}
 	}
 	/*g_printf("\n");*/
 
-	if (get_ecu_data_f(canID,page,UNITS,size) == 1)
+	if (ms_get_ecu_data_f(canID,page,UNITS,size) == 1)
 	{
 		/*g_printf("0.1 ms units\n");*/
 		ttm_data->units=100;

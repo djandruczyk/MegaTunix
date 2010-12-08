@@ -38,9 +38,16 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
 	get_symbol_f("signal_read_rtvars",(void *)&signal_read_rtvars_f);
-	get_symbol_f("get_ecu_data",(void *)&get_ecu_data_f);
+	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
+	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 	get_symbol_f("initialize_gc",(void *)&initialize_gc_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
+	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
+	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
+	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
+	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
+	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
+	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 }
 
 
@@ -59,14 +66,6 @@ void register_enums(void)
 	str_2_enum = DATA_GET(global_data,"str2_enum");
 	if (str_2_enum)
 	{
-		g_hash_table_insert(str_2_enum,"_START_TOOTHMON_LOGGER_",
-				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
-				GINT_TO_POINTER(START_TRIGMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
-				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
-				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	}
 }
 

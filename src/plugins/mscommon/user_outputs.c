@@ -394,14 +394,14 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	switch (column)
 	{
 		case COL_HYS:
-			send_to_ecu(canID, page, hys_offset, MTX_U08, result, TRUE);
+			ms_send_to_ecu(canID, page, hys_offset, MTX_U08, result, TRUE);
 			break;
 		case COL_ULIMIT:
-			send_to_ecu(canID, page, ulimit_offset, MTX_U08, result, TRUE);
+			ms_send_to_ecu(canID, page, ulimit_offset, MTX_U08, result, TRUE);
 			break;
 		case COL_ENTRY:
-			send_to_ecu(canID, page, src_offset, MTX_U08, rt_offset, TRUE);
-			send_to_ecu(canID, page, lim_offset, MTX_U08, result, TRUE);
+			ms_send_to_ecu(canID, page, src_offset, MTX_U08, rt_offset, TRUE);
+			ms_send_to_ecu(canID, page, lim_offset, MTX_U08, result, TRUE);
 			break;
 	}
 	gdk_threads_add_timeout(500,(GSourceFunc)deferred_model_update,(GtkWidget *)view);

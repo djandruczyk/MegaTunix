@@ -662,7 +662,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 			offset = firmware->table_params[table_num]->reqfuel_offset;
 			/*printf("Sending %i to ecu to canid %i, page %i, offset %i, size %i\n",(gint)rf_per_squirt,canID,firmware->table_params[table_num]->reqfuel_page, offset, firmware->table_params[table_num]->reqfuel_size);
 			 */
-			send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, firmware->table_params[table_num]->reqfuel_size, (gint)rf_per_squirt, TRUE);
+			ms_send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, firmware->table_params[table_num]->reqfuel_size, (gint)rf_per_squirt, TRUE);
 			/*
 			 * printf("MS2 reqfuel per squirt, value %i \n",(gint)(rf_per_squirt));
 			 */
@@ -681,10 +681,10 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 			else
 				dload_val = (int)(12000.0/((double)num_cyls));
 
-			send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
-			send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset+1, MTX_U08, (dload_val& 0x00ff), TRUE);
+			ms_send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
+			ms_send_to_ecu(canID, firmware->table_params[table_num]->rpmk_page, rpmk_offset+1, MTX_U08, (dload_val& 0x00ff), TRUE);
 			offset = firmware->table_params[table_num]->reqfuel_offset;
-			send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
+			ms_send_to_ecu(canID, firmware->table_params[table_num]->reqfuel_page, offset, MTX_U08, (gint)rf_per_squirt, TRUE);
 		}
 		/*
 		 * printf("rf per squirt is offset %i, val %i\n",offset,(gint)rf_per_squirt);
@@ -763,7 +763,7 @@ G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpoint
 {
 	Deferred_Data *data = (Deferred_Data *)value;
 
-	send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
+	ms_send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
 	g_free(data);
 	/* called per element from the hash table to drain and send to ECU */
 	return TRUE;
@@ -958,7 +958,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 				g_free(tmpbuf);
 
 				if (!firmware->chunk_support)
-					send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
+					ms_send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
 				if (mult == 1)
 					data[offset] = (guint8)value;
 				else if (mult == 2)
@@ -983,7 +983,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 			}
 		}
 		if (firmware->chunk_support)
-			chunk_write(canID,z_page,z_base,x_bins*y_bins*mult,data);
+			ms_chunk_write(canID,z_page,z_base,x_bins*y_bins*mult,data);
 	}
 	g_strfreev(vector);
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));

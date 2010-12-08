@@ -6,6 +6,7 @@ INCLUDES = \
         @GTK_CFLAGS@ \
         @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
@@ -29,6 +30,8 @@ libmscommon_la_SOURCES = \
 	interrogate.h \
 	mscommon_comms.c \
 	mscommon_comms.h \
+	mscommon_gui_handlers.c \
+	mscommon_gui_handlers.h \
 	mscommon_helpers.c \
 	mscommon_helpers.h \
 	mscommon_plugin.c \
@@ -45,7 +48,7 @@ libmscommon_la_SOURCES = \
 	vex_support.h
 
 
-libmscommon_la_LDFLAGS = -shared ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
+libmscommon_la_LDFLAGS = -shared ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
