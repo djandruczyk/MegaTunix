@@ -23,6 +23,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,11 +79,26 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	Firmware_Details *firmware = NULL;
+	static void (*store_new_block)(gconstpointer *) = NULL;
+	static void (*set_ecu_data)(gconstpointer *) = NULL;
+	static gboolean (*write_wrapper)(gint, const void *, size_t, gint *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	serial_params = DATA_GET(global_data,"serial_params");
 	if (!serio_mutex)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
+	if (!write_wrapper)
+		get_symbol("write_wrapper",(void*)&write_wrapper);
+	if (!write_wrapper)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"write_wrapper\" was NOT found in plugins, BUG!\n"));
+	if (!set_ecu_data)
+		get_symbol("set_ecu_data",(void*)&set_ecu_data);
+	if (!set_ecu_data)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"set_ecu_data\" was NOT found in plugins, BUG!\n"));
+	if (!store_new_block)
+		get_symbol("store_new_block",(void*)&store_new_block);
+	if (!store_new_block)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"store_new_block\" was NOT found in plugins, BUG!\n"));
 
 	g_static_mutex_lock(&mutex);
 	g_mutex_lock(serio_mutex);
@@ -105,10 +121,10 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		switch (mode)
 		{
 			case MTX_SIMPLE_WRITE:
-				set_ecu_data(canID,page,offset,size,value);
+				set_ecu_data(output->data);
 				break;
 			case MTX_CHUNK_WRITE:
-				store_new_block(canID,page,offset,data,num_bytes);
+				store_new_block(output->data);
 				break;
 			case MTX_CMD_WRITE:
 				break;
@@ -176,9 +192,9 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	if ((output) && (retval))
 	{
 		if (mode == MTX_SIMPLE_WRITE)
-			set_ecu_data(canID,page,offset,size,value);
+			set_ecu_data(output->data);
 		else if (mode == MTX_CHUNK_WRITE)
-			store_new_block(canID,page,offset,data,num_bytes);
+			store_new_block(output->data);
 	}
 
 	g_mutex_unlock(serio_mutex);

@@ -63,7 +63,6 @@ megatunix_SOURCES = \
 	tag_loader.c \
 	threads.c \
 	timeout_handlers.c \
-	user_outputs.c \
 	vetable_gui.c \
 	visibility.c \
 	warmwizard_gui.c \

@@ -46,6 +46,10 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
+	get_symbol_f("direct_lookup_data",(void *)&direct_lookup_data_f);
+	get_symbol_f("direct_reverse_lookup",(void *)&direct_reverse_lookup_f);
+	get_symbol_f("reverse_lookup",(void *)&reverse_lookup_f);
+	get_symbol_f("lookup_data",(void *)&lookup_data_f);
 	get_symbol_f("lookup_precision",(void *)&lookup_precision_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("translate_string",(void *)&translate_string_f);
@@ -68,6 +72,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 	get_symbol_f("mem_alloc",(void *)&mem_alloc_f);
 	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
+	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);
+	get_symbol_f("evaluator_evaluate_x",(void *)&evaluator_evaluate_x_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
 	get_symbol_f("get_table",(void *)&get_table_f);
 	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);

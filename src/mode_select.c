@@ -19,7 +19,6 @@
 #include <threads.h>
 
 static gchar *states[] = {"FALSE","TRUE"};
-extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
 
 
 /*!

@@ -16,6 +16,7 @@
 #include <assert.h>
 #include <config.h>
 #include <combo_mask.h>
+#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -42,7 +43,6 @@ enum
 	NUM_COLS
 };
 
-extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
 static GList *views = NULL;
 extern gconstpointer *global_data;
 
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
@@ -131,11 +131,11 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 		if (DATA_GET(object,"real_lower"))
 			lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size((DataSize)DATA_GET(object,"size"),LOWER);
+			lower = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),LOWER);
 		if (DATA_GET(object,"real_upper"))
 			upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size((DataSize)DATA_GET(object,"size"),UPPER);
+			upper = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),UPPER);
 		range = g_strdup_printf("%i-%i",lower,upper);
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
@@ -330,12 +330,12 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x(multi->dl_eval,new);
+		tmpf = evaluator_evaluate_x_f(multi->dl_eval,new);
 		/* Then if it used a lookuptable, reverse map it if possible 
 		 * to determine the ADC reading we need to send to ECU
 		 */
 		if (multi->lookuptable)
-			result = direct_reverse_lookup(multi->lookuptable,(gint)tmpf);
+			result = direct_reverse_lookup_f(multi->lookuptable,(gint)tmpf);
 		else
 			result = (gint)tmpf;
 
@@ -346,11 +346,11 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 		if (DATA_GET(object,"real_lower"))
 			lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size((DataSize)DATA_GET(object,"size"),LOWER);
+			lower = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),LOWER);
 		if (DATA_GET(object,"real_upper"))
 			upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size((DataSize)DATA_GET(object,"size"),UPPER);
+			upper = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),UPPER);
 		evaluator = (void *)DATA_GET(object,"dl_evaluator");
 		temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 
@@ -363,11 +363,11 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create_f(DATA_GET(object,"dl_conv_expr"));
 			if (!evaluator)
 			{
-				dbg_func(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"dl_conv_expr")));
-				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
+				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"dl_conv_expr")));
+				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy_f);
 			}
 		}
 		/* First conver to fahrenheit temp scale if temp dependant */
@@ -381,12 +381,12 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 		else
 			x = new;
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x(evaluator,x);
+		tmpf = evaluator_evaluate_x_f(evaluator,x);
 		/* Then if it used a lookuptable,  reverse map it if possible
 		 * to determine the ADC reading we need to send to ECU
 		 */
 		if (DATA_GET(object,"lookuptable"))
-			result = reverse_lookup(object,(gint)tmpf);
+			result = reverse_lookup_f(object,(gint)tmpf);
 		else
 			result = (gint)tmpf;
 	}
@@ -459,10 +459,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	page = (GINT)OBJ_GET(model,"page");
 	canID = (GINT)OBJ_GET(model,"canID");
 
-	offset = get_ecu_data(canID,page,src_offset,MTX_U08);
-	cur_val = get_ecu_data(canID,page,lim_offset,MTX_U08);
-	hys_val = get_ecu_data(canID,page,hys_offset,MTX_U08);
-	ulimit_val = get_ecu_data(canID,page,ulimit_offset,MTX_U08);
+	offset = ms_get_ecu_data(canID,page,src_offset,MTX_U08);
+	cur_val = ms_get_ecu_data(canID,page,lim_offset,MTX_U08);
+	hys_val = ms_get_ecu_data(canID,page,hys_offset,MTX_U08);
+	ulimit_val = ms_get_ecu_data(canID,page,ulimit_offset,MTX_U08);
 
 	looptest = TRUE;
 	while (looptest)
@@ -494,10 +494,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 
 				/* TEXT ENTRY part */
 				if (multi->lookuptable)
-					x = direct_lookup_data(multi->lookuptable,cur_val);
+					x = direct_lookup_data_f(multi->lookuptable,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x(evaluator,x);
+				tmpf = evaluator_evaluate_x_f(evaluator,x);
 				if (temp_dep)
 				{
 					if (temp_units == CELSIUS)
@@ -516,10 +516,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				if (OBJ_GET(model,"hys_offset") != NULL)
 				{
 					if (multi->lookuptable)
-						x = direct_lookup_data(multi->lookuptable,hys_val);
+						x = direct_lookup_data_f(multi->lookuptable,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x(evaluator,x);
+					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -539,10 +539,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				if (OBJ_GET(model,"ulimit_offset") != NULL)
 				{
 					if (multi->lookuptable)
-						x = direct_lookup_data(multi->lookuptable,ulimit_val);
+						x = direct_lookup_data_f(multi->lookuptable,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x(evaluator,x);
+					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -567,14 +567,14 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					expr = DATA_GET(object,"ul_conv_expr");
 					if (expr == NULL)
 					{
-						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
+						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
 						exit (-3);
 					}
-					evaluator = evaluator_create(expr);
+					evaluator = evaluator_create_f(expr);
 					if (!evaluator)
 					{
-						dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
+						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+						DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy_f);
 					}
 					assert(evaluator);
 
@@ -584,10 +584,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 
 				/* TEXT ENTRY part */
 				if (DATA_GET(object,"lookuptable"))
-					x = lookup_data(object,cur_val);
+					x = lookup_data_f(object,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x(evaluator,x);
+				tmpf = evaluator_evaluate_x_f(evaluator,x);
 				if (temp_dep)
 				{
 					if (temp_units == CELSIUS)
@@ -606,10 +606,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				if (OBJ_GET(model,"hys_offset") != NULL)
 				{
 					if (DATA_GET(object,"lookuptable"))
-						x = lookup_data(object,hys_val);
+						x = lookup_data_f(object,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x(evaluator,x);
+					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -629,10 +629,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				if (OBJ_GET(model,"ulimit_offset") != NULL)
 				{
 					if (DATA_GET(object,"lookuptable"))
-						x = lookup_data(object,ulimit_val);
+						x = lookup_data_f(object,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x(evaluator,x);
+					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)

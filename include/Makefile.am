@@ -64,7 +64,6 @@ headers = \
 	threads.h \
 	timeout_handlers.h \
 	unions.h \
-	user_outputs.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \

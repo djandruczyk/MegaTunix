@@ -39,6 +39,8 @@ libmscommon_la_SOURCES = \
 	req_fuel.h \
 	therm.c \
 	therm.h \
+	user_outputs.c \
+	user_outputs.h \
 	vex_support.c \
 	vex_support.h
 
