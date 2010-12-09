@@ -214,6 +214,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static gint (*get_ecu_data)(gpointer);
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
@@ -237,9 +238,9 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	GHashTable *sources_hash = NULL;
 	extern gconstpointer *global_data;
 
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	algorithm = DATA_GET(global_data,"algorithm");
 
+	if (!get_ecu_data)
+		get_symbol("get_ecu_data",(void *)&get_ecu_data);
 	g_static_mutex_lock(&mutex);
 
 	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
@@ -259,6 +260,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
+		sources_hash = DATA_GET(global_data,"sources_hash");
 		if (!OBJ_GET(widget,"ul_eval_hash"))
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
@@ -297,6 +299,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		}
 		else
 		{
+			algorithm = DATA_GET(global_data,"algorithm");
 			switch (algorithm[table_num])
 			{
 				case SPEED_DENSITY:
@@ -333,11 +336,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
+		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data(widget));
 	else
 	{
 		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
-		tmpi = get_ecu_data(canID,page,offset,size);
+		tmpi = get_ecu_data(widget);
 		/*printf("value is %i\n",tmpi);*/
 	}
 
@@ -367,6 +370,8 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
  */
 G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
+	static void (*update_widget_f)(gpointer, gpointer);
+	static gboolean (*check_deps)(gconstpointer *) = NULL;
 	gconstpointer *dep_obj = NULL;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
@@ -377,7 +382,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gint widget_temp = -1;
 	extern GdkColor black;
 	extern gconstpointer *global_data;
-	static gboolean (*check_deps)(gconstpointer *) = NULL;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
@@ -387,6 +391,8 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		return;
 	if (!check_deps)
 		get_symbol("check_dependancies",(void *)&check_deps);
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	if ((dep_obj) && (check_deps))
@@ -428,12 +434,12 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == CELSIUS))
 		{
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
 		{
@@ -482,12 +488,12 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == FAHRENHEIT))
 		{
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
 		{

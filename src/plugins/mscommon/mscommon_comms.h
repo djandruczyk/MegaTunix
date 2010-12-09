@@ -26,7 +26,6 @@ extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
 extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 extern gint (*get_multiplier_f)(DataSize);
 extern gboolean (*queue_function_f)(const gchar * );
-extern void (*recalc_table_limits_f)(gint, gint);
 extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
 extern gboolean (*get_symbol_f)(const gchar *, void **);
 

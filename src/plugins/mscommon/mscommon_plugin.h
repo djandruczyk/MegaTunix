@@ -54,7 +54,6 @@ GtkWidget *(*lookup_widget_f)(const gchar *);
 void (*set_group_color_f)(GuiColor, const gchar * );
 void (*thread_refresh_widgets_at_offset_f)(gint, gint);
 gint (*get_multiplier_f)(DataSize);
-void (*recalc_table_limits_f)(gint, gint);
 guint (*get_bitshift_f)(guint);
 GtkWidget *(*spin_button_handler_f)(GtkWidget *, gpointer);
 gboolean (*set_file_api_f)(ConfigFile *, gint, gint );

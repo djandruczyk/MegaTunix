@@ -56,7 +56,6 @@ void thread_refresh_widgets_at_offset(gint, gint);
 void refresh_widgets_at_offset(gint, gint);
 glong get_extreme_from_size(DataSize, Extreme);
  gboolean clamp_value(GtkWidget *, gpointer);
-void recalc_table_limits(gint, gint);
 void refocus_cell(GtkWidget *, Direction);
 void set_widget_label_from_array(gpointer, gpointer);
 void insert_text_handler(GtkEntry *, const gchar *, gint, gint *, gpointer);

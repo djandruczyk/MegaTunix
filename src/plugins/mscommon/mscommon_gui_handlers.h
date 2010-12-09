@@ -74,7 +74,7 @@ void set_widget_label_from_array(gpointer, gpointer);
 void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
 void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
 void update_widget(gpointer, gpointer);
-
+void recalc_table_limits(gint, gint);
 
 /* Prototypes */
 

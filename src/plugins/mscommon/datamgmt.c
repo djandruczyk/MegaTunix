@@ -23,6 +23,51 @@
 
 extern gconstpointer *global_data;
 
+G_MODULE_EXPORT gint get_ecu_data(gpointer data)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	DataSize size = MTX_U08;
+	gint value = 0 ;
+	GtkWidget *widget = NULL;
+	gconstpointer *container = NULL;
+	Firmware_Details *firmware = NULL;
+	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	if (!_get_sized_data)
+		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
+
+	firmware = DATA_GET(global_data,"firmware");
+	widget = (GtkWidget *)data;
+	container = (gconstpointer *)data;
+	/* Sanity checking */
+	if (!firmware)
+		return 0;
+	if (!firmware->page_params)
+		return 0;
+	if (!firmware->page_params[page])
+		return 0;
+	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
+		return 0;
+	if (GTK_IS_WIDGET(widget))
+	{
+		canID = (GINT)OBJ_GET(widget,"canID");
+		page = (GINT)OBJ_GET(widget,"page");
+		offset = (GINT)OBJ_GET(widget,"offset");
+		size = (DataSize)OBJ_GET(widget,"size");
+	}
+	else
+	{
+		canID = (GINT)DATA_GET(container,"canID");
+		page = (GINT)DATA_GET(container,"page");
+		offset = (GINT)DATA_GET(container,"offset");
+		size = (DataSize)DATA_GET(container,"size");
+	}
+
+	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
+}
+
+
 /*!
  \brief ms_get_ecu_data() is a func to return the data requested.
  \param canID, CAN Identifier (currently unused)
@@ -122,11 +167,22 @@ G_MODULE_EXPORT void set_ecu_data(gconstpointer *data)
 		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
 
 	firmware = DATA_GET(global_data,"firmware");
-	canID = (GINT)DATA_GET(data,"canID");
-	page = (GINT)DATA_GET(data,"page");
-	offset = (GINT)DATA_GET(data,"offset");
-	value = (GINT)DATA_GET(data,"value");                
-	size = (DataSize)DATA_GET(data,"size");
+	if (GTK_IS_WIDGET(data))
+	{
+		canID = (GINT)OBJ_GET(data,"canID");
+		page = (GINT)OBJ_GET(data,"page");
+		offset = (GINT)OBJ_GET(data,"offset");
+		value = (GINT)OBJ_GET(data,"value");                
+		size = (DataSize)OBJ_GET(data,"size");
+	}
+	else
+	{
+		canID = (GINT)DATA_GET(data,"canID");
+		page = (GINT)DATA_GET(data,"page");
+		offset = (GINT)DATA_GET(data,"offset");
+		value = (GINT)DATA_GET(data,"value");                
+		size = (DataSize)DATA_GET(data,"size");
+	}
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
 }

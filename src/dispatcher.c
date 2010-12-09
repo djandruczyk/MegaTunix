@@ -19,9 +19,10 @@
 #include <debugging.h>
 #include <dispatcher.h>
 #include <enums.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <notifications.h>
-#include <gui_handlers.h>
+#include <plugin.h>
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
@@ -155,6 +156,7 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	static GCond *gui_dispatch_cond = NULL;
+	static void (*update_widget_f)(gpointer,gpointer) = NULL;
 	gint len=0;
 	gint i=0;
 	UpdateFunction val = 0;
@@ -166,6 +168,8 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 	if (!gui_dispatch_cond)
 		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
 	if (!gui_dispatch_queue)
@@ -214,7 +218,7 @@ trypop:
 					if (GTK_IS_WIDGET(widget))
 					{
 						gdk_threads_enter();
-						update_widget(widget,NULL);
+						update_widget_f(widget,NULL);
 						gdk_threads_leave();
 						message->payload = NULL;
 					}

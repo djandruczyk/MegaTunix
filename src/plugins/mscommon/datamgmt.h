@@ -32,6 +32,7 @@ void ms_store_new_block(gint, gint, gint, void *, gint );
 void ms_backup_current_data(gint, gint );
 gboolean ms_find_mtx_page(gint,gint *);
 void set_ecu_data(gconstpointer *);
+gint get_ecu_data(gpointer);
 void store_new_block(gconstpointer *);
 /* Prototypes */
 

@@ -12,7 +12,6 @@
  */
 
 #define _ISOC99_SOURCE
-#include <2d_table_editor.h>
 #include <3d_vetable.h>
 #include <args.h>
 #include <config.h>
@@ -58,7 +57,6 @@
 #include <widgetmgmt.h>
 
 
-extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
 
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
@@ -541,6 +539,8 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	Firmware_Details *firmware = NULL;
 	void (*select_for)(gint) = NULL;
 	void (*revert)(void) = NULL;
+	void (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
+	void (*create_2d_table_editor_group)(GtkWidget *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -650,10 +650,12 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))
-				create_2d_table_editor((gint)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
+				if (get_symbol("create_2d_table_editor",(void *)create_2d_table_editor))
+					create_2d_table_editor((gint)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
 			break;
 		case TE_TABLE_GROUP:
-			create_2d_table_editor_group(widget);
+			if (get_symbol("create_2d_table_editor_group",(void *)create_2d_table_editor_group))
+				create_2d_table_editor_group(widget);
 			break;
 
 		default:
@@ -829,6 +831,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
+	static gint (*get_ecu_data_f)(gpointer) = NULL;
+	static GList ***ve_widgets = NULL;
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
@@ -845,9 +849,11 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean reverse_keys = FALSE;
 	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!ve_widgets)
+		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
 
 	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
@@ -873,7 +879,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 
 	upper = upper > hardupper ? hardupper:upper;
 	lower = lower < hardlower ? hardlower:lower;
-	value = get_ecu_data(canID,page,offset,size);
+	value = get_ecu_data_f(widget);
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 
 	if (event->keyval == GDK_Control_L)
@@ -895,9 +901,9 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 
 	if (event->type == GDK_KEY_RELEASE)
 	{
-/*		grab_single_cell = FALSE;
-		grab_multi_cell = FALSE;
-		*/
+		/*		grab_single_cell = FALSE;
+				grab_multi_cell = FALSE;
+		 */
 		return FALSE;
 	}
 	switch (event->keyval)
@@ -1478,16 +1484,20 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 
 G_MODULE_EXPORT void refresh_widgets_at_offset(gint page, gint offset)
 {
+	static void (*update_widget_f)(gpointer, gpointer);
+	static Firmware_Details *firmware = NULL;
+	static GList ***ve_widgets = NULL;
 	guint i = 0;
-	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
-
-	firmware = DATA_GET(global_data,"firmware");
+	if (!ve_widgets)
+		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!update_widget_f)
+		get_symbol("update_widget_f",(void *)&update_widget_f);
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+		update_widget_f(g_list_nth_data(ve_widgets[page][offset],i),NULL);
 	update_ve3d_if_necessary(page,offset);
 }
 
@@ -1574,59 +1584,6 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 	if (clamped)
 		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",val,precision));
 	return TRUE;
-}
-
-
-/*!
- \brief recalc_table_limits() Finds the minimum and maximum values for a 
- 2D table (this will be deprecated when thevetables are a custom widget)
- */
-G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
-{
-	gint i = 0;
-	gint x_count = 0;
-	gint y_count = 0;
-	gint z_base = 0;
-	gint z_page = 0;
-	gint z_size = 0;
-	gint z_mult = 0;
-	gint tmpi = 0;
-	gint max = 0;
-	gint min = 0;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
-
-	/* Limit check */
-	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
-		return;
-	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
-	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
-	x_count = firmware->table_params[table_num]->x_bincount;
-	y_count = firmware->table_params[table_num]->y_bincount;
-	z_base = firmware->table_params[table_num]->z_base;
-	z_page = firmware->table_params[table_num]->z_page;
-	z_size = firmware->table_params[table_num]->z_size;
-	z_mult = get_multiplier(z_size);
-	min = get_extreme_from_size(z_size,UPPER);
-	max = get_extreme_from_size(z_size,LOWER);
-
-	for (i=0;i<x_count*y_count;i++)
-	{
-		tmpi = get_ecu_data(canID,z_page,z_base+(i*z_mult),z_size);
-		if (tmpi > max)
-			max = tmpi;
-		if (tmpi < min)
-			min = tmpi;
-	}
-	if (min == max)	/* FLAT table, causes black screen */
-	{
-		min -= 10;
-		max += 10;
-	}
-	firmware->table_params[table_num]->z_maxval = max;
-	firmware->table_params[table_num]->z_minval = min;
-	return;
 }
 
 
