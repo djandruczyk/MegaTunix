@@ -233,6 +233,10 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 	GList ***ve_widgets = NULL;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
@@ -295,8 +299,8 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][2676],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][2678],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2676],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][2678],update_widget_f,NULL);
 
 		}
 		else
@@ -308,8 +312,8 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][518],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][520],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][518],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][520],update_widget_f,NULL);
 
 		}
 
@@ -510,6 +514,10 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 	GList ***ve_widgets;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
@@ -617,16 +625,16 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		if (firmware->capabilities & PIS)
 		{
 			gtk_widget_destroy(item);
-			g_list_foreach(ve_widgets[0][2702],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][2704],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2702],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][2704],update_widget_f,NULL);
 		}
 		else
 		{
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][506],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][508],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][530],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][532],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][506],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][508],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][530],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][532],update_widget_f,NULL);
 		}
 
 		item = glade_xml_get_widget(xml,"get_data_button");
@@ -691,6 +699,10 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	GList ***ve_widgets = NULL;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 	
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -738,7 +750,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
 
-		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget,NULL);
+		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));

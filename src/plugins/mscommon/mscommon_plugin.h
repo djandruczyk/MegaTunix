@@ -82,6 +82,13 @@ gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
 gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 void (*set_reqfuel_color_f)(GuiColor, gint);
 void (*alter_widget_state_f)(gpointer, gpointer);
+void (*bind_to_lists_f)(GtkWidget *, gchar * );
+void (*warn_user_f)(const gchar *);
+gboolean (*key_event_f)(GtkWidget *, GdkEventKey *, gpointer );
+gboolean (*focus_out_handler_f)(GtkWidget *, GdkEventFocus *, gpointer );
+guint32 (*create_value_change_watch_f)(const gchar *, gboolean, const gchar *, gpointer);
+void (*remove_from_lists_f)(gchar *, gpointer);
+void (*remove_watch_f)(guint32);
 /* Function Pointers */
 
 #endif

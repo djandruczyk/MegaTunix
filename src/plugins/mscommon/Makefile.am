@@ -14,6 +14,8 @@ plugin_LTLIBRARIES = libmscommon.la
 
 libmscommon_la_SOURCES = \
 	Makefile \
+	2d_table_editor.c \
+	2d_table_editor.h \
 	afr_calibrate.c \
 	afr_calibrate.h \
 	dataio.c \
@@ -48,7 +50,7 @@ libmscommon_la_SOURCES = \
 	vex_support.h
 
 
-libmscommon_la_LDFLAGS = -shared ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ $(no_undefined) -module
+libmscommon_la_LDFLAGS = -shared ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

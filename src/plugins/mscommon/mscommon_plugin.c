@@ -85,6 +85,13 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("search_model",(void *)&search_model_f);
 	get_symbol_f("set_reqfuel_color",(void *)&set_reqfuel_color_f);
 	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
+	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
+	get_symbol_f("warn_user",(void *)&warn_user_f);
+	get_symbol_f("key_event",(void *)&key_event_f);
+	get_symbol_f("focus_out_handler",(void *)&focus_out_handler_f);
+	get_symbol_f("create_value_change_watch",(void *)&create_value_change_watch_f);
+	get_symbol_f("remove_watch",(void *)&remove_watch_f);
+	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);
 }
 
 

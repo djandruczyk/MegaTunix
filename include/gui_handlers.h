@@ -48,8 +48,6 @@ typedef enum
  gboolean slider_value_changed(GtkWidget *, gpointer );
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );
-void switch_labels(gpointer , gpointer );
-void swap_labels(gchar *, gboolean );
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 guint get_bitshift(guint );

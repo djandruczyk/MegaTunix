@@ -13,7 +13,6 @@ bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
-	2d_table_editor.c \
 	3d_vetable.c \
 	about_gui.c \
 	apicheck.c \
