@@ -85,6 +85,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
 	get_symbol_f("search_model",(void *)&search_model_f);
 	get_symbol_f("get_choice_count",(void *)&get_choice_count_f);
+	get_symbol_f("set_reqfuel_color",(void *)&set_reqfuel_color_f);
 }
 
 
@@ -172,7 +173,6 @@ void register_enums(void)
 				GINT_TO_POINTER(FREEEMS));
 		g_hash_table_insert(str_2_enum,"_JIMSTIM_",
 				GINT_TO_POINTER(JIMSTIM));
-
 		g_hash_table_insert(str_2_enum,"_COUNT_",
 				GINT_TO_POINTER(COUNT));
 		g_hash_table_insert(str_2_enum,"_SUBMATCH_",

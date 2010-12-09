@@ -40,7 +40,7 @@ void (*update_widget_f)(gpointer, gpointer);
 extern gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
 extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 extern gint (*get_choice_count_f)(GtkTreeModel *);
-
+extern void (*set_reqfuel_color_f)(GuiColor, gint);
 /* Externs */
 
 /* Prototypes */

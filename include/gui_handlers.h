@@ -46,7 +46,6 @@ typedef enum
  void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
  gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
  gboolean slider_value_changed(GtkWidget *, gpointer );
-void update_ve_const_pf(void);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );
 void update_widget(gpointer, gpointer );
