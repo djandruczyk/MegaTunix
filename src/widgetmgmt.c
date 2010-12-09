@@ -226,38 +226,6 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 }
 
 
-/*!
- \brief set_widget_labels takes a passed string which is a comma 
- separated string of name/value pairs, first being the widget name 
- (global name) and the second being the string to set on this widget
- */
-G_MODULE_EXPORT void set_widget_labels(gchar *input)
-{
-	gchar ** vector = NULL;
-	gint count = 0;
-	gint i = 0;
-	GtkWidget * widget = NULL;
-
-	if (!input)
-		return;
-
-	vector = parse_keys(input,&count,",");
-	if (count%2 != 0)
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
-		return;
-	}
-	for(i=0;i<count;i+=2)
-	{
-		widget = lookup_widget(vector[i]);
-		if ((widget) && (GTK_IS_LABEL(widget)))
-			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
-		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
-	}
-	g_strfreev(vector);
-
-}
 
 /* Calculate the bounding box for a string rendered with a widget's 
  * default font. Set geo to a rect with 0,0 positioned on the left-hand 

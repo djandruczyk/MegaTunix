@@ -27,12 +27,12 @@ extern gconstpointer *global_data;
 
 
 /*!
- \brief req_fuel_change() is called whenever the req_fuel variable from 
+ \brief reqd_fuel_change() is called whenever the req_fuel variable from 
  the reqfuel_popup is changed and this recalcualtes things and updated 
  the necesary spinbuttons
  \param widget (GtkWidget *) the spinbutton that changed
  */
-G_MODULE_EXPORT void req_fuel_change(GtkWidget *widget)
+G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
 	Reqd_Fuel *reqd_fuel = NULL;
@@ -47,7 +47,7 @@ G_MODULE_EXPORT void req_fuel_change(GtkWidget *widget)
 		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
 	else
 	{
-		dbg_func_f(REQ_FUEL|CRITICAL,g_strdup(__FILE__": req_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
+		dbg_func_f(REQ_FUEL|CRITICAL,g_strdup(__FILE__": reqd_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
 		return;
 	}
 
@@ -59,11 +59,11 @@ G_MODULE_EXPORT void req_fuel_change(GtkWidget *widget)
 	reqd_fuel->actual_inj_flow = ((double)reqd_fuel->rated_inj_flow *
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tRated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tRated fuel pressure is %f bar\n",reqd_fuel->rated_pressure));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tActual fuel pressure is %f bar\n",reqd_fuel->actual_pressure));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tCalculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": req_fuel_change()\n\tTarget AFR is %f lbs/hr\n",reqd_fuel->target_afr));
+	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tRated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow));
+	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tRated fuel pressure is %f bar\n",reqd_fuel->rated_pressure));
+	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tActual fuel pressure is %f bar\n",reqd_fuel->actual_pressure));
+	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tCalculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow));
+	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tTarget AFR is %f lbs/hr\n",reqd_fuel->target_afr));
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \
@@ -785,27 +785,27 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
 	{
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 		case REQ_FUEL_CYLS:
 			reqd_fuel->cyls = (gint)value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 		case REQ_FUEL_RATED_INJ_FLOW:
 			reqd_fuel->rated_inj_flow = (gfloat)value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 		case REQ_FUEL_RATED_PRESSURE:
 			reqd_fuel->rated_pressure = (gfloat)value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 		case REQ_FUEL_ACTUAL_PRESSURE:
 			reqd_fuel->actual_pressure = (gfloat)value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 		case REQ_FUEL_AFR:
 			reqd_fuel->target_afr = value;
-			req_fuel_change(widget);
+			reqd_fuel_change(widget);
 			break;
 	}
 	return TRUE;

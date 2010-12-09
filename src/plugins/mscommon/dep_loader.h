@@ -20,7 +20,7 @@
 
 /* Externs */
 extern void (*dbg_func_f)(gint, gchar *);
-extern gchar **(*parse_keys_f)(gchar *, gint *, gchar * );
+extern gchar **(*parse_keys_f)(const gchar *, gint *, const gchar * );
 extern gint (*translate_string_f)(const gchar *);
 /* Externs */
 

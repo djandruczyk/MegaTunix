@@ -95,7 +95,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		return FALSE;
 	}
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
-	//set_title(g_strdup(_("Interrogating ECU...")));
+	/*set_title(g_strdup(_("Interrogating ECU...")));*/
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);

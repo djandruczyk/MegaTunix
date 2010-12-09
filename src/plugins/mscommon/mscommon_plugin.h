@@ -61,7 +61,7 @@ gboolean (*set_file_api_f)(ConfigFile *, gint, gint );
 gboolean (*get_file_api_f)(ConfigFile *, gint *, gint * );
 void (*stop_tickler_f)(gint);
 void (*start_tickler_f)(gint);
-gchar **(*parse_keys_f)(gchar *, gint *, gchar * );
+gchar **(*parse_keys_f)(const gchar *, gint *, const gchar * );
 gint (*get_multiplier_f)(DataSize );
 glong (*get_extreme_from_size_f)(DataSize, Extreme);
 gfloat (*convert_after_upload_f)(GtkWidget *);
@@ -79,6 +79,7 @@ void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
 gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
 gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
+void (*update_widget_f)(gpointer, gpointer);
 
 
 /* Function Pointers */

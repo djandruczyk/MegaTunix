@@ -68,7 +68,7 @@ struct _Reqd_Fuel
 gint reqd_fuel_popup(GtkWidget *);
 gboolean save_reqd_fuel(GtkWidget *, gpointer);
 gboolean close_popup(GtkWidget *);
-void req_fuel_change(GtkWidget *);
+void reqd_fuel_change(GtkWidget *);
 void check_req_fuel_limits(gint);
 Reqd_Fuel * initialize_reqd_fuel(gint );
 gboolean drain_hashtable(gpointer, gpointer, gpointer);

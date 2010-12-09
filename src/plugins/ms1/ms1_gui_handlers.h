@@ -27,9 +27,13 @@ extern void (*recalc_table_limits_f)(gint, gint);
 extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
 extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 extern gint (*convert_before_download_f)(GtkWidget *, gfloat);
+extern void (*start_tickler_f)(gint);
+extern void (*stop_tickler_f)(gint);
+extern void (*io_cmd_f)(const gchar *,void *);
 /* Externs */
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
+gboolean ecu_button_handler(GtkWidget *, gpointer);
 /* Prototypes */
 #endif

@@ -391,172 +391,29 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint bitshift = -1;
-	gint bitval = -1;
-	gint bitmask = -1;
-	gint dload_val = -1;
-	gint canID = 0;
-	gint page = -1;
-	gint tmp = 0;
-	gint tmp32 = 0;
-	gint offset = -1;
-	DataSize size = 0;
-	gint dl_type = -1;
-	gint handler = 0;
-	gint table_num = -1;
-	Deferred_Data *d_data = NULL;
-	gchar * swap_list = NULL;
-	gchar * set_labels = NULL;
-	gchar * table_2_update = NULL;
-	gchar * group_2_update = NULL;
-	GHashTable **interdep_vars = NULL;
-	GHashTable *sources_hash = NULL;
-	Firmware_Details *firmware = NULL;
-	void (*check_limits)(gint) = NULL;
-
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
-
-
-	if ((DATA_GET(global_data,"paused_handlers")) || 
-			(!DATA_GET(global_data,"ready")))
-		return TRUE;
+	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
-		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return TRUE;
 
-	canID = (GINT)OBJ_GET(widget,"canID");
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
-	size = (DataSize)OBJ_GET(widget,"size");
-	dl_type = (GINT)OBJ_GET(widget,"dl_type");
-	bitval = (GINT)OBJ_GET(widget,"bitval");
-	bitmask = (GINT)OBJ_GET(widget,"bitmask");
-	bitshift = get_bitshift(bitmask);
-	handler = (GINT)OBJ_GET(widget,"handler");
-	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
-	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
-	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
-	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
-
-
-	/* If it's a check button then it's state is dependant on the button's state*/
-	if (!GTK_IS_RADIO_BUTTON(widget))
-		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	switch ((MtxButton)handler)
+	if (!common_handler)
 	{
-		case MULTI_EXPRESSION:
-			/*printf("MULTI_EXPRESSION CHANGE\n");*/
-			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
-			{
-		/*		printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
-				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
-			}
-			/* FAll Through */
-		case GENERIC:
-			tmp = get_ecu_data(canID,page,offset,size);
-			tmp = tmp & ~bitmask;	/*clears bits */
-			tmp = tmp | (bitval << bitshift);
-			dload_val = tmp;
-			if (dload_val == get_ecu_data(canID,page,offset,size))
-				return FALSE;
-			break;
-		case DEBUG_LEVEL:
-			/* Debugging selection buttons */
-			tmp32 = (GINT)DATA_GET(global_data,"dbg_lvl");
-			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bitval << bitshift);
-			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmp32));
-			break;
-
-		case ALT_SIMUL:
-			/* Alternate or simultaneous */
-			if (firmware->capabilities & MSNS_E)
-			{
-				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-				tmp = get_ecu_data(canID,page,offset,size);
-				tmp = tmp & ~bitmask;/* clears bits */
-				tmp = tmp | (bitval << bitshift);
-				dload_val = tmp;
-				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, get_ecu_data(canID,page,offset,size));*/
-				if (dload_val == get_ecu_data(canID,page,offset,size))
-					return FALSE;
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				/*printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);*/
-
-				d_data = g_new0(Deferred_Data, 1);
-				d_data->canID = canID;
-				d_data->page = page;
-				d_data->offset = offset;
-				d_data->value = dload_val;
-				d_data->size = MTX_U08;
-				g_hash_table_replace(interdep_vars[table_num],
-						GINT_TO_POINTER(offset),
-						d_data);
-				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
-					check_limits(table_num);
-			}
-			else
-			{
-				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-				dload_val = bitval;
-				if (dload_val == get_ecu_data(canID,page,offset,size))
-					return FALSE;
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				d_data = g_new0(Deferred_Data, 1);
-				d_data->canID = canID;
-				d_data->page = page;
-				d_data->offset = offset;
-				d_data->value = dload_val;
-				d_data->size = MTX_U08;
-				g_hash_table_replace(interdep_vars[table_num],
-						GINT_TO_POINTER(offset),
-						d_data);
-				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
-					check_limits(table_num);
-			}
-			break;
-		default:
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset));
+		if (get_symbol("common_bitmask_button_handler",(void *)&common_handler))
+			return common_handler(widget,data);
+		else
+		{
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tiBitmask button handler in common plugin is MISSING, BUG!\n"));
 			return FALSE;
-			break;
-
+		}
 	}
-
-	/* Swaps the label of another control based on widget state... */
-	if ((set_labels) && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-		set_widget_labels(set_labels);
-	if (swap_list)
-		swap_labels(swap_list,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-	/* MUST use dispatcher, as the update functions run outside of the
-	 * normal GTK+ context, so if we were to call it direct we'd get a 
-	 * deadlock due to gtk_threads_enter/leave() calls,  so we use the
-	 * dispatch queue to let it run in the correct "state"....
-	 */
-	if (table_2_update)
-		gdk_threads_add_timeout(2000,force_update_table,table_2_update);
-	
-	/* Update controls that are dependant on a controls state...
-	 * In this case, MAP sensor related ctrls */
-	if (group_2_update)
-	{
-		gdk_threads_add_timeout(2000,force_view_recompute,NULL);
-		gdk_threads_add_timeout(2000,trigger_group_update,group_2_update);
-	}
-
-	if (dl_type == IMMEDIATE)
-	{
-		dload_val = convert_before_download(widget,dload_val);
-		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
-	}
-	return TRUE;
+	else
+		return common_handler(widget,data);
 }
+
 
 
 /*!
@@ -605,34 +462,27 @@ G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *eve
  */
 G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 {
-	gint page = 0;
-	gint offset = 0;
-	DataSize size = 0;
-	gint canID = 0;
-	MtxButton handler = -1;
-	gint dl_type = -1;
-	gfloat value = 0.0;
-	gint dload_val = 0;
+	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
-	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
-	size = (DataSize)OBJ_GET(widget,"size");
-	canID = (GINT)OBJ_GET(widget,"canID");
-	
-	value = gtk_range_get_value(GTK_RANGE(widget));
-	dload_val = convert_before_download(widget,value);
-
-	if (dl_type == IMMEDIATE)
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
 	{
-		/* If data has NOT changed,  don't bother updating 
-		 * and wasting time.
-		 */
-		if (dload_val != get_ecu_data(canID,page,offset,size))
-			send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		return TRUE;
 	}
-	return FALSE; /* Let other handlers run! */
+	if (!common_handler)
+	{
+		if (get_symbol("common_slider_handler",(void *)&common_handler))
+			return common_handler(widget,data);
+		else
+		{
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tEntry handler in common plugin is MISSING, BUG!\n"));
+			return FALSE;
+		}
+	}
+	else
+		return common_handler(widget,data);
+
 }
 
 
@@ -648,19 +498,29 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
-	gboolean res = FALSE;
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
-	if (!common_handler)
-		get_symbol("common_entry_handler",(void *)&common_handler);
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
 
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+	{
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		return TRUE;
+	}
 	if (!common_handler)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tEntry handler in common plugin is MISSING, BUG!\n",base));
-		return FALSE;
+		if (get_symbol("common_entry_handler",(void *)&common_handler))
+			return common_handler(widget,data);
+		else
+		{
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tEntry handler in common plugin is MISSING, BUG!\n"));
+			return FALSE;
+		}
 	}
-	res = common_handler(widget,data);
-	return res;
+	else
+		return common_handler(widget,data);
 }
 
 
@@ -675,24 +535,11 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
+
+	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 	void *obj_data = NULL;
 	gint handler = -1;
-	gint tmpi = 0;
-	gint tmp2 = 0;
-	gint page = 0;
-	gint offset = 0;
-	gint canID = 0;
-	gint raw_lower = 0;
-	gint raw_upper = 0;
-	DataSize size = 0;
-	gfloat tmpf = 0.0;
-	gchar * tmpbuf = NULL;
-	gchar * dest = NULL;
-	gboolean restart = FALSE;
 	Firmware_Details *firmware = NULL;
-	void (*rf_popup)(GtkWidget *) = NULL;
-	void (*rf_change)(GtkWidget *) = NULL;
-	void (*rf_rescale)(GtkWidget *) = NULL;
 	void (*select_for)(gint) = NULL;
 	void (*revert)(void) = NULL;
 
@@ -715,40 +562,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case PHONE_HOME:
 			printf("Phone home (callback TCP) is not yet implemented, ask nicely\n");
 			break;
-		case INCREMENT_VALUE:
-		case DECREMENT_VALUE:
-			dest = OBJ_GET(widget,"partner_widget");
-			tmp2 = (GINT)OBJ_GET(widget,"amount");
-			if (OBJ_GET(dest,"raw_lower"))
-				raw_lower = (gint)strtol(OBJ_GET(dest,"raw_lower"),NULL,10);
-			else
-				raw_lower = get_extreme_from_size(size,LOWER);
-			if (OBJ_GET(dest,"raw_upper"))
-				raw_upper = (gint)strtol(OBJ_GET(dest,"raw_upper"),NULL,10);
-			else
-				raw_upper = get_extreme_from_size(size,UPPER);
-			canID = (GINT)OBJ_GET(dest,"canID");
-			page = (GINT)OBJ_GET(dest,"page");
-			size = (DataSize)OBJ_GET(dest,"size");
-			offset = (GINT)OBJ_GET(dest,"offset");
-			tmpi = get_ecu_data(canID,page,offset,size);
-			if (handler == INCREMENT_VALUE)
-				tmpi = tmpi+tmp2 > raw_upper? raw_upper:tmpi+tmp2;
-			else 
-				tmpi = tmpi-tmp2 < raw_lower? raw_lower:tmpi-tmp2;
-			send_to_ecu(canID, page, offset, size, tmpi, TRUE);
-			break;
-		case GET_CURR_TPS:
-			tmpbuf = OBJ_GET(widget,"source");
-			lookup_current_value(tmpbuf,&tmpf);
-			dest = OBJ_GET(widget,"dest_widget");
-			tmpbuf = g_strdup_printf("%.0f",tmpf);
-			gtk_entry_set_text(GTK_ENTRY(lookup_widget(dest)),tmpbuf);
-			g_signal_emit_by_name(lookup_widget(dest),"activate",NULL);
-
-			g_free(tmpbuf);
-			break;
-
 		case EXPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
 				if(get_symbol("select_table_for_export",(void*)&select_for))
@@ -761,12 +574,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);
-			break;
-		case REQFUEL_RESCALE_TABLE:
-
-			printf("reqfuel rescale table!\n");
-			if (get_symbol("reqfuel_rescale_table",(void*)&rf_rescale))
-				rf_rescale(widget);
 			break;
 		case INTERROGATE_ECU:
 			set_title(g_strdup(_("User initiated interrogation...")));
@@ -796,27 +603,9 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			stop_tickler(RTV_TICKLER);
 			break;
-		case REBOOT_GETERR:
-			if (DATA_GET(global_data,"offline"))
-				break;
-			if (DATA_GET(global_data,"realtime_id"))
-			{
-				stop_tickler(RTV_TICKLER);
-				restart = TRUE;
-			}
-			gtk_widget_set_sensitive(widget,FALSE);
-			io_cmd("ms1_extra_reboot_get_error",NULL);
-			if (restart)
-				start_tickler(RTV_TICKLER);
-			break;
 		case READ_VE_CONST:
 			set_title(g_strdup(_("Reading VE/Constants...")));
 			io_cmd(firmware->get_all_command, NULL);
-			break;
-		case READ_RAW_MEMORY:
-			if (DATA_GET(global_data,"offline"))
-				break;
-			/*io_cmd(firmware->raw_mem_command,(gpointer)obj_data);*/
 			break;
 		case BURN_MS_FLASH:
 			io_cmd(firmware->burn_all_command,NULL);
@@ -856,12 +645,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_logfile_button")),FALSE);
 			present_viewer_choices();
 			break;
-		case REQ_FUEL_POPUP:
-			if (get_symbol("reqd_fuel_popup",(void *)&rf_popup))
-				rf_popup(widget);
-			if (get_symbol("reqd_fuel_change",(void *)&rf_change))
-				rf_change(widget);
-			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
 			g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
@@ -875,7 +658,16 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		default:
-			dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n"));
+			if (!common_handler)
+			{
+				if (get_symbol("common_button_handler",(void *)&common_handler))
+					return common_handler(widget,data);
+				else
+					dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
+			}
+			else
+				return common_handler(widget,data);
+			break;
 	}		
 	return TRUE;
 }
@@ -1790,71 +1582,6 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 }
 
 
-/*!
- \brief trigger_group_update() updates a subset of widgets (any widgets in
- the group name passed. This runs as a timeout delayed asynchronously from
- when the ctrl is modified, to prevent a deadlock.
- \param data, string name of list of controls
- */
-G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
-{
-	if (DATA_GET(global_data,"leaving"))
-		return FALSE;
-
-	g_list_foreach(get_list((gchar *)data),update_widget,NULL);
-	return FALSE;/* Make it cancel and not run again till called */
-}
-
-/*!
- \brief force_update_table() updates a subset of widgets (specifically ONLY
- the Z axis widgets) of a table on screen.
- \param table_num, integer number of the table in question
- */
-G_MODULE_EXPORT gboolean force_update_table(gpointer data)
-{
-	gint offset = -1;
-	gint page = -1;
-	gint table_num = -1;
-	gint base = 0;
-	gint length = 0;
-	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
-
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
-
-	firmware = DATA_GET(global_data,"firmware");
-
-	if (DATA_GET(global_data,"leaving"))
-		return FALSE;
-	if (page > firmware->total_pages)
-	       return FALSE;
-	table_num = (gint)strtol((gchar *)data,NULL,10);
-	if ((table_num < 0) || (table_num > (firmware->total_tables-1)))
-		return FALSE;
-	base = firmware->table_params[table_num]->z_base;
-	length = firmware->table_params[table_num]->x_bincount *
-		firmware->table_params[table_num]->y_bincount;
-	page =  firmware->table_params[table_num]->z_page;
-	for (offset=base;offset<base+length;offset++)
-	{
-		if ((DATA_GET(global_data,"leaving")) || (!firmware))
-			return FALSE;
-		if (ve_widgets[page][offset] != NULL)
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-	}
-	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	return FALSE;
-}
-
-
-/*!
- \brief update_widget() updates a widget on screen.  All parameters re the
- conversions and where the raw value is stored is embedded within the widget 
- itself.
- \param object (gpointer) pointer to the widget object
- \param user_data (gpointer) pointer to a widget to compare against to 
- prevent a race
- */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
 	GtkWidget * widget = object;
@@ -2919,80 +2646,6 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 	return;
 }
 
-
-/*!
- \brief swap_labels() is a utility function that extracts the list passed to 
- it, and kicks off a subfunction to do the swapping on each widget in the list
- \param input (gchar *) name of list to enumeration and run the subfunction
- on.
- \param state (gboolean) passed on to subfunction
- the default label
- */
-G_MODULE_EXPORT void swap_labels(gchar * input, gboolean state)
-{
-	GList *list = NULL;
-	GtkWidget *widget = NULL;
-	gchar **fields = NULL;
-	gint i = 0;
-	gint num_widgets = 0;
-
-	fields = parse_keys(input,&num_widgets,",");
-
-	for (i=0;i<num_widgets;i++)
-	{
-		widget = NULL;
-		widget = lookup_widget(fields[i]);
-		if (GTK_IS_WIDGET(widget))
-			switch_labels((gpointer)widget,GINT_TO_POINTER(state));
-		else if ((list = get_list(fields[i])) != NULL)
-			g_list_foreach(list,switch_labels,GINT_TO_POINTER(state));
-	}
-	g_strfreev(fields);
-
-}
-/*!
- \brief switch_labels() swaps labels that depend on the state of another 
- control. Handles temp dependant labels as well..
- \param key (gpointer) gpointer encapsulation of the widget
- \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
- we use the alternate label, if FALSE we use
- the default label
- */
-G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
-{
-	GtkWidget * widget = (GtkWidget *) key;
-	gboolean state = (GBOOLEAN) data;
-	gint temp_units;
-
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
-	if (GTK_IS_WIDGET(widget))
-	{
-		if ((GBOOLEAN)OBJ_GET(widget,"temp_dep") == TRUE)
-		{
-			if (state)
-			{
-				if (temp_units == FAHRENHEIT)
-					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_f_label"));
-				else
-					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_c_label"));
-			}
-			else
-			{
-				if (temp_units == FAHRENHEIT)
-					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"f_label"));
-				else
-					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"c_label"));
-			}
-		}
-		else
-		{
-			if (state)
-				gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_label"));
-			else
-				gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"label"));
-		}
-	}
-}
 
 
 /*!

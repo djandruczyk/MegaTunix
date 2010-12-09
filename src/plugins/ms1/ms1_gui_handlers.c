@@ -214,3 +214,32 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 
 }
+
+
+gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
+{
+	gint handler = -1;
+	gboolean restart = FALSE;
+
+	handler = (GINT)OBJ_GET(widget,"handler");
+
+	switch (handler)
+	{
+		case REBOOT_GETERR:
+			if (DATA_GET(global_data,"offline"))
+				break;
+			if (DATA_GET(global_data,"realtime_id"))
+			{
+				stop_tickler_f(RTV_TICKLER);
+				restart = TRUE;
+			}
+			gtk_widget_set_sensitive(widget,FALSE);
+			io_cmd_f("ms1_extra_reboot_get_error",NULL);
+			if (restart)
+				start_tickler_f(RTV_TICKLER);
+			break;
+		default:
+			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_button_handler()\n\tdefault case reached,  i.e. handler not foudn in global, common or ECU plugins, BUG!\n"));
+			break;
+	}
+}

@@ -24,7 +24,7 @@ extern gboolean (*set_file_api_f)(ConfigFile *, gint , gint );
 extern gboolean (*get_file_api_f)(ConfigFile *, gint *, gint *);
 extern void (*stop_tickler_f)(gint);
 extern void (*start_tickler_f)(gint);
-extern gchar **(*parse_keys_f)(gchar *, gint *, gchar * );
+extern gchar **(*parse_keys_f)(const gchar *, gint *, const gchar * );
 extern void(*set_title_f)(const gchar *);
 
 /* Externs */

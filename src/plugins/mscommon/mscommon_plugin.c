@@ -44,6 +44,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
+	get_symbol_f("update_widget",(void *)&update_widget_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("direct_lookup_data",(void *)&direct_lookup_data_f);

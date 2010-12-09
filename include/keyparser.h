@@ -17,8 +17,8 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gchar ** parse_keys(gchar *, gint *, gchar * );
-gint * parse_keytypes(gchar *, gint *, gchar * );
+gchar ** parse_keys(const gchar *, gint *, const gchar * );
+gint * parse_keytypes(const gchar *, gint *, const gchar * );
 
 /* Prototypes */
 
