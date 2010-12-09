@@ -130,3 +130,157 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	g_free(regex);
 
 }
+
+
+void update_ms2_user_outputs(GtkWidget *widget)
+{
+	GtkTreeModel *model = NULL;
+	DataSize size = MTX_U08;
+	GtkTreeIter iter;
+	gchar * dl_conv = NULL;
+	gchar * ul_conv = NULL;
+	gchar *lower = NULL;
+	gchar *upper = NULL;
+	gchar *range = NULL;
+	gchar *tmpbuf = NULL;
+	gfloat tmpf = 0.0;
+	gfloat tmpf2 = 0.0;
+	gint precision = 0;
+	void *eval = NULL;
+	GtkWidget *tmpwidget = NULL;
+
+
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+
+	/* Get the rest of the data from the combo */
+	gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+	tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
+	if (tmpbuf)
+		tmpwidget = lookup_widget_f(tmpbuf);
+	if (GTK_IS_LABEL(tmpwidget))
+		gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+	tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
+	if (tmpbuf)
+		tmpwidget = lookup_widget_f(tmpbuf);
+	if (GTK_IS_WIDGET(tmpwidget))
+	{
+		eval = NULL;
+		eval = OBJ_GET(tmpwidget,"dl_evaluator");
+		if (eval)
+		{
+			evaluator_destroy_f(eval);
+			OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+			eval = NULL;
+		}
+		if (dl_conv)
+		{
+			eval = evaluator_create_f(dl_conv);
+			OBJ_SET(tmpwidget,"dl_evaluator",eval);
+			if (upper)
+			{
+				tmpf2 = g_ascii_strtod(upper,NULL);
+				tmpf = evaluator_evaluate_x_f(eval,tmpf2);
+				tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+				if (tmpbuf)
+					g_free(tmpbuf);
+				OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+				/*printf("update_widget thresh has dl conv expr and upper limit of %f\n",tmpf);*/
+			}
+			if (lower)
+			{
+				tmpf2 = g_ascii_strtod(lower,NULL);
+				tmpf = evaluator_evaluate_x_f(eval,tmpf2);
+				tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+				if (tmpbuf)
+					g_free(tmpbuf);
+				OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+				/*printf("update_widget thresh has dl conv expr and lower limit of %f\n",tmpf);*/
+			}
+		}
+		else
+			OBJ_SET(tmpwidget,"raw_upper",upper);
+
+		eval = NULL;
+		eval = OBJ_GET(tmpwidget,"ul_evaluator");
+		if (eval)
+		{
+			evaluator_destroy_f(eval);
+			OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+			eval = NULL;
+		}
+		if (ul_conv)
+		{
+			eval = evaluator_create_f(ul_conv);
+			OBJ_SET(tmpwidget,"ul_evaluator",eval);
+		}
+		OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+		OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+		OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+		OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+		/*printf ("update widgets setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+		update_widget_f(tmpwidget,NULL);
+	}
+	tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
+	if (tmpbuf)
+		tmpwidget = lookup_widget_f(tmpbuf);
+	if (GTK_IS_WIDGET(tmpwidget))
+	{
+		eval = NULL;
+		eval = OBJ_GET(tmpwidget,"dl_evaluator");
+		if (eval)
+		{
+			evaluator_destroy_f(eval);
+			OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+			eval = NULL;
+		}
+		if (dl_conv)
+		{
+			eval = evaluator_create_f(dl_conv);
+			OBJ_SET(tmpwidget,"dl_evaluator",eval);
+			if (upper)
+			{
+				tmpf2 = g_ascii_strtod(upper,NULL);
+				tmpf = evaluator_evaluate_x_f(eval,tmpf2);
+				tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
+				if (tmpbuf)
+					g_free(tmpbuf);
+				OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+				/*printf("update_widget hyst has dl conv expr and upper limit of %f\n",tmpf);*/
+			}
+			if (lower)
+			{
+				tmpf2 = g_ascii_strtod(lower,NULL);
+				tmpf = evaluator_evaluate_x_f(eval,tmpf2);
+				tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
+				if (tmpbuf)
+					g_free(tmpbuf);
+				OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+				/*printf("update_widget hyst has dl conv expr and lower limit of %f\n",tmpf);*/
+			}
+		}
+		else
+			OBJ_SET(tmpwidget,"raw_upper",upper);
+
+		eval = NULL;
+		eval = OBJ_GET(tmpwidget,"ul_evaluator");
+		if (eval)
+		{
+			evaluator_destroy_f(eval);
+			OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+			eval = NULL;
+		}
+		if (ul_conv)
+		{
+			eval = evaluator_create_f(ul_conv);
+			OBJ_SET(tmpwidget,"ul_evaluator",eval);
+		}
+		OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
+		OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
+		OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+		OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
+		/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+		update_widget_f(tmpwidget,NULL);
+	}
+}
+
+                             

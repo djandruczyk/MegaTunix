@@ -676,3 +676,4 @@ G_MODULE_EXPORT gboolean deferred_model_update(GtkWidget * widget)
 	return FALSE;
 }
 
+

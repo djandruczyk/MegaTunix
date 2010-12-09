@@ -48,15 +48,10 @@ typedef enum
  gboolean slider_value_changed(GtkWidget *, gpointer );
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );
-void update_widget(gpointer, gpointer );
 void switch_labels(gpointer , gpointer );
 void swap_labels(gchar *, gboolean );
-void toggle_groups_linked(GtkWidget *, gboolean);
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
-void combo_toggle_groups_linked(GtkWidget *,gint);
-void combo_toggle_labels_linked(GtkWidget *,gint);
-gint get_choice_count(GtkTreeModel *);
 guint get_bitshift(guint );
  void update_misc_gauge(DataWatch *);
 void thread_refresh_widgets_at_offset(gint, gint);
@@ -67,7 +62,6 @@ void recalc_table_limits(gint, gint);
 void refocus_cell(GtkWidget *, Direction);
 void set_widget_label_from_array(gpointer, gpointer);
 void insert_text_handler(GtkEntry *, const gchar *, gint, gint *, gpointer);
-gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 
 /* Prototypes */

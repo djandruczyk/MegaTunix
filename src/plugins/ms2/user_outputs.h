@@ -24,7 +24,8 @@ extern void (*dbg_func_f)(gint, gchar *);
 extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
 extern gfloat (*direct_lookup_data_f)(gchar *, gint );
 extern gint (*direct_reverse_lookup_f)(gchar *, gint );
-
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern void (*update_widget_f)(gpointer, gpointer);
 /* Externs */
 
 enum
@@ -43,6 +44,8 @@ enum
 
 /* Prototypes */
 void ms2_output_combo_setup(GtkWidget *);
+void update_ms2_user_outputs(GtkWidget *);
+
 
 /* Prototypes */
 

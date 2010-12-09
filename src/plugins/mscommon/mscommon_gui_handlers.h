@@ -36,11 +36,11 @@ extern gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
 extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 extern guint (*get_bitshift_f)(guint);
 extern GList *(*get_list_f)(gchar *);
-void (*update_widget_f)(gpointer, gpointer);
 extern gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
 extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-extern gint (*get_choice_count_f)(GtkTreeModel *);
 extern void (*set_reqfuel_color_f)(GuiColor, gint);
+extern gint (*translate_string_f)(const gchar *);
+extern void (*alter_widget_state_f)(gpointer, gpointer);
 /* Externs */
 
 /* Prototypes */
@@ -49,14 +49,33 @@ gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
 gboolean common_slider_handler(GtkWidget *, gpointer);
 gboolean common_button_handler(GtkWidget *, gpointer);
 gboolean common_combo_handler(GtkWidget *, gpointer);
-
 gboolean common_spin_handler(GtkWidget *, gpointer);
+
 void set_widget_labels(const gchar *);
-void swap_labels(const gchar *, gboolean);
+void swap_labels(GtkWidget *, gboolean);
 void switch_labels(gpointer, gpointer);
+void update_combo(GtkWidget *);
+void update_entry(GtkWidget *);
+void update_checkbutton(GtkWidget *);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer);
 gboolean update_multi_expression(gpointer);
+void combo_handle_group_2_update(GtkWidget *);
+void combo_handle_algorithms(GtkWidget *);
+void handle_group_2_update(GtkWidget *);
+void handle_algorithm(GtkWidget *);
+gint get_choice_count(GtkTreeModel *);
+void combo_set_labels(GtkWidget *, GtkTreeModel *);
+gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
+void toggle_groups_linked(GtkWidget *, gboolean);
+void combo_toggle_groups_linked(GtkWidget *,gint);
+void combo_toggle_labels_linked(GtkWidget *,gint);
+void set_widget_label_from_array(gpointer, gpointer);
+void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
+void update_widget(gpointer, gpointer);
+
+
 /* Prototypes */
 
 

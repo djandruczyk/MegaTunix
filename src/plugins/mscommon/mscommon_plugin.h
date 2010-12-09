@@ -79,10 +79,9 @@ void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
 gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
 gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
-void (*update_widget_f)(gpointer, gpointer);
 gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-gint (*get_choice_count_f)(GtkTreeModel *);
 void (*set_reqfuel_color_f)(GuiColor, gint);
+void (*alter_widget_state_f)(gpointer, gpointer);
 /* Function Pointers */
 
 #endif
