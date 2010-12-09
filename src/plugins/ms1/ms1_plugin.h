@@ -43,6 +43,7 @@ void (*recalc_table_limits_f)(gint, gint);
 glong (*get_extreme_from_size_f)(DataSize, Extreme);
 GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
+guint (*get_bitshift_f)(guint);
 /* Function Pointers */
 
 #endif

@@ -48,6 +48,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
+	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
 }
 
 

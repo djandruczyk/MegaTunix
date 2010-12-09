@@ -813,12 +813,12 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
 
 
 /*!
-   \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
-    newly sent reqfuel variable.
-     \param widget_name is the widget of the scaler widget 
-      that was used. From this widget we extract the table number and other 
-       needed data to properly do the rescaling.
-        */
+ \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
+ newly sent reqfuel variable.
+ \param widget_name is the widget of the scaler widget 
+ that was used. From this widget we extract the table number and other 
+ needed data to properly do the rescaling.
+ */
 G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 {
 	DataSize z_size = MTX_U08;

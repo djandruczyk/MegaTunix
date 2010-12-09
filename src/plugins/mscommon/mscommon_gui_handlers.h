@@ -38,6 +38,9 @@ extern guint (*get_bitshift_f)(guint);
 extern GList *(*get_list_f)(gchar *);
 void (*update_widget_f)(gpointer, gpointer);
 extern gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
+extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
+extern gint (*get_choice_count_f)(GtkTreeModel *);
+
 /* Externs */
 
 /* Prototypes */
@@ -45,14 +48,15 @@ gboolean common_entry_handler(GtkWidget *, gpointer);
 gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
 gboolean common_slider_handler(GtkWidget *, gpointer);
 gboolean common_button_handler(GtkWidget *, gpointer);
+gboolean common_combo_handler(GtkWidget *, gpointer);
 
 gboolean common_spin_handler(GtkWidget *, gpointer);
-gboolean common_combo_handler(GtkWidget *, gpointer);
 void set_widget_labels(const gchar *);
 void swap_labels(const gchar *, gboolean);
 void switch_labels(gpointer, gpointer);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer);
+gboolean update_multi_expression(gpointer);
 /* Prototypes */
 
 

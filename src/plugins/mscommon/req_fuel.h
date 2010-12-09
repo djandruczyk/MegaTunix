@@ -73,6 +73,7 @@ void check_req_fuel_limits(gint);
 Reqd_Fuel * initialize_reqd_fuel(gint );
 gboolean drain_hashtable(gpointer, gpointer, gpointer);
 gboolean rf_spin_button_handler(GtkWidget *, gpointer);
+void reqfuel_rescale_table(GtkWidget *);
 
 /* Prototypes */
 

@@ -44,6 +44,13 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("initialize_gc",(void *)&initialize_gc_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("create_single_bit_state_watch",(void *)&create_single_bit_state_watch_f);
+	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
+	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);
+	get_symbol_f("evaluator_evaluate_x",(void *)&evaluator_evaluate_x_f);
+	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
+	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
+	get_symbol_f("update_widget",(void *)&update_widget_f);
+	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 
 	register_enums();
 }

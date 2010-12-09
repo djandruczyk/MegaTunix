@@ -6,7 +6,7 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libmtxcommon.la
 
-libmtxcommon_la_SOURCES = crx.c getfiles.c configfile.c xmlbase.c
+libmtxcommon_la_SOURCES = getfiles.c configfile.c xmlbase.c
 
 libmtxcommon_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@
 

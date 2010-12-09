@@ -83,6 +83,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
+	get_symbol_f("search_model",(void *)&search_model_f);
+	get_symbol_f("get_choice_count",(void *)&get_choice_count_f);
 }
 
 

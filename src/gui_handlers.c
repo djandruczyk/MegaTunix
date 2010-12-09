@@ -59,7 +59,6 @@
 
 
 extern void (*send_to_ecu)(gint, gint, gint, DataSize, gint, gboolean);
-static gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
@@ -476,7 +475,7 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 			return common_handler(widget,data);
 		else
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tEntry handler in common plugin is MISSING, BUG!\n"));
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": slider_value_changes()\n\tSlider handler in common plugin is MISSING, BUG!\n"));
 			return FALSE;
 		}
 	}
@@ -681,340 +680,29 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 {
-	GtkTreeIter iter;
-	GtkTreeModel *model = NULL;
-	gboolean state = FALSE;
-	gint handler = 0; 
-	gint bitmask = 0;
-	gint bitshift = 0;
-	gint total = 0;
-	guchar bitval = 0;
-	gchar * set_labels = NULL;
-	gchar * swap_list = NULL;
-	gchar * tmpbuf = NULL;
-	gchar * table_2_update = NULL;
-	gchar * group_2_update = NULL;
-	gchar * lower = NULL;
-	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
-	gint precision = 0;
-	gchar ** vector = NULL;
-	guint i = 0;
-	gint tmpi = 0;
-	gint page = 0;
-	gint offset = 0;
-	gint canID = 0;
-	gint table_num = 0;
-	gchar * range = NULL;
-	DataSize size = MTX_U08;
-	gchar * choice = NULL;
-	guint8 tmp = 0;
-	gint dload_val = 0;
-	gint dl_type = 0;
-	gfloat tmpf = 0.0;
-	gfloat tmpf2 = 0.0;
-	Deferred_Data *d_data = NULL;
-	GtkWidget *tmpwidget = NULL;
-	void *eval = NULL;
-	GHashTable **interdep_vars = NULL;
-	GHashTable *sources_hash = NULL;
-	Firmware_Details *firmware = NULL;
-	void (*check_limits)(gint) = NULL;
-
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
-
-	if ((DATA_GET(global_data,"paused_handlers")) || 
-			(!DATA_GET(global_data,"ready")))
-		return TRUE;
+	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	page = (GINT) OBJ_GET(widget,"page");
-	offset = (GINT) OBJ_GET(widget,"offset");
-	bitmask = (GINT) OBJ_GET(widget,"bitmask");
-	bitshift = get_bitshift(bitmask);
-	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	handler = (GINT) OBJ_GET(widget,"handler");
-	canID = (GINT)OBJ_GET(widget,"canID");
-	size = (DataSize)OBJ_GET(widget,"size");
-	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
-	swap_list = (gchar *)OBJ_GET(widget,"swap_labels");
-	table_2_update = (gchar *)OBJ_GET(widget,"table_2_update");
-	group_2_update = (gchar *)OBJ_GET(widget,"group_2_update");
-
-	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
-	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-	if (state == 0)	
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
 	{
-		/* Not selected by combo popdown button, thus is being edited. 
-		 * Do a model scan to see if we actually hit the jackpot or 
-		 * not, and get the iter for it...
-		 */
-		if (!search_model(model,widget,&iter))
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		return TRUE;
+	}
+	if (!common_handler)
+	{
+		if (get_symbol("common_combo_handler",(void *)&common_handler))
+			return common_handler(widget,data);
+		else
+		{
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_combo_handler()\n\tCombo handler in common plugin is MISSING, BUG!\n"));
 			return FALSE;
-	}
-	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
-			BITVAL_COL,&bitval,-1);
-
-	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
-	switch ((MtxButton)handler)
-	{
-		case MULTI_EXPRESSION:
-			/*printf("combo MULTI EXPRESSION\n");*/
-			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
-			{
-				tmpbuf = OBJ_GET(widget,"source_values");
-				vector = g_strsplit(tmpbuf,",",-1);
-				if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
-				{
-					printf("combo size doesn't match source_values for multi_expression\n");
-					return FALSE;
-				}
-				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
-				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
-				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
-			}
-		case GENERIC:
-			tmp = get_ecu_data(canID,page,offset,size);
-			tmp = tmp & ~bitmask;	/*clears bits */
-			tmp = tmp | (bitval << bitshift);
-			dload_val = tmp;
-			if (dload_val == get_ecu_data(canID,page,offset,size))
-				return FALSE;
-			break;
-		case ALT_SIMUL:
-			/* Alternate or simultaneous */
-			if (firmware->capabilities & MSNS_E)
-			{
-				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-				tmp = get_ecu_data(canID,page,offset,size);
-				tmp = tmp & ~bitmask;/* clears bits */
-				tmp = tmp | (bitval << bitshift);
-				dload_val = tmp;
-				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, get_ecu_data(canID,page,offset,size));*/
-				if (dload_val == get_ecu_data(canID,page,offset,size))
-					return FALSE;
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				/*printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);*/
-
-				d_data = g_new0(Deferred_Data, 1);
-				d_data->canID = canID;
-				d_data->page = page;
-				d_data->offset = offset;
-				d_data->value = dload_val;
-				d_data->size = MTX_U08;
-				g_hash_table_replace(interdep_vars[table_num],
-						GINT_TO_POINTER(offset),
-						d_data);
-				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
-					check_limits(table_num);
-			}
-			else
-			{
-				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-				dload_val = bitval;
-				if (dload_val == get_ecu_data(canID,page,offset,size))
-				{
-					return FALSE;
-				}
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				d_data = g_new0(Deferred_Data, 1);
-				d_data->canID = canID;
-				d_data->page = page;
-				d_data->offset = offset;
-				d_data->value = dload_val;
-				d_data->size = MTX_U08;
-				g_hash_table_replace(interdep_vars[table_num],
-						GINT_TO_POINTER(offset),
-						d_data);
-				if (get_symbol("check_req_fuel_limits",(void *)&check_limits))
-					check_limits(table_num);
-			}
-			break;
-		case MS2_USER_OUTPUTS:
-			/* Send the offset */
-			tmp = get_ecu_data(canID,page,offset,size);
-			tmp = tmp & ~bitmask;	/*clears bits */
-			tmp = tmp | (bitval << bitshift);
-			send_to_ecu(canID, page, offset, size, tmp, TRUE);
-			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
-
-			/* Send the "size" of the offset to the ecu */
-			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
-			send_to_ecu(canID, page, offset, MTX_U08,size, TRUE);
-
-			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
-			if (tmpbuf)
-				tmpwidget = lookup_widget(tmpbuf);
-			if (GTK_IS_LABEL(tmpwidget))
-				gtk_label_set_text(GTK_LABEL(tmpwidget),range);
-
-			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
-			if (tmpbuf)
-				tmpwidget = lookup_widget(tmpbuf);
-			if (GTK_IS_WIDGET(tmpwidget))
-			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
-				{
-					evaluator_destroy(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
-					if (upper)
-					{
-						tmpf2 = g_ascii_strtod(upper,NULL);
-						tmpf = evaluator_evaluate_x(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
-						/*printf("combo_handler thresh has dl conv expr and upper limit of %f\n",tmpf);*/
-					}
-					if (lower)
-					{
-						tmpf2 = g_ascii_strtod(lower,NULL);
-						tmpf = evaluator_evaluate_x(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
-						/*printf("combo_handler thresh has dl conv expr and lower limit of %f\n",tmpf);*/
-					}
-				}
-				else
-					OBJ_SET(tmpwidget,"raw_upper",upper);
-
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
-				{
-					evaluator_destroy(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
-				}
-				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
-				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
-				update_widget(tmpwidget,NULL);
-			}
-			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
-			if (tmpbuf)
-				tmpwidget = lookup_widget(tmpbuf);
-			if (GTK_IS_WIDGET(tmpwidget))
-			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
-				{
-					evaluator_destroy(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
-					if (upper)
-					{
-						tmpf2 = g_ascii_strtod(upper,NULL);
-						tmpf = evaluator_evaluate_x(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
-						/*printf("combo_handler hyst has dl conv expr and upper limit of %f\n",tmpf);*/
-					}
-					if (lower)
-					{
-						tmpf2 = g_ascii_strtod(lower,NULL);
-						tmpf = evaluator_evaluate_x(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
-						/*printf("combo_handler hyst has dl conv expr and lower limit of %f\n",tmpf);*/
-					}
-				}
-				else
-					OBJ_SET(tmpwidget,"raw_upper",upper);
-
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
-				{
-					evaluator_destroy(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
-				}
-				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
-				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
-				update_widget(tmpwidget,NULL);
-			}
-			return TRUE;
-			break;
-		default:
-			printf(_("std_combo_handler, default case!!! wrong wrong wrong!!\n"));
-			break;
-	}
-
-	if (swap_list)
-		swap_labels(swap_list,bitval);
-	if (table_2_update)
-		gdk_threads_add_timeout(2000,force_update_table,table_2_update);
-	if (set_labels)
-	{
-		total = get_choice_count(model);
-		tmpi = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-		vector = g_strsplit(set_labels,",",-1);
-		if ((g_strv_length(vector)%(total+1)) != 0)
-		{
-			dbg_func(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
-			goto combo_download;
 		}
-		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
-		{
-			tmpbuf = g_strconcat(vector[i*(total+1)],",",vector[(i*(total+1))+1+tmpi],NULL);
-			set_widget_labels(tmpbuf);
-			g_free(tmpbuf);
-		}
-		g_strfreev(vector);
 	}
-
-combo_download:
-	if (dl_type == IMMEDIATE)
-	{
-		dload_val = convert_before_download(widget,dload_val);
-		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
-	}
-	return TRUE;
+	else
+		return common_handler(widget,data);
 }
 
 
@@ -3022,7 +2710,7 @@ G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 
 
 
-gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
+G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 {
 	gchar *choice = NULL;
 	gboolean valid = TRUE;
@@ -3243,13 +2931,6 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
 	return;
-}
-
-
-G_MODULE_EXPORT gboolean update_multi_expression(gpointer data)
-{
-	g_list_foreach(get_list("multi_expression"),update_widget,NULL);	
-	return FALSE;
 }
 
 
