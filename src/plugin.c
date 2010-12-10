@@ -174,6 +174,8 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 
 	for (i=0;i<3;i++)
 	{
+		if (!module[i])
+			printf("module %i is not found!\n",i);
 		if ((module[i]) && (!found))
 			if (g_module_symbol(module[i],name,function_p))
 				found = TRUE;

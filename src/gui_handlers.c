@@ -538,8 +538,8 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	Firmware_Details *firmware = NULL;
 	void (*select_for)(gint) = NULL;
 	void (*revert)(void) = NULL;
-	void (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
-	void (*create_2d_table_editor_group)(GtkWidget *) = NULL;
+	gboolean (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
+	gboolean (*create_2d_table_editor_group)(GtkWidget *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -649,11 +649,11 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))
-				if (get_symbol("create_2d_table_editor",(void *)create_2d_table_editor))
+				if (get_symbol("create_2d_table_editor",(void *)&create_2d_table_editor))
 					create_2d_table_editor((gint)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
 			break;
 		case TE_TABLE_GROUP:
-			if (get_symbol("create_2d_table_editor_group",(void *)create_2d_table_editor_group))
+			if (get_symbol("create_2d_table_editor_group",(void *)&create_2d_table_editor_group))
 				create_2d_table_editor_group(widget);
 			break;
 

@@ -529,7 +529,6 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 
-	printf("common combo handler firing\n");
 	if ((DATA_GET(global_data,"paused_handlers")) ||
 			(!DATA_GET(global_data,"ready")))
 		return TRUE;
@@ -540,8 +539,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
+	printf("common combo handler firing\n");
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
+	printf("canID %i, page %i, offset %i, bitval %i, bitmask %i, bitshift %i\n",canID,page,offset,bitval,bitmask,bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	handler = (GINT) OBJ_GET(widget,"handler");
@@ -550,15 +551,20 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-	if (state == 0)
+	if (!state)
 	{
 		/* Not selected by combo popdown button, thus is being edited. 
 		 * Do a model scan to see if we actually hit the jackpot or 
 		 * not, and get the iter for it...
 		 */
 		if (!search_model(model,widget,&iter))
+		{
+			printf("search model failure!\n");
 			return FALSE;
+		}
 	}
+	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
+			BITVAL_COL,&bitval,-1);
 
 	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
 	switch ((MtxButton)handler)
