@@ -89,6 +89,7 @@ void (*remove_from_lists_f)(gchar *, gpointer);
 void (*remove_watch_f)(guint32);
 void (*thread_refresh_widget_range_f)(gint, gint, gint);
 void (*update_ve3d_if_necessary_f)(gint, gint);
+void (*thread_refresh_widget_f)(GtkWidget *);
 /* Function Pointers */
 
 #endif

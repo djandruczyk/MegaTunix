@@ -22,7 +22,7 @@ libms2_la_SOURCES = \
 	user_outputs.c \
 	user_outputs.h
 
-libms2_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ ../../../widgets/libmtxcombo_mask.la $(no_undefined) -module
+libms2_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ ../../../widgets/libmtxcombo_mask.la $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

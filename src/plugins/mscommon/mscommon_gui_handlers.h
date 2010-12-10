@@ -42,6 +42,7 @@ extern void (*set_reqfuel_color_f)(GuiColor, gint);
 extern gint (*translate_string_f)(const gchar *);
 extern void (*alter_widget_state_f)(gpointer, gpointer);
 extern void (*update_ve3d_if_necessary_f)(gint, gint);
+extern void (*thread_refresh_widget_f)(GtkWidget *);
 /* Externs */
 
 /* Prototypes */

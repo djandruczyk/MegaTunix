@@ -581,7 +581,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		}
 
 		if (mode == MTX_CHUNK_WRITE)
-			thread_refresh_widget_range(page,offset,length);
+			thread_refresh_widget_range_f(page,offset,length);
 		else
 		{
 			for (z=offset;z<offset+length;z++)
