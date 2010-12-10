@@ -383,10 +383,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
-		printf("Capabilities %s\n",tmpbuf);
+		/*printf("Capabilities %s\n",tmpbuf);*/
 		firmware->capabilities = translate_capabilities(tmpbuf);
-		printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, SECU_3 %i, FEEEMS %i JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,SECU_3,FREEEMS,JIMSTIM);
 		g_free(tmpbuf);
+		/*
+		printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, SECU_3 %i, FEEEMS %i JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,SECU_3,FREEEMS,JIMSTIM);
 
 		   if (firmware->capabilities & MS1)
 		   printf("MS1\n");
@@ -412,6 +413,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		   printf("FREEEMS\n");
 		   if (firmware->capabilities & JIMSTIM)
 		   printf("JIMSTIM\n");
+		   */
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))

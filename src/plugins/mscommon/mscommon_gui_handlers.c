@@ -1540,7 +1540,7 @@ void update_entry(GtkWidget *widget)
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 		}
 
-		if (use_color)
+		if (OBJ_GET(widget,"use_color"))
 		{
 			force_color_update = (GBOOLEAN)OBJ_GET(widget,"force_color_update");
 			if (OBJ_GET(widget,"table_num"))
