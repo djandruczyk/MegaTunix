@@ -63,40 +63,22 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint raw_upper = 0;
 	GdkColor color;
 
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return TRUE;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
+
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
-	temp_dep = (GBOOLEAN)OBJ_GET(widget,"temp_dep");
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	canID = (GINT)OBJ_GET(widget,"canID");
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
-	if (!OBJ_GET(widget,"size"))
-		size = MTX_U08 ;        /* default! */
-	else
-		size = (DataSize)OBJ_GET(widget,"size");
-	if (OBJ_GET(widget,"raw_lower"))
-		raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
-	else
-		raw_lower = get_extreme_from_size_f(size,LOWER);
-	if (OBJ_GET(widget,"raw_upper"))
-		raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
-	else
-		raw_upper = get_extreme_from_size_f(size,UPPER);
-	if (!OBJ_GET(widget,"base"))
-		base = 10;
-	else
-		base = (GINT)OBJ_GET(widget,"base");
-	precision = (GINT)OBJ_GET(widget,"precision");
-	use_color = (GBOOLEAN)OBJ_GET(widget,"use_color");
-	if (use_color)
-		if (OBJ_GET(widget,"table_num"))
-			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+	get_essentials(widget,&canID,&page,&offset,&size,&precision);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (GINT)strtol(text,NULL,base);
+	tmpi = (GINT)strtol(text,NULL,10);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	/*
 	 * printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);
@@ -122,26 +104,17 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	switch (handler)
 	{
 		case GENERIC:
-			if (temp_dep)
+			if (OBJ_GET(widget,"temp_dep"))
 			{
-				if (temp_units == CELSIUS)
+				if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
 					value = (tmpf*(9.0/5.0))+32;
 				else
 					value = tmpf;
 			}
 			else
 				value = tmpf;
-			if (base == 10)
-			{
-				dload_val = convert_before_download_f(widget,value);
-			}
-			else if (base == 16)
-				dload_val = convert_before_download_f(widget,tmpi);
-			else
-			{
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base));
-				return TRUE;
-			}
+			dload_val = convert_before_download_f(widget,value);
+
 			/* What we are doing is doing the forward/reverse 
 			 * conversion which will give us an exact value 
 			 * if the user inputs something in between,  thus 
@@ -156,17 +129,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
 			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
 
-			if (base == 10)
-			{
-				tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				g_free(tmpbuf);
-			}
-			else
-			{       tmpbuf = g_strdup_printf("%.2X",(GINT)real_value);
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				g_free(tmpbuf);
-			}
+			tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
 			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
 			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler_f, data);
 			break;
@@ -202,8 +167,18 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		}
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	if (use_color)
+	if (OBJ_GET(widget,"use_color"))
 	{
+		if (OBJ_GET(widget,"table_num"))
+			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		if (OBJ_GET(widget,"raw_lower"))
+			raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		else
+			raw_lower = get_extreme_from_size_f(size,LOWER);
+		if (OBJ_GET(widget,"raw_upper"))
+			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		else
+			raw_upper = get_extreme_from_size_f(size,UPPER);
 		if (table_num >= 0)
 		{
 			if (firmware->table_params[table_num]->color_update == FALSE)
@@ -254,6 +229,9 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	if ((DATA_GET(global_data,"paused_handlers")) ||
 			(!DATA_GET(global_data,"ready")))
 		return TRUE;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
@@ -407,11 +385,15 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gint dload_val = 0;
 
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return TRUE;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
+
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	canID = (GINT)OBJ_GET(widget,"canID");
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
-	size = (DataSize)OBJ_GET(widget,"size");
+	get_essentials(widget,&canID,&page,&offset,&size,NULL);
 
 	value = gtk_range_get_value(GTK_RANGE(widget));
 	dload_val = convert_before_download_f(widget,value);
@@ -442,7 +424,13 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
-	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
+
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return TRUE;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
 
 	handler = (StdButton)OBJ_GET(widget,"handler");
 
@@ -541,10 +529,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 
-	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
-
+	printf("common combo handler firing\n");
 	if ((DATA_GET(global_data,"paused_handlers")) ||
 			(!DATA_GET(global_data,"ready")))
 		return TRUE;
@@ -552,6 +537,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+
+	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -590,6 +579,53 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
 				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
 			}
+		case ALT_SIMUL:
+			/* Alternate or simultaneous */
+			if (firmware->capabilities & MSNS_E)
+			{
+				table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+				tmp = ms_get_ecu_data(canID,page,offset,size);
+				tmp = tmp & ~bitmask;/* clears bits */
+				tmp = tmp | (bitval << bitshift);
+				dload_val = tmp;
+				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, ms_get_ecu_data(canID,page,offset,size));*/
+				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				/*printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);*/
+
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
+				g_hash_table_replace(interdep_vars[table_num],
+						GINT_TO_POINTER(offset),
+						d_data);
+				check_req_fuel_limits(table_num);
+			}
+			else
+			{
+				table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+				dload_val = bitval;
+				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				d_data = g_new0(Deferred_Data, 1);
+				d_data->canID = canID;
+				d_data->page = page;
+				d_data->offset = offset;
+				d_data->value = dload_val;
+				d_data->size = MTX_U08;
+				g_hash_table_replace(interdep_vars[table_num],
+						GINT_TO_POINTER(offset),
+						d_data);
+				check_req_fuel_limits(table_num);
+			}
+			break;
 		case GENERIC:
 			tmp = ms_get_ecu_data(canID,page,offset,size);
 			tmp = tmp & ~bitmask;   /*clears bits */
@@ -625,7 +661,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		vector = g_strsplit(set_labels,",",-1);
 		if ((g_strv_length(vector)%(total+1)) != 0)
 		{
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
+			dbg_func_f(CRITICAL,g_strdup(__FILE__": common_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
 			goto combo_download;
 		}
 		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
@@ -1078,8 +1114,6 @@ G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
 	GdkColor black = {0,0,0,0};
 	gboolean (*ecu_handler)(GtkWidget *, gpointer);
 
-	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
 
 	if ((DATA_GET(global_data,"paused_handlers")) ||
 			(!DATA_GET(global_data,"ready")))
@@ -1093,12 +1127,13 @@ G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
 		dbg_func_f(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
 		return FALSE;
 	}
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	get_essentials(widget,&canID,&page,&offset,&size,NULL);
-	bitmask = (GINT) OBJ_GET(widget,"bitmask");
-	bitshift = get_bitshift_f(bitmask);
+	get_essential_bits(widget,&canID,&page,&offset,NULL,&bitmask,&bitshift);
+
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
 	tmpi = (int)(value+.001);
@@ -1794,7 +1829,7 @@ void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 	vector = g_strsplit(set_labels,",",-1);
 	if ((g_strv_length(vector)%(total+1)) != 0)
 	{
-		dbg_func_f(CRITICAL,g_strdup(__FILE__": std_combo_handler()\n\tProblem wiht set_labels, counts don't match up\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": combo_set_labels()\n\tProblem wiht set_labels, counts don't match up\n"));
 		return;
 	}
 	for (i=0;i<(g_strv_length(vector)/(total+1));i++)
@@ -2077,7 +2112,12 @@ void get_essentials(GtkWidget *widget, gint *canID, gint *page, gint *offset, Da
 	if (offset)
 		*offset = (GINT)OBJ_GET(widget,"offset");
 	if (size)
-		*size = (DataSize)OBJ_GET(widget,"size");
+	{
+		if (!OBJ_GET(widget,"size"))
+			*size = MTX_U08 ;        /* default! */
+		else
+			*size = (DataSize)OBJ_GET(widget,"size");
+	}
 	if (precision)
 		*precision = (DataSize)OBJ_GET(widget,"precision");
 }

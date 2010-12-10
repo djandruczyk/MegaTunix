@@ -37,7 +37,7 @@ extern double (*evaluator_evaluate_x_f)(void *, double);
 extern void ms_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 extern void (*update_widget_f)(gpointer, gpointer);
 extern gint (*convert_before_download_f)(GtkWidget *, gfloat);
-extern const gchar *(*translate_enum_f)(gint);
+extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 /* Externs */
 
 /* Prototypes */

@@ -242,6 +242,7 @@ G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
 			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_button_handler()\n\tdefault case reached,  i.e. handler not foudn in global, common or ECU plugins, BUG!\n"));
 			break;
 	}
+	return TRUE;
 }
 
 
@@ -281,35 +282,9 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 
 	switch (handler)
 	{
-		case ALT_SIMUL:
-			/* Alternate or simultaneous */
-			if (firmware->capabilities & MSNS_E)
-			{
-				table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-				tmp = ms_get_ecu_data_f(canID,page,offset,size);
-				tmp = tmp & ~bitmask;/* clears bits */
-				tmp = tmp | (bitval << bitshift);
-				dload_val = tmp;
-				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, ms_get_ecu_data_f(canID,page,offset,size));*/
-				if (dload_val == ms_get_ecu_data_f(canID,page,offset,size))
-					return FALSE;
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				d_data = g_new0(Deferred_Data, 1);
-				d_data->canID = canID;
-				d_data->page = page;
-				d_data->offset = offset;
-				d_data->value = dload_val;
-				d_data->size = MTX_U08;
-				g_hash_table_replace(interdep_vars[table_num],
-						GINT_TO_POINTER(offset),
-						d_data);
-				if (get_symbol_f("check_req_fuel_limits",(void *)&check_limits))
-					check_limits(table_num);
-			}
-			break;
 		default:
 			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_combo_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+			return TRUE;
 			break;
 	}
 	if (dl_type == IMMEDIATE)

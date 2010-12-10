@@ -12,9 +12,11 @@
  */
 
 #include <config.h>
+#include <combo_loader.h>
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <glade/glade.h>
 #include <ms2_gui_handlers.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
@@ -44,7 +46,6 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
-	gboolean state = FALSE;
 	gint handler = 0;
 	gint bitmask = 0;
 	gint bitshift = 0;
@@ -75,6 +76,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = 0;
 	gfloat tmpf = 0.0;
 	gfloat tmpf2 = 0.0;
+	gboolean state = FALSE;
 	Deferred_Data *d_data = NULL;
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
@@ -97,6 +99,19 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift_f(bitmask);
 
+	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+	if (state == 0)
+	{
+		/* Not selected by combo popdown button, thus is being edited.
+		   * Do a model scan to see if we actually hit the jackpot or
+		   * not, and get the iter for it...
+		   */
+		if (!search_model_f(model,widget,&iter))
+			return FALSE;
+	}
+	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
+			BITVAL_COL,&bitval,-1);
 
 	switch (handler)
 	{
@@ -110,8 +125,13 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
 
 			/* Send the "size" of the offset to the ecu */
-			offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
-			ms_send_to_ecu_f(canID, page, offset, MTX_U08,size, TRUE);
+			if (OBJ_GET(widget,"size_offset"))
+			{
+				offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
+				ms_send_to_ecu_f(canID, page, offset, MTX_U08, size, TRUE);
+			}
+			else
+				printf("size_offset NOT FOUND on widget %s\n",(gchar *)glade_get_widget_name(widget));
 
 			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
 			if (tmpbuf)
@@ -245,8 +265,8 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		default:
-			printf("Handler is %s\n",translate_enum_f(handler));
 			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_combo_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+			return TRUE;
 			break;
 	}
 	if (dl_type == IMMEDIATE)

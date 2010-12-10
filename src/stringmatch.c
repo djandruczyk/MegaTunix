@@ -534,21 +534,3 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	else
 		return (GINT)value;
 }
-
-const gchar *translate_enum(gint value)
-{
-	GHashTable *str_2_enum = NULL;
-        str_2_enum = DATA_GET(global_data,"str_2_enum");
-
-	printf("Told to seach for enum value %i\n",value);
-	return (const gchar *)g_hash_table_find(str_2_enum,hash_compare,GINT_TO_POINTER(value));
-}
-
-gboolean hash_compare(gpointer key, gpointer value, gpointer user_data)
-{
-	printf("potential value %i, match %i\n",(GINT)value,(GINT)user_data);
-	if ((GINT)user_data == (GINT)value)
-		return TRUE;
-	else 
-		return FALSE;
-}

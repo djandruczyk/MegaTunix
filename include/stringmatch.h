@@ -20,9 +20,7 @@
 /* Prototypes */
 void build_string_2_enum_table(void);
 gint translate_string(const gchar *);
-const gchar *translate_enum(gint);
 void dump_hash(gpointer,gpointer,gpointer);
-gboolean hash_compare(gpointer, gpointer, gpointer);
 /* Prototypes */
 
 #endif

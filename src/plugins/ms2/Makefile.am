@@ -5,6 +5,7 @@ INCLUDES = \
         @GTK_CFLAGS@ \
         @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
